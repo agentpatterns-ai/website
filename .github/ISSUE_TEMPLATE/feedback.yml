@@ -1,0 +1,36 @@
+name: Page feedback
+description: Suggest a change or report an issue with a page
+labels: ["feedback"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page URL
+      placeholder: https://agentpatterns.ai/...
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options:
+        - Factual error
+        - Outdated information
+        - Missing content
+        - Unclear explanation
+        - Broken link
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: What should be changed and why?
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources (optional)
+      placeholder: Links to relevant documentation, articles, etc.
