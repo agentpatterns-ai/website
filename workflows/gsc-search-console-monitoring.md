@@ -104,7 +104,7 @@ The `gsc-report` skill (`.github/skills/gsc-report/SKILL.md`) provides:
 Trigger via GitHub CLI:
 
 ```bash
-gh workflow run gsc-weekly-report.yml --repo bradleyboveinis/working-with-agents
+gh workflow run gsc-weekly-report.yml --repo agentpatterns-ai/content
 ```
 
 Or run locally:
