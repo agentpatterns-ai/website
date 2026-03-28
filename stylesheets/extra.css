@@ -1,17 +1,96 @@
-/* ── Sage brand color overrides ─────────────────────────── */
+/* ── Brand color variables ─────────────────────────── */
 
-/* Exact Sage green (#00D639) replacing Material's built-in green */
-[data-md-color-scheme="default"] {
-  --md-accent-fg-color: #00D639;
-  --md-accent-fg-color--transparent: rgba(0, 214, 57, 0.1);
+:root {
+  --ap-blue: #2B6CB0;
+  --ap-blue-dark: #1A4A7A;
+  --ap-blue-light: #4299E1;
+  --ap-blue-transparent: rgba(43, 108, 176, 0.1);
 }
 
+/* ── Light mode color overrides ─────────────────────── */
+
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color: var(--ap-blue);
+  --md-accent-fg-color--transparent: var(--ap-blue-transparent);
+  --md-typeset-a-color: var(--ap-blue);
+}
+
+/* ── Dark mode color overrides ─────────────────────── */
+
 [data-md-color-scheme="slate"] {
-  --md-accent-fg-color: #00D639;
-  --md-accent-fg-color--transparent: rgba(0, 214, 57, 0.1);
+  --md-accent-fg-color: var(--ap-blue-light);
+  --md-accent-fg-color--transparent: rgba(66, 153, 225, 0.1);
+  --md-typeset-a-color: var(--ap-blue-light);
+}
+
+/* ── Header styling (light mode) ─────────────────────── */
+
+[data-md-color-scheme="default"] .md-header {
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-md-color-scheme="default"] .md-header__title {
+  color: #1a202c;
+}
+
+[data-md-color-scheme="default"] .md-header .md-header__button {
+  color: #333;
+}
+
+[data-md-color-scheme="default"] .md-header .md-search__input {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+}
+
+[data-md-color-scheme="default"] .md-header .md-search__input::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Site name styling ─────────────────────────────── */
+
+.md-header__topic .md-ellipsis {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.md-header__topic .md-ellipsis .ap-bold {
+  font-weight: 700;
+}
+
+/* ── Navigation tabs ───────────────────────────────── */
+
+[data-md-color-scheme="default"] .md-tabs {
+  background-color: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.md-tabs__link {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link {
+  color: var(--ap-blue);
+  opacity: 0.85;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link:hover,
+[data-md-color-scheme="default"] .md-tabs__link--active {
+  color: var(--ap-blue-dark);
+  opacity: 1;
+}
+
+/* Active tab indicator */
+[data-md-color-scheme="default"] .md-tabs__link--active {
+  border-bottom: 2px solid var(--ap-blue);
 }
 
 /* ── Footer layout ── */
+
 .wwa-footer {
   display: flex !important;
   align-items: center;
@@ -22,7 +101,8 @@
   flex: 1;
 }
 
-/* Concept map: multi-column link lists */
+/* ── Concept map: multi-column link lists ── */
+
 .concept-map > ul {
   column-count: 2;
   column-gap: 2rem;
@@ -63,6 +143,7 @@
 }
 
 /* ── Feedback FAB ── */
+
 .wwa-fab {
   position: fixed;
   bottom: 1.5rem;
