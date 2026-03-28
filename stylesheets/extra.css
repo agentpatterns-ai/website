@@ -65,38 +65,41 @@
 /* ── Feedback FAB ── */
 .wwa-fab {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1.5rem;
+  right: 1.5rem;
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  background: var(--md-accent-fg-color);
-  color: #000;
-  border-radius: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  gap: 0.35rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--md-default-fg-color--lighter);
+  color: var(--md-default-bg-color);
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  opacity: 0.7;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 .wwa-fab:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  color: #000;
+  opacity: 1;
+  transform: translateY(-1px);
+  color: var(--md-default-bg-color);
 }
 
 .wwa-fab svg {
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
 }
 
 /* Collapse to icon-only on small screens */
 @media (max-width: 768px) {
   .wwa-fab {
-    padding: 0.75rem;
+    padding: 0.5rem;
     border-radius: 50%;
   }
 
