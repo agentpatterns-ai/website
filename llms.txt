@@ -3,7 +3,7 @@
 > Patterns and techniques for experienced developers leveling up with AI coding assistants.
 
 ## Workflows
-<!-- lastmod: 2026-03-18 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Workflows](https://agentpatterns.ai/workflows/): End-to-end workflows for agent-assisted development — from bootstrapping to team onboarding.
 - [Agent Environment Bootstrapping](https://agentpatterns.ai/workflows/agent-environment-bootstrapping/): Deterministically configure an agent's ephemeral environment before it starts working, pre-installing dependencies in...
@@ -62,7 +62,7 @@
 - [Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes](https://agentpatterns.ai/workflows/worktree-isolation/): Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with ...
 
 ## Security
-<!-- lastmod: 2026-03-23 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Security](https://agentpatterns.ai/security/): Patterns and techniques for building agents that resist manipulation, protect sensitive data, and fail safely.
 - [Blast Radius Containment: Least Privilege for AI Agents](https://agentpatterns.ai/security/blast-radius-containment/): Grant agents only the permissions their task requires — read-only for research, branch-scoped for code changes, no ex...
@@ -90,7 +90,7 @@
 - [Use a Public-Web Index to Gate Automatic URL Fetching](https://agentpatterns.ai/security/url-fetch-public-index-gate/): Rather than maintaining a domain allow-list, cross-reference URLs against an independent public-web crawl index befor...
 
 ## Fallacies
-<!-- lastmod: 2026-03-23 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Fallacies](https://agentpatterns.ai/fallacies/): Incorrect beliefs about AI tools that reliably produce poor outcomes.
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](https://agentpatterns.ai/fallacies/chain-of-thought-reasoning-fallacy/): Visible step-by-step output resembles reasoning but does not constitute it — the explanation is generated after the a...
@@ -101,7 +101,7 @@
 - [The Task Framing Irrelevance Fallacy](https://agentpatterns.ai/fallacies/task-framing-irrelevance-fallacy/): The belief that how you frame a task doesn't matter — only the underlying problem does — is demonstrably wrong and re...
 
 ## Human Factors
-<!-- lastmod: 2026-03-25 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Human Impact](https://agentpatterns.ai/human/): The human side of working with AI agents — cognitive load, sustainable use, and team dynamics.
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](https://agentpatterns.ai/human/cognitive-load-ai-fatigue/): Intensive AI assistant use creates measurable cognitive costs — recognizing and managing them is the difference betwe...
@@ -124,7 +124,7 @@
 - [The Context Ceiling](https://agentpatterns.ai/human/context-ceiling/): AI agents hit a hard capability boundary on expert-level architecture work: the context required — regulations, organ...
 
 ## Claude Code
-<!-- lastmod: 2026-03-23 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Claude Code](https://agentpatterns.ai/tools/claude/): Tool-specific reference for Claude Code's agentic features.
 - [Claude Agent SDK](https://agentpatterns.ai/tools/claude/agent-sdk/): The Claude Code runtime exposed as a library for building custom agentic workflows.
@@ -138,7 +138,7 @@
 - [Session Scheduling](https://agentpatterns.ai/tools/claude/session-scheduling/): Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no exter...
 
 ## GitHub Copilot
-<!-- lastmod: 2026-03-23 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [GitHub Copilot](https://agentpatterns.ai/tools/copilot/): Tool-specific reference for GitHub Copilot's agentic features.
 - [Agent HQ (Multi-Agent Platform)](https://agentpatterns.ai/tools/copilot/agent-hq/): GitHub's platform for running multiple coding agents — Copilot, Claude, and Codex — within a single interface, with c...
@@ -159,7 +159,7 @@
 ## Optional
 
 ### Emerging
-<!-- lastmod: 2026-03-18 -->
+<!-- lastmod: 2026-03-28 -->
 
 - [Emerging Concepts](https://agentpatterns.ai/emerging/): Early-stage ideas worth tracking — not yet established patterns, but too important to ignore.
 - [First-Party Agent Composition: Replace SaaS Stitching with Agent-Built Features](https://agentpatterns.ai/emerging/first-party-agent-composition/): Instead of integrating third-party SaaS products and stitching them together with webhooks, instruct coding agents to...
