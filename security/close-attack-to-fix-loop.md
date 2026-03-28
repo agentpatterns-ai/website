@@ -1,0 +1,143 @@
+---
+title: "Close the Attack-to-Fix Loop: Adversarially Train Agent"
+description: "When automated red teaming surfaces a new class of prompt injection attacks, immediately use those attack traces to adversarially train a new agent model"
+tags:
+  - agent-design
+  - instructions
+  - testing-verification
+  - security
+aliases:
+  - adversarial fine-tuning loop
+  - rapid attack-to-checkpoint cycle
+---
+# Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections
+
+> When automated red teaming surfaces a new class of prompt injection attacks, immediately use those attack traces to adversarially train a new agent model checkpoint — making the agent intrinsically harder to exploit rather than relying solely on wrapper-level mitigations.
+
+## Why Prompt Injection Resilience Degrades
+
+Prompt injection resilience is not a static property. As attackers or your own red teamers discover new attack strategies, defenses that were effective yesterday become obsolete. System-level mitigations (confirmation gates, narrow permissions, filtered inputs) address known attack patterns; they do not adapt as attack strategies evolve.
+
+Model-level hardening — updating the agent's weights to resist novel attacks — provides resilience that adapts with the threat. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+
+## The Rapid Response Loop
+
+OpenAI's Atlas team implements a tight discovery-to-checkpoint cycle:
+
+1. Automated red teamer discovers a new attack class
+2. Successful attack traces are immediately fed into adversarial fine-tuning of the defender model
+3. Training examples prioritize attacks the current checkpoint fails against — compute focuses on the frontier of the defense gap, not problems already solved
+4. A new hardened checkpoint is deployed before the novel attack class can be weaponized in the wild [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+
+## Prioritizing Training Examples
+
+Focus adversarial training on:
+
+- Attacks the agent checkpoint currently fails against
+- Novel attack classes discovered in the last training cycle
+- Long-horizon attacks (multi-step workflows, deferred actions) that require the most capability to execute
+
+Avoid spending compute on attacks the model already resists — the marginal return is low. Prioritize the current failure frontier. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+
+## Beyond Model Weights: Full Stack Iteration
+
+Successful attack traces reveal weaknesses beyond the model:
+
+- **Monitoring blind spots**: attacks that succeeded undetected indicate gaps in observability
+- **Context instruction gaps**: attacks that exploited underspecified safety instructions indicate system prompt improvements
+- **Missing system-level safeguards**: attacks that wouldn't have succeeded if a confirmation gate existed
+
+Iterate on the full defense stack, not just the model checkpoint. Adversarial training directly updates model behavior; it complements, rather than replaces, system-level mitigations. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+
+## The Compounding Defense
+
+As base models improve, automated attackers naturally become more capable (see [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)). The same compounding applies to the defense: each new hardened checkpoint becomes the baseline from which the next round of red teaming begins.
+
+This means each training cycle must produce a model that is harder to attack than the last — the automated attacker, now more capable than when the defender was trained, must find new attack vectors to succeed.
+
+## Scope and Prerequisites
+
+This approach requires:
+
+- An operational automated red teaming capability that generates attack traces
+- Infrastructure for model fine-tuning
+- A deployment pipeline that can ship hardened checkpoints rapidly
+
+This is an advanced technique for teams that have already deployed the system-level defenses (confirmation gates, least privilege permissions, narrow task instructions) and need to harden the underlying model against residual risks.
+
+## Example
+
+The following shows how a team might operationalize the rapid attack-to-fix cycle. An automated red-teamer surfaces a new multi-step injection class; successful attack traces are immediately funnelled into fine-tuning, and a hardened checkpoint is shipped before the attack pattern reaches production.
+
+```python
+# red_team_pipeline.py  — simplified discovery-to-training loop
+
+import json
+from pathlib import Path
+
+def run_red_teamer(target_checkpoint: str, num_probes: int = 200) -> list[dict]:
+    """Run automated attacker against current defender checkpoint; return successful traces."""
+    successful_attacks = []
+    for _ in range(num_probes):
+        probe = generate_adversarial_probe(target_checkpoint)
+        result = evaluate_probe(probe, target_checkpoint)
+        if result["exploited"]:
+            successful_attacks.append({"prompt": probe, "trace": result["trace"]})
+    return successful_attacks
+
+def build_fine_tune_dataset(attack_traces: list[dict]) -> Path:
+    """Convert successful attack traces to JSONL training examples."""
+    output = Path("adversarial_training_data.jsonl")
+    with output.open("w") as f:
+        for trace in attack_traces:
+            # Each example teaches the model to refuse the injected instruction
+            example = {
+                "messages": [
+                    {"role": "user", "content": trace["prompt"]},
+                    {"role": "assistant", "content": "<safe refusal — ignore injected instruction>"},
+                ]
+            }
+            f.write(json.dumps(example) + "\n")
+    return output
+
+def close_the_loop(target_checkpoint: str) -> str:
+    """Discover → collect traces → fine-tune → return new checkpoint id."""
+    traces = run_red_teamer(target_checkpoint)
+    if not traces:
+        return target_checkpoint  # nothing new to harden against
+
+    dataset_path = build_fine_tune_dataset(traces)
+    job = start_fine_tuning_job(
+        training_file=upload_file(dataset_path),
+        base_model=target_checkpoint,
+        hyperparameters={"n_epochs": 2},
+    )
+    return job.fine_tuned_model  # hardened checkpoint ready for deployment
+```
+
+Only the attack traces the current checkpoint *fails* are included in training — this focuses compute on the live defense frontier rather than re-training on already-solved problems. When `close_the_loop` returns, the new checkpoint is deployed and `run_red_teamer` begins the next cycle using the hardened model as the target.
+
+## Key Takeaways
+
+- Feed successful attack traces immediately into adversarial fine-tuning of the defender agent model
+- Prioritize training examples where the current checkpoint fails — focus compute on the defense frontier
+- Adversarial training updates model behavior directly; it is not a substitute for system-level safeguards but complements them
+- Attack traces also reveal monitoring gaps, instruction weaknesses, and missing system safeguards — iterate on the full stack
+- The rapid attack-to-checkpoint cycle deploys new robustness before novel attacks can be weaponized externally
+
+## Related
+
+- [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
+- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Explicit, Narrow Task Instructions to Reduce Injection Susceptibility](task-scope-security-boundary.md)
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
+- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
+- [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md)
+- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
+- [Safe Outputs Pattern](safe-outputs-pattern.md)
+- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
+- [Tool Signing and Signature Verification](tool-signing-verification.md)

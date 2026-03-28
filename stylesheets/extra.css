@@ -1,0 +1,63 @@
+/* ── Sage brand color overrides ─────────────────────────── */
+
+/* Exact Sage green (#00D639) replacing Material's built-in green */
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color: #00D639;
+  --md-accent-fg-color--transparent: rgba(0, 214, 57, 0.1);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-accent-fg-color: #00D639;
+  --md-accent-fg-color--transparent: rgba(0, 214, 57, 0.1);
+}
+
+/* ── Footer layout ── */
+.wwa-footer {
+  display: flex !important;
+  align-items: center;
+}
+
+.wwa-footer__attribution,
+.wwa-footer__spacer {
+  flex: 1;
+}
+
+/* Concept map: multi-column link lists */
+.concept-map > ul {
+  column-count: 2;
+  column-gap: 2rem;
+  list-style: none;
+  padding-left: 0;
+}
+
+.concept-map > ul > li {
+  break-inside: avoid;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.concept-map > ul > li:last-child {
+  border-bottom: none;
+}
+
+/* Concept map: styled section headers */
+.concept-map > h2 {
+  border-left: 4px solid var(--md-accent-fg-color);
+  padding-left: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+/* Concept map: section descriptions */
+.concept-map > blockquote {
+  border-left-color: var(--md-accent-fg-color);
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 1rem;
+}
+
+/* Single column on mobile */
+@media (max-width: 768px) {
+  .concept-map > ul {
+    column-count: 1;
+  }
+}

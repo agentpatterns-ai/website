@@ -1,0 +1,21 @@
+---
+title: "Observability for AI Agents: Tracing and Debugging"
+description: "Tracing, debugging, loop detection, circuit breakers, and logging patterns for understanding what agents are doing and diagnosing failures."
+tags:
+  - observability
+---
+
+# Observability
+
+> Tracing, debugging, loop detection, and logging patterns for understanding agent behavior.
+
+## Pages
+
+- [Agent Debugging](agent-debugging.md) — A systematic process for tracing why an agent produced wrong, incomplete, or unexpected output
+- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — OpenTelemetry metrics, trajectory tracing, and structured audit trails for cost attribution, compliance, and debugging that survives context resets
+- [Circuit Breakers for Agent Loops](circuit-breakers.md) — Stop agents automatically when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt
+- [Event Sourcing for Agents](event-sourcing-for-agents.md) — Agents emit structured intentions in validated JSON; a deterministic orchestrator validates, persists, and applies effects for replay-verifiable execution
+- [Loop Detection](loop-detection.md) — Track repeated file edits within a session and signal the agent to try a different approach when it enters an unproductive cycle
+- [Making Observability Legible to Agents](observability-legible-to-agents.md) — Wire browser automation, application metrics, and structured logs into agent context so agents can reason about system behavior from real signals
+- [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, and a bootstrap script
+- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — When AI handles production speed, meaningful commits, signal-rich PRs, and clear branch naming become the primary quality differentiators

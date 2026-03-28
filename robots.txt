@@ -1,0 +1,75 @@
+# robots.txt — agentpatterns.ai
+#
+# Three-tier AI crawler strategy:
+#
+#   TIER 1 — ALLOW (user-facing retrieval bots)
+#     These bots power real-time citations and traffic. Allow unconditionally.
+#
+#   TIER 2 — DISALLOW (training scrapers)
+#     These bots consume content for model training with no citation benefit.
+#     Disallowed. This is a deliberate decision — revisit if policy changes.
+#
+#   TIER 3 — CDN-LEVEL BLOCK (non-compliant bots)
+#     Bytespider (ByteDance) is documented to ignore robots.txt.
+#     Block via Cloudflare WAF Custom Rule:
+#       Field: User Agent | Operator: contains | Value: Bytespider
+#       Action: Block
+#     This cannot be expressed in robots.txt and must be set in the
+#     Cloudflare Dashboard under Security > WAF > Custom Rules.
+
+# ── Default: allow all standard crawlers ──────────────────────────────────────
+User-agent: *
+Allow: /
+
+# ── Tier 1: User-facing retrieval bots (ALLOW) ────────────────────────────────
+
+# ChatGPT Browse real-time retrieval
+User-agent: ChatGPT-User
+Allow: /
+
+# ChatGPT search features
+User-agent: OAI-SearchBot
+Allow: /
+
+# Claude real-time retrieval
+User-agent: Claude-User
+Allow: /
+
+# Claude search indexing
+User-agent: Claude-SearchBot
+Allow: /
+
+# Perplexity indexing
+User-agent: PerplexityBot
+Allow: /
+
+# Perplexity real-time retrieval
+User-agent: Perplexity-User
+Allow: /
+
+# ── Tier 2: Training scrapers (DISALLOW) ──────────────────────────────────────
+# Rationale: training scrapers provide no citation or traffic benefit.
+# Content is public but restricting training use preserves strategic value.
+
+# OpenAI training crawler
+User-agent: GPTBot
+Disallow: /
+
+# Anthropic training crawler
+User-agent: ClaudeBot
+Disallow: /
+
+# Google AI training (Bard/Gemini)
+User-agent: Google-Extended
+Disallow: /
+
+# Meta/Llama training
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# ── Tier 3: CDN-level block (see comment at top) ──────────────────────────────
+# Bytespider — ByteDance training crawler, documented to ignore robots.txt.
+# Blocked at Cloudflare WAF level. No robots.txt directive is effective here.
+
+# ── Sitemap ───────────────────────────────────────────────────────────────────
+Sitemap: https://agentpatterns.ai/sitemap.xml

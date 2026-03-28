@@ -1,0 +1,114 @@
+---
+title: "Critical Instruction Repetition via Primacy and Recency"
+description: "Repeating a critical instruction at prompt start and end exploits primacy and recency bias for higher compliance than placing it once."
+tags:
+  - context-engineering
+  - instructions
+aliases:
+  - Attention Sinks
+  - Lost in the Middle
+  - Attention Bias and Instruction Placement
+---
+
+# Critical Instruction Repetition: Exploiting Primacy and Recency Bias
+
+> Repeating a critical instruction at both the start and end of a prompt exploits primacy and recency bias to produce higher compliance than a single well-placed statement.
+
+!!! info "Also known as"
+    Attention Sinks, Lost in the Middle, Attention Bias and Instruction Placement
+
+## The Mechanism
+
+Transformer attention is not uniform across a context window [unverified — no cited study establishes this as a universal structural property across all transformer architectures]. Two structural biases exist at opposite ends:
+
+- **Primacy bias** — initial tokens receive disproportionate attention (the attention sink effect) [unverified — primacy bias as a structural effect has not been sourced here]
+- **Recency bias** — the most recent tokens are freshest in the model's effective working state, directly influencing the next generated token [unverified — recency bias as a structural effect has not been sourced here]
+
+Placing a critical instruction once in the middle of a prompt means it sits in the weakest-attention zone [unverified — the "weakest-attention zone" characterisation has not been sourced here]. Placing it at both the start and end means it appears in both high-attention positions — effectively simulating bidirectional attention in a unidirectional architecture [unverified — the "simulating bidirectional attention" framing is a conceptual analogy, not a mechanistic claim].
+
+## When to Use Repetition
+
+Reserve repetition for instructions where non-compliance has real consequences. Repeating every instruction dilutes the signal — if everything is repeated, the repetition conveys no priority information to the model.
+
+Criteria for whether an instruction warrants repetition:
+
+- Would forgetting this instruction cause a security, safety, or correctness problem?
+- Is the instruction a hard constraint rather than a preference?
+- Is the context window long or dense enough that position-based attention decay is a real risk?
+
+Examples: "Never include credentials in output", "Always validate input before writing to the database", "Do not modify files outside the specified directory".
+
+## How to Apply It
+
+State the critical rule immediately — before background context, before role-setting prose:
+
+```
+Never output authentication credentials or session tokens in any form.
+
+[Background context and instructions follow...]
+
+---
+
+Remember: never output authentication credentials or session tokens.
+```
+
+The closing restatement exploits recency bias. In long conversations, restate the constraint at the end of your most recent message when context has grown substantially.
+
+## Reasoning vs. Non-Reasoning Models
+
+The effect of repetition varies by model type [unverified — no controlled study comparing reasoning and non-reasoning models on this specific variable has been cited here]:
+
+- **Non-reasoning models** are more susceptible to positional effects and benefit most from explicit repetition
+- **Reasoning models** internally restate and examine instructions during their thinking phase, which may reduce (but not eliminate) the positional attention bias
+
+## Cost
+
+Repetition consumes context budget. A 20-token rule stated twice costs 40 tokens. For a handful of genuinely critical rules, this is a reasonable trade. For a document with 50 rules all repeated, the context cost becomes significant and the priority signal disappears.
+
+## Key Takeaways
+
+- State critical instructions at the start and end of the prompt to exploit both primacy and recency bias.
+- Reserve repetition for hard constraints — repeating everything negates the priority signal.
+- In long conversations, restate critical constraints at the end of your message rather than relying on earlier-session statements.
+- The context cost is real: use repetition selectively, not universally.
+
+## Example
+
+A code-generation agent system prompt that repeats the single most critical safety constraint at both ends:
+
+```
+CRITICAL: Do not read, write, or delete any file outside the /workspace directory.
+
+You are a code-generation assistant. The user will describe a feature and you will
+implement it by creating or modifying files. Follow these rules:
+
+- Write clean, well-documented code.
+- Run the test suite after each change.
+- Commit with a descriptive message.
+- If a task is ambiguous, ask a clarifying question before proceeding.
+
+Background context:
+- The project uses Python 3.12 with pytest for testing.
+- The CI pipeline runs `pytest --strict-markers -x` on every push.
+- Database migrations use Alembic; never modify migration files by hand.
+
+---
+
+CRITICAL (restated): Do not read, write, or delete any file outside the /workspace
+directory. This includes /etc, /home, /tmp, and any path not under /workspace.
+```
+
+The opening line places the constraint in the primacy position. The closing restatement places it in the recency position. The other rules — important but not catastrophic if missed — appear only once.
+
+## Related
+
+- [Attention Sinks: Why First Tokens Always Win](../context-engineering/attention-sinks.md)
+- [Lost in the Middle: The U-Shaped Attention Curve](../context-engineering/lost-in-the-middle.md)
+- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
+- [Event-Driven System Reminders](event-driven-system-reminders.md)
+- [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
+- [Layered Instruction Scopes](layered-instruction-scopes.md)
+- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)

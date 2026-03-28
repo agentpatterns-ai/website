@@ -1,0 +1,133 @@
+---
+title: "AGENTS.md as a Table of Contents, Not an Encyclopedia"
+description: "Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory treated as the system of record. Pointer Map, AGENTS.md"
+tags:
+  - context-engineering
+  - instructions
+aliases:
+  - Pointer Map
+  - AGENTS.md Content Strategy
+---
+
+# AGENTS.md as Table of Contents, Not Encyclopedia
+
+> Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory treated as the system of record.
+
+!!! info "Also known as"
+    Pointer Map, AGENTS.md Content Strategy. For the complementary pattern on **where** to place AGENTS.md files (distributed across directory levels), see [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md).
+
+## Why Monolithic AGENTS.md Files Fail
+
+The OpenAI Harness team — which built a million-line codebase with 3–7 engineers and zero hand-written code — identified "one big AGENTS.md" as an early failure mode with four specific consequences ([OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)):
+
+1. **Context crowding.** A large AGENTS.md consumes context space that should be available for the task, the relevant code, and the documentation for that specific problem. Agents have less room to reason about the actual work.
+
+2. **Attention dilution.** When every instruction is present simultaneously, no instruction is prominent. Agents pattern-match locally rather than navigating intentionally to the relevant section of the knowledge base.
+
+3. **Unverifiable scope.** A monolithic file grows without clear ownership. Agents cannot tell which sections are current; humans stop maintaining it because the file is intimidating to edit.
+
+4. **Instant rot.** Architectural decisions change. A single file updated piecemeal accumulates contradictions. What was true at month one is stale by month six, but the file still reads as authoritative.
+
+## The Pattern: Pointer Map + Structured Docs
+
+The fix is a structural one: AGENTS.md is a brief index — what this project is, where conventions live, what to read first for each type of task. The knowledge itself lives in a versioned `docs/` directory.
+
+```
+AGENTS.md                    # ~100 lines: what, where, first steps
+docs/
+  architecture/              # ADRs, system design, key decisions
+  conventions/               # Coding standards, naming, patterns
+  workflows/                 # How to do common tasks
+  onboarding/                # What agents need before starting a task
+```
+
+An AGENTS.md entry looks like: *"For API conventions, see `docs/conventions/api.md`. For deployment procedures, see `docs/workflows/deploy.md`."* The agent follows the pointer when it needs that context, rather than having it preloaded.
+
+This is the same principle as [retrieval-augmented context loading](../context-engineering/retrieval-augmented-agent-workflows.md): pull context at the moment it is needed, not preloaded at session start.
+
+## Enforcing Freshness Mechanically
+
+Pointers only work if the linked documents exist and are current. The Harness team enforces this mechanically with linters and CI jobs [unverified — exact approach not detailed in the public post]. Practical approaches:
+
+- CI that breaks if AGENTS.md contains a broken link to docs/
+- Lint rules that flag docs/ files not referenced from AGENTS.md
+- Automated prompts to review docs/ files older than a set threshold
+
+## What Belongs in AGENTS.md
+
+| Include | Exclude |
+|---------|---------|
+| Project overview (2-3 sentences) | Full architectural documentation |
+| Pointer to conventions docs | The conventions themselves |
+| Pointer to workflow docs | Step-by-step workflow instructions |
+| Key constraints (1-2 critical rules) | Exhaustive rule lists |
+| First steps for new agents | Background context and history |
+
+The test: would removing this line require a pointer to docs/ instead? Put it in docs/. Would removing it leave agents with no path to a critical concept? It belongs in AGENTS.md as a pointer.
+
+## Example
+
+Below is an AGENTS.md for a TypeScript monorepo that follows the pointer-map pattern. Each entry names the concept and links to the document that contains the actual content — nothing is expanded inline.
+
+```markdown
+# Acme Monorepo — Agent Instructions
+
+## What this repo is
+A TypeScript monorepo with three packages: `api` (Fastify), `web` (Next.js), and `shared` (types + utils).
+Primary language: TypeScript 5.x. Package manager: pnpm workspaces.
+
+## Before starting any task
+1. Run `pnpm typecheck` to confirm the type baseline.
+2. Run `pnpm test` to confirm no pre-existing failures.
+
+## Key pointers
+- Coding conventions and naming rules → `docs/conventions/coding-standards.md`
+- How to add a new API route → `docs/workflows/add-api-route.md`
+- How to add a new UI page → `docs/workflows/add-ui-page.md`
+- ADRs and architecture decisions → `docs/architecture/`
+- Deployment procedure → `docs/workflows/deploy.md`
+- Do NOT modify `packages/shared/generated/` — these files are auto-generated by `pnpm codegen`
+
+## Critical constraints
+- All public functions in `packages/shared` must have JSDoc with `@param` and `@returns`.
+- Database migrations live in `packages/api/migrations/`; never edit them after they have run in production.
+```
+
+The AGENTS.md is under 30 lines. The conventions, workflow steps, and architectural history are each in their own versioned file. A CI lint step can check that every path under `## Key pointers` resolves to a real file:
+
+```bash
+# scripts/lint-agents-md.sh — run in CI
+grep -oP '(?<=→ `)docs/[^`]+' AGENTS.md | while read -r path; do
+  if [ ! -e "$path" ] && [ ! -d "$path" ]; then
+    echo "AGENTS.md broken link: $path"
+    exit 1
+  fi
+done
+```
+
+If any linked document is deleted or renamed without updating AGENTS.md, the CI job fails before the stale pointer reaches a running agent.
+
+## Key Takeaways
+
+- Monolithic AGENTS.md crowds context, dilutes attention, and rots — structural fix: a ~100-line pointer map backed by a versioned `docs/` directory.
+- Enforce freshness mechanically — CI link validation is more reliable than human maintenance.
+- The principle is tool-agnostic: applies equally to CLAUDE.md, Copilot instructions, and Cursor rules.
+
+## Unverified Claims
+
+- Harness team enforces knowledge base freshness with linters and CI jobs `[unverified — the exact CI validation approach is not detailed in the public post; mechanical freshness enforcement as a practice is attributed to the Harness team's account]`
+
+## Related
+
+- [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — complementary technique covering *where* to place AGENTS.md files
+- [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md) — structural patterns for organizing AGENTS.md content
+- [CLAUDE.md Convention](claude-md-convention.md) — conventions for instruction files in Claude projects
+- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md) — layering instruction files across directory levels
+- [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md) — overview of instruction file types across agent platforms
+- [Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes](layered-instruction-scopes.md) — scoping instruction files to the right context level
+- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
+- [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
+- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
+- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
+- [Context Priming](../context-engineering/context-priming.md)
+- [Production System Prompt Architecture](production-system-prompt-architecture.md) — structural patterns for large-scale instruction files
