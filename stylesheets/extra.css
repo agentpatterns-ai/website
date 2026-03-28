@@ -61,3 +61,46 @@
     column-count: 1;
   }
 }
+
+/* ── Feedback FAB ── */
+.wwa-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--md-accent-fg-color);
+  color: #000;
+  border-radius: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wwa-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  color: #000;
+}
+
+.wwa-fab svg {
+  flex-shrink: 0;
+}
+
+/* Collapse to icon-only on small screens */
+@media (max-width: 768px) {
+  .wwa-fab {
+    padding: 0.75rem;
+    border-radius: 50%;
+  }
+
+  .wwa-fab__label {
+    display: none;
+  }
+}
