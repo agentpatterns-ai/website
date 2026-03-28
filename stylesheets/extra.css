@@ -72,11 +72,10 @@
   align-items: center;
   gap: 0.35rem;
   padding: 0.5rem 0.85rem;
-  background: #fff;
-  color: #333;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: var(--md-typeset-a-color);
+  color: #fff;
   border-radius: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   text-decoration: none;
   font-size: 0.75rem;
   font-weight: 600;
@@ -84,19 +83,9 @@
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-[data-md-color-scheme="slate"] .wwa-fab {
-  background: #2e2e2e;
-  color: #ccc;
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
 .wwa-fab:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  color: #333;
-}
-
-[data-md-color-scheme="slate"] .wwa-fab:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   color: #fff;
 }
 
