@@ -62,11 +62,8 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Semantic Context Loading](semantic-context-loading.md) — Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files
 - [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour
 - [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
-<<<<<<< HEAD
-- [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
-=======
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
->>>>>>> origin/main
+- [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 
 ## Error Handling & Drift Prevention
 
