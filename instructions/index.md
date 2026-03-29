@@ -14,7 +14,7 @@ tags:
 Every major AI coding tool ships a project-level instruction file. These pages cover the conventions, ecosystems, and design patterns for authoring them.
 
 - [CLAUDE.md Convention](claude-md-convention.md) — CLAUDE.md is Claude Code's project-level instruction file, read at session start to understand project conventions, tooling, and behavioral rules
-- [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md) — Every major AI coding tool invented a project-level instruction file independently; understanding how they relate helps teams avoid content drift and duplication
+- [Project Instruction File Ecosystem](instruction-file-ecosystem.md) — Every major AI coding tool invented a project-level instruction file independently; understanding how they relate helps teams avoid content drift and duplication
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md) — Four concrete patterns drawn from analysis of 2,500+ real repositories for writing effective AGENTS.md files
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — Capture team-specific patterns, style rules, and tooling requirements in AGENTS.md files throughout the codebase
@@ -27,8 +27,10 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
+- [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — Reference existing code by path instead of embedding samples in prompts — hints stay current, cost fewer tokens, and eliminate maintenance drift
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md) — Repeating a critical instruction at both the start and end of a prompt exploits primacy and recency bias for higher compliance
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — Instruction compliance degrades as rule count grows; adding more rules past a threshold produces omission errors, not better behavior
+- [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — LLM code generation accuracy drops sharply as simultaneous constraint count increases; reduce constraint load through decomposition, schemas, and mechanical enforcement
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behaviour across variation, neither too brittle nor too vague
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
 
@@ -65,6 +67,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 
 Reviewing, versioning, and repairing instruction files over time so they remain effective as projects evolve.
 
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behaviour changes
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — Restore behavioural contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md
 - [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md) — Security boundaries defined for one AI interaction mode may not apply across all modes; content exclusion rules for completions and chat can be silently ignored in agent mode

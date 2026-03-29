@@ -18,6 +18,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Layered Context Architecture](layered-context-architecture.md) — Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal
 - [Context Budget Allocation](context-budget-allocation.md) — Context is a finite budget; every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
+- [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
 
 ## Attention & Positioning
 
@@ -39,6 +40,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context, not as an optimization you toggle on after the fact
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
+- [Token-Efficient Code Generation](token-efficient-code-generation.md) — Reduce token cost of AI-generated code through idiomatic syntax patterns and structural optimization rather than prompt-level efficiency instructions
 
 ## Assembly & Composition
 
@@ -59,6 +61,12 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Repository Map Pattern](repository-map-pattern.md) — Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget
 - [Semantic Context Loading](semantic-context-loading.md) — Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files
 - [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour
+- [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
+<<<<<<< HEAD
+- [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
+=======
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
+>>>>>>> origin/main
 
 ## Error Handling & Drift Prevention
 

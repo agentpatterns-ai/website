@@ -39,7 +39,7 @@ _entries: list[tuple[str, str]] = []  # (loc_url, lastmod_date)
 _EXCLUDED_SRCS: frozenset[str] = frozenset({"404.md", "tags.md"})
 
 # Path prefixes whose pages are never indexed (not-yet-public sections).
-_EXCLUDED_PREFIXES: tuple[str, ...] = ("training/", "learning-paths/")
+_EXCLUDED_PREFIXES: tuple[str, ...] = ("training/",)
 
 
 # ---------------------------------------------------------------------------

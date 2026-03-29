@@ -91,7 +91,7 @@ Do not continue to the next step.
 
 This instruction pattern converts a stuck loop into a structured escalation. The agent surfaces the failure with enough context for the human to choose a hatch, rather than spinning until the human notices.
 
-The retry count (2 in the example) should match the task: some tasks warrant more attempts before escalation; others should escalate immediately. Set it based on how much context burn you can afford per task. [unverified: optimal retry thresholds vary by task type and are not documented by any agent tool vendor]
+The retry count (2 in the example) should match the task: some tasks warrant more attempts before escalation; others should escalate immediately. Set it based on how much context burn you can afford per task. [unverified: no formal evaluation of optimal retry thresholds by task type found in any source]
 
 ## Escalation: Surface, Don't Abandon
 
@@ -104,11 +104,31 @@ When an agent escalates a failure, the output should be actionable:
 
 Vague escalation ("I couldn't complete this") requires the human to re-investigate from scratch. Structured escalation lets the human pick the right hatch immediately.
 
+## Programmatic Escape Hatches
+
+Beyond human-triggered hatches, agent harnesses can enforce escape hatches automatically:
+
+**Turn limits** — Claude Code sub-agents support a [`maxTurns`](https://code.claude.com/docs/en/sub-agents) field that caps agentic turns before forcing a stop. This is the simplest automated hatch: the agent returns whatever partial results it has when the limit hits.
+
+**Loop detection middleware** — [LangChain's harness engineering approach](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) uses a `LoopDetectionMiddleware` that tracks per-file edit counts via tool call hooks. After N edits to the same file, it injects context telling the agent to reconsider its approach rather than letting it continue the same failing path.
+
+**PreToolUse hooks** — Claude Code [hooks](https://code.claude.com/docs/en/hooks) can validate tool calls before execution, blocking dangerous or repetitive operations. A validation script that exits with code 2 blocks the action entirely — useful for preventing agents from retrying operations that will always fail.
+
+**Replan gates** — [The nibzard agentic handbook](https://www.nibzard.com/agentic-handbook) recommends hard interruption points: stop on unexpected tool use, stop if diff exceeds N lines, stop on failing tests twice without narrowing scope. These deterministic checks prevent drift before it becomes a stuck loop.
+
+**Auto-compaction** — Claude Code sub-agents [trigger automatic compaction](https://code.claude.com/docs/en/sub-agents) at approximately 95% context capacity (configurable via `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`). This prevents context overflow from silently degrading output.
+
+## Error Preservation vs. Error Hiding
+
+A common instinct when an agent fails is to clear the error and retry clean. [Manus found the opposite works better](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving wrong turns visible in context helps models avoid repeating the same mistakes. Error recovery works best when the agent can see what already failed.
+
+This applies to context resets too — when starting a new session after a failure, carry forward a summary of what was tried and what went wrong. A blank slate that repeats the same approach produces the same result.
+
 ## Anti-Pattern: Infinite Retry
 
 Letting an agent retry indefinitely is not a strategy — it's a resource burn. Every failed attempt adds to context, and context pollution compounds. The more the agent retries a doomed approach, the less context remains for a working one.
 
-Set a retry ceiling in agent instructions and enforce it with hooks or CI timeouts where possible. [unverified: specific tool support for automated retry limits varies by agent platform]
+Set a retry ceiling in agent instructions and enforce it with [`maxTurns`](https://code.claude.com/docs/en/sub-agents) for sub-agents, [PreToolUse hooks](https://code.claude.com/docs/en/hooks) for tool-level validation, or CI timeouts for pipeline agents.
 
 ## Example
 
@@ -151,11 +171,11 @@ Then start a new attempt with the corrected approach.
 - `/compact` cleans context without losing session progress; CLAUDE.md re-injects automatically
 - Build escalation instructions directly into agent definitions so agents surface failures structurally rather than spinning
 - Before a context reset, document what failed and why — a fresh session repeating the same approach produces the same result
+- Automate escape hatches where possible — `maxTurns`, loop detection middleware, and PreToolUse hooks catch stuck states without human intervention
 
 ## Unverified Claims
 
-- Optimal retry thresholds vary by task type and are not documented by any agent tool vendor [unverified: optimal retry thresholds vary by task type and are not documented by any agent tool vendor]
-- Specific tool support for automated retry limits varies by agent platform [unverified: specific tool support for automated retry limits varies by agent platform]
+- Optimal retry thresholds vary by task type — no published benchmark compares retry counts across task categories [unverified: no formal evaluation of optimal retry thresholds by task type found in any source]
 
 ## Related
 

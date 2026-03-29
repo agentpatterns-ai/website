@@ -24,3 +24,4 @@ Each page links to its primary sources and notes the maturity level. Concepts th
 - [Product-as-IDE](product-as-ide.md) — the application becomes its own development environment
 - [Hyper-Personalized Software](hyper-personalized-software.md) — AI-driven RAD makes custom-built software economically viable again
 - [First-Party Agent Composition](first-party-agent-composition.md) — replace SaaS stitching with agent-built native features
+- [Bootstrapping Coding Agents](bootstrapping-coding-agents.md) — a coding agent re-implements itself from its specification, making the spec the stable artifact

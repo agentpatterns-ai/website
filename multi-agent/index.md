@@ -16,7 +16,9 @@ Choosing the right structure for agent collaboration determines failure modes, l
 - [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md) — Choosing the wrong coordination topology for a task type is a primary source of production agent failures; each topology carries distinct failure modes
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md) — A systematic study of 94 LLM-based multi-agent SE papers identifies 16 design patterns, with Role-Based Cooperation as the dominant pattern
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel
+- [System-Level Optimization Pipeline](system-level-optimization-pipeline.md) — A four-stage agent pipeline decomposes performance engineering into summarization, analysis, optimization, and verification across component boundaries
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md) — Introduce a reference oracle to generate per-unit expected outputs, converting one monolithic task into hundreds of independently verifiable subtasks
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md) — Define agents and workflows as structured data, then compose them through explicit wiring rather than imperative code
 
 ## Fan-Out & Parallelism
 
@@ -36,6 +38,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [File-Based Agent Coordination](file-based-agent-coordination.md) — Coordinate parallel agents using lightweight file locks in a shared repository; git merge mechanics enforce task exclusivity without a central orchestrator
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Decompose the self-improving agent loop into discrete, specialized roles with persistent knowledge layers, staged validation, and gated persistence
+- [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — Separate code and test generation into independent agents so the test writer never sees the code, preventing bias that cuts test accuracy by 30%
 
 ## Multi-Model
 

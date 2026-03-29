@@ -9,6 +9,7 @@ aliases:
   - Parallel Dispatch
   - Scatter-Gather
 ---
+
 # Orchestrator-Worker Pattern
 
 > A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel, reducing resolution time compared to sequential single-agent approaches.
@@ -20,8 +21,8 @@ aliases:
 
 The pattern has two roles:
 
-- **Orchestrator** — receives the task, analyzes its structure, decomposes it into independent subtasks, assigns each to a worker, and synthesizes results
-- **Workers** — each receives a bounded subtask with its own tool set, explores independently, and returns results to the orchestrator
+- **Orchestrator** -- receives the task, analyzes its structure, decomposes it into independent subtasks, assigns each to a worker, and synthesizes results
+- **Workers** -- each receives a bounded subtask with its own tool set, explores independently, and returns results to the orchestrator
 
 The orchestrator does not execute subtasks. Workers do not coordinate with each other.
 
@@ -37,20 +38,20 @@ graph TD
 
 ## When Parallelization Helps
 
-Parallelization is effective when the task requires "multiple independent directions simultaneously" — per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system). This includes:
+Parallelization is effective when the task requires "multiple independent directions simultaneously" -- per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system). This includes:
 
 - Research tasks spanning multiple independent sources or domains
 - Analysis requiring different methodologies applied to the same dataset
 - Code review across separate modules with no shared state
 
-It is not effective when subtasks are sequentially dependent — one worker's output is another's input. Sequential dependencies require chaining, not parallelization.
+It is not effective when subtasks are sequentially dependent -- one worker's output is another's input. Sequential dependencies require chaining, not parallelization.
 
 ## Effort Scaling
 
 The orchestrator should match worker count and tool allocation to task complexity. [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) documents explicit effort-scaling rules:
 
-- Simple queries: 1 agent, 3–10 tool calls
-- Moderate queries: 2–4 subagents with clearly divided responsibilities
+- Simple queries: 1 agent, 3--10 tool calls
+- Moderate queries: 2--4 subagents with clearly divided responsibilities
 - Complex queries: 10+ subagents with carefully partitioned search spaces
 
 These rules belong in the orchestrator's system prompt, not in code. The orchestrator reasons about task complexity and selects the appropriate scale; hard-coding agent counts removes this flexibility.
@@ -61,7 +62,7 @@ Each worker should have:
 
 - A bounded, self-contained subtask description
 - Its own tool set scoped to what the subtask requires
-- An independent exploration trajectory — workers that coordinate create coupling that undermines parallelization
+- An independent exploration trajectory -- workers that coordinate create coupling that undermines parallelization
 
 Workers returning results to the orchestrator is the only coordination point. Any state sharing between workers during execution is a design smell.
 
@@ -71,13 +72,37 @@ Workers returning results to the orchestrator is the only coordination point. An
 
 ## Synthesis
 
-After workers complete, the orchestrator synthesizes their outputs. Synthesis is not aggregation — it is a reasoning step where the orchestrator:
+After workers complete, the orchestrator synthesizes their outputs. Synthesis is not aggregation -- it is a reasoning step where the orchestrator:
 
 - Evaluates the reliability of each worker's findings
 - Identifies conflicts or gaps between results
 - Produces a unified output that draws on the strongest elements from each worker
 
 A weak synthesis step wastes the parallelization benefit. If the orchestrator simply concatenates worker outputs, the pattern adds latency without improving quality.
+
+## Token Economics
+
+Multi-agent orchestration multiplies token consumption. [Anthropic's research system data](https://www.anthropic.com/engineering/multi-agent-research-system) provides concrete multipliers:
+
+| Mode | Token Multiplier vs Chat |
+|------|--------------------------|
+| Single agent | ~4x |
+| Multi-agent (orchestrator + workers) | ~15x |
+
+Token usage explains roughly 80% of performance variance across research tasks, with tool call count and model choice as secondary factors. The pattern's value proposition depends on task value exceeding token cost -- a codebase audit saving hours of manual work justifies 15x tokens; a simple fact lookup does not.
+
+The effort-scaling rules in the orchestrator's prompt are the primary mechanism for controlling this cost. Without them, orchestrators tend to spawn excessive workers for simple queries.
+
+## Performance
+
+[Anthropic's internal evaluations](https://www.anthropic.com/engineering/multi-agent-research-system) report multi-agent systems with a stronger lead model (Opus 4) coordinating cheaper workers (Sonnet 4) outperformed single-agent Opus by 90.2% on complex research tasks. The asymmetry matters: the orchestrator needs stronger reasoning for decomposition and synthesis, while workers need adequate capability for bounded subtasks.
+
+## Common Failure Modes
+
+- **Over-spawning** -- launching too many workers for simple queries; effort-scaling rules prevent this
+- **Source quality drift** -- workers selecting SEO-optimized content farms over authoritative sources
+- **Premature termination** -- workers stopping after first results rather than exploring thoroughly
+- **Sequential bottleneck** -- synchronous wait for all workers creates latency spikes when one worker is slow
 
 ## Example
 
@@ -95,15 +120,16 @@ Worker prompt (per repo):
    missing test coverage, secrets in code. Return structured findings."
 ```
 
-The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (e.g., a dependency flagged critical in one repo but patched in another) and produces a consolidated report — rather than concatenating 50 raw outputs.
+The orchestrator dispatches 50 workers simultaneously, each scoped to one repository with read-only file tools. Workers return structured JSON findings. The orchestrator then evaluates conflicts (e.g., a dependency flagged critical in one repo but patched in another) and produces a consolidated report -- rather than concatenating 50 raw outputs.
 
 ## Key Takeaways
 
 - Workers run independently on bounded subtasks with separate tool sets; no inter-worker coordination
 - Match worker count to task complexity; make scaling rules explicit in the orchestrator's prompt
-- The orchestrator prompt is the highest-leverage and most sensitive component — small changes have large effects
-- Synthesis is a reasoning step, not aggregation — the orchestrator evaluates and selects, not just combines
+- The orchestrator prompt is the highest-leverage and most sensitive component -- small changes have large effects
+- Synthesis is a reasoning step, not aggregation -- the orchestrator evaluates and selects, not just combines
 - Parallelization only helps for genuinely independent subtasks; sequential dependencies require chaining
+- Multi-agent systems consume ~15x the tokens of chat interactions -- task value must justify the cost
 
 ## Unverified Claims
 
@@ -124,3 +150,5 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
+- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
+- [Rainbow Deployments for Agents](rainbow-deployments-agents.md)

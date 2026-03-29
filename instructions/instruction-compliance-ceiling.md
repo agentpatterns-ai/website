@@ -113,3 +113,4 @@ If you cannot read your instruction file in under two minutes, it is too long [u
 - [Content Exclusion Gap](content-exclusion-gap.md)
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
+- [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — the same degradation mechanism applied to code generation constraints

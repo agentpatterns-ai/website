@@ -57,6 +57,12 @@ Code injection in multi-agent pipelines exploits agent trust in code it reads as
 
 - [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md) — A coder-reviewer-tester architecture with a dedicated security analysis agent achieves the highest resilience while recovering efficiency losses
 
+## Tool Invocation
+
+Tool invocation exposes attack surfaces distinct from prompt injection. Malicious tools exploit argument generation and return processing to leak context and execute arbitrary commands.
+
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution
+
 ## Supply Chain
 
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
@@ -68,3 +74,4 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 No single safety mechanism is sufficient. Layered defenses ensure that failure of one layer does not compromise the agent.
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
+- [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates

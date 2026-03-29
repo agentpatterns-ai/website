@@ -12,10 +12,12 @@ tags:
 ## Pages
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — Agent-assisted code review routes the mechanical first pass to an agent, reserving human reviewers for design and architecture judgment
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — Autonomous coding agents dramatically increase PR volume but face lower merge rates than humans — speed and quantity alone do not equal engineering value
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — Agentic code review replaces static diff analysis with a tool-calling architecture where the reviewer actively explores the repository
 - [Committee Review Pattern](committee-review-pattern.md) — Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output
 - [Diff-Based Review](diff-based-review.md) — Review what changed, not the full output — mistakes live in the delta, and diffs compress review effort to the right scope
+- [Human-AI Review Synergy](human-ai-review-synergy.md) — Empirical evidence from 278,790 code reviews shows AI and human reviewers have complementary but unequal strengths — structuring collaboration around these differences improves outcomes
 - [PR Description Style as a Lever](pr-description-style-lever.md) — Treating PR description structure as a configurable agent parameter measurably affects reviewer engagement and merge outcomes
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — Predictive models can identify AI-generated functions likely to be deleted before reviewers spend time examining them
 - [Review-Then-Implement Loop](review-then-implement-loop.md) — Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result
