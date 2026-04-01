@@ -112,6 +112,7 @@ The rewritten issue applies **W** (descriptive title with file path, concrete be
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [Specification as Prompt](specification-as-prompt.md)
 - [Feature List Files](feature-list-files.md)
 - [Instruction Polarity](instruction-polarity.md)

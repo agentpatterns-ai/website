@@ -51,7 +51,7 @@ Prefix caching requires exact byte-level matches. Three patterns consistently bu
 
 ## Stateless Requests: Caching and ZDR Compatibility
 
-The caching layout only works when each request is a pure prefix extension of the prior one. This requires resending the full conversation history on every call.
+The caching layout only works when each request is a pure prefix extension of the prior one. Resend the full conversation history on every call.
 
 ```
 Turn 1: [system prompt] + [user message 1]
@@ -61,7 +61,7 @@ Turn 3: [system prompt] + [user message 1] + ... + [user message 3]
 
 Turns 2 and 3 hit the cache for all tokens before the new content. [Source: [Unlocking the Codex Harness](https://openai.com/index/unlocking-the-codex-harness/)]
 
-This design also satisfies Zero Data Retention (ZDR) requirements. ZDR prohibits the provider from persisting user data server-side; session-based APIs are inherently incompatible. Stateless requests have no server-side session dependency. [Source: [Unlocking the Codex Harness](https://openai.com/index/unlocking-the-codex-harness/)]
+This design also satisfies Zero Data Retention (ZDR) requirements. ZDR prohibits persisting user data server-side; session-based APIs are incompatible. Stateless requests have no server-side session dependency. [Source: [Unlocking the Codex Harness](https://openai.com/index/unlocking-the-codex-harness/)]
 
 **Portability.** The same harness code works across providers; the full conversation state lives in the client.
 
@@ -148,3 +148,5 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
+- [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
+- [Layered Context Architecture](layered-context-architecture.md)

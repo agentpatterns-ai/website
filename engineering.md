@@ -1,9 +1,18 @@
 ---
 title: "Engineering: Tools, Review, Verification, Security, and Observability"
 description: "Engineering disciplines for production agent systems — tool design, code review, verification, security hardening, and observability."
+tags:
+  - engineering
+  - tool-design
+  - security
+  - observability
+  - verification
+  - code-review
 ---
 
 # Engineering
+
+> The engineering disciplines that turn agent prototypes into production systems — tool design, code review, verification, security hardening, and observability.
 
 The engineering disciplines that make agent systems production-ready — from tool design and code review to verification, security, and observability.
 

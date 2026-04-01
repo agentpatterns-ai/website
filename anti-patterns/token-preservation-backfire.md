@@ -39,7 +39,7 @@ flowchart LR
 
 System-level instructions can override user-level task requests. When token preservation is framed as a system directive, the efficiency constraint takes precedence over the user's actual objective. The agent is not being lazy -- it is faithfully following an instruction that conflicts with the task.
 
-Any instruction that frames work as a *cost to be minimised* (rather than a *goal to be achieved*) risks reducing agent ambition. Whether this generalises across all frontier models is unclear — Cursor notes "different models respond differently to the same prompts" `[unverified]`.
+Any instruction that frames work as a *cost to be minimised* (rather than a *goal to be achieved*) risks reducing agent ambition. Whether this generalises across frontier models is unclear — Cursor notes "different models respond differently to the same prompts" `[unverified]`.
 
 ## Mitigation
 
@@ -53,7 +53,7 @@ Any instruction that frames work as a *cost to be minimised* (rather than a *goa
 
 The fix is to reframe constraints as **quality targets** rather than **resource limits**.
 
-**Frame around action, not conservation.** OpenAI's Codex prompting guide uses "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked" -- what to do, not what to avoid spending.
+**Frame around action, not conservation.** OpenAI's Codex prompting guide uses "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked" -- what to do, not what to avoid.
 
 **Use completion criteria instead of resource limits.** LangChain addresses agent laziness through structured phases (Planning, Build, Verify, Fix) and pre-completion checklists. The agent knows it is done because it met quality criteria, not because it hit a budget.
 

@@ -31,9 +31,9 @@ graph LR
 
 ## Why It Happens
 
-Empirically, models prioritize some constraints over others when given too many simultaneously. The result is partial compliance — the model satisfies the most prominent constraints and quietly drops the rest ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). [unverified] The likely mechanism is attention dilution: as constraint count grows, the model's capacity to track each requirement during decoding degrades, similar to how humans lose accuracy when juggling too many instructions at once.
+Models prioritize some constraints over others when given too many simultaneously — satisfying the most prominent and quietly dropping the rest ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). [unverified] The likely mechanism is attention dilution: as constraint count grows, the model's capacity to track each requirement during decoding degrades.
 
-This appears to be the same degradation pattern as the [instruction compliance ceiling](instruction-compliance-ceiling.md) — but applied specifically to code generation constraints rather than behavioral rules. [unverified]
+This appears to be the same degradation pattern as the [instruction compliance ceiling](instruction-compliance-ceiling.md) applied to code generation constraints rather than behavioral rules. [unverified]
 
 ## Mitigations
 
@@ -106,9 +106,9 @@ Separating generation from verification lets the model focus attention on checki
 
 ## What About Intent Amplification?
 
-Research into contrastive decoding techniques — comparing logits from a full prompt against an intent-masked version — shows up to 71% improvement in constraint adherence ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). These techniques build on classifier-free guidance adapted from image generation to text ([Sanchez et al., 2023](https://arxiv.org/abs/2306.17806)).
+Contrastive decoding — comparing logits from a full prompt against an intent-masked version — shows up to 71% improvement in constraint adherence ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)), building on classifier-free guidance adapted from image generation ([Sanchez et al., 2023](https://arxiv.org/abs/2306.17806)).
 
-However, these methods require token-level logit access, making them **applicable only to open-weight models** (via frameworks like vLLM or llama.cpp). Developers using closed-source APIs — Claude, GPT-4, Copilot — cannot modify decoding behavior. The mitigations above work with any model.
+These methods require token-level logit access, making them **applicable only to open-weight models** (vLLM, llama.cpp). Developers using closed-source APIs cannot modify decoding behavior. The mitigations above work with any model.
 
 ## Key Takeaways
 
@@ -119,11 +119,11 @@ However, these methods require token-level logit access, making them **applicabl
 
 ## Unverified Claims
 
-- The attention dilution mechanism in "Why It Happens" is a plausible explanation consistent with the empirical data, but the cited paper measures compliance rates, not internal model attention patterns [unverified]
-- The claim that constraint degradation in code generation shares the same mechanism as the behavioral instruction compliance ceiling is an inference across separate bodies of work, not directly demonstrated [unverified]
-- Sequential constraint decomposition allowing the model to verify prior constraints against existing code is a practitioner heuristic, not empirically measured [unverified]
-- The claim that schemas free attention for behavioral constraints is architecturally plausible but not tested in published studies [unverified]
-- Separating generation from verification improving constraint adherence is a common practice recommendation without controlled evaluation [unverified]
+- The attention dilution mechanism is consistent with the empirical data, but the cited paper measures compliance rates, not internal attention patterns [unverified]
+- Shared mechanism between code constraint degradation and the behavioral instruction compliance ceiling is inferred across separate bodies of work [unverified]
+- Sequential constraint decomposition as a mitigation is a practitioner heuristic, not empirically measured [unverified]
+- Schemas freeing attention for behavioral constraints is architecturally plausible but untested in published studies [unverified]
+- Separating generation from verification is a common recommendation without controlled evaluation [unverified]
 
 ## Related
 

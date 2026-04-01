@@ -107,3 +107,5 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — predicting which AI-generated functions reviewers will flag or delete
 - [PR Description Style Lever](pr-description-style-lever.md) — how PR description structure affects reviewer engagement and merge rates
+- [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — why higher PR volume from agents does not equal higher engineering value

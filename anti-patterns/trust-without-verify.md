@@ -88,3 +88,4 @@ The test catches the missing `+` in the character class. The developer asks the 
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling, producing code that compiles but fails in production
 - [Context Poisoning](context-poisoning.md) — unchecked hallucinations propagate as trusted premises
 - [Comprehension Debt](comprehension-debt.md) — merging agent output without understanding it compounds into unverifiable code
+- [The Yes-Man Agent](yes-man-agent.md) — agents that execute without pushback ship the same unverified errors at machine speed

@@ -5,6 +5,9 @@ tags:
   - agent-design
   - multi-agent
   - observability
+aliases:
+  - "define-and-compose"
+  - "declarative agent orchestration"
 ---
 
 # Declarative Multi-Agent Composition
@@ -13,9 +16,9 @@ tags:
 
 ## Why Declarative
 
-Imperative multi-agent code tangles three concerns: agent capabilities, coordination logic, and runtime behavior. When a workflow fails, the developer must trace through code to determine whether the problem is a misconfigured agent, a wrong handoff, or a runtime error. Declarative specs separate these layers.
+Imperative multi-agent code tangles agent capabilities, coordination logic, and runtime behavior. When a workflow fails, the developer must trace through code to distinguish a misconfigured agent from a wrong handoff or a runtime error. Declarative specs separate these layers.
 
-A declarative agent definition captures the **what** (which model, which tools, which memory) without encoding the **how** (framework internals, API call sequences, retry logic). This separation makes agent configurations:
+A declarative definition captures the **what** (model, tools, memory) without encoding the **how** (framework internals, API call sequences, retry logic). This makes agent configurations:
 
 - **Inspectable** — the full agent spec is readable without running anything
 - **Diffable** — changes between workflow versions show up as structured data changes, not code refactors
@@ -54,11 +57,11 @@ The pattern has two phases:
 }
 ```
 
-This mirrors how production teams already think about agent systems — roles first, then coordination — but makes the structure machine-readable.
+This mirrors how production teams already think — roles first, then coordination — but makes the structure machine-readable.
 
 ## Built-In Profiling Changes the Debugging Model
 
-Multi-agent workflows fail in ways that single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research found that **debugging and sensemaking tools** were the second most requested capability, confirming that multi-agent systems need observability built into the composition layer, not bolted on after.
+Multi-agent workflows fail in ways single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research found **debugging and sensemaking tools** were the second most requested capability — multi-agent systems need observability built into the composition layer, not bolted on after.
 
 Effective multi-agent profiling surfaces:
 
@@ -71,13 +74,13 @@ When agent definitions are declarative, the runtime can instrument every agent b
 
 ## The Export-to-Code Path
 
-A recurring lesson from the AutoGen Studio user base: visual/declarative tools are useful for prototyping, but production deployments need code. The pattern that works is **declarative-first, code-second**:
+Visual/declarative tools work for prototyping, but production deployments need code. The pattern that works is **declarative-first, code-second**:
 
 1. **Prototype** in declarative format — fast iteration, visual feedback
 2. **Validate** with built-in profiling — catch coordination issues early
 3. **Export** to code when the workflow is stable — full control, version-controlled, testable
 
-This avoids the [Framework-First anti-pattern](../anti-patterns/framework-first.md) by starting with explicit specifications rather than opaque abstractions. The declarative layer forces every design decision to be visible before any framework code runs.
+This avoids the [Framework-First anti-pattern](../anti-patterns/framework-first.md) by starting with explicit specifications rather than opaque abstractions.
 
 ## When Declarative Composition Breaks Down
 
@@ -85,7 +88,7 @@ Declarative specs work well for **static workflows** — fixed agent sets with k
 
 - **Dynamic agent creation** — workflows that spawn agents based on runtime conditions need imperative escape hatches
 - **Complex conditional routing** — "if the reviewer finds security issues, spawn a security specialist" is awkward in pure JSON
-- **Shared mutable state** — agents that need to read and write shared context during execution require runtime coordination beyond what a static spec captures
+- **Shared mutable state** — agents that read and write shared context during execution require runtime coordination beyond what a static spec captures
 
 The practical boundary: use declarative composition for the workflow skeleton, imperative code for runtime adaptation.
 
@@ -103,13 +106,53 @@ graph LR
     style E fill:#e8f5e9
 ```
 
+## Example
+
+A CI pipeline that reviews pull requests using three agents defined declaratively and composed into a sequential workflow:
+
+```yaml
+agents:
+  code-reviewer:
+    model: claude-sonnet-4-20250514
+    tools: [read_file, git_diff]
+    prompt: "Review code changes for correctness and style violations."
+    max_tokens: 4096
+
+  security-scanner:
+    model: claude-sonnet-4-20250514
+    tools: [read_file, grep, semgrep_run]
+    prompt: "Scan changed files for security vulnerabilities."
+    max_tokens: 4096
+
+  test-verifier:
+    model: claude-sonnet-4-20250514
+    tools: [run_tests, read_file]
+    prompt: "Verify that existing tests pass and new code has coverage."
+    max_tokens: 2048
+
+workflow:
+  name: pr-review-pipeline
+  orchestration: sequential
+  stages:
+    - agent: code-reviewer
+      output: { verdict: string, issues: list }
+    - agent: security-scanner
+      output: { vulnerabilities: list, severity: string }
+    - agent: test-verifier
+      output: { passed: bool, coverage_delta: number }
+  final_gate:
+    approve_if: "all(stage.verdict != 'reject' for stage in stages)"
+```
+
+Adding a fourth agent requires one new block under `agents:` and one new entry under `stages:` — no coordination code changes. The runtime instruments each stage boundary automatically, producing per-agent token counts and timing without manual instrumentation.
+
 ## Key Takeaways
 
 - Define agents as structured data (model, tools, memory, prompt) before writing coordination code
 - Compose workflows by wiring agent definitions, not by coding agent interactions
 - Build profiling into the composition layer — multi-agent debugging requires per-agent observability from the start
 - Use declarative specs for prototyping and validation; export to code for production
-- Cross-reference coordination issues with [Agent Handoff Protocols](agent-handoff-protocols.md) — declarative composition defines the workflow structure, handoff protocols define what flows between stages
+- Cross-reference coordination issues with [Agent Handoff Protocols](agent-handoff-protocols.md) — handoff protocols define what flows between declarative stages
 
 ## Related
 
@@ -119,6 +162,8 @@ graph LR
 - [Agent Debugging](../observability/agent-debugging.md) — diagnosing bad output in single-agent systems
 - [Loop Detection](../observability/loop-detection.md) — detecting agents stuck in unproductive cycles
 - [OpenTelemetry for Agent Observability](../standards/opentelemetry-agent-observability.md) — standardized observability for agent systems
+- [Orchestrator-Worker](orchestrator-worker.md) — the most common multi-agent coordination topology
+- [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — declarative specs for constraining subagent tool access
 
 ## Unverified Claims
 

@@ -6,6 +6,9 @@ tags:
   - agent-design
   - reliability
   - tool-agnostic
+aliases:
+  - Error History Retention
+  - Negative Examples in Context
 ---
 
 # Error Preservation in Context
@@ -73,7 +76,7 @@ When choosing tools for agent workflows, prefer those with descriptive error out
 | **Preserve everything** | Manus | Keep all failed actions visible; let the model learn from the full history | Context bloat in long sessions |
 | **Prevent and compact** | Anthropic | Design tools to prevent errors; clear tool results as lightweight compaction | Losing error signal the model needs for recovery |
 
-Anthropic frames tool misuse as context pollution and recommends tool result clearing as compaction ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Manus takes the opposite position — those "dead-ends" are the signal. Practical rule: preserve during active recovery, compact once recovery succeeds.
+Anthropic frames tool misuse as [context pollution](../anti-patterns/session-partitioning.md) and recommends tool result clearing as compaction ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Manus takes the opposite position — those "dead-ends" are the signal. Practical rule: preserve during active recovery, compact once recovery succeeds.
 
 ## Anchoring Recovery in Deterministic Signals
 
@@ -120,3 +123,5 @@ Removing the first failed tool call would cause the model to retry `/etc/config.
 - [Observation Masking](observation-masking.md)
 - [Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md)
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [Lost in the Middle](lost-in-the-middle.md)
+- [Attention Sinks](attention-sinks.md)

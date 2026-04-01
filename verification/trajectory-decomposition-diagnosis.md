@@ -6,6 +6,10 @@ tags:
   - evals
   - observability
   - agent-design
+aliases:
+  - "trajectory decomposition"
+  - "TRAJEVAL"
+  - "stage decomposition"
 ---
 
 # Trajectory Decomposition: Diagnose Where Coding Agents Fail
@@ -14,9 +18,9 @@ tags:
 
 ## The Problem with Binary Outcomes
 
-[pass@k metrics](pass-at-k-metrics.md) tell you whether an agent solved a problem and how consistently. [Outcome grading](grade-agent-outcomes.md) tells you whether the final state is correct. Neither tells you *where* the agent went wrong when it fails.
+[pass@k metrics](pass-at-k-metrics.md) tell you whether an agent solved a problem. [Outcome grading](grade-agent-outcomes.md) tells you whether the final state is correct. Neither tells you *where* the agent went wrong when it fails.
 
-A coding agent that fails a SWE-bench task could have failed at any point: wrong files, wrong functions, or wrong edits. Binary metrics collapse these distinct failure modes into a single "fail," making targeted improvement impossible.
+A coding agent that fails a SWE-bench task could have failed at any point: wrong files, wrong functions, or wrong edits. Binary metrics collapse these failure modes into a single "fail," making targeted improvement impossible.
 
 ## Three-Stage Decomposition
 
@@ -49,7 +53,7 @@ Analysis of 16,758 trajectories across three architectures and seven models reve
 
 ### Universal over-reading
 
-All agents examine approximately 22x more functions than necessary. This is not a model-specific bug — it is a structural property of how current agents explore code. Context engineering to reduce read scope has the highest ROI for most agent configurations.
+All agents examine approximately 22x more functions than necessary — a structural property of how current agents explore code, not a model-specific bug. Context engineering to reduce read scope has the highest ROI for most agent configurations.
 
 ### Model-specific failure stages
 

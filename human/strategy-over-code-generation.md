@@ -13,7 +13,7 @@ tags:
 
 ## The Evidence
 
-Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects. This persists despite AI assistants increasing code production speed by [50–55%](https://arxiv.org/abs/2601.01839). The bottleneck is not code generation. It is strategic alignment.
+Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects [unverified]. This persists despite AI assistants increasing code production speed by [50–55%](https://arxiv.org/abs/2601.01839). The bottleneck is not code generation. It is strategic alignment.
 
 Prause (2026) surveyed 150 data scientists and used Structural Equation Modeling to identify four interdependent success factors, quantifying how they cascade:
 

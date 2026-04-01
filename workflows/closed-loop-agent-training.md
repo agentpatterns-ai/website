@@ -1,6 +1,9 @@
 ---
 title: "Closed-Loop Agent Training from Tool Schemas"
 description: "Generate synthetic training data directly from MCP tool definitions, fine-tune small models to match frontier performance, and iterate as schemas evolve."
+aliases:
+  - schema-driven agent training
+  - synthetic tool-use training
 tags:
   - workflows
   - agent-design
@@ -14,7 +17,7 @@ tags:
 
 ## The Problem
 
-Enterprise teams deploying AI agents face a trilemma: frontier models (GPT-4o, Claude) deliver capability but leak data to third parties and cost 8-10x more at inference time; small open models preserve sovereignty but lack tool-use competence; and bridging the gap with fine-tuning requires training data that nobody has time to curate manually.
+Enterprise teams deploying AI agents face a trilemma: frontier models (GPT-4o, Claude) deliver capability but leak data to third parties and cost 8-10x more at inference time [unverified]; small open models preserve sovereignty but lack tool-use competence; and bridging the gap with fine-tuning requires training data that nobody has time to curate manually.
 
 The bottleneck is the training data pipeline. Most teams treat tool integration, data generation, and model training as separate concerns with different owners. This fragmentation means schema changes invalidate existing datasets, new tools require fresh annotation campaigns, and the feedback loop between deployment failures and training improvements is measured in weeks.
 
@@ -125,6 +128,48 @@ Parameter errors dominate -- the model knows *which* tool to call but struggles 
 - Your tool set is small and stable (manual curation is faster)
 - You need frontier-level reasoning on open-ended tasks beyond your tool domain
 - You lack GPU infrastructure for fine-tuning (SFT needs ~4 GPUs for a few hours minimum)
+
+## Example
+
+An HR platform exposes three MCP tools:
+
+```json
+[
+  {
+    "name": "get_open_roles",
+    "parameters": {},
+    "returns": { "role_ids": ["string"] }
+  },
+  {
+    "name": "get_role_candidates",
+    "parameters": { "role_id": "string" },
+    "returns": { "candidate_ids": ["string"], "scores": ["number"] }
+  },
+  {
+    "name": "schedule_interview",
+    "parameters": { "candidate_id": "string", "role_id": "string" },
+    "returns": { "interview_id": "string" }
+  }
+]
+```
+
+**Graph construction** creates edges: `get_open_roles` -> `get_role_candidates` (via `role_id`) -> `schedule_interview` (via `candidate_id` + `role_id`).
+
+**Trajectory sampling** walks this graph and produces:
+
+```
+1. get_open_roles() -> { role_ids: ["R-1042", "R-1087"] }
+2. get_role_candidates(role_id="R-1042") -> { candidate_ids: ["C-501", "C-602", "C-715"], scores: [92, 88, 85] }
+3. schedule_interview(candidate_id="C-501", role_id="R-1042") -> { interview_id: "INT-3301" }
+4. schedule_interview(candidate_id="C-602", role_id="R-1042") -> { interview_id: "INT-3302" }
+```
+
+**Task synthesis** generates descriptions at two levels:
+
+- Low-level: "List open roles, retrieve candidates for role R-1042, and schedule interviews for the top two."
+- High-level: "Interview the strongest candidates for an open position."
+
+After validation against a sandboxed HR API, both the trajectory and its task descriptions become a single training example. Repeat across tool subgraphs to build a dataset of 500-1,000 examples, then fine-tune.
 
 ## Key Takeaways
 

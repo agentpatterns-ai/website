@@ -1,6 +1,9 @@
 ---
 title: "Static Content First: Maximizing Prompt Cache Hits"
 description: "Place static prompt content first and variable content last to maximize prompt cache hits and reduce inference costs in agent loops."
+aliases:
+  - "prompt prefix caching"
+  - "cache-friendly prompt ordering"
 tags:
   - context-engineering
   - cost-performance
@@ -117,3 +120,5 @@ The key changes: tools sorted by name (deterministic order), system prompt built
 - [Filesystem-Based Tool Discovery](../tool-engineering/filesystem-tool-discovery.md)
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Prompt Compression](prompt-compression.md)
+- [Context Budget Allocation](context-budget-allocation.md)

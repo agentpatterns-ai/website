@@ -130,4 +130,6 @@ A task requiring only one of five documentation sections consumes context for th
 - [Observation Masking](observation-masking.md)
 - [Prompt Compression](prompt-compression.md)
 - [The Infinite Context](../anti-patterns/infinite-context.md)
+- [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

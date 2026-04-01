@@ -96,3 +96,6 @@ Running a sixth pass would likely produce cosmetic changes that may degrade qual
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md) — architectural context for convergence as a loop-termination mechanism
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — iterative refinement and effort allocation across passes
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing accumulated vs fresh context across iteration loops
+- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — iteration mechanics within a single agent turn
+- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — convergence signals applied to self-improvement cycles
+- [Execution-First Delegation](execution-first-delegation.md) — stopping and refinement decisions in delegated execution

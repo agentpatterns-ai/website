@@ -30,7 +30,7 @@ Classical patterns are a **starting point**, not a blueprint. They solve code-or
 | Circuit Breaker | `maxTurns`; [loop detection](../observability/loop-detection.md); backpressure | Budget-Constrained Execution Loop opens the circuit on repeated failure rather than retrying infinitely |
 | Composite | [Orchestrator-worker](../multi-agent/orchestrator-worker.md); hierarchical decomposition | Google ADK explicitly names Composite for hierarchical agent trees [unverified] |
 | Saga | Multi-step agentic workflows with compensating actions | Each tool call is a saga step; the agent coordinates compensation when a step fails |
-| Factory / Abstract Factory | Dynamic tool instantiation; agent spawning | Tool Search Tool manufactures tool definitions on demand; sub-agent spawning is a factory operation |
+| Factory / Abstract Factory | [Dynamic tool](../anti-patterns/dynamic-tool-fetching-cache-break.md) instantiation; agent spawning | Tool Search Tool manufactures tool definitions on demand; sub-agent spawning is a factory operation |
 | Decorator | Context injection middleware; summarisation wrapping | Middleware that adds context headers or wraps outputs before passing downstream |
 | Chain of Responsibility | Hook pipelines; permission escalation chains | Sequential hook evaluation where each handler can accept, modify, or reject a tool call |
 | Memento | Checkpointing; session recovery | Multi-session state resumption mirrors Memento — save state externally, restore on next session |

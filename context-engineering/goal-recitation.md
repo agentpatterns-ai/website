@@ -16,13 +16,11 @@ tags:
 
 ## The Problem
 
-Agent sessions exceeding ~50 tool calls routinely drift from their original objective. As conversation history grows, earlier instructions fall into the low-attention middle zone of the context window — still present but no longer attended to ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)).
-
-Arike et al. (2025) confirmed this across multiple models on sequences exceeding 100,000 tokens: all exhibited goal drift, predominantly through **inaction** rather than incorrect action ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)).
+Agent sessions exceeding ~50 tool calls routinely drift from their original objective. Earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)). Arike et al. (2025) confirmed this across multiple models on 100k+ token sequences: all exhibited goal drift, predominantly through **inaction** ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)).
 
 ## The Technique
 
-The agent maintains a running objectives file (e.g., `todo.md`) and rewrites it after each completed step — checking off finished items, restating remaining goals, and noting current status. By continuously writing the plan into the context tail, the agent pushes its global objectives into the high-attention recency zone.
+The agent maintains a running objectives file (e.g., `todo.md`) and rewrites it after each completed step — checking off finished items, restating remaining goals, and noting status. This pushes global objectives into the high-attention recency zone.
 
 ```mermaid
 graph LR
@@ -34,16 +32,16 @@ graph LR
     F --> A
 ```
 
-This is the pattern Manus uses for complex tasks averaging ~50 tool calls: a `todo.md` file maintained step-by-step, where the act of rewriting recites objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Manus uses this pattern for tasks averaging ~50 tool calls: a `todo.md` maintained step-by-step, where rewriting recites objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## How It Differs from Related Techniques
 
 | Technique | Who initiates | When it fires | Mechanism |
 |-----------|--------------|---------------|-----------|
-| **Goal recitation** | Agent | Every step (continuous) | Agent rewrites its own objectives into context tail |
-| [Critical instruction repetition](../instructions/critical-instruction-repetition.md) | Author | At prompt design time (static) | Duplicate rules at start and end of prompt |
-| [Event-driven system reminders](../instructions/event-driven-system-reminders.md) | Harness | On detected conditions (reactive) | Middleware injects user-role messages |
-| [Trajectory logging / progress files](../observability/trajectory-logging-progress-files.md) | Agent | At session boundaries | Filesystem state for cross-session recovery |
+| **Goal recitation** | Agent | Every step (continuous) | Rewrites objectives into context tail |
+| [Critical instruction repetition](../instructions/critical-instruction-repetition.md) | Author | Prompt design time (static) | Duplicates rules at start and end of prompt |
+| [Event-driven system reminders](../instructions/event-driven-system-reminders.md) | Harness | Detected conditions (reactive) | Injects user-role messages |
+| [Trajectory logging / progress files](../observability/trajectory-logging-progress-files.md) | Agent | Session boundaries | Filesystem state for cross-session recovery |
 
 ## Implementation
 
@@ -78,7 +76,7 @@ def post_step_recitation(agent_state: AgentState) -> str:
 
 ## Amplifying Recitation with Strong Goal Elicitation
 
-Arike et al. (2025) found that **strong goal elicitation** — restating the core objective in imperative language — produced significant drift reduction across all tested models.
+Arike et al. (2025) found that **strong goal elicitation** — restating the core objective in imperative language — significantly reduced drift across all tested models.
 
 Weak (task list only):
 
@@ -105,7 +103,7 @@ Goal recitation addresses within-session attention decay but not:
 
 - **Post-compaction drift** — if the todo file is lost during context compression, recitation cannot help. Instruct compaction to preserve it verbatim ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)).
 - **Instruction fade-out** — after ~15 tool calls, agents violate foundational instructions regardless of recitation. Event-driven system reminders are the complementary defense ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
-- **Cross-session continuity** — recitation is ephemeral. For multi-session persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
+- **Cross-session continuity** — recitation is ephemeral. For persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
 
 ## Unverified Claims
 
@@ -115,14 +113,14 @@ Goal recitation addresses within-session attention decay but not:
 ## Related
 
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md) — the underlying attention problem
-- [Attention Sinks: Why First Tokens Always Win](attention-sinks.md) — complements recency bias: why the tail gets attention but the middle loses it
-- [Context Window Dumb Zone](context-window-dumb-zone.md) — the degradation gradient that makes goal recitation necessary as context fills
-- [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — managing context compression to prevent post-compaction goal drift
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md) — tiered offloading and summarisation for long-running agents
+- [Attention Sinks: Why First Tokens Always Win](attention-sinks.md) — why the tail gets attention but the middle loses it
+- [Context Window Dumb Zone](context-window-dumb-zone.md) — the degradation gradient that makes goal recitation necessary
+- [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — managing context compression to prevent post-compaction drift
+- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md) — tiered offloading for long-running agents
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode this technique mitigates
 - [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) — static, author-placed counterpart
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — harness-injected, reactive counterpart
 - [Trajectory Logging via Progress Files](../observability/trajectory-logging-progress-files.md) — cross-session audit trail
-- [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) — addresses post-compaction drift that goal recitation alone cannot prevent
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — complementary technique for structuring context bundles per phase, including objective framing
-- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md) — the broader discipline of which goal recitation is a technique
+- [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) — addresses post-compaction drift that recitation alone cannot prevent
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — structuring context bundles per phase, including objective framing
+- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md) — the broader discipline

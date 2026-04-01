@@ -15,11 +15,11 @@ aliases:
 
 ## The Whole-Codebase Ingestion Problem
 
-Feeding an entire repository into an LLM context window does not scale. A 250K-line C project exceeds any current context limit, and even with retrieval, whole-codebase approaches produce noisy results because the model lacks a directed question to answer.
+Feeding an entire repository into an LLM context window does not scale. A 250K-line C project exceeds any current context limit, and whole-codebase approaches produce noisy results because the model lacks a directed question to answer.
 
-Demand-driven analysis inverts this: start from a specific suspicious pattern (a potentially null pointer, an allocation without a matching free), then trace backward through only the call chains that matter. The agent reads functions one at a time, following data flow across boundaries, and stops when the flow is resolved or a bug is confirmed.
+Demand-driven analysis inverts this: start from a suspicious pattern (a potentially null pointer, an allocation without a matching free), then trace only the call chains that matter. The agent reads functions one at a time, following data flow across boundaries, and stops when the flow is resolved or a bug is confirmed.
 
-[RepoAudit](https://arxiv.org/abs/2501.18160) demonstrates this approach on C/C++ memory safety bugs (null pointer dereference, memory leak, use-after-free) across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
+[RepoAudit](https://arxiv.org/abs/2501.18160) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
 
 ## Architecture: Initiator-Explorer-Validator
 
@@ -38,9 +38,9 @@ graph TD
 
 ### Initiator
 
-Pattern-matches source code (via tree-sitter or AST queries) to find suspect sites — locations where a bug *could* exist. For null pointer dereference: every pointer dereference. For memory leak: every allocation. Each suspect site captures the file path, line number, the tracked variable, and the bug category. This is a syntactic filter, not semantic analysis — fast and deterministic.
+Pattern-matches source code (via tree-sitter or AST queries) to find suspect sites — locations where a bug *could* exist. Each suspect site captures file path, line number, tracked variable, and bug category. This is a syntactic filter, not semantic analysis — fast and deterministic.
 
-The initiator also **abstracts** each function before analysis: the LLM strips irrelevant statements, keeping only those that affect the tracked variable. This pre-filtering step improved true positive detection by 47.5% in ablation studies.
+The initiator also **abstracts** each function before analysis: the LLM strips irrelevant statements, keeping only those that affect the tracked variable. This improved true positive detection by 47.5% in ablation studies.
 
 ### Explorer
 
@@ -73,25 +73,19 @@ This reduced LLM calls by 3-30x depending on the project, and is the primary mec
 
 ## Where LLMs Add Value Over Traditional Tools
 
-Traditional static analysis tools (Meta Infer, Amazon CodeGuru) struggle with pointer aliasing and path feasibility — problems that require reasoning about program semantics rather than pattern matching. On the same benchmark, Infer found 7 true bugs (2 FP) across 8 projects; CodeGuru found 0 true bugs (18 FP). RepoAudit found 40 true bugs (11 FP) across 15 projects.
+Traditional static analysis tools (Meta Infer, Amazon CodeGuru) struggle with pointer aliasing and path feasibility. On the same benchmark, Infer found 7 true bugs (2 FP) across 8 projects; CodeGuru found 0 true bugs (18 FP). RepoAudit found 40 true bugs (11 FP) across 15 projects.
 
-The LLM's advantage is concentrated in:
-
-- **Alias analysis** — determining whether two pointers reference the same memory
-- **Path feasibility** — determining whether a sequence of conditions can co-occur
-- **Cross-function reasoning** — understanding how a callee's behavior affects the caller's invariants
-
-These are precisely the tasks where rule-based tools produce the most false positives or miss bugs entirely.
+The LLM advantage concentrates in **alias analysis** (do two pointers reference the same memory?), **path feasibility** (can these conditions co-occur?), and **cross-function reasoning** (how does a callee affect the caller's invariants?) — precisely where rule-based tools produce the most false positives.
 
 ## Practical Implications
 
-**Demand-driven over whole-codebase**: When building agents that analyze code for correctness, trace specific flows across function boundaries on-demand rather than feeding entire repos into context. The agent reads only the functions on the data-flow path.
+**Demand-driven over whole-codebase**: Trace specific flows across function boundaries on-demand rather than feeding entire repos into context.
 
-**Always validate LLM analysis claims mechanically**: The 245.5% false positive increase without validation reinforces the [deterministic guardrails](deterministic-guardrails.md) pattern. Have the LLM re-verify its own findings through a separate prompt, or better, use a deterministic checker where possible.
+**Always validate mechanically**: The 245.5% false positive increase without validation reinforces the [deterministic guardrails](deterministic-guardrails.md) pattern. Re-verify findings through a separate prompt, or use a deterministic checker where possible.
 
-**Abstract before analyzing**: Have the LLM filter a function to only the statements relevant to the tracked property before performing the actual analysis. This focuses attention and measurably improves both precision and recall.
+**Abstract before analyzing**: Filter a function to only statements relevant to the tracked property before the actual analysis.
 
-**Memoize at the right granularity**: Cache analysis results keyed to (function, variable, statement) tuples. Function-level caching is too coarse; statement-level without function context is too fine.
+**Memoize at the right granularity**: Cache results keyed to (function, variable, statement) tuples. Function-level is too coarse; statement-level without function context is too fine.
 
 ## Limitations
 
@@ -107,12 +101,12 @@ These are precisely the tasks where rule-based tools produce the most false posi
 
 ## Key Takeaways
 
-- Trace specific data flows on-demand instead of ingesting whole codebases — the agent reads only functions on the path
-- Split analysis into detect (Initiator), trace (Explorer), and verify (Validator) — each LLM call has a focused task
-- Removing the validator increased false positives by 245.5% — independent re-verification is essential
-- Abstracting functions before analysis improved true positive detection by 47.5%
-- Cache results at (function, variable, statement) granularity to enable repo-scale analysis at manageable cost
-- LLMs outperform traditional tools specifically on alias analysis and path feasibility — use them where rule-based tools fail
+- Trace specific data flows on-demand — the agent reads only functions on the path
+- Split into detect (Initiator), trace (Explorer), verify (Validator) — each LLM call has a focused task
+- Removing the validator increased false positives by 245.5% — re-verification is essential
+- Abstract functions before analysis — 47.5% improvement in true positive detection
+- Cache at (function, variable, statement) granularity for affordable repo-scale analysis
+- LLMs outperform traditional tools on alias analysis and path feasibility
 
 ## Related
 

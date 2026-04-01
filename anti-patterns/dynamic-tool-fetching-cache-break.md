@@ -12,11 +12,11 @@ tags:
 
 ## The Intuition Trap
 
-Fewer tools means fewer tokens, so fetching only needed tools per step seems optimal. It is not: token savings from removing tool definitions are dwarfed by breaking prompt cache continuity.
+Fewer tools means fewer tokens, so fetching only needed tools per step seems optimal. It is not: savings from removing tools are dwarfed by breaking prompt cache continuity.
 
 ## Why It Fails
 
-Tool definitions sit at the **top** of the cache hierarchy. The prefix is computed in order: `tools` then `system` then `messages`. Any change to tool definitions invalidates every subsequent level.
+Tool definitions sit at the **top** of the cache hierarchy. The prefix is computed in order: `tools` → `system` → `messages`. Any change to tool definitions invalidates every subsequent level.
 
 ```mermaid
 graph LR
@@ -26,7 +26,7 @@ graph LR
     style C fill:#fbc02d,color:#000
 ```
 
-Cached input tokens cost **10x less** than uncached (Claude Sonnet: $0.30/MTok cached vs $3/MTok uncached). A single cache break per turn erases all savings from fewer tools in context.
+Cached tokens cost **10x less** than uncached (Claude Sonnet: $0.30/MTok cached vs $3/MTok uncached). A single cache break per turn erases all savings from fewer tools.
 
 | Approach | Tools in context | Cache hit rate | Effective cost |
 |---|---|---|---|
@@ -36,13 +36,13 @@ Cached input tokens cost **10x less** than uncached (Claude Sonnet: $0.30/MTok c
 
 ## The Subtle Variant: Non-Deterministic Serialization
 
-Languages like Swift and Go randomize dictionary key ordering during JSON serialization, causing the cache to see a different byte sequence even when tools are identical — the same anti-pattern triggered accidentally.
+Languages like Swift and Go randomize dictionary key ordering during JSON serialization, so the cache sees a different byte sequence even when tools are identical — the same anti-pattern triggered accidentally.
 
 **Fix**: sort keys deterministically before serialization.
 
 ## The Correct Alternative: Deferred Tool Loading
 
-Anthropic's [Tool Search Tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool) achieves the same goal without breaking the cache prefix. Tools marked `defer_loading: true` are excluded from the prompt; the agent discovers and loads them on demand.
+Anthropic's [Tool Search Tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool) achieves the same goal without breaking the cache prefix. Tools marked `defer_loading: true` are excluded from the prompt; the agent discovers them on demand.
 
 Anthropic's evaluations:
 
@@ -51,7 +51,7 @@ Anthropic's evaluations:
 | Token usage | ~55K | ~8.7K |
 | Accuracy (Opus) | 49% | 74% |
 
-The cache prefix stays **identical** across turns; deferred tools load into message history, invalidating nothing above.
+The cache prefix stays **identical** across turns; deferred tools load into message history, invalidating nothing.
 
 ## Recommended Tool Architecture
 
@@ -65,9 +65,9 @@ Philipp Schmid's [hierarchical action space](https://www.philschmid.de/context-e
 
 ## Key Takeaways
 
-- Any change to tool definitions invalidates the **entire** KV cache; cache continuity matters more than minimizing tool count.
-- Prefer deferred loading with a stable core tool set over dynamic RAG on tool definitions.
-- Audit JSON serialization for non-deterministic key ordering — an accidental form of the same anti-pattern.
+- Any change to tool definitions invalidates the **entire** KV cache — continuity matters more than minimizing tool count.
+- Prefer deferred loading with a stable core set over dynamic RAG on tool definitions.
+- Audit JSON serialization for non-deterministic key ordering — an accidental cache-breaker.
 
 ## Example
 

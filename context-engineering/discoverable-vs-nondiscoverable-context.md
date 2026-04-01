@@ -126,3 +126,8 @@ The "after" version is shorter and will never go stale: the project structure, A
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
 - [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
+- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
+- [Layered Context Architecture](layered-context-architecture.md)
+- [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md)
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
+- [Attention Sinks: Why First Tokens Always Win](attention-sinks.md)

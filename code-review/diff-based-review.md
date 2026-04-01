@@ -116,3 +116,5 @@ Each `git diff` is 10–30 lines. The reviewer never re-reads the full page — 
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
 - [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
+- [Human-AI Review Synergy in Agentic Code Review](human-ai-review-synergy.md)
+- [Agent PR Volume vs. Value: The Productivity Paradox](agent-pr-volume-vs-value.md)

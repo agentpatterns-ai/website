@@ -5,6 +5,9 @@ tags:
   - testing-verification
   - code-review
   - copilot
+aliases:
+  - "Agentic Code Review"
+  - "Tool-Calling Code Review"
 ---
 
 # Agentic Code Review Architecture
@@ -100,3 +103,5 @@ The same PR with GitHub Copilot's agentic review can be triggered from the CLI: 
 - [Predicting Reviewable Code](predicting-reviewable-code.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)

@@ -16,7 +16,7 @@ tags:
 
 !!! info "Also known as"
 
-    Hints Over Code Samples, Example-Based Instructions
+    [Hints Over Code Samples](hints-over-code-samples.md), Example-Based Instructions
 
 ## The Trade-off
 
@@ -104,3 +104,4 @@ Critical format constraints belong in the main instruction file. Reference examp
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
 - [Context Priming for AI Agent Development](../context-engineering/context-priming.md)
+- [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — detailed treatment of when and how to use path references instead of inline code samples

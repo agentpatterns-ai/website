@@ -100,7 +100,7 @@ Audit in priority order — highest citation impact first.
 Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools are most likely to cite a pattern page when a developer asks "what is X?" `[unverified]`
 
 - Lead with a one-sentence definition the reader can quote verbatim
-- Include a quantitative outcome where available ("reduces context pollution by eliminating N token categories")
+- Include a quantitative outcome where available ("reduces [context pollution](../anti-patterns/session-partitioning.md) by eliminating N token categories")
 - Use `TechArticle` schema with `author`, `dateModified`, and `description` fields
 - Add a `## Key Takeaways` section — embedding models score terminal summaries; they serve as a second citation-ready chunk `[unverified]`
 
@@ -171,6 +171,7 @@ graph LR
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [What is GEO?](what-is-geo.md)
 - [Answer-First Writing](answer-first-writing.md)
 - [Assertion Density](assertion-density.md)

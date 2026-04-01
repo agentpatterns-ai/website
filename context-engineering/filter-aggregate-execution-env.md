@@ -132,7 +132,4 @@ The model sees only the error lines for the target date, not the full log file.
 - [Prompt Compression](prompt-compression.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Semantic Context Loading](semantic-context-loading.md)
-- [Observation Masking](observation-masking.md)
-- [Prompt Compression](prompt-compression.md)
-- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Semantic Context Loading](semantic-context-loading.md)
+- [Context Budget Allocation](context-budget-allocation.md)

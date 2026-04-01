@@ -5,6 +5,9 @@ tags:
   - testing-verification
   - evals
   - cost-performance
+aliases:
+  - DevBench evaluation
+  - code generation benchmark selection
 ---
 
 # Benchmark-Driven Tool Selection for Code Generation
@@ -81,6 +84,20 @@ DevBench's design choices map directly to evaluation best practices:
 - Context handling (multi-file, project-wide dependencies) is where models diverge most and where you need the most signal
 - Public benchmarks identify candidates; internal evaluation on your own codebase confirms the choice
 - A model's ranking can change depending on the task type — there is no universally "best" code generation model
+
+## Example
+
+A backend team writing 80% TypeScript with frequent multi-file refactors evaluates three models for their IDE copilot.
+
+**Step 1 — Profile workload**: Git history shows 45% of AI-assisted edits are multi-file refactors, 30% are API usage completions, and 25% are test generation.
+
+**Step 2 — Select benchmark**: The team filters DevBench results to the "multi-file completion" and "API usage" task categories, ignoring "code purpose understanding" and single-function generation scores.
+
+**Step 3 — Filter by language**: They extract TypeScript-only results. Model A leads aggregate scores but ranks third on TypeScript multi-file tasks. Model B, mid-pack overall, ranks first on that slice.
+
+**Step 4 — Internal eval**: The team runs Models A and B against 20 recent PRs from their codebase, measuring functional correctness and style match. Model B produces fewer cross-module import errors and follows the project's barrel-export convention more consistently.
+
+**Result**: The team selects Model B despite its lower aggregate ranking — the task-language slice that matches their workload is the only score that matters.
 
 ## Unverified Claims
 

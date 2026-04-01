@@ -66,6 +66,9 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 - [PR Description Style as a Lever](pr-description-style-lever.md) — how description structure affects agent PR merge rates
 - [Tiered Code Review](tiered-code-review.md) — routing review effort by risk level
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — designing high-signal review feedback
+- [Human-AI Review Synergy](human-ai-review-synergy.md) — empirical evidence on complementary strengths of human and AI reviewers
+- [Agent-Assisted Code Review](agent-assisted-code-review.md) — using agents as a mechanical first pass before human review
+- [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md) — structural signals that predict which agent-generated code survives review
 
 ## Sources
 

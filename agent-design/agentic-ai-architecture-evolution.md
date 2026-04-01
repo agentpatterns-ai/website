@@ -124,3 +124,6 @@ This maps each component directly onto the reference architecture above: the LLM
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Agent Turn Model](agent-turn-model.md)
+- [Agent Harness: Initializer and Coding Agent](agent-harness.md)
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md)
+- [Convergence Detection in Iterative Refinement](convergence-detection.md)

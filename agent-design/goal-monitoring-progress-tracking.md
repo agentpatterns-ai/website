@@ -11,7 +11,7 @@ tags:
 
 > Planning tells the agent what to do. Monitoring tells you whether it actually did it — and whether it wandered off.
 
-Long-running coding agents declare tasks complete prematurely, drift from objectives after [context compression](../context-engineering/context-compression-strategies.md), and enter doom loops editing the same file repeatedly. The root cause: no durable, machine-readable record of what "done" looks like and how far the agent has gotten.
+Long-running coding agents declare tasks complete prematurely, drift from objectives after [context compression](../context-engineering/context-compression-strategies.md), and enter doom loops. The root cause: no durable, machine-readable record of what "done" looks like and how far the agent has gotten.
 
 ## Planning vs. Monitoring
 
@@ -29,7 +29,7 @@ flowchart LR
     C --> D
 ```
 
-Planning is pre-execution: decompose the problem, define success criteria, set up the environment. Monitoring is during-execution: track accomplishments, detect drift, and verify completion against the spec. Most guidance focuses on planning — monitoring is the harder problem.
+Planning is pre-execution: decompose the problem, define success criteria, set up the environment. Monitoring is during-execution: track progress, detect drift, and verify completion against the spec.
 
 ## Core Artifacts
 
@@ -39,7 +39,7 @@ A progress file (`claude-progress.txt` or equivalent) is a plain-text summary wr
 
 ### Feature List Specs
 
-A JSON [feature list](../instructions/feature-list-files.md) defines every granular feature as a testable unit, each initially marked `failing`. As the agent implements features, it marks them `passing`. JSON is preferred because structured formats are harder for the model to accidentally corrupt.
+A JSON [feature list](../instructions/feature-list-files.md) defines every granular feature as a testable unit, each initially marked `failing`. As the agent implements features, it marks them `passing`. The feature list is a **goal contract** — an objective measure of completeness that prevents declaring victory based on vibes. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
 ```json
 {
@@ -51,11 +51,9 @@ A JSON [feature list](../instructions/feature-list-files.md) defines every granu
 }
 ```
 
-The feature list serves as a **goal contract** — an objective measure of completeness that prevents the agent from declaring victory based on vibes. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
-
 ### Incremental Commits
 
-Descriptive git commits act as a secondary progress log. [unverified] Each commit records what changed and why, enabling human review and agent rollback via `git diff` or `git revert`.
+Descriptive git commits act as a secondary progress log. [unverified] Each commit records what changed and why, enabling human review and rollback via `git diff` or `git revert`.
 
 ## Failure Modes
 
@@ -65,9 +63,7 @@ Without progress files and feature lists, agents see partial progress and declar
 
 ### [Objective Drift](../anti-patterns/objective-drift.md)
 
-After context summarization, an agent may lose track of the original user intent — asking for unnecessary clarification or pursuing tangential subtasks. LangChain identifies this as "the most insidious failure mode" because the agent appears functional while working on the wrong thing. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/))
-
-Test for drift by deliberately triggering context summarization mid-task and checking whether the agent continues correctly.
+After context summarization, an agent may lose track of the original user intent — asking unnecessary clarification or pursuing tangential subtasks while appearing functional. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/)) Test for drift by triggering context summarization mid-task and verifying the agent continues on the original objective.
 
 ### Doom Loops
 
@@ -108,11 +104,9 @@ Agents need continuous ground truth — test results, linter output, build statu
 
 ## Production Monitoring
 
-For production agents, two additional patterns apply:
+**[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md)**: Shift traffic gradually between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
-**[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md)**: Gradually shift traffic between agent versions to update without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
-
-**Decision path tracing**: Monitor decision patterns and interaction structures (not content) to diagnose failures. Agent failures are non-deterministic, so full tracing is essential. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+**Decision path tracing**: Monitor decision patterns and interaction structures (not content) to diagnose failures. Non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
 ## Example
 
@@ -155,17 +149,16 @@ fi
 ## Key Takeaways
 
 - **Progress files bridge sessions** — without them, agents misread partial state and declare premature completion
-- **JSON feature lists are goal contracts** — structured, machine-readable definitions of "done" that resist model corruption
-- **Drift is invisible** — test for it explicitly by triggering summarization and checking continuity
-- **Separate bootstrapping from execution** — an initializer agent defines success criteria; coding agents work toward them
-- **Mechanical verification beats self-assessment** — pre-completion checklists and loop detection catch failures that agents cannot self-diagnose
-- **Production agents need tracing** — non-deterministic failures require observability into decision paths, not just outputs
+- **JSON feature lists are goal contracts** — structured definitions of "done" that resist model corruption
+- **Drift is invisible** — test by triggering context summarization mid-task and checking continuity
+- **Separate bootstrapping from execution** — an initializer agent defines success criteria; the coding agent works toward them
+- **Mechanical verification beats self-assessment** — pre-completion checklists and loop detection catch failures agents miss
 
 ## Unverified Claims
 
-- Incremental commits as a secondary progress log enabling agent rollback is a logical extension of progress file patterns but not explicitly documented in the cited sources
-- The initializer agent as a dedicated first-session bootstrapper is synthesized from Anthropic's harness guidance, not described as a named pattern in the source material
-- Loop detection middleware counting per-file edits is inferred from LangChain's doom loop discussion; the specific implementation pattern is not prescribed
+- Incremental commits as a secondary progress log: logical extension of progress file patterns, not documented in cited sources
+- Initializer agent pattern: synthesized from Anthropic's harness guidance, not a named pattern in the source material
+- Per-file edit counting in loop detection: inferred from LangChain's doom loop discussion, specific implementation not prescribed
 
 ## Related
 

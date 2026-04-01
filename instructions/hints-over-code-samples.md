@@ -129,6 +129,7 @@ The hint version costs ~20 tokens instead of ~80. It stays correct when the hand
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — broader framework for choosing between rules and examples, including a section on hints
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the same principle applied to AGENTS.md file sizing
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — hints operate at a higher altitude than code samples, staying valid across variation

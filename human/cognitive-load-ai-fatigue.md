@@ -105,3 +105,4 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload; structuring processes to manage the amplification effect
 - [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — gradually increasing agent autonomy while managing the cognitive overhead of sustained oversight
 - [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — pre-authorizing low-risk operations to reduce approval fatigue and preserve attention for high-stakes decisions
+- [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — gating AI suggestions before display to reduce alert fatigue and wasted cognitive effort

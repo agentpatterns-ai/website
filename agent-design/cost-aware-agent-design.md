@@ -58,7 +58,7 @@ Complexity routing decides *which tier*; role routing decides *which capability*
 | Thinking | Extended reasoning without tool access | Action model |
 | Critique | Self-evaluation of output (selective, not every turn) | Thinking model, then Action model |
 | Vision | Vision-language model for screenshots and images | Action model (if vision-capable) |
-| Compact | Fast summarization during context compaction | Action model |
+| Compact | Fast summarization during [context compaction](../context-engineering/context-compression-strategies.md) | Action model |
 
 Provider abstraction separates role assignment from model identity — swap providers without modifying agent code ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). HTTP client slots initialize lazily; only models actually used in a session are initialized. Model capabilities (context length, vision support, reasoning features) are cached locally with time-to-live refresh, enabling offline startup and background updates.
 
@@ -166,3 +166,6 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
+- [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
+- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)

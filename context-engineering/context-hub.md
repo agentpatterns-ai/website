@@ -91,3 +91,5 @@ If the agent discovers that `stream=True` requires explicit iterator handling no
 - [Context Budget Allocation](context-budget-allocation.md)
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
+- [Structured Domain Retrieval](structured-domain-retrieval.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)

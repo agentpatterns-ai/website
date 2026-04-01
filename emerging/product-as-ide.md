@@ -75,3 +75,4 @@ If the change had touched the database schema (e.g. storing user-selected date p
 - [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
 - [Hyper-Personalized Software](hyper-personalized-software.md)
 - [First-Party Agent Composition](first-party-agent-composition.md)
+- [Bootstrapping Coding Agents](bootstrapping-coding-agents.md)

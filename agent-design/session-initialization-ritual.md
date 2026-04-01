@@ -123,11 +123,6 @@ Step 5: Beginning implementation of password reset endpoint.
 - Select one feature per session and finish it — no multi-tasking within a session.
 - Enforce the ritual via system prompt instructions, not agent discretion.
 
-## Unverified Claims
-
-- Selecting one feature per session and finishing it is the harness constraint that prevents effort spreading `[unverified]`
-- Requiring the agent to output a confirmation for each step before proceeding ensures ritual compliance `[unverified]`
-
 ## Related
 
 - [Context Priming](../context-engineering/context-priming.md)

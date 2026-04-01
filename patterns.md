@@ -1,11 +1,18 @@
 ---
 title: "Patterns: Agent Design, Multi-Agent, and Anti-Patterns"
 description: "Design patterns for single agents, multi-agent coordination, and common anti-patterns to avoid in AI-assisted development."
+tags:
+  - agent-design
+  - multi-agent
+  - anti-patterns
+  - patterns
 ---
 
 # Patterns
 
-Recurring architectural patterns for building, coordinating, and debugging AI coding agents — plus the anti-patterns that derail them.
+> Recurring architectural patterns for building, coordinating, and debugging AI coding agents — plus the anti-patterns that derail them.
+
+Architecture, coordination, and failure-mode patterns organized into three areas: single-agent design, multi-agent collaboration, and common anti-patterns to recognize early.
 
 ## [Agent Design](agent-design/index.md)
 

@@ -195,3 +195,6 @@ If the audit later needs a gate — pages with critical findings block deploymen
 - [Evaluator-Optimizer](evaluator-optimizer.md)
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Progressive Disclosure Agents](progressive-disclosure-agents.md)
+- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
+- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Loop Middleware](agent-loop-middleware.md)

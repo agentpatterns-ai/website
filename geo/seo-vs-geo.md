@@ -4,6 +4,9 @@ description: "Side-by-side comparison of traditional SEO signals versus GEO sign
 tags:
   - geo
   - workflows
+aliases:
+  - SEO versus GEO
+  - search engine optimization vs generative engine optimization
 ---
 
 # SEO vs GEO — Signals, Metrics, Optimization Targets
@@ -39,7 +42,7 @@ Traditional SEO puts your link in a ranked list; the user decides whether to cli
 
 **Keyword density is a direct conflict.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found keyword stuffing decreases AI citation rates — the opposite of its historical SEO effect. A keyword-dense paragraph burns tokens; a data table is cheaper to parse and more likely cited.
 
-**Rank position is not a GEO proxy.** High-ranking pages are not reliably cited by AI engines (4.5% correlation); rank-5 websites gained 115% visibility from citation-oriented techniques while top-ranked sites lost share.
+**Rank position is not a GEO proxy.** High-ranking pages are not reliably cited by AI engines (4.5% correlation); rank-5 websites gained 115% visibility from citation-oriented techniques while top-ranked sites lost share [unverified].
 
 ## What Is New
 

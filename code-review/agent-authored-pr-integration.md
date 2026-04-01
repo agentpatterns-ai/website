@@ -82,4 +82,6 @@ An agent opens a 200-line PR adding a new webhook handler. The reviewer comments
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Diff-Based Review](diff-based-review.md)
 - [Tiered Code Review](tiered-code-review.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — merge rate gaps and the productivity paradox of high-volume agent PRs
+- [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers in code review collaboration
 - [Committee Review Pattern](committee-review-pattern.md)

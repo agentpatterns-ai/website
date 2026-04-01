@@ -64,7 +64,7 @@ Use rules when the constraint is binary and acceptable variation is fine: "Never
 
 The most reliable pattern combines both: state the rule, show one example. "File names must be kebab-case and match the concept name. Example: `progressive-disclosure.md` (not `ProgressiveDisclosure.md`, not `prog-disc.md`)." One example is usually sufficient. Multiple examples risk teaching the agent to interpolate between them rather than follow the rule [unverified].
 
-For format and style constraints in a codebase, pointing at existing code outperforms inline examples. "Follow the repository pattern in `src/repos/UserRepo.ts`" stays current as the code evolves. A 30-line inline example freezes at the moment it was written and drifts as the codebase changes. [Hints over code samples](../../instructions/example-driven-vs-rule-driven-instructions.md) are cheaper in tokens and require no maintenance.
+For format and style constraints in a codebase, pointing at existing code outperforms inline examples. "Follow the repository pattern in `src/repos/UserRepo.ts`" stays current as the code evolves. A 30-line inline example freezes at the moment it was written and drifts as the codebase changes. [Hints over code samples](../../instructions/hints-over-code-samples.md) are cheaper in tokens and require no maintenance.
 
 ---
 

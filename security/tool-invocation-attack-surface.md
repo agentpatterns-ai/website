@@ -126,3 +126,6 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layering principle that tool-invocation defense requires
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — tool invocation provides both the untrusted input and egress legs
 - [Sandbox Rules for Harness-Owned Tools](sandbox-rules-harness-tools.md) — scope rules to tools you control; MCP tools enforce their own
+- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md) — multi-agent architectures that detect injected code before execution
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns that limit blast radius when injection succeeds
+- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md) — URL channels as an exfiltration vector complementary to ToolLeak

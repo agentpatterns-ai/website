@@ -31,7 +31,7 @@ The gap between degradation onset and auto-compaction is where quality silently 
 
 ## When to Compact Manually
 
-Manual `/compact` is a reasoning quality tool, not a memory management chore. Use it at these transition points:
+Use `/compact` at these transition points:
 
 | Trigger | Example |
 |---------|---------|
@@ -55,7 +55,7 @@ In these cases, prefer `/clear` between unrelated tasks or use [observation mask
 
 ## Directing Compaction
 
-Generic compaction discards indiscriminately. Claude Code supports focused compaction:
+Claude Code supports focused compaction:
 
 **Inline focus:**
 
@@ -75,11 +75,11 @@ When compacting, always preserve:
 - Architectural decisions and their rationale
 ```
 
-Custom compaction instructions are a [first-class feature](https://code.claude.com/docs/en/best-practices) — shifting compaction from lossy summarization to targeted preservation.
+Custom compaction instructions are a [first-class feature](https://code.claude.com/docs/en/best-practices).
 
 ## Lowering the Auto-Compaction Threshold
 
-For reasoning-heavy sessions, 95% is too late. The `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` environment variable accepts values 1-100 and [overrides the default trigger point](https://code.claude.com/docs/en/settings):
+The `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` environment variable accepts values 1-100 and [overrides the default trigger point](https://code.claude.com/docs/en/settings):
 
 ```bash
 # Set auto-compaction to 60% for a reasoning-heavy session
@@ -102,8 +102,6 @@ Claude Code exposes `context_window.used_percentage` as a [status line field](ht
 }
 ```
 
-This makes compaction timing data-driven.
-
 ## Partial Summarization
 
 Claude Code (v2.1.30+) supports "Summarize from here" via the message selector [unverified]. This preserves recent context at full fidelity while compressing older turns — useful when exploration history can be discarded but recent implementation work cannot.
@@ -117,8 +115,6 @@ Claude Code (v2.1.30+) supports "Summarize from here" via the message selector [
 | LangChain Deep Agents | 85% | Compression + 20K-token tool offloading |
 | OPENDEV (ACC) | 70/80/85/90/99% | [Five graduated stages](context-compression-strategies.md) |
 | Manus | N/A | File system as external memory; avoids aggressive compaction entirely [unverified] |
-
-Production systems compact earlier and more selectively.
 
 ## Example
 

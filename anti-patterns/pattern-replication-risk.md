@@ -5,6 +5,9 @@ tags:
   - agent-design
   - anti-pattern
   - tool-agnostic
+aliases:
+  - "pattern propagation"
+  - "codebase pattern amplification"
 ---
 
 # Pattern Replication Risk
@@ -95,3 +98,5 @@ After two sprints of agent-assisted work, the codebase has 23 usages of `fetchWi
 - [Abstraction Bloat](abstraction-bloat.md) -- Over-engineering and unnecessary hierarchies from agent output
 - [Comprehension Debt](comprehension-debt.md) -- The growing gap between agent-produced code and developer understanding
 - [Shadow Tech Debt](shadow-tech-debt.md) -- Cumulative codebase drift from autonomous agent commits
+- [Boring Technology Bias](boring-technology-bias.md) -- LLMs recommend tools by training data frequency, not fitness for the problem
+- [Happy Path Bias](happy-path-bias.md) -- Agents produce code that works for the common case but breaks on edge cases and error paths

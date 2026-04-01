@@ -102,7 +102,7 @@ Constraints apply at generation time, not review time. See [PR Scope Creep](../a
 
 ## Example
 
-A team using Claude Code to generate features doubles PR volume in 30 days. Review cycle time climbs from 4 hours to 9 hours. Total engineering hours stay flat — the time saved on writing is absorbed by reviewing.
+A team using Claude Code to generate features [doubles PR volume](../code-review/agent-pr-volume-vs-value.md) in 30 days. Review cycle time climbs from 4 hours to 9 hours. Total engineering hours stay flat — the time saved on writing is absorbed by reviewing.
 
 They apply all three strategies in combination:
 

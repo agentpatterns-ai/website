@@ -158,3 +158,5 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — separating the agent layer that decides from the layer that acts, with typed tool interfaces enforcing the boundary
 - [Execution-First Delegation](execution-first-delegation.md) — specifying goals, constraints, and success conditions so agents handle the how
 - [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality
+- [AX/UX/DX Triad](ax-ux-dx-triad.md) — treats agent experience, user experience, and developer experience as separate design surfaces in agent systems
+- [Agent Pushback Protocol](agent-pushback-protocol.md) — how agents communicate resistance through the agent-computer interface when instructions conflict with constraints

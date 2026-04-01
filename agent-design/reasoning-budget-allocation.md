@@ -39,7 +39,7 @@ The OPENDEV paper implements the sandwich architecturally through two modes ([Bu
 - **[Plan Mode](../workflows/plan-first-loop.md)**: restricts the agent to read-only tools; planning delegated to a Planner subagent whose schema contains only read-only tools ([subagent schema-level tool filtering](../multi-agent/subagent-schema-level-tool-filtering.md)) — eliminating state machine complexity
 - **Normal Mode**: full tool access for implementation
 
-Mode switching triggers via explicit command (`/plan`) or planning-intent heuristics ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)). This maps to the sandwich: Plan Mode (extra-high compute) → Normal Mode execution (high) → verification (extra-high).
+Mode switching triggers via explicit command (`/plan`) or planning-intent heuristics ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)). This maps to the sandwich: [Plan Mode](../workflows/plan-mode.md) (extra-high compute) → Normal Mode execution (high) → verification (extra-high).
 
 An optional thinking phase adds a separate inference call using a dedicated Thinking model *before* action selection — architecturally distinct from in-generation reasoning ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). This amplifies any phase where deeper reasoning is needed.
 
@@ -56,7 +56,7 @@ A [community analysis](https://claudelog.com/mechanics/ultrathink) positions max
 This stacks with other techniques:
 
 1. **Extended thinking** — maximum reasoning tokens via trigger keyword
-2. **Plan mode** — structured planning before execution
+2. **[Plan mode](../workflows/plan-mode.md)** — structured planning before execution
 3. **Iterative critique** — systematic [self-review cycles](agent-self-review-loop.md) to catch edge cases
 
 Each layer adds cost but compounds quality for structured reasoning tasks [unverified — practitioner experience, not benchmarked].
@@ -85,7 +85,7 @@ Single-step tasks and independent parallel tool calls see no benefit from added 
 - The sandwich achieved the highest completion rate (66.5%) in LangChain benchmarks, outperforming continuous maximum reasoning (53.9%, penalized by timeouts) and uniform high reasoning (63.6%).
 - Extended thinking triggers (e.g., "ultrathink" in Claude Code skills) front-load reasoning before generation — distinct from mid-stream think tool reasoning.
 - Maximum-thinking on a balanced model is a cost-effective alternative to model tier upgrades for reasoning-heavy tasks [unverified].
-- Stack extended thinking with plan mode and iterative critique to compound quality gains [unverified].
+- Stack extended thinking with [plan mode](../workflows/plan-mode.md) and iterative critique to compound quality gains [unverified].
 - Dual-mode operation (plan/normal) enforces the sandwich architecturally by restricting tool access per phase.
 
 ## Example

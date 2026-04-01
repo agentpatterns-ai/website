@@ -61,5 +61,8 @@ A [systematic grey literature review](https://arxiv.org/html/2510.00328v1) found
 - [Cognitive Load & AI Fatigue](cognitive-load-ai-fatigue.md) — costs of sustained AI use vs. the compulsive pull
 - [Process Amplification](process-amplification.md) — agents amplifying compulsive output patterns
 - [Skill Atrophy](skill-atrophy.md) — delegation accelerated by addictive flow
+- [Developer Attention Management with Parallel Agents](attention-management-parallel-agents.md) — managing attention across concurrent agent sessions
+- [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — how friction shifts from coding to supervision
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — deliberate control patterns that counter compulsive loops
 - [Vibe Coding](../workflows/vibe-coding.md)
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — addictive flow accelerating the builder/coder identity fracture

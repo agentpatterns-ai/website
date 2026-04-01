@@ -58,7 +58,7 @@ Parallel dispatch prevents any single slow backend from blocking the others. Eac
 
 Align results on the shared time window and service identifier. Discard signals that appear in only one system and are not corroborated. Return a ranked summary with the most actionable signal first.
 
-The model never sees the raw telemetry — it sees the post-aggregation summary. This is what prevents context pollution from large log volumes.
+The model never sees the raw telemetry — it sees the post-aggregation summary. This is what prevents [context pollution](../anti-patterns/session-partitioning.md) from large log volumes.
 
 ## Context Budget Discipline
 

@@ -66,7 +66,7 @@ Three observable signals trigger the observer:
 
 1. **Repetition patterns** — the agent calls the same tool with identical or near-identical arguments across multiple turns without progress
 2. **Contradiction signals** — the agent's stated reasoning contradicts a tool output it received in the same session
-3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not been created yet in the current trajectory
+3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created
 
 These signals are observable without access to the model's internal state — they are detectable from the tool call log and conversation history.
 

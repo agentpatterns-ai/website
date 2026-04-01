@@ -76,3 +76,5 @@ Each session starts clean. Context stays low, costs stay low, and output quality
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — misattributing stateless session behavior to agent memory or personality
 - [Perceived Model Degradation](perceived-model-degradation.md) — bloated sessions can mimic apparent model quality loss
 - [Reasoning Overuse](reasoning-overuse.md) — excess reasoning compounds token cost in long sessions
+- [Demo-to-Production Gap](demo-to-production-gap.md) — session management habits from demos that break at scale
+- [Shadow Tech Debt](shadow-tech-debt.md) — hidden costs from unmanaged context accumulation

@@ -163,6 +163,7 @@ A minimal production system prompt skeleton applying the patterns above:
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [Dynamic System Prompt Composition](../context-engineering/dynamic-system-prompt-composition.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Prompt Cache Economics](../context-engineering/prompt-cache-economics.md)

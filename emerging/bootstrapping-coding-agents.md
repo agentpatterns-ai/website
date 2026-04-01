@@ -1,6 +1,10 @@
 ---
 title: "Bootstrapping Coding Agents: The Specification Is the Program"
 description: "A coding agent can re-implement itself from its own natural language specification, reproducing the classical compiler bootstrap — making the spec, not the code, the stable artifact."
+aliases:
+  - meta-circular agents
+  - agent self-hosting
+  - agent bootstrapping
 tags:
   - agent-design
   - instructions
@@ -54,13 +58,13 @@ The paper identifies four properties that make a specification bootstrappable:
 
 ## Connection to Existing Practices
 
-This concept extends patterns already used in agent-driven development:
+This concept extends existing agent-driven development patterns:
 
-**[Spec-driven development](../workflows/spec-driven-development.md)** treats the specification as the persistent source of truth across coding sessions. The bootstrap finding provides theoretical grounding: if the spec is precise enough, the entire implementation is regenerable — not just the next change.
+**[Spec-driven development](../workflows/spec-driven-development.md)** treats the specification as the persistent source of truth. The bootstrap finding provides theoretical grounding: if the spec is precise enough, the entire implementation is regenerable.
 
-**[Frozen spec files](../instructions/frozen-spec-file.md)** preserve intent across context compaction. Bootstrap-grade specs go further: they are not just preserved, they are *sufficient* — the implementation can be reconstructed from the spec alone.
+**[Frozen spec files](../instructions/frozen-spec-file.md)** preserve intent across context compaction. Bootstrap-grade specs go further: they are *sufficient* — the implementation can be reconstructed from the spec alone.
 
-**[Specification as prompt](../instructions/specification-as-prompt.md)** uses formal artifacts (types, schemas, tests) as agent instructions. The bootstrap paper works with natural language specs instead, suggesting that well-structured prose can achieve comparable precision for agent-level behavior.
+**[Specification as prompt](../instructions/specification-as-prompt.md)** uses formal artifacts (types, schemas, tests) as agent instructions. The bootstrap paper uses natural language specs instead, suggesting well-structured prose can achieve comparable precision.
 
 ## Limitations
 
@@ -68,9 +72,44 @@ This is a single-paper finding with important caveats:
 
 - **Scale is unresolved.** The demonstration uses a 926-word spec. Whether specs of 10,000+ words maintain tractability is an open question. The companion Attractor project uses 34,900-word specifications, but verification complexity increases substantially. [unverified]
 - **Model-dependent.** The bootstrap succeeds only with frontier models. Earlier or smaller models produce syntactically invalid or behaviorally incorrect implementations. This makes the property a moving target, not a universal guarantee.
-- **Security risk.** Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models, running generation in controlled CI environments, and treating outputs as reproducible build products.
+- **Security risk.** Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models and running generation in controlled CI environments.
 - **Industrial validation is thin.** The paper cites a team that built a million-line codebase with zero manually written code, but this claim is not independently verifiable from the paper alone. [unverified]
 - **Spec is necessary but not sufficient.** Real systems require test suites, deployment configs, and operational knowledge alongside the spec. The spec is *a* primary artifact, not *the only* artifact.
+
+## Example
+
+A bootstrappable specification for a file-search agent:
+
+```markdown
+# File Search Agent — Specification
+
+## Interface
+- Accept a query string and a root directory path
+- Return a ranked list of file paths with match excerpts
+
+## Behavior
+1. Recursively walk the directory tree, skipping hidden directories
+2. For each file, read the first 200 lines and score against the query using substring match
+3. Rank results by match count descending; cap at 20 results
+4. If the root directory does not exist, return an error message — never throw
+
+## Constraints
+- Read-only: never modify, create, or delete files
+- Timeout: abandon any single file read after 2 seconds
+- No external dependencies beyond the standard library
+```
+
+Feeding this specification to a coding agent produces a working implementation. Feeding the same specification to *that* implementation (as a worker agent) produces a second, functionally equivalent implementation — the bootstrap.
+
+```bash
+# Generate agent₀ from the spec
+claude-code "Implement the agent described in spec.md" > agent0.py
+
+# agent₀ re-implements itself from the same spec
+python agent0.py --task "Implement the agent described in spec.md" > agent1.py
+```
+
+Both `agent0.py` and `agent1.py` satisfy the specification. Divergences between them indicate ambiguity in the spec, not bugs in either implementation.
 
 ## Key Takeaways
 
@@ -91,3 +130,6 @@ This is a single-paper finding with important caveats:
 - [Frozen Spec File](../instructions/frozen-spec-file.md) — preserving spec intent across sessions
 - [Specification as Prompt](../instructions/specification-as-prompt.md) — using formal artifacts as agent instructions
 - [Entropy Reduction Agents](../workflows/entropy-reduction-agents.md) — reducing implementation variance through constraints
+- [First-Party Agent Composition](first-party-agent-composition.md) — building capabilities as native features rather than integrating third-party tools
+- [Hyper-Personalized Software](hyper-personalized-software.md) — AI-driven development making custom-built software economically viable
+- [Product-as-IDE](product-as-ide.md) — the running application as its own development environment

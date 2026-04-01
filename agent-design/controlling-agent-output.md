@@ -113,3 +113,6 @@ The concise version cuts token cost by roughly two-thirds for the same deliverab
 - [Agent Memory Patterns](agent-memory-patterns.md)
 - [Agent-First Software Design](agent-first-software-design.md)
 - [Prompt Engineering](../training/foundations/prompt-engineering.md)
+- [Progressive Disclosure for Layered Agent Definitions](progressive-disclosure-agents.md)
+- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Harness Engineering](harness-engineering.md)

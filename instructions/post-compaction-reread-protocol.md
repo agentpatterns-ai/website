@@ -14,7 +14,7 @@ tags:
 
 ## Overview
 
-When Claude Code compacts a long session, it summarises older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
+When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarises older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
 
 Users document Claude following rules perfectly before compaction and violating them 100% of the time after — not because CLAUDE.md was removed, but because the paraphrased summary no longer carries the full constraint set. `[unverified]`
 

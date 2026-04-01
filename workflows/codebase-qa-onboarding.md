@@ -14,7 +14,7 @@ tags:
 
 ## The Problem
 
-Developers spend roughly 60% of their time on program comprehension [unverified]. Onboarding to a new codebase -- reading code, tracing call paths, locating conventions -- is among the highest-friction activities in software engineering. The knowledge needed is scattered across files, commit history, tribal knowledge, and documentation that drifts from implementation within weeks.
+Developers spend roughly 60% of their time on program comprehension [unverified]. Onboarding to a new codebase -- reading code, tracing call paths, locating conventions -- is among the highest-friction activities in software engineering. The knowledge needed is scattered across files, commit history, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from implementation within weeks.
 
 Agents with code search and file reading capabilities change the economics. They can serve as always-available guides with perfect recall of the entire codebase, answering "where does X happen?", "why is Y structured this way?", and generating documentation that stays current with the code.
 

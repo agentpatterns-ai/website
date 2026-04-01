@@ -14,7 +14,7 @@ aliases:
 
 > FAQPage schema yields a 2.7x citation lift in AI responses (41% vs. 15% without markup) [unverified]. Structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing.
 
-Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude AI Overviews all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `docs/hooks/structured_data.py` build hook.
+Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `docs/hooks/structured_data.py` hook.
 
 ## What Changed: Google vs. AI Search
 
@@ -26,13 +26,13 @@ Schema markup's primary value has shifted from SEO to AI search citation — Cha
 | Perplexity | Indexed schema aids entity disambiguation | High — citation footnotes |
 | Gemini | Renders JavaScript; processes schema | High |
 
-**Key nuance**: AI chatbots do not read JSON-LD during live page fetches — the citation benefit comes from schema's role in the indexing and training pipeline, not from real-time extraction.
+**Key nuance**: AI chatbots do not read JSON-LD during live page fetches — the citation benefit comes from schema's role in the indexing and training pipeline.
 
 ## The Three Schema Types
 
 ### FAQPage
 
-Structures Q&A blocks for direct AI extraction. Answers should be 40–80 words — standalone, citable length that maps to AI response units.
+Structures Q&A blocks for direct AI extraction. Answers should be 40–80 words — standalone, citable length for AI response units.
 
 ```json
 {
@@ -49,11 +49,11 @@ Structures Q&A blocks for direct AI extraction. Answers should be 40–80 words 
 }
 ```
 
-The `structured_data.py` hook detects a `## FAQ` or `## Frequently Asked Questions` heading followed by `**Question**` / answer pairs and auto-generates this schema at build time.
+The `structured_data.py` hook detects `## FAQ` or `## Frequently Asked Questions` followed by `**Question**` / answer pairs and auto-generates this schema.
 
 ### HowTo
 
-Converts numbered step lists into extractable, step-ordered content blocks. Each step becomes a discrete quotable unit.
+Converts numbered step lists into extractable content blocks. Each step becomes a quotable unit.
 
 ```json
 {
@@ -71,7 +71,7 @@ The hook auto-detects ordered lists (`<ol>`) with three or more items, but only 
 
 ### DefinedTerm
 
-Establishes machine-readable definitions for named concepts — useful where terms like "agent", "harness", and "context window" are ambiguous across tools.
+Establishes machine-readable definitions for named concepts — useful where terms like "agent" and "context window" are ambiguous across tools.
 
 ```json
 {
@@ -92,7 +92,7 @@ Establishes machine-readable definitions for named concepts — useful where ter
 }
 ```
 
-Each term's `@id` fragment is directly linkable — AI knowledge graphs can reference `https://agentpatterns.ai/concepts#agent-harness` as an authoritative definition.
+Each term's `@id` fragment is directly linkable — AI knowledge graphs can reference it as an authoritative definition.
 
 ## How This Site Generates Schema
 
@@ -113,13 +113,13 @@ graph LR
     C & E & F & G & I & K --> L[Inject before head close]
 ```
 
-No per-page configuration required — add an FAQ section with the right heading and the schema appears automatically.
+No per-page config required — add an FAQ section and the schema appears automatically.
 
 ## Writing for Schema Auto-Detection
 
 ### FAQ Section
 
-The hook matches `## FAQ` or `## Frequently Asked Questions` (case-insensitive) followed by `**Question text**` / paragraph pairs:
+The hook matches `## FAQ` or `## Frequently Asked Questions` followed by `**Question text**` / paragraph pairs:
 
 ```markdown
 ## FAQ
@@ -139,7 +139,7 @@ that happen to have numbered sections.
 
 ### HowTo Steps
 
-Steps should be self-contained sentences — each is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` or `techniques/` paths (see `_HOWTO_PATHS` in `docs/hooks/structured_data.py`).
+Steps should be self-contained sentences — each is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` or `techniques/` paths.
 
 ## Testing Schema
 
@@ -175,6 +175,8 @@ mkdocs build --strict
 - [SEO vs GEO](seo-vs-geo.md) — how structured data signals differ between traditional SEO and AI citation optimization
 - [llms.txt](llms-txt.md) — complementary machine-readable format for AI discoverability
 - [AI Crawler Policy](ai-crawler-policy.md) — controlling which crawlers index your structured data
+- [Measuring GEO Performance](measuring-geo-performance.md) — tracking schema citation lift
+- [What Is GEO](what-is-geo.md) — foundational concepts behind generative engine optimization
 
 ## Unverified Claims
 

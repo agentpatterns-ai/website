@@ -27,7 +27,7 @@ GitHub's agentic workflow architecture does not specify a drift detection mechan
 - **Behavioral description validation** — verify that documented workflows match the current implementation flow
 - **Changelog-to-docs cross-reference** — check that recent changelog entries have corresponding documentation updates
 
-JIT context loading applies directly: maintain lightweight identifiers (file paths to code files and corresponding doc sections) rather than pre-loading everything. Separate tools for code retrieval versus documentation lookup prevent context pollution ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+JIT context loading applies directly: maintain lightweight identifiers (file paths to code files and corresponding doc sections) rather than pre-loading everything. Separate tools for code retrieval versus documentation lookup prevent [context pollution](../anti-patterns/session-partitioning.md) ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 ### Layer 2: Orchestration
 

@@ -132,3 +132,8 @@ The key decisions were about exclusion: what not to load, when not to load it, a
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
 - [Disable Attribution Headers to Preserve KV Cache in Local Inference](kv-cache-invalidation-local-inference.md)
+- [Environment Specification as Context](environment-specification-as-context.md)
+- [Instruction-Guided Code Completion](instruction-guided-code-completion.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
+- [Token-Efficient Code Generation: Structural Beats Prompting](token-efficient-code-generation.md)

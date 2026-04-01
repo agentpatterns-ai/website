@@ -16,7 +16,7 @@ aliases:
 
 ## The Problem
 
-AI coding agents optimize for functional correctness. Without explicit security constraints, they produce code that works but contains vulnerabilities — SQL injection, hardcoded secrets, missing input validation. Post-hoc security review catches these, but at high cost: rework cycles, delayed builds, and security debt that compounds with each generation pass.
+AI coding agents optimize for functional correctness. Without explicit security constraints, they produce code that works but contains vulnerabilities — SQL injection, hardcoded secrets, missing input validation. Post-hoc review catches these at high cost: rework cycles, delayed builds, and compounding security debt.
 
 The alternative: embed security rules in the specification layer so agents never generate the vulnerable pattern in the first place.
 
@@ -65,15 +65,15 @@ graph TD
     D --> E[Agent generates<br/>constrained code]
 ```
 
-The implication: front-load the constraints that matter for the current task, not the entire policy manual. A database migration task gets SEC-001 (SQL injection) and SEC-002 (no hardcoded credentials). An API endpoint task gets input validation and authentication principles instead.
+Front-load the constraints that matter for the current task. A database migration task gets SEC-001 (SQL injection) and SEC-002 (no hardcoded credentials). An API endpoint task gets input validation and authentication principles instead.
 
 ## Three-Phase Integration
 
-Security principles inject at each phase of a spec-driven workflow, not just at implementation time ([Marri, 2026](https://arxiv.org/abs/2602.02584)):
+Security principles inject at each phase of a spec-driven workflow ([Marri, 2026](https://arxiv.org/abs/2602.02584)):
 
-**Specification phase** — The feature spec references which constitution principles apply. This is where you select the 3–5 relevant principles.
+**Specification phase** — The feature spec references which constitution principles apply. Select 3–5 relevant principles here.
 
-**Planning phase** — The implementation plan includes security constraints as acceptance criteria. "All endpoints validate input against schema" becomes a concrete plan step, not an afterthought.
+**Planning phase** — The implementation plan includes security constraints as acceptance criteria. "All endpoints validate input against schema" becomes a plan step, not an afterthought.
 
 **Task phase** — Each task definition carries its applicable principles inline. The agent sees the constraint at the point of code generation.
 
@@ -93,13 +93,13 @@ graph TD
 
 A constitution in a prompt is guidance. A constitution backed by linters, CI gates, and hooks is enforcement. The document serves both roles — human-readable constraints that also feed automated checks.
 
-**Linters and static analysis** — Map each MUST principle to a linter rule. SEC-001 (parameterized queries) maps to a SQL injection scanner. SEC-002 (no hardcoded secrets) maps to secret detection tools like `gitleaks` or `trufflehog`.
+**Linters and static analysis** — Map each MUST principle to a linter rule. SEC-001 maps to a SQL injection scanner. SEC-002 maps to secret detection tools like `gitleaks` or `trufflehog`. See [secrets management for agents](secrets-management-for-agents.md) for the broader credential handling pattern.
 
 **Pre-commit hooks** — Block commits that violate MUST principles before they reach the repository. Claude Code's `PreToolUse` hooks can intercept file writes and run validation ([deterministic guardrails](../verification/deterministic-guardrails.md)).
 
 **CI gates** — Run the full constitution's MUST principles as a CI check. SHOULD principles generate warnings; MAY principles are informational.
 
-This layered approach means the constitution is not just documentation — it is the single source of truth for both agent prompts and automated enforcement. See [defense-in-depth agent safety](defense-in-depth-agent-safety.md) for the broader pattern of layered safety mechanisms.
+The constitution becomes the single source of truth for both agent prompts and automated enforcement. See [defense-in-depth agent safety](defense-in-depth-agent-safety.md) for the broader pattern of layered safety mechanisms.
 
 ## Integration with Existing Workflows
 
@@ -113,9 +113,7 @@ The constitution pattern works with instruction files already in use:
 
 The published evidence comes from a single case study: one developer, one AI assistant, one domain (banking microservices). The reported 73% reduction in CWE violations is indicative but not yet independently replicated ([Marri, 2026](https://arxiv.org/abs/2602.02584)).
 
-The 16-hour upfront investment is from a single practitioner. Teams with existing security standards can adapt faster; teams without them will need more time.
-
-The methodology has only been demonstrated in financial services. Whether the same structure works for other domains (embedded systems, frontend applications, data pipelines) is untested.
+The 16-hour upfront investment is from a single practitioner. Teams with existing security standards can adapt faster; teams without them will need more time. Whether the same structure works for other domains (embedded systems, frontend applications, data pipelines) is untested.
 
 ## Key Takeaways
 

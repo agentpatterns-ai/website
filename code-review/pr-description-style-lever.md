@@ -110,3 +110,5 @@ With this template in `CLAUDE.md`, the agent's PR descriptions consistently incl
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Diff-Based Review](diff-based-review.md)
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)

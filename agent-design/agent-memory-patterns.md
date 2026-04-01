@@ -130,3 +130,4 @@ The first two sections belong in the project `CLAUDE.md` (version-controlled, sh
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
+- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)

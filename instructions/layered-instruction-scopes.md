@@ -1,5 +1,5 @@
 ---
-title: "Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes"
+title: "Layered Instruction Scopes: Global, Project, and Directory"
 description: "Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific rule always wins."
 aliases:
   - Layered Instruction Scopes

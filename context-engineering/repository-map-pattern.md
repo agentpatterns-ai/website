@@ -181,5 +181,6 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 - [Context Priming](context-priming.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Prompt Compression](prompt-compression.md)

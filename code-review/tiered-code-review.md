@@ -16,7 +16,7 @@ tags:
 
 ## The Problem
 
-AI-generated code is increasing PR volume. PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is now the rate limiter. Applying the same human review depth to every change does not scale.
+AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is now the rate limiter. Applying the same human review depth to every change does not scale.
 
 Tiered code review treats review as a **risk-routing problem**: classify code by criticality, then match review effort to risk level.
 
@@ -186,3 +186,5 @@ Pair this with the CODEOWNERS file from the implementation section above. Tier 1
 - [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)
 - [PR Description Style as a Lever for Merge Rates](pr-description-style-lever.md)
 - [Predicting Reviewable Code](predicting-reviewable-code.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)

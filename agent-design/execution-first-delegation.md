@@ -126,3 +126,6 @@ Compare this to an under-specified version: "Update the docs for the release." T
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Empowerment Over Automation](empowerment-over-automation.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
+- [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
+- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)

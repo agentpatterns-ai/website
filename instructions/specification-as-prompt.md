@@ -92,6 +92,7 @@ The agent reads the interface, derives the method signatures, parameter types, r
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Context Priming](../context-engineering/context-priming.md)
 - [Frozen Spec File](frozen-spec-file.md)

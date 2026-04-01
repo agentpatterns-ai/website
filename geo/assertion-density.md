@@ -13,14 +13,14 @@ tags:
 
 ## Why Specificity Gets Cited
 
-AI answer engines use retrieval-augmented generation: they match queries against indexed content and generate answers from retrieved passages. Specific, verifiable claims improve retrieval in two ways:
+AI answer engines use retrieval-augmented generation: they match queries against indexed content and generate answers from retrieved passages. Specific claims improve retrieval in two ways:
 
-1. **Token-level matching** — a query for “how much does X improve Y” matches numeric passages more precisely than passages with “significantly” or “substantially”
-2. **Attribution confidence** — attributed quotes with named credentials and dated statistics are easier to cite verbatim than paraphrased generalities
+1. **Token-level matching** — a query for "how much does X improve Y" matches numeric passages more precisely than "significantly" or "substantially"
+2. **Attribution confidence** — attributed quotes with named credentials and dated statistics are easier to cite verbatim than generalities
 
 ## The Evidence
 
-The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) tested 9 optimization techniques against a 10,000-query benchmark (GEO-bench) across 25 content domains, measuring source visibility using Position-Adjusted Word Count (PAWC — word count weighted by exponential decay based on citation position):
+The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) tested 9 optimization techniques against a 10,000-query benchmark (GEO-bench) across 25 domains, measuring source visibility using Position-Adjusted Word Count (PAWC — word count weighted by exponential decay based on citation position):
 
 | Technique | PAWC Improvement |
 |-----------|-----------------|
@@ -30,7 +30,7 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 | Fluency Optimization | +15–30% |
 | Keyword Stuffing | –10% |
 
-**Caveats**: All three top techniques add content, not just modify it — the PAWC metric rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, limiting real-world applicability. The directional finding — specific over vague — is robust; exact percentages are an upper bound. Domain variation is real: no single technique dominates universally.
+**Caveats**: All three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, limiting real-world applicability. The directional finding — specific over vague — is robust; exact percentages are an upper bound.
 
 ## What Counts
 
@@ -60,23 +60,23 @@ Find vague qualifiers and replace with specifics. If you don't have a source, ta
 | "Keyword stuffing is counterproductive." | "Keyword stuffing reduced source visibility by 10% in the Princeton GEO benchmark (Aggarwal et al., KDD 2024)." |
 | "Large context windows help with complex tasks." | "Claude 3.5 Sonnet supports a 200K-token context window, sufficient to load an entire mid-size codebase before implementing." |
 
-## Relationship to This Site's `[unverified]` Convention
+## The `[unverified]` Convention
 
-- A claim tagged `[unverified]` is a retrieval liability — AI engines are less likely to cite it because they cannot verify attribution `[unverified]`
-- Find a source and cite it, or keep the `[unverified]` tag to signal the gap explicitly
-- Removing the tag without adding a source creates a false confidence signal that is worse than the original
+- `[unverified]` claims are retrieval liabilities — AI engines are less likely to cite unverifiable assertions `[unverified]`
+- Find a source and cite it, or keep the tag to signal the gap
+- Removing the tag without adding a source creates a worse false confidence signal
 
 ## Limits
 
-- **Freshness**: content recency is a separate citation signal. High assertion density on a stale page may still underperform a fresher page with weaker assertions. `[unverified — secondary GEO guides cite a recency majority-of-citations claim without a confirmed primary source]`
+- **Freshness**: content recency is a separate signal — high assertion density on a stale page may underperform a fresher page with weaker assertions `[unverified]`
 - **Fabrication risk**: manufactured statistics are detectable; only add specifics you can source
-- **Structural prerequisites**: if the page buries answers (see [Answer-First Writing](answer-first-writing.md)), assertion density in the body won't compensate for a retrieval miss at the section level
-- **Diminishing returns**: beyond a threshold, additional citations add length without adding citability; keep the page scannable
+- **Structural prerequisites**: if the page buries answers (see [Answer-First Writing](answer-first-writing.md)), assertion density won't compensate for a retrieval miss at the section level
+- **Diminishing returns**: past a threshold, additional citations add length without citability
 
 ## Unverified Claims
 
-- Content recency is a dominant signal for AI citation — secondary GEO practitioner guides cite a "majority from recently updated content" finding without a confirmed primary source `[unverified]`
-- LLMs increasingly detect hallucinated citations and may penalise sources that use them — directionally plausible but no primary study confirmed `[unverified]`
+- Content recency may be a dominant AI citation signal — secondary GEO guides cite a "majority from recently updated content" finding without a confirmed primary source `[unverified]`
+- LLMs increasingly detect hallucinated citations and may penalise sources that use them — directionally plausible but unconfirmed `[unverified]`
 
 ## Related
 

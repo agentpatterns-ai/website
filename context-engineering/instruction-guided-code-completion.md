@@ -14,7 +14,7 @@ tags:
 
 ## The Problem
 
-Standard code completion benchmarks (HumanEval, CrossCodeEval) measure whether generated code passes tests. They do not measure whether the model followed the developer's instructions about *how* to implement it. In practice, developers routinely specify implementation constraints: use a specific algorithm, follow a structural pattern, limit completion to a particular scope. [unverified] Most models treat these instructions as suggestions rather than requirements.
+Standard code completion benchmarks (HumanEval, CrossCodeEval) measure whether generated code passes tests. They do not measure whether the model followed the developer's instructions about *how* to implement it. In practice, developers specify implementation constraints: use a specific algorithm, follow a structural pattern, limit completion to a particular scope. [unverified] Most models treat these instructions as suggestions rather than requirements.
 
 C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
@@ -72,6 +72,49 @@ IFCoder (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following 
 - **Benchmark rankings do not predict instruction-following.** Evaluate models on the specific capability your workflow requires.
 - **Fine-tuning on instruction-completion pairs closes the gap.** If you run local models, synthetic instruction data is an effective lever.
 
+## Example
+
+A developer needs a function to flatten a nested dictionary. Without instruction guidance, the model chooses its own approach:
+
+```python
+# Prompt (no instruction guidance):
+# Write a function to flatten a nested dictionary
+
+def flatten_dict(d, parent_key='', sep='.'):
+    items = []
+    for k, v in d.items():
+        new_key = f"{parent_key}{sep}{k}" if parent_key else k
+        if isinstance(v, dict):
+            items.extend(flatten_dict(v, new_key, sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+```
+
+The model produces correct code but uses recursion, builds intermediate lists, and returns a new dictionary. With explicit implementation constraints:
+
+```python
+# Prompt with instruction guidance:
+# Write a function to flatten a nested dictionary.
+# - Use an iterative approach with an explicit stack (no recursion)
+# - Yield key-value pairs as a generator
+# - Use '/' as the separator
+# - Handle only dict nesting (skip lists)
+
+def flatten_dict(nested, sep='/'):
+    stack = [('', nested)]
+    while stack:
+        prefix, current = stack.pop()
+        for key, value in current.items():
+            full_key = f"{prefix}{sep}{key}" if prefix else key
+            if isinstance(value, dict):
+                stack.append((full_key, value))
+            else:
+                yield full_key, value
+```
+
+The second prompt specifies algorithm (iterative with stack), output structure (generator), separator choice, and scope boundary. C3-Bench results show that models follow these implementation-control instructions roughly 50-60% of the time — better than scale instructions but still unreliable enough to require verification.
+
 ## Unverified Claims
 
 - The claim that most models treat instructions as suggestions is based on C3-Bench results for a specific set of Python tasks; generalization to other languages and task types is assumed but not tested.
@@ -82,3 +125,4 @@ IFCoder (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following 
 - [Context Priming](context-priming.md) — Loading relevant context before completion shapes output quality; instruction-guided completion is a specific form of this discipline
 - [Prompt Layering](prompt-layering.md) — Instructions arrive from multiple sources simultaneously; understanding precedence affects whether completion instructions are followed
 - [Pass@k Metrics](../verification/pass-at-k-metrics.md) — Standard evaluation metric that measures functional correctness but not instruction adherence
+- [Token-Efficient Code Generation](token-efficient-code-generation.md) — Structural patterns that reduce generated code tokens; a complementary lens on controlling model output quality

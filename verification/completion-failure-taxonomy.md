@@ -14,7 +14,7 @@ tags:
 
 ## The Three Failure Categories
 
-Code4Me collected 600K+ real completions from 1,200+ developers across 12 languages. Qualitative analysis of 8,312 failures revealed three distinct categories with stable proportions. [Source: [Izadi et al., ICSE 2024](https://arxiv.org/abs/2402.16197)]
+Code4Me collected 600K+ real completions from 1,200+ developers across 12 languages. Analysis of 8,312 failures revealed three categories with stable proportions. [Source: [Izadi et al., ICSE 2024](https://arxiv.org/abs/2402.16197)]
 
 ```mermaid
 pie title Completion Failure Distribution (n = 8,312)
@@ -32,7 +32,7 @@ The model produced wrong output. Two sub-types:
 | Token-level mistakes | 3,835 | Wrong variable name, incorrect function call, bad literal, wrong type |
 | Statement-level errors | 1,676 | Wrong parameter count, incorrect semantics, early/late termination, rambling output |
 
-These are the failures that better models directly address. Upgrading from the study's models (InCoder, UniXcoder, CodeGPT) to modern models reduces this category substantially — GitHub Copilot now reports ~30% acceptance rates versus the study's 4.91%. `[unverified: exact modern acceptance rates vary by source and measurement methodology]`
+Better models directly reduce this category. Upgrading from the study's models (InCoder, UniXcoder, CodeGPT) to modern models narrows it substantially — GitHub Copilot now reports ~30% acceptance rates versus the study's 4.91%. `[unverified: exact modern acceptance rates vary by source and measurement methodology]`
 
 ### Application-oriented errors (24.4%)
 
@@ -44,7 +44,7 @@ The integration layer caused the failure, not the model:
 | Insufficient context | 482 | The IDE sent too little surrounding code for the model to produce a useful completion |
 | Redundant invocation | 240 | Completion fired when no suggestion was needed — wasting a round-trip and interrupting flow |
 
-This is the actionable category for agent and tool designers. Nearly **one in four failures** had nothing to do with model capability.
+This is the actionable category for agent builders. Nearly **one in four failures** had nothing to do with model capability.
 
 ### User overrides (9.3%)
 
@@ -55,20 +55,20 @@ The model output was acceptable but rejected:
 | Correct but rejected | 605 | Model predicted correctly; developer chose to type it themselves |
 | Valid but unpreferred | 112 | Output was functionally correct but didn't match developer's style or intent |
 
-These are not true failures — they represent the irreducible gap between what a model can predict and what a developer will accept.
+These are not true failures — they represent the irreducible gap between prediction and developer intent.
 
 ## The Benchmark Gap
 
-The study's most consequential finding: **offline evaluations substantially misrepresent real-world effectiveness**.
+The study's key finding: **offline evaluations substantially misrepresent real-world effectiveness**.
 
 | Setting | Metric behavior |
 |---------|----------------|
 | Offline (synthetic test sets) | Models score well on curated, clean inputs with full context |
 | Online (real IDE usage) | 4.91% average acceptance rate across all models and languages |
 
-Corroborating evidence: LLMs achieve 84–89% on synthetic benchmarks but only 25–34% on real-world class-level tasks. [Source: [arxiv 2510.26130](https://arxiv.org/abs/2510.26130)]
+Corroboration: LLMs achieve 84–89% on synthetic benchmarks but only 25–34% on real-world class-level tasks. [Source: [arxiv 2510.26130](https://arxiv.org/abs/2510.26130)]
 
-The gap stems from multiple factors:
+The gap stems from:
 
 - Benchmark inputs are clean; real code has typos, partial expressions, and mid-edit states
 - Benchmarks provide full file context; real invocations often have truncated or stale context
@@ -78,7 +78,7 @@ The gap stems from multiple factors:
 
 ### 1. Audit the integration layer, not just the model
 
-If ~25% of failures are application-oriented, improving the model alone has diminishing returns. Measure and optimize:
+If ~25% of failures are application-oriented, improving the model alone hits diminishing returns. Measure and optimize:
 
 - **Invocation timing** — debounce triggers to avoid mid-token firing
 - **Context assembly** — ensure the prompt includes sufficient surrounding code, imports, and type information
@@ -86,15 +86,15 @@ If ~25% of failures are application-oriented, improving the model alone has dimi
 
 ### 2. Use real-world telemetry for evaluation
 
-Synthetic benchmarks rank models but do not predict user acceptance. Track acceptance rate, time-to-accept, and rejection reasons from actual usage. RepoMasterEval shows a positive correlation between realistic benchmark scores and online acceptance rates — prefer telemetry-derived evals. [Source: [arxiv 2408.03519](https://arxiv.org/abs/2408.03519)]
+Synthetic benchmarks rank models but do not predict user acceptance. Track acceptance rate, time-to-accept, and rejection reasons from actual usage. RepoMasterEval confirms realistic benchmarks correlate with online acceptance rates — prefer telemetry-derived evals. [Source: [arxiv 2408.03519](https://arxiv.org/abs/2408.03519)]
 
 ### 3. Treat user overrides as signal, not noise
 
-The 9.3% override rate means roughly 1-in-10 suggestions is correct but unwanted. This is data: it reveals style mismatches, context preferences, and developer intent that can inform personalization or filtering.
+The 9.3% override rate means roughly 1-in-10 suggestions is correct but unwanted. This reveals style mismatches, context preferences, and developer intent that can inform personalization or filtering.
 
 ### 4. Language-specific performance varies sharply
 
-InCoder outperformed across all 12 languages, but mainstream languages (Python, Java) consistently scored higher than less common ones. Do not assume a model's Python performance predicts its Rust or Kotlin performance. Evaluate per-language if your team works across multiple stacks.
+InCoder outperformed across all 12 languages, but mainstream languages (Python, Java) consistently scored higher than less common ones. Do not assume Python performance predicts Rust or Kotlin performance — evaluate per-language.
 
 ## Key Takeaways
 

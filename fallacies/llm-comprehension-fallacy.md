@@ -56,6 +56,7 @@ The developer primes the model with the existing auth code, the new spec documen
 
 ## Related
 
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [Context Priming](../context-engineering/context-priming.md)
 - [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md)
 - [Chain-of-Thought Reasoning Fallacy](chain-of-thought-reasoning-fallacy.md)

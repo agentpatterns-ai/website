@@ -119,4 +119,6 @@ This returns call sites across the codebase with their file paths and line numbe
 - [Observation Masking](observation-masking.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Prompt Compression](prompt-compression.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Structured Domain Retrieval](structured-domain-retrieval.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

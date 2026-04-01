@@ -6,6 +6,9 @@ tags:
   - agentless
   - autonomous-agents
   - complexity
+aliases:
+  - agentless approach
+  - simple-first AI
 ---
 
 # Agentless vs Autonomous: When Simple Beats Complex
@@ -38,7 +41,7 @@ This constrained approach avoided the complexity overhead of autonomous planning
 
 ### The 80% Problem Shift
 
-As AI coding capability improved from 70% to 80%+, [failure modes shifted](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) from syntax bugs to deeper logical mistakes and comprehension debt. More autonomous agents compound these errors through:
+As AI coding capability improved from 70% to 80%+, [failure modes shifted](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) from syntax bugs to deeper logical mistakes and [comprehension debt](../anti-patterns/comprehension-debt.md). More autonomous agents compound these errors through:
 
 - **State accumulation**: Complex agents build incorrect assumptions over many turns
 - **Context drift**: Autonomous planning can diverge from actual requirements
@@ -67,7 +70,7 @@ Simple approaches demonstrate superior cost-performance ratios when complexity o
 3. **Guided autonomy**: AI executes within strict boundaries
 4. **Full autonomy**: AI plans and executes independently
 
-Most tasks stop at level 2-3 because the marginal benefits of full autonomy don't justify the complexity costs.
+Most tasks stop at level 2-3 because the marginal benefits of full autonomy don't justify the complexity costs. [unverified]
 
 ### Harness Engineering Over Agent Engineering
 
@@ -76,7 +79,7 @@ Instead of building more autonomous agents, constrain AI systems through archite
 - **Typed interfaces**: Enforce correct tool usage
 - **Bounded execution**: Limit scope and resource consumption
 - **Mechanical validation**: Automated checks catch errors before propagation
-- **Rollback-first design**: Every action should be easily reversible
+- **[Rollback-first design](rollback-first-design.md)**: Every action should be easily reversible
 
 This [harness engineering approach](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) maintains reliability while preserving AI capabilities within safe boundaries.
 
@@ -116,13 +119,10 @@ The agentless version produces more consistent results because it avoids coordin
 
 The goal is not to avoid AI, but to apply it within architectures that maximize its strengths while minimizing complexity overhead.
 
-## Unverified Claims
-
-- SWE-bench Lite-S quality improvements and specific accuracy metrics beyond what is stated in the Agentless paper abstract [unverified]
-
 ## Related
 
 - [Harness Engineering](harness-engineering.md) — The discipline of constraining agent environments so agents reliably produce correct results within safe boundaries
 - [Delegation Decision](delegation-decision.md) — Framework for deciding when agent delegation overhead is justified versus simpler approaches
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — Matching model capability to task complexity rather than defaulting to the most autonomous option
 - [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md) — The two-layer architecture that the agentless approach implicitly follows
+- [Agents vs Commands](agents-vs-commands.md) — Separating agent roles from workflow execution, reinforcing when command-style simplicity beats full autonomy

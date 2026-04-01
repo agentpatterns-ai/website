@@ -39,7 +39,7 @@ Coding agent systems solve the same coordination problems that distributed syste
 
 The mapping is structural, not exact. Three divergences matter:
 
-**Dynamic call graphs.** Microservices have predefined topologies. Agents construct call graphs at runtime based on reasoning. The [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) describes patterns involving dynamic tool selection and runtime task decomposition. When an agent calls a tool it has never called before, your [observability tooling](../standards/opentelemetry-agent-observability.md) has no historical baseline — traditional tracing assumptions do not apply [unverified].
+**Dynamic call graphs.** Microservices have predefined topologies. Agents construct call graphs at runtime based on reasoning. The [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) describes patterns involving [dynamic tool selection](../anti-patterns/dynamic-tool-fetching-cache-break.md) and runtime task decomposition. When an agent calls a tool it has never called before, your [observability tooling](../standards/opentelemetry-agent-observability.md) has no historical baseline — traditional tracing assumptions do not apply [unverified].
 
 **Context windows as a resource constraint.** Distributed systems manage memory, CPU, and network. Agent systems manage a fourth resource with no direct equivalent: the context window. It degrades non-linearly — performance doesn't scale down smoothly as the [context window fills](../context-engineering/context-window-dumb-zone.md), it falls off a cliff. Traditional capacity planning doesn't model this failure mode.
 

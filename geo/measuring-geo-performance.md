@@ -17,7 +17,7 @@ aliases:
 
 ## The Core Problem
 
-SEO rank tracking works because results are deterministic. GEO measurement does not — LLMs generate probabilistic outputs on-the-fly:
+SEO rank tracking works because results are deterministic. GEO measurement does not — LLMs generate probabilistic outputs on-the-fly.
 
 - Only ~20% of brands maintained citation presence across 5 consecutive runs [unverified]
 - Monthly citation drift ranges 40–60% across major platforms [unverified]
@@ -37,7 +37,7 @@ SEO rank tracking works because results are deterministic. GEO measurement does 
 | **Hallucination Rate** | How often AI states factually incorrect information about your brand |
 | **Platform Coverage Rate** | % of tracked platforms where your brand appears for target prompts |
 
-LLMs cite 2–7 domains per response [unverified] — far fewer than Google's 10 blue links, making citation share more competitive than organic share.
+LLMs cite 2–7 domains per response [unverified] — far fewer than Google's 10 blue links, making citation share intensely competitive.
 
 ## Tool Landscape
 
@@ -63,11 +63,11 @@ graph TD
     G --> H[Brand discovered in ChatGPT<br>visits site 3 days later<br>shows as direct traffic]
 ```
 
-**Attribution gap**: A brand discovered via ChatGPT that visits days later shows as direct traffic — the discovery touch is invisible.
+**Attribution gap**: Brands discovered via ChatGPT that visit days later appear as direct traffic — the discovery touch is invisible.
 
-**Zero-click gap**: For every 1,500 pages crawled by GPTBot, approximately one visitor clicks through [unverified].
+**Zero-click gap**: For every 1,500 pages GPTBot crawls, roughly one visitor clicks through [unverified].
 
-**Unannounced model updates**: Providers update models without notice, making sudden visibility changes unattributable to content versus model behaviour.
+**Unannounced model updates**: Providers update models without notice, making visibility shifts unattributable to content versus model behaviour.
 
 **GEO/SEO tension**: Restructuring content for AI extraction can improve citation rates while reducing organic rankings.
 
@@ -75,10 +75,10 @@ graph TD
 
 | Frequency | Activity |
 |-----------|----------|
-| **Daily** | Run 20–30 target prompts across platforms (automated via tool or agent script) |
-| **Weekly** | Review brand mention frequency, citation share, position, and sentiment; flag anomalies |
-| **Monthly** | Aggregate visibility trends; analyse citation source breakdown; benchmark against competitors |
-| **Quarterly** | Deep-dive sentiment analysis; update competitive benchmarks; reassess prompt set for relevance |
+| **Daily** | Run 20–30 target prompts across platforms (automated via tool or script) |
+| **Weekly** | Review mention frequency, citation share, position, and sentiment; flag anomalies |
+| **Monthly** | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
+| **Quarterly** | Deep-dive sentiment analysis; update competitive benchmarks; reassess prompt set |
 
 Brand web mentions correlate 0.664 with AI Overview visibility [unverified].
 

@@ -1,5 +1,5 @@
 ---
-title: "The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment"
+title: "Velocity-Quality Asymmetry: Why AI Speed Gains Fade"
 description: "Empirical evidence shows AI coding tools produce transient velocity gains but persistent quality degradation — sustainable speed requires scaling QA as a first-class concern."
 tags:
   - workflows
@@ -99,6 +99,60 @@ Use this window deliberately:
 2. **Invest the freed time in QA infrastructure** — automated gates, agent reviewers, complexity monitoring
 3. **Set a complexity baseline before adoption** — you cannot detect drift without a starting point
 4. **Review AI-generated multi-file changes with extra scrutiny** — this is where architectural inconsistencies enter
+
+## Example
+
+A team adopting Cursor adds quality gates to their CI pipeline during the first week. Their GitHub Actions workflow enforces complexity budgets and static analysis thresholds on every PR:
+
+```yaml
+# .github/workflows/quality-gate.yml
+name: Quality Gate
+on: [pull_request]
+
+jobs:
+  complexity-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check cognitive complexity
+        run: |
+          # Fail if any function exceeds complexity threshold
+          npx eslint --rule '{"complexity": ["error", 15]}' \
+            --no-eslintrc --ext .ts,.js src/
+      - name: Check file-level complexity delta
+        run: |
+          # Compare complexity against main branch baseline
+          BASE=$(git diff --name-only origin/main...HEAD -- '*.ts' '*.js')
+          for f in $BASE; do
+            npx cr --threshold 25 "$f" || exit 1
+          done
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block on new warnings
+        run: |
+          # Capture warning count on main
+          git stash
+          BASELINE=$(npx eslint src/ --format json | jq '[.[].errorCount] | add')
+          git stash pop
+          CURRENT=$(npx eslint src/ --format json | jq '[.[].errorCount] | add')
+          if [ "$CURRENT" -gt "$BASELINE" ]; then
+            echo "::error::Static analysis warnings increased from $BASELINE to $CURRENT"
+            exit 1
+          fi
+```
+
+The team tracks three metrics weekly in a shared dashboard:
+
+| Metric | Week 1 baseline | Week 4 | Week 8 | Trend |
+|--------|----------------|--------|--------|-------|
+| Static analysis warnings | 142 | 138 | 131 | Declining |
+| Avg cognitive complexity | 12.3 | 12.1 | 11.8 | Declining |
+| Change failure rate | 8% | 7% | 6% | Declining |
+
+By investing the velocity windfall in QA infrastructure during weeks 1-2, the team maintains the productivity gain through month 3 instead of losing it to compounding complexity.
 
 ## Key Takeaways
 

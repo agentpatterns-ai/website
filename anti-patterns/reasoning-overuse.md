@@ -78,4 +78,5 @@ To detect whether reasoning is contributing, measure pass^k — run the same tas
 - [pass@k and pass^k Metrics](../verification/pass-at-k-metrics.md) — Separate capability from consistency when measuring whether reasoning helps
 - [Framework-First Anti-Pattern](framework-first.md)
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
+- [The Kitchen Sink Session](session-partitioning.md) — Another cost-performance anti-pattern: mixing unrelated tasks fills context with irrelevant history
 - [The Infinite Context](infinite-context.md) — Another cost-performance anti-pattern: loading unnecessary tokens degrades output

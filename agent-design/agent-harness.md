@@ -144,3 +144,5 @@ Only after this orientation does the agent select the highest-priority incomplet
 - [Subtask-Level Memory](subtask-level-memory.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
+- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
+- [Agent Backpressure](agent-backpressure.md)

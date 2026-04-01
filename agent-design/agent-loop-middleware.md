@@ -52,7 +52,7 @@ def open_pr_if_needed(state: AgentState) -> AgentState:
     return state
 ```
 
-The Open SWE README describes this as "a lightweight version of Stripe's deterministic nodes — ensuring critical steps happen regardless of LLM behavior."
+The Open SWE README describes this as "a lightweight version of Stripe's deterministic nodes — ensuring critical steps happen regardless of LLM behavior." `[unverified]`
 
 Common safety-net targets:
 

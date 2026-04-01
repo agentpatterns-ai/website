@@ -61,7 +61,7 @@ Rollback is not failure — it's calibration. Autonomy is not monotonically incr
 
 ### The review bottleneck
 
-Agent-authored code increases PR volume. Without a review strategy, this creates a bottleneck: human reviewers can't keep up, PRs queue, cycle time increases, and the team concludes Copilot "doesn't save time." See [PR Scope Creep as a Human Review Bottleneck](../../anti-patterns/pr-scope-creep-review-bottleneck.md) for the feedback loop and structural mitigations.
+Agent-authored code [increases PR volume](../../code-review/agent-pr-volume-vs-value.md). Without a review strategy, this creates a bottleneck: human reviewers can't keep up, PRs queue, cycle time increases, and the team concludes Copilot "doesn't save time." See [PR Scope Creep as a Human Review Bottleneck](../../anti-patterns/pr-scope-creep-review-bottleneck.md) for the feedback loop and structural mitigations.
 
 The fix is not "review less carefully." It's routing review effort by risk.
 

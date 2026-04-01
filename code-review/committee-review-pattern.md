@@ -15,6 +15,8 @@ aliases:
 
 > Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output.
 
+The committee review pattern routes agent-produced work through multiple specialized reviewer agents running in parallel, each evaluating a single dimension (correctness, security, test coverage). An orchestrator aggregates structured verdicts and either accepts the output or routes feedback to the implementer for revision.
+
 ## Structure
 
 The pattern has three roles:
@@ -51,21 +53,17 @@ Each reviewer should have:
 - A structured output schema (e.g., `{"verdict": "PASS|FAIL", "issues": [...], "notes": [...]}`)
 - Explicit pass criteria — what counts as PASS must be unambiguous
 
-Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the consolidated issue list is sent to the implementer for a revision.
+Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the consolidated issue list goes back to the implementer.
 
 ## Loop Termination
 
-Set a maximum round limit — two to three rounds covers most cases. If the implementer cannot satisfy all reviewers within the limit, escalate to human review. An unresolved loop signals underspecified tasks, conflicting reviewer criteria, or insufficient implementer capability.
-
-## Structured Output as Coordination Protocol
-
-Structured JSON output lets the orchestrator count issues, filter by severity, deduplicate overlapping feedback across reviewers, and log verdicts per round — without parsing prose.
+Set a maximum round limit — two to three rounds covers most cases. If the implementer cannot satisfy all reviewers within the limit, escalate to human review. Unresolved loops signal underspecified tasks or conflicting reviewer criteria.
 
 ## Cross-Model Adversarial Review
 
 A committee where every reviewer runs on the same model shares the same blind spots. Cross-model review assigns each reviewer to a different provider (e.g., GPT, Gemini, Claude) so failure modes are independent.
 
-The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: for high-risk changes, three review subagents run in parallel on different models, each receiving the same staged diff. Verdicts are stored as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases — style is explicitly excluded to reduce noise.
+The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: three review subagents run in parallel on different models, each receiving the same staged diff. Verdicts are stored as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases — style is excluded to reduce noise.
 
 ### Risk-Proportional Scaling
 
@@ -77,7 +75,7 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | 1 | Bug fixes, features, refactors |
 | High | 3 (cross-model) | Auth, crypto, payments, schema migrations |
 
-File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of overall task scope. Cross-model rounds are capped at two; unresolved findings escalate to human review as structured data, not prose.
+File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Unresolved findings after two rounds escalate to human review as structured data.
 
 ## Key Takeaways
 
@@ -152,3 +150,6 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Adversarial Multi-Model Development Pipeline](../multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md)
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [PR Description Style as a Lever](pr-description-style-lever.md)

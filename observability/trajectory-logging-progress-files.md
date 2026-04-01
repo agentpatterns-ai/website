@@ -148,6 +148,7 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
+- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
 - [Event Sourcing for Agents](event-sourcing-for-agents.md)
 - [Agent Debugging](agent-debugging.md)
 - [Observability Legible to Agents](observability-legible-to-agents.md)

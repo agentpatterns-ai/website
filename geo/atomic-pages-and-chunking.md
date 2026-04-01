@@ -66,13 +66,13 @@ Descriptive headings also enable in-answer deep links: an AI tool can cite page.
 
 ## Why Monolithic Pages Underperform
 
-Long-form pages combining multiple concepts may rank well in traditional SEO. In AI retrieval, the opposite holds:
+Long-form pages combining multiple concepts hurt AI retrieval:
 
 - A 3,000-word page covering five techniques produces five blended embeddings — each weaker than a dedicated page embedding
-- Chunk boundaries may split an explanation mid-argument, stripping the passage of context needed for accurate citation
-- Retrieval systems penalize passages that match the query topic but are surrounded by off-topic content [unverified]
+- Chunk boundaries may split an explanation mid-argument, stripping context needed for accurate citation
+- Retrieval systems penalize passages surrounded by off-topic content [unverified]
 
-The GEO paper confirms that traditional SEO tactics like keyword density show negligible or negative effects on generative engine visibility.
+Traditional SEO tactics like keyword density show negligible or negative effects on generative engine visibility (GEO paper).
 
 ## Key Takeaways
 

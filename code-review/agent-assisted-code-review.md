@@ -143,3 +143,5 @@ Both agents run on every PR. The security reviewer catches an exposed database U
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete](predicting-reviewable-code.md)
 - [PR Description Style Lever](pr-description-style-lever.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)

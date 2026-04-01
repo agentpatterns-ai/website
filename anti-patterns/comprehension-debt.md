@@ -102,3 +102,4 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between what AI produces and what developers expect
 - [Pattern Replication Risk](pattern-replication-risk.md) -- agents reproducing codebase patterns at scale, including ones developers never fully understood
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt and who relocates rigor
+- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to accepting generated code without understanding it

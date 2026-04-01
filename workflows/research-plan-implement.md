@@ -123,6 +123,57 @@ Not every task needs all three phases. Claude Code's own documentation notes tha
 | Multi-file feature in unfamiliar code | Research → Plan → Implement |
 | Cross-system refactoring | Research → Plan → Implement → Verify → Re-plan |
 
+## Example
+
+Add a rate-limiter middleware to an unfamiliar Express API codebase.
+
+**Research phase** — the agent reads the project before proposing anything:
+
+```
+> Read server/app.ts, server/middleware/, and package.json
+> Check git log for prior rate-limiting attempts
+> Search for existing uses of express-rate-limit or similar
+
+Findings:
+- server/middleware/auth.ts already wraps express middleware
+- express-rate-limit is in devDependencies but unused
+- PR #47 attempted rate limiting but was reverted (broke WebSocket upgrade)
+```
+
+**Plan phase** — outline the approach using research findings:
+
+```
+Plan:
+1. Create server/middleware/rate-limit.ts following the auth.ts pattern
+2. Use express-rate-limit (already a dependency)
+3. Apply to /api/* routes only — skip /ws/* to avoid the PR #47 regression
+4. Add integration test in server/__tests__/rate-limit.test.ts
+5. Success criteria: 429 response after 100 req/min from same IP
+```
+
+**Implement phase** — execute the plan mechanically:
+
+```bash
+# Create middleware (pattern matches auth.ts)
+cat > server/middleware/rate-limit.ts << 'EOF'
+import rateLimit from 'express-rate-limit';
+export const apiLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 100,
+  standardHeaders: true,
+  message: { error: 'Rate limit exceeded' },
+});
+EOF
+
+# Mount on API routes only
+# Edit server/app.ts — add apiLimiter to /api/* router
+
+# Test
+npm test -- --grep "rate-limit"
+```
+
+Without the research phase, the agent would have missed the WebSocket constraint from PR #47 and repeated the same reverted mistake.
+
 ## Key Takeaways
 
 - **Separate information gathering from execution** — research, plan, then implement as distinct phases to catch wrong assumptions before they become wrong code

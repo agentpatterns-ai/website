@@ -20,15 +20,13 @@ aliases:
 
 ## The Problem: Shared-Context Bias
 
-When a single agent generates code and then writes tests for it, the tests tend to confirm the code's logic rather than challenge it. The agent has already committed to an implementation approach — its tests follow the same reasoning path, missing edge cases the code also misses.
+When a single agent generates code and then writes tests for it, the tests confirm the code's logic rather than challenge it — following the same reasoning path and missing the same edge cases.
 
-[AgentCoder](https://arxiv.org/abs/2312.13010) (Huang et al., 2023) quantified this: separating test generation into an independent agent raised test accuracy from 61.0% to 87.8% on HumanEval benchmarks. Line coverage jumped from 81.7% to 91.7% compared to MetaGPT's coupled approach.
-
-The mechanism is the same reason code review works better when the reviewer didn't write the code.
+[AgentCoder](https://arxiv.org/abs/2312.13010) (Huang et al., 2023) quantified this: separating test generation into an independent agent raised test accuracy from 61.0% to 87.8% on HumanEval benchmarks.
 
 ## Three-Agent Architecture
 
-The pattern uses three agents with distinct responsibilities and no shared context between the code and test paths:
+The pattern uses three agents with no shared context between code and test paths:
 
 ```mermaid
 graph TD
@@ -42,11 +40,11 @@ graph TD
 
 | Agent | Input | Output | Key constraint |
 |-------|-------|--------|---------------|
-| **Programmer** | Requirements + error feedback | Code implementation | Generates via chain-of-thought: clarify → algorithm → pseudocode → implement |
+| **Programmer** | Requirements + error feedback | Code implementation | Chain-of-thought: clarify → algorithm → pseudocode → implement |
 | **Test Designer** | Requirements only | Test cases (basic + edge + stress) | Never sees the generated code |
 | **Test Executor** | Code + tests | Pass/fail + error messages | Deterministic execution, routes failures back to Programmer |
 
-The test designer operates on the **specification**, not the implementation. This is the critical design decision — it prevents the test writer from accommodating implementation quirks.
+The test designer operates on the **specification**, not the implementation — preventing the test writer from accommodating implementation quirks.
 
 ## Fewer Specialized Agents Beat More Generalist Agents
 
@@ -57,7 +55,7 @@ The test designer operates on the **specification**, not the implementation. Thi
 | ChatDev | 4+ | 84.1% | 183.7K |
 | AgentVerse | 4+ | 89.0% | 149.2K |
 
-Each handoff is a compression point where information degrades. Three tightly-scoped agents with clear contracts outperform larger teams with diffuse responsibilities — at 59% lower token cost.
+Three tightly-scoped agents with clear contracts outperform larger teams with diffuse responsibilities at 59% lower token cost.
 
 ## Ablation: Each Agent Pulls Its Weight
 
@@ -70,24 +68,50 @@ Removing any component degrades the system (GPT-3.5 on HumanEval):
 | + Test Executor | 64.6% | +3.6 |
 | Full system (all three) | 79.9% | +18.9 |
 
-The non-linear jump when all three collaborate shows the feedback loop is what makes role separation effective. Tests alone help modestly — closing the loop with execution and error routing is where compounding occurs.
+The non-linear jump when all three collaborate shows that closing the loop with execution and error routing — not role separation alone — drives the gains.
 
 ## Iteration Budget
 
-Each refinement iteration yields ~1-2% improvement, with diminishing returns by iteration 4. Cap at 3-5 rounds — beyond that, failures indicate a fundamental approach problem that iteration won't solve. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
+Each refinement iteration yields ~1-2% improvement with diminishing returns by iteration 4. Cap at 3-5 rounds — beyond that, failures indicate a fundamental approach problem. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
 
 ## Applying the Pattern
 
-- **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt explicitly excludes code context. The programmer receives only execution errors, not test source.
+- **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt excludes code context; the programmer receives only execution errors, not test source.
 - **CI/CD pipelines**: Run code and test generation as separate agent invocations with isolated contexts. Route failures back with error context only.
 - **Single-agent tools**: Approximate by running test generation in a separate session with fresh context, using only requirements as input.
 
-## Key Takeaways
+## Example
 
-- Separate code and test generation into agents that never share implementation context
-- The test designer works from the specification, not the code — this prevents shared-context bias
-- The feedback loop (execute → route errors → refine) is what makes role separation compound — without it, separation provides only modest gains
-- Cap refinement iterations at 3-5 rounds; diminishing returns set in quickly
+A team building a Python utility library applies the three-agent pattern to generate and validate a `merge_sorted_lists` function.
+
+**Programmer agent system prompt:**
+
+```
+You are a Python programmer. Given a function specification,
+produce a correct implementation. If you receive test failure
+output, fix the code based on the error messages only.
+Do not request or reference any test code.
+```
+
+**Test designer agent system prompt:**
+
+```
+You are a test engineer. Given a function specification,
+produce pytest test cases covering: basic behavior, edge cases
+(empty lists, duplicates, single-element), and stress cases
+(10k elements). You will never see the implementation.
+Write tests based solely on the specification.
+```
+
+**Specification (shared input):**
+
+```
+merge_sorted_lists(a: list[int], b: list[int]) -> list[int]
+Merge two sorted integer lists into a single sorted list.
+Time complexity: O(n + m).
+```
+
+The test designer generates tests from the spec alone — including edge cases like `merge_sorted_lists([], [])` and `merge_sorted_lists([1,1,1], [1,1])` that a programmer-coupled test writer typically omits. The test executor runs both artifacts, routes any `FAILED` output back to the programmer with error messages only, and the loop repeats until all tests pass or the iteration cap is reached.
 
 ## Related
 

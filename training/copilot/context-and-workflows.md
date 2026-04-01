@@ -161,7 +161,7 @@ Not all tasks degrade equally:
 | Strategy | When to use | How |
 |----------|------------|-----|
 | **Fresh sessions for complex tasks** | Before starting a multi-file refactor or complex bug fix | Start a new chat. Load specific files with `#file` references. State the task clearly. |
-| **Manual compaction** | Mid-session, when you notice quality dropping | Copilot CLI: `/compact`. VS Code: start a new session (no manual compact yet). |
+| **[Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md)** | Mid-session, when you notice quality dropping | Copilot CLI: `/compact`. VS Code: start a new session (no manual compact yet). |
 | **Sub-agent isolation** | Research phase separate from implementation | In Copilot CLI, use a separate session for research. Summarise findings, then start a new session for implementation. |
 | **Smaller tasks** | Prevent rot by finishing before it starts | Break large tasks into agent-sized chunks (see next section). |
 
@@ -340,7 +340,7 @@ Since the agent's self-review handles mechanical checks, human reviewers should 
 | **Design fit** | Does this change fit the existing architecture, or did the agent introduce a parallel pattern? |
 | **Completeness** | Did the agent address the full requirement, or just the literal text of the issue? |
 | **What's missing** | Missing error paths, unhandled edge cases, absent `finally` blocks, no input validation |
-| **Implicit knowledge** | Would a team member who knows the system have done this differently? Why? |
+| **[Implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md)** | Would a team member who knows the system have done this differently? Why? |
 
 ### The review pipeline
 

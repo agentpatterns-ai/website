@@ -24,7 +24,7 @@ graph TD
 
 Each layer is more specific than the one above it. Specificity generally determines precedence when layers conflict: the user message overrides the skill, which overrides project instructions, which overrides the system prompt — because the more specific instruction is closer to the actual task.
 
-This is not a formal rule enforced by the model. It is a behavioral tendency that holds when instructions are well-structured and non-contradictory. Contradictions between layers produce unpredictable outputs.
+This is a behavioral tendency, not a formal rule enforced by the model. Contradictions between layers produce unpredictable outputs.
 
 ## What Each Layer Is For
 
@@ -40,7 +40,7 @@ This is not a formal rule enforced by the model. It is a behavioral tendency tha
 
 Subagents do not inherit the parent agent's context. A subagent invoked by a parent agent starts fresh with its own system prompt — typically one injected at invocation time ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). The parent's project instructions, loaded skills, and conversation history are not present unless explicitly passed.
 
-A subagent working on a subtask can violate project conventions the parent was following — unless the parent explicitly passes the relevant constraints. Debugging requires knowing what instructions the subagent received at invocation, not what the parent was working with.
+A subagent can violate project conventions the parent was following unless the parent explicitly passes the relevant constraints. Debugging requires knowing what the subagent received at invocation, not what the parent had.
 
 ## Conflicts and Debugging
 

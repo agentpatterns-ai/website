@@ -99,3 +99,4 @@ The agent reads the convention from `AGENTS.md`, and even if it guesses wrong, t
 - [Spec Complexity Displacement](spec-complexity-displacement.md) -- implicit knowledge relocated into overly detailed specs
 - [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- bootstrap an instruction file from zero
 - [The Copy-Paste Agent](copy-paste-agent.md) -- embedding tribal conventions in duplicated definitions instead of shared rules
+- [The Prompt Tinkerer](prompt-tinkerer.md) -- refining prompts instead of externalizing conventions into structural enforcement

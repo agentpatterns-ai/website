@@ -23,7 +23,7 @@ Every harness mechanism falls into one of three categories:
 | Category | Design Implication | Examples |
 |---|---|---|
 | **Compensatory** | Removable middleware; feature-flag; track which model capability obsoletes it | Loop detection, forced verification, instruction reminders, iteration caps |
-| **Structurally valuable** | Invest in robustness; valuable regardless of model capability | Sandboxing, permission gates, context compaction, tool discovery, feedback loops |
+| **Structurally valuable** | Invest in robustness; valuable regardless of model capability | Sandboxing, permission gates, [context compaction](../context-engineering/context-compression-strategies.md), tool discovery, feedback loops |
 | **Mixed permanence** | Design for graceful degradation; shrinks in scope but does not disappear | Context summarization, structured feature tracking, progress files |
 
 The classification question: *If the model were perfect at this capability, would I still want this mechanism?* Yes = structural; No = compensatory; Partially = mixed.
@@ -142,3 +142,4 @@ harness:
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)

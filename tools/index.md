@@ -1,11 +1,16 @@
 ---
 title: "Tools: Claude Code and GitHub Copilot"
 description: "Tool-specific patterns and workflows for Claude Code and GitHub Copilot — the two leading AI coding assistants."
+tags:
+  - claude-code
+  - github-copilot
+  - tools
+  - ai-coding-assistants
 ---
 
 # Tools
 
-Tool-specific patterns, workflows, and configuration guidance for the leading AI coding assistants.
+> Tool-specific patterns, workflows, and configuration guidance for the leading AI coding assistants.
 
 ## [Claude Code](claude/index.md)
 

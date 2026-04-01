@@ -1,5 +1,5 @@
 ---
-title: "Override Pattern: Reusing Interactive Commands in Automated Pipelines"
+title: "Override Pattern: Interactive Commands in Pipelines"
 description: "Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and fully automated execution"
 tags:
   - agent-design

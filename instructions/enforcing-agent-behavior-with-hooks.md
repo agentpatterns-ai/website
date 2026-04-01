@@ -16,12 +16,9 @@ aliases:
 
 > Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override — blocking forbidden actions, rewriting inputs, and gating task completion.
 
-!!! note "Also known as"
-    Rigor Relocation, Deterministic Behavioral Enforcement, Hook-Based Agent Governance.
-
 ## The Enforcement Spectrum
 
-Agent behavioral rules exist on a spectrum from advisory to deterministic. Most teams start at the left and never move right, leaving their highest-stakes rules at the mercy of model attention.
+Agent behavioral rules exist on a spectrum from advisory to deterministic. Most teams leave their highest-stakes rules at the mercy of model attention.
 
 ```mermaid
 graph LR
@@ -35,23 +32,23 @@ graph LR
     style D fill:#d6d8db,stroke:#383d41
 ```
 
-**Advisory** — Rules in CLAUDE.md or AGENTS.md. The model reads them at session start but may ignore them under task pressure, context compaction, or when strong training priors conflict ([Lavaee, 2025](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+**Advisory** — Rules in CLAUDE.md or AGENTS.md. The model may ignore them under task pressure, [context compaction](../context-engineering/context-compression-strategies.md), or conflicting training priors ([Lavaee, 2025](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
-**Probabilistic** — Rules injected via system prompts or event-driven reminders. Higher attention weight than file-based instructions, but still subject to drift in long sessions ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
+**Probabilistic** — System prompts or event-driven reminders. Higher attention weight, but still subject to drift in long sessions ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
 
-**Deterministic** — Shell hooks that execute outside the model's context window. A hook returning exit code 2 blocks the tool call unconditionally — the model cannot override it, argue with it, or forget it ([Claude Code hooks](https://code.claude.com/docs/en/hooks)).
+**Deterministic** — Shell hooks executing outside the context window. Exit code 2 blocks the tool call unconditionally — the model cannot override, argue with, or forget it ([Claude Code hooks](https://code.claude.com/docs/en/hooks)).
 
-**Organizational** — Managed policies pushed via MDM or enterprise configuration. These hooks cannot be disabled at the project or user level, enforcing organization-wide standards.
+**Organizational** — Managed policies via MDM or enterprise configuration, enforcing organization-wide standards that cannot be disabled at project or user level.
 
-The key insight: **rigor relocation**. Instead of writing more detailed instructions and hoping the model follows them, relocate the enforcement to a layer the model cannot influence. Every rule that moves from advisory to deterministic is a rule that stops failing silently.
+The key insight: **rigor relocation**. Relocate enforcement to a layer the model cannot influence. Every rule that moves from advisory to deterministic stops failing silently.
 
 ## Three Hook Patterns
 
-Claude Code hooks fire on lifecycle events (`PreToolUse`, `PostToolUse`, `Notification`, `Stop`) and receive JSON context via stdin. Three patterns cover most enforcement needs ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)):
+Claude Code hooks fire on lifecycle events (`PreToolUse`, `PostToolUse`, `Notification`, `Stop`) and receive JSON via stdin. Three patterns cover most needs ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)):
 
 ### Block: Exit Code 2
 
-The simplest pattern. The hook inspects the tool call, and if it violates a rule, exits with code 2. Claude Code blocks the call and shows the hook's stderr as the reason.
+The hook inspects the tool call and exits with code 2 if it violates a rule. Claude Code blocks the call and shows the hook's stderr as the reason.
 
 ```jsonc
 // .claude/settings.json
@@ -82,7 +79,7 @@ Exit code 2 means "blocked." Exit code 0 means "allowed." Any other exit code is
 
 ### Rewrite: Transform Inputs via `updatedInput`
 
-A hook can modify the tool call rather than blocking it. Output a JSON object with an `updatedInput` field to stdout, and Claude Code replaces the original input before execution.
+A hook can modify the tool call rather than blocking it. Output a JSON object with `updatedInput` to stdout, and Claude Code replaces the original input.
 
 ```python
 # .claude/hooks/enforce-uv.py
@@ -96,11 +93,11 @@ if cmd.startswith("pip install"):
     json.dump(result, sys.stdout)
 ```
 
-The model sees the rewritten command in its output, reinforcing the correct pattern for future calls without needing an instruction.
+The model sees the rewritten command in its output, reinforcing the correct pattern for future calls.
 
 ### Completion Gates: Stop Hooks
 
-`Stop` hooks fire when the agent is about to end its turn. Use them to enforce completion criteria — running a linter, checking test coverage, or validating that a spec file was updated.
+`Stop` hooks fire when the agent is about to end its turn. Use them to enforce completion criteria — running a linter, checking test coverage, or validating spec updates.
 
 ```jsonc
 {
@@ -131,19 +128,19 @@ Managed hooks cannot be disabled by project or user settings. This is how organi
 
 ## Why Hooks Beat Instructions
 
-Models revert to training defaults under pressure. This is not a bug — it is how attention-based architectures work when the context window fills or when instructions conflict with strong priors ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Models revert to training defaults under pressure — this is inherent to attention-based architectures when the context window fills or instructions conflict with strong priors ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
-Common failure modes that instructions alone cannot prevent:
+Failure modes that instructions alone cannot prevent:
 
-- **Training prior override**: The model uses `npm` despite CLAUDE.md saying "use pnpm" — `npm` is vastly more common in training data
-- **Context compaction loss**: After compaction, behavioral rules are summarized or dropped, and the model reverts
-- **Multi-step drift**: In long task chains, compliance with early instructions degrades as attention distributes across accumulated context
+- **Training prior override**: The model uses `npm` despite CLAUDE.md saying "use pnpm" — `npm` dominates training data
+- **Context compaction loss**: After compaction, behavioral rules are summarized or dropped
+- **Multi-step drift**: Compliance with early instructions degrades as attention distributes across accumulated context
 
-Hooks are immune to all three. They execute in the shell, not in the context window. The model's attention, priors, and compaction behavior are irrelevant.
+Hooks are immune to all three. They execute in the shell, outside the context window.
 
 ## When to Use Each Layer
 
-Not every rule needs a hook. The decision depends on the cost of violation and whether the rule requires judgment.
+Not every rule needs a hook. The decision depends on violation cost and whether the rule requires judgment.
 
 | Rule type | Layer | Example |
 |---|---|---|
@@ -154,7 +151,7 @@ Not every rule needs a hook. The decision depends on the cost of violation and w
 | Completion criteria | Deterministic (Stop hook) | "Tests must pass before done" |
 | Security policy | Organizational (managed) | "No secrets in source" |
 
-Rules that require context or judgment — "write concise commit messages," "prefer composition over inheritance" — belong in instructions. Rules that are binary and non-negotiable belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md) for the detailed decision framework.
+Rules requiring judgment — "write concise commit messages," "prefer composition over inheritance" — belong in instructions. Binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md) for the decision framework.
 
 ## Key Takeaways
 

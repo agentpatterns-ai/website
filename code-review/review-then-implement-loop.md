@@ -139,3 +139,5 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 - [Diff-Based Review](diff-based-review.md)
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md)
 - [Committee Review Pattern](committee-review-pattern.md)
+- [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)

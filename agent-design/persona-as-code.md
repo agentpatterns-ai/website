@@ -73,7 +73,7 @@ Git-versioning the artifacts adds auditability. Every human and AI contribution 
 
 ## Role Boundaries and Conflict Resolution
 
-When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit priority rules, two agents modifying the same artifact create a merge conflict with no principled resolution. With explicit priority, the conflict is resolved by the spec, not by the merge step.
+When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules, two agents modifying the same artifact create a merge conflict with no principled resolution; with explicit priority, the spec resolves it.
 
 This mirrors the principle behind [Specialized Agent Roles](specialized-agent-roles.md): mutually exclusive scopes prevent redundant overlap. Persona-as-code makes that exclusivity durable across sessions.
 
@@ -88,7 +88,7 @@ Persona-as-code and [task-specific agents](task-specific-vs-role-based-agents.md
 | Best fit | Long-running project workflows | Discrete automations, CI operations |
 | Handoff mechanism | Versioned artifact files | JSON output or tool results |
 
-Personas suit multi-phase project work. Task-specific agents suit discrete automations where success is unambiguous. The patterns compose: a Scrum Master persona may invoke a task-specific story-validator agent without the persona file encoding that logic.
+Personas suit multi-phase project work. Task-specific agents suit discrete automations where success is unambiguous. The patterns compose: a Scrum Master persona can invoke a task-specific story-validator without encoding that in the persona file.
 
 ## Example
 

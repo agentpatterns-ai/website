@@ -49,7 +49,7 @@ A primitive qualifies as unique when it enables or precludes a class of patterns
 |-----------|-------------------|------------------------------|
 | Parallel context windows (multi-agent) | Independent subagent execution without [context pollution](../anti-patterns/session-partitioning.md) | Single-agent architectures must serialize or share context |
 | JSONL bead storage + advisory locks | Durable, resumable task graphs | In-memory context cannot survive process restart or be locked |
-| Dynamic Tool Discovery | 85% token reduction via on-demand schema loading [unverified] | Static tool registration bloats context at session start |
+| [Dynamic Tool Discovery](../anti-patterns/dynamic-tool-fetching-cache-break.md) | 85% token reduction via on-demand schema loading [unverified] | Static tool registration bloats context at session start |
 | SequentialAgent / ParallelAgent primitives (ADK) | Constrained orchestration patterns per agent type | Generic agents lack enforced composition boundaries |
 
 ## Worked Example: NATS vs. Agent Flywheel Primitives
@@ -72,7 +72,7 @@ NATS cannot replicate this — its message model has no execution state or bead-
 
 Apply during:
 
-- **Research-plan-implement phase** — run inversion against the reference system before committing to a design
+- **[Research-plan-implement](../workflows/research-plan-implement.md) phase** — run inversion against the reference system before committing to a design
 - **Architectural planning** — invert against the paths not taken when choosing between primitives
 - **Competitive design reviews** — invert before matching a competitor feature to verify it is the right goal
 

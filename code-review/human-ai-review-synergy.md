@@ -4,6 +4,9 @@ description: "Empirical evidence from 278,790 code reviews shows AI and human re
 tags:
   - code-review
   - arxiv
+aliases:
+  - "Human-AI Code Review Collaboration"
+  - "AI-Human Review Complementarity"
 ---
 
 # Human-AI Review Synergy
@@ -85,3 +88,8 @@ The data supports a specific collaboration model:
 - [Committee Review Pattern](committee-review-pattern.md) — multi-agent verification approach suggested by the study
 - [Tiered Code Review](tiered-code-review.md) — risk-based routing that aligns with the human-last principle
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — tool-calling architecture for the AI review stage
+- [Agent-Authored PR Integration](agent-authored-pr-integration.md) — reviewer engagement as merge predictor, complementary to the adoption rate findings here
+- [Predicting Reviewable Code](predicting-reviewable-code.md) — pre-flagging AI-generated functions reviewers will delete, addressing review burden from the AI side
+- [Review-Then-Implement Loop](review-then-implement-loop.md) — closing the loop between AI review findings and automated fixes
+- [Diff-Based Review](diff-based-review.md) — focusing review on changes rather than full outputs, relevant to managing AI review verbosity
+- [PR Description Style as a Lever](pr-description-style-lever.md) — PR description structure as a configurable parameter affecting reviewer engagement

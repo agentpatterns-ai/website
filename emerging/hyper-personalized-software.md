@@ -1,5 +1,5 @@
 ---
-title: "Hyper-Personalized Software: The Return of Rapid Application Development"
+title: "Hyper-Personalized Software: The Return of RAD"
 description: "AI-driven development is making custom-built software economically viable again, reversing two decades of SaaS consolidation and vendor lock-in."
 aliases:
   - RAD

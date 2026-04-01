@@ -72,7 +72,7 @@ flowchart TD
 
 ## Hybrid: Research Then Implement
 
-The most effective pattern for complex work combines both strategies across phases.
+The most effective pattern for complex work combines both strategies across phases. `[unverified]`
 
 ```mermaid
 graph LR
@@ -133,3 +133,4 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
+- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)

@@ -143,3 +143,4 @@ Each skill lives in its own file (e.g., `.claude/skills/lint-check.md`) and is l
 - [Persona as Code](persona-as-code.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Harness Engineering for Building Reliable AI Agents](harness-engineering.md)
+- [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md)

@@ -103,3 +103,5 @@ The first version works when the file exists and contains valid JSON. The second
 - [TDD Agent Development](../verification/tdd-agent-development.md) — Tests first; agents implement against them
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents reproduce codebase patterns at scale, including bad error handling
 - [The Yes-Man Agent](yes-man-agent.md) — Executes requests without flagging missing error handling
+- [The Effortless AI Fallacy](effortless-ai-fallacy.md) — Underestimating the effort needed to make AI-generated code production-ready
+- [Shadow Tech Debt](shadow-tech-debt.md) — Hidden quality issues accumulating in AI-generated code

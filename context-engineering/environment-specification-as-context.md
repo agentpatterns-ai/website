@@ -29,7 +29,7 @@ graph TD
 
 ## Why Models Default to Deprecated APIs
 
-Models trained on web-scale code corpora see more examples of older API surfaces than current ones. The result: a systematic preference for deprecated patterns, with 3–30% gaps between strict evaluation (current API only) and lenient evaluation (deprecated APIs accepted) ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
+Models trained on web-scale code corpora see more examples of older API surfaces than current ones. The result: a systematic preference for deprecated patterns, with 3–30% gaps between strict and lenient evaluation ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
 
 This compounds in fast-evolving domains. ML libraries — `torch`, `transformers`, `datasets` — show the steepest accuracy drops because their API surfaces change across minor versions ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)). An independent benchmark (GitChameleon) confirms: enterprise models achieve only 48–51% on version-conditioned Python tasks across 26 libraries ([Vidal et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367)).
 
@@ -47,13 +47,13 @@ When requesting code that depends on specific libraries, name the version:
 
 > "Write a data loader using PyTorch 2.1 DataPipes" not "Write a data loader using PyTorch"
 
-This shifts the model's distribution toward the correct API surface — strongest for libraries with breaking changes between versions.
+This shifts the model toward the correct API surface — strongest for libraries with breaking changes between versions.
 
 ### Prefer Migration over Generation
 
-The three adaptation strategies tested — RAG, LoRA MoE, and prefix-KV caching — show that models are 2–3x better at adapting existing code to a target environment than generating version-correct code from scratch. MoE improves partial correctness; memory-based approaches (prefix-KV) excel at migration tasks; RAG tends to overfit retrieved examples ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
+The three adaptation strategies tested — RAG, LoRA MoE, and prefix-KV caching — show models are 2–3x better at adapting existing code to a target environment than generating version-correct code from scratch. MoE improves partial correctness; memory-based approaches (prefix-KV) excel at migration tasks; RAG tends to overfit retrieved examples ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)).
 
-When possible, give the agent existing working code and ask it to migrate, rather than generating from scratch.
+When possible, give the agent working code to migrate rather than generating from scratch.
 
 ### Use Execution Feedback Loops
 
@@ -99,7 +99,7 @@ One renamed parameter — a `FutureWarning` or outright failure depending on ver
 - Deprecated API preference is systematic: models default to the most-represented patterns in training data, which skew older.
 - Feed lock files and version manifests into agent context to shift generation toward the correct API surface.
 - Prefer migration tasks (adapt existing code) over from-scratch generation — adaptation accuracy is 2–3x higher.
-- Focus verification effort on fast-evolving libraries (ML frameworks, web frameworks) where version churn causes the steepest accuracy drops.
+- Focus verification on fast-evolving libraries (ML frameworks, web frameworks) where version churn causes the steepest accuracy drops.
 
 ## Unverified Claims
 
@@ -119,3 +119,4 @@ One renamed parameter — a `FutureWarning` or outright failure depending on ver
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Context Hub](context-hub.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)

@@ -73,7 +73,7 @@ GitHub's implementation mitigates silent stalls with automated weekly reports an
 
 ## Example
 
-GitHub's accessibility pipeline uses `issues: [opened, labeled]` to route between three tiers. The AI intake workflow fires on `issues.opened`, calls the GitHub Models API with prompts stored in `.github/copilot-instructions.md`, populates ~80% of metadata (severity, WCAG mapping, affected groups), then applies the next label. A separate workflow fires when a human applies `validated`, routing to the service team.
+GitHub's accessibility pipeline uses `issues: [opened, labeled]` to route between three tiers. The AI intake workflow fires on `issues.opened`, calls the GitHub Models API with prompts stored in `.github/copilot-instructions.md`, populates ~80% of metadata (severity, WCAG mapping, affected groups), then applies the next label. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/) A separate workflow fires when a human applies `validated`, routing to the service team.
 
 ```yaml
 # .github/workflows/ai-intake.yml
@@ -118,3 +118,5 @@ Prompts live in `.github/copilot-instructions.md` and are modified via pull requ
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md)
 - [Idempotent Agent Operations](idempotent-agent-operations.md)
+- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
+- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)

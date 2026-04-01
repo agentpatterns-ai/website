@@ -74,6 +74,70 @@ The harness maintains a per-session log of failed tool calls keyed by operation 
 
 Recovery suggestions should be generic enough to avoid prescribing a single fix, but specific enough to exclude approaches already attempted. The suggestion catalog is maintained as a static mapping — no LLM inference is needed to generate suggestions.
 
+## Example
+
+A Python harness that builds and injects error context on each tool failure:
+
+```python
+from dataclasses import dataclass, field
+
+RECOVERY_HINTS: dict[str, list[str]] = {
+    "FileNotFoundError": [
+        "Verify the file path exists using list_directory or find_file",
+        "Check for typos in directory or filename",
+        "The file may have been moved or renamed earlier in this session",
+    ],
+    "PermissionError": [
+        "Check file permissions or sandbox restrictions",
+        "Try reading the file before writing to confirm access",
+    ],
+    "TimeoutError": [
+        "Reduce the scope of the operation",
+        "Break the task into smaller steps",
+    ],
+}
+
+@dataclass
+class FailureRecord:
+    operation: str
+    target: str
+    error: str
+
+@dataclass
+class ErrorContextBuilder:
+    history: list[FailureRecord] = field(default_factory=list)
+
+    def record_failure(self, operation: str, target: str, error: str) -> None:
+        self.history.append(FailureRecord(operation, target, error))
+
+    def build_context(self, operation: str, target: str, error: str) -> str:
+        self.record_failure(operation, target, error)
+
+        prior = [
+            f"  {i}. {r.operation}(\"{r.target}\") → {r.error}"
+            for i, r in enumerate(self.history, 1)
+            if r.operation == operation and r.target == target
+        ]
+
+        error_type = error.split(":")[0].strip()
+        hints = RECOVERY_HINTS.get(error_type, ["Try an alternative approach"])
+
+        lines = [
+            "[Error Recovery Context]",
+            f"Operation: {operation}(\"{target}\")",
+            f"Error: {error}",
+            "",
+            f"Previous attempts (this session): {len(prior)}",
+            *prior,
+            "",
+            "Recovery suggestions:",
+            *(f"  - {h}" for h in hints),
+        ]
+        return "\n".join(lines)
+```
+
+The harness calls `build_context` after each tool failure and appends the returned block to the next LLM prompt, immediately after the error result.
+
 ## Key Takeaways
 
 - Inject structured error context — not just the raw error — into the next inference call after a tool failure
@@ -90,3 +154,4 @@ Recovery suggestions should be generic enough to avoid prescribing a single fix,
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Observation Masking](observation-masking.md)
+- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)

@@ -98,3 +98,6 @@ Content that must be reliably followed belongs at either end. Content the agent 
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
+- [Layered Context Architecture](layered-context-architecture.md)
+- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
+- [Prompt Cache Economics Across Providers](prompt-cache-economics.md)

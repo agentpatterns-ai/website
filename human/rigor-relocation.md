@@ -99,6 +99,7 @@ A linter rule catches a dependency violation every time, in every session, for e
 - [Convention over Configuration](../instructions/convention-over-configuration.md) -- structural enforcement of decisions
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
 - [Retrieval-Augmented Agent Workflows: On-Demand Context](../context-engineering/retrieval-augmented-agent-workflows.md) -- JIT context loading pattern
+- [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
 - [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) -- how adding work to a stalled PR compounds the review bottleneck

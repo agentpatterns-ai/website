@@ -1,6 +1,10 @@
 ---
 title: "Repository-Level Retrieval for Code Generation"
 description: "AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context."
+aliases:
+  - RACG
+  - repo-level code generation
+  - retrieval-augmented code generation
 tags:
   - context-engineering
   - agent-design
@@ -73,12 +77,16 @@ This is distinct from [on-demand agent retrieval](retrieval-augmented-agent-work
 - **Cross-language gaps**: retrieval across language boundaries (e.g., a Python service calling a Go microservice) remains weak
 - **Privacy**: sending repository context to cloud-hosted models creates data exposure risk for proprietary code
 
-## Key Takeaways
+## Example
 
-- Repository-level retrieval produces more accurate code generation than file-level approaches by capturing cross-file dependencies and conventions.
-- Hybrid retrieval (semantic embeddings + structural graphs) outperforms any single strategy, but at higher computational cost.
-- Developers can improve retrieval quality by maintaining clean module boundaries, explicit imports, and consistent naming.
-- Verify generated code with tests, not similarity metrics -- functional correctness is the only reliable signal.
+Aider uses a repository map built from ASTs (tree-sitter) and PageRank to select cross-file context before each code generation request. Given a task like "add rate limiting to the `/upload` endpoint," Aider:
+
+1. Parses the repository into a graph of symbols (functions, classes, imports) using tree-sitter
+2. Identifies `upload_handler` in `routes/upload.py` and its direct dependencies: `auth_middleware` in `middleware/auth.py`, `RateLimitError` in `exceptions/errors.py`
+3. Ranks symbols by relevance using PageRank weighted toward the edit target
+4. Includes the top-ranked context (signatures, docstrings, import chains) in the generation prompt alongside the target file
+
+The resulting prompt contains cross-file type signatures and conventions that a single-file approach would miss, reducing errors from mismatched function signatures or unknown error types.
 
 ## Unverified Claims
 
@@ -93,3 +101,8 @@ This is distinct from [on-demand agent retrieval](retrieval-augmented-agent-work
 - [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md) -- documentation retrieval pattern complementary to code retrieval
 - [Environment Specification as Context](environment-specification-as-context.md) -- feeding dependency versions and runtime constraints into agent context
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md) -- framework for deciding how much context budget to allocate to retrieval results
+- [Context Priming](context-priming.md) -- pre-loading relevant context before generation, complementary to retrieval-based approaches
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) -- classifying which context an agent can retrieve versus what must be provided upfront
+- [Structured Domain Retrieval](structured-domain-retrieval.md) -- knowledge graph and case-based retrieval strategies complementary to code-level graph retrieval
+- [Token-Efficient Code Generation](token-efficient-code-generation.md) -- reducing token cost of generated code, relevant when retrieval expands prompt size
+- [Context Compression Strategies](context-compression-strategies.md) -- compressing retrieved context to fit within budget after repository-level retrieval

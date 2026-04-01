@@ -19,13 +19,11 @@ aliases:
 
 ## Why Seeding Works
 
-Agents explore codebases by reading files. What they find determines what they do. Unlike interactive prompts that exist only for one session, seeded context is persistent — it influences every agent session that touches that part of the codebase.
-
-This shifts [context management](context-engineering.md) from a per-session concern to a codebase hygiene concern. The information is where the work happens.
+Agents explore codebases by reading files — what they find determines what they do. Unlike interactive prompts, seeded context is persistent and influences every session that touches that codebase region. This shifts [context management](context-engineering.md) from a per-session concern to codebase hygiene.
 
 ## The Durability Spectrum
 
-Breadcrumbs vary in how reliably they influence agent behaviour. Higher-durability signals are harder to ignore or misinterpret.
+Breadcrumbs vary in how reliably they influence agent behaviour.
 
 ```mermaid
 graph TD
@@ -36,21 +34,19 @@ graph TD
     E -->|lowest durability| F["TODO / FIXME markers"]
 ```
 
-Mechanical enforcement — custom linters with remediation guidance in error messages — outperforms written guidelines because the agent encounters the constraint at the point of violation. The error message itself becomes context for the next attempt ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Mechanical enforcement outperforms written guidelines because the agent encounters the constraint at the point of violation — the error message itself becomes context for the next attempt ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ## Techniques
 
 ### Directory-Scoped Context Files
 
-The [AGENTS.md open standard](https://agents.md) defines a dedicated file for agent context, adopted by 60k+ open-source projects and supported by 25+ platforms including GitHub Copilot, Cursor, and Codex. Agents read the nearest AGENTS.md in the directory tree, so subdirectory files override or extend project-level instructions.
+The [AGENTS.md open standard](https://agents.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms. Agents read the nearest AGENTS.md in the directory tree, so subdirectory files override or extend project-level instructions.
 
-Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with a similar scoping model: files walk up the directory tree from the working directory and subdirectory CLAUDE.md files load on demand when Claude reads files in those directories. The `.claude/rules/` directory adds path-scoped rules that activate only when Claude works with matching files (e.g., `src/api/**/*.ts`).
-
-For repos that use both standards, CLAUDE.md can import AGENTS.md to avoid duplication.
+Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with similar scoping: files walk up the directory tree and load on demand per subdirectory. The `.claude/rules/` directory adds path-scoped rules for matching files (e.g., `src/api/**/*.ts`). For repos using both standards, CLAUDE.md can import AGENTS.md.
 
 ### Progressive Disclosure Over Monoliths
 
-A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a comprehensive single instruction file that crowds out task-specific context. The repository itself functions as the agent memory — anything not accessible in-context effectively does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory and anything not in-context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)). The same principle applies to [progressive disclosure for agent definitions](../agent-design/progressive-disclosure-agents.md).
 
 ### Inline Decision Comments
 
@@ -61,48 +57,48 @@ Comments explaining *why* a decision was made prevent agents from reverting it:
 // Reverting to pessimistic updates caused noticeable UI lag in user testing.
 ```
 
-Without the comment, an agent refactoring the function has no signal that this is an intentional design choice.
+Without the comment, a refactoring agent has no signal this is intentional.
 
 ### TODO and FIXME Markers
 
-Agents treat `TODO` and `FIXME` comments as actionable items [unverified — behaviour varies by tool and instruction set]. Placing a TODO at the exact location of a known issue ensures the agent encounters it when editing nearby code.
+Agents treat `TODO` and `FIXME` comments as actionable items [unverified — behaviour varies by tool and instruction set]. Placing a TODO at the exact location ensures the agent encounters it when editing nearby code.
 
 ### Type Annotations
 
-Complete type signatures eliminate an entire class of agent guesswork. The agent does not need to infer return types, parameter shapes, or nullability — the types specify them.
+Complete type signatures eliminate agent guesswork about return types, parameter shapes, and nullability.
 
 ### Example Files and Pattern Replication
 
-Agents pattern-match against existing code. A well-written reference implementation communicates conventions more precisely than prose instruction. However, agents replicate both good and bad patterns — poor examples compound architectural drift without mechanical enforcement ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift without mechanical enforcement ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ### Progress Files as Breadcrumbs
 
-Long-running agents maintain progress files (e.g., `claude-progress.txt`, `todo.md`) that subsequent sessions read to get oriented. Git history combined with progress files forms a discovery mechanism that eliminates repeated orientation work across sessions ([Anthropic, "Effective Harnesses for Long-Running Agents"](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism that keeps objectives in the recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Long-running agents maintain progress files (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic, "Effective Harnesses for Long-Running Agents"](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## What to Seed vs. What to Prompt
 
 | Seed in the codebase | Prompt interactively |
 |---------------------|---------------------|
 | Stable conventions and constraints | Task-specific requirements |
-| Architectural decisions and rationale | Current context about what you are building |
-| Known issues and TODOs | Priorities and scope for this session |
+| Architectural decisions and rationale | What you are building now |
+| Known issues and TODOs | Session priorities and scope |
 | Type annotations and interfaces | One-off instructions |
-| Progress files for multi-session work | Session-specific corrections |
+| Progress files for multi-session work | Session corrections |
 
-Breadcrumbs work for durable information. Session-specific intent belongs in the prompt. For what belongs in instruction files vs. what agents should discover on their own, see [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md).
+Seed durable information; prompt session-specific intent. See [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md).
 
 ## Key Takeaways
 
-- Mechanical enforcement (linters, tests, CI) is the most durable form of context seeding — agents cannot ignore a failing check.
-- Directory-scoped context files (AGENTS.md, CLAUDE.md) place conventions where the work happens rather than centralizing everything at project level.
-- Agents replicate existing patterns indiscriminately — good examples and bad examples both propagate.
-- Progress files and git history serve as breadcrumbs for multi-session agent workflows, eliminating repeated discovery.
-- A lean entry-point file with links to structured subdirectories outperforms a monolithic instruction file.
+- Mechanical enforcement is the most durable seeding form — agents cannot ignore a failing check.
+- Directory-scoped context files place conventions where the work happens.
+- Agents replicate existing patterns indiscriminately — good and bad examples both propagate.
+- Progress files and git history eliminate repeated discovery across sessions.
+- A lean entry-point file outperforms a monolithic instruction file.
 
 ## Unverified Claims
 
 - Agents treat `TODO` and `FIXME` comments as actionable items [unverified] — behaviour varies by tool and instruction set
-- Strategic file naming (descriptive names helping agents understand purpose without reading content) improves agent navigation [unverified] — reasonable inference from how agents use file metadata but no specific study
+- Strategic file naming improves agent navigation [unverified] — reasonable inference but no specific study
 
 ## Example
 
@@ -158,7 +154,7 @@ def fetch_records(
     ...
 ```
 
-An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the decision comment, sees the TODO, and understands the typed interface — all without any session-level prompting.
+An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the decision comment, sees the TODO, and understands the typed interface — all without session-level prompting.
 
 ## Sources
 

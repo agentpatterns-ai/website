@@ -24,7 +24,7 @@ Human runbooks fail for agents in three distinct ways:
 |---|---|---|
 | Implicit action | "Check the dashboard" | No tool to call, no success criterion |
 | Ambiguous condition | "If load looks high..." | Cannot evaluate a vague threshold |
-| Assumed context | "Restart the usual way" | No access to tribal knowledge |
+| Assumed context | "Restart the usual way" | No access to [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md) |
 
 Each failure mode requires a different fix. An audit step before rewriting identifies which failure applies to each step.
 
