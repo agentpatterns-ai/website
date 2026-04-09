@@ -13,7 +13,7 @@ tags:
 
 ## The Pattern
 
-You may believe an AI coding assistant should require less expertise than traditional development. Under this model, providing minimal context, accepting raw output without review, and skipping iteration are not failures — they are the expected mode of use.
+You may believe an AI coding assistant should require less expertise than traditional development — that minimal context, no review, and no iteration are the expected mode of use.
 
 Output quality tracks input quality more tightly with AI than with most tools, because the model amplifies whatever signal your prompt carries [unverified].
 
@@ -31,13 +31,13 @@ Anthropic found they ["spent more time optimizing our tools than the overall pro
 
 Low investment produces poor output. Poor output confirms your belief the tool doesn't work. That belief justifies not investing further. You never exit the loop.
 
-The [METR RCT study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers predicted a 24% speedup but measured a 19% slowdown — and still believed they were 20% faster afterward. Subjective perception diverges from measured outcomes, insulating the fallacy from correction.
+The [METR RCT study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers predicted a 24% speedup but measured a 19% slowdown — and still believed they were 20% faster afterward, insulating the fallacy from correction.
 
 [Stack Overflow's 2025 survey](https://survey.stackoverflow.co/2025/ai) confirms the split: heavy users report 5.5/6 satisfaction versus 3.8/6 for minimal adopters. 66% cite "almost right, but not quite" as their top frustration.
 
 ## The Context Gap
 
-65% of developers report AI misses context during refactoring; 44% of those perceiving quality degradation blame missing context ([Qodo State of AI Code Quality](https://www.qodo.ai/reports/state-of-ai-code-quality/)). Context provision is the gating factor.
+65% of developers report AI misses context during refactoring; 44% of those perceiving quality degradation blame missing context ([Qodo State of AI Code Quality](https://www.qodo.ai/reports/state-of-ai-code-quality/)).
 
 Only 2–4% of developers in an enterprise study accepted AI output verbatim; successful patterns were "acceleration" and "exploration", not autonomous generation ([IBM/Arxiv, n≈700](https://arxiv.org/html/2412.06603v2)).
 

@@ -13,9 +13,9 @@ tags:
 
 ## Why Diffs Are Easier to Review Than Complete Outputs
 
-Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with the size of what you read; error density is highest in what is new.
+Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with what you read; error density is highest in what is new.
 
-Agent-driven workflows should be designed so human review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
+Design agent workflows so human review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
 
 ## The PR Model as Review Boundary
 
@@ -38,7 +38,7 @@ Structuring work around checkpoints keeps the diff scope predictable:
 
 ## Review Fatigue and Output Size
 
-Review fatigue grows with output size, not diff size. An agent that produces 2,000 lines across ten files will be reviewed less carefully than an agent that produces 20 lines in one file — full-artifact review does not scale.
+Review fatigue grows with output size, not diff size. An agent producing 2,000 lines across ten files gets reviewed less carefully than one producing 20 lines in a single file.
 
 Designing for diff-based review means:
 

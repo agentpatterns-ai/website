@@ -72,3 +72,5 @@ Pushback protocols gate on *request quality*: "this request is a bad idea, here'
 - [Human-in-the-Loop](../workflows/human-in-the-loop.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Agent Backpressure](agent-backpressure.md)
+- [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md)
+- [Steering Running Agents](steering-running-agents.md)

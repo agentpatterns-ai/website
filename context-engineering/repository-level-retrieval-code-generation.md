@@ -19,7 +19,7 @@ tags:
 
 Function-level and file-level code generation treats each unit in isolation. The agent sees the current file but not the authentication middleware three directories away, the shared error types in a common package, or the test patterns the team follows.
 
-Repository-level code generation retrieves cross-file context before generation. A [survey of retrieval-augmented code generation (RACG)](https://arxiv.org/abs/2510.04905) found that repository-level approaches consistently outperform single-file methods by leveraging broader contextual information.
+A [survey of retrieval-augmented code generation (RACG)](https://arxiv.org/abs/2510.04905) found that repository-level approaches consistently outperform single-file methods by leveraging broader contextual information.
 
 ## The Retrieval Strategy Hierarchy
 
@@ -44,7 +44,7 @@ graph TD
 | **Graph-based** | Dependency graphs, call graphs, ASTs | Captures cross-file relationships | Expensive to build and maintain |
 | **Hybrid** | Combines semantic + structural signals | Best accuracy on complex tasks | Highest computational cost |
 
-Graph-based retrieval captures dependencies that text similarity cannot: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior [unverified -- the claim that graph-based "consistently" outperforms other methods may be benchmark-dependent; individual results vary by task type and codebase size].
+Graph-based retrieval captures dependencies that text similarity misses: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior [unverified -- graph-based "consistently" outperforming other methods may be benchmark-dependent].
 
 ## How Repository-Level Retrieval Works
 
@@ -55,27 +55,27 @@ The retrieval step identifies:
 - **Direct dependencies**: modules imported by the target file
 - **Structural neighbors**: functions that call or are called by the target
 - **Similar implementations**: existing handlers or test cases matching the task semantically
-- **Convention signals**: naming patterns, error handling styles, and architectural decisions in related files
+- **Convention signals**: naming patterns, error handling styles, and architectural decisions nearby
 
-This is distinct from [on-demand agent retrieval](retrieval-augmented-agent-workflows.md), which fetches context via tool calls at runtime. Repository-level retrieval happens at the *model* level before generation begins.
+This differs from [on-demand agent retrieval](retrieval-augmented-agent-workflows.md), which fetches context via tool calls at runtime. Repository-level retrieval happens before generation begins.
 
 ## What Developers Can Control
 
 **Structure code for retrievability.** Clean module boundaries, explicit imports, and consistent naming help retrieval systems find relevant context. Circular dependencies and implicit conventions produce noisier results.
 
-**Prefer tools with structural awareness.** Agents using dependency graphs or ASTs (like [semantic context loading](semantic-context-loading.md) via LSP) produce better cross-file generation than grep-based search.
+**Prefer tools with structural awareness.** Agents using dependency graphs or ASTs (like [semantic context loading](semantic-context-loading.md) via LSP) outperform grep-based search for cross-file generation.
 
-**Scope retrieval to service boundaries.** For large monorepos, scoping retrieval to the relevant package rather than the entire repository reduces noise and improves quality.
+**Scope retrieval to service boundaries.** In monorepos, scoping retrieval to the relevant package rather than the entire repository reduces noise.
 
-**Verify cross-file generation with tests.** Functional correctness (tests passing) is more reliable than similarity scores. AI-generated code spanning multiple files has higher error rates than single-file output.
+**Verify cross-file generation with tests.** Functional correctness is more reliable than similarity scores. Multi-file generated code has higher error rates than single-file output.
 
 ## Limitations
 
-- **Domain shift**: models trained on public repositories perform poorly on proprietary codebases with custom frameworks and conventions
-- **Noise in retrieval**: large repositories surface irrelevant context that can mislead generation
-- **Staleness**: indexed repository representations go stale as code changes; incremental re-indexing adds complexity
-- **Cross-language gaps**: retrieval across language boundaries (e.g., a Python service calling a Go microservice) remains weak
-- **Privacy**: sending repository context to cloud-hosted models creates data exposure risk for proprietary code
+- **Domain shift**: models trained on public repositories perform poorly on proprietary codebases with custom frameworks
+- **Noise in retrieval**: large repositories surface irrelevant context that misleads generation
+- **Staleness**: indexed representations go stale as code changes; incremental re-indexing adds overhead
+- **Cross-language gaps**: retrieval across language boundaries (e.g., Python calling a Go microservice) remains weak
+- **Privacy**: sending repository context to cloud-hosted models creates data exposure risk
 
 ## Example
 
@@ -90,8 +90,8 @@ The resulting prompt contains cross-file type signatures and conventions that a 
 
 ## Unverified Claims
 
-- Graph-based retrieval "consistently" outperforms lexical and semantic methods across all task types [unverified -- survey aggregates across studies but individual results vary by task type and codebase size]
-- Maintaining clear dependency structure improves AI retrieval quality [unverified -- logically sound but not directly tested in the survey]
+- Graph-based retrieval "consistently" outperforms lexical and semantic methods across all task types [unverified -- survey aggregates across studies; individual results vary by task type and codebase size]
+- Clear dependency structure improves AI retrieval quality [unverified -- logically sound but not directly tested in the survey]
 
 ## Related
 

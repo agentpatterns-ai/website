@@ -133,6 +133,7 @@ No webhook setup, no API key management, no data export. The scoring agent reads
 
 ## Related
 
+- [Bootstrapping Coding Agents](bootstrapping-coding-agents.md)
 - [Hyper-Personalized Software](hyper-personalized-software.md)
 - [Product-as-IDE](product-as-ide.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)

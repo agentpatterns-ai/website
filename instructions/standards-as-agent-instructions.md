@@ -29,7 +29,7 @@ The actionable form gives the agent a verifiable rule. The vague form gives the 
 
 Humans read standards with context: they know what "concise" means in their domain, they have judgment about edge cases, they apply intent rather than letter. Agents apply the rule as written. Ambiguity in a rule does not produce a reasonable interpretation — it produces the interpretation most consistent with training data, which may not match project conventions.
 
-This is not a failure mode to work around; it is a constraint to design for. Writing standards that an agent can follow without interpretation produces instructions that are also clearer for humans.
+This is a constraint to design for, not a failure mode to work around. Standards that agents can follow without interpretation are also clearer for humans.
 
 ## File Hierarchy
 
@@ -102,11 +102,11 @@ A human reviewer reads these rules and checks a pull request against them. An ag
 
 ## Key Takeaways
 
-- An actionable standards file requires no translation to serve as an agent instruction — precision serves both audiences
-- Agents read standards literally; ambiguity produces training-data defaults, not project-appropriate interpretation
-- Use file hierarchy to scope rules: project-wide at root, area-specific in nested files
-- Include concrete examples — both correct and incorrect forms — to eliminate the ambiguity zone
-- Design standards for reviewability (binary pass/fail per rule) to force the precision that makes them work for agents
+- Actionable standards require no translation to serve as agent instructions — precision serves both audiences
+- Agents read literally; ambiguity produces training-data defaults, not project-appropriate interpretation
+- Scope rules via file hierarchy: project-wide at root, area-specific in nested files
+- Include concrete examples — correct and incorrect forms — to eliminate the ambiguity zone
+- Design for reviewability (binary pass/fail per rule) to force precision that works for agents
 
 ## Unverified Claims
 

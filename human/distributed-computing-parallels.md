@@ -1,6 +1,9 @@
 ---
 title: "Distributed Computing Parallels in Agent Architecture"
 description: "Agent architectures reuse structural patterns from distributed systems — recognizing the mapping lets you apply decades of operational wisdom instead of relearning it."
+aliases:
+  - distributed systems patterns for agents
+  - microservices parallels in agent design
 tags:
   - agent-design
   - context-engineering

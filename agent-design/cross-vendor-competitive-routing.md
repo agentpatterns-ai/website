@@ -95,6 +95,7 @@ This pattern operates at the **platform level** (which vendor agent handles the 
 
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
+- [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request multipliers vs token billing
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Delegation Decision](delegation-decision.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)

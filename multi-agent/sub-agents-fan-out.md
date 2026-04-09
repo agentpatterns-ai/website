@@ -32,7 +32,7 @@ Sub-agents solve two problems, but isolation is the more important one:
 
 The main thread dispatches tasks and receives only synthesized results. The raw work — file reads, URL fetches, error handling, retries — happens entirely within sub-agent contexts that are discarded when the sub-agent finishes.
 
-This is the principle behind the [Anthropic context engineering post](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): sub-agents as a context management strategy, not just a parallelism strategy.
+This is the principle behind [context engineering](../context-engineering/context-engineering.md) ([Anthropic's framing](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)): sub-agents as a context management strategy, not just a parallelism strategy.
 
 ## Fan-Out Pattern
 

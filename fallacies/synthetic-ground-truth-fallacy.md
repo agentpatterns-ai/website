@@ -6,6 +6,9 @@ tags:
   - evals
   - human-factors
   - tool-agnostic
+aliases:
+  - "model collapse from synthetic data"
+  - "synthetic data feedback loop"
 ---
 
 # The Synthetic Ground Truth Fallacy

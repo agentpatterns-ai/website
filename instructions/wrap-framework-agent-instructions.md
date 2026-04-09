@@ -123,3 +123,4 @@ The rewritten issue applies **W** (descriptive title with file path, concrete be
 - [Convention Over Configuration](convention-over-configuration.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Negative Space Instructions](negative-space-instructions.md)
+- [Harness Engineering](../agent-design/harness-engineering.md) — environment design as the primary lever for agent reliability

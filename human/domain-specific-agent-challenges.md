@@ -122,3 +122,8 @@ Constraining component choice converts visual judgment into a structural check: 
 - [Rigor Relocation](rigor-relocation.md)
 - [Safe Command Allowlisting](safe-command-allowlisting.md)
 - [Process Amplification](process-amplification.md)
+- [Skill Atrophy](skill-atrophy.md)
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
+- [Evidence-Based Allowlist Auto-Discovery](evidence-based-allowlist-auto-discovery.md)
+- [The Context Ceiling](context-ceiling.md)
+- [Empirical Baseline: How Developers Configure Agentic AI Coding Tools](empirical-baseline-agentic-config.md)

@@ -29,7 +29,7 @@ A key distinction: **LLM drift** (behavioral changes over time) is not the same 
 
 ### Pin model versions
 
-Anthropic's [model versioning guidance](https://docs.anthropic.com/en/docs/about-claude/models) recommends pinning to a specific dated snapshot in production. Alias endpoints (`claude-sonnet-4-20250514`, `gpt-4o`) follow the latest snapshot — treat every version change as a potential breaking change.
+Anthropic's [model versioning guidance](https://docs.anthropic.com/en/docs/about-claude/models) recommends pinning to a specific dated snapshot in production. Alias endpoints (`claude-sonnet-4`, `gpt-4o`) follow the latest snapshot — treat every version change as a potential breaking change.
 
 ### Build golden-query eval suites
 

@@ -93,3 +93,4 @@ If the agent discovers that `stream=True` requires explicit iterator handling no
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Structured Domain Retrieval](structured-domain-retrieval.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Environment Specification as Context: Closing the Version Gap](environment-specification-as-context.md)

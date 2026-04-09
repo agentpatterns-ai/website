@@ -403,6 +403,7 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 **Adoption & Human Factors**
 
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — seat pricing, premium request model, and Claude API comparison
 - [Progressive Autonomy with Model Evolution](../../human/progressive-autonomy-model-evolution.md) — evidence-based autonomy escalation
 - [Skill Atrophy](../../human/skill-atrophy.md) — when AI reliance erodes developer capability
 - [Cognitive Load and AI Fatigue](../../human/cognitive-load-ai-fatigue.md) — sustainable agent use patterns

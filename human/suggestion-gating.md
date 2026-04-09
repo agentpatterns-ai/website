@@ -35,9 +35,9 @@ flowchart LR
 
 **Trigger model** — decides whether to invoke the LLM at all. Suppresses inference when context signals indicate an unwanted completion (mid-word typing, rapid deletion, ambiguous scope).
 
-**Filter model** — evaluates the generated completion before display. Catches suggestions the LLM produced confidently but the developer would reject.
+**Filter model** — evaluates the completion before display. Catches suggestions the LLM produced confidently but the developer would reject.
 
-Both are tiny. JetBrains' production filter compiles to [2.5 MB and predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
+Both are tiny. JetBrains' production filter compiles to [2.5 MB, predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
 
 ## Production Evidence
 
@@ -74,36 +74,37 @@ JetBrains uses ~120 features for the trigger and several hundred for the filter 
 - **Code signals** — imports, reference resolution, token-level scores
 - **Session state** — recent accept/reject history, time since last interaction
 
-Gating outperforms simple confidence thresholds because the decision depends on the developer's state, not just the completion's quality.
+Gating outperforms simple confidence thresholds because the decision depends on developer state, not just completion quality.
 
 ## Language-Specific Behavior
 
-JetBrains found Kotlin benefits more from post-generation filtering while PHP benefits more from pre-generation triggering; Python and C# fall between the extremes. Per-language tuning outperforms a uniform threshold ([de Moor et al., 2026](https://arxiv.org/abs/2601.20223)).
+Kotlin benefits more from post-generation filtering while PHP benefits more from pre-generation triggering; Python and C# fall between. Per-language tuning outperforms a uniform threshold ([de Moor et al., 2026](https://arxiv.org/abs/2601.20223)).
 
 ## The Perception Gap
 
-Open-source developers perceived +20% productivity while producing −19% less with AI completions ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Ungated completions amplify this gap; gated completions compress it.
+Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). [unverified] Ungated completions amplify this gap; gated completions compress it.
 
 ## Implications for Developers
 
-**Acceptance rate matters more than suggestion volume.** A tool showing 40 suggestions at 45% acceptance beats one showing 100 at 15%.
+**Acceptance rate matters more than volume.** A tool showing 40 suggestions at 45% acceptance beats one showing 100 at 15%.
 
-**Configure aggressively.** [unverified] Most tools expose completion sensitivity settings. If you routinely dismiss suggestions, raise confidence thresholds.
+**Configure aggressively.** [unverified] Most tools expose completion sensitivity settings. If you routinely dismiss suggestions, raise thresholds.
 
-**Context signals improve over time.** [unverified] Gating models that observe accept/reject patterns can learn preferences.
+**Context signals improve over time.** [unverified] Gating models observing accept/reject patterns can learn preferences.
 
 ## Key Takeaways
 
 - Four major tools (JetBrains, Cursor, Copilot, NES) independently converged on suggestion gating
 - Lightweight classifiers (2.5 MB, 1–2 ms) gate with no perceptible latency cost
-- Developers type more themselves, but acceptance rates improve 26–48% and interruptions drop significantly
+- Developers type more themselves, but acceptance rates improve 26–48% and interruptions drop
 
 ## Unverified Claims
 
 - Developers who see too many bad suggestions stop reading them (extrapolated from alert fatigue research, not directly measured)
 - Most tools expose completion sensitivity settings (not verified across all major tools)
 - Gating models learn individual preferences over time (plausible but unconfirmed in production)
-- Copilot’s current architecture may differ from the 2022 reverse-engineering analysis
+- Copilot’s architecture may differ from the 2022 reverse-engineering analysis
+- Ungated completions amplify the perception gap and gated completions compress it (plausible inference, not directly measured)
 
 ## Related
 

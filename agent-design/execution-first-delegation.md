@@ -15,9 +15,9 @@ aliases:
 
 ## The Shift
 
-In prompt-response AI, you describe each step: "read this file, extract these fields, format the output as JSON." You are still the orchestrator; the model executes individual instructions.
+In prompt-response AI, you describe each step: "read this file, extract these fields, format the output as JSON." You remain the orchestrator; the model executes individual instructions.
 
-In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans the required steps, runs commands, modifies files, and adapts if something fails — all without you specifying the sequence.
+In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans steps, runs commands, modifies files, and adapts if something fails — all without you specifying the sequence.
 
 The developer's job changes from writing instructions to writing contracts.
 
@@ -44,13 +44,13 @@ Skipping any part produces predictable failures:
 
 - **No constraints** → agent interprets intent broadly, exceeds scope, makes irreversible changes
 - **No success condition** → agent runs indefinitely or stops at an arbitrary point
-- **No recovery path** → agent gets stuck on a blocker with no fallback
+- **No recovery path** → agent stalls on a blocker with no fallback
 
 ## Why Boundaries Matter More Than Phrasing
 
-In prompt-response workflows, the primary skill is phrasing — write clearly, use examples, format the request well.
+In prompt-response workflows, the primary skill is phrasing — write clearly, use examples, format well.
 
-In execution-first workflows, the primary skill is bounding — what can the agent touch, how far can it go, and when must it stop?
+In execution-first workflows, the primary skill is bounding — what can the agent touch, how far can it go, when must it stop?
 
 [Anthropic's research on autonomous agents](https://www.anthropic.com/engineering/building-effective-agents) identifies stopping conditions and human-in-the-loop checkpoints as required structural elements, not optional add-ons. [nibzard's production-agent pattern library](https://www.nibzard.com/agentic-handbook) concludes: most agent failures are loop design failures, not model failures — the model executed correctly within an under-specified contract.
 
@@ -58,9 +58,7 @@ In execution-first workflows, the primary skill is bounding — what can the age
 
 Agents operating on intent need structured access to real tools and data. Without it, context gets embedded in prompts — ownership rules, API schemas, dependency constraints stuffed into text.
 
-Model Context Protocol (MCP) replaces prompt-embedded context with structured runtime access. The agent queries what it needs during execution, under defined permissions.
-
-The architectural difference:
+Model Context Protocol (MCP) replaces prompt-embedded context with structured runtime access. The agent queries what it needs during execution, under defined permissions:
 
 - "Here is the current state of the deployment system (as text)" — prompt-embedded, stale, untestable
 - "You have access to the deployment API via MCP" — structured, permissioned, live
@@ -74,7 +72,7 @@ Execution-first is appropriate when the task has these characteristics:
 - **Large scope** — the work spans many files, systems, or decisions
 - **Clear stopping condition** — you can define done precisely enough that the agent can recognize it
 
-Avoid it for tasks where every step can be defined in advance. A fixed workflow with predictable inputs is better served by a scripted sequence or a [prompt chain](../context-engineering/prompt-chaining.md) — adding an autonomous loop introduces cost and non-determinism without benefit.
+Avoid it when every step can be defined in advance. A fixed workflow with predictable inputs is better served by a [prompt chain](../context-engineering/prompt-chaining.md) — an autonomous loop adds cost and non-determinism without benefit.
 
 [Addy Osmani notes](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) this fits greenfield or self-contained projects more cleanly than large existing codebases with tight coupling — the contract is harder to specify when system boundaries are unclear.
 
@@ -108,7 +106,7 @@ Recovery: If a link is broken and cannot be fixed by editing docs/,
           add it to broken-links.md and continue.
 ```
 
-Compare this to an under-specified version: "Update the docs for the release." The latter gives the agent no constraints, no boundary on what it can touch, and no way to know when it's done.
+Compare this to an under-specified version: "Update the docs for the release." The latter gives the agent no constraints, no boundary on scope, and no way to know when it's done.
 
 ## Related
 

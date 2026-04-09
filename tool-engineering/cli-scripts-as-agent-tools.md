@@ -16,7 +16,7 @@ tags:
 
 ## Raw Commands Waste Context
 
-When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Scripts that pre-filter at the source reduce that expenditure.
+When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Scripts that pre-filter at the source reduce that expenditure.
 
 ## The Pattern
 

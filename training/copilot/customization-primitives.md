@@ -861,7 +861,7 @@ Instructions provide baseline context. Path-specific instructions refine per dir
 - [GitHub Copilot: Context Engineering & Agent Workflows](context-and-workflows.md) — context design, task decomposition, and steering
 - [GitHub Copilot: Advanced Patterns](advanced-patterns.md) — multi-agent orchestration and automation
 - [GitHub Copilot: Harness Engineering](harness-engineering.md) — making codebases agent-ready with enforcement and legibility
-- [GitHub Copilot: Team Adoption & Governance](team-adoption.md) — rolling out Copilot with progressive autonomy and shared configuration
+- [GitHub Copilot: Team Adoption & Governance](team-adoption.md) — rolling out Copilot with [progressive autonomy](../../human/progressive-autonomy-model-evolution.md) and shared configuration
 - [GitHub Copilot: Model Selection & Routing](model-selection.md) — model roster, premium multipliers, and override strategies
 
 **Context & Instructions**

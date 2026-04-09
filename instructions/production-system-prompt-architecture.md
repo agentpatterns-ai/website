@@ -52,7 +52,7 @@ XML tags serve three functions:
 
 ## Temporal Grounding at Prompt Head
 
-The prompt opens with hardcoded contextual facts — current date, deployment environment, user location — before any behavioral rules. Placing these at the prompt head means they are always in the cache prefix and never invalidated by changes to behavioral sections below.
+The prompt opens with hardcoded contextual facts — current date, deployment environment, user location — before any behavioral rules. Placing these at the prompt head means they are always in the cache prefix and never invalidated by changes to sections below.
 
 ## Skills Registry Pattern
 
@@ -68,7 +68,7 @@ Skills are defined declaratively in an `<available_skills>` block rather than in
 </available_skills>
 ```
 
-Each entry contains a name, trigger conditions, and a filesystem path. Skill content loads on demand — not on every conversation. This is [progressive disclosure](../agent-design/progressive-disclosure-agents.md) applied to [prompt engineering](../training/foundations/prompt-engineering.md): a lean registry of 20 pointers consumes far fewer tokens than 20 inlined definitions.
+Each entry contains a name, trigger conditions, and a filesystem path. Skill content loads on demand — not on every conversation. This is [progressive disclosure](../agent-design/progressive-disclosure-agents.md) applied to [prompt engineering](../training/foundations/prompt-engineering.md): a lean registry of 20 pointers consumes fewer tokens than 20 inlined definitions.
 
 ## Deferred Tool Loading
 

@@ -18,7 +18,7 @@ aliases:
 !!! info "Also known as"
     **Hierarchical CLAUDE.md** · **Layered Instruction Scopes** · **Directory-Level Instruction Hierarchy**
 
-    This page covers the Claude Code–specific implementation. For the tool-agnostic pattern, see [Layer Agent Instructions by Specificity](layered-instruction-scopes.md).
+    Claude Code–specific implementation. For the tool-agnostic pattern, see [Layer Agent Instructions by Specificity](layered-instruction-scopes.md).
 
 ## Four Scopes
 

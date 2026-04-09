@@ -93,3 +93,5 @@ The corrected prompt adds three gate points: a pre-task duplicate check, in-task
 - [Trust Without Verify](trust-without-verify.md)
 - [Happy Path Bias](happy-path-bias.md)
 - [LLM Review Overcorrection](llm-review-overcorrection.md)
+- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md)
+- [Pattern Replication Risk](pattern-replication-risk.md)

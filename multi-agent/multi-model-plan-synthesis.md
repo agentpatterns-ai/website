@@ -1,6 +1,9 @@
 ---
 title: "Multi-Model Plan Synthesis for System Architecture"
 description: "Get independent plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each before writing any code."
+aliases:
+  - "plan triangulation"
+  - "multi-model planning"
 tags:
   - agent-design
   - multi-agent
@@ -145,3 +148,4 @@ observability approach, and the top 3 risks you see.
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)

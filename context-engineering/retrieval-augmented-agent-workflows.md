@@ -23,7 +23,7 @@ Retrieval-augmented agent workflows structure context in two layers: a small sta
 
 ## The Problem with Preloading
 
-Every token loaded at startup consumes context budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites does not need all five loaded before the first message — it needs to know they exist and how to access them.
+Every token loaded at startup consumes budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites does not need all five loaded before the first message — it needs to know they exist and how to access them.
 
 Loading context speculatively "just in case" produces two failure modes: the agent runs out of context mid-task, or the [U-shaped attention curve](lost-in-the-middle.md) buries the preloaded material where the model rarely attends to it [unverified — specific attention curve effect on preloaded agent context not sourced here].
 
@@ -42,17 +42,17 @@ Anthropic notes that teams increasingly augment retrieval systems with ["just in
 
 ## Mechanisms
 
-**MCP servers** expose external data sources as tools. The agent receives tool descriptions at startup and fetches content via tool calls on demand. Nothing enters the prompt until the agent asks for it.
+**MCP servers** expose external data sources as tools. The agent receives tool descriptions at startup and fetches content on demand. Nothing enters the prompt until the agent asks for it.
 
 **Web fetch** lets an agent pull a documentation page when researching a specific question rather than pre-embedding pages in the system prompt.
 
-**File search** lets an agent locate relevant code at the point of implementation rather than loading every module upfront — it searches when it needs to understand a dependency.
+**File search** lets an agent locate relevant code at the point of implementation rather than loading every module upfront.
 
 **Sub-agents** provide isolated context windows for retrieval-heavy tasks. A coordinator delegates a retrieval step to a sub-agent, which fetches, processes, and returns a condensed summary. [LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) uses a filesystem abstraction that lets agents offload large results and re-read them selectively, rather than keeping everything in active context.
 
 ## Trade-offs
 
-On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput noticeably. Preloading eliminates that latency at the cost of context budget.
+On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput. Preloading eliminates that latency at the cost of context budget.
 
 The right balance depends on task structure:
 
@@ -132,4 +132,5 @@ A task requiring only one of five documentation sections consumes context for th
 - [The Infinite Context](../anti-patterns/infinite-context.md)
 - [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Filter and Aggregate in the Execution Environment](filter-aggregate-execution-env.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

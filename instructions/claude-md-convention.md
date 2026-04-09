@@ -13,15 +13,15 @@ aliases:
 > CLAUDE.md is Claude Code's project-level instruction file -- a Markdown file that Claude Code reads at session start to understand project conventions, tooling, and behavioral rules.
 
 ??? note "Also known as: Instruction File Convention, Project Instruction Files"
-    See also [Project Instruction File Ecosystem](instruction-file-ecosystem.md) and [copilot-instructions.md Convention](../tools/copilot/copilot-instructions-md-convention.md).
+    See [Project Instruction File Ecosystem](instruction-file-ecosystem.md) and [copilot-instructions.md Convention](../tools/copilot/copilot-instructions-md-convention.md).
 
 ## What It Does
 
-Claude Code loads CLAUDE.md files at session start and injects their contents into the context window ([docs](https://code.claude.com/docs/en/memory)). The instructions are context, not enforced configuration -- Claude follows them on a best-effort basis; more specific instructions produce more consistent compliance.
+Claude Code loads CLAUDE.md at session start into the context window ([docs](https://code.claude.com/docs/en/memory)). Instructions are context, not enforced configuration -- specificity yields compliance.
 
 ## File Locations and Scopes
 
-Four scopes, each with a different persistence model ([docs](https://code.claude.com/docs/en/memory)):
+Four scopes with different persistence models ([docs](https://code.claude.com/docs/en/memory)):
 
 | Scope | Location | Shared with | Purpose |
 |-------|----------|-------------|---------|
@@ -32,41 +32,41 @@ Four scopes, each with a different persistence model ([docs](https://code.claude
 
 ## Load Order and Precedence
 
-Claude Code walks up the directory tree loading every CLAUDE.md and CLAUDE.local.md it finds ([docs](https://code.claude.com/docs/en/memory)). Subdirectory files load on demand. More specific scopes take precedence: directory overrides project root, project overrides user, user overrides managed policy.
+Claude Code walks up the directory tree loading every CLAUDE.md and CLAUDE.local.md it finds ([docs](https://code.claude.com/docs/en/memory)). Subdirectory files load on demand. More specific scopes win: directory overrides project root, project overrides user, user overrides policy.
 
 ## Writing Effective Instructions
 
-Key properties from the [official docs](https://code.claude.com/docs/en/memory):
+Key properties ([docs](https://code.claude.com/docs/en/memory)):
 
 | Property | Guidance |
 |----------|----------|
-| **Size** | Target under 200 lines -- longer files reduce adherence |
-| **Structure** | Use headers and bullets for scanning |
-| **Specificity** | Concrete enough to verify: "Use 2-space indentation" not "Format code properly" |
-| **Consistency** | Contradictory rules cause unpredictable behavior; audit periodically |
+| **Size** | Under 200 lines -- longer files reduce adherence |
+| **Structure** | Headers and bullets for scanning |
+| **Specificity** | Verifiable: "Use 2-space indentation" not "Format code properly" |
+| **Consistency** | Contradictions cause unpredictable behavior; audit regularly |
 
 ## What to Include
 
-A project CLAUDE.md should contain ([docs](https://code.claude.com/docs/en/memory)):
+A project CLAUDE.md should cover ([docs](https://code.claude.com/docs/en/memory)):
 
-- **Build and test commands** -- exact commands to build, test, lint, deploy
-- **Coding standards** -- naming conventions, formatting rules, patterns
-- **Architecture** -- where code lives, how modules interact
-- **Workflows** -- deployment steps, PR process, conventions
-- **Navigation pointers** -- links to deeper docs rather than embedding
+- **Build and test commands** -- build, test, lint, deploy commands
+- **Coding standards** -- naming conventions, formatting rules
+- **Architecture** -- where code lives, module interactions
+- **Workflows** -- deployment steps, PR process
+- **Navigation pointers** -- link to deeper docs rather than embedding
 
-Run `/init` to generate a starting CLAUDE.md from discovered conventions.
+Run `/init` to generate a CLAUDE.md from discovered conventions.
 
 ## What Not to Include
 
 - **Task-specific instructions** -- belong in the prompt
-- **Discoverable knowledge** -- directory structure, types, and test output are available via tools (see [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md))
-- **Full documentation** -- link to docs; CLAUDE.md tokens reduce task budget
-- **Generic advice** -- "write clean code" adds noise without signal
+- **Discoverable knowledge** -- directory structure, types, test output available via tools (see [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md))
+- **Full documentation** -- link instead; tokens reduce task budget
+- **Generic advice** -- "write clean code" is noise
 
 ## Importing Additional Files
 
-CLAUDE.md supports `@path/to/file` import syntax ([docs](https://code.claude.com/docs/en/memory)). Both relative and absolute paths work; imports nest five levels deep. See [@import Composition Pattern](import-composition-pattern.md) for modular authoring patterns.
+CLAUDE.md supports `@path/to/file` import syntax ([docs](https://code.claude.com/docs/en/memory)). Relative and absolute paths work; imports nest five levels deep. See [@import Composition Pattern](import-composition-pattern.md) for modular authoring patterns.
 
 ```text
 See @README for project overview and @package.json for available npm commands.
@@ -75,11 +75,11 @@ See @README for project overview and @package.json for available npm commands.
 - git workflow @docs/git-instructions.md
 ```
 
-On first encounter, Claude Code shows an approval dialog; declined imports stay disabled.
+Claude Code shows an approval dialog on first encounter; declined imports remain disabled ([docs](https://code.claude.com/docs/en/memory)).
 
 ## Path-Scoped Rules with `.claude/rules/`
 
-Place topic-specific Markdown files in `.claude/rules/` ([docs](https://code.claude.com/docs/en/memory)). Files without `paths` frontmatter load unconditionally; files with `paths` load only when matching files are accessed.
+Place topic-specific Markdown files in `.claude/rules/` ([docs](https://code.claude.com/docs/en/memory)). Files without `paths` frontmatter load unconditionally; files with `paths` load when matching files are in scope.
 
 ```markdown
 ---
@@ -93,11 +93,11 @@ paths:
 - Use the standard error response format
 ```
 
-Rules files support symlinks for cross-project sharing.
+Rules files support symlinks for cross-repo sharing ([docs](https://code.claude.com/docs/en/memory)).
 
 ## CLAUDE.md vs. AGENTS.md
 
-Both provide repository-level context but differ in audience and discovery model:
+Both offer repo-level context but differ in audience and discovery:
 
 | Dimension | CLAUDE.md | AGENTS.md |
 |-----------|-----------|-----------|
@@ -111,7 +111,7 @@ Teams using multiple AI tools should maintain both or consolidate into AGENTS.md
 
 ## Auto Memory: The Companion System
 
-Auto memory is the companion system Claude writes -- build commands, debugging insights, preferences from corrections ([docs](https://code.claude.com/docs/en/memory)). It lives in `~/.claude/projects/<project>/memory/`; the first 200 lines load at session start. Toggle via `/memory`.
+Auto memory is what Claude writes back -- build commands, debugging insights, preferences ([docs](https://code.claude.com/docs/en/memory)). Stored in `~/.claude/projects/<project>/memory/`; first 200 lines load at session start. Toggle via `/memory`.
 
 ## Example
 
@@ -173,3 +173,8 @@ paths:
 - [AGENTS.md Design Patterns](agents-md-design-patterns.md)
 - [Content Exclusion Gap](content-exclusion-gap.md)
 - [Frozen Spec File](frozen-spec-file.md)
+- [Standards as Agent Instructions](standards-as-agent-instructions.md)
+- [Prompt File Libraries](prompt-file-libraries.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md)
+- [Prompt Governance via PR](prompt-governance-via-pr.md)

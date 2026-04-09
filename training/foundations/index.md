@@ -16,7 +16,7 @@ These modules teach the conceptual frameworks behind effective AI-assisted devel
 
 | Module | Topic | Duration |
 |--------|-------|----------|
-| [Prompt Engineering](prompt-engineering.md) | [System prompt altitude](../../instructions/system-prompt-altitude.md), polarity, rule- vs example-driven instructions, compliance ceiling, domain-specific prompts, negative-space instructions | 30–45 min |
+| [Prompt Engineering](prompt-engineering.md) | [System prompt altitude](../../instructions/system-prompt-altitude.md), polarity, rule- vs [example-driven instructions](../../instructions/example-driven-vs-rule-driven-instructions.md), compliance ceiling, domain-specific prompts, negative-space instructions | 30–45 min |
 | [Context Engineering](context-engineering.md) | Context window mechanics, [attention sinks](../../context-engineering/attention-sinks.md), lost-in-the-middle, compression strategies, dynamic context assembly, JIT loading, [prompt caching](../../context-engineering/prompt-caching-architectural-discipline.md) | 30–45 min |
 | [Harness Engineering](harness-engineering.md) | Repo legibility, mechanical enforcement, constrained solution spaces, [backpressure](../../agent-design/agent-backpressure.md), feedback loop quality, pre-completion checklists, [convergence detection](../../agent-design/convergence-detection.md) | 30–45 min |
 | [Tool Engineering](tool-engineering.md) | [Tool description quality](../../tool-engineering/tool-description-quality.md), token-efficient design, schema design, MCP architecture, skill authoring, [tool minimalism](../../tool-engineering/tool-minimalism.md), poka-yoke tools | 30–45 min |

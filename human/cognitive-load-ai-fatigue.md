@@ -18,17 +18,17 @@ aliases:
 
 ## The Hidden Cost of AI-Augmented Work
 
-AI assistants reduce mechanical effort but introduce new cognitive demands: reviewing generated output, catching errors, maintaining mental context across AI and human thinking modes, and making micro-decisions about when to accept or redirect the assistant.
+AI assistants reduce mechanical effort but introduce new cognitive demands: reviewing generated output, catching errors, maintaining context across AI and human thinking modes, and making micro-decisions about when to accept or redirect.
 
-Research from BCG and UC Riverside found that [14% of workers experience mental fatigue from excessive AI tool use](https://futurism.com/artificial-intelligence/ai-brain-fry), with high performers most affected — intensive users who get the most value are also the most exposed to the costs.
+Research from BCG and UC Riverside found that [14% of workers experience mental fatigue from excessive AI tool use](https://futurism.com/artificial-intelligence/ai-brain-fry), with high performers most affected — intensive users who get the most value are also most exposed to the costs.
 
 ## Forms of AI Cognitive Load
 
-**Output review fatigue.** Reading and validating generated code all day is not passive. Every suggestion requires a judgment call — accept, modify, reject. Over a full day, this judgment load accumulates even when individual decisions are fast.
+**Output review fatigue.** Reading and validating generated code all day is not passive. Every suggestion requires a judgment call — accept, modify, reject. Over a full day, this load accumulates even when individual decisions are fast.
 
 **Context-switch cost.** Moving between AI-assisted work and independent reasoning has a switching cost [unverified: the magnitude of this cost has not been formally studied for AI-specific contexts]. The mode boundaries are rarely clean.
 
-**Decision fatigue from oversight.** Agentic workflows require you to monitor and correct AI behavior in real time. Sustained oversight of a probabilistic system differs from writing code directly — humans have limited tolerance for it before quality degrades.
+**Decision fatigue from oversight.** Agentic workflows require monitoring and correcting AI behavior in real time. Sustained oversight of a probabilistic system differs from writing code directly — humans have limited tolerance before quality degrades.
 
 **Verification anxiety.** Generated output may be wrong without indicating where. This ambient uncertainty differs from reviewing human-written code, where error patterns are more predictable.
 
@@ -40,11 +40,11 @@ Reviewing AI output as a continuous stream is more fatiguing than batching revie
 
 ### Scope Limits Per Session
 
-Set explicit scope limits on agentic tasks per session. Long-running agents require extended oversight; each added hour compounds fatigue. Short, bounded tasks with clear completion criteria reduce the sustained monitoring burden.
+Set explicit scope limits on agentic tasks per session. Long-running agents require extended oversight; each added hour compounds fatigue. Short, bounded tasks with clear completion criteria reduce sustained monitoring burden.
 
 ### Designated Non-AI Work Blocks
 
-Reserve time blocks for architecture decisions, debugging novel failures, and performance analysis requiring deep codebase knowledge. These blocks also serve as cognitive recovery from AI-assisted mode.
+Reserve blocks for architecture decisions, debugging novel failures, and performance analysis requiring deep codebase knowledge. These blocks also serve as cognitive recovery from AI-assisted mode.
 
 ### When Not to Use AI
 
@@ -54,13 +54,13 @@ AI assistance is most costly (cognitively) when:
 - The correction loop is tight and every suggestion needs close review
 - You need deep concentration without interruption
 
-In these scenarios, the overhead of directing and reviewing an assistant exceeds the value returned. Recognizing this boundary is a skill, not a failure.
+In these scenarios, the overhead of directing and reviewing exceeds the value returned. Recognizing this boundary is a skill.
 
 ## Team-Level Considerations
 
-Individual fatigue patterns aggregate into team-level risk. Teams where senior engineers review all AI output face a bottleneck: high performers carry disproportionate load. Distributing review responsibility and establishing standards that don't require expert judgment for every case reduces load concentration.
+Individual fatigue patterns aggregate into team-level risk. Teams where senior engineers review all AI output face a bottleneck: high performers carry disproportionate load. Distributing review responsibility and establishing standards that don't require expert judgment for every case reduces concentration.
 
-Adoption pressure that pushes engineers to use AI assistants before they've developed effective mental models creates additional stress. Forcing adoption faster than learning manifests as fatigue [unverified: adoption pressure as a fatigue amplifier is not directly studied].
+Adoption pressure that pushes engineers to use AI assistants before they have effective mental models creates additional stress. Forcing adoption faster than learning manifests as fatigue [unverified: adoption pressure as a fatigue amplifier is not directly studied].
 
 ## Example
 
@@ -100,9 +100,10 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — long-term capability costs of sustained AI delegation
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](cross-tool-translation.md)
 - [Initiatives and Community: Tracking the Agentic Engineering Landscape](initiatives-community.md)
-- [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck; load concentration on senior engineers
+- [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
-- [Process Amplification](process-amplification.md) — how AI use intensity scales workload; structuring processes to manage the amplification effect
-- [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — gradually increasing agent autonomy while managing the cognitive overhead of sustained oversight
-- [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — pre-authorizing low-risk operations to reduce approval fatigue and preserve attention for high-stakes decisions
-- [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — gating AI suggestions before display to reduce alert fatigue and wasted cognitive effort
+- [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification
+- [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — gradually increasing agent autonomy while managing oversight overhead
+- [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
+- [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — gating AI suggestions before display to reduce alert fatigue
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — the plan-supervise-validate loop that manages cognitive overhead of delegation

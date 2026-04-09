@@ -7,6 +7,9 @@ tags:
   - memory
   - tool-agnostic
   - long-form
+aliases:
+  - experience replay for agents
+  - episode-based recall
 ---
 
 # Episodic Memory Retrieval
@@ -196,4 +199,5 @@ episode_store.upsert(
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md) -- work-state tracking that complements knowledge memory
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) -- on-demand context retrieval patterns
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) -- why stored reasoning traces should be treated as rationalization rather than ground truth
+- [AST-Guided Agent Memory](ast-guided-agent-memory.md) -- using AST representations as memory substrate to prevent error recurrence across code generation sessions
 - [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality

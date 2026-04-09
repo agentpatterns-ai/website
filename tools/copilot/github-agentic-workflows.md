@@ -152,6 +152,7 @@ The compiled `summarize.lock.yml` is the executable GitHub Actions workflow. The
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md)
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md)
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs for workflow runs
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [GitHub Models in Actions](github-models-in-actions.md)
 - [GitHub Copilot MCP Integration](mcp-integration.md)

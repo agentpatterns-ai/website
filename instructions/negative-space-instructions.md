@@ -114,3 +114,5 @@ Each positive directive ("Write clear, self-documenting code") sets the goal. Th
 - [Critical Instruction Repetition via Primacy and Recency](critical-instruction-repetition.md)
 - [Layer Agent Instructions by Specificity](layered-instruction-scopes.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)

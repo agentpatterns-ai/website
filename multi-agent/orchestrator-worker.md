@@ -44,7 +44,7 @@ Parallelization is effective when the task requires "multiple independent direct
 - Analysis requiring different methodologies applied to the same dataset
 - Code review across separate modules with no shared state
 
-It is not effective when subtasks are sequentially dependent -- one worker's output is another's input. Sequential dependencies require chaining, not parallelization.
+It is not effective when subtasks are sequentially dependent -- sequential dependencies require chaining, not parallelization.
 
 ## Effort Scaling
 
@@ -54,7 +54,7 @@ The orchestrator should match worker count and tool allocation to task complexit
 - Moderate queries: 2--4 subagents with clearly divided responsibilities
 - Complex queries: 10+ subagents with carefully partitioned search spaces
 
-These rules belong in the orchestrator's system prompt, not in code. The orchestrator reasons about task complexity and selects the appropriate scale; hard-coding agent counts removes this flexibility.
+These rules belong in the orchestrator's system prompt, not in code. Hard-coding agent counts removes the flexibility to match scale to complexity.
 
 ## Worker Independence
 
@@ -78,7 +78,7 @@ After workers complete, the orchestrator synthesizes their outputs. Synthesis is
 - Identifies conflicts or gaps between results
 - Produces a unified output that draws on the strongest elements from each worker
 
-A weak synthesis step wastes the parallelization benefit. If the orchestrator simply concatenates worker outputs, the pattern adds latency without improving quality.
+If the orchestrator simply concatenates worker outputs, the pattern adds latency without improving quality.
 
 ## Token Economics
 
@@ -89,9 +89,7 @@ Multi-agent orchestration multiplies token consumption. [Anthropic's research sy
 | Single agent | ~4x |
 | Multi-agent (orchestrator + workers) | ~15x |
 
-Token usage explains roughly 80% of performance variance across research tasks, with tool call count and model choice as secondary factors. The pattern's value proposition depends on task value exceeding token cost -- a codebase audit saving hours of manual work justifies 15x tokens; a simple fact lookup does not.
-
-The effort-scaling rules in the orchestrator's prompt are the primary mechanism for controlling this cost. Without them, orchestrators tend to spawn excessive workers for simple queries.
+Token usage explains roughly 80% of performance variance across research tasks. The effort-scaling rules in the orchestrator's prompt are the primary cost-control mechanism -- without them, orchestrators spawn excessive workers for simple queries.
 
 ## Performance
 
@@ -125,11 +123,10 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 ## Key Takeaways
 
 - Workers run independently on bounded subtasks with separate tool sets; no inter-worker coordination
-- Match worker count to task complexity; make scaling rules explicit in the orchestrator's prompt
-- The orchestrator prompt is the highest-leverage and most sensitive component -- small changes have large effects
-- Synthesis is a reasoning step, not aggregation -- the orchestrator evaluates and selects, not just combines
-- Parallelization only helps for genuinely independent subtasks; sequential dependencies require chaining
-- Multi-agent systems consume ~15x the tokens of chat interactions -- task value must justify the cost
+- Match worker count to task complexity via explicit scaling rules in the orchestrator prompt
+- The orchestrator prompt is the highest-leverage component -- small changes have large downstream effects
+- Synthesis is a reasoning step, not aggregation
+- Multi-agent systems consume ~15x the tokens of chat -- task value must justify the cost
 
 ## Unverified Claims
 
@@ -152,3 +149,7 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Rainbow Deployments for Agents](rainbow-deployments-agents.md)
+- [Oracle-Based Task Decomposition](oracle-task-decomposition.md)
+- [Staggered Agent Launch](staggered-agent-launch.md)
+- [Agent Handoff Protocols](agent-handoff-protocols.md)
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)

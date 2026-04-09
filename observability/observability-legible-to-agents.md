@@ -12,17 +12,17 @@ tags:
 > Wire browser automation, application metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior from real signals.
 
 !!! note "Not about observing agents"
-    [Agent Observability (OTel)](agent-observability-otel.md) covers humans watching agent behavior. This page covers the inverse: **agents watching application behavior** using the same observability signals -- DevTools, dashboards, logs -- accessed through tools.
+    [Agent Observability (OTel)](agent-observability-otel.md) covers humans watching agent behavior. This page covers the inverse: **agents watching application behavior** through tools.
 
 ## The Gap
 
 Agents write code, run tests, and read output. They cannot:
 
-- Check whether a UI change actually renders correctly
+- Check whether a UI change renders correctly
 - Query production metrics to confirm a fix reduced error rates
-- Search logs for the specific error pattern a user reported
+- Search logs for the error pattern a user reported
 
-Without these signals, agents operate in "write and hope" mode. Closing the loop creates "write, observe, and verify" systems.
+Without these signals, agents operate in "write and hope" mode. Closing the loop enables "write, observe, and verify" workflows.
 
 ## Three Signal Categories
 
@@ -38,7 +38,7 @@ graph LR
 
 ### Visual Signals: Browser Automation
 
-Agents verify rendering and UI behavior by driving a browser and inspecting results.
+Agents verify rendering and UI behavior by driving a browser.
 
 | Tool | Approach | Key capability |
 |------|----------|----------------|
@@ -47,16 +47,16 @@ Agents verify rendering and UI behavior by driving a browser and inspecting resu
 | [agent-browser](https://github.com/vercel-labs/agent-browser) | Accessibility-first Rust CLI | Elements as `@e1`, `@e2` references; built-in network interception and profiling |
 | Puppeteer MCP (generic) | Screenshots | Visual verification via captured images; no structured DOM access |
 
-**Accessibility snapshots vs. screenshots.** Snapshots return structured text (element roles, names, states) that LLMs reason about directly. Screenshots require a vision model -- use them only for CSS or layout bugs.
+**Accessibility snapshots vs. screenshots.** Snapshots return structured text (roles, names, states) that LLMs reason about directly. Screenshots require a vision model -- use them only for layout bugs.
 
 !!! warning "Blind spot: modal dialogs"
-    Puppeteer MCP cannot see browser-native alert modals -- Anthropic's [harness engineering](../agent-design/harness-engineering.md) work found modal-dependent features were buggier as a result. Playwright MCP accessibility snapshots partially address this [unverified].
+    Puppeteer MCP cannot see browser-native alert modals -- Anthropic's [harness engineering](../agent-design/harness-engineering.md) work found modal-dependent features were buggier as a result. Playwright MCP snapshots partially address this [unverified].
 
-**Executable proof of work:** [Showboat](https://github.com/simonw/showboat) produces documents mixing narrative and runnable code blocks with captured output. Its `verify` command re-executes every block and checks outputs match.
+**Executable proof of work:** [Showboat](https://github.com/simonw/showboat) mixes narrative and runnable code blocks with captured output. Its `verify` command re-executes every block and checks outputs match.
 
 ### Log Signals: Structured Logs as Agent Context
 
-Agents need structured, filterable log data -- not raw syslog streams:
+Agents need structured, filterable log data -- not raw streams:
 
 | Server | Platform | Capabilities |
 |--------|----------|-------------|
@@ -68,9 +68,9 @@ Agents need structured, filterable log data -- not raw syslog streams:
 
 Agents use metrics to verify a change had the intended effect:
 
-- After fixing an auth bug: query error rate metric, confirm it dropped
+- After fixing an auth bug: query error rate, confirm it dropped
 - After a performance optimization: query p99 latency, confirm it decreased
-- After a deployment: check RUM performance data for regressions
+- After a deployment: check RUM data for regressions
 
 The same MCP servers that expose logs also expose metrics. [Arize Phoenix MCP](https://github.com/Arize-ai/phoenix/tree/main/js/packages/phoenix-mcp) adds span retrieval and annotation.
 
@@ -78,7 +78,7 @@ The same MCP servers that expose logs also expose metrics. [Arize Phoenix MCP](h
 
 Observability data is high-volume. Two patterns keep context lean:
 
-**JIT references:** Agents maintain lightweight identifiers -- stored queries, metric names, time ranges -- and load data on demand rather than pulling full payloads upfront.
+**JIT references:** Agents store lightweight identifiers -- query strings, metric names, time ranges -- and load data on demand rather than pulling full payloads upfront.
 
 ```text
 # Agent stores a reference, not the data
@@ -89,11 +89,11 @@ datadog_log_search(query=log_query)
 Result: 3 results (down from 47 before the fix)
 ```
 
-**[Programmatic tool calling](../tool-engineering/advanced-tool-use.md#programmatic-tool-calling-code-based-orchestration):** Agents write code that calls observability tools, processes outputs, and decides which subset to retain -- filtering large payloads before they hit the context window.
+**[Programmatic tool calling](../tool-engineering/advanced-tool-use.md#programmatic-tool-calling-code-based-orchestration):** Agents write code that calls observability tools and filters large payloads before they hit the context window.
 
 ## Verification Ladder: Cheap to Expensive
 
-Simon Willison's [agentic manual testing guide](https://simonwillison.net/guides/agentic-engineering-patterns/agentic-manual-testing/) maps the full verification spectrum:
+Simon Willison's [agentic manual testing guide](https://simonwillison.net/guides/agentic-engineering-patterns/agentic-manual-testing/) maps the verification spectrum:
 
 | Signal type | Tool | Use case |
 |-------------|------|----------|
@@ -126,7 +126,7 @@ datadog_metric_query(query="sum:auth.errors{service:auth}.as_count()", from="-1h
 → 3 errors in the last hour (down from 312 in the prior 24h)
 ```
 
-The agent closed the loop: logs identified the root cause, tests confirmed the code fix, browser automation verified the UI, and metrics proved the fix reduced errors in practice.
+The agent closed the loop: logs identified the root cause, tests confirmed the code fix, browser automation verified the UI, and metrics proved errors dropped.
 
 ## Related
 

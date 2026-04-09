@@ -113,4 +113,7 @@ Both subagents can run concurrently — their filtered schemas ensure neither ca
 - [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
+- [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
+- [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)

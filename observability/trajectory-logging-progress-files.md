@@ -152,3 +152,4 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 - [Event Sourcing for Agents](event-sourcing-for-agents.md)
 - [Agent Debugging](agent-debugging.md)
 - [Observability Legible to Agents](observability-legible-to-agents.md)
+- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)

@@ -140,6 +140,7 @@ The raw observation records *what happened*; the synthesized lesson records *wha
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
+- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)

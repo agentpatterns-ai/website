@@ -18,7 +18,7 @@ aliases:
 
 ## Why Monolithic AGENTS.md Files Fail
 
-The OpenAI Harness team — which built a million-line codebase with 3–7 engineers and zero hand-written code — identified "one big AGENTS.md" as an early failure mode with four specific consequences ([OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)):
+The OpenAI Harness team identified "one big AGENTS.md" as an early failure mode with four specific consequences ([OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)):
 
 1. **Context crowding.** A large AGENTS.md consumes context space that should be available for the task, the relevant code, and the documentation for that specific problem. Agents have less room to reason about the actual work.
 
@@ -43,7 +43,7 @@ docs/
 
 An AGENTS.md entry looks like: *"For API conventions, see `docs/conventions/api.md`. For deployment procedures, see `docs/workflows/deploy.md`."* The agent follows the pointer when it needs that context, rather than having it preloaded.
 
-This is the same principle as [retrieval-augmented context loading](../context-engineering/retrieval-augmented-agent-workflows.md): pull context at the moment it is needed, not preloaded at session start.
+This follows the same principle as [retrieval-augmented context loading](../context-engineering/retrieval-augmented-agent-workflows.md): pull context when needed, not at session start.
 
 ## Enforcing Freshness Mechanically
 
@@ -130,4 +130,6 @@ If any linked document is deleted or renamed without updating AGENTS.md, the CI 
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Context Priming](../context-engineering/context-priming.md)
+- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — when AGENTS.md files hurt more than they help
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — structural patterns for large-scale instruction files
+- [Harness Engineering](../agent-design/harness-engineering.md) — the discipline of designing agent environments so agents succeed by default

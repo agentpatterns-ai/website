@@ -53,7 +53,7 @@ The system also reportedly maintains [cross-review memory](https://github.blog/a
 
 ## Architectural Implications
 
-This pattern extends beyond GitHub's implementation. Any AI code review system benefits from the same structural shift:
+Any AI code review system benefits from the same structural shift:
 
 1. **Give the reviewer tools, not just data.** A reviewer with access to file reading, search, and dependency tracing produces more accurate findings than one that only sees the diff.
 2. **Blend analysis methods.** Use LLMs for judgment-requiring issues (architectural fit, naming quality, design patterns) and deterministic tools for rule-based issues (security patterns, style violations, type errors).

@@ -104,3 +104,5 @@ The command can be extended with new pipeline steps (e.g., an additional review 
 - [Cognitive Reasoning Execution Separation](cognitive-reasoning-execution-separation.md)
 - [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
+- [Execution-First Delegation](execution-first-delegation.md)
+- [Classical SE Patterns as Agent Analogues](classical-se-patterns-agent-analogues.md)

@@ -17,7 +17,7 @@ tags:
 
 ## The Orientation Problem
 
-When an agent encounters a large codebase, flat directory listings, random file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
+When an agent encounters a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
 
 The repository map pattern builds a weighted structural overview fitted to a token budget.
 
@@ -90,7 +90,7 @@ src/models/session.py
     def is_expired() -> bool
 ```
 
-Higher budget: more files and full type annotations. Lower budget: only the most-referenced symbols.
+Higher budget: more files with full type annotations. Lower budget: only the most-referenced symbols.
 
 ## Benchmark Impact
 
@@ -98,7 +98,7 @@ Aider's repository map contributed to a then-SOTA 26.3% resolve rate on SWE-benc
 
 ## Alternative Approaches
 
-Three codebase orientation strategies:
+Codebase orientation strategies:
 
 | Approach | Mechanism | Best when |
 |----------|-----------|-----------|
@@ -106,11 +106,11 @@ Three codebase orientation strategies:
 | **Agentic search** (Claude Code) | On-demand Glob, Grep, Read | Frequent changes; freshness matters more than structure |
 | **Vector embeddings** (Cursor, Windsurf) | Semantic similarity search | Natural-language queries against code |
 
-Claude Code skips indexing entirely, using agentic search instead of a pre-built map — early RAG experiments showed agentic search generally performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
+Claude Code skips indexing entirely, using agentic search instead of a pre-built map — early RAG experiments showed agentic search performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
 
 ## MCP Server Availability
 
-The repository map pattern is available as standalone MCP servers, making it tool-agnostic:
+The pattern is available as standalone MCP servers, making it tool-agnostic:
 
 - **[RepoMapper](https://github.com/pdavis68/RepoMapper)** — Aider's repo map logic as an MCP server; any MCP-compatible agent can request a token-fitted map.
 - **[mcp-server-tree-sitter](https://github.com/wrale/mcp-server-tree-sitter)** — AST-based symbol extraction, dependency graphs, and complexity analysis as MCP tools.

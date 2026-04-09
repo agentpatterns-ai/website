@@ -66,7 +66,7 @@ The design philosophy is deliberately aggressive: the agent runs until manually 
 
 ---
 
-## The Orchestrator-Worker Research Loop
+## The [Orchestrator-Worker](../../multi-agent/orchestrator-worker.md) Research Loop
 
 For information research — where there is no single metric and the artifact is knowledge rather than code — a different architecture is needed.
 

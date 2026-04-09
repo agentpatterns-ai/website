@@ -177,6 +177,9 @@ mkdocs build --strict
 - [AI Crawler Policy](ai-crawler-policy.md) — controlling which crawlers index your structured data
 - [Measuring GEO Performance](measuring-geo-performance.md) — tracking schema citation lift
 - [What Is GEO](what-is-geo.md) — foundational concepts behind generative engine optimization
+- [Assertion Density](assertion-density.md) — specific claims and statistics that complement schema-marked content
+- [Atomic Pages and Chunking](atomic-pages-and-chunking.md) — page structure that improves schema auto-detection accuracy
+- [Topical Authority](topical-authority.md) — how schema markup contributes to entity coverage and domain authority
 
 ## Unverified Claims
 

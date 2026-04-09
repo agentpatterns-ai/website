@@ -23,11 +23,11 @@ Two studies evaluated AGENTS.md-style context files on real coding benchmarks:
 | Gloaguen et al. (2026) | SWE-bench Lite (300 tasks), AGENTbench (138 tasks) | LLM-generated files: **-3% success, +20% cost**. Human-written files: **+4% success, +19% cost** |
 | Lulla et al. (2026) | 10 repos, 124 PRs | AGENTS.md present: **-28.6% runtime, -16.6% output tokens**, completion rates unchanged |
 
-One measures success, the other efficiency. Context files can make agents faster but not more successful, and getting it wrong is costly.
+One measures success, the other efficiency. Context files can make agents faster but not more successful.
 
 ## Why Auto-Generated Files Fail
 
-Running `/init` produces a document that restates what the agent can already discover from the codebase:
+Running `/init` produces a document restating what the agent can already discover:
 
 ```mermaid
 graph LR
@@ -46,9 +46,9 @@ GPT-5.1 Mini and GPT-5.2 used 14% and 22% more reasoning tokens respectively wit
 
 Human-written context files improved success by ~4% on AGENTbench but increased costs by up to 19% because agents followed instructions **too faithfully** — running more tests, reading more files, and executing more searches than the task required.
 
-This is the [compliance ceiling](instruction-compliance-ceiling.md) in action — agents treat every instruction as equally important, so more instructions produce more work without proportional accuracy gains.
+This is the [compliance ceiling](instruction-compliance-ceiling.md) in action — agents treat every instruction as equally important, producing more work without proportional accuracy gains.
 
-**Architectural overviews did not help.** Agents spent the same effort locating files regardless of whether the overview was present.
+**Architectural overviews did not help.** Agents spent the same effort locating files regardless of overview presence.
 
 ## What Actually Works
 
@@ -82,7 +82,7 @@ Both studies evaluated well-documented open-source repositories. Context file va
 - Projects with non-standard tooling or build systems
 - Repos where critical constraints are not inferable from code
 
-This gap is untested — the strongest evidence applies to the open-source case.
+This gap is untested — the evidence applies to the open-source case.
 
 ## Key Takeaways
 
@@ -90,7 +90,7 @@ This gap is untested — the strongest evidence applies to the open-source case.
 - Human-written files improve success ~4% but at ~19% higher cost
 - Tool-specific commands are the highest-value content: 2.5 calls when mentioned vs 0.05 when not
 - Architectural overviews do not reduce file discovery time — omit them
-- The research empirically validates minimal instruction files and the pointer-map pattern
+- The research validates minimal instruction files and the pointer-map pattern
 
 ## Sources
 

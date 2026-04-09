@@ -38,9 +38,9 @@ graph LR
 
 **Deterministic** — Shell hooks executing outside the context window. Exit code 2 blocks the tool call unconditionally — the model cannot override, argue with, or forget it ([Claude Code hooks](https://code.claude.com/docs/en/hooks)).
 
-**Organizational** — Managed policies via MDM or enterprise configuration, enforcing organization-wide standards that cannot be disabled at project or user level.
+**Organizational** — Managed policies via MDM or enterprise configuration, enforcing organization-wide standards beyond project or user control.
 
-The key insight: **rigor relocation**. Relocate enforcement to a layer the model cannot influence. Every rule that moves from advisory to deterministic stops failing silently.
+The key insight: **[rigor relocation](../human/rigor-relocation.md)**. Move enforcement to a layer the model cannot influence. Every rule that shifts from advisory to deterministic stops failing silently.
 
 ## Three Hook Patterns
 
@@ -124,23 +124,15 @@ Hooks resolve from four scopes, each with different trust and override propertie
 | **Local** | `.claude/settings.local.json` | Yes | Per-machine overrides |
 | **Managed** | Enterprise MDM policy | No | Organization-wide mandates |
 
-Managed hooks cannot be disabled by project or user settings. This is how organizations enforce security policies without trusting individual developers to maintain their hook configurations.
+Managed hooks cannot be disabled by project or user settings — this is how organizations enforce security policies regardless of individual developer configurations.
 
 ## Why Hooks Beat Instructions
 
-Models revert to training defaults under pressure — this is inherent to attention-based architectures when the context window fills or instructions conflict with strong priors ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
-
-Failure modes that instructions alone cannot prevent:
-
-- **Training prior override**: The model uses `npm` despite CLAUDE.md saying "use pnpm" — `npm` dominates training data
-- **Context compaction loss**: After compaction, behavioral rules are summarized or dropped
-- **Multi-step drift**: Compliance with early instructions degrades as attention distributes across accumulated context
-
-Hooks are immune to all three. They execute in the shell, outside the context window.
+Models revert to training defaults under pressure — attention-based architectures lose instruction compliance when the context window fills or priors conflict ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). Hooks are immune: they execute in the shell, outside the context window.
 
 ## When to Use Each Layer
 
-Not every rule needs a hook. The decision depends on violation cost and whether the rule requires judgment.
+The decision depends on violation cost and whether the rule requires judgment.
 
 | Rule type | Layer | Example |
 |---|---|---|
@@ -151,7 +143,7 @@ Not every rule needs a hook. The decision depends on violation cost and whether 
 | Completion criteria | Deterministic (Stop hook) | "Tests must pass before done" |
 | Security policy | Organizational (managed) | "No secrets in source" |
 
-Rules requiring judgment — "write concise commit messages," "prefer composition over inheritance" — belong in instructions. Binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md) for the decision framework.
+Rules requiring judgment belong in instructions. Binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md) for the decision framework.
 
 ## Key Takeaways
 
@@ -168,4 +160,5 @@ Rules requiring judgment — "write concise commit messages," "prefer compositio
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)

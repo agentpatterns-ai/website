@@ -125,3 +125,4 @@ Both examples enforce the filesystem boundary (write access restricted to `$PROJ
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)

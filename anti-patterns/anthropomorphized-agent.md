@@ -84,3 +84,5 @@ The difference is not the agent — it is the developer's model of what the agen
 - [Context Poisoning](context-poisoning.md)
 - [Perceived Model Degradation](perceived-model-degradation.md)
 - [The Kitchen Sink Session](session-partitioning.md)
+- [The Infinite Context](infinite-context.md) — unfocused context dilutes attention, compounding the effects of misplaced trust
+- [The Yes-Man Agent](yes-man-agent.md) — compliance without verification is amplified when developers anthropomorphize agent agreement as understanding

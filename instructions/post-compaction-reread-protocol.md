@@ -132,3 +132,5 @@ sequenceDiagram
 - [Claude Code Hooks](../tools/claude/hooks-lifecycle.md)
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — compaction degrades compliance; understanding the ceiling informs re-read protocol design
 - [Frozen Spec File](frozen-spec-file.md) — pairs with this protocol: the frozen spec survives compaction on disk; this protocol ensures the agent re-reads it
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — broader hook patterns for behavioral enforcement, including SessionStart hooks used here
+- [CLAUDE.md Convention](claude-md-convention.md) — the instruction file that this protocol ensures is re-read after compaction

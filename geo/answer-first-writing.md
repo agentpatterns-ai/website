@@ -125,3 +125,4 @@ The "before" opens with meta-framing that contributes no semantic signal. The "a
 - [SEO vs GEO](seo-vs-geo.md)
 - [Measuring GEO Performance](measuring-geo-performance.md)
 - [Topical Authority](topical-authority.md)
+- [Schema Markup for AI Citation](schema-and-structured-data.md)

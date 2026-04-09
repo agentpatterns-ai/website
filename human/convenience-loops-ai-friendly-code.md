@@ -1,6 +1,10 @@
 ---
 title: "Convenience Loops and AI-Friendly Code in Your Stack"
 description: "Typed codebases produce better AI output, driving adoption of typed languages, which further improves AI training data in a self-reinforcing convenience loop."
+aliases:
+  - virtuous cycle
+  - flywheel effect
+  - positive feedback loop
 tags:
   - context-engineering
 ---
@@ -105,3 +109,4 @@ Now `mypy` or Pyright flags invalid calls immediately. The agent reads the error
 - [Process Amplification](process-amplification.md)
 - [Rigor Relocation](rigor-relocation.md)
 - [Cross-Tool Translation](cross-tool-translation.md)
+- [Domain-Specific Agent Challenges](domain-specific-agent-challenges.md)

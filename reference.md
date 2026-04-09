@@ -24,7 +24,7 @@ The human side of working with AI agents — cognitive load, skill atrophy, atte
 
 ## [Emerging](emerging/index.md)
 
-Trends and capabilities on the horizon — bootstrapping coding agents, first-party agent composition, hyper-personalized software, and product-as-IDE.
+Trends and capabilities on the horizon — [bootstrapping coding agents](emerging/bootstrapping-coding-agents.md), [first-party agent composition](emerging/first-party-agent-composition.md), [hyper-personalized software](emerging/hyper-personalized-software.md), and [product-as-IDE](emerging/product-as-ide.md).
 
 ## [Fallacies](fallacies/index.md)
 

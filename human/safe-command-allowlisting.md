@@ -95,3 +95,5 @@ Allowlisting eliminates noise so that genuine risk prompts stand out; it is not 
 - [Evidence-Based Allowlist Auto-Discovery for Agents](evidence-based-allowlist-auto-discovery.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md)
+- [The Bottleneck Migration](bottleneck-migration.md)
+- [Suggestion Gating](suggestion-gating.md)

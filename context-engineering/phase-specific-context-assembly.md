@@ -165,3 +165,6 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - [Prompt Compression](prompt-compression.md)
 - [Repository Map Pattern](repository-map-pattern.md)
 - [Discoverable vs. Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
+- [Context Engineering](context-engineering.md)
+- [Environment Specification as Context](environment-specification-as-context.md)
+- [Error Preservation in Context](error-preservation-in-context.md)

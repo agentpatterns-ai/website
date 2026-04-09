@@ -110,3 +110,7 @@ The key shift: decisions that previously required judgment (what naming style? w
 - [Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
+- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
+- [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
+- [Import Composition Pattern](import-composition-pattern.md)
+- [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)

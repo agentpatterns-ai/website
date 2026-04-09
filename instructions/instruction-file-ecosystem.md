@@ -29,58 +29,47 @@ Each AI coding assistant needs project context. Multiple tools means multiple in
 | GitHub Copilot | `.github/copilot-instructions.md` + `.github/instructions/*.instructions.md` ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) | Organization → repository-wide → path-specific → personal |
 | AGENTS.md-compatible tools | `AGENTS.md` ([standard](https://agents.md)) | Closest file to edited file wins; nested in subdirectories |
 
-GitHub Copilot also reads `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` as "agent-specific" instruction files, though with limited feature support compared to its native `.github/copilot-instructions.md` ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)). This cross-reading is a concrete sign of convergence.
+GitHub Copilot also reads `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` as "agent-specific" instruction files ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) — a concrete sign of convergence.
 
-The [AGENTS.md open standard](https://agents.md), now stewarded by the Agentic AI Foundation under the Linux Foundation, is supported by 20+ tools including OpenAI Codex, Google Jules, GitHub Copilot, Cursor, Devin, Aider, Zed, and Windsurf ([agents.md](https://agents.md)).
+[AGENTS.md](https://agents.md), stewarded by the Linux Foundation, is supported by 20+ tools including OpenAI Codex, Google Jules, Copilot, Cursor, Devin, Aider, Zed, and Windsurf.
 
 ## Discovery Differences
 
-**Claude Code** walks up the directory tree from the working directory, loading every `CLAUDE.md` it finds. Subdirectory files load on demand when the agent navigates there. Claude Code also supports `.claude/rules/*.md` files with `paths` frontmatter for glob-scoped instructions that only trigger when matching files are read ([docs](https://code.claude.com/docs/en/memory)). A `src/auth/CLAUDE.md` can add constraints specific to authentication code without affecting the rest of the project.
+**Claude Code** walks up the directory tree, loading every `CLAUDE.md` it finds. Subdirectory files load on demand. `.claude/rules/*.md` files with `paths` frontmatter add glob-scoped instructions that trigger only when matching files are read ([docs](https://code.claude.com/docs/en/memory)).
 
-**GitHub Copilot** uses a multi-tier model. `.github/copilot-instructions.md` applies repository-wide; path-specific `*.instructions.md` files in `.github/instructions/` use `applyTo` frontmatter globs to target specific files or directories ([docs](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)). All relevant tiers are provided simultaneously ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)). Copilot code review reads only the first 4,000 characters of instruction files; chat and coding agents have no character restriction ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)).
+**GitHub Copilot** uses a multi-tier model. `.github/copilot-instructions.md` applies repository-wide; `*.instructions.md` files in `.github/instructions/` use `applyTo` globs to target specific paths ([docs](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot)). All tiers are provided simultaneously. Code review reads only the first 4,000 characters; chat and coding agents have no limit ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)).
 
-**AGENTS.md** uses proximity-based discovery: the closest `AGENTS.md` to the edited file wins, with explicit user prompts overriding everything. Monorepos can nest files in subdirectories — large projects like OpenAI's repository use dozens of AGENTS.md files to scope instructions per package ([agents.md](https://agents.md)).
+**AGENTS.md** uses proximity-based discovery: the closest file to the edited file wins. Monorepos nest files in subdirectories to scope instructions per package ([agents.md](https://agents.md)).
 
 ## Content Overlap and Drift
 
-All three files typically contain the same categories: project context, coding conventions, architectural constraints, workflow notes. When maintained separately without a convergence strategy, content diverges [unverified] — one file says "use pnpm", another says "use npm", and each agent follows whatever its tool reads. Architectural decisions recorded in one file may not appear in others [unverified], making the files unreliable as context sources.
+All three files contain the same categories — project context, conventions, constraints, workflow notes. Without a convergence strategy, content diverges [unverified]: one file says "use pnpm", another says "use npm", and agents follow their own source.
 
 ## Convergence Strategies
 
-**Single canonical file with symlinks.** Maintain one source of truth (`AGENTS.md` or `CLAUDE.md`) and symlink the others to it. The tradeoff: tool-specific syntax (e.g., Claude Code's [`@path/to/import` syntax](https://code.claude.com/docs/en/memory)) may not be supported by other tools.
+**Single canonical file with symlinks.** Symlink all instruction files to one source of truth. Tradeoff: tool-specific syntax (e.g., Claude Code's [`@path/to/import`](https://code.claude.com/docs/en/memory)) may not work in other tools.
 
-**Shared base with tool-specific extends.** Maintain a base file with project-wide content, and tool-specific files that import the base and add tool-specific configuration. Claude Code supports this natively via `@AGENTS.md` import syntax in `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)). Copilot does not support cross-file imports, so its instructions must be duplicated or generated.
+**Shared base with tool-specific extends.** Claude Code supports this via `@AGENTS.md` import in `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)). Copilot lacks cross-file imports, requiring duplication or generation.
 
-**AGENTS.md as the canonical standard.** The [AGENTS.md open standard](https://agents.md) is tool-agnostic by design and now governed by the Linux Foundation. With 20+ compatible tools, authoring for AGENTS.md gives the widest native reach. Non-compatible tools still need their own file, but the canonical content lives in one place.
+**AGENTS.md as canonical standard.** With 20+ compatible tools and Linux Foundation governance, [AGENTS.md](https://agents.md) gives the widest reach.
 
 ## Hierarchy as a Feature
 
-All three ecosystems support scoped instruction files. Claude Code uses directory-level `CLAUDE.md` files and `.claude/rules/*.md` with `paths` frontmatter globs. Copilot uses `*.instructions.md` files with `applyTo` glob patterns. AGENTS.md uses proximity — the nearest file to the edited file takes precedence. All three let high-sensitivity areas carry additional constraints while keeping the root file short.
+All three ecosystems support scoped instruction files — Claude Code via directory-level files and `.claude/rules/` globs, Copilot via `applyTo` patterns, AGENTS.md via proximity. High-sensitivity areas carry additional constraints while root files stay short.
 
 ## Size Limits and Practical Constraints
 
 | Tool | Limit | Effect |
 |------|-------|--------|
-| Claude Code | ~200 lines per `CLAUDE.md` recommended ([docs](https://code.claude.com/docs/en/memory)) | Longer files consume more context and reduce adherence |
-| GitHub Copilot | 4,000 characters for code review ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) | Content beyond this is silently ignored during PR review; chat has no limit |
-| AGENTS.md | No formal limit | Practical limit is tool-dependent — keep files concise for widest compatibility |
+| Claude Code | ~200 lines per `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)) | Longer files reduce adherence |
+| GitHub Copilot | 4,000 chars for code review ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) | Silently ignored beyond limit in PR review; chat has no limit |
+| AGENTS.md | No formal limit | Keep concise for widest compatibility |
 
-Claude Code mitigates the size constraint with `.claude/rules/` path-scoped files and `@path/to/import` syntax, both of which load content conditionally rather than front-loading everything ([docs](https://code.claude.com/docs/en/memory)).
+Claude Code mitigates this with `.claude/rules/` and `@path/to/import`, both loading content conditionally ([docs](https://code.claude.com/docs/en/memory)).
 
 ## What to Include
 
-The content categories that belong in any project instruction file:
-
-- **Project identity** — what the project does, tech stack, primary language
-- **Conventions** — naming, formatting, test strategy, commit format
-- **Constraints** — banned tools, required tools, restricted files
-- **Navigation** — pointers to architecture docs, workflow guides, area-specific files
-
-What does not belong:
-
-- Full documentation of conventions (link to where it lives)
-- Architecture diagrams or lengthy explanations
-- Anything only relevant to one task type (put that in a skill)
+Include: project identity, conventions, constraints, and navigation pointers. Exclude: full documentation (link instead), architecture diagrams, and single-task content (use a skill).
 
 ## Example
 
@@ -148,19 +137,18 @@ With this layout, updating `AGENTS.md` propagates to Claude Code immediately (vi
 
 ## Key Takeaways
 
-- Each major AI coding tool has a project-level instruction file; without a convergence strategy they diverge and become unreliable
-- AGENTS.md, governed by the Linux Foundation, has the widest tool support (20+) and is the strongest candidate for a canonical shared file
-- GitHub Copilot now reads AGENTS.md and CLAUDE.md natively as "agent-specific" instruction files, reducing the need for duplication
-- Claude Code's `@AGENTS.md` import syntax enables a shared-base-with-extends strategy where `AGENTS.md` holds canonical content and `CLAUDE.md` adds tool-specific configuration
-- All three ecosystems support scoped/hierarchical instructions; keep root files short and push specifics into path-scoped overrides
-- Respect size limits: ~200 lines for CLAUDE.md, 4,000 characters for Copilot code review
+- Without a convergence strategy, multiple instruction files diverge and become unreliable
+- AGENTS.md has the widest tool support (20+) and is the strongest candidate for a canonical shared file
+- Copilot reads AGENTS.md and CLAUDE.md natively, reducing duplication needs
+- Claude Code's `@AGENTS.md` import syntax enables a shared-base-with-extends strategy
+- Keep root files short; push specifics into path-scoped overrides
 
 ## Unverified Claims
 
-- Content drift between instruction files compounds over time when maintained separately without a convergence strategy.
-- Whether Cursor's `.cursor/rules/` system reads AGENTS.md natively.
-- Whether the symlink convergence strategy works reliably across all tools and operating systems, particularly Windows symlinks with git.
-- The 60,000+ project adoption figure for AGENTS.md is self-reported by the standard's website.
+- Content drift compounds over time when files are maintained separately.
+- Whether Cursor's `.cursor/rules/` reads AGENTS.md natively.
+- Whether symlink convergence works reliably on Windows with git.
+- The 60,000+ AGENTS.md adoption figure is self-reported.
 
 ## Related
 
@@ -178,3 +166,8 @@ With this layout, updating `AGENTS.md` propagates to Claude Code immediately (vi
 - [AGENTS.md Distributed Conventions](agents-md-distributed-conventions.md)
 - [AGENTS.md Design Patterns](agents-md-design-patterns.md)
 - [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
+- [Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
+- [Hints over Code Samples](hints-over-code-samples.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Frozen Spec File](frozen-spec-file.md)

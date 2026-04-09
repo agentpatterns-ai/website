@@ -17,13 +17,13 @@ aliases:
 
 [Latent Patterns](https://latentpatterns.com/glossary) defines context engineering as "the discipline of designing, managing, and optimizing the information placed into a language model's context window to maximize the quality and reliability of its output."
 
-The context window is the agent's entire world. Every output it produces is a function of what is in that window — not what exists in the codebase or the developer's intent, but what was explicitly placed in context.
+The context window is the agent's entire world. Every output is a function of what is in that window — not what exists in the codebase or the developer's intent, but what was explicitly placed in context.
 
-[Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as finding "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome." Signal density, not volume.
+[Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as finding "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome." Signal density over volume.
 
 ## The Layers of Agent Context
 
-Agent context is a stack of layers, each with different persistence and purpose:
+Agent context is a stack of layers, each with different persistence:
 
 ```mermaid
 graph TD
@@ -43,44 +43,44 @@ graph TD
 | Conversation history | Prior turns, compressed as needed | Accumulated |
 | Tool outputs | Results from tool calls | Per tool call |
 
-Each layer has an opportunity cost: every token it occupies displaces reasoning, instructions, or task-relevant content.
+Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content.
 
 ## Token Economics
 
-Context space is finite. Every inclusion is an exclusion. This reframes context management as resource allocation:
+Context space is finite. Every inclusion is an exclusion:
 
-- **System prompt tokens** should carry high-leverage, durable instructions — not examples that could be on-demand
-- **Skill content** loaded lazily avoids consuming budget until needed (see [Agent Skills Standard](../standards/agent-skills-standard.md))
-- **Tool outputs** should return concise, structured results — verbose responses displace reasoning capacity
-- **Conversation history** accumulates and degrades quality — [compaction](https://latentpatterns.com/glossary) (lossy summarisation of older turns) frees space but requires preserving task-critical information
+- **System prompt tokens** carry high-leverage, durable instructions — not examples that could load on-demand
+- **Skill content** loaded lazily avoids consuming budget until needed ([Agent Skills Standard](../standards/agent-skills-standard.md))
+- **Tool outputs** return concise, structured results — verbose responses displace reasoning capacity
+- **Conversation history** accumulates and degrades quality — [compaction](https://latentpatterns.com/glossary) (lossy summarisation of older turns) frees space but requires preserving task-critical facts
 
 ## Context Pollution
 
 [Context pollution](../anti-patterns/session-partitioning.md) — irrelevant context accumulated across unrelated tasks — competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2. [unverified]
 
-The diagnostic question: "Does this improve the agent's output on this specific task?" If no, it is pollution.
+The diagnostic question: "Does this improve output on this specific task?" If no, it is pollution.
 
 Common sources:
 
 - Speculative preloading of reference material
-- Tool responses returning full data structures when only a summary is needed
+- Tool responses returning full data structures when a summary suffices
 - Accumulated history with superseded instructions
-- Project-level instructions that duplicate the system prompt
+- Project-level instructions duplicating the system prompt
 
 ## The Scope of the Discipline
 
-Context engineering subsumes several concerns often treated separately:
+Context engineering subsumes several concerns treated separately:
 
 - **[Prompt engineering](../training/foundations/prompt-engineering.md)** — designing individual instructions within the context
 - **Skill design** — what tool descriptions expose vs. load on-demand
-- **Agent architecture** — whether sub-agents handle retrieval to isolate pollution from the coordinator
-- **Memory management** — what is preserved across sessions, what is summarised, what is discarded
+- **Agent architecture** — sub-agents handling retrieval to isolate pollution from the coordinator
+- **Memory management** — what persists across sessions, what is summarised, what is discarded
 
-[Anthropic identifies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) three complementary approaches: compaction (lossy summarisation), structured note-taking (persistent external memory), and sub-agent architectures (returning condensed summaries to a coordinator).
+[Anthropic identifies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) three complementary approaches: compaction (lossy summarisation), structured note-taking (persistent external memory), and sub-agent architectures (condensed summaries returned to a coordinator).
 
 ## Key Takeaways
 
-- The context window is the agent's complete world — what is not in it does not exist for the agent.
+- The context window is the agent's complete world — what is absent does not exist.
 - Optimise for signal density, not volume: "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome."
 - Every context layer has a cost — lazy loading, compaction, and sub-agent isolation manage that cost.
 - Context engineering subsumes prompt engineering, skill design, agent architecture, and memory management.

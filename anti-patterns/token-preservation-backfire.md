@@ -21,7 +21,7 @@ Cursor discovered this during their Codex model harness development. GPT-5-Codex
 
 > "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!"
 
-The model treated token conservation as a goal in its own right. Rather than optimising *how* it worked, the instruction changed *whether* it worked on substantial problems at all.
+The model treated token conservation as a goal in its own right. Rather than optimising *how* it worked, the instruction changed *whether* it worked on substantial problems.
 
 ```mermaid
 flowchart LR
@@ -39,7 +39,7 @@ flowchart LR
 
 System-level instructions can override user-level task requests. When token preservation is framed as a system directive, the efficiency constraint takes precedence over the user's actual objective. The agent is not being lazy -- it is faithfully following an instruction that conflicts with the task.
 
-Any instruction that frames work as a *cost to be minimised* (rather than a *goal to be achieved*) risks reducing agent ambition. Whether this generalises across frontier models is unclear — Cursor notes "different models respond differently to the same prompts" `[unverified]`.
+Any instruction that frames work as a *cost to be minimised* (rather than a *goal to be achieved*) risks reducing agent ambition. Whether this generalises across frontier models is unclear `[unverified]`.
 
 ## Mitigation
 
@@ -75,3 +75,4 @@ The fix is to reframe constraints as **quality targets** rather than **resource 
 - [Distractor Interference](distractor-interference.md)
 - [Objective Drift](objective-drift.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
+- [Harness Engineering](../agent-design/harness-engineering.md) — environment design that mechanically enforces constraints agents fail to self-impose

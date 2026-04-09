@@ -120,7 +120,7 @@ Beyond human-triggered hatches, agent harnesses can enforce escape hatches autom
 
 ## Error Preservation vs. Error Hiding
 
-A common instinct when an agent fails is to clear the error and retry clean. [Manus found the opposite works better](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving wrong turns visible in context helps models avoid repeating the same mistakes. Error recovery works best when the agent can see what already failed.
+A common instinct when an agent fails is to clear the error and retry clean. [Manus found the opposite works better](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving wrong turns visible in context helps models avoid repeating the same mistakes. [Error preservation in context](../context-engineering/error-preservation-in-context.md) works best when the agent can see what already failed.
 
 This applies to context resets too — when starting a new session after a failure, carry forward a summary of what was tried and what went wrong. A blank slate that repeats the same approach produces the same result.
 
@@ -171,7 +171,7 @@ Then start a new attempt with the corrected approach.
 - `/compact` cleans context without losing session progress; CLAUDE.md re-injects automatically
 - Build escalation instructions directly into agent definitions so agents surface failures structurally rather than spinning
 - Before a context reset, document what failed and why — a fresh session repeating the same approach produces the same result
-- Automate escape hatches where possible — `maxTurns`, loop detection middleware, and PreToolUse hooks catch stuck states without human intervention
+- Automate escape hatches where possible — `maxTurns`, [loop detection](../observability/loop-detection.md) middleware, and PreToolUse hooks catch stuck states without human intervention
 
 ## Unverified Claims
 
@@ -183,3 +183,4 @@ Then start a new attempt with the corrected approach.
 - [Human in the Loop](human-in-the-loop.md) — human intervention patterns and manual override workflows
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
+- [Error Preservation in Context](../context-engineering/error-preservation-in-context.md) — keeping failed actions visible as negative examples

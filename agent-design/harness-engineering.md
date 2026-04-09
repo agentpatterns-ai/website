@@ -48,7 +48,7 @@ flowchart TD
 
 Anything not in the repository does not exist for agents. Repository legibility -- how easily an agent can find, read, and act on project knowledge -- determines the capability ceiling. It includes:
 
-- **Documentation structure** -- AGENTS.md as a compact index (~100 lines) pointing to deeper resources, not a monolithic knowledge dump
+- **Documentation structure** -- [AGENTS.md as a compact index](../instructions/agents-md-as-table-of-contents.md) (~100 lines) pointing to deeper resources, not a monolithic knowledge dump
 - **Decision visibility** -- architectural choices and rationale documented where agents encounter them (inline comments, directory-level READMEs)
 - **[Progressive disclosure](progressive-disclosure-agents.md)** -- layered docs so agents load context proportional to the task
 

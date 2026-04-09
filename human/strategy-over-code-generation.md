@@ -76,6 +76,21 @@ Jumping to step 4 (better tools, faster agents) without steps 1–3 is the patte
 - Process without ecosystem backfires (β=-0.199) — structured review of agent output requires automated infrastructure to be effective
 - Strategy is the highest-leverage intervention: it has both direct effect on success and indirect effects through every other factor
 
+## Example
+
+A data team at a logistics company adopts an AI coding agent to build a demand forecasting service. The lead engineer immediately starts generating model training pipelines, data loaders, and API endpoints. Within two weeks the agent has produced a working system: feature engineering, model selection, hyperparameter tuning, deployment scripts, monitoring dashboards.
+
+The project fails in production. The model optimizes for prediction accuracy on historical data, but the business needs order-level confidence intervals for warehouse staffing decisions. The metric was wrong. No amount of code velocity could fix a misaligned objective.
+
+A second team at the same company applies the cascade:
+
+1. **Support**: VP of operations sponsors the project with a named stakeholder and weekly check-ins
+2. **Strategy**: The team defines the business metric (staffing cost error per warehouse per week) before writing any code, and specifies which data sources map to that metric
+3. **Process**: Two-week iteration cycles with risk reviews comparing model output against warehouse manager decisions
+4. **Ecosystem**: CI pipeline runs backtests against the staffing cost metric on every commit; the agent gets ground-truth feedback automatically
+
+The second team ships in six weeks. The agent writes the same volume of code, but every line serves a defined business metric because the upstream factors were in place first.
+
 ## Unverified Claims
 
 - The 80% ML project failure rate is widely cited across multiple studies but the exact figure varies by source and definition of "failure"

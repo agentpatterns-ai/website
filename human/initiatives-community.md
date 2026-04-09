@@ -1,5 +1,5 @@
 ---
-title: "Initiatives and Community: Tracking the Agentic Engineering"
+title: "Initiatives and Community: Tracking Agentic Engineering"
 description: "A curated map of active initiatives, communities, and learning resources for practitioners tracking the rapidly evolving agentic engineering field."
 tags:
   - human-factors
@@ -13,9 +13,9 @@ tags:
 
 ## Why This Exists
 
-The agentic engineering space changes faster than any single practitioner can track. New patterns, tools, and governance frameworks emerge weekly. The organizations and resources below produce consistent signal — not every link, but the ones worth following.
+New patterns, tools, and governance frameworks emerge weekly in the agentic engineering space — faster than any single practitioner can track. The organizations and resources below produce consistent signal worth following.
 
-This is distinct from a project's internal source list, which curates research inputs for content production. This page is reader-facing: a starting point for staying current with the field.
+A project's internal source list curates research inputs for content production. The resources here serve a different purpose: helping practitioners stay current with where the field is heading.
 
 ## Standards and Open Protocols
 

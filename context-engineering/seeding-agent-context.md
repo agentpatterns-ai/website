@@ -69,7 +69,7 @@ Complete type signatures eliminate agent guesswork about return types, parameter
 
 ### Example Files and Pattern Replication
 
-Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift without mechanical enforcement ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift without mechanical enforcement, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ### Progress Files as Breadcrumbs
 

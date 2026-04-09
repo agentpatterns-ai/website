@@ -143,3 +143,6 @@ The Adversary call passes only the artifacts under review — no prior conversat
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
+- [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
+- [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
+- [Orchestrator-Worker Pattern](orchestrator-worker.md)

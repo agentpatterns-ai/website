@@ -1,5 +1,5 @@
 ---
-title: "Idempotent Agent Operations: Design for Safe Retry"
+title: "Idempotent Agent Operations: Safe to Retry"
 description: "Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors"
 aliases: [idempotency, safe-retry-design]
 tags:
@@ -116,4 +116,5 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 - [Agent Loop Middleware](agent-loop-middleware.md)
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
+- [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)

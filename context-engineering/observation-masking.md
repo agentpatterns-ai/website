@@ -1,6 +1,9 @@
 ---
 title: "Observation Masking: Filter Tool Outputs from Context"
 description: "Observation masking removes processed tool outputs from conversation history to keep the context window lean, replacing each output with a one-line summary."
+aliases:
+  - Tool Output Masking
+  - Context Masking
 tags:
   - context-engineering
   - cost-performance
@@ -127,3 +130,5 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - [Filter, Aggregate, and Execution Environment](filter-aggregate-execution-env.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
+- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)

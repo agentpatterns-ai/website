@@ -1,6 +1,6 @@
 ---
 title: "Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers"
-description: "A systematic study of 94 LLM-based multi-agent SE papers identifies 16 design patterns, with Role-Based Cooperation as the dominant pattern and Functional"
+description: "A study of 94 LLM-based multi-agent SE papers identifies 16 design patterns across five categories, with Role-Based Cooperation as the dominant pattern."
 tags:
   - agent-design
 aliases:
@@ -91,6 +91,18 @@ graph TD
     E --> H[Orchestrator → Workers → Consolidation]
 ```
 
+## Example
+
+A team is designing a multi-agent system for automated pull request review. Using the taxonomy, they label their architecture decisions:
+
+- **Cooperation**: Role-Based Cooperation — three agents with distinct roles: static-analysis agent, security-scan agent, style-review agent
+- **Memory**: Shared Memory — all agents read from and write to a shared review context object containing the diff, file tree, and accumulated comments
+- **Execution**: Parallel Execution — the three review agents run concurrently on the same diff
+- **Verification**: Consensus Voting — a synthesis agent merges overlapping comments and flags contradictions; only comments with agreement from 2+ agents are surfaced to the developer
+- **Communication**: Structured Message Passing — each agent emits a typed `ReviewComment` payload with fields for file, line, severity, and rationale
+
+During the design review, the team notes they are optimizing for Functional Suitability (comment accuracy) but have not addressed MAS Performance (latency when all three agents hit the LLM provider simultaneously) or MAS Security (whether the security-scan agent can be manipulated via crafted diff content). The taxonomy flags these as known research gaps worth mitigating before production deployment.
+
 ## Key Takeaways
 
 - 16 patterns across five categories; Role-Based Cooperation is most common
@@ -114,3 +126,7 @@ graph TD
 - [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
+- [File-Based Agent Coordination](file-based-agent-coordination.md)
+- [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
+- [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)

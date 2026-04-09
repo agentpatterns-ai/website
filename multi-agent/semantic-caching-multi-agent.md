@@ -12,7 +12,7 @@ tags:
 
 ## The Cost Problem
 
-Multi-agent systems amplify per-query token costs: each user request may trigger several LLM calls across orchestrators, sub-agents, and reviewers. Exact-match caching provides near-zero benefit on natural language inputs because users rarely phrase the same query identically. Semantic caching closes this gap by detecting equivalence rather than requiring exact repetition.
+Multi-agent systems amplify per-query token costs: each user request may trigger several LLM calls across orchestrators, sub-agents, and reviewers. Exact-match caching provides near-zero benefit because users rarely phrase the same query identically. Semantic caching closes this gap by detecting equivalence rather than requiring exact repetition.
 
 MeanCache (2025) establishes that approximately 31% of LLM queries are semantic repeats in production — the theoretical ceiling for semantic cache hit rates. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694)) [unverified]
 
@@ -46,7 +46,7 @@ The approach: classify the incoming query's intent, then filter the context prov
 
 This produces 40–60% token reduction without accuracy loss. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
 
-Anthropic's just-in-time context retrieval pattern implements the same principle architecturally [unverified]: agents maintain lightweight references to available context and load only what is needed at runtime, rather than pre-loading the full context into every call. ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
+Anthropic's just-in-time [context engineering](../context-engineering/context-engineering.md) pattern implements the same principle architecturally [unverified]: agents maintain lightweight references to available context and load only what is needed at runtime, rather than pre-loading the full context into every call. ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
 
 ## Combining Both Mechanisms
 
@@ -81,7 +81,7 @@ Anthropic's prompt caching delivers 90% cost reduction on cache hits for the sta
 
 ## Applicability
 
-Semantic caching delivers the highest return in systems with repetitive query patterns: analytics agents, code-generation pipelines for common templates, and customer support bots. Systems with highly varied queries will see hit rates closer to the 31% theoretical baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
+Semantic caching delivers the highest return in systems with repetitive query patterns: analytics agents, code-generation pipelines, and customer support bots. Systems with highly varied queries will see hit rates closer to the 31% theoretical baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
 
 ## Example
 

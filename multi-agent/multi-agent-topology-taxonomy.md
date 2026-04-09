@@ -127,6 +127,7 @@ A document processing pipeline that ingests legal contracts, extracts clauses, c
 - [Multi-Model Plan Synthesis for System Architecture](multi-model-plan-synthesis.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
+- [Harness Engineering](../agent-design/harness-engineering.md) — environment design that constrains multi-agent architectures through mechanical enforcement
 - [Sub-Agents for Fan-Out Research](sub-agents-fan-out.md)
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)

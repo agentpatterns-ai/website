@@ -13,7 +13,7 @@ tags:
 
 ## The Problem
 
-AI coding agents generate working code at 5--7x the rate a human can review it `[unverified]`. Tests pass, the diff looks reasonable, you merge. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
+AI coding agents generate working code at 5--7x human review speed `[unverified]`. Tests pass, the diff looks reasonable, you merge. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
 
 ## Why It Is Distinct
 
@@ -26,11 +26,11 @@ AI coding agents generate working code at 5--7x the rate a human can review it `
 
 ## The Velocity-Comprehension Gap
 
-AI generates 140--200 lines/min; developers review at 20--40 lines/min `[unverified]`. Working code accumulates faster than understanding, so developers ask AI to fix code they never understood -- paying off debt with more debt.
+AI generates 140--200 lines/min; developers review 20--40 lines/min `[unverified]`. Code accumulates faster than understanding, so developers ask AI to fix code they never understood -- paying off debt with more debt.
 
 ## The Evidence: Usage Mode Matters
 
-An Anthropic RCT with 52 junior engineers found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%) `[unverified]`. The critical finding was not *whether* developers used AI -- it was *how*:
+An Anthropic RCT with 52 junior engineers found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%) `[unverified]`. The critical finding was not *whether* developers used AI but *how*:
 
 | Usage mode | Comprehension score | What it looks like |
 |-----------|-------------------|-------------------|
@@ -39,7 +39,7 @@ An Anthropic RCT with 52 junior engineers found AI-assisted developers scored 17
 
 ## Countermeasures
 
-**Explain before generate.** Ask AI to explain its approach *before* requesting code. Conceptual inquiry preserves comprehension; pure delegation destroys it.
+**Explain before generate.** Ask AI to explain its approach *before* requesting code. Conceptual inquiry preserves comprehension; delegation destroys it.
 
 ```
 # Builds comprehension debt
@@ -50,7 +50,7 @@ An Anthropic RCT with 52 junior engineers found AI-assisted developers scored 17
 What are the invalidation tradeoffs?"
 ```
 
-**Interactive explanations.** When you receive complex generated code, ask the agent for an annotated walkthrough rather than accepting it outright.
+**Interactive explanations.** When you receive complex generated code, ask the agent for an annotated walkthrough rather than accepting it.
 
 ## Example
 
@@ -98,8 +98,8 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Vibe Coding](../workflows/vibe-coding.md) -- the workflow pattern where comprehension debt accumulates fastest
 - [Trust Without Verify](trust-without-verify.md) -- accepting agent output as correct because it looks polished
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) -- the belief that AI should require less engagement, which accelerates debt accumulation
-- [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents committing code that silently erodes codebase coherence, a structural companion to comprehension debt
-- [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between what AI produces and what developers expect
-- [Pattern Replication Risk](pattern-replication-risk.md) -- agents reproducing codebase patterns at scale, including ones developers never fully understood
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt and who relocates rigor
-- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to accepting generated code without understanding it
+- [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt
+- [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
+- [Pattern Replication Risk](pattern-replication-risk.md) -- agents reproducing codebase patterns at scale, including ones developers never understood
+- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt
+- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance

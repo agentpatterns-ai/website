@@ -144,3 +144,5 @@ The root file encodes repo-wide enforcement rules (CI commands, naming, prohibit
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — deterministic enforcement complement to convention-based AGENTS.md instructions
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why keeping AGENTS.md files short matters

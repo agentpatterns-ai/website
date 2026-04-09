@@ -1,6 +1,9 @@
 ---
 title: "Rigor Relocation: Engineering Discipline with AI Agents"
 description: "Engineering rigor relocates from code style and abstractions to scaffolding, feedback loops, and mechanical enforcement when agents write the code."
+aliases:
+  - engineering discipline shift
+  - harness engineering discipline
 tags:
   - agent-design
   - workflows
@@ -28,15 +31,15 @@ Teams that invest in scaffolding outperform teams that invest in [prompt enginee
 | Architecture docs guide humans | Structured docs guide agents |
 | Type systems constrain code | Schemas and guardrails constrain agent output |
 
-The right column is not new work -- it is the same engineering instinct applied to a different surface.
+The right column is the same engineering instinct applied to a different surface.
 
 ## Why Environment Beats Prompts
 
-LangChain improved their coding agent from **rank 30 to rank 5** on Terminal Bench 2.0 without changing the model. The interventions were pure harness engineering: [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+LangChain improved their coding agent from **rank 30 to rank 5** on Terminal Bench 2.0 without changing the model. The interventions were pure [harness engineering](../agent-design/harness-engineering.md): [pre-completion checklists](../verification/pre-completion-checklists.md), [loop detection middleware](../observability/loop-detection.md), and structured verification ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 OpenAI shipped roughly one million lines of agent-written production code over five months using machine-readable documentation, mechanical architectural boundaries, and telemetry-driven iteration ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)) -- [agent-first software design](../agent-design/agent-first-software-design.md) at scale.
 
-The bottleneck is infrastructure, not intelligence. Better models actually *increase* infrastructure demands -- more autonomy requires better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
+Better models *increase* infrastructure demands -- more autonomy requires better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
 
 ## Mechanical Enforcement Beats Documentation
 
@@ -92,22 +95,22 @@ A linter rule catches a dependency violation every time, in every session, for e
 
 ## Related
 
+- [Harness Engineering](../agent-design/harness-engineering.md) -- the discipline of designing agent environments for reliable results
 - [Agent Harness](../agent-design/agent-harness.md) -- the specific initializer/coding-agent two-phase architecture
 - [Codebase Readiness](../workflows/codebase-readiness.md) -- making code agent-friendly
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion
 - [Progressive Disclosure for Agents](../agent-design/progressive-disclosure-agents.md) -- layered context loading
 - [Convention over Configuration](../instructions/convention-over-configuration.md) -- structural enforcement of decisions
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
-- [Retrieval-Augmented Agent Workflows: On-Demand Context](../context-engineering/retrieval-augmented-agent-workflows.md) -- JIT context loading pattern
 - [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
-- [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md) -- how adding work to a stalled PR compounds the review bottleneck
 - [Context Ceiling](context-ceiling.md) -- limits on what context an agent can hold and how environment design compensates
-- [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md) -- encoding constraints into code structure for agent reliability
 - [Process Amplification](process-amplification.md) -- how agents amplify existing processes, including rigor and verification
 - [Domain-Specific Agent Challenges](domain-specific-agent-challenges.md) -- constraints and verification demands by domain
-- [Distributed Computing Parallels](distributed-computing-parallels.md) -- harness and verification patterns from distributed systems
-- [Empirical Baseline for Agentic Config](empirical-baseline-agentic-config.md) -- verification-driven configuration baselines
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) -- how rigor requirements evolve with increasing agent autonomy
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how rigor relocation intersects with the broader shift in engineering identity
+- [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
+- [Safe Command Allowlisting](safe-command-allowlisting.md) -- enforcement guardrails for agent autonomy
+- [Strategy Over Code Generation](strategy-over-code-generation.md) -- prioritizing design rigor over raw output
+- [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- verification burden as agents scale

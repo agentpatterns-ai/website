@@ -18,9 +18,9 @@ The gap is not the model. It is the environment the model operates in.
 
 ## Why Environment Beats Prompting
 
-Agent output quality is a function of environment quality. At each step, an agent needs ground truth -- tool results, test output, compiler errors -- to assess whether it is making progress. Without accurate signals, the agent cannot self-correct and errors compound across turns.
+Agent output quality is a function of environment quality. At each step, an agent needs ground truth -- tool results, test output, compiler errors -- to assess progress. Without accurate signals, errors compound across turns.
 
-Feedback loops matter more than prompts. The tighter the loop (agent writes code, automated check verifies, agent iterates), the more trustworthy the output. The weaker the loop (agent writes code, human reviews manually), the more the human becomes the bottleneck.
+Feedback loops matter more than prompts. The tighter the loop (agent writes code, automated check verifies, agent iterates), the more trustworthy the output. The weaker the loop, the more the human becomes the bottleneck.
 
 ```mermaid
 graph LR
@@ -48,9 +48,9 @@ graph LR
 
 **[Assumption propagation](../anti-patterns/assumption-propagation.md).** Without clear specs and tests, agents build on faulty premises. Each commit deepens the wrong assumption until the cascade spans multiple files.
 
-**Abstraction bloat.** In poorly-constrained environments, agents optimize for comprehensiveness over maintainability, adding layers and indirection that nothing in the environment signals to stop.
+**Abstraction bloat.** In poorly-constrained environments, agents optimize for comprehensiveness over maintainability, adding layers and indirection that no signal stops.
 
-**Dead code accumulation.** Missing architecture principles allow debris to persist. Agents generate utilities and fallback paths that are never called but never flagged by any check.
+**Dead code accumulation.** Missing architecture principles allow debris to persist. Agents generate utilities and fallback paths that are never called but never flagged.
 
 ## Readiness Audit
 
@@ -67,17 +67,14 @@ Before scaling, audit your feedback infrastructure.
 
 ## The Compounding Problem
 
-Agents chain errors across commits at machine speed. Humans hit natural friction that slows propagation. Without automated gates, incorrect assumptions span multiple commits before anyone catches them.
-
-The answer is not more human review — it is better automated verification.
+Agents chain errors across commits at machine speed. Without automated gates, incorrect assumptions span multiple commits before anyone catches them. The answer is not more human review — it is better automated verification.
 
 ## Key Takeaways
 
-- Agent output quality is determined by environment quality, not model quality or prompt quality
-- The DORA 2025 data shows measurable amplification: high-performing teams accelerate, struggling teams degrade faster ([Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
+- Agent output quality is determined by environment quality, not model or prompt quality
+- DORA 2025 data confirms measurable amplification: high-performing teams accelerate, struggling teams degrade faster ([Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
 - Feedback loops (tests, linters, CI) are the highest-leverage investment for agent adoption
-- Agents mirror the patterns they observe -- clean code produces clean output, inconsistent code produces inconsistent output
-- Audit your verification infrastructure before scaling; the readiness checklist maps each vector to what it enables
+- Audit verification infrastructure before scaling
 
 ## Example
 
@@ -104,3 +101,5 @@ The agent did not become smarter. The environment gave it something to push agai
 - [Progressive Autonomy with Model Evolution](progressive-autonomy-model-evolution.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
 - [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md)
+- [Strategy Over Code Generation](strategy-over-code-generation.md)
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)

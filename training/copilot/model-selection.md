@@ -257,6 +257,7 @@ Switch back to Opus in Ask mode to review the diff. Opus identifies that the fix
 
 **Patterns**
 
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request vs token billing comparison
 - [Cost-Aware Agent Design](../../agent-design/cost-aware-agent-design.md) — big.LITTLE routing, cascade patterns, token economics
 - [Reasoning Budget Allocation](../../agent-design/reasoning-budget-allocation.md) — the reasoning sandwich, dual-mode operation
 - [Heuristic Effort Scaling](../../agent-design/heuristic-effort-scaling.md) — self-classifying complexity tiers

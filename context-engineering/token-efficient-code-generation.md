@@ -87,11 +87,35 @@ Apply structural approaches at the right layer:
 
 - **Model selection**: Models trained on high-quality Python already favor idiomatic patterns [unverified]
 - **Post-processing**: Lint rules or AST transforms catch non-idiomatic output before context entry
-- **Example-driven instructions**: Code samples in prompts guide style without competing objectives
+- **[Example-driven instructions](../instructions/example-driven-vs-rule-driven-instructions.md)**: Code samples in prompts guide style without competing objectives
 
 ### For Cost-Aware Workflows
 
 Combine with [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md): route simple tasks to cheaper models and ensure all produce idiomatic output. Generation-side reduction complements [tool-output-side](../tool-engineering/token-efficient-tool-design.md) reduction.
+
+## Example
+
+An agent generates a function that collects valid user records. The verbose version uses a loop with append:
+
+```python
+# Verbose: 38 tokens
+def get_valid_users(users):
+    results = []
+    for user in users:
+        if user.is_active:
+            results.append(user.name)
+    return results
+```
+
+An AST-preserving transform rewrites this to idiomatic Python with no behavioral change:
+
+```python
+# Idiomatic: 24 tokens (37% reduction)
+def get_valid_users(users):
+    return [user.name for user in users if user.is_active]
+```
+
+Both functions produce identical output. The idiomatic version consumes fewer tokens when it re-enters the context window on the next turn, and the savings repeat every time the agent references this code.
 
 ## Limitations
 
@@ -118,6 +142,7 @@ Combine with [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.m
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md) — Cache-friendly prompt structure
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — Where tokens get lost in large windows
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Controlling what models generate beyond correctness
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context retrieval using ASTs and dependency graphs
 
 ## Unverified Claims
 

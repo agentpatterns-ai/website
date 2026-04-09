@@ -5,6 +5,9 @@ tags:
   - agent-design
   - multi-agent
   - tool-agnostic
+aliases:
+  - prompt sensitivity
+  - cascade sensitivity
 ---
 
 # Emergent Behavior Sensitivity
@@ -76,15 +79,32 @@ Infrastructure configuration alone can swing performance by 6+ percentage points
 
 ## Example
 
-A research agent system uses a lead agent that delegates search tasks to three subagents. The original prompt says: "Search for recent papers on transformer architectures."
+A Claude Code orchestrator delegates code review to three subagents using `Task` from the Claude Agent SDK. The lead agent's system prompt says: "Review the pull request for correctness."
 
-A developer edits it to: "Thoroughly search for recent and comprehensive papers on transformer architectures and their applications."
+A developer edits it to: "Thoroughly review the pull request for correctness, security, and performance."
 
-**Prescriptive result:** Subagent A interprets "thoroughly" as exhaustive coverage and spawns 12 sub-searches. Subagent B treats "comprehensive" as a quality filter and narrows results to surveys only. Subagent C combines both signals and searches indefinitely. The lead receives three incompatible result sets.
+**Prescriptive result:** Subagent A interprets "thoroughly" as exhaustive and runs `grep -r` across the entire repository for related patterns. Subagent B treats "security" as its primary scope and flags every `eval()` and `subprocess.run()` call regardless of context. Subagent C combines both signals and spawns its own sub-tasks for each file, exceeding the API rate limit. The orchestrator receives three incompatible review summaries with overlapping, contradictory recommendations.
 
-**Framework result:** The lead prompt instead encodes: "Search for papers published in the last two years; return the 10 most-cited results; stop after 3 search iterations." Adding "thorough" language has no effect -- the effort budget caps behavior regardless of adjective choice.
+```python
+# Prescriptive delegation -- brittle under prompt changes
+task = Task(
+    instructions="Thoroughly review every file for correctness, security, and performance issues. "
+                 "Check each function. List all findings."
+)
+```
 
-The framework version is cascade-resistant: the same behavioral outcome emerges whether the prompt says "search" or "thoroughly search."
+**Framework result:** The lead prompt instead encodes effort boundaries: "Review only changed files in the diff; flag at most 5 issues per category; stop after evaluating the diff once." Adding "thorough" language has no effect -- the effort budget caps behavior regardless of adjective choice.
+
+```python
+# Framework delegation -- cascade-resistant
+task = Task(
+    instructions="Review changed files only. Categories: correctness, security, performance. "
+                 "Max 5 findings per category. One pass over the diff. "
+                 "Return structured JSON with file, line, category, severity, description."
+)
+```
+
+The framework version produces the same behavioral outcome whether the prompt says "review" or "thoroughly review" because the effort boundary, not the adjective, controls scope.
 
 ## Key Takeaways
 

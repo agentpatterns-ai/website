@@ -91,7 +91,7 @@ Apply the same formula at the read (function) and edit (location) levels.
 
 | Symptom | Stage bottleneck | Likely fix |
 |---------|-----------------|------------|
-| Low search recall | Agent misses relevant files | Better repository maps, improved file discovery tools |
+| Low search recall | Agent misses relevant files | Better [repository maps](../context-engineering/repository-map-pattern.md), improved file discovery tools |
 | Low read precision | Agent reads too many functions | Tighter context filtering, [semantic context loading](../context-engineering/semantic-context-loading.md) |
 | Low edit precision | Agent modifies wrong locations | More specific edit instructions, [constraint-based prompting](../instructions/negative-space-instructions.md) |
 

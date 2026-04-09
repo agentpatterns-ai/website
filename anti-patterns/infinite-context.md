@@ -16,11 +16,11 @@ Load as much context as possible into the agent's prompt. Include every potentia
 
 ## Why It Fails
 
-Attention is finite even when the context window is not. As total tokens increase, the model's ability to attend to specific tokens degrades. Anthropic's context engineering guide describes this as "context rot" — the model's ability to recall and use information degrades as token count grows.
+Attention is finite even when the context window is not. As total tokens increase, the model's ability to attend to specific tokens degrades. Anthropic's context engineering guide describes this as "context rot" — the model's ability to recall and use information degrades as token count grows. [unverified]
 
 The symptoms are recognisable: the agent ignores instructions that were followed reliably when the prompt was shorter, produces increasingly generic outputs, or loses track of constraints stated early in the conversation.
 
-Adding irrelevant context does not add capability — it adds noise that competes with the signal for the model's attention. The Anthropic guide recommends identifying "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising context volume.
+Adding irrelevant context does not add capability — it adds noise that competes with the signal for the model's attention. The Anthropic guide recommends identifying "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising context volume. [unverified]
 
 ## Common Causes
 

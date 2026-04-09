@@ -4,6 +4,9 @@ description: "Gradually increase agent autonomy based on demonstrated reliabilit
 tags:
   - human-factors
   - agent-design
+aliases:
+  - "Graduated Autonomy"
+  - "Trust Escalation"
 ---
 
 # Progressive Autonomy with Model Evolution
@@ -12,11 +15,11 @@ tags:
 
 ## The Tension
 
-Restricting autonomy limits productivity; granting too much risks costly mistakes. Teams that treat trust as binary oscillate between extremes. Progressive autonomy expands the boundary incrementally, using evidence from each stage to justify the next.
+Restricting autonomy limits productivity; granting too much risks costly mistakes. Progressive autonomy expands the boundary incrementally, using evidence from each stage to justify the next.
 
 ## Autonomy Levels
 
-Every major AI coding tool implements graduated autonomy levels:
+Major AI coding tools implement graduated autonomy levels:
 
 | Level | Human Role | Agent Scope | Tool Examples |
 |-------|-----------|-------------|---------------|
@@ -34,7 +37,7 @@ Anthropic's Claude Code usage data shows how developers grant autonomy over time
 - 99.9th percentile turn duration nearly doubled from <25 to >45 min (Oct 2025 – Jan 2026) [unverified]
 - Experienced users show a paradox: **higher auto-approval AND higher interruption rates** (~9% vs ~5%) — shifting to a monitoring-and-intervening model [unverified]
 
-Progressive autonomy repositions oversight from per-action approval to monitoring and intervening on exceptions.
+Progressive autonomy shifts oversight from per-action approval to exception-based monitoring.
 
 ```mermaid
 graph LR
@@ -71,7 +74,7 @@ Levels 1–3 are synchronous; 4–5 are asynchronous — assign work and review 
 
 ## Metrics That Justify Escalation
 
-Set these **before** granting autonomy.
+Define these **before** expanding autonomy.
 
 | Metric | Escalation Signal |
 |--------|-------------------|
@@ -84,14 +87,14 @@ Set these **before** granting autonomy.
 ## Rollback Mechanisms
 
 - **Automatic scope reduction:** Narrow permitted actions when error rate exceeds threshold
-- **Canary rollout:** Test policy changes on a subset before broad rollout
+- **Canary rollout:** Test policy changes on a subset before rollout
 - **Kill switches:** Org-level controls (managed settings, MDM) that restrict capabilities
 - **Agent self-calibration:** Claude Code requests clarification 2x more on complex tasks [unverified]
 
 ## Key Takeaways
 
 - Autonomy is a dial, not a switch — expand incrementally using evidence
-- Progressive autonomy repositions oversight (per-action → monitoring); it does not eliminate it
+- Progressive autonomy repositions oversight (per-action → monitoring); it never eliminates it
 - Trust resets on a single failure — staged rollout limits blast radius (see [Blast Radius Containment](../security/blast-radius-containment.md))
 - Define escalation metrics before granting autonomy; include rollback triggers
 - Match autonomy level to task clarity, risk, familiarity, test coverage, and reversibility
@@ -124,3 +127,6 @@ This trajectory is not guaranteed — a production incident in week 5 would have
 - [Cognitive Load and AI Fatigue](../human/cognitive-load-ai-fatigue.md)
 - [Evidence-Based Allowlist Auto-Discovery](../human/evidence-based-allowlist-auto-discovery.md)
 - [Skill Atrophy](../human/skill-atrophy.md)
+- [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)
+- [The Bottleneck Migration](../human/bottleneck-migration.md)
+- [Domain-Specific Agent Challenges](../human/domain-specific-agent-challenges.md)

@@ -39,7 +39,7 @@ graph LR
 
 **Trade-off:** No parallelism; latency accumulates across steps.
 
-**Example:** [Content pipeline](../workflows/content-pipeline.md) — research → draft → review → publish. Each phase produces artifacts the next requires.
+**Example:** [Content pipeline](../workflows/content-pipeline.md) — research → draft → review → publish.
 
 ### Multi-Phase Chain Tactics
 
@@ -71,7 +71,7 @@ graph TD
 
 **When to use:** N independent tasks — reviewing N files, fetching N URLs, analyzing N data sources.
 
-**Trade-off:** Fast (parallel execution). The orchestrator must synthesize N results.
+**Trade-off:** Fast (parallel execution). The orchestrator must synthesize results.
 
 **Example:** Parallel reviewers for code quality, type safety, and test coverage — each sub-agent gets its own context window. See [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Specialized Agent Roles](specialized-agent-roles.md).
 
@@ -89,7 +89,7 @@ graph LR
 
 **When to use:** Repeatable processes where output quality at each stage gates progress.
 
-**Trade-off:** Explicit pass/fail at each boundary, with feedback loops (stage 3 fails → return to stage 2).
+**Trade-off:** Explicit pass/fail at each boundary, with feedback loops on failure.
 
 **Example:** CI/CD pipeline — build → test → security scan → deploy. Each gate blocks until criteria are met.
 
@@ -99,7 +99,7 @@ A coordinator agent decides what to delegate, to whom, and when.
 
 **When to use:** Tasks where the sequence and delegation targets are not known upfront.
 
-**Trade-off:** More flexible but harder to debug. The supervisor needs sufficient context to delegate.
+**Trade-off:** More flexible but harder to debug. The supervisor needs sufficient context.
 
 **Example:** An agent receives "make this codebase production-ready" and decomposes into: security review, test coverage, documentation.
 
@@ -152,11 +152,29 @@ claude --agents '{
 
 A documentation site audit needs to lint every page, check links, and validate frontmatter. The tasks are independent per page — fan-out fits:
 
-```yaml
-# .claude/agents/audit-orchestrator.md
-# Spawns one worker subagent per page
-# Each worker: lint → check links → validate frontmatter (chain within the worker)
-# Orchestrator synthesizes results into a single report
+```markdown
+<!-- .claude/agents/audit-orchestrator.md -->
+---
+description: Fan out one audit-worker per page, collect results
+tools: Bash, Glob, Grep, Read
+---
+
+Glob for all `docs/**/*.md` files. For each file, dispatch the
+`audit-worker` subagent with the file path. Collect each worker's
+JSON result and merge into a single report.
+```
+
+```markdown
+<!-- .claude/agents/audit-worker.md -->
+---
+description: Lint, check links, validate frontmatter for one page
+tools: Bash, Read, Grep
+---
+
+1. Lint the page for formatting errors.
+2. Extract internal links and verify each target exists.
+3. Validate frontmatter has required fields.
+Return a JSON object with the page path and findings.
 ```
 
 Each worker runs a sequential chain internally (lint → links → frontmatter), while the orchestrator fans out across pages. This combines two patterns: fan-out at the top level, chains within each worker.

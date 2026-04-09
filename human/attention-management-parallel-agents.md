@@ -106,4 +106,5 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Skill Atrophy](skill-atrophy.md)
 - [Context Ceiling](context-ceiling.md)
 - [Rigor Relocation](rigor-relocation.md)
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
 - [Progressive Autonomy and Model Evolution](progressive-autonomy-model-evolution.md)

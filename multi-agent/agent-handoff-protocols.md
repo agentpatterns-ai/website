@@ -108,3 +108,8 @@ The writer agent's system prompt references this schema explicitly: it reads `fi
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
+- [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
+- [LLM Map-Reduce Pattern](llm-map-reduce.md)
+- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)

@@ -11,16 +11,14 @@ tags:
 
 > Point agents at existing code instead of pasting samples into instructions. Hints stay current as the codebase evolves; embedded code samples become stale the moment you commit them.
 
-A hint is a path reference that tells the agent where to find a pattern: "follow the repository pattern in `src/repos/UserRepo.ts`." The agent reads the current file, not a frozen copy. This is a departure from traditional prompt engineering, where few-shot examples are a default technique — but coding agents operate inside a live codebase, not a stateless API call.
+A hint is a path reference: "follow the repository pattern in `src/repos/UserRepo.ts`." The agent reads the current file, not a frozen copy. Coding agents operate inside a live codebase — few-shot examples that work well in isolated prompts become a liability when the source of truth is already on disk.
 
 ## The Problem with Embedded Code Samples
 
-Code samples in instruction files create a shadow codebase. The real implementation changes — function signatures, dependencies, error handling — while the prompt example stays frozen. Two failure modes emerge:
+Code samples in instruction files create a shadow codebase. The real implementation changes while the prompt example stays frozen. Two failure modes emerge:
 
-- **Divergence.** The agent follows the prompt example while the real code has moved on. Generated code may use outdated patterns, deprecated APIs, or incompatible signatures.
-- **Token waste.** A 30-line code sample loaded at session start consumes context budget on every task, including unrelated ones. Multiply by several examples and a meaningful share of the context window is occupied by stale reference material.
-
-Instruction files should function as a table of contents, not an encyclopedia. Every token competes with the actual task context for the agent's attention.
+- **Divergence.** The agent follows the frozen example, producing outdated patterns or incompatible signatures.
+- **Token waste.** A 30-line sample loaded at session start consumes context budget on every task, including unrelated ones. Multiply by several examples and a meaningful share of the window holds stale reference material.
 
 ## How Hints Work
 
@@ -32,7 +30,7 @@ A hint replaces a code block with a path reference:
 | Full middleware function | `Use src/middleware/auth.ts as the pattern for new middleware` |
 | Example test setup with fixtures | `Tests follow the pattern in src/__tests__/user.test.ts` |
 
-The agent reads the referenced file at task time, getting the current implementation. The hint itself is stable — it rarely changes even as the referenced code evolves.
+The agent reads the referenced file at task time. The hint itself is stable — it rarely changes even as the referenced code evolves.
 
 ```mermaid
 graph LR
@@ -52,23 +50,23 @@ graph LR
 
 ## Why Hints Are More Effective
 
-**Zero maintenance.** The hint stays valid as the referenced code evolves. No one needs to remember to update the instruction file when the implementation changes.
+**Zero maintenance.** The hint stays valid as the referenced code evolves. No one needs to update the instruction file when the implementation changes.
 
-**Context efficiency.** A one-line hint costs a fraction of the tokens that a multi-line code sample consumes. For files loaded at session start (CLAUDE.md, AGENTS.md, system prompts), this compounds across every interaction.
+**Context efficiency.** A one-line hint costs a fraction of the tokens a multi-line sample consumes. For files loaded at session start, this compounds across every interaction.
 
-**KV-cache stability.** In production agent systems, cache hit rates depend on stable context prefixes. Code samples that change when the codebase changes invalidate cache prefixes. Hints are stable strings that preserve cache hits across sessions.
+**KV-cache stability.** Cache hit rates in production agent systems depend on stable context prefixes. Code samples that change with the codebase invalidate those prefixes. Hints are stable strings that preserve cache hits across sessions.
 
-**Reduced few-shot brittleness.** Repeated, uniform examples can make agents brittle — they copy structure verbatim rather than generalizing the pattern. A hint forces the agent to read and interpret the real code, producing more adaptive output.
+**Reduced few-shot brittleness.** Repeated examples can make agents copy structure verbatim rather than generalizing. A hint forces the agent to read and interpret the real code, producing more adaptive output.
 
 ## When to Still Use Code Samples
 
 Hints require something to point at. Use an inline code sample when:
 
-- **Introducing a genuinely novel pattern** with no existing implementation in the codebase. The sample serves as the initial specification.
+- **Introducing a genuinely novel pattern** with no existing implementation. The sample serves as the initial specification.
 - **Defining output formats** where the exact structure matters (commit message templates, API response schemas, file naming conventions).
 - **Tool definitions** where example usage and edge cases improve tool selection accuracy.
 
-Once any file implements the novel pattern, replace the sample with a hint to that file. The sample was a bootstrap; the hint is the steady state.
+Once a file implements the novel pattern, replace the sample with a hint. The sample was a bootstrap; the hint is the steady state.
 
 ## Example
 
@@ -104,15 +102,14 @@ export const createHandler: Handler = async (req, res) => {
 New API handlers follow the pattern in `src/api/handlers/users.ts`. Read it before creating new handlers.
 ```
 
-The hint version costs ~20 tokens instead of ~80. It stays correct when the handler pattern changes. The agent reads the real file and adapts to current imports, error handling, and conventions.
+The hint version costs ~20 tokens instead of ~80, stays correct when the handler pattern changes, and lets the agent adapt to current imports, error handling, and conventions.
 
 ## Key Takeaways
 
 - Code samples in instruction files are frozen snapshots that diverge from the real codebase over time
 - Hints point agents to current code, eliminating maintenance burden and token waste
-- Use code samples only for novel patterns with no existing reference, output format definitions, or tool documentation
+- Use code samples only for novel patterns with no existing reference, output formats, or tool documentation
 - Replace every code sample with a hint once the pattern exists in the codebase
-- This is a strong default, not a blanket rule — the exception is when there is nothing to point at
 
 ## Sources
 
@@ -129,9 +126,9 @@ The hint version costs ~20 tokens instead of ~80. It stays correct when the hand
 
 ## Related
 
-- [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window
-- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — broader framework for choosing between rules and examples, including a section on hints
-- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the same principle applied to AGENTS.md file sizing
-- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — hints operate at a higher altitude than code samples, staying valid across variation
-- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — shorter instruction files with hints instead of samples keep rule counts lower
-- [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md) — hints are a form of compression that preserves signal while reducing token cost
+- [Context Engineering](../context-engineering/context-engineering.md) — designing what enters an agent's context window
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — framework for choosing between rules and examples, including hints
+- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — same principle applied to AGENTS.md sizing
+- [System Prompt Altitude](system-prompt-altitude.md) — hints operate at a higher altitude than code samples, staying valid across variation
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — shorter instruction files with hints keep rule counts lower
+- [Prompt Compression](../context-engineering/prompt-compression.md) — hints as compression that preserves signal while reducing token cost

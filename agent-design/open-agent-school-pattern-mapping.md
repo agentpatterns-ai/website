@@ -160,3 +160,5 @@ The `maxTurns: 12` cap enforces the iteration budget. The `allowedTools` / `disa
 - [Agent Harness](agent-harness.md)
 - [Agent Turn Model](agent-turn-model.md)
 - [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
+- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — another pattern taxonomy mapping, connecting GoF and SOLID patterns to agent system design
+- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating reasoning compute across phases; complements the Budget-Constrained Execution Loop pattern

@@ -171,3 +171,5 @@ fi
 - [Agent Harness](agent-harness.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
+- [Agentic Flywheel](agentic-flywheel.md)

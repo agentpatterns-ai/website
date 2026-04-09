@@ -5,6 +5,9 @@ tags:
   - instructions
   - technique
   - copilot
+aliases:
+  - "AGENTS.md best practices"
+  - "AGENTS.md writing patterns"
 ---
 
 # AGENTS.md Design Patterns: Commands, Boundaries, and Personas

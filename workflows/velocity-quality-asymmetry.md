@@ -168,6 +168,7 @@ By investing the velocity windfall in QA infrastructure during weeks 1-2, the te
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md) — implementation patterns for automated quality gates
 - [Tiered Code Review](../code-review/tiered-code-review.md) — routing review effort by risk level
 - [The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) — Osmani on bottleneck migration from writing to verification
+- [The Bottleneck Migration](../human/bottleneck-migration.md) — review becomes the new bottleneck as code generation gets cheaper
 
 ## Unverified Claims
 

@@ -14,7 +14,7 @@ aliases:
 
 ## The Three Layers
 
-Agent systems that mix knowledge, execution, and orchestration into monolithic definitions become hard to maintain and impossible to reuse. The separation pattern assigns each concern to its own layer:
+Agent systems that mix knowledge, execution, and orchestration into monolithic definitions become hard to maintain. The separation pattern assigns each concern to its own layer:
 
 | Layer | Contains | Changes when |
 |-------|----------|--------------|
@@ -22,15 +22,15 @@ Agent systems that mix knowledge, execution, and orchestration into monolithic d
 | Agents | Execution logic — task-specific workers that compose skills | The process changes |
 | Commands | Orchestration — pipeline steps, user-facing triggers | The workflow changes |
 
-According to the [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md), skills are portable knowledge units designed to be shared across agents and tools. The [Claude Code sub-agents documentation](https://code.claude.com/docs/en/sub-agents) describes agents as workers that compose skills to complete tasks.
+The [Agent Skills Standard](../standards/agent-skills-standard.md) defines skills as portable knowledge units shared across agents and tools. The [Claude Code sub-agents documentation](https://code.claude.com/docs/en/sub-agents) describes agents as workers that compose skills to complete tasks.
 
 ## Why Each Layer is Distinct
 
-**Skills carry knowledge, not behavior.** A skill describing how to navigate GitHub documentation remains stable when the agent using it changes. When you embed that knowledge directly in an agent, every agent that needs it duplicates it — and when the knowledge drifts, you have multiple places to update.
+**Skills carry knowledge, not behavior.** A skill describing how to navigate GitHub documentation remains stable when the agent using it changes. Embedding that knowledge directly in agents duplicates it — and when the knowledge drifts, you have multiple places to update.
 
 **Agents carry execution, not knowledge.** An agent that knows "how to research a topic" should not also encode "what URLs are authoritative for this domain." Separating these allows the same agent logic to work across different domains by swapping skills.
 
-**Commands carry orchestration, not logic.** A command that runs the [content pipeline](../workflows/content-pipeline.md) triggers agents in sequence but doesn't implement the pipeline steps itself. This lets you change the workflow (add a review step, reorder stages) without touching the agents that do the work.
+**Commands carry orchestration, not logic.** A command that runs the [content pipeline](../workflows/content-pipeline.md) triggers agents in sequence but doesn't implement the steps itself. You can change the workflow — add a review step, reorder stages — without touching the agents.
 
 ## Reuse and Composability
 
@@ -45,7 +45,7 @@ graph TD
     A2 --> S3[Skill: Style Guide]
 ```
 
-Multiple agents sharing the same skill means a single update propagates everywhere. Multiple commands invoking the same agent means orchestration changes don't require agent rewrites.
+Shared skills mean a single update propagates everywhere. Shared agents mean orchestration changes don't require agent rewrites.
 
 ## Independent Testability
 
@@ -56,11 +56,11 @@ Each layer can be validated without the others:
 - **Agents**: Given a skill, does the agent produce correct output for a known input?
 - **Commands**: Given working agents, does the command sequence produce the expected pipeline behavior?
 
-This mirrors the layered architecture pattern in software — data layer, business logic, API layer — where each can be tested and replaced independently.
+This mirrors the layered architecture pattern in software — data layer, business logic, API layer — each testable and replaceable independently.
 
 ## Anti-Pattern: Embedded Knowledge
 
-The failure mode is agent definitions that embed domain knowledge directly. Over time, knowledge drifts independently in each agent, verification becomes ad-hoc, and adding a new agent requires duplicating knowledge from existing ones. The skill layer exists specifically to prevent this.
+The failure mode is embedding domain knowledge directly in agent definitions. Knowledge drifts independently in each agent, verification becomes ad-hoc, and new agents require duplicating knowledge from existing ones.
 
 ## Example
 

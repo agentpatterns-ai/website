@@ -105,3 +105,6 @@ Critical format constraints belong in the main instruction file. Reference examp
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
 - [Context Priming for AI Agent Development](../context-engineering/context-priming.md)
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — detailed treatment of when and how to use path references instead of inline code samples
+- [System Prompt Altitude](system-prompt-altitude.md) — balancing specificity and brittleness in instruction design
+- [Critical Instruction Repetition](critical-instruction-repetition.md) — exploiting primacy and recency bias to improve compliance
+- [Layered Instruction Scopes](layered-instruction-scopes.md) — organizing instructions by specificity across global, project, and directory levels

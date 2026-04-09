@@ -19,7 +19,7 @@ tags:
 
 ## Tools as Context Injections
 
-Every tool call produces output that enters the context window. A tool returning a 10,000-token API response when 200 tokens would suffice consumes 10% of a 100k context window on a single call. [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies tool design as a direct lever on context quality: the shape of tool output determines how much of the context window is signal versus noise.
+Every tool call produces output that enters the context window. A tool returning a 10,000-token API response when 200 tokens would suffice consumes 10% of a 100k context window on a single call. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool design as a direct lever on context quality: the shape of tool output determines how much of the context window is signal versus noise.
 
 ## Design Principles
 

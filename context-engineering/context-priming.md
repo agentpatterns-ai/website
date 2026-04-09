@@ -15,7 +15,7 @@ aliases:
 > Load relevant context before asking an agent to act — the order information enters the context window shapes the quality of everything that follows.
 
 !!! note "Also known as"
-    Providing Context to Agents, Seeding Agent Context, Breadcrumbs in Code. This page covers the general technique of loading context before a task. For embedding persistent contextual hints directly in the codebase for agents to discover, see [Seeding Agent Context](seeding-agent-context.md).
+    Providing Context to Agents, Seeding Agent Context, Breadcrumbs in Code. Context priming is the general technique of loading context before a task. For embedding persistent contextual hints directly in the codebase for agents to discover, see [Seeding Agent Context](seeding-agent-context.md).
 
 ## How It Works
 

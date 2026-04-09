@@ -120,4 +120,5 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
+- [Convergence Detection in Iterative Refinement](convergence-detection.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)

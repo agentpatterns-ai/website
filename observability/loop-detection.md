@@ -138,5 +138,6 @@ Register in `.claude/settings.json`:
 - [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
+- [Making Application Observability Legible to Agents](observability-legible-to-agents.md)
 - [Event Sourcing for Agents](event-sourcing-for-agents.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

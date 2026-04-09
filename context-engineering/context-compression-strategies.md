@@ -141,3 +141,6 @@ The summariser prompt structure maps to the preservation table above: objective,
 - [Goal Recitation: Countering Drift in Long Sessions](goal-recitation.md)
 - [Layered Context Architecture](layered-context-architecture.md)
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
+- [Prompt Cache Economics Across Providers](prompt-cache-economics.md)
+- [Structure Prompts with Static Content First to Maximize Cache Hits](static-content-first-caching.md)

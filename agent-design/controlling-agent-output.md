@@ -116,3 +116,5 @@ The concise version cuts token cost by roughly two-thirds for the same deliverab
 - [Progressive Disclosure for Layered Agent Definitions](progressive-disclosure-agents.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Harness Engineering](harness-engineering.md)
+- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)

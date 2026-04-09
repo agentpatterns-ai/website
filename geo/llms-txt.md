@@ -137,3 +137,5 @@ For a simpler approach: a static `docs/llms.txt` with 5-10 manually curated entr
 - [How AI Engines Cite](how-ai-engines-cite.md)
 - [SEO vs GEO](seo-vs-geo.md)
 - [GEO for Technical Docs](geo-for-technical-docs.md)
+- [Assertion Density](assertion-density.md)
+- [Topical Authority](topical-authority.md)

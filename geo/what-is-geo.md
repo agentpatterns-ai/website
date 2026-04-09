@@ -32,7 +32,7 @@ Backlinks — the core currency of SEO — show weak or neutral correlation with
 
 ## Why This Matters for Developer Content
 
-Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../agent-design/agent-memory-patterns.md), context engineering, or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation isn't structured for AI comprehension, it won't be cited — even if it's the most accurate source available.
+Developers use AI assistants as their primary discovery channel. When a developer asks ChatGPT about [agent memory patterns](../agent-design/agent-memory-patterns.md), [context engineering](../context-engineering/context-engineering.md), or tool design, the assistant synthesizes from whatever content it retrieves and cites. If your documentation isn't structured for AI comprehension, it won't be cited — even if it's the most accurate source available.
 
 The scale signal:
 

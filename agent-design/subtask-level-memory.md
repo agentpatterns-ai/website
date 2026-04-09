@@ -129,3 +129,4 @@ The injected experience is the abstracted lesson from the prior pagination episo
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
+- [AST-Guided Agent Memory](ast-guided-agent-memory.md) -- uses AST representations instead of natural language as memory substrate for code generation agents

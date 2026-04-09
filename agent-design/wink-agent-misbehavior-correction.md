@@ -15,7 +15,7 @@ tags:
 
 ## Misbehavior Rate in Production Trajectories
 
-Production coding agent trajectories contain misbehaviors at a rate that makes manual intervention unscalable. Analysis of 10,000+ real trajectories from [arXiv:2602.17037](https://arxiv.org/abs/2602.17037) shows approximately 30% of all agent trajectories contain at least one misbehavior. These are not edge cases — they are normal production behavior requiring a systematic response.
+Production coding agent trajectories contain misbehaviors at a rate that makes manual intervention unscalable. Analysis of 10,000+ real trajectories from [arXiv:2602.17037](https://arxiv.org/abs/2602.17037) shows approximately 30% contain at least one misbehavior — normal production behavior requiring a systematic response.
 
 ## Three Misbehavior Categories
 
@@ -48,7 +48,7 @@ graph TD
 
 The observer runs asynchronously — it watches the trajectory without blocking the agent's execution. When it detects a misbehavior signal, it classifies the event and injects a targeted course-correction into the agent's next inference call. The agent continues without a full restart.
 
-This is distinct from synchronous guardrails that block execution. Async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
+Unlike synchronous guardrails that block execution, async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
 
 ## Results
 
@@ -58,7 +58,7 @@ From the Wink A/B test on production traffic ([arXiv:2602.17037](https://arxiv.o
 - Reduction in tokens per session [unverified] — the agent reaches correct behavior faster without wasted execution
 - Reduction in engineer interventions per session [unverified] — most misbehaviors resolve without human involvement
 
-The 10% that require multiple interventions or escalate to human review are typically novel failure modes not covered by the existing classifier's training distribution.
+The 10% requiring multiple interventions or human escalation are typically novel failure modes outside the classifier's training distribution.
 
 ## Implementation Signals
 
@@ -68,7 +68,7 @@ Three observable signals trigger the observer:
 2. **Contradiction signals** — the agent's stated reasoning contradicts a tool output it received in the same session
 3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created
 
-These signals are observable without access to the model's internal state — they are detectable from the tool call log and conversation history.
+These signals are detectable from the tool call log and conversation history without access to model internals.
 
 ## Deployment Implication
 
@@ -126,3 +126,5 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - [Rollback-First Design](rollback-first-design.md)
 - [Agent Turn Model](agent-turn-model.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
+- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)

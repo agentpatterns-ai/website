@@ -19,9 +19,9 @@ tags:
 
 ## The Principle
 
-Least privilege applied to agents: every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a production incident.
+Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a production incident.
 
-The damage an agent can do is bounded by the permissions you grant it. Reducing permissions reduces the blast radius.
+The damage an agent can do is bounded by the permissions you grant it.
 
 ## Permission Dimensions
 
@@ -83,10 +83,6 @@ Remove any permission that cannot be justified by the task definition.
 Rather than granting one agent broad permissions, decompose into separate agents with narrow scopes chained together. Each agent handles one operation and holds only the permissions for that operation.
 
 This reduces the attack surface per agent: a successful injection against the research agent cannot trigger write operations that only the write agent holds. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
-
-## The Cost of Convenience
-
-Giving every agent full access is easier to configure. The cost is unbounded blast radius — full-access configurations make recovery harder and damage wider.
 
 ## Key Takeaways
 

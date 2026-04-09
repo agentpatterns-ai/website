@@ -251,6 +251,7 @@ Every status must have a designated handler. If a label is added and nothing res
 
 **Patterns**
 
+- [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs when running multiple agents
 - [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
 - [Specialized Agent Roles](../../agent-design/specialized-agent-roles.md) — complementary coverage through specialisation
 - [Loop Strategy Spectrum](../../agent-design/loop-strategy-spectrum.md) — accumulated vs fresh context for long-running work

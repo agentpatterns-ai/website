@@ -1,6 +1,9 @@
 ---
 title: "Agentic AI Architecture: From Prompt to Goal-Directed"
 description: "Reference architecture for goal-directed agentic systems: cognitive-execution separation, multi-agent topology taxonomy, and enterprise hardening."
+aliases:
+  - goal-directed agent architecture
+  - cognitive-execution architecture
 tags:
   - agent-design
   - multi-agent
@@ -127,3 +130,6 @@ This maps each component directly onto the reference architecture above: the LLM
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md)
 - [Convergence Detection in Iterative Refinement](convergence-detection.md)
+- [Agent-First Software Design](agent-first-software-design.md)
+- [Structured Agentic Software Engineering](structured-agentic-software-engineering.md)
+- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)

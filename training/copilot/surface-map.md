@@ -531,7 +531,7 @@ The `applyTo` field supports standard glob patterns (`*`, `**`, comma-separated)
 
 #### Prompt Files (`.github/prompts/NAME.prompt.md`)
 
-**What it is**: Reusable prompt templates with embedded file references. Available in VS Code, Visual Studio, and JetBrains.
+**What it is**: [Reusable prompt templates](../../instructions/prompt-file-libraries.md) with embedded file references. Available in VS Code, Visual Studio, and JetBrains.
 
 **Used for**: Standardising how the team asks Copilot for specific tasks — ensures consistent results across developers.
 

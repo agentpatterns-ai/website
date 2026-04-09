@@ -105,3 +105,4 @@ The hook eliminates the error deterministically. The prompt can drop all five pr
 - [Distractor Interference](distractor-interference.md)
 - [The Infinite Context](infinite-context.md)
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
+- [Spec Complexity Displacement](spec-complexity-displacement.md)

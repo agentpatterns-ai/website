@@ -160,4 +160,5 @@ send_frame(result.frame, timeout_ms=100)
 - [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md) — domain adaptation via prompting
 - [Domain-Specific Agent Challenges](../human/domain-specific-agent-challenges.md) — human factors of domain-specific agents
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) — persistent knowledge vs per-task retrieval
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — cross-file dependency and AST retrieval for code generation
 - [Observation Masking](observation-masking.md) — refinement gate for intermediate tool results

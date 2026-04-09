@@ -13,21 +13,19 @@ tags:
 
 ## The Study
 
-[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analysed 2,926 public GitHub repositories using Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study identifies eight distinct configuration mechanisms and measures how frequently each appears in real-world repos. It is the first empirical baseline for agentic AI coding tool configuration in the wild.
-
-The eight mechanisms are: Context Files, Skills, Subagents/Agents, Hooks, MCP servers, Memory, Permissions, and Settings/Model config.
+[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analysed 2,926 public GitHub repositories using Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study identifies eight configuration mechanisms — Context Files, Skills, Subagents/Agents, Hooks, MCP servers, Memory, Permissions, and Settings/Model config — and measures how frequently each appears in practice.
 
 ## What the Data Shows
 
-**Context Files dominate.** Most repositories configure the agent via a single context file and do not touch any other mechanism. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) claims 60k+ open-source projects [unverified — self-reported] and support across 25+ tools [unverified — self-reported].
+**Context Files dominate.** Most repos configure the agent via a single context file. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) claims 60k+ projects [unverified — self-reported] and 25+ tools [unverified — self-reported].
 
 **Skills are shallowly adopted.** Most repositories define only 1–2 skill artifacts containing static instructions rather than executable workflows. The [Agent Skills open standard](../standards/agent-skills-standard.md) (30+ supporting tools [unverified — self-reported]) and [Claude Code's SKILL.md format](https://code.claude.com/docs/en/skills) support file bundling, subagent execution, dynamic context injection, invocation control, and hooks — yet real-world adoption exploits almost none of this [unverified].
 
-**Subagents are rarely configured beyond defaults.** Claude Code's subagent system (`.claude/agents/`) supports per-agent model selection, tool restrictions, permission modes, hooks, preloaded skills, and persistent memory ([code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)). Repos rarely configure any of these dimensions.
+**Subagents are rarely configured beyond defaults.** Claude Code's subagent system (`.claude/agents/`) supports per-agent model selection, tool restrictions, permission modes, hooks, and persistent memory ([code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)). Repos rarely configure any of these.
 
-**Hooks are an underused automation layer.** Claude Code hooks fire at `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `Stop`, and `InstructionsLoaded` events and can block, transform, or log ([code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks)). Adoption is minimal.
+**Hooks are underused.** Claude Code hooks fire at `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `Stop`, and `InstructionsLoaded` events and can block, transform, or log ([code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks)). Adoption is minimal.
 
-**MCP servers are underrepresented.** MCP extends agent capabilities to external systems — databases, issue trackers, design tools, monitoring — configurable at local, project, user, and managed scopes ([code.claude.com/docs/en/mcp](https://code.claude.com/docs/en/mcp)). Real-world deployment remains low despite broad availability.
+**MCP servers are underrepresented.** MCP extends agent capabilities to external systems — databases, issue trackers, design tools, monitoring — at local, project, user, and managed scopes ([code.claude.com/docs/en/mcp](https://code.claude.com/docs/en/mcp)). Deployment remains low despite broad availability.
 
 **Claude Code users employ the broadest range of mechanisms.** Distinct configuration cultures form around each tool, with Claude Code leading in multi-mechanism adoption.
 
@@ -35,7 +33,7 @@ The eight mechanisms are: Context Files, Skills, Subagents/Agents, Hooks, MCP se
 
 Under-configuration is a self-imposed capability gap: the mechanisms exist, are documented, and work.
 
-The CLAUDE.md hierarchy — managed policy, user, project, subdirectory, plus `.claude/rules/` for path-scoped rules ([code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)) — is a rich configuration surface. Most repos deploy a single flat file at the project root.
+The CLAUDE.md hierarchy — managed policy, user, project, subdirectory, plus `.claude/rules/` for path-scoped rules ([code.claude.com/docs/en/memory](https://code.claude.com/docs/en/memory)) — is a rich surface that most repos collapse to a single flat file at the root.
 
 ## A Prioritised Adoption Ramp
 
@@ -50,22 +48,22 @@ graph TD
     E --> F[MCP Servers<br>external system integrations]
 ```
 
-**Step 1 — Layered context files.** Split the single root context file into global, project, and subdirectory layers so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](../instructions/layered-instruction-scopes.md).
+**Step 1 — Layered context files.** Split the root context file into global, project, and subdirectory layers so each scope carries only the rules it needs. See [Layer Agent Instructions by Specificity](../instructions/layered-instruction-scopes.md).
 
-**Step 2 — Skills.** Extract repeated workflows into SKILL.md files that specify their subagent, required tools, and preloaded context. See [Skill Library Evolution](../tool-engineering/skill-library-evolution.md).
+**Step 2 — Skills.** Extract repeated workflows into SKILL.md files specifying their subagent, required tools, and preloaded context. See [Skill Library Evolution](../tool-engineering/skill-library-evolution.md).
 
 **Step 3 — Hooks.** Replace prompt-based enforcement with hooks for constraints that must not vary — a `PreToolUse` hook cannot be overridden by injected instructions. See [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md).
 
-**Step 4 — Subagent specialisation.** Assign distinct roles with scoped tool sets so that, e.g., a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
+**Step 4 — Subagent specialisation.** Assign distinct roles with scoped tool sets so that a reviewer subagent cannot modify files even if instructed to. See [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
 
 **Step 5 — MCP for external systems.** Connect agents to issue trackers, documentation, observability, and design tools via structured [MCP integrations](../tools/copilot/mcp-integration.md) instead of copy-paste context.
 
 ## Key Takeaways
 
-- Context files dominate real-world agentic AI configuration; advanced mechanisms are rarely used even among teams using agentic tools
-- The gap is an awareness and adoption gap, not a capability gap — all mechanisms are documented and production-ready for you to use
-- Claude Code users exhibit the broadest configuration culture; AGENTS.md is emerging as the cross-tool interoperability standard across 25+ tools [unverified — self-reported]
-- Teams that adopt multiple mechanisms tend to configure each one more deeply
+- Context files dominate real-world agentic AI configuration; advanced mechanisms are rarely used
+- The gap is awareness and adoption, not capability — all mechanisms are documented and production-ready
+- Claude Code users exhibit the broadest configuration culture; AGENTS.md is emerging as the cross-tool standard across 25+ tools [unverified — self-reported]
+- Teams that adopt multiple mechanisms tend to configure each more deeply
 
 ## Related
 
@@ -82,3 +80,8 @@ graph TD
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [The Bottleneck Migration When Humans Supervise Agents](../human/bottleneck-migration.md)
 - [Initiatives and Community: Tracking the Agentic Engineering](../human/initiatives-community.md)
+- [Rigor Relocation](../human/rigor-relocation.md)
+- [Evidence-Based Allowlist Auto-Discovery](../human/evidence-based-allowlist-auto-discovery.md)
+- [Safe Command Allowlisting: Reducing Approval Fatigue](../human/safe-command-allowlisting.md)
+- [Skill Atrophy: When AI Reliance Erodes Developer Capability](../human/skill-atrophy.md)
+- [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)

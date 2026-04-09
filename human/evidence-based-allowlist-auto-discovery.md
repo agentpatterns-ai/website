@@ -6,6 +6,10 @@ tags:
   - workflows
   - claude
   - technique
+aliases:
+  - automatic allowlisting
+  - usage-based allowlisting
+  - dynamic allowlist discovery
 ---
 
 # Evidence-Based Allowlist Auto-Discovery
@@ -40,7 +44,7 @@ A `PostToolUse` hook tracks outcomes after execution. The rule is only written o
 
 ## The Two-Hook Implementation
 
-`PermissionRequest` is the only hook with a `updatedPermissions` write-back path. `PostToolUse` cannot write to settings.json via its return value; it writes to the counter log.
+`PermissionRequest` is the only hook with a `updatedPermissions` write-back path [unverified]. `PostToolUse` cannot write to settings.json via its return value; it writes to the counter log.
 
 | Hook | Role | Can write to settings.json via API? |
 |------|------|-------------------------------------|

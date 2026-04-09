@@ -41,9 +41,9 @@ graph TD
 
 ## Why Multiple Reviewers Beat Self-Review
 
-A single agent reviewing its own output exhibits confirmation bias — it tends to agree with decisions it already made. Splitting implementer and reviewer into separate agents with separate prompts removes this bias. Splitting reviewers further by domain surface area (correctness, style, security, test coverage) ensures each lens is applied with full attention, not diluted across competing concerns [unverified].
+A single agent reviewing its own output exhibits confirmation bias — it agrees with decisions it already made. Splitting implementer and reviewer into separate agents with separate prompts removes this bias. Splitting reviewers by domain (correctness, style, security, test coverage) ensures each lens gets full attention rather than being diluted across competing concerns [unverified].
 
-The iterative loop — implement → review → fix → re-review — mirrors the human PR review cycle. Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent over time, with humans as the final optional check.
+The iterative loop — implement → review → fix → re-review — mirrors the human PR cycle. Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
 
 ## Reviewer Design
 
@@ -53,7 +53,7 @@ Each reviewer should have:
 - A structured output schema (e.g., `{"verdict": "PASS|FAIL", "issues": [...], "notes": [...]}`)
 - Explicit pass criteria — what counts as PASS must be unambiguous
 
-Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the consolidated issue list goes back to the implementer.
+Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the issue list goes back to the implementer.
 
 ## Loop Termination
 
@@ -75,7 +75,7 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | 1 | Bug fixes, features, refactors |
 | High | 3 (cross-model) | Auth, crypto, payments, schema migrations |
 
-File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Unresolved findings after two rounds escalate to human review as structured data.
+File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Unresolved findings after two rounds escalate to human review.
 
 ## Key Takeaways
 
@@ -149,6 +149,7 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Adversarial Multi-Model Development Pipeline](../multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md)
+- [Harness Engineering](../agent-design/harness-engineering.md) — environment design discipline that enables agent-to-agent code review
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
