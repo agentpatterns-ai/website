@@ -10,6 +10,7 @@ nav:
       - agentless-vs-autonomous.md
       - classical-se-patterns-agent-analogues.md
       - cognitive-reasoning-execution-separation.md
+      - continual-learning-layers.md
       - delegation-decision.md
       - empowerment-over-automation.md
       - execution-first-delegation.md
@@ -43,6 +44,7 @@ nav:
       - loop-strategy-spectrum.md
       - progressive-disclosure-agents.md
       - specialized-agent-roles.md
+      - sprint-contracts.md
       - steering-running-agents.md
   - "Reliability":
       - advisor-strategy.md
@@ -67,6 +69,7 @@ nav:
       - agent-turn-model.md
       - deferred-permission-pattern.md
       - harness-engineering.md
+      - harness-hill-climbing.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md

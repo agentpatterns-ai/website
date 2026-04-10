@@ -12,3 +12,4 @@ tags:
 ## Pages
 
 - [Agents Window](agents-window.md) — Parallel agents across local, cloud, worktree, and SSH environments with `/worktree` and `/best-of-n` commands
+- [Self-Hosted Cloud Agents](self-hosted-cloud-agents.md) — Run agent tool execution inside your own infrastructure while Cursor's cloud handles inference

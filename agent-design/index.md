@@ -64,6 +64,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md) — Choose between accumulated-context loops, within-session compression, and fresh-context loops based on workload type, not habit
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) — Keep agent definitions minimal — identity and scope only — and load detailed task knowledge on demand through skills rather than front-loading everything
 - [Specialized Agent Roles](specialized-agent-roles.md) — Assign distinct specializations to parallel agents so they complement rather than compete on the same problems
+- [Sprint Contracts](sprint-contracts.md) — A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
 
 ## Reliability

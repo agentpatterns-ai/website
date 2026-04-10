@@ -33,6 +33,8 @@ Headless agents block when they need an already-running process — a dev server
 
 The `send_to_terminal` tool solves this. Sessions can send commands to terminal processes as part of their execution — start a dev server, trigger a build — without the user switching context. The process dependency becomes an agent task, not a human precondition.
 
+An experimental companion setting, `chat.tools.terminal.backgroundNotifications`, alerts agents when background commands complete or require input — eliminating manual polling via `get_terminal_output`. Enable it via VS Code settings.
+
 ## Parallel Fan-Out Pattern
 
 The Agents app enables a practical fan-out workflow:
@@ -50,7 +52,7 @@ This differs from three Claude Code processes in three terminals: the Agents app
 
 ## Cursor Comparison
 
-Cursor's Agents Window introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor's implementation does not do this in the same way [unverified — verify against current Cursor docs].
+[Cursor's Agents Window](../tools/cursor/agents-window.md) introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor's implementation does not do this in the same way [unverified].
 
 ## Limitations
 

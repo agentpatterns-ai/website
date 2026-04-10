@@ -11,6 +11,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 
 - [Agent Debugging](../observability/agent-debugging.md) — Diagnosing bad agent output
 - [Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity](changelog-driven-feature-parity.md) — Track which CLI tool shipped each capability first and when the other matched it
+- [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — Configure agents to sign or annotate their commits with verifiable identity metadata so audit trails distinguish agent-generated changes from human-authored ones
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md) — Build a new product agent-first by defining roles, decomposing to context-safe tasks, and executing through autonomous agent loops
 - [Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md) — Distribute shared agent skills, instruction files, and coding conventions from a central repository to downstream projects
 - [Enterprise Skill Marketplace: Distribution, Usage Reporting, and Quality Evals](enterprise-skill-marketplace.md) — Scale a shared skill library with MDM distribution, private plugin marketplaces, OTel usage telemetry, and a manual eval cadence for high-traffic skills
@@ -19,6 +20,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Content & Skills Audit Workflow](content-skills-audit.md) — Automated staleness detection for URLs, site maps, and sourced claims
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
+- [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — Build a small library of purpose-built skills that encode your engineering process from ideation through architecture
 - [Introspective Skill Generation](introspective-skill-generation.md) — Mine agent patterns across sessions to generate new skills, agents, and hooks
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — Define evaluation tasks and success criteria before implementing agent features to make "done" objective and prevent requirement drift
 - [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md) — Create and iterate on your first CLAUDE.md, AGENTS.md, or copilot-instructions.md in under thirty minutes
