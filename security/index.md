@@ -13,13 +13,16 @@ tags:
 
 Threat models identify the structural conditions that make agent systems exploitable and prescribe architectural mitigations.
 
+- [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Risk emerges when an agent has private data access, untrusted input, and egress simultaneously; remove at least one leg from every execution path
 
 ## Prompt Injection
 
 Prompt injection is the primary attack vector for agents that consume untrusted content. External instructions embedded in web pages, emails, documents, or API responses can redirect an agent's behavior at the model level.
 
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — Separate trusted control flow from untrusted data flow so injection attacks cannot alter tool invocation, regardless of model susceptibility
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md) — Use new attack traces to adversarially train hardened model checkpoints immediately after discovery
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — External content consumed by agents is an attack surface; malicious instructions can override agent instructions at the model level
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
@@ -34,12 +37,14 @@ Isolation limits what a compromised or misbehaving agent can affect.
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
+- [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
 
 ## Data Protection
 
 Preventing sensitive data from entering agent context is cheaper than scrubbing it after the fact.
 
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md) — Keep credentials out of skill definitions at authoring time; placeholder syntax, pre-commit scanning, and wrapper scripts prevent leakage when skills are shared or reproduced
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md) — Replace sensitive fields with deterministic tokens before data reaches the model
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — Use permission rules and hooks to prevent agents from reading credentials and secrets
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — Keep broad credentials outside the sandbox; use an external proxy that attaches scoped tokens only to validated requests
@@ -61,12 +66,14 @@ Code injection in multi-agent pipelines exploits agent trust in code it reads as
 
 Tool invocation exposes attack surfaces distinct from prompt injection. Malicious tools exploit argument generation and return processing to leak context and execute arbitrary commands.
 
+- [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence more than safety alignment; select guard models accordingly
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution
 
 ## Supply Chain
 
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
 
 ## Defense in Depth

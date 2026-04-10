@@ -26,6 +26,27 @@ Hardening addresses all three.
 
 ---
 
+## Benchmark Contamination
+
+Static benchmarks degrade as models train on their data. SWE-rebench demonstrated this concretely: DeepSeek-V3 scored 39.7% on older SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination, not capability. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+
+Teams that rely solely on published benchmarks for model comparison or upgrade decisions risk selecting models that memorized the benchmark rather than models that generalize. Two defenses:
+
+1. **Maintain a private eval suite** sourced from your own codebase and real incidents. Tasks drawn from internal repositories are unlikely to appear in training data.
+2. **Refresh continuously.** SWE-rebench's pipeline sources tasks from recent merged PRs linked to resolved issues — tasks that postdate the model's training cutoff. The same principle applies at team scale: periodically add eval tasks from recent work to keep the suite ahead of potential contamination.
+
+---
+
+## Trajectory-Opaque Grading
+
+Outcome-based grading — checking only the final state — is the right default for capability measurement (see [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-outcomes.md)). But for safety and robustness evaluation, it is insufficient. Claw-Eval research found that a vanilla LLM judge missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. [Source: [Claw-Eval](https://arxiv.org/abs/2604.06132)]
+
+Agents can reach correct final states through unsafe intermediate steps — deleting and recreating files rather than editing them, executing commands with excessive permissions, or accessing data outside their scope. These violations are invisible when only the output is graded.
+
+For production safety evals, augment outcome grading with trajectory evidence from at least two of: execution traces, audit logs, and environment snapshots. The research also found that Pass^k (consistency across trials) drops up to 24% under error injection while Pass@k (peak capability) remains stable — confirming that reliability and capability require separate measurement.
+
+---
+
 ## Anti-Reward Hacking
 
 Agents optimize for the literal metric, not the intent behind it. A coding agent graded on "tests pass" can write tests that validate a fallback value, then write code that always returns it. Research agents have chosen SEO-optimized content farms over authoritative sources because the metric did not penalize source quality. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
@@ -125,6 +146,8 @@ After hardening, the suite catches three regressions in the next quarter that wo
 ## Key Takeaways
 
 - Agents optimize for the literal metric — combine orthogonal graders and test bidirectionally to resist gaming
+- Static benchmarks degrade through contamination — maintain private, continuously refreshed eval suites alongside public benchmarks
+- Outcome grading measures capability; trajectory auditing measures safety — you need both for production agents
 - Production incidents are the highest-signal source of eval tasks — every postmortem should ask "what eval would have caught this?"
 - Golden query pairs with semantic grading provide continuous regression detection as the agent evolves
 - Layer accuracy defense across the pipeline so no single agent is the sole gatekeeper

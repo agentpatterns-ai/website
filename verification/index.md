@@ -11,16 +11,20 @@ tags:
 
 ## Measuring Quality
 
+- [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated pipelines restore honest measurement
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate agents by the final state they produce, not the sequence of steps they took to get there
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — pass@k measures capability ceiling; pass^k measures consistency — report both to distinguish agents that sometimes succeed from those that reliably do
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Two-thirds of code completion failures are model errors, but one quarter are integration failures — fix both to improve acceptance rates
+- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Outcome-only grading misses 44% of safety violations — add structured trajectory auditing for safety and robustness assessment
+- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — Skill-augmented agent benchmarks overstate production gains — performance degrades systematically with realistic retrieval, and query-specific refinement recovers the gap
 
 ## Behavioral Testing
 
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Test decision quality and end-state for non-deterministic agent systems using capability matrices, three grading methods, and acceptable variance thresholds
+- [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Apply coverage-guided fuzzing to multi-agent systems using interaction path coverage as the exploration signal to surface coordination failures and emergent failure modes
 
 ## Regression Testing
 
@@ -35,6 +39,7 @@ tags:
 
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Run the same critique prompt five times in sequence on a plan or spec; each pass normalises the issues it finds, forcing later passes deeper into structural and logical problems
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
+- [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
 
 ## Rubric Design
 

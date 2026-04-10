@@ -1,0 +1,6 @@
+title: Tools
+nav:
+  - index.md
+  - Claude Code: claude
+  - Cursor: cursor
+  - GitHub Copilot: copilot

@@ -64,6 +64,17 @@ def grade_code_based(output, expected):
 
 For coding agents, test suites are the most reliable outcome grader — they are objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
+**Assessing test suite quality.** Not all test suites are equally effective graders. SAGA research identifies four metrics for evaluating whether a test suite actually catches bugs: [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
+
+| Metric | What it measures |
+|--------|-----------------|
+| Detection Rate | Fraction of buggy solutions the suite flags |
+| Verifier Accuracy | Correct pass/fail verdicts across all solutions |
+| Distinct Error Pattern Coverage | Variety of fault types the suite can distinguish |
+| Normalized AUC | Discrimination ability across the full quality spectrum |
+
+A suite scoring high on verifier accuracy but low on error pattern coverage will catch common bugs while missing rare-but-critical failure modes.
+
 ---
 
 ## LLM-as-Judge
@@ -95,6 +106,9 @@ Output as JSON: {"factual_accuracy": {"score": N, "reason": "..."}, ...}
 **Calibrate against human reviewers.** Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution.
 
 See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-judge-evaluation.md) for the full pipeline.
+
+!!! warning "The Test Homogenization Trap"
+    When LLMs generate test cases, the tests systematically mirror the generating model's own error patterns — they cluster around the same solution strategies the model uses and miss the exact edge cases the model also misses. This "homogenization trap" means a model-generated test suite provides false confidence: tests pass because they share the model's blind spots, not because the code is correct. Mitigate by combining LLM-generated structural tests with human-authored edge cases, or use differential analysis that compares failed vs corrected submissions to target specific error patterns. [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
 
 ---
 

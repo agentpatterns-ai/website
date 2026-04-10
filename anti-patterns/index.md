@@ -34,6 +34,7 @@ tags:
 - [The Kitchen Sink Session](session-partitioning.md) — Mixing unrelated tasks in a single session fills the context window with irrelevant history and degrades output quality
 - [The Mega-Prompt](../instructions/instruction-compliance-ceiling.md) — A single instruction file containing every rule, convention, and example degrades agent compliance rather than improving it
 - [The Prompt Tinkerer](prompt-tinkerer.md) — Endlessly refining prompts to prevent errors that structural controls would eliminate deterministically
+- [The Test Homogenization Trap](test-homogenization-trap.md) — LLM-generated test suites share the generating model's blind spots, providing false confidence because tests miss the same edge cases the code misses
 - [The Yes-Man Agent](yes-man-agent.md) — Agents without verification instructions execute every request without flagging problems
 - [Shadow Tech Debt](shadow-tech-debt.md) — AI agents operating without structural codebase understanding accumulate invisible architectural drift that compounds at machine speed
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished

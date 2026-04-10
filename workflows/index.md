@@ -31,6 +31,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) — Adding agent support to an existing repo
 - [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md) — Validate agent prompt changes by replaying a past task in isolation and diffing the result against what was actually merged
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md) — At 10+ parallel agents, feature branches cause merge conflicts and waste context on rebases; single-branch with advisory reservations and mechanical guards is the alternative
+- [Sparse-Checkout Worktrees for Monorepo Agent Isolation](sparse-paths-monorepo-isolation.md) — Use worktree.sparsePaths to limit an agent's file-system view to one service subtree, reducing context noise and accidental blast radius in large monorepos
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — Bringing a team up to speed on agent-assisted development
 - [The AI Development Maturity Model](ai-development-maturity-model.md) — Phases of AI coding tool adoption, from skeptic to agent-native workflows
 - [Plan Mode: Read-Only Exploration Before Implementation](plan-mode.md) — Restrict agents to read-only operations to surface understanding and correct approach before any code is written

@@ -14,6 +14,7 @@ tags:
 Foundational architecture decisions — how to structure agents, delegate work, and separate concerns.
 
 - [Agent-First Software Design](agent-first-software-design.md) — Architect systems where AI agents are the primary consumers, using machine-readable APIs and structured outputs instead of visual UIs
+- [Emergent Architecture in AI-Driven Codebases](agent-driven-codebase-fingerprint.md) — AI coding agents produce codebases with measurable architectural biases — pattern replication, abstraction bloat, and stack convergence — that compound across agent runs
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md) — Reference architecture separating cognitive reasoning from execution, a topology taxonomy for multi-agent coordination, and an enterprise hardening checklist
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md) — Commands define what to do; agents define who does it — separating orchestration from expertise lets you change either without touching the other
@@ -23,10 +24,13 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — Agent delegation has overhead; match task characteristics to agent strengths rather than delegating everything or nothing
 - [Empowerment Over Automation](empowerment-over-automation.md) — AI tools should skip tedious work while preserving your autonomy over architectural decisions, domain logic, and creative choices
 - [Execution-First Delegation](execution-first-delegation.md) — Instead of scripting steps, specify the outcome and the boundaries; the agent determines how
+- [Externalization in LLM Agents: Memory, Skills, Protocols, and Harness](externalization-in-llm-agents.md) — Reliable agents externalize cognitive burdens into persistent infrastructure — four components that transform hard internal problems into tractable retrieval and composition tasks
 - [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](inversion-analysis.md) — Inversion asks what your architecture enables that others cannot replicate, producing novel integrations rather than feature parity
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) — Map the Open Agent School academic pattern taxonomy to practical coding-agent primitives like maxTurns, PreToolUse hooks, and CLAUDE.md memory
 - [Persona-as-Code: Defining Agent Roles as Structured Documents](persona-as-code.md) — Encode each agent's domain, responsibilities, constraints, output artifacts, and scope exclusions as a Markdown file so roles are explicit, auditable, and composable
+- [Petri Net of Thoughts: Formal Process Models as Prompting Scaffolds](petri-net-of-thoughts.md) — Use Petri net formalism to derive reasoning structure from process evidence, giving each LLM call a state-aware prompt constrained by formally defined transitions
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — Agents synthesize, modify, and deploy custom tools during active problem-solving rather than relying on a fixed toolkit
+- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md) — A three-layer framework — control architecture, tool interface, resource management — for characterizing and comparing coding agent scaffold designs
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) — Structure agent systems in three layers — skills (knowledge), agents (execution), and commands (orchestration) — so each layer changes independently
 - [Structured Agentic Software Engineering (SASE)](structured-agentic-software-engineering.md) — A framework for transitioning from AI-augmented to goal-directed agentic SE, with structured artifacts (MRPs, CRPs, BriefingScript) that close the speed-vs-trust gap
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md) — Build agents for specific tasks rather than generic roles — narrow scope produces more precise output and reduces context confusion
@@ -51,10 +55,12 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 
 - [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md) — Matching the agent's response format to what you actually need reduces noise and preserves context budget
 - [Convergence Detection in Iterative Refinement](convergence-detection.md) — Monitor three observable signals across refinement passes to replace intuition-based stopping with a mechanical criterion
+- [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviews the primary agent's plan before execution begins, catching structural errors early when recovery is cheap
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two distinct LLM roles in a loop: a generator produces output and an evaluator critiques it, feeding structured feedback back until a quality threshold is met
 - [Event-Driven Agent Routing](event-driven-agent-routing.md) — Route work between agents and human teams by reacting to status-change events rather than maintaining a central coordinator that owns the full workflow
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — Planning tells the agent what to do; monitoring tells you whether it actually did it and whether it wandered off
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs
+- [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates by 17% on average
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md) — Choose between accumulated-context loops, within-session compression, and fresh-context loops based on workload type, not habit
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) — Keep agent definitions minimal — identity and scope only — and load detailed task knowledge on demand through skills rather than front-loading everything
 - [Specialized Agent Roles](specialized-agent-roles.md) — Assign distinct specializations to parallel agents so they complement rather than compete on the same problems
@@ -64,11 +70,15 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 
 Making agents robust — backpressure, idempotency, cost awareness, error recovery, and self-correction.
 
+- [The Advisor Strategy: Frontier Model as Strategic Advisor](advisor-strategy.md) — Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention
+- [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Four observable failure clusters and three behavioral patterns that predict success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
 - [Agent Self-Review Loop](agent-self-review-loop.md) — Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review
+- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — Use pre-computed code health metrics as a routing signal to assign SE tasks to cheaper model tiers — reserving expensive models for tangled, high-complexity files
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — Match model capability to task complexity: fast models for exploration, capable models for implementation, powerful models for architecture
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — Assign competing vendor agents to the same task, collect independent results, and let a human or automated gate select the winner
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — Agents fail; the question is whether they fail forward (recover and continue) or fail catastrophically (corrupt state, lose progress, repeat work)
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — Weaker models with high-quality iterative feedback outperform stronger models without it — invest in feedback loop quality before upgrading the model
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — Encode resource allocation rules in system prompts so agents spend proportional effort — few tool calls for simple lookups, many subagents for complex research
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation
@@ -85,6 +95,8 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Agent Loop Middleware](agent-loop-middleware.md) — Treat the agent loop as a unit to wrap from the outside; middleware nodes guarantee critical steps happen regardless of agent behavior
 - [Agent Pushback Protocol](agent-pushback-protocol.md) — Agents evaluate requests at both implementation and requirements level, surface concerns, and wait for explicit confirmation before executing
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — A single user-facing turn is an iterative sequence of model inference and tool execution steps, not a single round-trip inference call
+- [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
 - [Harness Engineering](harness-engineering.md) — The discipline of designing agent environments — layered architecture, mechanical enforcement, legibility — so agents reliably produce correct results
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture
 - [The Think Tool](think-tool.md) — A mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action
+- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — Run multiple agent sessions simultaneously across projects — each session inherits workspace custom instructions and MCP servers, enabling practical fan-out task execution

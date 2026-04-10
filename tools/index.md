@@ -1,6 +1,6 @@
 ---
-title: "Tools: Claude Code and GitHub Copilot"
-description: "Tool-specific patterns and workflows for Claude Code and GitHub Copilot — the two leading AI coding assistants."
+title: "Tools: Claude Code, Cursor, and GitHub Copilot"
+description: "Tool-specific patterns and workflows for Claude Code, Cursor, and GitHub Copilot — leading AI coding assistants."
 tags:
   - claude-code
   - github-copilot
@@ -15,6 +15,10 @@ tags:
 ## [Claude Code](claude/index.md)
 
 Anthropic's CLI agent — hooks lifecycle, sub-agents, batch worktrees, session scheduling, agent SDK, and extension points.
+
+## [Cursor](cursor/index.md)
+
+Cursor's agentic interface — Agents Window for parallel multi-environment execution, `/worktree` for isolated task execution, and `/best-of-n` for model comparison.
 
 ## [GitHub Copilot](copilot/index.md)
 

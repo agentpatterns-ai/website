@@ -31,6 +31,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md) — Repeating a critical instruction at both the start and end of a prompt exploits primacy and recency bias for higher compliance
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — Instruction compliance degrades as rule count grows; adding more rules past a threshold produces omission errors, not better behavior
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — LLM code generation accuracy drops sharply as simultaneous constraint count increases; reduce constraint load through decomposition, schemas, and mechanical enforcement
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — Restructuring how constraints are formatted in prompts does not improve model compliance; the compliance lever is constraint design, not encoding form
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behaviour across variation, neither too brittle nor too vague
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
 

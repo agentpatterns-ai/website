@@ -16,8 +16,10 @@ tags:
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — Agentic code review replaces static diff analysis with a tool-calling architecture where the reviewer actively explores the repository
 - [Committee Review Pattern](committee-review-pattern.md) — Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — Empirical data from 3,109 PRs shows CRA-only review achieves a 45% merge rate versus 68% for human-only review — reviewer composition determines merge outcomes
 - [Diff-Based Review](diff-based-review.md) — Review what changed, not the full output — mistakes live in the delta, and diffs compress review effort to the right scope
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — Empirical evidence from 278,790 code reviews shows AI and human reviewers have complementary but unequal strengths — structuring collaboration around these differences improves outcomes
+- [Learned Review Rules](learned-review-rules.md) — Code review agents that extract rules from accepted and rejected PR feedback, applying them to future reviews automatically — demonstrated by Cursor's Bugbot
 - [PR Description Style as a Lever](pr-description-style-lever.md) — Treating PR description structure as a configurable agent parameter measurably affects reviewer engagement and merge outcomes
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — Predictive models can identify AI-generated functions likely to be deleted before reviewers spend time examining them
 - [Review-Then-Implement Loop](review-then-implement-loop.md) — Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result

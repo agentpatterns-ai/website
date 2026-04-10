@@ -41,6 +41,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — Reduce token cost of AI-generated code through idiomatic syntax patterns and structural optimization rather than prompt-level efficiency instructions
+- [Semantic Density Optimization](semantic-density-optimization.md) — Maximize task-relevant tokens in a codebase by eliminating zero-information ceremony while preserving naming, documentation, and commit context that agents cannot reconstruct without inference cost
 
 ## Assembly & Composition
 

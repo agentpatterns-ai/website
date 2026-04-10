@@ -1,0 +1,20 @@
+title: GEO
+nav:
+  - index.md
+  - "Foundations":
+      - what-is-geo.md
+      - seo-vs-geo.md
+      - how-ai-engines-cite.md
+  - "Content Techniques":
+      - answer-first-writing.md
+      - assertion-density.md
+      - atomic-pages-and-chunking.md
+  - "Technical":
+      - ai-crawler-policy.md
+      - llms-txt.md
+      - schema-and-structured-data.md
+  - "Measurement & Strategy":
+      - geo-for-technical-docs.md
+      - measuring-geo-performance.md
+      - topical-authority.md
+  - ...

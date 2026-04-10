@@ -37,6 +37,8 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md) — Architectural best practices covering transport selection, tool granularity, error handling, capability negotiation, and security
 - [MCP Client Design](mcp-client-design.md) — Host-side logic for connecting to servers, negotiating capabilities, routing tool calls, caching descriptions, and degrading gracefully on failure
+- [MCP Elicitation](mcp-elicitation.md) — How MCP servers collect structured user input mid-task, and how Elicitation and ElicitationResult hooks let you automate, validate, or block those requests
+- [MCP LLM Sampling](mcp-llm-sampling.md) — How MCP servers request host LLM inference mid-execution via sampling/createMessage, creating hybrid tools that combine deterministic logic with embedded AI reasoning
 - [MCP Server Design](mcp-server-design.md) — A server author's checklist for tool naming, schema design, error handling, resource exposure, and token efficiency
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md) — When a proprietary extension system gets replaced by an open protocol, rebuild on the standard rather than port the old architecture
 
@@ -55,9 +57,11 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 Deterministic interception points that enforce policy, automate side effects, and audit agent behavior without relying on model compliance.
 
 - [Hooks and Lifecycle Events](hooks-lifecycle-events.md) — Hooks run deterministic code at defined points in an agent's execution -- before and after tool calls, at session boundaries -- enabling enforcement and audit
+- [Conditional Hook Execution](conditional-hook-execution.md) — Use the `if` field on hook handlers to filter by tool name and arguments, eliminating subprocess spawns for non-matching calls
 - [Hook Catalog](hook-catalog.md) — A reference catalog of high-value hooks grouped by purpose: CLI enforcement, destructive operation guardrails, sandboxing, and workflow automation
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md) — Register PreToolUse hooks through a skill invocation to arm strict guardrails for a single session without imposing friction on every workflow
 - [PostToolUse BSD/GNU Detection](posttooluse-bsd-gnu-detection.md) — Catch BSD/GNU CLI incompatibilities at runtime with a PostToolUse hook, feed fixes back via additionalContext, and persist knowledge to CLAUDE.md
+- [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md) — The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows
 
 ## Specialized Tools
 
@@ -70,5 +74,6 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Next Edit Suggestions](next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode
 - [Override Interactive Commands](override-interactive-commands.md) — Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and automated execution
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists
+- [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes
 - [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — A single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives
 - [Web Search Agent Loop](web-search-agent-loop.md) — Instead of firing a single query, wrap retrieval in a cycle of search, evaluate, refine, and synthesize -- giving the agent autonomy to decide when evidence is sufficient

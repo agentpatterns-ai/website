@@ -178,6 +178,7 @@ When the agent runs `npm install lodash`, the hook denies the call and the model
 ## Related
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
+- [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

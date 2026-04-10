@@ -102,6 +102,19 @@ The workflow for model upgrades:
 
 Without evals, step 4 is "have three engineers manually test for two weeks and report back." With evals, it is an automated comparison that takes minutes.
 
+Not all features require the same upgrade strategy. Anthropic's skill-creator distinguishes two categories that generalize beyond skills to any agent capability: [Source: [Improving Skill-Creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+
+- **Capability uplift** — encodes techniques that produce better output than the base model alone. These may become obsolete when a new model internalizes the technique. Model upgrade evals should compare the skill-augmented agent against the raw model on the same tasks; if the raw model matches or exceeds the skill, retire the skill rather than maintaining dead complexity.
+- **Encoded preference** — sequences existing capabilities according to team-specific workflows. These remain valuable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality.
+
+---
+
+## A/B Comparison Testing
+
+When iterating on prompts, skills, or configurations, run a blind comparison rather than evaluating each version in isolation. A comparator agent receives outputs from version A and version B without labels and grades which is better on each eval criterion. This eliminates anchoring bias that occurs when grading sequentially. [Source: [Improving Skill-Creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+
+Run each version's evals with independent agents in parallel, each starting from clean context. Shared context between eval runs introduces cross-contamination — the agent's performance on task 5 is influenced by what it learned from tasks 1-4.
+
 ---
 
 ## Common Anti-Patterns
@@ -132,3 +145,4 @@ Without evals, step 4 is "have three engineers manually test for two weeks and r
 - [Eval-Driven Tool Development](../../workflows/eval-driven-tool-development.md) — applying the loop to tool/skill design
 - [What Evals Are](what-evals-are.md) — foundational concepts on agent evaluations
 - [Step-by-Step: Building Your First Eval-Driven Feature](step-by-step-first-feature.md) — hands-on walkthrough applying this loop
+- [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md) — skill lifecycle including eval-gated publishing
