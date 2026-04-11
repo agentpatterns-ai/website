@@ -29,11 +29,13 @@ Models do not attend uniformly across the context window. These pages cover wher
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — Output quality degrades as context fills, but the onset depends on task type; retrieval, reasoning, and code generation hit different thresholds
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — Auto-compaction fires at ~95% context fill, long after reasoning quality has degraded; manual compaction reframes context management as reasoning quality preservation
 - [Observation Masking](observation-masking.md) — Strip intermediate tool results from conversation history once they have served their purpose to keep active context lean without losing the work product
+- [Context Window Anxiety](context-window-anxiety.md) — Advanced models exhibit behavioral shortcuts as context limits approach; strategic buffers, counter-prompting, and token budget transparency counteract premature task closure
 
 ## Compression & Caching
 
 Strategies for fitting more useful content into less space, and for making repeated prefixes cheaper through provider caching mechanisms.
 
+- [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Prompt Cache Economics](prompt-cache-economics.md) — Prompt caching discounts range from 50% to 90% depending on the provider, but each has different activation rules, TTLs, and hidden costs
@@ -65,6 +67,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
 
 ## Error Handling & Drift Prevention
 

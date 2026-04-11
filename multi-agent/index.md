@@ -19,13 +19,17 @@ Choosing the right structure for agent collaboration determines failure modes, l
 - [System-Level Optimization Pipeline](system-level-optimization-pipeline.md) — A four-stage agent pipeline decomposes performance engineering into summarization, analysis, optimization, and verification across component boundaries
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md) — Introduce a reference oracle to generate per-unit expected outputs, converting one monolithic task into hundreds of independently verifiable subtasks
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md) — Define agents and workflows as structured data, then compose them through explicit wiring rather than imperative code
+- [Declarative Multi-Agent Topology: Topology-as-Code](declarative-multi-agent-topology.md) — Encode an entire agent graph in a single declarative file that compiles to any target runtime, making topology auditable and portable
 
 ## Fan-Out & Parallelism
 
 Strategies for splitting work across parallel agents — and controlling the blast radius of concurrent execution.
 
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md) — Spawn N independent agents to solve the same problem in parallel, then use a synthesis agent to merge the strongest elements from each attempt
+- [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md) — Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — Spawn sub-agents to parallelize independent work in isolated context windows; the main thread receives only distilled results
+- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md) — Start with a small parallel batch, monitor quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront
+- [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
@@ -34,6 +38,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 
 How agents hand off work, share state, and refine each other's output without a centralized controller.
 
+- [Economic Value Signaling in Multi-Agent Networks](economic-value-signaling.md) — Attach token values to inter-agent messages so agents self-sort by task priority without a central scheduler
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — Define explicit contracts between pipeline stages to prevent information loss at handoff points
 - [File-Based Agent Coordination](file-based-agent-coordination.md) — Coordinate parallel agents using lightweight file locks in a shared repository; git merge mechanics enforce task exclusivity without a central orchestrator
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
@@ -47,6 +52,7 @@ Patterns that leverage multiple distinct models — using diversity of reasoning
 - [Adversarial Multi-Model Development Pipeline (VSDD)](adversarial-multi-model-pipeline.md) — A six-phase pipeline where a fresh-context adversary attacks builder output until convergence, combining spec-driven development, TDD, and formal verification
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md) — Get independent plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each before writing code
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md) — Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence
+- [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md) — Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision
 
 ## Operational
 

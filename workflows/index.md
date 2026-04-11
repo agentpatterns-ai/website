@@ -18,6 +18,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Closed-Loop Agent Training from Tool Schemas](closed-loop-agent-training.md) — Generate synthetic training data from MCP tool definitions, fine-tune small models to match frontier performance, and re-train incrementally as schemas evolve
 - [Content Pipeline: Idea to Published Page](content-pipeline.md) — How ideas move through GitHub issues, agent drafting, multi-reviewer quality gates, and into the published site
 - [Content & Skills Audit Workflow](content-skills-audit.md) — Automated staleness detection for URLs, site maps, and sourced claims
+- [Skill Library Refinement Loops](skill-library-refinement-loops.md) — Four complementary feedback mechanisms that together keep a shared skill library accurate and useful
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — Build a small library of purpose-built skills that encode your engineering process from ideation through architecture
@@ -27,6 +28,8 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Google Search Console Monitoring Workflow](gsc-search-console-monitoring.md) — Automate GSC and Bing WMT verification, index coverage tracking, and weekly CWV + query reports via API
 - [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md) — Build agent tools in a prototype-evaluate-analyze-iterate loop rather than optimizing in the dark
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md) — Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases
+- [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Self-directed agent loop that selects, executes, commits, and iterates over a task backlog with fresh context per task and rate-limit handling
+- [Factory Over Assistant: Orchestrating Parallel Agent Fleets](factory-over-assistant.md) — Shift from watching one agent to orchestrating parallel agents with automated feedback loops — and the infrastructure required to make it viable
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md) — Running multiple simultaneous agent sessions transforms the engineer's role from contributor to tech lead
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — Multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues via codebase investigation
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](posttooluse-auto-formatting.md) — Configure a PostToolUse hook so that formatting and linting run automatically after every file Claude writes or edits
@@ -43,3 +46,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — Wire up OpenTelemetry on Claude Code and LangChain agents for cost dashboards, compliance audit trails, and trajectory debugging
 - [Per-Page OG Image Generation at MkDocs Build Time](og-image-generation.md) — Auto-generate branded 1200×630 Open Graph images from page metadata at build time so every social share shows a unique, on-brand preview card
+- [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](prototype-before-optimizing.md) — Defer production efficiency constraints until after establishing quality baselines to avoid locking in suboptimal architectures
+- [Background-to-Foreground Handoff](background-foreground-handoff.md) — Transfer work from a background agent to a human at the ~90% completion mark using distilled summaries and artifact-based handoff points
+- [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — Gate agent policy updates behind a traffic-split rollout so regressions surface on a small blast radius before full deployment
+- [Burn the Boats — Commitment-Forcing Deprecation](burn-the-boats.md) — Remove a working feature entirely with a hard deadline to force full commitment to a new paradigm and stop anchoring to obsolete approaches

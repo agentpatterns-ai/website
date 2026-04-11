@@ -110,6 +110,42 @@ Skills can reference other skills by name ([source](https://x.com/trq212/status/
 
 Reference skills by their exact `name` field, not by filename.
 
+## CLI-First Design (Recommended for Executable Skills)
+
+Skills with non-trivial executable logic should ship a dedicated CLI entry point under `<skill-name>/scripts/<skill-name>.{sh,py}` rather than embedding bash or Python inline in `SKILL.md` ([nibzard catalogue: CLI-First Skill Design](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md)). A single CLI interface serves humans (debugging, testing, composition with Unix tools) and agents (deterministic invocation, meaningful exit codes) at the same time.
+
+Inline-shell skills have compounding costs: logic cannot be tested independently, agents re-parse the shell on every invocation, humans debugging must manually extract commands from markdown, and composition requires reassembly.
+
+### The shape
+
+Three skill shapes, chosen by whether the skill has executable logic:
+
+| Shape | Use when | SKILL.md body | Logic lives in |
+|-------|----------|---------------|----------------|
+| **Script-backed (CLI-first)** | Skill has non-trivial executable logic | description, when to invoke, how to call the CLI, Gotchas, Related | `<skill-name>/scripts/<skill-name>.{sh,py}` |
+| **Inline-shell** | One- or two-line commands with no branching | fine to embed directly | SKILL.md itself |
+| **Pure reference** | Templates, taxonomies, decision tables | the reference content itself | SKILL.md itself |
+
+CLI-backed scripts should follow Unix philosophy: one script per skill, subcommands for operations, JSON on stdout, errors on stderr, meaningful exit codes, and `--dry-run` where side effects are involved.
+
+### Reference examples
+
+Three existing skills in this repo are written CLI-first and can be used as templates:
+
+- [`add-missing-meta`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/add-missing-meta) — script at `scripts/add-missing-meta.py`; SKILL.md body is a thin wrapper naming the trigger, the command, and the constraints
+- [`parse-citations`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/parse-citations) — Python module importable from other scripts, with the SKILL.md documenting the public API
+- [`create-audit-backlog`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/create-audit-backlog) — argparse-based CLI with flags documented in a table; SKILL.md names the triggers and the post-run steps
+
+### Authoring checklist
+
+When writing a new skill, answer:
+
+1. Does this skill have logic more complex than two lines of shell? If yes → CLI-first.
+2. If you chose inline, does the SKILL.md explain why (triviality, pure reference, or an environment-specific command that cannot be extracted)?
+3. Does the SKILL.md body reduce to description, when to invoke, how to call, Gotchas, and Related — with the actual algorithm living in `scripts/`?
+
+Existing inline-shell skills migrate opportunistically when next touched. No forced refactor — but new skills default to CLI-first.
+
 ## Five Implementation Patterns
 
 | Pattern | Use when | Key structure |

@@ -21,6 +21,7 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — Simple two-phase workflows often outperform complex autonomous agents — empirical evidence for starting with constrained approaches rather than maximizing AI autonomy
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — Classical GoF patterns and SOLID principles have direct structural analogues in agent systems, with the concern shift moving from reuse to control and safety
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable
+- [Discrete Phase Separation](discrete-phase-separation.md) — Prevent context contamination by running research, planning, and execution in separate conversations — only distilled artifacts cross phase boundaries
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — Agent delegation has overhead; match task characteristics to agent strengths rather than delegating everything or nothing
 - [Empowerment Over Automation](empowerment-over-automation.md) — AI tools should skip tedious work while preserving your autonomy over architectural decisions, domain logic, and creative choices
 - [Execution-First Delegation](execution-first-delegation.md) — Instead of scripting steps, specify the outcome and the boundaries; the agent determines how
@@ -28,7 +29,9 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](inversion-analysis.md) — Inversion asks what your architecture enables that others cannot replicate, producing novel integrations rather than feature parity
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) — Map the Open Agent School academic pattern taxonomy to practical coding-agent primitives like maxTurns, PreToolUse hooks, and CLAUDE.md memory
 - [Persona-as-Code: Defining Agent Roles as Structured Documents](persona-as-code.md) — Encode each agent's domain, responsibilities, constraints, output artifacts, and scope exclusions as a Markdown file so roles are explicit, auditable, and composable
+- [Graph of Thoughts: Directed Graph Reasoning for Multi-Path Problems](graph-of-thoughts.md) — Model reasoning as a directed graph to aggregate insights across independent paths — the Aggregate operation that neither CoT nor Tree of Thoughts can express
 - [Petri Net of Thoughts: Formal Process Models as Prompting Scaffolds](petri-net-of-thoughts.md) — Use Petri net formalism to derive reasoning structure from process evidence, giving each LLM call a state-aware prompt constrained by formally defined transitions
+- [Self-Discover Reasoning: LLM-Composed Reasoning Structures](self-discover-reasoning.md) — Enable the model to compose a task-specific reasoning plan from a library of atomic modules before solving, outperforming fixed strategies like Chain-of-Thought on complex analytical tasks
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — Agents synthesize, modify, and deploy custom tools during active problem-solving rather than relying on a fixed toolkit
 - [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md) — A three-layer framework — control architecture, tool interface, resource management — for characterizing and comparing coding agent scaffold designs
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) — Structure agent systems in three layers — skills (knowledge), agents (execution), and commands (orchestration) — so each layer changes independently
@@ -47,6 +50,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — Retrieve relevant past interaction episodes — not isolated facts — so agents recall what was tried, what failed, and what worked when facing similar problems
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — Extract causal lessons from agent execution traces — what worked, what failed, which approaches were abandoned and why — so every run makes future runs more effective
 - [Session Initialization Ritual: How Agents Orient Themselves](session-initialization-ritual.md) — A mandatory startup sequence that every agent session executes before touching code — verify state, orient to progress, confirm baseline health, then act
+- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md) — Assign and update utility scores to stored episodic memories so retrieval favors historically effective solutions, not just semantically similar ones
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — Store and retrieve memory at individual reasoning stages, not whole sessions, to prevent misguided retrieval when tasks share surface similarity
 
 ## Control & Orchestration
@@ -71,6 +75,8 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 
 Making agents robust — backpressure, idempotency, cost awareness, error recovery, and self-correction.
 
+- [Agent Circuit Breaker](agent-circuit-breaker.md) — Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops
+- [Self-Healing Production Agent](self-healing-production-agent.md) — A closed-loop pipeline that detects post-deploy regressions, triages causality, and dispatches a sub-agent to open a fix PR — with human review at the merge gate
 - [The Advisor Strategy: Frontier Model as Strategic Advisor](advisor-strategy.md) — Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention
 - [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Four observable failure clusters and three behavioral patterns that predict success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
@@ -98,6 +104,8 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — A single user-facing turn is an iterative sequence of model inference and tool execution steps, not a single round-trip inference call
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
 - [Harness Engineering](harness-engineering.md) — The discipline of designing agent environments — layered architecture, mechanical enforcement, legibility — so agents reliably produce correct results
+- [Lane-Based Execution Queueing](lane-based-execution-queueing.md) — Isolate concurrent agent tasks into named queues with per-lane concurrency limits to prevent output interleaving, race conditions, and deadlocks
+- [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — Decision framework for choosing between managed agent services and self-hosted harnesses based on compliance, memory ownership, model routing, and ops capacity
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture
 - [The Think Tool](think-tool.md) — A mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action
 - [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — Run multiple agent sessions simultaneously across projects — each session inherits workspace custom instructions and MCP servers, enabling practical fan-out task execution

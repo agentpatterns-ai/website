@@ -10,6 +10,7 @@ nav:
       - agentless-vs-autonomous.md
       - classical-se-patterns-agent-analogues.md
       - cognitive-reasoning-execution-separation.md
+      - discrete-phase-separation.md
       - continual-learning-layers.md
       - delegation-decision.md
       - empowerment-over-automation.md
@@ -19,7 +20,9 @@ nav:
       - inversion-analysis.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md
+      - graph-of-thoughts.md
       - petri-net-of-thoughts.md
+      - self-discover-reasoning.md
       - separation-of-knowledge-and-execution.md
       - structured-agentic-software-engineering.md
       - task-specific-vs-role-based-agents.md
@@ -29,7 +32,9 @@ nav:
       - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
+      - cross-cycle-consensus-relay.md
       - episodic-memory-retrieval.md
+      - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
       - session-initialization-ritual.md
       - subtask-level-memory.md
@@ -43,10 +48,13 @@ nav:
       - goal-monitoring-progress-tracking.md
       - loop-strategy-spectrum.md
       - progressive-disclosure-agents.md
+      - self-rewriting-meta-prompt-loop.md
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
   - "Reliability":
+      - agent-circuit-breaker.md
+      - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
       - agent-self-review-loop.md
@@ -70,6 +78,8 @@ nav:
       - deferred-permission-pattern.md
       - harness-engineering.md
       - harness-hill-climbing.md
+      - lane-based-execution-queueing.md
+      - managed-vs-self-hosted-harness.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md

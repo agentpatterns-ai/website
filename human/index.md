@@ -20,6 +20,8 @@ tags:
 - [Initiatives and Community: Tracking the Agentic Engineering Landscape](initiatives-community.md)
 - [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — Automatically approving low-risk operations reduces permission prompts so developers stay alert to the ones that matter
 - [PM on the AI Exponential: Short Sprints, Demos Over Docs, Simplicity](pm-on-the-ai-exponential.md) — Four workflow shifts for product management when AI model capabilities improve exponentially
+- [Polya Small-Steps: Using AI to Think Better, Not Think Less](polya-small-steps.md) — A problem-solving discipline that keeps AI as a thinking partner, working 1–2 steps at a time with comprehension as the exit gate
+- [Deliberate AI-Assisted Learning: Accelerating Skill Acquisition](deliberate-ai-learning.md) — Interaction patterns that use AI as adaptive scaffolding within the Zone of Proximal Development, building skill rather than replacing it
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — Prolonged AI delegation erodes the independent problem-solving skills needed to review, debug, and architect code
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — Empirical evidence from 150 data scientists shows strategy clarity predicts ML project success far more than AI coding speed
 - [Suggestion Gating: Why Fewer AI Completions Improve Developer Experience](suggestion-gating.md) — Lightweight classifiers gate suggestions before display, improving acceptance rates 33–48% while cutting wasted inference
