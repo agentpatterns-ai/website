@@ -197,7 +197,7 @@ def test_agent_handles_existing_pattern():
     assert uses_drizzle_orm(repo_file)  # not raw SQL
 ```
 
-See the [Eval-Driven Development](../../workflows/eval-driven-development.md) and [Eval Engineering](../foundations/eval-engineering.md) modules for full eval design methodology.
+See the [Eval-Driven Development](../../workflows/eval-driven-development.md) and [Eval Engineering](../../training/foundations/eval-engineering.md) modules for full eval design methodology.
 
 ### Step 3: Integrate Agents into CI/CD
 

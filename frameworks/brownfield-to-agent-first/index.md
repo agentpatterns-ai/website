@@ -1,8 +1,7 @@
 ---
-title: "Brownfield to Agent-First: Repo Transformation Training"
-description: "A staged transformation model for taking an existing codebase with no agent considerations and making it progressively more agent-friendly — from readable to fully agentic."
+title: "Brownfield to Agent-First: Repo Maturity Framework"
+description: "A staged transformation framework for taking an existing codebase with no agent considerations and making it progressively more agent-friendly — from readable to fully agentic."
 tags:
-  - training
   - agent-design
   - workflows
   - human-factors
