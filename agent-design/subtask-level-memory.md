@@ -134,3 +134,4 @@ Subtask-level memory adds overhead that outweighs benefits in several conditions
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [AST-Guided Agent Memory](ast-guided-agent-memory.md) -- uses AST representations instead of natural language as memory substrate for code generation agents
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)

@@ -129,7 +129,7 @@ Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [
 - **Keep tool lists small.** Single responsibility per server; curate minimal, non-overlapping toolsets.
 - **Design for lazy discovery.** Agents discover tools contextually, not upfront ([Bui 2025](https://arxiv.org/abs/2603.05344)). Write clear server instructions so tool search finds your tools.
 - **Make responses clearable.** Return only what the agent needs next. Tool result clearing is "one of the safest lightest touch forms of compaction" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
-- **Input schemas are 60--80% of per-tool token cost.** `[unverified]` Trim optional fields that agents rarely use. Consider `$ref` deduplication for shared types.
+- **Input schemas dominate per-tool token cost.** Trim optional fields that agents rarely use. Consider `$ref` deduplication for shared types.
 
 ## Server Design Checklist
 

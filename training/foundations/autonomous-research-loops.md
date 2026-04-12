@@ -145,7 +145,7 @@ graph LR
     S -->|condensed result| T
 ```
 
-For multi-session work, a progress file (`claude-progress.txt` or equivalent) persists state between sessions. The file tracks completed work with commit references, in-progress items, and remaining tasks. This replaces conversation context (which degrades) with a persistent artifact (which stays accurate).
+For multi-session work, a [progress file](../../observability/trajectory-logging-progress-files.md) (`claude-progress.txt` or equivalent) persists state between sessions. The file tracks completed work with commit references, in-progress items, and remaining tasks. This replaces conversation context (which degrades) with a persistent artifact (which stays accurate).
 
 ---
 

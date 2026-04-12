@@ -17,7 +17,7 @@ tags:
 
 ## Why Triangulate
 
-Frontier models have distinct training distributions that produce systematic biases in architectural decisions. One model tends to over-abstract; another under-specifies error handling; a third skips observability concerns `[unverified]`. Committing to a single model's plan imports those biases wholesale.
+Frontier models have distinct training distributions that produce systematic differences in architectural emphasis. Committing to a single model's plan imports those biases wholesale.
 
 Running plans in parallel across 3-4 models is cheap: planning tokens are a small fraction of implementation tokens. The synthesis step converts model disagreement from a problem into signal — where models agree, the decision is high-confidence; where they disagree, the tradeoff is worth examining.
 
@@ -83,6 +83,14 @@ graph TD
 | vs voting/ensemble | Extracts complementary strengths instead of picking majority answer | Synthesis requires a capable model and a precise prompt |
 | vs adversarial review | Front-loads architectural diversity before implementation; cheaper than post-implementation critique | Does not replace implementation-phase adversarial review |
 
+## Why It Works
+
+Diverse reasoning paths sample different regions of the hypothesis space. When multiple models produce independent plans, each model's training distribution emphasizes different constraints — one may foreground failure modes, another observability, another operational simplicity. Synthesis captures these perspectives without requiring any single model to hold all of them simultaneously.
+
+The mechanism is analogous to ensemble learning: agreement across diverse sources raises confidence precisely because each source was likely to produce different errors. Disagreement surfaces tradeoffs that a single planner would make implicitly; forcing those tradeoffs into the open allows deliberate human review rather than silent default.
+
+Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that diversity in reasoning paths improves outcomes, with ensemble disagreement reliably surfacing the highest-value decisions for human review ([Dipper, 2024](https://arxiv.org/abs/2412.15238)).
+
 ## When to Use
 
 - High-stakes architecture decisions where reverting is expensive
@@ -130,11 +138,6 @@ observability approach, and the top 3 risks you see.
 | Failure model | Disagree (DLQ vs saga) | DLQ for csv/email; saga compensation for multi-step DAG flows (Gemini) |
 
 **Tradeoff review**: Queue topology is the only high-stakes disagreement requiring deliberate decision — the team opts for 3 queues based on operational clarity. All other decisions have sufficient agreement to proceed with confidence.
-
-## Unverified Claims
-
-- Each model finds blind spots the others missed `[unverified]` — documented in practitioner workflows but not validated in controlled studies
-- Specific failure modes per model family (over-abstraction, under-specified error handling, missed observability) `[unverified]` — pattern observed in practitioner reports, not systematically studied
 
 ## Related
 

@@ -26,8 +26,8 @@ Models carry strong training priors: they reach for `npm`, `git add -A`, or `cur
 
 | Approach | Reliability | Override risk |
 |----------|------------|---------------|
-| AGENTS.md instruction | Low — model interprets [unverified] | High — model may ignore under task pressure [unverified] |
-| System prompt rule | Medium — higher attention [unverified] | Medium — multi-step tasks cause drift [unverified] |
+| AGENTS.md instruction | Low — model interprets freely | High — model may ignore under task pressure |
+| System prompt rule | Medium — higher attention weight | Medium — multi-step tasks cause drift |
 | `PreToolUse` hook | High — executes in shell | None — model cannot bypass |
 
 ## How Hooks Work
@@ -192,7 +192,7 @@ else
 fi
 ```
 
-**Block outbound curl during test runs [unverified]:**
+**Block outbound network calls during agent sessions:**
 
 ```bash
 #!/bin/bash
@@ -226,11 +226,11 @@ echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) Instructions loaded: $INSTRUCTIONS" >> ~/.c
 }
 ```
 
-`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` files are loaded (v2.1.69 [unverified]). Combined with `agent_id` and `agent_type` from the event payload [unverified], this enables per-agent instruction auditing in multi-agent workflows.
+`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` files are loaded. The event payload includes `file_path`, `memory_type`, `load_reason`, and `trigger_file_path` — enough to audit which instruction files each agent session loads ([docs](https://code.claude.com/docs/en/hooks)).
 
 ## Hook Configuration and Combining
 
-Multiple handlers can fire for the same event and matcher. Hooks scope at different levels ([docs](https://code.claude.com/docs/en/hooks)):
+Multiple handlers can fire for the same event and matcher. Hooks scope at different levels ([docs](https://code.claude.com/docs/en/hooks); [settings reference](https://code.claude.com/docs/en/settings)):
 
 | Location | Scope | Shareable |
 |----------|-------|-----------|
@@ -239,6 +239,13 @@ Multiple handlers can fire for the same event and matcher. Hooks scope at differ
 | `.claude/settings.local.json` | Single project | No — gitignored |
 
 Project-level hooks in `.claude/settings.json` travel with the repo and enforce team conventions for all contributors.
+
+## When This Backfires
+
+- **False positive blocking**: Over-broad regex matchers (e.g., matching `rm` instead of `rm -rf`) block legitimate commands. The model then exhausts retry attempts or hallucinates workarounds. Validate patterns against real command logs before deploying.
+- **Silent failures hide problems**: A hook that exits non-zero without emitting a `permissionDecisionReason` gives the model no signal to adapt — the tool call silently fails. Always emit a reason string.
+- **Maintenance burden from fragile patterns**: Hooks that match on exact command strings break when the model changes invocation style (e.g., `git push origin main` vs `git push --set-upstream origin main`). Pattern maintenance can outpace instruction updates.
+- **No bypass path for emergency changes**: A hook enforcing team standards can block a legitimate time-sensitive operation. Without a documented override mechanism (e.g., `settings.local.json` entry), contributors are stuck.
 
 ## When to Use Hooks vs. Instructions
 

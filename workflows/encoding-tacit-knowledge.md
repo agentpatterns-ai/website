@@ -13,7 +13,7 @@ tags:
 
 ## The Encoding Problem
 
-Most teams carry two kinds of knowledge. Documented institutional knowledge — ADRs, runbooks, onboarding guides — can be encoded directly into instruction files or skills. Tacit knowledge is different: it lives in the judgment of experienced practitioners who apply it automatically but struggle to articulate it on demand ([LangChain](https://blog.langchain.com/human-judgment-in-the-agent-improvement-loop/)).
+Most teams carry two kinds of knowledge. Documented institutional knowledge — ADRs, [runbooks](runbooks-as-agent-instructions.md), onboarding guides — can be encoded directly into instruction files or skills. Tacit knowledge is different: it lives in the judgment of experienced practitioners who apply it automatically but struggle to articulate it on demand ([LangChain](https://blog.langchain.com/human-judgment-in-the-agent-improvement-loop/)).
 
 When you ask a senior engineer to explain a coding convention, they often describe the rule. When you watch them review code, they catch five additional things the rule didn't mention. That gap is tacit knowledge. An agent trained only on what practitioners *say* they do, not what they *actually* do, will hit a quality ceiling that no amount of prompt tuning can raise. A study of a visualization domain found a 206% quality improvement when an agent was augmented with codified expert domain knowledge compared to a baseline with no such encoding — the gap was attributed to knowledge quality, not model capability ([arxiv 2601.15153](https://arxiv.org/html/2601.15153v1)).
 
@@ -68,7 +68,15 @@ Encoded tacit knowledge becomes stale. Practices evolve, tools change, new team 
 
 Two signals indicate staleness: the agent produces output that matches an older convention rather than current practice, or domain experts start regularly overriding automated evaluator verdicts. Both indicate a gap between encoded knowledge and current tacit knowledge.
 
-Schedule periodic re-elicitation sessions — not triggered by failure, but on a regular cadence. Treat each session as a diff against the previous encoding: capture what has changed, update the affected instructions and eval criteria, and document why the standard shifted. [unverified: specific re-elicitation cadence norms are not standardized across teams]
+Schedule periodic re-elicitation sessions — not triggered by failure, but on a regular cadence. Treat each session as a diff against the previous encoding: capture what has changed, update the affected instructions and eval criteria, and document why the standard shifted. Cadence varies by domain velocity; fast-moving teams may need quarterly sessions while stable domains can run annually.
+
+## When This Backfires
+
+Encoding tacit knowledge is expensive and carries its own failure modes:
+
+- **Expert is unavailable or unwilling**: the workflow requires sustained access to domain experts. If the only subject-matter expert is time-constrained or has left the team, elicitation stalls. Consider recording rationale during code reviews and retrospectives as a lower-bandwidth substitute.
+- **Knowledge is too context-sensitive to encode**: some judgments depend on real-time context that cannot be captured as static instructions or few-shot examples. Forcing them into an instruction file produces rules that are correct on average but wrong in the specific cases that matter most. Prefer eval tasks that test context-sensitive behavior rather than encoding the rule.
+- **Encoding lag creates stale guidance faster than re-elicitation fixes it**: in domains where practices shift rapidly (new frameworks, evolving security requirements), encoded knowledge may be outdated before agents act on it. High-velocity domains may benefit more from retrieval-augmented context (pulling live documentation at inference time) than from static encoded knowledge.
 
 ## Key Takeaways
 
@@ -77,10 +85,6 @@ Schedule periodic re-elicitation sessions — not triggered by failure, but on a
 - Elicited knowledge maps to three encoding targets: instruction constraints (explicit rules), few-shot examples (contextual judgment), and eval rubrics (quality standards)
 - Scale human review by using expert annotation to calibrate automated evaluators, then shifting volume to automation
 - Encoded tacit knowledge drifts as practices evolve — schedule proactive re-elicitation sessions rather than waiting for failures to expose the gap
-
-## Unverified Claims
-
-- Specific re-elicitation cadence norms are not standardized across teams [unverified]
 
 ## Related
 
@@ -91,3 +95,5 @@ Schedule periodic re-elicitation sessions — not triggered by failure, but on a
 - [Introspective Skill Generation](introspective-skill-generation.md) — agent-assisted skill capture from observed behavior
 - [Closed-Loop Agent Training](closed-loop-agent-training.md) — full feedback loop from production to training
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — converting failures into eval cases
+- [AI Development Maturity Model](ai-development-maturity-model.md) — calibration and eval stages in the broader maturity arc
+- [Changelog-Driven Feature Parity](changelog-driven-feature-parity.md) — elicitation from changelogs as a knowledge capture technique

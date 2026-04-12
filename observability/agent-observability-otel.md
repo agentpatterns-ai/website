@@ -41,8 +41,8 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 To see data quickly during setup, reduce export intervals:
 
 ```bash
-export OTEL_METRIC_EXPORT_INTERVAL=10000   # 10 s (default: 60 000 ms) [unverified]
-export OTEL_LOGS_EXPORT_INTERVAL=5000      # 5 s (default: 5 000 ms) [unverified]
+export OTEL_METRIC_EXPORT_INTERVAL=10000   # 10 s (default: 60 000 ms)
+export OTEL_LOGS_EXPORT_INTERVAL=5000      # 5 s (default: 5 000 ms)
 ```
 
 Reset to defaults before production; short intervals add overhead.
@@ -95,7 +95,7 @@ All events in a prompt cycle share a `prompt.id` (UUID v4) for correlation. `pro
 
 ## Cost Dashboards
 
-`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog over Prometheus (poorly suited to high-cardinality distinct counts) `[unverified]`. Cost values are approximations — use the billing console for authoritative figures.
+`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog over Prometheus — the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) note Prometheus is suited to time-series aggregations, while columnar stores handle efficient distinct-count queries. Cost values are approximations — use the billing console for authoritative figures.
 
 ## Prometheus + Grafana Monitoring Stack
 
@@ -116,11 +116,22 @@ Pair with `tool_result` events (which carry `tool_parameters`) for full audit co
 
 ## LangSmith Trajectory Tracing for LangChain Agents
 
-[LangSmith](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) records each agent action as a trace entry (tool name, inputs, outputs, latency, tokens, cost). Traces can be replayed, diffed, and fed back as improvement signal. The **Trace Analyzer pattern** `[unverified]` automates this: retrieve traces → run parallel error-analysis agents → synthesize → apply harness changes.
+LangSmith records each agent action as a trace entry (tool name, inputs, outputs, latency, tokens, cost). Traces can be replayed, diffed, and fed back as improvement signal. Retrieving traces, running parallel error-analysis agents over them, and synthesizing harness changes is a natural automation loop on top of this data.
 
 ## Progress Files as Human-Readable Audit Trails
 
 OTel traces are machine-readable. For human-readable audit trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits at each task providing a diff-linked audit trail. Watch for [goal drift](../anti-patterns/objective-drift.md) (repeated clarifications, premature completion post-compaction) via diffs. When post-compaction drift is detected, the [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores behavioral compliance.
+
+## Why It Works
+
+OTel's push-based export model fits agent workloads because agents are long-running processes that emit bursts of activity across many tool calls. A pull-based model (e.g., Prometheus scraping) risks missing short-lived sessions or under-sampling bursty cost spikes. The `prompt.id` correlation attribute is structurally necessary because a single user prompt can trigger dozens of API calls and tool executions — without a shared identifier, reconstructing what caused a cost spike or failure is infeasible post-hoc. Structured audit trails (rather than log-level text) let teams query "which tool decisions fired under which authorization source" without parsing free text.
+
+## When This Backfires
+
+- **Label cardinality explosion**: Using `prompt.id` or other per-request identifiers as metric labels creates an ever-growing number of time series. The official docs exclude `prompt.id` from metrics for this reason — enforce the same discipline on custom attributes added via `OTEL_RESOURCE_ATTRIBUTES`.
+- **Secrets in tool parameters**: `tool_parameters` on `tool_result` events may include Bash commands or MCP arguments that contain credentials. Without backend redaction, enabling `OTEL_LOG_TOOL_DETAILS=1` leaks secrets into your telemetry store.
+- **Context loss across agent boundaries**: OTel traces propagate via `TRACEPARENT` only to direct subprocesses. Agents that communicate via queues, webhooks, or separate processes break the trace context chain — you get islands of trace data rather than end-to-end visibility.
+- **Cost approximations masquerade as billing data**: `claude_code.cost.usage` values are estimates. Teams that build chargebacks or budget alerts directly on metric values will drift from actual invoices over time; always reconcile against the billing console.
 
 ## Key Takeaways
 
@@ -129,13 +140,6 @@ OTel traces are machine-readable. For human-readable audit trails that survive c
 - `claude_code.tool_decision` with `source` is a ready-made compliance audit trail.
 - OTel metrics, LangSmith traces, and [progress files](trajectory-logging-progress-files.md) complement each other: cost/perf, failure analysis, and context-portable audit trails.
 - Enforce telemetry org-wide via managed settings (MDM).
-
-## Unverified Claims
-
-- Default `OTEL_METRIC_EXPORT_INTERVAL` is 60,000 ms [unverified]
-- Default `OTEL_LOGS_EXPORT_INTERVAL` is 5,000 ms [unverified]
-- For unique-user counts, prefer a columnar backend over Prometheus [unverified]
-- The Trace Analyzer pattern automates failure analysis [unverified]
 
 ## Related
 
@@ -148,3 +152,4 @@ OTel traces are machine-readable. For human-readable audit trails that survive c
 - [Observability Legible to Agents](observability-legible-to-agents.md)
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
+- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)

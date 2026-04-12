@@ -98,13 +98,10 @@ Telling an agent "just implement it" on a multi-file feature leads to implementa
 - [The Plan-First Loop](plan-first-loop.md) — The general pattern of designing before coding, independent of tool-specific features
 - [Context Priming](../context-engineering/context-priming.md) — Loading relevant context before implementation; Plan Mode is one mechanism for achieving this
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — Structured exploration of a codebase before making changes
+- [Human-in-the-Loop Placement](human-in-the-loop.md) — Where to place human approval gates in agent pipelines; Plan Mode is one mechanism for inserting a review checkpoint before execution
 
 ## Sources
 
 - [Claude Code — Common Workflows: Plan Mode](https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis)
 - [Claude Code — Best Practices: Explore first, then plan, then code](https://code.claude.com/docs/en/best-practices)
 - [Claude Code — Settings](https://code.claude.com/docs/en/settings)
-
-## Unverified Claims
-
-- Matt Pocock described switching from AI skeptic to plan mode advocate as a turning point for output quality [unverified]

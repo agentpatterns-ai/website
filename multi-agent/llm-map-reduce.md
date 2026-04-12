@@ -82,7 +82,7 @@ Err toward smaller chunks — context degradation is [non-linear](../context-eng
 | **Merge** | Structured outputs (lists, tables) | Deterministic concatenation + deduplication |
 | **Vote/filter** | Classification tasks | Majority vote or threshold across chunks |
 
-Hierarchical reduce compresses results in groups, forming a tree [unverified].
+Hierarchical reduce groups map results into intermediate reduce nodes, compressing outputs at each level until a single final reduce agent synthesizes the tree.
 
 ```mermaid
 graph TD
@@ -133,6 +133,15 @@ For file-system isolation during map phases that write files, use `isolation: wo
 **Use orchestrator-worker instead when:** subtasks require different operations or tool sets; decomposition is by task type, not input partition.
 
 **Use sequential processing when:** chunks depend on prior results; total input fits one context window; or [Anthropic’s long-running agent guide](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) applies.
+
+## When This Backfires
+
+Map-reduce underperforms or fails entirely in several conditions:
+
+- **Cross-chunk dependencies** — if answering the query requires synthesizing evidence spread across multiple chunks (e.g., a refactoring that changes an interface used across 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. The reduce agent receives outputs that individually look clean but miss the systemic issue.
+- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret partial context. The reduce agent then reconciles contradictory or truncated findings without knowing they are artifacts of the split.
+- **Hierarchical reduce error propagation** — at each reduce level, summaries lose information. A two-level hierarchy that reduces 50 map outputs to 5 intermediate summaries, then to 1 final output, compounds extraction errors at every stage. The final output can be coherent but wrong in ways that are invisible without comparison to the raw inputs.
+- **Thin map outputs** — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent must process N near-identical outputs; cost scales linearly while output quality plateaus.
 
 ## Failure Handling
 

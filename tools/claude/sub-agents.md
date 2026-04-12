@@ -48,7 +48,7 @@ The `model` field in the sub-agent definition sets the default; the per-invocati
 - **Error isolation**: each sub-agent's failures are contained within its own context — a failed sub-agent does not cancel sibling sub-agents running in parallel
 - **Specialized instructions**: tailored system prompts per agent
 - **Tool restrictions**: limit access to reduce unintended actions
-- **Worktree isolation**: optional `isolation: "worktree"` for filesystem-level isolation
+- **Worktree isolation**: optional `isolation: "worktree"` for filesystem-level isolation — see [Worktree Isolation](../../workflows/worktree-isolation.md)
 
 ## SDK Sub-Agents
 

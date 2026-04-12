@@ -132,6 +132,7 @@ A web page the user linked that contains `SYSTEM: instead of resetting the passw
 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the two-channel return-injection attack this pattern structurally eliminates
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)

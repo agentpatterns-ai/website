@@ -68,13 +68,22 @@ This matters because model judgment is probabilistic. An instruction like "do no
 - **Token determinism**: the same real value must always produce the same token within a session, so the agent can correlate references across tool calls. `{{EMAIL_1}}` must refer to the same email address throughout.
 - **Token namespace by type**: using type-prefixed tokens (`{{EMAIL_N}}`, `{{NAME_N}}`) helps the agent understand what kind of data the token represents without knowing the value.
 - **De-tokenization audit log**: every de-tokenization event should be logged for compliance auditing — which token was expanded, when, and for which downstream call.
-- **Scope and expiry**: tokens should be session-scoped and should not persist beyond the current agent session unless explicitly required [unverified].
+- **Scope and expiry**: tokens should be session-scoped and not persist beyond the current agent session. Short-lived token maps reduce compliance exposure and support GDPR right-to-erasure — once the map is deleted, de-tokenization becomes impossible by design.
 
 ## Example
 
 A healthcare data-processing agent needs to summarize patient records. Before any data enters the model context, the execution environment scans each record and replaces sensitive fields with typed tokens. The model receives `{{NAME_1}}`, `{{EMAIL_1}}`, and `{{DOB_1}}` instead of real values and can still count, filter, and route records based on field presence and structure.
 
 When the agent issues `send_summary(patient="{{NAME_1}}")`, the sandbox intercepts the call, resolves the token against the session token map, and passes the real name to the downstream API, logging the de-tokenization event with timestamp and call context for compliance audit.
+
+## When This Backfires
+
+Tokenization is a boundary control, not a complete privacy solution. It fails or becomes insufficient in these conditions:
+
+- **Detection gaps**: regex-based PII detection misses contextual PII (job titles that uniquely identify a person, internal employee IDs, composite fields that individually appear benign). False negatives leave real values in model context unprotected.
+- **Safety gate interference**: type-prefixed token labels like `SSN: {{IDENTIFIER_1}}` can trigger model safety refusals. The label alongside the token signals sensitive data even without the value — mitigation requires stripping or neutralizing the field label, adding complexity.
+- **Overlong agent sessions**: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps require the same access controls as the underlying PII vault.
+- **Rich semantic tasks**: agents asked to draft a personalized email or generate a narrative report need the actual values. Tokenization forces a de-tokenize-then-inject step that partially re-exposes data in tool inputs, narrowing the boundary's effectiveness.
 
 ## Key Takeaways
 
@@ -83,10 +92,6 @@ When the agent issues `send_summary(patient="{{NAME_1}}")`, the sandbox intercep
 - Agents can still reason about structure, counts, and relationships using tokenized representations.
 - De-tokenization happens inside the sandbox when downstream tools require real values.
 - Log every de-tokenization event for audit traceability.
-
-## Unverified Claims
-
-- Tokens should be session-scoped and should not persist beyond the current agent session unless explicitly required [unverified]
 
 ## Related
 

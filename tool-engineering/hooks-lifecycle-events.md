@@ -184,3 +184,4 @@ When the agent runs `npm install lodash`, the hook denies the call and the model
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
+- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)

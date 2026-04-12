@@ -44,7 +44,7 @@ Each active session requires:
 - Integration decisions when session outputs interact
 - Final PR review before merge
 
-Three to five sessions may be a practical ceiling for one engineer, depending on task complexity and how frequently sessions need attention [unverified]. Beyond that, the overhead of staying current with all sessions may exceed the parallelism benefit.
+The number of sessions one engineer can manage effectively depends on task complexity and how frequently each session needs attention. Beyond a handful of concurrent sessions, the overhead of staying current may exceed the parallelism benefit.
 
 ## Agents Don't Context-Switch; Humans Do
 
@@ -109,10 +109,6 @@ With this structure, the engineer reviews progress updates from each session in 
 - Design tasks so sessions batch their questions and can make extended progress independently
 - `/clear` cancels only the foreground task — background agents and bash tasks survive, making it safe to reset context mid-session
 
-## Unverified Claims
-
-- Three to five sessions may be a practical ceiling for one engineer [unverified]
-
 ## Related
 
 - [Worktree Isolation](worktree-isolation.md)
@@ -123,3 +119,4 @@ With this structure, the engineer reviews progress updates from each session in 
 - [Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)
 - [Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
+- [Compound Engineering](compound-engineering.md)

@@ -138,9 +138,16 @@ on:
 
 ## Extension: Learning From Session Logs
 
-Brian Scanlan (Intercom) noted [unverified] that a weekly CLAUDE.md fact-checker "needs to go further and continually learn" — meaning the next step is not just verifying existing claims but surfacing new patterns from agent session logs worth adding to the instruction file.
+A natural extension of the fact-checker is a workflow that also learns — not just verifying existing claims but surfacing new patterns from agent session logs worth adding to the instruction file.
 
 That extension is a separate workflow from fact-checking. The fact-checker answers "is what we wrote still true?" Session log mining answers "what should we add?" Conflating them in one agent produces a low-precision output that is harder to review.
+
+## When This Backfires
+
+- **Stable, low-churn projects** — if the codebase changes rarely, weekly PRs with zero corrections are noise. Disable the schedule and trigger only on directory changes.
+- **Intent drift masquerading as fact drift** — the agent may propose "correcting" a path that moved intentionally as part of a refactor, without knowing the convention itself changed. Each correction PR still needs human review; this is a feature, not a bug, but reviewers who rubber-stamp will erode the quality of the instruction file over time.
+- **High-rename velocity** — projects that rename paths and commands frequently will produce a steady stream of correction PRs. At that point, better investment is a single post-refactor hook that prompts the developer to update CLAUDE.md before the schedule runs.
+- **Over-scoped prompts** — if the agent prompt allows editing strategy or intent (not just verifiable facts), it will rewrite the instruction file's meaning rather than its accuracy. Restrict `--allowedTools` to `Read,Bash,Write` and constrain the prompt to fact-checking only.
 
 ## Example
 
@@ -182,3 +189,4 @@ The agent opens a single PR with two surgical edits to CLAUDE.md. A human review
 - [CLI, IDE, GitHub Context Ladder](cli-ide-github-context-ladder.md)
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Continuous AI-Agentic CI/CD](continuous-ai-agentic-cicd.md)
+- [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)

@@ -11,10 +11,10 @@ tags:
 
 > Wire browser automation, application metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior from real signals.
 
-!!! note "Not about observing agents"
-    [Agent Observability (OTel)](agent-observability-otel.md) covers humans watching agent behavior. This page covers the inverse: **agents watching application behavior** through tools.
-
 ## The Gap
+
+!!! note "Not about observing agents"
+    [Agent Observability (OTel)](agent-observability-otel.md) covers humans watching agent behavior. The inverse: agents watching application behavior through tools.
 
 Agents write code, run tests, and read output. They cannot:
 
@@ -50,7 +50,7 @@ Agents verify rendering and UI behavior by driving a browser.
 **Accessibility snapshots vs. screenshots.** Snapshots return structured text (roles, names, states) that LLMs reason about directly. Screenshots require a vision model -- use them only for layout bugs.
 
 !!! warning "Blind spot: modal dialogs"
-    Puppeteer MCP cannot see browser-native alert modals -- Anthropic's [harness engineering](../agent-design/harness-engineering.md) work found modal-dependent features were buggier as a result. Playwright MCP snapshots partially address this [unverified].
+    Puppeteer MCP cannot see browser-native alert modals (`window.alert`, `window.confirm`, `window.prompt`) -- this is a known architectural gap. Use Playwright MCP when the workflow includes native dialog interactions; its accessibility snapshot model captures dialog state that screenshot-only tools miss.
 
 **Executable proof of work:** [Showboat](https://github.com/simonw/showboat) mixes narrative and runnable code blocks with captured output. Its `verify` command re-executes every block and checks outputs match.
 
@@ -127,6 +127,15 @@ datadog_metric_query(query="sum:auth.errors{service:auth}.as_count()", from="-1h
 ```
 
 The agent closed the loop: logs identified the root cause, tests confirmed the code fix, browser automation verified the UI, and metrics proved errors dropped.
+
+## When This Backfires
+
+Wiring observability into agent context adds complexity that can degrade reliability:
+
+- **MCP server outage = blind agent.** If the Datadog or Axiom MCP server is down, the agent loses all log and metric visibility. It may silently proceed without realizing its verification step returned nothing.
+- **Stale or sampled data misleads.** Metrics dashboards aggregate and sample. An agent querying error rate 30 seconds after a deploy may read pre-deploy data and incorrectly conclude the fix worked.
+- **Context bloat from large payloads.** Log queries without tight time/count limits can return thousands of entries, consuming context window and reducing reasoning quality. JIT references (described above) mitigate this but require deliberate query discipline.
+- **Screenshot-heavy workflows are slow.** Vision-model verification via screenshots adds latency per check. On long test suites this compounds; prefer accessibility snapshots for functional checks and screenshots only for layout verification.
 
 ## Related
 

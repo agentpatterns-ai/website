@@ -53,9 +53,9 @@ Vibe coding produces [black box nodes](../anti-patterns/trust-without-verify.md)
 
 **Review at scale.** AI generates thousands of lines per session. [CodeRabbit found](https://www.coderabbit.ai/blog/code-review-best-practices-for-vibe-coding) that AI-generated code is "notoriously verbose" with pointless loops and imaginary functions, and large PRs defeat meaningful review. PRs of 10,000+ lines guarantee reviewers miss critical issues.
 
-**Productivity expectations.** A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers were 19% slower with AI tools despite predicting they would be 24% faster. Developers accepted less than 44% of AI generations [unverified], with rejected code consuming review time for no output.
+**Productivity expectations.** A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers were 19% slower with AI tools despite predicting they would be 24% faster. Rejected AI generations still consume review time with no output to show for it.
 
-**Safeguard removal.** When AI output triggers linters or tests, vibe coders remove the safeguard rather than fixing the code [unverified]. The guardrail correctly identified dangerous code; the response was to delete the guardrail.
+**Safeguard removal.** When AI output triggers linters or tests, the path of least resistance is removing the safeguard rather than fixing the code. The guardrail correctly identified dangerous code; the response was to delete the guardrail.
 
 **Maintainer burden.** [Open source projects report](https://www.infoq.com/news/2026/02/ai-floods-close-projects/) being flooded with AI-generated contributions — Daniel Stenberg shut down cURL's bug bounty after AI submissions reached 20% with only 5% validity. The cost of receiving contributions stays constant while the cost of creating them collapses.
 
@@ -65,7 +65,7 @@ If you choose to vibe code, these practices limit the blast radius of wrong outp
 
 ### Frequent Git Staging Outside the Session
 
-Stage and commit at every working milestone from a separate terminal — not through the agent. Asking the agent to handle version control introduces risks: the agent may stage incomplete work, commit with misleading messages, or trigger automation that interferes with the current task ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)) [unverified].
+Stage and commit at every working milestone from a separate terminal — not through the agent. Agents staging version control operations can introduce subtle problems: staging incomplete work, committing with misleading messages, or triggering automation that interferes with the current task ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)).
 
 ```bash
 # In a separate terminal, not through the agent
@@ -149,12 +149,6 @@ The entire session takes 10 minutes. The developer never read a diff. The tool w
 - Stage and commit from a separate terminal at every working milestone — do not delegate version control to the agent
 - Verify incrementally and maintain enough domain knowledge to distinguish correct output from output that merely appears to work
 
-## Unverified Claims
-
-- Asking the agent to handle version control introduces risks such as staging incomplete work or committing with misleading messages [unverified]
-- Developers accepting less than 44% of AI generations [unverified]
-- Vibe coders removing safeguards rather than fixing flagged code [unverified]
-
 ## Related
 
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
@@ -167,3 +161,4 @@ The entire session takes 10 minutes. The developer never read a diff. The tool w
 - [Human-in-the-Loop](human-in-the-loop.md)
 - [Verification-Centric Development](verification-centric-development.md)
 - [Eval-Driven Development](eval-driven-development.md)
+- [The AI Development Maturity Model](ai-development-maturity-model.md)

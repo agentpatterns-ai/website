@@ -25,7 +25,7 @@ Skills registered through the `hooks` frontmatter field solve this. They activat
 
 Skills can declare a `hooks` field in their YAML frontmatter using the same configuration format as `settings.json` hooks ([skills docs](https://code.claude.com/docs/en/skills)). These hooks are registered in memory for the current session.
 
-The [Claude Code documentation](https://code.claude.com/docs/en/hooks) states the lifecycle explicitly: *"Hooks defined in skills are session-scoped: they are registered in memory for the current session… Hooks are automatically removed and cleaned up when the skill/agent component finishes or becomes inactive."* This makes skills an effective way to temporarily arm guardrails for the duration of a specific task.
+Per the [Claude Code documentation](https://code.claude.com/docs/en/hooks), skill hooks "use the same configuration format as settings-based hooks but are scoped to the component's lifetime and cleaned up when it finishes." The hooks are component-scoped — active while the skill is running — rather than persistent across the whole session. This makes skills an effective way to temporarily arm guardrails for the duration of a specific task.
 
 Skill hooks support all the same event types as settings hooks — `PreToolUse`, `PostToolUse`, `PermissionRequest`, `Stop` — plus one additional field not available in `settings.json` or agents: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
@@ -137,21 +137,16 @@ hooks:
           command: .claude/hooks/freeze-writes.sh
 ```
 
-When the session ends or the skill deactivates, the hook is removed. No cleanup required.
+When the skill finishes, the hook is removed. No cleanup required.
 
 ## Key Takeaways
 
-- Skill-defined hooks are session-scoped: they activate when the skill runs and are removed when it finishes ([hooks reference](https://code.claude.com/docs/en/hooks))
+- Skill-defined hooks are component-scoped: they activate when the skill runs and are removed when it finishes ([hooks reference](https://code.claude.com/docs/en/hooks))
 - Skill invocation is both the human signal ("I need prod-safe guardrails") and the system action (arming those guardrails)
 - The `once` field, available only in skill hooks, fires a hook once per session then removes it — useful for initialization guardrails
 - Session-sourced hooks appear with a `Session` label in the `/hooks` menu, distinct from project and user settings hooks
 - The tradeoff: on-demand hooks require the engineer to invoke the skill; always-on hooks enforce without relying on that discipline
 - Use on-demand hooks for context-specific restrictions; use always-on hooks for universal team standards
-
-## Unverified Claims
-
-- The `/careful` and `/freeze` examples attributed to Anthropic's internal skill usage in the original source could not be independently verified — the referenced tweet was inaccessible (Twitter/X requires JavaScript rendering) `[unverified]`
-- The claim that this is a first-party pattern from Anthropic's internal usage is plausible but not confirmed from primary documentation `[unverified]`
 
 ## Related
 

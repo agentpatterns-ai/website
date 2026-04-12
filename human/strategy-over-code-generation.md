@@ -52,7 +52,7 @@ This maps directly to what teams experience with AI agents: adopting rigorous re
 
 The study measures ML projects broadly, not AI coding agents specifically. But the structural relationships apply:
 
-**Strategy failure looks like**: Using an agent to generate code before defining what the code should accomplish. Vibe coding an entire feature without requirements. Automating the wrong workflow.
+**Strategy failure looks like**: Using an agent to generate code before defining what the code should accomplish. [Vibe coding](../workflows/vibe-coding.md) an entire feature without requirements. Automating the wrong workflow.
 
 **Process without ecosystem looks like**: Requiring code review for every agent PR but having no automated linting, no test suite, and no CI pipeline. The review burden scales with agent output volume.
 

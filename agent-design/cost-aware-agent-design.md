@@ -171,6 +171,7 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md)

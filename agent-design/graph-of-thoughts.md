@@ -70,7 +70,7 @@ GoT adds value when the problem has **interdependent reasoning paths** — where
 GoT is **not justified** for:
 
 - Problems solvable by a single reasoning chain — use CoT
-- Exploration tasks where paths don't need to reconverge — use ToT or plan-mode
+- Exploration tasks where paths don't need to reconverge — use ToT or [Plan Mode](../workflows/plan-mode.md)
 - Resource-constrained settings — 5–20x cost premium and implementation complexity limit production use ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/graph-of-thoughts.md))
 - Advanced reasoning models (Claude extended thinking, o1) that internalize multi-step synthesis — external GoT scaffolding introduces additional latency without a demonstrated benefit over the model's built-in chain computation
 

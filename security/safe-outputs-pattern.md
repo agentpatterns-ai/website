@@ -16,7 +16,7 @@ tags:
 
 ## The Principle
 
-Every agent starts with zero write access. Read operations — querying files, reading issues, inspecting PR state — are unrestricted. Write operations — creating PRs, posting comments, modifying files — require explicit per-type authorization. This inverts the typical permission model where agents receive broad access and rules attempt to constrain behavior after the fact [unverified].
+Every agent starts with zero write access. Read operations — querying files, reading issues, inspecting PR state — are unrestricted. Write operations — creating PRs, posting comments, modifying files — require explicit per-type authorization. This inverts the default GitHub Actions trust model, where [everything runs in the same trust domain](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) and rogue agents can interfere with MCP servers, access authentication secrets, and make network requests to arbitrary hosts.
 
 GitHub's agentic workflows [implement this as a foundational trust pattern](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/): agents access repository state through a read-only MCP server by default, and all write operations flow through a separate safe outputs MCP server that buffers and validates every modification.
 
@@ -59,6 +59,17 @@ The pattern generalizes to any agent execution environment:
 
 In each case, the same structure applies: enumerate the write operations, set volume limits, validate content before execution, and log everything.
 
+## Why It Works
+
+The security guarantee is architectural, not behavioral. By routing all writes through a separate MCP server that buffers requests before execution, the pattern creates a deterministic checkpoint where constraint enforcement happens before any modification reaches the repository. [Post-hoc analysis is reactive](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/) — the damage already exists publicly by the time detection runs. Staged mediation is preventive: each stage's side effects are explicit and vetted, so a prompt-injected or hallucinating agent cannot overwhelm maintainers with spam, embed malicious content in outputs, or leak secrets before detection.
+
+## When This Backfires
+
+- **Write operation not in declared list** — if a legitimate agent task requires a write type that the workflow author did not enumerate, the operation silently fails at the filtering stage; the blast-radius guarantee becomes an accidental availability denial for valid use cases
+- **Volume caps too tight** — a refactoring agent creating many small PRs may hit caps designed for spam prevention; tuning limits requires understanding the workload distribution before execution
+- **Content moderation false positives** — pattern-based URL removal or content filtering can strip legitimate technical content (e.g., documentation links in PR descriptions) without surfacing a failure signal to the agent
+- **Does not protect the read surface** — the pattern bounds the write blast radius, but a compromised agent still has full read access to repository state; exfiltration risks require separate controls such as scoped credentials or network isolation
+
 ## Example
 
 A GitHub Actions workflow declares its safe outputs before execution. The agent is granted permission to create pull requests and post issue comments, with a volume cap of three pull requests per run. Any attempt to push commits directly or modify workflow files is blocked at the operation-filtering stage.
@@ -83,10 +94,6 @@ At runtime, the agent calls the safe outputs MCP server for every write. The ser
 - Apply sequential validation (operation filtering, content moderation, secret removal) to every write
 - Volume limits on output types prevent runaway agent behavior
 - The pattern applies to any agent environment, not just GitHub workflows
-
-## Unverified Claims
-
-- Typical permission model gives agents broad access with rules constraining behavior after the fact `[unverified]`
 
 ## Related
 

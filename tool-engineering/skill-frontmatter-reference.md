@@ -16,7 +16,7 @@ aliases:
 !!! note "Also known as"
     Skill configuration, SKILL.md headers. See [Skill Authoring Patterns](skill-authoring-patterns.md) for authoring guidance; [Agent Skills Standard](../standards/agent-skills-standard.md) for the portable format.
 
-Most fields are optional. The base Agent Skills standard defines only `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools`; all other fields are Claude Code extensions.
+Most fields are optional. The [Agent Skills standard](https://agentskills.io) defines only `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools`; all other fields are Claude Code extensions.
 
 ## Field Reference
 
@@ -122,7 +122,7 @@ Built-in `agent` values:
 
 Lifecycle hooks scoped to this skill. Same format as `.claude/settings.json` hooks; all four types supported: `command`, `http`, `prompt`, `agent`.
 
-Hooks are scoped to the skill's execution and cleaned up on exit. [unverified]
+Hooks are scoped to the skill's execution and cleaned up on exit ([Claude Code hooks docs](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents)).
 
 ```yaml
 ---
@@ -169,6 +169,16 @@ Substitution variables available in the skill body:
 | `${CLAUDE_SESSION_ID}` | Current session ID |
 
 If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARGUMENTS: <value>`.
+
+## Caveats
+
+**`context: fork` + reference-only content**: The subagent receives the knowledge but no task — produces no output. Use `context: fork` only for skills with explicit step-by-step instructions.
+
+**`allowed-tools` does not restrict**: It grants pre-approval for listed tools but does not block others. Use project permission deny rules to block specific tools.
+
+**`user-invocable: false` + `disable-model-invocation: true`**: Setting both leaves the skill unreachable — hidden from `/` and from Claude's automatic loading. Use one or the other.
+
+**`model` overrides are skill-scoped**: The session model resumes after the skill completes.
 
 ## Related
 

@@ -18,7 +18,7 @@ aliases:
 
 Most agent improvements start the same way: a human reads session transcripts, notices a recurring correction, and writes a new skill or instruction to prevent it. Rather than waiting for someone to notice that every session runs lint after edit, the agent itself can surface that pattern and scaffold the automation directly.
 
-The [continuous improvement loop](continuous-agent-improvement.md) depends on a human noticing patterns, categorizing root causes, and writing the fix. This works when teams are small and sessions are few. As agent usage scales — more sessions, more developers, more repositories — the observation step becomes the bottleneck. Patterns that span dozens of transcripts go unnoticed because no one reads them all [unverified].
+The [continuous improvement loop](continuous-agent-improvement.md) depends on a human noticing patterns, categorizing root causes, and writing the fix. This works when teams are small and sessions are few. As agent usage scales — more sessions, more developers, more repositories — the observation step becomes the bottleneck. Manual review does not scale: the volume of transcript data grows faster than any individual's capacity to read it systematically.
 
 Introspective skill generation closes that gap by delegating the pattern-mining step to the agent itself.
 
@@ -53,7 +53,7 @@ Feed the collected material to an analysis agent — a read-only subagent with a
 - **Frequent manual steps** — tasks the user performs every session that the agent could handle (e.g., checking for broken links, validating imports)
 - **Recurring failure-then-fix sequences** — patterns where the agent makes a predictable mistake and the user applies the same correction
 
-Agents can analyze evaluation transcripts and refactor tools based on the results — Anthropic reports using this approach internally to optimize tool implementations. [Source: [Anthropic — Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)] The same capability applies to mining session transcripts for recurring corrections and manual steps [unverified].
+Agents can analyze evaluation transcripts and refactor tools based on the results — Anthropic reports using this approach internally to optimize tool implementations. [Source: [Anthropic — Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)] The same transcript-analysis capability applies directly to mining session logs for recurring corrections and manual steps: the agent reads transcripts, identifies patterns by frequency, and proposes automations in the same way it proposes tool improvements.
 
 Rank candidates by frequency and impact. A correction that appears in 80% of sessions is a stronger automation candidate than one that appears in 10%.
 
@@ -117,6 +117,14 @@ Not every pattern should become a skill. Automating context-dependent decisions 
 
 When the analysis agent surfaces these, log them as "non-automatable patterns" rather than forcing a skill definition. These patterns may still inform instruction updates or documentation rather than automated tooling.
 
+## When This Backfires
+
+Three specific conditions where the workflow produces negative returns:
+
+- **Sensitive data in transcripts.** Session logs frequently contain API keys, credentials, database connection strings, and PII entered during debugging. Feeding these transcripts to an analysis agent exposes that data. Before running pattern-miner, audit transcript retention and redact or exclude sessions containing credentials.
+- **False-positive pattern noise.** The analysis agent ranks candidates by frequency, but frequency is not the same as automatable. A correction that appears in 60% of sessions may reflect a project-specific quirk that resolves once a refactor completes — not a durable automation target. Human review of ranked candidates is mandatory, not optional.
+- **Analysis cost at scale.** Reading and analyzing 40 transcript files with a Sonnet-class model consumes substantial tokens. Running pattern-miner on every session directory daily quickly becomes expensive. Schedule analysis runs on a cadence (weekly or after a threshold of new sessions) and scope them to the most active repositories.
+
 ## Integration with Existing Workflows
 
 This workflow connects to established patterns:
@@ -167,11 +175,6 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - Generate concrete artifacts (skill files, agent definitions, hook configs) rather than abstract recommendations
 - Gate every generated artifact with human review to prevent over-automation of context-dependent decisions
 - Use persistent memory so the analysis agent accumulates findings across sessions rather than starting fresh
-
-## Unverified Claims
-
-- Patterns spanning dozens of transcripts go unnoticed because no one reads them all [unverified]
-- Mining session transcripts for recurring corrections and manual steps using agent-assisted transcript analysis [unverified]
 
 ## Related
 

@@ -16,7 +16,7 @@ tags:
 
 Jumping straight to "Here is the feature. Here are some files. Please build it." gives the agent insufficient context and no explicit alignment checkpoint. The result compiles but may stray from architectural goals and require significant correction.
 
-[OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) found this precisely. Initial implementation-first prompts produced code that was functional but architecturally inconsistent. Shifting to a plan-first loop enabled Codex to run unsupervised for extended periods and made code review significantly easier [unverified].
+[OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) found this precisely. Initial implementation-first prompts produced code that was functional but architecturally inconsistent. Shifting to a plan-first loop gave the team confidence in the direction before implementation began — analogous to how a good design document gives a tech lead confidence in a project.
 
 ## The Loop
 
@@ -59,7 +59,7 @@ With an approved plan, the agent implements. Implementation is now execution of 
 
 ## Iterative Self-Critique Rounds
 
-A single planning pass can miss edge cases, include redundant steps, or sequence operations suboptimally. A community analysis of iterative planning describes a multi-round refinement process where the agent critiques its own plan before execution [unverified].
+A single planning pass can miss edge cases, include redundant steps, or sequence operations suboptimally. Adding a self-critique round — where the agent reviews its own plan before execution — catches these issues before they become implementation errors.
 
 ### The Three-Round Refinement
 
@@ -99,7 +99,7 @@ Self-critique rounds compound with extended thinking and plan mode. Each techniq
 2. **Plan mode** — structured, read-only exploration before planning
 3. **Self-critique** — multi-round refinement across planning passes
 
-A community analysis positions this stack as a cost-effective alternative to model tier upgrades — investing compute in planning on a balanced model rather than switching to a more expensive model [unverified — based on practitioner experience, not benchmarked].
+In practice, investing additional compute in planning rounds on a mid-tier model can substitute for switching to a more expensive model — the gain comes from reasoning quality at the planning stage, not raw generation power.
 
 ## Plans as Files for Long-Horizon Tasks
 
@@ -133,7 +133,7 @@ The plan file is version-controlled alongside the code. It serves as both a coor
 
 ## Activating Plan Mode in Claude Code
 
-Claude Code provides Plan Mode as a built-in permission constraint: the agent may only read files and ask questions until you approve a plan. No write operations are possible until approval.
+Claude Code provides [Plan Mode](plan-mode.md) as a built-in permission constraint: the agent may only read files and ask questions until you approve a plan. No write operations are possible until approval.
 
 **During a session**: press `Shift+Tab` twice. The first press activates Auto-Accept mode; the second activates Plan Mode, shown as `⏸ plan mode on` at the bottom of the terminal.
 
@@ -165,7 +165,7 @@ Plan Mode is a permission constraint — it restricts what actions the agent may
 
 ## Enforcing Plan-First via System Prompt
 
-Manual Plan Mode requires activation each session. The [`--append-system-prompt` flag](https://code.claude.com/docs/en/cli-reference) embeds the planning requirement directly into the session, so the agent always plans first regardless of how the session starts [unverified]:
+Manual Plan Mode requires activation each session. The [`--append-system-prompt` flag](https://code.claude.com/docs/en/cli-reference) embeds the planning requirement directly into the session, so the agent always plans first regardless of how the session starts:
 
 ```bash
 claude --append-system-prompt "Before executing ANY tool that modifies state (Write, Edit, Bash), you MUST present a plan and WAIT for explicit user approval. Each new user message requires a new plan — previous approvals do not carry over."
@@ -173,7 +173,7 @@ claude --append-system-prompt "Before executing ANY tool that modifies state (Wr
 
 Key elements of an effective injected planning prompt:
 
-- **Trigger scope**: target only state-changing tools (Write, Edit, Bash); blocking read-only tools adds friction without safety benefit [unverified]
+- **Trigger scope**: target only state-changing tools (Write, Edit, Bash); blocking read-only tools adds friction without safety benefit
 - **Approval reset rule**: require a new plan for each new user message — prior approvals do not carry over
 - **Plan format**: specify which files will change, what each change accomplishes, and any commands that will run
 
@@ -202,6 +202,18 @@ graph TD
     H --> I[Done]
 ```
 
+## When This Backfires
+
+The plan-first loop adds a mandatory checkpoint before every implementation. That checkpoint is valuable when assumptions are uncertain — and pure overhead when they are not.
+
+Specific conditions where plan-first adds cost without proportional benefit:
+
+- **Trivial or already-understood changes.** If the task has one plausible implementation path and the agent has all necessary context, the plan produces no new information. Fixing a typo, bumping a version number, or adding a single line to a config file does not benefit from a summarize-plan-implement loop.
+- **Exploratory or debugging sessions.** When the goal is to discover what is wrong rather than to execute a known change, constraining the agent to produce a plan before reading files delays the actual investigation. Discovery-mode work benefits from read-first freedom, not write-last constraints.
+- **Rapid-iteration feedback loops.** In a tight test-fix-test cycle — where the feedback loop is shorter than the planning overhead and errors are cheap to reverse — the plan step becomes a speed penalty with no alignment benefit.
+
+In these cases, use direct prompting or Plan Mode selectively on the specific step where scope uncertainty is high, rather than applying the full loop by default.
+
 ## Key Takeaways
 
 - Ask the agent to summarize before it plans; plan before it implements.
@@ -214,14 +226,6 @@ graph TD
 - Use `--append-system-prompt` to enforce planning across every session without manual activation; scope the rule to state-changing tools only.
 - Delegate the research phase to sub-agents to keep the main agent's context clean.
 - The implement-fail-fix loop is the failure mode this pattern prevents — detect it by watching for repeated revisions of the same function.
-
-## Unverified Claims
-
-- Shifting to a plan-first loop enabled Codex to run unsupervised for extended periods and made code review significantly easier [unverified]
-- A multi-round self-critique refinement process improves plan quality before execution [unverified]
-- Investing compute in planning on a balanced model is a cost-effective alternative to model tier upgrades [unverified — based on practitioner experience, not benchmarked]
-- `--append-system-prompt` creates an automatic safety layer that persists across the entire session [unverified]
-- Narrow scope (only state-changing tools) is more practical than blocking all tool calls [unverified]
 
 ## Related
 

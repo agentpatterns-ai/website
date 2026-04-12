@@ -56,7 +56,7 @@ If a file's correct output depends on another file's implementation, oracle veri
 
 ## Generalization
 
-The pattern generalizes to any domain with a reference implementation or ground truth: [unverified]
+The [test oracle problem](https://en.wikipedia.org/wiki/Test_oracle) — how to determine whether a program's output is correct — is solved whenever a trusted reference implementation exists. The oracle pattern applies across domains where such a reference is available:
 
 - **Translation:** reference translations for per-sentence verification
 - **Refactoring:** original tests as oracle for behavioral equivalence checking
@@ -64,6 +64,14 @@ The pattern generalizes to any domain with a reference implementation or ground 
 - **API compatibility:** reference API responses for per-endpoint verification
 
 The question to ask: is there a trusted artifact that can produce expected outputs at a unit level? If yes, the monolith can be decomposed.
+
+## When This Backfires
+
+Oracle-based decomposition fails or degrades in three conditions:
+
+1. **No oracle exists.** Building a reference implementation from scratch costs more than the parallelization saves. If the only "oracle" would be the same implementation being written, the pattern collapses to manual test authoring.
+2. **Cross-unit dependencies are pervasive.** When every file's correct output depends on another file's implementation, raising the verification boundary to the cross-unit level eliminates the independence that makes parallelization valuable. The bottleneck moves rather than disappears.
+3. **Oracle correctness is disputed.** If the oracle itself has known bugs or behavioral differences from the target (e.g., GCC and a new compiler diverge intentionally on undefined behavior), agent fixes will target the oracle's behavior rather than correct behavior, embedding the oracle's defects into the output.
 
 ## Key Takeaways
 
@@ -96,6 +104,7 @@ A Python data pipeline team needs to migrate 400 transformation functions from p
 - [Adversarial Multi-Model Development Pipeline](adversarial-multi-model-pipeline.md)
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
+- [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)

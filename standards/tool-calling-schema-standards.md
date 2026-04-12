@@ -75,7 +75,7 @@ This makes MCP the practical convergence standard: write the tool definition onc
 
 ## Schema Design Guidance
 
-- **Keep schemas flat.** Deeply nested objects increase token count and parsing errors [unverified]. Prefer top-level properties over nested structures.
+- **Keep schemas flat.** Deeply nested objects increase token count and can introduce parsing complexity. Prefer top-level properties over nested structures.
 - **Describe every parameter.** A `description` on each property tells the model what value to provide. Without it, the model guesses from the parameter name alone.
 - **Use absolute identifiers.** Anthropic found that [requiring absolute filepaths](https://www.anthropic.com/research/building-effective-agents) instead of relative paths eliminated an entire class of agent errors ([poka-yoke principle](../tool-engineering/poka-yoke-agent-tools.md)).
 - **Minimize parameter count.** Each additional parameter increases the probability of an incorrect argument. Consolidate related fields when possible.
@@ -157,6 +157,12 @@ The same `get_weather` tool defined for each provider:
 
 The logic is identical across all four; only the wrapper structure and the parameters key name differ.
 
+## When This Backfires
+
+- **Vendor-specific schema features**: Some providers support schema extensions beyond core JSON Schema. Gemini accepts OpenAPI-compatible constraints; OpenAI's strict mode requires `additionalProperties: false` on every nested object. Designing for portability means avoiding these extensions, trading expressiveness for compatibility.
+- **Strict mode schema constraints**: OpenAI and Anthropic strict mode requires all properties to be listed in `required`. This prevents using optional fields with defaults in ways that feel natural in JSON Schema — tools that rely heavily on optional parameters need redesign to use strict mode.
+- **MCP overhead in local integrations**: MCP adds a client-server protocol layer. For tools that only ever run in one host (e.g., a Claude Code-only tool), defining a full MCP server adds operational overhead with no portability benefit. Inline tool definitions in the host's native format are simpler.
+
 ## Key Takeaways
 
 - All providers converge on JSON Schema for tool parameters, but the wrapping structure and field names differ (`parameters` vs `input_schema` vs `inputSchema`).
@@ -164,10 +170,6 @@ The logic is identical across all four; only the wrapper structure and the param
 - Strict mode (`strict: true`) eliminates schema conformance errors in production but requires all properties to be marked `required`.
 - MCP tool definitions serve as a write-once, run-anywhere convergence point across compatible hosts.
 - Flat schemas with per-parameter descriptions and absolute identifiers reduce agent errors.
-
-## Unverified Claims
-
-- Deeply nested objects increase token count and parsing errors [unverified]
 
 ## Related
 

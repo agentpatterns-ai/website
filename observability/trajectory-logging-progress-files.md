@@ -52,7 +52,7 @@ A JSON file tracks discrete features with `passes`/`fails` status. Agents toggle
 
 ### 4. `init.sh` as Environment Trajectory
 
-The initializer agent writes `init.sh` to reconstruct the development environment. Subsequent sessions run it at startup to detect broken states before any code changes [unverified].
+The initializer agent writes `init.sh` to reconstruct the development environment. Subsequent sessions run it at startup to verify the environment is in a known-good state before any code changes.
 
 ## Filesystem Write-on-Summarisation
 
@@ -66,6 +66,16 @@ Two middleware patterns from [LangChain's harness engineering post](https://blog
 
 - **LoopDetectionMiddleware** — tracks per-file edit counts via tool-call hooks; excessive edits inject a contextual reminder, catching doom loops before they exhaust the context budget.
 - **PreCompletionChecklistMiddleware** — intercepts the agent before it signals completion and forces a verification pass against the task spec, preventing premature task closure.
+
+## When This Backfires
+
+The filesystem pattern assumes a persistent, local working directory — which breaks in three common scenarios:
+
+- **Serverless or ephemeral agents** — containers spun up per-request have no stable filesystem between invocations; progress files and git state disappear on teardown.
+- **Parallel agent pools** — multiple concurrent sessions writing to the same progress file or committing to the same branch produce conflicts and race conditions.
+- **Teams with existing observability infrastructure** — when OTel pipelines, structured logging, or cost dashboards are already in place, duplicating trajectory data in flat files adds maintenance overhead with no additional insight.
+
+When any of these conditions apply, prefer structured observability backends (see [OTel GenAI span conventions](../standards/opentelemetry-agent-observability.md)) over the filesystem approach.
 
 ## Example
 

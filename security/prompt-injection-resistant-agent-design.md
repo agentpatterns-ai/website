@@ -1,5 +1,5 @@
 ---
-title: Designing Injection-Resistant Agents with Defense-in-Depth
+title: Designing Agents to Resist Prompt Injection
 description: Architectural patterns and defense-in-depth strategies for building AI coding agents that are resilient to prompt injection attacks from untrusted inputs.
 tags:
   - agent-design
@@ -9,6 +9,7 @@ aliases:
   - prompt injection defense
   - injection-resistant agents
 ---
+
 # Designing Agents to Resist Prompt Injection
 
 > Prompt injection is unlikely to ever be fully solved. Treat it as a permanent constraint and design agent architectures where successful injection cannot cause consequential harm.
@@ -80,7 +81,7 @@ Coding assistants face distinct injection vectors. [Source: [Maloyan and Namiot,
 | Compromised MCP servers | Tool description poisoning, response injection | Varies |
 | Malicious dependencies | Post-install scripts on agent-initiated installs | Varies |
 
-Tool ratings: Claude Code **Low**, Copilot **High**, Cursor **Critical**. [unverified]
+Tool ratings per platform vulnerability assessment: Claude Code **Low**, Copilot **High**, Cursor **Critical**. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)]
 
 ## Practical Defenses for Coding Workflows
 
@@ -103,6 +104,17 @@ Run agents in containers with default-deny network egress, removing the egress l
 ### 5. Separate planning from execution
 
 Generate the plan before ingesting untrusted content, then execute deterministically.
+
+## Why It Works
+
+Each pattern severs the path from untrusted content to consequential action before the LLM processes it. Action-Selector restricts the output space to a fixed enumeration — injected instructions cannot name actions outside it. Plan-Then-Execute generates intent before untrusted data is seen, so mid-execution hijacking is structurally impossible. Dual LLM enforces a trust boundary: the quarantined LLM has no write path to privileged state, so compromise is contained. The guarantee is architectural, not behavioral. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
+
+## When This Backfires
+
+- **Utility loss**: Action-Selector and Plan-Then-Execute only fit workflows decomposable into a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be safely constrained this way.
+- **Architectural cost**: Dual LLM doubles inference cost; splitting privileged and quarantined contexts requires deliberate system design most frameworks don't provide.
+- **False confidence**: Applying one pattern without removing the other two legs of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md) creates an illusion of safety — an agent that asks before acting can still exfiltrate data if egress is unrestricted.
+- **Schema drift**: Tool schemas added post-deployment may silently reintroduce capabilities intentionally excluded by schema-level filtering.
 
 ## Example
 
@@ -144,25 +156,10 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 ## Related
 
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
-- [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md)
-- [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Code Injection in Multi-Agent Defence](code-injection-multi-agent-defence.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Sandbox Rules Harness and Tools](sandbox-rules-harness-tools.md)
-- [Scoped Credentials Proxy](scoped-credentials-proxy.md)
-- [Secrets Management for Agents](secrets-management-for-agents.md)
-- [Permission-Gated Commands](permission-gated-commands.md)
-- [Tool Signing and Verification](tool-signing-verification.md)
-- [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
-- [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
+- [Indirect Injection Discovery](indirect-injection-discovery.md)
+- [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)

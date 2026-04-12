@@ -113,7 +113,7 @@ graph TD
 
 The mechanism: every bug caught in Assess that gets encoded in Compound is a bug that cannot recur. Every architectural decision recorded means the next agent session does not need to rediscover it. New team members -- and new agent sessions -- inherit the equivalent of senior engineer knowledge from their first interaction.
 
-This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions) and the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), but applied as a **systematic workflow** rather than an ad-hoc practice.
+This is the same principle described in [agent memory patterns](../agent-design/agent-memory-patterns.md) (persistence across sessions), the [implicit knowledge problem](../anti-patterns/implicit-knowledge-problem.md) (making tacit knowledge explicit), and [encoding tacit knowledge into agent improvement loops](encoding-tacit-knowledge.md) (active elicitation and encoding), but applied as a **systematic workflow** rather than an ad-hoc practice.
 
 ## Learnings as Prompts
 

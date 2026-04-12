@@ -38,7 +38,7 @@ Knowledge and execution change for different reasons:
 | New tool or environment | Skill unchanged | Agent adapts |
 | Source URLs rotate | Skill changes | Agent unchanged |
 
-When you embed knowledge in agents, a domain change forces agent changes. When you embed execution in skills, a tool change forces skill changes. Separating them means each changes only when its own concern changes. [unverified]
+When you embed knowledge in agents, a domain change forces agent changes. When you embed execution in skills, a tool change forces skill changes. Separating them means each changes only when its own concern changes — the same reason the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) applies to modules applies here to agent layers.
 
 This mirrors the [harness engineering](../agent-design/harness-engineering.md) pattern at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — externalizing domain knowledge from the coding agent's execution logic ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
@@ -90,9 +90,14 @@ The first version works only in Claude Code and breaks if the tool API changes. 
 - Separating knowledge from execution prevents coupled change: domain updates touch skills, process updates touch agents.
 - Skills that embed execution sequences ("skill scripts") are brittle, non-portable, and collapse the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md).
 
-## Unverified Claims
+## When This Backfires
 
-- Knowledge and execution change on different cadences — domain rules update independently of workflow processes `[unverified]`
+Knowledge-only skills fail when:
+
+- **The "knowledge" is actually a procedure.** If a skill encodes a fixed sequence — run script A, then B, then C — calling it "knowledge" is a mislabel. Execution-heavy workflows belong in agents or task skills with `disable-model-invocation: true`.
+- **Portability isn't a goal.** Single-tool deployments (Claude Code only, no cross-tool requirement) gain no portability benefit from avoiding tool calls. The overhead of factoring knowledge from execution is only worthwhile when the skill must run in multiple environments.
+- **The domain knowledge is too sparse to warrant a skill.** A skill that encodes one URL or one formatting rule adds indirection without payoff. Inline context or CLAUDE.md serves better below a few hundred tokens of domain knowledge.
+- **Knowledge becomes a reference dump.** Skills with 500+ lines of domain rules degrade discovery and slow invocation. Progressive disclosure (main SKILL.md + reference files) is needed at that scale, or the knowledge should be split into narrower skills.
 
 ## Related
 

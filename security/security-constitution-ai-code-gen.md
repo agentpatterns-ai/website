@@ -51,7 +51,7 @@ Each principle contains:
 | `level` | MUST/SHOULD/MAY — distinguishes hard requirements from guidance |
 | `constraint` | What the agent must ensure |
 | `pattern` | How to implement it — the positive pattern, not just the prohibition |
-| `rationale` | Why — agents follow constraints better when they understand the reasoning [unverified] |
+| `rationale` | Why — agents follow constraints better when they understand the reasoning ([Marri, 2026](https://arxiv.org/abs/2602.02584)) |
 
 ## Progressive Disclosure: Select Relevant Principles
 

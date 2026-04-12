@@ -15,9 +15,9 @@ aliases:
 
 ## The Problem: Silent Decay
 
-Codebases accumulate entropy between changes. Documentation drifts from implementation. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches.
+Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.
 
-Traditional CI is reactive — it runs when code changes. Entropy reduction agents are proactive — they run on a schedule, scanning for decay that accumulates silently whether or not anyone pushes a commit. OpenAI's harness engineering team calls this pattern **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Codebases accumulate entropy between changes. Documentation drifts from implementation. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches. OpenAI's harness engineering team calls this proactive scanning **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 Before adopting this pattern, the OpenAI harness team spent 20% of weekly capacity on cleanup — "AI slop" that proved unsustainable at scale ([Alex Lavaee — OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
@@ -55,6 +55,12 @@ The core design principle: *"Human taste is captured once, then enforced continu
 | Output | Pass / fail | Refactoring PR |
 
 The two are complementary. Deterministic linters (ArchUnit, NetArchTest, PyTestArch) catch rule-expressible violations; LLM-based agents handle judgment-heavy ones. The combination covers both categories ([Martin Fowler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+
+## Why It Works
+
+Entropy accumulates because the cost of fixing each individual violation is low, but the cost of *noticing* it is high — no developer is paid to scan the entire codebase weekly for drift. Entropy reduction agents eliminate the noticing cost. Because violations are caught continuously on a short cadence, each one is small and isolated; the PR required to fix it is proportionally small and reviewable in under a minute. By contrast, entropy caught once per quarter or during a refactoring sprint has compounded into a larger, riskier change.
+
+The second mechanism is behavioral: encoding a standard as a machine-checkable rule forces the team to express it precisely. Vague principles ("keep things clean") cannot be enforced. Precise ones ("all retry logic must use `retry_with_backoff`") can. The act of encoding creates shared, durable, executable understanding that survives team turnover.
 
 ## The Tech Debt Tracker
 
@@ -146,18 +152,24 @@ This pattern is not fire-and-forget. CodeScene data shows AI breaks code in appr
 - **Scope PRs narrowly** — one violation per PR makes review fast and revert trivial
 - **Track false-positive rate** — if the agent consistently flags non-issues, refine the golden principle
 
+## When This Backfires
+
+Entropy reduction agents are only as good as the golden principles they enforce. Failure conditions:
+
+- **Poorly specified principles** — vague instructions produce high false-positive rates. Agents flag non-issues, reviewers start ignoring PRs, and the pattern collapses into noise.
+- **Missing test coverage** — without running tests against each generated PR, the agent ships breakage. The CodeScene two-thirds failure rate applies to unsupervised refactors; test gates bring this down substantially.
+- **Review fatigue** — generating too many PRs per cadence degrades review culture. Scope agents narrowly (one violation per PR) and tune cadence until false positives are rare before scaling up.
+- **Drift in the tracker** — if `tech-debt-tracker.md` is not kept current, agents re-raise resolved issues or skip newly identified ones. The tracker requires ongoing maintenance, not just initial setup.
+
+The pattern is not appropriate as a substitute for improving the root-cause process that generates debt. If agents are producing entropy faster than scheduled cleanup can address it, fix the upstream problem first.
+
 ## Key Takeaways
 
 - Entropy reduction agents are proactive and scheduled, distinct from reactive CI
 - The "garbage collection" pattern encodes human taste once and enforces it continuously
 - Start minimal: one principle, one tracker file, one periodic prompt
-- Every agent-generated PR requires human review — two-thirds of unsupervised AI refactors introduce breakage [unverified]
+- Every agent-generated PR requires human review — two-thirds of unsupervised AI refactors introduce breakage ([CodeScene](https://codescene.com/blog/automatically-fix-technical-debt-with-ai-refactoring))
 - Combine deterministic architectural tests with LLM-based judgment scanning for full coverage
-
-## Unverified Claims
-
-- The "garbage collection of technical debt" phrase is attributed to OpenAI but the primary source returned a 403 error; confirmed through secondary sources (Martin Fowler, Alex Lavaee) [unverified]
-- CodeScene's two-thirds failure rate statistic for AI refactoring without validation could not be independently verified against the original dataset [unverified]
 
 ## Related
 
@@ -168,3 +180,5 @@ This pattern is not fire-and-forget. CodeScene data shows AI breaks code in appr
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Architectural Foundation First](architectural-foundation-first.md)
 - [AI Development Maturity Model](ai-development-maturity-model.md)
+- [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
+- [The Velocity-Quality Asymmetry](velocity-quality-asymmetry.md)

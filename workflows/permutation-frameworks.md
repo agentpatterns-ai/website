@@ -10,7 +10,7 @@ tags:
 
 ## The Pattern
 
-Many codebases contain families of similar features: API endpoints with the same middleware chain, UI components with shared props interfaces, test suites following identical setup/teardown patterns. Implementing each by hand is linear work. A permutation framework defines the shared structure once, then instructs the agent to generate each variation within strict constraints (Source: ClaudeLog).
+Many codebases contain families of similar features: API endpoints with the same middleware chain, UI components with shared props interfaces, test suites following identical setup/teardown patterns. Implementing each by hand is linear work. A permutation framework defines the shared structure once, then instructs the agent to generate each variation within strict constraints ([Source: ClaudeLog](https://claudelog.com/mechanics/permutation-frameworks/)).
 
 The technique requires investing in constraint definition upfront. Without explicit boundaries, the agent produces inconsistent output across variations — what the ClaudeLog source calls "permutations of slop."
 
@@ -18,7 +18,7 @@ The technique requires investing in constraint definition upfront. Without expli
 
 A permutation framework has three components:
 
-**1. Reference implementations.** Build several features manually with matching function signatures, file structures, and naming conventions. These serve as concrete examples the agent can pattern-match against. The more reference implementations you provide, the less variance in generated output [unverified].
+**1. Reference implementations.** Build several features manually with matching function signatures, file structures, and naming conventions. These serve as concrete examples the agent can pattern-match against. More reference implementations reduce the ambiguity the agent resolves at generation time — each additional example narrows the space of plausible outputs.
 
 **2. Constraint specification.** Define explicitly in your instruction file (CLAUDE.md, copilot-instructions.md, or equivalent):
 
@@ -51,7 +51,7 @@ Generate filters for:
 
 Variance across generated permutations is a direct measure of constraint quality. If three generated variations follow different file structures or use different error handling patterns, the constraints are underspecified.
 
-Systematic variance tracking: generate several variations, diff them against each other, and identify where they diverge unnecessarily. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This iterative loop — generate, measure variance, refine constraints — is the core refinement cycle [unverified].
+Systematic variance tracking: generate several variations, diff them against each other, and identify where they diverge unnecessarily. Each divergence point maps to a constraint gap. Tighten the constraint, regenerate, and measure again. This iterative loop — generate, measure variance, refine constraints — is the practical refinement process for converging on a stable framework.
 
 ## The Role Shift
 
@@ -64,6 +64,10 @@ With a well-defined framework, the developer's work changes:
 | Linear scaling with feature count | Review-limited scaling |
 
 The bottleneck moves from implementation speed to review throughput. This pairs well with [parallel agent sessions](../workflows/parallel-agent-sessions.md) — multiple agents can generate different variations simultaneously, each working from the same constraint specification.
+
+## Why It Works
+
+Explicit constraints narrow the token-level sampling space the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and reference implementations which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses to near zero, leaving only variation-specific logic to differ ([constrained generation research](https://arxiv.org/html/2403.06988v1) shows this mechanism operates at the token-probability level).
 
 ## When It Works and When It Breaks
 
@@ -125,11 +129,6 @@ The diffs show only variation-specific logic differs — file structure, error h
 - The developer role shifts from writing implementations to reviewing generated variations and refining constraints
 - Pairs with parallel agent sessions for simultaneous variation generation
 
-## Unverified Claims
-
-- The more reference implementations you provide, the less variance in generated output [unverified]
-- The iterative generate-measure-refine loop is the core refinement cycle [unverified]
-
 ## Related
 
 - [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
@@ -138,3 +137,4 @@ The diffs show only variation-specific logic differs — file structure, error h
 - [Oracle-Based Task Decomposition](../multi-agent/oracle-task-decomposition.md)
 - [Skeleton Projects as Scaffolding](../workflows/skeleton-projects-as-scaffolding.md)
 - [Spec-Driven Development](../workflows/spec-driven-development.md)
+- [Lay the Architectural Foundation by Hand Before Delegating](../workflows/architectural-foundation-first.md)

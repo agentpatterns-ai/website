@@ -78,7 +78,7 @@ How the scaffold handles the bounded resources of a model-in-a-loop: context win
 
 **Context budget strategy** determines what enters the context window and when it is pruned. Accumulated-context scaffolds let context grow until compaction or window limits force action; fresh-context scaffolds reset per iteration; compression scaffolds summarize at configurable thresholds. See [Loop Strategy Spectrum](loop-strategy-spectrum.md) for the trade-offs.
 
-**State persistence** determines what survives between iterations or sessions. In-memory state is lost on failure or context reset. File-backed state enables resumption across sessions — the approach in [Agent Harness](agent-harness.md). A [feature list file](../instructions/feature-list-files.md) is a common implementation: a structured artifact tracking feature status and acceptance criteria that persists across sessions.
+**State persistence** determines what survives between iterations or sessions. In-memory state is lost on failure or context reset. File-backed state enables resumption across sessions — the approach in [Agent Harness](agent-harness.md). Structured artifacts — [progress files](../observability/trajectory-logging-progress-files.md) and [feature list files](../instructions/feature-list-files.md) — serve as both human-readable state and agent-readable context that persists across sessions.
 
 **Tool-call capping** and **cost guardrails** bound unbounded loops. Without explicit caps, adaptive and MCTS scaffolds can exhaust budgets before completing a task. Caps apply at session level (max turns), tool level (max calls per type), or cost level (max token spend).
 

@@ -33,7 +33,7 @@ GitHub [deprecated Copilot Extensions (GitHub Apps) on September 24, 2025](https
 
 **No mandatory hosting for local tools.** Unlike Copilot Extensions (always remote), stdio transport runs the server as a local process with zero infrastructure. Remote tools still need hosting.
 
-**Autonomous invocation.** Copilot's agent mode and coding agent can call MCP tools without user `@mention`. The agent discovers available tools at startup via `tools/list` [unverified] and calls them as needed during task execution.
+**Autonomous invocation.** Copilot's agent mode and coding agent can call MCP tools without user `@mention`. The agent discovers available tools at startup via [`tools/list`](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2024-11-05/schema.ts) and calls them as needed during task execution.
 
 **Open ecosystem.** The [GitHub MCP Registry](https://github.blog/ai-and-ml/generative-ai/how-to-find-install-and-manage-mcp-servers-with-the-github-mcp-registry/) (github.com/mcp) offers [1-click VS Code installation](https://code.visualstudio.com/docs/copilot/customization/mcp-servers), namespace conventions, and enterprise allow lists. The same registry serves all MCP clients.
 
@@ -146,10 +146,6 @@ The same server binary works across Copilot, Claude Code, and Cursor with no cod
 - MCP's core value is cross-tool portability: one server, every MCP-compatible agent
 - Skillsets had no equivalent in MCP — tool orchestration is the host agent's responsibility
 - When an open standard reaches critical adoption mass, proprietary extension systems deprecate; build on the standard early
-
-## Unverified Claims
-
-- Agent discovers available tools at startup via `tools/list` [unverified]
 
 ## Related
 

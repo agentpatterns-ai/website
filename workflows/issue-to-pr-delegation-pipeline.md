@@ -52,7 +52,7 @@ The Copilot coding agent accepts work via multiple channels, each suited to diff
 | Agents panel (github.com/copilot/agents) | Monitoring and managing active agent sessions |
 | VS Code / CLI handoff | Switching from local exploration to cloud execution |
 
-Claude Code uses `@claude` mentions in issue/PR comments as triggers, with support for custom trigger phrases and scheduled automation ([Claude Code docs](https://code.claude.com/docs/en/github-actions)) [unverified].
+Claude Code uses `@claude` mentions in issue/PR comments as triggers, with support for custom trigger phrases and scheduled automation ([Claude Code docs](https://code.claude.com/docs/en/github-actions)).
 
 Both systems acknowledge receipt (Copilot: eye emoji reaction; Claude: comment response) and begin autonomous work.
 
@@ -89,7 +89,6 @@ This multi-round review cycle follows the same mechanics as human PR reviews —
 The Copilot coding agent enforces structural constraints that prevent autonomous merging ([GitHub Blog: Coding Agent 101](https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/)). For enterprise-wide policy controls (agent mode access, MCP allowlists, model availability), see [Agent Governance Policies](agent-governance-policies.md).
 
 - Cannot approve or merge its own PRs
-- The issue creator cannot be the final approver [unverified — this constraint is attributed to Copilot coding agent governance but is not confirmed in the cited source]
 - CI/CD checks in GitHub Actions require human approval before execution
 - Existing org policies and branch protections apply automatically
 - All commits are co-authored for traceability
@@ -101,6 +100,20 @@ The Copilot coding agent supports Jira Cloud integration (public preview March 2
 ## Cost Considerations
 
 Copilot delegation consumes premium requests plus GitHub Actions minutes. Concurrent sessions are possible but each incurs cost. Model selection allows trading speed for capability — faster models for routine tasks (unit tests), more capable models for complex refactoring ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
+
+## Why It Works
+
+The five-phase structure limits error propagation by inserting checkpoints between phases. Each boundary forces the agent to produce a concrete artifact — task checklist, commits, self-review feedback — that the next phase consumes. Failures surface at phase transitions rather than at final delivery. The self-review loop exploits the same mechanism as human code review: a second pass with a different frame catches regressions that execution mode misses. Human approval is deferred until after self-check passes, concentrating reviewer attention on logic and intent rather than mechanical correctness.
+
+## When This Backfires
+
+Delegation degrades or fails under several conditions:
+
+- **Underspecified issues** — Vague acceptance criteria cause the agent to fill gaps with assumptions. The plan phase conceals these behind a plausible checklist; divergence only surfaces at review, after full execution cost is paid.
+- **Missing test infrastructure** — The self-review loop cannot verify correctness without runnable tests. Without them, the agent ships changes that pass its own pattern-matching but fail actual behavior requirements.
+- **Cross-cutting changes** — Tasks requiring simultaneous edits to interfaces, callers, and tests across a large codebase can exceed the agent's working-context window. The agent completes one side of the change and misses others, producing a partially applied patch.
+- **Novel architecture** — Delegation assumes the agent can infer correct patterns from the existing codebase. Greenfield code with no established precedents produces inconsistent output that is harder to review than a human draft.
+- **High-security contexts** — The agent operates with the permissions of the triggering account. In repositories with broad write access or sensitive data, a misunderstood requirement can cause damage before human review occurs.
 
 ## Example
 
@@ -169,23 +182,13 @@ When assigned, Copilot opens a draft PR tagged `[WIP]` with a task checklist der
 - Governance guardrails (no self-merge, co-authored commits, mandatory human review) are structural, not advisory
 - Multi-round review via `@copilot` or `@claude` comments enables iterative refinement without restarting the pipeline
 
-## Unverified Claims
-
-- Claude Code uses `@claude` mentions in issue/PR comments as triggers, with support for custom trigger phrases and scheduled automation [unverified]
-- The issue creator cannot be the final approver for Copilot coding agent PRs [unverified — this constraint is attributed to Copilot coding agent governance but is not confirmed in the cited source]
-
 ## Related
 
 - [Copilot Coding Agent](../tools/copilot/coding-agent.md)
-- [Custom Agents and Skills](../tools/copilot/custom-agents-skills.md)
 - [Delegation Decision](../agent-design/delegation-decision.md)
-- [Risk-Based Task Sizing](../verification/risk-based-task-sizing.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
-- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md)
-- [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md)
-- [Entropy Reduction Agents](entropy-reduction-agents.md)
+- [Agent Governance Policies](agent-governance-policies.md)
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md)
-- [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md)

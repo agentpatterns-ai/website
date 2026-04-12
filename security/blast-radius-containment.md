@@ -21,13 +21,13 @@ tags:
 
 Every permission an agent does not need is an attack surface for hallucination-driven damage. A research agent with write access can corrupt files. A reviewer with merge access can close PRs it shouldn't. A draft writer with deploy access is one bad session away from a production incident.
 
-The damage an agent can do is bounded by the permissions you grant it.
+The damage an agent can do is bounded by the permissions you grant it. This works because tool access is enforced at the runtime layer — the execution environment filters which tools are available before the model ever sees a request, so even a successfully injected prompt cannot invoke a restricted tool. Isolation is structural, not probabilistic.
 
 ## Permission Dimensions
 
 Four dimensions to scope per agent:
 
-**1. Tool access** — which tools the agent can invoke. A research agent needs Read but not Write or Bash. A formatter needs Write but not network tools. Tool access restrictions at the agent definition level are enforced by the runtime, not the model [unverified].
+**1. Tool access** — which tools the agent can invoke. A research agent needs Read but not Write or Bash. A formatter needs Write but not network tools. Tool access restrictions at the agent definition level are enforced by the runtime, not the model — a subagent's `tools` frontmatter field determines which tools the runtime makes available to it, regardless of what the model requests ([docs](https://code.claude.com/docs/en/sub-agents)).
 
 Claude Code sub-agent frontmatter supports explicit tool lists ([docs](https://code.claude.com/docs/en/sub-agents)):
 ```yaml
@@ -84,10 +84,20 @@ Rather than granting one agent broad permissions, decompose into separate agents
 
 This reduces the attack surface per agent: a successful injection against the research agent cannot trigger write operations that only the write agent holds. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 
+## When This Backfires
+
+Narrow permission scopes impose a maintenance cost that grows with pipeline complexity:
+
+- **Early-stage pipelines**: When a single developer is iterating rapidly on a single-user, local-only pipeline, per-agent YAML configuration adds friction with limited security gain — the blast radius is already low by environment.
+- **Permission creep over time**: Agents granted narrow initial scopes often accumulate permissions incrementally as edge cases emerge. Without active audit, the YAML grows toward broad access anyway, providing false confidence.
+- **Tool enumeration complexity**: In multi-agent chains with many tool categories, mapping each agent's exact required tools requires upfront analysis that teams skip under deadline pressure, leading to over-provisioned scopes as the path of least resistance.
+
+Apply full scoping in production pipelines with external data access or write access to shared state. In sandboxed, ephemeral, or single-user environments, prioritize auditing permissions before deployment over maintaining minimal permission manifests.
+
 ## Key Takeaways
 
 - Every unnecessary permission is potential blast radius — remove it
-- Tool restrictions in agent frontmatter are enforced by the runtime, not the model [unverified]
+- Tool restrictions in agent frontmatter are enforced by the runtime, not the model — the `tools` field controls what the runtime exposes, not what the model requests ([docs](https://code.claude.com/docs/en/sub-agents))
 - Worktrees provide filesystem containment for file-writing agents
 - Decompose broad-scope agents into narrow-scope chains to reduce per-agent attack surface
 - Audit before deployment; remove permissions justified only by convenience
@@ -151,3 +161,5 @@ Each agent's worst-case injection outcome is bounded to its operation. A prompt 
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md)
 - [Secrets Management for AI Agents: Credential Injection](secrets-management-for-agents.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)

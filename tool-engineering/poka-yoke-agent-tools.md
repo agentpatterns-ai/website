@@ -74,7 +74,7 @@ graph LR
 
 ### Tool Use Examples in Definitions
 
-Concrete sample calls in tool definitions improved accuracy from 72% to 90% on complex parameter handling in Anthropic's testing [unverified] ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
+Concrete sample calls in tool definitions improved accuracy from 72% to 90% on complex parameter handling in Anthropic's testing ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## Beyond Tool Parameters
 
@@ -84,6 +84,17 @@ Concrete sample calls in tool definitions improved accuracy from 72% to 90% on c
 | [Pre-completion checklists](../verification/pre-completion-checklists.md) — middleware forces verification before agent exit | Incomplete or incorrect final outputs | [LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) |
 | [Loop detection](../observability/loop-detection.md) middleware — intervenes after N iterations | Infinite retry loops | [LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) |
 | Minimal non-overlapping toolsets — reduce ambiguity in tool selection | Wrong-tool selection | [Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
+
+## When This Backfires
+
+Over-constraining tool interfaces introduces its own failure modes:
+
+- **Enum exhaustion** — a fixed enum valid at design time excludes production edge cases; update or the agent cannot proceed.
+- **Prerequisite deadlock** — read-before-write gates block optimistic-write patterns and content-from-scratch pipelines.
+- **Designer blind spots** — constraints encode the designer's model of valid usage; legitimate emergent reasoning strategies get rejected.
+- **Over-normalized toolsets** — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability.
+
+Apply poka-yoke where failure modes are well-understood and the constraint space is stable. Prefer validation over elimination when use cases are still evolving.
 
 ## Designing Your Own Poka-Yoke
 

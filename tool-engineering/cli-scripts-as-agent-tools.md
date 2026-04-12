@@ -12,7 +12,7 @@ tags:
 
 # CLI Scripts as Agent Tools: Return Only What Matters
 
-> Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse.
+> Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse. Agents can also write and iterate on these scripts themselves through a tight write-execute-debug cycle.
 
 ## Raw Commands Waste Context
 
@@ -69,7 +69,7 @@ When writing a CLI script for agent consumption:
 
 ## Tight Feedback Loops: Agents Writing and Iterating on Scripts
 
-A complementary pattern is agents creating bash scripts as the development artifact and iterating through a write-execute-debug cycle ([Source: ClaudeLog](https://claudelog.com/mechanics/tight-feedback-loops)). Bash provides the tightest agentic feedback loop available [unverified]: zero startup time, no compilation step, and error output in the same terminal context the agent already occupies.
+A complementary pattern is agents creating bash scripts as the development artifact and iterating through a write-execute-debug cycle. Bash offers a short feedback loop for agents: zero startup time, no compilation step, and error output in the same terminal context the agent already occupies.
 
 ### The Write-Execute-Debug Cycle
 
@@ -110,6 +110,16 @@ The write-execute-debug cycle with bash is most effective for:
 - **Exploratory prototyping** — testing an approach before committing to a compiled language
 
 Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
+
+## When This Backfires
+
+**Script maintenance burden.** Wrapper scripts hard-code assumptions about command output format. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or produces wrong output. Every wrapper is a synchronization point between the agent's interface and the system it queries.
+
+**Over-filtering hides signals.** A script that filters to "only errors" will miss warnings that precede errors, or status transitions the agent needs to make a correct decision. Pre-filtering is a bet that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
+
+**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper script adds a layer to the investigation. The agent saw filtered output; reconstructing what the raw command returned requires running it manually.
+
+These conditions most often arise in **novel incident types** (new failure modes the script wasn't written for), **rapidly evolving systems** (CLI output changes frequently), and **exploratory tasks** (the agent needs broad context, not a narrow summary).
 
 ## Example
 
@@ -153,10 +163,6 @@ It then calls `pod_errors("payments-worker-7f8b9")` and receives:
 ```
 
 Two tool calls, two concise responses. The agent identifies the root cause (database connection failure) without parsing full pod tables or scrolling through log streams.
-
-## Unverified Claims
-
-- Bash provides the tightest agentic feedback loop available [unverified]
 
 ## Related
 

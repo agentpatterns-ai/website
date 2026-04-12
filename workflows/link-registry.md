@@ -34,7 +34,7 @@ The registry is injected into every page at build time so keys resolve site-wide
 
 ## Implementation with pymdownx.snippets
 
-The `pymdownx.snippets` extension supports an `auto_append` option that appends a file to every markdown document before parsing — explicitly designed for "including a page of reference links or abbreviations on every page" ([Snippets docs](https://facelessuser.github.io/pymdown-extensions/extensions/snippets/)). MkDocs Material ships with pymdown-extensions as a dependency, so no additional install is required [unverified].
+The `pymdownx.snippets` extension supports an `auto_append` option that appends a file to every markdown document before parsing — explicitly designed for "including a page of reference links or abbreviations on every page" ([Snippets docs](https://facelessuser.github.io/pymdown-extensions/extensions/snippets/)). MkDocs Material ships with pymdown-extensions as a dependency ([requirements.txt](https://github.com/squidfunk/mkdocs-material/blob/master/requirements.txt)), so no additional install is required.
 
 **`mkdocs.yml`** — add the extension with `auto_append`:
 
@@ -107,6 +107,12 @@ Add a CI step that fails if any page contains unresolved reference-style link ke
     fi
 ```
 
+## When This Backfires
+
+- **Small sites**: for documentation with fewer than ~20 pages, a separate registry file adds coordination overhead without meaningful maintenance benefit — inline URLs are easier to trace.
+- **Inconsistent key naming**: teams without a shared naming convention produce registries where similar URLs get distinct keys (`anthropic-agents` vs `building-effective-agents`), making keys harder to discover than a direct URL search.
+- **Build system incompatibility**: projects not using MkDocs or a system that supports file injection at parse time must implement a custom hook or CI transformation, trading simplicity for control.
+
 ## Example
 
 **Before** — URL duplicated across 38 files:
@@ -132,10 +138,6 @@ Updating the URL requires editing one line in `_links.md`. The CI guard catches 
 - The hook alternative expands `[label][key]` to inline links; prefer snippets to keep reference-style links intact
 - A CI grep over rendered HTML for unresolved `][key]` patterns catches registry misses before they reach production
 - Updating a URL in the registry propagates to all pages on the next build
-
-## Unverified Claims
-
-- MkDocs Material ships with pymdown-extensions pre-installed [unverified] — verify against the [mkdocs-material requirements](https://github.com/squidfunk/mkdocs-material/blob/master/requirements.txt) before adopting.
 
 ## Related
 

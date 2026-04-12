@@ -34,9 +34,9 @@ The study compares four multi-agent configurations against code injection:
 
 **Coder + Tester:** Tests validate functional correctness, not security properties. Injected code that passes tests propagates.
 
-**Coder + Reviewer + Tester:** A reviewer catches injection patterns in many cases but reduces coding efficiency through latency and false positives that block legitimate code.
+**Coder + Reviewer + Tester:** A reviewer catches injection patterns in many cases but reduces coding efficiency via false positives.
 
-**With dedicated Security Agent:** A security agent focused exclusively on injection detection restores efficiency while achieving higher resilience. Its narrow scope avoids the false positive rate that generalist reviewers produce.
+**With dedicated Security Agent:** A security agent focused exclusively on injection detection restores efficiency while achieving higher resilience. Narrow scope avoids the false positive rate that generalist reviewers produce.
 
 ## The Poisoned Few-Shot Vulnerability
 
@@ -48,13 +48,24 @@ Mitigations:
 
 - **Separate training data from injected code** — the security agent must not use code it is analyzing as in-context examples for its own reasoning
 - **Sanitize few-shot examples** at the harness level before they reach the security agent's context
-- **Apply structural analysis** (AST-level, not text-level) to reduce susceptibility to text-based few-shot poisoning [unverified]
+- **Apply structural analysis** (AST-level, not text-level) — narrowing input to structured representations limits the attack surface for comment-embedded few-shot examples
 
 ## Human-in-the-Loop Requirement
 
-No autonomous configuration in the study achieved full resilience. The fundamental finding: **goal-directed agents optimize for task completion, not for detecting that they are being manipulated**. An agent whose goal is to generate working code has no built-in incentive to refuse code that passes tests, even if that code also contains a backdoor.
+No autonomous configuration achieved full resilience. The fundamental finding: **goal-directed agents optimize for task completion, not for detecting that they are being manipulated**. An agent generating working code has no built-in incentive to refuse code that passes tests, even if that code contains a backdoor.
 
-Human-in-the-loop at the merge gate — reviewing diffs before code enters the main branch — remains the reliable final safeguard. The security agent reduces what humans need to review, but does not replace the review gate.
+Human review at the merge gate remains the reliable final safeguard. The security agent reduces what humans need to review, but does not replace the gate.
+
+## Why It Works
+
+Three structural properties drive effectiveness. Narrow-scope specialization: a generalist reviewer competes across quality, style, and security objectives, raising the false positive rate on legitimate code; a single-purpose security agent tuned only for injection detection avoids this trade-off. Early-gate rejection: code blocked before the reviewer and tester never reaches downstream agents, eliminating cross-agent propagation rather than reducing it. Context isolation: passing a structured AST instead of raw source removes the mechanism behind the 0%→71.95% attack success jump — comment-embedded few-shot examples can't reach the security agent's context window.
+
+## When This Backfires
+
+- **Low-risk internal pipelines**: Trusted-contributor pipelines face negligible injection risk; the latency and cost of a four-agent chain produce no security gain.
+- **Semantic injection vectors**: The architecture targets code-level injection. [arXiv:2602.19547](https://arxiv.org/abs/2602.19547) (CIBER) shows natural-language injection achieves +14.1% higher attack success than explicit code injection; code-review-focused agents miss this surface entirely.
+- **Security agent as high-value target**: Without context isolation, poisoning the security agent inverts its role — the paper's own data shows this raises attack success to 71.95%, worse than the coder-reviewer-tester baseline.
+- **False-positive friction**: High-recall tuning flags legitimate code. Practitioners route around strict gates via bypasses or reduced strictness, degrading resilience below the simpler configuration.
 
 ## Deployment Recommendations
 
@@ -62,7 +73,7 @@ For any autonomous coding pipeline that accepts external code (dependencies, PRs
 
 1. **Treat the security analysis agent as required infrastructure**, not optional hardening
 2. **Isolate the security agent's context** from the code under analysis — pass structured representations, not raw code with embedded comments
-3. **Apply sandboxed execution** before the security agent reviews — run code in isolation first to observe runtime behavior [unverified]
+3. **Apply sandboxed execution** before the security agent reviews — run code in isolation to observe runtime behavior; sandboxing is standard containment practice
 4. **Gate on security agent approval** before the reviewer and tester proceed — early rejection is cheaper than late rejection
 
 ## Example
@@ -143,11 +154,6 @@ Key decisions in this config:
 - Poisoned few-shot examples raise security agent attack success from 0% to 71.95% — isolate the agent's context from analyzed code
 - Human review at the merge gate remains the reliable final safeguard
 
-## Unverified Claims
-
-- AST-level structural analysis reduces susceptibility to text-based few-shot poisoning [unverified]
-- Sandboxed execution before security agent review observes runtime behavior [unverified]
-
 ## Related
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
@@ -168,3 +174,8 @@ Key decisions in this config:
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)
+- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)

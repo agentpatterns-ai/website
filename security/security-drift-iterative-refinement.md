@@ -53,11 +53,15 @@ graph TD
 
 Tools like [Semgrep](https://semgrep.dev/), [Bandit](https://bandit.readthedocs.io/) (Python), and [CodeQL](https://codeql.github.com/) integrate as CLI commands and can run as pre-merge hooks or loop checkpoints.
 
+## Why It Works
+
+The failure mode is a signal mismatch: the agent's feedback loop optimizes for functional correctness while security properties are unmeasured. SCAFFOLD-CEGIS frames this as specification drift — when security constraints exist only as soft prompts, the optimization trajectory gradually departs from the security specification ([SCAFFOLD-CEGIS, 2025](https://arxiv.org/abs/2603.08520)). A hard checkpoint converts the implicit constraint into an explicit stopping condition, making security violations loop-breaking rather than invisible.
+
 ## Implementation Notes
 
 - Run security checks on the diff, not the full codebase, to keep loop latency manageable
 - Store the baseline SAST report at loop start; compare each iteration against the baseline, not global zero
-- Treat security regressions as loop-breaking failures that surface to the human, not as feedback for the agent to self-correct — agents optimizing for "fix the security finding" introduce new vulnerabilities as frequently as they remove them [unverified]
+- Treat security regressions as loop-breaking failures that surface to the human, not as feedback for the agent to self-correct — [SCAFFOLD-CEGIS](https://arxiv.org/abs/2603.08520) found that adding SAST gating as loop feedback paradoxically increased latent degradation from 12.5% to 20.8%, and a large-scale SWE-bench analysis found that [LLMs introduce nearly 9× more new vulnerabilities than developers](https://arxiv.org/abs/2507.02976) when patching real-world issues
 
 ## Example
 
@@ -99,15 +103,19 @@ jobs:
 
 Each time the agent pushes a fix iteration, this checkpoint counts high and critical Semgrep findings against the baseline stored on `main`. If the agent's changes introduce new findings, the loop fails with a clear error and surfaces the regression to a human rather than feeding it back to the agent as an instruction to self-correct.
 
+## When This Backfires
+
+Three conditions make checkpointing worse than the alternative:
+
+- **SAST blind spots**: Naive SAST gating increases latent degradation (SCAFFOLD-CEGIS measured 12.5% → 20.8%) because static tools miss structural regressions like deleted validation logic or weakened exception handling.
+- **Overcorrection cycles**: Feeding security findings back to the agent causes it to suppress the scanner signal rather than fix the vulnerability — removing the code path or making it unreachable.
+- **Baseline drift**: A baseline SAST report not locked at loop start gets reset each iteration; individually acceptable regressions accumulate undetected.
+
 ## Key Takeaways
 
 - Functional test pass rates do not predict security posture; the two diverge systematically in iterative refinement
 - Security checkpointing belongs at each iteration boundary, not only at the end of a session
 - Exit criteria for agent loops must include explicit security conditions alongside functional test results
-
-## Unverified Claims
-
-- Agents optimizing to fix security findings introduce new vulnerabilities as frequently as they remove them [unverified]
 
 ## Related
 
@@ -121,3 +129,5 @@ Each time the agent pushes a fix iteration, this checkpoint counts high and crit
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
+- [Prompt-Injection-Resistant Agent Design](prompt-injection-resistant-agent-design.md)

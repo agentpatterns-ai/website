@@ -79,7 +79,7 @@ Infrastructure configuration -- resource limits, network latency, and time-of-da
 
 ## Example
 
-A Claude Code orchestrator delegates code review to three subagents using `Task` from the Claude Agent SDK. The lead agent's system prompt says: "Review the pull request for correctness."
+A Claude Code orchestrator delegates code review to three subagents using `Task` from the [Claude Agent SDK](../tools/claude/agent-sdk.md). The lead agent's system prompt says: "Review the pull request for correctness."
 
 A developer edits it to: "Thoroughly review the pull request for correctness, security, and performance."
 

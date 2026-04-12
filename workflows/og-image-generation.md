@@ -14,7 +14,7 @@ aliases:
 
 > Auto-generate branded 1200×630 Open Graph images from page metadata at build time, so every social share shows a unique, on-brand preview card without manual design work.
 
-Posts with compelling preview images get significantly more clicks in social feeds [unverified]. Generic or missing OG images are a conversion leak on every share. With 200+ pages, manual image design doesn't scale — move the work to the build pipeline instead.
+Generic or missing OG images leave social shares with platform-generated previews — often just a logo or blank card. With 200+ pages, manual image design doesn't scale — move the work to the build pipeline instead.
 
 ## How MkDocs Hooks Work
 
@@ -241,9 +241,14 @@ Both tools cache aggressively. Use a cache-buster query string (`?v=2`) if you'r
 - Commit generated images to the repo or to your CI artifact cache; regenerate on every build only if images are gitignored
 - Per-page `og_image: none` gives authors an escape hatch for pages that don't need social images
 
-## Unverified Claims
+## When This Backfires
 
-- Line 13: "Posts with compelling preview images get significantly more clicks in social feeds." — no source provided.
+Build-time image generation with Pillow is pragmatic but has specific failure modes:
+
+- **Font assets missing in CI** — `ImageFont.truetype()` raises `OSError` if the font file isn't present. The hook's try/except silently falls back to the site default, so failures are invisible unless you inspect build logs. Pin font files in the repo, not a CDN download step.
+- **Slug collisions** — the output filename uses `Path(src_path).stem`, so two pages named `index.md` in different directories write to the same `og/index.png`. Explicitly include the directory segment in the slug for nested content.
+- **Stale images on rename** — renaming a page leaves the old PNG in `docs/assets/og/`. If that directory is committed, stale files accumulate. Add `docs/assets/og/` to `.gitignore` and regenerate on every build, or run a cleanup step keyed to current page paths.
+- **Build-time cost at scale** — Pillow is fast per image, but 500+ pages adds measurable CI minutes. Cache generated images by content hash or switch to a CDN-based dynamic OG service (e.g., Vercel OG, Cloudinary) if build time is a constraint.
 
 ## Related
 

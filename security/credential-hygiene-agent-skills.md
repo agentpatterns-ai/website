@@ -129,10 +129,16 @@ The skill now encodes the intent and the interface; no credential is present.
 - Structure skill invocations to call wrapper scripts rather than authenticated endpoints directly
 - Audit skill files before publishing to any shared corpus or registry
 
-## Unverified Claims
+## When This Backfires
 
-- LLM verbatim reproduction of skill content into agent outputs is reported by practitioners but not formally documented in a primary source [unverified]
-- Secret-scanning tools do not cover skill directories by default — behavior depends on tool configuration and path glob defaults [unverified]
+Placeholder syntax and wrapper scripts reduce leakage at authoring time but do not eliminate all vectors:
+
+- **Private corpora without scanning** — Teams that never publish skills externally may skip scanner setup. Leaked credentials remain exploitable if the repository is later open-sourced, the skill is copied to a shared workspace, or an insider threat extracts the history.
+- **Agents that resolve placeholders** — An agent given both a skill file and access to environment secrets may substitute real values into placeholder slots during a generation step, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
+- **Coverage gaps in CI** — Adding gitleaks path rules for `.claude/skills/` is only effective if the CI job runs on all branches and pull requests. Skills committed to feature branches before the rule was added remain unscanned in history.
+- **Registry-level credential reuse** — Credentials rotated after a skill was published remain exposed in any consumer who cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials.
+
+Apply wrapper-script isolation and pre-commit scanning together; neither alone closes all paths.
 
 ## Related
 
@@ -142,3 +148,4 @@ The skill now encodes the intent and the interface; no credential is present.
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — how malicious tools exploit credential-containing arguments
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — limiting the impact when a credential is exposed
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layered controls that catch leaks at multiple stages
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious credentials and payloads embedded in published community skills

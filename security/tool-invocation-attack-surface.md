@@ -96,11 +96,11 @@ Combine guard LLM semantic analysis, harness-level subcommand whitelisting (vali
 
 ### Isolate tool sections
 
-Keep MCP tool descriptions in a separated prompt section, distinct from system instructions. This reduces cross-contamination between tool metadata and agent directives — the pattern that made Trae most resilient.
+Keep MCP tool descriptions in a separated prompt section, distinct from system instructions. This reduces cross-contamination between tool metadata and agent directives — the pattern that made Trae most resilient. The MCP spec itself requires clients to treat tool annotations as untrusted unless the server is trusted ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/server/tools)).
 
 ### Enforce instruction-data separation
 
-Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md).
+Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md). Spotlighting — delimiting trusted instructions from untrusted tool content — operationalises this separation ([Microsoft MCP security guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp)).
 
 ### Restrict tool auto-approval
 
@@ -112,12 +112,17 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - ToolLeak bypasses refusal training by framing prompt extraction as routine argument population
 - Two-channel injection achieved RCE on every tested agent-LLM pair
 - Guard models help but can be overridden — layer with harness-level whitelisting and tool isolation
-- Treat every MCP tool return as untrusted input [unverified]
+- Treat every MCP tool return as untrusted input — returns demonstrated as injection vectors in every tested agent-LLM pair ([Li et al., 2025](https://arxiv.org/abs/2509.05755))
 
-## Unverified Claims
+## When This Backfires
 
-- The claim that instruction-data separation at the architectural level would fully prevent two-channel attacks remains theoretical — no production implementation has been tested
-- Success rates may differ on newer model versions released after the study period
+Layered defenses reduce attack surface but do not eliminate it:
+
+- **Guard-model override is demonstrated, not theoretical.** The paper confirms the main model overrode guard-model rejections when both channels reinforced the malicious context. Adding a guard without harness-level enforcement leaves this path open.
+- **Pre-approved tool registries create false confidence.** Registries narrow the attack surface but do not eliminate it — a compromised registry entry or a tool updated post-approval reintroduces the vector.
+- **Whitelisting breaks on novel subcommand variants.** Command whitelisting validating only top-level commands (`bash`, `python`) fails when subcommands or argument composition achieves the same effect. Validate at the subcommand and argument level.
+- **Instruction-data separation prevents two-channel injection architecturally**, but no production coding-agent implementation has been validated against this specific attack class. The pattern is well-grounded theoretically; operational deployment remains the open question.
+- **Success rates shift with model versions.** The study used specific model snapshots; newer releases with stronger output sanitization (e.g., GPT-5's 20% RCE rate in Cline) suggest the attack surface is model-version-sensitive.
 
 ## Related
 
@@ -129,3 +134,6 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md) — multi-agent architectures that detect injected code before execution
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns that limit blast radius when injection succeeds
 - [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md) — URL channels as an exfiltration vector complementary to ToolLeak
+- [Action-Selector Pattern](action-selector-pattern.md) — tool outputs never re-enter the model, eliminating the return-channel injection vector this page describes
+- [CaMeL: Separating Control and Data Flow](camel-control-data-flow-injection.md) — architectural defense that makes instruction-data confusion structurally impossible
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious tool registration via poisoned public registries, an upstream variant of the MCP attack vector

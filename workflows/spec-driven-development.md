@@ -38,7 +38,7 @@ graph TD
 
 **Implement** — The agent executes tasks sequentially. You review focused changes rather than large code dumps.
 
-Spec Kit supports 20+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit](https://github.com/github/spec-kit)) [unverified].
+Spec Kit supports 23+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)).
 
 ## The Specification File
 
@@ -131,10 +131,6 @@ Each task is concrete and independently verifiable, matching the **Tasks** phase
 - Spec-driven development externalizes project intent into a Markdown file that persists across agent sessions, eliminating context loss as the primary failure mode
 - The four-phase workflow (specify, plan, tasks, implement) decomposes ambiguous requirements into testable implementation units
 - Specifications complement rather than replace formal artifacts like types and tests — use both for maximum precision
-
-## Unverified Claims
-
-- Spec Kit supports 20+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands [unverified]
 
 ## Related
 

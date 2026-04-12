@@ -15,7 +15,7 @@ aliases:
 
 ## The Problem With LLM-Driven Control Flow
 
-In a ReAct-style loop, the LLM decides which tool to call on every step — including retries and fallbacks. Most of those decisions are deterministic [unverified]: "this tool failed, use the next available one." Routing them through the LLM wastes inference budget and introduces latency for decisions that require no reasoning.
+In a ReAct-style loop, the LLM decides which tool to call on every step — including retries and fallbacks. Most retry and fallback decisions follow deterministic rules: "this tool failed, use the next available one." Routing them through the LLM wastes inference budget and introduces latency for decisions that require no reasoning.
 
 Static workflow baselines avoid this cost but produce silent failures: when a tool is unavailable, the workflow halts or skips silently. Neither failure mode is acceptable for production agents.
 
@@ -53,6 +53,10 @@ Testing across 19 scenarios and three graph topologies (linear pipeline, depende
 
 Every failure is either a logged reroute or an explicit escalation — the silent-failure mode of static workflows is eliminated without paying the inference cost of LLM-directed recovery.
 
+## Why It Works
+
+The 93% reduction in LLM control-plane calls follows from a structural property: the routing decisions eliminated are those that carry no ambiguity. A ReAct agent consults the LLM at every step, including steps where the only valid action is "retry with the next available tool." Because the LLM must re-read context, re-evaluate tool options, and generate a decision token sequence, each such call costs fixed inference overhead regardless of decision difficulty. Dijkstra routing moves those decisions into an in-process graph traversal — constant-time per edge, no token sampling — and reserves LLM inference for states where graph traversal returns no feasible path. The result is a step-function cost reduction proportional to the fraction of steps that are unambiguously deterministic, which in practice is the majority of steps in failure-recovery scenarios.
+
 ## Positioning on the Workflow/Agent Spectrum
 
 [Anthropic's agent design guidance](https://www.anthropic.com/engineering/building-effective-agents) distinguishes fixed workflows (predefined code paths) from full agents (LLM-directed). Self-Healing Tool Routing occupies the space between them: paths adapt at runtime based on live health state, but adaptation is deterministic — the LLM is not involved until adaptation is impossible. This is a third mode: deterministic adaptive routing.
@@ -60,8 +64,16 @@ Every failure is either a logged reroute or an explicit escalation — the silen
 Complementary to, not in competition with:
 
 - **Workload-specialized model routing** ([arXiv:2603.05344](https://arxiv.org/abs/2603.05344)): routes at the model-selection level, not the tool-call level
-- **Lazy tool discovery** [unverified — arXiv:2603.05344 covers workload-specialized model routing, not lazy tool discovery; a separate citation is needed]: reduces context window cost by deferring tool schema loading; orthogonal to control-plane call reduction
+- **Lazy tool discovery**: reduces context window cost by deferring tool schema loading until a tool is actually needed; orthogonal to control-plane call reduction
 - **Harness-level loop detection** ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)): catches failure at the middleware level through hooks, not through graph reweighting
+
+## When This Backfires
+
+Graph construction and edge reweighting add overhead that simple alternatives don't pay. Avoid this pattern when:
+
+- **Tool set is small and stable** (fewer than ~5 tools): a static priority list with a retry counter has lower setup cost and comparable fault tolerance.
+- **Failure rates are near-zero** in production: the health monitor infrastructure carries ongoing overhead for a failure path that rarely executes; a harness-level exception handler is simpler.
+- **Tool dependencies are dynamic**: when sequencing rules change per-request (e.g., multi-tenant agents with per-user tool grants), rebuilding the graph on each request can exceed the latency savings from avoiding LLM routing calls.
 
 ## Implementation Notes
 
@@ -72,7 +84,7 @@ Four components are required:
 3. **Router**: Dijkstra (or A* with admissible heuristic) run at each step against the current graph state
 4. **Escalation handler**: invoked when the router returns no feasible path; passes failure context to the LLM
 
-Exact health monitor API contracts and code-level integration points are unconfirmed from the primary source [unverified] — the paper's abstract and results are accessible at https://arxiv.org/abs/2603.01548.
+The paper ([arXiv:2603.01548](https://arxiv.org/abs/2603.01548)) documents the routing algorithm and benchmark results; specific health monitor API contracts and integration code are implementation choices left to the adopter.
 
 ## Example
 
@@ -138,6 +150,7 @@ When `summarizer` is healthy, the router selects the lower-cost path `web_search
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Loop Detection](../observability/loop-detection.md)
+- [MCP Client Design](mcp-client-design.md)
 - [Tool Engineering](tool-engineering.md)
 - [RFC 9457 Machine-Readable Errors](rfc9457-machine-readable-errors.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)

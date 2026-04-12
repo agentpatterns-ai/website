@@ -43,7 +43,7 @@ graph TD
 
 **Initializer agent for multi-session work.** For long-running tasks, the initializer agent writes an expanded feature spec to a persistent progress file. Each downstream agent reads this file rather than re-expanding the original directive. The expansion cost is paid once. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
-**Developer-driven exploration (interactive mode).** Claude Code's Plan Mode enforces the same principle interactively: a read-only exploration phase surfaces the agent's understanding before any changes are made. The agent reads the codebase, asks clarifying questions, and produces a plan — you review the plan before execution begins. ([Claude Code best practices](https://code.claude.com/docs/en/best-practices))
+**Developer-driven exploration (interactive mode).** Claude Code's [Plan Mode](plan-mode.md) enforces the same principle interactively: a read-only exploration phase surfaces the agent's understanding before any changes are made. The agent reads the codebase, asks clarifying questions, and produces a plan — you review the plan before execution begins. ([Claude Code best practices](https://code.claude.com/docs/en/best-practices))
 
 The "let Claude interview you" pattern extends this: a minimal prompt triggers the agent to interview you using structured questions, then synthesize findings into a spec file before a clean implementation session begins. ([Claude Code best practices](https://code.claude.com/docs/en/best-practices))
 

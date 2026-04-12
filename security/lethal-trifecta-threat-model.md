@@ -73,7 +73,7 @@ Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) m
 | **Code-Then-Execute** | Untrusted input | LLM generates code; sandboxed runtime executes without LLM re-evaluation |
 | **[LLM Map-Reduce](../multi-agent/llm-map-reduce.md)** | Private data | Each instance sees only a partition; no single instance has full data access |
 
-CaMeL ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)) enforces trifecta separation via control and data flow primitives, achieving 77% task completion with provable security.
+[CaMeL](camel-control-data-flow-injection.md) ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)) enforces trifecta separation via control and data flow primitives, achieving 77% task completion with provable security.
 
 ## Attack Chains
 

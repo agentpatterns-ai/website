@@ -105,3 +105,4 @@ The [agentic flywheel](agentic-flywheel.md) extends this: agents propose candida
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — sourcing eval tasks from production failures
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — reasoning sandwich as a concrete tunable component
 - [Incremental Verification](../verification/incremental-verification.md) — the same one-step-at-a-time principle applied to implementation
+- [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) — when to use LLM-as-judge vs. deterministic graders, and how to calibrate both

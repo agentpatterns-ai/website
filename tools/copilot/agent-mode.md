@@ -74,6 +74,7 @@ Review the plan, approve, and then Copilot executes all steps.
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
 - [Copilot Extensions](copilot-extensions.md)
+- [Migrating Copilot Extensions to MCP](../../tool-engineering/copilot-extensions-to-mcp-migration.md)
 - [Copilot Memory](copilot-memory.md)
 - [GitHub Copilot SDK](copilot-sdk.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)

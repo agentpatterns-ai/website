@@ -125,6 +125,7 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
 - [Convergence Detection in Iterative Refinement](convergence-detection.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)

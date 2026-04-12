@@ -24,9 +24,9 @@ The same model with wide vs. narrow scope presents a fundamentally different att
 
 ## Two Properties Narrow Scope Provides
 
-**Blast radius containment.** A compromised agent can only take actions its task permits. An agent without email access cannot be injected into sending email. [unverified]
+**Blast radius containment.** A compromised agent can only take actions its task permits. An agent without email access cannot be injected into sending email — capability restrictions enforce this at the tool layer, independent of model behavior. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
-**Explicit intent signal.** "Do X, only X, not Y" creates a reference against which "also do Y" is objectively out of scope — rather than an ambiguous extension. [unverified]
+**Explicit intent signal.** "Do X, only X, not Y" creates a reference against which "also do Y" is objectively out of scope — rather than an ambiguous extension. Tight scope creates a verifiable contract: any injected instruction that requests out-of-scope action contradicts a stated directive rather than plausibly extending a vague one.
 
 ## What Tight Instructions Look Like
 
@@ -38,7 +38,7 @@ Replace delegated judgment with explicit constraints:
 **Tight:**
 > "Reply to unread emails from the domain @company.com about the project status report. Reply only with a brief acknowledgment. Do not forward, archive, or take any other action. Do not reply to emails from other senders or on other topics."
 
-The tight version specifies permitted sender domain, topic, and action — and excludes others. "Also forward this to..." directly contradicts a stated directive [unverified]. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
+The tight version specifies permitted sender domain, topic, and action — and excludes others. "Also forward this to..." directly contradicts a stated directive rather than extending a vague one. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 
 ## The Parameterized Query Analogy
 
@@ -76,7 +76,7 @@ graph TD
 
 Instructions that grant "use your judgment" or "take whatever action is needed" actively authorize redirection — providing no boundary for the model to defend. This is the highest-risk scope pattern for agents processing untrusted content.
 
-Wide latitude is appropriate only for agents in fully controlled environments without external data sources. [unverified]
+Wide latitude increases risk proportionally to the untrustworthiness of the agent's input sources. Avoid it for agents that consume external data, user-provided content, or any channel that could carry injected instructions.
 
 ## Example
 
@@ -132,3 +132,7 @@ Tight instructions reduce flexibility — a narrow-scope agent cannot handle req
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
+- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)

@@ -25,3 +25,4 @@ tags:
 - [Review-Then-Implement Loop](review-then-implement-loop.md) — Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — Design AI code review to stay silent when it has nothing useful to say — high-signal feedback builds trust; exhaustive commenting destroys it
 - [Tiered Code Review](tiered-code-review.md) — Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory human review
+- [Deferred Standards Enforcement via Review Agents](deferred-standards-enforcement.md) — Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time, preserving implementation context budget for the task at hand

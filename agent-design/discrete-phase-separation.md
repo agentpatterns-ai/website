@@ -76,7 +76,7 @@ The handoff artifact is the mechanism that makes isolation possible without losi
 - **Self-contained** — the receiving agent needs no access to phase history
 - **Opinionated** — conclusions, not raw findings; a plan, not a list of options
 
-[Claude Code best practices](https://code.claude.com/docs/en/best-practices) formalizes a four-phase sequence (Explore → Plan → Implement → Commit) where Plan Mode enforces read-only context during research and planning, preventing premature file writes. This is the same isolation enforced mechanically rather than by conversation boundary.
+[Claude Code best practices](https://code.claude.com/docs/en/best-practices) formalizes a four-phase sequence (Explore → Plan → Implement → Commit) where [Plan Mode](../workflows/plan-mode.md) enforces read-only context during research and planning, preventing premature file writes. This is the same isolation enforced mechanically rather than by conversation boundary.
 
 ## Model Selection Per Phase
 

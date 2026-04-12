@@ -11,15 +11,15 @@ tags:
 
 # Advanced Tool Use: Scaling Agent Tool Libraries
 
-> When good tool design isn't enough — three API-level features for managing hundreds of tools without drowning in context or losing selection accuracy.
+> Advanced tool use covers three Anthropic API features — deferred tool loading with tool search, programmatic calling, and input examples — that address context bloat and selection accuracy degradation when tool libraries grow beyond ~30 tools.
 
 Well-designed tools ([Tool Engineering](tool-engineering.md)) and precise descriptions ([Tool Selection Guidance](tool-description-quality.md)) work at small scale. Past 30–50 tools, two problems compound: tool definitions consume the context budget before work begins, and selection accuracy degrades as the model evaluates more options. These are API-level features from [Anthropic's advanced tool use post](https://www.anthropic.com/engineering/advanced-tool-use) that address the scaling problem directly.
 
 ## The Scaling Wall
 
-A typical multi-server MCP setup (GitHub, Slack, Sentry, Grafana, Splunk) can consume ~55K tokens in tool definitions alone — before any actual work. At scale, tool definitions become the dominant cost, not conversation content (see also [Token-Efficient Tool Design](token-efficient-tool-design.md) and [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) for design-level strategies) [unverified].
+A typical multi-server MCP setup (GitHub, Slack, Sentry, Grafana, Splunk) can consume ~55K tokens in tool definitions alone — before any actual work. At scale, tool definitions become the dominant cost, not conversation content (see also [Token-Efficient Tool Design](token-efficient-tool-design.md) and [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) for design-level strategies) ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-Selection accuracy also degrades — Anthropic's benchmarks show Opus 4 dropping to 49% and even Opus 4.5 reaching only 79.5% with large tool sets [unverified]. The more tools available, the more likely the model picks the wrong one.
+Selection accuracy also degrades — Anthropic's benchmarks show Opus 4 dropping to 49% and even Opus 4.5 reaching only 79.5% with large tool sets ([source](https://www.anthropic.com/engineering/advanced-tool-use)). The more tools available, the more likely the model picks the wrong one.
 
 ## Tool Search Tool: On-Demand Discovery
 
@@ -41,9 +41,9 @@ Two search variants exist:
 | Regex | `tool_search_tool_regex_20251119` | Model constructs regex patterns |
 | BM25 | `tool_search_tool_bm25_20251119` | Model uses natural language queries |
 
-**Token impact:** ~55K → ~8.7K (85%+ reduction) [unverified]. The model loads only 3–5 tools per request instead of 50+.
+**Token impact:** ~55K → ~8.7K (85%+ reduction) ([source](https://www.anthropic.com/engineering/advanced-tool-use)). The model loads only 3–5 tools per request instead of 50+.
 
-**Accuracy impact:** Opus 4 improved from 49% → 74%. Opus 4.5 improved from 79.5% → 88.1% [unverified].
+**Accuracy impact:** Opus 4 improved from 49% → 74%. Opus 4.5 improved from 79.5% → 88.1% ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 **MCP toolset support** allows deferring entire servers while keeping high-use tools loaded:
 
@@ -94,11 +94,11 @@ exceeded = [m for m, exp in zip(team, expenses)
 print(json.dumps(exceeded))
 ```
 
-**Token impact:** 37% reduction (43,588 → 27,297 tokens on complex multi-step research tasks) [unverified].
+**Token impact:** 37% reduction (43,588 → 27,297 tokens on complex multi-step research tasks) ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-**Latency impact:** Eliminates 19+ inference passes by orchestrating 20+ tool calls in a single code block [unverified].
+**Latency impact:** Eliminates 19+ inference passes by orchestrating 20+ tool calls in a single code block ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
-**Accuracy impact:** Knowledge retrieval improved 25.6% → 28.5% [unverified].
+**Accuracy impact:** Knowledge retrieval improved 25.6% → 28.5% ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 Use for multi-step workflows with 3+ dependent tool calls, large datasets needing aggregation, or parallel operations across many items. Skip for single-tool invocations, quick lookups, or tasks where the model should reason about intermediate results.
 
@@ -136,7 +136,7 @@ These three examples teach the model:
 - **Parameter correlations:** critical bugs get full escalation objects; feature requests don't
 - **Progressive complexity:** minimal tickets exist — not everything needs every field
 
-**Accuracy impact:** 72% → 90% on complex parameter handling in internal testing [unverified].
+**Accuracy impact:** 72% → 90% on complex parameter handling in internal testing ([source](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 Use for complex nested structures, domain-specific conventions not captured in schemas, or similar tools that need examples to clarify distinction. Skip for simple single-parameter tools, standard formats (URLs, emails), or when validation concerns are better handled by JSON Schema constraints.
 
@@ -167,6 +167,24 @@ graph TD
 - Keep 3–5 most-used tools always loaded (`defer_loading: false`); defer the rest
 - Add system prompt context: *"You have access to tools for Slack, Google Drive, Jira, and GitHub. Use tool search to find specific capabilities."*
 - Deferred tools are excluded from the initial prompt, keeping system prompt and core definitions cacheable
+
+## When This Backfires
+
+These features add complexity that is only justified by specific bottlenecks.
+
+**Tool search backfires when:**
+- Tool libraries are small or all tools are used frequently — the extra search round-trip adds latency with no benefit
+- You need ZDR (Zero Data Retention) compliance — server-side tool search is not ZDR-eligible; use client-side tool_reference blocks instead
+- Tools have similar names or overlapping descriptions — the model may retrieve the wrong set of tools, and the failure is harder to debug than a selection miss in a flat list
+
+**Programmatic calling backfires when:**
+- Workflows require the model to reason about intermediate results — sandboxed execution returns only `stdout`, so intermediate reasoning is lost
+- The task involves a small number of well-defined API calls in fixed order — the infrastructure overhead (sandboxing, container management) isn't justified
+- Container cold starts are unacceptable — PTC containers expire after ~4.5 minutes of inactivity, adding latency on the first call after idle
+
+**Tool use examples backfire when:**
+- Examples are outdated and no longer reflect real tool behavior — the model will learn the wrong conventions
+- Token overhead from verbose examples exceeds the accuracy gain for simple tools
 
 ## Key Takeaways
 

@@ -16,15 +16,15 @@ tags:
 
 ## The Problem
 
-Browser automation tools like Playwright give agents access to bot-protected web content by launching a real Chromium instance instead of issuing a raw HTTP request. Where an HTTP client receives a 403 or challenge page from CDN bot detection, a full browser passes fingerprint checks and loads the page normally.
+Browser automation tools like Playwright give agents access to bot-protected web content by launching a real Chromium instance instead of issuing a raw HTTP request. Where an HTTP client receives a 403 or challenge page from basic CDN bot detection, a full browser passes user-agent and header checks and loads the page normally.
 
 Research workflows — fetching documentation, importing blog posts, reading specs — require agents to retrieve web content. Many sites deploy CDN-level bot detection (Cloudflare being the most common) that inspects request fingerprints: user agent strings, TLS fingerprinting, absence of browser headers, and JavaScript challenge support.
 
-An agent's HTTP client fails these checks and receives a 403 or a challenge page instead of content [unverified — specific Cloudflare detection mechanisms not verified against official Cloudflare documentation]. The developer sees an error and may incorrectly conclude the content is unavailable.
+An agent's HTTP client fails these checks and receives a 403 or a challenge page instead of content. The developer sees an error and may incorrectly conclude the content is unavailable.
 
 ## Why Browser Automation Works
 
-Playwright and Puppeteer launch real Chromium instances. These browsers send genuine browser headers, execute JavaScript, and maintain consistent TLS fingerprints. CDN bot detection treats them as human traffic [unverified — Cloudflare and other CDN vendors do not publicly document all detection signals; this reflects observed behavior].
+Playwright and Puppeteer launch real Chromium instances. These browsers send genuine browser headers, execute JavaScript, and maintain consistent TLS fingerprints. Against basic CDN bot detection — primarily user-agent and header inspection — this is sufficient to retrieve content. Against advanced systems like Cloudflare Turnstile or enterprise anti-bot services, Playwright's Chromium binary exposes distinct JA3/JA4 TLS fingerprints and CDP protocol signals that can still trigger detection ([Playwright stealth limitations](https://securityboulevard.com/2025/03/how-to-detect-headless-chrome-bots-instrumented-with-playwright/)).
 
 The tradeoff: browser automation is slower and more resource-intensive than HTTP fetch, so it is not a default — it is a fallback triggered by specific failure conditions.
 
@@ -34,7 +34,7 @@ Switch from HTTP fetch to browser automation when:
 
 1. `WebFetch` or equivalent returns a 403, 401, or challenge page on a URL you can open in a browser
 2. The response body contains known bot detection markers (`cf-ray`, `Checking your browser`, `Access denied`)
-3. The site is known to use aggressive bot detection (openai.com, some Vercel-hosted sites) [unverified — site list based on observed failures, not official block lists]
+3. The site is known to use aggressive bot detection (openai.com, some Vercel-hosted sites) — based on observed failures; the specific sites employing advanced fingerprinting will change over time
 
 Do not switch preemptively. HTTP fetch is faster and sufficient for most sites.
 
@@ -67,13 +67,13 @@ fetch_url(url):
   return response.body
 ```
 
-This fallback pattern keeps the happy path fast while handling bot-protected content automatically [unverified — specific MCP tool availability and API varies by agent framework].
+This fallback pattern keeps the happy path fast while handling bot-protected content automatically. Tool availability and API specifics vary by agent framework; adapt the pseudocode to the actual browser tool interface.
 
 ## Known Limitations
 
-- Browser automation requires a running browser process — not always available in headless CI environments [unverified]
-- Some sites detect headless Chromium through additional signals beyond standard browser fingerprinting [unverified]
-- Session state (cookies, auth) is not preserved across browser_navigate calls by default [unverified — depends on MCP Playwright tool implementation]
+- Browser automation requires a running browser process — CI environments support this via Docker or native Playwright installation ([Playwright CI docs](https://playwright.dev/docs/ci)), but serverless or sandboxed execution environments may not
+- Modern CDN anti-bot systems (Cloudflare Turnstile, DataDome, Akamai) detect headless Chromium through JA3/JA4 TLS fingerprints and CDP protocol signals that stealth patches do not fully eliminate
+- Session state (cookies, auth) is not preserved across browser_navigate calls by default in most MCP Playwright implementations — check the tool's session handling documentation
 - JavaScript-heavy single-page applications may require explicit wait conditions beyond `browser_wait_for("body")`
 
 ## Example
@@ -101,10 +101,14 @@ Agent: Content retrieved. Parsing release notes into structured format.
 
 The agent detects the 403, falls back to Playwright, targets the `article` container to avoid navigation and sidebar content, and retrieves clean text for downstream processing.
 
+## Limits of This Approach
+
+Browser automation is not a universal bypass. Cloudflare's challenge system [explicitly lists automation frameworks as unsupported clients](https://developers.cloudflare.com/cloudflare-challenges/reference/supported-browsers/), and detection relies on signals that a Playwright binary cannot fully hide: JA3/JA4 TLS handshake fingerprints specific to Chromium's build, CDP protocol markers, and behavioral analysis. Against basic bot detection (user-agent checks, missing browser headers), Playwright works reliably. Against Cloudflare Turnstile, DataDome, or Kasada deployments, it often fails even with stealth patches applied. Use this pattern as a first-level fallback, not a guaranteed solution.
+
 ## Key Takeaways
 
 - HTTP clients used by agents have non-browser fingerprints — CDN bot detection blocks them
-- Playwright launches real Chromium and presents as human traffic to CDN detection
+- Playwright launches real Chromium with genuine browser headers — sufficient for basic bot detection; advanced CDN systems (Cloudflare Turnstile, DataDome) may still detect it via TLS fingerprinting
 - Trigger: 403 on a URL you can view in a browser → switch to browser_navigate
 - Extract content with semantic element selectors, not raw HTML parsing
 - Use browser automation as a fallback, not a default — it is slower and heavier

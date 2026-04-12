@@ -38,7 +38,7 @@ graph TD
     D --> E[Graduate to agentic workflows with oversight]
 ```
 
-Teach the trust spectrum early. Agents perform well on high-context, well-specified tasks: boilerplate generation, refactoring with clear rules, summarizing documentation, writing tests against defined interfaces [unverified]. They perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring judgment about business context [unverified]. Making this explicit prevents both over-reliance and under-use.
+Teach the trust spectrum early. Agents perform well on high-context, well-specified tasks: boilerplate generation, refactoring with clear rules, summarizing documentation, writing tests against defined interfaces — areas where [productivity gains are consistently documented](https://arxiv.org/html/2511.04824v1). They perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring judgment about business context — domains where [validation criteria are unclear and business policy interpretation is required](https://venturebeat.com/ai/why-ai-coding-agents-arent-production-ready-brittle-context-windows-broken). Making this explicit prevents both over-reliance and under-use.
 
 ## Shifting Review Culture
 
@@ -79,7 +79,15 @@ Shared vocabulary prevents confusion in code reviews and discussions about agent
 
 Agent infrastructure decays without maintenance. Skills become outdated as codebases evolve. Commands that worked for one project phase may not fit the next. Assign ownership: someone is responsible for keeping AGENTS.md current, reviewing skill changes, and evaluating new agent capabilities as they ship.
 
-Schedule periodic reviews of agent output quality. If output quality drops, the cause is usually stale instructions or changed codebase conventions — not a change in the model [unverified]. Treat infrastructure maintenance as ongoing, not a one-time setup.
+Schedule periodic reviews of agent output quality. If output quality drops, the cause is usually stale instructions or changed codebase conventions — not a change in the model. Treat infrastructure maintenance as ongoing, not a one-time setup.
+
+## When This Backfires
+
+Structured team onboarding adds coordination overhead. On small or short-lived teams, that overhead can outweigh the benefit:
+
+- **Team of two or three**: Synchronizing on shared conventions, reviewing AGENTS.md changes via PR, and scheduling group calibration sessions costs more time than individual drift would. Small teams converge naturally through pair work.
+- **Exploratory or prototype phases**: When requirements change weekly, shared agent infrastructure becomes outdated before it stabilizes. Premature standardization locks in conventions that don't yet fit the problem.
+- **Low CI discipline**: AGENTS.md and shared skills decay quickly without consistent maintenance and code review. Teams that skip reviewing agent configuration changes in PRs will find infrastructure diverges from codebase reality within weeks, producing worse agent output than no instructions at all.
 
 ## Example
 
@@ -117,11 +125,6 @@ This three-week sequence surfaces agent failure modes in a controlled way before
 - Agent output review focuses on correctness, not style — teach this distinction explicitly
 - Establish shared vocabulary for agent concepts before teams diverge on terminology
 - Agent infrastructure requires ongoing maintenance; assign ownership to prevent decay
-
-## Unverified Claims
-
-- Agents perform well on high-context, well-specified tasks like boilerplate generation, refactoring, summarizing, and writing tests [unverified]
-- Agents perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring business context judgment [unverified]
 
 ## Related
 

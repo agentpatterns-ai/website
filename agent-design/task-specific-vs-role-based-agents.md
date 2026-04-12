@@ -128,3 +128,4 @@ The `canary-promote` agent knows exactly what it does, what tools it needs, and 
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — task-scoped agents produce cleaner execution logs for memory synthesis
 - [The Delegation Decision](delegation-decision.md) — deciding what to delegate complements deciding how to scope the agent
 - [Agent Composition Patterns](agent-composition-patterns.md) — structural patterns for combining task-specific agents into workflows
+- [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — narrow scope reduces prompt injection attack surface, not just context noise

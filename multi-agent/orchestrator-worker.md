@@ -38,7 +38,7 @@ graph TD
 
 ## When Parallelization Helps
 
-Parallelization is effective when the task requires "multiple independent directions simultaneously" -- per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system). This includes:
+Parallelization is effective when the task requires "multiple independent directions simultaneously" -- per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system). A systematic review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)) confirms that parallelism and specialization are the primary rationale for multi-agent over single-agent architectures, delivering quality gains that a single generalist agent cannot achieve. This includes:
 
 - Research tasks spanning multiple independent sources or domains
 - Analysis requiring different methodologies applied to the same dataset
@@ -68,7 +68,7 @@ Workers returning results to the orchestrator is the only coordination point. An
 
 ## Orchestrator Sensitivity
 
-[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) notes that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator is the highest-leverage point in the system: its decomposition decisions determine which subtasks workers receive and how. Treat the orchestrator prompt as the most sensitive component in the architecture, and test decomposition behavior explicitly across a range of input queries [unverified].
+[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) notes that prompt engineering was the primary lever for improving agent behavior, and that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator is the highest-leverage point in the system: its decomposition decisions determine which subtasks workers receive and how. Treat the orchestrator prompt as the most sensitive component in the architecture, and test decomposition behavior explicitly across a range of input queries.
 
 ## Synthesis
 
@@ -128,10 +128,6 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - Synthesis is a reasoning step, not aggregation
 - Multi-agent systems consume ~15x the tokens of chat -- task value must justify the cost
 
-## Unverified Claims
-
-- Orchestrator prompt is the most sensitive component; test decomposition behavior explicitly across a range of input queries [unverified]
-
 ## Related
 
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
@@ -153,3 +149,6 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
+- [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
+- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
+- [System-Level Optimization Pipeline](system-level-optimization-pipeline.md)

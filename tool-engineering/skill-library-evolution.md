@@ -15,7 +15,7 @@ tags:
 
 ## Why Persist Skills
 
-Agent sessions are stateless by default — each session rediscovers solutions already found in prior runs. Persisting agent-written code as named skill files converts repeated token spend into reuse [unverified]. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
+Agent sessions are stateless by default — each session rediscovers solutions already found in prior runs. Persisting agent-written code as named skill files makes prior solutions available for later sessions rather than regenerating them. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
 A minimal skill record contains: **Name**, **Description** (what problem it solves and when to use it), **Inputs/Outputs**, and a **Usage example**. Early sessions produce general-purpose skills; later sessions build on those for higher-complexity tasks. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
@@ -32,7 +32,9 @@ Fetches all pages from a paginated REST API endpoint.
 
 ## Why Libraries Degrade
 
-Skills accumulate without pruning: redundant entries create nondeterministic selection, outdated entries cause silent failures, and poor descriptions make skills undiscoverable. Progressive disclosure manages runtime context loading `[unverified]` but does not solve upstream bloat.
+Skills accumulate without pruning: redundant entries create nondeterministic selection, outdated entries cause silent failures, and poor descriptions make skills undiscoverable. Progressive disclosure manages runtime context loading — agents load only the definitions needed for the current task rather than all definitions upfront — but does not solve upstream bloat. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
+
+The mechanism: tool selection works by matching the agent's current intent against skill descriptions. When two descriptions are semantically similar, the model cannot reliably distinguish them and may pick arbitrarily — the same root cause as nondeterministic behavior in any softmax distribution over near-equal scores. Pruning and clear scoping prevent this by keeping descriptions orthogonal.
 
 ## The Maturation Path
 
@@ -86,7 +88,7 @@ Two registry approaches with distinct trade-offs:
 | Velocity | Slower — must pass gates | Faster — lower barrier |
 | Trust model | Verify then trust | Trust then verify |
 
-Specification quality is the primary gate: screening raised utility success from 76.5% to 99.9% `[unverified]`.
+Specification quality is the primary gate: audited registries require passing quality gates before entry; curated-but-not-audited registries leave validation to consumers. Research into automated skill library construction confirms that iterative quality refinement — validating and revising skills based on execution feedback — consistently improves task success rates compared to static repositories. [Source: [SkillX: Automatically Constructing Skill Knowledge Bases for Agents](https://arxiv.org/abs/2604.04804)]
 
 ## Versioning and Deprecation
 
@@ -106,20 +108,20 @@ Retire skills showing: zero invocations over a defined period; supersession by a
 | Absent testing | Kills reliability — silent failures propagate |
 | No deprecation path | Kills evolution — outdated skills persist |
 
+## When This Backfires
+
+Lifecycle governance adds overhead that may exceed its value in certain contexts:
+
+- **Small libraries** — fewer than ~20 skills rarely suffer from selection ambiguity; governance rituals (versioning, deprecation notices, quality gates) create more friction than they prevent.
+- **Short-lived projects** — skills go stale faster than they accumulate reuse value; the return on investment requires stable, repeated task patterns across multiple sessions.
+- **Dynamic prompting suffices** — when agent tasks are diverse and unpredictable, a curated prompt-based approach can achieve equivalent reuse without the file-management and routing overhead of a persisted library.
+
 ## Key Takeaways
 
 - Persist agent-written code as named skills with name, description, inputs/outputs, and a usage example
 - Libraries degrade without lifecycle management — growth alone does not equal improvement
 - Description quality determines discoverability — invest in clear descriptions over perfect code
 - Prune actively; build on open standards to avoid forced rewrites
-
-## Unverified Claims
-
-- SkillRL: ~15% improvement, 10-20% token compression vs raw trajectory storage
-- 13.4% critical issues in community registries (no primary source)
-- Stateless sessions may produce different solutions on different runs
-- Anthropic tool search ~72K → 8.7K tokens; selective MCP loading 91% reduction
-- MCP Registry screening raised utility success from 76.5% to 99.9%
 
 ## Related
 

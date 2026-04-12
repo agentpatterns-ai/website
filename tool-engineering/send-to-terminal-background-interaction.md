@@ -78,7 +78,7 @@ Both VS Code Copilot and Claude Code solve the "agent needs to react to async te
 |-----------|----------------|-------------|
 | Write to terminal | `send_to_terminal` tool | `Bash` tool (new subprocess only) |
 | React to background events | `backgroundNotifications` setting | `Monitor` tool (streams stdout) |
-| Background read | `get_terminal_output` tool | `Bash` + polling [unverified] |
+| Background read | `get_terminal_output` tool | `Bash` + polling ([source](https://code.claude.com/docs/en/tools-reference)) |
 
 VS Code uses a setting to push events to the agent; Claude Code exposes `Monitor` as a dedicated streaming tool where each stdout line arrives as a notification. Both avoid the polling loop, but the integration point differs — a setting vs. a tool call.
 
@@ -113,9 +113,13 @@ The agent recovers those polling turns and receives the signal with lower latenc
 - `get_terminal_output` (read) + `send_to_terminal` (write) + `backgroundNotifications` (event) form a complete async I/O model for background terminal process management
 - Claude Code's `Monitor` tool fills the equivalent role in Claude-based agent workflows by streaming background process stdout as notifications
 
-## Unverified Claims
+## When This Backfires
 
-- Claude Code `Bash` tool polling behavior for background processes: described as requiring repeated calls to approximate completion detection, but the exact mechanism is not confirmed against Claude Code documentation.
+**Experimental flag instability.** `chat.tools.terminal.backgroundNotifications` is marked experimental in VS Code 1.115. Settings that ship under this flag can be renamed, behaviorally changed, or removed before reaching stable — any workflow built on it needs retesting across minor VS Code updates.
+
+**Version lock-in.** `send_to_terminal` and `backgroundNotifications` are VS Code 1.115+ features. Teams pinned to an older VS Code version, or using a different IDE entirely, cannot adopt this pattern. Falling back to `get_terminal_output` polling is still required in those environments.
+
+**Notification reliability.** The `backgroundNotifications` event fires when the shell reports process exit or input-wait status. Processes that stall without exiting (hung network calls, deadlocked threads) produce no notification — the agent waits indefinitely unless a separate timeout is enforced. The polling loop the setting replaces can at least detect output staleness.
 
 ## Related
 

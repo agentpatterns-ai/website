@@ -62,7 +62,7 @@ Opus 4.6 and Sonnet 4.6 support 1M token context via the `context-1m-2025-08-07`
 | Variable | Effect | Default |
 |----------|--------|---------|
 | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | Enable agent teams for multi-agent coordination | Disabled ([settings docs](https://code.claude.com/docs/en/settings)) |
-| `CLAUDE_CODE_PLAN_MODE_REQUIRED` | Auto-set by Claude Code when spawning teammates; indicates [plan mode](../../workflows/plan-first-loop.md) is active (read-only) | Auto-set ([settings docs](https://code.claude.com/docs/en/settings)) |
+| `CLAUDE_CODE_PLAN_MODE_REQUIRED` | Auto-set by Claude Code when spawning teammates; indicates [Plan Mode](../../workflows/plan-mode.md) is active (read-only) | Auto-set ([settings docs](https://code.claude.com/docs/en/settings)) |
 | `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` | Reset to project directory after each bash command | Not set ([env-vars docs](https://code.claude.com/docs/en/env-vars)) |
 | `ENABLE_LSP_TOOL` | Enable Language Server Protocol integration (goToDefinition, findReferences, hover, documentSymbol, getDiagnostics) | Disabled ([GitHub issue #15619](https://github.com/anthropics/claude-code/issues/15619), [ClaudeLog](https://claudelog.com/faqs/what-is-lsp-tool-in-claude-code/)) |
 

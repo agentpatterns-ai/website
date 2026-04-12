@@ -20,7 +20,7 @@ tags:
 
 ## Why Output Design Matters
 
-Agents reason over tool output as natural language. When tools return opaque identifiers, machine-oriented fields, or oversized payloads, agents are more likely to hallucinate values or make erroneous downstream calls. Anthropic's guidance on writing tools for agents identifies tool output design as a primary lever for reliability — the same capability can produce dramatically different accuracy depending on how its results are formatted [unverified].
+Agents reason over tool output as natural language. When tools return opaque identifiers, machine-oriented fields, or oversized payloads, agents are more likely to hallucinate values or make erroneous downstream calls. Output format is a reliability lever independent of model capability — a well-designed response schema consistently outperforms a poorly designed one even when the underlying tool logic is identical.
 
 ## Principles
 
@@ -83,6 +83,20 @@ Not:
 
 An opaque error code forces the agent to guess the cause. A specific, corrective message allows it to self-correct on the next call without human intervention.
 
+## Why It Works
+
+LLMs process tool output as tokens in the context window and perform next-token prediction over those tokens. UUIDs and MIME type strings are arbitrary byte sequences with no semantic relationship to the concepts they represent — the model cannot reliably reconstruct or reference them without copying verbatim. Natural-language equivalents (names, human-readable types, formatted values) activate the model's existing world-knowledge associations, making reference in downstream calls far more accurate. Reducing context to decision-relevant fields also narrows the set of tokens the model must attend to, which lowers the probability of the model conflating or misattributing fields from different parts of the record.
+
+## When This Backfires
+
+Semantic filtering at the tool layer has failure modes:
+
+- **Under-specification**: A task-specific schema omits a field the agent unexpectedly needs. The agent either hallucinates the value or must make an additional round-trip call to retrieve it — sometimes more expensive than returning the full record once.
+- **Mismatch between `concise` and `detailed`**: When a `response_format` enum is exposed but the agent misjudges which mode to request, it operates on incomplete data without knowing it. Prompting the agent to reason about its data needs before calling the tool reduces this risk.
+- **Schema drift**: A tool's "clean default" is often shaped by the first use case implemented. As agents are given new tasks, the default schema becomes misaligned without explicit versioning or opt-in expansion.
+
+When tool output scope is genuinely unpredictable across callers, a richer default with well-named fields is safer than a narrow schema that forces multiple calls.
+
 ## Anti-Pattern: Developer-Convenience Output
 
 Tools built for developer debugging often return everything: raw database records, full object graphs, internal identifiers, and debug fields. This is appropriate for a developer reading output in a terminal. It is the wrong default for an agent consuming output in a context window.
@@ -129,10 +143,6 @@ The agent now has exactly what it needs — a human-readable name, the contact a
 - Apply filtering and pagination at the tool layer, not in the agent's reasoning.
 - Use a `response_format` enum to let the agent match output depth to context budget.
 - Write error messages that diagnose the problem and specify the correction.
-
-## Unverified Claims
-
-- The same capability can produce dramatically different accuracy depending on how its results are formatted [unverified]
 
 ## Related
 

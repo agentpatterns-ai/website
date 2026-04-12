@@ -84,7 +84,7 @@ Before delegating execution to an agent, verify:
 - [ ] **Constraints are explicit** — which files, systems, or operations are off-limits
 - [ ] **Success condition is testable** — the agent can verify completion without asking
 - [ ] **Recovery path exists** — what the agent should do when it hits a blocker
-- [ ] **Scope is bounded** — no permission escalation or scope expansion without a checkpoint
+- [ ] **Scope is bounded** — no permission escalation or scope expansion without a checkpoint (see [Blast Radius Containment](../security/blast-radius-containment.md))
 - [ ] **Irreversible operations are gated** — deploys, deletes, and external writes require explicit authorization
 
 ## Example

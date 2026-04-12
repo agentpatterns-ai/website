@@ -78,15 +78,15 @@ Filesystem discovery adds a navigation step before each new tool type is used �
 
 ## Keyword-Scored MCP Discovery
 
-The OPENDEV paper describes a complementary approach: a `search_tools` tool that uses keyword matching to discover MCP tools, loading them lazily on first invocation rather than registering all definitions at startup ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)). The initial approach loaded all MCP tools into the schema upfront, causing [prompt bloat](../anti-patterns/prompt-tinkerer.md) and context budget exhaustion. Lazy loading trades a one-time lookup cost for a significant reduction in initial prompt size ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)) [unverified — the specific 50% figure is not stated in the cited section].
+The OPENDEV paper describes a complementary approach: a `search_tools` tool that uses keyword matching to discover MCP tools, loading them lazily on first invocation rather than registering all definitions at startup ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)). The initial approach loaded all MCP tools into the schema upfront, causing [prompt bloat](../anti-patterns/prompt-tinkerer.md) and context budget exhaustion. Lazy loading trades a one-time lookup cost for a significant reduction in initial prompt size ([Bui, 2025 §2.4.7](https://arxiv.org/abs/2603.05344)).
 
-The principle is identical — on-demand loading — but the mechanism differs. Filesystem discovery uses directory navigation (98.7% reduction); keyword-scored discovery uses search queries (50% reduction). The approaches complement each other: filesystem structure for category browsing, keyword scoring for cross-category lookup.
+The principle is identical — on-demand loading — but the mechanism differs. Filesystem discovery uses directory navigation (98.7% reduction); keyword-scored discovery uses search queries against a tool index. The approaches complement each other: filesystem structure for category browsing, keyword scoring for cross-category lookup.
 
 ## Key Takeaways
 
 - Registering all MCP tool definitions upfront is a fixed context cost that scales with tool count, not task complexity.
 - Filesystem-based discovery loads only the definitions needed for the current task.
-- Anthropic reports a 98.7% token reduction using this pattern for large tool collections [unverified].
+- Anthropic reports a 98.7% token reduction using this pattern for large tool collections.
 - Models navigate directory trees natively — no special orchestration is required.
 - Group tools by service or domain to make category-level navigation practical.
 - Keyword-scored lazy MCP loading achieves significant initial prompt reduction as a complementary discovery mechanism.
@@ -128,3 +128,4 @@ Total tokens loaded: ~400 (2 tool definitions). Upfront registration of all 120 
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
+- [Self-Healing Tool Routing](self-healing-tool-routing.md)

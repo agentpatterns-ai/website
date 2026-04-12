@@ -16,6 +16,10 @@ When you change an agent's instructions, how do you know the change improves out
 
 Simulation and replay testing solves this by using the past as the test fixture.
 
+## Why It Works
+
+Replay testing eliminates confounding variables. A new task varies in complexity, context, and success criteria, making before/after comparisons unreliable. A past task fixes all of these: the inputs are known, the expected output is known (what was merged), and the only variable is the updated instructions. Because git preserves the repository state at every commit, you can reconstruct the exact conditions of any prior run and replay them deterministically from the prompt's perspective — the task context is frozen even if the model output varies.
+
 ## The Technique
 
 The core loop:
@@ -38,7 +42,7 @@ graph TD
 
 ## Using Worktrees for Isolation
 
-Git worktrees allow multiple working trees from the same repository [unverified: Claude Code sub-agents documentation describes worktree-based isolation for parallel agent tasks]. Simulation runs in an isolated worktree so it does not interfere with the main working directory or other parallel simulations.
+Git worktrees allow multiple working trees from the same repository ([`git worktree add`](https://git-scm.com/docs/git-worktree) is a standard git feature since Git 2.5). Simulation runs in an isolated worktree so it does not interfere with the main working directory or other parallel simulations.
 
 ```bash
 # Create an isolated worktree at the pre-merge commit
@@ -63,7 +67,7 @@ Define success criteria before running the simulation, not after:
 - **Regression check** — the updated agent does not omit things the original agent got right
 - **Improvement** — the updated agent catches something the original missed
 
-Automated diff scoring (line count, structural similarity) is a starting point [unverified]. Human judgment on the diff is still required for qualitative assessment.
+Automated diff scoring (line count, structural similarity) is a starting point for flagging obvious regressions. Human judgment on the diff is still required for qualitative assessment.
 
 ## Regression Testing Agent Behavior
 
@@ -73,7 +77,7 @@ Simulation replay is most valuable for regression testing:
 - After updating a skill file, replay several past tasks that used the skill
 - After tool configuration changes, verify the agent still reaches the correct outcome
 
-A library of "golden" past tasks — completed, merged, and known-good — forms a regression suite for agent behavior [unverified].
+A library of "golden" past tasks — completed, merged, and known-good — forms a regression suite for agent behavior, analogous to snapshot testing in software.
 
 ## Integration with the Content Pipeline
 
@@ -87,7 +91,7 @@ Each stage has an independently testable input/output boundary.
 ## Limitations
 
 - Simulation tests past conditions, not future ones — novel task types may not be represented in the golden library
-- Replay is not deterministic: the same agent instructions on the same task may produce different output on each run [unverified — depends on model temperature and API non-determinism]
+- Replay is not deterministic: the same agent instructions on the same task may produce different output on each run — LLMs sample stochastically by default, so temperature > 0 means results vary
 - A "better" output is easier to define for structured tasks (code, structured documents) than for open-ended ones
 
 ## Key Takeaways
@@ -124,13 +128,6 @@ You update a researcher agent's instructions to add a "related pages" step. Befo
     ```
 
 5. Review the diff: if the updated agent produces equivalent content plus the new "related pages" additions, the prompt change is validated. If it drops sections the original got right, reject and iterate.
-
-## Unverified Claims
-
-- Git worktrees provide isolation for parallel agent simulation tasks [unverified: Claude Code sub-agents documentation describes worktree-based isolation for parallel agent tasks]
-- Automated diff scoring (line count, structural similarity) is a starting point for evaluating replay results [unverified]
-- A library of golden past tasks forms a regression suite for agent behavior [unverified]
-- Replay is not deterministic due to model temperature and API non-determinism [unverified — depends on model temperature and API non-determinism]
 
 ## Related
 

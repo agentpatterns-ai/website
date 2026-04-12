@@ -69,6 +69,10 @@ Keyless signing requires CI/CD ambient OIDC credentials, preventing ad-hoc signi
 
 [Sigstore model-signing v1.0](https://blog.sigstore.dev/model-transparency-v1.0/) extends the same infrastructure to ML models and datasets, targeting integration with model hubs (HuggingFace, Kaggle) and ML frameworks (TensorFlow, PyTorch).
 
+## Why It Works
+
+Cryptographic signing binds a tool artifact's content to a hash: any modification produces a different digest, invalidating the original signature. The agent gateway rejects mismatches before the tool description ever reaches the LLM — fail-closed by design. Transparency logs (Rekor) make every signing event append-only in a Merkle tree, so retroactive log manipulation is computationally infeasible. Identity-binding via short-lived OIDC certificates means the signature attests *who* built the artifact, not just *what* it contains, defeating impersonation. Post-load monitoring compares live tool schemas against the signed baseline to catch rug pulls where a tool mutates after initial verification ([Cullinan et al., 2025](https://arxiv.org/html/2601.23132v1)).
+
 ## Runtime Enforcement Patterns
 
 Signing alone is insufficient — verification must happen at runtime before invocation.
@@ -120,7 +124,7 @@ Every request produces audit traces; ephemeral runners contain blast radius ([In
 
 ## Practical Limitations
 
-- **No major MCP client verifies tool signatures natively** — this is emerging, not built-in [unverified]
+- **No major MCP client verifies tool signatures natively** — third-party middleware like [MCPS](https://mcp-secure.dev/) fills this gap; native client support remains absent as of 2025
 - **sigstore-a2a is early-stage** — feasibility demonstrated but adoption is limited
 - **CI/CD-only signing** limits keyless signing to automated pipelines; ad-hoc workflows need alternatives
 - **Performance overhead** of per-call verification needs profiling in latency-sensitive agents
@@ -181,3 +185,5 @@ A `non-zero exit` from `cosign verify-blob` signals a mismatch — the agent gat
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
+- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)

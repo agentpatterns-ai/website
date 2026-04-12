@@ -57,7 +57,7 @@ Voting adds little value for creative synthesis, open-ended generation, or real-
 
 ## Choosing N
 
-The foundational self-consistency paper (Wang et al. 2023) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
+The foundational self-consistency paper ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
 
 | N | Effect |
 |---|--------|
@@ -66,7 +66,7 @@ The foundational self-consistency paper (Wang et al. 2023) showed +17.9% accurac
 | 5 | Marginal improvement over 3; good ceiling for most use cases |
 | 7+ | Diminishing or **inverted** returns — more calls can hurt on hard queries |
 
-Kore.ai's scaling law research confirms that performance initially increases then **decreases** with N `[unverified]`. The optimal count is task-dependent; determine it empirically.
+Kore.ai's [scaling law research](https://blog.kore.ai/cobus-greyling/performing-multiple-llm-calls-voting-on-the-best-result-are-subject-to-scaling-laws) confirms that performance initially increases then **decreases** with N — more calls help on easy queries but hurt on hard ones. The optimal count is task-dependent; determine it empirically.
 
 ## Aggregation Strategies
 
@@ -76,11 +76,11 @@ Simple majority voting treats all runs equally but leaves accuracy on the table.
 |----------|-----------|-----------|
 | Majority vote | Most common answer wins | Simple; ignores model quality differences |
 | Weighted vote | Runs scored by model capability or historical accuracy | Better accuracy; requires calibration data |
-| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy `[unverified]` |
+| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy ([Kossen et al. 2025](https://arxiv.org/abs/2502.06233)) |
 | Unanimous | All runs must agree; else escalate | High precision, low recall — good for safety-critical |
 | Semantic similarity | Cluster answers by meaning, pick densest cluster | Handles paraphrased equivalents |
 
-Advanced methods like Optimal Weight and Inverse Surprisingly Popular algorithms improve accuracy by up to 14.2% over standard majority voting by accounting for model heterogeneity and answer correlations `[unverified]`.
+Advanced methods like Optimal Weight and Inverse Surprisingly Popular algorithms improve accuracy by 1–3% over standard majority voting by accounting for model heterogeneity and answer correlations ([Plaat et al. 2024](https://arxiv.org/abs/2510.01499)).
 
 ## Cost Trade-Off
 
@@ -90,6 +90,12 @@ N runs costs N× tokens. Confidence-weighted voting can cut this nearly in half 
 2. **Use confidence thresholds** — if 3/3 agree with high confidence, skip additional runs
 
 For routine tasks with strong single-run baselines, voting is wasteful. Reserve it for decisions where a false positive or false negative carries real cost.
+
+## Why It Works
+
+LLMs are stochastic: the same prompt samples from a distribution of reasoning paths. Incorrect answers are scattered across that distribution — each error arises from a distinct spurious chain of thought. Correct answers, by contrast, cluster: multiple independent paths tend to converge on the same right answer because the underlying logic is consistent. Majority voting amplifies this signal by selecting the answer most paths agree on, drowning out idiosyncratic errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
+
+Multi-model consensus strengthens this further. Different models have independent failure modes rooted in distinct training data and architectures, so an error that is systematic for one model is uncorrelated with errors in another — the correct answer remains the densest cluster even as ensemble size grows.
 
 ## Example
 
@@ -127,14 +133,9 @@ The three models have independent failure modes: a vulnerability one model misse
 - Voting trades compute for confidence — same task, multiple runs, aggregated verdict
 - Multi-model diversity beats same-model repetition for genuine independence
 - 3-5 runs covers most use cases; beyond that, returns diminish or invert
-- Confidence-weighted aggregation cuts compute by ~46% vs naive majority voting `[unverified]`
+- Confidence-weighted aggregation cuts compute by ~46% vs naive majority voting ([Kossen et al. 2025](https://arxiv.org/abs/2502.06233))
 - Reserve voting for discrete, verifiable tasks (classification, security, compliance) — not open-ended generation
 - Distinct from fan-out synthesis (which merges complementary strengths) and committee review (which applies specialized lenses)
-
-## Unverified Claims
-
-- A committee of weaker models can outperform a single strong model via voting — empirical evidence is mostly from reasoning benchmarks, not software engineering tasks `[unverified]`
-- The 3-5 run sweet spot aligns with self-consistency literature but no single source pins it to exactly that range for coding tasks specifically `[unverified]`
 
 ## Related
 

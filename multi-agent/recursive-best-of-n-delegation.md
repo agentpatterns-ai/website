@@ -111,3 +111,4 @@ Targeted K allocation — concentrating extra candidates only on uncertain or hi
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
+- [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) — scoring candidate outputs with rubric-based LLM judges at scale

@@ -19,7 +19,7 @@ aliases:
 
 GSC is the authoritative source for how Google sees the site. It exposes index coverage gaps, real CrUX performance (not lab data), crawl anomalies, schema errors, and query performance. Without a reporting loop, regressions are invisible until traffic drops.
 
-Bing WMT provides the same data for Bing and Microsoft Copilot Search. It has no public API `[unverified]` — setup is manual, monitoring is dashboard-only.
+Bing WMT provides the same data for Bing and Microsoft Copilot Search. It has a public API ([Bing Webmaster Tools API](https://learn.microsoft.com/en-us/bingwebmaster/)) but no bulk CSV export equivalent to GSC's Search Analytics API — trend monitoring still relies on the dashboard.
 
 ## One-Time Setup
 
@@ -123,7 +123,7 @@ cat /tmp/gsc_report.md
 | Search Analytics lag | ~3 days — report end date is `today - 3` |
 | CrUX window | Trailing 28 days — not the past 7 days |
 | URL Inspection rate limit | 2,000 requests/day — spot-check only |
-| Bing WMT | No public bulk export API — dashboard-only |
+| Bing WMT | No bulk CSV export — API exists but bulk analytics require dashboard |
 | CrUX origin eligibility | Insufficient real-user traffic returns 404 from CrUX API |
 
 ## Related
@@ -140,7 +140,10 @@ cat /tmp/gsc_report.md
 - [Bing Webmaster Tools](https://www.bing.com/webmasters/about)
 - [IndexNow protocol](https://www.indexnow.org/)
 
-## Unverified Claims
+## When This Backfires
 
-- Bing WMT has no public API — no official documentation explicitly states there is no API; this claim reflects current practical state but is not sourced `[unverified]`
-- Bing WMT IndexNow auto-submit covers all Bing crawl ping use cases without a separate workflow `[unverified]`
+Automating GSC adds real infrastructure overhead — a GCP service account, stored credentials, and a weekly Actions workflow. The return on that investment degrades under these conditions:
+
+- **Insufficient traffic**: CrUX requires a minimum volume of real user data; the API returns 404 for low-traffic origins, making the Core Web Vitals section empty for most of its life.
+- **Search Analytics lag**: The 3-day data lag means the weekly report reflects conditions from 10+ days ago by the time it is acted on — too stale for incident response, where manual GSC checks are faster.
+- **Single-property sites**: GSC's Search Analytics API caps at 10 rows by default; sites with fewer than 50 indexed pages gain little over a manual 5-minute weekly check.

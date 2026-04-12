@@ -24,7 +24,7 @@ OpenAPI operation objects map directly to agent tool schema fields:
 | `parameters` + `requestBody` | `parameters` / `input_schema` / `inputSchema` | JSON Schema objects translate directly |
 | Response schemas | Output documentation | Agents need to know what data structures to expect |
 
-This mapping means a team maintaining an OpenAPI spec already has 80% of a tool definition [unverified]. The remaining 20% is description quality.
+This mapping means a team maintaining an OpenAPI spec already has most of a tool definition's structure — names, parameter schemas, types, and constraints transfer directly. The remaining work is description quality.
 
 ## Generating MCP Servers from OpenAPI
 
@@ -36,6 +36,8 @@ Common generators include:
 - **openapi-mcp-codegen** — [Parses paths and operations](https://github.com/cnoe-io/openapi-mcp-codegen) to render structured MCP server code
 
 The recommended workflow: [autogenerate the groundwork from OpenAPI, then curate](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi) by enriching descriptions for agent consumption.
+
+**Curation is not optional.** Exposing every endpoint as an individual tool without filtering is a recognized anti-pattern: an API with 200 endpoints becomes 200 tools, burning context-window space and producing tool selection failures. Practitioners at GitHub Copilot and Block cut their tool counts by 60–93% before seeing reliable agent behavior. The generation step reduces boilerplate; the curation step — selecting which operations to surface and how to group them — determines whether the resulting server is usable. See [MCP tool design guidance](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc) and [semantics-first MCP design](https://blog.christianposta.com/semantics-matter-exposing-openapi-as-mcp-tools/) for practitioner evidence.
 
 ## Description Quality Gap
 

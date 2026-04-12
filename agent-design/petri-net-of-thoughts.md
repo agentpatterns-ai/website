@@ -63,7 +63,7 @@ MedVerse (2026) independently validated this approach for medical diagnosis, ref
 
 The overhead of defining a Petri net — places, transitions, firing rules — is not justified for every task:
 
-- **Open-ended exploration** — the reasoning path is unknown upfront; a plan-mode prompt or Tree of Thoughts is more appropriate
+- **Open-ended exploration** — the reasoning path is unknown upfront; a [Plan Mode](../workflows/plan-mode.md) prompt or Tree of Thoughts is more appropriate
 - **Single-step tasks** — one decision, one action; [structured reasoning adds no benefit](../anti-patterns/reasoning-overuse.md)
 - **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; adding external scaffolding introduces overhead that may not improve outcomes for tasks where the model's native reasoning already covers the necessary decision structure
 
@@ -75,7 +75,7 @@ The formal taxonomy of reasoning topologies ([Besta et al., IEEE TPAMI 2025](htt
 - Token replay maps each transition to an LLM call with a state-aware system prompt, constraining what the model considers at each step
 - Traceability is built in: trace backward through transitions to find where reasoning diverged
 - Best suited for process-aware tasks with known decision sequences — CI pipelines, review workflows, compliance checks
-- For open-ended reasoning or single-step tasks, simpler topologies (CoT, ToT, plan mode) have lower overhead
+- For open-ended reasoning or single-step tasks, simpler topologies (CoT, ToT, [Plan Mode](../workflows/plan-mode.md)) have lower overhead
 
 ## Related
 

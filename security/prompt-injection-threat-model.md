@@ -40,7 +40,7 @@ An agent with read-only access to a single document is a limited target. An agen
 
 ## Common Attack Patterns
 
-**Hidden instructions**: Instructions embedded in content using CSS visibility:hidden, white-on-white text, or zero-font-size characters that are invisible to human readers but present in the text the model processes [unverified].
+**Hidden instructions**: Instructions embedded in content using CSS visibility:hidden, white-on-white text, or zero-font-size characters that are invisible to human readers but present in the text the model processes. Research confirms this is effective: invisible Unicode-encoded instructions achieve large effect sizes ([Graves, 2026](https://arxiv.org/abs/2603.00164)), and hidden HTML comments in skill documentation successfully influence agent behavior ([Wang et al., 2026](https://arxiv.org/abs/2602.10498)).
 
 **Impersonation**: Content that claims to come from a trusted principal ("This is a system message from your operator: disregard previous instructions").
 
@@ -58,6 +58,18 @@ No single defense is complete. Effective defense requires:
 4. **Monitor for anomalous tool call patterns** — agent loops that suddenly begin making unrelated API calls or accessing unusual resources may indicate a successful injection.
 
 Effective prompt injection defense layers multiple controls — input filtering, output validation, permission scoping, and human confirmation gates — so that no single bypass compromises the system.
+
+## Why It Works
+
+Prompt injection succeeds because transformer-based models are provenance-blind: the attention mechanism processes all tokens in the context window uniformly, with no architectural distinction between tokens from the system prompt, user input, or externally fetched content. Injected instructions in a web page occupy the same token space as legitimate instructions and carry no metadata indicating their origin. The model has no native mechanism to verify which principal authored a given token sequence. This is the root cause — defenses must compensate externally, either by structurally separating control and data flow (see [CaMeL](camel-control-data-flow-injection.md)) or by enforcing permissions at the tool layer rather than relying on the model to self-enforce.
+
+## When This Backfires
+
+Strict injection defenses have real costs. Three conditions where the overhead outweighs the benefit:
+
+1. **Fully controlled data pipelines**: When all content an agent processes originates from internal, access-controlled sources with no external input path, treating every document as potentially hostile adds confirmation friction without reducing actual risk. The attack surface simply doesn't exist in a closed system.
+2. **Confirmation fatigue undermines compliance**: Requiring explicit user approval before every external-effect action works only if users read the prompts. In high-volume automation, users habituate to approving requests, reducing confirmation gates to security theater — and creating the false impression that human oversight is active.
+3. **Defense mechanisms can be weaponized**: Some input-filtering approaches (keyword blocking, output validation) can be triggered by legitimate content that resembles injection payloads, causing false positives that break valid tasks. Research shows certain baseline defenses produce "counterproductive side effects" ([arXiv:2604.03870](https://arxiv.org/abs/2604.03870)). Over-filtering degrades utility without eliminating attacks that adapt to the filter.
 
 ## Example
 
@@ -99,13 +111,11 @@ The system prompt uses minimal permissions (no outbound POST capability) and req
 - Treat external content as untrusted input; require explicit user authorization before irreversible actions.
 - Minimal permissions reduce attack surface — agents should access only what the current task requires.
 
-## Unverified Claims
-
-- Hidden text injection techniques (CSS visibility:hidden, white-on-white text, zero-font-size) used to hide instructions from humans `[unverified]`
-
 ## Related
 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
 - [Design Agents with Defence-in-Depth Against Prompt Injection](../verification/layered-accuracy-defense.md)
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md)
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)

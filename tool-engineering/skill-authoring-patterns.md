@@ -221,6 +221,7 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
 - [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md)
 - [Plugin and Extension Packaging](../standards/plugin-packaging.md)
+- [Credential Hygiene for Agent Skill Authorship](../security/credential-hygiene-agent-skills.md)
 - [Narrow Task Instructions](../security/task-scope-security-boundary.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)

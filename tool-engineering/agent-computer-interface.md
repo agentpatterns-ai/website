@@ -52,7 +52,7 @@ Tool descriptions are the agent's only way to understand what a tool does and wh
 
 Return values that the agent can reason about directly:
 
-- Return 'name' and 'file_type' instead of 'uuid' and 'mime_type' -- agents perform "significantly more successfully" with natural language identifiers [unverified]
+- Return 'name' and 'file_type' instead of 'uuid' and 'mime_type' -- human-readable identifiers map directly to tokens the agent already understands, reducing the reasoning step needed to act on the result
 - Structure output for the agent's next decision, not for API completeness
 
 ```mermaid
@@ -70,6 +70,17 @@ flowchart LR
 LlamaIndex recommends: **ask the agent "what arguments does this tool take?"** Discrepancies reveal gaps. ([LlamaIndex tool design](https://www.llamaindex.ai/blog/building-better-tools-for-llm-agents-f8c5a6714f11))
 
 From Anthropic's [Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use) guidance: keep 3-5 most-used tools always loaded; defer the rest behind tool search; evaluate each tool definition as a context-budget item.
+
+## When This Backfires
+
+ACI design has real failure modes:
+
+- **Over-specialization**: A tool tuned to one model's quirks becomes brittle when the model changes. Highly customized output formats and constrained inputs may need rework with each new model generation.
+- **Hidden failures**: Middleware and validation layers intercept errors before the agent sees them. If the agent never observes raw failure signals, it cannot adapt its strategy — the tool absorbs errors the agent should be learning from.
+- **Abstraction overhead**: Wrapping generic tools in ACI-friendly layers adds maintenance surface. Teams that move fast with simple tools and better prompts sometimes outperform teams maintaining complex ACI tooling.
+- **Constraint mismatch**: Tight input constraints (e.g., absolute paths only) fail when the agent operates in environments where those constraints don't hold (containerized builds, cross-platform paths, dynamically mounted filesystems).
+
+These failure modes are most pronounced when the ACI design is done once and not iterated against real agent transcripts.
 
 ## Example
 
@@ -96,10 +107,6 @@ def read_file(
 ```
 
 The redesign adds: absolute-path constraint (eliminates relative-path errors), windowed output (prevents context overload), and explicit error strings instead of exceptions (semantic feedback the agent can reason about).
-
-## Unverified Claims
-
-- Whether Anthropic internally refers to ACI as a named discipline beyond their public blog posts could not be confirmed -- the term appears to originate from the SWE-agent paper `[unverified]`
 
 ## Related
 

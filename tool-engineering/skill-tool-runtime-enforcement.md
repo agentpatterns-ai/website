@@ -127,11 +127,6 @@ The Skill tool resolves the canonical path, injects the current version into con
 - Shell interpolation (`` !`command` ``) injects live system state at invocation time
 - Use Skill tool for directing agents; use Read for reference data
 
-## Unverified Claims
-
-- Agent caching/truncation of "read the file" instructions is based on practitioner experience, not published benchmarks `[unverified]`
-- Whether the two-message injection pattern is stable API behavior or an undocumented implementation detail is not confirmed by Anthropic `[unverified]`
-
 ## Related
 
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)

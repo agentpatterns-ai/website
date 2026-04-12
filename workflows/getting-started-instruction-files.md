@@ -93,7 +93,7 @@ graph LR
 
 ## Keep It Short
 
-Target under 200 lines per file. Every line consumes context budget before the agent starts working on your actual task. Long instruction files reduce adherence -- the agent's attention dilutes across more content. [unverified]
+Target under 200 lines per file. Every line consumes context budget before the agent starts working on your actual task. Long instruction files reduce adherence — instruction-following accuracy degrades as instruction density increases, with even leading frontier models achieving only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
 
 When you outgrow 200 lines:
 
@@ -196,6 +196,14 @@ A real progression for a TypeScript API project:
     ```
 
 Each version adds only what the agent needed and did not have. Nothing is added speculatively.
+
+## When This Backfires
+
+Instruction files create value when they are maintained. They create liability when they are not:
+
+- **Stale structural references mislead.** Directory paths, file names, and module boundaries change. An instruction file that documents `src/api/handlers/` after a refactor actively directs the agent to the wrong place. Update the file or remove the reference when the codebase changes.
+- **Auto-generated files underperform.** Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file. Review and trim aggressively before committing.
+- **Over-specification reduces adherence.** Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
 
 ## Related
 

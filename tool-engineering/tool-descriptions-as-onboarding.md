@@ -23,7 +23,7 @@ A terse, accurate API reference is sufficient for a developer who already knows 
 
 The effective framing is: write as if training a competent new hire on their first day. Not a tutorial — they can already read code and understand systems — but explicit about the things the documentation omits because experienced users know them.
 
-Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), minor description refinements routinely yield dramatic accuracy improvements. The gap between accurate-but-minimal and accurate-with-context is the primary source of agent tool misuse [unverified].
+Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), minor description refinements routinely yield dramatic accuracy improvements — precise refinements to tool descriptions dramatically reduced error rates in SWE-bench Verified evaluations. Description gaps are a leading cause of agent tool misuse; an agent cannot infer what it was never told.
 
 ## What Implicit Context Looks Like
 
@@ -124,9 +124,13 @@ The improved description makes explicit three things a new hire would learn on d
 - Minor description refinements produce dramatic accuracy improvements — iterate on descriptions the same way you would on code
 - Keep descriptions current as the underlying system evolves; stale descriptions are a silent failure source
 
-## Unverified Claims
+## When This Backfires
 
-- The gap between accurate-but-minimal and accurate-with-context descriptions is the primary source of agent tool misuse [unverified]
+Verbose descriptions consume context budget. A description that covers every edge case can add hundreds of tokens per tool call; in agents that invoke many tools per session, this compounds into measurable cost and latency increases. The right level of detail is the minimum needed to prevent misuse — not exhaustive documentation.
+
+Over-specifying expected call sequences limits valid solution paths. If a description prescribes "always call `list_sprints` first," the agent cannot adapt when a sprint ID is already known from context. Describe what parameters require, not how to obtain them from scratch every time.
+
+Description maintenance is ongoing cost. As the underlying API evolves, descriptions silently go stale. An outdated description that contradicts current API behavior is worse than a terse one — it confidently misdirects the agent. Budget time for description review whenever the API changes.
 
 ## Related
 

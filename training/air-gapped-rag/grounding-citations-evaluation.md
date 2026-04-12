@@ -412,3 +412,4 @@ The whole loop is ~60 lines, and every non-boilerplate line is a Haystack Compon
 - [Deployment, Operations, and Compliance](deployment-operations-compliance.md) — operationalizing the eval loop in production
 - [Writing Your First Eval Suite](../eval-driven-development/writing-first-eval-suite.md) — golden query set methodology
 - [Grading Strategies](../eval-driven-development/grading-strategies.md) — choosing between code-based, LLM-as-judge, and human graders
+- [LLM-as-Judge Evaluation](../../workflows/llm-as-judge-evaluation.md) — rubric-based scoring, calibration, and human spot-check integration

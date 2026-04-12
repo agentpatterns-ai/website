@@ -53,3 +53,4 @@ This effect scales. A comprehensive instruction file covering every testing patt
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
+- [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — task-scoped instructions also reduce prompt injection attack surface

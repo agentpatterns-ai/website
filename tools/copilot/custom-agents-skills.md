@@ -97,6 +97,7 @@ Copilot reads only the skill metadata until `/changelog` is invoked, keeping con
 - [Agent Skills Standard](../../standards/agent-skills-standard.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
 - [Copilot Extensions](copilot-extensions.md)
+- [Migrating Copilot Extensions to MCP](../../tool-engineering/copilot-extensions-to-mcp-migration.md)
 - [Copilot MCP Integration](mcp-integration.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot SDK](copilot-sdk.md)

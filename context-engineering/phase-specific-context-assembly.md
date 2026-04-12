@@ -172,3 +172,4 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - [Context Engineering](context-engineering.md)
 - [Environment Specification as Context](environment-specification-as-context.md)
 - [Error Preservation in Context](error-preservation-in-context.md)
+- [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — scoping each phase's context also limits injection attack surface

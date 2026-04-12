@@ -21,7 +21,7 @@ aliases:
 
 For agent workflows, this means: each agent gets a private sandbox. It reads and writes files without affecting any other agent's environment. If its output is wrong, the worktree is deleted. If its output is correct, its branch is submitted for merge.
 
-[Claude Code's worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics.
+[Claude Code's worktrees workflow documentation](https://code.claude.com/docs/en/common-workflows) covers the mechanics. The underlying primitive is standard [git worktree](https://git-scm.com/docs/git-worktree) — nothing Claude-specific about the isolation guarantee.
 
 ## Isolation Guarantees
 
@@ -65,7 +65,16 @@ git worktree remove ../agent-task-1
 
 [Claude Code's sub-agent configuration](https://code.claude.com/docs/en/sub-agents) supports `isolation: worktree` that handles this automatically for agents it spawns.
 
-Within an agent conversation, the `EnterWorktree` and `ExitWorktree` tools provide programmatic session management. `ExitWorktree` (added in v2.1.72 [unverified]) enables clean teardown — the agent returns to its original working directory rather than requiring session termination to leave a worktree.
+Within an agent conversation, the `EnterWorktree` and `ExitWorktree` tools provide programmatic session management. `ExitWorktree` enables clean teardown — the agent returns to its original working directory rather than requiring session termination to leave a worktree.
+
+## When This Backfires
+
+Worktrees are not always the right tool:
+
+- **Environment re-initialization overhead**: Each worktree is a fresh checkout. Long setup sequences — `npm install`, Docker builds, secrets provisioning — run once per worktree. For short-lived agents doing lightweight tasks, this cost can exceed the parallelism benefit.
+- **Disk pressure at scale**: Each worktree duplicates the working tree (not git objects, but all tracked files). Fifty agents on a large monorepo can saturate disk before the first task completes.
+- **Orchestrator complexity**: The orchestrator must track which branch lives in which worktree, handle cleanup on failure, and reconcile branches after runs. For simple sequential tasks this is pure overhead.
+- **Stateless agents don't need isolation**: If an agent only reads files and calls external APIs — never writes to disk — shared checkout is safe and worktrees add friction without benefit.
 
 ## Anti-Pattern: Shared Checkout
 

@@ -32,7 +32,7 @@ None captures the full stack: model, tools, compliance, composition, and memory.
 
 ## gitagent: One Concrete Implementation
 
-[gitagent](https://github.com/open-gitagent/gitagent) (MIT, v0.1.0, ~1.7k GitHub stars) defines an agent as a git repository with two required files and several optional directories:
+[gitagent](https://github.com/open-gitagent/gitagent) (MIT, v0.1.0, ~2.7k GitHub stars as of April 2026) defines an agent as a git repository with two required files and several optional directories:
 
 ```
 my-agent/
@@ -106,7 +106,7 @@ This extends [Prompt Governance via PR](../instructions/prompt-governance-via-pr
 
 ## Built-in Compliance
 
-gitagent includes first-class compliance primitives: segregation of duties (role conflict matrices), supervision policies (human review checkpoints), and recordkeeping (FINRA 4511 / SEC logging specs). Real-world regulatory acceptance is not documented. [unverified]
+gitagent includes first-class compliance primitives: segregation of duties (role conflict matrices), supervision policies (human review checkpoints), and recordkeeping (FINRA 4511 / SEC logging specs). As of April 2026, open issues in the repository include a request for review by a FINRA/SEC practitioner ([Issue #7](https://github.com/open-gitagent/gitagent/issues/7)), indicating these features have not yet been validated by regulated-industry compliance teams.
 
 ## Limitations and Risks
 
@@ -115,7 +115,7 @@ The pattern is sound. The specific implementation has open questions:
 - **Secrets management** -- relies on `.gitignore` alone, the same mechanism behind credential leaks. ([Source: HN thread](https://news.ycombinator.com/item?id=47376584))
 - **Prompt injection surface** -- every repo file loads into agent context with no sandboxing defined
 - **Spec churn** -- at v0.1.0, adapters must track breaking changes across all supported frameworks
-- **Adoption** -- ~1.7k GitHub stars, no public production data; compare [AGENTS.md](agents-md.md) at 60k+ repos under Linux Foundation
+- **Adoption** -- ~2.7k GitHub stars (April 2026), no public production data; compare [AGENTS.md](agents-md.md) at 60k+ repos under Linux Foundation
 
 ## The Pattern vs. The Tool
 
@@ -141,15 +141,15 @@ The open question: can a single portable format survive framework evolution, or 
 - Export adapters are necessarily lossy -- treat outputs as starting points
 - Convergent evolution (GitHub Enterprise AI Controls, AGENTS.md, Claude Code agents) validates the pattern
 
-## Unverified Claims
-
-- Whether gitagent's compliance features (segregation of duties, supervision policies, recordkeeping) have been validated by compliance teams in regulated industries is unknown [unverified]
-
 ## Related
 
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md) -- per-tool format catalogue
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md) -- the dominant project-level instruction standard
+- [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md) -- capability advertisement for agent-to-agent discovery
+- [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) -- portable skill definitions across runtimes
+- [Tool Calling Schema Standards](tool-calling-schema-standards.md) -- schema standards governing agent tool calls
 - [Persona-as-Code: Defining Agent Roles as Structured Docs](../agent-design/persona-as-code.md) -- encoding roles as Markdown files
 - [Prompt Governance via PR](../instructions/prompt-governance-via-pr.md) -- PR-based review of agent instructions
 - [Central Repo for Shared Agent Standards](../workflows/central-repo-shared-agent-standards.md) -- distributing standards across repos
 - [Plugin and Extension Packaging](plugin-packaging.md) -- distributing agent capabilities as installable bundles
+- [MCP: The Open Protocol Connecting Agents to External Tools](mcp-protocol.md) -- the standard protocol for agent-tool communication referenced in MCP allowlists

@@ -35,7 +35,7 @@ Two events are relevant:
 
 `PostToolUseFailure` is the right event for "command not found" (exit 127) and most BSD/GNU errors (non-zero exits). `PostToolUse` can catch cases where the command succeeds but produces an error-like message on stderr.
 
-The `PostToolUse` hook can return `additionalContext` (added in Claude Code 2.1.9 [unverified]) to inject information into the agent's context without blocking. `PostToolUseFailure` uses the same mechanism.
+Both `PostToolUse` and `PostToolUseFailure` hooks can return `additionalContext` in their JSON output to inject information into the agent's context without blocking the tool call.
 
 ## Implementation
 
@@ -186,7 +186,7 @@ This is technically viable — hooks run in the same shell context as Claude Cod
 
 ## Relationship to PreToolUse Prevention
 
-The official [bash_command_validator example](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py) uses a `PreToolUse` hook to rewrite commands before they run — e.g., redirecting `grep` to `ripgrep`. These two approaches are complementary:
+The official [bash_command_validator example](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py) uses a `PreToolUse` hook to rewrite commands before they run — e.g., redirecting `grep` to `ripgrep`. BSD/GNU divergence is a documented portability concern ([GNU sed manual](https://www.gnu.org/software/sed/manual/sed.html#The-_0022s_0022-Command), [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)). These two approaches are complementary:
 
 | Approach | Event | Mechanism | Use when |
 |----------|-------|-----------|----------|
@@ -194,6 +194,14 @@ The official [bash_command_validator example](https://github.com/anthropics/clau
 | PostToolUse detection | `PostToolUseFailure` | additionalContext | Unknown missing tool, discovered at runtime |
 
 Static allowlisting catches known patterns. Runtime detection handles the cases that weren't anticipated.
+
+## When This Backfires
+
+Runtime hook detection adds overhead to every failing Bash call. Three conditions make this pattern worse than the alternative:
+
+- **Overly broad pattern matching produces false positives.** If the regex matches "invalid option" in output unrelated to BSD/GNU divergence, the agent receives misleading advice and may spend turns chasing the wrong fix. Test detection patterns against real failure output before deploying.
+- **Sentinel files break in ephemeral environments.** Containerised CI runners, sandboxed shells, or environments where `$HOME` is not persistent will fail to find or create the sentinel file, causing the hook to emit the context message on every invocation rather than once per session. Use an in-process variable or skip once-per-session gating when `$HOME` is not guaranteed.
+- **The hook can mask the original error.** When `additionalContext` fires alongside a non-zero exit, the agent sees both the error and the advisory message. If the advisory message is confident ("use grep -E instead"), the agent may act on it even when the actual error has a different root cause, bypassing diagnostic steps. Keep advisory text conditional and hedged.
 
 ## Key Takeaways
 

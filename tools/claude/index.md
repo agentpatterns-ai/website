@@ -24,3 +24,4 @@ tags:
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops
 - [Channels Permission Relay](channels-permission-relay.md) — Forward tool-use approval prompts to your phone for unattended agent runs
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploy independent policy fragments per team without merge conflicts
+- [PowerShell Tool](powershell-tool.md) — Native Windows shell for Claude Code via PowerShell instead of Git Bash

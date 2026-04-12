@@ -13,7 +13,7 @@ tags:
 
 # Enterprise Agent Hardening: Governance, Observability, and Reproducibility
 
-> A production readiness checklist for agentic systems organized around three gates — governance, observability, and reproducibility — grounded in concrete Claude Code primitives and third-party tooling.
+> Enterprise agent hardening secures agentic systems for production through three control layers — governance (what agents may do), observability (what they did), and reproducibility (that outcomes are auditable and resumable) — enforced as deployment gates.
 
 Moving an agent to production requires three categories of control. An enterprise survey across Kore.ai, Salesforce Agentforce, TrueFoundry, ZenML, and LangChain converged on MUST/SHOULD checklists for each pillar ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
@@ -51,7 +51,7 @@ The survey identifies a Policy Enforcement Gateway: tool invocations mediated th
 
 `claude_code.tool_decision` events record every tool accept/reject with `decision_source` (`config`, `hook`, `user_permanent`, `user_temporary`) — a built-in compliance audit trail ([Claude Code monitoring docs](https://code.claude.com/docs/en/monitoring-usage)).
 
-LangSmith records every agent action with latency, token counts, and cost; TrueFoundry integrates OTel into Grafana and Datadog. Standardized trace metadata for regression and safety benchmarks is a MUST requirement ([LangChain harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/), [arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
+LangSmith records every agent action with latency, token counts, and cost; TrueFoundry integrates OTel into Grafana and Datadog. Standardized trace metadata for regression and safety benchmarks is a MUST requirement ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
 See [Pre-Completion Checklists](../verification/pre-completion-checklists.md) for governance at the completion boundary.
 
@@ -63,9 +63,17 @@ Git snapshots log each session's work; sessions verify before new work to preven
 
 Claude Code's persistent memory scopes (`user`, `project`, `local`) carry institutional knowledge across sessions ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). ZenML and TrueFoundry add reproducibility through artifact versioning ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
+## When This Backfires
+
+**Overfitted deny patterns block legitimate operations.** Broad glob patterns like `Bash(rm*)` silently block needed cleanup commands; agents loop or fail instead of explaining the denial. Scope deny lists to the narrowest form (`Bash(rm -rf /)` not `Bash(rm*)`).
+
+**Provider coupling raises switching costs.** Claude Code primitives (`bypassPermissions`, `PreToolUse` hooks, `CLAUDE_CODE_ENABLE_TELEMETRY`) are not portable. An org that hard-wires governance to these APIs faces rewrite-level switching costs if it migrates to a different runtime.
+
+**Reproducibility ceremony slows iteration.** `claude-progress.txt` updates and git snapshots per session add mandatory steps that stall rapid prototyping loops. Apply the reproducibility gate only to long-running or multi-session tasks, not interactive one-shot usage.
+
 ## Open Challenge
 
-Verifiability and safe autonomy remain unsolved. Current hardening reduces but does not eliminate human oversight ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Hard-wiring governance to one provider creates rewrite-level switching costs; portable eval suites and downgrade modes are a proposed mitigation [unverified] ([o16g.com](https://o16g.com)).
+Verifiability and safe autonomy remain unsolved. Current hardening reduces but does not eliminate human oversight ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Hard-wiring governance to one provider creates rewrite-level switching costs; the survey paper notes conformance testing and interoperability contracts as open research directions but does not prescribe specific migration strategies ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
 ## Example
 
@@ -122,11 +130,6 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - **Observability**: `CLAUDE_CODE_ENABLE_TELEMETRY=1` for `tool_decision` events and `prompt.id` correlation.
 - **Reproducibility**: session-portable artifacts (progress files, feature-state JSON, git snapshots) over memory.
 
-## Unverified Claims
-
-- Three-gate sequence (Governance, Observability, Reproducibility) as deployment blocker [unverified]
-- Portable eval suites and downgrade modes mitigate provider lock-in [unverified]
-
 ## Related
 
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)
@@ -158,6 +161,5 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Tool Signing and Signature Verification for Agents](tool-signing-verification.md)

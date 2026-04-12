@@ -32,7 +32,7 @@ Treat [schema violations like contract failures](https://github.blog/ai-and-ml/g
 
 ## Action Schemas with Discriminated Unions
 
-Action schemas constrain agent outputs to enumerated outcomes using [discriminated unions](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/):
+Action schemas constrain agent outputs to enumerated outcomes using [discriminated unions](https://github.com/colinhacks/zod?tab=readme-ov-file#discriminated-unions) — a Zod primitive that enforces a tagged union where a single literal field (`type`) selects among mutually exclusive schemas:
 
 ```typescript
 const ActionSchema = z.discriminatedUnion("type", [
@@ -68,11 +68,21 @@ The underlying principle is treating [agents like distributed systems, not chat 
 - **Log intermediate state** — capture schema-validated payloads at each handoff for debugging
 - **Expect retries and partial failures** — schema violations trigger structured recovery, not crashes
 
+## When This Backfires
+
+Typed schemas add overhead and rigidity — three conditions where the cost outweighs the benefit:
+
+- **Rapid interface churn**: discriminated unions become a migration burden when action types change frequently. Every new action type requires updating schemas across all agents simultaneously; mismatched versions silently reject valid outputs during rolling deployments.
+- **Exploratory or open-ended agents**: strict schemas block agents from returning legitimately unexpected outputs. A research agent that discovers a novel category it wasn't designed for will fail validation rather than surfacing the finding.
+- **Schema complexity exceeds model reliability**: deeply nested or highly conditional schemas increase the rate of validation failures requiring retries. [When retry chains compound across multiple agent hops](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), latency and token costs can exceed the cost of tolerating occasional unstructured output.
+
+Apply schemas at high-stakes boundaries — state transitions, inter-service calls, irreversible actions — and use looser validation for intermediate reasoning steps where flexibility matters more than precision.
+
 ## Key Takeaways
 
 - Most multi-agent failures come from missing structure at boundaries, not model limitations
 - Typed interfaces enforce data contracts; discriminated unions enforce action contracts
-- MCP provides runtime schema validation that prevents field invention and drift [unverified]
+- MCP provides [runtime schema validation](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/) that prevents field invention and drift
 - Schema violations should trigger retry/repair/escalate flows, not silent propagation
 - Agent-to-agent communication requires the same rigor as microservice API contracts
 
@@ -123,3 +133,4 @@ The orchestrator never inspects free-text output. If the triage agent returns an
 - [MCP Client-Server Architecture](mcp-client-server-architecture.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md)

@@ -122,9 +122,18 @@ The main thread receives three 200-token summaries. The raw file contents — po
 
 ## Error Isolation in Parallel Tool Calls
 
-As of Claude Code v2.1.72 [unverified], parallel tool calls for `Read`, `WebFetch`, and `Glob` isolate failures — a single failed call no longer cancels sibling tool calls running in parallel. Only `Bash` errors still cascade and abort concurrent calls.
+As of [Claude Code v2.1.72](https://code.claude.com/docs/en/changelog), parallel tool calls for `Read`, `WebFetch`, and `Glob` isolate failures — a single failed call no longer cancels sibling tool calls running in parallel. Only `Bash` errors still cascade and abort concurrent calls.
 
 This matters for fan-out patterns because sub-agents routinely issue parallel reads and fetches. Before this change, one bad file path or unreachable URL would abort every parallel call in flight. Now, the successful calls complete and return results; only the failed call reports an error. Fan-out sub-agents can handle partial failures gracefully instead of losing all concurrent work.
+
+## When This Backfires
+
+Fan-out sub-agents add overhead that makes them worse than in-thread execution in several conditions:
+
+- **Small task count with low token volume** — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. The isolation benefit is real only when each sub-agent's exploration would otherwise pollute the main context.
+- **Interdependent tasks** — when sub-task B depends on sub-task A's output, fan-out forces a two-phase structure (fan-out then sequential dependency resolution) that eliminates the parallelism benefit.
+- **Cost-sensitive workloads** — N parallel sub-agents means N simultaneous model invocations. If the sub-tasks are simple, a single agent with context compaction is cheaper.
+- **Result synthesis is the bottleneck** — if assembling N summaries requires reading most of the raw detail anyway, isolation provides no advantage; the main thread context fills up regardless.
 
 ## Key Takeaways
 
@@ -150,3 +159,6 @@ This matters for fan-out patterns because sub-agents routinely issue parallel re
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
+- [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
+- [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
+- [Oracle Task Decomposition](oracle-task-decomposition.md)

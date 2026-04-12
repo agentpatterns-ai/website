@@ -14,7 +14,7 @@ tags:
 
 ## What It Is
 
-The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) is the infrastructure that powers Claude Code, available as a library. Renamed from "Claude Code SDK" in September 2025 to reflect that the runtime is general-purpose, not coding-specific [unverified].
+The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) is the infrastructure that powers Claude Code, available as a library.
 
 Available as [`@anthropic-ai/claude-agent-sdk`](https://platform.claude.com/docs/en/agent-sdk/typescript) (TypeScript) and `claude_agent_sdk` (Python).
 
@@ -24,11 +24,11 @@ The SDK's core is the `query()` function, which returns an async generator yield
 
 ## What You Get
 
-The SDK provides the same filesystem-based features as Claude Code:
+The SDK provides access to the same filesystem-based features as Claude Code. None load by default — set `settingSources` to activate them:
 
-- **Project instructions**: CLAUDE.md and `.claude/rules/` are loaded automatically
-- **Skills**: SKILL.md files are discovered and available
-- **Hooks**: lifecycle hooks fire the same way as in Claude Code
+- **Project instructions**: CLAUDE.md and `.claude/rules/` load when `settingSources` includes `"project"`
+- **Skills**: SKILL.md files are discovered when `settingSources` includes `"project"` or `"user"`
+- **Hooks**: filesystem hooks from `settings.json` fire when `settingSources` loads them; programmatic hooks can also be passed directly to `query()`
 - **Permissions**: allow/ask/deny rules control tool access
 - **Sub-agents**: define inline via the `agents` option; Claude spawns them via the Task tool
 
@@ -38,27 +38,23 @@ Use the SDK when you need Claude Code's agentic capabilities in a custom applica
 
 ## Example
 
-The following shows a minimal TypeScript script that uses the Agent SDK's `query()` function to run a coding task in a CI pipeline, collecting the final assistant message.
+A minimal TypeScript script that uses `query()` to run a security review in a CI pipeline. `settingSources: ["project"]` loads CLAUDE.md and hooks from the working directory; omit it to run in isolation mode.
 
 ```typescript
-import { query, MessageParam } from "@anthropic-ai/claude-agent-sdk";
+import { query } from "@anthropic-ai/claude-agent-sdk";
 
 async function runCodeReview(diffPath: string): Promise<string> {
-  const messages: MessageParam[] = [
-    {
-      role: "user",
-      content: `Review the diff at ${diffPath} for security issues.
-Output a JSON array of findings: [{severity, file, line, description}].`,
-    },
-  ];
-
   let result = "";
   for await (const message of query({
-    prompt: messages,
-    options: { maxTurns: 5 },
+    prompt: `Review the diff at ${diffPath} for security issues.
+Output a JSON array of findings: [{severity, file, line, description}].`,
+    options: {
+      maxTurns: 5,
+      settingSources: ["project"], // loads CLAUDE.md and hooks from cwd
+    },
   })) {
-    if (message.type === "assistant" && typeof message.content === "string") {
-      result = message.content;
+    if (message.type === "result" && message.subtype === "success") {
+      result = message.result;
     }
   }
   return result;
@@ -70,18 +66,21 @@ console.log(findings);
 process.exit(findings.includes('"severity":"critical"') ? 1 : 0);
 ```
 
-The `query()` call runs the same agent loop that powers Claude Code — the CLAUDE.md in the working directory is loaded automatically, hooks fire at their lifecycle points, and the loop continues until the task is complete or `maxTurns` is reached. The script exits non-zero if the agent finds a critical severity finding, making it directly composable with CI gate logic.
+The loop continues until the task is complete or `maxTurns` is reached. The script exits non-zero if the agent finds a critical severity finding, making it directly composable with CI gate logic.
+
+## When This Backfires
+
+- **Simpler workflows**: If you only need Claude to run a single agentic task, `claude -p "..."` from the CLI avoids adding an SDK dependency and its release cadence to your application.
+- **Async generator complexity**: Consuming `query()` correctly requires handling multiple message types; teams unfamiliar with async generators often misread the result stream, missing tool-call messages or consuming the final result before the loop ends.
+- **Feature isolation**: By default the SDK runs in isolation mode — no CLAUDE.md, no skills, no hooks — which is intentional for reproducibility but surprises teams that expect CLI parity without setting `settingSources`.
+- **Bundle size in browser contexts**: The SDK is designed for server-side and CI use; browser deployments should use the Anthropic Messages API directly instead.
 
 ## Key Takeaways
 
 - Same runtime as Claude Code, exposed as a library
-- Supports all Claude Code features: instructions, skills, hooks, permissions, sub-agents
+- Supports all Claude Code features: instructions, skills, hooks, permissions, sub-agents — but none load by default; configure `settingSources` explicitly
 - Core API is `query()` returning an async generator of typed messages
 - Use when you need agent capabilities in custom applications, not the CLI
-
-## Unverified Claims
-
-- Renamed from "Claude Code SDK" in September 2025 to reflect that the runtime is general-purpose [unverified]
 
 ## Related
 
@@ -92,5 +91,7 @@ The `query()` call runs the same agent loop that powers Claude Code — the CLAU
 - [Feature Flags](feature-flags.md)
 - [Claude Code /batch and Worktrees](batch-worktrees.md)
 - [Claude Code Review](code-review.md)
+- [Claude Code --bare Flag](bare-mode.md)
+- [Claude Code Auto Mode](auto-mode.md)
 - [Session Scheduling](session-scheduling.md)
 - [Headless Claude in CI](../../workflows/headless-claude-ci.md)

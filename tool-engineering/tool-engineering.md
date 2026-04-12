@@ -20,13 +20,13 @@ tags:
 
 ## Tools as the Agent's Interface to the World
 
-Agent quality is bounded by tool quality. No prompt compensates for a tool interface the model cannot use reliably. Poorly designed tools are a primary source of agent failures [unverified]: the model selects the wrong tool, calls it with incorrect parameters, or misinterprets its output.
+Agent quality is bounded by tool quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong tool selection, incorrect parameters, misinterpreted output — are a recurring failure mode in agent loops.
 
 Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), tool design deserves the same investment as prompt engineering.
 
 ## Minimize Formatting Overhead
 
-Inputs requiring precise formatting — exact line counts, complex escaping, specific delimiters — create failure surface. Design inputs to accept formats with strong model priors from training data (JSON, markdown, plain prose). Custom or mechanically precise formats (line numbers, fixed-width fields) increase errors [unverified].
+Inputs requiring precise formatting — exact line counts, complex escaping, specific delimiters — create failure surface. Design inputs to accept formats with strong model priors from training data (JSON, markdown, plain prose). Anthropic's guidance is explicit: avoid formatting "overhead such as having to keep an accurate count of thousands of lines of code, or string-escaping any code it writes" ([Building Effective Agents, Appendix 2](https://www.anthropic.com/engineering/building-effective-agents)).
 
 The same applies to outputs: return formats the model can parse without counting characters or matching offsets.
 
@@ -40,6 +40,8 @@ Tool docstrings should include:
 - Known edge cases and what happens when they occur
 
 A model with no prior knowledge of your system forms its understanding entirely from the docstring. Write accordingly.
+
+This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly. A well-written docstring functions as a compact, always-present reference that shapes every tool invocation in the session.
 
 ## Poka-Yoke: Mistake-Proofing
 
@@ -123,6 +125,16 @@ def search_codebase(
 
 The docstring gives the model a concrete call example, documents every return key, and explains what happens on error — so the model can handle failure without guessing. The `file_type` enumeration eliminates free-text guessing. The structured error response tells the model exactly what to fix.
 
+## When This Backfires
+
+Tool engineering investment pays off when tools are reused across many agent sessions and workflows. It adds friction without payoff in these conditions:
+
+- **Rapidly-changing interfaces**: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
+- **One-off or exploratory scripts**: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
+- **Upstream documentation already exists**: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies.
+
+Apply the full pattern to stable, shared tools that are called repeatedly across agent runs. Apply minimal-viable documentation to throwaway or prototype tooling.
+
 ## Key Takeaways
 
 - Tool quality bounds agent quality — no prompt compensates for a bad tool interface
@@ -131,11 +143,6 @@ The docstring gives the model a concrete call example, documents every return ke
 - Apply poka-yoke: unambiguous parameter names, enumerated valid values, structured error messages
 - Test tools independently before integration to surface model misuse patterns early
 - Optimize tool results: summarize by type, offload large outputs, include agent-aware truncation hints for ~54% peak context reduction
-
-## Unverified Claims
-
-- Poorly designed tools are a primary source of agent failures [unverified]
-- Custom or mechanically precise formats (line numbers, fixed-width fields) increase errors [unverified]
 
 ## Related
 
@@ -151,3 +158,5 @@ The docstring gives the model a concrete call example, documents every return ke
 - [Unix CLI as the Native Tool Interface](unix-cli-native-tool-interface.md)
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — structured errors for agent tool calls
+- [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — naming, schema design, and error handling for MCP-exposed tools
+- [Self-Healing Tool Routing](self-healing-tool-routing.md) — cost-weighted routing and failure recovery for agent tool calls

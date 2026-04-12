@@ -50,7 +50,7 @@ How agents hand off work, share state, and refine each other's output without a 
 
 Patterns that leverage multiple distinct models — using diversity of reasoning to strengthen outputs.
 
-- [Adversarial Multi-Model Development Pipeline (VSDD)](adversarial-multi-model-pipeline.md) — A six-phase pipeline where a fresh-context adversary attacks builder output until convergence, combining spec-driven development, TDD, and formal verification
+- [Adversarial Multi-Model Development Pipeline (VSDD)](adversarial-multi-model-pipeline.md) — A six-phase pipeline where a fresh-context adversary attacks builder output until convergence, combining [spec-driven development](../workflows/spec-driven-development.md), TDD, and formal verification
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md) — Get independent plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each before writing code
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md) — Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence
 - [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md) — Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision

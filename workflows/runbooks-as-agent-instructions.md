@@ -14,7 +14,7 @@ aliases:
 
 > Runbooks written for humans fail for agents: implicit context, ambiguous decision points, and actions that assume cognitive inference. The fix is not a new format — it is an audit workflow that identifies each failure mode and applies the correct transformation.
 
-Brian Scanlan's team at Intercom set a concrete goal: all operational runbooks followable by Claude within 6 weeks [unverified]. The constraint surfaces the core problem — most runbooks are written as memory aids for experienced operators, not as executable instructions.
+A concrete adoption target — all operational runbooks followable by the agent within a fixed time window — surfaces the core problem: most runbooks are written as memory aids for experienced operators, not as executable instructions.
 
 ## Why Human Runbooks Fail for Agents
 
@@ -36,7 +36,7 @@ Before rewriting anything, audit each runbook step against three questions:
 2. **Can the agent evaluate this condition?** Decision points ("if this looks wrong") must become explicit conditionals with a measurable signal and a threshold.
 3. **Does the step depend on knowledge the agent doesn't have?** Service topology, escalation contacts, system quirks — these must be declared explicitly or loaded via a references directory.
 
-Steps that fail question 1 need tool-call replacements. Steps that fail question 2 need explicit conditionals. Steps that fail question 3 need supporting context injected.
+Steps that fail question 1 need tool-call replacements. Steps that fail question 2 need explicit conditionals. Steps that fail question 3 need supporting context injected. Anthropic's guidance on building effective agents notes that tool definitions require the same deliberate engineering attention as system prompts — "example usage, edge cases, input format requirements, and clear boundaries from other tools" ([Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
 
 ## Before and After: Step Transformations
 
@@ -149,9 +149,19 @@ This is equivalent to the feature list and progress file pattern described in [h
 
 ## Adoption Driver: Measurable Goals
 
-The Intercom approach — "all runbooks followable by Claude within 6 weeks" [unverified] — works because it is binary and auditable. A runbook either passes or fails the agent-followable test. Vague goals ("improve our runbooks") produce inconsistent effort. A binary test with a deadline produces a complete audit.
+A binary adoption target — "all runbooks followable by the agent" — works because it is auditable. A runbook either passes or fails the agent-followable test. Vague goals ("improve our runbooks") produce inconsistent effort. A binary test with a deadline produces a complete audit.
 
 Operationally: assign one engineer to run each runbook against an agent in a test environment. Any step the agent fails to execute or evaluate becomes a tracked rewrite item. This surfaces the actual failure distribution across the runbook library before any rewriting begins.
+
+## When This Backfires
+
+Agent-executable runbooks work when each step has a deterministic, tool-invokable form. The pattern breaks down in three conditions:
+
+- **Human-judgment steps that cannot be made explicit.** Some decisions depend on live context that no metric captures — a degraded-but-not-alerting system that an experienced operator would deprioritize. Converting these to thresholds produces either false positives or missed escalations. These steps are better handled with a human-in-the-loop gate than a scripted conditional.
+- **Cross-system state coordination.** Runbooks that span multiple teams, change-freeze windows, or external vendor actions assume the agent can verify state it cannot observe. If the agent cannot confirm the dependency is met, it proceeds on false assumptions.
+- **High blast-radius actions.** Failover triggers, database writes, and traffic reroutes carry irreversible consequences. The `disable-model-invocation: true` packaging mitigates this by requiring human initiation, but it does not prevent the agent from executing a step sequence in the wrong incident context if routing is misconfigured.
+
+The audit-before-rewriting step is the safeguard: steps that cannot be made unambiguous should be flagged as human checkpoints, not converted.
 
 ## Key Takeaways
 
@@ -171,3 +181,5 @@ Operationally: assign one engineer to run each runbook against an agent in a tes
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Incident Log Investigation Skill](incident-log-investigation-skill.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)
+- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)

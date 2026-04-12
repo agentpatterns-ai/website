@@ -20,7 +20,7 @@ aliases:
 
 Runtime checks reject forbidden tool calls after the model has already planned to use them. Schema filtering removes tools from the subagent's schema entirely, so the model cannot form the intent to call tools it has never seen ([Bui, 2025 §2.2.2](https://arxiv.org/abs/2603.05344)).
 
-This distinction matters. A runtime rejection wastes an inference cycle and creates a failure the model must recover from [unverified]. Schema filtering eliminates the failure mode at the structural level — the model selects only from tools it can see.
+This distinction matters. A runtime rejection occurs after the model has already expended tokens planning the call; recovery requires an additional inference turn. Schema filtering eliminates the failure mode at the structural level — the model selects only from tools it can see.
 
 ## Filtered Tool Sets by Role
 
@@ -35,7 +35,7 @@ Additional specialized subagents are registered in the subagent capability matri
 
 ## Prompt + Schema Dual Constraint
 
-Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that emphasize constraints and responsibilities ([Bui, 2025 §2.2.7](https://arxiv.org/abs/2603.05344)).
+Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that emphasize constraints and responsibilities ([Bui, 2025 §2.2.7](https://arxiv.org/abs/2603.05344)). Anthropic's guidance on writing effective agent tools makes the same point: giving an agent only the tools relevant to its task reduces ambiguity and improves selection accuracy ([Anthropic Engineering, 2025](https://www.anthropic.com/engineering/writing-tools-for-agents)).
 
 The prompt tells the model what to do; the schema prevents it from doing anything else. Neither mechanism alone is sufficient — prompts can be overridden by strong context, and schema filtering does not guide the model toward the *right* tool among those available. Together, they create a dual constraint that is harder to violate than either alone.
 
@@ -96,6 +96,15 @@ strategic_planner_spec = SubAgentSpec(
 
 Both subagents can run concurrently — their filtered schemas ensure neither can touch files the other is reading, and neither can perform write operations regardless of what appears in their prompts.
 
+## When This Backfires
+
+Schema filtering adds structural rigidity — when it fails to match the actual workload, costs outweigh the safety benefit:
+
+- **Over-scoped allowlists**: A subagent given too broad a tool allowlist provides false safety assurance while still being able to cause harm within its scope. Allowlists require ongoing maintenance as the tool registry evolves.
+- **Allowlist maintenance lag**: Adding a new tool to the shared registry does not automatically grant it to existing subagents. Conversely, removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer requires synchronization with the live tool registry.
+- **Misuse within the allowlist**: Schema filtering prevents calls to *absent* tools but does not prevent misuse of *present* ones. A Code Explorer subagent with `search_code` can still perform excessive queries or leak discovered content — prompt specialization must handle intra-allowlist safety.
+- **Parallel execution overhead**: Spawning multiple filtered subagents introduces orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
+
 ## Key Takeaways
 
 - Schema filtering is stronger than runtime rejection — the model cannot call tools absent from its schema
@@ -117,3 +126,4 @@ Both subagents can run concurrently — their filtered schemas ensure neither ca
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
+- [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)

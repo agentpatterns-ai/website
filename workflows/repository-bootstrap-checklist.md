@@ -13,7 +13,9 @@ tags:
 
 ## Why Order Matters
 
-Agents need context before they can use tools, and tools before they can be governed. Adding CI gates before instructions means agents operate blind and produce output nobody trusts. The sequence below builds each layer on the previous one.
+Each layer in the checklist is a dependency for the next. Instructions define what correct output looks like — without them, agents cannot know which patterns to follow or avoid. Skills package the domain knowledge that agent definitions draw on — an agent definition that references a non-existent skill silently degrades to generic behavior. Commands invoke agents by name, so agent definitions must exist before commands can be wired. Hooks and CI gates enforce correctness criteria that only make sense once instructions have established what correct means.
+
+Skipping ahead breaks this chain: adding CI gates before instructions creates enforcement rules with no defined standard to enforce against. Adding hooks before skills means hooks may reject output that would have been correct with domain context in place.
 
 ## The Checklist
 
@@ -21,7 +23,7 @@ Agents need context before they can use tools, and tools before they can be gove
 
 Create `AGENTS.md` in the repository root. This file is the entry point for any agent that opens the project — it tells the agent what the repo is, how it's structured, and what conventions it must follow.
 
-The [AGENTS.md open standard](https://agents.md) defines the format: standard Markdown, any headings you need. Include at minimum:
+The `AGENTS.md` convention uses standard Markdown with any headings you need. Include at minimum:
 
 - Project purpose and architecture overview
 - Build and test commands
@@ -31,7 +33,7 @@ The [AGENTS.md open standard](https://agents.md) defines the format: standard Ma
 
 For Claude Code, the equivalent is `CLAUDE.md` at the repo root or `.claude/CLAUDE.md`. [Claude Code loads CLAUDE.md files hierarchically](https://code.claude.com/docs/en/memory#claudemd-files) — the project file is shared with the team via version control and applies to every session.
 
-Keep the file under 200 lines. Longer files consume more context window and reduce adherence. [unverified]
+Keep the file under 200 lines. Longer files consume more context window and reduce adherence — Claude Code's own documentation states that files over this threshold produce lower instruction-following rates ([source](https://code.claude.com/docs/en/memory#claudemd-files)).
 
 ### Step 2: Standards File
 
@@ -45,7 +47,7 @@ Reference `STANDARDS.md` from `AGENTS.md` using an import or a direct mention so
 
 ### Step 3: Skills for Domain Knowledge
 
-Skills are Markdown files that package repeatable knowledge — domain conventions, workflows, research patterns — that agents load on demand rather than on every session. The [Agent Skills standard](https://agentskills.io) defines a cross-tool format supported by GitHub Copilot, Claude Code, Cursor, and others. [unverified]
+Skills are Markdown files that package repeatable knowledge — domain conventions, workflows, research patterns — that agents load on demand rather than on every session.
 
 Place skills under `.github/skills/` (Copilot convention) or `.claude/skills/` (Claude Code convention). One skill per topic. Examples:
 
@@ -99,6 +101,14 @@ Start here before adding anything else:
 3. A pre-commit hook that runs the linter
 
 One instruction file and one skill is more useful on day one than a full framework that takes a week to build.
+
+## When This Order Doesn't Apply
+
+The checklist assumes a greenfield setup — starting from a repo with no agent infrastructure. Several conditions change the calculus:
+
+- **Existing CI already in place**: Most repos already have CI before agents are introduced. Do not remove or delay CI to match the checklist sequence; instead, add instructions (Step 1) and point agents at the existing CI workflow rather than treating Step 7 as future work.
+- **Small teams or solo projects**: The full seven-step sequence is overkill for a one-person project. Steps 2, 4, and 5 (standards file, agent definitions, commands) are optional until the project grows enough to need them. Jumping straight from instructions to hooks is defensible.
+- **Tool-specific adoption**: If only one tool (e.g., Claude Code) is being onboarded, skip `.github/`-convention steps entirely. The Copilot-specific paths for skills and agent definitions are not relevant until Copilot is also in scope.
 
 ## Mermaid: Bootstrap Sequence
 
@@ -174,10 +184,6 @@ This is the Minimum Viable Agent Infrastructure described above. Add agent defin
 - Skills reduce instruction file bloat by loading domain knowledge on demand
 - Hooks provide deterministic enforcement where instructions only provide guidance
 - Start with one instruction file, one skill, and one hook — not the full stack
-
-## Unverified Claims
-
-- Keep the AGENTS.md file under 200 lines to avoid reduced adherence [unverified]
 
 ## Related
 

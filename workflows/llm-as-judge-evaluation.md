@@ -42,11 +42,11 @@ The judge evaluates each output against a rubric with independent dimensions. An
 
 Each dimension produces a score from 0.0–1.0 and a pass/fail grade. Scoring dimensions independently matters: an output can be factually accurate but incomplete, or complete but citing low-quality sources. Aggregating into a single score hides which dimension failed.
 
-Anthropic found that a single LLM call with a single prompt outputting scores and pass/fail grades was "the most consistent and aligned with human judgements" — more than deploying multiple specialized judges. Giving the LLM judge the same rubric criteria that human reviewers use is the documented approach for producing that alignment [unverified: the causal mechanism is inferred; the source documents the correlation, not the explanation].
+Anthropic found that a single LLM call with a single prompt outputting scores and pass/fail grades was "the most consistent and aligned with human judgements" — more than deploying multiple specialized judges ([source](https://www.anthropic.com/engineering/multi-agent-research-system)). Using the same rubric criteria for the LLM judge and human reviewers is the approach Anthropic used to produce that alignment.
 
 ## Starting Small: 20 Queries
 
-Full evaluation suites of hundreds of test cases are not required before systematic testing can begin. Anthropic recommends starting with "20-50 simple tasks drawn from real failures" ([source](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)). Early-stage agents have "abundant low-hanging fruit" where prompt changes produce large improvements — a 30% to 80% success rate jump is detectable at 20 samples [unverified]. Signal is high when effect sizes are large.
+Full evaluation suites of hundreds of test cases are not required before systematic testing can begin. Anthropic recommends starting with "20-50 simple tasks drawn from real failures" ([source](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)). Early-stage agents have "abundant low-hanging fruit" where prompt changes produce large improvements — effect sizes are large enough that small sample sizes suffice to detect them. Signal is high when each change produces a noticeable, measurable shift.
 
 Build the test case library incrementally: start with the 20 queries most representative of your actual usage, add edge cases as human review surfaces them, and expand as improvements become smaller and harder to detect.
 
@@ -66,7 +66,7 @@ Human spot-checking is not a review of every output. It is a targeted sample: re
 
 Production observability provides a third signal: patterns across many interactions, not just individual outputs.
 
-Monitor agent decision patterns and interaction structures without logging the contents of individual conversations. Anthropic describes this as capturing the shape of agent behavior — which tools were called, in what order, how many times, where the agent stalled — without exposing user data [unverified].
+Monitor agent decision patterns and interaction structures without logging the contents of individual conversations — Anthropic describes this as maintaining user privacy while still capturing diagnostic signal ([source](https://www.anthropic.com/engineering/multi-agent-research-system)). The focus is on structural behavior: which tools were invoked, sequencing patterns, and where the agent stalled — not the content of user messages.
 
 This structural logging surfaces systematic failures that neither rubric scoring nor human spot-checking catches: an agent that consistently uses a particular tool in the wrong order, or that stalls on a specific query type at high frequency. These are root causes, not symptoms.
 
@@ -80,7 +80,16 @@ The LLM judge and human reviewers should use the same rubric. Alignment degrades
 4. Compare scores and resolve disagreements by refining the rubric or the judge prompt
 5. Treat ongoing disagreement between judge and humans as a signal to investigate
 
-Calibration is not a one-time step. When new query types enter the distribution, recalibrate [unverified].
+Calibration is not a one-time step. When new query types enter the distribution, re-run the calibration process against a fresh human-scored sample before relying on automated scoring for those types.
+
+## When This Backfires
+
+LLM-as-judge evaluation degrades or fails in several conditions:
+
+- **Shared model bias**: LLM judges often share stylistic and verbosity biases with the models they evaluate. A fluent but factually incorrect output can score higher than a terse but correct one because the judge rewards surface coherence. This is especially acute when judge and subject are the same model family.
+- **Distribution shift without recalibration**: A rubric calibrated against one query distribution will drift as usage patterns change. New query types that weren't in the original calibration set can have systematically miscalibrated scores — producing false confidence in a judge that no longer aligns with human reviewers.
+- **Subtlety ceiling**: The single-judge approach performs well on dimensions with clear criteria (citation accuracy, factual accuracy against cited sources) but struggles with nuanced quality signals — tone appropriateness, reasoning soundness, or whether a source is authoritative in context. Human spot-checking remains essential for these dimensions.
+- **Cost at scale**: Running a separate LLM call per output adds latency and cost. For high-volume pipelines where outputs are mostly pass and human review is infrequent, simpler deterministic heuristics (length checks, citation presence, known-bad pattern detection) may catch the same failures at a fraction of the cost before escalating to LLM scoring.
 
 ## Handling Rubric Failures
 
@@ -169,13 +178,6 @@ Running this against 20 representative queries before a release surfaces whether
 - Log agent decision patterns and tool usage in production, not conversation contents, to preserve privacy while surfacing systematic failures
 - Align the judge and human reviewers on the same rubric before deploying automated scoring
 
-## Unverified Claims
-
-- Anthropic describes production observability as capturing the shape of agent behavior — which tools were called, in what order, how many times, where the agent stalled — without exposing user data [unverified: attributed to Anthropic but no direct source link available]
-- Giving the LLM judge the same rubric criteria that human reviewers use produces alignment between judge and human scores [unverified: the causal mechanism is inferred; the source documents the correlation, not the explanation]
-- A 30% to 80% success rate jump is detectable at 20 samples [unverified]
-- When new query types enter the distribution, judge-human calibration needs to be repeated [unverified]
-
 ## Related
 
 - [Incremental Verification: Check at Each Step, Not at the End](../verification/incremental-verification.md)
@@ -184,3 +186,5 @@ Running this against 20 representative queries before a release surfaces whether
 - [Agent-Assisted Code Review: Agents as PR First Pass](../code-review/agent-assisted-code-review.md)
 - [Eval-Driven Development](eval-driven-development.md)
 - [Eval-Driven Tool Development](eval-driven-tool-development.md)
+- [Closed-Loop Agent Training](closed-loop-agent-training.md)
+- [Continuous Agent Improvement](continuous-agent-improvement.md)

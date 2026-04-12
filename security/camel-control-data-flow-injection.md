@@ -65,7 +65,7 @@ a successful injection in a tool output cannot redirect the agent to call unauth
 
 **Task completion**: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-**Latency**: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — unsuitable for interactive applications. [unverified]
+**Latency**: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — unsuitable for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
 
 **Residual risk**: CaMeL does not protect against text-to-text attacks. An injected email can instruct the Q-LLM to produce a misleading summary, which the P-LLM then acts on. The structural guarantee covers tool invocation; it does not cover the semantic content of Q-LLM outputs. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
@@ -100,17 +100,16 @@ For lower-risk contexts, the [defense-in-depth](defense-in-depth-agent-safety.md
 - Does not protect against text-to-text attacks: the Q-LLM can still be misled into producing inaccurate summaries.
 - Complements, rather than replaces, defense-in-depth; blast-radius containment and confirmation gates address residual risks CaMeL cannot eliminate.
 
-## Unverified Claims
-
-- Latency can exceed 10 seconds when the Q-LLM processes complex artifacts [unverified — reported in secondary analysis; primary paper does not state specific latency figures]
-
 ## Related
 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — instruction-data separation is the structural defense against the two-channel injection chain described there
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
+- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)

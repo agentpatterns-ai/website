@@ -31,7 +31,7 @@ Each session in the Agents app is an independent agent context:
 
 Headless agents block when they need an already-running process — a dev server, a file watcher, a build daemon. Without a way to interact with these, agents must start and stop them on every run or assume they are already running.
 
-The `send_to_terminal` tool solves this. Sessions can send commands to terminal processes as part of their execution — start a dev server, trigger a build — without the user switching context. The process dependency becomes an agent task, not a human precondition.
+The `send_to_terminal` tool solves this. Sessions can send commands to terminal processes as part of their execution — start a dev server, trigger a build — without the user switching context. The process dependency becomes an agent task, not a human precondition. See [Terminal Tools for Agents: send_to_terminal and Background Interaction](../tool-engineering/send-to-terminal-background-interaction.md) for the full terminal I/O model including `backgroundNotifications`.
 
 An experimental companion setting, `chat.tools.terminal.backgroundNotifications`, alerts agents when background commands complete or require input — eliminating manual polling via `get_terminal_output`. Enable it via VS Code settings.
 
@@ -80,3 +80,4 @@ The `send_to_terminal` integration closes a second bottleneck: background agents
 - [Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — criteria for deciding which subtasks warrant agent delegation
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — how to redirect a session mid-execution without discarding accumulated context
 - [Harness Engineering](harness-engineering.md) — runtime infrastructure design for agent execution environments
+- [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md) — the protocol behind MCP server configuration that sessions inherit automatically

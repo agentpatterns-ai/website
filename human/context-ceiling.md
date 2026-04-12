@@ -144,7 +144,7 @@ The context-ceiling argument is weakest in three conditions:
 ## Key Takeaways
 
 - AI hits a hard boundary when problems require more interconnected context than a window can hold
-- The boundary maps to the Dreyfus gradient: AI handles novice/competent work and fails at expert-level tacit knowledge
+- The boundary maps to the Dreyfus gradient: AI handles novice/competent work and fails at expert-level tacit knowledge; [encoding tacit knowledge](../workflows/encoding-tacit-knowledge.md) is one strategy for raising that ceiling
 - Effective context capacity is well below advertised size; attention degrades for mid-context information
 - Rubber-stamping AI architecture output creates more work and liability risk, not less
 - Expert skepticism about AI for architecture is an empirically grounded observation, not resistance to change

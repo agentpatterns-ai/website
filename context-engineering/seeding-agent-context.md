@@ -71,7 +71,7 @@ Agents pattern-match against existing code — a well-written reference implemen
 
 ### Progress Files as Breadcrumbs
 
-Long-running agents maintain progress files (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Long-running agents maintain [progress files](../observability/trajectory-logging-progress-files.md) (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## What to Seed vs. What to Prompt
 

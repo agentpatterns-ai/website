@@ -97,13 +97,13 @@ The response returns a `file_id`. Use it in the Claude API request as:
 }
 ```
 
-Files persist for 30 days [unverified]. Using `file_id` references avoids re-uploading the same frame if the skill needs to retry the assembly step.
+Files persist until explicitly deleted via the [Files API](https://platform.claude.com/docs/en/docs/build-with-claude/files). Using `file_id` references avoids re-uploading the same frame if the skill needs to retry the assembly step.
 
 **Availability constraint**: The Files API requires the `anthropic-beta: files-api-2025-04-14` header and is not available on Amazon Bedrock or Google Vertex AI.
 
 ## Screenshot Density Control
 
-Each uploaded image costs approximately 1,600 tokens at 1 megapixel [unverified]. A one-hour meeting with 60 visual cues would use ~96,000 tokens on images alone — before the transcript text.
+Each uploaded image costs approximately 1,334 tokens at 1 megapixel (1000×1000 px), scaling to ~1,600 tokens at 1.19 megapixels — [the practical maximum](https://platform.claude.com/docs/en/docs/build-with-claude/vision) before Claude downsamples the image. A one-hour meeting with 60 visual cues would use ~80,000–96,000 tokens on images alone — before the transcript text.
 
 Design decisions for density control:
 
@@ -188,11 +188,20 @@ command -v whisper >/dev/null 2>&1 || { echo "whisper not found"; exit 1; }
 command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg not found"; exit 1; }
 ```
 
+## When This Backfires
+
+This pipeline makes sense when you need programmable customization — cue-phrase detection, custom output formats, or integration with downstream Claude skills. It is the wrong choice when:
+
+- **A native tool already exists**: Zoom, Teams, and Google Meet produce auto-transcripts with speaker labels without any installation. Otter.ai and rev.ai offer more accurate diarization than Whisper alone and handle the full pipeline as a service.
+- **Token costs exceed the value**: A 60-frame, one-hour meeting consumes ~80–96k tokens just on images — before the transcript text. For large meeting libraries, costs accumulate quickly without aggressive frame capping.
+- **The runtime environment is sandboxed**: CI systems and container environments often block `ffmpeg` and `whisper` CLI installs. The skill fails silently if prerequisites are absent without the guard check; verify the environment before deploying.
+- **Audio quality is low**: Whisper transcription quality degrades sharply with background noise, heavy accents, or multiple simultaneous speakers. Without diarization, the output is a single-speaker stream regardless of how many participants spoke.
+
 ## Key Takeaways
 
 - Claude has no native audio/video ingestion — Whisper is a hard dependency, not an optional enhancement
 - ffmpeg handles both audio extraction and frame capture; it is the only tool needed for both steps
-- Cap screenshot count before uploading; each image is ~1,600 tokens at 1 MP [unverified]
+- Cap screenshot count before uploading; each image is ~1,334 tokens at 1 MP, up to ~1,600 tokens at the 1.19 MP practical maximum
 - Use `file_id` references from the Files API to avoid re-uploading frames on retry
 - `context: fork` is the right isolation pattern for long-running media pipelines
 - Speaker diarization (pyannote.audio) is a separate step — visual cue phrase detection works without it
@@ -204,3 +213,5 @@ command -v ffmpeg >/dev/null 2>&1 || { echo "ffmpeg not found"; exit 1; }
 - [On-Demand Skill Hooks](../tool-engineering/on-demand-skill-hooks.md)
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Incident Log Investigation Skill](incident-log-investigation-skill.md)
+- [Enterprise Skill Marketplace](enterprise-skill-marketplace.md)
+- [Content Skills Audit](content-skills-audit.md)

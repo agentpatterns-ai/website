@@ -36,13 +36,13 @@ aliases:
 
 ## Why the Assistant Model Fails at Scale
 
-As autonomous agent sessions extend to 45+ minutes [unverified], the assistant model inverts the intended ratio: most human time goes to watching rather than deciding. Three structural problems compound:
+As autonomous agent sessions extend beyond a few minutes, the assistant model inverts the intended ratio: most human time goes to watching rather than deciding. Three structural problems compound:
 
 **Single-stream constraint.** You can only watch one agent at a time. A second agent running simultaneously requires a second human — or a shift to asynchronous review.
 
 **Human as bottleneck.** When the human is the feedback loop, agent speed is bounded by human response time. Automated checks run in milliseconds; humans do not.
 
-**Wrong surface.** Editor-centric assistant UIs optimize for observation, not orchestration. AMP shut down their VS Code extension on the premise that frontier developers spend only ~20% of their work time in editors — the rest happens in review, planning, and integration. [unverified — attributed to Raising an Agent podcast, episodes 9-10, 2025]
+**Wrong surface.** Editor-centric assistant UIs optimize for observation, not orchestration. Experienced developers spend the majority of their time outside the editor — in code review, planning, debugging, and integration — yet assistant-model tools anchor attention to the editor pane.
 
 ## Infrastructure Prerequisites
 
@@ -60,9 +60,7 @@ The factory model is not a mindset change — it requires systems that replace r
 
 Anthropic's internal multi-agent research system (lead agent + parallel subagents) outperformed single-agent Claude Opus 4 by 90.2% on internal research evaluations and reduced research time by up to 90% for complex queries. [Source: [Anthropic: multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
-Map-reduce across 10+ parallel agents is reported to produce 10x+ speedups on framework migrations [unverified — cited in the awesome-agentic-patterns catalog without a primary URL].
-
-The mechanism in both cases is the same: parallelization eliminates sequential bottlenecks when tasks are independent and feedback is automated.
+The mechanism: parallelization eliminates sequential bottlenecks when tasks are independent and feedback is automated.
 
 ## Where the Factory Model Fails
 
@@ -70,7 +68,7 @@ The factory model assumes automatable feedback. It breaks down when:
 
 - **Goals are exploratory or undefined.** Automated tests cannot validate what "correct" means for open-ended research or product discovery.
 - **Tasks require frequent guidance.** If an agent needs human input every few minutes, the async review model adds latency without removing attention load.
-- **Domain knowledge is not documented.** Agents operating autonomously rely on written conventions. Tacit knowledge that exists only in developers' heads produces misaligned output.
+- **Domain knowledge is not documented.** Agents operating autonomously rely on written conventions. Tacit knowledge that exists only in developers' heads produces misaligned output. See [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md) for extraction techniques.
 - **Verification is unreliable.** If CI is flaky or tests are insufficient, agents optimize for passing the gate rather than solving the actual problem.
 - **Safety-critical decisions are required.** Architecture choices, security boundaries, and product trade-offs that require human judgment should not be automated away.
 
@@ -102,13 +100,6 @@ The human's constraint is now PR review throughput, not agent execution speed.
 - Build and validate the feedback layer before removing real-time oversight; unreliable tests produce misaligned autonomous output
 - The assistant model remains appropriate for exploratory work, novel problems, safety-critical decisions, and tasks requiring frequent human guidance
 - Throughput gains come from removing sequential bottlenecks, not from adding agents to tasks that are inherently sequential
-
-## Unverified Claims
-
-- 10x+ speedups on framework migrations using map-reduce across 10+ parallel agents (cited in awesome-agentic-patterns, no primary URL found) [unverified]
-- AMP shutting down VS Code extension attributed to Raising an Agent podcast, episodes 9-10, 2025 (youtube.com/watch?v=2wjnV6F2arc) [unverified]
-- 80% watching / 20% developing split for assistant model — catalog synthesis, not a published study [unverified]
-- 45+ minutes as the threshold at which assistant model attention costs become significant — no primary source [unverified]
 
 ## Related
 

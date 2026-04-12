@@ -15,7 +15,7 @@ aliases:
 
 ## What MCP Does
 
-Before MCP, each AI coding tool implemented tool integrations independently [unverified]. Claude Code had its own plugin format, VS Code Copilot had extensions, Cursor had integrations. An MCP server for a database had to be rebuilt separately for each tool.
+Before MCP, each AI coding tool required its own integration format. Claude Code had its own plugin format, VS Code Copilot had extensions, Cursor had integrations. An MCP server for a database had to be rebuilt separately for each tool.
 
 The [Model Context Protocol](https://modelcontextprotocol.io) standardizes the interface. An agent host (Claude Code, GitHub Copilot, Cursor) speaks MCP on one side. An MCP server (a database connector, an API wrapper, a local script) speaks MCP on the other. The two communicate over a standard protocol — which host is running does not matter.
 
@@ -55,7 +55,7 @@ This makes agent reasoning auditable (what tools did the agent call, in what ord
 
 ## Ecosystem
 
-The MCP ecosystem has grown rapidly since the protocol's release [unverified]. Community MCP servers exist for databases (PostgreSQL, SQLite), cloud providers (AWS, GCP), communication tools (Slack, GitHub), browsers (Playwright), and developer tooling. [github/awesome-copilot](https://github.com/github/awesome-copilot) catalogs community servers for Copilot; the broader MCP ecosystem is indexed at [modelcontextprotocol.io](https://modelcontextprotocol.io).
+The MCP ecosystem now includes [hundreds of community servers](https://github.com/modelcontextprotocol/servers) spanning databases (PostgreSQL, SQLite), cloud providers (AWS, GCP), communication tools (Slack, GitHub), browsers (Playwright), and developer tooling. [github/awesome-copilot](https://github.com/github/awesome-copilot) catalogs community servers for Copilot; the broader MCP ecosystem is indexed at [modelcontextprotocol.io](https://modelcontextprotocol.io).
 
 ## Example
 
@@ -80,6 +80,17 @@ The following `.claude/settings.json` snippet configures two MCP servers — one
 The `playwright` server runs as a subprocess on the developer's machine — the agent communicates via stdin/stdout. The `internal-api` server runs remotely and is shared across the team; every developer's Claude Code session connects to the same hosted tool server without each installing a local copy.
 
 Because both servers implement MCP, they are interchangeable from the agent's perspective. Switching from Claude Code to another MCP-compliant host (e.g., GitHub Copilot) requires no changes to either server.
+
+## When This Backfires
+
+MCP adds a protocol layer that is not always justified:
+
+- **Single-tool integrations**: When an agent only ever calls one specific API, a native SDK call is simpler than standing up an MCP server. The abstraction buys nothing if portability is not a requirement.
+- **Version skew**: Host and server must agree on the same MCP protocol version. When Anthropic or a tool vendor ships a breaking spec change, servers built against the old spec stop working until updated — a maintenance burden that native integrations avoid.
+- **Subprocess overhead for stdio**: Each Claude Code session spawns MCP servers as subprocesses. For latency-sensitive or resource-constrained environments, this startup cost is measurable.
+- **Organizational overhead**: Remote MCP servers require hosting, auth, and availability SLAs. Teams without existing infra for hosted services may find the operational cost exceeds the portability benefit.
+
+Use MCP when building reusable tool servers shared across multiple hosts or developers. For one-off integrations or tightly coupled tooling, evaluate whether the indirection adds value.
 
 ## Key Takeaways
 

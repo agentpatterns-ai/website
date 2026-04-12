@@ -52,7 +52,7 @@ How you prompt an agent is itself a form of visible thinking. GitHub recommends 
 - **Context**: Reference related files, architecture decisions, and existing conventions.
 - **Output format**: Define the expected shape of the result.
 
-Saving prompts alongside code (in commit messages, PR descriptions, or instruction files) preserves the decision context that would otherwise vanish when the chat session ends. This aligns with Anthropic's guidance to "prioritize transparency by explicitly showing the agent's planning steps" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — the same principle applied to the human side of the workflow.
+Saving prompts alongside code (in commit messages, PR descriptions, or instruction files) preserves the decision context that would otherwise vanish when the chat session ends. This aligns with Anthropic's guidance to "prioritize transparency by explicitly showing the agent's planning steps" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — the same principle applied to the human side of the workflow. Anthropic's Claude Code best practices reinforce this by recommending CLAUDE.md be checked into git so constraints and conventions persist across sessions and team members ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)).
 
 ## Anti-Patterns
 
@@ -93,6 +93,15 @@ devices.
 ```
 
 The reasoning recorded in the commit and PR outlasts the chat session. A reviewer — or a future maintainer — can reconstruct why `localStorage` was chosen without access to the original prompt.
+
+## When This Backfires
+
+Visible thinking practices assume documentation overhead is recoverable — that is, the time spent writing clear commit messages and PR descriptions costs less than the time saved later in review and maintenance. This breaks down in several situations:
+
+- **Extreme time pressure with short-lived code**: Throwaway scripts, hotfixes with an immediate rollback plan, or spike branches that are deleted after a demo rarely justify detailed commit narration. The reasoning record has no audience.
+- **AI-generated documentation accepted uncritically**: When developers prompt agents to generate commit messages and PR descriptions without review, the visible thinking artifacts are present but meaningless — they document what the agent guessed the reasoning was, not the actual constraints and trade-offs.
+- **Context saturation in large teams**: As codebases grow and commit volume increases, the signal-to-noise ratio of commit history degrades. Teams that enforce verbose commits without pruning or tagging conventions often find the log unsearchable — the documentation exists but cannot be found.
+- **Misaligned tooling**: Repositories using squash-merge strategies collapse all commit reasoning into a single PR description. Branch-level commit discipline is lost, making per-commit narration pointless unless PR descriptions absorb that detail.
 
 ## Key Takeaways
 
