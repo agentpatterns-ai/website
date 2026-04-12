@@ -97,7 +97,7 @@ Target under 200 lines per file. Every line consumes context budget before the a
 
 When you outgrow 200 lines:
 
-- **Claude Code**: split into `@path` imports or `.claude/rules/` files with path-scoped frontmatter
+- **Claude Code**: split into [`@path` imports](../instructions/import-composition-pattern.md) or `.claude/rules/` files with path-scoped frontmatter
 - **Copilot**: use `.github/instructions/*.instructions.md` files with `applyTo` globs
 - **AGENTS.md**: break into multiple `AGENTS.md` files in subdirectories
 

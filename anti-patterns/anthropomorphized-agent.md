@@ -22,13 +22,13 @@ Agents produce fluent, contextually appropriate language. That fluency activates
 
 ## Consequences
 
-**Misplaced trust.** "It understood last time" is not a basis for trust. The same prompt can produce different results across sessions. Agents are stateless by default [unverified for all providers]. Trust built on rapport, not verified output, is fragile.
+**Misplaced trust.** "It understood last time" is not a basis for trust. The same prompt can produce different results across sessions. Agents are [stateless by default](https://www.letta.com/blog/stateful-agents) — each session starts from a blank context unless memory infrastructure is explicitly added. Trust built on rapport, not verified output, is fragile.
 
 **Inappropriate frustration.** "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless explicitly configured with persistent storage. Frustration directed at the agent is misdirected.
 
 **Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal. Reset context, don't take a break.
 
-**Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. An agent that confidently produces wrong output is more dangerous than one that hedges [unverified].
+**Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. [LLMs are fine-tuned to avoid expressing uncertainty](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html) — an agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
 
 ## The Correct Mental Model
 
@@ -67,14 +67,14 @@ The difference is not the agent — it is the developer's model of what the agen
 - Trust calibrated to verified output outperforms trust built on conversational feel
 - Context overload degrades output — unrelated to fatigue
 
-## Unverified Claims
+## When This Does Not Apply
 
-- Statelessness by default across all providers `[unverified for all providers]`
-- Confident wrong output being more dangerous than hedging output `[unverified]`
+Deliberate agent personas in end-user products — a customer support bot with a name and personality — are intentional UX design, not a mental model error. This anti-pattern targets developer reasoning about agent reliability: building trust on conversational feel rather than verified output. If you are designing an agent persona for end users, the failure modes described here still apply to the *developers* building and evaluating that system.
 
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — explicit project instruction file that replaces reliance on implied agent memory
+- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how to actually persist knowledge across sessions
 - [The Prompt Tinkerer](prompt-tinkerer.md)
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md)

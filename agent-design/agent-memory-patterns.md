@@ -65,7 +65,7 @@ When the agent receives a correction, it should prompt the user to save it ([Ope
 
 ## Memory Curation
 
-Memory is how an agent improves without retraining. Append-only memory degrades: stale entries cause outdated patterns and contradictory entries cause unpredictable behavior [unverified]. Update or remove entries when patterns change; if an entry hasn't influenced behavior in several sessions, move it to code comments.
+Memory is how an agent improves without retraining. Append-only memory degrades: stale entries cause outdated patterns and [contradictory entries force the agent to guess which version is correct, producing inconsistent behavior](https://arxiv.org/html/2603.10062v1). Update or remove entries when patterns change; if an entry hasn't influenced behavior in several sessions, move it to code comments.
 
 ## Memory vs. Codebase Breadcrumbs
 
@@ -79,6 +79,21 @@ Memory and [seeded codebase context](../context-engineering/seeding-agent-contex
 | Scoped to agent or project | Scoped to directory or file |
 
 For shared conventions, seeded context (AGENTS.md, inline comments) is more appropriate. Memory suits knowledge the agent discovers and applies repeatedly.
+
+## Why It Works
+
+Agents start each session with an empty context window. Without external persistence, the agent rediscovers the same facts — codebase conventions, recurring failure modes, domain-specific exceptions — on every session. Scoped memory works by injecting relevant prior knowledge into the context at session start, so the model reasons from accumulated state rather than ground zero. The OPENDEV study found this reduced redundant exploration by ~30% ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)) by eliminating re-discovery loops that otherwise repeat the same investigative steps. Scoping prevents cross-contamination: org-level policies stay separate from personal preferences, so one user's corrections don't override another's conventions.
+
+## When This Backfires
+
+Persistent memory introduces failure modes that an amnesiac agent avoids:
+
+- **Stale entries silently degrade output.** A correction that was accurate six months ago may now contradict a refactored API or updated convention. The agent applies it confidently because it has no way to know the context has changed.
+- **Contradictory entries produce unpredictable behavior.** When the same topic accumulates conflicting instructions across sessions — an updated rule added without removing the old one — the agent guesses which version is correct, producing inconsistent results.
+- **High-volume environments cause context pollution.** Agents operating across many domains or users can fill memory with low-signal entries that dilute retrieval quality and exceed token budgets.
+- **Shared-scope memory creates coordination problems.** In multi-agent systems, concurrent writes to shared project memory can introduce race conditions or leave stale artifacts visible after updates ([multi-agent memory challenges](https://arxiv.org/html/2603.10062v1)).
+
+Use memory only for stable, general, verified facts. Establish a curation cadence: review entries that haven't influenced behavior in several sessions and either revalidate or remove them.
 
 ## Anti-Patterns
 
@@ -131,3 +146,4 @@ The first two sections belong in the project `CLAUDE.md` (version-controlled, sh
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
 - [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
+- [Memory Reinforcement Learning](memory-reinforcement-learning.md)

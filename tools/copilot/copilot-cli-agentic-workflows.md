@@ -35,6 +35,8 @@ Copilot CLI implements a graduated permission model that controls what the agent
 | Granular deny | `--deny-tool 'TOOL(command)'` | Block specific tools; deny takes precedence over allow |
 | Full auto-approval | `--allow-all-tools` | Skip all permission prompts |
 
+The graduated model works because deny rules are evaluated after allow rules, giving operators a reliable veto layer — `--deny-tool` takes precedence over any matching `--allow-tool` for the same command, preventing allow-list creep from accidentally permitting destructive operations.
+
 For headless scripting, combine programmatic mode with tool restrictions:
 
 ```bash
@@ -54,7 +56,7 @@ Activated via `Shift+Tab`, [plan mode](../../workflows/plan-first-loop.md) restr
 
 ## Delegation to Cloud Agents
 
-The `/delegate` command dispatches work to the cloud-based coding agent for background execution. The agent works asynchronously via GitHub Actions, opens PRs for review while the developer continues locally ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)) [unverified]. `/resume` switches between local and remote sessions.
+The `/delegate` command dispatches work to the cloud-based coding agent for background execution. The agent works asynchronously via GitHub Actions, opens PRs for review while the developer continues locally ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)). `/resume` switches between local and remote sessions.
 
 ## Slash Commands
 
@@ -62,30 +64,51 @@ Copilot CLI organizes commands into five categories ([GitHub Blog: Cheat Sheet](
 
 ## Custom Agents in the CLI
 
-Custom agents defined via `.agent.md` files [unverified] are available across CLI, IDE, and the coding agent on github.com. The `/agent` command lists and selects available agents for the current session ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
+Custom agents are available across CLI, IDE, and github.com. The `/agent` command lists and selects available agents for the current session ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
 
-Agents can bundle specialized MCP tools for domain-specific tasks like security validation or team-specific code review [unverified].
+Agents can bundle specialized MCP tools for domain-specific tasks like security validation or team-specific code review.
 
 ## MCP in the Terminal
 
 Copilot CLI ships with the GitHub MCP server built in, enabling repository queries, issue lookups, and PR management without leaving the terminal ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
 
-Custom MCP servers are managed via `/mcp [show|add|edit|delete|disable|enable]`. Tool-level permission control applies: `--deny-tool 'My-MCP-Server(tool_name)'` [unverified] blocks specific MCP tools while keeping others accessible ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
+Custom MCP servers are managed via `/mcp [show|add|edit|delete|disable|enable]`. Tool-level permission control applies: `--deny-tool 'My-MCP-Server(tool_name)'` blocks specific MCP tools while keeping others accessible ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
 ## Code Review from the CLI
 
-As of March 2026, Copilot code review can be triggered directly from the `gh` CLI ([GitHub Changelog](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/)):
+As of March 2026, Copilot code review can be requested directly from the `gh` CLI ([GitHub Changelog](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/)):
 
 ```bash
-# Request Copilot code review on the current PR
-gh pr review --copilot
+# Add Copilot as a reviewer on the current PR
+gh pr edit --add-reviewer @copilot
 ```
 
-Combined with the [agentic code review architecture](../../code-review/agentic-code-review-architecture.md), CLI-triggered reviews run the full tool-calling pipeline — reading files, tracing dependencies, and evaluating architectural fit [unverified] — without leaving the terminal.
+Combined with the [agentic code review architecture](../../code-review/agentic-code-review-architecture.md), this triggers the Copilot code review pipeline without leaving the terminal.
 
 ## Session Management
 
-Auto-compaction compresses conversation at 95% context window capacity, enabling extended sessions without manual intervention. Manual compression via `/compact` [unverified] is available when needed ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
+Auto-compaction compresses conversation history at 95% context window capacity, enabling extended sessions without manual intervention ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)). Repository memory persists conventions and patterns learned across sessions.
+
+## Example
+
+Hardening a CI pipeline with minimal blast radius — use programmatic mode with scoped tool permissions so the agent can run tests and commit fixes but cannot push to remote or modify pipeline configuration:
+
+```bash
+copilot -p "Run the test suite, identify failing tests, and fix them" \
+  --allow-tool 'shell(npm test)' \
+  --allow-tool 'shell(git add *)' \
+  --allow-tool 'shell(git commit *)' \
+  --deny-tool 'shell(git push)'
+```
+
+The `--deny-tool` takes precedence over `--allow-tool`, so push is blocked even if a broader allow rule would otherwise permit it. For exploratory work, omit `-p` and use interactive mode with `Shift+Tab` plan mode first to validate the approach before granting any execution permissions.
+
+## When This Backfires
+
+- **`--allow-all-tools` outside containers** — grants full shell access; a prompt injection or hallucinated command can modify files, install packages, or push commits without review. Restrict to containerized CI environments where blast radius is bounded.
+- **Headless mode with underspecified prompts** — programmatic mode exits after the first attempt and cannot ask clarifying questions; ambiguous prompts produce partial or incorrect results with no opportunity for course correction.
+- **Context window exhaustion on large codebases** — auto-compaction at 95% capacity can lose earlier context that constrains later decisions; long refactoring sessions may contradict earlier choices made before compaction.
+- **`/delegate` latency mismatch** — cloud agent execution via GitHub Actions takes minutes to hours; delegating time-sensitive tasks introduces a latency gap that breaks flow if the developer expects synchronous completion.
 
 ## Key Takeaways
 
@@ -93,26 +116,20 @@ Auto-compaction compresses conversation at 95% context window capacity, enabling
 - `--allow-tool` / `--deny-tool` enables precise permission scoping for both modes
 - `/delegate` bridges local CLI work and async cloud execution
 - Plan mode (`Shift+Tab`) separates analysis from execution
-- `gh pr review --copilot` triggers agentic code review from the terminal
+- `gh pr edit --add-reviewer @copilot` requests agentic code review from the terminal
 - Programmatic mode with tool restrictions makes Copilot CLI viable for CI/CD
-
-## Unverified Claims
-
-- Authorization model table details (flag names and behavior descriptions) [unverified]
-- `/delegate` dispatches work to the cloud-based coding agent for background execution [unverified]
-- `--deny-tool 'My-MCP-Server(tool_name)'` blocks specific MCP tools [unverified]
-- Manual compression via `/compact` is available [unverified]
-- Custom agents defined via `.agent.md` files [unverified]
-- Agents can bundle specialized MCP tools for domain-specific tasks [unverified]
-- CLI-triggered reviews run the full tool-calling pipeline (reading files, tracing dependencies, evaluating architectural fit) [unverified]
 
 ## Related
 
 - [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md)
 - [Copilot Coding Agent](coding-agent.md)
+- [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md)
 - [Custom Agents and Skills](custom-agents-skills.md)
 - [MCP Integration](mcp-integration.md)
 - [Copilot Agent Mode](agent-mode.md)
+- [Agent HQ](agent-hq.md)
+- [Agent Mission Control](agent-mission-control.md)
+- [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
 - [CLI-IDE-GitHub Context Ladder](../../workflows/cli-ide-github-context-ladder.md)
 - [Cloud-Local Agent Handoff](../../workflows/cloud-local-agent-handoff.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)

@@ -51,7 +51,7 @@ The architect's real work is navigating corner cases: a regulatory exception tha
 
 ### Advertised capacity is not effective capacity
 
-Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is roughly 30--60% of advertised window size `[unverified]`.
+Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size — both studies show degradation begins well before the nominal limit is reached.
 
 Du et al. (2025) found performance drops **13.9--85%** as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381)). Better retrieval cannot fix the ceiling.
 
@@ -131,6 +131,16 @@ An enterprise architect is asked to design an identity and access management (IA
 
 None of these constraints appear in any document the AI could retrieve. The architect carries them from direct experience. The AI's output is technically sound for a greenfield deployment; it is wrong for this organization. Identifying the delta, reconstructing the correct approach, and negotiating the constraints with stakeholders is the architect's actual job -- and it requires context no prompt can supply.
 
+## When This Backfires
+
+The context-ceiling argument is weakest in three conditions:
+
+**Narrow, well-documented domains.** A financial institution with fully externalized regulatory requirements, machine-readable constraint files, and a tightly scoped architecture problem may fit sufficient context into a large window. The ceiling is real but its height varies with documentation quality and domain breadth.
+
+**Greenfield with no organizational history.** New projects lack the accumulated constraints — failed pilots, expired vendor contracts, political incidents — that make the ceiling binding. AI can handle genuine greenfield architecture more completely than the framing suggests; the ceiling tightens as organizations mature and accumulate history.
+
+**Rapidly expanding context windows.** Frontier models have moved from 4K to 1M tokens in three years. If that trend continues and retrieval quality improves proportionally, some tasks currently above the ceiling will fall below it. The ceiling is a present-day capability boundary, not a permanent one — though Du et al. (2025) show that length-induced degradation persists even at large windows, so the ceiling rises more slowly than raw token counts imply.
+
 ## Key Takeaways
 
 - AI hits a hard boundary when problems require more interconnected context than a window can hold
@@ -138,11 +148,6 @@ None of these constraints appear in any document the AI could retrieve. The arch
 - Effective context capacity is well below advertised size; attention degrades for mid-context information
 - Rubber-stamping AI architecture output creates more work and liability risk, not less
 - Expert skepticism about AI for architecture is an empirically grounded observation, not resistance to change
-
-## Unverified Claims
-
-- Kambhampati's "Polanyi's revenge" framing: accessed via summary only; exact phrasing not independently verified `[unverified]`
-- "30--60% of advertised window size": the percentage range does not appear in the cited source; general degradation is supported by Liu et al. and Chroma but the specific figure needs a source `[unverified]`
 
 ## Related
 

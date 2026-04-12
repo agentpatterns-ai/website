@@ -113,6 +113,7 @@ CORE_TOOLS = [stable_tool_schema(t) for t in load_core_tools()]
 ## Related
 
 - [Prompt Caching as Architectural Discipline](../context-engineering/prompt-caching-architectural-discipline.md)
+- [Prompt Cache Economics Across Providers](../context-engineering/prompt-cache-economics.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism](../tool-engineering/tool-minimalism.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md) — full documentation of deferred tool loading and the Tool Search Tool

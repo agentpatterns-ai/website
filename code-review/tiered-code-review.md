@@ -162,16 +162,22 @@ jobs:
 
 Pair this with the CODEOWNERS file from the implementation section above. Tier 1 PRs (tests, docs, config) merge after AI review and green CI. Tier 2 and 3 PRs wait for the designated human reviewers defined in CODEOWNERS.
 
+## When This Backfires
+
+Tiered review depends entirely on correct classification. Three conditions cause it to fail:
+
+- **Misclassified security code**: a database migration that adds a PII column, a config change that broadens CORS policy, or a utility function called from an auth path — none of these match a CODEOWNERS pattern for `/src/auth/`, so they route to Tier 1 and merge without human review.
+- **Cross-cutting changes**: a refactor touching both `tests/` (Tier 1) and `src/api/` (Tier 2) in one PR. If classification logic checks the *first* matching tier, the PR may under-escalate.
+- **AI confidence drift**: AI reviewers trained on earlier code patterns silently degrade on novel architectural styles. Without periodic accuracy audits, the Tier 1 gate erodes while appearing functional.
+
+Tiered review is not a substitute for threat modeling or dependency scanning — it reduces the volume reaching human reviewers, not the need for human judgment on the paths that matter.
+
 ## Key Takeaways
 
 - Tiered review is a risk-routing problem — classify code by criticality, then match review depth to risk
 - AI review runs on everything; human review is reserved for costly or irreversible mistakes
 - Layer CODEOWNERS + branch protection + automatic AI review to approximate tiered review on GitHub today
 - Severity-driven merge gates prevent critical findings from drowning in noise
-
-## Unverified Claims
-
-- Exact percentage improvement in review throughput from tiered AI-first review is not established in any source `[unverified]`
 
 ## Related
 
@@ -188,3 +194,5 @@ Pair this with the CODEOWNERS file from the implementation section above. Tier 1
 - [Predicting Reviewable Code](predicting-reviewable-code.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)

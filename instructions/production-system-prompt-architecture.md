@@ -97,11 +97,11 @@ Discrete blocks prevent rule conflicts — a compliance reviewer inspects the co
 
 ## Reasoning Meta-Instructions at Prompt Tail
 
-The prompt tail carries runtime-injected parameters — reasoning effort level, thinking mode, and max thinking budget `[unverified]`. Placing these at the tail is cache-optimal: the static prefix remains unchanged across sessions with different reasoning configurations.
+The prompt tail carries runtime-injected parameters — reasoning effort level and thinking mode configuration. Placing these at the tail is cache-optimal: the static prefix remains unchanged across sessions with different reasoning configurations.
 
 ## Cache Stability as Architectural Constraint
 
-Every choice above serves prompt prefix stability — "even a single-token difference can invalidate the cache from that token onward" ([Manus, context engineering](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)):
+Every choice above serves prompt prefix stability — Anthropic notes that prompt caching matches on an exact prefix, so any change to an earlier token invalidates all cached content from that point onward ([Anthropic, prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)):
 
 - **Static tool definitions with runtime masking** — changing tool lists breaks the cache
 - **Skills as pointers** — adding a new skill does not change the prompt prefix
@@ -147,10 +147,23 @@ A minimal production system prompt skeleton applying the patterns above:
 <reasoning_config effort="high" thinking="enabled" max_tokens="8192" />
 ```
 
-## Unverified Claims
+## When This Backfires
 
-- The exact reasoning-effort and thinking-mode parameter names and their injection mechanism at the prompt tail are visible in the leaked prompt but not publicly documented by Anthropic `[unverified]`
-- Whether the ~25-section count and XML tag naming conventions are consistent across other Anthropic product deployments (API, mobile, enterprise) or specific to the computer-use configuration `[unverified]`
+**Single deployment context.** The evidence base is one computer-use session capture. A mobile or API deployment may use fewer sections and different naming conventions — applying ~25 XML tags in a simpler deployment adds authoring overhead without benefit.
+
+**Source instability.** The leaked prompt is not a versioned API contract. Anthropic can change internal structure without notice; patterns reverse-engineered from captures may become stale or misleading as the product evolves.
+
+**Verbosity amplifies, not compresses.** XML tags add token overhead. For short prompts (under ~500 tokens), concern isolation via XML sections costs more tokens than it saves in cache hits. The economics flip only when sections are individually stable and the prompt is large enough that cache savings offset tag overhead.
+
+## Scope Notes
+
+The CL4R1T4S capture is a computer-use session prompt. The exact parameter names for reasoning effort and thinking mode at the prompt tail are visible in that capture but not publicly documented by Anthropic. The ~25-section count and XML tag naming conventions may be specific to the computer-use configuration rather than consistent across API, mobile, or enterprise deployments.
+XML-sectioned prompts impose structure that helps at scale but creates friction in simpler deployments:
+
+- **Section sprawl** — prompts with 25+ named sections become hard to audit; rules buried in obscure sections get ignored by operators and missed in code reviews
+- **Cache invalidation from reordering** — renaming or repositioning a section invalidates everything below it in the prefix cache; this makes refactoring expensive once the prompt reaches production scale
+- **Over-isolation** — separating concerns too finely can cause contradictions between sections that the model resolves inconsistently; a `<safety>` section that overrides `<code_generation>` without a defined precedence rule is a latent conflict
+- **Not needed at low scale** — for single-task agents or short prompts under ~2K tokens, XML structure adds syntax noise with no cache or attention benefit; flat prose with clear headings is preferable
 
 ## Sources
 
@@ -158,8 +171,7 @@ A minimal production system prompt skeleton applying the patterns above:
 - [Anthropic — Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — XML/Markdown section delineation, right-altitude instructions
 - [Anthropic — Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use) — Deferred tool loading pattern reducing context from 77K to 8.7K tokens
 - [Anthropic — Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) — Composable patterns and separation of concerns
-- [Manus — Context engineering for AI agents](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) — KV-cache optimization through prompt prefix stability
-- [Alex Lavaee — OpenAI agent-first codebase learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings) — Progressive disclosure via lean entry point with pointers
+- [Anthropic — Prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) — KV-cache mechanics: exact prefix matching and cache invalidation on token changes
 
 ## Related
 
@@ -173,3 +185,7 @@ A minimal production system prompt skeleton applying the patterns above:
 - [Instruction Polarity](instruction-polarity.md)
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Domain-Specific System Prompts](domain-specific-system-prompts.md)
+- [Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Critical Instruction Repetition](critical-instruction-repetition.md)
+- [Prompt Governance via PR](prompt-governance-via-pr.md)

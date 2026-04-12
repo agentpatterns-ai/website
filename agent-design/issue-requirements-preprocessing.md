@@ -17,13 +17,13 @@ aliases:
 
 ## The Problem: Agents Take Issues at Face Value
 
-Most coding agents treat the issue description as the task specification and immediately proceed to codebase exploration and patch generation [unverified]. This fails because real issues routinely contain:
+Most coding agents treat the issue description as the task specification and immediately proceed to codebase exploration and patch generation — the REAgent paper characterizes this as the default baseline behavior across the five agent systems it benchmarks against ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)). This fails because real issues routinely contain:
 
 - **Omissions** — missing reproduction steps, expected behavior, or environment details
 - **Ambiguities** — descriptions with multiple valid interpretations that lead to different patches
 - **Conflicts** — requirements that contradict each other or diverge from the actual codebase state
 
-The REAgent study ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) tested this hypothesis at scale: across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks using two LLMs, preprocessing issue descriptions into structured requirements improved average resolution rates by 17.40% compared to five baselines that used raw issue text as input.
+The REAgent study ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) tested this hypothesis at scale: across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770)) using two LLMs, preprocessing issue descriptions into structured requirements improved average resolution rates by 17.40% compared to five baselines that used raw issue text as input.
 
 ## The Preprocessing Approach
 
@@ -103,6 +103,15 @@ A developer files: "The user profile page crashes when the avatar is missing."
 
 The coding agent receives a specification, not a report. The resulting patch handles both `null` and empty string, adds a regression test, and resolves the issue on the first attempt.
 
+## When This Backfires
+
+Preprocessing adds latency and an extra model call per issue. The cost-benefit calculation inverts in several conditions:
+
+- **Well-specified issues**: When the issue already contains reproduction steps, environment details, and expected behavior, the preprocessing phase adds overhead without improving the input quality the coding agent receives.
+- **Simple single-file fixes**: Typo corrections, obvious off-by-one errors, and single-symbol renames don't benefit from a nine-attribute requirement schema — the overhead exceeds the gain.
+- **Low test-generation fidelity**: The RAS signal degrades when the codebase has sparse test infrastructure or when the issue domain produces tests with low correctness rates. At the low end of the 23–46% correctness range observed in the REAgent study, the RAS score may mislead the refinement loop, causing it to converge on worse requirements than the original.
+- **Non-Python / non-SWE-bench codebases**: The 17.40% improvement is measured on SWE-bench Python repositories. Generalization to other languages and issue structures remains unstudied; the structured schema may require adaptation for codebases with different conventions.
+
 ## Key Takeaways
 
 - Issue descriptions routinely omit or ambiguate information that agents need — preprocessing is not redundant
@@ -110,13 +119,6 @@ The coding agent receives a specification, not a report. The resulting patch han
 - Test-based quality signals (even imperfect ones) outperform model-based requirement scoring
 - The structured attribute schema (background, reproduction steps, expected/actual behavior, solution location) serves as a practical issue-writing checklist for developers
 - Iterative requirement refinement with counterexample tracking avoids repeating failed refinement strategies
-
-## Unverified Claims
-
-- Most coding agents treat issue descriptions as direct task inputs without preprocessing — the baseline claim is from the REAgent paper's framing of the problem space, not a systematic survey
-- Whether the 17.40% average improvement generalizes beyond SWE-bench-style Python repositories to other languages and issue types
-- Whether the 4-iteration default is optimal outside the benchmark or was tuned to its distribution
-- Cost per resolved issue at enterprise scale with larger, less structured codebases
 
 ## Related
 

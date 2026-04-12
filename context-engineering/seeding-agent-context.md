@@ -19,7 +19,7 @@ aliases:
 
 ## Why Seeding Works
 
-Agents explore codebases by reading files — what they find determines what they do. Unlike interactive prompts, seeded context is persistent and influences every session that touches that codebase region. This shifts [context management](context-engineering.md) from a per-session concern to codebase hygiene.
+Agents explore codebases by reading files — what they find shapes what they do. Seeded context is persistent: it influences every session that touches that codebase region, shifting [context management](context-engineering.md) from a per-session concern to codebase hygiene.
 
 ## The Durability Spectrum
 
@@ -34,34 +34,32 @@ graph TD
     E -->|lowest durability| F["TODO / FIXME markers"]
 ```
 
-Mechanical enforcement outperforms written guidelines because the agent encounters the constraint at the point of violation — the error message itself becomes context for the next attempt ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Mechanical enforcement outperforms written guidelines: the agent encounters the constraint at the point of violation and the error message becomes context for the next attempt ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ## Techniques
 
 ### Directory-Scoped Context Files
 
-The [AGENTS.md open standard](https://agents.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms. Agents read the nearest AGENTS.md in the directory tree, so subdirectory files override or extend project-level instructions.
+The [AGENTS.md open standard](https://agents.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms. Agents read the nearest AGENTS.md in the directory tree; subdirectory files override project-level instructions.
 
-Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with similar scoping: files walk up the directory tree and load on demand per subdirectory. The `.claude/rules/` directory adds path-scoped rules for matching files (e.g., `src/api/**/*.ts`). For repos using both standards, CLAUDE.md can import AGENTS.md.
+Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with the same scoping. The `.claude/rules/` directory adds path-scoped rules for matching files (e.g., `src/api/**/*.ts`).
 
 ### Progressive Disclosure Over Monoliths
 
-A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory and anything not in-context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)). The same principle applies to [progressive disclosure for agent definitions](../agent-design/progressive-disclosure-agents.md).
+A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../agent-design/progressive-disclosure-agents.md)).
 
 ### Inline Decision Comments
 
-Comments explaining *why* a decision was made prevent agents from reverting it:
+Comments explaining *why* a decision was made prevent agents from reverting it. Without such a comment, a refactoring agent has no signal the choice is intentional:
 
 ```typescript
 // We use optimistic updates here rather than waiting for the server response.
 // Reverting to pessimistic updates caused noticeable UI lag in user testing.
 ```
 
-Without the comment, a refactoring agent has no signal this is intentional.
-
 ### TODO and FIXME Markers
 
-Agents treat `TODO` and `FIXME` comments as actionable items [unverified — behaviour varies by tool and instruction set]. Placing a TODO at the exact location ensures the agent encounters it when editing nearby code.
+Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code — though whether agents treat these as actionable items varies by tool.
 
 ### Type Annotations
 
@@ -69,11 +67,11 @@ Complete type signatures eliminate agent guesswork about return types, parameter
 
 ### Example Files and Pattern Replication
 
-Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift without mechanical enforcement, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. However, agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ### Progress Files as Breadcrumbs
 
-Long-running agents maintain progress files (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic, "Effective Harnesses for Long-Running Agents"](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Long-running agents maintain progress files (e.g., `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## What to Seed vs. What to Prompt
 
@@ -85,7 +83,15 @@ Long-running agents maintain progress files (e.g., `todo.md`) that subsequent se
 | Type annotations and interfaces | One-off instructions |
 | Progress files for multi-session work | Session corrections |
 
-Seed durable information; prompt session-specific intent. See [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md).
+Seed durable information; prompt session-specific intent. See [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) for the boundary.
+
+## When This Backfires
+
+- **Stale breadcrumbs**: An AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
+- **Pattern replication**: Agents replicate existing code indiscriminately. A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
+- **Conflicting scopes**: Nested context files with contradictory instructions cause agents to apply the wrong scope — unpredictable and difficult to debug.
+
+Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
 
 ## Key Takeaways
 
@@ -94,11 +100,6 @@ Seed durable information; prompt session-specific intent. See [Discoverable vs N
 - Agents replicate existing patterns indiscriminately — good and bad examples both propagate.
 - Progress files and git history eliminate repeated discovery across sessions.
 - A lean entry-point file outperforms a monolithic instruction file.
-
-## Unverified Claims
-
-- Agents treat `TODO` and `FIXME` comments as actionable items [unverified] — behaviour varies by tool and instruction set
-- Strategic file naming improves agent navigation [unverified] — reasonable inference but no specific study
 
 ## Example
 

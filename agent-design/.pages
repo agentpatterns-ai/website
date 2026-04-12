@@ -34,6 +34,7 @@ nav:
       - beads-task-graph-agent-memory.md
       - cross-cycle-consensus-relay.md
       - episodic-memory-retrieval.md
+      - generative-agents-memory-stream.md
       - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
       - session-initialization-ritual.md
@@ -43,6 +44,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
+      - dspy-programmatic-prompt-optimization.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
       - goal-monitoring-progress-tracking.md

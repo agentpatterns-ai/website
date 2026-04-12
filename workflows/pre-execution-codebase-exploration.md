@@ -39,7 +39,7 @@ graph TD
 
 **Automated wrapper (pipeline mode).** CodeScout operates as a pre-execution wrapper on top of existing agent scaffolds without modifying them. The same pattern applies to any multi-agent system: add a lightweight pre-execution agent that analyzes the task and rewrites the problem statement before passing it to the main agent. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))
 
-Anthropic's harness engineering describes an equivalent pattern: an initializer agent creates a progress file and expands the original directive into granular, testable feature specs before any coding agents execute. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
+[Harness engineering](../agent-design/harness-engineering.md) describes an equivalent pattern: an initializer agent creates a progress file and expands the original directive into granular, testable feature specs before any coding agents execute. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 
 **Initializer agent for multi-session work.** For long-running tasks, the initializer agent writes an expanded feature spec to a persistent progress file. Each downstream agent reads this file rather than re-expanding the original directive. The expansion cost is paid once. ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents))
 

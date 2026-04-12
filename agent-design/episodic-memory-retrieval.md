@@ -18,6 +18,8 @@ aliases:
 
 ## Semantic vs. Episodic Memory
 
+Episodic memory retrieval gives an agent access to recorded problem-solving arcs -- the sequence of what was tried, what failed, and what worked the last time a similar problem appeared. Where standard semantic memory answers "what do I know about X?", episodic retrieval answers "what happened last time I encountered X?" -- surfacing the diagnostic path rather than isolated facts.
+
 Standard agent memory systems store facts or document embeddings. An agent remembers *that* the database uses UTC timestamps or *that* a particular API requires pagination. This is **semantic memory** -- context-free knowledge retrieval.
 
 **Episodic memory** stores sequences of events with outcomes: the agent encountered error X, tried approach A (failed because of Y), then tried approach B (succeeded because of Z). The narrative arc -- problem, attempts, resolution -- is the unit of storage, not isolated facts extracted from it.
@@ -30,7 +32,7 @@ Standard agent memory systems store facts or document embeddings. An agent remem
 | Temporal structure | None | Ordered steps with causal links |
 | Value signal | Relevance | Relevance + outcome (success/failure) |
 
-The distinction matters because recurring problems rarely need just the answer -- they need the *path* to the answer. An agent that recalls "last time I saw this stack trace, I tried patching the config first and it failed because the issue was in the dependency, then I pinned the version and it resolved" makes better first moves than one that only knows "this service uses pinned dependencies." [unverified]
+The distinction matters because recurring problems rarely need just the answer -- they need the *path* to the answer. An agent that recalls "last time I saw this stack trace, I tried patching the config first and it failed because the issue was in the dependency, then I pinned the version and it resolved" makes better first moves than one that only knows "this service uses pinned dependencies." Research on subtask-level memory for software engineering agents confirms that episode-based retrieval outperforms instance-level baselines across diverse backbones on SWE-bench Verified ([Structurally Aligned Subtask-Level Memory, arxiv 2602.21611](https://arxiv.org/abs/2602.21611)).
 
 ## Episode Structure
 
@@ -74,17 +76,17 @@ Index episodes by the situational context -- which part of the codebase, which t
 
 ### Outcome-Based Filtering
 
-Not all episodes are equally useful. Episodes where the first attempt succeeded provide less learning signal than episodes where early attempts failed. Prioritize retrieving episodes with **failed intermediate attempts** followed by eventual success -- these contain the diagnostic reasoning that prevents repeating mistakes. [unverified]
+Not all episodes are equally useful. Episodes where the first attempt succeeded provide less learning signal than episodes where early attempts failed. Prioritize retrieving episodes with **failed intermediate attempts** followed by eventual success -- these contain the diagnostic reasoning that prevents repeating mistakes. Dead-ends are the primary information source: knowing that approach A was tried and failed for reason Y is exactly what prevents the agent from repeating it.
 
 ## Temporal Awareness
 
 Episodes are not equally relevant over time. Three temporal factors affect retrieval quality:
 
-**Recency weighting.** Recent episodes are more likely to reflect current system state. An episode from yesterday about a flaky test is more relevant than one from six months ago about the same test file, because the codebase has changed. [unverified]
+**Recency weighting.** Recent episodes are more likely to reflect current system state. An episode from yesterday about a flaky test is more relevant than one from six months ago about the same test file, when the codebase has changed substantially. Score retrieval candidates with a recency multiplier to surface fresher episodes first.
 
-**Relevance decay.** Episodes about resolved issues (dependency upgraded, API deprecated, architecture changed) should decay in retrieval priority. Without decay, stale episodes mislead the agent into applying fixes for problems that no longer exist. [unverified]
+**Relevance decay.** Episodes about resolved issues (dependency upgraded, API deprecated, architecture changed) should decay in retrieval priority. Without decay, stale episodes mislead the agent into applying fixes for problems that no longer exist. Decay can be implemented via explicit invalidation on known events (e.g., a major version bump) or via time-based scoring reduction.
 
-**Episode boundary detection.** Determining where one episode ends and another begins in a continuous interaction stream requires heuristics: topic shifts, explicit task transitions, or time gaps between interactions. Poor boundary detection produces episodes that conflate multiple unrelated problems, degrading retrieval precision. [unverified]
+**Episode boundary detection.** Determining where one episode ends and another begins in a continuous interaction stream requires heuristics: topic shifts, explicit task transitions, or time gaps between interactions. Poor boundary detection produces episodes that conflate multiple unrelated problems, degrading retrieval precision. Heuristics include task-transition signals from the orchestrator, idle-time thresholds, or LLM-scored topic divergence.
 
 ## Practical Implementation
 
@@ -117,7 +119,7 @@ Use them to inform your approach, but adapt to current context."
 
 Episodic memory requires a deliberate extraction step. Without it, problem-solving narratives evaporate at session end. Two approaches:
 
-- **Agent self-summarization**: the agent writes its own episode summary before session close. Fast, but prone to omitting failures the agent does not recognize as informative. [unverified]
+- **Agent self-summarization**: the agent writes its own episode summary before session close. Fast, but tends to omit failures -- agents optimize for task completion and treat dead-ends as noise rather than signal.
 - **Post-hoc extraction**: a separate process (or second LLM call) analyzes the full session transcript and extracts episodes. More thorough, but adds latency and cost.
 
 ## Example
@@ -184,12 +186,6 @@ episode_store.upsert(
 - Abstract at storage time: strip instance-specific details to retain transferable reasoning patterns
 - Index by trigger, context, and outcome; apply temporal weighting and prefer failed-then-succeeded episodes
 - Limit to 1-3 retrieved episodes per task; the technique compounds over time for stable codebases
-
-## Unverified Claims
-
-- Episodic memory retrieval produces better first moves on recurring problems than semantic-only recall [unverified]
-- Failed-then-succeeded episodes provide higher learning signal than first-attempt successes [unverified]
-- Recency weighting, relevance decay, and episode boundary detection improve retrieval quality [unverified]
 
 ## Related
 

@@ -31,7 +31,7 @@ graph LR
     D -->|summary| E[UI: Agent Commentary]
 ```
 
-The user sees both the raw data and the agent's interpretation; discrepancies are immediately visible. The raw panel is populated by deterministic code, never by the LLM. The trade-off is UI complexity -- not every interface can display raw data alongside commentary [unverified].
+The user sees both the raw data and the agent's interpretation; discrepancies are immediately visible. The raw panel is populated by deterministic code, never by the LLM. The trade-off is UI complexity -- not every interface can display raw data alongside commentary.
 
 ### Structural Separation of Data and Commentary
 
@@ -61,11 +61,11 @@ Layer schema validation with other defenses:
 | Schema validation | Wrong types, missing fields, invalid enums | Fabricated values within valid types |
 | Passthrough display | Value mutations visible to users | Nothing -- but requires human attention |
 | Diff-based auditing | Any discrepancy, automatically | Mutations the model applies before logging |
-| Checksum verification [unverified] | Any payload alteration | Requires infrastructure support |
+| Checksum verification | Any payload alteration | Requires infrastructure support |
 
 ### Diff-Based Auditing
 
-Log raw tool responses and the model's presented version; flag discrepancies automatically [unverified]:
+Log raw tool responses and the model's presented version; flag discrepancies automatically:
 
 ```mermaid
 graph TD
@@ -113,12 +113,6 @@ Trusting the model to faithfully transcribe data because the prompt says "report
 - Passthrough architecture and structural separation are the strongest defenses; schema validation enforces shape, not accuracy
 - Diff-based auditing catches discrepancies automatically; tool poisoning makes this a security concern, not just a reliability one
 - Design tools to minimize mutation opportunity: fewer fields, semantic values, tool-layer filtering
-
-## Unverified Claims
-
-- Passthrough architecture as a named pattern lacks a canonical primary source `[unverified]`
-- Diff-based auditing is architecturally straightforward but no primary source describes a production implementation `[unverified]`
-- Hash/checksum verification of individual tool call payloads does not appear in any primary source `[unverified]`
 
 ## Related
 

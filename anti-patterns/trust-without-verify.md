@@ -24,7 +24,7 @@ The mistake is using output quality as a proxy for accuracy. An agent can produc
 
 ## Why It Happens
 
-Fluency, formatting, and confidence are mistaken for correctness. Agents are trained to produce coherent responses — a separate objective from accuracy. The correlation between surface polish and correctness is weak [unverified].
+Fluency, formatting, and confidence are mistaken for correctness. Agents are trained to produce coherent responses — a separate objective from accuracy. The correlation between surface polish and correctness is weak — fluent explanations systematically increase user confidence without reliably improving accuracy ([Bhatt et al., 2025](https://arxiv.org/abs/2604.03237)).
 
 Agents are most dangerous when almost right. A fully wrong answer is easy to catch; a mostly correct answer with one subtle error propagates undetected.
 
@@ -38,6 +38,16 @@ Verify independently — not by re-reading the output, but by checking against e
 - **Review the diff.** Diffs are easier to verify than full artifacts.
 
 If something can be checked programmatically, check it automatically. Linters, type checkers, and test suites are verification, not overhead.
+
+## When This Backfires
+
+Constant verification has a cost. Over-verifying introduces its own failure modes:
+
+- **Verification theater**: Running tests that don't cover the actual change, then treating a passing test suite as ground truth. The motion of verification without the substance.
+- **Alert fatigue**: Automated checks that fire too often train reviewers to dismiss failures. When every warning is noise, real errors get approved.
+- **Bottleneck on low-stakes output**: Applying the same scrutiny to a one-off throwaway script as to production auth code destroys the productivity benefit of AI assistance. Reserve manual verification for high-stakes, irreversible, or security-critical outputs.
+
+The fix is calibrated verification, not universal paranoia.
 
 ## Progressive Trust
 
@@ -73,10 +83,6 @@ The test catches the missing `+` in the character class. The developer asks the 
 - "Looks right" is not a verification method
 - Output fluency is independent of correctness; agents are most dangerous when almost right
 - Automate verification; make it the default, not the exception
-
-## Unverified Claims
-
-- Weak correlation between surface polish and underlying correctness `[unverified]`
 
 ## Related
 

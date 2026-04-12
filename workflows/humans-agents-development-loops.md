@@ -97,6 +97,19 @@ Moving to autonomous requires a track record. Start interactive. Promote specifi
 
 At scale, this starts to resemble humans-outside-the-loop again — but the difference is that the harness was engineered deliberately, not abandoned. The system is not just "good enough"; it is capable of catching and correcting its own failure modes.
 
+## When This Backfires
+
+On-the-loop is not a universal remedy. The Microsoft Azure SRE Agent team reported that heavy harness scaffolding — pre-written queries, curated tools, hand-built sub-agents for known failure modes — produced high-performing benchmarks but a low ceiling: "every prewritten query was a place we told the model not to think, every curated tool was a decision made on its behalf." Their breakthrough came from *removing* scaffolding and giving the agent a structured filesystem plus context hooks instead ([source](https://techcommunity.microsoft.com/blog/appsonazureblog/the-agent-that-investigates-itself/4500073)). Harness investment is most productive when it encodes verifiable constraints (tests, linters, architectural rules) and least productive when it pre-computes the agent's answer space.
+
+Conditions under which on-the-loop is worse than the alternative:
+
+- **Novel problem classes**: if failure modes are not yet recognized, any rule encoded in the harness is a guess — agents with general tools and freedom to explore outperform agents steered by premature guardrails
+- **Rapidly shifting model capability**: a harness tuned for last quarter's model may under-use this quarter's model; the maintenance cost of re-tuning can exceed the cost of direct review
+- **Small teams or short-lived projects**: harness investment amortizes over many agent runs; one-off work or exploratory spikes rarely recoup the upfront cost
+- **Opaque or bespoke integrations**: when harness tooling hides the underlying system from the agent (custom wrappers around APIs, pre-digested context), the agent loses the ability to reason about edge cases the wrapper did not anticipate
+
+The signal to watch: if harness maintenance is consuming more human attention than the artefact review it replaced, the investment has inverted.
+
 ## Key Takeaways
 
 - Software delivery nests two loops: the why loop (idea → working software, human-owned) and the how loop (artefacts → working software, increasingly agent-owned)
@@ -104,6 +117,7 @@ At scale, this starts to resemble humans-outside-the-loop again — but the diff
 - Three human positioning modes exist: outside (delegate the how loop), in (gate each step), on (engineer the harness)
 - "In the loop" scales poorly: agent throughput exceeds human review capacity; use gates only for irreversible or high-impact steps
 - "On the loop" compounds quality: each harness improvement applies to every future agent run, not just the current artefact
+- Harness investment inverts when the scaffolding pre-computes the agent's answer space — encode constraints, not decisions
 - The agentic flywheel extends "on the loop" by having agents propose harness improvements — the end state is a system that improves itself within human-defined bounds
 
 ## Related

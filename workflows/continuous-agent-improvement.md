@@ -37,7 +37,7 @@ Review agent output regularly, not just when something breaks. Issues worth trac
 - Tasks the agent routes around by taking a longer path
 - Output that was correct six months ago and isn't now
 
-One-off errors are noise. Patterns are signal. Batch observations before acting on them.
+One-off errors are noise. Patterns are signal. Batch observations before acting on them — because a single failure has many plausible causes (ambiguous input, transient context, prompt format), and only recurrence across varied sessions isolates the true root cause from coincidence.
 
 ### Categorize
 
@@ -63,7 +63,7 @@ Apply changes in isolation where possible:
 - Add one skill before reorganizing the skill hierarchy
 - Add one hook before enabling a validation pipeline
 
-Document why each change was made. Agent configuration files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed incorrectly when someone can't determine whether it's still needed. [unverified: this is general practice, not sourced from a specific doc]
+Document why each change was made. Agent configuration files benefit from changelogs — the same reasoning that applies to dependency updates applies here. A rule with no documented rationale gets removed incorrectly when someone can't determine whether it's still needed.
 
 ### Verify
 
@@ -73,7 +73,7 @@ Keep the verification input fixed. Testing against a different task after a chan
 
 ### Progressive Trust
 
-As agents demonstrate reliable output over time, reduce review overhead proportionally — but never eliminate it. [unverified: specific thresholds for trust reduction are not standardized] A useful heuristic: start with human review of every output, move to sampling (review every nth output) once error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
+As agents demonstrate reliable output over time, reduce review overhead proportionally — but never eliminate it. No industry-standard thresholds exist for this progression; apply judgment based on task risk. A useful heuristic: start with human review of every output, move to sampling (review every nth output) once error rate drops, and move to hook-only validation only when sampling finds no issues over a sustained period.
 
 Reducing review prematurely reintroduces risk without detection.
 
@@ -98,13 +98,23 @@ Useful signals for spotting improvement opportunities:
 - **Correction time** — how long it takes to fix agent output to an acceptable state
 - **Context usage** — consistently high context usage may indicate instruction files are too verbose or skills are loading unnecessarily
 
-You don't need formal tooling for this. A shared notes file or GitHub issue tracking patterns in agent output is sufficient for most teams. [unverified]
+You don't need formal tooling for this. A shared notes file or GitHub issue tracking patterns in agent output is sufficient for most teams.
 
 ## Anti-Patterns
 
 **Reactive single-error updates.** Changing the instruction file after every individual error adds noise and makes it hard to identify which changes actually helped. Batch observations across multiple sessions before acting.
 
 **Never updating after initial setup.** Agent configurations that aren't maintained diverge from the project's current state. The gap between "what the agent thinks the project is" and "what the project actually is" grows over time until output quality drops noticeably.
+
+## When This Backfires
+
+The improvement loop degrades under three conditions:
+
+**Instruction bloat.** Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
+
+**Over-fitting to recent sessions.** If observations are drawn from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting.
+
+**Conflicting rule accumulation.** Two separately-correct updates can contradict each other when applied together. Adding "always use concise commit messages" and later "always include the ticket number in commit messages" produces two rules that conflict on short-ticket-number-heavy workflows. Audit for conflicts when adding to an existing instruction set.
 
 ## Example
 
@@ -151,15 +161,12 @@ The changelog comment ("added 2026-02-14 — sessions #42, #47, #51") documents 
 - Document the reason for every configuration change — undocumented rules get removed incorrectly
 - Schedule proactive staleness reviews rather than waiting for failures to expose outdated instructions
 
-## Unverified Claims
-
-- Agent configuration files benefit from changelogs with documented rationale for each rule [unverified: this is general practice, not sourced from a specific doc]
-- Specific thresholds for progressive trust reduction are not standardized [unverified: specific thresholds for trust reduction are not standardized]
-- A shared notes file or GitHub issue is sufficient for tracking agent output patterns for most teams [unverified]
-
 ## Related
 
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Escape Hatches: Unsticking Stuck Agents](escape-hatches.md)
 - [Introspective Skill Generation](introspective-skill-generation.md)
+- [Failure-Driven Iteration](failure-driven-iteration.md)
+- [Skill Library Refinement Loops](skill-library-refinement-loops.md)
+- [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)

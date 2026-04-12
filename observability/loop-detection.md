@@ -17,33 +17,33 @@ aliases:
 
 ## The Micro-Loop Problem
 
-Agents can enter micro-loops: edit a file, run tests, observe failure, edit the same file, observe the same failure, repeat. Without intervention, the agent exhausts its context window retrying an approach that does not work. The pattern is invisible from a prompt perspective — each iteration looks like forward progress to the agent.
+Agents enter micro-loops: edit a file, run tests, observe failure, edit the same file, observe the same failure, repeat. Without intervention, the agent exhausts its context window retrying an approach that does not work. Each iteration looks like forward progress from the inside.
 
-Loop detection middleware monitors edit frequency and intervenes when repetition crosses a threshold. Per [LangChain's deep agent benchmark post](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/), this is one of the key harness-level interventions that improve agent reliability without model changes.
+Loop detection middleware watches edit frequency and intervenes when repetition crosses a threshold — one of the harness-level interventions [LangChain credits](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) for moving their agent from rank 30 to rank 5 on Terminal Bench 2.0 without changing the underlying model.
 
 ## Detection Mechanism
 
-Track a count of edits per file path within the session. When the same file is edited beyond a threshold (for example, five times), flag it as a potential loop [unverified].
+Track edits per file path within the session. When the same file is edited beyond a configured threshold, flag it as a potential loop. LangChain's `LoopDetectionMiddleware` takes this shape, adding context like "consider reconsidering your approach" after N edits to the same file, with N left to the operator to tune ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 On detection:
 
-1. Inject a prompt nudge into the agent's context: "You have edited `{file}` N times without passing tests. Consider whether a different approach is needed."
-2. Optionally surface the last N test failure messages alongside the nudge, so the agent has full context when reconsidering.
+1. Inject a prompt nudge: "You have edited `{file}` N times without passing tests. Consider whether a different approach is needed."
+2. Optionally surface the last N test failure messages alongside the nudge so the agent is not reconsidering blind.
 
-The threshold is configurable. Five edits is a reasonable starting point; lower thresholds increase false positives, higher thresholds delay intervention.
+There is no published canonical threshold; lower values interrupt legitimate iterative refinement, higher values let more context burn before the nudge fires.
 
 ## What Counts as Progress
 
-Edit count alone is an imperfect signal. A more precise detector tracks whether test outcomes improve between edits:
+Edit count alone is an imperfect signal. Where test output is available, track whether failures decrease between edits:
 
-- Same file edited, tests still failing at the same rate → likely loop
-- Same file edited, test failures decreasing → iterative refinement, not a loop
+- Same file edited, failures steady → likely loop
+- Same file edited, failures decreasing → iterative refinement
 
-Where test output is available, incorporate it into the detection logic. Where it is not, edit count is the fallback signal.
+Where test output is not available, edit count is the fallback.
 
 ## Implementation
 
-Loop detection runs as middleware monitoring tool calls — specifically Edit, Write, and Bash (for test execution). A PostToolUse hook is a natural implementation point:
+Loop detection runs as middleware on Edit, Write, and Bash (for test execution). A PostToolUse hook is a natural implementation point:
 
 ```
 PostToolUse(Edit | Write):
@@ -52,13 +52,13 @@ PostToolUse(Edit | Write):
     inject nudge prompt
 ```
 
-The nudge message should state the observation factually, avoid prescribing a specific alternative, and include recent failure context so the agent is not reasoning blind.
+Nudges should state the observation factually, avoid prescribing a specific alternative, and include recent failure context so the agent is not reasoning blind.
 
 ## Doom-Loop Detection
 
-Edit-count tracking catches repetitive editing but misses a distinct failure mode: the agent making the *same tool call* and receiving the *same error* repeatedly. Doom-loop detection targets this identical-failure pattern.
+Edit-count tracking misses a distinct failure mode: the agent making the *same tool call* and receiving the *same error* repeatedly. Doom-loop detection targets this identical-failure pattern.
 
-In the OPENDEV agent, doom-loop detection runs inside the decision/dispatch phase of each iteration ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). The detector compares the current tool call and error against recent history. On repeated identical failures, it stops iteration entirely rather than injecting a nudge — identical failures will not self-resolve.
+In the OPENDEV agent, doom-loop detection runs inside the decision/dispatch phase of each iteration, comparing the current tool call and error against recent history ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). On repeated identical failures, it stops iteration entirely rather than nudging — identical failures will not self-resolve.
 
 ## Iteration Cap
 
@@ -115,6 +115,17 @@ Register in `.claude/settings.json`:
 }
 ```
 
+## When This Backfires
+
+Loop detection is not free. Across 220 instrumented agent runs, only half of 12 automated loop interventions actually reduced their target signal; one generated 13x more signals than it suppressed by triggering its own detector ([boucle2026, 2026](https://dev.to/boucle2026/how-to-tell-if-your-ai-agent-is-stuck-with-real-data-from-220-loops-4d4h)). Failure modes to watch for:
+
+- **False positives on legitimate iteration**: tight refactors on a single file look identical to an edit loop from a counter's view. Thresholds tuned for loops interrupt focused iteration.
+- **Nudge pollution**: every injected nudge consumes context the agent could use for code, and on agents already near the context limit it accelerates the failure it was meant to prevent.
+- **Detector-on-detector amplification**: if one layer fires on output another produces, signals multiply instead of settling.
+- **Problems no nudge can fix**: missing requirements or wrong architecture encode a human decision; no threshold fixes them.
+
+Measure whether a specific intervention reduces the signal it targets, and remove ones that do not.
+
 ## Key Takeaways
 
 - Track edit count per file path within a session; flag when a threshold is exceeded
@@ -122,10 +133,7 @@ Register in `.claude/settings.json`:
 - Doom-loop detection catches identical tool-call/error pairs and terminates iteration
 - Three layers: edit-count tracking, doom-loop detection, iteration cap
 - Distinguish from the Ralph Wiggum Loop: loop detection is intra-session, not cross-session
-
-## Unverified Claims
-
-- Five edits as a reasonable starting threshold for loop detection [unverified]
+- Measure intervention effectiveness — roughly half of automated loop responses do not help or actively worsen outcomes ([boucle2026, 2026](https://dev.to/boucle2026/how-to-tell-if-your-ai-agent-is-stuck-with-real-data-from-220-loops-4d4h))
 
 ## Related
 

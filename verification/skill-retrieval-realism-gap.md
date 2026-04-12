@@ -27,7 +27,7 @@ Performance degraded consistently along each axis. When all three combined — a
 
 ## The Retrieval Tax
 
-As the skill pool grows, retrieval precision falls even with state-of-the-art embedding-based retrieval. The agent receives a skill that partially overlaps with the task rather than one designed for it. A skill written for "deploying a Python Flask app to AWS ECS" retrieved for a "deploy a FastAPI service to AWS ECS" query contains correct structural knowledge but wrong specifics — environment variables, container definitions, health check paths. The agent uses it anyway, applying the wrong details with misplaced confidence.
+As the skill pool grows, retrieval precision falls even with state-of-the-art embedding retrieval. The agent receives a skill that partially overlaps with the task rather than one designed for it. A skill written for "deploying a Python Flask app to AWS ECS" retrieved for a "deploy a FastAPI service to AWS ECS" query contains correct structural knowledge but wrong specifics — environment variables, container definitions, health check paths. The agent uses it anyway with misplaced confidence.
 
 ```mermaid
 graph TD
@@ -39,17 +39,17 @@ graph TD
     D -->|Refinement applied| G[Partial performance recovery]
 ```
 
-The degradation is not gradual: precision drops faster than pool size grows because the density of near-duplicates and misleading near-matches increases with scale.
+The degradation is not gradual: precision drops faster than pool size grows because near-duplicate and misleading near-match density increases with scale.
 
 ## Query-Specific Skill Refinement
 
 When the initially retrieved skill is relevantly related but not precisely matched, refining it to the specific query before injecting it into context recovers a substantial portion of the performance lost to retrieval imprecision. [Source: [arxiv.org/abs/2604.04323](https://arxiv.org/abs/2604.04323)]
 
-The technique prompts the agent (or a separate refinement step) to adapt the retrieved skill to the actual query — stripping irrelevant sections, substituting correct specifics, and surfacing the relevant portions — before the main agent uses it. The result is a task-specific skill synthesized from a general retrieved one. [unverified — implementation details would be in the paper]
+The technique adapts the retrieved skill to the actual query — stripping irrelevant sections, substituting correct specifics, and surfacing the relevant portions — before the main agent uses it. The result is a task-specific skill synthesized from a general retrieved one. Full implementation details are in the paper and the companion repository at [github.com/UCSB-NLP-Chang/Skill-Usage](https://github.com/UCSB-NLP-Chang/Skill-Usage).
 
 Validation on Terminal-Bench 2.0 showed Claude Opus 4.6 pass rate improving from 57.7% to 65.5% when query-specific refinement was applied, confirming the technique transfers to real agentic task settings beyond the study's primary benchmarks. [Source: [arxiv.org/abs/2604.04323](https://arxiv.org/abs/2604.04323)]
 
-**The technique has a floor**: refinement cannot recover performance when retrieval quality is very poor. If the retrieved skill is unrelated to the query, there is nothing to refine. Retrieval quality sets the ceiling; refinement works within that ceiling.
+**The technique has a floor**: if the retrieved skill is unrelated to the query, there is nothing to refine. Retrieval quality sets the ceiling; refinement works within it.
 
 ## When to Apply Refinement
 
@@ -61,15 +61,23 @@ Validation on Terminal-Bench 2.0 showed Claude Opus 4.6 pass rate improving from
 
 The threshold between "moderate" and "low" precision is task-dependent. A practical check: if the retrieved skill's title and first paragraph are relevant to the query, refinement is worth applying. If neither is relevant, skip.
 
+## When This Backfires
+
+Refinement performs worse than direct injection in three conditions:
+
+1. **High-precision retrieval**: small, curated pools already produce precise matches — refinement adds latency with no accuracy gain.
+2. **Very low retrieval quality**: when the retrieved skill shares no structural overlap with the query, refinement has nothing to work with and degrades the result. The table above marks this condition.
+3. **Latency-sensitive tasks**: refinement requires an additional LLM inference pass; for interactive tasks the extra round-trip may exceed acceptable response budgets.
+
 ## Practical Implications
 
-**Re-evaluate skill libraries against realistic retrieval.** If your eval suite provides one curated skill per test task, you are measuring an upper bound, not expected production performance. Re-run evals with retrieval from the full collection to get an honest number.
+**Re-evaluate skill libraries against realistic retrieval.** If your eval suite provides one curated skill per test task, you are measuring an upper bound. Re-run evals with retrieval from the full collection to get an honest number.
 
-**Measure retrieval precision independently.** Track what fraction of retrievals are "good enough to refine" vs. "irrelevant." This metric predicts where you will recover with refinement and where you will not.
+**Measure retrieval precision independently.** Track what fraction of retrievals are "good enough to refine" vs. "irrelevant." This metric predicts where refinement recovers performance and where it cannot.
 
-**Apply refinement as a preprocessing step.** For Claude Code sub-agents, this means a dedicated refinement agent or prompt stage that adapts the retrieved `.md` skill file to the current task before the main agent runs. The refinement step is short — it operates on the skill text, not the full codebase.
+**Apply refinement as a preprocessing step.** For Claude Code sub-agents, a dedicated refinement prompt stage adapts the retrieved `.md` skill file to the current task before the main agent runs — it operates on skill text, not the full codebase.
 
-**Treat skill collection size as a retrieval cost.** Larger skill collections require better retrieval to deliver the same precision. A 500-skill collection with 90% retrieval precision outperforms a 5,000-skill collection with 60% retrieval precision for most tasks.
+**Treat skill collection size as a retrieval cost.** A 500-skill collection with 90% retrieval precision outperforms a 5,000-skill collection with 60% precision for most tasks.
 
 ## Example
 
@@ -91,8 +99,3 @@ The pattern this demonstrates: idealized eval gains disappear in production retr
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — use realistic, telemetry-derived benchmarks rather than synthetic setups
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — measure final task success to detect skill retrieval failures that do not show in trajectory logs
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — report consistency across trials to surface flakiness introduced by variable retrieval quality
-
-## Unverified Claims
-
-- The 34,000-skill collection was drawn from real-world skill repositories; the exact provenance is stated as "real-world skills" in the paper but the specific source is not detailed in the abstract [unverified]
-- The query-specific refinement implementation involves prompting an LLM to adapt the retrieved skill text to the query before injection; the exact prompt format is in the paper [unverified]

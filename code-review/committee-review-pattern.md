@@ -41,9 +41,13 @@ graph TD
 
 ## Why Multiple Reviewers Beat Self-Review
 
-A single agent reviewing its own output exhibits confirmation bias — it agrees with decisions it already made. Splitting implementer and reviewer into separate agents with separate prompts removes this bias. Splitting reviewers by domain (correctness, style, security, test coverage) ensures each lens gets full attention rather than being diluted across competing concerns [unverified].
+A single agent reviewing its own output exhibits confirmation bias — it agrees with decisions it already made. Splitting implementer and reviewer into separate agents with separate prompts removes this bias. Splitting reviewers by domain (correctness, style, security, test coverage) narrows each reviewer's scope so the full context window and attention is applied to a single dimension rather than spread across competing concerns.
 
 The iterative loop — implement → review → fix → re-review — mirrors the human PR cycle. Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
+
+### Why It Works
+
+The mechanism is attentional narrowing combined with role-induced perspective shift. Research on LLM peer-review simulation ([EMNLP 2024](https://aclanthology.org/2024.emnlp-main.70)) shows that prompting agents with distinct reviewer personas reliably shifts which defects they surface — a security-scoped reviewer activates different reasoning pathways than a correctness-scoped one given the same diff. Running them in parallel means their error populations are largely non-overlapping; the committee catches defects that any single reviewer — or the implementer itself — would miss because no one reviewer's attention is split across competing concerns.
 
 ## Reviewer Design
 
@@ -58,6 +62,15 @@ Reviewers run in parallel. The orchestrator waits for all verdicts before aggreg
 ## Loop Termination
 
 Set a maximum round limit — two to three rounds covers most cases. If the implementer cannot satisfy all reviewers within the limit, escalate to human review. Unresolved loops signal underspecified tasks or conflicting reviewer criteria.
+
+## When This Backfires
+
+The committee pattern adds cost, latency, and orchestration complexity that can outweigh its benefits in specific conditions:
+
+- **Low-risk or trivial changes** — typo fixes, config tweaks, and one-liners rarely benefit from multi-reviewer overhead. A single scoped reviewer or no agent review costs less and finishes faster.
+- **Misaligned reviewer criteria** — when two reviewers evaluate overlapping dimensions (e.g., both correctness and security flag the same auth logic from different angles), the orchestrator receives contradictory feedback that is harder to act on than a single consolidated review.
+- **High-frequency iteration loops** — if the implementer generates many small revisions, running three or more reviewers per iteration multiplies token cost and latency at every turn; reviewers should be reduced or consolidated until the implementation stabilizes.
+- **Underspecified tasks** — if the original task lacks clear acceptance criteria, adding reviewers multiplies the surface area for divergent verdicts. Reviewers will FAIL for different reasons across rounds with no convergence; address task specification before scaling reviewer count.
 
 ## Cross-Model Adversarial Review
 
@@ -130,10 +143,6 @@ else:
 
 Each reviewer receives only the diff, not prior verdicts, so opinions are independent. The orchestrator merges issue lists by line number and deduplicates overlapping findings before sending consolidated feedback to the implementer.
 
-## Unverified Claims
-
-- Splitting reviewers by domain surface area ensures each lens is applied with full attention `[unverified]`
-
 ## Related
 
 - [Task-Specific vs Role-Based Agents](../agent-design/task-specific-vs-role-based-agents.md)
@@ -154,3 +163,5 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [PR Description Style as a Lever](pr-description-style-lever.md)
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive rule extraction to reduce noise across review rounds
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical data on how reviewer composition affects merge outcomes

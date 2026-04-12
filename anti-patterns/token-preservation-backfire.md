@@ -37,9 +37,15 @@ flowchart LR
 
 ## The Mechanism
 
-System-level instructions can override user-level task requests. When token preservation is framed as a system directive, the efficiency constraint takes precedence over the user's actual objective. The agent is not being lazy -- it is faithfully following an instruction that conflicts with the task.
+System-level instructions override user-level task requests. When token preservation is a system directive, the efficiency constraint takes precedence over the user's objective — the agent is not being lazy, it is faithfully following a conflicting instruction.
 
-Any instruction that frames work as a *cost to be minimised* (rather than a *goal to be achieved*) risks reducing agent ambition. Whether this generalises across frontier models is unclear `[unverified]`.
+Any instruction framing work as a *cost to be minimised* risks reducing agent ambition. The effect is most documented for long-horizon coding agents; evidence for other task types is limited to a small number of practitioner reports.
+
+## When This Applies
+
+The failure mode is specific to long-horizon agent tasks with tool use — coding agents and file-system tasks where the agent chooses whether to explore or continue. In these contexts, the efficiency constraint directly competes with task completion.
+
+Brevity framing is legitimate for conversational assistants, summarisation pipelines, and single-turn tasks without tool use — scenarios where the model has no opportunity to do *less work*.
 
 ## Mitigation
 
@@ -51,13 +57,13 @@ Any instruction that frames work as a *cost to be minimised* (rather than a *goa
 | "Minimise tool calls" | "Use the tools needed to verify your work" |
 | "Only read files when necessary" | "Read files to build context before acting" |
 
-The fix is to reframe constraints as **quality targets** rather than **resource limits**.
+Reframe constraints as **quality targets** rather than **resource limits**.
 
-**Frame around action, not conservation.** OpenAI's Codex prompting guide uses "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked" -- what to do, not what to avoid.
+**Frame around action.** OpenAI's Codex prompting guide: "Bias to action: default to implementing with reasonable assumptions; do not end on clarifications unless truly blocked."
 
-**Use completion criteria instead of resource limits.** LangChain addresses agent laziness through structured phases (Planning, Build, Verify, Fix) and pre-completion checklists. The agent knows it is done because it met quality criteria, not because it hit a budget.
+**Use completion criteria.** LangChain structures agent phases (Planning, Build, Verify, Fix) with pre-completion checklists — done means quality criteria met, not budget hit.
 
-**Design interfaces that enable correct behaviour.** Anthropic recommends constructive interface design over restrictive framing -- e.g., requiring absolute filepaths instead of instructing "don't use relative paths."
+**Make constraints mechanical.** Anthropic recommends requiring absolute filepaths rather than instructing "don't use relative paths" — the constraint enforces itself.
 
 ## Sources
 

@@ -20,7 +20,7 @@ The loop has four steps that repeat across task executions:
 
 1. **Reflect** — after completing a task, the agent examines its output against the task objective and identifies where its instructions led to suboptimal behavior (verbosity, format drift, missed constraints)
 2. **Draft** — the agent generates a targeted delta to its own system prompt: a specific addition, deletion, or rewrite of the underperforming instruction
-3. **Validate** — the proposed change is scored against a quality gate before adoption. The gate may be a held-out eval suite, a separate critic agent, or a programmatic check
+3. **Validate** — the proposed change is scored against a quality gate before adoption. The gate may be a held-out eval suite, a separate [critic agent](critic-agent-plan-review.md), or a programmatic check
 4. **Persist** — changes that pass the gate are written to the versioned system prompt store; changes that fail are discarded and logged
 
 ```mermaid

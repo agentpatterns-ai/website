@@ -71,8 +71,8 @@ GoT is **not justified** for:
 
 - Problems solvable by a single reasoning chain — use CoT
 - Exploration tasks where paths don't need to reconverge — use ToT or plan-mode
-- Resource-constrained settings — 5–20x cost premium and implementation complexity limit production use [unverified]
-- Advanced reasoning models (Claude extended thinking, o1) that internalize multi-step synthesis — external scaffolding may add latency without benefit [unverified]
+- Resource-constrained settings — 5–20x cost premium and implementation complexity limit production use ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/graph-of-thoughts.md))
+- Advanced reasoning models (Claude extended thinking, o1) that internalize multi-step synthesis — external GoT scaffolding introduces additional latency without a demonstrated benefit over the model's built-in chain computation
 
 ## Implementation Considerations
 
@@ -100,8 +100,4 @@ The [nibzard catalog entry](https://github.com/nibzard/awesome-agentic-patterns/
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate reasoning compute by phase rather than uniformly
 - [Agent Composition Patterns](agent-composition-patterns.md) — Multi-agent structural patterns including chains, fan-out, pipelines, and supervisors
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two-role loop where generator and evaluator iterate to a quality threshold
-
-## Unverified Claims
-
-- Advanced reasoning models with extended thinking internalize multi-step synthesis — external GoT scaffolding may add latency without benefit [unverified — no controlled comparison found]
-- GoT in production systems outside research is rare due to implementation barriers [unverified — no adoption survey found]
+- [Self-Discover Reasoning: LLM-Composed Reasoning Structures](self-discover-reasoning.md) — Model selects and composes reasoning modules per task, an alternative to fixed CoT or GoT topologies

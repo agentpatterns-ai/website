@@ -14,7 +14,7 @@ tags:
 
 Claude Code's context window fills fast. A debugging session or codebase exploration can consume tens of thousands of tokens. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) warns that bloated instruction files cause important rules to get lost — instructions near the end of a long context receive less attention than instructions at the start.
 
-The same problem applies to instruction files. The documentation explicitly warns: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions!" A 20-rule CLAUDE.md that triggers all 20 rules outperforms a 40-rule file where the agent skips half [unverified].
+The same problem applies to instruction files. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) explicitly warns: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions!" A shorter file where every rule applies outperforms a longer file where important rules are buried and skipped.
 
 Prompt compression is not about losing guidance — it is about removing the words that carry no meaning.
 
@@ -99,6 +99,14 @@ After applying compression techniques (rules over explanations, bullets over sen
 
 Same constraints. 60% fewer tokens.
 
+## When This Backfires
+
+Compression removes words, not meaning — but the two are not always separable.
+
+- **Edge-case context removed**: A rule like "Write tests before submitting" compresses cleanly, but "Write integration tests when the function touches the database, unit tests otherwise" cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
+- **Implicit reasoning stripped**: Rules without *why* rely on the agent inferring intent correctly. When the agent encounters a case the rule author didn't anticipate, absence of rationale means no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
+- **Compression as premature optimization**: Trimming a CLAUDE.md that is already under 20 rules produces marginal gains. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) identifies long, bloated files as the failure mode — not files that are merely imperfect. Compress to remove noise; stop before removing signal.
+
 ## Key Takeaways
 
 - Verbose instructions do not improve accuracy — they increase the chance that important rules are skipped.
@@ -106,10 +114,6 @@ Same constraints. 60% fewer tokens.
 - Apply a compression test: remove any word or sentence that does not change agent behavior.
 - Front-load the highest-priority rules; attention degrades across long instruction sets.
 - Move workflow-specific instructions from always-loaded files (CLAUDE.md) to on-demand skills.
-
-## Unverified Claims
-
-- A 20-rule CLAUDE.md that triggers all 20 rules outperforms a 40-rule file where the agent skips half [unverified]
 
 ## Related
 
@@ -129,3 +133,5 @@ Same constraints. 60% fewer tokens.
 - [Context Hub](context-hub.md)
 - [Semantic Context Loading](semantic-context-loading.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
+- [Token-Efficient Code Generation](token-efficient-code-generation.md)
+- [Context Window Management: Understanding the Dumb Zone](context-window-dumb-zone.md)

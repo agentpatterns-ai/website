@@ -143,3 +143,4 @@ The Skill tool resolves the canonical path, injects the current version into con
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md) — token economics and lazy loading principles behind JIT context loading

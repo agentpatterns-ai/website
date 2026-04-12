@@ -16,23 +16,23 @@ tags:
 
 [Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature available on Teams and Enterprise plans. Once an admin enables it, reviews run automatically whenever a pull request opens or is updated. You write no orchestration code; Anthropic's infrastructure handles it.
 
-The contrast with [DIY subagent review](../../code-review/agent-assisted-code-review.md) is architectural: a hand-rolled review subagent requires defining the agent, configuring tool access, wiring it into CI, and maintaining it. Code Review is a managed service — the GitHub App integration is the only setup step.
+Contrast with [DIY subagent review](../../code-review/agent-assisted-code-review.md): hand-rolling a review subagent requires defining the agent, configuring tool access, wiring CI, and maintaining it. Code Review is a managed service — the GitHub App is the only setup step.
 
 ## How the Review Runs
 
-Per the [documentation](https://code.claude.com/docs/en/code-review), multiple specialized agents analyze the diff and surrounding codebase in parallel. Each agent focuses on a different class of issue. A verification step then checks flagged candidates against actual code behavior to filter false positives. Results are deduplicated, ranked by severity, and posted as inline comments on the specific lines where issues were found. If no issues are found, Claude posts a short confirmation comment.
+Per the [documentation](https://code.claude.com/docs/en/code-review), multiple specialized agents analyze the diff and surrounding codebase in parallel. Each focuses on a different issue class. A verification step checks flagged candidates against actual code behavior to filter false positives. Results are deduplicated, ranked by severity, and posted as inline comments. If no issues are found, Claude posts a confirmation comment.
 
-The default focus is correctness: bugs that would break production. Code Review does not flag formatting preferences or missing test coverage unless you instruct it to.
+Default focus is correctness: bugs that would break production, not formatting or missing test coverage (unless you add instructions for those).
 
 Severity tags on findings:
 
 | Marker | Level | Meaning |
 |--------|-------|---------|
-| 🔴 | Normal | A bug that should be fixed before merging |
+| 🔴 | Important | A bug that should be fixed before merging |
 | 🟡 | Nit | A minor issue, not blocking |
 | 🟣 | Pre-existing | A bug present in the codebase but not introduced by this PR |
 
-Reviews average 20 minutes and cost $15–25, scaling with PR size and codebase complexity [unverified].
+Reviews [average 20 minutes and cost $15–25](https://code.claude.com/docs/en/code-review#pricing), scaling with PR size and codebase complexity.
 
 ## Setup
 
@@ -41,16 +41,16 @@ An admin installs the Claude GitHub App to the organization and selects which re
 - **After PR creation only** — one review per PR open or ready-for-review event
 - **After every push to PR branch** — reviews on each commit; auto-resolves threads when the flagged code is fixed
 
-The on-push trigger provides continuous feedback and automatic thread cleanup, but multiplies cost by the number of pushes. The admin settings table at `claude.ai/admin-settings/claude-code` shows average cost per review per repository, which makes the trade-off visible before you commit to a trigger mode.
+The on-push trigger multiplies cost by push count. `claude.ai/admin-settings/claude-code` shows average cost per review per repository to make the trade-off visible.
 
 ## Customizing What Gets Flagged
 
 Code Review reads two files from your repository root:
 
-- **`CLAUDE.md`** — shared project instructions used across all Claude Code tasks. Code Review treats newly-introduced violations of `CLAUDE.md` rules as nit-level findings. If a PR makes a `CLAUDE.md` statement outdated, Claude flags that too.
-- **`REVIEW.md`** — review-only guidance. Use this for rules that are strictly about what to flag or skip during review and would clutter your general `CLAUDE.md`.
+- **`CLAUDE.md`** — shared project instructions. Newly-introduced violations are flagged as nits. If a PR makes a `CLAUDE.md` statement outdated, Claude flags that too.
+- **`REVIEW.md`** — review-only guidance for rules that would clutter `CLAUDE.md`.
 
-`REVIEW.md` is auto-discovered at the repository root with no additional configuration. Both files are additive on top of the default correctness checks.
+`REVIEW.md` is auto-discovered at the repository root. Both files are additive on top of default correctness checks.
 
 Example `REVIEW.md` content from the docs:
 
@@ -65,23 +65,32 @@ Example `REVIEW.md` content from the docs:
 
 ## The @claude PR Tagging Pattern
 
-A secondary pattern: tagging `@claude` on a teammate's PR to propose `CLAUDE.md` updates [unverified]. When a review surfaces a recurring issue — a naming convention that's not yet documented, an architectural decision that should be codified — a `@claude` mention can draft the corresponding `CLAUDE.md` change as part of the same review thread.
+Comment `@claude review` on any open PR to trigger a review on demand. Use `@claude review once` for a single review without subscribing the PR to future pushes.
 
-This turns review findings into norm refinement: issues caught in review become permanent constraints preventing recurrence.
+Recurring findings are a prompt to update `CLAUDE.md` or `REVIEW.md` — encoding the fix prevents the same issue class from appearing on future PRs.
 
 ## What Human Review Still Handles
 
-Code Review findings are non-binding: they never approve or block a PR, and do not count toward required approval counts. Existing review workflows stay intact.
+Findings are non-binding: they never approve or block a PR and don't count toward required approvals. The agents focus on correctness — logic errors, security patterns, edge cases, regressions. Design decisions and architectural fit remain with human reviewers.
 
-The agents focus on correctness — logic errors, security patterns, edge cases, regressions. Design decisions, architectural fit, and product trade-offs remain with human reviewers.
+## Why It Works
+
+Parallel specialization reduces cognitive load per agent. A single reviewer scanning a diff for security issues, logic correctness, edge cases, and regressions simultaneously must context-switch between incompatible mental models. Code Review assigns each issue class to a dedicated agent that builds context only for that domain. A verification step then cross-checks flagged candidates against actual code behavior before posting, filtering false positives without sacrificing recall.
+
+## When This Backfires
+
+- **Cost multiplies on push-heavy branches**: on-push trigger runs a full review per commit. A 15-push PR costs $225–375. Use `@claude review once` or "Once after PR creation" for high-churn branches.
+- **False positives create noise**: verification filters many false positives but not all. Rate findings (👍/👎) to give Anthropic tuning signal; skipping ratings compounds noise over time.
+- **Teams/Enterprise-only**: unavailable on free and Pro plans — use the [DIY subagent approach](../../code-review/agent-assisted-code-review.md) instead.
+- **Advisory findings get dismissed**: non-binding, never blocking merges — teams under deadline pressure routinely ignore them.
 
 ## Key Takeaways
 
-- Code Review runs a fleet of parallel specialized agents on every PR with no per-repository configuration beyond enabling it
+- Parallel specialized agents review every PR with no per-repository configuration beyond enabling it
 - Default focus is correctness (bugs), not style — extend scope via `CLAUDE.md` or `REVIEW.md`
-- Findings are severity-tagged and advisory; they never block merges or substitute for required approvals
-- The on-push trigger provides automatic thread resolution when flagged code is fixed, at higher cost
-- Tagging `@claude` on PRs to propose `CLAUDE.md` updates turns review findings into shared norm refinement
+- Findings are advisory; they never block merges or substitute for required approvals
+- On-push trigger auto-resolves threads when flagged code is fixed, at higher cost per PR
+- `@claude review` triggers on-demand; `@claude review once` runs once without subscribing to future pushes
 
 ## Example
 
@@ -115,11 +124,6 @@ A developer opens a PR adding a new `/users/export` endpoint. Code Review posts 
 3. A `print("debug")` statement left in the handler — flagged as a nit (per `CLAUDE.md`)
 
 The developer fixes all three and pushes. Code Review re-runs and auto-resolves the three threads. A human reviewer then focuses on whether the export format and pagination strategy fit the product requirements.
-
-## Unverified Claims
-
-- Reviews average 20 minutes and cost $15–25, scaling with PR size and codebase complexity [unverified]
-- Tagging `@claude` on a teammate's PR to propose `CLAUDE.md` updates [unverified]
 
 ## Related
 

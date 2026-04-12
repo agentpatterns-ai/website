@@ -43,7 +43,7 @@ The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344) describes th
 
 Prefix caching requires exact byte-level matches. Three patterns consistently bust the cache:
 
-**Adding or removing tools mid-session.** Tool definitions sit in the prefix. Changing them invalidates everything after. Keep the tool list static across the session [unverified].
+**Adding or removing tools mid-session.** Tool definitions sit in the prefix. Changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache.
 
 **Switching models.** Model-specific instructions are injected into the prefix. A model change [invalidates the cache](https://openai.com/index/unrolling-the-codex-agent-loop/) for the entire session. Treat model switches as context boundaries.
 
@@ -81,7 +81,7 @@ Track `cache_read_input_tokens` / total as a session metric. A healthy session s
 
 ## SDK Cache Invalidation: A Case Study
 
-Claude Code's SDK `query()` method contained a bug (fixed in v2.1.72/v2.1.73) that caused cache invalidation on every call, resulting in up to 12x higher input token costs [unverified]. Cache misses are silent — the API charges the full rate without erroring. Monitor `cache_read_input_tokens` vs `cache_creation_input_tokens`; anomalies indicate structural problems.
+Claude Code's SDK `query()` method contained a bug (fixed in [v2.1.72](https://github.com/anthropics/claude-code/releases/tag/v2.1.72)) that caused cache invalidation on every call, reducing input token costs up to 12x when fixed. Cache misses are silent — the API charges the full rate without erroring. Monitor `cache_read_input_tokens` vs `cache_creation_input_tokens`; anomalies indicate structural problems.
 
 ## Key Takeaways
 

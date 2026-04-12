@@ -108,3 +108,4 @@ Enterprise: Let organizations decide
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md)
 - [Central Repo Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
+- [Agent Governance Policies](../../workflows/agent-governance-policies.md)

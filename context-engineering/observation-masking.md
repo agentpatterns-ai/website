@@ -15,13 +15,13 @@ tags:
 
 ## The Problem
 
-Tool calls are a primary source of context growth in agent workflows. Every tool output — a file read, a search result, test runner output, a lint report — injects tokens into the context window. Most of those tokens are consumed once during synthesis and never referenced again [unverified]. They remain in context, consuming budget and diluting attention.
+Tool calls are a primary source of context growth in agent workflows. Every tool output — a file read, a search result, test runner output, a lint report — injects tokens into the context window. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content, and most are consumed once during synthesis and not referenced again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). They remain in context, consuming budget and diluting attention.
 
 The useful artifact of a tool call is typically what the agent produced from it (the code written, the decision made, the summary), not the raw tool output that informed it.
 
 ## How Observation Masking Works
 
-Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesises a result from the tool output; once synthesis is complete, the raw output is dropped from context [unverified].
+Observation masking removes processed tool outputs from conversation history before the next inference call. The agent synthesises a result from the tool output; once synthesis is complete, the raw output is replaced with a compact summary or dropped entirely.
 
 The retention decision is based on whether the agent will need to reference the tool output again:
 
@@ -47,6 +47,10 @@ Observation masking is applied at the conversation history management layer — 
 
 The one-line replacement preserves agent traceability (the agent can see what it consulted) without the full token cost of the original output.
 
+## Why It Works
+
+Retaining stale tool outputs degrades inference quality through two mechanisms. First, transformer attention is quadratic: adding tokens raises the cost of every subsequent call and spreads attention thinner across all token pairs ([context rot research, Chroma 2025](https://www.trychroma.com/research/context-rot)). Second, semantically similar but outdated content — a file read that has since been edited — acts as a distractor; models attend to it even when it no longer reflects the current state, skewing generation toward stale assumptions. Removing processed outputs eliminates both the cost and the distraction without discarding the synthesised result that the agent actually needs.
+
 ## What Masking Does Not Address
 
 Observation masking reduces context growth from intermediate tool results — it does not address:
@@ -56,6 +60,15 @@ Observation masking reduces context growth from intermediate tool results — it
 - Tool outputs the agent needs to retain for repeated reference
 
 For those cases, combine masking with context compression (tiered summarisation and offloading) and on-demand retrieval for content the agent needs to consult multiple times.
+
+## When This Backfires
+
+Masking is a heuristic, not a guarantee. It degrades quality when:
+
+- **Reference outputs are masked too early.** Schema definitions, API contracts, or documentation the agent consults repeatedly are not "single-use" — masking them forces the agent to re-read or hallucinate their contents on subsequent turns.
+- **Synthesis is not yet complete.** Masking a test failure output before the agent has produced and verified a fix removes the ground truth mid-task. The retention decision must be confirmed, not assumed.
+- **Models use extended reasoning.** Benchmarks show that masking reduces solve rate by ~10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). Prefer LLM-based summarisation over hard masking in those configurations.
+- **Domain differs from software engineering.** The efficiency advantage of masking assumes observation tokens dominate context (≈84% in SE benchmarks). In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
 
 ## Example
 
@@ -110,11 +123,6 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - Apply masking at the conversation history management layer, before each inference call.
 - Replace masked outputs with a brief summary line to preserve traceability without the full token cost.
 
-## Unverified Claims
-
-- Most tokens from tool outputs are consumed once and never referenced again [unverified]
-- Once synthesis is complete, the raw tool output is dropped from context [unverified]
-
 ## Related
 
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
@@ -132,3 +140,6 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
 - [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
+- [Attention Sinks and Why Token Position Shapes Focus](attention-sinks.md)
+- [Layered Context Architecture](layered-context-architecture.md)
+- [Context Priming: Pre-Loading Files for AI Agent Tasks](context-priming.md)

@@ -26,5 +26,5 @@ These modules teach the conceptual frameworks behind effective AI-assisted devel
 
 | Module | Topic | Duration |
 |--------|-------|----------|
-| [Eval Engineering](eval-engineering.md) | [Pass@k metrics](../../verification/pass-at-k-metrics.md), LLM-as-judge, golden query pairs, [incident-to-eval synthesis](../../verification/incident-to-eval-synthesis.md), [behavioral testing](../../verification/behavioral-testing-agents.md), anti-reward hacking | 30–45 min |
+| [Eval Engineering](eval-engineering.md) | [Pass@k metrics](../../verification/pass-at-k-metrics.md), LLM-as-judge, golden query pairs, [incident-to-eval synthesis](../../verification/incident-to-eval-synthesis.md), [behavioral testing](../../verification/behavioral-testing-agents.md), [anti-reward hacking](../../verification/anti-reward-hacking.md) | 30–45 min |
 | [Autonomous Research Loops](autonomous-research-loops.md) | Experimentation vs information research loops, termination design, doom loop prevention, context management, grounding strategies, control surfaces | 30–45 min |

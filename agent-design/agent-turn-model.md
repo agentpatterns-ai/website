@@ -48,9 +48,9 @@ Track token usage across all intermediate steps, not just the final response. Th
 
 **Progress indicators**: stream intermediate output via SSE or partial results rather than waiting silently through tool call cycles. [Source: [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/)]
 
-**Error recovery**: if a tool call fails mid-turn, the error is appended to the prompt and the model decides whether to retry or surface a failure. [unverified]
+**Error recovery**: if a tool call fails mid-turn, the error is appended to the prompt as an observation and the model decides whether to retry or surface a failure. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
 
-**Context continuity**: intermediate tool call outputs must persist for subsequent inference calls. Stripping tool call history within a turn breaks the model's access to its own working state. [unverified]
+**Context continuity**: intermediate tool call outputs must persist for subsequent inference calls within the same turn. Stripping tool call history within a turn breaks the model's access to its own working state. ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344))
 
 ## Extended ReAct Phases
 
@@ -103,6 +103,18 @@ graph TD
     C -->|No| H[Surface Assistant Message to User]
 ```
 
+## When This Backfires
+
+Unbounded turn loops become liabilities in production under these conditions:
+
+1. **Runaway cost from stuck tool calls**: when a tool returns an error state that the model treats as recoverable, the loop can retry indefinitely — a single stuck turn has been observed consuming millions of tokens before hitting a wall ([The Agent Loop Problem, Modexa, 2026](https://medium.com/@Modexa/the-agent-loop-problem-when-smart-wont-stop-ccbf8489180f)). Always enforce a hard iteration cap.
+
+2. **Context window exhaustion mid-turn**: each tool result appends to the growing prompt. A turn involving many file reads or large API responses will silently approach the context limit. Without proactive compression, the next inference call is truncated or rejected — design for token budget exhaustion as a normal case, not an edge case.
+
+3. **Latency opacity**: a turn that takes 30 seconds of silent tool execution is indistinguishable from a hung process to the end user. Streaming intermediate tool results is the only signal available; omitting it produces a wall of silence that triggers retries or abandonment.
+
+4. **Doom loops in multi-agent systems**: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the Extended ReAct loop explicitly targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)).
+
 ## Key Takeaways
 
 - A single agent turn loops until the model emits a final message without a tool call
@@ -135,3 +147,5 @@ graph TD
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
 - [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
+- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — strategies for mid-turn tool failures and error recovery
+- [The Think Tool](think-tool.md) — explicit thinking phase during Phase 1 of the Extended ReAct loop

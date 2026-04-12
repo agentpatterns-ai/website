@@ -18,7 +18,7 @@ tags:
 
 ## What It Does
 
-Copilot reads `.github/copilot-instructions.md` on every chat request, [agent mode](agent-mode.md) session, [coding agent](coding-agent.md) task, and code review [unverified — this four-context enumeration has not been independently confirmed against the cited documentation] ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)). The contents are appended to the system prompt automatically -- you do not reference or import the file.
+Copilot reads `.github/copilot-instructions.md` on every chat request, [agent mode](agent-mode.md) session, [coding agent](coding-agent.md) task, and code review ([docs](https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot), [GitHub Blog](https://github.blog/ai-and-ml/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). The contents are appended to the system prompt automatically -- you do not reference or import the file.
 
 ## File Location and Format
 
@@ -89,7 +89,14 @@ Support varies by IDE ([docs](https://docs.github.com/en/copilot/reference/custo
 | Hierarchy | Flat + path-specific | Directory-level traversal |
 | Portability | Copilot only | Cross-tool |
 
-Copilot reads both files when present [unverified]. Teams using multiple AI tools can maintain both with a convergence strategy or consolidate into AGENTS.md, losing path-specific `applyTo` globs. See [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) for convergence strategies.
+Teams using multiple AI tools can maintain both files with a convergence strategy or consolidate into AGENTS.md, losing path-specific `applyTo` globs. See [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) for convergence strategies.
+
+## When This Backfires
+
+- **Over-stuffed files**: Loading the file with implementation details, full documentation, or task-specific context bloats the system prompt, consuming token budget that would otherwise hold conversation or code context. Keep it to broadly applicable project-wide rules ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)).
+- **Personal settings override**: Personal-scope instructions take highest priority and silently override repository instructions on conflict. Team members with conflicting personal Copilot settings will see different behavior than the repository instructions intend.
+- **IDE feature gaps**: Visual Studio only reads the repository-wide file — path-specific instructions and organization-level scope are unsupported. Workflows built around path-specific `applyTo` globs break silently on these IDEs.
+- **Instructions don't guarantee compliance**: GitHub explicitly notes that "providing instructions doesn't guarantee perfect code" — the same request can render different results across sessions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)). Treat instructions as a probabilistic nudge, not a deterministic contract.
 
 ## Example
 
@@ -128,11 +135,6 @@ REST API for order management. Node.js 20, Express, PostgreSQL, Prisma ORM.
 - `src/db/` — Prisma client and migrations
 - `tests/` — integration and unit tests
 ```
-
-## Unverified Claims
-
-- Four-context enumeration (chat, agent mode, coding agent, code review) has not been independently confirmed against cited documentation [unverified]
-- Copilot reads both `copilot-instructions.md` and `AGENTS.md` when present [unverified]
 
 ## Related
 

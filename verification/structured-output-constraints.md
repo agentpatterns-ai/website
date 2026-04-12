@@ -84,7 +84,7 @@ Structure reduces hallucination surface but constrains legitimate flexibility. T
 
 - High-stakes, automatable tasks (code review output, schema generation) benefit from tight schema constraints
 - Creative or exploratory tasks (early ideation, open-ended research) may need looser structure to avoid forcing artificial answers into ill-fitting fields
-- Progressive structuring — loose template first, tighter schema after validation — can balance both needs [unverified]
+- Progressive structuring — loose template first, tighter schema after validation — can balance both needs; start permissive to discover natural output shapes before locking in field names and types
 
 Too much structure produces compliant but hollow output: the agent fills every field with something rather than nothing, but the content is low-quality filler. Too little structure produces unverifiable output.
 
@@ -139,3 +139,5 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Incremental Verification](incremental-verification.md)
 - [Verification Ledger](verification-ledger.md)
 - [Risk-Based Task Sizing](risk-based-task-sizing.md)
+- [Grading Agent Outcomes](grade-agent-outcomes.md)
+- [Agent Transcript Analysis](agent-transcript-analysis.md)

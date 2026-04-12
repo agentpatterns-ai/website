@@ -18,9 +18,11 @@ tags:
 
 ## Why a Mapping Page
 
-The Open Agent School patterns library catalogs 11 "Data Autonomy Patterns" spanning perception, planning, execution governance, tool safety, memory, and multi-agent orchestration. Five of these patterns map directly to challenges coding-agent practitioners face daily. The remaining six target data pipelines and domain-specific workflows with limited transferability.
+The [Open Agent School patterns library](https://www.openagentschool.org/patterns) catalogs 11 "Data Autonomy Patterns" spanning perception, planning, execution governance, tool safety, memory, and multi-agent orchestration. Five of these patterns map directly to challenges coding-agent practitioners face daily. The remaining six target data pipelines and domain-specific workflows with limited transferability.
 
-If you encounter OAS terminology in training material or conversation, the mapping below shows what each pattern means in practice and where to find in-depth coverage.
+Note: The Open Agent School source was inaccessible at the time of this page's last review (2026-03). The pattern descriptions below are based on OAS training materials circulated in the coding-agent community; verify against the current OAS source before citing in formal documentation.
+
+The table in the next section shows what each pattern means in practice and where to find in-depth coverage.
 
 ## Pattern Mapping
 
@@ -63,7 +65,7 @@ The mapping:
 | Policy lattice | Deny lists, RBAC/ABAC policies, `disallowedTools` |
 | Signed execution | Sandboxed execution environments, filesystem isolation |
 
-The [Enterprise Agent Hardening](../security/enterprise-agent-hardening.md) page covers the Policy Enforcement Gateway pattern with `PreToolUse` hooks. The [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) page covers filesystem and network isolation. OAS's contribution is naming the full pipeline — most production setups implement two or three stages, not all five [unverified].
+The [Enterprise Agent Hardening](../security/enterprise-agent-hardening.md) page covers the Policy Enforcement Gateway pattern with `PreToolUse` hooks. The [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) page covers filesystem and network isolation. OAS's contribution is naming the full pipeline; published policy-gateway reference architectures (Microsoft's [Agent Governance Toolkit](https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/), [AWS Bedrock AgentCore policies](https://aws.github.io/bedrock-agentcore-starter-toolkit/user-guide/policy/overview.html)) typically ship three of the five stages — capability mapping, policy evaluation, and sandboxed execution — and leave intent analysis and risk scoring to per-deployment extensions.
 
 ### Strategy Memory Replay
 
@@ -133,17 +135,25 @@ Stop and report if cost exceeds 60% of session budget. # Budget threshold
 
 The `maxTurns: 12` cap enforces the iteration budget. The `allowedTools` / `disallowedTools` lists implement a two-stage policy gate (capability mapping + deny list). The instruction to read `CLAUDE.md` and `progress.md` at session start triggers strategy memory replay through flat-file retrieval.
 
+## When the Mapping Breaks Down
+
+The five equivalences above are useful shorthand, not drop-in replacements. The mapping flattens distinctions that matter at scale:
+
+- **Strategy Memory Replay via flat files loses similarity-based recall.** OAS assumes embedding retrieval over a strategy store; grepping `CLAUDE.md` or reading `progress.md` only matches literal tokens. When a new task is semantically similar to a past task but uses different vocabulary, flat-file memory misses it entirely.
+- **Policy-Gated Tool Invocation without risk scoring under-enforces.** `PreToolUse` hooks plus a static deny list collapse OAS's five stages into two. A deny list cannot distinguish `rm -rf /tmp/cache` from `rm -rf /` unless you hand-author the matcher, and policy-gateway surveys show runtime risk scoring is the stage most production setups omit.
+- **Budget-Constrained Execution Loop collapses if only one budget is enforced.** `maxTurns` without session-level cost caps still allows an agent to stay under the iteration ceiling while issuing expensive tool calls on every turn. As [execution-budget analyses](https://www.rack2cloud.com/ai-inference-execution-budgets/) note, multi-layer enforcement is the control — single-layer enforcement is a budget in name only.
+- **Schema-Aware Decomposition assumes a stable schema.** In greenfield code or during active refactors, the "real schema entities" the agent should ground plans in are themselves in flux. Priming against a schema that is about to change produces plans that break on merge.
+- **Perception Normalization's feedback loop requires an output quality signal.** On coding agents without deterministic test or lint feedback — interactive exploration, architectural planning — there is no degradation signal to close the loop on.
+
+If you need the formal guarantees OAS describes, budget for vector retrieval, an explicit policy engine, and multi-layer budget enforcement. The flat-file equivalents are the right default for small teams and solo practitioners; they are not the right default for multi-tenant or regulated deployments.
+
 ## Key Takeaways
 
-- OAS provides formal names for patterns most practitioners already use informally [unverified] — the vocabulary is useful for cross-team communication and training
-- Five of eleven patterns have direct coding-agent equivalents; the other six are data-pipeline-specific
-- The highest-value OAS insight is treating budget, policy, memory, schema grounding, and perception as a unified system rather than independent concerns
-- OAS pattern descriptions are brief and lack implementation guidance [unverified — based on site review as of 2026-03] — this site's pages provide the concrete implementation details OAS names but does not specify
-
-## Unverified Claims
-
-- OAS pattern descriptions are brief and lack implementation guidance — based on site review as of 2026-03 [unverified]
-- Most practitioners already use OAS-equivalent patterns informally [unverified]
+- OAS provides formal names for patterns coding-agent practitioners already approximate with lighter-weight primitives — the vocabulary is useful for cross-team communication and training.
+- Five of eleven patterns have direct coding-agent equivalents; the other six are data-pipeline-specific.
+- The highest-value OAS insight is treating budget, policy, memory, schema grounding, and perception as a unified system rather than independent concerns.
+- OAS pattern pages describe the *what* and *why*; this site's pages provide the concrete commands, config, and hook scripts. Use them together.
+- The mapping is a translation layer, not a substitution. When the formal guarantees matter, implement the formal pattern — not the flat-file approximation.
 
 ## Related
 
@@ -160,5 +170,6 @@ The `maxTurns: 12` cap enforces the iteration budget. The `allowedTools` / `disa
 - [Agent Harness](agent-harness.md)
 - [Agent Turn Model](agent-turn-model.md)
 - [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
+- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — another pattern taxonomy mapping, connecting GoF and SOLID patterns to agent system design
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating reasoning compute across phases; complements the Budget-Constrained Execution Loop pattern

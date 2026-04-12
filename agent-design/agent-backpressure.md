@@ -29,7 +29,7 @@ Each source provides a different level of feedback precision. Type systems are t
 
 ## Autonomy Scales with Backpressure
 
-An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It doesn't need human feedback at each step because the tooling provides it.
+An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It doesn't need human feedback at each step because the tooling provides it. A [2025 survey of LLM agent feedback mechanisms](https://dl.acm.org/doi/10.24963/ijcai.2025/1175) identifies external environmental feedback — including compiler output and test results — as the most reliable category of feedback for agent self-correction.
 
 An agent operating in a codebase with no types, no tests, and no linting produces output that looks syntactically correct but may be semantically wrong — and there's no automated signal to detect it.
 
@@ -65,6 +65,14 @@ These investments compound: they benefit both agents and human developers.
 
 Deploying agents against codebases with minimal backpressure maximizes the review burden on humans. Every agent output requires manual inspection because no automated signal catches errors. The agent produces more output faster than the team can review.
 
+## When This Backfires
+
+Backpressure is only as reliable as the signal quality. Three conditions where it misleads:
+
+- **Test-gaming**: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." Mutation testing or property-based tests reduce this risk.
+- **Domains with no reliable oracle**: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. In these domains backpressure either doesn't exist or is so coarse-grained (linter, formatter) that it can't catch the meaningful errors. Agents here require human review that backpressure was meant to replace.
+- **Upfront investment cost**: comprehensive types, test coverage, and enforced linting take time to establish. For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
+
 ## Example
 
 A TypeScript project with strict mode enabled gives an agent a tight backpressure loop. The agent adds a new function, runs `tsc --noEmit`, and receives an error: `Argument of type 'string' is not assignable to parameter of type 'number'`. The agent reads the error, fixes the type mismatch, and runs again. Clean. It then runs `jest` — two tests fail with assertion details showing the return value is off by one. The agent reads the failures, adjusts the logic, and reruns. All green. Finally it runs `eslint` — one violation: `no-unused-vars` on a helper it introduced. The agent removes the variable and reruns. Clean.
@@ -76,7 +84,7 @@ The full loop completes without human involvement. Each tool in the chain catche
 - Backpressure is the automated feedback that enables agent self-correction without human intervention.
 - Type systems, tests, linters, and CI each provide different levels of precision — use all of them.
 - Agent autonomy scales directly with backpressure quality in the codebase.
-- Improving codebase backpressure coverage improves agent output quality more than prompt tuning. [unverified]
+- Improving codebase backpressure coverage is a high-leverage path to better agent output — it changes what errors the agent can detect, not just how it responds to them.
 
 ## Related
 

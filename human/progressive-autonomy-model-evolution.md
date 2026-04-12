@@ -31,11 +31,11 @@ Major AI coding tools implement graduated autonomy levels:
 
 ## How Trust Actually Builds
 
-Anthropic's Claude Code usage data shows how developers grant autonomy over time [unverified]:
+Anthropic's Claude Code usage data shows how developers grant autonomy over time ([Measuring Agent Autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)):
 
-- **~20%** of newer users (<50 sessions) use full auto-approve, rising to **>40%** at ~750 sessions [unverified]
-- 99.9th percentile turn duration nearly doubled from <25 to >45 min (Oct 2025 – Jan 2026) [unverified]
-- Experienced users show a paradox: **higher auto-approval AND higher interruption rates** (~9% vs ~5%) — shifting to a monitoring-and-intervening model [unverified]
+- **~20%** of newer users (<50 sessions) use full auto-approve, rising to **>40%** at ~750 sessions
+- 99.9th percentile turn duration nearly doubled from <25 to >45 min (Oct 2025 – Jan 2026)
+- Experienced users show a paradox: **higher auto-approval AND higher interruption rates** (~9% vs ~5%) — shifting to a monitoring-and-intervening model
 
 Progressive autonomy shifts oversight from per-action approval to exception-based monitoring.
 
@@ -66,7 +66,7 @@ Levels 1–3 are synchronous; 4–5 are asynchronous — assign work and review 
 |-------|------|-------------|
 | **1. Read-Only / Suggest** | Information only | Team reliably identifies wrong suggestions |
 | **2. Supervised Execution** | Additive low-risk work (tests, docs, config) with per-action approval | Error rate on approved changes acceptable |
-| **3. Gated Autonomy with Sandboxing** | Broader execution in sandbox; 84% fewer permission prompts [unverified] | Sandboxed quality matches supervised output |
+| **3. Gated Autonomy with Sandboxing** | Broader execution in sandbox; 84% fewer permission prompts ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)) | Sandboxed quality matches supervised output |
 | **4. Autonomous with Monitoring** | High-autonomy modes; post-hoc audit sampling | Disagreement rate within tolerance; rollback tested |
 | **5. Asynchronous Delegation** | End-to-end from issue to PR | Comprehensive tests, clear specs, documented conventions |
 
@@ -89,7 +89,16 @@ Define these **before** expanding autonomy.
 - **Automatic scope reduction:** Narrow permitted actions when error rate exceeds threshold
 - **Canary rollout:** Test policy changes on a subset before rollout
 - **Kill switches:** Org-level controls (managed settings, MDM) that restrict capabilities
-- **Agent self-calibration:** Claude Code requests clarification 2x more on complex tasks [unverified]
+- **Agent self-calibration:** Claude Code requests clarification 2x more on complex tasks ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy))
+
+## When This Backfires
+
+Progressive autonomy assumes measurable signals — when those don't exist, the model breaks down:
+
+- **Metrics don't exist yet.** Approval rate and defect escape rate require an instrumented workflow. Teams without CI or code review tooling have no signal to justify escalation; advancing by calendar creates phantom trust.
+- **Task distribution shifts.** Autonomy earned on scoped feature work doesn't transfer to greenfield architecture or security-sensitive domains. Treating it as a global setting rather than per-task-class causes regressions on unfamiliar work.
+- **Trust resets asymmetrically.** A single production incident erases accumulated trust and forces a full restart of the escalation sequence — teams that advanced quickly are disproportionately exposed.
+- **Thresholds need calibration before incidents, not after.** Rollback thresholds set reactively are often too permissive to prevent recurrence or too strict to allow useful work.
 
 ## Key Takeaways
 
@@ -128,5 +137,7 @@ This trajectory is not guaranteed — a production incident in week 5 would have
 - [Evidence-Based Allowlist Auto-Discovery](../human/evidence-based-allowlist-auto-discovery.md)
 - [Skill Atrophy](../human/skill-atrophy.md)
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)
+- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)
 - [Domain-Specific Agent Challenges](../human/domain-specific-agent-challenges.md)
+- [Suggestion Gating](../human/suggestion-gating.md)

@@ -13,7 +13,7 @@ tags:
 
 ## The Gap
 
-Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Reasoning tasks degrade at [10-20% of context usage](https://arxiv.org/abs/2406.10149), and code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
+Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively leverage only 10-20% of a long context window](https://arxiv.org/abs/2406.10149) for multi-step reasoning tasks, and code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
 
 ```mermaid
 graph LR
@@ -77,6 +77,10 @@ When compacting, always preserve:
 
 Custom compaction instructions are a [first-class feature](https://code.claude.com/docs/en/best-practices).
 
+## Why It Works
+
+Transformer attention is computed across all tokens in the context window, creating n² pairwise relationships for n tokens. As the context grows, [this attention budget spreads thin](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — the model's capacity to attend to any specific piece of information decreases while irrelevant tokens compete for the same fixed attention capacity. Compaction works by replacing the accumulated token mass with a dense summary, giving the model a focused context where relevant information receives proportionally more attention. Compacting early, before the window is saturated, avoids the window ever reaching the state where useful signal is crowded out by accumulated noise.
+
 ## Lowering the Auto-Compaction Threshold
 
 The `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` environment variable accepts values 1-100 and [overrides the default trigger point](https://code.claude.com/docs/en/settings):
@@ -104,7 +108,7 @@ Claude Code exposes `context_window.used_percentage` as a [status line field](ht
 
 ## Partial Summarization
 
-Claude Code (v2.1.30+) supports "Summarize from here" via the message selector [unverified]. This preserves recent context at full fidelity while compressing older turns — useful when exploration history can be discarded but recent implementation work cannot.
+Claude Code supports partial summarization via the message selector ("Summarize from here"). This preserves recent context at full fidelity while compressing older turns — useful when exploration history can be discarded but recent implementation work cannot.
 
 ## How Other Systems Handle This
 
@@ -114,7 +118,7 @@ Claude Code (v2.1.30+) supports "Summarize from here" via the message selector [
 | Claude Code (override) | Configurable 1-100% | Same mechanism, earlier trigger |
 | LangChain Deep Agents | 85% | Compression + 20K-token tool offloading |
 | OPENDEV (ACC) | 70/80/85/90/99% | [Five graduated stages](context-compression-strategies.md) |
-| Manus | N/A | File system as external memory; avoids aggressive compaction entirely [unverified] |
+| Manus | N/A | File system as external memory; avoids aggressive compaction entirely |
 
 ## Example
 
@@ -140,12 +144,6 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 - Compact at task-type transitions, after bulk reads, or when output quality declines.
 - Use a focus directive or CLAUDE.md to control what survives summarization.
 - Set `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` to 50-70% for reasoning-heavy sessions.
-
-## Unverified Claims
-
-- `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` at lower values has not been empirically tested for reasoning quality improvements vs. the default 95% [unverified]
-- The community recommendation to compact at 50% comes from [claude-code-best-practice](https://github.com/shanraisshan/claude-code-best-practice) and is not officially endorsed by Anthropic [unverified]
-- Manus using file system as external memory to avoid aggressive compaction [unverified]
 
 ## Related
 

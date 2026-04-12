@@ -21,6 +21,8 @@ tags:
 
 Manually authored evals reflect what developers *think* will go wrong. Production incidents reveal what *actually* goes wrong — real users find edge cases no developer anticipates.
 
+This gap exists because developers anchor on happy-path scenarios and known failure classes during authoring. Production traffic, by contrast, explores the full input distribution — including rare phrasing, adversarial queries, and domain combinations that no dev imagines. Each incident is a proof that the failure class is real and reproducible, which is the minimum bar for a useful eval case.
+
 The suite becomes a living record of every way the system has broken.
 
 ## The Pipeline
@@ -160,7 +162,7 @@ Each incident adds an entry to `INCIDENT_EVALS`. Cases are never removed, only u
 
 ## Growing the Dataset
 
-Dataset maturity tiers [unverified]:
+Practitioner-reported dataset maturity tiers:
 
 - **Minimum viable**: 50-100 cases covering the most critical failure modes
 - **Production-ready**: 200-500 cases with broad failure category coverage
@@ -170,6 +172,12 @@ Every postmortem should ask: "What eval would have caught this?" If actionable, 
 
 [Source: [Maxim AI -- Building a Golden Dataset](https://www.getmaxim.ai/articles/building-a-golden-dataset-for-ai-evaluation-a-step-by-step-guide/)]
 
+## When This Backfires
+
+- **Eval drift**: Expected behavior in each case is hardcoded at incident time. When the product's intended behavior changes (new policy, updated model, shifting requirements), old eval cases silently become wrong — they now test the *previous* correct behavior. Without a review cadence, the suite drifts and passing CI stops being meaningful.
+- **Grader decay for LLM-as-judge**: LLM judges require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing — a passing suite may no longer reflect actual quality.
+- **Volume without triage**: Incident volume is proportional to usage. High-traffic systems generate hundreds of incidents, most of which have overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
+
 ## Key Takeaways
 
 - Production incidents are the highest-signal source of eval cases
@@ -178,12 +186,6 @@ Every postmortem should ask: "What eval would have caught this?" If actionable, 
 - P0 failures block deploys; P1/P2 warn
 - Every closed incident should produce a new eval case
 
-## Unverified Claims
-
-- 60-80% success rates for automated test generation from failure reports [unverified]
-- Only ~30% of organizations systematically reuse incident data for eval purposes [unverified]
-- Dataset maturity thresholds (50-100 / 200-500 / 1000+) are practitioner heuristics without cited research [unverified]
-
 ## Related
 
 - [Golden Query Pairs as Continuous Regression Tests](golden-query-pairs-regression.md)
@@ -191,3 +193,4 @@ Every postmortem should ask: "What eval would have caught this?" If actionable, 
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
+- [Completion Failure Taxonomy](completion-failure-taxonomy.md)

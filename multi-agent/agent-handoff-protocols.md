@@ -24,7 +24,7 @@ Define what each pipeline stage produces. Common fields across handoff formats:
 - **What needs attention** — items the next agent must address
 - **What is unresolved** — open questions or blockers
 
-A research agent producing prose notes is less reliable as a handoff than one producing structured JSON or a defined markdown schema [unverified]. The receiving agent can extract the right fields without guessing at the format.
+A research agent producing structured JSON or a defined markdown schema produces a more reliable handoff than prose notes: field extraction is deterministic and does not depend on the receiving agent's ability to parse unstructured natural language. The receiving agent can extract the right fields without guessing at the format.
 
 ## Summarize, Don't Forward
 
@@ -62,6 +62,15 @@ Each agent starting with a fresh context — informed by the handoff, not burden
 
 Passing a previous agent's full output or conversation transcript to the next agent as its prompt causes context bloat: the receiving agent's context fills with the sender's reasoning process rather than its conclusions. Extract and summarize at each boundary.
 
+## When This Backfires
+
+Structured handoff protocols add overhead that is not always justified:
+
+- **Short-lived or single-stage pipelines** — when one agent can complete the task end-to-end, a schema adds friction without benefit. Protocols pay off only when work genuinely crosses agent boundaries.
+- **Rapidly evolving schemas** — if the upstream agent's outputs change frequently, maintaining a schema contract creates synchronization overhead. Loose prose may be more adaptive during early prototyping when the pipeline shape is not yet stable.
+- **Over-summarization** — aggressive summarization at handoff boundaries can discard context the downstream agent actually needs. When the upstream agent cannot reliably distinguish essential from incidental detail, the summary may omit critical caveats or edge-case findings, causing the downstream agent to proceed on an incomplete picture.
+- **Rigid schemas hiding uncertainty** — structured fields suggest certainty. An agent filling `findings` with a well-formatted JSON array may obscure that its conclusions were tentative; the downstream agent reads the structure as authoritative. Prose notes with hedging language sometimes preserve epistemic uncertainty better than named fields with string values.
+
 ## Example
 
 The following shows a research agent producing a structured JSON handoff that a writer agent can consume directly. The upstream agent writes conclusions and open items — not its reasoning trace — into a file that becomes the writer agent's sole input.
@@ -87,16 +96,25 @@ The following shows a research agent producing a structured JSON handoff that a 
 
 The writer agent's system prompt references this schema explicitly: it reads `findings` for content, `needs_attention` for required coverage, and `unresolved` for items to flag as open questions rather than assert as facts. This prevents the writer from inventing answers for gaps the research agent deliberately left open.
 
+## When This Backfires
+
+Structured handoff protocols add overhead that is not always justified:
+
+- **Short-lived or single-agent pipelines**: defining and maintaining a schema costs more than it saves when the task can complete in one agent's context.
+- **Rapidly evolving pipelines**: schema fields go stale as agent responsibilities change; stale fields either get silently ignored or cause parse failures downstream.
+- **Unstructured creative tasks**: when the downstream agent's value is precisely its ability to synthesize freeform input, forcing upstream output into rigid fields discards nuance that structured schemas can't represent.
+- **Schema mismatch at version boundaries**: if upstream and downstream agents are updated independently, a schema change on either side breaks the contract until both are redeployed.
+
+## Why It Works
+
+Structured schemas eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs.
+
 ## Key Takeaways
 
 - Define explicit output schemas for each pipeline stage — structured handoffs are more reliable than prose.
 - Summarize at boundaries: the next agent needs conclusions, not the full exploration history.
 - Use persistent artifacts (GitHub issues, PRs, comments) as handoff media when cross-session durability matters.
 - Context isolation between agents is intentional — the handoff is the only channel.
-
-## Unverified Claims
-
-- Structured JSON or defined markdown schema is more reliable as a handoff than prose notes [unverified]
 
 ## Related
 

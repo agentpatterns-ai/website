@@ -28,7 +28,7 @@ Five signals warrant a circuit break:
 
 **3. Repetition detected.** The agent is doing the same thing it already did — fetching the same URL, reading the same file, attempting the same fix. Repetition without new information is a stuck loop.
 
-**4. Context budget exceeded.** The context window is approaching the zone where output quality degrades — the "dumb zone." Stopping before it is better than continuing into degraded reasoning. Aim to stop before 50% context consumption on long-running tasks [unverified — specific threshold varies by model and task].
+**4. Context budget exceeded.** The context window is approaching the zone where output quality degrades — the "dumb zone." Stopping before it is better than continuing into degraded reasoning. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found that every model degrades as input length grows — non-uniformly, with the onset depending on task similarity and distractor density. There is no universal percentage; monitor for the degradation pattern on your task and trip the breaker when recall or coherence drops, not at a fixed token count.
 
 **5. Cost threshold exceeded.** The task has consumed more than the expected budget — cost overrun often correlates with loops.
 
@@ -93,15 +93,22 @@ You are a research agent. Fetch and summarise up to 5 sources for the given topi
 
 The `maxTurns: 20` field is enforced at the Claude Code runtime level and cannot be overridden by model reasoning. The instruction-level checks handle error-rate and repetition signals, which the runtime does not detect automatically.
 
+## When This Backfires
+
+Circuit breakers are failure-mode detectors, not correctness guarantees — set too aggressively, they become the failure mode. A reasonable practitioner would push back in at least three situations:
+
+- **Iteration limits trip on legitimate work.** Setting `maxTurns` low enough to catch pathological loops also cuts off legitimate multi-step refactors or research tasks — several production frameworks have open issues where agents halt mid-task on "stopped due to max iterations" even when making forward progress ([openai-agents-python#844](https://github.com/openai/openai-agents-python/issues/844), [langflow#10607](https://github.com/langflow-ai/langflow/issues/10607)). Raise the ceiling for task classes that legitimately need 50+ turns.
+- **Repetition detection flags valid re-reads.** Re-reading the same file after an edit, or refetching a URL after a 429 backoff, are normal behaviors, not stuck loops. Naive "did we already fetch this?" heuristics fire on both.
+- **Cost thresholds penalize exploration.** Exploratory research agents legitimately consume variable budgets. A hard cost cap trips on successful discovery runs as readily as on loops — the signal is cost *without progress*, not cost alone.
+- **Instruction-level stops are model-dependent.** Signals 2, 3, and 5 rely on the model reading its own circuit-breaker rules and obeying them. If the model ignores the instruction mid-reasoning, the stop never fires. For safety-critical stops, prefer runtime enforcement (`maxTurns`, hooks) over instructions.
+
+The steelman: if your agent population already fails gracefully on its own — returns partial results, detects its own thrash — adding another stopping layer mostly creates false positives. Instrument first; add breakers where instrumentation shows real loops, not prophylactically.
+
 ## Key Takeaways
 
 - Five stopping signals: iteration limit, repeated failure, repetition, context budget, cost threshold
 - `maxTurns` provides runtime-enforced iteration limits; instruction-based checks can be overridden by the model
 - Graceful degradation: return partial results + failure explanation, never discard completed work
-
-## Unverified Claims
-
-- Stop before 50% context consumption on long-running tasks `[unverified — specific threshold varies by model and task]`
 
 ## Related
 

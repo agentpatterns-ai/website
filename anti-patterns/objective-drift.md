@@ -14,35 +14,23 @@ aliases:
 
 > After context compression, agents can continue working productively on a subtly wrong objective — the original intent lost in summarisation.
 
-## What Objective Drift Looks Like
+## Why It Happens
 
-After context compaction, the agent solves a subtly different problem. [LangChain's research](https://blog.langchain.com/context-management-for-deepagents/) identifies this as a failure mode after summarisation: the gist survives but nuance is lost, and downstream steps compound the drift.
+Summarisation favours high-frequency content. A constraint ("do not change public method signatures") appears once; the core task ("refactor for DI") recurs across many messages — the constraint is discarded as noise ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)). Downstream steps compound the error: each tool call is consistent with the compressed objective, so the agent builds toward the wrong target with no internal signal.
 
-## Primary Triggers
+A second trigger is instruction fade-out: models deprioritize initial instructions as history grows, even when they remain present ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
 
-**Context summarisation / compaction.** Compression reduces the task statement to a summary that omits constraining specifics — files, edge cases, required formats.
+## Detection and Mitigation
 
-**Long tool chains.** Small misalignments compound over many steps until the trajectory diverges from the original objective.
+Signals: the agent "completes" without satisfying the original requirement, output format diverges from spec, or a subtly different problem is solved.
 
-**Instruction fade-out.** The model progressively deprioritizes initial instructions as history grows. Instructions may still be present but are no longer attended to effectively ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).
+**Preserve intent in structured summaries.** A named `session_intent` field survives compression better than prose — [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that retain task objectives.
 
-## Detection
+**Anchor constraints in system prompt.** System-prompt content is less likely to be paraphrased away during summarisation.
 
-The agent addresses a related but different problem, output format diverges from spec, or the agent "completes" without satisfying the original requirement.
+**Bounded tasks.** The [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) bounds each session to one task; each restart re-reads the original specification from disk.
 
-## Mitigation
-
-**Preserve intent in structured summaries.** Require a named `session_intent` field carrying the exact objective through compression. [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that retain task objectives.
-
-**Anchor instructions in system prompt.** System-prompt constraints survive compression better than conversational ones — the system prompt persists in full [unverified].
-
-**Bounded tasks.** The [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) bounds each session to one well-defined task. Each restart re-reads the original specification from disk.
-
-**[Event-driven reminders](../instructions/event-driven-system-reminders.md).** Inject targeted reminders at decision points as user messages. Guardrail counters escalate severity: advisory first, then mandatory ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
-
-## Testing for Drift
-
-Run agents on known tasks with known correct output. Trigger compression artificially by adding noise until compaction occurs. Verify post-compaction output matches expected.
+**[Event-driven reminders](../instructions/event-driven-system-reminders.md).** Re-inject objectives at decision points ([Bui, 2026 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
 ## Example
 
@@ -76,6 +64,12 @@ You are a refactoring agent. Before each action:
 
 This combination — structured intent file plus system-prompt anchor — ensures the exact constraints survive summarisation and remain attended to throughout the session.
 
+## When This Backfires
+
+- **Short sessions**: `session_intent.json` adds overhead for sessions that will never reach compaction.
+- **Exploratory tasks**: Strict anchoring prevents legitimate course corrections mid-session.
+- **Compaction policy mismatch**: Structured summaries only help if the compressor preserves named fields; many paraphrase them anyway.
+
 ## Key Takeaways
 
 - Objective drift occurs when summarisation loses task specifics or instructions fade from attention.
@@ -83,10 +77,6 @@ This combination — structured intent file plus system-prompt anchor — ensure
 - Structured summaries with a named session-intent field resist drift better than prose.
 - [Event-driven reminders](../instructions/event-driven-system-reminders.md) counter fade-out by re-injecting objectives at decision points.
 - Bounded sessions ([Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)) prevent drift from accumulating across iterations.
-
-## Unverified Claims
-
-- System prompt persisting in full through compression `[unverified]`
 
 ## Related
 
@@ -101,3 +91,5 @@ This combination — structured intent file plus system-prompt anchor — ensure
 - [The Kitchen Sink Session](session-partitioning.md) — mixing unrelated tasks fills context with noise
 - [Assumption Propagation](assumption-propagation.md) — early misunderstandings compound over time, similar to how drift compounds after compression
 - [The Infinite Context Anti-Pattern](infinite-context.md) — context overload dilutes attention, accelerating drift
+- [Token Preservation Backfire](token-preservation-backfire.md) — token-saving instructions create a competing objective that undermines task completion
+- [Spec Complexity Displacement](spec-complexity-displacement.md) — constraints that grow too complex to track reliably, compounding drift risk

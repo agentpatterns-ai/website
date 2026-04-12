@@ -16,11 +16,11 @@ Load as much context as possible into the agent's prompt. Include every potentia
 
 ## Why It Fails
 
-Attention is finite even when the context window is not. As total tokens increase, the model's ability to attend to specific tokens degrades. Anthropic's context engineering guide describes this as "context rot" — the model's ability to recall and use information degrades as token count grows. [unverified]
+Attention is finite even when the context window is not. As total tokens increase, the model's ability to attend to specific tokens degrades. Anthropic's context engineering guide describes this as "context rot" — the model's ability to recall and use information degrades as token count grows ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 The symptoms are recognisable: the agent ignores instructions that were followed reliably when the prompt was shorter, produces increasingly generic outputs, or loses track of constraints stated early in the conversation.
 
-Adding irrelevant context does not add capability — it adds noise that competes with the signal for the model's attention. The Anthropic guide recommends identifying "the smallest set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising context volume. [unverified]
+Adding irrelevant context does not add capability — it adds noise that competes with the signal for the model's attention. The Anthropic guide recommends identifying "the smallest possible set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising context volume ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 ## Common Causes
 
@@ -40,7 +40,20 @@ Replace volume with precision:
 - **Isolate with sub-agents**: delegate retrieval-heavy subtasks to isolated context windows; the coordinator receives only the compressed result
 - **Prune tool results**: store large tool outputs externally and provide the agent with a summary plus a path to retrieve the full content if needed
 
-LangChain's Deep Agents implements this through tiered compression: offloading large results, truncating older tool calls, and summarising conversation history — applied in sequence as context pressure increases. [unverified]
+LangChain's Deep Agents implements this through tiered compression: offloading large results, truncating older tool calls, and summarising conversation history — applied in sequence as context pressure increases ([LangChain, 2025](https://blog.langchain.com/context-management-for-deepagents/)).
+
+## Mechanism
+
+Transformer attention computes relevance scores between every token in the context. As context length grows, the signal-to-noise ratio drops: each relevant token must compete with more irrelevant tokens for the model's limited attention budget. Empirically, models exhibit a "lost in the middle" effect — tokens at the start and end of a long context are retrieved reliably, while tokens in the middle receive disproportionately less attention ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Irrelevant content is not inert; it acts as a distractor that displaces attention from genuinely relevant tokens.
+
+## When This Backfires
+
+Loading more context is not always wrong. This remediation is worse than the anti-pattern under specific conditions:
+
+- **Retrieval is unreliable**: when the task requires reasoning over a large space and semantic search returns poor recall, loading more context directly may outperform retrieval-augmented generation with high miss rates.
+- **Latency budget is tight**: on-demand retrieval adds round-trip overhead. If response latency matters more than accuracy, preloading reduces tool calls.
+- **Context is truly homogeneous**: a task that genuinely requires every file (e.g., a whole-repo rename) has no irrelevant content to exclude — the anti-pattern does not apply.
+- **Sub-agent overhead is prohibitive**: spawning isolated context windows adds orchestration cost and failure modes; for short, focused tasks, a single larger context can be cheaper and more reliable.
 
 ## Example
 

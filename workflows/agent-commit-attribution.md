@@ -69,7 +69,7 @@ Task-Reference: #673
 - `Model` — records the model version at time of commit; relevant when a model upgrade changes agent behavior
 - `Task-Reference` — ties the commit to the originating issue or ticket
 
-[unverified] `Agent-Session`, `Model`, and `Task-Reference` trailers are not yet standardized across tools — conventions vary by team.
+`Agent-Session`, `Model`, and `Task-Reference` are team-defined conventions — no cross-tool standard exists; adopt whichever trailer names fit your toolchain.
 
 ## Branch Protection Configuration
 
@@ -132,11 +132,6 @@ For the Copilot cloud agent, signing is automatic — no configuration required.
 - "Require signed commits" branch protection is the policy lever that forces agent identities into the signed-commit model or blocks them from pushing.
 - Metadata trailers (`Agent-Session`, `Model`, `Task-Reference`) complement signing by providing session-level traceability for debugging and auditing.
 - Key management for agent signing identities is real operational overhead; weigh it against the compliance requirement.
-
-## Unverified Claims
-
-- Whether Claude Code agents can be configured to sign commits via `git -c gpg.format=ssh -c user.signingkey=...` — likely supported via standard git configuration but no primary source was found.
-- `Agent-Session`, `Model`, and `Task-Reference` commit trailers are not a standardized convention — adoption varies by team.
 
 ## Related
 

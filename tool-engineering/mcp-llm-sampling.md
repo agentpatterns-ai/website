@@ -14,7 +14,7 @@ tags:
 
 Standard MCP flows in one direction: the client calls a tool on the server. Sampling inverts this. The server sends a `sampling/createMessage` request to the client, the client runs inference against its hosted model, and the result flows back to the server — all within a single tool execution.
 
-GitHub Copilot CLI v1.0.13 (March 30, 2026) introduced this capability: [MCP servers can request LLM inference (sampling) with user approval via a new review prompt](https://github.com/github/copilot-cli/releases/tag/v1.0.13).
+GitHub [Copilot CLI](../tools/copilot/copilot-cli-agentic-workflows.md) v1.0.13 (March 30, 2026) introduced this capability: [MCP servers can request LLM inference (sampling) with user approval via a new review prompt](https://github.com/github/copilot-cli/releases/tag/v1.0.13).
 
 ## The sampling/createMessage Request
 

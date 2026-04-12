@@ -33,19 +33,19 @@ model: sonnet
 Review the provided code changes for...
 ```
 
-Key frontmatter fields: `name`, `description`, `tools` (restrict which tools are available), `model` (route to a specific Claude model — e.g. `opus`, `sonnet`, `haiku`). Set `disable-model-invocation: true` to prevent Claude from auto-invoking the sub-agent [unverified — not found in official sub-agents docs].
+Key frontmatter fields: `name`, `description`, `tools` (restrict which tools are available), `model` (route to a specific Claude model — e.g. `opus`, `sonnet`, `haiku`). Only `name` and `description` are required; all others are optional.
 
 ## Agent Tool `model` Parameter
 
 The `Agent` tool accepts a `model` parameter for per-invocation model selection (e.g. `model: opus`, `model: sonnet`, `model: haiku`). This allows the parent to route individual sub-agent invocations to a specific model regardless of the default.
 
-This parameter was temporarily removed and restored in v2.1.72 [unverified]. Prior to the fix, sub-agents on Bedrock, Vertex, and Foundry that specified a model were silently downgraded to older model versions — this is now resolved [unverified].
+The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-6`) are accepted.
 
 ## Properties
 
 - **Context isolation**: each sub-agent only sees what it needs
 - **Parallelization**: multiple sub-agents run concurrently
-- **Error isolation**: parallel `Read`, `WebFetch`, and `Glob` calls isolate failures — a failed call no longer cancels sibling calls running in parallel; only `Bash` errors still cascade (as of v2.1.72) [unverified]
+- **Error isolation**: each sub-agent's failures are contained within its own context — a failed sub-agent does not cancel sibling sub-agents running in parallel
 - **Specialized instructions**: tailored system prompts per agent
 - **Tool restrictions**: limit access to reduce unintended actions
 - **Worktree isolation**: optional `isolation: "worktree"` for filesystem-level isolation
@@ -88,16 +88,24 @@ Agent(agent: "reviewer", prompt: "Review src/parser.ts for correctness and style
 
 The sub-agent runs in its own context window with access only to `Read`, `Grep`, and `Glob`. The parent receives only the final findings — never the sub-agent's intermediate tool calls or reasoning.
 
+## Why It Works
+
+Sub-agents achieve isolation because each runs in its own fresh context window with only the content provided in its prompt — no inherited conversation history, no parent reasoning, no sibling tool outputs. The parent passes a scoped task description; the sub-agent produces a focused result. This boundary is structural: the Claude Code runtime enforces that sub-agents cannot read the parent context and the parent receives only the final text response, not intermediate tool calls or reasoning traces. Parallelization follows from the same structure — because sub-agents share nothing, multiple can execute concurrently without coordination overhead.
+
+## When This Backfires
+
+Sub-agents add overhead that outweighs the benefit for small tasks. When the work takes fewer tokens to complete than it takes to describe and delegate, spawning a sub-agent is slower and more expensive than doing the work inline.
+
+Debugging is harder because the parent only sees the final result. If a sub-agent silently misunderstands the task or produces a wrong output, the parent has no visibility into the intermediate steps that led there — the isolation that prevents context pollution also prevents inspection.
+
+Sub-agents cannot communicate with each other. If the task requires agents to exchange partial results, coordinate decisions, or share state, [agent teams](agent-teams.md) provide the right model; sub-agents are for fire-and-forget delegation only.
+
 ## Key Takeaways
 
 - Sub-agents run in isolated context — the parent only sees the final result
-- Restrict tools and model per sub-agent for focused, cost-efficient execution — the Agent tool `model` parameter supports per-invocation routing (restored in v2.1.72)
+- Restrict tools and model per sub-agent for focused, cost-efficient execution — the `Agent` tool `model` parameter supports per-invocation routing that overrides the sub-agent definition's `model` field
 - Use worktree isolation for filesystem-level separation in parallel workflows
 - SDK sub-agents can be defined inline for programmatic use
-
-## Unverified Claims
-
-- `disable-model-invocation: true` prevents Claude from auto-invoking the sub-agent [unverified — not found in official sub-agents docs]
 
 ## Related
 

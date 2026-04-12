@@ -19,9 +19,15 @@ tags:
 
 ## The Constraint
 
-Instruction sets have a compliance ceiling. Below it, agents follow rules with reasonable precision. Above it, compliance degrades: first imprecisely (modification errors), then not at all (omission errors). Attention distribution — not agent choice — determines which rules get dropped [unverified].
+Instruction sets have a compliance ceiling. Below it, agents follow rules with reasonable precision. Above it, compliance degrades: first imprecisely (modification errors), then not at all (omission errors). Attention distribution — not agent choice — determines which rules get dropped; even frontier models reach only 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
 
 Architect instruction sets to stay well below the ceiling. Clearly stating a rule does not guarantee it will be followed.
+
+## Why It Works
+
+Transformer models process instructions and task context through the same attention mechanism. As instruction length grows, each rule competes for attention weight at every output token — longer prompts dilute per-rule attention. Research on multi-step agents confirms that monolithic prompts encoding entire decision structures are "prone to instruction-following degradation as prompt length increases" ([Arbor, 2026](https://arxiv.org/abs/2602.14643)).
+
+Position compounds this: tokens near the beginning and end of a context window receive higher attention weights than those in the middle. Rules buried mid-prompt get less reliable attention regardless of their stated importance.
 
 ## Failure Modes
 
@@ -40,13 +46,13 @@ graph TD
 
 ## Primacy Bias
 
-Position within the instruction set affects compliance independent of importance. Instructions near the top receive more reliable attention than those toward the end [unverified] — poor ordering effectively makes low-position rules optional.
+Position within the instruction set affects compliance independent of importance. Instructions near the top receive more reliable attention than those toward the end — primacy bias peaks at moderate instruction densities (150–200 rules) and poor ordering effectively makes low-position rules optional ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
 
 Place critical rules first. Do not rely on the agent finding important rules at line 150.
 
 ## Model Variation
 
-The compliance ceiling varies by model type [unverified — thresholds not publicly benchmarked]:
+The compliance ceiling varies by model type — IFScale benchmarking across 20 frontier models identifies three distinct degradation patterns ([IFScale, 2025](https://arxiv.org/abs/2507.11538)):
 
 - Reasoning models (extended thinking): threshold-style degradation — compliance holds until a point, then drops
 - Standard models: roughly linear degradation as rule count grows
@@ -80,13 +86,33 @@ Decompose into layers:
 | Skills | Task-specific procedures, output templates — loaded on demand |
 | Hooks | Anything that must be enforced deterministically |
 
-If you cannot read your instruction file in under two minutes, it is too long [unverified — rule of thumb, not a measured threshold].
+If you cannot read your instruction file in under two minutes, it is too long — a practical rule of thumb for keeping instruction sets within reliable range.
+
+## When This Backfires
+
+Modularizing instruction sets introduces its own failure modes:
+
+- **Discovery gap.** Skills loaded on demand are invisible to developers who don't know they exist. A new team member reading only `AGENTS.md` misses task-specific conventions, leading to inconsistent output until someone notices.
+- **Over-fragmentation.** Splitting tightly coupled rules across multiple skill files forces the agent to reconcile partial contexts. If a coding skill and a commit skill each define overlapping output format rules, conflicts arise at boundaries.
+- **Audit difficulty.** A single file is auditable in one pass; a dozen skills distributed across `.claude/skills/` requires tooling or discipline to review comprehensively. Governance overhead scales with fragment count.
+- **Small-team cost.** For a solo developer or very small team, the cognitive overhead of managing layers may exceed the compliance gain. A 50-rule `AGENTS.md` that fits comfortably within the ceiling needs no decomposition.
+
+The ceiling is a real constraint, but decomposing past the point of diminishing returns replaces one failure mode with another.
 
 ## Example
 
 **Monolithic (over the ceiling):** A single `AGENTS.md` with 200+ rules covering commit conventions, coding style, testing requirements, deployment steps, output templates, and tool usage. Every incident adds another rule. The agent ignores the last third of the file.
 
 **Layered (below the ceiling):** `AGENTS.md` holds 10 project-wide conventions. A `commit` skill loads commit rules on demand. A `test` skill loads testing requirements. Pre-commit hooks enforce formatting deterministically. Each context is small enough to stay within reliable range.
+
+## When This Backfires
+
+- **Skill loading gaps**: Loading the wrong skill for a task removes task-specific rules entirely — a silent failure mode distinct from degradation.
+- **Overhead for simple tasks**: Stateless one-shot queries gain nothing from modularization; a single focused prompt handles them more cleanly.
+- **Hook maintenance drift**: Rules moved to hooks stay deterministic only if hooks are kept current. A stale linter creates false confidence.
+- **Model updates reset calibration**: Ceiling thresholds change between model versions. An instruction set tested with one model may degrade after an update.
+
+Decomposition is not the only fix. Reducing total rule count — not just distributing rules — also raises headroom, and is often simpler.
 
 ## Key Takeaways
 
@@ -115,3 +141,4 @@ If you cannot read your instruction file in under two minutes, it is too long [u
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — the same degradation mechanism applied to code generation constraints
+- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — empirical data on when instruction files reduce compliance and increase cost

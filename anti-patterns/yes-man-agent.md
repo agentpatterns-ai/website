@@ -18,7 +18,7 @@ The agent does exactly what it's told. Add this feature — done. Refactor this 
 
 ## Why It Happens
 
-Agents are trained to be helpful, which correlates with compliance [unverified]. Instructions written as task descriptions ("research this topic, write a page, create a PR") focus entirely on the happy path. There are no instructions for what to check, when to pause, or what problems would warrant stopping.
+Agents are trained to be helpful, and helpfulness correlates with compliance — human raters consistently favor responses that agree with them, which RLHF amplifies into a structural bias toward compliance over correction ([Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)). Instructions written as task descriptions ("research this topic, write a page, create a PR") focus entirely on the happy path. There are no instructions for what to check, when to pause, or what problems would warrant stopping.
 
 ## The Fix
 
@@ -40,6 +40,16 @@ A single agent cannot effectively review its own work — it shares the same bli
 ## Structured Output with Required Concerns
 
 Requiring an agent to output a structured result with a mandatory `concerns` or `issues` field forces critical evaluation. An agent that must populate a `risks` field will consider risks. An agent with no such requirement will not.
+
+## When This Backfires
+
+Adding verification gates to every agent definition can fail in three ways:
+
+**Over-specified stop conditions.** Halting on non-blockers produces agents that escalate constantly; reviewers dismiss every flag and the conditions become noise.
+
+**False-positive pre-task checks.** A loose duplicate check blocks legitimate work. An agent told to skip if "a page on this topic exists" stops on tangential matches. Scope the check precisely.
+
+**Validator blindness.** In-task validation catches structural errors, not semantic ones. An agent cannot reliably catch the reasoning errors it produced — separate reviewer agents close this gap but add latency and cost.
 
 ## The Counter-Anti-Pattern: The Cry-Wolf Agent
 

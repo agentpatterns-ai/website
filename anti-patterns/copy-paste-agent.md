@@ -20,13 +20,13 @@ The symptom is the same agent definition — same core instructions, same tool l
 
 ## Why It Happens
 
-The immediate cause is the absence of a sharing mechanism. When copying a file is faster than setting up a skill or plugin, copying wins. The second cause is unawareness: many teams don't realize that [Claude Code supports user-level agents](https://code.claude.com/docs/en/sub-agents) at `~/.claude/agents/` and project-level skills that can be composed rather than duplicated.
+The immediate cause is the absence of a sharing mechanism. When copying a file is faster than setting up a skill or plugin, copying wins. The second cause is unawareness: many teams don't realize that [Claude Code supports user-level agents](https://code.claude.com/docs/en/sub-agents) at `~/.claude/agents/` and [project-level skills](https://code.claude.com/docs/en/skills) that can be composed rather than duplicated.
 
 ## The Fix
 
 Extract the shared parts of an agent definition into a skill. Skills are the reusable unit — they live in one place, and agents compose them. When the skill changes, all agents that reference it get the update automatically.
 
-For cross-project sharing, package skills and agents as plugins and install them across projects. For personal reuse across all projects, place agents and skills in `~/.claude/agents/` and `~/.claude/skills/` [unverified] — they are available to any project session.
+For cross-project sharing, package skills and agents as plugins and install them across projects. For personal reuse across all projects, place agents and skills in `~/.claude/agents/` and `~/.claude/skills/` — they are available to any project session ([Skills documentation](https://code.claude.com/docs/en/skills#where-skills-live)).
 
 ## The Anti-Pattern Within the Anti-Pattern
 
@@ -50,11 +50,17 @@ Six months later:
 
 When a new security rule is discovered and added to the backend copy, the frontend and mobile copies never receive it.
 
-**Fixed with skills**: Extract the shared rules into `~/.claude/skills/security-review.md`. Each repository's agent composes it with `apply skill: security-review`. When the skill is updated, all three agents benefit automatically. Repository-specific rules remain in each agent definition without duplicating the shared core.
+**Fixed with skills**: Extract the shared rules into `~/.claude/skills/security-review/SKILL.md`. Each repository's agent references it via the `skills:` frontmatter field (e.g., `skills: [security-review]`). When the skill is updated, all three agents benefit automatically. Repository-specific rules remain in each agent definition without duplicating the shared core.
 
-## Unverified Claims
+## When This Backfires
 
-- User-level skill storage paths `~/.claude/skills/` `[unverified]`
+Extracting shared skills only helps when agents are maintained over time. Three conditions where the anti-pattern is less harmful than it appears:
+
+- **True one-off agents**: an agent built for a single short project that will never be reused or updated doesn't accumulate drift — copies never diverge because changes never happen.
+- **Premature abstraction cost**: extracting a skill before the shared core stabilizes forces every downstream agent to absorb every experimental change. Waiting until the shared behavior is settled reduces churn.
+- **Transient fork intentionality**: occasionally a copy is an intentional fork — one project needs behavior that diverges fundamentally. In this case the copies are meant to diverge, and a shared skill adds coupling without benefit.
+
+The pattern is harmful specifically when agents are expected to receive updates and improvements. If neither condition holds, audit whether the shared skill is pulling its weight.
 
 ## Related
 

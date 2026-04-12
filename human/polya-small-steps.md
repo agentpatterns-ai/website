@@ -22,7 +22,7 @@ The critical finding was not that AI causes skill loss. It was that **interactio
 
 ## The Four-Step Structure
 
-George Polya's problem-solving framework from *How to Solve It* (1945) maps onto LLM-assisted coding [unverified]:
+George Polya's problem-solving framework from *How to Solve It* (1945) is a practitioner-applied lens for LLM-assisted coding — the mapping below is a structured application of the original four steps, not a published finding:
 
 | Polya step | What it means with AI |
 |-----------|----------------------|
@@ -122,10 +122,6 @@ At commit time, the developer can explain every line. When burst behavior appear
 - Small steps compound: errors caught at 3 lines are recoverable; errors discovered at 200 lines are structural
 - Use delegation mode freely for boilerplate, permutation work, and throwaway scripts — small-steps discipline is for contexts where comprehension matters
 
-## Unverified Claims
-
-- The Polya four-step framework mapped to LLM-assisted coding — this is the author's application of Polya's steps to AI workflows, not a published finding [unverified]
-
 ## Related
 
 - [Skill Atrophy](skill-atrophy.md) — cumulative capability loss when delegation mode becomes the default
@@ -134,3 +130,5 @@ At commit time, the developer can explain every line. When burst behavior appear
 - [Vibe Coding](../workflows/vibe-coding.md) — the opposite workflow: appropriate for low-risk, throwaway contexts
 - [Process Amplification](process-amplification.md) — strong engineering practices scale with agents; this discipline is one such practice
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — prioritizing understanding of the problem over speed of output
+- [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — structured approach to accelerating skill acquisition without comprehension loss
+- [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — managing the cognitive overhead of sustained AI-assisted work

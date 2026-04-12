@@ -40,7 +40,7 @@ Knowledge and execution change for different reasons:
 
 When you embed knowledge in agents, a domain change forces agent changes. When you embed execution in skills, a tool change forces skill changes. Separating them means each changes only when its own concern changes. [unverified]
 
-This mirrors the [harness engineering pattern](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — externalizing domain knowledge from the coding agent's execution logic.
+This mirrors the [harness engineering](../agent-design/harness-engineering.md) pattern at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — externalizing domain knowledge from the coding agent's execution logic ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
 ## The Anti-Pattern: Skill Scripts
 
@@ -105,3 +105,4 @@ The first version works only in Claude Code and breaks if the tool API changes. 
 - [Skill Tool as Enforcement](skill-tool-runtime-enforcement.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
+- [Feature List Files](../instructions/feature-list-files.md)

@@ -31,11 +31,11 @@ These are not competing philosophies. They are tools for different workloads, an
 
 The agent stays in a single session, building on everything it has seen. Each iteration reads prior results and accumulated artifacts without resetting.
 
-Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) is the canonical example. The agent modifies `train.py`, runs a 5-minute experiment, evaluates the result via `val_bpb`, keeps or discards, and repeats. It reads prior experiment history, Git history (successful commits), and current code to decide what to try next. Over two days, ~700 autonomous iterations produced ~20 additive improvements and an 11% efficiency gain `[unverified]`.
+Karpathy's [autoresearch](https://github.com/karpathy/autoresearch) is the canonical example. The agent modifies `train.py`, runs a 5-minute experiment, evaluates the result via `val_bpb`, keeps or discards, and repeats. It reads prior experiment history, Git history (successful commits), and current code to decide what to try next. The autoresearch README targets roughly 12 experiments per hour — enough to run hundreds of iterations over a multi-day session.
 
 **Why it works for synthesis**: the agent needs to cross-reference findings, spot patterns across experiments, and avoid repeating failed approaches. Accumulated context enables this naturally.
 
-**Why it breaks for long runs**: [context rot](../context-engineering/context-window-dumb-zone.md) -- reasoning quality degrades as the window fills. Anthropic identifies this as a "performance gradient" that appears "across all models." BABILong benchmarks show reasoning tasks retain only [10-20% effective context](../context-engineering/context-window-dumb-zone.md) at high fill levels. Karpathy experienced this directly: the agent "discovered" that bigger networks reduce loss -- a trivially confounded result that required manual correction `[unverified]`.
+**Why it breaks for long runs**: [context rot](../context-engineering/context-window-dumb-zone.md) -- reasoning quality degrades as the window fills. Anthropic identifies this as a "performance gradient" that appears "across all models." BABILong benchmarks show reasoning tasks retain only [10-20% effective context](../context-engineering/context-window-dumb-zone.md) at high fill levels. Karpathy noted this failure mode directly: as sessions lengthened, the agent began producing spurious correlations requiring manual correction.
 
 ## Within-Session Compression
 
@@ -72,7 +72,7 @@ flowchart TD
 
 ## Hybrid: Research Then Implement
 
-The most effective pattern for complex work combines both strategies across phases. `[unverified]`
+A hybrid approach combines both strategies across phases, matching each phase to the workload it handles best.
 
 ```mermaid
 graph LR
@@ -104,11 +104,6 @@ If this were a single accumulated-context run, the agent would degrade after doz
 - Each strategy has a primary risk: context rot (accumulated), lossy compression (within-session), fragmented coherence (fresh). Choose based on which risk matters least for the workload.
 - Hybrid workflows -- research with accumulated context, then implement with fresh context -- combine the strengths of both strategies.
 - The choice is workload-dependent, not ideological. Match the strategy to the task.
-
-## Unverified Claims
-
-- Karpathy's autoresearch producing ~700 iterations, ~20 additive improvements, and 11% efficiency gain -- these figures are reported in social media commentary, not in the autoresearch repository documentation `[unverified]`
-- Karpathy's agent "discovering" that bigger networks reduce loss as a trivially confounded result requiring manual correction -- referenced in community discussion but not verified against a primary source `[unverified]`
 
 ## Related
 

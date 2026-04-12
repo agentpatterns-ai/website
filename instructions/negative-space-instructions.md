@@ -1,6 +1,6 @@
 ---
 title: "Negative Space Instructions: What NOT to Do in Agent Prompts"
-description: "Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance. Instruction Polarity, Positive Rules Over"
+description: "Use negative constraints — banned phrases, scope exclusions, tool restrictions — to eliminate known failure modes in agent prompts with binary, greppable rules."
 tags:
   - instructions
 aliases:
@@ -20,7 +20,7 @@ aliases:
 
 "Write concise content" is vague — concise to whom, in what context? "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is precise and binary. The agent either produced the phrase or it didn't. There is no interpretation required.
 
-Negative constraints are cheap in tokens, unambiguous in intent, and verifiable programmatically. A grep for banned phrases confirms compliance without human review. Equivalent positive guidance ("write in a direct, information-dense style") requires judgment to evaluate [unverified].
+Negative constraints are cheap in tokens, unambiguous in intent, and verifiable programmatically. A grep for banned phrases confirms compliance without human review. Equivalent positive guidance ("write in a direct, information-dense style") requires a human or second model to evaluate — there is no deterministic check.
 
 ## Types of Negative Constraints
 
@@ -60,6 +60,14 @@ Relying entirely on positive guidance leaves edge cases open. Relying entirely o
 
 A well-formed negative constraint is one you can verify automatically. If the constraint cannot be expressed as a grep pattern or a deterministic check, it may belong in positive guidance instead. This also makes negative constraints audit-friendly: a CI step can flag violations before human review.
 
+## Why It Works
+
+The effectiveness of negative constraints comes from reducing the interpretation surface. A constraint like "no filler phrases" collapses to a binary outcome — the phrase either appears or it doesn't. The agent cannot partially comply; the output is deterministically checkable. Positive guidance like "write concisely" leaves the interpretation open: the agent must model what "concise" means in context, and that model can drift.
+
+Palantir's prompt engineering guidance documents this directly: banning specific undesired outputs is more reliable than describing desired characteristics, because banned patterns can be verified while quality attributes require judgment ([Palantir AIP prompt engineering best practices](https://www.palantir.com/docs/foundry/aip/best-practices-prompt-engineering)).
+
+This specificity advantage also applies at enforcement time. A CI step can grep for banned phrases and block a commit; it cannot evaluate whether prose is "information-dense." The constraint is only as strong as your ability to verify it.
+
 ## What Negative Constraints Cannot Do
 
 Negative constraints eliminate known failure modes. They do not handle unknown ones. If an agent finds a new way to violate the spirit of an instruction, a negative constraint won't catch it. Keep a list of negative constraints short and targeted; don't try to enumerate every possible mistake.
@@ -92,16 +100,27 @@ Complete the task in a single session. Be thorough.
 
 Each positive directive ("Write clear, self-documenting code") sets the goal. The negative constraints close off the most common violations — and every one is verifiable with a grep or a git diff.
 
+## Why It Works
+
+Negative constraints reduce the agent's search space. When a model generates text, every possible token is a candidate. A negative constraint eliminates entire token sequences from consideration, which has a discrete and binary effect: the banned phrase either appears or it doesn't. Positive guidance ("be concise") adds a soft preference that must compete against other objectives in the model's output distribution — it narrows the distribution without hard-cutting regions. Negative constraints are closest to hard constraints in optimization: they create a feasibility boundary rather than a preference gradient.
+
+## When This Backfires
+
+Negative constraints fail in predictable ways:
+
+- **Unknown failure modes**: A constraint list only covers mistakes the author anticipated. When an agent finds a new way to violate the spirit of an instruction, no existing negative constraint catches it — the list must be updated reactively.
+- **Superficial compliance**: An agent can satisfy the letter of a negative constraint while preserving the underlying problem. Banning "in this guide" doesn't prevent wordy preambles; it just changes the wording.
+- **Constraint explosion**: As edge cases accumulate, the constraint list grows until it dominates the prompt. Long constraint lists are harder to reason about and more likely to conflict internally.
+- **Missing context**: Scope exclusions ("do not modify files outside docs/") assume the agent correctly identifies what counts as "outside docs/". Ambiguous boundaries produce false compliance.
+
+For must-never-fail constraints, rely on enforced mechanisms — hooks, CI checks, schema validation — rather than instruction text alone.
+
 ## Key Takeaways
 
 - Negative constraints are binary, cheap, and verifiable — prefer them for eliminating known failure modes
 - Design constraints to be greppable: if you cannot check compliance automatically, reconsider the form
 - Pair negative constraints with positive guidance: state the goal, then close off the wrong paths
 - For must-never-fail constraints, use hooks rather than instructions
-
-## Unverified Claims
-
-- Equivalent positive guidance requires judgment to evaluate [unverified]
 
 ## Related
 

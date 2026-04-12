@@ -18,6 +18,7 @@ tags:
 - [Coding Agent](coding-agent.md) — Asynchronous agent that works via GitHub Actions to plan, implement, and open PRs
 - [Copilot Extensions](copilot-extensions.md) — Build agents and skillsets that integrate into Copilot Chat via GitHub Marketplace
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
+- [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md) — Route Dependabot alerts to Copilot for autonomous fix generation with human review at merge
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol

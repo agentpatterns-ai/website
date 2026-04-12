@@ -17,7 +17,7 @@ Traditional CI/CD handles binary outcomes: tests pass or fail, builds succeed or
 
 ## How It Works
 
-Continuous AI workflows execute coding agents within standard CI infrastructure (e.g., GitHub Actions), triggered by the same mechanisms as traditional pipelines: schedules, repository events, or manual dispatch. The difference is the instruction format. Instead of YAML-encoded rules, you express expectations in plain language: "Check whether documented behavior matches implementation, explain mismatches, and propose fixes." The agent interprets these instructions, reasons about the codebase, and produces [reviewable outputs like pull requests, issues, or reports](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/) [unverified].
+Continuous AI workflows execute coding agents within standard CI infrastructure (e.g., GitHub Actions), triggered by the same mechanisms as traditional pipelines: schedules, repository events, or manual dispatch. The difference is the instruction format. Instead of YAML-encoded rules, you express expectations in plain language: "Check whether documented behavior matches implementation, explain mismatches, and propose fixes." The agent interprets these instructions, reasons about the codebase, and produces [reviewable outputs like pull requests, issues, or reports](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/).
 
 ```mermaid
 graph TD
@@ -36,7 +36,7 @@ The critical design constraint is that agents produce artifacts, never autonomou
 
 ## Task Categories
 
-The following categories of work suit this pattern, as [identified by GitHub](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/) [unverified — the source describes seven use cases; the exact taxonomy below is unconfirmed]:
+The following categories represent common applications of this pattern, adapted from [seven use cases identified by GitHub](https://github.blog/ai-and-ml/generative-ai/continuous-ai-in-practice-what-developers-can-automate-today-with-agentic-ci/):
 
 - **Triage** — Label and route incoming issues based on content analysis
 - **Documentation** — Detect drift between docs and implementation, propose updates
@@ -90,6 +90,16 @@ jobs:
 ```
 
 The `permissions` block enforces the read-only default described in the Safe Outputs section — the agent can only write via the explicitly allowed `create_pull_request` tool. Because the agent receives a plain-language instruction rather than a YAML rule, it can reason about semantic drift that no linter could express.
+
+## When This Backfires
+
+Continuous AI is not a drop-in upgrade to every CI pipeline. Failure conditions include:
+
+- **Cost-sensitive pipelines** — LLM inference runs on every trigger; a nightly schedule across a large monorepo can accumulate significant token costs that deterministic linters never incur.
+- **Compliance environments requiring reproducibility** — agent outputs are non-deterministic by nature; if audit trails require bit-for-bit reproducible CI results, agentic steps break that contract.
+- **High-churn codebases** — when the repository changes faster than agents can review it, a backlog of stale agent-authored PRs accumulates and becomes noise rather than signal.
+- **Tasks already expressible as rules** — applying LLM reasoning to checks that a linter handles precisely adds latency and cost without improving accuracy; the non-determinism becomes a liability, not an asset.
+- **Prompt-injection attack surface** — any workflow that feeds user-controlled content (issue bodies, PR titles, commit messages) into an agent prompt is a potential injection vector; safe-output guardrails reduce but do not eliminate this risk.
 
 ## Key Takeaways
 

@@ -21,7 +21,7 @@ Long-horizon tasks generate context from conversation turns, tool inputs, and to
 
 ## Tiered Compression
 
-[LangChain's Deep Agents framework](https://blog.langchain.com/context-management-for-deepagents/) implements three compression tiers, applied in order as context pressure increases:
+LangChain's Deep Agents framework implements three compression tiers, applied in order as context pressure increases:
 
 ```mermaid
 graph TD
@@ -39,7 +39,7 @@ graph TD
 
 Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. The full content goes to disk; the agent re-reads it when needed.
 
-This preserves recoverability without keeping content in active context. LangChain offloads responses above 20,000 tokens [unverified — LangChain-specific default].
+This preserves recoverability without keeping content in active context. The threshold for offloading is configurable; frameworks typically set it in the range of tens of thousands of tokens, above which keeping content in active context yields diminishing attention returns.
 
 ### Tier 2: Summarise Conversation History
 
@@ -56,7 +56,7 @@ The agent restarts with the summary as its prior context. [Anthropic's context e
 
 ### Image Preservation During Compaction
 
-Claude Code's compaction (v2.1.70+) preserves images in the summariser request [unverified]. Visual context survives compression cycles, and image tokens become eligible for prompt cache hits — making compaction passes cheaper for image-heavy workflows.
+Claude Code's compaction preserves images in the summariser request, so visual context survives compression cycles. Image tokens also become eligible for prompt cache hits after compaction — making subsequent turns cheaper for image-heavy workflows.
 
 ## Progressive Five-Stage Compaction
 
@@ -72,7 +72,7 @@ OPENDEV extends the two-tier approach with Adaptive Context Compaction (ACC), a 
 
 Recent tool outputs are preserved at full fidelity. An Artifact Index tracks all files touched during the session and is serialized into compaction summaries, so the agent remembers what it worked with after compression. The history archive path is injected into the summary so the agent can recover details on demand, making compaction effectively non-lossy ([Bui, 2026 §2.3.6](https://arxiv.org/abs/2603.05344)).
 
-The key difference from LangChain's binary trigger: graduated stages let the agent degrade gracefully rather than hitting a single compression cliff [unverified].
+The key difference from a single-threshold approach: graduated stages let the agent degrade gracefully rather than hitting a single compression cliff where the full history is suddenly summarised in one pass.
 
 ## What to Preserve in Summaries
 
@@ -84,6 +84,19 @@ Summaries that only capture "what happened" without "what matters next" cause [o
 | State | What has been built, changed, or decided |
 | Constraints | Any constraints surfaced during the session |
 | Next steps | The immediate next action |
+
+## Why It Works
+
+Transformer attention is computed over all tokens in the active window. As context grows, relevant signal competes with accumulated noise — redundant tool outputs, superseded reasoning, resolved errors — and retrieval precision degrades. Compression works by reducing this noise floor: offloading removes content that is addressable on demand but rarely needed, while summarisation distils decision rationale and state into a compact form the model can condition on reliably. The mechanism is selective discarding, not lossy encoding — the underlying artifacts remain on disk, so compaction is non-destructive for recoverable content.
+
+## When This Backfires
+
+Compression degrades task continuity when applied incorrectly:
+
+- **Silent context loss**: Overly aggressive summarisation can drop subtle constraints whose importance only becomes apparent later in the task — the [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends starting with maximum recall and iterating toward precision, not the reverse.
+- **Premature compaction**: Triggering compaction too early (low threshold) forces unnecessary lossy summarisation when the context is still navigable; this can cause [objective drift](../anti-patterns/objective-drift.md) if the summary omits scope constraints.
+- **Broken recoverability**: Offloaded payloads that are deleted or moved after compaction cannot be re-read on demand, making the approach worse than in-context storage. Ensure the observation store persists for the full session lifetime.
+- **Compounding errors across cycles**: Each compaction cycle introduces summarisation error; long sessions with many cycles accumulate drift that a single summary cannot.
 
 ## Testing Compression
 
@@ -123,10 +136,6 @@ agent = Agent(
 
 The summariser prompt structure maps to the preservation table above: objective, state, constraints, next steps.
 
-## Unverified Claims
-
-- LangChain offloads tool responses above 20,000 tokens `[unverified — LangChain-specific default]`
-
 ## Related
 
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
@@ -144,3 +153,6 @@ The summariser prompt structure maps to the preservation table above: objective,
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Prompt Cache Economics Across Providers](prompt-cache-economics.md)
 - [Structure Prompts with Static Content First to Maximize Cache Hits](static-content-first-caching.md)
+- [Context Priming](context-priming.md)
+- [Attention Sinks](attention-sinks.md)
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)

@@ -145,7 +145,7 @@ After each step, append to /tmp/incident-{timestamp}.md:
 This file is the handoff artifact if the session ends or a different operator continues.
 ```
 
-This is equivalent to the feature list and progress file pattern described in [Anthropic's harness engineering documentation](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) for long-running agents. See [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) for the full pattern.
+This is equivalent to the feature list and progress file pattern described in [harness engineering](../agent-design/harness-engineering.md) for long-running agents ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). See [Goal Monitoring and Progress Tracking](../agent-design/goal-monitoring-progress-tracking.md) for the full pattern.
 
 ## Adoption Driver: Measurable Goals
 

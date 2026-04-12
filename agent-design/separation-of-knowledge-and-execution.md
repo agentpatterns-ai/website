@@ -45,14 +45,13 @@ graph TD
     A2 --> S3[Skill: Style Guide]
 ```
 
-Shared skills mean a single update propagates everywhere. Shared agents mean orchestration changes don't require agent rewrites.
+Shared skills mean a single update propagates everywhere. Shared agents mean orchestration changes don't require agent rewrites. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) presents these composable patterns as the recommended building blocks for agent systems, emphasizing reuse over monolithic design.
 
 ## Independent Testability
 
 Each layer can be validated without the others:
 
-- **Skills**: Are the URLs still live? Is the knowledge current? [unverified]
-
+- **Skills**: Are the referenced URLs still live? Does the knowledge match the current tool behavior?
 - **Agents**: Given a skill, does the agent produce correct output for a known input?
 - **Commands**: Given working agents, does the command sequence produce the expected pipeline behavior?
 
@@ -61,6 +60,14 @@ This mirrors the layered architecture pattern in software — data layer, busine
 ## Anti-Pattern: Embedded Knowledge
 
 The failure mode is embedding domain knowledge directly in agent definitions. Knowledge drifts independently in each agent, verification becomes ad-hoc, and new agents require duplicating knowledge from existing ones.
+
+## When This Backfires
+
+Three-layer separation adds indirection overhead that is not always worth it:
+
+- **Single-purpose throwaway agents**: If an agent will never be reused and has no sibling agents sharing knowledge, extracting a skill file adds file management cost with no payoff. The pattern is optimized for shared reuse.
+- **Rapidly evolving domains**: When the domain knowledge changes faster than the agents using it, a centralized skill becomes a choke point — every agent breaks when the skill is updated, requiring coordinated testing across all consumers.
+- **Small teams with one agent author**: Separation works best when different people or processes own different layers. When one person writes every skill, agent, and command, the abstraction adds navigation overhead without the coordination benefit it is designed to provide.
 
 ## Example
 
@@ -117,10 +124,6 @@ With this structure, updating the source list in `source-list.md` propagates imm
 - Updating a skill propagates to all agents that use it without changing agent definitions.
 - Each layer can be tested and replaced independently of the others.
 - Embedding knowledge in agents causes duplication, drift, and coupling.
-
-## Unverified Claims
-
-- Skills can be independently validated (e.g., checking if URLs are still live and knowledge is current) `[unverified]`
 
 ## Related
 

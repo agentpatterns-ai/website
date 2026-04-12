@@ -25,7 +25,7 @@ The outputs look correct because the model generates plausible outputs — not v
 
 ### Feedback Loops Degrade Over Generations
 
-When AI-generated artifacts feed back into training, evaluation, or quality gates, distributional shift compounds across each cycle. By the ninth generation of model-training-on-model-output in documented experiments, output degraded catastrophically — a prompt about architecture produced only nonsensical text. [unverified]
+When AI-generated artifacts feed back into training, evaluation, or quality gates, distributional shift compounds across each cycle. "The Curse of Recursion" documented this in OPT-125m: by generation 9, outputs degraded from coherent English to fragmented, repetitive text — the model's distribution had drifted far from the original. [Source: [The Curse of Recursion: Training on Generated Data Makes Models Forget](https://arxiv.org/abs/2305.17493)]
 
 Smaller-scale versions of this loop appear in daily coding agent workflows:
 
@@ -65,6 +65,17 @@ The evals measured what the model found plausible. They never measured what the 
 
 The fix: seed evals from real production failures and user-reported bugs, then calibrate LLM judge scores against human expert review before using them as a quality gate.
 
+## When This Backfires
+
+The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as *starting points*, not ground truth.
+
+- **Bootstrapping test coverage**: AI-generated test stubs seeded from real code paths are a productivity win — the risk is treating pass/fail rates as meaningful before humans verify the stubs reflect correct behavior
+- **Data augmentation**: Synthetic training examples improve coverage of rare cases when augmented into a dataset that already has real-world grounding — the fallacy fires only when synthetic data *replaces* real data entirely
+- **Eval templating**: LLM-generated eval rubrics reduce scaffolding work; calibrating those rubrics against human expert judgment (as Anthropic recommends) converts them from synthetic ground truth into validated artifacts
+- **Short feedback loops**: A coding agent checking its own output against a compiled binary or test runner is using environmental ground truth, not synthetic — the fallacy applies to AI-on-AI assessment, not AI-plus-deterministic-signal loops
+
+The pattern to avoid is circular: AI generates artifact → AI judges artifact → scores are accepted as authoritative without external grounding. Adding any external validation signal (human review, test execution, real user behavior) breaks the circularity.
+
 ## Key Takeaways
 
 - AI-generated artifacts measure model priors, not correctness — using them as ground truth introduces feedback loops
@@ -72,10 +83,6 @@ The fix: seed evals from real production failures and user-reported bugs, then c
 - Broken graders produce misleading scores that look authoritative — validate evaluation infrastructure before trusting its output
 - Ground truth comes from the environment: test execution, user behavior, deterministic validators — not model self-assessment
 - The fallacy generates multiple downstream anti-patterns: reward hacking, documentation drift, training data contamination
-
-## Unverified Claims
-
-- The ninth-generation model collapse experiment showing "only nonsensical text about jackrabbit colors" — cited in the source video (Baylor University, YouTube) but not directly verifiable from a linkable text source [unverified]
 
 ## Related
 

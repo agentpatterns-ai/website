@@ -39,7 +39,7 @@ Each memory entry is a structured triple `(z, d, e)`:
 - **d** — a structured description with objective and mechanism-level keywords (the retrieval anchor)
 - **e** — an abstracted experience with instance-specific noise removed (file paths, variable names stripped)
 
-The abstraction step is critical: raw trajectory storage yields only +1.2 pp improvement; LLM-abstracted experience entries deliver +3.9 pp, because abstraction distills transferable insights while removing artifacts that don't generalize. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) [unverified]
+The abstraction step is critical: raw trajectory storage yields only +1.2 pp improvement; LLM-abstracted experience entries deliver +3.9 pp, because abstraction distills transferable insights while removing artifacts that don't generalize. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 ## Two-Stage Retrieval
 
@@ -60,13 +60,13 @@ Stage 1 hard-filters by category `z`, eliminating cross-phase contamination befo
 
 **Transition prediction via system prompt.** The agent autonomously predicts its current functional category and synthesizes a structured description as part of its reasoning process. This is integrated into the system prompt — no separate orchestrator is required. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
-**Memory sparsity in early sessions.** Gains are near zero with few stored memories per category [unverified — the "fewer than five entries" threshold is not confirmed as an exact figure in the cited paper]. Gains accelerate with density, reaching +9–10 pp in later phases. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+**Memory sparsity in early sessions.** The first ~200 stored instances produce a slight performance dip (−1 pp) from retrieval overhead without sufficient relevant matches; gains accelerate with density, reaching +9–10 pp after 300+ instances. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 **Model-agnostic.** Results are consistent across multiple model families; Gemini 2.5 Pro sees +6.8 pp. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 ## Results
 
-Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified compared to baseline agents without subtask alignment. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified compared to baseline agents without subtask alignment. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) The broader principle — that retrieval granularity should match reasoning granularity — is independently supported by work on dual-layer episodic-semantic memory, where granular interaction logs paired with abstract concept synthesis outperform flat retrieval on multi-hop reasoning tasks. ([arXiv:2601.02744](https://arxiv.org/abs/2601.02744))
 
 ## Relation to Scope-Based Memory
 
@@ -74,7 +74,7 @@ This technique addresses a different dimension from the scope-based memory patte
 
 ## Example
 
-The following shows the structure of a memory entry triple  for the **Reproduce** category, and how two-stage retrieval uses it to inject only the relevant experience when a new task reaches its reproduction stage.
+The following shows the structure of a memory entry triple for the **Reproduce** category, and how two-stage retrieval uses it to inject only the relevant experience when a new task reaches its reproduction stage.
 
 ```python
 # Storing a memory entry after a successful Reproduce subtask
@@ -116,10 +116,14 @@ The injected experience is the abstracted lesson from the prior pagination episo
 - LLM-abstracted experience entries outperform raw trajectory storage; abstraction is not optional.
 - Gains are largest for long, multi-step tasks and grow with memory density.
 
-## Unverified Claims
+## When This Backfires
 
-- Raw trajectory storage yields only +1.2 pp improvement; LLM-abstracted experience entries deliver +3.9 pp [unverified]
-- Performance dips when fewer than five entries exist per category [unverified — the "fewer than five entries" threshold is the author's characterization and is not confirmed as an exact figure in the cited paper]
+Subtask-level memory adds overhead that outweighs benefits in several conditions:
+
+- **Cold-start penalty**: The first ~200 instances yield a slight performance dip; retrieval fires on sparse per-category pools with no good matches. For tasks that won't accumulate 200+ episodes, skip memory entirely.
+- **Category misprediction**: The agent predicts its current functional category via system prompt. Misprediction routes retrieval to the wrong pool, injecting irrelevant experience that actively misleads. Tasks with ambiguous or overlapping phases (analyze and edit interleaved) increase this risk.
+- **Abstraction cost**: Each successful subtask requires an LLM call to abstract the experience. At scale this adds latency and token cost. Raw trajectory storage avoids this but delivers only a fraction of the gain (+1.2 pp vs +3.9 pp).
+- **Non-repetitive task streams**: The pattern is optimized for agents that encounter recurring task structures. One-off or highly heterogeneous task streams never reach the density where cross-episode transfer materializes.
 
 ## Related
 

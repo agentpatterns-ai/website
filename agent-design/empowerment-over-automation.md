@@ -1,6 +1,6 @@
 ---
 title: "Empowerment Over Automation for AI Agent Development"
-description: "AI tools should skip tedious work while preserving your autonomy over architectural decisions, domain logic, and creative choices — you always own the merge"
+description: "AI tools should skip tedious work while preserving your autonomy over architectural decisions, domain logic, and creative choices — you always own the merge button."
 tags:
   - human-factors
 aliases:
@@ -17,6 +17,8 @@ aliases:
 Effective AI coding tools enhance your capability without replacing your judgment. The design goal is empowerment: handle mechanical tasks so you can focus on decisions that require experience, context, and accountability. As GitHub's developer research concludes, "effective AI empowers developers, but doesn't replace their judgment" ([GitHub Blog: What AI Is Actually Good For](https://github.blog/ai-and-ml/generative-ai/what-ai-is-actually-good-for-according-to-developers/)).
 
 This is a design philosophy, not a limitation. Tools built for empowerment preserve developer judgment. Tools built for full automation create resistance and risk.
+
+The mechanism is automation bias: the tendency to over-delegate cognitive tasks to machines even when contradicting evidence is present ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)). Empowerment counters this by keeping AI in its strength zone and preserving the developer feedback loop for decisions where organizational context and long-term accountability matter.
 
 ## What AI Should Handle
 
@@ -38,7 +40,7 @@ Three categories of work remain human ([GitHub Blog: Why Developers Will Always 
 
 **Ethics and values.** The question "Should we build this?" demands your judgment. AI can tell you how to implement a feature — it cannot tell you whether you should.
 
-The merge button embodies this boundary. GitHub's pull request model, introduced in 2008, "hard-wired accountability into modern software" by requiring human approval before merging. That governance structure remains essential regardless of how capable agents become ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)).
+The merge button embodies this boundary. GitHub's pull request model "hard-wired accountability into modern software" by requiring human approval before merging — a governance structure that remains essential regardless of agent capability ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)).
 
 ## Flow Preservation
 
@@ -46,11 +48,11 @@ How AI integrates matters as much as what it does. Chat-based interfaces create 
 
 Contextual inline suggestions — autocomplete, naming proposals, refactoring hints triggered at the point of editing — integrate without disrupting flow. The distinction is not about capability but about preserving the productive state where developers stay focused on the problem.
 
-Design implication: prefer ambient assistance (suggestions that appear in context) over interruptive assistance (chat windows that demand attention switching) for tasks where you are actively writing code.
+Prefer ambient assistance (suggestions in context) over interruptive assistance (chat windows requiring attention switching) during active coding.
 
 ## AI as First-Pass Filter
 
-A practical application of this principle is using AI for mechanical scanning before human review. Developer interviews show that running AI self-reviews before opening PRs "wiped out an entire class of trivial nit-picks," reducing review back-and-forth by roughly one-third ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)) [unverified].
+A practical application: use AI for mechanical scanning before human review. Developer interviews show that running AI self-reviews before opening PRs "wiped out an entire class of trivial nit-picks," reducing review back-and-forth by roughly one-third ([GitHub Blog: Why Developers Will Always Own the Merge Button](https://github.blog/ai-and-ml/generative-ai/code-review-in-the-age-of-ai-why-developers-will-always-own-the-merge-button/)).
 
 The recommended layering:
 
@@ -58,7 +60,15 @@ The recommended layering:
 2. **CI stage**: Automated gates enforce tests, security scans, and linters.
 3. **Review stage**: Humans focus on architectural decisions, organizational context, and cultural standards.
 
-This layering keeps AI in its strength zone (pattern matching, consistency enforcement) while reserving human attention for decisions AI cannot make.
+This keeps AI in its strength zone (pattern matching, consistency enforcement) while reserving human attention for decisions AI cannot make.
+
+## When This Backfires
+
+The empowerment model breaks down in specific conditions:
+
+- **Over-intervention on mature pipelines.** In highly standardized codebases with narrow decision spaces, every change routed through human architectural review adds latency without improving outcomes — lightweight automation (auto-merge for green CI on dependency bumps) outperforms the checkpoint overhead.
+- **Automation bias flips the risk.** Developers who trust AI on mechanical tasks often extend that trust into judgment-intensive decisions without noticing the boundary shift. Calibration degrades when AI handles 90%+ of a workflow and cognitive engagement drops.
+- **Junior teams without review culture.** When reviewers lack the experience to evaluate AI output, the human checkpoint rubber-stamps AI decisions. Structured checklists or pairing protocols provide more protection than individual judgment alone.
 
 ## Example
 
@@ -72,10 +82,6 @@ The same team rejects a proposal to let the agent auto-approve PRs that pass CI.
 - Prefer contextual inline suggestions over chat-based interfaces for active coding tasks — flow preservation determines whether AI adoption feels productive or disruptive.
 - Use AI as a first-pass filter in code review to eliminate trivial nit-picks, then reserve your review for trade-offs, mentorship, and accountability decisions.
 
-## Unverified Claims
-
-- Running AI self-reviews before opening PRs reduced review back-and-forth by roughly one-third [unverified]
-
 ## Related
 
 - [Human-in-the-Loop](../workflows/human-in-the-loop.md)
@@ -85,7 +91,4 @@ The same team rejects a proposal to let the agent auto-approve PRs that pass CI.
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Agent-First Software Design](agent-first-software-design.md)
 - [Harness Engineering](harness-engineering.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
 - [The Delegation Decision](delegation-decision.md)
-- [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)

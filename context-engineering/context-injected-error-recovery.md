@@ -15,7 +15,7 @@ tags:
 
 ## The Problem: Blind Retries
 
-When a tool call returns an error, most agent harnesses pass only the raw error message back to the model [unverified]. The model retries with minimal additional information, often repeating the same approach. After several identical failures, the agent enters a retry loop — consuming context window and tokens without progress.
+When a tool call returns an error, most agent harnesses pass only the raw error message back to the model ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The model retries with minimal additional information, often repeating the same approach. After several identical failures, the agent enters a retry loop — consuming context window and tokens without progress.
 
 The root cause is information asymmetry: the model lacks the context needed to choose a different strategy on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
 
@@ -61,7 +61,7 @@ Loop detection and error recovery are complementary but operate at different poi
 - **Error recovery** acts at the moment of failure — it prevents loops from forming by giving the model better information on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344))
 - **Loop detection** acts after repeated failures — it detects and interrupts loops that have already formed
 
-Error recovery reduces the workload on loop detection by eliminating the majority of loops at the source [unverified]. Loop detection remains necessary as a safety net for cases where enriched context is insufficient.
+Error recovery reduces the workload on loop detection: the 25–40% reduction in retry loops means fewer cases reach the threshold that triggers detection ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). Loop detection remains necessary as a safety net for cases where enriched context is insufficient.
 
 ## Implementation Considerations
 
@@ -73,6 +73,14 @@ The harness maintains a per-session log of failed tool calls keyed by operation 
 4. Inject the block into the next prompt, positioned immediately after the error result
 
 Recovery suggestions should be generic enough to avoid prescribing a single fix, but specific enough to exclude approaches already attempted. The suggestion catalog is maintained as a static mapping — no LLM inference is needed to generate suggestions.
+
+## When This Backfires
+
+Context injection adds tokens to every retry prompt. Three conditions make this trade-off unfavorable:
+
+1. **Near-context-limit sessions** — injecting prior-attempt history and recovery hints into a prompt that is already large can push the total context past the model's limit, truncating earlier session history and introducing new errors.
+2. **High-frequency, low-variance errors** — when errors repeat across many different operations (e.g., a systemic auth failure or a network outage), the recovery suggestion catalog produces the same generic hints on every retry, adding tokens without adding signal.
+3. **Static suggestion catalog staleness** — if the hint mappings are not maintained as the tool surface evolves, they can suggest approaches that no longer apply or contradict current tool behavior, actively misleading the model.
 
 ## Example
 
@@ -155,3 +163,4 @@ The harness calls `build_context` after each tool failure and appends the return
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Observation Masking](observation-masking.md)
 - [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
+- [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Broader taxonomy of agent failure modes and recovery strategies

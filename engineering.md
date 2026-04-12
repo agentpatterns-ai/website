@@ -22,7 +22,7 @@ Design, implement, and optimize the tools agents use — MCP servers, CLI wrappe
 
 ## [Code Review](code-review/index.md)
 
-Patterns for reviewing agent-generated code — tiered review strategies, diff-based approaches, committee patterns, and balancing PR volume against value.
+Patterns for reviewing agent-generated code — tiered review strategies, diff-based approaches, committee patterns, and [balancing PR volume against value](code-review/agent-pr-volume-vs-value.md).
 
 ## [Verification](verification/index.md)
 

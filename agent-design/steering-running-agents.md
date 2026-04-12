@@ -72,7 +72,7 @@ Steer as early as possible — ideally after the first tool call that signals a 
 
 Follow-up messages work best when the current step is short. For long-running steps, steering mid-step may be more efficient.
 
-Some interfaces queue follow-ups automatically when you type during execution; others interrupt immediately [unverified].
+Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message.
 
 ## Example
 
@@ -113,9 +113,19 @@ Both messages preserve the file reads and reasoning the agent has already accumu
 - Steer early — detecting wrong direction from tool calls beats correcting finished output
 - Over-steering signals an underspecified prompt; fix the prompt, not the run
 
-## Unverified Claims
+## Why It Works
 
-- Some interfaces queue follow-ups automatically when you type during execution; others interrupt immediately [unverified]
+LLM inference is stateless between calls, but context is not — each tool call appends its inputs and outputs to the conversation history that feeds the next call. When you steer mid-run, you prepend a new instruction to that accumulated history. The model reads the correction together with everything it has already learned: file contents, error messages, prior tool results. A restart, by contrast, discards all accumulated context and forces the model to re-read files and re-derive conclusions it had already reached, paying both token and latency costs again. Steering is efficient precisely because LLM context windows are readable in both directions: past results inform future steps regardless of when the instruction arrived.
+
+## When This Backfires
+
+**Irreversible side-effects already executed**: If the agent has already written to a database, sent API requests, or pushed commits, a mid-run steer redirects future steps but cannot undo completed actions. In pipelines with irreversible side-effects, checkpoint-and-restart with pre-verified state is safer than ad-hoc mid-run correction.
+
+**Interfaces that only queue, not interrupt**: Sending a follow-up when you mean to interrupt does not stop the current step. In Claude Code, typed messages queue until the next turn boundary; only Ctrl+C produces an immediate interrupt ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). If the current step consumes significant context in the wrong direction, a queued correction arrives too late to be cost-effective.
+
+**Heavily cached sub-agent architectures**: In orchestrator-worker setups where workers run in isolated context windows, a steering message to the orchestrator does not propagate to already-dispatched workers. The worker completes its current task with the original instruction; only the next dispatch receives the correction.
+
+**Accumulated context is itself the problem**: If earlier tool calls introduced noise — verbose error traces, irrelevant file contents, or conflicting outputs — preserving that context may hurt the subsequent steps rather than help them. Restart with a cleaner prompt when the context itself is contaminated.
 
 ## Related
 
@@ -123,6 +133,7 @@ Both messages preserve the file reads and reasoning the agent has already accumu
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — auto-correcting misbehaving agents mid-run
 - [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for observing and intervening in the agent loop
+- [Agent Turn Model](agent-turn-model.md) — the multi-step inference-tool-call loop that a single agent turn runs through
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — detecting wrong direction through progress signals
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — restarting with fresh context when steering cannot salvage a run
 - [Convergence Detection](convergence-detection.md) — deciding when to stop or redirect an iterating agent

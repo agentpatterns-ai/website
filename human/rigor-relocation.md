@@ -18,7 +18,7 @@ tags:
 
 When agents write the code, the human's leverage point moves. Code quality becomes a function of environment quality.
 
-Teams that invest in scaffolding outperform teams that invest in [prompt engineering](../training/foundations/prompt-engineering.md). This finding appears independently across OpenAI, Anthropic, LangChain, and Datadog `[unverified]`.
+Teams that invest in scaffolding outperform teams that invest in [prompt engineering](../training/foundations/prompt-engineering.md). LangChain's Terminal Bench improvements and Datadog's harness-first methodology both demonstrate gains from environment investment rather than model or prompt changes.
 
 ## Old Rigor vs. New Rigor
 
@@ -41,11 +41,13 @@ OpenAI shipped roughly one million lines of agent-written production code over f
 
 Better models *increase* infrastructure demands -- more autonomy requires better guardrails ([Lavaee](https://alexlavaee.me/blog/harness-engineering-why-coding-agents-need-infrastructure/)).
 
+**Why this works**: Prompts degrade across long contexts -- instructions given at session start lose salience as context fills. Environment constraints have no such decay: a failing test returns the same signal on step 1 and step 100. The mechanism is enforcement locality -- the constraint fires at the exact moment the agent generates non-compliant output, before that output propagates further. Prompts create compliance pressure at session start; harnesses create compliance pressure at each decision point.
+
 ## Mechanical Enforcement Beats Documentation
 
 Written conventions rely on agents reading and following instructions. Custom linters, structural tests, and CI guardrails enforce constraints mechanically -- the agent cannot proceed without satisfying them.
 
-When a linter fails, its error message enters the agent's context at the moment of decision -- effectively a [prompt injection](../security/prompt-injection-threat-model.md) at the point of highest compliance `[unverified]`.
+When a linter fails, its error message enters the agent's context at the moment of decision -- structured feedback delivered precisely when the agent must act on it.
 
 ```mermaid
 flowchart LR
@@ -92,6 +94,15 @@ The engineer's job shifts from code reviewer to harness designer:
 - Build feedback loops that catch bug classes, not individual bugs
 
 A linter rule catches a dependency violation every time, in every session, for every agent -- compounding across iterations rather than catching one issue in one PR review.
+
+## When This Backfires
+
+Rigor relocation has real costs. The scaffolding-first bet fails or yields poor returns in several conditions:
+
+- **Scope too narrow**: A single-task agent that runs once or twice does not recoup the investment in linters, CI guardrails, and verification pipelines. The overhead only pays off when agents run repeatedly across sessions.
+- **Premature infrastructure lock-in**: Teams that build elaborate harnesses before understanding the task topology often optimize for the wrong constraints. High iteration velocity through prompt changes is faster than pipeline rewrites at early stages.
+- **Harness correctness burden**: The harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because failures become invisible rather than explicit.
+- **Skill atrophy accelerates**: Mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 
 ## Related
 

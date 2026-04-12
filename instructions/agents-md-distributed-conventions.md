@@ -46,7 +46,7 @@ AGENTS.md files at each scope should capture conventions most likely to be viola
 
 ## Have the Agent Write and Maintain the Files
 
-[The Sora team](https://openai.com/index/shipping-sora-for-android-with-codex/) had Codex create and maintain its own AGENTS.md files. The agent surfaces what context it actually needs in practice, not what the human guesses in advance [unverified].
+[The Sora team](https://openai.com/index/shipping-sora-for-android-with-codex/) had Codex create and maintain its own AGENTS.md files throughout the codebase. This approach surfaces the context the agent actually encounters in practice — naming gaps, missing architecture notes, undocumented CI steps — rather than what a human predicts upfront.
 
 To bootstrap this:
 
@@ -63,7 +63,7 @@ AGENTS.md files should contain instructions, not documentation. Avoid:
 - Task-specific context that belongs in a prompt
 - Instructions that duplicate content already in code comments
 
-Every line in an AGENTS.md file is loaded into context before task work begins [unverified — behavior varies by tool]. Each unnecessary line consumes context budget that could be used for implementation.
+AGENTS.md content is injected into the agent's context before task work begins, subject to per-tool limits (Codex applies a [32 KiB cap by default](https://developers.openai.com/codex/guides/agents-md)). Each unnecessary line consumes context budget that could be used for implementation.
 
 ## Mandatory CI Commands as Conventions
 
@@ -123,10 +123,12 @@ The root file encodes repo-wide enforcement rules (CI commands, naming, prohibit
 - Keep files short and instruction-focused; link to documentation rather than embedding it.
 - Multi-repo agents need a global config documenting repository layout.
 
-## Unverified Claims
+## When This Backfires
 
-- The agent surfaces what context it actually needs in practice, not what the human guesses it needs in advance [unverified]
-- Every line in an AGENTS.md file is loaded into context before task work begins [unverified — behavior varies by tool]
+- **Agent-written files can be redundant**: LLM-generated AGENTS.md files risk duplicating documentation the agent already accesses directly from the codebase. Validate agent-written files by reviewing for content that the agent could discover from existing code, tests, or README files.
+- **Files drift as the codebase evolves**: Static convention files go stale when the code they describe changes. Treat AGENTS.md updates as part of the same PR as the code change they document.
+- **Conflicting instructions across levels**: Distributed files at root and module level can conflict without explicit priority ordering. When a module-level instruction contradicts a root instruction, agents may skip verification steps rather than ask for clarification.
+- **Small or stable codebases gain less**: Distributed convention files add maintenance overhead. For small repos where conventions are few and stable, a single root AGENTS.md (or none at all) may outperform a hierarchy.
 
 ## Related
 

@@ -135,6 +135,7 @@ Sections at priority 10–45 are stable across requests and can be cached at the
 - [System Prompt Altitude](../instructions/system-prompt-altitude.md)
 - [Prompt Layering: How Instructions Stack and Override](./prompt-layering.md)
 - [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md)
+- [Hierarchical CLAUDE.md: Layered Context File Scoping](../instructions/hierarchical-claude-md.md)
 - [Context Budget Allocation: Every Token Has a Cost](./context-budget-allocation.md)
 - [Prompt Caching as Architectural Discipline](./prompt-caching-architectural-discipline.md)
 - [Structure Prompts with Static Content First to Maximize Cache Hits](./static-content-first-caching.md)

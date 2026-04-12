@@ -18,7 +18,7 @@ aliases:
 
 Teams use AI to generate architecture decisions, design novel APIs, or produce "creative" solutions they couldn't have thought of themselves. The implicit assumption: generative AI is a source of net-new information that exceeds what was in its training data.
 
-It is not. LLMs [interpolate between known data points](https://arxiv.org/html/2412.04503v1); they do not extrapolate to genuinely novel ground truth. A model cannot produce more information than was used to train it. What looks like invention is recombination — fluent, confident, and fast, but drawn entirely from prior practice.
+It is not. LLMs are bounded by their training distribution; they recombine patterns from prior data but cannot produce information that was absent from it. A model cannot produce more information than was used to train it. What looks like invention is recombination — fluent, confident, and fast, but drawn entirely from prior practice. Johnson and Hyland-Wood (2024) catalogue this as a [core LLM limitation](https://arxiv.org/html/2412.04503v1): outputs reflect training data, not independent reasoning about ground truth.
 
 This distinction matters because confident recombination and genuine novelty look identical in output. The model does not signal which kind it is producing.
 
@@ -34,13 +34,23 @@ This distinction matters because confident recombination and genuine novelty loo
 
 ## The Scale Consequence
 
-As web-scraped training data is increasingly synthetic, each model generation trains on the outputs of prior generations [unverified]. The practical effect mirrors model collapse: information degrades, diversity narrows, and the model's apparent knowledge reflects what was common in AI outputs, not what was true in the world.
+As web-scraped training data is increasingly synthetic, each model generation trains on the outputs of prior generations. The practical effect mirrors model collapse: information degrades, diversity narrows, and the model's apparent knowledge reflects what was common in AI outputs, not what was true in the world. Shumailov et al. (2024) documented this progression across multiple model architectures — LLMs, VAEs, and Gaussian mixture models all show the same degradation pattern when recursively trained on generated content.
 
 ## The Correct Mental Model
 
 AI is a high-fidelity compression of prior practice. It is most reliable when your problem fits within documented patterns and most unreliable when your problem is genuinely novel.
 
 Addy Osmani frames the task split as [70/30](https://addyo.substack.com/p/the-80-problem-in-agentic-coding): AI handles roughly 70% of routine work — boilerplate, pattern application, syntax — while the remaining 30% (problem definition, architectural decisions, critical verification) requires human judgment. The 30% is precisely where this fallacy does the most damage.
+
+## When This Backfires
+
+Overcorrecting on this fallacy leads to its own failure mode: dismissing all AI output as mere recombination, even when recombination is precisely what's needed.
+
+- **Well-documented domains**: When your problem fits established patterns — standard CRUD APIs, common authentication flows, widely-deployed infrastructure — AI retrieval of those patterns is reliable and fast. Treating all AI output as untrustworthy in these contexts wastes the tool's genuine strengths.
+- **Emergent cross-domain synthesis**: LLMs trained on large corpora can surface non-obvious connections between documented practices from different fields (e.g., applying game theory concepts to API rate-limiting design). This isn't genuine novelty, but the synthesis may not be obvious to a practitioner working within a single domain.
+- **Recombination as the goal**: Many real engineering tasks — boilerplate, test scaffolding, documentation, code translation — require competent recombination, not invention. The fallacy warning applies only when you need genuinely novel output (new architectural decisions, untested regulatory interpretations, novel domain synthesis).
+
+The operative question is not "can AI generate new information?" but "does this problem require new information, or does it require competent retrieval of existing practice?"
 
 ## Example
 

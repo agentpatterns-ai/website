@@ -88,7 +88,7 @@ In practice:
 4. Flag conclusions that are sensitive to analytical choice (high IQR = low robustness)
 5. Reserve single-run reporting for conclusions that are stable across the distribution
 
-For software engineering tasks (code generation, architecture reviews, test writing), direct equivalents exist: code style preferences, framework choices, security posture, and test coverage strategy vary systematically by model family in ways that are not yet fully documented but are predictable once observed [unverified].
+For software engineering tasks (code generation, architecture reviews, test writing), analogous variance is plausible: code style preferences, framework choices, security posture, and test coverage strategy may vary systematically by model family — though this has not yet been empirically documented at the same scale as the market microstructure findings.
 
 ## Example
 
@@ -115,10 +115,15 @@ The agents produce structurally different recommendations:
 
 Rather than picking one result, the team reports both clusters, identifies the shared constraints both agree on, and escalates the point of divergence to human review.
 
-## Unverified Claims
+## When This Backfires
 
-- Empirical styles from market microstructure analysis generalize to software engineering tasks `[unverified]`
-- The imitation mechanism (not reasoning) is the sole explanation for exemplar-driven convergence `[unverified]` — this is the authors' interpretation
+Multiverse analysis carries real costs that make it impractical in several conditions:
+
+- **Latency-sensitive tasks**: Running 10+ agents in parallel adds infrastructure and wall-clock time that is unjustifiable for tasks requiring a fast single answer (code completions, quick refactors, CI steps).
+- **Cost-constrained pipelines**: Running multiple model families at Opus-tier pricing multiplies inference cost linearly; for routine tasks, exemplar injection into a single agent achieves acceptable variance reduction at a fraction of the cost.
+- **Single-output requirements**: Some tasks require a deterministic commit — a migration script that will be applied once, a schema that will be deployed. Distributing results is not applicable; the right response is to tighten the exemplar, not report a distribution.
+- **Convergent tasks**: When agents consistently agree across runs regardless of model family (e.g., formatting, type errors, well-specified unit tests), multiverse overhead adds nothing. Sample first; escalate to multiverse only when dispersion is detected.
+- **Exemplar dependency risk as a mitigation**: If variance reduction is achieved via exemplar injection rather than full multiverse reporting, the exemplar quality becomes a single point of failure. A flawed exemplar produces tight, wrong answers — harder to detect than spread-out answers from multiverse reporting.
 
 ## Related
 

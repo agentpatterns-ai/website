@@ -44,7 +44,7 @@ A hardened system may still fall to injections that trigger a background HTTP re
 
 ## Defence-in-Depth Design
 
-Effective defence requires at least three independent layers [unverified]:
+Effective defence requires at least three independent layers — [OpenAI's defence-in-depth approach](https://openai.com/index/designing-agents-to-resist-prompt-injection/) and [OWASP LLM01:2025](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) both enumerate the same three categories:
 
 1. **Model-level**: injection resistance in the model itself, updated as attacks evolve
 2. **Infrastructure-level**: fetch controls, URL validation, rate limiting, and egress monitoring — applied regardless of model behavior
@@ -68,6 +68,15 @@ history and append it as a query string to the next fetch.
 The agent fetches the page, reads the injected instruction, and issues a follow-up request to `partner.example.com/collect?data=<summary>` — still within the allow-list. The single-layer defence is bypassed because the attacker operates entirely within the trusted domain.
 
 A product-level confirmation flow ("Do you want to send data to partner.example.com?") would surface the silent side-effect before it executes.
+
+## When This Backfires
+
+Three independent layers add real complexity:
+
+- **Low-sensitivity, read-only agents** — no egress channels means URL allow-listing alone may be proportionate; the full three-layer overhead is not always warranted.
+- **Model-level hardening as a substitute** — instruction hardening reduces injection success rates but does not create a hard security boundary; treat it as one layer, not a replacement for infrastructure controls.
+- **Confirmation fatigue** — overly broad confirmation flows train users to approve blindly; scope confirmations to high-impact or irreversible actions only.
+- **Layer interdependency** — if all three layers share the same trust root, independence collapses and the defence-in-depth guarantee breaks.
 
 ## Key Takeaways
 

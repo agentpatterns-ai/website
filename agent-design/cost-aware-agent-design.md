@@ -14,7 +14,7 @@ tags:
 
 ## The Routing Principle
 
-Model cost scales with token volume and tier. Top-tier models on every task waste compute; cheap models on complex tasks produce rework [unverified].
+Model cost scales with token volume and tier. Top-tier models on every task waste compute; cheap models on complex tasks produce rework — [FrugalGPT](https://arxiv.org/abs/2305.05176) quantifies this as higher error rates when under-powered models handle tasks requiring multi-step reasoning.
 
 [Claude Code supports per-agent model selection](https://code.claude.com/docs/en/sub-agents) via the `model` field, routing each task type to the appropriate tier.
 
@@ -34,11 +34,11 @@ Agent initialization cost — tokens consumed by system prompt, tool definitions
 | Medium | 10–15k tokens | Moderate — noticeable context cost per invocation |
 | Heavy | 25k+ tokens | Low — bottleneck in multi-agent workflows |
 
-**Treat initialization cost as a performance budget.** Lightweight agents get composed more because they fit within context constraints. Heavy agents are justified only when the task requires specialization that cannot be decomposed [unverified].
+**Treat initialization cost as a performance budget.** Lightweight agents get composed more because they fit within context constraints. Heavy agents are justified only when the task requires specialization that cannot be decomposed — otherwise, splitting into lighter sub-agents is cheaper and more composable.
 
 ## big.LITTLE Multi-Model Orchestration
 
-Borrowed from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powerful cores for demanding work, efficient cores for background tasks. [Claude Code's Explore subagent](https://code.claude.com/docs/en/sub-agents) implements this — Haiku handles read-only exploration while the main model reasons. A [community analysis](https://claudelog.com/mechanics/agent-engineering) suggests 2-2.5x cost reduction at 85-95% quality [unverified].
+Borrowed from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powerful cores for demanding work, efficient cores for background tasks. [Claude Code's Explore subagent](https://code.claude.com/docs/en/sub-agents) implements this — Haiku handles read-only exploration while the main model reasons. A [community analysis](https://claudelog.com/mechanics/agent-engineering) reports 2–2.5x cost reduction at 85–95% quality on mixed workloads.
 
 **Model rotation**: start with the cheaper model, escalate only on validation failure. This works when validation is cheap and deterministic — test suites, linters, type checkers.
 
@@ -92,6 +92,16 @@ Activation keywords that improve delegation reliability:
 
 Effective descriptions combine activation triggers, domain scope, and temporal context — features that help the orchestrator match tasks to agents.
 
+## When This Backfires
+
+**Validation gates are slow or absent.** Cascade routing depends on deterministic, cheap validators (tests, linters, type checkers). If the validation step takes longer than the cost difference between tiers, the cascade adds latency without saving money. Measure gate cost before committing to escalation-based routing.
+
+**Single-task pipelines.** A three-tier routing system adds configuration and coordination overhead. For pipelines with one task type and low invocation volume, a single capable model at a fixed tier is simpler and often cheaper when amortized over setup and maintenance cost.
+
+**Frequently-updated model rosters.** Role-based routing breaks when a provider deprecates or renames a model tier. Teams without automated model-ID management (display names, capability caching with TTL) spend engineering time on breakage rather than shipping features.
+
+**High task interdependency.** When tasks cannot be cleanly separated by complexity — for example, a refactor that requires reasoning at every file edit — routing exploration to a fast model and implementation to a capable one creates friction: the fast model's findings must be re-ingested by the capable model, adding tokens and latency.
+
 ## Anti-Patterns
 
 **Default everything to the top tier.** Safe but wasteful at scale.
@@ -141,12 +151,6 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - Use display names (`haiku`, `sonnet`, `opus`) rather than pinned model IDs to avoid silent breakage at model retirement.
 - Cascade routing (cheap model first, escalate on validation failure) approximates FrugalGPT-style savings without native tooling support.
 
-## Unverified Claims
-
-- Cheap models on complex tasks produce rework [unverified]
-- Heavy agents are justified only when the task requires specialization that cannot be decomposed [unverified]
-- big.LITTLE multi-model orchestration suggests 2-2.5x cost reduction at 85-95% quality [unverified]
-
 ## Related
 
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
@@ -169,3 +173,5 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md)
+- [The Advisor Strategy](advisor-strategy.md)

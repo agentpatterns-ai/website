@@ -54,7 +54,7 @@ graph LR
 
 **Context efficiency.** A one-line hint costs a fraction of the tokens a multi-line sample consumes. For files loaded at session start, this compounds across every interaction.
 
-**KV-cache stability.** Cache hit rates in production agent systems depend on stable context prefixes. Code samples that change with the codebase invalidate those prefixes. Hints are stable strings that preserve cache hits across sessions.
+**KV-cache stability.** Prompt caching works by hashing the token sequence up to a cache breakpoint. Because a hint is a fixed string, it hashes identically across sessions. An embedded code sample that changes with the codebase produces a different hash each time, breaking the cache and forcing a full re-computation ([Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)).
 
 **Reduced few-shot brittleness.** Repeated examples can make agents copy structure verbatim rather than generalizing. A hint forces the agent to read and interpret the real code, producing more adaptive output.
 
@@ -67,6 +67,15 @@ Hints require something to point at. Use an inline code sample when:
 - **Tool definitions** where example usage and edge cases improve tool selection accuracy.
 
 Once a file implements the novel pattern, replace the sample with a hint. The sample was a bootstrap; the hint is the steady state.
+
+## When This Backfires
+
+Hints add a file-read step at task time. In contexts where that overhead matters, the trade-off shifts:
+
+- **Large referenced files.** If the hint points at a 500-line module, the agent may load the entire file into context — far more tokens than a targeted 20-line embedded sample. Use hints for files where the agent will read selectively, not monolithic ones.
+- **Deleted or renamed targets.** A hint pointing at a deleted file silently fails. The agent either errors or invents a pattern. Embedded samples survive refactors; hints require the target to exist.
+- **Low-latency agent loops.** Short-lived agents (e.g., a CI bot that runs hundreds of small tasks) pay the file-read cost on every invocation. For high-frequency, low-complexity tasks, pre-loading a short sample may be cheaper than repeated disk reads.
+- **Isolated execution environments.** Sandboxed or remote agents without filesystem access cannot follow a hint. Embedded samples are the only option when the referenced code is unavailable.
 
 ## Example
 
@@ -118,11 +127,6 @@ The hint version costs ~20 tokens instead of ~80, stays correct when the handler
 - [Anthropic: Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — minimal high-signal tokens, curated examples over exhaustive coverage
 - [Manus: Context Engineering for AI Agents](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) — KV-cache optimization, few-shot brittleness, file system as ultimate context
 - [Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) — tool definitions benefit from example usage
-
-## Unverified Claims
-
-- The specific framing of "hints over code samples" originated from internal practitioner discussion — no public source uses this exact terminology [unverified]
-- KV-cache invalidation from changing code samples is architecturally plausible but not empirically measured in published benchmarks [unverified]
 
 ## Related
 

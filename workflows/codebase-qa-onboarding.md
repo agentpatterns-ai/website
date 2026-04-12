@@ -10,11 +10,11 @@ tags:
 
 # Agent-Powered Codebase Q&A and Onboarding
 
-> A structured workflow for using agents to explore unfamiliar codebases, build mental models through progressive Q&A, and generate architecture documentation -- compressing individual onboarding from weeks to days.
+> Agents with codebase search tools turn unfamiliar repositories into navigable systems: answer targeted questions about architecture, trace execution paths, and generate architecture documentation — compressing ramp-up time without requiring upfront reading of every file.
 
 ## The Problem
 
-Developers spend roughly 60% of their time on program comprehension [unverified]. Onboarding to a new codebase -- reading code, tracing call paths, locating conventions -- is among the highest-friction activities in software engineering. The knowledge needed is scattered across files, commit history, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from implementation within weeks.
+Program comprehension — reading code, tracing call paths, locating conventions — consumes a disproportionate share of developer time and is among the highest-friction activities in software engineering. The knowledge needed is scattered across files, commit history, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from implementation within weeks. Research into LLM-powered codebase documentation (e.g., [RepoAgent, arXiv 2402.16667](https://arxiv.org/abs/2402.16667)) confirms that repository-level comprehension is a primary bottleneck for both humans and agents.
 
 Agents with code search and file reading capabilities change the economics. They can serve as always-available guides with perfect recall of the entire codebase, answering "where does X happen?", "why is Y structured this way?", and generating documentation that stays current with the code.
 
@@ -38,7 +38,7 @@ Start by generating a project-level instruction file. Claude Code's `/init` comm
 claude /init
 ```
 
-The [AGENTS.md standard](https://agents.md) provides an equivalent for tool-agnostic setups -- a predictable location where project conventions, build steps, and architecture notes live. The instruction file becomes the entry point for every future agent session and every new team member.
+The [AGENTS.md standard](https://agents.md) provides an equivalent for tool-agnostic setups — a predictable location where project conventions, build steps, and architecture notes live. The instruction file becomes the entry point for every future agent session and every new team member.
 
 ### Step 2: Safe Exploration with Plan Mode
 
@@ -147,14 +147,7 @@ The agent produces a step-by-step trace with 12 file references. The developer o
 
 **Day 2 -- Generate and refine docs.** They ask the agent to produce an architecture overview and a key-file map, review both for accuracy, correct two mischaracterizations, and commit the result. They update CLAUDE.md with the conventions they discovered: the event-sourcing pattern, the naming convention for processor adapters, and the test structure.
 
-**Result.** What typically takes one to two weeks of ramp-up compresses into one to two days [unverified]. The instruction file improvements mean the next person onboards even faster.
-
-## Unverified Claims
-
-- Developers spend roughly 60% of their time on program comprehension [unverified -- cited in RepoAgent paper, EMNLP 2024]
-- Agentic coding reduces codebase onboarding "from weeks to one or two days" [unverified -- Anthropic blog claim without published case study]
-- AGENTS.md has been adopted by 60,000+ open-source projects [unverified -- self-reported by agents.md website]
-- AGENTS.md presence correlates with 29% runtime reduction and 17% token savings [unverified -- cited in Codified Context paper, methodology not independently reviewed]
+**Result.** What typically takes one to two weeks of ramp-up compresses significantly. The instruction file improvements mean the next person onboards even faster.
 
 ## Related
 

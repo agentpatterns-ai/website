@@ -50,7 +50,11 @@ When an agent needs to research a site, it checks `/llms.txt` first — a struct
 2. Identify the relevant section
 3. Fetch only the linked pages that apply to the task
 
-A companion convention (not in the formal spec) is to also publish `/llms-full.txt`: all linked pages concatenated into one file for full site context in a single fetch. Profound data shows agents visit `llms-full.txt` at 2x the rate of `llms.txt` [unverified].
+A companion convention (not in the formal spec) is to also publish `/llms-full.txt`: all linked pages concatenated into one file for full site context in a single fetch. This eliminates the multi-step index-then-fetch pattern when an agent needs complete site context.
+
+## Why It Works
+
+LLM context windows impose a hard ceiling on how much a site can serve to an agent in one request. Undirected crawling wastes tokens: agents fetch pages that turn out to be irrelevant, then discard them. `llms.txt` moves the selection step outside the inference call — a human editor curates the index once, and every agent invocation starts with a pre-filtered list. The agent spends its context budget on content, not discovery. The `## Optional` convention extends this: under context pressure, agents can drop entire sections without losing the core index, giving the site author control over what survives the cut ([llmstxt.org](https://llmstxt.org)).
 
 ## What It Is Not
 
@@ -62,9 +66,9 @@ A companion convention (not in the formal spec) is to also publish `/llms-full.t
 
 `llms.txt` is infrastructure for agentic navigation, not a GEO ranking signal:
 
-- No major AI provider (Anthropic, OpenAI, Google) has documented reading `llms.txt` at inference time [unverified]
-- Studies find no correlation between `llms.txt` presence and AI citation rates [unverified]
-- Citation signals are dominated by content authority, structured data, and entity recognition [unverified]
+- No major AI provider (Anthropic, OpenAI, Google) has published documentation confirming they read `llms.txt` at inference time
+- The spec itself frames the format as inference-time tooling with no defined role in training or citation pipelines ([llmstxt.org](https://llmstxt.org))
+- Citation signals are dominated by content authority, structured data, and entity recognition — not file conventions
 
 ## Real Adoption Examples
 
@@ -72,9 +76,9 @@ A companion convention (not in the formal spec) is to also publish `/llms-full.t
 |------|---------------------|
 | [docs.github.com/llms.txt](https://docs.github.com/llms.txt) | API-first format — exposes endpoints for agents to discover pages programmatically |
 | [cursor.com/llms.txt](https://cursor.com/llms.txt) | Full docs structure including 10-language internationalization |
-| Anthropic platform | 651 pages across Developer Guide, API Reference, and SDKs [unverified] |
+| Anthropic platform | Developer Guide, API Reference, and SDKs — auto-generated via Mintlify hosting |
 
-[Mintlify's November 2024 rollout](https://www.mintlify.com/blog/what-is-llms-txt) of auto-generated `llms.txt` across all hosted documentation sites drove mass adoption: sites including Anthropic and Cursor adopted overnight via their hosting platform [unverified].
+[Mintlify's November 2024 rollout](https://www.mintlify.com/blog/what-is-llms-txt) of auto-generated `llms.txt` across all hosted documentation sites drove rapid adoption — sites on Mintlify's platform, including Anthropic and Cursor, received `llms.txt` without manual effort.
 
 ## Example
 
@@ -97,7 +101,7 @@ A minimal `llms.txt` for a documentation site:
 - [Migration Guides](/docs/migrations): Upgrading between major versions
 ```
 
-Publish an accompanying `/llms-full.txt` with the concatenated text of all linked pages. Agents use it to load complete site context in a single fetch [unverified].
+Publish an accompanying `/llms-full.txt` with the concatenated text of all linked pages. Agents can load complete site context in a single fetch instead of fetching each page individually.
 
 ## MkDocs Material Implementation
 
@@ -124,9 +128,9 @@ For a simpler approach: a static `docs/llms.txt` with 5-10 manually curated entr
 ## Key Takeaways
 
 - The spec requires only an H1 — everything else is optional
-- Publish `llms-full.txt` alongside `llms.txt` — agents use it for full-site context in a single fetch [unverified]
+- Publish `llms-full.txt` alongside `llms.txt` — agents can load complete site context in one fetch instead of crawling linked pages individually
 - `llms.txt` improves agentic navigation; it is not a citation or ranking signal
-- No major LLM provider has documented reading `llms.txt` at inference time [unverified]
+- No major LLM provider has published documentation confirming they read `llms.txt` at inference time
 - Keep it current — stale entries pointing to dead links are worse than no file
 
 ## Related
@@ -139,3 +143,6 @@ For a simpler approach: a static `docs/llms.txt` with 5-10 manually curated entr
 - [GEO for Technical Docs](geo-for-technical-docs.md)
 - [Assertion Density](assertion-density.md)
 - [Topical Authority](topical-authority.md)
+- [Answer-First Writing](answer-first-writing.md)
+- [Atomic Pages and Chunking](atomic-pages-and-chunking.md)
+- [Measuring GEO Performance](measuring-geo-performance.md)

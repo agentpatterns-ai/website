@@ -47,13 +47,13 @@ Sections of 200–400 words produce chunks that are:
 - **Long enough** to give the LLM sufficient context to generate an accurate answer
 - **Short enough** that the embedding remains semantically tight
 
-Unstructured.io identifies ~250 tokens (~1,000 characters) as a sensible baseline [unverified]. The [GEO paper (Aggarwal et al., KDD 2024)](https://arxiv.org/html/2311.09735v3) found structurally optimized content delivers up to 40% relative improvement in source visibility, with citations and statistics boosting visibility 22–37% further.
+[Unstructured.io identifies ~250 tokens (~1,000 characters) as a sensible baseline](https://unstructured.io/blog/chunking-for-rag-best-practices), adjustable based on document style and query patterns. The [GEO paper (Aggarwal et al., KDD 2024)](https://arxiv.org/html/2311.09735v3) found structurally optimized content delivers up to 40% relative improvement in source visibility, with citations and statistics boosting visibility 22–37% further.
 
 Every H2 section should answer one question independently. If a section requires another to make sense, split them into separate pages.
 
 ## Descriptive Headings as Topic Anchors
 
-LLMs build their internal topic map from heading hierarchy [unverified]. H1/H2/H3 headings are the strongest semantic signals in a document — they set content expectations and mark chunk boundaries when chunking by title.
+H1/H2/H3 headings are the strongest semantic signals in a document — they define the semantic outline LLMs use to map topic boundaries and concept relationships, and mark chunk boundaries when chunking by title.
 
 [Search Engine Journal (2024)](https://www.searchenginejournal.com/how-llms-interpret-content-structure-information-for-ai-search/544308/) found flat heading structures reduce retrieval precision. Logical nesting (H1 to H2 to H3) communicates concept hierarchy to LLMs and embedding models.
 
@@ -70,9 +70,19 @@ Multi-concept pages hurt AI retrieval:
 
 - A 3,000-word page covering five techniques produces five blended embeddings — each weaker than a dedicated page embedding
 - Chunk boundaries may split an explanation mid-argument, stripping context needed for citation
-- Retrieval systems penalize passages surrounded by off-topic content [unverified]
+- Passages surrounded by off-topic content produce blended embeddings with lower cosine similarity to any single query — the same mechanism that penalizes multi-topic pages applies within a page's sections
 
 Traditional SEO tactics like keyword density show negligible or negative effects on generative engine visibility.
+
+## When This Backfires
+
+Over-atomization has real costs. Splitting tightly coupled content into separate pages can hurt retrieval when:
+
+- **Procedural sequences are fragmented** — a multi-step workflow split across three pages may retrieve only step 2, leaving the LLM without the setup context needed to generate a complete answer.
+- **Pages are too short to be useful** — a 100-word page may not give the LLM enough context to answer confidently, even if retrieval succeeds. The NVIDIA benchmark showed 256–512 token chunks perform best; pages under ~200 words fall below this floor.
+- **Concepts require co-citation** — some topics are only meaningful in contrast (e.g., authentication vs. authorization). Splitting them prevents the retrieved passage from explaining the distinction, forcing the LLM to fabricate the relationship.
+
+The rule is one *meaningful* concept per page, not one *sentence* per page. If splitting would strip the context that makes a concept understandable, keep related ideas together.
 
 ## Key Takeaways
 

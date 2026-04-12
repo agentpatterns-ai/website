@@ -104,3 +104,4 @@ Concrete sample calls in tool definitions improved accuracy from 72% to 90% on c
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
 - [Tool Minimalism](tool-minimalism.md) — fewer, non-overlapping tools reduce selection ambiguity
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — higher-level tools that match agent reasoning over many narrow endpoints
+- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md) — signal density principles underlying tool output constraints

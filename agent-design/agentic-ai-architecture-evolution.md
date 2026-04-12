@@ -52,7 +52,7 @@ This separation enables independent testing of each layer and explicit auditabil
 
 ## Multi-Agent Topology Taxonomy
 
-Three coordination topologies, each with distinct failure patterns (see [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) for a full breakdown):
+Three coordination topologies, each with distinct failure patterns (see [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) for a full breakdown; centralized vs. decentralized tradeoffs are also surveyed in [arXiv:2601.01743](https://arxiv.org/abs/2601.01743)):
 
 **Centralised orchestration** — one orchestrator agent manages all worker agents. Workers execute assigned tasks and return results; the orchestrator synthesizes and decides next steps.
 
@@ -75,25 +75,33 @@ Production agent deployments require three categories of hardening beyond functi
 
 **Governance**
 
-- Audit trails: every agent action is logged with timestamp, agent identity, tool name, arguments, and result [unverified]
-- Access control: agents operate with least-privilege permissions; no agent has broader access than its assigned task requires [unverified]
-- Policy enforcement: organizational constraints (data residency, PII handling, approved models) are enforced at the harness level, not by agent prompt alone [unverified]
+- Audit trails: every agent action is logged with timestamp, agent identity, tool name, arguments, and result ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Access control: agents operate with least-privilege permissions; no agent has broader access than its assigned task requires ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Policy enforcement: organizational constraints (data residency, PII handling, approved models) are enforced at the harness level, not by agent prompt alone ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 
 **Observability**
 
-- [Trajectory logging](../observability/trajectory-logging-progress-files.md): full turn-by-turn execution logs for post-hoc analysis and debugging [unverified]
-- Cost tracking: per-session and per-agent token consumption reported in real time [unverified]
-- Anomaly detection: alerts on deviation from expected trajectory length, tool call patterns, or cost bounds [unverified]
+- [Trajectory logging](../observability/trajectory-logging-progress-files.md): full turn-by-turn execution logs for post-hoc analysis and debugging ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Cost tracking: per-session and per-agent token consumption reported in real time ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Anomaly detection: alerts on deviation from expected trajectory length, tool call patterns, or cost bounds ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
 
 **Reproducibility**
 
-- Deterministic seeding: where randomness affects agent behavior, seeds are captured in logs for replay [unverified]
-- Idempotent operations: agent actions produce the same end state if executed more than once; no compounding side effects on retry [unverified]
-- Snapshot-based rollback: system state is snapshotted before consequential actions; rollback is defined before execution begins [unverified] — see [Rollback-First Design](rollback-first-design.md)
+- Deterministic seeding: where randomness affects agent behavior, seeds are captured in logs for replay ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Idempotent operations: agent actions produce the same end state if executed more than once; no compounding side effects on retry ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479))
+- Snapshot-based rollback: system state is snapshotted before consequential actions; rollback is defined before execution begins ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)) — see [Rollback-First Design](rollback-first-design.md)
 
 ## Industry Convergence Pattern
 
-The paper observes that the ecosystem is converging on shared infrastructure patterns parallel to web services maturation: standardized agent loops, tool registries, and auditable control mechanisms. Multiple frameworks now implement the cognitive/execution separation, typed tool interfaces, and governance checklists described above. [unverified] If you build on these patterns now, you avoid architectural retrofits later.
+The paper observes that the ecosystem is converging on shared infrastructure patterns parallel to web services maturation: standardized agent loops, tool registries, and auditable control mechanisms. Multiple frameworks now implement the cognitive/execution separation, typed tool interfaces, and governance checklists described above ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). If you build on these patterns now, you avoid architectural retrofits later.
+
+## When This Backfires
+
+The cognitive/execution separation pattern adds structural overhead. Three conditions where it costs more than it returns:
+
+1. **Simple single-turn tasks.** If the agent calls one tool and terminates, typed interfaces and a separate execution layer are engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
+2. **Rapid prototyping.** Strict schema contracts between layers slow iteration. Early-stage agents benefit from fluid coupling; formal separation is a refactoring target once the interface stabilizes.
+3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary matters when agents run autonomously at volume. A human-in-the-loop reviewing every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it creates maintenance cost with no proportionate gain.
 
 ## Example
 

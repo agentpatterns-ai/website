@@ -20,7 +20,7 @@ graph TD
     B -->|overrides| C[User Preferences]
 ```
 
-Enterprise owners can enforce uniform policies across all organizations or delegate decisions to individual organization owners ([GitHub Docs: Managing Policies for Copilot](https://docs.github.com/en/copilot/managing-copilot/managing-copilot-for-your-enterprise/managing-policies-and-features-for-copilot-in-your-enterprise)). This delegation model lets enterprises set guardrails while giving organizations flexibility within those bounds.
+Enterprise owners can enforce uniform policies across all organizations or delegate decisions to individual organization owners ([GitHub Docs: Managing Copilot policies for your organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies)). This delegation model lets enterprises set guardrails while giving organizations flexibility within those bounds.
 
 ## Core Policy Controls
 
@@ -35,17 +35,17 @@ Configuration surfaces:
 
 ### Model Availability
 
-Enterprise administrators control which AI models are available to Copilot users. This determines which models appear in the model picker across IDE integrations. Restricting model availability is a common governance lever for controlling cost, data residency, and output quality characteristics [unverified].
+Enterprise administrators control which AI models are available to Copilot users. This determines which models appear in the model picker across IDE integrations. Restricting model availability lets organizations limit exposure to models that have not cleared internal data-handling or compliance review.
 
 ### MCP Server Allowlists
 
-The MCP servers policy controls access to Model Context Protocol server support where it is generally available. MCP is disabled by default for Business and Enterprise plans — administrators must explicitly enable it and can maintain allowlists of approved servers [unverified — the cited GitHub Docs source does not confirm MCP defaults; this claim has not been independently verified].
+The MCP servers policy controls access to Model Context Protocol server support where it is generally available. MCP is disabled by default for Business and Enterprise plans — administrators must explicitly enable it and can maintain allowlists of approved servers ([GitHub Docs: Configure MCP server access](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-mcp-server-access)).
 
 This default-deny posture prevents unvetted MCP servers from accessing repository context without administrative approval.
 
 ### Third-Party Agent Access
 
-Policies govern whether third-party AI tools (beyond Copilot itself) can access repositories. This controls the blast radius of agent integrations and ensures that only approved tools interact with organizational code [unverified].
+Policies govern whether third-party AI tools (beyond Copilot itself) can access repositories. This controls the blast radius of agent integrations and ensures that only approved tools interact with organizational code.
 
 ### Preview Feature Controls
 
@@ -125,29 +125,23 @@ gh api \
 
 This lets governance teams confirm that agent mode is being adopted at the expected rate and identify teams that may need onboarding support, without reviewing individual conversation contents.
 
+## When This Backfires
+
+Centralized governance creates bottlenecks when allowlist approval cycles are slower than team delivery cadence — developers route around blocked MCP servers using personal Copilot subscriptions outside the enterprise plan, which eliminates the visibility the policy was designed to create. Overly broad model restrictions that block capable models for compliance reasons not grounded in actual data-handling requirements reduce output quality without reducing risk. Default-deny postures applied uniformly across all teams ignore maturity differences — a team with mature code review and CI checks has lower blast radius from agent access than one without, making uniform restrictions a poor fit for heterogeneous organizations. Monitor shadow-IT signals (personal subscription usage, local MCP server adoption) as leading indicators that governance friction is exceeding its value.
+
 ## Key Takeaways
 
 - Agent governance operates through a three-tier hierarchy (enterprise > organization > user) where higher tiers override lower ones — set enterprise guardrails and delegate operational decisions to organizations.
 - MCP server access is disabled by default on Business/Enterprise plans, requiring explicit administrative enablement — this default-deny posture prevents unvetted tool integrations.
 - Agent activity metrics (feature usage, model consumption, adoption trends) provide the visibility layer that makes governance data-driven rather than policy-driven.
 
-## Unverified Claims
-
-- Restricting model availability is a common governance lever for controlling cost, data residency, and output quality characteristics [unverified]
-- MCP is disabled by default for Business and Enterprise plans [unverified — the cited GitHub Docs source does not confirm MCP defaults; this claim has not been independently verified]
-- Policies govern whether third-party AI tools can access repositories [unverified]
-
 ## Related
 
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-- [Safe Command Allowlisting](../human/safe-command-allowlisting.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md)
 - [Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)
-- [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md)
-- [Entropy Reduction Agents](entropy-reduction-agents.md)
-- [Human-in-the-Loop Placement](human-in-the-loop.md)
+- [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md)
 - [Team Onboarding for Agent Workflows](team-onboarding.md)

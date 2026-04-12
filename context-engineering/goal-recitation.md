@@ -32,7 +32,7 @@ graph LR
     F --> A
 ```
 
-Manus uses this pattern for tasks averaging ~50 tool calls: a `todo.md` maintained step-by-step, where rewriting recites objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Manus uses this pattern for tasks averaging ~50 tool calls: a `todo.md` maintained step-by-step, where rewriting recites objectives into the model's recent attention span ([Manus, "Context Engineering for AI Agents"](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)). No controlled metrics have been published for this practice; the claim rests on Manus's engineering blog post.
 
 ## How It Differs from Related Techniques
 
@@ -102,13 +102,8 @@ Strong elicitation reduces drift but does not eliminate it.
 Goal recitation addresses within-session attention decay but not:
 
 - **Post-compaction drift** — if the todo file is lost during context compression, recitation cannot help. Instruct compaction to preserve it verbatim ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)).
-- **Instruction fade-out** — after ~15 tool calls, agents violate foundational instructions regardless of recitation. Event-driven system reminders are the complementary defense ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
+- **Instruction fade-out** — after ~15 tool calls, agents violate foundational instructions regardless of recitation ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)). This threshold varies across models and context configurations. Event-driven system reminders are the complementary defense.
 - **Cross-session continuity** — recitation is ephemeral. For persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
-
-## Unverified Claims
-
-- Manus reports improved goal adherence from todo.md rewriting but has not published metrics or A/B results. [unverified]
-- The ~15 tool-call threshold for instruction fade-out may vary across models and context configurations. [unverified]
 
 ## Related
 

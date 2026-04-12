@@ -30,13 +30,13 @@ graph TD
     C -->|Rejected + feedback| B
 ```
 
-The critic is a distinct agent role, not self-review. Using a different model creates genuine disagreement — the critic is not subject to the same blind spots as the planner.
+The critic is a distinct agent role, not self-review. Using a different model creates genuine disagreement — the critic is not subject to the same blind spots as the planner. Research on the ["self-correction blind spot"](https://arxiv.org/abs/2507.02778) measured an average 64.5% blind-spot rate across 14 tested LLMs, where models failed to correct errors in their own outputs even while successfully correcting identical errors from external sources — evidence that same-model review inherits the producer's failure modes.
 
 ## Why Plan-Gating Matters
 
 The pattern's value is timing. The [evaluator-optimizer pattern](evaluator-optimizer.md) applies a reviewer inside a generation loop — useful for iterative refinement. The critic agent applies review at the plan stage, before any tool calls or code changes execute.
 
-Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution requires rollback, re-planning, and re-execution — often at 3–5× the token cost [unverified].
+Plan-stage errors are cheap. A structurally flawed plan caught before execution costs one extra model call. The same error caught mid-execution requires rollback, re-planning, and re-execution — each of which re-incurs the token cost of the already-consumed steps.
 
 Multi-step agentic plans amplify single errors. If step 3 of a 10-step plan assumes the wrong environment state, every subsequent step inherits that assumption. A critic that reviews the full plan detects cross-step inconsistencies that per-step review misses.
 
@@ -58,7 +58,7 @@ Skip it when:
 
 Copilot CLI [v1.0.18](https://github.com/github/copilot-cli/releases/tag/v1.0.18) (April 4, 2026) introduced an experimental critic agent that automatically reviews plans and complex implementations using a complementary model to catch errors early. The feature is available in experimental mode for Claude models.
 
-The Copilot CLI implementation does not require manual configuration — the critic fires automatically when experimental mode is enabled [unverified]. Whether the complementary model is a different vendor model or a different reasoning configuration (e.g., extended thinking) is not specified in the release notes [unverified].
+The release does not describe how the complementary model is selected — whether it is a different vendor model, a different reasoning configuration, or a separate context. Operators should treat the specific routing as an implementation detail subject to change.
 
 ## Trade-offs
 
@@ -97,3 +97,4 @@ The error is caught before a single query runs.
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
+- [Convergence Detection in Iterative Refinement](convergence-detection.md)

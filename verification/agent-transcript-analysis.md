@@ -28,6 +28,8 @@ Agents analyzing transcripts tend to surface:
 
 Agents are also particularly effective at ensuring consistent changes across multiple tool definitions simultaneously — something humans tend to do inconsistently when editing several related tool descriptions in one pass. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
+The mechanism: when all transcripts and all tool definitions are held in a single context window, the agent can apply the same internal criterion uniformly across every instance — without the attention drift, recency bias, or inconsistent framing that accumulate when a human reads transcripts sequentially. Humans anchor on the most recent or most dramatic failure; models weigh all instances simultaneously.
+
 ## Setup
 
 **What to provide:**
@@ -44,7 +46,7 @@ Agents are also particularly effective at ensuring consistent changes across mul
 - Whether any tools should be consolidated, split, or removed
 
 **Instruction to trigger deeper analysis:**
-Ask the agent to output its reasoning before each proposed change. This encourages more detailed analysis rather than surface-level observations [unverified].
+Ask the agent to output its reasoning before each proposed change. Anthropic's evaluation guidance recommends structuring agent output with reasoning blocks before tool calls — applying the same principle here separates diagnosis from prescription. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 ## Interpreting the Output
 
@@ -60,7 +62,7 @@ After applying changes, re-run the evaluation suite to confirm the targeted fail
 
 ## Combined Human and Agent Review
 
-Neither approach alone produces the best results. Human reviewers catch things that require domain context and judgment about intended behavior; agent reviewers catch patterns across large transcript volumes that humans miss [unverified].
+Neither approach alone produces the best results. Human reviewers catch things that require domain context and judgment about intended behavior; agents excel at applying consistent criteria across large transcript volumes without attention fatigue. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 A practical split: run agent analysis first to identify the top 3-5 issue classes, then focus human review on understanding the root causes of those specific issues and deciding whether the agent's proposed fixes are sound.
 
@@ -115,10 +117,13 @@ The key instruction is to reason through the root cause before proposing a rewri
 - Apply changes as targeted hypotheses, then re-run evaluations to confirm resolution and check for regressions
 - Validate improvements against a held-out test set to avoid overfitting to development transcripts
 
-## Unverified Claims
+## When This Backfires
 
-- Asking the agent to output reasoning before each proposed change encourages more detailed analysis [unverified]
-- Agent reviewers catch patterns across large transcript volumes that humans miss [unverified]
+Agent-based transcript analysis has specific failure modes worth anticipating. Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include. LLMs don't always say what they mean." An agent that confidently lists five issue classes may be silently skipping a sixth that is harder to articulate.
+
+Agent-proposed fixes can also overfit to the surface presentation of a failure rather than its root cause. A proposed description rewrite may resolve the visible symptom in the evaluated transcripts while introducing a subtler ambiguity — one that only surfaces on task types not covered by your eval set. This is why re-running a held-out test set after applying changes is not optional.
+
+Finally, avoid relying on agent analysis as the sole quality gate for tool changes. Use it to narrow the search space for human review, not to replace the judgment required to validate proposed fixes.
 
 ## Related
 
@@ -129,3 +134,5 @@ The key instruction is to reason through the root cause before proposing a rewri
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
+- [Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals](incident-to-eval-synthesis.md)
+- [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)

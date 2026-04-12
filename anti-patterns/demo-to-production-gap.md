@@ -25,7 +25,7 @@ Demos use curated inputs, full context, and reliable tools. Production exposes w
 
 ## Compound Error Amplification
 
-Per-step accuracy compounds: 0.9^10 = ~35% end-to-end. Most production workflows have 10+ steps `[unverified]`.
+Per-step accuracy compounds: 0.9^10 = ~35% end-to-end. Each step's output becomes the next step's input — a wrong intermediate result propagates forward, and without per-step validation, it cannot be recovered downstream. Production workflows with more than a few steps face steep end-to-end accuracy decay.
 
 ```mermaid
 graph LR
@@ -64,7 +64,6 @@ Production agents fail in patterns demos never exercise:
 | Security vulnerabilities | 1.5-2x more | Stack Overflow |
 | Teams citing quality as top blocker | 32% | [LangChain Survey](https://www.langchain.com/state-of-agent-engineering) |
 | Agents in production with offline evals | 52% | LangChain Survey |
-| Enterprise GenAI systems reaching production | 5% | MIT GenAI Divide `[unverified]` |
 
 ## Engineering Countermeasures
 
@@ -84,6 +83,10 @@ A team demos a code-review agent on 5 clean PRs — all pass. Per-step accuracy 
 Production reality: PRs include merge conflicts and binary files (tool failures), batch runs hit rate limits (concurrency), long PRs overflow context and the agent declares "no issues found" on truncated diffs (context rot), and a malicious PR description instructs the agent to approve all files unconditionally (tool output injection).
 
 At 95% per-step over an 8-step workflow, end-to-end success is 0.95^8 = ~66%. One-third of reviews are wrong. Fixes: eval on production-representative samples, add a pre-completion checklist verifying all files were reviewed, and reject oversized diffs above a token budget.
+
+## When This Backfires
+
+Applying full harness engineering to simple, single-step, or heavily supervised workflows is over-engineering. Compound error decay only applies when steps chain automatically without per-step validation. Reserve these countermeasures for workflows with: (1) 5+ sequential automated steps, (2) tool calls that depend on prior tool outputs, and (3) no mandatory human checkpoints between steps.
 
 ## Related
 

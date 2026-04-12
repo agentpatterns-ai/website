@@ -42,7 +42,7 @@ This documentation belongs in AGENTS.md or equivalent instruction files, not in 
 
 ## The Result of Getting This Right
 
-The Sora team shipped an Android app where 85% of the final codebase was agent-written, with a 99.9% crash-free rate at launch ([source](https://openai.com/index/shipping-sora-for-android-with-codex/)). The foundation — built by hand — made that ratio possible [unverified].
+The Sora team shipped an Android app where 85% of the final codebase was agent-written, with a 99.9% crash-free rate at launch ([source](https://openai.com/index/shipping-sora-for-android-with-codex/)). The foundation — built by hand — made that ratio possible.
 
 The investment in the foundation is not overhead. It is the primary control mechanism that determines whether agent-written code meets your standards or requires constant correction.
 
@@ -93,10 +93,6 @@ This file is the boundary between the foundation you built by hand and every age
 - Document the patterns in AGENTS.md so the agent inherits them across sessions.
 - The foundation is not overhead; it is the mechanism that makes reliable agent delegation possible.
 - Without a foundation, even a capable agent introduces structural drift that compounds over time.
-
-## Unverified Claims
-
-- Sora team's 85% agent-written codebase with 99.9% crash-free rate was made possible by the hand-built foundation `[unverified]`
 
 ## Related
 

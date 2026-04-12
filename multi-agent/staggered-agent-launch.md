@@ -38,7 +38,7 @@ launch agent-3
 
 Each agent reads the queue in a different state: agent-2 sees a queue already partially claimed by agent-1. Contention on top-priority items drops because the items no longer appear available.
 
-A 30-second stagger is a common practitioner convention. An additional 4-second delay between launch and sending the first prompt is recommended [unverified] to allow agent [session initialization](../agent-design/session-initialization-ritual.md) to settle. Neither figure is empirically derived — the real principle is ensuring each agent has enough time to read-and-reserve before the next agent reads.
+A 30-second stagger is a common practitioner convention. Adding a short delay between agent launch and sending the first prompt gives [session initialization](../agent-design/session-initialization-ritual.md) time to settle before the agent reads the queue. Neither figure is empirically derived — the real principle is ensuring each agent has enough time to read-and-reserve before the next agent reads.
 
 ```mermaid
 gantt
@@ -81,7 +81,7 @@ Timing-based coordination is fragile. It breaks down under:
 
 **[Worktree isolation](../workflows/worktree-isolation.md)** (`isolation: worktree` in Claude Code sub-agents) eliminates file-level contention entirely by giving each agent its own git worktree. Agents never compete for the same file paths. Orthogonal to launch timing, but removes a major contention source.
 
-**Block's agent-task-queue** MCP server serializes expensive concurrent operations (builds, tests) via FIFO queuing [unverified], preventing agents from thrashing shared resources regardless of when they were launched.
+**[Block's agent-task-queue](https://github.com/block/agent-task-queue)** MCP server serializes expensive concurrent operations (builds, tests) via strict FIFO queuing, preventing agents from thrashing shared resources regardless of when they were launched.
 
 ## Relationship to Fungible Agent Architecture
 
@@ -121,11 +121,6 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 - The 30-second figure is a practitioner heuristic, not an empirically validated interval — tune based on your queue-read latency
 - For swarms larger than ~5 agents or with variable latency, prefer file-locked task claims or worktree isolation
 
-## Unverified Claims
-
-- The 30-second minimum and 4-second post-launch delay are practitioner conventions; no empirical source validates these specific intervals
-- The claim that stagger eliminates contention for typical swarm sizes is untested at scale
-
 ## Related
 
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
@@ -136,3 +131,5 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 - [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent](crdt-observation-driven-coordination.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
+- [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)

@@ -69,7 +69,7 @@ For agents outside GitHub's integrated ecosystem, the same loop can be construct
 3. **Coding agent applies fixes.** The agent receives the finding and proposed fix, applies it, runs tests, and commits. If tests fail after applying the fix, the finding is escalated back to human review rather than iterated on indefinitely.
 4. **Review the aggregate result.** You see both the review findings and the implemented fixes in a single view.
 
-Cap automated fix attempts at one pass. If the coding agent's fix does not resolve the finding cleanly (tests fail, new issues introduced), escalate to human review. Recursive fix-review loops for mechanical issues rarely converge after the first attempt [unverified].
+Cap automated fix attempts at one pass. If the coding agent's fix does not resolve the finding cleanly (tests fail, new issues introduced), escalate to human review rather than looping. Each additional automated pass risks introducing new issues while masking the original — the cost of a wrong fix compounds faster than the benefit of avoiding a human review.
 
 ## Limitations
 
@@ -121,10 +121,6 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 - Your authority is preserved: you decide which suggestions to implement and review the result
 - Cap automated fix attempts at one pass — escalate to human review if the fix does not resolve cleanly
 
-## Unverified Claims
-
-- Recursive fix-review loops for mechanical issues rarely converge after the first attempt `[unverified]`
-
 ## Related
 
 - [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
@@ -141,3 +137,5 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)

@@ -1,6 +1,6 @@
 ---
 title: "Schema and Structured Data for GEO — AI Citation Guide"
-description: "FAQPage JSON-LD yields a 2.7x citation lift in AI responses. Implementation guide for FAQPage, HowTo, and DefinedTerm schema in MkDocs Material."
+description: "FAQPage JSON-LD yields measurable citation lifts in AI responses (2.7x–3.2x across studies). Implementation guide for FAQPage, HowTo, and DefinedTerm schema in MkDocs Material."
 tags:
   - geo
   - workflows
@@ -12,7 +12,7 @@ aliases:
 
 # Schema Markup for AI Citation
 
-> FAQPage schema yields a 2.7x citation lift in AI responses (41% vs. 15% without markup) [unverified]. Structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing.
+> FAQPage schema yields a measurable citation lift in AI responses — structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing. Independent studies cite FAQPage citation improvements ranging from 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)).
 
 Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `docs/hooks/structured_data.py` hook.
 
@@ -141,6 +141,15 @@ that happen to have numbered sections.
 
 Steps should be self-contained sentences — each is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` or `techniques/` paths.
 
+## When This Backfires
+
+Schema markup improves AI citation probability in aggregate, but fails to deliver under specific conditions:
+
+- **Stale schema after content edits** — if body text diverges from the auto-generated schema (e.g., FAQ answers updated without matching the `**Question**` / answer format the hook detects), AI engines receive contradictory signals and may deprioritize the page.
+- **Thin or low-authority domains** — citation lift is relative to baseline authority; a new or low-traffic domain injecting FAQPage schema does not overcome trust deficits. Schema accelerates existing signal; it does not manufacture credibility.
+- **Wrong schema type for content shape** — applying HowTo schema to conceptual explanations, or FAQPage to unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalise.
+- **AI engine indexing changes** — citation benefit accrues at indexing time, not during live fetch. If an AI provider changes its indexing pipeline to ignore or discount structured data, pages relying on schema lift lose the advantage without any change to the page itself.
+
 ## Testing Schema
 
 | Tool | Purpose | URL |
@@ -181,6 +190,3 @@ mkdocs build --strict
 - [Atomic Pages and Chunking](atomic-pages-and-chunking.md) — page structure that improves schema auto-detection accuracy
 - [Topical Authority](topical-authority.md) — how schema markup contributes to entity coverage and domain authority
 
-## Unverified Claims
-
-- The 41% vs. 15% citation rate numbers originate from the referenced GEO research sources; the primary source (eseospace.com) returned 403 during research. The figure is corroborated at similar magnitudes by multiple independent studies. `[unverified]`

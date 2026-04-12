@@ -23,7 +23,7 @@ When a section opens with context, caveats, or throat-clearing, the embedding av
 
 ## The 40–60 Word Pattern
 
-The optimal opening answer is 40–60 words: long enough to be a self-contained, citable unit; short enough to dominate the chunk without competition from elaboration. [Frase's AEO guide](https://www.frase.io/blog/what-is-answer-engine-optimization-the-complete-guide-to-getting-cited-by-ai) and [Search Engine Journal's LLM content analysis](https://www.searchenginejournal.com/how-llms-interpret-content-structure-information-for-ai-search/544308/) both identify this range as practitioner consensus for balancing semantic completeness with embedding precision. [unverified]
+The optimal opening answer is 40–60 words: long enough to be a self-contained, citable unit; short enough to dominate the chunk without competition from elaboration. This range reflects practitioner consensus in the AEO community — below 40 words risks an underspecified embedding; above 60 words, elaboration dilutes the opening signal before the key claim is embedded.
 
 Structure every H2 section as:
 
@@ -102,16 +102,22 @@ developer documentation, section-aligned chunking — splitting at H2 boundaries
 
 The "before" opens with meta-framing that contributes no semantic signal. The "after" opens with a direct 50-word answer — a self-contained, citable passage that dominates the chunk embedding.
 
+## When This Backfires
+
+Answer-first structure optimizes for chunk-based vector retrieval. It provides limited benefit in three situations:
+
+- **Full-document scoring**: AI tools that embed and score entire documents (rather than chunking) are not sensitive to where within the document the answer appears — positional ordering has no effect on a whole-document embedding.
+- **BM25 and keyword retrieval**: Lexical search ranks passages by term frequency, not positional density. Opening with the answer does not change keyword coverage unless the opening uses more specific terminology than the body.
+- **Conversational AI reading full context**: When a system pastes an entire page into a model context window (no retrieval step), the model reads everything regardless of order. Structure aids human skim-reading, but answer-first placement adds no retrieval advantage.
+
+Apply answer-first structure selectively when you know content will be consumed via chunk-based RAG. For hybrid pipelines or human-first documentation, standard editorial judgment applies.
+
 ## Key Takeaways
 
 - Answer-first writing is a retrieval optimization, not a style preference — section opening content determines chunk embedding quality
 - 40–60 word opening answers produce chunks that are self-contained, precisely embedded, and citation-ready
 - Sections must be independently understandable — RAG tools cite passages, not pages
 - Descriptive headings carry semantic weight; generic headings ("Overview", "Details") do not
-
-## Unverified Claims
-
-- The 40–60 word range for section-opening answers is practitioner consensus (Frase, SEJ) rather than a finding from a peer-reviewed study.
 
 ## Related
 

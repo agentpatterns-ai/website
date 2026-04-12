@@ -68,10 +68,25 @@ The paper does not identify the mechanism, but the data holds regardless of indi
 - Adding one human reviewer to CRA-reviewed PRs recovers most of the merge rate (67.99%)
 - Industry claims of 80% CRA self-sufficiency are not supported by empirical merge rate data
 
-## Unverified Claims
+## When This Backfires
 
-- The dataset covers HuggingFace-hosted repositories, which skew toward ML/AI projects — generalizability to other software domains is not established [unverified]
-- Whether signal ratio as a calibration metric applies equally to all CRA tools or primarily to those studied [unverified]
+CRA-only review performs closest to human-only when the CRA is narrowly scoped and the repository has low merge-rate stakes. Three conditions favor CRA-only:
+
+- **Bot-generated PRs**: dependency bumps, automated refactors, and chore PRs where merge criteria are explicit and mechanical
+- **Signal ratio above 80%**: if a CRA has been calibrated to exceed this threshold on your codebase, the 60.2% abandonment finding may not apply
+- **Low-volume, low-risk contexts**: internal tooling repositories where abandonment is acceptable and human review bandwidth is the binding constraint
+
+The 23-point gap was measured on HuggingFace-hosted ML/AI repositories; generalizability to other software domains is not established by this study. Signal ratio as a calibration metric was validated across 13 CRAs — whether it transfers equally to CRA tools outside that set is not confirmed.
+
+## Limitations
+
+CRA-only review performs closest to human-only when the CRA is narrowly scoped and the repository has low merge-rate stakes. Three conditions favor CRA-only:
+
+- **Bot-generated PRs**: dependency bumps, automated refactors, and chore PRs where merge criteria are explicit and mechanical
+- **Signal ratio above 80%**: if a CRA has been calibrated to exceed this threshold on your codebase, the 60.2% abandonment finding may not apply
+- **Low-volume, low-risk contexts**: internal tooling repositories where abandonment is acceptable and human review bandwidth is the binding constraint
+
+The 23-point gap was measured on HuggingFace-hosted ML/AI repositories; generalizability to other software domains is not established by this study. Signal ratio as a calibration metric was validated across 13 CRAs — whether it transfers equally to CRA tools outside that set is not confirmed.
 
 ## Related
 
@@ -79,6 +94,7 @@ The paper does not identify the mechanism, but the data holds regardless of indi
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — design principle for raising signal ratio: silence as valid output, confidence thresholds, severity filtering
 - [Tiered Code Review](tiered-code-review.md) — risk-based routing that provides the structural framework for CRA-first plus human-last review
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — agent-as-author merge rates; this page covers agent-as-reviewer — complementary data points
+- [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md) — how PR description structure (not just reviewer composition) affects merge outcomes using the same AIDev dataset
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — prescriptive guide for structuring the AI first pass
 - [Committee Review Pattern](committee-review-pattern.md) — multi-agent verification as an alternative to single CRA deployment
 

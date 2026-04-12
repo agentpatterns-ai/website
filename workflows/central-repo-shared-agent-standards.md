@@ -184,7 +184,7 @@ To upgrade, a team bumps the submodule tag and re-runs the copy step. The CI dif
 
 **Monolithic instruction file.** A single massive file that covers every convention for every tool. It exceeds context windows, confuses agents with irrelevant rules, and creates merge conflicts. Use [modular rules directories](https://claudefa.st/blog/guide/mechanics/rules-directory) with path-specific YAML frontmatter targeting instead.
 
-**Copy-paste distribution.** Manually copying instruction files between repos. Typically causes drift within weeks [unverified]. See [The Copy-Paste Agent](../anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
+**Copy-paste distribution.** Manually copying instruction files between repos. Without automated sync, copies diverge as the source evolves — there is no mechanism to detect or prevent drift. See [The Copy-Paste Agent](../anti-patterns/copy-paste-agent.md) for the full anti-pattern. Use any of the five distribution mechanisms above instead.
 
 **No versioning.** Pushing changes to all downstream repos simultaneously with no opt-in. Breaks projects that depend on specific convention versions. Pin versions and validate on CI.
 

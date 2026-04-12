@@ -29,13 +29,13 @@ Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/
 
 ### Anthropic Model-Specific Thresholds
 
-Minimum tokens before a cache breakpoint activates [unverified]:
+Minimum tokens before a cache breakpoint activates ([Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)):
 
 | Minimum tokens | Models |
 |---|---|
 | 1,024 | Sonnet 4/4.5, Opus 4/4.1 |
-| 2,048 | Sonnet 4.6, Haiku 3/3.5 |
-| 4,096 | Opus 4.5/4.6, Haiku 4.5 |
+| 2,048 | Sonnet 4.6, Haiku 3.5 |
+| 4,096 | Opus 4.5/4.6, Haiku 3, Haiku 4.5 |
 
 ## Worked Example: 50-Turn Agent Session
 
@@ -81,11 +81,11 @@ graph TD
 
 **Short sessions (1--2 turns)**: Anthropic's write premium (1.25x or 2x) requires 2--3 cache reads to break even.
 
-**High parallelism** [unverified]: On Anthropic, simultaneous requests each miss the cache and pay the write cost. Sequence the first request before fanning out.
+**High parallelism**: On Anthropic, a cache entry only becomes available after the first response begins — simultaneous requests each miss the cache and pay the write cost ([Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Sequence the first request before fanning out.
 
 **Google explicit caching**: Storage fees ($1.00--$4.50/MTok/hour) exceed read savings unless the cache is hit several times per hour.
 
-**Anthropic 20-block lookback** [unverified]: Modifications beyond 20 blocks from a breakpoint cause full cache misses.
+**Anthropic 20-block lookback**: The system checks at most 20 block positions per breakpoint; modifications beyond 20 blocks from a breakpoint cause full cache misses ([Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
 
 ## Monitoring Cache Performance
 

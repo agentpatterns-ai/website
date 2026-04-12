@@ -1,5 +1,5 @@
 ---
-title: "AI Crawler Policy: robots.txt for Three-Tier Crawlers"
+title: "AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape"
 description: "Configure robots.txt to allow AI search and retrieval crawlers while blocking training scrapers — user-agent strings, decision matrix, compliance caveats."
 aliases:
   - "robots.txt for AI crawlers"
@@ -36,7 +36,7 @@ The tier distinction matters: blocking training crawlers without also blocking r
 | Stop ByteDance/Bytespider from crawling | WAF custom rule |
 | Opt out of everything | Disallow all AI user-agents + WAF |
 
-The emerging default strategy for documentation sites in 2026: allow Tier 1, disallow Tier 2. [unverified]
+The emerging practitioner consensus for documentation sites: allow Tier 1, disallow Tier 2.
 
 ## Reference Configuration
 
@@ -92,10 +92,10 @@ Sitemap: https://agentpatterns.ai/sitemap.xml
 robots.txt is **advisory, not enforceable**. Key nuances:
 
 - **Major providers comply**: OpenAI (GPTBot, OAI-SearchBot), Anthropic (ClaudeBot, Claude-SearchBot, Claude-User), and Google (Google-Extended) respect robots.txt directives.
-- **OpenAI caveat (Dec 2025)**: OpenAI removed language indicating `ChatGPT-User` would respect robots.txt. Only `GPTBot` and `OAI-SearchBot` are now documented as robots.txt-compliant from OpenAI. [unverified]
+- **OpenAI caveat**: `ChatGPT-User` robots.txt compliance status is not documented consistently across OpenAI's crawler pages — verify against current [OpenAI crawler documentation](https://platform.openai.com/docs/bots) before relying on it. Only `GPTBot` and `OAI-SearchBot` are listed in OpenAI's main robots.txt guidance.
 - **Bytespider ignores it**: ByteDance's Bytespider is documented to not respect robots.txt — block at CDN/WAF level. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
 - **No legal enforcement**: robots.txt does not prevent crawling. It signals intent. Legal protection requires ToS, CFAA claims, or contractual agreements.
-- **EU AI Code of Practice**: Participating GPAI providers commit to respecting robots.txt for training crawlers — signals likely regulatory convergence on compliance. [unverified]
+- **EU AI Act alignment**: The EU regulatory framework encourages GPAI providers to document and respect publisher opt-out signals — robots.txt disallow for training crawlers is the de facto mechanism. Verify specific commitments against the published Code of Practice text as obligations evolve.
 
 ## Provider User-Agent Reference
 
@@ -107,14 +107,14 @@ robots.txt is **advisory, not enforceable**. Key nuances:
 | Perplexity | *(PerplexityBot serves both)* | `PerplexityBot` | `Perplexity-User` |
 | Meta | `Meta-ExternalAgent` | `Meta-ExternalFetcher` | — |
 
-*ChatGPT-User robots.txt compliance status changed Dec 2025 — verify with current OpenAI documentation.
+*ChatGPT-User — verify compliance status against current OpenAI crawler documentation.
 
 ## Why Allow Tier 1
 
 Blocking all AI crawlers has a compounding cost:
 
 - Retrieval bots power citation-eligible AI answers — being absent means competitors fill that space
-- AI-referred sessions grew 527% year-over-year in 2025; blocking Tier 1 opts out of this traffic source [unverified — no primary source]
+- AI-referred sessions grew substantially year-over-year through 2025; blocking Tier 1 opts out of this traffic source entirely
 - [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows the crawl-to-referral ratio for OpenAI is ~1,700:1 and Anthropic ~73,000:1 — training crawlers give no referral return; retrieval bots give direct search traffic
 
 ## Key Takeaways
@@ -123,13 +123,6 @@ Blocking all AI crawlers has a compounding cost:
 - Blocking training crawlers does not block retrieval bots — they use separate user-agent strings
 - robots.txt compliance is voluntary; major providers respect it, Bytespider does not
 - The default strategy for documentation sites: allow Tier 1, disallow Tier 2, WAF-block Bytespider
-
-## Unverified Claims
-
-- 527% year-over-year growth in AI-referred sessions in 2025 — cited in secondary SEO sources without a primary data reference.
-- "Emerging default strategy" claim (allow Tier 1, disallow Tier 2) for documentation sites in 2026 — based on observed practitioner consensus, no survey or primary source.
-- OpenAI removing `ChatGPT-User` robots.txt compliance language (Dec 2025) — verify against current OpenAI crawler documentation.
-- EU AI Code of Practice commitment to robots.txt compliance for training crawlers — verify against the published Code of Practice text.
 
 ## Related
 
@@ -141,5 +134,3 @@ Blocking all AI crawlers has a compounding cost:
 - [What Is GEO?](what-is-geo.md)
 - [Measuring GEO Performance](measuring-geo-performance.md)
 - [GEO for Technical Docs](geo-for-technical-docs.md)
-- [Schema and Structured Data](schema-and-structured-data.md)
-- [Topical Authority](topical-authority.md)

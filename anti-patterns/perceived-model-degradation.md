@@ -15,50 +15,56 @@ aliases:
 
 ## The Pattern
 
-Within weeks of any model release, user forums fill with reports that quality has declined. The complaints are persistent, cross-provider, and structurally identical every time.
-
-The anti-pattern is not the degradation itself — some may be real. The problem is that teams cannot distinguish genuine regression from perception bias, so they either panic-switch models without evidence or dismiss real problems as "just vibes."
+After every model release, user forums fill with reports that quality has declined — persistent, cross-provider, and structurally identical each time. The anti-pattern is not the degradation itself (some is real); it is the inability to tell the difference, causing teams to either panic-switch without evidence or dismiss real problems as vibes.
 
 ## Why It Happens
 
-Plausible causes include post-training adjustments (providers iterate on deployed models without announcing changes), confirmation bias (users selectively notice failures as novelty wears off — consistent with OpenAI VP Peter Welinder's [statement](https://twitter.com/npew/status/1681578562419056641)), A/B routing, and weight quantization `[unverified]`. None has definitive proof. Without your own measurements, you cannot act on any.
+Candidate causes: post-training adjustments, confirmation bias (consistent with OpenAI VP Peter Welinder's [statement](https://twitter.com/npew/status/1681578562419056641)), A/B routing, and weight quantization. None has definitive proof.
 
-A key distinction: **LLM drift** (behavioral changes over time) is not the same as **degradation** (inability to solve previously solvable problems). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009)) documented GPT-4 accuracy dropping from 84% to 51% on prime identification — but critics noted this measured a preference shift, not a reasoning decline `[unverified]`.
+**LLM drift** (behavioral change over time) differs from **degradation** (inability to solve previously solvable tasks). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009)) documented GPT-4 prime-identification accuracy dropping from 84% to 51% — the drop coincided with reduced chain-of-thought compliance, making root cause difficult to isolate.
 
 ## What to Do Instead
 
 ### Pin model versions
 
-Anthropic's [model versioning guidance](https://docs.anthropic.com/en/docs/about-claude/models) recommends pinning to a specific dated snapshot in production. Alias endpoints (`claude-sonnet-4`, `gpt-4o`) follow the latest snapshot — treat every version change as a potential breaking change.
+Per Anthropic's [model versioning guidance](https://docs.anthropic.com/en/docs/about-claude/models), pin to a specific dated snapshot in production. Alias endpoints (`claude-sonnet-4`, `gpt-4o`) silently follow the latest snapshot — treat each version change as a potential breaking change.
 
 ### Build golden-query eval suites
 
-Maintain task-specific prompts with known-good expected outputs. Run them on every model version change and on a schedule. See [Golden Query Pairs](../verification/golden-query-pairs-regression.md) for implementation details.
+Maintain task-specific prompts with known-good outputs; run on every version change and on a schedule. See [Golden Query Pairs](../verification/golden-query-pairs-regression.md) for implementation.
 
 ### Use statistical tests, not eyeballing
 
-A 2025 paper proposes [McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144) to distinguish genuine degradation from statistical noise, detecting drops as small as 0.3%.
+[McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144) distinguishes genuine degradation from noise, detecting drops as small as 0.3%.
 
 ### Separate capability evals from regression evals
 
-Anthropic's eval framework distinguishes two types `[unverified]`:
+- **Capability evals** — low initial pass rate, track improvement
+- **Regression evals** — near-100% baseline, detect degradation
 
-- **Capability evals** target tasks the agent struggles with (low initial pass rate) — these track improvement
-- **Regression evals** maintain a near-100% baseline — these detect degradation
-
-A drop on a regression eval is a signal. A drop on a capability eval may just be noise.
+A regression eval drop is a signal. A capability eval drop may be noise.
 
 ## Decision Checklist
 
 Before reacting to perceived degradation:
 
-- [ ] Are you using a pinned model version or a floating alias?
-- [ ] Do you have eval results from before and after the perceived change?
-- [ ] Is the sample size large enough for statistical significance?
-- [ ] Have you controlled for prompt changes, context changes, and tool changes on your side?
-- [ ] Can you reproduce the degradation on a specific, repeatable test case?
+- [ ] Using a pinned model version, not a floating alias?
+- [ ] Eval results from before and after the perceived change?
+- [ ] Sample size sufficient for statistical significance?
+- [ ] Controlled for prompt, context, and tool changes on your side?
+- [ ] Reproducible on a specific, repeatable test case?
 
-If you cannot answer yes to at least three of these, you are operating on vibes.
+Fewer than three "yes" answers means you are operating on vibes.
+
+## Why It Works
+
+Novel models get credit for wins; routine ones get blamed for failures. Eval suites substitute systematic sampling for selective memory — identical prompts against the same rubric produce a signal independent of observer bias. Pinned snapshots isolate change attribution: any observed difference originated in your code, prompts, or data, not a silent upstream update.
+
+## When This Backfires
+
+1. **Evals lag real usage.** Suites reflect the authoring-time distribution; shifted user behavior means a passing eval masks degradation on the live workload.
+2. **Pinning delays improvements.** Pinning foregoes bug fixes and upgrades. Providers deprecate old snapshots; teams without a rotation policy face forced migrations with no baseline.
+3. **Underpowered tests miss real regressions.** McNemar's test requires sufficient paired samples; sparse traffic or narrow suites cannot detect small but real drops.
 
 ## Example
 

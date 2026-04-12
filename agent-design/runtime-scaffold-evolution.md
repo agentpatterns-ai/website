@@ -64,11 +64,11 @@ This is **not a universal technique**. It requires frontier-class models:
 
 | Model tier | Effect | Mechanism |
 |-----------|--------|-----------|
-| **Frontier** | Significant improvement [unverified] | Synthesizes useful, targeted tools that reduce step count |
-| **Mid-tier** | Modest improvement [unverified] | Creates tools but sometimes over-engineers them |
-| **Small** | **Performance degrades** [unverified] | Gets stuck in tool-creation loops, never solves the actual problem |
+| **Frontier** | Significant improvement | Synthesizes useful, targeted tools that reduce step count |
+| **Mid-tier** | Modest improvement | Creates tools but sometimes over-engineers them |
+| **Small** | **Performance degrades** | Gets stuck in tool-creation loops, never solves the actual problem |
 
-Weaker models lack the meta-reasoning to judge when tool creation is worthwhile, turning the reflection prompt into a distraction trap ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
+In ablation experiments, the pattern yielded +22.6% improvement with Claude 4.5 Sonnet and −68.2% degradation with GPT-5-Nano. Weaker models lack the meta-reasoning to judge when tool creation is worthwhile, turning the reflection prompt into a distraction trap ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
 
 ## Runtime vs Offline Evolution
 
@@ -83,9 +83,9 @@ Tools vanish when the session ends. Promoting useful ones to a [skill library](.
 
 ## Cost and Context Trade-offs
 
-Token overhead is ~$0.12 per issue [unverified — tested on SWE-bench tasks], negligible relative to overall agent cost.
+Token overhead is modest: on SWE-bench Verified, Live-SWE-agent averaged $0.68 per issue versus $0.56 for the baseline agent — roughly $0.12 incremental cost — which the authors describe as "minimal" relative to the accuracy gain ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
 
-The hidden cost is context pressure. Each synthesized tool definition consumes tokens. In long sessions, accumulated definitions may crowd out problem-relevant context. Active tool pruning remains an open area [unverified].
+The hidden cost is context pressure. Each synthesized tool definition consumes tokens. In long sessions, accumulated definitions may crowd out problem-relevant context. Active tool pruning strategies are not addressed by current implementations.
 
 ## When to Use
 
@@ -137,9 +137,11 @@ The tool was created in response to friction (noisy grep results), used for the 
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md) — offline pattern mining across sessions
 - [Agentic Flywheel](agentic-flywheel.md) — closed-loop harness self-improvement
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance for persisted skills
+- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — three-layer framework for characterizing scaffold designs across control, tool interface, and resource dimensions
 - [Harness Engineering](harness-engineering.md) — designing agent environments
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — human-driven observation-to-update loop
 - [The Think Tool](think-tool.md) — mid-stream reasoning checkpoint
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — runtime tools as removable scaffolding
 - [Agent Self-Review Loop](agent-self-review-loop.md) — self-evaluation of output quality
 - [Tool Minimalism](../tool-engineering/tool-minimalism.md) — counterpoint: fewer tools can outperform more
+- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — characterizes the three-layer scaffold structure that runtime evolution operates within

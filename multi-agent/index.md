@@ -32,6 +32,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
 
 ## Coordination

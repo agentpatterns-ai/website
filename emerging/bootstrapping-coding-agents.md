@@ -70,10 +70,10 @@ This concept extends existing agent-driven development patterns:
 
 This is a single-paper finding with important caveats:
 
-- **Scale is unresolved.** The demonstration uses a 926-word spec. Whether specs of 10,000+ words maintain tractability is an open question. The companion Attractor project uses 34,900-word specifications, but verification complexity increases substantially. [unverified]
+- **Scale is unresolved.** The demonstration uses a 926-word spec. Whether specs of 10,000+ words maintain tractability is an open question. The companion [Attractor project](https://github.com/strongdm/attractor) uses 34,900-word specifications — roughly 38× larger — but the paper notes that verification difficulty grows with spec size: the test suite must cover a larger behavioral surface, and the specification itself may harbor internal inconsistencies ([source](https://arxiv.org/abs/2603.17399)).
 - **Model-dependent.** The bootstrap succeeds only with frontier models. Earlier or smaller models produce syntactically invalid or behaviorally incorrect implementations. This makes the property a moving target, not a universal guarantee.
 - **Security risk.** Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models and running generation in controlled CI environments.
-- **Industrial validation is thin.** The paper cites a team that built a million-line codebase with zero manually written code, but this claim is not independently verifiable from the paper alone. [unverified]
+- **Industrial validation is thin.** The paper cites a team of three to seven engineers that built a million-line codebase over five months using Codex, with zero manually written lines of code, by treating their `docs/` directory as the reference system ([source](https://arxiv.org/abs/2603.17399)). This is reported as an industrial existence proof, not a peer-reviewed replication.
 - **Spec is necessary but not sufficient.** Real systems require test suites, deployment configs, and operational knowledge alongside the spec. The spec is *a* primary artifact, not *the only* artifact.
 
 ## Example
@@ -119,11 +119,6 @@ Both `agent0.py` and `agent1.py` satisfy the specification. Divergences between 
 - Code review shifts to specification review; implementations become regenerable build artifacts
 - The finding is model-dependent and scale-limited — treat it as an emerging direction, not an established pattern
 
-## Unverified Claims
-
-- The companion Attractor project's 34,900-word specification has been successfully bootstrapped
-- A team built a million-line codebase using Codex with zero manually written code
-
 ## Related
 
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — the workflow this concept extends
@@ -133,3 +128,4 @@ Both `agent0.py` and `agent1.py` satisfy the specification. Divergences between 
 - [First-Party Agent Composition](first-party-agent-composition.md) — building capabilities as native features rather than integrating third-party tools
 - [Hyper-Personalized Software](hyper-personalized-software.md) — AI-driven development making custom-built software economically viable
 - [Product-as-IDE](product-as-ide.md) — the running application as its own development environment
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — how tiered compaction preserves task continuity across long sessions

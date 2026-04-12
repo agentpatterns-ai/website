@@ -13,7 +13,7 @@ tags:
 
 ## How It Works
 
-GitHub's Dependabot alerts surface vulnerable dependencies. Each alert now accepts an assignee — a collaborator, team, or `@copilot`. Assigning to Copilot triggers a different path than assigning to a human: instead of sending a notification, GitHub invokes the [Copilot coding agent](coding-agent.md) to generate a fix and open a draft pull request.
+GitHub's Dependabot alerts surface vulnerable dependencies. Each alert now accepts an assignee — a collaborator, team, or `@copilot`. Assigning to Copilot triggers a different path than assigning to a human: instead of sending a notification, GitHub invokes the [Copilot coding agent](coding-agent.md) to generate a fix and open a draft pull request. Requires GitHub Code Security and a Copilot plan that includes coding agent access ([changelog](https://github.blog/changelog/2026-04-07-dependabot-alerts-are-now-assignable-to-ai-agents-for-remediation/)).
 
 The workflow:
 
@@ -57,7 +57,7 @@ This positions agent assignment inside the [human-in-the-loop](../../security/de
 
 ## Example
 
-In the Dependabot alerts tab, open any alert with an available patch. Use the **Assignees** dropdown in the alert details panel to select **Copilot** ([full steps](https://docs.github.com/en/code-security/how-tos/manage-security-alerts/manage-dependabot-alerts/viewing-and-updating-dependabot-alerts#viewing-and-prioritizing-dependabot-alerts)). The alert list updates to show `@copilot` as the assignee and the agent begins generating the fix.
+In the Dependabot alerts tab, open any alert with an available patch. Use the **Assignees** dropdown in the alert details panel to select **Copilot** ([full steps](https://docs.github.com/en/code-security/dependabot/dependabot-alerts/viewing-and-updating-dependabot-alerts)). The alert list updates to show `@copilot` as the assignee and the agent begins generating the fix.
 
 To track all agent-assigned alerts across an organization's repositories in Security Overview:
 
@@ -67,17 +67,20 @@ assignee:@copilot is:open
 
 This query surfaces all open Dependabot alerts currently delegated to the agent, enabling progress monitoring without opening individual repositories.
 
+## When This Backfires
+
+Agent assignment degrades or fails in three conditions:
+
+1. **No test suite**: The agent opens a PR, but without automated tests there is no signal that the dependency bump is safe. Reviewers must manually exercise the diff — negating much of the time saving.
+2. **Complex transitive updates**: When a version bump pulls in a chain of transitive dependency upgrades, the agent may resolve conflicts mechanically while missing semantic breakage in nested packages. Human inspection of the full dependency graph remains necessary.
+3. **No available patch**: The agent cannot synthesise a fix for an advisory with no upstream patch. Assigning these alerts wastes a Copilot premium request and produces a draft PR with no actionable changes.
+
 ## Key Takeaways
 
 - Assigning a Dependabot alert to `@copilot` replaces a manual notification with autonomous fix generation
 - Auto-triage rules reduce the assignment queue by dismissing low-risk alerts before they surface
 - The draft PR model keeps a human at the merge gate — the agent executes, but cannot ship
 - Risk-based routing (version bumps and transitive updates to agent; logic-impacting advisories to humans) maximises throughput while preserving review quality
-
-## Unverified Claims
-
-- Plan tier requirements for agent assignment (GitHub Advanced Security, Copilot Enterprise, or all paid Copilot plans) [unverified — feature flag `dependabot-alerts-assignees` gating not confirmed in public pricing docs]
-- Whether the agent uses the same ephemeral GitHub Actions runner as the standard Copilot coding agent [unverified]
 
 ## Related
 

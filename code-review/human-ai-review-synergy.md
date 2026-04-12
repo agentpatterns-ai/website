@@ -1,6 +1,6 @@
 ---
 title: "Human-AI Review Synergy in Agentic Code Review"
-description: "Empirical evidence from 278,790 code reviews shows AI and human reviewers have complementary but unequal strengths — structuring their collaboration around these differences improves outcomes."
+description: "278,790 code reviews show AI and human reviewers have complementary strengths. Structure collaboration around these measured differences for better outcomes."
 tags:
   - code-review
   - arxiv
@@ -60,13 +60,19 @@ The data supports a specific model:
 
 **Constrain AI verbosity.** At 7x the tokens per line of code, unconstrained AI review output creates the same alert fatigue that [signal-over-volume design](signal-over-volume-in-ai-review.md) addresses. Configure review agents with confidence thresholds and severity filters.
 
-**Use multi-agent verification.** A second AI agent validating the first agent's findings can filter incorrect suggestions before they reach the developer, potentially improving the 16.6% adoption rate [unverified]. This connects to the [committee review pattern](committee-review-pattern.md).
+**Use multi-agent verification.** A second AI agent validating the first agent's findings can filter incorrect suggestions before they reach the developer, reducing triage load. This connects to the [committee review pattern](committee-review-pattern.md). Note that when both agents share the same training distribution and no executable specification anchors review, correlated failures can echo rather than cancel ([arxiv:2603.25773](https://arxiv.org/abs/2603.25773)).
 
-## Unverified Claims
+## When This Backfires
 
-- The dataset (2022-2025) may include periods before agentic review tools matured, potentially depressing AI adoption metrics
-- Whether the complexity increase finding holds for newer models with better code understanding
-- Whether multi-agent verification improves AI suggestion adoption rates
+The AI-first, human-last model adds triage cost to every PR. In high-velocity repositories where AI suggestion quality is low (below 10% adoption), the developer triage burden can exceed the defect-catch benefit — measure adoption rates per-repo before committing to the pattern.
+
+When AI-generated code is reviewed by AI agents from the same model family, correlated failures emerge: the reviewing agent reasons from the same training distribution as the generating agent and misses the same classes of error ([arxiv:2603.25773](https://arxiv.org/abs/2603.25773)). Executable specifications or cross-family agent panels mitigate this.
+
+Teams without confidence threshold or severity filter tooling will experience the 7x verbosity gap as alert fatigue that degrades trust in AI review output over time, reducing effective adoption below the 16.6% baseline.
+
+## Why It Works
+
+AI agents excel at pattern-matching against large defect databases and applying consistent rules across every line of code without fatigue. Human reviewers provide contextual judgment that AI agents lack: architectural fit, knowledge transfer, and team-specific conventions that change over time. The sequential model works because AI pre-triage reduces the human reviewer's cognitive load — by the time a human reviews, known-pattern defects are already addressed, freeing attention for higher-level concerns. The data confirms this role division: over 95% of AI comments target defects and improvements, while human comments distribute across understanding, knowledge transfer, and design ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
 
 ## Key Takeaways
 
@@ -78,6 +84,7 @@ The data supports a specific model:
 
 ## Related
 
+- [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) — why large AI-generated diffs get rubber-stamped while small changes attract debate
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — design principle for the verbosity problem quantified here (29.6 vs 4.1 tokens/LOC)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — prescriptive guide for AI-first review that this page provides empirical backing for
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — PR authoring acceptance rates, complementary to the review suggestion adoption rates here
@@ -89,3 +96,5 @@ The data supports a specific model:
 - [Review-Then-Implement Loop](review-then-implement-loop.md) — closing the loop between AI review findings and automated fixes
 - [Diff-Based Review](diff-based-review.md) — focusing review on changes rather than full outputs, relevant to managing AI review verbosity
 - [PR Description Style as a Lever](pr-description-style-lever.md) — PR description structure as a configurable parameter affecting reviewer engagement
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical data on how CRA-only review affects merge outcomes; complementary evidence to the adoption rate findings here
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive agents that extract accept/reject signals to improve future suggestion adoption rates, directly addressing the 16.6% baseline

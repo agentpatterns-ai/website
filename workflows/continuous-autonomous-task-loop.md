@@ -1,7 +1,7 @@
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Continuous Autonomous Task Loop"
-description: "Automate sequential task execution by running a self-directed agent loop that selects, executes, commits, and iterates — with fresh context per task and built-in rate-limit handling."
+description: "Run a self-directed agent loop that reads a task backlog, executes each item via a ReAct inner loop, commits results, and repeats with fresh context per task."
 tags:
   - workflows
   - agent-design
@@ -77,7 +77,7 @@ This pattern trades oversight for momentum. It is not appropriate for explorator
 
 ## Permissions Consideration
 
-Unattended execution at this scale typically requires elevated agent permissions (e.g., skipping interactive prompts). Review your tool's permission model before enabling unattended mode — the blast radius of an ambiguous task grows proportionally with the permissions granted. [unverified — specific flag requirements vary by tool and version]
+Unattended execution at this scale typically requires elevated agent permissions. In Claude Code, the `--dangerously-skip-permissions` flag bypasses interactive prompts to allow fully headless operation. Review your tool's permission model before enabling unattended mode — the blast radius of an ambiguous task grows proportionally with the permissions granted. [Source: [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/continuous-autonomous-task-loop-pattern.md)]
 
 ## Example
 
@@ -129,11 +129,6 @@ The `--no-cache` flag ensures a genuinely clean context each cycle. Non-zero exi
 - Rate-limit handling and git safety nets eliminate the two most common sources of manual interruption in long-running unattended loops
 - This is sequential execution; combine with [parallel agent sessions](parallel-agent-sessions.md) to add horizontal throughput
 - Guardrails (iteration cap, per-task commits, small-batch validation) are structural requirements, not optional enhancements
-
-## Unverified Claims
-
-- Skipping interactive permission prompts (e.g., `--dangerously-skip-permissions` in Claude Code) may be required for fully unattended execution — verify against your tool's current documentation before use [unverified]
-- Whether 300 seconds is a hardcoded or configurable default in the nibzard reference implementation [unverified]
 
 ## Related
 

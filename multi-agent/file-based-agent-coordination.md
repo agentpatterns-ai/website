@@ -59,11 +59,11 @@ File-based coordination handles task exclusivity. It does not handle:
 - **Agent failure recovery** — a crashed agent leaves a stale lock file; the harness needs a timeout or cleanup mechanism
 - **Load balancing** — agents self-select tasks based on queue order; skewed task complexity can leave some agents idle
 
-For projects where these concerns are significant, a dedicated orchestrator is warranted. The file-based pattern works best when tasks are genuinely independent and roughly uniform in complexity.
+For projects where these concerns are significant, a dedicated orchestrator is warranted. The file-based pattern works best when tasks are genuinely independent and roughly uniform in complexity. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) illustrates the alternative: when tasks are interdependent or require shared context, explicit task boundaries in agent instructions become necessary to prevent duplication.
 
 ## Scaling Properties
 
-The pattern scales horizontally: adding more agents requires no changes to the coordination mechanism. Each new agent reads the same task queue and participates in the same lock contention protocol. The bottleneck is git push throughput, not a central service [unverified].
+The pattern scales horizontally: adding more agents requires no changes to the coordination mechanism. Each new agent reads the same task queue and participates in the same lock contention protocol. Contention surfaces at the git push step rather than at a central coordinator process.
 
 ## Key Takeaways
 

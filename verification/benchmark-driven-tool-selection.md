@@ -16,7 +16,7 @@ aliases:
 
 ## The Gap Between Benchmarks and Reality
 
-Most code-generation benchmarks (HumanEval, MBPP, SWE-bench) use self-contained puzzles or curated repository tasks. Developers work differently: they complete partial functions mid-file, call unfamiliar APIs, and navigate multi-file dependencies. DevBench addresses this by deriving 1,800 evaluation instances from real developer telemetry across six languages and six task categories.
+Most code-generation benchmarks (HumanEval, MBPP, SWE-bench) use self-contained puzzles or curated repository tasks. [Source: [Evaluating Large Language Models Trained on Code](https://arxiv.org/abs/2107.03374)] Developers work differently: they complete partial functions mid-file, call unfamiliar APIs, and navigate multi-file dependencies. DevBench addresses this by deriving 1,800 evaluation instances from real developer telemetry across six languages and six task categories.
 
 The key finding: **models that rank similarly on synthetic benchmarks diverge significantly on realistic tasks.** A model that excels at Python API usage may underperform on C++ multi-file completions. A model that tops leaderboards on isolated function generation may struggle with contextual code that depends on surrounding scope. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
@@ -24,7 +24,7 @@ The key finding: **models that rank similarly on synthetic benchmarks diverge si
 
 ### Performance is language-specific
 
-Leading models (GPT-4o, Claude 3.5 Sonnet) substantially outperform smaller alternatives on aggregate scores. But per-language breakdowns show that the gap narrows or reverses on specific languages. A model's Python performance does not predict its Java or C++ performance. [unverified: specific per-language rankings not detailed in available data]
+Leading models (GPT-4o, Claude 4 Sonnet) substantially outperform smaller alternatives on aggregate scores. But per-language breakdowns show that the gap narrows or reverses on specific languages — TypeScript underperforms across all models due to its complex type system and strict type-consistency requirements, while Python scores run higher overall. A model's Python performance does not predict its TypeScript or C performance. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ### Task type matters more than overall score
 
@@ -46,13 +46,7 @@ flowchart LR
 
 ### 1. Profile your workload
 
-Before comparing models, identify what your team actually asks AI tools to do. Common categories:
-
-- **Completions mid-function** — continuing code from cursor position
-- **API usage** — calling libraries the model may not have seen in training
-- **Multi-file edits** — changes that span module boundaries
-- **Test generation** — creating tests for existing code
-- **Refactoring** — restructuring without changing behavior
+Identify what your team actually asks AI tools to do. Common categories: completions mid-function, API usage, multi-file edits, test generation, refactoring.
 
 ### 2. Match benchmark to workload
 
@@ -60,11 +54,11 @@ Use benchmarks matching your task types. Synthetic puzzles cannot predict multi-
 
 ### 3. Filter by language
 
-Never rely on aggregate cross-language scores. If your codebase is 80% TypeScript, the model's Python performance is irrelevant. Look for per-language results and weight accordingly.
+Never rely on aggregate cross-language scores. If your codebase is 80% TypeScript, the model's Python performance is irrelevant. Extract per-language results and weight accordingly.
 
 ### 4. Evaluate on your own code
 
-Public benchmarks identify candidates; internal evaluation confirms them. Run 2-3 models against your actual codebase. This catches training-data contamination and surfaces project-specific context handling gaps.
+Public benchmarks identify candidates; internal evaluation confirms them. Run 2-3 models against your actual codebase to catch training-data contamination and surface project-specific context gaps.
 
 ## What DevBench Gets Right
 
@@ -76,6 +70,18 @@ DevBench's design choices map directly to evaluation best practices:
 | Six languages, six task types | Exposes language-specific and task-specific variation that aggregates hide |
 | Multi-metric evaluation (correctness + similarity + LLM-judge) | No single metric captures "useful" — functional correctness misses style, similarity misses logic |
 | Contamination resistance | Tasks derived from telemetry are harder to memorize than static benchmark suites |
+
+## When This Backfires
+
+Benchmark-driven selection fails or loses value under three conditions:
+
+- **Team lacks internal eval capacity**: Running models against real codebase PRs requires instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure will treat public benchmark scores as final answers — restoring the original problem.
+- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., from completions to large-scale refactors), the chosen model may no longer be the best fit. Selection should be revisited when language distribution or task mix changes significantly.
+- **Benchmark data becomes contaminated**: Telemetry-derived benchmarks resist contamination at creation time, but published benchmark suites become training targets once released. DevBench mitigates this with contamination-resistant design, but no public benchmark remains fully uncontaminated indefinitely. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+
+## Why It Works
+
+Task-language slicing outperforms aggregate scoring because aggregate metrics obscure two orthogonal sources of variance: language-specific training coverage and task-specific capability. A model trained on more Python open-source code will perform better on Python API usage regardless of its general reasoning ability. Similarly, multi-file editing requires maintaining cross-file context across long token windows — a capability that is architecturally distinct from single-function generation. Synthetic benchmarks collapse these dimensions into one score; realistic benchmarks expose each dimension independently, letting teams weight variance that matches their actual workload.
 
 ## Key Takeaways
 
@@ -98,11 +104,6 @@ A backend team writing 80% TypeScript with frequent multi-file refactors evaluat
 **Step 4 — Internal eval**: The team runs Models A and B against 20 recent PRs from their codebase, measuring functional correctness and style match. Model B produces fewer cross-module import errors and follows the project's barrel-export convention more consistently.
 
 **Result**: The team selects Model B despite its lower aggregate ranking — the task-language slice that matches their workload is the only score that matters.
-
-## Unverified Claims
-
-- [unverified] Specific per-model performance rankings by language (mentioned in paper but detailed numbers not available in abstract/summary)
-- [unverified] Cost-performance tradeoff assessments between model tiers are qualitative, not derived from quantitative data in the source
 
 ## Related
 

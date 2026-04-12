@@ -15,7 +15,7 @@ tags:
 
 You may believe an AI coding assistant should require less expertise than traditional development — that minimal context, no review, and no iteration are the expected mode of use.
 
-Output quality tracks input quality more tightly with AI than with most tools, because the model amplifies whatever signal your prompt carries [unverified].
+Output quality tracks input quality more tightly with AI than with most tools — the model has no independent source of signal beyond what you provide.
 
 ## The Effort Shift
 
@@ -40,6 +40,10 @@ The [METR RCT study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-
 65% of developers report AI misses context during refactoring; 44% of those perceiving quality degradation blame missing context ([Qodo State of AI Code Quality](https://www.qodo.ai/reports/state-of-ai-code-quality/)).
 
 Only 2–4% of developers in an enterprise study accepted AI output verbatim; successful patterns were "acceleration" and "exploration", not autonomous generation ([IBM/Arxiv, n≈700](https://arxiv.org/html/2412.06603v2)).
+
+## When This Backfires
+
+Effort investment has diminishing returns in some cases. A throwaway script, quick syntax check, or exploratory spike where you discard the output after inspection rarely justifies deep context engineering. The fallacy applies to production work and iterative development — not to one-shot, low-stakes probes where a rough answer is sufficient. Over-investing effort in tasks you'll discard is its own inefficiency. The relevant question is whether you're using the output to make real decisions; if not, minimal context is appropriate.
 
 ## Example
 
@@ -66,3 +70,4 @@ The exit: provide the relevant file, describe what the current structure is, sta
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) — context the model needs but the developer never provides
 - [Happy Path Bias](happy-path-bias.md) — testing only the easy case and skipping verification of edge cases
 - [The Copy-Paste Agent](copy-paste-agent.md) — accepting AI output verbatim without adaptation or review
+- [Assumption Propagation](assumption-propagation.md) — agents build on faulty premises provided by low-context prompts, compounding the initial error across commits

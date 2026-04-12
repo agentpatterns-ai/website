@@ -86,7 +86,7 @@ A team running nightly agent batches across 50 repositories implements the flywh
 
 1. **Embed signals**: Each agent task includes a pre-completion checklist that runs tests and validates output against the issue spec
 2. **Analyze traces**: A morning trace-analysis job filters to failed tasks, clusters them by error type (timeout, test failure, loop), and generates a report
-3. **Generate modifications**: For the most common failure cluster, the analyzer proposes a harness change -- e.g., adding a file-count guardrail after observing agents creating excessive temporary files
+3. **Generate modifications**: For the most common [failure cluster](behavioral-drivers-agent-success.md), the analyzer proposes a harness change -- e.g., adding a file-count guardrail after observing agents creating excessive temporary files
 4. **Escalate**: The team reviews the first three proposals interactively. After two weeks of safe applications, they promote "add missing test import" fixes to autonomous
 
 ## Unverified Claims

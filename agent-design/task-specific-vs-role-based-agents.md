@@ -119,6 +119,7 @@ The `canary-promote` agent knows exactly what it does, what tools it needs, and 
 ## Related
 
 - [Specialized Agent Roles](specialized-agent-roles.md) — parallel counterpart: assigning distinct specializations to concurrent agents
+- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — running multiple task-specific agents simultaneously in a dedicated execution surface
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)

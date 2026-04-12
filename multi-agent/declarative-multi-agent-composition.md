@@ -61,7 +61,7 @@ This mirrors how production teams already think — roles first, then coordinati
 
 ## Built-In Profiling Changes the Debugging Model
 
-Multi-agent workflows fail in ways single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research found **debugging and sensemaking tools** were the second most requested capability — multi-agent systems need observability built into the composition layer, not bolted on after.
+Multi-agent workflows fail in ways single-agent systems do not: coordination failures, context loss at handoffs, and cascading errors across agents. The AutoGen Studio research identified **debugging and sensemaking tools** as a critical, frequently requested capability — multi-agent systems need observability built into the composition layer, not bolted on after.
 
 Effective multi-agent profiling surfaces:
 
@@ -165,7 +165,3 @@ Adding a fourth agent requires one new block under `agents:` and one new entry u
 - [Orchestrator-Worker](orchestrator-worker.md) — the most common multi-agent coordination topology
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — declarative specs for constraining subagent tool access
 
-## Unverified Claims
-
-- The claim that 200,000+ AutoGen Studio installations validate the define-and-compose pattern assumes download count correlates with successful workflow authoring — adoption data alone does not confirm the pattern produces better outcomes than code-first approaches
-- Whether declarative agent specs meaningfully reduce debugging time compared to well-structured imperative code has not been measured in controlled studies

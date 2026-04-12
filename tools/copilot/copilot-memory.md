@@ -38,7 +38,7 @@ Three Copilot surfaces share the same memory pool ([GitHub engineering blog](htt
 - **Code review** — reads and writes memories during PR review
 - **CLI** — reads and writes memories during terminal interactions
 
-When code review discovers a naming convention violation, that knowledge becomes available to the coding agent on the next task [unverified]. No other major tool offers cross-agent memory sharing today [unverified].
+When code review discovers a naming convention violation, that knowledge becomes available to the coding agent on the next task — each agent both contributes to and benefits from the shared knowledge base ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
 ## Citation-Based Verification and Self-Healing
 
@@ -111,9 +111,14 @@ To inspect or delete stored memories for a repository, navigate to **Repository 
 - 28-day auto-expiry with use-based renewal balances freshness against unbounded growth.
 - Measured impact: 7% increase in PR merge rates for the coding agent (p < 0.00001).
 
-## Unverified Claims
+## When This Backfires
 
-- Each agent surface feeds knowledge to the others, creating a compounding effect [unverified]
+Autonomous memory creation without human curation works against you in several conditions:
+
+- **Security-sensitive repositories**: an incorrectly stored memory about a security pattern (e.g., "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the specific violation that created the false memory.
+- **Repositories with contested conventions**: when a codebase is mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
+- **Teams using explicit context files**: organizations that manage `.github/copilot-instructions.md` as the authoritative source of truth may find autonomous memories create ambiguity when the two sources diverge — the explicit instruction file takes precedence, but the agent may still surface the contradicting memory as a suggestion.
+- **Multi-repository workflows**: memories are repository-scoped, so patterns learned in one repo do not transfer to others. Teams working across a monorepo split or separate service repos must rebuild memory independently in each context.
 
 ## Related
 

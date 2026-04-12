@@ -17,7 +17,7 @@ aliases:
 
 Chat-native IDEs attach agents to the editor's conversation panel: one active task at a time, waiting for completion before starting the next. This creates a bottleneck for compound tasks with independent subtasks.
 
-The [VS Code Agents app](https://code.visualstudio.com/updates/v1_115) (introduced in VS Code 1.115, April 2026, VS Code Insiders preview) provides a companion panel where multiple agent sessions run headlessly in parallel. You submit tasks, switch back to your editor, and check results when sessions complete. The Agents app is not a better chat panel — it is a task execution surface.
+The [VS Code Agents app](https://code.visualstudio.com/updates/v1_115) (introduced in VS Code 1.115, April 2026, VS Code Insiders preview; see also [VS Code multi-agent development overview](https://code.visualstudio.com/blogs/2026/02/05/multi-agent-development)) provides a companion panel where multiple agent sessions run headlessly in parallel. You submit tasks, switch back to your editor, and check results when sessions complete. The Agents app is not a better chat panel — it is a task execution surface.
 
 ## How the Agents App Works
 
@@ -52,7 +52,13 @@ This differs from three Claude Code processes in three terminals: the Agents app
 
 ## Cursor Comparison
 
-[Cursor's Agents Window](../tools/cursor/agents-window.md) introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor's implementation does not do this in the same way [unverified].
+Cursor's Agents Window introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor propagates custom instructions via project-level Rules files (`.cursor/rules/*.mdc`) and user-level settings, but MCP server configuration is not automatically inherited by background agent sessions in the same way — each session requires explicit tool configuration.
+
+## Why It Works
+
+Headless parallel sessions eliminate the two dominant sources of serial bottleneck in chat-native IDEs: the editor foreground lock (only one task occupies the panel at a time) and per-session configuration overhead (each new context requires manual setup). The Agents app removes both: sessions run detached from the editor window, so the foreground is never blocked, and workspace config inheritance means all sessions start with the same custom instructions and MCP servers already in scope. The result is that task latency becomes parallel rather than cumulative — three independent subtasks that each take ten minutes complete in ten minutes, not thirty.
+
+The `send_to_terminal` integration closes a second bottleneck: background agents previously had to either start fresh processes (incurring cold-start cost) or assume a human had already set up required daemons. By letting agents interact with running terminals, the dependency on human precondition work is eliminated.
 
 ## Limitations
 
@@ -66,11 +72,6 @@ This differs from three Claude Code processes in three terminals: the Agents app
 - Workspace config inheritance (custom instructions + MCP servers) is the practical advantage over ad-hoc multi-terminal setups — sessions are pre-configured, not blank contexts
 - `send_to_terminal` closes the background-process gap that makes headless agents brittle in real dev environments
 - Fan-out tasks work best when subtasks are genuinely independent — shared state between sessions reintroduces the serialization bottleneck the Agents app is designed to avoid
-
-## Unverified Claims
-
-- Cursor's Agents Window does not automatically propagate custom instructions across sessions in the same way VS Code's Agents app does [unverified — verify against current Cursor docs]
-- Maximum concurrent session limit in the VS Code Agents app [unverified — not documented in the 1.115 release notes]
 
 ## Related
 

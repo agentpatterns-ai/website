@@ -35,7 +35,7 @@ The CLI excels at low-ceremony, high-speed exploration. Nothing runs automatical
 - Mechanical repo-wide changes (renames, migrations)
 - Exploring problem spaces before committing to a design
 
-**Copilot CLI** offers `/plan`, `/diff`, `/explain`, `/suggest`, and `/delegate` commands with built-in specialized agents (Explore, Task, Code Review, Plan) ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)) [unverified].
+**Copilot CLI** provides a `/diff` command for syntax-highlighted inline review and automatically delegates to four built-in specialized agents — Explore, Task, Code Review, and Plan — based on the nature of the request ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
 **Claude Code CLI** follows Unix philosophy — pipeable, scriptable, composable with other tools. Plan mode (`--permission-mode plan`) restricts to read-only operations, useful for exploration before implementation ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)).
 
@@ -83,9 +83,8 @@ Copilot reads `.github/copilot-instructions.md` and custom agent files across ID
 
 Claude Code provides explicit handoff commands for surface transitions ([Claude Code docs](https://code.claude.com/docs/en/remote-control)):
 
-- `/teleport` — pulls a web or mobile session into the local terminal
-- `/desktop` — hands a terminal session to the Desktop app for visual diff review [unverified — no documentation found for this command]
-- `--from-pr` — resumes a session linked to a specific PR, creating a GitHub-to-CLI handoff
+- `--teleport` — resumes a cloud session in the local terminal ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference))
+- `--from-pr` — resumes a session linked to a specific PR, creating a GitHub-to-CLI handoff ([Claude Code CLI reference](https://code.claude.com/docs/en/cli-reference))
 
 ### Structured Artifacts
 
@@ -103,13 +102,21 @@ Rather than pre-loading full objects, maintain file paths, queries, and links th
 | "This needs to work correctly" | IDE | Precision editing, visual feedback |
 | "Others need to see and review this" | GitHub | Durable artifacts, async collaboration |
 | "This is mechanical and well-scoped" | GitHub (agent) | Autonomous execution, no human typing needed |
-| "I started remotely, need local tools" | CLI via `/teleport` | Resume with full filesystem access |
+| "I started remotely, need local tools" | CLI via `--teleport` | Resume with full filesystem access |
+
+## When This Backfires
+
+The three-surface model assumes context transfer is low-friction. In practice, three conditions undermine it:
+
+1. **Context doesn't survive the transition.** If a CLI exploration session produces no structured artifact — no diff, no notes, no commit — the IDE session starts cold. The ladder degrades to sequential isolated sessions.
+2. **Async GitHub iteration stalls the local loop.** Delegating to `@copilot` or a GitHub Actions agent on a tight feedback loop adds latency that local iteration would avoid. Reserve the GitHub surface for work where async is an advantage, not a workaround.
+3. **Tool lock-in within a surface.** The model assumes Claude Code and Copilot CLI are interchangeable at the CLI layer. In practice, they differ on file access scope, memory mechanisms, and available tools. Switching mid-task without re-establishing context has the same cost as switching surfaces.
 
 ## Key Takeaways
 
 - Match the AI surface to the development phase: exploration (CLI), refinement (IDE), collaboration (GitHub)
 - Context preservation mechanisms — instruction files, session handoff commands, structured artifacts — are what make the ladder work without losing state
-- The ladder is bidirectional: GitHub-to-CLI handoffs (`--from-pr`, `/teleport`) are as important as CLI-to-GitHub progressions
+- The ladder is bidirectional: GitHub-to-CLI handoffs (`--from-pr`, `--teleport`) are as important as CLI-to-GitHub progressions
 - Diffs and plans generated at the CLI surface serve as concrete handoff artifacts for IDE refinement
 - The workflow respects existing developer behavior — terminal, editor, PR review — rather than replacing it
 
@@ -142,11 +149,6 @@ When the implementation is solid, the developer commits and pushes.
 The push opens a PR. CI runs lint and tests. A teammate leaves a review comment: "the window should be configurable per-route." The developer adds an `@copilot` comment on the PR asking it to apply the per-route config change. Copilot iterates in a GitHub Actions worker, pushes a fixup commit, and re-runs CI. The reviewer approves and merges.
 
 The context handoff chain: CLI diff → IDE commit → GitHub PR → `@copilot` comment → merged PR.
-
-## Unverified Claims
-
-- Copilot CLI offers `/plan`, `/diff`, `/explain`, `/suggest`, and `/delegate` commands with built-in specialized agents [unverified]
-- `/desktop` hands a terminal session to the Desktop app for visual diff review [unverified — no documentation found for this command]
 
 ## Related
 

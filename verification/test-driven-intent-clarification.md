@@ -21,7 +21,7 @@ The gap between what you mean and what the model generates is a specification fa
 
 ## The Technique
 
-Instead of reviewing generated code directly, use AI-generated tests as an intermediate artifact to surface and resolve ambiguity *before* code is written.
+Use AI-generated tests as an intermediate artifact to surface and resolve ambiguity *before* code is written.
 
 ```mermaid
 graph TD
@@ -34,7 +34,7 @@ graph TD
     E --> G
 ```
 
-The cognitive shift: instead of asking "is this 50-line function correct?" you answer "should `sort_users(['alice', 'bob'])` return `['bob', 'alice']`?" The second question is simpler, faster, and more precise.
+The cognitive shift: instead of "is this 50-line function correct?" you answer "should `sort_users(['alice', 'bob'])` return `['bob', 'alice']`?" — simpler, faster, more precise.
 
 ### Why Tests, Not Code
 
@@ -44,9 +44,9 @@ The TiCoder workflow measured a 38% reduction in cognitive load (NASA-TLX) when 
 
 ## Discriminative Test Selection
 
-Not all tests are equally useful. A test that every candidate implementation passes provides zero information. The highest-value tests are *discriminative* — they split candidates into groups that disagree on expected output.
+Not all tests are equally useful. A test every candidate implementation passes provides zero information. The highest-value tests are *discriminative* — they split candidates into groups that disagree on expected output.
 
-Ranking heuristic: score each test by how evenly it divides passing and failing candidates. A 50/50 split provides maximum information gain — your response eliminates roughly half the candidate space. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100)) In practice, the AI surfaces tests at the *points of ambiguity* — exactly where different reasonable interpretations produce different behavior.
+Ranking heuristic: score each test by how evenly it divides passing and failing candidates. A 50/50 split provides maximum information gain — your response eliminates roughly half the candidate space. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100)) The AI surfaces tests at *points of ambiguity* — where different reasonable interpretations produce different behavior.
 
 ## Quantitative Evidence
 
@@ -54,13 +54,13 @@ Ranking heuristic: score each test by how evenly it divides passing and failing 
 
 **Benchmark (7 LLMs, 2 Python datasets)**: 45.97% average absolute improvement in pass@1 across MBPP and HumanEval within 5 rounds. Smaller models with validated tests outperformed larger baselines — CodeGen-6B (69.55% on MBPP) beat baseline GPT-3.5-turbo (61.91%). ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
-**Tests outperform prompt-based specification**: Adding all tests to the prompt reached 80.88% pass@1 (GPT-4-32k, MBPP). Execution-based pruning reached 81.56% with pass/fail alone — LLMs do not reliably satisfy tests given as prompt context. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+**Tests outperform prompt-based specification**: Adding tests to the prompt reached 80.88% pass@1 (GPT-4-32k, MBPP). Execution-based pruning reached 81.56% with pass/fail alone — LLMs do not reliably satisfy tests given as prompt context. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
 **Limitations**: 15 participants across 3 tasks (small sample). Benchmark uses an idealized oracle (upper bound). Tasks are single-function Python; generalization to multi-file codebases is unproven.
 
 ## How This Differs from TDD with Agents
 
-[Test-driven agent development](tdd-agent-development.md): *developer writes tests, agent implements*. The developer knows the spec and encodes it as tests. Test-driven intent clarification inverts this: *agent generates tests, developer validates*. The developer does not yet have a precise spec — the AI-generated tests surface ambiguity, and validation responses formalize the specification incrementally.
+[Test-driven agent development](tdd-agent-development.md): *developer writes tests, agent implements*. The developer knows the spec and encodes it as tests. Test-driven intent clarification inverts this: *agent generates tests, developer validates*. The developer does not yet have a precise spec — AI-generated tests surface ambiguity, and validation responses formalize the specification incrementally.
 
 | Dimension | TDD with Agents | Intent Clarification |
 |-----------|----------------|----------------------|
@@ -69,18 +69,18 @@ Ranking heuristic: score each test by how evenly it divides passing and failing 
 | When to use | Spec is known | Spec is ambiguous |
 | Developer reviews | Code (after tests pass) | Tests (before code exists) |
 
-The two are complementary. Use intent clarification when the spec is fuzzy; use TDD when it is precise.
+The two are complementary: use intent clarification when the spec is fuzzy, TDD when it is precise.
 
 ## Applying the Technique Today
 
-No mainstream AI coding assistant has a built-in TiCoder-style interactive test validation workflow [unverified]. You can approximate the technique manually:
+No mainstream AI coding assistant offers a built-in TiCoder-style test-validate-then-generate loop. You can approximate the technique manually:
 
 1. **Prompt for tests first**: "Before implementing, generate 5-10 test cases that cover the expected behavior, including edge cases where the specification is ambiguous."
 2. **Review the tests**: For each test, decide: does this match your intent? Mark tests that contradict your intent and explain why.
 3. **Refine and constrain**: "Here are the approved tests. Implement the function so all approved tests pass. Remove the tests I rejected."
 4. **Iterate**: If the implementation reveals new ambiguity, repeat — ask for additional discriminative tests targeting the unclear behavior.
 
-The key discipline: review the tests *before* seeing any implementation. Once you have seen code, your evaluation is anchored to the implementation rather than your intent.
+Key discipline: review tests *before* seeing any implementation. Once you have seen code, your evaluation anchors to the implementation rather than your intent.
 
 ## Example
 
@@ -121,10 +121,6 @@ The developer reviews each test in seconds. "Yes, extract from brackets. Yes, de
 - Discriminative tests (those that split candidate implementations) provide the most information per interaction
 - The technique is complementary to TDD: use intent clarification when the spec is ambiguous, TDD when the spec is known
 - Smaller models with validated tests outperform larger models without them — test-based constraints compensate for model capability gaps
-
-## Unverified Claims
-
-- No mainstream AI coding assistant currently has a built-in TiCoder-style interactive test validation workflow [unverified]
 
 ## Related
 

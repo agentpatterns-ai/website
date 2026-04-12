@@ -1,6 +1,6 @@
 ---
 title: "Cognitive Reasoning vs Execution: A Two-Layer Agent"
-description: "Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable"
+description: "Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable."
 tags:
   - agent-design
   - multi-agent
@@ -28,15 +28,15 @@ The [arXiv:2602.10479 survey of production agent architectures](https://arxiv.or
 
 The contract between layers is a JSON schema parameter definition. Each tool the reasoning layer can invoke is described by name, purpose, and typed inputs. The reasoning layer resolves which tool to call based on the schema description; the execution layer validates the call against the schema before acting.
 
-[Anthropic's advanced tool use research](https://www.anthropic.com/engineering/advanced-tool-use) describes how tool results can be routed programmatically rather than always returned to the model's context window [unverified — the source discusses tool use patterns broadly; the specific claim about scratchpad routing to a secondary storage layer is not directly stated].
+[Anthropic's advanced tool use research](https://www.anthropic.com/engineering/advanced-tool-use) describes how tool results can be routed programmatically rather than always returned to the model's context window — intermediate results are processed in a code execution environment and only the final filtered result reaches the reasoning layer's context.
 
 ## How Claude Code Models This
 
-Claude Code's [sub-agent architecture](https://code.claude.com/docs/en/sub-agents) makes the split concrete. Sub-agents receive scoped tool permissions rather than broad access: an exploration sub-agent holds read-only tools with no write permissions, while an orchestrating sub-agent holds decision and delegation tools. The constraint is enforced at the tool permission level, not by instruction [unverified].
+Claude Code's [sub-agent architecture](https://code.claude.com/docs/en/sub-agents) makes the split concrete. Sub-agents receive scoped tool permissions rather than broad access: an exploration sub-agent holds read-only tools with no write permissions, while an orchestrating sub-agent holds decision and delegation tools. The constraint is enforced at the tool permission level, not by instruction — sub-agent definitions specify an explicit `tools` allowlist and a `permissionMode` that the runtime enforces regardless of what the system prompt says.
 
 ## Dynamic Tool Discovery
 
-Loading every tool definition into the reasoning layer's context at startup is waste. [Anthropic's context engineering patterns](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) discuss keeping context lean by loading only what is needed [unverified — the source addresses context management broadly; the specific just-in-time tool registry pattern described here is an inference from that guidance, not a direct recommendation].
+Loading every tool definition into the reasoning layer's context at startup is waste. [Anthropic's context engineering patterns](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommend keeping context lean by loading only what is needed — a principle that applies directly to tool registries: surface tool schemas to the reasoning layer on demand rather than pre-loading the full set.
 
 Execution-layer tools stay available without pre-occupying reasoning context.
 
@@ -44,7 +44,7 @@ Execution-layer tools stay available without pre-occupying reasoning context.
 
 The separation enables model routing by layer. Reasoning tasks require instruction-following depth and long-context coherence — appropriate for larger frontier models. Execution tasks are often deterministic, short-context, and high-frequency — appropriate for fast, low-cost models.
 
-This is one of the primary cost levers in production agent systems [unverified]: running execution on cheaper models while reserving frontier capacity for reasoning reduces per-task cost.
+Running execution on cheaper models while reserving frontier capacity for reasoning reduces per-task cost — this model routing is one of the main cost levers the layer separation enables.
 
 ```mermaid
 graph TD
@@ -53,6 +53,18 @@ graph TD
     E -->|structured result| T
     T -->|filtered result| R
 ```
+
+## Why It Works
+
+Layer separation works because it eliminates two categories of failure that compound in monolithic agents. First, when a reasoning model must also manage implementation details — file handles, retry loops, API pagination — those details compete with planning content in the context window and degrade decision quality. Keeping execution logic out of the reasoning context preserves the signal-to-noise ratio for the reasoning model. Second, execution failures become isolated and attributable: a failed tool call can be retried or rerun independently without re-invoking the reasoning layer, and side effects (writes, API calls) are confined to the execution layer where they can be audited or rolled back without touching reasoning state.
+
+## When This Backfires
+
+The split adds overhead that is not always justified:
+
+- **Short-lived single-turn tasks**: For tasks that complete in one or two tool calls, the typed-interface seam adds schema validation and context-passing overhead with no testability benefit — a simple function call is often clearer.
+- **High-latency layer seams**: If the execution layer is a remote service, every reasoning-to-execution round-trip adds network latency. Tight feedback loops (reactive agents, streaming responses) may need collocated logic instead.
+- **Schema versioning churn**: Typed interfaces become a maintenance burden when tool signatures change frequently — the schema contract must be versioned and both layers kept in sync, which offsets the testing advantages in fast-iteration codebases.
 
 ## Independent Testability
 
@@ -97,31 +109,13 @@ The reasoning layer never opens files. The execution layer never decides what to
 - Claude Code sub-agents instantiate this pattern via tool permission scoping, not just by instruction.
 - The split enables workload-appropriate model routing: large models for reasoning, fast models for execution.
 
-## Unverified Claims
-
-- Programmatic tool result routing away from context window `[unverified]`
-- Claude Code sub-agent permission scoping enforced at tool level, not instruction `[unverified]`
-- Just-in-time tool registry pattern `[unverified — inference from context management guidance, not a direct recommendation]`
-- Model routing by layer as a primary cost lever `[unverified]`
-
 ## Related
 
+- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Three Reasoning Spaces](three-reasoning-spaces.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
-- [Blast Radius Containment](../security/blast-radius-containment.md)
-- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
-- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Context Engineering](../context-engineering/context-engineering.md)
 - [Execution-First Delegation](execution-first-delegation.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
-- [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
+- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
+- [Context Engineering](../context-engineering/context-engineering.md)

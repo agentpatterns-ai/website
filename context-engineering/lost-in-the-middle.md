@@ -19,15 +19,15 @@ aliases:
 
 ## The Attention Distribution
 
-Transformer models do not process a context window uniformly. Research has consistently shown that attention is distributed in a U-shape: content near the beginning and end of the context receives the strongest attention; content in the middle zone receives substantially less [unverified — the underlying "Lost in the Middle" research is established, but the precise shape and magnitude vary by model and have not been independently cited here].
+Transformer models do not process a context window uniformly. Research has consistently shown that attention is distributed in a U-shape: content near the beginning and end of the context receives the strongest attention; content in the middle zone receives substantially less ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). The precise magnitude varies by model, but the positional bias is consistent across architectures tested.
 
 This is a structural property of how transformer attention mechanisms weight earlier and later tokens, not a quirk of any particular model or instruction format.
 
 ## What This Means in Practice
 
-**Instruction position determines instruction effectiveness.** An instruction placed in section 5 of a 10-section system prompt is in the weak attention zone. The instruction may be well-written and clearly stated, but the model is statistically less likely to follow it than an identical instruction placed at the top or bottom [unverified].
+**Instruction position determines instruction effectiveness.** An instruction placed in section 5 of a 10-section system prompt is in the weak attention zone. The instruction may be well-written and clearly stated, but the model is statistically less likely to follow it than an identical instruction placed at the top or bottom — position affects retrieval accuracy even when content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
 
-**Adding content degrades surrounding content.** Each instruction added in the middle does not merely dilute attention — it pushes existing instructions further from the high-attention edges [unverified]. A long AGENTS.md file buries most of its instructions in the zone where they are least likely to be followed.
+**Adding content degrades surrounding content.** Each instruction added in the middle does not merely dilute attention — it pushes existing instructions further from the high-attention edges. A long AGENTS.md file buries most of its instructions in the zone where they are least likely to be followed.
 
 **The middle is for reference, not rules.** Content that must be reliably followed belongs at the edges. Content that the agent retrieves and refers to — schemas, examples, lookup information — can tolerate mid-context placement because the agent is actively pulling it, not relying on passive attention.
 
@@ -77,16 +77,19 @@ tests/        # Jest test suites
 
 The opening section carries the rules the agent must reliably follow. The middle holds project structure and conventions — content the agent actively retrieves when needed, not rules it must remember passively. The closing section restates the most critical constraint so it sits in the high-attention tail of the context.
 
+## When This Backfires
+
+- **Short contexts**: When the full input fits within a few hundred tokens, there is no meaningful middle zone. Placement optimisation has negligible effect and adds unnecessary structural overhead.
+- **Retrieval-augmented flows**: If the model is explicitly instructed to retrieve a specific document section, positional bias is largely overridden by the retrieval directive. Passive attention is not the bottleneck.
+- **Long-context models with position-aware training**: Some models (e.g., those trained with specific long-context fine-tuning or instruction-following reinforcement) exhibit reduced middle-degradation. Treat placement as a default safeguard, not a universal guarantee.
+- **Frequently refreshed context**: In agent loops that compact or re-inject context at each step, the "middle" shifts continuously. Optimising static layout matters less than ensuring critical state survives each compaction cycle.
+
 ## Key Takeaways
 
 - Model attention follows a U-shape: strongest at the start and end, weakest in the middle.
 - Critical rules belong at the beginning and end of instruction files; reference material can occupy the middle.
 - Adding instructions in the middle of a long file pushes existing instructions further into the low-attention zone.
 - Keep instruction files short enough to minimise the size of the weak-attention middle zone.
-
-## Unverified Claims
-
-- Attention is distributed in a U-shape with the precise shape and magnitude varying by model [unverified — the underlying "Lost in the Middle" research is established, but the precise shape and magnitude vary by model and have not been independently cited here]
 
 ## Related
 

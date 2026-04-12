@@ -103,7 +103,7 @@ A developer needs to add input validation to a REST endpoint. Rather than prompt
 
 **Validate**: Review the diff. Run `npm test`. Confirm 422 responses include field-level error messages. Check that the agent did not silently change error formats in other endpoints.
 
-The planning step took two minutes but prevented a scope creep that would have required reverting database migrations.
+The planning step took two minutes but prevented a scope creep that would have required reverting database migrations — the same batching dynamic that causes [PR scope creep](../anti-patterns/pr-scope-creep-review-bottleneck.md) at review time.
 
 ## Key Takeaways
 

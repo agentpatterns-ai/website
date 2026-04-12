@@ -52,6 +52,18 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 
 20% of reviewers on agent PRs are bots, compared to 10% for human PRs. This suggests an emerging pattern: agent-authored code increasingly passes through automated review before (or instead of) human review. Teams adopting agents at scale need a review triage strategy — see [Tiered Code Review](tiered-code-review.md).
 
+## Why Acceptance Rates Lag
+
+The AIDev study attributes the acceptance gap to structural and contextual factors: agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context that shapes what changes are worth making at a given moment. Without access to unwritten priorities — roadmap direction, tribal knowledge about which subsystems are frozen — agents optimize for correctness within a local scope rather than relevance within a broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+
+## When This Backfires
+
+Volume-first agent deployment underperforms when:
+
+- **Scope is poorly defined**: agents without clear, bounded task specifications generate PRs that are technically valid but strategically irrelevant — the 49% acceptance rate for Devin reflects this failure mode.
+- **Review capacity is fixed**: 10× more PRs with lower acceptance rates consumes reviewer time without proportional throughput. Bot pre-screening (already 20% of agent PR reviews) is a partial mitigation, not a solution.
+- **Complexity is the actual bottleneck**: if the team's backlog is dominated by architectural changes (cyclomatic complexity), agent output skewed toward simpler tasks contributes little to velocity. Only 9.1% of agent PRs introduce complexity changes versus 23.3% for humans.
+
 ## Key Takeaways
 
 - Agent PR volume can increase by 10-50x, but acceptance rates drop 13-42 percentage points below human baselines
@@ -69,11 +81,11 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — empirical evidence on complementary strengths of human and AI reviewers
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — using agents as a mechanical first pass before human review
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md) — structural signals that predict which agent-generated code survives review
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical merge rate gap (45% vs 68%) when CRAs review without human involvement
 
 ## Sources
 
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
 
-## Unverified Claims
+> All quantitative claims on this page derive from a single study. Treat specific acceptance-rate figures as initial benchmarks from one dataset snapshot, not settled industry averages.
 
-- The "SE 3.0" framing as a named paradigm shift appears to originate from the paper authors rather than being an established industry term `[unverified]`

@@ -1,7 +1,7 @@
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Seamless Background-to-Foreground Handoff"
-description: "Design pattern for transferring work from an async background agent to a human at the ~90% completion mark, using distilled summaries and artifact-based handoff points."
+description: "Transfer work from a background agent to a human at the ~90% completion mark using distilled context summaries and artifact-based handoff points."
 tags:
   - workflows
   - tool-agnostic
@@ -39,7 +39,7 @@ The agent stops before nuanced judgment calls — not at failure and not at 100%
 
 ### 2. Context Preservation via Distilled Summaries
 
-The handoff passes a compact summary, not the full conversation history. The [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/seamless-background-to-foreground-handoff.md) cites 10:1 to 100:1 compression ratios [unverified]. The summary captures:
+The handoff passes a compact summary, not the full conversation history. The [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/seamless-background-to-foreground-handoff.md) describes significant compression between the agent's full execution trace and the handoff summary. The summary captures:
 
 - What was completed and what remains
 - Decisions made and alternatives rejected
@@ -59,11 +59,11 @@ Anthropic's [Effective Harnesses for Long-Running Agents](https://www.anthropic.
 
 ### 4. Tool Parity
 
-The human picks up using the same tools the agent used: same IDE, same terminal commands, same MCP servers. When tool interfaces match, the human can apply the agent's context summary directly — no translation of "what the agent did" into "what I can do." Tool parity eliminates the impedance mismatch between agent execution and human continuation [unverified].
+The human picks up using the same tools the agent used: same IDE, same terminal commands, same MCP servers. When tool interfaces match, the human can apply the agent's context summary directly — no translation of "what the agent did" into "what I can do." Tool parity reduces the impedance mismatch between agent execution and human continuation — the human operates in the same environment the agent described in its summary.
 
 ## Progress Visibility
 
-Real-time progress visibility changes when and how the human engages. Without it, the human either polls for completion or misses the handoff window. The nibzard catalog cites WebSocket streaming as the mechanism for live progress signals [unverified]. The relevant property: the human sees incremental agent output and can intervene before the agent reaches its stopping point, not just after.
+Real-time progress visibility changes when and how the human engages. Without it, the human either polls for completion or misses the handoff window. The relevant property: the human sees incremental agent output and can intervene before the agent reaches its stopping point, not just after.
 
 ## Handoff Flow
 
@@ -115,6 +115,16 @@ Draft PR: feat/pagination-component (branch: feat/pagination-component)
 
 The developer opens the branch in their IDE, reads the summary, makes three targeted edits, and merges.
 
+## When This Backfires
+
+The pattern assumes the agent can reliably identify the 90% threshold and produce an accurate handoff summary. Both assumptions can fail:
+
+- **No reliable stopping signal**: agents that lack explicit completion criteria or confidence thresholds stop at arbitrary points — sometimes too early (wasting the handoff), sometimes too late (after the agent has already made the irreversible judgment calls the pattern was meant to preserve for the human).
+- **Summary drift**: if the agent's summary omits or misrepresents decisions made during execution, the human picks up from a false starting point. A draft PR with misleading context can be harder to untangle than starting fresh from requirements.
+- **Tool parity absent**: when the human's environment differs from the agent's — different branch state, missing MCP servers, inaccessible infrastructure — the handoff degrades to a cold start regardless of summary quality.
+
+In these conditions, a hard 100% automation loop with post-hoc review is often more reliable than a mid-task ownership transfer.
+
 ## Key Takeaways
 
 - Stop at the judgment threshold, not at failure or 100% — the goal is handing off the nuanced tail, not the whole task
@@ -122,12 +132,6 @@ The developer opens the branch in their IDE, reads the summary, makes three targ
 - Draft PRs and progress files are the durable handoff artifacts; the human should be able to pick up from git alone
 - Tool parity reduces translation friction: human and agent use the same interfaces
 - Progress visibility is a prerequisite — the human needs a signal to know when to engage
-
-## Unverified Claims
-
-- 10:1 to 100:1 context compression ratios cited in nibzard/awesome-agentic-patterns — no primary source provided
-- WebSocket streaming as the specific mechanism for progress visibility
-- Tool parity as a necessary (vs. optional) condition for seamless continuation
 
 ## Related
 

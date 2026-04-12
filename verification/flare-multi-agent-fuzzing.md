@@ -51,7 +51,7 @@ graph TD
 
 An **interaction path** is a sequence of agent-to-agent messages, tool calls, and handoffs observed during a run. When a fuzzed input triggers a sequence not seen before, that input enters the corpus and becomes a seed for further mutation.
 
-The fuzzer is itself LLM-based ("agentic"), generating semantically plausible mutations rather than random byte flips [unverified — inferred from "agentic" framing in the paper]. LLM systems reject malformed inputs silently; coherent mutations are required to reach deeper system states.
+The fuzzer operates by analyzing MAS source code to extract agent definitions and behavioral specifications, then generating test inputs that probe the extracted interaction space. LLM systems reject malformed inputs silently; coherent, specification-grounded mutations are required to reach deeper system states ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)).
 
 ## What Interaction Path Coverage Measures
 
@@ -66,7 +66,7 @@ Each unique prefix of a message trace is a distinct coverage point:
 
 Coverage saturation — the point where fuzzing discovers no new paths — provides a measurable stopping criterion defined by the system's reachable interaction space, not by test authors.
 
-Interaction path coverage is coarser than code branch coverage. Saturation does not guarantee absence of bugs, only absence of unexplored *discovered* paths [unverified].
+Interaction path coverage is coarser than code branch coverage. Saturation does not guarantee absence of bugs, only absence of unexplored *discovered* paths.
 
 ## Prerequisites for Applying FLARE
 
@@ -115,12 +115,15 @@ The failure case is added to the behavioral eval suite as a regression test with
 - Coverage saturation provides a measurable stopping criterion but does not guarantee bug-free systems
 - Treat every fuzzing-discovered failure as a regression eval seed to close the discovery-to-prevention loop
 
-## Unverified Claims
+## When This Backfires
 
-- The FLARE fuzzer uses an LLM-based (agentic) approach to input mutation rather than random byte mutation [unverified — inferred from "agentic" in paper title; implementation details not confirmed from paper text]
-- Interaction path coverage saturation is achievable in practice for real-world multi-agent systems [unverified — coverage saturation properties for LLM interaction spaces are not established in the literature]
-- Specific failure modes (stuck loops, silent abandonment, cross-agent prompt injection, cascading hallucinations) are findings from the FLARE evaluation [unverified — failure taxonomy inferred from the problem category, not confirmed from paper results]
-- Quantitative results (coverage rates, bug counts, system types evaluated) from the FLARE paper [unverified — paper not directly accessible during research]
+**Source access required.** FLARE ingests MAS source code to extract agent specifications. Systems running behind third-party APIs or closed-source orchestration layers cannot be fuzzed this way — the interaction space cannot be derived without agent definitions.
+
+**Non-determinism limits reproducibility.** LLM non-determinism means a path discovered in one fuzzing run may not reproduce reliably. Failure cases added to the regression suite need deterministic replay harnesses (e.g., seeded or mocked LLM responses) to function as stable regression tests.
+
+**Long runtimes exclude fuzzing from CI.** FLARE achieved 96.9% inter-agent and 91.1% intra-agent coverage across 16 open-source applications ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)), but sessions run for hours. Treating fuzzing as a blocking CI gate is impractical — schedule it as a periodic or pre-release activity.
+
+**Coverage saturation is a moving target.** Adding an agent or message type expands the interaction space, invalidating prior saturation claims. Re-run fuzzing after any architectural change to the MAS.
 
 ## Related
 

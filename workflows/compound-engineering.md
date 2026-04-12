@@ -165,11 +165,13 @@ The value is not in any individual pattern but in the **closed loop** that conne
 - Each encoded learning prevents an entire class of future errors, making the next feature genuinely easier
 - The workflow orchestrates existing patterns (committee review, agent memory, plan-first loop) into a self-reinforcing cycle
 
-## Unverified Claims
+## When This Backfires
 
-- Single developers using compound engineering "can do the work of five developers a few years ago" -- sourced only from the Every team self-report, no independent verification [unverified]
-- The parallel review uses 12 dimensions -- the article names some but the full list is not documented in the plugin README [unverified]
-- Whether learnings-as-prompts produces measurable improvement over standard project memory files -- no comparative data found [unverified]
+Compound engineering requires sustained discipline across all four phases. Several conditions reduce its effectiveness or make it counterproductive:
+
+- **Deadline pressure collapses the Compound step.** The 10% effort allocation for Compound is the first budget cut when teams are under pressure. Without consistent compounding, the workflow degrades to a standard plan-build-review cycle with no cumulative benefit.
+- **Stale or contradictory prompt files.** Encoded learnings accumulate over time. If the codebase evolves but the prompt files are not pruned, agents receive conflicting instructions — older rules that no longer apply alongside current ones. The maintenance cost of a learnings library grows with the project's age.
+- **Front-loading planning is only valuable when the problem is well-defined.** The ~40% planning allocation assumes research can yield a precise spec. For genuinely exploratory work (novel integrations, prototyping in unknown domains), a fixed upfront plan may constrain agents toward premature decisions and prevent useful divergence.
 
 ## Related
 
@@ -187,3 +189,4 @@ The value is not in any individual pattern but in the **closed loop** that conne
 - [AI Development Maturity Model](ai-development-maturity-model.md)
 - [Architectural Foundation First](architectural-foundation-first.md)
 - [Central Repo & Shared Agent Standards](central-repo-shared-agent-standards.md)
+- [Encoding Tacit Knowledge](encoding-tacit-knowledge.md)

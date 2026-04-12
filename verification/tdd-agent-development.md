@@ -124,6 +124,7 @@ The agent cannot pass the tie-ordering test by sorting carelessly — the test e
 
 ## Related
 
+- [Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts](test-driven-intent-clarification.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)

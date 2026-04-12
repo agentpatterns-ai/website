@@ -17,7 +17,7 @@ aliases:
 
 ## The Waste Problem
 
-JetBrains measured their completion pipeline end-to-end: only 31% of inferences produce a shown suggestion, and only 31% of those get accepted — roughly [10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust. [unverified] Developers who see too many bad suggestions stop reading them — the same [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) seen in AI code review.
+JetBrains measured their completion pipeline end-to-end: only 31% of inferences produce a shown suggestion, and only 31% of those get accepted — roughly [10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust. The pattern mirrors the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) seen in AI code review: when signal-to-noise drops, developers begin ignoring the signal.
 
 ## How Gating Works
 
@@ -59,7 +59,7 @@ Cursor trains the Tab model to avoid bad suggestions via [online reinforcement l
 
 ### GitHub Copilot: logistic regression trigger
 
-As of 2022, Copilot used a logistic regression model with 11 features to decide when to invoke inference ([Thakkar, 2022](https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals.html)). [unverified] Copilot’s internals have likely evolved since.
+As of 2022, Copilot used a logistic regression model with 11 features to decide when to invoke inference ([Thakkar, 2022](https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals.html)). The 2022 reverse-engineering predates major Copilot architecture revisions; the feature set will differ in current releases.
 
 ### GitHub NES: custom model suppression
 
@@ -82,15 +82,15 @@ Kotlin benefits more from post-generation filtering while PHP benefits more from
 
 ## The Perception Gap
 
-Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). [unverified] Ungated completions amplify this gap; gated completions compress it.
+Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Higher interruption rates from ungated completions can widen this gap; reducing noise via gating is one lever for realigning perceived and actual productivity.
 
 ## Implications for Developers
 
 **Acceptance rate matters more than volume.** A tool showing 40 suggestions at 45% acceptance beats one showing 100 at 15%.
 
-**Configure aggressively.** [unverified] Most tools expose completion sensitivity settings. If you routinely dismiss suggestions, raise thresholds.
+**Configure aggressively.** GitHub Copilot and VS Code extensions expose completion sensitivity and trigger delay settings. If you routinely dismiss suggestions, raise thresholds before reaching for a different tool.
 
-**Context signals improve over time.** [unverified] Gating models observing accept/reject patterns can learn preferences.
+**Context signals improve over time.** Cursor's RL-based Tab model trains directly on accept/reject history ([Cursor, 2024](https://cursor.com/blog/tab-rl)); tools using online learning get better at individual preference modeling as usage accumulates.
 
 ## Key Takeaways
 
@@ -98,13 +98,15 @@ Open-source developers perceived +20% productivity while producing −19% less (
 - Lightweight classifiers (2.5 MB, 1–2 ms) gate with no perceptible latency cost
 - Developers type more themselves, but acceptance rates improve 26–48% and interruptions drop
 
-## Unverified Claims
+## When This Backfires
 
-- Developers who see too many bad suggestions stop reading them (extrapolated from alert fatigue research, not directly measured)
-- Most tools expose completion sensitivity settings (not verified across all major tools)
-- Gating models learn individual preferences over time (plausible but unconfirmed in production)
-- Copilot’s architecture may differ from the 2022 reverse-engineering analysis
-- Ungated completions amplify the perception gap and gated completions compress it (plausible inference, not directly measured)
+Gating classifiers trained on aggregate accept/reject data may not generalize well to every developer or context:
+
+- **Atypical coding patterns** — developers who work in narrow domains (e.g., embedded systems, novel DSLs) may have accept/reject patterns that diverge from the training distribution, causing a filter calibrated on the majority to suppress their highest-value completions.
+- **Exploratory sessions** — during low-familiarity work (learning a new framework, prototyping), a developer’s natural accept rate drops. A filter tuned to production accept rates may suppress at exactly the moment when completions are most valuable, forcing more manual typing when cognitive load is already high.
+- **Rapid style evolution** — as a developer changes habits (moving from verbose to terse code, adopting new idioms), a static or slow-updating filter lags behind. Suggestion volume may not recover to the useful level until the model observes enough new accept/reject signal to recalibrate.
+
+When gating degrades rather than improves DX, the fix is exposure controls: disable or loosen the filter, accumulate fresh data, then re-enable.
 
 ## Related
 

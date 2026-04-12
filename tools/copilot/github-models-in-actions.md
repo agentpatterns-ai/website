@@ -14,7 +14,7 @@ tags:
 
 ## Architecture
 
-GitHub Models exposes 40+ AI models (OpenAI, Mistral, xAI, and others) via a single inference endpoint. Access from Actions requires only `permissions: models: read` and authenticates with the built-in `GITHUB_TOKEN` — no external API key management ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)) [unverified].
+GitHub Models exposes 40+ AI models (OpenAI, Mistral, xAI, and others) via a single inference endpoint. Access from Actions requires only `permissions: models: read` and authenticates with the built-in `GITHUB_TOKEN` — no external API key management ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/automate-your-project-with-github-models-in-actions/)).
 
 Three integration methods are available:
 
@@ -68,7 +68,7 @@ The core pattern: constrain model output to fixed return values, then branch det
       })
 ```
 
-This turns probabilistic AI output into reliable workflow logic — the same conditional mechanics that drive any Actions workflow.
+This works because LLMs constrained to a small vocabulary of valid tokens (e.g., `"pass"`, `"bug"`, `"feature"`) have far fewer degrees of freedom than open-ended generation — reducing variance enough to treat the output as an enum value. The same conditional mechanics drive any Actions workflow.
 
 ## Pre-Built Actions
 
@@ -93,6 +93,15 @@ The primary risk is prompt injection via user-controlled content (issue bodies, 
 - Use intermediate environment variables for untrusted input rather than inline shell interpolation
 - Sensitive headers are not automatically masked — use `::add-mask::` explicitly to redact secrets from logs
 
+## When This Backfires
+
+GitHub Models in Actions is a preview feature — model availability, API surface, and rate limits can change without notice, making it unsuitable for workflows where reliability guarantees matter. Specific failure conditions:
+
+- **Rate limits cause silent failures**: GitHub Models applies per-user and per-workflow quotas. Exceeding them causes steps to fail or return empty responses — if your workflow does not assert on response content, failures become invisible.
+- **Non-determinism persists at temperature:0**: Constrained single-word output reduces variance but does not eliminate it. Edge-case inputs (malformed issue bodies, unusually long content) can still produce unexpected output, causing deterministic branching to mis-route.
+- **Prompt injection cannot be fully mitigated**: User-controlled content passed directly into prompts can override instructions regardless of system-prompt framing. Workflows that take irreversible actions (closing issues, applying restrictive labels, modifying code) should require human confirmation for high-stakes outcomes.
+- **Endpoint vendor lock-in**: Workflows built on `actions/ai-inference@v1` and the `models: read` permission are GitHub-specific; porting to other CI platforms requires replacing the inference layer.
+
 ## Key Takeaways
 
 - `models: read` permission plus `GITHUB_TOKEN` provides zero-configuration AI access in any GitHub Actions workflow
@@ -103,7 +112,7 @@ The primary risk is prompt injection via user-controlled content (issue bodies, 
 
 ## Example
 
-A complete workflow that triages new issues using GitHub Models — the prompt file classifies each issue, and the workflow applies labels based on the model's response:
+A complete workflow that triages new issues using GitHub Models — the prompt file classifies each issue, and the workflow applies labels based on the model's response. For a full pipeline including summarization, routing, and rollout sequencing, see [Continuous Triage](../../workflows/continuous-triage.md).
 
 ```yaml
 # .github/workflows/issue-triage.yml
@@ -171,10 +180,6 @@ messages:
 ```
 
 The workflow uses `temperature: 0` and single-word constrained output to maximize determinism. The `models: read` permission grants access to GitHub Models via the built-in `GITHUB_TOKEN`, requiring no additional secrets.
-
-## Unverified Claims
-
-- GitHub Models exposes 40+ AI models via a single inference endpoint with `GITHUB_TOKEN` authentication and no external API key management [unverified]
 
 ## Related
 

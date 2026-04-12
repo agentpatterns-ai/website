@@ -53,7 +53,7 @@ Optimizing for cache hits requires discipline in prompt construction:
 - System instructions cannot be personalized per-call (any change busts the prefix cache)
 - The split between static and dynamic sections must be maintained as the harness evolves
 
-For short agent sessions (5–10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, it can reduce inference costs by an order of magnitude [unverified].
+For short agent sessions (5–10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and empirical studies on agentic workloads report 41–80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
 
 ## Implementation Checklist
 

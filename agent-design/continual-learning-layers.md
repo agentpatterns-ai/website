@@ -14,7 +14,7 @@ tags:
 
 ## The Three Layers
 
-Every agentic system has three places where knowledge can be updated. [LangChain's analysis](https://blog.langchain.com/continual-learning-for-ai-agents/) defines them as:
+[LangChain's analysis](https://blog.langchain.com/continual-learning-for-ai-agents/) defines three update targets in any agentic system:
 
 | Layer | What it covers | Update mechanism |
 |-------|---------------|-----------------|
@@ -28,23 +28,23 @@ These are not a hierarchy — they are independent update targets. A failure at 
 
 Model-layer learning updates the weights themselves. Techniques include supervised fine-tuning (SFT) and reinforcement learning methods such as GRPO.
 
-The central challenge is **catastrophic forgetting**: updating a model on new data tends to degrade performance on tasks it previously handled well. This is an open research problem.
+The central challenge is **catastrophic forgetting**: new training degrades performance on previously-handled tasks. This is an open research problem.
 
-In practice, model updates are made at the agent level — training a model that works well for a specific agentic system as a whole. Per-user weight updates (e.g., a LoRA per user) are theoretically possible but rarely implemented. [unverified]
+In practice, model updates target the agent level — one model trained for a specific agentic system. Per-user weight updates (e.g., LoRA per user) remain a research direction; production deployments are rare.
 
 Model updates are expensive, slow, and the hardest to reverse. Use them when the capability gap cannot be closed by better instructions or retrieved context.
 
 ## Harness Layer
 
-The harness is the code that drives the agent, plus any instructions or tools that are always present for every instance. Harness-layer learning rewrites the scaffold.
+The harness is the scaffold code that drives the agent, plus instructions and tools always present for every instance. Harness-layer learning rewrites the scaffold.
 
-The Meta-Harness approach formalizes this: run the agent over a batch of tasks, evaluate the results, store execution traces, then run a coding agent over those traces to propose harness code changes. [LangChain applied this to Deep Agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) and improved Terminal Bench 2.0 from 52.8% to 66.5% through harness changes alone — no model change.
+The Meta-Harness approach formalizes this: run the agent over a batch of tasks, store execution traces, then run a coding agent over those traces to propose scaffold changes. [LangChain applied this to Deep Agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) and improved Terminal Bench 2.0 from 52.8% to 66.5% through harness changes alone — no model change.
 
-Harness updates affect every instance of the agent. A bug fix or instruction improvement at this layer generalizes immediately across all users and sessions. The tradeoff: changes require code review and deployment, and a bad harness change degrades everyone at once.
+Harness updates affect every instance of the agent. A fix generalizes immediately across all users and sessions. The tradeoff: changes require code review and deployment, and a bad harness change degrades everyone at once.
 
 ## Context Layer
 
-Context sits outside the harness and configures it. This includes skills, instructions, and memory specific to a particular agent instance, user, or organization. This layer is also referred to as agent memory.
+Context sits outside the harness and configures it: skills, instructions, and memory specific to a particular agent instance, user, or organization. This layer is also referred to as agent memory.
 
 Context updates can be scoped at multiple levels:
 
@@ -52,7 +52,7 @@ Context updates can be scoped at multiple levels:
 - **User/tenant level** — per-user context that accumulates preferences and conventions (e.g., [Hex Context Studio](https://hex.tech/product/context-studio/), [Decagon Duet](https://decagon.ai/blog/introducing-duet))
 - **Org level** — shared context across a team or organization
 
-These scopes can coexist: an agent can update its own SOUL.md, accept user-level corrections, and pull from org-level rules simultaneously.
+These scopes coexist: an agent can update its own SOUL.md, accept user-level corrections, and pull from org-level rules simultaneously.
 
 Updates happen in two modes:
 
@@ -72,7 +72,7 @@ graph TD
     D -->|No, per-user or per-agent| F[Context layer — update instructions/memory]
 ```
 
-The most common anti-pattern is reaching for model fine-tuning when a context update would suffice. Fine-tuning is expensive, slow, and risks catastrophic forgetting. If a user consistently needs a specific convention applied, that is a context update — not a model problem.
+The most common anti-pattern is reaching for fine-tuning when a context update would suffice. Fine-tuning is expensive, slow, and risks catastrophic forgetting. A user convention is a context update — not a model problem.
 
 ### Trade-offs at a glance
 
@@ -86,13 +86,13 @@ The most common anti-pattern is reaching for model fine-tuning when a context up
 
 ## Traces as the Common Substrate
 
-All three update flows are powered by execution traces — the full record of what an agent did. The update mechanism differs per layer, but the input data is the same:
+All three update flows consume execution traces. The mechanism differs per layer:
 
-- Model updates: collect traces, label outcomes, fine-tune
-- Harness updates: feed traces to a coding agent that proposes scaffold changes
-- Context updates: extract conventions and preferences from traces, write to memory files
+- Model: collect traces, label outcomes, fine-tune
+- Harness: feed traces to a coding agent that proposes scaffold changes
+- Context: extract conventions and preferences from traces, write to memory files
 
-Investing in trace collection and quality is therefore a prerequisite for any layer of continual learning.
+Trace collection quality is a prerequisite for improvement at any layer.
 
 ## Example
 
@@ -111,13 +111,10 @@ A project-specific convention (e.g., always use `assert_raises` instead of `pyte
 - Model fine-tuning is rarely the right first response to a recurring agent failure; exhaust context and harness options first.
 - Traces are the input for improvements at all three layers; trace collection quality determines improvement velocity.
 
-## Unverified Claims
-
-- Per-user weight updates (e.g., LoRA per user) are theoretically possible but rarely implemented in production [unverified]
-
 ## Related
 
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Harness Engineering](harness-engineering.md)
 - [Agent Memory Patterns](agent-memory-patterns.md)
+- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)

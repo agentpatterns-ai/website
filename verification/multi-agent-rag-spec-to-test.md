@@ -13,7 +13,7 @@ tags:
 
 ## The Spec-to-Test Bottleneck
 
-Agile teams produce test specifications faster than they can manually convert them to executable scripts. The conversion step — mapping natural-language acceptance criteria to runnable test code — is labor-intensive and creates a release bottleneck.
+Multi-Agent RAG for spec-to-test automation uses a retrieval-augmented pipeline — typically planner, generator, and validator agents — to convert natural-language acceptance criteria into runnable test scripts grounded in a team's existing test corpus. It directly addresses the gap where agile teams produce specifications faster than they can manually implement them as executable tests.
 
 [arXiv:2603.08190](https://arxiv.org/abs/2603.08190), developed with Hacon/Siemens, demonstrates that a RAG multi-agent approach significantly increases test script throughput while preserving human review gates. The pattern may generalize to other domains where formal specifications exist and spec production outpaces manual implementation.
 
@@ -33,15 +33,15 @@ graph TD
     H -->|Changes requested| G
 ```
 
-**Planner** `[unverified]`: Decomposes the spec into implementable steps. Uses the retrieved scripts as structural reference — what setup, assertion, and teardown patterns your team uses.
+**Planner**: Decomposes the spec into implementable steps using retrieved scripts as structural reference — what setup, assertion, and teardown patterns your team uses. This role is an architectural inference from the RAG retrieval step; the [Hacon/Siemens implementation](https://arxiv.org/abs/2603.08190) uses a Generator/Evaluator split without a discrete planner.
 
-**Generator** `[unverified]`: Writes executable code for each step. RAG retrieval grounds style and library choices in your existing corpus rather than the model's training data.
+**Generator**: Produces candidate test scripts using retrieval-augmented generation over historical specification–script pairs ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). RAG grounds library choices in your existing corpus rather than the model's training data.
 
-**Validator** `[unverified]`: Runs static checks (syntax, import resolution, schema conformance) before the script reaches a human reviewer. Feeds failures back to the generator.
+**Validator**: Checks syntactical correctness and executability before the script reaches a human reviewer ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). Feeds failures back to the generator.
 
 ## RAG Grounding
 
-The retrieval step provides stylistic grounding. Without it, generators produce syntactically valid but stylistically inconsistent scripts that reviewers must normalize. With it:
+The retrieval step provides stylistic grounding. Without it, generators produce syntactically valid but stylistically inconsistent scripts that reviewers must normalize. RAG over code examples reduces hallucinated API calls by anchoring generation in real usage patterns ([Lewis et al., 2020](https://arxiv.org/abs/2005.11401)). With it:
 
 - Library choices match your existing test framework
 - Assertion patterns match team conventions
@@ -66,11 +66,11 @@ Keep a mandatory human review gate on each generated script before merge. The pi
 - Edge cases the generator may have missed
 - Assertions that are structurally valid but semantically wrong
 
-`[unverified]` The gate does not require line-by-line reading of generated code — reviewers review the spec-to-test mapping, not the implementation details.
+The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190) found 30–50% of generated code per script was left unchanged by test engineers, indicating selective rather than exhaustive review. Reviewers focus on the spec-to-test mapping — whether assertions match intent — rather than optimizing every generated line.
 
 ## Scope
 
-`[unverified]` The pattern may apply beyond test generation. Any workflow where:
+The pattern may apply beyond test generation. The Hacon/Siemens study is narrowly focused on regression testing; generalization is an inference. Any workflow where:
 
 - Specifications are produced at higher volume than implementations
 - Prior implementations are a reliable style reference
@@ -122,20 +122,21 @@ The validator runs `npx playwright test --dry-run` plus import resolution checks
 
 The retrieval step is what makes this work at scale. Without it, the generator would invent import paths and helper function names. With the retrieved examples, it uses `loginAsPassenger`, `searchJourney`, and `data-testid` selectors that already exist in the codebase.
 
+## When This Backfires
+
+The pattern degrades or fails under several conditions:
+
+- **Thin corpus**: Retrieval is only as useful as the existing test library. A corpus under ~50 scripts in a given domain returns too-generic examples; the generator falls back to its training priors and produces style-inconsistent output.
+- **Unstable specs**: If acceptance criteria change frequently between writing and review, retrieved examples from an older spec style diverge from the incoming spec. Spec quality must be locked before pipeline entry, not after.
+- **High API churn**: The generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break — retrieved examples become misleading rather than grounding, and hallucination rates increase rather than decrease.
+- **Semantically narrow test suites**: If the existing corpus covers only one test pattern (e.g., all smoke tests), retrieval degenerates into retrieving the same unhelpful example for every spec regardless of type.
+
 ## Key Takeaways
 
 - RAG grounds script generation in your team's existing test patterns, reducing hallucination and style drift
 - A three-agent split (planner, generator, validator) catches errors before they reach human reviewers
 - Ambiguous specs block the pipeline — spec quality is a prerequisite, not an afterthought
 - Human review gates remain necessary; the pipeline increases throughput without bypassing judgment
-
-## Unverified Claims
-
-- Planner agent decomposes spec into implementable steps using retrieved scripts as structural reference [unverified]
-- Generator agent grounds style and library choices in existing corpus via RAG retrieval [unverified]
-- Validator agent runs static checks before human review and feeds failures back to generator [unverified]
-- Human review gate does not require line-by-line reading of generated code [unverified]
-- The pattern may apply beyond test generation to API stubs, data pipelines, and config files [unverified]
 
 ## Related
 

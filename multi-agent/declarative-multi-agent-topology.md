@@ -61,7 +61,7 @@ Each emitted output is a native config or scaffold for the target runtime. Trans
 - Validation engine with 82+ built-in rules
 - Claude Code skill interface for natural-language topology design
 
-At time of writing: 75 GitHub stars, 84 commits. The project is early-stage; the ecosystem is emerging.
+At time of writing: 75 GitHub stars, 84 commits. The project is early-stage; the ecosystem is emerging. Adapter fidelity across target platforms has not been independently verified — the project states adapters are "ground-truth validated against real-world configs" but does not enumerate per-platform feature gaps; evaluate against your target runtime before adopting.
 
 ## How This Differs from Related Patterns
 
@@ -124,10 +124,6 @@ Running the compiler against this file emits platform-specific configs for each 
 - A compiler targets the same topology at multiple frameworks, but translation is lossy — adapters approximate the intent
 - Gates encoded in the topology file keep approval checkpoints explicit and version-controlled
 - The pattern is sound; the ecosystem is early-stage — evaluate implementations against your target platforms before committing
-
-## Unverified Claims
-
-- Fidelity of AgenTopology's multi-platform scaffolding adapters (Claude Code, Codex, Cursor, Gemini CLI, Copilot, Kiro) has not been independently verified against each target platform's current API [unverified]
 
 ## Related
 

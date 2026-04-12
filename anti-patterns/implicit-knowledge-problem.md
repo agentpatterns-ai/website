@@ -15,7 +15,7 @@ aliases:
 
 ## The Pattern
 
-Team conventions, architectural decisions, and domain rules live in Slack threads, meeting recordings, and institutional memory. An agent violates a rule, the developer corrects it, and the next session repeats the mistake. This is a **knowledge externalization** problem: each session is a recurring first day with no access to accumulated decisions ([Hodgson](https://blog.thepete.net/blog/2025/05/22/why-your-ai-coding-assistant-keeps-doing-it-wrong-and-how-to-fix-it/)).
+Team conventions, architectural decisions, and domain rules live in Slack threads, meeting recordings, and institutional memory. An agent violates a rule, the developer corrects it, and the next session repeats the mistake. This is a **[knowledge externalization](../agent-design/externalization-in-llm-agents.md)** problem: each session is a recurring first day with no access to accumulated decisions ([Hodgson](https://blog.thepete.net/blog/2025/05/22/why-your-ai-coding-assistant-keeps-doing-it-wrong-and-how-to-fix-it/)).
 
 ## Why It Fails Silently
 

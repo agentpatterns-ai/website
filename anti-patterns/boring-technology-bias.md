@@ -14,7 +14,7 @@ tags:
 
 ## The Problem
 
-When you ask an agent "what should I use for X?", the answer reflects training frequency. An analysis of 2,430 Claude Code responses reportedly found stark defaults: GitHub Actions 94% for CI/CD, Stripe 91% for payments, shadcn/ui 90% for components `[unverified]`. Cloud deployment went exclusively to Vercel and Railway — AWS, GCP, and Azure received 0% `[unverified]`.
+When you ask an agent "what should I use for X?", the answer reflects training frequency. Greenfield recommendations cluster around a small set of dominant tools — GitHub Actions for CI/CD, Stripe for payments, shadcn/ui for components, Vercel for deployment — regardless of whether they fit the project. Less-popular alternatives receive lower confidence scores or are omitted entirely.
 
 This is a frequency prior, not a reasoning failure. More training examples of popular tools means higher confidence. Greenfield projects converge on the same narrow stack regardless of requirements.
 
@@ -75,7 +75,7 @@ Pin technology choices in project instruction files to override training data de
 - When generating examples, use the stack above
 ```
 
-For niche tools, provide seed examples. Microsoft research found agent accuracy on domain-specific languages starts below 20% but reaches 85% with 3-5 examples and explicit rules `[unverified]`.
+For niche tools, provide seed examples. Few-shot examples compensate for limited training coverage: agents that receive 3-5 representative examples of a niche API produce correct implementations significantly more often than with zero-shot prompting ([arxiv.org/abs/2406.09834](https://arxiv.org/abs/2406.09834)).
 
 | Mitigation | Mechanism |
 |---|---|
@@ -84,10 +84,16 @@ For niche tools, provide seed examples. Microsoft research found agent accuracy 
 | Add compiler/linter validation loops | Catches deprecated API usage automatically |
 | Treat tool recommendations like a junior dev's | Verify reasoning, don't accept defaults |
 
-## Unverified Claims
+## When This Backfires
 
-- Reports that Cursor and Copilot show similar technology concentration patterns `[unverified]`
-- Claim that 68% of AI-generated snippets reference libraries with known deprecation notices `[unverified]`
+Overspecifying the technology stack in instruction files creates its own problems:
+
+- **Stack lock-in**: pinning every tool prevents agents from suggesting a better fit when requirements change mid-project.
+- **Onboarding friction**: new contributors must learn the project's overridden defaults before the agent behaves predictably.
+- **False confidence**: a pinned stack still requires human review — agents implement the pinned tool incorrectly if their training coverage for it is thin, producing confident but broken code.
+- **Maintenance burden**: locked stacks drift as pinned libraries release breaking changes, and agents are not notified — the instruction file becomes a source of stale guidance.
+
+Use instruction files to override defaults for non-negotiable choices (regulatory requirements, existing infrastructure) rather than as a blanket constraint on every dependency.
 
 ## Related
 

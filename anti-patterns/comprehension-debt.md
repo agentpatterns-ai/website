@@ -13,7 +13,7 @@ tags:
 
 ## The Problem
 
-AI coding agents generate working code at 5--7x human review speed `[unverified]`. Tests pass, the diff looks reasonable, you merge. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
+AI coding agents generate code faster than developers can thoroughly read it. Tests pass, the diff looks reasonable, you merge. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
 
 ## Why It Is Distinct
 
@@ -26,11 +26,11 @@ AI coding agents generate working code at 5--7x human review speed `[unverified]
 
 ## The Velocity-Comprehension Gap
 
-AI generates 140--200 lines/min; developers review 20--40 lines/min `[unverified]`. Code accumulates faster than understanding, so developers ask AI to fix code they never understood -- paying off debt with more debt.
+Code accumulates faster than understanding. Developers ask AI to fix code they never understood — paying off debt with more debt.
 
 ## The Evidence: Usage Mode Matters
 
-An Anthropic RCT with 52 junior engineers found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%) `[unverified]`. The critical finding was not *whether* developers used AI but *how*:
+An [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%). The critical finding was not *whether* developers used AI but *how*:
 
 | Usage mode | Comprehension score | What it looks like |
 |-----------|-------------------|-------------------|
@@ -51,6 +51,18 @@ What are the invalidation tradeoffs?"
 ```
 
 **Interactive explanations.** When you receive complex generated code, ask the agent for an annotated walkthrough rather than accepting it.
+
+## Why It Accumulates
+
+Code generation bypasses the retrieval effort that consolidates memory. Writing code requires applying knowledge; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). Recognition fades; recall persists. The Anthropic study's [debugging score gap](https://www.anthropic.com/research/AI-assistance-coding-skills) confirms this: the largest comprehension deficit appeared on debugging tasks — understanding when code fails and why requires the highest retrieval effort.
+
+## When This Backfires
+
+Debt does not accumulate uniformly. Three conditions where it is low or zero:
+
+1. **Active inquiry mode.** Developers who ask for explanations before generating code show comprehension comparable to hand-coders.
+2. **Throwaway code.** Scaffolding, one-off scripts, and test fixtures that will never be debugged carry minimal debt.
+3. **Single-owner modules.** A specialist who owns a module end-to-end can tolerate local debt. The pattern is most damaging in shared infrastructure maintained by multiple developers who all delegated its creation.
 
 ## Example
 

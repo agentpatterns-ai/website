@@ -76,7 +76,7 @@ For agents without built-in self-review:
 
 ## Limitations
 
-**Confirmation bias.** An agent reviewing its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review. The pattern trades independence for speed and simplicity [unverified].
+**Confirmation bias.** An agent reviewing its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review — a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is operationally simpler and faster than coordinating separate reviewers, at the cost of that independence.
 
 **Scope ceiling.** Self-review catches mechanical issues — style, known vulnerability patterns, dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that require domain knowledge beyond the agent's context.
 
@@ -147,10 +147,6 @@ pip-audit --format=json > audit-findings.json
 
 The agent parses each JSON output and fixes findings before the PR opens. If findings remain after the iteration cap, they are documented in the PR body for human review.
 
-## Unverified Claims
-
-- Self-review trades independence for speed and simplicity compared to cross-agent review `[unverified]`
-
 ## Related
 
 - [Review-Then-Implement Loop](../code-review/review-then-implement-loop.md)
@@ -165,5 +161,8 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 - [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that self-review extends with an extra verification pass
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — fresh-context iteration pattern that applies to self-review rounds
+- [Agent Harness](agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
 - [Harness Engineering](harness-engineering.md) — integrating review steps into agent harness configuration
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating iteration budget across reasoning and review phases
+- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — handling errors that self-review cycles cannot resolve within the iteration cap
+- [Behavioral Drivers of Agent Success](behavioral-drivers-agent-success.md) — quality gates and verification behaviors that determine whether self-review loops converge reliably

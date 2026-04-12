@@ -19,7 +19,7 @@ Feeding an entire repository into an LLM context window does not scale. A 250K-l
 
 Demand-driven analysis inverts this: start from a suspicious pattern (a potentially null pointer, an allocation without a matching free), then trace only the call chains that matter. The agent reads functions one at a time, following data flow across boundaries, and stops when the flow is resolved or a bug is confirmed.
 
-[RepoAudit](https://arxiv.org/abs/2501.18160) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
+[RepoAudit](https://arxiv.org/abs/2501.18160) ([code](https://github.com/PurCL/RepoAudit)) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
 
 ## Architecture: Initiator-Explorer-Validator
 
@@ -91,13 +91,8 @@ The LLM advantage concentrates in **alias analysis** (do two pointers reference 
 
 - Call chain depth is bounded (RepoAudit uses 4 functions) — deeper inter-procedural bugs are missed
 - Requires language-specific pattern matchers (tree-sitter grammars) for each bug type — not zero-shot
-- Demonstrated only on C/C++ memory safety bugs — generalization to other languages and bug classes is unproven [unverified]
-- Whether this demand-driven pattern works for dynamically-typed languages where data flow is harder to trace statically is an open question [unverified]
-
-## Unverified Claims
-
-- Generalization beyond C/C++ memory safety (see Limitations above)
-- Applicability to dynamically-typed languages where static flow tracing is harder
+- Demonstrated only on C/C++ memory safety bugs — applicability to other bug classes (logic errors, race conditions) and other languages is not established by the paper
+- Dynamically-typed languages (Python, JavaScript) make static data-flow tracing harder; the demand-driven approach has not been evaluated outside statically-typed C/C++
 
 ## Key Takeaways
 

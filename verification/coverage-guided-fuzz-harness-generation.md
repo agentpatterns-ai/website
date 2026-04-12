@@ -18,7 +18,7 @@ aliases:
 
 Coverage-guided fuzzing is effective at finding memory corruption bugs, logic errors, and edge-case crashes in library code. The constraint is harness authoring: hand-written glue code that translates fuzzer byte streams into valid sequences of API calls. Writing a correct harness requires understanding parameter constraints, call ordering dependencies, and state initialization — work that can take significant time per API.
 
-[arXiv:2603.08616](https://arxiv.org/abs/2603.08616) demonstrates that a multi-agent system using coverage feedback can automate harness generation for Java libraries, reducing time-to-first-fuzzing-results from weeks to hours [unverified — the "weeks to hours" time reduction claim has not been independently confirmed from the cited paper].
+[arXiv:2603.08616](https://arxiv.org/abs/2603.08616) demonstrates that a five-agent system using coverage feedback can automate harness generation for Java libraries, achieving a median 26% improvement in branch coverage over OSS-Fuzz baselines at a cost of $3.20 and ~10 minutes per harness.
 
 ## How Coverage Feedback Drives Iteration
 
@@ -42,9 +42,9 @@ When a harness fails to reach new code paths, the agent receives that signal and
 
 Harness generation requires the agent to work through three constraints:
 
-**Parameter constraints**: What values are valid for each argument? Null-safety, range constraints, format requirements. The agent can infer these from type signatures, Javadoc, and examples in the codebase. [unverified — specific inference mechanisms are the author's synthesis, not detailed in the paper]
+**Parameter constraints**: What values are valid for each argument? Null-safety, range constraints, format requirements. The research agent queries type signatures, Javadoc, and codebase examples on-demand to build this understanding before generating harness code.
 
-**Call ordering**: Which methods must be called before others? Constructor before method calls, open before read, initialize before use. The agent can reason about object lifecycle from the API surface. [unverified — reasoning approach is the author's synthesis]
+**Call ordering**: Which methods must be called before others? Constructor before method calls, open before read, initialize before use. The research agent queries the API surface and available documentation to infer object lifecycle requirements.
 
 **State coverage**: Which code paths require specific preconditions to be reachable? An authenticated session, a populated collection, a configured subsystem. Coverage feedback identifies when state assumptions are wrong.
 
@@ -56,9 +56,19 @@ Harness generation requires the agent to work through three constraints:
 - **Review before production fuzzing**: Generated harnesses may exercise APIs in unintended sequences — review for crash-on-startup conditions before you target production builds
 - **Corpus seeding**: Provide a seed corpus of valid inputs alongside the harness to give the fuzzer a head start on interesting paths
 
+## When This Backfires
+
+Coverage improvement is not a universal proxy for harness quality. The approach degrades in several conditions:
+
+- **Weakly typed or dynamically typed APIs**: The research agent's ability to infer parameter constraints depends on type information. APIs that rely on runtime duck-typing, `Object` parameters, or reflection give the agent less signal, increasing the rate of invalid call sequences.
+- **Deeply stateful initialization**: APIs that require complex, multi-step setup (authentication flows, database connections, protocol handshakes) may require state the agent cannot construct from documentation alone, resulting in harnesses that abort early on every input.
+- **Side-effecting APIs**: Harness generation calls methods in combinations that may not occur in production. APIs with destructive side effects — file deletion, network writes, irreversible state changes — can cause harnesses to be unsafe to run without sandboxing.
+- **Coverage plateau without semantic progress**: Branch coverage can increase while the harness reaches semantically uninteresting code paths. Coverage metrics do not distinguish bug-prone deep paths from shallow error handlers; high coverage numbers do not guarantee the harness is exercising security-relevant behavior.
+- **Cost at scale**: At $3.20 per harness, generating harnesses for hundreds of API methods in a large library is expensive. The approach is most practical for targeted high-value APIs, not full-library coverage.
+
 ## Generalization
 
-The paper demonstrates the pattern on Java libraries. The feedback loop — generate, measure coverage, refine — could in principle apply to other typed API surfaces you work with (C/C++ with libFuzzer/AFL, Python with Atheris, Rust with cargo-fuzz), but cross-language generalization has not been validated [unverified].
+The paper demonstrates the pattern on Java libraries. The feedback loop — generate, measure coverage, refine — could in principle apply to other typed API surfaces — C/C++ with [libFuzzer](https://llvm.org/docs/LibFuzzer.html) or [AFL++](https://github.com/AFLplusplus/AFLplusplus), Python with [Atheris](https://github.com/google/atheris), Rust with [cargo-fuzz](https://github.com/rust-fuzz/cargo-fuzz) — but cross-language generalization has not been validated by published research.
 
 ## Key Takeaways
 
@@ -66,13 +76,6 @@ The paper demonstrates the pattern on Java libraries. The feedback loop — gene
 - The agent's value is in reasoning about parameter constraints and call ordering, not in writing fuzzer boilerplate
 - Review generated harnesses before targeting production systems
 - Strong typing and documentation quality directly improve harness generation accuracy
-
-## Unverified Claims
-
-- "Weeks to hours" time reduction for harness generation [unverified — the "weeks to hours" time reduction claim has not been independently confirmed from the cited paper]
-- Agent infers parameter constraints from type signatures, Javadoc, and codebase examples [unverified — specific inference mechanisms are the author's synthesis, not detailed in the paper]
-- Agent reasons about object lifecycle from the API surface for call ordering [unverified — reasoning approach is the author's synthesis]
-- Cross-language generalization to C/C++, Python, Rust fuzzing [unverified]
 
 ## Example
 

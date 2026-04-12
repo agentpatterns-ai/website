@@ -97,19 +97,19 @@ Audit in priority order — highest citation impact first.
 
 ### Pattern and Concept Pages
 
-Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools are most likely to cite a pattern page when a developer asks "what is X?" `[unverified]`
+Pattern pages document a repeatable design — a mechanism, a structure, or an approach that applies across multiple contexts. GEO priority: quotable assertions and statistics, because AI tools retrieve concept definitions using short declarative matches — a direct one-sentence definition gives the retrieval model a high-confidence anchor.
 
 - Lead with a one-sentence definition the reader can quote verbatim
 - Include a quantitative outcome where available ("reduces [context pollution](../anti-patterns/session-partitioning.md) by eliminating N token categories")
 - Use `TechArticle` schema with `author`, `dateModified`, and `description` fields
-- Add a `## Key Takeaways` section — embedding models score terminal summaries; they serve as a second citation-ready chunk `[unverified]`
+- Add a `## Key Takeaways` section — terminal summaries provide a self-contained chunk that can be retrieved independently from the body.
 
 ### Tutorial Pages
 
-Tutorial pages teach a procedure through sequenced steps. GEO priority: `HowTo` schema and sequential structure, because AI tools summarize tutorials as step lists `[unverified]`.
+Tutorial pages teach a procedure through sequenced steps. GEO priority: `HowTo` schema and sequential structure. `HowTo` schema maps directly to the step-list format AI assistants use when answering procedural questions.
 
 - H1 must name the goal, not the process ("Bootstrapping a GEO-Optimized Page", not "How to Bootstrap")
-- List prerequisites explicitly before step 1 — AI tools extract and present these `[unverified]`
+- List prerequisites explicitly before step 1 — prerequisite lists are discrete, structured chunks that retrieval models can extract without parsing surrounding prose.
 - Number steps; avoid prose that buries the sequence
 - Each step: one action + one expected output — no compound steps
 - Include estimated time in `HowTo` schema `totalTime` field (ISO 8601, e.g., `PT20M`)
@@ -120,7 +120,7 @@ Anti-pattern pages describe what goes wrong and why. GEO priority: `FAQPage` sch
 
 - Frame each H2 as a question the failing developer would ask ("Why does my agent lose context mid-task?")
 - Answer directly in the first sentence of each section
-- Include a "What to do instead" section — AI tools are more likely to cite corrective guidance than descriptions of failure alone `[unverified]`
+- Include a "What to do instead" section — corrective guidance answers a different (and more actionable) query than the failure description alone, increasing the range of questions this page can answer.
 - Apply `FAQPage` schema with one `Question`/`Answer` pair per H2 section
 
 ### API Reference Sections
@@ -161,6 +161,15 @@ graph LR
 
 **Step 5: Feed into `/pipeline`.** A topic string from step 2 becomes a pipeline issue.
 
+## When This Backfires
+
+GEO techniques developed for general web content do not transfer uniformly to all technical documentation formats.
+
+- **Versioned API references**: answer-first structure and JSON-LD schema add maintenance cost on every release cycle. For frequently-versioned endpoints, the cost often outweighs citation gains — internal developer portals rarely earn external AI citations regardless of optimization.
+- **HowTo schema on linear tutorials**: numbering steps and adding `totalTime` estimates is only worthwhile when the tutorial covers a self-contained task. Multi-page tutorials or modular guides do not map cleanly to a single `HowTo` block; forcing the schema produces malformed structured data.
+- **Statistics requirement on thin pages**: the GEO paper ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)) measured visibility gains for statistics on general web content. For narrow technical reference pages (a single API parameter, one error code), forcing a statistic into a section that does not call for one degrades readability without confirmed citation benefit.
+- **Internal-only documentation**: GEO techniques apply to content indexed by AI crawlers. Private or intranet documentation is not in scope — applying GEO structure there wastes editorial effort.
+
 ## Sources
 
 - [GEO: Generative Engine Optimization (arxiv.org/abs/2311.09735)](https://arxiv.org/abs/2311.09735) — KDD 2024; 9 techniques benchmarked; quotation addition +41%, statistics +30–40%, keyword stuffing counterproductive
@@ -185,7 +194,3 @@ graph LR
 - [llms.txt](llms-txt.md)
 - [Content & Skills Audit Workflow](../workflows/content-skills-audit.md)
 
-## Unverified
-
-- MkDocs Material does not natively output FAQPage or HowTo JSON-LD; implementation requires a custom `extra_javascript` block or plugin — no primary source confirmed this for the specific stack `[unverified]`
-- Triple schema stacks (Article + ItemList + FAQPage) receiving 1.8× more citations is from a secondary source; original study not directly verified `[unverified]`

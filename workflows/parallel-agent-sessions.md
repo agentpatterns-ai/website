@@ -117,6 +117,7 @@ With this structure, the engineer reviews progress updates from each session in 
 
 - [Worktree Isolation](worktree-isolation.md)
 - [Human in the Loop](human-in-the-loop.md)
+- [Background-to-Foreground Handoff](background-foreground-handoff.md)
 - [The Delegation Decision](../agent-design/delegation-decision.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)

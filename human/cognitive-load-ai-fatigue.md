@@ -20,13 +20,15 @@ aliases:
 
 AI assistants reduce mechanical effort but introduce new cognitive demands: reviewing generated output, catching errors, maintaining context across AI and human thinking modes, and making micro-decisions about when to accept or redirect.
 
-Research from BCG and UC Riverside found that [14% of workers experience mental fatigue from excessive AI tool use](https://futurism.com/artificial-intelligence/ai-brain-fry), with high performers most affected — intensive users who get the most value are also most exposed to the costs.
+Research from BCG and UC Riverside [found that 14% of workers experience mental fatigue from excessive AI tool use](https://www.bcg.com/news/5march2026-when-using-ai-leads-brain-fry), with high performers most affected — intensive users who get the most value are also most exposed to the costs.
+
+The underlying mechanism is working memory saturation. Human working memory is sharply bounded; AI-assisted work does not eliminate that limit — it shifts what saturates it. Instead of holding implementation details, attention moves to evaluating output correctness, tracking context across AI and human thinking modes, and making constant accept/reject micro-decisions. [MIT Media Lab research](https://arxiv.org/abs/2506.08872) found that sustained AI assistance reduced neural connectivity in brain networks associated with deep engagement, a pattern the researchers termed "cognitive debt" — the accumulated cost of offloading reasoning rather than performing it.
 
 ## Forms of AI Cognitive Load
 
 **Output review fatigue.** Reading and validating generated code all day is not passive. Every suggestion requires a judgment call — accept, modify, reject. Over a full day, this load accumulates even when individual decisions are fast.
 
-**Context-switch cost.** Moving between AI-assisted work and independent reasoning has a switching cost [unverified: the magnitude of this cost has not been formally studied for AI-specific contexts]. The mode boundaries are rarely clean.
+**Context-switch cost.** Moving between AI-assisted work and independent reasoning has a switching cost. Mode boundaries are rarely clean — AI-augmented work establishes a different cognitive rhythm than unassisted deep work, and the transition overhead compounds across repeated shifts within a session.
 
 **Decision fatigue from oversight.** Agentic workflows require monitoring and correcting AI behavior in real time. Sustained oversight of a probabilistic system differs from writing code directly — humans have limited tolerance before quality degrades.
 
@@ -36,7 +38,7 @@ Research from BCG and UC Riverside found that [14% of workers experience mental 
 
 ### Batch Review, Not Continuous Review
 
-Reviewing AI output as a continuous stream is more fatiguing than batching review into discrete windows [unverified]. Where the workflow allows, complete a generation task, then review the full output — rather than evaluating each line as it appears.
+Reviewing AI output as a continuous stream is more fatiguing than batching review into discrete windows. Where the workflow allows, complete a generation task, then review the full output — rather than evaluating each line as it appears. Sustained evaluation of a probabilistic output stream forces the same micro-decision loop repeatedly; batching converts many small interrupts into a single focused review pass.
 
 ### Scope Limits Per Session
 
@@ -60,7 +62,7 @@ In these scenarios, the overhead of directing and reviewing exceeds the value re
 
 Individual fatigue patterns aggregate into team-level risk. Teams where senior engineers review all AI output face a bottleneck: high performers carry disproportionate load. Distributing review responsibility and establishing standards that don't require expert judgment for every case reduces concentration.
 
-Adoption pressure that pushes engineers to use AI assistants before they have effective mental models creates additional stress. Forcing adoption faster than learning manifests as fatigue [unverified: adoption pressure as a fatigue amplifier is not directly studied].
+Adoption pressure that pushes engineers to use AI assistants before they have effective mental models creates additional stress. When the mental model is incomplete, every AI output requires more verification effort — the BCG study found that high oversight demands are the most draining aspect of AI work, raising mental fatigue 12% and information overload 19% compared to lower-oversight usage.
 
 ## Example
 
@@ -98,6 +100,8 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — the opposite pole: compulsive engagement rather than fatigue
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](attention-management-parallel-agents.md) — structuring attention across simultaneous AI tasks
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — long-term capability costs of sustained AI delegation
+- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the growing gap between AI-generated code and developer understanding, the third concept in the fatigue/atrophy/debt cluster
+- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — how the bottleneck migration and skill atrophy connect to the wider professional identity shift
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](cross-tool-translation.md)
 - [Initiatives and Community: Tracking the Agentic Engineering Landscape](initiatives-community.md)
 - [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck

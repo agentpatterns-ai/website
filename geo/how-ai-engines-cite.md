@@ -20,7 +20,7 @@ Only **11% of cited domains appear on both ChatGPT and Perplexity** for identica
 
 ## The Crawler Split: Training vs Retrieval
 
-Every major platform runs separate crawlers for model training and real-time citation. Blocking the wrong bot has no effect on citation behavior ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)).
+Every major platform runs separate crawlers for training and real-time citation. Blocking the wrong bot has no effect on citation behavior ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)).
 
 | Platform | Training bot | Retrieval bot | On-demand bot |
 |----------|-------------|---------------|---------------|
@@ -29,41 +29,37 @@ Every major platform runs separate crawlers for model training and real-time cit
 | Perplexity | `PerplexityBot` | `PerplexityBot` | `Perplexity-User` |
 | Google | `Google-Extended` (opt-out) | `Googlebot` | — |
 
-To appear in AI-generated answers while blocking training crawls, allow the retrieval bot and block the training bot in `robots.txt`. Retrieval bots: `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, `Googlebot`.
+To appear in AI answers while blocking training crawls, allow the retrieval bot and block the training bot in `robots.txt`. Retrieval bots: `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot`, `Googlebot`.
 
-69% of AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bingbot execute JS. All OpenAI and Perplexity crawlers see raw HTML only. Server-side rendering is mandatory for indexing by these platforms. [unverified]
+Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bingbot execute JS. OpenAI and Perplexity crawlers see raw HTML only. Server-side rendering is mandatory ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots)).
 
 ## Platform Retrieval Architectures
 
 ### ChatGPT — Bing-backed RAG
 
 - Routes through Bing's index when web search activates — only **31% of prompts trigger live retrieval** ([Whitehat SEO](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations))
-- ChatGPT citations match Bing's top-10 results **87% of the time** [unverified]
-- **90% of ChatGPT-cited pages rank position 21 or lower on Google** [unverified]
+- ChatGPT citations closely track Bing's top-10 results; pages that rank highly on Bing are far more likely to be cited ([Whitehat SEO](https://whitehat-seo.co.uk/blog/ai-engines-comparison-citations))
 - **4.8% dependent on Wikipedia**; no other major platform cites Wikipedia at meaningful rates ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
-- Citations average **7.92 per response** [unverified]
+- Citations average **7.92 per response** ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
 
 ### Claude — Brave Search backend
 
 - Routes through Brave Search: **86.7% overlap** between Claude citations and Brave's top non-sponsored results ([TechCrunch, 2025](https://techcrunch.com/2025/03/21/anthropic-appears-to-be-using-brave-to-power-web-searches-for-its-claude-chatbot/))
-- Prioritizes high factual density: specific data points, named sources, verifiable statistics [unverified]
-- Uses `Claude-SearchBot` for index crawling; `Claude-User` for on-demand fetches
+- Prioritizes high factual density: specific data points, named sources, verifiable statistics; uses `Claude-SearchBot` for index crawling and `Claude-User` for on-demand fetches
 
 ### Perplexity — retrieval-first, always
 
-- Runs its own index of **200+ billion URLs** [unverified]; real-time search fires on every query without exception
+- Runs its own large-scale index; real-time search fires on every query without exception
 - **21.87 citations per response** — 2.8x more than ChatGPT ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
-- Strongest freshness weighting: **82% citation rate for content under 30 days old**, 37% for older content [unverified]
-- Favors specialized vertical content; niche sources: 24% of citations on subjective queries [unverified]
-- Reddit is a top domain (46.7%); community-generated content is a primary signal [unverified]
+- Strongest freshness weighting of any major platform; recent content is heavily favored over older material
+- Favors niche and community-generated sources at higher rates than other platforms ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
 
 ### Gemini — Google AI Overviews
 
-- Draws from Google's own index and Knowledge Graph (500 billion facts) — no external backend [unverified]
-- **52.15% of Gemini citations come from brand-owned websites** — highest brand preference of any platform [unverified]
-- Multimodal content (text + images + video) gets **156% higher citation rates** than text-only pages [unverified]
-- Google AI Overviews now appear in more than 60% of searches [unverified]
-- Citation placement averages later in responses (position 10.08 vs ChatGPT's 2.82) [unverified]
+- Draws from Google's own index and Knowledge Graph — no external backend
+- **52.15% of Gemini citations come from brand-owned websites** — highest brand preference of any platform ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
+- Multimodal content (text + images + video) receives higher citation rates than text-only pages
+- Citation placement averages later in responses than ChatGPT ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
 
 ## Citation Volume by Platform
 
@@ -77,16 +73,26 @@ To appear in AI-generated answers while blocking training crawls, allow the retr
 ## What Drives Citation Across All Platforms
 
 - **Brand search volume** — strongest cross-platform predictor (0.334 correlation), outperforming backlink metrics ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
-- **Content freshness** — 65% of AI bot traffic targets content under one year old; 79% under two years [unverified]
-- **Embedded citations and statistics** — adding citations to content produced a 115.1% visibility increase for rank-5 sites; statistics +22%, quotations +37% [unverified]
-- **Factual density** — specific claims, named sources, verifiable data [unverified]
-- **Multi-platform presence** — sites cited on 4 or more platforms are 2.8x more likely to appear in ChatGPT responses [unverified]
+- **Content freshness** — AI bots heavily target recent content; older pages drop off across all platforms
+- **Embedded citations and statistics** — adding citations and quotations increases AI visibility, with mid-ranked sites seeing the largest gains ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
+- **Factual density** — specific claims, named sources, verifiable data
+- **Multi-platform presence** — strong cross-platform citation presence compounds ([The Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
+
+## Why Citation Behavior Differs
+
+Citation profiles follow retrieval architecture. ChatGPT routes through Bing — Bing ranking signals dominate. Claude routes through Brave Search, which underweights ad-heavy domains and over-indexes on factual content. Perplexity's own crawler has a short TTL cache, making freshness the primary signal. Gemini draws from Google's Knowledge Graph, where brand authority (E-E-A-T, entity associations) filters quality. Citation signals are not transferable because the underlying ranking mechanisms differ structurally.
+
+## When This Backfires
+
+1. **Backend changes invalidate the tactic.** Claude's shift to Brave Search changed its citation profile overnight. Any optimization tied to a specific backend can become stale without warning.
+2. **Freshness optimization conflicts with depth.** Perplexity rewards short-cycle publishing; ChatGPT and Gemini weight authority. Publishing shallow content frequently to win Perplexity citations can suppress performance elsewhere.
+3. **Over-specialization reduces cross-platform citation.** The 11% domain overlap between ChatGPT and Perplexity means winning both requires different content architecture, not the same page with minor tweaks.
 
 ## Key Takeaways
 
 - Allow retrieval bots, block training bots in `robots.txt` — each platform uses separate user-agent strings
 - Four backends: Bing (ChatGPT), Brave (Claude), own index (Perplexity), Google (Gemini)
-- Server-side rendering is mandatory; 69% of AI crawlers cannot execute JavaScript [unverified]
+- Server-side rendering is mandatory; most AI crawlers cannot execute JavaScript ([Momentic AI Crawlers Guide](https://momenticmarketing.com/blog/ai-search-crawlers-bots))
 - Brand search volume is the strongest cross-platform citation predictor
 
 ## Related

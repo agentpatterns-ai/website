@@ -63,7 +63,7 @@ File names must be kebab-case and match the concept name.
 Example: progressive-disclosure.md (not ProgressiveDisclosure.md, not prog-disc.md)
 ```
 
-One example is usually enough. Multiple examples risk teaching the agent to interpolate between them rather than follow the rule [unverified]. For constraint rules, a single well-chosen example suffices.
+One example is usually enough. Multiple examples can shift agent focus from the rule to the pattern of the examples themselves, producing outputs that interpolate between cases rather than apply the constraint uniformly. For constraint rules, a single well-chosen example suffices.
 
 ## Pointing at Existing Code (Hints Over Code Samples)
 
@@ -86,6 +86,10 @@ The one case where a code sample is justified: a genuinely novel pattern with no
 ## Placement
 
 Critical format constraints belong in the main instruction file. Reference examples and templates belong in supporting files (skills, referenced documents) loaded on demand. Putting every example inline bloats the system prompt and pushes rules past the reliable attention range.
+
+## Why It Works
+
+Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Research on in-context learning suggests examples activate induction heads — attention components that match and extend prior patterns — giving the model a concrete template to replicate rather than a constraint to interpret ([Dong et al., "A Survey on In-context Learning," 2022](https://arxiv.org/abs/2301.00234)). Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
 
 ## Key Takeaways
 

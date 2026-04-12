@@ -69,7 +69,7 @@ Read the relevant skill before beginning each task.
 
 The skills live in `.github/skills/` or `.claude/skills/` — separate files loaded when needed, not embedded.
 
-The [Agent Skills standard](../standards/agent-skills-standard.md) formalizes this pattern with a portable `SKILL.md` entrypoint format supported across Claude Code, GitHub Copilot, Cursor, and other tools. [unverified]
+The [Agent Skills standard](../standards/agent-skills-standard.md) formalizes this pattern with a portable `SKILL.md` entrypoint format supported across Claude Code, GitHub Copilot, Cursor, and other tools ([agentskills.io](https://agentskills.io)).
 
 ## Self-Contained Skills
 
@@ -121,6 +121,21 @@ Read only the skill matching the requested check before executing.
 ```
 
 Each skill lives in its own file (e.g., `.claude/skills/lint-check.md`) and is loaded only when that specific check runs. A lint-only invocation loads 120 + 350 = 470 tokens instead of 1800.
+
+## Why It Works
+
+Context window size directly affects inference quality. When an agent receives a 2000-token monolithic definition, its attention mechanism must distribute weight across all 2000 tokens — including the 80% irrelevant to the current task. This is attention dilution: critical instructions compete with noise, reducing the probability that the model will weight them correctly ([Marta Fernández García, Feb 2026](https://medium.com/@martia_es/progressive-disclosure-the-technique-that-helps-control-context-and-tokens-in-ai-agents-8d6108b09289)). Irrelevant rules in the same context window can also cause instruction interference — the model enters self-reconciliation mode when rules that don't apply to the current task appear to conflict with rules that do, producing hedged output rather than precise execution. Smaller, focused contexts eliminate both failure modes.
+
+## When This Backfires
+
+Progressive disclosure adds complexity that creates its own failure modes:
+
+- **Skill index rot**: If the definition lists skills by name but the actual skill files drift — renamed, moved, or deleted — the agent will attempt to load a non-existent skill and either fail or fall back to guessing. The index must be kept in sync with the filesystem.
+- **Wrong skill loaded**: Agents rely on their own judgment to select the relevant skill. Ambiguous task descriptions or poorly-named skills cause the agent to load the wrong skill and execute against incorrect procedures.
+- **Orchestration overhead**: Each skill load is an additional read operation. For tasks that genuinely require all skills simultaneously, progressive disclosure adds round-trips without reducing token load.
+- **Self-contained skill violations**: If a skill implicitly depends on another skill being loaded first (shared terminology, referenced templates), the agent may produce inconsistent output when it loads skills in a different order or loads only one.
+
+The pattern is most effective when tasks are clearly scoped and skills are genuinely orthogonal. It degrades when the agent's task space is broad and overlapping.
 
 ## Key Takeaways
 

@@ -94,7 +94,7 @@ This pattern draws on established foundations: Actor Model isolation (1973), Wor
 
 ## Relation to Worktree Isolation
 
-Worktree isolation operates at the process and filesystem level — each agent gets its own working directory. Lane-based queueing operates at the task-scheduling level — each class of work gets its own queue. The two are complementary: worktrees prevent filesystem conflicts between parallel agents; lanes prevent scheduling conflicts between concurrent tasks within a platform. See [Worktree Isolation](../workflows/worktree-isolation.md).
+Worktree isolation operates at the process and filesystem level — each agent gets its own working directory. Lane-based queueing operates at the task-scheduling level — each class of work gets its own queue. The two are complementary: worktrees prevent filesystem conflicts between parallel agents; lanes prevent scheduling conflicts between concurrent tasks within a platform. See [Worktree Isolation](../workflows/worktree-isolation.md) and [/batch and Worktrees](../tools/claude/batch-worktrees.md) for Claude Code's built-in worktree orchestration.
 
 ## Key Takeaways
 

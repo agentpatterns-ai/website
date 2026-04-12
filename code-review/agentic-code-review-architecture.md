@@ -47,9 +47,9 @@ For complex PRs, the agent [maps out its review strategy ahead of time](https://
 
 ## Measured Impact
 
-The agentic architecture produced an [8.1% increase in positive developer feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) despite increased review latency — suggesting developers may value accuracy over speed `[unverified]`.
+The agentic architecture produced an [8.1% increase in positive developer feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) despite increased review latency — [a deliberate trade-off the team describes as worthwhile because meaningful analysis requires computation time](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/).
 
-The system also reportedly maintains [cross-review memory](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), enabling pattern recognition across pull requests rather than treating each as isolated `[unverified]`.
+The system maintains [cross-review memory](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/), enabling pattern recognition across pull requests rather than treating each as isolated — so flagging a pattern in one section can inform future reviews of the same codebase.
 
 ## Architectural Implications
 
@@ -65,6 +65,15 @@ Any AI code review system benefits from the same structural shift:
 Agentic code review requires compute infrastructure for tool-calling loops. GitHub's implementation requires [self-hosted runners for organizations that opted out of GitHub-hosted runners](https://github.blog/changelog/2026-03-05-copilot-code-review-now-runs-on-an-agentic-architecture/). Custom implementations must account for added latency and cost from multiple tool calls per review.
 
 As of March 2026, reviews can be [triggered from the GitHub CLI](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/) via `gh pr edit --add-reviewer @copilot` or by selecting Copilot during `gh pr create` (requires CLI 2.88.0+). See [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md) for details.
+
+## When This Backfires
+
+Agentic code review adds overhead that can outweigh its benefits in several conditions:
+
+- **Small or trivial PRs** — a tool-calling review loop has fixed startup latency that exceeds the value added on single-file or typo-fix PRs. Static diff review is faster and sufficient.
+- **Latency-sensitive pipelines** — teams running sub-minute CI gates will find agentic review's multi-tool round-trips incompatible with their merge velocity targets; the 8.1% quality gain does not compensate for a blocked pipeline.
+- **Self-hosted runner constraints** — GitHub's implementation requires self-hosted runners for organizations that have opted out of GitHub-hosted runners; teams without that infrastructure cannot adopt the feature without operational changes.
+- **Over-reaching architectural comments** — the agent's broader context access can produce low-signal comments on code that is intentionally isolated or handled by conventions the agent does not know; without a custom review persona tuned to project norms, false positives increase reviewer fatigue.
 
 ## Example
 
@@ -85,14 +94,10 @@ The same PR with GitHub Copilot's agentic review can be triggered from the CLI: 
 - Reading linked issues and tracing dependencies enables reviews that evaluate architectural fit, not just line-level correctness
 - The approach produced an 8.1% increase in positive developer feedback despite higher latency
 
-## Unverified Claims
-
-- Developers may value accuracy over speed in agentic code review `[unverified]`
-- Cross-review memory enabling pattern recognition across pull requests `[unverified]`
-
 ## Related
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
@@ -105,3 +110,4 @@ The same PR with GitHub Copilot's agentic review can be triggered from the CLI: 
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions

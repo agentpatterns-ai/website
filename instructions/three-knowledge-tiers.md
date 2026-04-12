@@ -41,11 +41,24 @@ The collection of unverified claims into a dedicated section is intentional. It 
 
 ## Anti-Patterns
 
-**Silent inclusion**: The agent uses training knowledge as fact without sourcing it. Readers cannot distinguish sourced from unsourced claims. This is the dominant failure mode in agent-generated content.
+**Silent inclusion**: The agent uses training knowledge as fact without sourcing it. Readers cannot distinguish sourced from unsourced claims. [Hallucination surveys](https://arxiv.org/html/2509.18970v1) consistently categorize this extrinsic hallucination type — outputs unverifiable against any source — as a primary failure mode in agent-generated content.
 
 **Silent omission**: The agent discards all unsourced knowledge. Correct-but-uncitable information — conventions, tradeoffs, operational patterns — disappears from the output. The document is accurate but thinner than it should be.
 
 **Hedging instead of marking**: The agent writes "the model might prefer..." or "this could possibly..." instead of `[unverified]`. Hedges are invisible to editors and do not surface the claim for review.
+
+## Why It Works
+
+Binary sourced/rejected rules fail because model training knowledge is not uniform — it spans claims the model has seen confirmed across many sources, claims encountered once, and fabrications. Collapsing these into a single "unsourced = rejected" rule discards the first category unnecessarily. The `[unverified]` marker preserves that knowledge while routing it to human review rather than silent discard. Concentrating all flagged claims in one section reduces the cognitive load of audit: an editor reviews a bounded list rather than scanning prose of unknown length.
+
+## When This Backfires
+
+The three-tier pattern adds value only when the unverified claims section is actually reviewed:
+
+- **Unactioned review backlog**: If the "Unverified Claims" section is never processed before publication, it ships with the document and exposes unvalidated assertions to readers.
+- **Tagging discipline erodes under deadline pressure**: Agents operating under token or time constraints tend to skip `[unverified]` tagging, collapsing back to silent inclusion.
+- **Tier 2 and Tier 3 are hard to distinguish**: An agent that cannot accurately introspect on its own confidence may classify hallucinated claims as unverified (Tier 2) rather than rejected (Tier 3), producing a review list that is systematically optimistic.
+- **False confidence from the process itself**: Stakeholders may treat the existence of an "Unverified Claims" section as evidence of rigor even when individual entries are never researched.
 
 ## Example
 
@@ -75,6 +88,20 @@ compared to RLHF-only baselines [unverified].
 ```
 
 The editor can process the Unverified Claims section in one pass — verifying, citing, or removing each claim — rather than re-reading the full document to find unsourced statements.
+
+## Why It Works
+
+The mechanism is audit surface concentration. Inline hedges like "the model might prefer..." scatter uncertainty throughout the document — an editor must re-read the entire output to find everything requiring verification. The `[unverified]` tag with a dedicated collection section creates a single, bounded list: the editor processes one section, not the full document. This mirrors established code review practice, where linting violations are aggregated into a report rather than surfaced one-by-one during reading.
+
+The binary alternative — citing or rejecting — forces agents to omit correct-but-uncitable knowledge. Research on [LLM knowledge awareness](https://arxiv.org/html/2411.14257v2) shows models often hold accurate information that they cannot trace to a specific document. Silent omission discards that signal; explicit tagging preserves it for human judgment.
+
+## When This Backfires
+
+**The section goes unactioned.** If the editorial pipeline does not include a review step for the Unverified Claims section, tagged claims ship anyway. The pattern requires an active triage step — it does not self-enforce.
+
+**Tag volume overwhelms the reviewer.** Agents that lack calibration tend to mark everything uncertain. A document with 15 unverified claims becomes noise rather than signal; the human stops reading the section.
+
+**Context collapses the distinction.** In low-stakes, high-velocity contexts (internal drafts, brainstorming outputs), the overhead of tagging and reviewing may exceed the benefit. The pattern is most valuable where accuracy matters more than throughput.
 
 ## Key Takeaways
 

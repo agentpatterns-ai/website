@@ -17,7 +17,9 @@ Long agent sessions degrade as context fills. Early instructions get pushed out.
 
 The Ralph Wiggum Loop addresses this by design: each iteration starts with a clean context window, reads persistent state from disk, completes a bounded unit of work, and writes results back before restarting. State lives in files, not in conversation history.
 
-Named and popularized by Geoff Huntley [unverified], the pattern is now widely used for unattended and long-running agent workflows [unverified].
+It works because LLM quality degrades non-linearly past roughly 60–70% context fill — a range practitioners call the ["dumb zone"](../context-engineering/context-window-dumb-zone.md). At that point, compaction begins discarding tokens to make room for new content; if the discarded tokens include original instructions or accumulated conventions, instruction-following deteriorates. Restarting with a fresh window prevents compaction entirely, keeping every iteration at full capacity.
+
+Named and popularized by Geoff Huntley — see [ghuntley.com/loop](https://ghuntley.com/loop/) and [ghuntley/how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum) — the pattern is now widely used for unattended and long-running agent workflows.
 
 ## Cycle Structure
 
@@ -69,6 +71,15 @@ Running one continuous session across many tasks means:
 - Early session state colors later decisions
 - A failure midway requires recovering from an unknown state
 - No natural verification point between tasks
+
+## When This Backfires
+
+The pattern assumes each iteration can be meaningfully bounded and verified. Several conditions break that assumption:
+
+- **Unbounded tasks**: If a single unit of work cannot be completed in one context window, the loop stalls or produces partial output every cycle. Decompose further before looping.
+- **No progress signal**: Without a reliable completion check (test suite, task-list marker, CI result), the loop can cycle indefinitely on a task it cannot solve, consuming tokens without converging.
+- **Shared mutable state**: If multiple concurrent loop iterations write to the same files, later iterations may overwrite earlier progress. Use per-iteration output paths or explicit locking.
+- **Context-sensitive tasks**: Tasks requiring deep continuity — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
 
 ## Example
 

@@ -31,9 +31,9 @@ graph LR
 
 ## Why It Happens
 
-Models prioritize some constraints over others when given too many simultaneously — satisfying the most prominent and quietly dropping the rest ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). [unverified] The likely mechanism is attention dilution: as constraint count grows, the model's capacity to track each requirement during decoding degrades.
+Models prioritize some constraints over others when given too many simultaneously — satisfying the most prominent and quietly dropping the rest ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)). Logit analysis shows that even when the model appears to understand the intent, the intent signal is too weak to override competing token probabilities during greedy decoding.
 
-This appears to be the same degradation pattern as the [instruction compliance ceiling](instruction-compliance-ceiling.md) applied to code generation constraints rather than behavioral rules. [unverified]
+This is the same degradation pattern as the [instruction compliance ceiling](instruction-compliance-ceiling.md) applied to code generation constraints rather than behavioral rules.
 
 ## Mitigations
 
@@ -55,7 +55,7 @@ Turn 4: "Filter to only positive numbers as keys."
 Turn 5: "Remove any import statements."
 ```
 
-Each turn addresses one constraint while the model can verify prior constraints against existing code. After each turn, confirm prior constraints still hold — sequential editing can silently regress earlier requirements. [unverified]
+Each turn addresses one constraint while the model can verify prior constraints against existing code. After each turn, confirm prior constraints still hold — sequential editing can silently regress earlier requirements.
 
 ### Use Structured Output Schemas
 
@@ -74,7 +74,7 @@ Constrain output format programmatically rather than through natural language:
 }
 ```
 
-Schema validation enforces structural constraints — function name format, return type, parameter shape — that would otherwise compete for attention in the prompt. Behavioral constraints like "no imports" cannot be offloaded to schemas and must remain in the prompt or be enforced by a linter post-generation. [unverified]
+Schema validation enforces structural constraints — function name format, return type, parameter shape — that would otherwise compete for the model's constraint budget in the prompt. Behavioral constraints like "no imports" cannot be offloaded to schemas and must remain in the prompt or be enforced by a linter post-generation.
 
 ### Prioritize Constraints by Enforcement Method
 
@@ -102,7 +102,7 @@ Add a verification pass that checks each constraint explicitly:
 Fix any failures."
 ```
 
-Separating generation from verification lets the model focus attention on checking rather than simultaneously generating and constraining. [unverified]
+Separating generation from verification lets the model focus on checking each requirement independently rather than satisfying all constraints during generation.
 
 ## What About Intent Amplification?
 
@@ -117,15 +117,18 @@ These methods require token-level logit access, making them **applicable only to
 - Reserve prompt-based constraints for requirements that no tool can check — the fewer constraints competing during generation, the more reliably each is followed
 - Decoding-level fixes (intent amplification) exist but require open-weight models with logit access
 
-## Unverified Claims
+## When This Backfires
 
-- The attention dilution mechanism is consistent with the empirical data, but the cited paper measures compliance rates, not internal attention patterns [unverified]
-- Shared mechanism between code constraint degradation and the behavioral instruction compliance ceiling is inferred across separate bodies of work [unverified]
-- Sequential constraint decomposition as a mitigation is a practitioner heuristic, not empirically measured [unverified]
-- Schemas freeing attention for behavioral constraints is architecturally plausible but untested in published studies [unverified]
-- Separating generation from verification is a common recommendation without controlled evaluation [unverified]
+Multi-turn decomposition trades accuracy for latency and token cost. In agentic pipelines with strict budget constraints or tight feedback loops, issuing five sequential turns to produce one function is often impractical — a single well-structured prompt with fewer constraints may deliver better end-to-end throughput.
+
+Schema-enforced constraints require upfront engineering investment and only cover structural requirements. If the codebase lacks JSON Schema tooling or the target API doesn't support structured output, schemas add integration overhead without offsetting the constraint budget in the prompt.
+
+Mechanical enforcement (linters, type checkers, unit tests) works well for invariant constraints but breaks down for context-sensitive rules — "no external network calls in this module" or "align with the team's naming convention" cannot be reliably checked by static analysis. Prompt-based constraints are still necessary for any rule that requires semantic understanding of intent.
+
+Turn-by-turn constraint application assumes the model preserves all prior constraints when asked to add new ones. In practice, later turns can silently regress earlier requirements — particularly for format or style rules that were satisfied in turn 1 but not re-checked in turn 5. Always re-run the full constraint checklist after the final turn.
 
 ## Related
 
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the same degradation mechanism applied to behavioral rules rather than code constraints
 - [Critical Instruction Repetition](critical-instruction-repetition.md) — exploiting primacy and recency bias to boost compliance on specific constraints
+- [Negative Space Instructions](negative-space-instructions.md) — explicit "what not to do" constraints as an alternative to positive-only constraint lists

@@ -21,14 +21,14 @@ A spec precise enough to reliably generate correct code must encode type constra
 
 | Failure | Description | Outcome |
 |---|---|---|
-| **Spec slop** [unverified] | Low-precision prose written at speed | Unreliable agent output; assumptions propagate |
+| **Spec slop** | Low-precision prose written at speed | Unreliable agent output; assumptions propagate |
 | **Over-specification** | Excessive detail accumulates beyond model capacity | Adherence to individual instructions degrades as spec grows |
 
 Scott Logic found Spec Kit produced 2,000+ lines of Markdown per feature — still introducing bugs — while iterative prompting produced working code ten times faster ([Scott Logic, 2025](https://blog.scottlogic.com/2025/11/26/putting-spec-kit-through-its-paces-radical-idea-or-reinvented-waterfall.html)). Addy Osmani names the opposing failure the “curse of instructions”: as detail accumulates, adherence to individual instructions degrades ([Osmani, O’Reilly](https://www.oreilly.com/radar/how-to-write-a-good-spec-for-ai-agents/)). The sweet spot is narrow.
 
 ## Complexity Is Conserved
 
-Spec-driven development relocates complexity rather than eliminating it — planning replaces chaos, but total work doesn’t shrink ([Thoughtworks, 2025](https://www.thoughtworks.com/en-us/insights/blog/agile-engineering-practices/spec-driven-development-unpacking-2025-new-engineering-practices)). The Lobsters community measured 3,388 lines of spec producing 16,063 lines of Elixir [unverified] — precision was high, but so was the writing burden.
+Spec-driven development relocates complexity rather than eliminating it — planning replaces chaos, but total work doesn’t shrink ([Thoughtworks, 2025](https://www.thoughtworks.com/en-us/insights/blog/agile-engineering-practices/spec-driven-development-unpacking-2025-new-engineering-practices)).
 
 ```mermaid
 graph LR
@@ -39,7 +39,7 @@ graph LR
 
 ## What Replaces Verbose Specs
 
-Formal enforcement outperforms documentation for precision-sensitive work [unverified]:
+Formal enforcement gives precision-sensitive work a verification step that prose cannot:
 
 | Mechanism | Encodes | Verifiable |
 |---|---|---|
@@ -53,7 +53,7 @@ Reserve prose for what has no formal equivalent: business rationale, priority tr
 
 ## The Nuance: Spec Is Not the Same as Code
 
-A spec covers all possible implementations; code is one. A spec is more abstract, transferable, and auditable than code [unverified]. The claim is not that specs are useless — it is that specs precise enough to drive reliable generation converge toward code-like structure, and the “simpler than writing code” argument collapses.
+A spec covers all possible implementations; code is one. A spec is more abstract and transferable than code, but precision requirements for reliable generation pull it toward code-like structure. The claim is not that specs are useless — it is that specs precise enough to drive reliable generation converge toward code-like structure, and the “simpler than writing code” argument collapses.
 
 ## Example
 
@@ -66,10 +66,6 @@ After several iterations to improve agent reliability, the spec becomes:
 > "POST /auth/login accepts `{ email: string, password: string }`. Validate email format with RFC 5322 regex. Hash password using bcrypt with cost factor 12. Return 200 with `{ token: string, expires_at: ISO8601 }` on success. Return 401 with `{ error: "invalid_credentials" }` for unknown email or wrong password. Rate-limit to 5 attempts per IP per 15 minutes using a sliding window; return 429 on breach. Log all attempts to the auth audit table with timestamp, IP, and outcome."
 
 The second version is precise enough to drive reliable generation — but it is also a type signature, a schema, a rate-limiting algorithm spec, and a logging requirement in prose form. The complexity was not eliminated; it was relocated from code into the spec.
-
-## Unverified Claims
-
-- **“Spec slop”** is original framing introduced as a descriptive term; it does not appear in the indexed sources.
 
 ## Related
 

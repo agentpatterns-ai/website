@@ -14,18 +14,22 @@ tags:
 
 Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs -- different tool call sequences, different phrasings, different solution paths. Equality checks generate false negatives on correct behavior and false positives on lucky runs.
 
-Behavioral testing replaces "did the agent produce output X?" with "did the agent make good decisions and reach a valid end-state?" [Source: [From Prompts to Production](https://www.infoq.com/articles/prompts-to-production-playbook-for-agentic-development/)] [unverified]
+Behavioral testing replaces "did the agent produce output X?" with "did the agent make good decisions and reach a valid end-state?" [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+
+## Why It Works
+
+Agents solve problems through search — iteratively selecting tools, observing results, and updating plans. The same task admits multiple valid paths because the solution space is under-constrained. Equality checks penalize valid alternative paths as false negatives and reward lucky runs as false positives. End-state evaluation removes the path constraint: if the final state satisfies acceptance criteria, the agent succeeded regardless of route. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Separate Deterministic from Agentic Components
 
-Not every part of an agent system needs behavioral testing. A capability matrix isolates what to test how:
+Not every part of an agent system needs behavioral testing. A capability matrix isolates what to test and how:
 
 | Component type | Testing method | Example |
 |---|---|---|
 | Deterministic | Traditional unit/integration tests | Tool input parsing, output formatting, API call construction |
 | Agentic | Behavioral evaluation | Decision-making, tool selection, multi-step reasoning |
 
-Mock tools to test agent reasoning without external dependencies. Tool responses comprise most agent conversation tokens, so evaluation must also cover tool output quality -- concise, filtered to relevant data, and well-formatted. [Source: [The Canonical Agent Architecture](https://www.braintrust.dev/blog/agent-while-loop)] [unverified]
+Mock tools to test agent reasoning without external dependencies. Evaluation must also cover tool output quality — concise, filtered, well-formatted — because tool responses shape the context the agent reasons over in subsequent steps.
 
 ## Three Grading Methods
 
@@ -50,7 +54,7 @@ RUBRIC = """Score the agent's response on each dimension (0.0-1.0):
 Respond with JSON: {"scores": {...}, "pass": true/false, "explanation": "..."}"""
 ```
 
-Track precision and recall of LLM graders against human assessments separately -- raw agreement metrics are misleading when pass/fail classes are imbalanced.
+Track precision and recall of LLM graders against human assessments separately — raw agreement metrics mislead when pass/fail classes are imbalanced.
 
 ## Three-Part Eval Foundation
 
@@ -65,25 +69,23 @@ graph LR
 
 **Representative dataset**: Start with ~20 queries. Small-sample evaluation catches dramatic effect sizes (e.g., 30% to 80% from a prompt change) without a large dataset upfront. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-**Scorer library**: Reusable grading functions -- code-based checkers, LLM rubric evaluators, and composite scorers. Each returns a structured result (score, pass/fail, explanation).
+**Scorer library**: Reusable grading functions — code-based checkers, LLM rubric evaluators, composite scorers — each returning a structured result (score, pass/fail, explanation).
 
-**Feedback loop**: Every model change, prompt edit, or tool modification runs through the same dataset and scorers. Regressions are caught before deployment.
+**Feedback loop**: Every model change, prompt edit, or tool modification runs through the same dataset and scorers, catching regressions before deployment.
 
 ## Define Acceptable Variance
 
-Pass rate thresholds are not fixed at 100%. They depend on the failures you are willing to tolerate. This is a product decision, not an engineering one.
+Pass rate thresholds are not fixed at 100% — they depend on the failures you are willing to tolerate. This is a product decision.
 
-Define acceptable ranges rather than expecting determinism:
-
-- **File editing agent**: 95% pass rate acceptable (occasional formatting differences are tolerable)
+- **File editing agent**: 95% acceptable (formatting differences tolerable)
 - **Security scanning agent**: 99.5% minimum (missed vulnerabilities are not tolerable)
-- **Research summarization agent**: 85% acceptable (phrasing variance is expected)
+- **Research summarization agent**: 85% acceptable (phrasing variance expected)
 
-When pass rates drop below thresholds, the eval suite blocks deployment -- but review thresholds as agent capabilities evolve.
+When pass rates drop below thresholds, the eval suite blocks deployment. Review thresholds as agent capabilities evolve.
 
 ## Evaluate End-State, Not Process
 
-For agents that modify persistent state across multiple turns, focus evaluation on final outcomes rather than intermediate steps. A longer path that reaches the correct state beats a shorter path that does not.
+For agents that modify persistent state across multiple turns, focus evaluation on final outcomes. A longer path that reaches the correct state beats a shorter path that does not.
 
 See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for detailed implementation.
 
@@ -131,7 +133,16 @@ print(f"Deterministic: {deterministic['passed']} | Behavioral: {behavioral}")
 
 ## Multi-Agent Considerations
 
-Small prompt changes in one agent unpredictably alter subagent behavior. Monitor interaction patterns across the full system and establish golden trajectory baselines to catch regressions across decision points. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)] [unverified]
+Small prompt changes in one agent unpredictably alter subagent behavior. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)] Monitor interaction patterns across the full system and establish golden trajectory baselines to catch regressions across decision points.
+
+## When This Backfires
+
+Behavioral testing pays off only when outputs are genuinely non-deterministic:
+
+- **Constrained function-calling agents**: Structured JSON with a fixed schema needs equality checks, not LLM grading. Behavioral evaluation adds cost without signal.
+- **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve behavioral evaluation for the agentic layer; use code-based checks for structured outputs at scale.
+- **Uncalibrated thresholds**: Thresholds set without real failure data either block valid outputs or pass defective ones. Threshold selection requires actual failure history.
+- **Uncalibrated LLM judge**: An LLM grader not calibrated against human expert assessments introduces systematic bias that invalidates the entire eval pipeline.
 
 ## Key Takeaways
 
@@ -141,11 +152,6 @@ Small prompt changes in one agent unpredictably alter subagent behavior. Monitor
 - Define pass rate thresholds as a product decision, not an engineering target
 - Evaluate end-state and decision quality, not execution paths
 - In multi-agent systems, monitor cross-agent interaction patterns
-
-## Unverified Claims
-
-- Tool responses comprise the majority of agent conversation tokens [unverified]
-- Small prompt changes in one agent unpredictably alter subagent behavior [unverified]
 
 ## Related
 
@@ -162,3 +168,6 @@ Small prompt changes in one agent unpredictably alter subagent behavior. Monitor
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
+- [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md)
+- [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md)
+- [Pre-Completion Checklists for AI Agent Development](pre-completion-checklists.md)

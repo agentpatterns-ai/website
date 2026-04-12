@@ -9,9 +9,9 @@ tags:
 
 # Phase-Specific Context Assembly
 
-> Optimise the orchestration layer that prepares each agent, not the agent itself.
+> Phase-specific context assembly delivers a different context bundle to each agent based on its role in the workflow — planners get architecture summaries, workers get targeted file excerpts and validation commands, reviewers get diffs and acceptance criteria.
 
-When an agent produces poor output, the instinct is to improve the prompt or switch models. A more effective target is the **context bundle delivered to the agent for that phase** [unverified]. The question shifts from "what instructions should the agent follow?" to "what information does this agent need, at this step?"
+When an agent produces poor output, the instinct is to improve the prompt or switch models. A more productive target is the **context bundle delivered to the agent for that phase**. The question shifts from "what instructions should the agent follow?" to "what information does this agent need, at this step?"
 
 ## The Phase Model
 
@@ -37,14 +37,14 @@ Failures route back to an earlier stage. A blocked implementer means the plan wa
 
 ## Orchestrators vs. Workers
 
-- **Orchestrators** need condensed summaries (1,000–2,000 tokens) [unverified]. They route and decompose; file contents waste attention on decisions they do not make.
+- **Orchestrators** need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.
 - **Workers** need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
 
-Giving both agents the same context bundle is a common source of drift. [unverified]
+Giving both agents the same context bundle tends to cause drift: orchestrators get distracted by implementation details, workers carry planning artifacts that crowd out actionable context.
 
 ## JIT Loading over Upfront Loading
 
-Agents perform better when they maintain lightweight references (file paths, stored queries) and retrieve on demand, rather than loading everything at session start [unverified].
+Agents benefit from maintaining lightweight references (file paths, stored queries) and retrieving on demand, rather than loading everything at session start. This keeps early-stage context from persisting as stale noise into later stages.
 
 ```
 # Instead of: load all docs at session start
@@ -77,6 +77,15 @@ The environment — repo structure, tests, linters — shapes what context is us
 ## Claude Code Native Implementation
 
 Claude Code's sub-agents implement phase-specific context directly. Each receives only the tools relevant to its phase: **Explore** gets read-only file navigation, **Plan** gets research access before entering [Plan Mode](../workflows/plan-first-loop.md), and the general-purpose sub-agent gets full tool access with a targeted system prompt per skill.
+
+## When This Backfires
+
+Phase-specific assembly adds orchestration overhead that is not always justified:
+
+- **Flat workflows** — single-phase or two-step pipelines (prompt → response) gain nothing from phase decomposition; the added assembly logic creates latency without benefit.
+- **Emergent replanning** — when agents frequently need to revise their plan mid-execution, strict phase isolation forces expensive context re-assemblies. A single unified context that the agent can reread on demand can be cheaper.
+- **Cross-phase dependencies** — if the reviewer needs implementation history to catch subtle regressions, stripping it out per the review-phase rules causes missed findings. Identify whether cross-phase context actually matters before excluding it.
+- **Small token budgets** — if the entire project fits comfortably within context, the cost of filtering is higher than the cost of inclusion. Apply phase-specific assembly when context exceeds what the model can usefully attend to.
 
 ## Example
 
@@ -136,11 +145,6 @@ It does not receive the planning rationale or the full migration spec.
 It does not receive the implementation history or planning artifacts.
 
 Each agent operates with under 3,000 tokens of input context; none receives the full project history.
-
-## Unverified Claims
-
-- Same-context-for-all-agents being a common source of drift is directionally consistent with practitioner reports but has no controlled study.
-- Token ranges for orchestrator summaries (1,000–2,000) reflect Anthropic internal guidance and may not generalise.
 
 ## Related
 

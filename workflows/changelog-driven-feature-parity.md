@@ -12,7 +12,7 @@ tags:
 
 ## Why Changelog Tracking
 
-Official documentation reflects current state, not arrival order. When you ask "does Copilot CLI support hooks now?" the answer from the docs is yes. What the docs don't show: Claude Code shipped hooks in v2.0.x [unverified]; Copilot CLI matched with `preToolUse` in [v0.0.396 (2026-01-27)](https://github.com/github/copilot-cli/releases). That multi-month gap matters for your adoption planning.
+Official documentation reflects current state, not arrival order. When you ask "does Copilot CLI support hooks now?" the answer from the docs is yes. What the docs don't show: Claude Code shipped hooks well before Copilot CLI matched with `preToolUse` in [v0.0.396 (2026-01-27)](https://github.com/github/copilot-cli/releases). That multi-month gap matters for your adoption planning.
 
 Changelog-driven parity tracking surfaces:
 
@@ -43,26 +43,26 @@ As of 2026-03. Sources: [Claude Code changelog](https://code.claude.com/docs/en/
 
 | Capability | Claude Code | Copilot CLI | Status |
 |---|---|---|---|
-| MCP server support | v2.0.x [unverified] | v0.0.337 (2025-10-08) | Both |
-| [Plan mode](plan-first-loop.md) | v2.0.x [unverified] (Shift+Tab) | v0.0.387 (2026-01-20, `/plan`) | Both |
-| Skills / slash commands | v2.0.x [unverified] (`SKILL.md` auto-discovery) | v0.0.371 (2025-12-18, `~/.copilot/skills/`) | Both |
-| Hooks (lifecycle interception) | v2.0.x [unverified] (16+ events) | v0.0.396 (2026-01-27, `preToolUse`) | Both |
-| Plugin / extension system | Skills + marketplace [unverified] | v0.0.392 (2026-01-22, `/plugin`) | Both |
-| Parallel sub-agents | v2.0.x [unverified] (`/batch`) | v0.0.374 (2026-01-02, Explore/Task agents) | Both |
-| Custom agent definitions | v2.0.x [unverified] (`.claude/agents/*.md`) | v0.0.353 (2025-10-28, `.github/agents/`) | Both |
-| Permission system / autopilot | v2.0.x [unverified] (hooks block with exit code 2) | v0.0.351 (2025-10-24); v0.0.399 `/allow-all` | Both |
+| MCP server support | pre-2026 (exact version not in public changelog) | v0.0.337 (2025-10-08) | Both |
+| [Plan mode](plan-first-loop.md) | pre-2026 (Shift+Tab) | v0.0.387 (2026-01-20, `/plan`) | Both |
+| Skills / slash commands | pre-2026 (`SKILL.md` auto-discovery) | v0.0.371 (2025-12-18, `~/.copilot/skills/`) | Both |
+| Hooks (lifecycle interception) | pre-2026 (14+ documented events) | v0.0.396 (2026-01-27, `preToolUse`) | Both |
+| Plugin / extension system | Skills + marketplace | v0.0.392 (2026-01-22, `/plugin`) | Both |
+| Parallel sub-agents | pre-2026 (`/batch`) | v0.0.374 (2026-01-02, Explore/Task agents) | Both |
+| Custom agent definitions | pre-2026 (`.claude/agents/*.md`) | v0.0.353 (2025-10-28, `.github/agents/`) | Both |
+| Permission system / autopilot | pre-2026 (hooks block with exit code 2) | v0.0.351 (2025-10-24); v0.0.399 `/allow-all` | Both |
 | Cross-session memory | v2.1.59 (`/memory`) | v0.0.384 (2026-01-16, `store_memory` tool) | Both |
-| Context compaction | v2.0.x [unverified] (auto-compact) | v0.0.374 (2026-01-02, 95% threshold) | Both |
+| Context compaction | pre-2026 (auto-compact) | v0.0.374 (2026-01-02, 95% threshold) | Both |
 | Multi-model support | v2.1.68 (model picker) | v0.0.341+ (Claude, GPT, Gemini) | Both |
-| Remote / background delegation | v2.1.51 [unverified] (`claude remote-control`) | v0.0.353 (`/delegate`); v0.0.384 (`&` prefix) | Both |
-| Worktree isolation | v2.1.50+ [unverified] (`--worktree`, WorktreeCreate/Remove hooks) | — | Claude Code only |
-| Auto-decomposition into parallel worktrees | v2.1.63 [unverified] (`/batch`, 5–30 units) | — | Claude Code only |
-| [Agent teams](../tools/claude/agent-teams.md) (shared task list, direct messaging) | v2.0.x [unverified] experimental | — | Claude Code only |
-| HTTP hooks (POST/JSON via hooks) | v2.1.63 [unverified] | — | Claude Code only |
-| Voice mode (STT, push-to-talk) | v2.1.69+ [unverified] (20 languages) | — | Claude Code only |
-| `/loop` with [cron scheduling](../tools/claude/session-scheduling.md) | v2.1.71 [unverified] | — | Claude Code only |
-| Extended thinking effort controls | v2.1.x [unverified] | — | Claude Code only |
-| [Agent SDK](../tools/claude/agent-sdk.md) (TypeScript + Python) | v2.0.x [unverified] | — | Claude Code only |
+| Remote / background delegation | pre-2026 (`claude remote-control`; `/remote-control` in v2.1.79) | v0.0.353 (`/delegate`); v0.0.384 (`&` prefix) | Both |
+| Worktree isolation | pre-2026 (`--worktree`, WorktreeCreate/Remove hooks) | — | Claude Code only |
+| Auto-decomposition into parallel worktrees | pre-2026 (`/batch`, 5–30 units) | — | Claude Code only |
+| [Agent teams](../tools/claude/agent-teams.md) (shared task list, direct messaging) | pre-2026, experimental | — | Claude Code only |
+| HTTP hooks (POST/JSON via hooks) | v2.1.76+ (`type: "http"` on WorktreeCreate hook) | — | Claude Code only |
+| Voice mode (STT, push-to-talk) | v2.1.69+ (20 languages) | — | Claude Code only |
+| `/loop` with [cron scheduling](../tools/claude/session-scheduling.md) | pre-2026 | — | Claude Code only |
+| Extended thinking effort controls | v2.1.80+ (`effort` frontmatter field) | — | Claude Code only |
+| [Agent SDK](../tools/claude/agent-sdk.md) (TypeScript + Python) | pre-2026 | — | Claude Code only |
 | `/research` command (exportable reports) | — | v0.0.417 (2026-02-25) | Copilot CLI only |
 | `/review` command (built-in code review agent) | — | v0.0.388 (2026-01-20) | Copilot CLI only |
 | `/chronicle` (standup / session history) | — | v0.0.419 (2026-02-27) | Copilot CLI only |
@@ -75,9 +75,9 @@ As of 2026-03. Sources: [Claude Code changelog](https://code.claude.com/docs/en/
 
 ### Hooks
 
-Claude Code ships a hooks system with ~16 lifecycle events: `PreToolUse`, `PostToolUse`, `Stop`, `SubagentStart`, and others. An exit code of `2` from a hook blocks the tool call. This covers deny, modify, and notification patterns.
+Claude Code ships a hooks system with 14+ lifecycle events (per the [Claude Code changelog](https://code.claude.com/docs/en/changelog)): `PreToolUse`, `PostToolUse`, `Stop`, `SubagentStart`, and others. An exit code of `2` from a hook blocks the tool call. This covers deny, modify, and notification patterns.
 
-Copilot CLI v0.0.396 added `preToolUse` (deny/modify); v0.0.401 added `agentStop` and `subagentStop`; v0.0.422 added personal hooks and startup hooks. The Copilot CLI surface is ~4 confirmed events [unverified] vs Claude Code's ~16 [unverified]. The mechanisms are equivalent; the coverage differs.
+Copilot CLI v0.0.396 added `preToolUse` (deny/modify); v0.0.401 added `agentStop` and `subagentStop`; v0.0.422 added personal hooks and startup hooks. The Copilot CLI surface is approximately 5 confirmed events vs Claude Code's 14+ documented events (per the [Claude Code changelog](https://code.claude.com/docs/en/changelog)). The mechanisms are equivalent; the coverage differs.
 
 Source: [Copilot CLI releases](https://github.com/github/copilot-cli/releases); [Claude Code changelog](https://code.claude.com/docs/en/changelog).
 
@@ -97,7 +97,7 @@ Both tools separate planning from execution:
 - Claude Code: Shift+Tab enters read-only analysis mode before code changes
 - Copilot CLI v0.0.387: `/plan` with a dedicated panel; v0.0.415 adds plan approval menu with autopilot and fleet options
 
-Copilot CLI's plan mode shipped significantly later than Claude Code's [unverified: exact gap requires precise Claude Code v2.0.x release date], with a more structured approval UI.
+Copilot CLI's plan mode (v0.0.387, January 2026) shipped after Claude Code's Shift+Tab plan mode, which predates the public changelog window (pre-2026), with a more structured approval UI.
 
 ## Keeping the Table Current
 
@@ -123,29 +123,13 @@ When you see a tool-specific feature appear in the other tool's changelog, updat
 - Copilot CLI closed most major gaps between late 2025 and early 2026 — a 4–6 month lead time from idea to parity across core primitives
 - Semantic equivalence analysis matters more than keyword matching; "Extensions" and "skills + hooks" describe different implementations of the same capability
 
-## Unverified Claims
+## When This Backfires
 
-- Claude Code MCP server support shipped in v2.0.x [unverified]
-- Claude Code Plan mode shipped in v2.0.x [unverified]
-- Claude Code Skills / slash commands shipped in v2.0.x [unverified]
-- Claude Code Hooks (lifecycle interception) shipped in v2.0.x with 16+ events [unverified]
-- Claude Code Plugin / extension system with skills + marketplace [unverified]
-- Claude Code Parallel sub-agents shipped in v2.0.x [unverified]
-- Claude Code Custom agent definitions shipped in v2.0.x [unverified]
-- Claude Code Permission system / autopilot shipped in v2.0.x [unverified]
-- Claude Code Context compaction shipped in v2.0.x [unverified]
-- Claude Code Remote / background delegation shipped in v2.1.51 [unverified]
-- Claude Code Worktree isolation shipped in v2.1.50+ [unverified]
-- Claude Code Auto-decomposition into parallel worktrees shipped in v2.1.63 [unverified]
-- Claude Code [Agent teams](../tools/claude/agent-teams.md) (shared task list, direct messaging) shipped in v2.0.x [unverified]
-- Claude Code HTTP hooks shipped in v2.1.63 [unverified]
-- Claude Code Voice mode shipped in v2.1.69+ with 20 languages [unverified]
-- Claude Code `/loop` with [cron scheduling](../tools/claude/session-scheduling.md) shipped in v2.1.71 [unverified]
-- Claude Code Extended thinking effort controls shipped in v2.1.x [unverified]
-- Claude Code [Agent SDK](../tools/claude/agent-sdk.md) (TypeScript + Python) shipped in v2.0.x [unverified]
-- Copilot CLI hooks surface has ~4 confirmed events [unverified]
-- Claude Code hooks surface has ~16 events [unverified]
-- Exact plan mode gap requires precise Claude Code v2.0.x release date [unverified]
+Changelog-driven parity tracking is only as good as the changelogs themselves:
+
+- **Silent features**: Both tools frequently ship capabilities without changelog entries or under generic labels like "minor improvements." Version-pinning a feature to a specific release may be incorrect if it landed earlier via a quiet update.
+- **Semantic equivalence disputes**: Deciding that "Claude Code skills + hooks" is functionally equivalent to "Copilot CLI Extensions" requires judgment calls that other practitioners may contest. The table encodes one perspective; implementations differ in ways that matter for specific use cases.
+- **Staleness rate**: Both tools ship weekly or faster. A parity matrix accurate today may misclassify features as "tool-specific" within a week. Treat the table as a snapshot requiring regular refresh, not a durable reference.
 
 ## Example
 
@@ -157,7 +141,7 @@ Copilot CLI v0.0.422 (released 2026-02-14) includes the entry: "Add personal hoo
 
 **Step 3 — Update the detail section.** In **Key Cross-Matches in Detail → Hooks**, add: "v0.0.422 added personal hooks and startup hooks."
 
-**Step 4 — Re-evaluate coverage delta.** Claude Code has ~16 hook events [unverified]; Copilot CLI now has `preToolUse`, `agentStop`, `subagentStop`, personal hooks, and startup hooks (~5 confirmed). The coverage gap remains but is narrowing.
+**Step 4 — Re-evaluate coverage delta.** Claude Code has 14+ documented hook events (per the [Claude Code changelog](https://code.claude.com/docs/en/changelog)); Copilot CLI now has `preToolUse`, `agentStop`, `subagentStop`, personal hooks, and startup hooks (~5 confirmed). The coverage gap remains but is narrowing.
 
 No Status column change required. The detail section is updated and the gap delta is recorded.
 
@@ -169,6 +153,7 @@ gh api repos/github/copilot-cli/releases/latest --jq '.body' | head -40
 ## Related
 
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
+- [CLI → IDE → GitHub: Context Ladder](cli-ide-github-context-ladder.md)
 - [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md)
 - [Worktree Isolation](worktree-isolation.md)
 - [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)

@@ -21,7 +21,7 @@ Rules:
 - Both relative and absolute paths are supported
 - Relative paths resolve from the importing file, not the working directory
 - Imports nest up to five levels deep
-- First encounter triggers an approval dialog; declined imports stay disabled
+- First encounter triggers an approval dialog; declined imports stay disabled and the dialog does not reappear ([docs](https://code.claude.com/docs/en/memory#import-additional-files))
 
 ```text
 # CLAUDE.md
@@ -84,7 +84,7 @@ Use [worktrees](../workflows/worktree-isolation.md) for experimental work.
 Check subdirectory CLAUDE.md files — auth code has additional constraints.
 ```
 
-`.github/copilot-instructions.md` must duplicate the shared content because Copilot has no equivalent syntax. The drift surface is small and explicit.
+[`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) must duplicate the shared content because Copilot has no equivalent syntax. The drift surface is small and explicit.
 
 User-specific preferences stay out of version control by importing from `~/.claude/`:
 
@@ -103,9 +103,9 @@ The import reference is checked in; the file it points to stays local. Teammates
 | Claude Code (alternative) | `.claude/rules/*.md` with `paths` frontmatter | Path-scoped rules, demand-loaded |
 | GitHub Copilot | None | Hierarchical discovery: nested AGENTS.md, `applyTo` globs in `.github/instructions/` |
 | OpenAI Codex | None | Directory traversal + concatenation root-down |
-| Cursor | `@file` within `.cursor/rules/*.mdc` | Context attachment, not import expansion [unverified] |
+| Cursor | `@file` within `.cursor/rules/*.mdc` | Context attachment (referenced file appended as context at rule evaluation, not expanded inline into the rule body) |
 
-**Failure mode for unsupported tools**: `@AGENTS.md` in a Copilot instructions file passes through as literal Markdown text [unverified]. The model may attempt to interpret it as a file path or ignore it — there is no error.
+**Failure mode for unsupported tools**: `@AGENTS.md` in a Copilot instructions file is not a supported directive — it passes through as literal Markdown text. The model may attempt to interpret it as a file path or ignore it — there is no error.
 
 ## Example: Shared Base with Tool-Specific Extends
 
@@ -147,18 +147,20 @@ Run `pnpm test` before committing. All tests must pass.
 
 Both CLAUDE.md files stay short; shared content lives once.
 
+## When This Backfires
+
+- **Silent broken imports**: renaming or moving an imported file breaks the reference without any error. Claude silently loads fewer instructions than expected — the failure is invisible.
+- **Approval-dialog friction**: the first-use approval dialog blocks imports in headless or CI contexts where there is no interactive session to click through.
+- **Nesting limit**: import chains are capped at five levels. A deeply composed instruction set that exceeds this limit is truncated at load time with no warning.
+- **Tilde expansion is unreliable**: `@~/.claude/file.md` silently fails in some configurations (closed as NOT_PLANNED: [Issue #8765](https://github.com/anthropics/claude-code/issues/8765)); absolute paths are the only reliable workaround.
+
 ## Key Takeaways
 
 - Claude Code's `@path` import syntax is shipped and documented — imported files load at session start alongside CLAUDE.md
 - Tilde expansion (`@~/...`) is unreliable; use absolute paths for home-directory imports
 - Imports and `.claude/rules/` are complementary, not alternatives — imports for external content, rules for path-scoped conventions
 - GitHub Copilot, OpenAI Codex, and AGENTS.md standard do not support file inclusion — modularity comes from hierarchical discovery, not imports
-- Unsupported `@`-syntax in other tools passes through as literal text with no error
-
-## Unverified Claims
-
-- Declined import approvals cannot be re-enabled without manually editing a configuration file — the approval dialog does not re-appear.
-- Cursor's `@file` reference in `.cursor/rules/*.mdc` files attaches context at rule-evaluation time rather than expanding the referenced file's content inline in the rule body.
+- Unsupported `@`-syntax in other tools is not processed — it either appears as literal text or is silently ignored, with no error
 
 ## Related
 

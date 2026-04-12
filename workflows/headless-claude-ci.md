@@ -134,3 +134,4 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 - [Worktree Isolation for Parallel Agent Sessions](worktree-isolation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Continuous AI: Agentic CI/CD Pipelines](continuous-ai-agentic-cicd.md)
+- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)

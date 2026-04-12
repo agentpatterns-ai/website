@@ -8,7 +8,7 @@ tags:
 
 # Prompt Layering: How Instructions Stack and Override
 
-> Agent instructions arrive from multiple sources simultaneously — understanding the precedence order and conflict resolution prevents unpredictable behavior and makes debugging tractable.
+> Prompt layering stacks agent instructions across four sources — system prompt, project instructions, skill content, user message — where specificity determines precedence on conflicts. Knowing this stack prevents unpredictable behavior and makes debugging tractable.
 
 ## The Layer Stack
 
@@ -30,7 +30,7 @@ This is a behavioral tendency, not a formal rule enforced by the model. Contradi
 
 **System prompt.** The outermost layer — set by the tool or platform. Defines the agent's role, permissions, and baseline constraints.
 
-**Project instructions.** `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` — loaded at session start, applies to every task in the project. Conventions, constraints, tooling preferences. This layer must apply universally; if a rule is task-specific, it does not belong here.
+**Project instructions.** `AGENTS.md`, `CLAUDE.md`, [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) — loaded at session start, applies to every task in the project. Conventions, constraints, tooling preferences. This layer must apply universally; if a rule is task-specific, it does not belong here.
 
 **Skill content.** Task-specific knowledge loaded when a skill runs. A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a second source of truth that can drift.
 
@@ -46,7 +46,7 @@ A subagent can violate project conventions the parent was following unless the p
 
 When an agent ignores an instruction, diagnose by layer:
 
-1. **Which layer does the instruction come from?** An instruction buried in the middle of a long AGENTS.md competes with primacy bias [unverified]; instructions near the top receive more reliable attention.
+1. **Which layer does the instruction come from?** An instruction buried in the middle of a long AGENTS.md competes with primacy bias — models show measurable performance degradation on constraints placed later in multi-constraint prompts ([Chen et al., 2024](https://arxiv.org/abs/2407.01419)); instructions near the top receive more reliable attention.
 2. **Is there a conflicting instruction closer to the task?** A user message that says "skip tests for now" overrides a project instruction to always write tests.
 3. **Is the agent a subagent?** If so, the project-level instructions may not be in its context.
 4. **Is the instruction past the compliance ceiling?** The more rules in the stack, the more likely lower-priority rules are ignored.
@@ -80,21 +80,21 @@ The gap is intentional: the project layer sets policy, the skill layer enforces 
 - Duplicate instructions across layers create drift; each convention belongs in exactly one layer
 - When an agent ignores an instruction, check: layer position, conflicting instructions closer to the task, subagent context isolation, total compliance ceiling
 
-## Unverified Claims
+## When This Backfires
 
-- Instructions buried in long AGENTS.md files compete with primacy bias, reducing reliable attention `[unverified]`
+Prompt layering assumes the model will respect layer precedence — but that assumption fails:
+
+- **Silent contradictions go undetected.** When project instructions and a skill both define a convention differently, the model picks one without signaling the conflict. A flat single-layer system prompt makes contradictions at least visible in one file.
+- **Compliance degrades with stack depth.** Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
+- **Subagent isolation amplifies drift.** Subagents start fresh — if the parent's project layer isn't explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
 
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](../instructions/instruction-file-ecosystem.md)
 - [The Instruction Compliance Ceiling](../instructions/instruction-compliance-ceiling.md)
-- [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Layered Context Architecture](layered-context-architecture.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
-- [Prompt Chaining](prompt-chaining.md)
 - [Seeding Agent Context](seeding-agent-context.md)
-- [Context Priming](context-priming.md)

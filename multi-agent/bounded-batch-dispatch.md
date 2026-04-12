@@ -45,23 +45,23 @@ Each agent handles exactly one work item in its own context window — no state 
 
 ## The Control Variable
 
-Batch size N is the single tuning knob. Set it against two constraints:
+Batch size N is the single tuning knob, set against two constraints:
 
-**Rate limits** — Anthropic's token bucket enforces RPM and ITPM ceilings per model tier. A batch of N agents firing simultaneously counts as N requests. N should stay comfortably below the RPM ceiling, accounting for retries.
+**Rate limits** — a batch of N agents firing simultaneously counts as N requests. N should stay comfortably below the RPM ceiling, accounting for retries.
 
-**Cost budget** — N agents x average tokens per agent x token price = cost per batch. With a fixed N, total cost for the full queue is predictable before the run starts.
+**Cost budget** — `N × avg_tokens × price = cost per batch`. With a fixed N, total cost for the full queue is predictable before the run starts.
 
-Start at N=10-20 for most workloads. Reduce if you're hitting 429s; increase if you have headroom and need throughput.
+Start at N=10-20. Reduce if hitting 429s; increase if headroom exists and throughput matters.
 
 ## Why Not a True Sliding Window
 
-The intuitive design is a sliding window: maintain exactly N agents running at all times, and the moment any agent completes, immediately spawn a replacement. This maximises throughput by eliminating the wait for the slowest agent in each batch.
+A sliding window would maintain exactly N agents at all times — the moment one completes, immediately spawn a replacement. This maximises throughput by eliminating the wait for the slowest agent in each batch.
 
-**It isn't implementable with LLM orchestrators.** A sliding window requires `wait-for-any` semantics — block until the first of N running tasks completes, then act. LLM orchestrators can only `wait-for-all` — they spawn a group of background agents and resume only when the entire group finishes. [unverified]
+**It isn't implementable with LLM orchestrators.** A sliding window requires `wait-for-any` semantics — block until the first of N tasks completes, then act. LLM orchestrators only support `wait-for-all` — they spawn a group of background agents and resume when the entire group finishes. Claude Code's agent teams architecture confirms this: the lead waits for all teammates to complete, with no mechanism to act on whichever finishes first ([Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)).
 
-The practical consequence is minor: a slow agent in a batch slightly delays the start of the next batch. Throughput is marginally lower than a true sliding window but the concurrency cap, cost predictability, and context isolation are identical. For workloads where items have similar duration, the difference is negligible.
+The practical consequence is minor: a slow agent slightly delays the next batch. For workloads where items have similar duration, the difference is negligible.
 
-A true sliding window is achievable only with an external process or queue worker running outside the LLM context — a background service that polls for completed tasks and enqueues new ones.
+A true sliding window requires an external process or queue worker outside the LLM context — a background service that polls for completed tasks and enqueues new ones.
 
 ## Error Handling
 
@@ -73,22 +73,45 @@ When an agent in a batch fails:
 
 Failed items surface in the final report for manual follow-up or a targeted retry run. A single failure never stops subsequent work.
 
+## When This Backfires
+
+**Head-of-line blocking** — the slowest agent delays the entire batch. For highly variable item durations, consider a [staggered launch](staggered-agent-launch.md) or [adaptive fan-out](adaptive-sandbox-fanout-controller.md) instead.
+
+**Fixed N doesn't adapt** — batch size is calibrated once at run start. If model latency spikes or your rate-limit tier changes mid-run, N is miscalibrated with no feedback loop to correct it.
+
+**Context isolation has a cost** — one agent per item means one full context initialisation per item. For large queues with shared context (system prompt, rubric, reference data), prompt caching becomes essential to avoid ITPM exhaustion.
+
+## Why It Works
+
+Sequential batches cap concurrent requests at N. Because N agents fire simultaneously, peak RPM is bounded: at most N × (1 / avg_agent_duration_minutes) — below the rate ceiling when N is set correctly. Cost predictability follows: with fixed N and known average token consumption, total cost equals queue_size × avg_tokens × token_price, computable upfront. Each agent's isolated context window prevents state leakage, so failures stay local and never cascade. Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this synchronous batch model, noting that "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
+
 ## When to Use
 
 Use bounded batch dispatch when:
 
 - The work queue has more items than your API rate limit allows in a single burst
 - Each item is independent — no output from one item feeds into another
-- Context isolation matters — items must not share or contaminate each other's context
+- Context isolation matters — items must not share or contaminate each other's state
 - Cost predictability is required before starting the run
 
-Use unbounded fan-out when the queue is small (under ~15 items) and rate limits are not a concern. Use sequential processing only when items have strict ordering dependencies.
+Use unbounded fan-out for small queues (under ~15 items) where rate limits are not a concern. Use sequential processing when items have strict ordering dependencies.
+
+## Why It Works
+
+With N fixed below the RPM ceiling, a full batch fits within one rate-limit window. The token bucket replenishes continuously, so batch completion time recharges capacity before the next burst. Cost is computable upfront because N is fixed: `N × avg_tokens × price`. Context isolation is structural — each agent receives only its own work item, with no shared state to corrupt.
+
+## When This Backfires
+
+- **High variance in item duration.** One slow agent delays the entire batch. Reduce N or switch to sequential processing for workloads with unpredictable duration.
+- **Interdependent items.** If item 30 needs output from item 12, batching breaks the dependency. Use sequential processing when items have ordering constraints.
+- **Very short items at low N.** Agent spawn overhead can exceed work duration for trivial tasks. A single agent processing items sequentially is faster.
+- **N near the rate-limit ceiling.** Failed agents retrying simultaneously can push the next burst over the limit. Keep N at 60–80% of the RPM ceiling.
 
 ## Key Takeaways
 
 - Batch size N is the single control variable — tune against RPM limits and cost budget
 - One agent per item guarantees full context isolation at the cost of one agent spawn per item
-- LLM orchestrators support wait-for-all, not wait-for-any — sequential batches are the correct implementation of bounded concurrency in this context
+- Native background dispatch uses wait-for-all semantics; wait-for-any requires async dispatch or an external queue worker — sequential batches are the simpler default
 - Errors in one batch never abort subsequent batches
 
 ## Example
@@ -110,5 +133,7 @@ Adjusting N: if 429 errors appear, reduce to N=10. If headroom exists and throug
 - [Orchestrator-Worker](orchestrator-worker.md)
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md)
+- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)

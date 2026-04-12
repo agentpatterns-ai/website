@@ -41,7 +41,7 @@ flowchart TD
 
 A post-loop safety net runs after the agent loop terminates. If the agent performed the step, the safety net is a no-op; otherwise it performs the step deterministically.
 
-The canonical example from Open SWE (attributed to Stripe/Ramp/Coinbase patterns `[unverified]`):
+The canonical example from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase:
 
 ```python
 # open_pr_if_needed — runs after the agent loop exits
@@ -52,7 +52,7 @@ def open_pr_if_needed(state: AgentState) -> AgentState:
     return state
 ```
 
-The Open SWE README describes this as "a lightweight version of Stripe's deterministic nodes — ensuring critical steps happen regardless of LLM behavior." `[unverified]`
+The [Open SWE README](https://github.com/langchain-ai/open-swe) describes this as "a lightweight version of Stripe's deterministic nodes — ensuring critical steps happen regardless of LLM behavior."
 
 Common safety-net targets:
 
@@ -174,9 +174,13 @@ graph.add_edge("commit", END)
 
 The `inject` node drains external messages before every model call. The `commit` node guarantees changes are committed regardless of whether the agent remembered to do so.
 
-## Unverified Claims
+## When This Backfires
 
-- Whether Stripe, Ramp, and Coinbase implement identical nodes to Open SWE, or whether Open SWE represents LangChain's interpretation — the Open SWE README attributes `open_pr_if_needed` to "Stripe's deterministic nodes" but this is not confirmed by a primary Stripe source `[unverified]`
+Post-loop safety nets rely on idempotency — if a net fires when the agent already completed the step, the result must be identical, not doubled. Three conditions produce failures:
+
+- **Non-idempotent critical steps.** `open_pr_if_needed` is safe only if the `state.pr_opened` flag is reliably set. If the agent opens a PR but fails to persist the flag, the net opens a second PR. Design safety nets around verifiable state, not assumed state.
+- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate; a rate above ~5% signals an upstream issue worth addressing.
+- **Message queue injection in high-latency channels.** Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds per-iteration overhead. Rate-limit the poll or use a local buffer when the queue source is unreliable.
 
 ## Related
 

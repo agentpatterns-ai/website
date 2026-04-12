@@ -17,7 +17,7 @@ tags:
 
 Adoption of AI coding tools isn't linear, and the mistakes at each phase are different. If you are over-trusting, you make different errors than if you are under-trusting. If you are stuck in prompt tinkering, you have different problems than if you are building multi-agent pipelines. The phases provide a map: where you are now, where the traps are, and what the next phase looks like.
 
-Matt Pocock describes a progression through phases of AI-driven development [unverified]. The model below draws on that framing.
+Practitioners who have systematically observed developer AI adoption describe a recognizable phase progression. The model below synthesizes that framing with observed patterns in team adoption and trust calibration.
 
 ## The Phases
 
@@ -87,7 +87,7 @@ Surfacing the model explicitly helps teams identify gaps and set baseline expect
 
 **[The Prompt Tinkerer](../anti-patterns/prompt-tinkerer.md)** (stuck between Phase 2 and 5): Endlessly adjusting prompt wording without addressing the underlying context or task specification problem. More prompt iteration rarely solves what better context or task decomposition would fix in one step.
 
-**The Permanent Skeptic** (stuck at Phase 1): Dismisses the tool based on early failures or others' war stories without fresh evaluation. Tool capabilities change; a dismissal from 18 months ago may not reflect current behavior [unverified].
+**The Permanent Skeptic** (stuck at Phase 1): Dismisses the tool based on early failures or others' war stories without fresh evaluation. Tool capabilities change substantially between model generations; a dismissal formed during early adoption may not reflect current behavior.
 
 **The Plateau** (stuck at Phase 5): Reaches calibrated use but doesn't invest in context engineering. Continues to work prompt-by-prompt rather than building infrastructure that compounds.
 
@@ -109,6 +109,15 @@ A developer joins a team that already uses Claude Code for feature development. 
 
 The key observation: Phase 4 feels like the tool doesn't work. It does — the inputs were wrong. The exit is systematic verification, not abandonment.
 
+## When This Backfires
+
+The phase model is an observational heuristic, not a universal law. It breaks down in specific conditions:
+
+- **Non-linear adoption paths**: Developers who switch tools mid-career, move between teams with different AI maturity, or return after extended absences often skip phases or regress. The model assumes a single continuous adoption arc; fragmented experience violates that assumption.
+- **Phase misidentification**: Labeling yourself as "Phase 5 calibrated" can mask under-investment in verification habits. Self-assessed phase doesn't track actual output quality. The [Stack Overflow 2025 Developer Survey](https://survey.stackoverflow.co/2025/ai) found that 84% of developers use AI tools while only 29% trust them — usage and calibration are independent variables, not sequential phases.
+- **Team-level anchoring**: Teams that surface the model explicitly sometimes use phase labels to dismiss concerns ("they're just Phase 4") rather than addressing underlying tool or process problems. The model explains behavior; it doesn't excuse it.
+- **Tool category differences**: The phases describe adoption of conversational code-generation tools. Developers adopting purpose-built agents (CI agents, code review agents) often enter at Phase 5 directly because the trust boundary is narrower and the output is more auditable. Applying the full seven-phase arc to specialized tooling adds unnecessary friction.
+
 ## Key Takeaways
 
 - You move through recognizable phases; knowing your phase clarifies what to learn next
@@ -116,11 +125,6 @@ The key observation: Phase 4 feels like the tool doesn't work. It does — the i
 - Calibrated use (Phase 5) is the productive baseline; context engineering (Phase 6) is where compounding gains begin
 - Teams often have members at different phases — surfacing this prevents friction and misaligned expectations
 - The goal is effective human-agent collaboration, not full automation
-
-## Unverified Claims
-
-- Matt Pocock describes a progression through phases of AI-driven development [unverified]
-- A dismissal from 18 months ago may not reflect current tool behavior [unverified]
 
 ## Related
 

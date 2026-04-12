@@ -26,7 +26,7 @@ Instruction files are loaded at agent session start and are not cached between r
 
 - **Claude Code** reads `CLAUDE.md` at session start, including for subagents ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents))
 - **GitHub Copilot** reads `.github/copilot-instructions.md` (repo-wide) and matching `.github/instructions/*.instructions.md` files on each request ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions))
-- **AGENTS.md-compatible tools** (Codex, Jules, Cursor, Aider, and 60k+ open-source projects) read `AGENTS.md` from the repo root ([agents.md standard](https://agents.md)) `[unverified]`
+- **AGENTS.md-compatible tools** (Codex, Jules, Cursor, Aider, and others) read `AGENTS.md` from the repo root ([agents.md standard](https://agents.md))
 
 Because files are loaded at runtime, a merged PR takes effect immediately — no deployment, no retraining, no restart.
 
@@ -47,7 +47,7 @@ The PR review process applies unchanged:
 
 ## Example
 
-GitHub's accessibility team runs a triage pipeline that calls the GitHub Models API. Their instruction file serves two roles: classifying issues by WCAG violation severity, and coaching engineers on accessible code. The file references internal accessibility policies and their component library.
+GitHub's accessibility team runs a triage pipeline that calls the [GitHub Models API](../tools/copilot/github-models-in-actions.md). Their instruction file serves two roles: classifying issues by WCAG violation severity, and coaching engineers on accessible code. The file references internal accessibility policies and their component library.
 
 **Before** (generic severity guidance):
 ```markdown
@@ -98,14 +98,10 @@ The PR diff makes the severity definition change explicit. Reviewers can assess 
 - [Feature List Files](feature-list-files.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
 
-## Unverified Claims
-
-- The 60k+ open-source projects adoption figure for AGENTS.md is self-reported by the agents.md site and has not been independently verified. `[unverified]`
-
 ## Sources
 
 - [GitHub Blog — Continuous AI for Accessibility](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/) — Production case study: stored prompts + PR workflow instead of fine-tuning
 - [GitHub Docs — Add Repository Instructions](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions) — Official reference for `copilot-instructions.md` file format and org/repo/personal hierarchy
 - [GitHub Accessibility — Optimizing Copilot with Custom Instructions](https://accessibility.github.com/documentation/guide/copilot-instructions) — GitHub's own guide on writing accessibility-focused custom instructions
-- [agents.md open standard](https://agents.md) — Cross-tool standard supported by 60k+ open-source projects
+- [agents.md open standard](https://agents.md) — Cross-tool standard for `AGENTS.md` instruction files
 - [Claude Code Sub-Agents Docs](https://code.claude.com/docs/en/sub-agents) — Confirms CLAUDE.md loads per session including for spawned subagents

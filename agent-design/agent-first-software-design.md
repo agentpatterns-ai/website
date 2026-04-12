@@ -31,7 +31,7 @@ Replace dashboards with queryable APIs. Where a human reads a status page, an ag
 
 ### Self-Describing Interfaces
 
-Agent-consumable APIs require richer metadata than human-facing ones. Every endpoint, parameter, and response field needs a description an LLM can interpret without external documentation [unverified]. OpenAPI 3.0+ specifications with complete `description` fields on all components serve as both documentation and agent instruction.
+Agent-consumable APIs require richer metadata than human-facing ones. Anthropic recommends investing the same engineering effort in tool documentation as in the agent prompt itself — every endpoint, parameter, and response field benefits from a description an LLM can interpret without external documentation. OpenAPI 3.0+ specifications with complete `description` fields on all components serve as both documentation and agent instruction.
 
 ### Poka-Yoke Tool Design
 
@@ -47,9 +47,9 @@ Agents perform best against APIs with predictable behavior. [Idempotent operatio
 
 **Model Context Protocol (MCP)** — An [open standard](https://modelcontextprotocol.io) for connecting agents to external tools and data sources. MCP servers expose capabilities in a structured, discoverable format agents consume programmatically.
 
-**[Agent Cards](../standards/agent-cards.md)** — Machine-readable capability declarations that let agents discover what other agents or services can do, enabling automated composition [unverified].
+**[Agent Cards](../standards/agent-cards.md)** — Machine-readable capability declarations that let agents discover what other agents can do — the A2A protocol formalised agent cards as its discovery mechanism for multi-agent composition.
 
-**[OpenAPI as tool spec](../standards/openapi-agent-tool-spec.md)** — API specifications designed for human developers double as agent tool definitions when enriched with descriptive metadata and clear parameter constraints [unverified].
+**[OpenAPI as tool spec](../standards/openapi-agent-tool-spec.md)** — API specifications designed for human developers double as agent tool definitions when enriched with descriptive metadata and clear parameter constraints — an OpenAPI operation maps directly to tool schema fields consumed by agents.
 
 ## The Layering Pattern
 
@@ -152,6 +152,7 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 - [The Specification as Prompt](../instructions/specification-as-prompt.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
+- [Schema Markup for AI Citation](../geo/schema-and-structured-data.md)
 - [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that underlies agent execution
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — separating the agent layer that decides from the layer that acts, with typed tool interfaces enforcing the boundary
 - [Execution-First Delegation](execution-first-delegation.md) — specifying goals, constraints, and success conditions so agents handle the how

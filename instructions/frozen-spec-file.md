@@ -155,5 +155,6 @@ OpenAI's Codex long-horizon guide uses this exact split: Prompt.md is frozen (go
 - [Feature List Files](feature-list-files.md) — structured feature tracking alongside specs
 - [Hooks Beat Prompts](../verification/hooks-vs-prompts.md) — why structural enforcement outperforms prompt instructions
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — the mechanism that makes re-reading the frozen spec reliable after context compaction
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — tiered offloading and summarisation techniques that determine what context survives compaction
 - [The Specification as Prompt](specification-as-prompt.md) — using formal artifacts (types, schemas, tests) as agent instructions
 - [Layer Agent Instructions by Specificity](layered-instruction-scopes.md) — structural approach to organizing agent instruction files

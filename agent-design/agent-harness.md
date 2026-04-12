@@ -13,7 +13,7 @@ aliases:
 ---
 # Agent Harness: Initializer and Coding Agent
 
-> Structure long-running agent work as two distinct phases — an initializer that prepares the environment and artifacts, and a coding agent that picks up reliably from wherever any prior session left off.
+> Structure long-running agent work as an initializer that prepares the environment and a coding agent that resumes reliably from any prior session — with eager construction, a structured execution cycle, and git-based handoff artifacts keeping every session on track.
 
 ## The Stateless Session Problem
 
@@ -66,11 +66,19 @@ Each iteration follows a six-phase cycle ([Bui, 2026 §2.2.2](https://arxiv.org/
 
 **Agent tries to do too much in one session** — exhausts context mid-feature, leaving partial work.
 
-Fix: enforce single-feature-per-session in the coding agent's instructions [unverified].
+Fix: enforce single-feature-per-session in the coding agent's instructions. Anthropic's engineering practice confirms this constraint [prevents context mid-feature exhaustion](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
 
 **Agent prematurely declares completion** — marks a feature done before tests pass.
 
 Fix: require passing tests as the completion gate. This rule must be explicit in the system prompt; agents without it will [optimistically self-report](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents).
+
+## When This Backfires
+
+The two-phase harness adds structure and overhead — it is not always the right choice.
+
+- **Short-lived or predictable tasks** — a task that fits in a single context window needs no initializer, progress file, or multi-session handoff machinery. The overhead of maintaining `claude-progress.txt` and baseline commits outweighs the benefit.
+- **Human-in-the-loop workflows** — if a human reviews and redirects after every subtask, rigid single-feature sessions introduce unnecessary checkpointing friction. An interactive back-and-forth agent is simpler and faster.
+- **Environments without reliable git access** — the pattern depends on commit history as cross-session memory. Without git, the handoff mechanism degrades to manual file management with no audit trail.
 
 ## Session Handoff Checklist
 
@@ -120,10 +128,6 @@ Only after this orientation does the agent select the highest-priority incomplet
 - Git commits are structured session handoff notes, not just change records
 - Require test passage as the completion gate; never allow agent self-report alone
 
-## Unverified Claims
-
-- Enforcing single-feature-per-session in the coding agent's instructions prevents context exhaustion `[unverified]`
-
 ## Related
 
 - [Feature List Files](../instructions/feature-list-files.md)
@@ -139,6 +143,7 @@ Only after this orientation does the agent select the highest-priority incomplet
 - [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Persona as Code](persona-as-code.md)
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Agent Loop Middleware](agent-loop-middleware.md)
 - [Subtask-Level Memory](subtask-level-memory.md)
@@ -146,3 +151,4 @@ Only after this orientation does the agent select the highest-priority incomplet
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
 - [Agent Backpressure](agent-backpressure.md)
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)

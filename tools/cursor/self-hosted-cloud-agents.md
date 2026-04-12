@@ -1,6 +1,6 @@
 ---
 title: "Cursor Self-Hosted Cloud Agents"
-description: "Run Cursor cloud agents in your own infrastructure — keeping tool execution, code, and secrets inside organizational boundaries while Cursor's cloud handles inference."
+description: "Run Cursor cloud agents in your own infrastructure — code, secrets, and artifacts stay on your network while Cursor's cloud handles inference."
 tags:
   - cursor
   - agent-design
@@ -41,10 +41,10 @@ The worker connects outbound via HTTPS to Cursor's cloud — no inbound ports, f
 
 ## Worker Deployment
 
-Start a worker with:
+Start a worker with ([full options in Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)):
 
 ```sh
-agent worker start
+agent worker start --pool
 ```
 
 **Worker lifetime options:**
@@ -56,7 +56,7 @@ agent worker start
 
 Long-lived workers suit always-on environments (CI runners, shared team infrastructure). Single-use workers suit ephemeral compute (Lambda, container jobs) where you want clean state between tasks.
 
-**Kubernetes:** Deploy at scale via Helm charts and a `WorkerDeployment` custom resource. Define the desired pool size; the controller manages scaling, rolling updates, and lifecycle automatically. A fleet management API covers non-Kubernetes environments with utilization monitoring.
+**Kubernetes:** Deploy at scale via a Helm chart and Kubernetes operator. Define the desired pool size; the controller manages scaling, rolling updates, and lifecycle automatically. A fleet management API covers non-Kubernetes environments with utilization monitoring.
 
 ## When to Use Self-Hosted
 
@@ -65,7 +65,7 @@ Use self-hosted execution when:
 - Policy prohibits code leaving the organizational network (regulated industries, government, defense)
 - The agent needs access to internal resources — private package registries, internal APIs, airgapped build systems — not reachable from Cursor's infrastructure
 - Compliance requires data residency: code, secrets, and build artifacts must stay in a specific region or network boundary
-- You need agents to run with the same service account permissions as your CI system [unverified]
+- You need agents to run with the same credentials and environment access as your CI system — workers run with whatever secrets and permissions are present in the host environment
 
 Use vendor-hosted execution (the default) when you have no residency constraints and want zero operational overhead. Vendor-hosted agents require no infrastructure provisioning, patching, or monitoring.
 
@@ -87,7 +87,7 @@ A team with an airgapped internal npm registry needs agents to install dependenc
 
 ```sh
 # Start a long-lived worker on an internal runner
-agent worker start
+agent worker start --pool
 
 # Agent now resolves internal packages normally
 npm install --registry https://npm.internal.corp
@@ -99,7 +99,7 @@ The inference (planning which commands to run) happens in Cursor's cloud. The `n
 
 - Cursor self-hosted agents split inference (Cursor cloud) from execution (your worker) — code never leaves your network
 - Workers connect outbound via HTTPS only — no inbound firewall changes needed
-- Kubernetes deployment uses `WorkerDeployment` resources for pool management; a fleet API covers non-Kubernetes environments
+- Kubernetes deployment uses a Helm chart and operator for pool management; a fleet API covers non-Kubernetes environments
 - The trade-off is operational overhead (worker provisioning and maintenance) vs. data residency and internal resource access
 - Use self-hosted for compliance requirements and internal tooling access; use vendor-hosted when residency is not a constraint
 

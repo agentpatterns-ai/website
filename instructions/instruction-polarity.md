@@ -17,9 +17,9 @@ aliases:
 
 ## The Compliance Asymmetry
 
-Negative instructions require suppression: the agent must hold the prohibited action in mind while choosing not to take it. Positive instructions require execution: the agent identifies the target behavior and performs it. Execution is a cheaper cognitive operation than suppression [unverified — model-architecture dependent], which produces measurably higher compliance rates for positive forms across equivalent rule sets.
+Negative instructions require suppression: the agent must hold the prohibited action in mind while choosing not to take it. Positive instructions require execution: the agent identifies the target behavior and performs it. Token generation favors positive selection — the model chooses what comes next rather than explicitly avoiding tokens — so positive instructions directly boost the probability of desired outputs ([The Pink Elephant Problem](https://eval.16x.engineer/blog/the-pink-elephant-negative-instructions-llms-effectiveness-analysis)), producing higher compliance rates for positive forms across equivalent rule sets. Anthropic's own prompt engineering guidance reflects this: ["Tell Claude what to do instead of what not to do."](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)
 
-The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules are among the first to fail when attention is under pressure from a large instruction set. [unverified]
+The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules tend to degrade first under a large instruction set because the suppression signal must compete with a growing context of execution targets.
 
 ## Reframing Common Rules
 
@@ -43,7 +43,7 @@ Some prohibitions are genuinely clearer in negative form. Use negative phrasing 
 - The prohibition is absolute and the positive form would be ambiguous: "Never push directly to main" vs. "Push to feature branches" (which main? which branches?)
 - You are naming a specific banned item: "No `console.log` in production code"
 
-In these cases, keep the negative instruction and move it toward the top of the instruction set (primacy bias favors earlier instructions [unverified]).
+In these cases, keep the negative instruction and move it toward the top of the instruction set. LLMs exhibit position-dependent attention effects — instructions placed earlier tend to receive stronger weighting in typical prompt lengths, though this can reverse in very long contexts where recency effects dominate.
 
 ## Hooks for True Prohibitions
 
@@ -81,18 +81,23 @@ A `.claude/CLAUDE.md` instruction file for a TypeScript project, reframed from n
 
 The last rule stays negative because the set of acceptable imports is too large to enumerate. The others gain an explicit target behavior the agent can execute directly.
 
+## When This Backfires
+
+Positive reframing has limits. It fails or is inapplicable when:
+
+- **The acceptable-behavior space is unbounded.** "Use only approved libraries" cannot be made positive without enumerating every approved library — sometimes the negative form is the only practical option.
+- **Ambiguity in the positive form creates new errors.** "Push to a feature branch" leaves open which repo, which base branch, and who owns naming. The negative "never push directly to main" is crisper precisely because it is narrower.
+- **Context-window pressure is extreme.** Positive instructions are still subject to the lost-in-the-middle effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Long instruction sets degrade all rule types; positive phrasing mitigates but does not eliminate the problem.
+- **Rule count is low.** With fewer than five or six instructions, the compliance gap between positive and negative forms is small enough to be outweighed by other factors such as clarity or brevity.
+
+The pattern is a default, not a universal. Apply it where the compliance benefit is material and the positive form is unambiguous.
+
 ## Key Takeaways
 
-- Positive instructions ("use X") outperform negative ones ("avoid Y") because execution is cheaper than suppression
+- Positive instructions ("use X") outperform negative ones ("avoid Y") — positive forms give the agent an explicit execution target rather than a suppression task
 - Reframe prohibitions as requirements: negative rules become positive constraints with explicit targets
-- Reserve negative phrasing for absolute prohibitions where the positive form is ambiguous
+- Reserve negative phrasing for absolute prohibitions where the positive form is ambiguous or the acceptable-behavior space is too large to enumerate
 - Move critical prohibitions to hooks — instructions ask, hooks require
-
-## Unverified Claims
-
-- Execution is a cheaper cognitive operation than suppression for models [unverified — model-architecture dependent]
-- Negative rules are among the first to fail when attention is under pressure from a large instruction set [unverified]
-- Primacy bias favors earlier instructions [unverified]
 
 ## Related
 
@@ -105,3 +110,5 @@ The last rule stays negative because the set of acceptable imports is too large 
 - [System Prompt Replacement for Domain-Specific Agent Personas](system-prompt-replacement.md)
 - [Layer Agent Instructions by Specificity: Global, Project](layered-instruction-scopes.md)
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)

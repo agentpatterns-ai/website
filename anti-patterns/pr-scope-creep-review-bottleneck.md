@@ -16,11 +16,11 @@ tags:
 
 ## The Pattern
 
-AI coding assistants shift the constraint in software delivery from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times. The bottleneck has moved; reviewer capacity has not [unverified].
+AI coding assistants shift the constraint in software delivery from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times. Generation velocity has outpaced reviewer capacity.
 
-When a PR sits unreviewed, adding dependent work to it is your rational local response. On high-adoption teams, Faros reports average PR size increases of 154%, pushing changesets past the cognitive threshold for effective review [unverified].
+When a PR sits unreviewed, adding dependent work to it is your rational local response. On high-adoption teams, Faros reports average PR size increases of 154%, pushing changesets past the cognitive threshold for effective review.
 
-[SmartBear's study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) [unverified: 10-month, 2,500 reviews] establishes the threshold: reviewers detect defects most effectively in 200-400 lines, with effectiveness dropping sharply beyond that.
+[SmartBear's study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) (10-month, 2,500 reviews) establishes the threshold: reviewers detect defects most effectively in 200-400 lines, with effectiveness dropping sharply beyond that.
 
 ## The Feedback Loop
 
@@ -36,7 +36,7 @@ graph TD
 
 The loop is self-reinforcing. [Pullflow's practitioner analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope causes developers to batch changes, further inflating PR size and compounding delay.
 
-[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) finds larger changes reduce merge likelihood in agent-authored PRs. [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code, making each added line more expensive to review [unverified].
+[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) finds larger changes reduce merge likelihood in agent-authored PRs. [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code, making each added line more expensive to review.
 
 ## Mitigations
 
@@ -46,7 +46,17 @@ The loop is self-reinforcing. [Pullflow's practitioner analysis](https://pullflo
 
 **AI pre-review.** Use AI pre-review to triage issues and flag high-risk areas before human review, reducing per-PR cognitive load. See [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md).
 
-**Distribute review load.** Concentrated review load — a small set of senior reviewers handling all PRs — is the structural cause of the bottleneck [unverified]. Rotate reviewers and use risk-based assignment to reduce queue depth.
+**Distribute review load.** Concentrated review load — a small set of senior reviewers handling all PRs — amplifies the bottleneck. Rotate reviewers and use risk-based assignment to reduce queue depth.
+
+## When This Backfires
+
+Stacked PRs and strict atomic discipline create overhead that outweighs the benefit in some contexts:
+
+- **Small or solo teams.** When one person reviews everything, stacking adds branching complexity without shortening the queue — the same reviewer still sees all the work sequentially.
+- **Fast-merge workflows.** Teams that merge to trunk multiple times per day may find the overhead of maintaining stacked branch chains slower than batching changes and merging once.
+- **Tooling gaps.** Stacked PRs require explicit tooling support (Graphite, ghstack, or equivalent). Without it, rebasing chains is error-prone and can break dependent branches on force-push.
+
+The 400-line threshold is a heuristic, not a hard rule — a 600-line rename-only diff may be trivially reviewable while a 200-line cryptographic change is not. Apply size limits to complexity, not character count.
 
 ## Example
 
@@ -67,6 +77,7 @@ The structural fix: Agent B opens PR #102 targeting PR #101's branch using stack
 
 ## Related
 
+- [The Bottleneck Migration](../human/bottleneck-migration.md) — why review becomes the binding constraint when generation gets cheap
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — reviewer psychology behind rubber-stamping large diffs
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md) — how AI reviewers misclassify correct code at scale
 - [Shadow Tech Debt](shadow-tech-debt.md) — how AI-accelerated delivery creates invisible debt accumulation

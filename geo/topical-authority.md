@@ -27,17 +27,17 @@ Topical authority means AI systems recognize your domain as a trusted node for a
 | Rank individual pages | Become the recognized entity for a subject |
 | Linear returns per page | Compounding returns as coverage grows |
 
-Brand search volume is the strongest predictor of AI citation rates (correlation 0.334) [unverified], outweighing backlinks. Topical authority drives brand recall, which drives citations.
+Brand search volume is a stronger predictor of AI citation rates than backlinks. Topical authority drives brand recall, which drives citations.
 
 ## How It Works
 
 ### Entity Recognition
 
-AI systems identify your site as an authority by mapping it to known entities. Consistent terminology across many pages creates stable entity entries AI can reliably retrieve. Content containing 15+ connected entities shows 4.8× higher selection probability than entity-sparse content [unverified].
+AI systems identify your site as an authority by mapping it to known entities. Consistent terminology across many pages creates stable entity entries AI can reliably retrieve. Content with many interconnected entities is selected more frequently than entity-sparse content.
 
 ### Coverage Breadth vs. Depth
 
-Deep coverage of one subtopic is not equivalent to broad coverage of a domain. AI systems reward consistent publishing within a topic area — a niche-relevant source outperforms a generic high-authority site lacking topic alignment once the citation threshold is met. [unverified]
+Deep coverage of one subtopic is not equivalent to broad coverage of a domain. AI systems reward consistent publishing within a topic area — a niche-relevant source outperforms a generic high-authority site lacking topic alignment once the citation threshold is met.
 
 ### Internal Linking as Semantic Graph Construction
 
@@ -55,7 +55,11 @@ External knowledge infrastructure amplifies entity recognition:
 
 - **Wikidata**: Underlies Google's Knowledge Graph. An entry with Label, Description, Aliases, and Website registers your site as a distinct entity that AI systems can merge into a single authoritative node.
 - **Schema markup**: An About page, a README, and an API spec pointing to the same `Organization` schema entry give generative systems confidence to treat them as one source.
-- **Multi-platform consistency**: Sites on 4+ platforms are 2.8× more likely to appear in AI responses [unverified]. Consistent signals across GitHub, Stack Overflow, and relevant communities reinforce entity mapping.
+- **Multi-platform consistency**: Consistent presence across multiple platforms reinforces entity mapping. Signals across GitHub, Stack Overflow, and relevant communities increase the probability of AI system recognition.
+
+## Why It Works
+
+AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more frequently in training data and retrieval indexes for that subject area — making it more likely to be selected when a query touches the domain. Retrieval-augmented systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but lacking topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
 
 ## Diagram
 

@@ -12,7 +12,7 @@ tags:
 
 ## What Spaces Are
 
-Copilot Spaces are manually curated context bundles. You assemble the reference material Copilot needs for a specific domain — repositories, individual files, pull requests, issues, free-text notes, images, and file uploads — and questions asked within that space are grounded in that curated content ([GitHub Docs](https://docs.github.com/en/copilot/concepts/context/spaces)) [unverified].
+Copilot Spaces are manually curated context bundles. You assemble the reference material Copilot needs for a specific domain — repositories, individual files, pull requests, issues, free-text notes, images, and file uploads — and questions asked within that space are grounded in that curated content ([GitHub Docs](https://docs.github.com/en/copilot/concepts/context/spaces), [GitHub changelog, GA](https://github.blog/changelog/2025-09-24-copilot-spaces-is-now-generally-available/)).
 
 Spaces replaced the deprecated Knowledge Bases (sunset November 2025), adding support for richer content types beyond the repo-only model of their predecessor ([GitHub changelog, Knowledge Bases sunset](https://github.blog/changelog/2025-08-20-sunset-notice-copilot-knowledge-bases/)).
 
@@ -25,11 +25,11 @@ Spaces occupy a specific layer in the context hierarchy — the manually curated
 | Layer | Mechanism | Persistence | Who Curates |
 |-------|-----------|-------------|-------------|
 | Behavioral rules | `.github/copilot-instructions.md` | Every interaction | Team (version-controlled) |
-| Learned preferences | Copilot Memory | Autonomous, 28-day TTL [unverified] | Agent |
+| Learned preferences | Copilot Memory | Autonomous, 28-day auto-expiry ([GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/)) | Agent |
 | **Reference material** | **Copilot Spaces** | **Persistent, manually curated** | **Human** |
 | Ad-hoc context | Paste into chat / `@file` | Single interaction | Human |
 
-Instruction files define *how* the agent behaves. Memory captures *what* the agent learns. Spaces provide *the reference material* the agent draws on. Each serves a different purpose, and they apply simultaneously when a space is active [unverified].
+Instruction files define *how* the agent behaves. Memory captures *what* the agent learns. Spaces provide *the reference material* the agent draws on. Each serves a different purpose in the context stack.
 
 ## Auto-Sync
 
@@ -71,7 +71,7 @@ Use instruction files for behavioral rules that apply to every interaction. Use 
 
 ## Billing
 
-Spaces follow the Copilot Chat billing model with request-based consumption and model-specific multipliers ([GitHub changelog, GA](https://github.blog/changelog/2025-09-24-copilot-spaces-is-now-generally-available/)).
+Spaces follow the same billing model as Copilot Chat ([GitHub changelog, GA](https://github.blog/changelog/2025-09-24-copilot-spaces-is-now-generally-available/)).
 
 ## Example
 
@@ -109,18 +109,21 @@ Always use camelCase for event property names.
 
 The instruction file handles the behavioral rule (camelCase). The space provides the schemas and docs the agent reads when implementing. Auto-sync on the repo source means the space stays current as `analytics-sdk` evolves — no manual re-import required.
 
+## When This Backfires
+
+Spaces work well for stable reference material — they underperform in several conditions:
+
+- **Static uploads drift silently.** Uploaded files and free-text notes do not auto-sync. Teams that use uploads for actively changing specs or schemas accumulate stale context without warning; Copilot will reason from outdated content until someone manually re-uploads.
+- **Large repos hit context limits.** Adding a large monorepo as a source does not guarantee Copilot reads all of it. Context window limits mean the model may silently drop low-priority content; overfilled spaces give false confidence that everything is grounded.
+- **GitHub-hosted only.** Spaces require a GitHub account and work through github.com or the remote GitHub MCP server. Teams working in airgapped environments, private self-hosted instances, or non-GitHub hosts cannot use Spaces — instruction files and ad-hoc paste remain the only options.
+- **Shared spaces do not eliminate access gaps.** RBAC enforcement means team members with different repository permissions see different effective context from the same space. A space that "grounds" a team member with admin access may silently omit content for a collaborator with read-only access, producing divergent responses for the same question.
+
 ## Key Takeaways
 
 - Spaces are the manual curation layer in the context stack — reference material that sits between always-on instruction files and ephemeral chat context.
 - GitHub-based sources auto-sync; uploaded content does not.
 - RBAC is enforced even on public spaces — viewers only see sources they can already access.
 - Use spaces for reference material (specs, schemas, docs), instruction files for behavioral rules, and memory for agent-discovered knowledge.
-
-## Unverified Claims
-
-- Spaces aggregate repositories, code files, PRs, issues, notes, images, and uploads into a curated container that grounds Copilot responses [unverified]
-- Copilot Memory has a 28-day TTL [unverified]
-- Instruction files, memory, and spaces apply simultaneously when a space is active [unverified]
 
 ## Related
 

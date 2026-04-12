@@ -23,13 +23,13 @@ Convenience loops form when ease-of-use creates preference that, at scale, resha
 4. Typed language ecosystems grow, producing more training data
 5. AI tools improve further on typed code
 
-TypeScript overtook Python and JavaScript as GitHub's most-used language in August 2025, with 66% year-over-year growth [unverified] ([Octoverse 2025](https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/)). Eighty percent of new GitHub developers use Copilot within their first week ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). AI-assisted development is the default, not an opt-in [unverified].
+TypeScript overtook Python and JavaScript as GitHub's most-used language in August 2025, with 66% year-over-year growth ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). Eighty percent of new GitHub developers use Copilot within their first week ([GitHub blog](https://github.blog/ai-and-ml/generative-ai/how-ai-is-reshaping-developer-choice-and-octoverse-data-proves-it/)). AI-assisted development is the default workflow for new GitHub contributors, not an opt-in.
 
 ## Why Types Reduce AI Error Surfaces
 
 A 2025 study found that 94% of LLM-generated compilation errors were type-check failures ([GitHub blog, citing arxiv.org/pdf/2504.09246](https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/)). Types catch the exact error class AI introduces most often.
 
-Types function as implicit constraints on generation. Declaring `x: string` eliminates an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions that outperform natural language descriptions of the same contracts `[unverified]`.
+Types function as implicit constraints on generation. Declaring `x: string` eliminates an entire class of invalid operations. Type definitions, interfaces, and schemas act as precise agent instructions — a contract the agent must satisfy rather than a description it might misinterpret.
 
 Type errors become agent backpressure — immediate, machine-readable feedback the agent can self-correct against without human intervention. The agent runs the compiler, reads the error, fixes the code, and re-runs. Untyped codebases surface equivalent errors only at runtime or during human review.
 
@@ -37,15 +37,15 @@ Type errors become agent backpressure — immediate, machine-readable feedback t
 
 The pattern is "type systems reduce AI error surfaces," not "use TypeScript." Other typed languages show the same growth signal ([Octoverse 2025](https://github.blog/news-insights/octoverse/what-the-fastest-growing-tools-reveal-about-how-software-is-being-built/)):
 
-- Luau (Roblox's gradually-typed Lua): +194% YoY [unverified]
-- Typst: +108% YoY [unverified]
+- Luau (Roblox's gradually-typed Lua): fastest-growing in the embedded scripting category
+- Typst: among the fastest-growing document languages
 - Java, C++, C#: all growing
 
 Python type hints, PHP typed properties, and Ruby's RBS signatures provide the same constraints. Adding annotations to function signatures and data structures captures most of the benefit without a language switch ([GitHub blog](https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/)).
 
 ## The Economics Changed
 
-For 25+ years, type annotations slowed iteration speed `[unverified]`. AI agents invert this: agents absorb the annotation cost while types still provide verification benefits.
+For decades, type annotations traded iteration speed for correctness guarantees — a worthwhile exchange for large teams but friction for solo or early-stage work. AI agents invert this: agents absorb the annotation cost while types still provide verification benefits.
 
 Simon Willison reversed his long-held position in February 2026: "If a coding agent is doing all that typing for me, the benefits of explicitly defining all of those types are suddenly much more attractive" ([simonwillison.net](https://simonwillison.net/2026/Feb/18/typing/)).
 
@@ -86,19 +86,21 @@ def process_order(order: Order, discount: float) -> dict[str, float | str]:
 
 Now `mypy` or Pyright flags invalid calls immediately. The agent reads the error (`Argument of type "str" cannot be assigned to parameter "discount" of type "float"`) and self-corrects — no human review required. This is type-check backpressure in practice.
 
+## When This Backfires
+
+The convenience loop does not apply uniformly:
+
+- **Early-stage prototypes.** Adding types upfront in a fast-changing domain locks in unstable abstractions. The annotation cost returns before the codebase stabilizes.
+- **Dynamic-typing-native ecosystems.** Python data-science workflows (NumPy, pandas, matplotlib) often rely on duck typing. Strict type annotations fight the library conventions and generate noisy mypy errors on legitimate usage.
+- **Legacy codebases without CI.** Retrofitting types onto an untyped codebase is a large batch change. If type errors can't gate merges (no CI type-check step), they provide no backpressure — just maintenance overhead.
+- **Agents that don't self-correct.** The backpressure loop requires the agent to run the type checker, read the error, and re-attempt. Agents used in single-shot mode without tool access don't benefit from the feedback cycle.
+
 ## Key Takeaways
 
 - The convenience loop: AI produces better output in typed codebases → drives adoption → improves training data → improves AI further.
 - 94% of LLM-generated compilation errors are type-check failures — types catch the exact error class AI introduces most.
 - Agents absorb annotation cost; types still deliver verification benefits.
 - Gradual typing (Python type hints, PHP typed properties) captures most of the benefit without a migration.
-
-## Unverified Claims
-
-- TypeScript 66% year-over-year growth `[unverified]`
-- AI-assisted development is the default experience `[unverified]`
-- Luau +194% YoY growth `[unverified]`
-- Typst +108% YoY growth `[unverified]`
 
 ## Related
 

@@ -55,8 +55,8 @@ Unlike synchronous guardrails that block execution, async intervention preserves
 From the Wink A/B test on production traffic ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)):
 
 - **90% resolution rate** for misbehaviors that require a single intervention
-- Reduction in tokens per session [unverified] — the agent reaches correct behavior faster without wasted execution
-- Reduction in engineer interventions per session [unverified] — most misbehaviors resolve without human involvement
+- **5.3% reduction in tokens per session** — the agent reaches correct behavior faster without wasted execution
+- **4.2% reduction in engineer interventions per session** — most misbehaviors resolve without human involvement
 
 The 10% requiring multiple interventions or human escalation are typically novel failure modes outside the classifier's training distribution.
 
@@ -64,7 +64,7 @@ The 10% requiring multiple interventions or human escalation are typically novel
 
 Three observable signals trigger the observer:
 
-1. **Repetition patterns** — the agent calls the same tool with identical or near-identical arguments across multiple turns without progress
+1. **Repetition patterns** — the agent calls the same tool with identical or near-identical arguments three or more consecutive times without progress ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037))
 2. **Contradiction signals** — the agent's stated reasoning contradicts a tool output it received in the same session
 3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created
 
@@ -77,9 +77,23 @@ The 30% misbehavior rate means every production agent deployment needs a traject
 The minimum viable observer:
 
 - Records each tool call and its arguments
-- Detects repetition patterns (same tool + args appearing 3+ times without a successful result) [unverified]
+- Detects repetition patterns (same tool + args appearing 3+ times without a successful result)
 - Detects precondition violations (file read before file creation in the same session)
-- Injects a single corrective message when triggered; escalates to human after two failed interventions [unverified]
+- Injects a single corrective message when triggered; escalates to human when repeated interventions fail
+
+## Why It Works
+
+Category-specific corrections target the actual failure mode rather than issuing a generic nudge. The Wink taxonomy was constructed bottom-up from 10,000+ production trajectories and developer feedback to ensure construct validity — each category maps to a distinct correction strategy. A Specification Drift correction re-anchors the agent to the original task; a Tool Call Failure correction changes the retrieval or invocation strategy; a Reasoning Problem correction supplies the missing inference step. Applying the wrong correction type (e.g., re-anchoring an agent with a tool invocation error) adds context noise without addressing the root cause.
+
+## When This Backfires
+
+Async injection does not guarantee recovery. The Wink A/B test ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) documents these non-recovery patterns:
+
+- **Agent ignores the correction** (37% of non-recovered sessions) — the agent processes the injected message but continues on the same trajectory, often because the correction arrives too late in a long context or conflicts with strong prior context.
+- **Premature termination** (22%) — the agent exits early after receiving a correction, treating it as a signal that the task is unresolvable rather than as guidance.
+- **Mechanical failures** (19%) — IDE, tool, or environment errors prevent the correction from having any effect regardless of content.
+- **Novel failure modes** — the classifier's training distribution does not cover all production misbehaviors; out-of-distribution events get misclassified and receive the wrong correction type.
+- **Classification latency** — the async observer adds an inference step; for short-running agents this overhead can exceed the recovery benefit.
 
 ## Example
 
@@ -102,13 +116,6 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - Async intervention preserves trajectory continuity; synchronous blocking does not
 - 90% of single-intervention misbehaviors resolve without engineer involvement
 - Observable signals (repetition, contradiction, precondition violations) detect misbehaviors without model-internal access
-
-## Unverified Claims
-
-- Reduction in tokens per session [unverified]
-- Reduction in engineer interventions per session [unverified]
-- Repetition detection triggers at same tool + args appearing 3+ times without a successful result [unverified]
-- Escalates to human after two failed interventions [unverified]
 
 ## Related
 

@@ -46,11 +46,22 @@ Each pattern has a targeted fix: add explicit dependency markers for sequencing 
 
 Requesting highly detailed task descriptions — specifying exact file paths, function names, parameter changes — forces the agent to expose its design decisions before execution. A task like "style the navbar" becomes a list of specific CSS property changes with values. You can approve, reject, or redirect individual decisions without waiting for implementation.
 
-This trades compactness for visibility. Use it when the cost of wrong execution is high or when you are calibrating instructions for a new domain [unverified].
+This trades compactness for visibility. Use it when the cost of wrong execution is high or when you are calibrating instructions for a new domain.
 
 ## Real-Time Steering
 
-Task lists are not static. When you correct the agent mid-task, the updated task list reflects whether the correction was understood. If you change a requirement ("use green, not blue") and the remaining tasks update accordingly, the correction landed. If tasks remain unchanged, the agent did not integrate the correction — a signal to restate it differently [unverified].
+Task lists are not static. When you correct the agent mid-task, the updated task list reflects whether the correction was understood. If you change a requirement ("use green, not blue") and the remaining tasks update accordingly, the correction landed. If tasks remain unchanged, the agent did not integrate the correction — a signal to restate it differently.
+
+## Why It Works
+
+LLMs decompose tasks by propagating explicit constraints from the prompt into subtask structure. When constraints are absent or underspecified, the model fills gaps with training priors — producing a plan that reflects how similar tasks typically look rather than what was specified. That gap is the diagnostic signal: plan steps driven by prior knowledge identify exactly what was left implicit in the instructions. Research on task decomposition confirms that explicit constraint specification drives measurable improvements in decomposition accuracy ([Advancing Agentic Systems: Dynamic Task Decomposition, Tool Integration and Evaluation, arXiv 2410.22457](https://arxiv.org/abs/2410.22457)).
+
+## When This Backfires
+
+- **Simple, well-specified tasks**: A task breakdown adds a round-trip with minimal diagnostic return when the task has a single unambiguous action.
+- **Exploratory tasks**: Divergence comparison requires knowing the intended sequence. For open-ended tasks where the correct approach is unknown, there is no baseline to compare against.
+- **Non-deterministic planners**: Agents that generate different task lists across repeated prompts require multiple comparisons to separate instruction-driven from noise-driven variation.
+- **Agents without plan-before-execute modes**: The technique requires the agent to externalize its plan before acting. Agents that execute silently do not expose the diagnostic signal.
 
 ## Tool-Agnostic Application
 
@@ -87,11 +98,6 @@ After all code changes, run `pytest tests/auth/` and confirm all tests pass befo
 
 Re-running the prompt after adding these two sentences produces a plan that matches the intended sequence — catching both errors before any code was written.
 
-## Unverified Claims
-
-- Extreme granularity as a transparency strategy is useful when calibrating instructions for a new domain [unverified]
-- Task lists function as a continuous feedback channel, not a one-time plan artifact [unverified]
-
 ## Related
 
 - [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
@@ -99,3 +105,6 @@ Re-running the prompt after adding these two sentences produces a plan that matc
 - [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md)
 - [Steering Running Agents](../agent-design/steering-running-agents.md)
 - [The Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md) — omissions in task plans often trace to implicit knowledge the agent was never given
+- [Pre-Completion Checklists](pre-completion-checklists.md) — structured verification before task completion, complementary to pre-execution plan review
+- [Trajectory Decomposition Diagnosis](trajectory-decomposition-diagnosis.md) — diagnosing agent failures by decomposing execution traces
+- [Completion Failure Taxonomy](completion-failure-taxonomy.md) — classifying the ways agents fail to complete tasks

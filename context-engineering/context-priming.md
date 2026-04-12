@@ -21,7 +21,7 @@ aliases:
 
 Agents don't retrieve project knowledge on their own. They work with what's in the context window at the time they generate a response. A cold prompt — "add authentication to the API" — forces the agent to guess at existing patterns, naming conventions, and architecture. Priming reverses this: you load the relevant context first, then ask.
 
-The effect is measurable [unverified]. An agent that has read your middleware layer, auth config, and user model before implementing authentication produces output that fits the codebase. Without that context, it produces generic code you'll need to rework.
+An agent that has read your middleware layer, auth config, and user model before implementing authentication produces output that fits the codebase. Without that context, it produces generic code that defaults to common framework boilerplate rather than project-specific patterns.
 
 ## Priming Strategies
 
@@ -37,7 +37,7 @@ Start broad, then narrow:
 2. Module or subsystem relevant to the task
 3. Specific file(s) to modify
 
-Dumping everything at once is less effective than building understanding incrementally [unverified]. The agent's interpretation of specific details is shaped by the broader context it read first.
+Dumping everything at once is less effective than building understanding incrementally. Language models attend more reliably to content at the start and end of a context window than to content buried in the middle — the [lost-in-the-middle effect](https://arxiv.org/abs/2307.03172). Loading architecture first, then specifics, keeps the most critical framing at the attention-favored start of context rather than interleaved with detail.
 
 ### Explore Before Implement
 
@@ -82,6 +82,17 @@ Use the refreshToken field on the User model. Return a new access token signed w
 
 Contrast this with a cold prompt that provides none of the above context — the agent would fall back to generic Express boilerplate, require rework to match the actual middleware signature, and likely miss the `refreshToken` field entirely.
 
+## Why It Works
+
+Transformer models generate each token conditioned on all tokens currently in context — there is no separate "memory" step. When the agent generates code, it pattern-matches against the examples it can see right now. Loading your actual middleware signature, naming conventions, and config shape before the task puts those patterns directly in the distribution the model samples from, making project-specific outputs more probable and generic boilerplate less probable. This is the same mechanism that makes few-shot prompting effective: in-context examples shift output distribution without any weight update.
+
+## When This Backfires
+
+- **Context window saturation**: Pre-loading large files pushes task instructions and earlier reasoning toward the middle of the context window, where attention degrades. Long files should be trimmed or summarized before loading ([Context Compression Strategies](context-compression-strategies.md)).
+- **Low-precision context**: Loading loosely related files adds noise that competes with the relevant signal. If the loaded content doesn't directly constrain the task output, it can steer the agent toward irrelevant patterns.
+- **Short, self-contained tasks**: For tasks with no codebase dependency — writing a pure-function utility, converting a data format — priming adds latency and token cost without affecting output quality. Apply selectively.
+- **Stale context**: If loaded files don't reflect the current state of the codebase (out-of-date after a refactor), the agent anchors on the wrong patterns. Verify that primed files are current before loading.
+
 ## Key Takeaways
 
 - Agents work with what's in context — they don't automatically know your codebase
@@ -89,11 +100,6 @@ Contrast this with a cold prompt that provides none of the above context — the
 - Build context progressively: broad architecture → specific files
 - Use [plan mode](../workflows/plan-mode.md) to verify the agent's understanding before it acts
 - Position critical context at the start of the prompt, not buried in the middle
-
-## Unverified Claims
-
-- Dumping context all at once is less effective than building understanding incrementally `[unverified]`
-- "The effect is measurable" — priming produces measurably better output `[unverified]`
 
 ## Related
 

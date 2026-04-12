@@ -24,7 +24,7 @@ With N agents running, a single idle minute represents N units of forgone progre
 
 The natural bottleneck in parallel agent workflows is not code generation — it is your review capacity. As Addy Osmani observes, "the highest-leverage developers will look like async-first managers running a small fleet of parallel AI coding agents," and the constraint shifts from producing code to evaluating it. [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
 
-The Sora team found simultaneous Codex sessions felt "uncannily similar to being a tech lead with several new engineers, all making progress, all needing guidance" [unverified — attributed to Sora team, no primary source].
+The Sora for Android team found simultaneous Codex sessions felt "uncannily similar to being a tech lead with several new engineers, all making progress, all needing guidance." [Source: [OpenAI — Shipping Sora for Android with Codex](https://openai.com/index/shipping-sora-for-android-with-codex/)]
 
 Agents work in parallel without attention cost to each other; the human switches serially, each switch carrying cognitive overhead.
 
@@ -50,7 +50,7 @@ Not all work benefits equally from parallel dispatch. Osmani distinguishes three
 
 ### Context-Switch Efficiency
 
-Parallel agent work inverts the focus-time ideal: you context-switch frequently [unverified], reviewing outputs and unblocking agents. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
+Parallel agent work inverts the focus-time ideal: you context-switch frequently, reviewing outputs and unblocking agents. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
 
 Armin Ronacher: "it's only so much my mind can review." Context-switch throughput varies, but everyone has a ceiling. [Source: [The Pragmatic Engineer](https://blog.pragmaticengineer.com/new-trend-programming-by-kicking-off-parallel-ai-agents/)]
 
@@ -96,6 +96,7 @@ The developer monitors the fully-delegated sessions only when they emit completi
 ## Related
 
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
+- [/batch and Worktrees](../tools/claude/batch-worktrees.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md)
 - [The Delegation Decision](../agent-design/delegation-decision.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)

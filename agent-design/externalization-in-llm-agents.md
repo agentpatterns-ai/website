@@ -25,7 +25,11 @@ The alternative — externalization — moves each cognitive burden into dedicat
 | Context (2023–2024) | What should we put in the prompt? | Prompt + retrieval |
 | Harness (2024+) | What environment should the model operate in? | Persistent infrastructure |
 
-The shift from context to harness is not incremental. It requires treating memory, skills, protocols, and harness as first-class design objects rather than engineering afterthoughts.
+The shift from context to harness requires treating memory, skills, protocols, and harness as first-class design objects, not engineering afterthoughts.
+
+## Why It Works
+
+Externalization works by converting reconstruction tasks (inferring state from weights) into retrieval tasks — operations LLMs perform more consistently. A system with vast storage but weak retrieval still presents the wrong problem representation; strong indexing and contextual selection make downstream reasoning significantly easier ([Zhou et al., 2025](https://arxiv.org/abs/2604.08224)). Active memory management with deliberate curation achieves 58% memory reuse and 17–18% net efficiency gains over passive retrieval ([Shi et al., 2025](https://arxiv.org/abs/2508.13171)).
 
 ## Four Externalization Components
 
@@ -42,51 +46,35 @@ Four distinct memory layers operate on different timescales and update policies:
 | Semantic knowledge | Stable abstractions, facts, heuristics | On change |
 | Personalized memory | User and environment preferences | As preferences evolve |
 
-Mixing these layers causes drift. Working state injected into semantic knowledge becomes stale within sessions; stable heuristics written to episodic storage get discarded prematurely.
-
-**Retrieval quality beats storage quantity** [unverified]. A well-curated 100K-token store outperforms a poorly ranked 1M-token store — the volume of stored information matters less than whether the right information surfaces at the right decision point.
+Mixing these layers causes drift: working state in semantic storage goes stale; heuristics in episodic storage get discarded prematurely.
 
 ### Skills: Procedural Expertise
 
-Skills convert ad hoc generation (improvising each step) into structured composition (assembling pre-validated components). The model doesn't need to rederive procedures — it invokes pre-built expertise.
+Skills convert ad hoc generation into structured composition. The model invokes pre-built expertise rather than rederiving procedures each time. Skills accumulate knowledge through four paths: authored (human-written rules), distilled (from execution traces), discovered (from repeated behavioral patterns), and composed (assembled from smaller skills).
 
-Skills acquire knowledge through four paths:
-
-- **Authored** — human-written procedures and rules
-- **Distilled** — extracted from execution traces across past agent runs
-- **Discovered** — inferred from repeated patterns in agent behavior
-- **Composed** — assembled from smaller skills into higher-order workflows
-
-Skills require explicit boundaries: semantic alignment with the model's vocabulary, portability across contexts, safe composition rules, and defined behavior when context degrades. Skills without boundaries drift and produce inconsistent results when invoked in different agents or pipelines.
+Skills require explicit boundaries — semantic alignment, portability, safe composition rules, and defined fallback behavior. Without these, skills drift and produce inconsistent results across agents.
 
 ### Protocols: Interaction Structure
 
-Protocols convert ad hoc communication (ambiguous natural language exchanges) into governed contracts (machine-readable specifications). The model doesn't need to negotiate interaction — it follows explicit rules.
+Protocols convert ad hoc communication into governed contracts. The model follows explicit rules rather than negotiating each interaction.
 
-Three protocol types cover different interaction surfaces:
+Three protocol types cover different surfaces:
 
 | Type | What it governs |
 |------|----------------|
-| Agent–Tool | How the agent calls APIs, functions, and external services |
-| Agent–Agent | How agents coordinate, delegate, and hand off work |
-| Agent–User | When and how the agent requests human approval or clarification |
+| Agent–Tool | API calls, functions, and external services |
+| Agent–Agent | Coordination, delegation, and handoffs |
+| Agent–User | Human approval and clarification requests |
 
-Protocols matter most when systems grow past single-agent setups. Ad hoc natural language coordination works at small scale; explicit contracts become mandatory for multi-agent reliability, auditability, and governance.
+Protocols become mandatory past single-agent setups — natural language coordination fails at scale; contracts provide reliability and auditability.
 
 ### Harness: The Control Plane
 
 The harness is not a fourth externalization component — it is the control plane that coordinates the other three. It provides the runtime environment where memory, skills, and protocols operate together.
 
-Six harness design dimensions determine whether a system is governable, debuggable, and safe:
+Six design dimensions determine whether a system is governable, debuggable, and safe: agent loop and control flow, sandboxing and isolation, human oversight gates, observability and feedback, configuration and policy encoding, and context budget management.
 
-1. **Agent loop and control flow** — how the model invokes tools, handles results, and decides next steps
-2. **Sandboxing and isolation** — what operations can execute and where
-3. **Human oversight gates** — which paths require human review before proceeding
-4. **Observability and feedback** — logging, tracing, and performance monitoring
-5. **Configuration and policy encoding** — what agents can access and what they cannot
-6. **Context budget management** — how finite tokens are rationed across memory, skills, and instructions
-
-The components interact: memory feeds skills (execution traces become procedure candidates), skills feed memory (invocations produce records), retrieved memory influences which protocol path to choose, and protocol results write back to persistent state. Treating them as isolated modules ignores these dependencies.
+The components interact: skill traces write back to memory; retrieved memory guides protocol selection; protocol results update state. Isolated design breaks these feedback loops.
 
 ## The Trade-off Space
 
@@ -126,10 +114,6 @@ Each component addresses a specific failure mode. Together they make the system 
 - The harness is the control plane coordinating all three — design it explicitly rather than bolting it on after functional work is complete
 - Retrieval quality beats storage quantity — curation and ranking determine memory effectiveness, not volume
 - Protocols become mandatory at multi-agent scale; natural language coordination does not survive multiple agents, tools, and humans in the loop
-
-## Unverified Claims
-
-- The 100K vs 1M token store comparison is an illustrative analogy from [Zhou et al. (2025)](https://arxiv.org/abs/2604.08224) — not a measured result from a controlled experiment [unverified]
 
 ## Related
 

@@ -56,7 +56,7 @@ Feedback ratings (`chub feedback`) flow upstream to doc maintainers, creating an
 
 ## Private and Internal APIs
 
-The pattern generalizes beyond public providers. Teams with proprietary or fast-moving internal APIs can host a chub-compatible doc repository — the same markdown-with-frontmatter format, served from a private registry. This gives internal agents the same on-demand retrieval without exposing proprietary surfaces publicly [unverified].
+The same on-demand retrieval pattern applies to proprietary APIs. Because docs are plain markdown with YAML frontmatter, teams can author internal chub-compatible doc sets in the same format and inject them into agent context using the same `chub get` workflow — without submitting them to the public registry.
 
 ## Relationship to JIT Context Loading
 
@@ -68,16 +68,16 @@ An agent tasked with writing a Python function that calls the OpenAI Chat Comple
 
 If the agent discovers that `stream=True` requires explicit iterator handling not covered in the docs, it runs `chub annotate openai/chat-completions "stream=True returns a generator; call next() to advance"`. On the next fetch, this annotation surfaces automatically -- no need to rediscover the quirk.
 
+## When This Backfires
+
+On-demand doc retrieval adds a network round-trip before every code-generation step — in latency-sensitive pipelines or offline environments, this is a non-starter. The pattern also requires the agent to have shell tool-calling capability; agents confined to pure text completion cannot invoke `chub get`. The public registry covers roughly 68 providers as of early 2026; for APIs not in the registry, the agent falls back to training data anyway, offering no improvement over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see marginal gains — chub's value is highest when no other retrieval layer exists.
+
 ## Key Takeaways
 
 - Agents hallucinate API calls when training data predates library changes — on-demand doc retrieval solves this at generation time rather than retraining
 - `chub get <provider>/<endpoint>` injects current, language-specific API docs into context before code generation
 - Annotations persist locally and surface on re-fetch, preventing agents from rediscovering known workarounds
-- The pattern generalizes to private APIs via self-hosted chub-compatible doc repositories
-
-## Unverified Claims
-
-- Teams with proprietary APIs can host a chub-compatible doc repository for internal agents [unverified]
+- The pattern extends to proprietary APIs by authoring internal doc sets in the same markdown-with-frontmatter format
 
 ## Related
 

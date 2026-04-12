@@ -42,7 +42,7 @@ Coding agent systems solve the same coordination problems that distributed syste
 
 The mapping is structural, not exact. Three divergences matter:
 
-**Dynamic call graphs.** Microservices have predefined topologies. Agents construct call graphs at runtime based on reasoning. The [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) describes patterns involving [dynamic tool selection](../anti-patterns/dynamic-tool-fetching-cache-break.md) and runtime task decomposition. When an agent calls a tool it has never called before, your [observability tooling](../standards/opentelemetry-agent-observability.md) has no historical baseline — traditional tracing assumptions do not apply [unverified].
+**Dynamic call graphs.** Microservices have predefined topologies. Agents construct call graphs at runtime based on reasoning. The [Azure Architecture Center](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) describes patterns involving [dynamic tool selection](../anti-patterns/dynamic-tool-fetching-cache-break.md) and runtime task decomposition. When an agent calls a tool it has never called before, your [observability tooling](../standards/opentelemetry-agent-observability.md) has no historical baseline — distributed tracing tools are built around known service maps and alert thresholds derived from historical call patterns, neither of which exist for novel agent tool invocations.
 
 **Context windows as a resource constraint.** Distributed systems manage memory, CPU, and network. Agent systems manage a fourth resource with no direct equivalent: the context window. It degrades non-linearly — performance doesn't scale down smoothly as the [context window fills](../context-engineering/context-window-dumb-zone.md), it falls off a cliff. Traditional capacity planning doesn't model this failure mode.
 
@@ -80,10 +80,6 @@ Without recognizing these as known patterns, teams reinvent each mechanism ad ho
 - Agent architectures reuse 18 structural patterns from distributed computing — the problems are structurally identical, only the names differ
 - The analogy breaks at dynamic call graphs, context window constraints, and non-deterministic routing
 - Start from the equivalent distributed systems pattern and adjust for non-determinism and context limits
-
-## Unverified Claims
-
-- Traditional tracing assumptions about known topologies do not apply to agent systems with dynamic call graphs [unverified]
 
 ## Related
 

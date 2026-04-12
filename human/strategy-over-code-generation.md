@@ -13,7 +13,7 @@ tags:
 
 ## The Evidence
 
-Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects [unverified]. This persists despite AI assistants increasing code production speed by [50–55%](https://arxiv.org/abs/2601.01839). The bottleneck is not code generation. It is strategic alignment.
+Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects ([Prause, 2026](https://arxiv.org/abs/2601.01839)). This persists despite AI assistants increasing code production speed by 50–55% ([Peng et al., 2023](https://arxiv.org/abs/2302.06590)). The bottleneck is not code generation. It is strategic alignment.
 
 Prause (2026) surveyed 150 data scientists and used Structural Equation Modeling to identify four interdependent success factors, quantifying how they cascade:
 
@@ -69,6 +69,16 @@ The SEM model shows success flows in a specific order. Skipping upstream factors
 
 Jumping to step 4 (better tools, faster agents) without steps 1–3 is the pattern that produces the 80% failure rate.
 
+## When This Backfires
+
+The cascade model is most actionable for sustained production ML projects with identifiable business metrics. It is less applicable in three specific contexts:
+
+- **Short-horizon experiments**: Proofs of concept with a defined end date (under four weeks) often need just enough strategy to define a testable hypothesis — full cascade overhead exceeds the value delivered. Skip to process and ecosystem; treat strategy as a one-paragraph hypothesis rather than a full planning exercise.
+- **Deliberately undefined goals**: Research prototypes and exploratory ML work intentionally operate without fixed objectives. Forcing strategy clarity prematurely closes off the exploration needed to discover what the right goal should be. The cascade applies once a promising direction is found, not before.
+- **Skill-bottlenecked teams**: If the real constraint is that the team lacks technical capability to execute (wrong stack, missing domain knowledge, inadequate data infrastructure), strategy clarity does not unblock delivery. The SEM model assumes baseline execution capability exists; teams below that threshold need skill-building first.
+
+The study also measures ML projects broadly, not AI coding agents specifically — the structural relationships are plausible extensions but are not empirically verified in general software development contexts.
+
 ## Key Takeaways
 
 - AI agents increase code velocity 50–55% but cannot compensate for unclear goals — the 80% ML failure rate persists ([Prause, 2026](https://arxiv.org/abs/2601.01839))
@@ -91,11 +101,6 @@ A second team at the same company applies the cascade:
 
 The second team ships in six weeks. The agent writes the same volume of code, but every line serves a defined business metric because the upstream factors were in place first.
 
-## Unverified Claims
-
-- The 80% ML project failure rate is widely cited across multiple studies but the exact figure varies by source and definition of "failure"
-- Whether the SEM paths generalize beyond ML projects to general AI-assisted software development is untested — the structural relationships are plausible but not empirically verified in that context
-
 ## Related
 
 - [Process Amplification](process-amplification.md) — Agents amplify existing practices; this page adds the upstream cause (strategy clarity) that determines what gets amplified
@@ -103,3 +108,6 @@ The second team ships in six weeks. The agent writes the same volume of code, bu
 - [Empowerment Over Automation](../agent-design/empowerment-over-automation.md) — AI should preserve human judgment; this page provides empirical evidence for why that judgment (strategy) matters most
 - [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md) — Expecting AI tools to work without effort; the ML Canvas shows effort must be directed at strategy, not just prompting
 - [Rigor Relocation](rigor-relocation.md) — Effort shifts from writing to verification; the cascade model shows where that relocated effort should be directed
+- [PM on the AI Exponential](pm-on-the-ai-exponential.md) — How product managers adapt to AI-driven development velocity; the cascade model shows which strategic decisions remain human-owned
+- [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — Structured practice with AI tools; strategy clarity determines which skills to build vs. delegate
+- [Skill Atrophy](skill-atrophy.md) — AI reliance can erode developer capability; the cascade model identifies where human judgment must be preserved upstream

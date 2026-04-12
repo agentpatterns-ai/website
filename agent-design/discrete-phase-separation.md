@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Discrete Phase Separation"
 description: "Prevent context contamination by running research, planning, and execution in separate conversations — only distilled artifacts cross phase boundaries."
@@ -10,6 +9,8 @@ aliases:
   - conversation boundary pattern
   - research-plan-execute isolation
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Discrete Phase Separation
 
@@ -39,21 +40,21 @@ flowchart LR
 
     subgraph P1["Phase 1 — Research"]
         direction TB
-        R1[Fresh context] --> R2[Explore codebase\nGather requirements\nIdentify constraints]
+        R1[Fresh context] --> R2[Explore codebase<br>Gather requirements<br>Identify constraints]
     end
 
-    P1 -->|"Findings summary\n(1–2K tokens)"| P2
+    P1 -->|"Findings summary<br>(1–2K tokens)"| P2
 
     subgraph P2["Phase 2 — Planning"]
         direction TB
-        PL1[Fresh context] --> PL2[Structure steps\nResolve dependencies\nIdentify risks]
+        PL1[Fresh context] --> PL2[Structure steps<br>Resolve dependencies<br>Identify risks]
     end
 
-    P2 -->|"Implementation plan\n(structured doc)"| P3
+    P2 -->|"Implementation plan<br>(structured doc)"| P3
 
     subgraph P3["Phase 3 — Execution"]
         direction TB
-        E1[Fresh context] --> E2[Implement step-by-step\nNo research noise\nNo planning residue]
+        E1[Fresh context] --> E2[Implement step-by-step<br>No research noise<br>No planning residue]
     end
 
     P3 --> D([Done])
@@ -79,12 +80,12 @@ The handoff artifact is the mechanism that makes isolation possible without losi
 
 ## Model Selection Per Phase
 
-The separation enables workload-appropriate model routing. Research and planning benefit from deeper reasoning; execution benefits from speed and throughput. The nibzard catalog notes reasoning models for research/planning phases and faster models for execution [unverified — from nibzard catalog entry, not primary tool documentation].
+The separation enables workload-appropriate model routing. Research and planning benefit from deeper reasoning; execution benefits from speed and throughput. The nibzard catalog uses Opus for research/planning phases and Sonnet for execution ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/discrete-phase-separation.md)).
 
 ## Trade-offs
 
-- **Latency**: ~35% latency increase from separate conversation setup overhead [unverified — cited via nibzard catalog referencing Parisien et al., ICLR 2024; not independently verified]
-- **Tool use accuracy**: 72% → 94% in deliberation-first approaches [unverified — same source as above]
+- **Latency**: ~35% latency increase from separate conversation setup overhead ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441))
+- **Tool use accuracy**: 72% → 94% in deliberation-first approaches ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441))
 - **Artifact quality ceiling**: If the research summary omits a critical finding, the plan cannot recover it. The distillation step is a lossy compression.
 - **Orchestration overhead**: Requires a harness to spawn phases, pass artifacts, and handle phase-level failures.
 
@@ -100,7 +101,7 @@ The separation enables workload-appropriate model routing. Research and planning
 - Only distilled artifacts (summaries, plans) cross boundaries — not raw history.
 - Conversation boundary eliminates attention crosstalk; prompt-level separation does not.
 - The distillation step is lossy: artifact quality sets the ceiling for all downstream phases.
-- ~35% latency overhead is the primary cost [unverified]; deliberation-first approaches show improved tool accuracy [unverified].
+- ~35% latency overhead is the primary cost; deliberation-first approaches improve tool use accuracy from 72% to 94% ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441)).
 
 ## Related
 

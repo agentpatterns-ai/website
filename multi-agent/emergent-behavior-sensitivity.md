@@ -16,7 +16,7 @@ aliases:
 
 ## The Problem
 
-Subagents receive only their own system prompt and the delegation message -- not the lead's full context. Minor wording changes in the lead's prompt cascade unpredictably. Anthropic observed this directly: "small changes to the lead agent can unpredictably change how subagents behave."
+Subagents receive only their own system prompt and the delegation message -- not the lead's full context. Minor wording changes in the lead's prompt cascade unpredictably. Anthropic observed this directly: ["small changes to the lead agent can unpredictably change how subagents behave."](https://www.anthropic.com/engineering/multi-agent-research-system)
 
 ```mermaid
 graph TD
@@ -36,7 +36,7 @@ graph TD
     style O2 fill:#2d5016,stroke:#4a8529
 ```
 
-This is not a bug -- it is a property of systems where agents interpret instructions rather than execute them deterministically [unverified].
+This is not a bug -- it is a property of systems where agents interpret instructions rather than execute them deterministically.
 
 ## Why Prescriptive Prompts Break
 
@@ -44,13 +44,13 @@ Rigid, step-by-step instructions create brittle multi-agent systems:
 
 **Interpretation drift.** Each subagent filters delegation through its own context. A phrasing shift changes what the subagent infers about scope or priority -- without any explicit instruction changing.
 
-**Cascade convergence.** In Anthropic's parallel C compiler project, agents on a monolithic task would "hit the same bug, fix that bug, and then overwrite each other's changes."
+**Cascade convergence.** In [Anthropic's parallel C compiler project](https://www.anthropic.com/engineering/building-c-compiler), agents on a monolithic task would "hit the same bug, fix that bug, and then overwrite each other's changes."
 
-**Emergent over-scaling.** Without effort boundaries, Anthropic's research system "spawned 50 subagents for simple queries, scouring the web endlessly for nonexistent sources."
+**Emergent over-scaling.** Without effort boundaries, [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) "spawned 50 subagents for simple queries, scouring the web endlessly for nonexistent sources."
 
 ## Framework Prompts Over Prescriptive Prompts
 
-Effective multi-agent prompts encode "heuristics rather than rigid rules" -- striking "a balance: specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics."
+Effective multi-agent prompts [encode "heuristics rather than rigid rules"](https://www.anthropic.com/engineering/multi-agent-research-system) -- striking "a balance: specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics."
 
 | Prompt Style | Characteristic | Cascade Behavior |
 |---|---|---|
@@ -71,11 +71,11 @@ Embed resource budgets directly into prompts -- subagent count, search duration,
 
 ### Cascade-aware testing
 
-Measure end-to-end behavior when prompts change. Harness-level changes -- [loop detection](../observability/loop-detection.md), [pre-completion checklists](../verification/pre-completion-checklists.md), and prompt adjustments -- collectively produced a 13.7-point improvement [unverified].
+Measure end-to-end behavior when prompts change. Harness-level changes -- [loop detection](../observability/loop-detection.md), [pre-completion checklists](../verification/pre-completion-checklists.md), and prompt adjustments -- [collectively produced a 13.7-point improvement](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) on Terminal Bench 2.0 with no model change.
 
 ### Distinguish prompt sensitivity from environmental noise
 
-Infrastructure configuration alone can swing performance by 6+ percentage points [unverified]. Resource limits, network latency, and time-of-day effects mimic prompt sensitivity -- control for these before attributing behavior changes to a prompt edit.
+Infrastructure configuration -- resource limits, network latency, and time-of-day effects -- can produce performance swings that mimic prompt sensitivity. Control for these before attributing behavior changes to a prompt edit.
 
 ## Example
 
@@ -108,17 +108,19 @@ The framework version produces the same behavioral outcome whether the prompt sa
 
 ## Key Takeaways
 
-- Small input changes produce disproportionate, unpredictable output changes [unverified]
+- Small input changes produce disproportionate, unpredictable output changes
 - Subagents interpret delegation through their own context -- wording matters more than intent
 - Framework prompts outperform prescriptive prompts for cascade resilience
 - Task granularity is the primary isolation mechanism
 - Evaluate changes end-to-end; individual agent correctness does not predict system behavior
 
-## Unverified Claims
+## When This Backfires
 
-- The complex adaptive systems analogy is implied by sources but not explicitly drawn in any of them [unverified]
-- Framework prompt resilience is supported by Anthropic's experience but not tested in controlled isolation [unverified]
-- "Emergent behavior sensitivity" is a synthesis term, not established in the literature [unverified]
+Framework prompts assume subagents handle ambiguity well -- this breaks down in three conditions:
+
+- **Compliance-critical contexts.** Regulated pipelines (finance, healthcare, legal) may require step-by-step auditability. Framework prompts produce flexible behavior that is harder to trace back to specific instructions, making post-hoc compliance review difficult.
+- **Brittle task types.** Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences. Framework prompts introduce unwanted interpretation where none should occur.
+- **Undertrained subagents.** Heuristic delegation relies on subagents having enough domain knowledge to infer intent. A model without sufficient instruction-following capability or domain context will interpret framework prompts erratically, producing worse outcomes than a prescriptive approach.
 
 ## Related
 

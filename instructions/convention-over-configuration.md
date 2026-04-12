@@ -66,9 +66,15 @@ Conventions reduce decision errors but introduce rigidity. A directory structure
 
 A convention that requires exceptions at every turn is a signal it was specified too narrowly.
 
+## Why It Works
+
+Agents have no persistent memory between sessions. Each task starts cold. When naming and placement are deterministic — derivable from the issue number, content category, or file type — an agent needs no context about what previous agents chose. The correct output follows from the inputs alone.
+
+Without conventions, an agent encountering an ambiguous situation guesses. Different agents make different guesses. Later agents must inspect prior outputs to infer which ad-hoc scheme was used — adding a disambiguation step that grows with every task. Conventions eliminate the disambiguation step entirely by removing the ambiguity at the source.
+
 ## Anti-Pattern: Per-Task Invention
 
-Agents that invent conventions per task produce inconsistent results: mixed branch naming, arbitrary file locations, ad-hoc commit formats. The inconsistency compounds — later agents must guess which convention the earlier agent used, rather than applying a known scheme [unverified].
+Agents that invent conventions per task produce inconsistent results: mixed branch naming, arbitrary file locations, ad-hoc commit formats. Each new agent must inspect what previous agents did before proceeding, rather than applying a deterministic formula.
 
 ## Key Takeaways
 
@@ -114,3 +120,5 @@ The key shift: decisions that previously required judgment (what naming style? w
 - [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
 - [Import Composition Pattern](import-composition-pattern.md)
 - [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
+- [Prompt Governance via PR](prompt-governance-via-pr.md)
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)

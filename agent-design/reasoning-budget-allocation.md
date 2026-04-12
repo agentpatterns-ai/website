@@ -51,7 +51,7 @@ In Claude Code, [including "ultrathink" in a skill's content enables extended th
 
 ### Maximum Thinking as a Cost-Performance Tradeoff
 
-A [community analysis](https://claudelog.com/mechanics/ultrathink) positions maximum-thinking on a balanced model as an alternative to model tier upgrades. Exhausting the thinking budget on a cheaper model costs less than switching tiers, while closing much of the capability gap for reasoning-heavy tasks [unverified].
+A [community analysis](https://claudelog.com/mechanics/ultrathink) positions maximum-thinking on a balanced model as an alternative to model tier upgrades. Exhausting the thinking budget on a cheaper model costs less than switching tiers — a tradeoff worth evaluating before moving to a higher-cost tier for reasoning-heavy tasks.
 
 This stacks with other techniques:
 
@@ -59,7 +59,7 @@ This stacks with other techniques:
 2. **[Plan mode](../workflows/plan-mode.md)** — structured planning before execution
 3. **Iterative critique** — systematic [self-review cycles](agent-self-review-loop.md) to catch edge cases
 
-Each layer adds cost but compounds quality for structured reasoning tasks [unverified — practitioner experience, not benchmarked].
+Each layer adds cost; combine them when the task warrants the investment.
 
 ### Applying Budget Triggers
 
@@ -68,6 +68,10 @@ Each layer adds cost but compounds quality for structured reasoning tasks [unver
 - **Any tool with model routing**: route planning and verification to a capable model, execution to a cheaper one
 
 For tools without per-call configuration, approximate through prompt structure: deep reasoning guidance in planning prompts, less in execution.
+
+## Why It Works
+
+Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploration of the possibility space and must account for requirements, edge cases, and risks — errors here propagate through every downstream step; execution follows a decided plan, making it largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark demonstrated — causes agent timeouts that degrade overall completion rates. Concentrating compute where ambiguity is highest (planning and verification) while reducing it where mechanical fidelity suffices (execution) balances cost against quality at the phase level.
 
 ## When to Apply
 
@@ -84,8 +88,8 @@ Single-step tasks and independent parallel tool calls see no benefit from added 
 - Planning and verification warrant extra-high reasoning compute; execution warrants high.
 - The sandwich achieved the highest completion rate (66.5%) in LangChain benchmarks, outperforming continuous maximum reasoning (53.9%, penalized by timeouts) and uniform high reasoning (63.6%).
 - Extended thinking triggers (e.g., "ultrathink" in Claude Code skills) front-load reasoning before generation — distinct from mid-stream think tool reasoning.
-- Maximum-thinking on a balanced model is a cost-effective alternative to model tier upgrades for reasoning-heavy tasks [unverified].
-- Stack extended thinking with [plan mode](../workflows/plan-mode.md) and iterative critique to compound quality gains [unverified].
+- Maximum-thinking on a balanced model may cost less than a tier upgrade for reasoning-heavy tasks — evaluate before switching tiers.
+- Stack extended thinking with [plan mode](../workflows/plan-mode.md) and iterative critique for tasks that warrant the added cost.
 - Dual-mode operation (plan/normal) enforces the sandwich architecturally by restricting tool access per phase.
 
 ## Example
@@ -136,3 +140,5 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 - [Agent Turn Model](agent-turn-model.md)
 - [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
 - [Agent-First Software Design](agent-first-software-design.md)
+- [The Advisor Strategy](advisor-strategy.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)

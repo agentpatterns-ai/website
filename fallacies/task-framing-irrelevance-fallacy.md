@@ -51,16 +51,22 @@ No files specified, no constraints, no goal. Relevant files compete for attentio
 
 Same underlying problem. Different framing. Different output.
 
+## When Framing Matters Less
+
+The framing effect is real but uneven. In specific conditions, surface presentation has minimal measurable impact:
+
+- **Structured-output and function-calling modes** — when a model responds into a strict JSON schema or typed function signature, framing variation in the surrounding prompt often produces negligible output differences; the schema itself constrains the response space.
+- **Highly fine-tuned task-specific models** — models fine-tuned on a narrow domain develop strong priors that partially override prompt framing; a code-review model fine-tuned on a single codebase is less sensitive to how the review task is described.
+- **Very short or unambiguous queries** — for retrieval-style tasks with a single determinate answer ("What is the return type of X?"), framing variation rarely changes the output.
+
+Investing heavily in framing optimization for these cases yields diminishing returns. The fallacy is the *blanket* claim that framing never matters — not the observation that it matters less in constrained modes.
+
 ## Key Takeaways
 
 - LLM outputs are a function of framing, not just problem structure — changing surface presentation produces measurably different results.
 - Prompt engineering is precision work — parameter names, task descriptions, and context composition affect which patterns the model activates.
 - Irrelevant context is not neutral — open files, conversation history, and surrounding instructions compete with task-relevant content.
 - Attribute output variation to framing before attributing it to model capability.
-
-## Unverified Claims
-
-- Variable renaming (e.g., domain terms to unrelated terms) reducing model accuracy by up to 65% — cited from a YouTube video summary of a Baylor/UCLA study; no primary paper URL has been verified `[unverified]`
 
 ## Related
 

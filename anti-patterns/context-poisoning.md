@@ -28,7 +28,7 @@ An agent hallucinates an incorrect detail early in a session -- a wrong API sign
 
 ## Why Detection Is Hard
 
-Output remains coherent, confident, and internally consistent. The agent does not hedge or self-correct. Once LLMs take a wrong turn, they over-commit to the flawed premise rather than revisiting it ([Breunig, 2025](https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html)) `[unverified]`.
+Output remains coherent, confident, and internally consistent. The agent does not hedge or self-correct. Early mistakes trigger a cascade: each subsequent token is predicted from previously generated tokens, so an initial error compounds into a snowball of downstream errors ([Chen et al., 2025](https://arxiv.org/abs/2510.06265)).
 
 ## Common Causes
 
@@ -71,7 +71,17 @@ Forty tool calls deep, the developer reviews a diff full of changes built on a f
 
 ## Recovery
 
-Corrective prompts only mask the problem temporarily -- the hallucination resurfaces from poisoned context. Start a new session with clean context ([Roo Code docs](https://docs.roocode.com/advanced-usage/context-poisoning)) `[unverified]`.
+Corrective prompts patch the symptom but the poisoned content remains in context, available to re-activate on the next relevant step. The only reliable fix is a clean context: start a new session and re-anchor with verified ground truth before resuming ([Roo Code](https://docs.roocode.com/advanced-usage/context-poisoning)).
+
+## When Mitigation Falls Short
+
+Ground-truth checks and evaluator loops reduce context poisoning but do not eliminate it:
+
+- **Silent hallucinations**: A structurally plausible but wrong value passes schema validation and re-reads without flagging.
+- **Multi-agent boundaries**: Sub-agents trust the orchestrator's summary; a hallucination there propagates unchallenged.
+- **Context compaction**: Summaries can re-inject the original hallucination, resetting the error clock.
+
+Add human checkpoints at key decision boundaries for high-stakes tasks.
 
 ## Mitigation
 

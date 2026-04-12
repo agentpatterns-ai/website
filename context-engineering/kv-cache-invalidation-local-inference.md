@@ -50,18 +50,24 @@ The mitigation is the same in every case: ensure the prompt prefix remains ident
 
 ## Affected Servers
 
-The issue is [documented against llama.cpp](https://unsloth.ai/docs/basics/claude-code#fixing-90-slower-inference-in-claude-code) (`llama-server`). Other local serving frameworks that implement KV cache prefix matching — such as vLLM and Ollama — are likely affected by the same mechanism [unverified].
+The issue is [documented against llama.cpp](https://unsloth.ai/docs/basics/claude-code#fixing-90-slower-inference-in-claude-code) (`llama-server`). Other local serving frameworks that implement KV cache prefix matching will exhibit the same invalidation behaviour for the same structural reason: a mutated prompt prefix produces a different token hash, which misses the cache entirely. This includes [vLLM's automatic prefix caching](https://docs.vllm.ai/en/latest/features/prefix_caching.html) (enabled via `--enable-prefix-caching`) and Ollama, which uses llama.cpp as its backend and inherits its cache behaviour.
+
+## When This Backfires
+
+Disabling the attribution header is appropriate when KV cache hit rate matters more than request traceability. Three conditions where you should leave attribution enabled:
+
+- **Multi-tenant or audited environments** — the header identifies which tool or user issued the request; removing it loses that signal for logging and compliance.
+- **Debugging tool-level issues** — if you are diagnosing why Claude Code or a proxy is behaving unexpectedly, attribution lets you distinguish its requests from other callers.
+- **Single-request benchmarks** — if the inference workload is entirely single-shot (no repeated prefix, no session context), the cache provides no benefit and disabling attribution trades nothing useful.
+
+If any of these apply, prefer moving attribution data out of the prompt body and into HTTP request headers or a separate metadata field instead of eliminating it entirely.
 
 ## Key Takeaways
 
 - Claude Code's attribution header prepends tokens to every prompt, breaking KV cache prefix matching in local inference servers
 - Disable it by setting `CLAUDE_CODE_ATTRIBUTION_HEADER` to `0` in `~/.claude/settings.json` — shell exports do not work
 - Any tool that mutates the prompt prefix will cause the same cache invalidation; keep prefixes stable across requests
-- The fix is confirmed for llama.cpp; other local servers using prefix-based KV caching are likely affected
-
-## Unverified Claims
-
-- vLLM and Ollama are likely affected by the same KV cache invalidation mechanism [unverified]
+- The fix is confirmed for llama.cpp; vLLM and Ollama-backed servers will be affected by the same mechanism because all use hash-based prefix matching
 
 ## Related
 

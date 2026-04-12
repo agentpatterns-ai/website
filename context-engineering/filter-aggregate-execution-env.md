@@ -45,7 +45,7 @@ The same pattern applies to any large intermediate representation:
 
 An agent that achieves filtering through a sequence of tool calls — fetch all, filter, paginate, aggregate — incurs overhead at each step: the intermediate results enter context at each stage, and the agent must reason about each result before issuing the next call.
 
-Code in a sandbox replaces the chain with a single execution: fetch, filter, aggregate, return. [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) notes that familiar programming constructs (loops, conditionals) enable this consolidation, reducing both "time to first token" latency and total token consumption [unverified].
+Code in a sandbox replaces the chain with a single execution: fetch, filter, aggregate, return. [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) notes that familiar programming constructs (loops, conditionals) enable this consolidation, reducing both "time to first token" latency and total token consumption.
 
 ## Sandbox Requirements
 
@@ -68,16 +68,19 @@ This pattern is most valuable when:
 
 It is not applicable when the agent needs to reason about the full dataset — for example, when the task is to identify structural patterns across all rows rather than filter to a subset.
 
+## When This Backfires
+
+- **Agent writes non-deterministic code**: If the agent generates code with side effects — writing to shared state, making external calls, consuming random seeds — determinism guarantees break. The same filter run twice may return different results or corrupt shared resources.
+- **Sandbox provisioning latency exceeds context savings**: Cold-starting a new sandbox container can add hundreds of milliseconds per invocation. For small datasets or infrequent queries, the sandbox overhead outweighs the token savings from filtering.
+- **Sandbox isolation is under-scoped**: An inadequately isolated sandbox — shared filesystem, unrestricted network, or insufficient memory limits — turns agent-generated code into a privilege-escalation vector. The pattern assumes a well-hardened execution environment; without it, the pattern introduces more risk than raw context overhead.
+- **Filtering silently drops relevant data**: If the agent's filter logic has an off-by-one error or incorrect predicate, the model receives a clean but wrong subset and reasons confidently over incomplete data. Errors in tool chains are often visible; errors in sandbox code may be silent.
+
 ## Key Takeaways
 
 - Pass filtered results to the model, not raw datasets — the sandbox is the compute boundary.
 - Replace multi-step tool chains with single sandbox executions to reduce latency and token cost.
 - Apply to any large intermediate representation: tables, logs, API payloads, binary data.
 - The sandbox must have resource limits, isolation, and monitoring — code execution without these is a security risk.
-
-## Unverified Claims
-
-- Code in a sandbox reduces "time to first token" latency and total token consumption compared to tool chains [unverified]
 
 ## Example
 

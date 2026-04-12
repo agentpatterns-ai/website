@@ -50,7 +50,7 @@ Tree-sitter parses source files into abstract syntax trees and extracts structur
 
 Source files become nodes in a directed graph; edges connect files sharing symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result emphasizes task-relevance over sheer size.
 
-([Aider repo map docs](https://aider.chat/docs/repomap.html))
+PageRank works here because importance propagates through the call graph: a function referenced by 20 other files scores higher than a private helper called once, and symbols referenced *by* important symbols gain transitively elevated scores. This property — which BM25 keyword ranking and recency-based weighting lack — means the top-ranked symbols surface the architectural spine of the codebase without any explicit query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
 
 ### 3. Fit: Binary Search to Token Budget
 
@@ -94,7 +94,7 @@ Higher budget: more files with full type annotations. Lower budget: only the mos
 
 ## Benchmark Impact
 
-Aider's repository map contributed to a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate *where* to make changes before attempting *what* to change. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
+Aider's system achieved a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate *where* to make changes before attempting *what* to change. The SWE-bench post credits the repo map as part of the system but does not isolate its contribution in an ablation; the benchmark figure reflects the full Aider stack, not the map alone. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
 
 ## Alternative Approaches
 
@@ -159,17 +159,19 @@ are the most-referenced auth symbols. I'll read those files first.
 
 The map consumed 87 tokens instead of the ~12,000 tokens that reading all source files would require. The agent identified the right entry points without scanning the full codebase.
 
+## When This Backfires
+
+- **Rapidly-changing codebases**: The map is recomputed per session but not per edit. In a monorepo with thousands of commits per day, the parsed AST can be stale within minutes; Claude Code's on-demand agentic search is a better fit because it queries the live filesystem.
+- **Heavy metaprogramming**: Codebases that generate classes or functions at runtime (Rails `method_missing`, Python metaclasses, macro-heavy Rust) produce AST symbols that don't reflect runtime structure; PageRank over those symbols misleads rather than orients.
+- **Small or flat codebases**: A repo with fewer than ~20 files gains nothing from the ranking step — reading all source files fits inside a standard context window and provides richer implementation detail than signatures alone.
+- **Large repos with huge token budgets**: If the agent context window is already large enough to hold most of the codebase directly, the compression step introduces truncation risk for no gain.
+
 ## Key Takeaways
 
 - Tree-sitter extraction + PageRank ranking + binary-search fitting produces a weighted structural overview for any token budget.
 - The map adapts dynamically: expands with few files in context, shrinks with many.
 - Three codebase orientation approaches (structural indexing, agentic search, vector embeddings) — choose by codebase size and change frequency.
 - RepoMapper and mcp-server-tree-sitter make the pattern available to any MCP-compatible agent.
-
-## Unverified Claims
-
-- The exact PageRank damping factor and personalization vector weights used by Aider are referenced in source code but not documented in any blog post or docs page [unverified — source code review was blocked by rate limiting during research]
-- Whether Aider's repo map has been formally ablated (tested with/without) is unclear — the SWE-bench post credits the map as part of the system but does not isolate its contribution [unverified]
 
 ## Related
 
@@ -180,6 +182,8 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Context Priming](context-priming.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
+- [Layered Context Architecture](layered-context-architecture.md)
+- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Context Compression Strategies](context-compression-strategies.md)

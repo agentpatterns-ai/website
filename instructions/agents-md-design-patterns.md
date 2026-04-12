@@ -41,7 +41,7 @@ Type checking: tsc --noEmit
 
 Include the actual flags. "Run tests" leaves the invocation open to interpretation; `pytest -v` does not. The most common agent errors in the analysis stemmed from omitting commands entirely or listing tool names without invocation details.
 
-Six areas to cover: commands, testing practices, project structure, code style, git workflow, and boundaries. Missing any one area is the second-most-common failure pattern after vagueness.
+Six areas to cover: commands, testing practices, project structure, code style, git workflow, and boundaries. Missing any one area is the second-most-common failure pattern after vagueness. Within project structure, specificity helps: "React 18 with TypeScript, Vite, and Tailwind CSS" is more actionable than "React project."
 
 ## Pattern 2 — Code Over Prose for Style
 
@@ -140,11 +140,6 @@ The recommended starting point is one specialist (e.g. `@test-agent`), not a ful
 - [AGENTS.md Open Standard](https://agents.md)
 - [GitHub Copilot: Custom Instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot)
 
-## Unverified Claims
-
-- Stack specificity (e.g. "React 18 with TypeScript, Vite, and Tailwind CSS" over "React project") measurably improves agent behaviour `[unverified]`
-- The three-tier emoji format produces higher compliance than prose-only boundaries `[unverified]`
-
 ## Related
 
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
@@ -160,3 +155,5 @@ The recommended starting point is one specialist (e.g. `@test-agent`), not a ful
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Negative-Space Instructions](negative-space-instructions.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md)

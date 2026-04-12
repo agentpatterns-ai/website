@@ -14,7 +14,7 @@ tags:
 
 ## The Cost of Instruction Files
 
-Agent instruction files (AGENTS.md, CLAUDE.md, copilot-instructions.md) are loaded into context on every interaction. Every line in those files consumes context budget before the agent starts any work. This makes the question of what to include a resource allocation decision, not a documentation exercise.
+Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) are loaded into context on every interaction. Every line in those files consumes context budget before the agent starts any work. This makes the question of what to include a resource allocation decision, not a documentation exercise.
 
 The test for inclusion is simple: can the agent discover this information itself using the tools available to it — file reads, grep, glob searches? If yes, the information does not belong in the instruction file.
 

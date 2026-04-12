@@ -16,7 +16,7 @@ tags:
 
 ## What Agent HQ Provides
 
-Agent HQ shifts GitHub from a single-agent tool to a [multi-agent platform where teams select and deploy different coding agents](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/) depending on the task. Supported agents include GitHub Copilot, Anthropic Claude, and OpenAI Codex in public preview, with agents from Google, Cognition, and xAI announced as forthcoming [unverified].
+Agent HQ shifts GitHub from a single-agent tool to a [multi-agent platform where teams select and deploy different coding agents](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/) depending on the task. Supported agents include GitHub Copilot, Anthropic Claude, and OpenAI Codex in public preview, with [agents from Google, Cognition, and xAI announced as forthcoming](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/).
 
 The core design principle: agents operate as teammates that produce reviewable artifacts, not autonomous actors that ship code.
 
@@ -91,9 +91,16 @@ The agent picks up the comment, makes the changes, and updates the same draft PR
 - Enterprise governance provides centralized policy, audit logging, and quality metrics
 - @-mention invocation in comments follows existing GitHub collaboration patterns
 
-## Unverified Claims
+## When This Backfires
 
-- Agents from Google, Cognition, and xAI announced as forthcoming [unverified]
+Parallel agent deployment only delivers value when concurrency limits allow it. Practitioner reports from 2025 flag rate limits as the primary constraint — running Copilot, Claude, and Codex simultaneously on the same issue burns through per-model quotas faster than sequential use, and hitting a cap mid-session leaves draft PRs incomplete.
+
+Conditions where Agent HQ underperforms alternatives:
+
+- **Rate-limited environments**: Teams on Copilot Pro (not Enterprise) hit concurrent mission ceilings quickly; parallel evaluation becomes sequential in practice
+- **Merge-conflict-heavy repos**: Copilot running within Agent HQ has documented difficulty resolving merge conflicts, requiring manual intervention that erodes the asynchronous workflow benefit
+- **Custom agent workflows**: The configuration surface for custom agents is limited — model selection for the Copilot coding agent is not exposed, constraining teams that need fine-grained control
+- **Cost-sensitive teams**: Comparative evaluation means paying for N agent runs per task rather than one; without a clear decision framework for when to run parallel agents, costs scale without proportional benefit
 
 ## Related
 

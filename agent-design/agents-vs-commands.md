@@ -88,6 +88,16 @@ You write documentation pages for the Agent Patterns repo.
 
 The command can be extended with new pipeline steps (e.g., an additional review stage) without editing `content-writer.md`. The agent's quality bar can be tightened without touching any command file.
 
+## When This Backfires
+
+The pattern adds overhead without payoff in three conditions:
+
+1. **Single-use pipelines**: If a command will never be reused and only one agent ever runs it, the separation is pure indirection. The cost of two files and an indirection layer outweighs the composability benefit that never materialises.
+2. **Rapidly changing scope**: When both the pipeline *and* the domain expertise are in flux simultaneously, maintaining the boundary actively slows iteration — every decision requires updating two files to stay coherent.
+3. **Solo projects without reuse**: On projects where agent definitions are never shared across commands, the abstraction is notional. The separation only pays off when the same agent genuinely serves multiple callers, or when the pipeline genuinely evolves independent of the expert definition.
+
+The principle derives from [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns), a foundational software design heuristic with well-documented trade-offs: it improves long-term maintainability at the cost of upfront complexity and indirection. The same cost-benefit calculus applies here.
+
 ## Key Takeaways
 
 - Commands own orchestration (what, when, to whom); agents own execution (how, to what standard)
@@ -106,3 +116,6 @@ The command can be extended with new pipeline steps (e.g., an additional review 
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Execution-First Delegation](execution-first-delegation.md)
 - [Classical SE Patterns as Agent Analogues](classical-se-patterns-agent-analogues.md)
+- [Persona-as-Code: Defining Agent Roles as Structured Docs](persona-as-code.md)
+- [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
+- [Agentic AI Architecture: From Prompt to Goal-Directed](agentic-ai-architecture-evolution.md)

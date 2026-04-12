@@ -127,6 +127,7 @@ When a contributor runs `/draft-content`, the agent definition for `content-writ
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
+- [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
 - [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](mcp-protocol.md)

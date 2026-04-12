@@ -1,6 +1,6 @@
 ---
 title: "Content Pipeline: From Idea to Published Documentation"
-description: "How content moves from a captured idea through research, agent-drafted writing, multi-reviewer quality gates, and into the published site. Content Pipeline"
+description: "How content moves from a captured idea through research, agent-drafted writing, multi-reviewer quality gates, and into the published site."
 tags:
   - workflows
   - agent-design
@@ -13,7 +13,7 @@ aliases:
 
 # Content Pipeline: From Idea to Published Documentation
 
-> How content moves from a captured idea through research, agent-drafted writing, multi-reviewer quality gates, and into the published site.
+> A label-based issue pipeline that routes content through agent-handled stages — research, draft, review — with two independent reviewers and human approval at merge.
 
 !!! info "Also known as"
     Content Pipeline, Idea-to-Research Pipeline, Idea Capture and Research Stages
@@ -178,6 +178,14 @@ The core components you need in any implementation:
 5. **Tag-based routing** — the stage transitions (`idea` → `researched` → `drafting` → `reviewing`) are the only coordination signals between steps
 
 The specific implementation (slash commands, GitHub issues, a task database) is secondary. The pattern holds across tools.
+
+## When This Backfires
+
+The pipeline adds coordination overhead that only pays off when review is the bottleneck — not writing. Three conditions where it underperforms:
+
+- **Small teams or solo projects**: multi-stage label transitions and parallel reviewer runs add ceremony that exceeds the benefit for a one- or two-person team. An ad-hoc PR review with a single reviewer is faster and adequate when output volume is low.
+- **Reviewer fatigue at volume**: if agent output volume is high and the two-reviewer round runs on every draft, human merge approvals become rubber stamps. Quality enforcement degrades to theater when reviewers process more issues than they can meaningfully assess per session.
+- **Thin or vague issue bodies**: the research and draft stages depend on a well-formed issue with specific key points. A poorly written idea item produces poor research output and a poor draft; the pipeline amplifies input quality in both directions.
 
 ## Example
 

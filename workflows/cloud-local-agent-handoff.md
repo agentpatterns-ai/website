@@ -37,7 +37,7 @@ The reverse direction uses the [`/delegate` command in Copilot CLI](https://gith
 
 The delegated work follows the [standard coding agent workflow](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/) — the agent operates asynchronously and opens a pull request with its results. The developer continues working locally on other tasks while the cloud agent handles the delegated work in the background.
 
-The `&` shortcut in the CLI provides a [quick delegation mechanism](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) to send the current task to the cloud and keep working locally [unverified].
+The `&` shortcut in the CLI provides a [quick delegation mechanism](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) to send the current task to the cloud and keep working locally.
 
 ## When to Hand Off
 
@@ -85,6 +85,15 @@ After verifying the fix passes locally, the developer pushes the commit.
 
 The coding agent picks up the task on a new branch, works asynchronously, and opens a separate PR. The developer continues refining the auth redirect fix locally while the cloud agent handles session expiry in parallel.
 
+## When This Backfires
+
+Cloud-local handoff depends on session state being transferable, which breaks down in several conditions:
+
+- **Stale or truncated session logs** — cloud agents that run long tasks may produce logs exceeding the local context window. The receiving session loads partial context and may misunderstand prior decisions.
+- **Branch divergence** — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume.
+- **Environment mismatch** — cloud runners have different toolchains, credentials, and network access than local machines. A task that succeeded in the cloud (e.g., calling an internal API via runner credentials) may fail locally without equivalent configuration.
+- **Toolchain lock-in** — the integrated handoff is GitHub Copilot-specific. Teams using other agent stacks must implement session serialization manually via shared branch state and exported logs.
+
 ## Key Takeaways
 
 - Cloud-to-local handoff preserves branch, session logs, and conversation context across surfaces
@@ -92,10 +101,6 @@ The coding agent picks up the task on a new branch, works asynchronously, and op
 - Git branches serve as the universal coordination mechanism between cloud and local agents
 - Agent sessions should be serializable and portable — not locked to a single execution surface
 - Delegated work produces reviewable PRs, maintaining human authority over the final result
-
-## Unverified Claims
-
-- The `&` shortcut in the CLI provides a quick delegation mechanism to send the current task to the cloud [unverified]
 
 ## Related
 

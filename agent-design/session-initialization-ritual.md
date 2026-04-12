@@ -41,7 +41,7 @@ Read `git log --oneline -20` and any progress file (a markdown or JSON file upda
 
 ### 3. Select the Highest-Priority Incomplete Feature
 
-Identify one feature from the incomplete list and commit to it for the session. Multi-tasking within a session increases context fragmentation and produces incomplete, inconsistent output. Selecting one item — and finishing it — is the harness constraint that prevents the agent from spreading effort across several half-done tasks [unverified].
+Identify one feature from the incomplete list and commit to it for the session. Multi-tasking within a session increases context fragmentation and produces incomplete, inconsistent output. Selecting one item — and finishing it — is the harness constraint that prevents the agent from spreading effort across several half-done tasks. Anthropic's [harness engineering practice](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) found this "incremental approach turned out to be critical to addressing the agent's tendency to do too much at once."
 
 ### 4. Run Baseline Tests
 
@@ -58,7 +58,7 @@ The ritual is only reliable when it is non-negotiable. [Anthropic's effective ha
 In practice:
 
 - Encode the ritual as system prompt instructions with explicit ordering: "You must complete steps 1 through 4 before writing any code."
-- Require the agent to output a confirmation for each step before proceeding [unverified].
+- Require the agent to output a brief status line for each step before proceeding — this creates an auditable trace and surfaces unexpected states early.
 
 - Use pre-commit hooks to enforce that git log was consulted (e.g., by requiring a commit message format that references the progress file).
 
@@ -114,6 +114,15 @@ Step 3: Selecting "Password reset endpoint" — highest priority incomplete item
 Step 4: Running npm test... 42 passed, 0 failed — baseline clean.
 Step 5: Beginning implementation of password reset endpoint.
 ```
+
+## When This Backfires
+
+The ritual adds overhead at session start — when that cost outweighs the benefit, the pattern degrades:
+
+- **Stale progress file**: If the progress file is not updated at session end, the next session reads stale state and selects the wrong task. The ritual amplifies a missing habit (updating on exit) rather than replacing it.
+- **Long baseline test suites**: Running the full test suite before every session is impractical when tests take minutes. Agents skip the step under time pressure, defeating its purpose — scope it to a fast smoke test or targeted subset.
+- **Single-session work**: For short, self-contained tasks with no prior context to retrieve, the startup sequence adds latency with no orientation benefit. Apply the ritual only when prior state actually exists to read.
+- **Context overloading**: Reading a large git log, a verbose progress file, and multiple config files front-loads context consumption. Keep progress files minimal — just enough for the next session to make a good decision quickly.
 
 ## Key Takeaways
 

@@ -16,7 +16,7 @@ tags:
 
 ## The Problem
 
-Agents restart cold each session. When work spans many sessions, agents rediscover completed steps, re-derive task order, and generate redundant plans. Steve Yegge coined this the "50 First Dates" problem [unverified — original source for this attribution not located]: every conversation is the agent's first.
+Agents restart cold each session. When work spans many sessions, agents rediscover completed steps, re-derive task order, and generate redundant plans. Steve Yegge coined this the ["50 First Dates" problem](https://steve-yegge.medium.com/introducing-beads-a-coding-agent-memory-system-637d7d92514a): every conversation is the agent's first.
 
 Markdown plan files make the problem worse. Agents produce new plan files each session, none referencing the others. After weeks of development, a plans/ directory accumulates hundreds of overlapping, partially-complete files. When context is tight, agents hallucinate completion, skip phases, and disavow discovered problems rather than log them.
 
@@ -51,7 +51,7 @@ bd create "Add auth middleware" -p 1   # create a priority-1 task
 bd dep add bd-a1b2 bd-c3d4        # bd-a1b2 blocks bd-c3d4
 bd update bd-a1b2 --claim         # atomically claim (sets assignee + in_progress)
 bd ready                          # list unblocked tasks
-bd update bd-a1b2 --status closed # mark done [unverified: exact flag syntax]
+bd close bd-a1b2 "Done"            # mark closed
 ```
 
 `--claim` is atomic: it sets both assignee and status in one operation, preventing two parallel agents from acquiring the same task.
@@ -88,7 +88,7 @@ bd init
 echo "Use 'bd' for task tracking. Start each session with bd ready." >> AGENTS.md
 ```
 
-The agent instruction in AGENTS.md is the only per-project change needed. Agents exposed to this convention spontaneously file new issues when they discover problems mid-session [unverified], rather than silently ignoring them to save context.
+The agent instruction in AGENTS.md is the only per-project change needed. Agents exposed to this convention [spontaneously file new issues when they discover problems mid-session](https://github.com/steveyegge/beads/blob/main/AGENTS.md), rather than silently ignoring them to save context.
 
 For personal use on shared or open-source projects, `bd init --stealth` keeps the `.beads/` directory local and untracked.
 
@@ -107,7 +107,7 @@ bd dep add bd-a1b2 bd-e5f6                     # tests depend on auth
 # Agent A claims and completes auth
 bd update bd-a1b2 --claim
 # ... implements auth ...
-bd update bd-a1b2 --status closed
+bd close bd-a1b2 "Implemented"
 ```
 
 ```bash
@@ -123,10 +123,19 @@ bd dep add bd-g7h8 bd-e5f6                           # tests now blocked on migr
 
 bd update bd-c3d4 --claim
 # ... implements rate limiting ...
-bd update bd-c3d4 --status closed
+bd close bd-c3d4 "Implemented"
 ```
 
 Agent B did not need to read plan files or ask what was already done. `bd ready` surfaced actionable tasks, and the new dependency (`bd-g7h8` blocking `bd-e5f6`) was recorded for the next session rather than lost.
+
+## When This Backfires
+
+Beads adds real costs. Skip it when the overhead is not justified.
+
+- **Short-lived or single-session projects.** If the entire project fits in one context window, `bd ready` adds tooling friction without a meaningful payoff. A plain TASKS.md achieves the same result with zero setup.
+- **Crashed in-progress tasks.** `--claim` sets status to `in_progress` atomically, but there is no built-in watchdog. An agent that crashes mid-task leaves the task stuck in `in_progress`, blocking downstream work until a human or supervisor agent runs `bd update --status open` to reset it.
+- **Semantic compaction is irreversible.** Closed-task summaries discard detail. If a future session needs to understand *why* a task was closed a certain way — to debug a regression, for example — that detail may be gone. Dolt's git log partially mitigates this, but compact-and-forget is not a substitute for a full audit trail.
+- **Dolt overhead on constrained machines.** Dolt runs as a per-project server by default. Machines running many simultaneous Beads projects can exhaust ports or memory. Shared server mode resolves this but adds a coordination step to project setup.
 
 ## Key Takeaways
 

@@ -15,7 +15,7 @@ tags:
 
 Most agent workflows assume an existing codebase. Greenfield projects offer a different opportunity: you can design the project structure, conventions, and workflow around agent collaboration from the start rather than retrofitting it.
 
-The key insight is that in a greenfield agent-first project, the agent topology is the architecture. The agents you define, the skills they carry, and the boundaries between them shape how the codebase is structured — just as team structure shapes system architecture ([Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)) [unverified].
+The key insight is that in a greenfield agent-first project, the agent topology is the architecture. The agents you define, the skills they carry, and the boundaries between them shape how the codebase is structured — just as team structure shapes system architecture ([Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law)).
 
 ## The Workflow
 
@@ -62,12 +62,12 @@ Capture decisions and trade-offs as issue comments — not just in conversation 
 
 ### Phase 3: Recursive Decomposition to Context-Safe Tasks
 
-Epics must be decomposed until each work item fits within an agent's effective context window. The [context window dumb zone](../context-engineering/context-window-dumb-zone.md) defines the constraint: task completion should target 50% of the model's context window, because output quality degrades in the second half.
+Epics must be decomposed until each work item fits within an agent's effective context window. The [context window dumb zone](../context-engineering/context-window-dumb-zone.md) defines the constraint: output quality degrades beyond a model-specific token threshold, and tasks that push into that zone produce unreliable results.
 
-**Right-sizing heuristic.** A task is agent-safe when: [unverified]
+**Right-sizing heuristic.** A task is agent-safe when:
 
-- It touches a bounded set of files (typically 3-5)
-- The full context of those files plus instructions fits within 50% of the context window
+- It touches a bounded set of files (typically 3–5)
+- The full context of those files plus instructions fits within the model's effective context range — see [context window dumb zone](../context-engineering/context-window-dumb-zone.md) for per-model thresholds
 - Success criteria can be verified without understanding the entire system
 - The task has no ambiguous dependencies on concurrent work
 
@@ -148,7 +148,7 @@ A team builds a Kubernetes deployment CLI with rollback support using the agent-
 
 **Step 2 — Shape epics.** An interactive agent session decomposes the product into four epics: CLI scaffold, deployment commands, rollback logic, and status reporting. Each epic's trade-offs and dependencies are captured as GitHub issue comments.
 
-**Step 3 — Decompose to context-safe tasks.** The "deployment commands" epic splits into five tasks: `deploy create` subcommand, Kubernetes client wrapper, deployment status polling, configuration validation, and integration test harness. Each task touches 3–4 files and fits within 50% of the context window.
+**Step 3 — Decompose to context-safe tasks.** The "deployment commands" epic splits into five tasks: `deploy create` subcommand, Kubernetes client wrapper, deployment status polling, configuration validation, and integration test harness. Each task touches 3–4 files and stays well within the model's effective context range.
 
 **Step 4 — Execute in parallel.**
 
@@ -166,17 +166,12 @@ Each session reads `AGENTS.md`, picks up its assigned issue, and produces a PR. 
 
 - In greenfield projects, define agent roles, skills, and AGENTS.md before writing product code — the agent topology shapes the architecture
 - Shape epics interactively with agents and persist decisions in issue comments, not conversation history
-- Decompose tasks until each fits within 50% of the agent's context window — the dumb zone makes oversized tasks unreliable
+- Decompose tasks until each fits within the model's effective context range — the [dumb zone](../context-engineering/context-window-dumb-zone.md) makes oversized tasks unreliable
 - Execute through [fresh-context loops](../agent-design/loop-strategy-spectrum.md) with human review at PR boundaries, not mid-implementation
 - Treat agent output quality as feedback on your decomposition and instructions, not just agent capability
 - Design issue templates as agent intake forms — capture structured context, not just human-readable descriptions
 - Dog-food the pipeline immediately; issues surface faster under real use than inspection
 - Start with the minimum viable stack (AGENTS.md, one standards file, one agent, one command, one hook); add complexity only when the minimum proves insufficient
-
-## Unverified Claims
-
-- Agent topology shapes system architecture analogously to Conway's Law [unverified]
-- Right-sizing heuristic for context-safe tasks (3-5 files, 50% context window, bounded success criteria) [unverified]
 
 ## Related
 
@@ -194,3 +189,5 @@ Each session reads `AGENTS.md`, picks up its assigned issue, and produces a PR. 
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
+- [Codebase Readiness for Agents](codebase-readiness.md)
+- [Compound Engineering: Systematic Agent Learning Loop](compound-engineering.md)

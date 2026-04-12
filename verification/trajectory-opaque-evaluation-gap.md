@@ -119,3 +119,4 @@ The outcome grader sees a correct deployment. The trajectory auditor catches tha
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
+- [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md)

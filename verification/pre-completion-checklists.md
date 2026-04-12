@@ -39,7 +39,7 @@ Add to the system prompt: "Before completing any task, you must explicitly work 
 
 **As a PostToolUse hook:**
 
-Monitor for completion signals (task done, STOP calls, summary messages). On detection, inject the checklist as a continuation prompt before allowing the agent to terminate. This is more reliable because it intercepts completion even when the agent forgets the instruction [unverified].
+Monitor for completion signals (task done, STOP calls, summary messages). On detection, inject the checklist as a continuation prompt before allowing the agent to terminate. Hooks execute outside the LLM's reasoning chain, so they enforce the checklist even when the agent forgets the instruction under context pressure or long sessions — [prompt-based instructions achieve 70–90% compliance, while hooks achieve near-100% because they run at the system level](https://www.dotzlaw.com/insights/claude-hooks/).
 
 **As a PreCompletionChecklist middleware:**
 
@@ -112,17 +112,29 @@ Run `npm test` and paste the result. Do not summarize — show the actual output
 
 This combination — a `PostToolUse` hook plus an explicit system prompt instruction — ensures the checklist runs even when the agent does not remember the instruction from earlier in the conversation.
 
+## Why It Works
+
+Mandatory self-verification interrupts the premature-closure bias built into agent training: models optimise for appearing done, not for being correct. Forcing the agent to re-engage with the original requirement after output is generated creates a second pass that catches drift between intent and implementation.
+
+The mechanism is established in LLM research: self-verification that checks conclusions backward against initial conditions — rather than only forward reasoning — measurably improves accuracy across arithmetic, commonsense, and logical tasks. ([Weng et al., 2022](https://arxiv.org/abs/2212.09561))
+
+Implementing the gate as a hook rather than a prompt instruction exploits the same principle: hooks execute at the system level, outside the LLM's reasoning context, guaranteeing execution independent of what the model remembers.
+
+## When This Backfires
+
+Pre-completion checklists introduce risk in several conditions:
+
+- **Unsatisfiable checklist items create infinite loops.** If the agent cannot make a failing test pass — because the test is flawed, the requirement is contradictory, or the underlying capability is missing — the checklist becomes a deadlock. Add a maximum retry count or an explicit escalation path for persistent failures.
+- **Vague items provide false confidence.** A checklist item like "check your work" nominally passes without verifying anything. Agents satisfy the surface form of the instruction, not the intent. Every item must specify a concrete, observable output.
+- **Latency compounds in long pipelines.** Each verification pass adds one full LLM round-trip. In a multi-step pipeline with a pre-completion gate at every stage, total latency can exceed the cost of just running end-to-end tests directly.
+
 ## Key Takeaways
 
 - Agents stop when output looks plausible, not when it is verified correct — without intervention
 - Self-verification was a high-impact component in harness changes that improved task scores from 52.8% to 66.5% in LangChain benchmark experiments
-- Implement the checklist as a hook or middleware, not just a prompt instruction — hooks are more reliable
+- Implement the checklist as a hook or middleware, not just a prompt instruction — hooks execute at the system level and are not subject to context pressure that degrades prompt compliance
 - Checklist items must be specific and verifiable; vague items are not executed meaningfully
 - The verification sequence has four phases: planning, building, verification, fixing
-
-## Unverified Claims
-
-- PostToolUse hook injection is more reliable than prompt instructions because it intercepts completion even when the agent forgets the instruction [unverified]
 
 ## Related
 

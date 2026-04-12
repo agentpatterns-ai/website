@@ -12,7 +12,7 @@ tags:
 
 ## Backend: The Baseline
 
-Agents perform best on backend code [unverified]. The reasons are structural: backend tasks tend to be typed, testable, and specified precisely. A function signature, a test suite, and a documented API form an unambiguous target. Agents can generate code, run tests, and iterate against machine-verifiable feedback.
+Agents perform best on backend code. The reasons are structural: backend tasks tend to be typed, testable, and specified precisely. A function signature, a test suite, and a documented API form an unambiguous target. Agents can generate code, run tests, and iterate against machine-verifiable feedback. Benchmarks such as SWE-bench and [ABC-Bench](https://arxiv.org/abs/2601.11077) measure agent performance almost exclusively on backend tasks — precisely because objective correctness criteria exist there that don't exist for visual or stateful domains.
 
 This is the reference point. Other domains deviate from it in specific ways.
 
@@ -34,7 +34,7 @@ Reduce autonomy for visual output tasks. Increase verification frequency.
 
 Infrastructure mistakes are expensive. A dropped database, a misconfigured security group, or an incorrect IAM policy can cause outages or data loss. Infrastructure is also stateful — the current state of a system matters to every action taken against it.
 
-Agents reason poorly about state they cannot observe [unverified]. An agent that cannot query current infrastructure state will operate on assumptions that may be wrong.
+Agents reason from context, not live observation. An agent that cannot query current infrastructure state will operate on assumptions that may be wrong — it has no mechanism to detect drift between its prior knowledge and reality.
 
 **Adaptations:**
 
@@ -47,7 +47,7 @@ Agents reason poorly about state they cannot observe [unverified]. An agent that
 
 Data engineering failures are often silent. A wrong join condition, a missed null check, or an off-by-one in a date range produces results that look plausible but are wrong. Unlike a failing test or a runtime exception, incorrect data may not surface until downstream consumers detect anomalies.
 
-Agents are prone to generating plausible-looking queries that contain subtle errors [unverified]. The correctness bar for data work is high because the verification cost is also high.
+Agents are prone to generating plausible-looking queries that contain subtle errors. Meta's engineering team documented this directly: agents without full pipeline context would produce code that compiled correctly but referenced wrong intermediate field names or violated append-only identifier rules, with failures propagating silently to downstream consumers ([source](https://engineering.fb.com/2026/04/06/developer-tools/how-meta-used-ai-to-map-tribal-knowledge-in-large-scale-data-pipelines/)). The correctness bar for data work is high because the verification cost is also high.
 
 **Adaptations:**
 
@@ -68,6 +68,17 @@ graph TD
     B -->|High: infrastructure changes| E[Plan + human approval]
     B -->|High: data transformations| F[Test coverage + second review]
 ```
+
+## When This Backfires
+
+Domain-based autonomy restrictions are heuristics, not rules:
+
+- **Over-restriction on backend.** Blanket approval gates on low-risk backend tasks waste the agent's highest-value use case.
+- **Frontend with visual testing in place.** Teams with Percy, Chromatic, or Playwright visual regression have already closed the "flying blind" gap. Further restriction adds friction without reducing risk.
+- **Infrastructure with policy-as-code.** Terraform + CI-enforced plans + Open Policy Agent reduce blast-radius risk substantially. Treating all infrastructure as high-risk ignores this.
+- **Not all data work is silent.** Schema migrations with automatic rollback and row-count assertions behave like backend tasks.
+
+Recalibrate when tooling closes the domain's correctness gap.
 
 ## Example
 
@@ -107,12 +118,6 @@ Constraining component choice converts visual judgment into a structural check: 
 - Frontend requires structural constraints (component libraries, design systems) and automated visual feedback
 - Infrastructure requires plan-before-apply patterns and read-only defaults to contain blast radius (see [Blast Radius Containment](../security/blast-radius-containment.md))
 - Data work requires comprehensive test fixtures and verification gates because failures are often silent
-
-## Unverified Claims
-
-- Agents perform best on backend code [unverified]
-- Agents reason poorly about state they cannot observe [unverified]
-- Agents are prone to generating plausible-looking queries that contain subtle errors [unverified]
 
 ## Related
 

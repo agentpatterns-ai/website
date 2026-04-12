@@ -77,11 +77,11 @@ In Copilot, .github/copilot-instructions.md sets project-wide behavior.
 What's the Claude Code equivalent and what differences should I expect?
 ```
 
-The assistant maps `CLAUDE.md` to the instructions file and explains additional capabilities. This works because the underlying architecture is shared [unverified].
+The assistant maps `CLAUDE.md` to the instructions file and explains additional capabilities. This works because both tools expose project instructions as a single context-injected file — the mechanism is the same even when the filename differs.
 
 ## Anti-Pattern: Isolated Learning
 
-The failure mode is learning each tool in a silo without recognizing you are learning the same patterns twice. Teams that cross-pollinate documentation report faster ramp-up because they recognize patterns rather than learning from scratch [unverified].
+The failure mode is learning each tool in a silo without recognizing you are learning the same patterns twice. Teams that cross-pollinate documentation can ramp up faster by recognizing patterns they already know rather than treating each tool as entirely new.
 
 ## Gaps in Translation
 
@@ -90,6 +90,14 @@ Not all concepts have equivalents:
 - **Agent teams** (multi-agent coordination with shared task lists) exist in Claude Code but have no Copilot equivalent yet
 - **Hooks** have similar concepts across tools but different event models
 - Translation works best for foundational patterns; advanced features may remain tool-specific
+
+## When This Backfires
+
+Cross-tool translation fails in three recurring scenarios:
+
+- **Execution-model mismatch**: Tools differ in token budgets, tool-call approval flows, and sandboxing policies. A skill that runs silently in Claude Code may surface approval prompts or fail outright in Copilot due to different permission models.
+- **Tool-name mapping gaps**: When VS Code reads `.claude/agents/*.md`, it maps Claude tool names to its own equivalents. If the agent references a tool with no counterpart (e.g., a Claude-specific built-in), the definition loads but behaves differently or fails silently.
+- **Standard version drift**: Agent Skills and AGENTS.md are actively evolving. A `SKILL.md` written against one tool's interpretation of the spec may rely on a feature another tool hasn't implemented yet. Test portability claims; don't assume them.
 
 ## Example
 
@@ -137,11 +145,6 @@ Copilot finds the skill in `.claude/skills/` (or `.github/skills/`), maps `Bash`
 - [VS Code: Custom agents](https://code.visualstudio.com/docs/copilot/customization/custom-agents) — Reads `.claude/agents/` format
 - [Anthropic: Context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) — Tool-agnostic patterns
 
-## Unverified Claims
-
-- AI assistants mapping cross-tool concepts accurately because the underlying architecture is shared [unverified]
-- Teams that cross-pollinate documentation spending less time on ramp-up [unverified]
-
 ## Related
 
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md)
@@ -149,5 +152,6 @@ Copilot finds the skill in `.claude/skills/` (or `.github/skills/`), maps `Bash`
 - [Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md)
 - [Agent Skills Standard](../standards/agent-skills-standard.md)
 - [AGENTS.md Standard](../standards/agents-md.md)
+- [Empirical Baseline: Agentic AI Coding Tool Configuration](empirical-baseline-agentic-config.md)
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md)
 - [Context Ceiling](context-ceiling.md)

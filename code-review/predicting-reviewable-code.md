@@ -142,5 +142,6 @@ These two functions would be candidates for deletion. Returning this report to t
 - [Risk-Based Task Sizing for Agent Verification Depth](../verification/risk-based-task-sizing.md)
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)
+- [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — the training incentive that produces over-engineered code and drives the over-engineering deletion category
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)

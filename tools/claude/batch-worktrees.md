@@ -13,41 +13,34 @@ tags:
 
 ## /batch
 
-The `/batch` slash command orchestrates large-scale changes across a codebase in parallel. It researches the codebase, [decomposes the work into 5 to 30 independent units](https://code.claude.com/docs/en/skills), presents a plan for approval, then spawns one background agent per unit — each in an isolated git worktree.
+[`/batch` is a bundled skill](https://code.claude.com/docs/en/commands) that orchestrates large-scale changes across a codebase in parallel. It researches the codebase, decomposes the work into 5 to 30 independent units, presents a plan for approval, then spawns one background agent per unit — each in [an isolated git worktree](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees). Each agent implements its unit, runs tests, and opens a pull request.
 
 Each agent works independently without interfering with other agents or your main working directory.
 
 ## --worktree Flag
 
-The `--worktree` flag runs Claude Code in its own git worktree. Use this for manual parallel sessions — run multiple Claude Code instances on the same repo without conflicts. Project configs and [auto memory are shared across worktrees](https://code.claude.com/docs/en/memory) of the same repository.
+The [`--worktree` (`-w`) flag](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) creates an isolated worktree under `<repo>/.claude/worktrees/<name>` on a new branch `worktree-<name>` (branching from `origin/HEAD`) and starts Claude in it. Use this for manual parallel sessions — run multiple Claude Code instances on the same repo without conflicts. Project configs and [auto memory are shared across worktrees](https://code.claude.com/docs/en/memory) of the same repository.
+
+### Why worktrees work
+
+Git worktrees let multiple working directories share a single object database while keeping independent index and working-tree state. Each worktree has its own `HEAD`, branch, and checkout, so parallel edits cannot collide on disk, but all commits remain visible from the main repository's history. [Git's own worktree documentation](https://git-scm.com/docs/git-worktree) covers the underlying model.
 
 ## EnterWorktree / ExitWorktree
 
-The `EnterWorktree` and `ExitWorktree` tools manage worktree sessions programmatically within an agent conversation:
+The `EnterWorktree` and `ExitWorktree` tools let an agent manage worktree sessions mid-conversation:
 
-- **`EnterWorktree`** — creates or enters an isolated git worktree, switching the agent's working directory to that worktree.
-- **`ExitWorktree`** — cleanly leaves the worktree session and returns to the original working directory. Prior to v2.1.72, there was no dedicated exit mechanism; sessions had to be terminated rather than cleanly returned from. [unverified]
+- **`EnterWorktree`** — creates a new worktree under `.claude/worktrees/`, branches from `HEAD`, and switches the session's working directory into it.
+- **`ExitWorktree`** — leaves the worktree session and returns to the parent working directory. If no changes exist, the worktree and its branch are [cleaned up automatically](https://code.claude.com/docs/en/common-workflows#worktree-cleanup); if commits or uncommitted changes exist, Claude Code prompts to keep or remove.
 
 Typical lifecycle: enter the worktree, perform work, then exit to return to the parent context.
 
-### Worktree Context in Hooks
+### Worktree Hooks
 
-Since v2.1.69, hook events fired during a worktree session include a `worktree` field containing: [unverified]
-
-- **name** — the worktree identifier
-- **path** — the filesystem path to the worktree
-- **branch** — the branch checked out in the worktree
-
-This allows hook commands to adapt behavior based on which worktree the agent is operating in.
+Worktree events fire the [`WorktreeCreate` and `WorktreeRemove` hook events](https://code.claude.com/docs/en/hooks#worktreecreate), which also replace the default `git worktree` logic entirely when configured — useful for non-git version control (Perforce, Mercurial) or for branching off a non-default ref.
 
 ## Background Agents
 
-Run commands and agents in the background while continuing to work:
-
-- Prefix commands with `&` to run in background [unverified]
-- Use `/tasks` to view running background tasks [unverified]
-- Use `/bashes` to view background shell commands [unverified]
-- Use `/kill <task-id>` to stop background agents [unverified]
+`/batch` spawns [one background agent per unit](https://code.claude.com/docs/en/commands), so you can continue working in the foreground while units execute. To inspect or manage them, use [`/tasks` (also available as `/bashes`)](https://code.claude.com/docs/en/commands) to list and manage background tasks.
 
 ## Claude Code on the Web
 
@@ -74,20 +67,27 @@ claude --worktree "Refactor src/auth to use dependency injection"
 claude --worktree "Add integration tests for the payments service"
 ```
 
+## When This Backfires
+
+Parallel worktree decomposition is not free. The steelman for a single sequential agent is strong when:
+
+- **Units aren't truly independent** — if the planned slices touch shared files or depend on one another's output, the parallel agents race on merge, and you pay review cost on 12+ PRs instead of one.
+- **Review throughput is the bottleneck** — 12 small PRs consume more human review attention than one larger PR, and reviewers lose the cross-cutting context that explains why the changes belong together.
+- **The repo lacks fast, hermetic tests** — each worktree agent runs tests in isolation; on repos with slow CI or flaky integration tests, the parallel fan-out multiplies CI cost and flake surface area.
+- **The change is exploratory** — when the right shape of the refactor isn't known yet, a plan decomposed into 5–30 units locks in a premature design that later units can't cheaply revise.
+- **Disk or file-watcher limits bite** — dozens of worktrees each run `node_modules` / `.venv` installs and can exhaust file-watcher quotas (`inotify` on Linux, `fs.inotify.max_user_watches`) or disk space on laptops.
+
+For tightly-coupled refactors, a single agent with `--worktree` isolation (no fan-out) keeps the isolation benefit without the decomposition cost.
+
 ## Key Takeaways
 
 - `/batch` decomposes large changes into parallel worktree-isolated units automatically
 - `--worktree` provides manual worktree isolation for concurrent sessions
 - `EnterWorktree` / `ExitWorktree` manage worktree sessions within agent conversations
-- Hook events in worktree sessions include worktree name, path, and branch context
-- Background agents let you continue working while agents execute [unverified]
+- `WorktreeCreate` / `WorktreeRemove` hooks can replace the default worktree logic for non-git VCS
+- `/tasks` (alias `/bashes`) lists and manages background tasks while you keep working
 - Cloud execution via claude.ai/code delegates to remote environments with automatic PR creation
-
-## Unverified Claims
-
-- Background agent commands (`&` prefix, `/tasks`, `/bashes`, `/kill <task-id>`) are described without a source link
-- ExitWorktree availability claim (v2.1.72) has no source link
-- Worktree context in hooks claim (v2.1.69) has no source link
+- Parallel decomposition adds review and merge cost — prefer a single worktree for tightly-coupled changes
 
 ## Related
 

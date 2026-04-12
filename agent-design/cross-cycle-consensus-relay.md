@@ -160,3 +160,4 @@ The agent is responsible for writing the relay at cycle end using the temp-file-
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — failure recovery strategies for long-running agent loops
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — tracking agent progress across the multi-session loops this pattern enables
 - [Idempotent Agent Operations](idempotent-agent-operations.md) — design operations for safe retry across relay cycles
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages

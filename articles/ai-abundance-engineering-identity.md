@@ -56,23 +56,23 @@ graph LR
     style E fill:#5a2d2d,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-The bottleneck has not disappeared. It has migrated from creation to review, from writing to reading, from production to judgment. This migration is the structural shift underneath all the identity arguments.
+The bottleneck has not disappeared. It has migrated from creation to review, from writing to reading, from production to judgment. This migration is the structural shift underneath all the identity arguments. Large-scale empirical data confirms the volume-vs-value tension: agent PR acceptance rates run 13–42 percentage points below human baselines despite 10× speed gains — see [Agent PR Volume vs. Value](../code-review/agent-pr-volume-vs-value.md).
 
 ### Quality Metrics Are Under Pressure
 
 GitClear's data quantifies the downstream effect: a 17.1% increase in copy-pasted code, an 8-fold rise in duplicated code blocks, and a 26% increase in code churn — code that gets revised within two weeks of being written. More code is being produced. More of it is being thrown away ([Vella: Software Engineering Identity Crisis](https://annievella.com/posts/the-software-engineering-identity-crisis/)).
 
-Seventy-seven percent of engineers report spending less time writing code than they did two years ago [unverified]. The time freed up has not been absorbed by leisure. It has been absorbed by review, debugging, and integration — the work that remains stubbornly human.
+Stack Overflow's 2025 Developer Survey found that 66% of developers report spending more time fixing "almost-right" AI-generated code. The time freed from boilerplate production has not been absorbed by leisure. It has been absorbed by review, debugging, and integration — the work that remains stubbornly human ([Stack Overflow 2025 Developer Survey](https://survey.stackoverflow.co/2025/ai)).
 
 ## Industry Parallels
 
 Software engineering is not the first profession to face the commoditization of its core production activity. The historical parallels are instructive, not because they predict outcomes perfectly, but because they illuminate the patterns of displacement and adaptation.
 
-**Manufacturing craftsmen** faced a similar fracture during industrialization. Research on nineteenth-century England found that the share of young craftsmen fell from 49% in 1850 to 24% by 1940 as factory production displaced artisanal skill [unverified]. The craftsmen who survived were those who moved into design, quality control, and process engineering — the judgment layer above production.
+**Manufacturing craftsmen** faced a similar fracture during industrialization. Factory production progressively displaced artisanal skill across nineteenth- and early-twentieth-century England, compressing demand for hand-craft expertise as machine outputs became cost-competitive. The craftsmen who survived were those who moved into design, quality control, and process engineering — the judgment layer above production.
 
-**Journalism** is a more recent and more uncomfortable parallel. AI is not merely automating distribution or layout (as earlier technology waves did) but intervening directly in the core creative process — writing. Journalists who redefined their value around investigation, source relationships, and editorial judgment have adapted [unverified]. Those whose identity was tied to prose production face the same displacement software developers now confront.
+**Journalism** is a more recent and more uncomfortable parallel. AI is not merely automating distribution or layout (as earlier technology waves did) but intervening directly in the core creative process — writing. Journalists who redefined their value around investigation, source relationships, and editorial judgment have adapted. Those whose identity was tied to prose production face the same displacement software developers now confront.
 
-**Graphic design** offers perhaps the closest analogy. Tools like Canva democratized execution — anyone can produce competent layouts. The premium shifted to taste, brand thinking, and creative direction [unverified]. The designers who thrived were those who were never really selling pixel-pushing in the first place. They were selling judgment.
+**Graphic design** offers perhaps the closest analogy. Tools like Canva democratized execution — anyone can produce competent layouts. The premium shifted to taste, brand thinking, and creative direction. The designers who thrived were those who were never really selling pixel-pushing in the first place. They were selling judgment.
 
 In each case, the pattern is the same: production skill gets commoditized, and value migrates to the judgment layer above it.
 
@@ -106,7 +106,7 @@ Where rigor previously lived in careful implementation — choosing the right al
 
 The engineer who thrives is not the one who stops caring about code quality. It is the one who applies that same obsessive care to the harness around the AI rather than to the code the AI produces. Osmani draws the line sharply: agentic engineering is a professional discipline; vibe coding is not — and conflating the two accelerates the identity confusion ([Osmani: Agentic Engineering](https://addyosmani.com/blog/agentic-engineering/)).
 
-This maps directly to the maturity model GitHub identified in their Octoverse data. Developers progress through four stages: **Skeptic** (refuses AI tools), **Explorer** (experiments cautiously), **Collaborator** (integrates AI into daily workflow), **Strategist** (orchestrates AI agents as "creative director of code"). At the Strategist level, the practitioner focuses on defining intent, guiding agents, resolving ambiguity, and validating correctness — not on writing implementations ([GitHub Blog](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/)).
+This maps directly to the maturity model GitHub identified in their Octoverse data. Developers progress through four stages: **Skeptic** (refuses AI tools), **Explorer** (experiments cautiously), **Collaborator** (integrates AI into daily workflow), **Strategist** (orchestrates AI agents as "creative director of code"). At the Strategist level, the practitioner focuses on defining intent, guiding agents, resolving ambiguity, and validating correctness — not on writing implementations ([GitHub Blog](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/)). A more granular seven-phase practitioner model — including the trust trough at Phase 4 — is explored in [The AI Development Maturity Model](../workflows/ai-development-maturity-model.md).
 
 ## The Abundance Paradox
 
@@ -154,12 +154,13 @@ Every time you accept generated code without reading it, you move toward atrophy
 
 The profession is not dying. It is differentiating. And the practitioners who navigate the transition successfully will be the ones who understand that the most important engineering decision in the AI era is not which model to use or which agent framework to adopt. It is deciding what kind of engineer you want to be — and then doing the deliberate work to become that person.
 
-## Unverified Claims
+## Key Takeaways
 
-- Manufacturing craftsmen displacement statistics (49% to 24% share of young craftsmen, 1850-1940) — cited from memory of economic history research on industrialization in England; specific source not located
-- Journalism parallel — general industry observation, not tied to a specific study
-- Graphic design parallel — general industry observation, not tied to a specific study
-- 77% of engineers spending less time writing code — sourcing not confirmed; specific survey not located
+- The coder/builder split is an identity question, not a competence ranking — both orientations can thrive if practitioners consciously relocate their rigor.
+- The production bottleneck has migrated: code generation accelerated ~2x, but review capacity stayed flat, shifting where quality work actually happens.
+- Skill atrophy is self-concealing: developers in the METR study estimated they were 20% faster while actually running 19% slower — you cannot correct for degradation you cannot detect.
+- Rigor relocation means applying engineering discipline to the harness — constraint design, verification systems, and intent specification — rather than to the code the AI produces.
+- The most durable career investments are architectural judgment, review discipline, and deliberate manual practice, because these are the skills required to supervise AI output.
 
 ## Sources
 
@@ -175,6 +176,7 @@ The profession is not dying. It is differentiating. And the practitioners who na
 - [GitHub Blog: New Identity of a Developer](https://github.blog/news-insights/octoverse/the-new-identity-of-a-developer-what-changes-and-what-doesnt-in-the-ai-era/) — four-stage maturity model
 - [Martin Fowler: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) — rigor relocation framework
 - [Stack Overflow: AI vs Gen Z](https://stackoverflow.blog/2025/12/26/ai-vs-gen-z/) — junior developer employment data
+- [Stack Overflow: 2025 Developer Survey — AI](https://survey.stackoverflow.co/2025/ai) — code quality and time allocation data
 - [METR: AI Developer Study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) — perception gap data
 
 ## Related

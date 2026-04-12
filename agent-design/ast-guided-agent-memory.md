@@ -52,9 +52,18 @@ Structural representation enables mechanical regression detection — text summa
 
 ## Results
 
-CodeMEM reports 12.2% current-turn and 11.5% session-level improvement in instruction following, with 2-3 fewer rounds per task. Token efficiency remains competitive with baselines. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868)) [unverified]
+CodeMEM reports 12.2% current-turn and 11.5% session-level improvement in instruction following, with 2-3 fewer rounds per task. Token efficiency remains competitive with baselines. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868))
 
 Round reduction is the key practical finding: each avoided round saves wait time and token budget.
+
+## When This Backfires
+
+AST-guided memory is not universally applicable:
+
+- **Language coverage gaps**: Tree-sitter and similar parsers cover most mainstream languages, but agents working on domain-specific languages, templating systems, or binary formats cannot produce AST diffs. Text summaries remain the only option.
+- **Non-code files**: Config files (YAML, TOML), prose, and documentation don't have AST representations. Agents that mix code and config edits in the same session still face structural memory loss for the non-code portions.
+- **Implementation overhead**: Maintaining live AST state requires integrating a parser into the agent runtime, tracking file versions, and computing diffs after each change. Single-session or throwaway agents don't recover this cost.
+- **Short sessions**: The benefit scales with session length and turn count. For tasks completed in 1-3 turns, the round reduction advantage (2-3 turns) is meaningless, and the overhead of maintaining AST state is pure cost.
 
 ## Practical Implications
 
@@ -62,7 +71,7 @@ Round reduction is the key practical finding: each avoided round saves wait time
 
 **For agent users:** Error recurrence — the agent fixing something, then breaking it two turns later — signals lost structural context. Shorter sessions, "do not change X" constraints, or diffing against validated state can mitigate this.
 
-**Token efficiency:** AST representations compress code changes more efficiently than prose, keeping context windows manageable. [unverified]
+**Token efficiency:** AST representations maintain competitive token efficiency with baseline approaches. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868))
 
 ## Relation to Other Memory Patterns
 
@@ -73,11 +82,6 @@ AST-guided memory operates on a different axis from scope and granularity patter
 - **[Episodic Memory Retrieval](episodic-memory-retrieval.md)** retrieves past episodes by trigger-context-outcome indexing. AST-guided memory could use structural similarity (edit distance) as the retrieval signal.
 
 These dimensions compose: an agent could combine subtask-level retrieval, episodic scope, and AST-based encoding.
-
-## Unverified Claims
-
-- 12.2% current-turn and 11.5% session-level improvement [unverified — paper benchmarks, not independently reproduced]
-- AST representations compress more efficiently than natural language [unverified — paper reports competitive token efficiency without compression ratio comparisons]
 
 ## Example
 

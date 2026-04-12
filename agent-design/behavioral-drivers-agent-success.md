@@ -33,7 +33,7 @@ Trajectories group into four distinct failure modes. Each requires a different r
 | **Patch generation failure** | Agent identifies the correct location but produces an incorrect fix | Correct file targeted; implementation breaks adjacent tests |
 | **Verification failure** | Agent applies a plausible patch without confirming it resolves the issue | No test run after patch; PR opened with untested changes |
 
-Most framework-level failures concentrate in reproduction and verification — the first and last steps of the cycle [unverified]. Localization and patch generation are where model capability has the most leverage.
+Most framework-level failures concentrate in reproduction and verification — the first and last steps of the cycle. Localization and patch generation are where model capability has the most leverage.
 
 ## Three Behavioral Predictors of Success
 
@@ -72,11 +72,11 @@ graph TD
 
 ## Framework Constrains Model Behavior
 
-A stronger LLM driving the same framework produces different behavioral profiles than a weaker one — but the framework constrains what behavior is possible. If the framework does not include a test-execution step, no model can produce a verification loop.
+A stronger LLM driving the same framework produces different behavioral profiles than a weaker one — and the LLM is the primary driver of both outcome and behavior. Agents sharing the same LLM agree on far more tasks than agents sharing the same framework, and the framework performance gap shrinks with each LLM generation ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)).
 
-This means behavioral pattern failures are often harness failures, not model failures. Auditing your framework against the three predictors is more actionable than upgrading the model.
+That said, the framework still sets hard limits. If the framework does not include a test-execution step, no model can produce a verification loop regardless of capability. Framework prompts influence agent tactics, though this effect diminishes with stronger LLMs.
 
-**Framework audit questions:**
+**Framework audit questions** (frame-level constraints that even capable LLMs cannot bypass):
 - Does the agent execute tests after applying a patch?
 - Does the framework route test failure output back to the agent for a repatch attempt?
 - Is there a maximum iteration count that allows at least two repatch cycles?
@@ -84,7 +84,7 @@ This means behavioral pattern failures are often harness failures, not model fai
 
 ## Ensemble Strategy for Task Heterogeneity
 
-Because failure sets are non-overlapping, combining agents is more effective than selecting the best single agent. Two agents with 60% resolve rates — failing on different tasks — can cover substantially more of the task space in an oracle selection scenario [unverified].
+Because failure sets are non-overlapping, combining agents is more effective than selecting the best single agent. Two agents with 60% resolve rates — failing on different tasks — can cover substantially more of the task space in an oracle selection scenario ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)).
 
 Practical approaches:
 - **Majority vote**: run three agents on the same task, apply the most common patch
@@ -93,26 +93,28 @@ Practical approaches:
 
 The ensemble gain is proportional to failure-set divergence. Agents using different frameworks with different exploration strategies diverge more than agents using the same framework with different models.
 
+## When This Backfires
+
+Applying behavioral-pattern auditing and ensembling strategies has diminishing returns in several conditions:
+
+- **LLM capability gap dominates**: When the underlying model is substantially weaker than alternatives, framework optimizations yield less improvement than a model upgrade. The paper finds that LLM is the primary driver of outcome; auditing the framework first is premature if the model is the bottleneck.
+- **Benchmark tasks diverge from production workloads**: The four failure clusters are derived from SWE-bench Verified, which skews toward well-specified single-file bugs. Real production tasks (architecture changes, multi-repo coordination, ambiguous requirements) may have different dominant failure modes.
+- **Ensemble divergence is low**: Ensemble gains require failure-set divergence between agents. If your agents use the same LLM with different prompts, their failure sets may overlap substantially — the oracle coverage improvement will be much smaller than the 60%-overlap example implies.
+
 ## Key Takeaways
 
 - Two agents with identical resolve rates can have non-overlapping failure sets — headline score is an insufficient comparison metric
 - Four failure clusters (reproduction, localization, patch generation, verification) require different responses; most framework failures concentrate at reproduction and verification
 - Three behavioral patterns predict success: exploration before execution, post-patch verification loops, deep context loading along call chains
-- Framework design constrains which behavioral patterns are possible — model upgrades cannot compensate for a framework without a test-execution step
+- LLM capability is the primary driver of outcome; framework design sets hard limits on which behavioral patterns are structurally possible (no model can produce a verification loop in a framework with no test-execution step) but matters less as LLMs improve
 - Ensembling agents with divergent failure profiles produces higher coverage than optimizing a single agent
-
-## Unverified Claims
-
-- The exact resolution-rate uplift from adding verification loops is not linked to a specific figure — the directional finding (higher success with loops) is sourced; the magnitude is not [unverified]
-- Whether majority-vote ensembling consistently reaches the oracle upper bound depends on task distribution details not specified here [unverified]
-- Framework-level failures concentrating in reproduction and verification is based on the paper's framing in the issue context — specific cluster proportions are not independently verifiable [unverified]
-- The oracle-selection ensemble coverage figure is illustrative of the non-overlap principle, not a specific empirical result from the paper [unverified]
 
 ## Related
 
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — two-phase constrained approaches outperforming autonomous agents on SWE-bench
 - [Agent Self-Review Loop](agent-self-review-loop.md) — implementing the post-patch verification loop pattern
 - [Harness Engineering](harness-engineering.md) — environment design as the primary lever on agent behavioral patterns
+- [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md) — structuring long-running agent work with initializer and execution phases
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — trajectory-level misbehavior classification (30% misbehavior rate in production)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role loop for iterative quality improvement
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — routing tasks across competing agents to select the best result

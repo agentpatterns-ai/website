@@ -132,7 +132,7 @@ The highest-signal content in any skill is the Gotchas section: cases where the 
 
 - [Prompt Engineering](prompt-engineering.md) -- [system prompt altitude](../../instructions/system-prompt-altitude.md), polarity, compliance ceiling
 - [Context Engineering](context-engineering.md) -- context window mechanics, compression, caching
-- [Harness Engineering](harness-engineering.md) -- repo legibility, mechanical enforcement, backpressure
+- [Harness Engineering](harness-engineering.md) -- repo legibility, mechanical enforcement, [backpressure](../../agent-design/agent-backpressure.md)
 - [How the Four Disciplines Compound](prompt-context-harness-capstone.md) -- the multiplication model and diagnostic framework
 
 **Other training modules**

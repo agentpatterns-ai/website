@@ -19,8 +19,8 @@ aliases:
 
 SEO rank tracking works because results are deterministic. GEO measurement does not — LLMs generate probabilistic outputs on-the-fly.
 
-- Only ~20% of brands maintained citation presence across 5 consecutive runs [unverified]
-- Monthly citation drift ranges 40–60% across major platforms [unverified]
+- Brand citation presence is inconsistent across consecutive runs on the same prompt — citations vary by session
+- Monthly citation drift is substantial across major platforms; the same brand may appear in week one and disappear by week four
 - AI platforms expose no impression counts, referral data, or ranking signals
 - All measurement relies on repeated sampling, not platform APIs
 
@@ -31,13 +31,13 @@ SEO rank tracking works because results are deterministic. GEO measurement does 
 | **AI Visibility Score** | Normalised composite: mention frequency × position × platform coverage |
 | **Share of Model (SoM)** | % of AI responses where your brand appears for relevant category queries |
 | **Citation Share of Voice** | Your brand's citation count as a % of total category citations |
-| **Generative Position** | Average rank when AI outputs a list; first-mentioned brands receive preferential framing [unverified] |
+| **Generative Position** | Average rank when AI outputs a list; first-mentioned brands receive more prominent framing in the response |
 | **Citation Frequency** | How often AI includes clickable links or footnotes to your domain |
 | **Sentiment Score** | Qualitative tone (positive / neutral / negative) when your brand is described |
 | **Hallucination Rate** | How often AI states factually incorrect information about your brand |
 | **Platform Coverage Rate** | % of tracked platforms where your brand appears for target prompts |
 
-LLMs cite 2–7 domains per response [unverified] — far fewer than Google's 10 blue links, making citation share intensely competitive.
+LLMs typically cite a small number of domains per response — far fewer than Google's 10 blue links — making citation share intensely competitive.
 
 ## Tool Landscape
 
@@ -65,7 +65,7 @@ graph TD
 
 **Attribution gap**: Brands discovered via ChatGPT that visit days later appear as direct traffic — the discovery touch is invisible.
 
-**Zero-click gap**: For every 1,500 pages GPTBot crawls, roughly one visitor clicks through [unverified].
+**Zero-click gap**: GPTBot crawls pages heavily, but the crawl-to-click conversion rate is extremely low — AI answers surface information without driving referral traffic.
 
 **Unannounced model updates**: Providers update models without notice, making visibility shifts unattributable to content versus model behaviour.
 
@@ -80,7 +80,17 @@ graph TD
 | **Monthly** | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
 | **Quarterly** | Deep-dive sentiment analysis; update competitive benchmarks; reassess prompt set |
 
-Brand web mentions correlate 0.664 with AI Overview visibility [unverified].
+Brand web mention volume correlates with AI Overview visibility — brands with stronger organic presence tend to appear more frequently in AI-generated responses.
+
+## When This Backfires
+
+GEO monitoring can produce misleading signals or waste investment under specific conditions:
+
+- **High-drift queries**: Broad, ambiguous prompts ("best tools for X") produce results that vary so widely session-to-session that sampled data reflects random noise more than actual visibility. Narrow, brand-specific prompts are more stable.
+- **Small sample budgets**: Running fewer than 20–30 prompts daily gives insufficient statistical coverage to distinguish genuine visibility change from session variance. Under-sampling leads to false positives and missed drops.
+- **Single-platform fixation**: A brand optimised for ChatGPT citation may see zero lift on Perplexity or Gemini — models differ in training data, retrieval architecture, and citation behaviour. Per-platform results are not portable.
+- **Attribution substitution**: Teams that treat AI citation counts as a proxy for revenue confuse visibility with intent. A brand appearing in an AI response about a category may receive no commercial consideration from that mention.
+- **Model update blindness**: Providers update models without changelogs. A sustained visibility drop may reflect a model weight change, not any content failure — acting on it by rewriting content can cause SEO regressions with no GEO benefit.
 
 ## Example
 

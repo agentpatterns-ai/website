@@ -18,7 +18,7 @@ aliases:
 
 Single-vendor routing optimizes *within* a known capability profile. Cross-vendor routing exposes *differences between* capability profiles — which is only visible when you run both agents on the same task and compare.
 
-GitHub Agent HQ (Feb 2026) made this practical: Claude and Codex can both be assigned to the same issue in the same repo. Each agent opens its own branch and PR independently. The team reviews both and picks the best output — surfacing which vendor's strengths better fit the task type. [Source](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/)
+GitHub Agent HQ (Feb 2026) made this practical: Claude and Codex can both be assigned to the same issue in the same repo. Each agent opens its own branch and PR independently. The team reviews both and picks the best output — surfacing which vendor's strengths better fit the task type. ([Announcement](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/); [Agentic Workflows changelog](https://github.blog/changelog/2026-02-13-github-agentic-workflows-are-now-in-technical-preview/))
 
 ## How It Works
 
@@ -55,7 +55,7 @@ The selection criteria differ from within-harness model routing. Cost and latenc
 
 **Spot-check competitive**: assign both agents to a sample of tasks (e.g., every 10th implementation PR). Calibrates confidence in your primary routing strategy without full duplication.
 
-**Triage competitive**: assign both agents only when the primary agent's output fails review. `[unverified]` Running a second vendor on a failing output is cheaper than additional review cycles on a single vendor's retries.
+**Triage competitive**: assign both agents only when the primary agent's output fails review. Running a second vendor on a failing output introduces a different capability profile rather than retrying the same failure mode.
 
 ## Trade-offs
 
@@ -86,10 +86,6 @@ This pattern operates at the **platform level** (which vendor agent handles the 
 - Platform-level assignment (GitHub Agent HQ) makes parallel runs practical without custom harness integration
 - Selection criteria are qualitative (output quality), not quantitative (cost/latency) — each agent runs in parallel, so latency does not compound
 - Spot-check competitive routing calibrates static routing strategy without full duplication cost
-
-## Unverified Claims
-
-- Triage competitive routing is cheaper than additional review cycles on a single vendor `[unverified]`
 
 ## Related
 

@@ -83,15 +83,28 @@ For non-negotiable rules, prefer hooks. See [Hooks vs Prompts](../../verificatio
 - **MCP + skills**: MCP exposes external tools; a skill provides the workflow using them.
 - **Plugins**: [bundle](../../standards/plugin-packaging.md) agents, skills, hooks, and MCP configs for distribution. Plugins solve distribution, not logic.
 
-Commands have been [merged into skills](https://code.claude.com/docs/en/skills) in recent versions. Existing `.claude/commands/` files continue to work.
+Commands are [merged into skills](https://code.claude.com/docs/en/skills) — existing `.claude/commands/` files continue to work.
+
+## Why the Determinism Boundary Matters
+
+Hooks are shell processes spawned by the Claude Code CLI at lifecycle events, independent of the model's token stream. The model never sees the hook script and has no mechanism to suppress execution. Skills, subagents, and `.claude/rules/` instructions are text delivered into the model's context — a sufficiently confusing context can cause them to be skipped. Anything routed through model reasoning is probabilistic; anything executed at the infrastructure layer is deterministic.
+
+CLAUDE.md's high context cost follows: injected into every request's context window unconditionally. Skills avoid this by loading full content only on invocation.
+
+## When This Backfires
+
+- **Overlapping extension points**: A path-scoped rule that also needs enforcement requires both a `.claude/rules/` entry and a hook. Maintaining the rule in two places creates drift.
+- **Hook proliferation**: Applying hooks to stylistic preferences rather than non-negotiable compliance accumulates startup latency and failure modes.
+- **CLAUDE.md bloat**: At 500+ lines, unconditional injection degrades instruction-following on unrelated tasks. Move domain content to rules or skills early.
+- **Premature plugins**: Bundling before two or more repos need the config adds release overhead; a shared git subtree is cheaper at small scale.
 
 ## Security: Per-Server MCP Trust
 
-Prior to v2.1.69 [unverified], enabling MCP servers via `.mcp.json` silently trusted all servers without individual approval dialogs. This is now fixed: Claude Code shows a per-server trust dialog, requiring explicit approval for each server. Automated setups that relied on silent MCP enablement should expect an approval prompt per server on first session after updating.
+Prior to v2.1.69, `.mcp.json` silently trusted all servers without approval dialogs. Claude Code now shows a per-server trust dialog on first session ([changelog](https://code.claude.com/docs/en/changelog)). Automated setups relying on silent enablement will see a prompt per server after updating.
 
 ## Deprecation: /output-style → /config
 
-The `/output-style` command was deprecated in v2.1.73 [unverified], replaced by `/config`. Output style is now fixed at session start to improve prompt cache hit rates — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/` and `.claude/output-styles/`) still work.
+The `/output-style` command was deprecated in v2.1.73, replaced by `/config` ([changelog](https://code.claude.com/docs/en/changelog)). Output style is now fixed at session start to improve [prompt cache hit rates](../../context-engineering/static-content-first-caching.md) — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/` and `.claude/output-styles/`) still work.
 
 ## Example
 
@@ -114,8 +127,8 @@ The hook script (`hooks/check-down-migration.sh`) runs deterministically. The sk
 - Hooks are the only fully deterministic extension point — use them when compliance is non-negotiable
 - Skills load progressively; hooks and subagents have zero context cost — choose based on context budget
 - Plugins are distribution packaging, not a separate logic layer
-- MCP servers now require per-server trust approval (v2.1.69 [unverified]) — silent bulk enablement is no longer supported
-- `/output-style` is deprecated in favor of `/config` (v2.1.73 [unverified]) — output style is fixed at session start for cache efficiency
+- MCP servers now require per-server trust approval (v2.1.69) — silent bulk enablement is no longer supported
+- `/output-style` is deprecated in favor of `/config` (v2.1.73) — output style is fixed at session start for cache efficiency
 
 ## Related
 
@@ -132,3 +145,7 @@ The hook script (`hooks/check-down-migration.sh`) runs deterministically. The sk
 - [Claude Agent SDK](agent-sdk.md)
 - [Feature Flags and Environment Variables](feature-flags.md)
 - [Session Scheduling](session-scheduling.md)
+- [Claude Code Auto Mode](auto-mode.md)
+- [Managed Settings Drop-In Directory](managed-settings-drop-in.md)
+- [Skill Eval Loop](skill-eval-loop.md)
+- [Channels Permission Relay](channels-permission-relay.md)

@@ -70,7 +70,7 @@ Simple approaches demonstrate superior cost-performance ratios when complexity o
 3. **Guided autonomy**: AI executes within strict boundaries
 4. **Full autonomy**: AI plans and executes independently
 
-Most tasks stop at level 2-3 because the marginal benefits of full autonomy don't justify the complexity costs. [unverified]
+Most tasks stop at level 2-3 because the marginal benefits of full autonomy are often outweighed by the complexity, debugging overhead, and coordination costs that autonomous planning introduces.
 
 ### Harness Engineering Over Agent Engineering
 
@@ -108,6 +108,16 @@ phases:
 ```
 
 The agentless version produces more consistent results because it avoids coordination complexity while leveraging AI strengths (pattern recognition and code generation) within bounded contexts.
+
+## When This Backfires
+
+Simple-first defaults have real costs when the task structure doesn't fit constrained workflows:
+
+- **Exploratory or open-ended tasks**: When the problem space is poorly defined and requires iterative discovery (e.g., debugging novel production failures), fixed two-phase pipelines lack the flexibility to adapt mid-execution.
+- **Long-horizon planning requirements**: Tasks spanning many interdependent steps — such as multi-file refactors or feature implementations crossing architectural boundaries — may require the planning capacity that autonomous agents provide.
+- **Rapidly maturing capability curve**: Benchmark results shift quickly. TDFlow achieved [88.8% on SWE-bench Lite](https://arxiv.org/abs/2510.23761) and Live-SWE-agent reached [77.4% on SWE-bench Verified](https://arxiv.org/abs/2511.13646), both far above the Agentless 27.33% baseline from 2024. As model capability advances, the performance gap between simple and sophisticated designs narrows — making the complexity tradeoff worth reconsidering for higher-stakes tasks.
+
+The agentless approach remains a strong default for well-scoped tasks. The case for it weakens as tasks grow more exploratory, models grow more capable, and teams develop better tooling to manage agent complexity.
 
 ## Key Takeaways
 

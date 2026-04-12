@@ -17,7 +17,7 @@ When a coding agent starts in a bare environment, it spends tokens and time disc
 
 ## copilot-setup-steps.yml
 
-GitHub's coding agent uses [copilot-setup-steps.yml](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent) as the environment configuration surface. The file lives at `.github/workflows/copilot-setup-steps.yml` on the default branch and follows GitHub Actions workflow syntax with a single job named `copilot-setup-steps`.
+GitHub's coding agent uses [copilot-setup-steps.yml](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) as the environment configuration surface. The file lives at `.github/workflows/copilot-setup-steps.yml` on the default branch and follows GitHub Actions workflow syntax with a single job named `copilot-setup-steps`.
 
 Configurable attributes:
 
@@ -40,24 +40,24 @@ jobs:
       - run: npm ci
 ```
 
-If any setup step returns a non-zero exit code, [remaining steps are skipped and the agent proceeds with the partial environment](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent).
+If any setup step returns a non-zero exit code, [remaining steps are skipped and the agent proceeds with the partial environment](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment).
 
 ## Runner Configuration
 
 Three runner tiers are available, each trading cost for capability:
 
 - **Standard runners** — default GitHub-hosted runners, sufficient for most tasks
-- **Larger runners** — [specify the runner label](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent) (e.g., `ubuntu-4-core`) for compute-intensive setup or agent tasks. Only Ubuntu x64 and Windows 64-bit are supported [unverified].
+- **Larger runners** — [specify the runner label](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) (e.g., `ubuntu-4-core`) for compute-intensive setup or agent tasks. Only Ubuntu x64 and Windows 64-bit are supported; macOS and other platforms are not compatible with the coding agent ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment)).
 
-- **Self-hosted runners via ARC** — Actions Runner Controller for environments requiring network restrictions or custom hardware. Requires [ephemeral, single-use runners](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent) not reused across jobs.
+- **Self-hosted runners via ARC** — Actions Runner Controller for environments requiring network restrictions or custom hardware. Requires [ephemeral, single-use runners](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) not reused across jobs.
 
-Self-hosted runners require disabling the integrated firewall and configuring network security controls to limit access to approved hosts. [unverified]
+Self-hosted runners require disabling the coding agent's integrated firewall in repository settings and configuring your own network security controls to allow connections to the required hosts ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment)).
 
 ## Secrets Management
 
 For general patterns on keeping credentials out of agent context, see [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md).
 
-The coding agent accesses secrets through a dedicated [`copilot` environment](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent) configured in repository settings. Environment secrets (API keys, passwords) and variables are available to both setup steps and agent operations. This isolates agent credentials from other CI/CD environments.
+The coding agent accesses secrets through a dedicated [`copilot` environment](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) configured in repository settings. Environment secrets (API keys, passwords) and variables are available to both setup steps and agent operations. This isolates agent credentials from other CI/CD environments.
 
 ## Generalizing the Pattern
 
@@ -69,6 +69,16 @@ The principle — deterministic setup over trial-and-error discovery — transfe
 
 Every minute an agent spends figuring out its environment is a minute not spent on your actual task, and the results are less reproducible.
 
+## Why It Works
+
+Deterministic bootstrapping works because it moves environment reasoning out of the LLM's inference loop entirely. When dependencies are pre-installed, the agent starts with a known-good baseline and can direct its full context window toward the actual task. Trial-and-error discovery is expensive: each installation attempt consumes tokens, each failure branches the conversation tree, and partial installs leave the agent uncertain whether a subsequent error is a code bug or an environment artifact. A declarative setup spec makes failures binary — the job either succeeds completely or fails with an explicit exit code before the agent runs — eliminating the silent partial-failure mode where the agent proceeds with incorrect tool versions.
+
+## When This Backfires
+
+- **One-off exploratory tasks**: Maintaining a bootstrap file is overhead; if a task is run once and the environment is discarded immediately, trial-and-error discovery may be faster than writing and debugging setup steps.
+- **Rapidly evolving dependencies**: A bootstrap spec that pins tool versions can become stale faster than it's updated, causing the agent to run with outdated tooling while developers assume the environment is current. Treat `copilot-setup-steps.yml` as production code with the same review and update discipline.
+- **Opaque partial failures**: The coding agent [proceeds with a partial environment](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) if a setup step fails. A failing bootstrap step produces no guardrail — the agent still runs, but in a degraded state, making failures harder to attribute than a full stop would be.
+
 ## Key Takeaways
 
 - Pre-install dependencies deterministically; do not let agents discover environments through trial and error
@@ -76,11 +86,6 @@ Every minute an agent spends figuring out its environment is a minute not spent 
 - Use the `copilot` environment in repository settings for secrets isolation
 - Ephemeral, single-use runners prevent state leakage between agent sessions
 - The deterministic-setup-over-discovery principle applies to any agent platform
-
-## Unverified Claims
-
-- Only Ubuntu x64 and Windows 64-bit are supported for larger runners [unverified]
-- Self-hosted runners require disabling the integrated firewall and configuring network security controls [unverified]
 
 ## Related
 

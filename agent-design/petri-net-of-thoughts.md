@@ -57,7 +57,7 @@ PNoT pays off when the reasoning process has **known structure** — a defined s
 - **Code review workflows** — check style, check logic, check security, aggregate findings
 - **Regulatory or compliance checks** — sequential gates with defined pass/fail criteria
 
-MedVerse (2025) independently validated this approach for medical diagnosis, formalizing differential diagnosis as a Colored Petri Net with parallel transition firing. The result: [4.8-8.9% accuracy gains over CoT and 1.3x latency reduction](https://arxiv.org/abs/2602.07529) through topology-aware parallel execution.
+MedVerse (2026) independently validated this approach for medical diagnosis, reformulating differential diagnosis as a [DAG-structured parallel execution framework based on Petri net theory](https://arxiv.org/abs/2602.07529). The result: 4.8-8.9% accuracy gains over CoT and 1.3x latency reduction through topology-aware parallel execution.
 
 ## When Simpler Approaches Suffice
 
@@ -65,7 +65,7 @@ The overhead of defining a Petri net — places, transitions, firing rules — i
 
 - **Open-ended exploration** — the reasoning path is unknown upfront; a plan-mode prompt or Tree of Thoughts is more appropriate
 - **Single-step tasks** — one decision, one action; [structured reasoning adds no benefit](../anti-patterns/reasoning-overuse.md)
-- **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; external scaffolding may add latency without improving outcomes [unverified]
+- **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; adding external scaffolding introduces overhead that may not improve outcomes for tasks where the model's native reasoning already covers the necessary decision structure
 
 The formal taxonomy of reasoning topologies ([Besta et al., IEEE TPAMI 2025](https://arxiv.org/abs/2401.14295)) positions PNoT alongside CoT (chain), ToT (tree), and GoT (graph) — each suited to different task structures. PNoT is strongest when the structure is derivable from evidence rather than designed by intuition.
 

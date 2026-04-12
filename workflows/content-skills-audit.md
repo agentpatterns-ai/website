@@ -43,7 +43,7 @@ Output: a deduplicated list of URLs with their source file and line number.
 
 ### Step 2: Validate URL Health
 
-For each URL, issue an HTTP HEAD request. Flag any response that is not 2xx:
+For each URL, issue an [HTTP HEAD request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/HEAD). Flag any response that is not 2xx:
 
 - **404 / 410**: resource deleted — content citing this URL needs a replacement source or removal
 - **301 / 302**: resource moved — update the link to the new location
@@ -55,7 +55,7 @@ Group results by source file to make remediation targeted. A skill with five bro
 
 For skills that embed site structure maps (e.g., a skill documenting the GitHub Copilot docs navigation or Anthropic's platform structure), fetch the live site and compare against what the skill describes.
 
-This step requires judgment, not just automation: page URLs may be stable while section organization changes. Flag skills whose described structure diverges from the live site for human review rather than automated correction. An LLM agent can perform the comparison and write a summary of diffs. [unverified]
+This step requires judgment, not just automation: page URLs may be stable while section organization changes. Flag skills whose described structure diverges from the live site for human review rather than automated correction. An LLM agent can perform the comparison and produce a structured diff summary — prompting with both the fetched live content and the skill's embedded map surfaces section renames, reordered entries, and removed pages in a single pass.
 
 ### Step 4: Validate Pipeline Labels
 
@@ -89,7 +89,7 @@ An audit command runs the full workflow when invoked manually. Use for:
 
 ### Option 2: Scheduled GitHub Action (Automated)
 
-A weekly or monthly scheduled GitHub Action runs the audit, opens an issue with the results, and labels it for triage. This catches drift that no one actively checks for.
+A weekly or monthly [scheduled GitHub Action](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#schedule) runs the audit, opens an issue with the results, and labels it for triage. This catches drift that no one actively checks for.
 
 ```yaml
 on:
@@ -122,6 +122,19 @@ NAVIGATION SKILL DIFFS (manual review required)
 
 Group by action type so a human can triage and delegate.
 
+## Why It Works
+
+Scheduled auditing catches drift that reactive fixes miss because no individual contributor has a complete view of all external dependencies. A docs site with ten skills and fifty pages may reference hundreds of external URLs and several third-party site structures — the cognitive overhead of tracking these exceeds what any reviewer can sustain. Automation delegates the legwork: HTTP HEAD requests are deterministic, git log age checks are O(1), and LLM-based structure diffing converts a qualitative judgment ("has anything changed?") into a reviewable diff that a human can action in minutes rather than hours.
+
+The alternative — fixing staleness only when readers report it — compounds the problem. Stale content produces confident wrong output from any agent that consumes it, and those errors often propagate across multiple downstream agents before a symptom surfaces.
+
+## When This Backfires
+
+- **High-churn external dependencies**: If the audited skills embed rapidly changing third-party structures (e.g., docs sites that restructure monthly), the audit noise ratio grows — every run generates diffs that require human review, and reviewers start ignoring them. Cap navigation-skill audits to sources with stable structure, or accept higher false-positive rates.
+- **Misclassified "stale" files**: Age-based flagging treats intentionally stable reference files the same as genuinely outdated content. A reference table with no expiry is not stale. Without a triage step that distinguishes the two, audit output requires more human time than it saves.
+- **False-positive URL checks**: CDN-gated, login-protected, or rate-limited URLs return non-2xx codes without being genuinely broken. Blanket 4xx-flagging misrepresents these as broken links. Maintain a skip-list or verify with a second request before flagging.
+- **Audit drift itself**: The audit workflow depends on skills that embed site structure maps — and those skills can become stale too. If the audit's own dependencies are not included in its scope, the tool degrades silently over time.
+
 ## Key Takeaways
 
 - Skills with hardcoded site structure maps are the highest-staleness-risk artifacts in a project — audit them against live sites, not just link health
@@ -129,10 +142,6 @@ Group by action type so a human can triage and delegate.
 - Flag stale files by age, but don't auto-delete — some files are intentionally stable
 - Produce output grouped by action type so triage is fast
 - Run the audit before major releases and after known external site restructurings
-
-## Unverified Claims
-
-- An LLM agent can perform site structure comparison and write a summary of diffs [unverified]
 
 ## Related
 

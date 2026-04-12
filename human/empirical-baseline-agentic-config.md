@@ -1,6 +1,6 @@
 ---
 title: "Empirical Baseline: Agentic AI Coding Tool Configuration"
-description: "Study of 2,926 GitHub repos: context files dominate agentic AI config while Skills, Subagents, Hooks, and MCP remain shallowly adopted."
+description: "Study of 2,923 GitHub repos: context files dominate agentic AI config while Skills, Subagents, Hooks, and MCP remain shallowly adopted."
 tags:
   - agent-design
   - instructions
@@ -9,17 +9,17 @@ tags:
 
 # Empirical Baseline: How Developers Configure Agentic AI Coding Tools
 
-> A study of 2,926 GitHub repositories finds that context files dominate configuration while advanced mechanisms — Skills, Subagents, Hooks, MCP — remain shallowly adopted across every tool.
+> A study of 2,923 GitHub repositories finds that context files dominate configuration while advanced mechanisms — Skills, Subagents, Hooks, MCP — remain shallowly adopted across every tool.
 
 ## The Study
 
-[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analysed 2,926 public GitHub repositories using Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study identifies eight configuration mechanisms — Context Files, Skills, Subagents/Agents, Hooks, MCP servers, Memory, Permissions, and Settings/Model config — and measures how frequently each appears in practice.
+[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analysed 2,923 public GitHub repositories using Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study identifies eight configuration mechanisms — Context Files, Skills, Subagents/Agents, Hooks, MCP servers, Memory, Permissions, and Settings/Model config — and measures how frequently each appears in practice.
 
 ## What the Data Shows
 
-**Context Files dominate.** Most repos configure the agent via a single context file. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) claims 60k+ projects [unverified — self-reported] and 25+ tools [unverified — self-reported].
+**Context Files dominate.** Most repos configure the agent via a single context file. AGENTS.md is emerging as the cross-tool interoperability standard — the [agents.md spec](https://agents.md) self-reports 60k+ projects and 25+ tools.
 
-**Skills are shallowly adopted.** Most repositories define only 1–2 skill artifacts containing static instructions rather than executable workflows. The [Agent Skills open standard](../standards/agent-skills-standard.md) (30+ supporting tools [unverified — self-reported]) and [Claude Code's SKILL.md format](https://code.claude.com/docs/en/skills) support file bundling, subagent execution, dynamic context injection, invocation control, and hooks — yet real-world adoption exploits almost none of this [unverified].
+**Skills are shallowly adopted.** Most repositories define only 1–2 skill artifacts containing static instructions rather than executable workflows. The [Agent Skills open standard](../standards/agent-skills-standard.md) (self-reported 30+ supporting tools) and [Claude Code's SKILL.md format](https://code.claude.com/docs/en/skills) support file bundling, subagent execution, dynamic context injection, invocation control, and hooks — yet the Galster et al. data shows real-world adoption exploits almost none of this capability surface.
 
 **Subagents are rarely configured beyond defaults.** Claude Code's subagent system (`.claude/agents/`) supports per-agent model selection, tool restrictions, permission modes, hooks, and persistent memory ([code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents)). Repos rarely configure any of these.
 
@@ -58,11 +58,21 @@ graph TD
 
 **Step 5 — MCP for external systems.** Connect agents to issue trackers, documentation, observability, and design tools via structured [MCP integrations](../tools/copilot/mcp-integration.md) instead of copy-paste context.
 
+## When Not to Over-Configure
+
+The configuration ramp above is a capability unlock, not a mandate. Three conditions favour stopping at a simple context file:
+
+1. **Short-lived or exploratory projects.** The amortisation period for hooks, subagent roles, and MCP integrations only pays off when the same patterns repeat across many sessions. A two-day prototype rarely recurs enough to justify the setup cost.
+2. **Single-developer codebases.** Hooks and permission modes exist to enforce constraints across multiple contributors or across long time horizons. Solo work with tight review cycles already provides that enforcement through code review.
+3. **Stable, low-complexity domains.** If the agent's job is limited to a small, well-understood task — formatting, test generation for a single framework — a single CLAUDE.md rule often covers it. Subagent specialisation adds overhead without capability gain when there is only one role to play.
+
+The empirical data reflects this: shallow adoption may partly be rational scoping, not just ignorance of available features.
+
 ## Key Takeaways
 
 - Context files dominate real-world agentic AI configuration; advanced mechanisms are rarely used
 - The gap is awareness and adoption, not capability — all mechanisms are documented and production-ready
-- Claude Code users exhibit the broadest configuration culture; AGENTS.md is emerging as the cross-tool standard across 25+ tools [unverified — self-reported]
+- Claude Code users exhibit the broadest configuration culture; AGENTS.md is emerging as the cross-tool standard, self-reported at 25+ tools
 - Teams that adopt multiple mechanisms tend to configure each more deeply
 
 ## Related

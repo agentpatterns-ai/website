@@ -19,9 +19,13 @@ Each time an agent makes a recurring mistake, the prompt grows: another sentence
 
 ## Why Prompts Fail at Enforcement
 
-Agents do not process instructions the way a compiler processes code. A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. The longer the instruction set, the more likely any single rule is ignored `[unverified]`.
+A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale benchmark testing across 20 frontier models](https://arxiv.org/abs/2507.11538) found instruction-following accuracy degrades measurably as instruction count rises, with top models reaching only 68% compliance at high densities.
 
-Adding "IMPORTANT:" or "NEVER do X" to a prompt applies social emphasis to a system that has no concept of social emphasis. It changes token distribution slightly but does not enforce the rule.
+Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. It changes token distribution slightly but does not enforce the rule.
+
+## Why It Works
+
+LLMs treat instructions as competing signals, not ordered rules. [Research on instruction density](https://arxiv.org/abs/2507.11538) shows all frontier models degrade as instruction count rises; patterns range from threshold decay to exponential collapse. Each new prohibition dilutes the attention budget for existing ones. A hook blocks a write regardless of what the model attended to.
 
 ## The Escalation Ladder
 
@@ -33,7 +37,7 @@ When an agent repeats the same error, apply this sequence:
 4. **Tool restriction** — remove the agent's ability to perform the action entirely
 5. **Accept and verify** — if none of the above is cost-effective, add a human verification gate
 
-Stop at the step that eliminates the error. Do not continue prompt-tweaking when a lower-rung fix would work.
+Stop at the step that eliminates the error.
 
 ## When Prompts Are the Right Tool
 
@@ -54,6 +58,14 @@ If "correct" has a valid range of interpretations, prompts are appropriate. If t
 - The same category of error recurs despite prompt updates
 - You have added "IMPORTANT:" more than once
 - You are explaining context in the prompt that should be in project files or skills
+
+## When This Backfires
+
+Escalating to structure has real costs:
+
+- **No hook infrastructure**: Without CI/CD or tool-call interception, deploying hooks costs more than the error does. Prompt-only is the right call for throwaway scripts.
+- **Interpretive tasks**: Binary enforcement on soft constraints (tone, approach, style) introduces rigidity without safety benefit.
+- **Premature hardening**: Tool restrictions set too early block valid use cases that emerge during development.
 
 ## Example
 
@@ -92,10 +104,6 @@ The hook eliminates the error deterministically. The prompt can drop all five pr
 - Use the escalation ladder: prompt → skill → hook → tool restriction → verify
 - Prompts suit guidance with a valid interpretation range; structure suits binary correctness
 - A long prohibition list is a signal that structural controls are overdue
-
-## Unverified Claims
-
-- Longer instruction sets making any single rule more likely to be ignored `[unverified]`
 
 ## Related
 

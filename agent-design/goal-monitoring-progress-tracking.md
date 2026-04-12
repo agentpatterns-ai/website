@@ -53,7 +53,7 @@ A JSON [feature list](../instructions/feature-list-files.md) defines every granu
 
 ### Incremental Commits
 
-Descriptive git commits act as a secondary progress log. [unverified] Each commit records what changed and why, enabling human review and rollback via `git diff` or `git revert`.
+Descriptive git commits act as a secondary progress log ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) — each records what changed, enabling review and rollback via `git diff` or `git revert`.
 
 ## Failure Modes
 
@@ -63,17 +63,17 @@ Without progress files and feature lists, agents see partial progress and declar
 
 ### [Objective Drift](../anti-patterns/objective-drift.md)
 
-After context summarization, an agent may lose track of the original user intent — asking unnecessary clarification or pursuing tangential subtasks while appearing functional. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/)) Test for drift by triggering context summarization mid-task and verifying the agent continues on the original objective.
+After context summarization, an agent may lose track of original intent — asking unnecessary clarification or pursuing tangential subtasks while appearing functional. ([LangChain: Context management for deep agents](https://blog.langchain.com/context-management-for-deepagents/)) Test for drift by triggering summarization mid-task and verifying the agent continues on the original objective.
 
 ### Doom Loops
 
-An agent edits the same file repeatedly without converging. Detection: track per-file edit counts via tool call hooks. After N edits, inject context like "you have edited this file 8 times — consider a different approach." ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
+An agent edits the same file repeatedly without converging. Detection: track per-file edit counts via hooks. After N edits, inject context like "you've edited this file 8 times — try a different approach." ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
 
 ## Harness Patterns
 
 ### The Initializer Agent
 
-A dedicated first-session agent handles environment setup: creates `init.sh`, `claude-progress.txt`, `feature_list.json`, and an initial git commit. [unverified] This separates bootstrapping from coding — the coding agent never decides what "done" looks like.
+A dedicated first-session agent handles environment setup: creates `init.sh`, `claude-progress.txt`, `feature_list.json`, and an initial git commit. ([Anthropic: Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)) This separates bootstrapping from coding — the coding agent never decides what "done" looks like.
 
 ```mermaid
 sequenceDiagram
@@ -92,21 +92,31 @@ sequenceDiagram
 
 ### Pre-Completion Checklist
 
-Middleware intercepts the agent before exit and forces a verification pass against the task spec. Each requirement must be confirmed before the harness allows completion — a mechanical safeguard against premature exit. ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
+Middleware intercepts the agent before exit and forces a verification pass against the task spec. Each requirement must confirm before the harness allows completion — a mechanical safeguard against premature exit. ([LangChain: Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/))
 
 ### [Loop Detection](../observability/loop-detection.md) Middleware
 
-Tool call hooks track repetitive behavior. [unverified] The harness counts edits per file, consecutive failed tests, or repeated identical tool calls. When thresholds are exceeded, it injects corrective context or forces a strategy change.
+Tool call hooks can track repetitive behavior by monitoring consecutive failed tests or repeated identical tool calls. When thresholds are exceeded, the harness injects corrective context or forces a strategy change.
 
 ### Environmental Feedback
 
-Agents need continuous ground truth — test results, linter output, build status — to know whether changes actually work, not just whether they look right. ([Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents))
+Agents need continuous ground truth — test results, linter output, build status — to confirm changes actually work. ([Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents))
+
+## Why It Works
+
+Progress files and feature lists externalize state that would otherwise live only in the model's context window. Context compression partially replaces in-context memory with a summary — which can omit detail. A progress file written to disk is immune to that loss. A JSON feature list makes completion criteria explicit and binary: the model cannot interpret "passing" as "partially passing." The separation between volatile in-context reasoning and durable external state closes the gap between what the agent *thinks* it has done and what it has actually done.
+
+## When This Backfires
+
+1. **Short-lived tasks**: For tasks completing in a single session, progress files and an initializer agent add overhead that exceeds their benefit. ROI requires context window boundaries to become real.
+2. **Emergent requirements**: Feature lists require upfront enumeration. When success criteria are discovered through exploration, a rigid contract creates friction — the agent spends time updating the list rather than building.
+3. **Broken scaffolding**: A misspecified `feature_list.json` from the initializer is worse than none — downstream sessions inherit a false map and gain false confidence about completion.
 
 ## Production Monitoring
 
-**[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md)**: Shift traffic gradually between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+**[Rainbow deployments](../multi-agent/rainbow-deployments-agents.md)**: Shift traffic between agent versions without disrupting in-progress tasks. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
-**Decision path tracing**: Monitor decision patterns and interaction structures (not content) to diagnose failures. Non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
+**Decision path tracing**: Monitor decision patterns and interaction structures (not content) to diagnose failures — non-deterministic failures require full tracing. ([Anthropic: Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system))
 
 ## Example
 
@@ -154,12 +164,6 @@ fi
 - **Separate bootstrapping from execution** — an initializer agent defines success criteria; the coding agent works toward them
 - **Mechanical verification beats self-assessment** — pre-completion checklists and loop detection catch failures agents miss
 
-## Unverified Claims
-
-- Incremental commits as a secondary progress log: logical extension of progress file patterns, not documented in cited sources
-- Initializer agent pattern: synthesized from Anthropic's harness guidance, not a named pattern in the source material
-- Per-file edit counting in loop detection: inferred from LangChain's doom loop discussion, specific implementation not prescribed
-
 ## Related
 
 - [The Plan-First Loop](../workflows/plan-first-loop.md)
@@ -168,8 +172,5 @@ fi
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [Convergence Detection](convergence-detection.md)
 - [Steering Running Agents](steering-running-agents.md)
-- [Agent Harness](agent-harness.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Agentic Flywheel](agentic-flywheel.md)
+- [Agent Harness](agent-harness.md)

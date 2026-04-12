@@ -30,7 +30,7 @@ graph TD
     C -->|FAIL + feedback| B
 ```
 
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), the evaluator-optimizer is appropriate when there are clear evaluation criteria and iterative refinement provides measurable value.
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), the evaluator-optimizer is appropriate when there are clear evaluation criteria and iterative refinement provides measurable value. Anthropic's [reference implementation](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/evaluator_optimizer.ipynb) demonstrates the pattern with a translation task, evaluating outputs against criteria and looping until PASS.
 
 ## Evaluator Design
 
@@ -48,7 +48,7 @@ The evaluator returns structured output — a JSON verdict with specific issues 
 Every loop needs a clear termination condition to prevent runaway iteration and cost:
 
 - **Primary:** evaluator returns PASS
-- **Fallback:** maximum round limit (typically 2–3 [unverified]) reached; escalate or return best-effort output
+- **Fallback:** maximum round limit reached; escalate or return best-effort output. A round limit of 3 is a common starting point — Anthropic's reference implementation uses this default — though the right cap depends on task complexity and cost budget.
 
 Without a round limit, a loop where the evaluator and generator have conflicting assumptions will run until budget exhaustion. The fallback is not a failure; it is a signal that the criteria or the generator need adjustment.
 
@@ -61,6 +61,15 @@ The pattern produces measurable improvement when:
 - The task does not have a single correct answer that would make iteration redundant
 
 For coding tasks, the pattern maps naturally: generator produces code → evaluator runs tests → failures feed back to generator → repeat. Tests provide a machine-checkable termination condition, making the loop predictable and auditable.
+
+## When This Backfires
+
+The pattern degrades or fails in four conditions:
+
+- **Shared blind spots** — when the generator and evaluator are the same model with only a prompt swap, both may miss the same class of errors. The evaluator returns PASS on output that violates the intent, not because criteria are met but because neither role can detect the violation. Mitigation: use a different model for evaluation, or replace the LLM evaluator with a deterministic checker (tests, lint, type checker).
+- **Vague criteria** — evaluation criteria expressed as subjective prose ("is it high quality?") make the evaluator's PASS/FAIL signal noisy and the termination condition unpredictable. Iteration continues past the point of improvement, burning tokens without converging.
+- **Non-actionable feedback** — if the evaluator cannot identify *specific* issues in its structured output, the generator has no surface to act on. Each iteration produces cosmetic variation rather than substantive improvement, hitting the round limit without resolution.
+- **Tasks with a single correct answer** — when the output is either right or wrong (e.g., a lookup, a pure computation), iterative refinement adds cost without benefit. Use a direct call with deterministic validation instead.
 
 ## Example
 
@@ -107,23 +116,9 @@ A generator that makes marginal improvements per iteration should trigger a rede
 
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Prompt Chaining](../context-engineering/prompt-chaining.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Incremental Verification](../verification/incremental-verification.md)
 - [Convergence Detection](convergence-detection.md)
 - [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Agentic Flywheel](agentic-flywheel.md)
-- [Controlling Agent Output](controlling-agent-output.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md)
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agent Pushback Protocol](agent-pushback-protocol.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Controlling Agent Output](controlling-agent-output.md)
 - [Agent Harness](agent-harness.md)
-- [Agent Memory Patterns](agent-memory-patterns.md)

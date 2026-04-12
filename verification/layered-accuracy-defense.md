@@ -50,7 +50,7 @@ A single "fact-checker" agent at the end of the pipeline has to re-examine the e
 - The writer layer prevents recalled knowledge from entering as fact
 - The reviewer layer catches anything the writer missed
 
-Each layer only needs to catch some errors, not all. The compounded probability of an error surviving all three is lower than any single agent's error rate. [unverified]
+Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and markup completeness — an error must evade three different detection criteria to reach the reader.
 
 ## What Each Layer Checks
 
@@ -68,17 +68,23 @@ Relying on a single review agent at the end of the pipeline. That agent will see
 
 - No single agent is the accuracy gatekeeper — every agent in the chain validates within its scope
 - Explicit reject instructions per layer outperform generic "be accurate" prompts
-- The compounded error rate across layers is lower than any individual layer's miss rate [unverified]
+- Each layer checks a distinct property, so errors must evade different detection criteria rather than the same check repeated
 - This is defense in depth applied to content accuracy, not security
 - Anti-pattern: a single fact-checker at the end of the pipeline
 
-## Unverified Claims
+## When This Backfires
 
-- Compounded probability of an error surviving all three verification layers is lower than any single agent's error rate `[unverified]`
+Layered verification adds latency and cost proportional to the number of agents. Three round-trips through researcher → writer → reviewer is appropriate for high-stakes content pipelines, but can be excessive for:
+
+- **Simple lookup tasks** where a single agent retrieves and returns a fact — adding a reviewer layer adds cost without addressing the root failure mode (model fabrication without retrieval).
+- **Rapid iteration contexts** where speed matters more than accuracy — a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
+- **Correlated knowledge gaps** — if the writer and reviewer share the same training data blind spots, both layers will miss the same class of errors. Independent layers require genuinely different perspectives or constraints, not just role labels.
+
+The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks markup. If two layers are doing the same check, one is redundant.
 
 ## Example
 
-A three-agent content pipeline where each agent's system prompt encodes its verification responsibility.
+A three-agent [content pipeline](../workflows/content-pipeline.md) where each agent's system prompt encodes its verification responsibility.
 
 **Researcher prompt excerpt:**
 
@@ -117,4 +123,5 @@ The researcher rejects claims without URLs. The writer marks anything beyond the
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Verification Ledger](verification-ledger.md)
+- [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md)
 - [Defense Patterns](index.md)

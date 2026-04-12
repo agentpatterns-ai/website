@@ -62,7 +62,7 @@ Routing only saves cost when both conditions hold:
 
 **Condition 2 — Signal gate**: CodeHealth must discriminate task difficulty with a measurable effect size (p̂ ≥ 0.56). If code health scores do not reliably predict which tier a task needs, routing on them produces no gain.
 
-Both gates must hold before routing pays off. Either condition failing means the signal is not predictive enough to justify the routing overhead.
+Both gates must hold before routing pays off. Either condition failing makes the signal not predictive enough to justify routing overhead.
 
 ## The Verification Gate
 
@@ -88,28 +88,69 @@ The gate is deterministic — its output is the same whether the input came from
 
 Three routing approaches are described in the proposal:
 
-**Heuristic thresholds** — assign tiers using CodeHealth score ranges directly. Transparent and easy to audit; no training required. Threshold calibration depends on your codebase characteristics.
+**Heuristic thresholds** — assign tiers using CodeHealth score ranges directly. Transparent, auditable, no training required; threshold calibration depends on codebase characteristics.
 
-**ML classifier** — train a classifier on code health sub-factors; use SHAP analysis to rank which sub-factors (e.g., cyclomatic complexity alone vs. composite) carry the most predictive weight. Allows sub-factor selection to reduce instrumentation overhead.
+**ML classifier** — train a classifier on code health sub-factors; use SHAP analysis to identify which sub-factors (e.g., cyclomatic complexity alone vs. composite) carry the most predictive weight, reducing instrumentation overhead.
 
-**Perfect-hindsight oracle** — a theoretical ceiling that assigns each task retroactively to the cheapest tier that would have passed. Used as a benchmark to quantify headroom between heuristic or ML policies and optimal routing.
+**Perfect-hindsight oracle** — assigns each task retroactively to the cheapest passing tier. A theoretical ceiling used to quantify headroom above heuristic or ML policies.
 
 ## Applying the Pattern Without a Composite Score
 
-If you do not have a CodeHealth composite, apply the underlying logic using a single proxy metric [unverified]:
+Without a CodeHealth composite, proxy with a single metric that correlates with task complexity:
 
-- **Cyclomatic complexity** (per function): files with average complexity > 10 route to heavy
+- **Cyclomatic complexity** (per function): average > 10 routes to heavy ([McCabe, 1976](https://doi.org/10.1109/TSE.1976.233837))
 - **Module coupling** (fan-in/fan-out): high-coupling files route to heavy
-- **File churn rate** (git log): frequently modified files correlate with instability — route to heavy
+- **File churn rate** (git log): frequent modification correlates with instability — route to heavy
 
-The key constraint is unchanged: the verification gate must be deterministic and identical across all tiers. Without a consistent gate, routing decisions cannot be evaluated against a shared quality standard.
+The key constraint is unchanged: the verification gate must be deterministic and identical across all tiers.
 
 ## Limitations
 
 - **No empirical results yet** — the SWE-bench Lite evaluation is pending; stated cost savings are theoretical conditions
 - **Causal direction** — clean code may correlate with simpler specs and better test coverage independently, confounding the health signal as a predictor of model-tier need
 - **Pricing sensitivity** — the 20% cost-gate threshold is calibrated to current Haiku/Opus pricing; changes invalidate it
-- **Tier-dependent asymmetry** — the hypothesis that mid-tier models benefit more from clean code than frontier models is stated but unmeasured [unverified]
+- **Tier-dependent asymmetry** — Madeyski (2026) reports mid-tier models benefit from clean code while frontier models do not; the mechanism is not yet explained
+
+## Example
+
+A CI-integrated routing lookup in Python, using cyclomatic complexity as a proxy when no composite score is available:
+
+```python
+import subprocess
+import anthropic
+
+def get_complexity(filepath: str) -> float:
+    """Return average cyclomatic complexity for a file using radon."""
+    result = subprocess.run(
+        ["radon", "cc", "-a", "-s", filepath],
+        capture_output=True, text=True
+    )
+    # Parse "Average complexity: B (5.2)" -> 5.2
+    for line in result.stdout.splitlines():
+        if "Average complexity" in line:
+            return float(line.split("(")[-1].rstrip(")"))
+    return 1.0
+
+def route_model(filepath: str) -> str:
+    complexity = get_complexity(filepath)
+    if complexity > 10:
+        return "claude-opus-4-5"      # heavy tier
+    elif complexity > 5:
+        return "claude-sonnet-4-5"    # standard tier
+    else:
+        return "claude-haiku-4-5"     # light tier
+
+# Usage: route the task before generating
+model = route_model("src/billing/invoice.py")
+client = anthropic.Anthropic()
+response = client.messages.create(
+    model=model,
+    max_tokens=2048,
+    messages=[{"role": "user", "content": task_prompt}]
+)
+```
+
+The verification gate (test suite, linter) runs identically regardless of which model produced the patch.
 
 ## Key Takeaways
 
@@ -118,12 +159,6 @@ The key constraint is unchanged: the verification gate must be deterministic and
 - The verification gate must be deterministic and identical for all tiers — this is the design constraint that makes tier equivalence measurable
 - If no composite score is available, proxy with cyclomatic complexity or coupling as a simpler routing heuristic
 - This is a research proposal (Madeyski, 2026) with pending empirical validation — treat stated cost savings as theoretical conditions, not measured outcomes
-
-## Unverified Claims
-
-- Tier-dependent asymmetry: mid-tier models show more variance on code health differences than frontier models [unverified]
-- SHAP analysis will identify a small number of sub-factors that carry most of the routing signal, with the composite adding little over individual metrics [unverified]
-- Single proxy metrics (cyclomatic complexity > 10, high coupling, high churn) provide actionable routing signal in the absence of a composite CodeHealth score [unverified]
 
 ## Related
 

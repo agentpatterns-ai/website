@@ -68,7 +68,7 @@ Additional validated results from the same methodology:
 - Ambience Healthcare (ICD-10 medical coding): F1 0.52 → 0.57 (+9.6%), 18% latency reduction
 - Cognition/Devon AI (file planning): 50% reduction in planning tool calls
 
-[Source: [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/variance-based-rl-sample-selection.md)]
+[Source: OpenAI Build Hours — [Agent Reinforcement Fine-Tuning, November 2025](https://github.com/openai/build-hours/tree/main/20-agent-rft)]
 
 ## Cost Trade-off
 
@@ -99,10 +99,6 @@ The team trains on 300 samples instead of 2,000 — a 6.7× compute reduction �
 - The gap between mean score and best-of-N score gives an improvement ceiling to evaluate before training
 - Upfront profiling costs 3–5× inference; training cost savings typically exceed this by an order of magnitude
 - Always-wrong samples indicate capability or task-distribution gaps — not training opportunities
-
-## Unverified
-
-- The FinQA benchmark case study and Ambience Healthcare / Cognition results are cited from the nibzard/awesome-agentic-patterns catalog; the underlying primary source (paper or blog post) is not directly linked in that catalog entry [unverified]
 
 ## Related
 

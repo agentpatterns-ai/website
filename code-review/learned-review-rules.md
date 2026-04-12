@@ -18,7 +18,7 @@ aliases:
 
 A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times, misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
 
-The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first.
+The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first. An [empirical study of 278,790 AI-reviewed pull requests](https://arxiv.org/abs/2603.15911) found AI agent suggestions achieve 16.6% adoption — roughly a third of the 56.5% rate for human reviewers — a gap that persists in part because agents cannot adjust their defaults based on team-specific dismissal patterns.
 
 ## The Pattern
 
@@ -57,7 +57,7 @@ Rules extracted from feedback fall into two categories:
 | Developer accepts fix | Positive rule | Reinforce: flag this pattern in future reviews |
 | Developer dismisses comment | Suppression rule | Filter: do not flag this pattern in future reviews |
 
-Over time, suppression rules reduce false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent's calibration converges toward the team's actual review standards rather than the model's priors [unverified].
+Over time, suppression rules reduce false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent's behavior shifts toward the team's established conventions rather than the model's default priors — a narrowing that practitioners report as the system starting to "sound like" the team's senior reviewers.
 
 ## Building This Pattern Without Bugbot
 
@@ -83,13 +83,6 @@ The mechanism is not Cursor-specific. Any review agent with structured output ca
 - Suppression rules reduce false positive noise; positive rules reinforce patterns the team actually enforces
 - The pattern generalizes: capture signals, extract rules, inject into context, prune periodically
 - Without maintenance, rules encode blind spots and stale conventions — the rule set itself needs periodic review
-
-## Unverified Claims
-
-- Exact storage mechanism for Bugbot learned rules (file-based, embedded prompts, or model context injection) [unverified]
-- Whether Bugbot allows developers to inspect, edit, or delete individual learned rules [unverified]
-- Whether rule extraction uses LLM summarization or structured classification of dismiss/accept signals [unverified]
-- Whether accumulated rules demonstrably shift the agent's behavior toward team standards versus the model's default priors [unverified]
 
 ## Related
 

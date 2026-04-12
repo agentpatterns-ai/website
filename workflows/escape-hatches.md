@@ -91,7 +91,7 @@ Do not continue to the next step.
 
 This instruction pattern converts a stuck loop into a structured escalation. The agent surfaces the failure with enough context for the human to choose a hatch, rather than spinning until the human notices.
 
-The retry count (2 in the example) should match the task: some tasks warrant more attempts before escalation; others should escalate immediately. Set it based on how much context burn you can afford per task. [unverified: no formal evaluation of optimal retry thresholds by task type found in any source]
+The retry count (2 in the example) should match the task: some tasks warrant more attempts before escalation; others should escalate immediately. Set it based on how much context burn you can afford per task.
 
 ## Escalation: Surface, Don't Abandon
 
@@ -129,6 +129,19 @@ This applies to context resets too — when starting a new session after a failu
 Letting an agent retry indefinitely is not a strategy — it's a resource burn. Every failed attempt adds to context, and context pollution compounds. The more the agent retries a doomed approach, the less context remains for a working one.
 
 Set a retry ceiling in agent instructions and enforce it with [`maxTurns`](https://code.claude.com/docs/en/sub-agents) for sub-agents, [PreToolUse hooks](https://code.claude.com/docs/en/hooks) for tool-level validation, or CI timeouts for pipeline agents.
+
+## When This Backfires
+
+Escape hatches assume interruption is low-cost. That is not always true. Recent work on interruptible agents — [InterruptBench](https://arxiv.org/abs/2604.00892) evaluates six strong LLM backbones on mid-task request revision, addition, and retraction, and reports that even advanced models struggle both to adapt to updated intents and to recover from mid-task changes. A practitioner could reasonably argue that for long-horizon tasks, letting a run complete and debugging afterward preserves more reasoning state than any mid-run intervention.
+
+Concrete conditions where hatches are worse than the alternative:
+
+- **Long-horizon web or tool navigation with persistent side-effects** — mid-run redirection leaves partially applied state (half-committed transactions, partially uploaded files) that the revised instruction rarely accounts for. Letting the original run surface its own failure produces a cleaner rollback point.
+- **Compaction during active multi-file reasoning** — `/compact` discards conversational detail, including which files were read, which hypotheses were ruled out, and which edge cases the agent had already considered. If the stuck state is within a few turns of a solution, compacting can strand that work in an unrecoverable summary.
+- **Context reset when the failure cause is structural** — starting a new session after a missing-permission or missing-tool failure repeats the same approach unless the root cause is fixed first. The reset costs context without changing the outcome.
+- **Scope reduction on tasks with cross-cutting constraints** — breaking a refactor into smaller pieces can break invariants that only hold across the whole change (e.g., renaming an API surface in one file while leaving callers in another). The smaller pieces pass individually and fail as a set.
+
+If any of these conditions apply, prefer fixing the blocker out-of-band and resuming the original run over interrupting it.
 
 ## Example
 
@@ -172,10 +185,6 @@ Then start a new attempt with the corrected approach.
 - Build escalation instructions directly into agent definitions so agents surface failures structurally rather than spinning
 - Before a context reset, document what failed and why — a fresh session repeating the same approach produces the same result
 - Automate escape hatches where possible — `maxTurns`, [loop detection](../observability/loop-detection.md) middleware, and PreToolUse hooks catch stuck states without human intervention
-
-## Unverified Claims
-
-- Optimal retry thresholds vary by task type — no published benchmark compares retry counts across task categories [unverified: no formal evaluation of optimal retry thresholds by task type found in any source]
 
 ## Related
 

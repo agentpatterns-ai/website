@@ -35,7 +35,7 @@ Reviewers spending 4.2 hours on large PRs leave fewer comments than those spendi
 
 ## AI Makes It Worse
 
-[CodeRabbit's report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI-generated PRs contain 1.7x more issues than human-written code, with 3x more readability issues and 75% more logic/correctness defects [unverified]. Three cognitive mechanisms compound the problem:
+[CodeRabbit's report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI-generated PRs contain 1.7x more issues than human-written code, with 3x more readability issues and 75% more logic/correctness defects. Three cognitive mechanisms compound the problem:
 
 - **Template blindness.** AI code follows similar structural patterns, causing reviewers to skim; subtle bugs hide inside familiar-looking boilerplate. ([AsyncSquad Labs](https://asyncsquadlabs.com/blog/code-review-bottleneck-ai-era/))
 - **AI brain fry.** Sustained AI oversight produces mental fog and increased error rates. ([Help Net Security / HBR](https://www.helpnetsecurity.com/2026/03/09/harvard-business-review-ai-workplace-fatigue-report/))
@@ -77,6 +77,10 @@ Review abstracted behavior changes rather than raw line diffs. AST-based diffs a
 
 Define expected behavior before the agent codes. Review becomes validation against pre-agreed criteria per [Spec-Driven Development](../workflows/spec-driven-development.md).
 
+## When This Backfires
+
+Size limits fail when changes are genuinely atomic (cross-cutting refactors, schema migrations), when coordination overhead exceeds review benefit in tightly coupled monorepos, or when hard LOC gates produce superficial splitting — many small PRs that are individually below threshold but collectively incoherent.
+
 ## Example
 
 An agent completes a feature sprint and opens a single 1,400-LOC PR touching auth, billing, and the data model. The reviewer spends 3 hours skimming and approves with two style comments. A logic error in the billing calculation ships.
@@ -98,6 +102,7 @@ CI enforcement keeps scope in check:
 
 ## Related
 
+- [The Bottleneck Migration](../human/bottleneck-migration.md) — systemic shift from generation to review as the binding constraint
 - [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md)
 - [Comprehension Debt](comprehension-debt.md)
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md)

@@ -39,7 +39,7 @@ This compounds in fast-evolving domains. ML libraries — `torch`, `transformers
 
 ### Feed Lock Files as Context
 
-Include `requirements.txt`, `pyproject.toml`, `package-lock.json`, or equivalent lock files in the agent's context. This gives the model an explicit version manifest to target. Tools that index workspace files (Claude Code, Cursor, Copilot Workspace) can surface these automatically [unverified — no controlled study confirms the specific accuracy improvement, though the mechanism is consistent with the research].
+Include `requirements.txt`, `pyproject.toml`, `package-lock.json`, or equivalent lock files in the agent's context. This gives the model an explicit version manifest to target. Tools that index workspace files (Claude Code, Cursor, Copilot Workspace) can surface these automatically; for tools that don't, paste the relevant lock file contents directly into the prompt or system message.
 
 ### State Versions in Instructions
 
@@ -62,6 +62,14 @@ Error traces from failed execution contain version-specific signals (e.g., `Attr
 ### Scope Caution to High-Churn Libraries
 
 ML frameworks (`torch`, `transformers`, `tensorflow`) and web frameworks with rapid release cycles show the steepest accuracy drops. Stable standard-library modules rarely trigger version mismatches. Focus verification effort where churn is highest.
+
+## When This Backfires
+
+Environment specification has real costs. Three conditions where the overhead exceeds the benefit:
+
+- **Stable, low-churn deps**: Standard library modules, mature packages with frozen APIs (e.g., `os`, `json`, `requests` ≥2.x), or projects pinned to an LTS release rarely produce version mismatches. Adding lock file context for these bloats the prompt with noise.
+- **Token-budget pressure**: A full `package-lock.json` or `poetry.lock` can run thousands of tokens. In agents with long task context, feeding the entire lock file may crowd out instructions, retrieved code, or error history that matters more. Prefer excerpting only the relevant dep declarations (`[tool.poetry.dependencies]` or filtered `requirements.txt` lines) rather than the full resolved tree.
+- **Version not in training data**: For very new library releases (released after the model's training cutoff), the model has no examples of the correct API surface. Specifying the version signals the correct target but cannot conjure knowledge of it. In this case, supplement with retrieved docs or changelogs rather than relying on version-conditioned generation alone.
 
 ## Example
 
@@ -100,11 +108,6 @@ One renamed parameter — a `FutureWarning` or outright failure depending on ver
 - Feed lock files and version manifests into agent context to shift generation toward the correct API surface.
 - Prefer migration tasks (adapt existing code) over from-scratch generation — adaptation accuracy is 2–3x higher.
 - Focus verification on fast-evolving libraries (ML frameworks, web frameworks) where version churn causes the steepest accuracy drops.
-
-## Unverified Claims
-
-- Including workspace lock files (requirements.txt, pyproject.toml) in agent context tools like Claude Code and Cursor produces measurable accuracy improvements on version-specific tasks [unverified — mechanism is consistent with research but no controlled study confirms the specific claim]
-- The 2–3x migration advantage may shift with newer model architectures trained on more recent code corpora [unverified]
 
 ## Sources
 

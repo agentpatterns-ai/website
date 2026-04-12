@@ -19,7 +19,7 @@ aliases:
 
 Harness engineering is the practice of structuring a codebase, its tooling, and its documentation so that coding agents succeed by default. It treats the repository as the primary interface for agent work: if something is not in the repo, it does not exist for the agent.
 
-The term emerged from convergent findings across OpenAI, Anthropic, LangChain, and Martin Fowler's team -- each independently discovering that environment quality determines agent output quality, not model capability or prompt sophistication. `[unverified]`
+OpenAI, Anthropic, LangChain, and Martin Fowler's team each published findings converging on the same conclusion: environment quality determines agent output quality more than model capability or prompt sophistication.
 
 OpenAI shipped roughly one million lines of production code without manually written source in a five-month experiment. The enabler was environment design ([InfoQ](https://www.infoq.com/news/2026/02/openai-harness-engineering-codex/)). LangChain improved Terminal Bench 2.0 from 52.8% to 66.5% through pure harness changes -- no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
@@ -142,6 +142,16 @@ ESLintError [api/no-direct-db-import]:
 
 All three pillars contributed: legibility told the agent what to do, mechanical enforcement told it when it was wrong, and constrained solution spaces made the correct path the only available path.
 
+## When This Backfires
+
+Harness engineering addresses structural failure modes reliably -- import violations, architecture boundary crossings, format errors. It does not reliably catch higher-impact problems: misdiagnosis of issues, overengineering, unnecessary features, and misunderstood instructions still surface because linters and CI gates operate at the syntax and architecture layer, not the intent layer ([Fowler](https://martinfowler.com/articles/harness-engineering.html)).
+
+Three specific conditions where the investment pays off less:
+
+- **Over-constraint limits problem-solving** -- excessively narrow linter rules block valid solutions and force agents to contort implementations to satisfy constraints rather than solve the actual problem. Comprehensive tool libraries with every capability gave worse results than stripped-down essentials in Vercel's experience; fewer choices made agents faster and more reliable ([NxCode](https://www.nxcode.io/resources/news/harness-engineering-complete-guide-ai-agent-codex-2026)).
+- **Documentation maintenance overhead** -- monolithic instruction files rot quickly; stale rules become noise that degrades agent decision quality. The harness requires active maintenance proportional to codebase change rate, or it becomes a liability.
+- **Short-lived codebases** -- building custom linters, structural tests, and layered docs pays off across many agent sessions. For prototypes or throwaway code, the investment cost exceeds the reliability benefit.
+
 ## Key Takeaways
 
 - Harness engineering is the discipline of designing environments where agents succeed by default -- it subsumes prompt engineering
@@ -150,17 +160,14 @@ All three pillars contributed: legibility told the agent what to do, mechanical 
 - Agent failure is a signal about the environment; feed fixes back into the repository
 - Environment design compounds: every harness improvement benefits all future agent sessions
 
-## Unverified Claims
-
-- The exact term "harness engineering" as a named discipline originates from the Fowler/Bockeler article; other sources describe the same practices without using this specific term `[unverified]`
-- "Legibility precedes capability" is an editorial distillation of Lavaee's findings -- the exact phrase does not appear in the source `[unverified]`
-- Whether OpenAI's ~1M LOC figure includes generated tests and configuration, or only application logic, is not specified in the InfoQ source `[unverified]`
-
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the project instruction file standard that provides agents project context before any task
 - [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding
+- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the builder/coder split reframes harness engineering as the new professional discipline
 - [Agent Harness](agent-harness.md) -- the specific initializer/worker two-phase architecture
+- [Harness Hill-Climbing](harness-hill-climbing.md) -- eval-driven iterative improvement of the agent harness using benchmark scores as the optimization signal
+- [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs
 - [Agent-First Software Design](agent-first-software-design.md) -- designing systems where agents are the primary consumers
 - [Codebase Readiness](../workflows/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
 - [Process Amplification](../human/process-amplification.md) -- agents amplify existing practices, good or bad

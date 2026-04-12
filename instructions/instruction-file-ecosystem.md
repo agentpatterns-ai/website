@@ -1,6 +1,6 @@
 ---
 title: "Project Instruction File Ecosystem"
-description: "Every major AI coding tool invented a project-level instruction file independently — understanding how these files relate helps teams working across tools avoid content drift and duplication."
+description: "CLAUDE.md, copilot-instructions.md, and AGENTS.md all carry project context for AI tools but differ in discovery and scope. Convergence strategy prevents drift."
 aliases:
   - Instruction File Convention
   - Project Instruction Files
@@ -11,7 +11,7 @@ tags:
 
 # Project Instruction File Ecosystem
 
-> Every major AI coding tool invented a project-level instruction file independently — understanding how these files relate helps teams working across tools avoid content drift and duplication.
+> The instruction file ecosystem is a set of overlapping per-project context files — `CLAUDE.md`, `.github/copilot-instructions.md`, and `AGENTS.md` — that each AI coding tool reads for project conventions, constraints, and workflow rules.
 
 ??? note "Also known as: Instruction File Convention, Project Instruction Files"
     This page is the tool-agnostic overview. For tool-specific details, see:
@@ -43,11 +43,11 @@ GitHub Copilot also reads `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` as "agent-sp
 
 ## Content Overlap and Drift
 
-All three files contain the same categories — project context, conventions, constraints, workflow notes. Without a convergence strategy, content diverges [unverified]: one file says "use pnpm", another says "use npm", and agents follow their own source.
+All three files contain the same categories — project context, conventions, constraints, workflow notes. Each tool reads only its own file, so updates to one file don't propagate. Without a convergence strategy, the files diverge independently: one file says "use pnpm", another says "use npm", and agents follow their own source.
 
 ## Convergence Strategies
 
-**Single canonical file with symlinks.** Symlink all instruction files to one source of truth. Tradeoff: tool-specific syntax (e.g., Claude Code's [`@path/to/import`](https://code.claude.com/docs/en/memory)) may not work in other tools.
+**Single canonical file with symlinks.** Symlink all instruction files to one source of truth. Tradeoff: tool-specific syntax (e.g., Claude Code's [`@path/to/import`](https://code.claude.com/docs/en/memory)) may not work in other tools. Symlinks also require developer setup on Windows, where git does not create them by default.
 
 **Shared base with tool-specific extends.** Claude Code supports this via `@AGENTS.md` import in `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)). Copilot lacks cross-file imports, requiring duplication or generation.
 
@@ -142,13 +142,6 @@ With this layout, updating `AGENTS.md` propagates to Claude Code immediately (vi
 - Copilot reads AGENTS.md and CLAUDE.md natively, reducing duplication needs
 - Claude Code's `@AGENTS.md` import syntax enables a shared-base-with-extends strategy
 - Keep root files short; push specifics into path-scoped overrides
-
-## Unverified Claims
-
-- Content drift compounds over time when files are maintained separately.
-- Whether Cursor's `.cursor/rules/` reads AGENTS.md natively.
-- Whether symlink convergence works reliably on Windows with git.
-- The 60,000+ AGENTS.md adoption figure is self-reported.
 
 ## Related
 

@@ -17,7 +17,7 @@ tags:
 
 ## The Problem
 
-Enterprise teams deploying AI agents face a trilemma: frontier models (GPT-4o, Claude) deliver capability but leak data to third parties and cost 8-10x more at inference time [unverified]; small open models preserve sovereignty but lack tool-use competence; and bridging the gap with fine-tuning requires training data that nobody has time to curate manually.
+Enterprise teams deploying AI agents face a trilemma: frontier models (GPT-4o, Claude) deliver capability but leak data to third parties and cost 8-10x more at inference time ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)); small open models preserve sovereignty but lack tool-use competence; and bridging the gap with fine-tuning requires training data that nobody has time to curate manually.
 
 The bottleneck is the training data pipeline. Most teams treat tool integration, data generation, and model training as separate concerns with different owners. This fragmentation means schema changes invalidate existing datasets, new tools require fresh annotation campaigns, and the feedback loop between deployment failures and training improvements is measured in weeks.
 
@@ -74,18 +74,24 @@ Train the target model on validated trajectories. The training approach matters:
 | Direct Preference Optimization (DPO) | Learns from ranked pairs | 500-1,000 + preference pairs |
 | Trajectory-level RL (e.g., GRPO) | Rewards complete workflows, not tokens | 500-1,000 + reward signal |
 
-Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches [unverified beyond EnterpriseLab benchmarks].
+Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)).
 
 ## Evidence: Small Models Matching Frontier Performance
 
 EnterpriseLab ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)) validated this pattern across 15 enterprise applications with 140+ MCP-exposed tools:
 
 - **Qwen3-8B** trained on fewer than 1,000 synthesized examples matched GPT-4o on their EnterpriseArena benchmark (500 expert-curated tasks)
-- **8-10x inference cost reduction** ($0.50-$1.00 vs. $3.00-$15.00 per million tokens) [unverified -- costs are point-in-time]
+- **8-10x inference cost reduction** ($0.50-$1.00 vs. $3.00-$15.00 per million tokens at time of study; costs are point-in-time)
 - **Cross-benchmark generalization**: +10% over GPT-4o on EnterpriseBench and CRMArena
 - **Training wall time**: SFT in 2 hours, online RL in 24-30 hours on 4xH200 GPUs
 
-For comparison, prior work required 26,000-60,000 manually curated examples to achieve similar tool-use competence. The data efficiency comes from leveraging environment structure rather than brute-force annotation.
+For comparison, prior work required 26,000-60,000 manually curated examples to achieve similar tool-use competence — for instance, ToolBench ([Qin et al., 2023](https://arxiv.org/abs/2307.16789)) used 126,486 instances across 16,000+ APIs to train ToolLLaMA. The data efficiency of the closed-loop approach comes from leveraging environment structure rather than brute-force annotation.
+
+## Why It Works
+
+The core mechanism is distribution alignment: training trajectories are derived from the exact same tool definitions the model will encounter at inference time. Unlike general-purpose instruction tuning -- where training data is drawn from a broad distribution that only partially overlaps with any given deployment -- schema-derived trajectories are guaranteed to cover the actual parameter types, argument shapes, and data-flow dependencies the model needs to navigate. The model never encounters a tool signature in production that it hasn't seen structurally during training.
+
+Trajectory-level optimization amplifies this further. Token-level fine-tuning rewards correct individual tokens but is indifferent to whether the overall tool-call sequence succeeds. Trajectory-level RL (GRPO, PPO with episode-level rewards) directly optimizes for complete workflow success, which better matches the evaluation criterion and suppresses locally-plausible but globally-failing call sequences.
 
 ## Schema Evolution: Incremental Re-Training
 

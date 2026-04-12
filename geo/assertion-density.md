@@ -62,21 +62,19 @@ Find vague qualifiers and replace with specifics. If you don't have a source, ta
 
 ## The `[unverified]` Convention
 
-- `[unverified]` claims are retrieval liabilities — AI engines are less likely to cite unverifiable assertions `[unverified]`
+- `[unverified]` claims are retrieval liabilities — the GEO study found that PAWC rewards length and attributed specificity, not vague generalities; unverifiable assertions offer neither
 - Find a source and cite it, or keep the tag to signal the gap
 - Removing the tag without adding a source creates a worse false confidence signal
 
 ## Limits
 
-- **Freshness**: content recency is a separate signal — high assertion density on a stale page may underperform a fresher page with weaker assertions `[unverified]`
 - **Fabrication risk**: manufactured statistics are detectable; only add specifics you can source
 - **Structural prerequisites**: if the page buries answers (see [Answer-First Writing](answer-first-writing.md)), assertion density won't compensate for a retrieval miss at the section level
 - **Diminishing returns**: past a threshold, additional citations add length without citability
 
-## Unverified Claims
+## Recency and Assertion Density
 
-- Content recency may be a dominant AI citation signal — secondary GEO guides cite a "majority from recently updated content" finding without a confirmed primary source `[unverified]`
-- LLMs increasingly detect hallucinated citations and may penalise sources that use them — directionally plausible but unconfirmed `[unverified]`
+Content freshness and assertion density are independent citation signals — improving one does not substitute for the other. See [Measuring GEO Performance](measuring-geo-performance.md) for tracking both.
 
 ## Related
 

@@ -121,3 +121,4 @@ Skip canary rollout for: documentation-only prompt changes, fixing obvious bugs 
 - [Agent Observability in Practice](../observability/agent-observability-otel.md) — Wire up OTel for the metrics this pattern depends on
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Long-running loops where policy drift compounds over cycles
 - [Staggered Agent Launch](../multi-agent/staggered-agent-launch.md) — Complementary technique for blast-radius control at launch time
+- [Agent Governance Policies](agent-governance-policies.md) — Enterprise-level policy controls for agent mode, MCP, and model availability

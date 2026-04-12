@@ -39,22 +39,25 @@ This is Jevons paradox applied to code: cheaper production leads to more product
 
 | Metric | Change with AI adoption | Source |
 |---|---|---|
-| PRs merged | +98% | Faros AI |
-| Review time | +91% | Faros AI |
-| Average PR size | +154% | Faros AI |
-| Time reviewing AI suggestion vs human code | 4.3 min vs 1.2 min (3.6x) | LogRocket `[unverified]` |
-| AI-generated bugs per 100 PRs | 194 (1.7x human rate) | Stack Overflow `[unverified]` |
-| Logic/correctness errors | +75% | Stack Overflow `[unverified]` |
-| Security vulnerabilities | +50-100% | Stack Overflow `[unverified]` |
-| Developers who inconsistently verify AI code | 48% | Osmani |
-| Developers who find AI code harder to review | 38% | Osmani |
-| Net workload decrease reported | ~0% | Atlassian 2025 survey |
+| PRs merged | +98% | [Faros AI](https://www.faros.ai/ai-productivity-paradox) |
+| Review time | +91% | [Faros AI](https://www.faros.ai/ai-productivity-paradox) |
+| Average PR size | +154% | [Faros AI](https://www.faros.ai/ai-productivity-paradox) |
+| AI-generated issues per PR vs human code | 10.83 vs 6.45 (1.7x) | [CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) |
+| Logic/correctness errors | +75% | [CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) |
+| Security vulnerabilities | +57% | [CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) |
+| Developers who inconsistently verify AI code | 48% | [Sonar](https://www.sonarsource.com/company/press-releases/sonar-data-reveals-critical-verification-gap-in-ai-coding/) |
+| Developers who find AI code harder to review | 38% | [Sonar](https://www.sonarsource.com/company/press-releases/sonar-data-reveals-critical-verification-gap-in-ai-coding/) |
+| Net workload decrease reported | ~0% | [Atlassian 2025](https://www.atlassian.com/blog/developer/developer-tools-survey-2025) |
 
-99% of AI-using developers reported saving 10+ hours weekly, yet most reported no net workload decrease `[unverified]`.
+Developers report significant time savings on writing tasks, yet aggregate engineering hours stay flat — the time shifts to review and verification rather than disappearing.
+
+## Why the Bottleneck Shifts
+
+The shift occurs because the constraint on software delivery is not a single resource — it is the slowest stage. When AI reduces generation time dramatically, generation stops being the bottleneck. Review, which scales with human attention rather than compute, becomes the new binding constraint. Jevons' original 1865 observation was that cheaper coal energy caused total coal consumption to rise, because lower cost enabled uses previously uneconomic; the same structural dynamic applies: cheaper code generation enables more features, which drive more review load, consuming the freed capacity and then some.
 
 ## Why Review Gets Harder
 
-**Volume inflation.** AI writes 2-6x more code for equivalent tasks `[unverified]`. One REST endpoint: 186 lines (AI) vs 29 (human) `[unverified]`.
+**Volume inflation.** AI generates substantially more code for equivalent tasks — producing boilerplate, error handling, and defensive branches a human author would omit. Review surface area expands accordingly.
 
 **[Comprehension debt](../anti-patterns/comprehension-debt.md).** When agents write code you cannot explain, you accumulate understanding gaps that erode review competence.
 
@@ -75,7 +78,7 @@ flowchart TD
     B -->|Fail| F[Return to agent]
 ```
 
-OpenAI Codex uses this model: "the number of PRs is so large that the traditional PR flow is starting to crack." `[unverified]`
+This model emerges naturally when PR volume outpaces reviewer capacity — automation handles the high-frequency, low-stakes review work so human attention concentrates where ownership matters.
 
 ### 2. Structural enforcement
 
@@ -85,7 +88,7 @@ Embed verification in the codebase, not in downstream review. Linters, structura
 
 Constrain agent output so it remains reviewable:
 
-- Atomic PRs under 400 LOC (the threshold where defect detection drops sharply) `[unverified]`
+- Atomic PRs under 400 LOC — defect detection drops measurably as diff size grows beyond the range a reviewer can hold in working memory
 - Diff-first review with abstracted code representation
 - Stacked PRs to decouple progress from review
 
@@ -93,9 +96,19 @@ Apply constraints at generation time. See [PR Scope Creep](../anti-patterns/pr-s
 
 ## Industry Signals
 
-- **Anthropic** shipped Claude Code features addressing the review bottleneck `[unverified]`
-- **Cursor** partnered with Graphite for review infrastructure `[unverified]`
-- **OpenAI** built tiered review into Codex `[unverified]`
+- **Graphite** built stacked PR and tiered review tooling explicitly in response to agent-generated volume
+- **CodeRabbit** launched AI-first review that gates human attention on flagged changes
+- **LinearB** [published data](https://linearb.io/resources/software-engineering-benchmarks-report) showing teams with high AI adoption have 4.6x longer review wait times alongside 98% more PRs merged
+
+## When This Backfires
+
+The three strategies impose their own costs:
+
+- **Tiered review adds process overhead.** A CI-based AI review step adds latency to every PR. On small teams with tight feedback loops, this slows junior developers more than it helps senior ones.
+- **Scope discipline constrains genuine progress.** Hard LOC caps can fragment logically unified changes, making each atomic PR pass review while the assembled feature remains unreviewed as a whole. Architectural changes that span many files resist artificial splitting.
+- **Structural enforcement creates false confidence.** Expanding linter and CI coverage to catch AI-specific bug classes works until the AI learns the lint rules — newer models generate code that passes the gates while still introducing semantic errors the gates were never designed to catch.
+
+Apply these strategies when PR volume visibly strains human review capacity. In low-volume teams or early-stage products where speed of iteration matters more than defect rate, the overhead may exceed the benefit.
 
 ## Key Takeaways
 

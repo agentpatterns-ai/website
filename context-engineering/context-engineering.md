@@ -43,7 +43,7 @@ graph TD
 | Conversation history | Prior turns, compressed as needed | Accumulated |
 | Tool outputs | Results from tool calls | Per tool call |
 
-Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content.
+Each layer has an opportunity cost: every token displaces reasoning, instructions, or task-relevant content. This is not merely a capacity constraint — [attention is non-uniform](https://arxiv.org/abs/2307.03172). Models attend strongly to content near the start and end of the context window and poorly to content in the middle. Loading irrelevant tokens does not produce neutral noise; it actively dilutes attention on relevant tokens, causing measurable output degradation.
 
 ## Token Economics
 
@@ -56,7 +56,7 @@ Context space is finite. Every inclusion is an exclusion:
 
 ## Context Pollution
 
-[Context pollution](../anti-patterns/session-partitioning.md) — irrelevant context accumulated across unrelated tasks — competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2. [unverified]
+[Context pollution](../anti-patterns/session-partitioning.md) — irrelevant context accumulated across unrelated tasks — competes with relevant content for attention. An agent loaded with 50 potentially-relevant files produces worse output on the 2 actually-relevant files than one loaded with only those 2 — a pattern confirmed by [Liu et al. (2023)](https://arxiv.org/abs/2307.03172), who found multi-document QA accuracy drops 30%+ as distractors increase.
 
 The diagnostic question: "Does this improve output on this specific task?" If no, it is pollution.
 
@@ -77,6 +77,16 @@ Context engineering subsumes several concerns treated separately:
 - **Memory management** — what persists across sessions, what is summarised, what is discarded
 
 [Anthropic identifies](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) three complementary approaches: compaction (lossy summarisation), structured note-taking (persistent external memory), and sub-agent architectures (condensed summaries returned to a coordinator).
+
+## When This Backfires
+
+Context engineering introduces its own failure modes:
+
+- **Retrieval errors propagate**: if the retrieval layer selects wrong files, the agent has no fallback — selective loading without reliable retrieval produces worse results than loading everything.
+- **Compaction loses critical state**: lossy summarisation discards information that turns out to be needed later. Compaction requires knowing in advance what is task-critical, which is not always possible at summarisation time.
+- **Coordination overhead**: sub-agent architectures require well-designed handoff contracts. A coordinator that receives a poor summary from a sub-agent cannot recover missing context.
+
+The pattern assumes retrieval quality and compaction fidelity. When those assumptions fail, an unfiltered context is more robust than a poorly filtered one.
 
 ## Key Takeaways
 

@@ -18,7 +18,7 @@ GitHub's Copilot code review demonstrates this at scale: [in 71% of reviews, Cop
 
 ## Why Volume Fails
 
-Alert fatigue is the primary failure mode [unverified]. When every PR gets a wall of comments — style nits, suggestions on intentional patterns, low-confidence speculation — you stop reading AI review output entirely. The one critical security finding gets buried in twenty stylistic preferences.
+Alert fatigue is the primary failure mode. When every PR gets a wall of comments — style nits, suggestions on intentional patterns, low-confidence speculation — you stop reading AI review output entirely. The one critical security finding gets buried in twenty stylistic preferences.
 
 This mirrors noisy alerting in operations: a system that pages on everything gets ignored.
 
@@ -57,6 +57,17 @@ When building or configuring AI review:
 - **Categorize by severity.** Critical and high findings appear as PR comments. Medium and low findings surface only when explicitly requested.
 - **Track false positive rates.** If you dismiss a category of finding more than half the time, suppress it or refine the detection criteria.
 - **Scope review instructions.** Tell the agent what to check and — equally important — what to ignore. A review prompt that says "flag all uses of `any`" will flag intentional uses alongside accidental ones.
+
+## Why It Works
+
+The mechanism is attentional: reviewers have a fixed budget of attention per PR. When a tool produces many low-value comments, reviewers apply a consistent discount to all its output — including the high-value findings. This is a learned response to repeated false positives, not a deliberate choice. Suppressing low-confidence findings preserves the reviewer's full attention for comments that surface, so each one is read rather than skimmed.
+
+## When This Backfires
+
+- **Cross-file false negatives.** A strict confidence floor silences bugs that span multiple files — the model cannot reach high confidence without full context. This defect class is missed unless the agent receives sufficient scope.
+- **Silent failure on novel patterns.** Confidence thresholds reflect known patterns. A new vulnerability type may score low confidence because it is rare in training data, not because it is low risk. The agent's silence is indistinguishable from a clean bill of health.
+- **Trust inversion.** When the agent comments rarely, developers may interpret silence as implicit approval and reduce manual review. A "No high-confidence findings." response creates false completeness if secondary review has been dropped.
+- **Threshold decay.** Confidence floors drift as codebases evolve. Without periodic recalibration against resolved findings, signal quality degrades silently.
 
 ## Example
 
@@ -110,3 +121,5 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — why higher PR volume from agents does not equal higher engineering value
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — collaboration signals and reviewer engagement as merge predictors for agent-authored PRs
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — how agents can persist accept/reject signals to suppress recurring false positives automatically

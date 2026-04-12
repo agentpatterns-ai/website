@@ -122,3 +122,4 @@ The orchestrator never inspects free-text output. If the triage agent returns an
 - [MCP Client Design](mcp-client-design.md)
 - [MCP Client-Server Architecture](mcp-client-server-architecture.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)

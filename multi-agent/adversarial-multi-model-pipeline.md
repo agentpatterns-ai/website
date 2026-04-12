@@ -20,7 +20,7 @@ The pipeline separates two antagonistic roles across different model instances �
 - **Builder** — owns spec authorship, test generation, and code implementation. Accumulates context across phases and can develop confirmation bias toward its own decisions.
 - **Adversary** — receives a context reset between each review pass. Attacks specs, tests, and implementation with no prior investment in them. The context reset is the mechanism: the adversary cannot rationalize decisions it did not make.
 
-Using a different model family for each role (e.g., Claude as Builder, Gemini as Adversary) ensures independent failure modes [unverified]. A same-model adversary may share the Builder's blind spots even with a fresh context window. See [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) for context on when fresh-context resets are appropriate.
+Using a different model family for each role (e.g., Claude as Builder, Gemini as Adversary) reduces correlated failure modes — multi-model ensembles suppress shared error patterns that same-family models exhibit even with a fresh context window ([LLM-TOPLA, EMNLP 2024](https://aclanthology.org/2024.findings-emnlp.698.pdf)). See [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) for context on when fresh-context resets are appropriate.
 
 ## The Six Phases
 
@@ -43,7 +43,7 @@ graph TD
 
 **Phase 4 — Feedback Integration.** Route findings to the phase they belong to: spec revisions cycle back to Phase 1; test gaps cycle back to Phase 2. Phases 3 and 4 repeat until convergence.
 
-**Phase 5 — Formal Hardening.** Execute formal verification proofs, fuzzing, and mutation testing against the now battle-tested implementation. The Purity Boundary Map defines which components are candidates for formal verification.
+**Phase 5 — Formal Hardening.** Execute formal verification proofs, fuzzing, and mutation testing against the now battle-tested implementation. The Purity Boundary Map defines which components are candidates for formal verification. Cross-examination at phase boundaries is a documented robustness mechanism in LLM multi-agent SE systems ([ACM TOSEM, 2024](https://dl.acm.org/doi/10.1145/3712003)).
 
 **Phase 6 — Convergence.** Exit the loop. See convergence criterion below.
 
@@ -56,7 +56,7 @@ The Purity Boundary Map separates the codebase into two zones before implementat
 | Pure core | Deterministic, no side effects | Formal proofs, property-based testing |
 | Effectful shell | I/O, network, database, time | Integration tests, contract tests, fuzzing |
 
-Designing this boundary in Phase 1 is not optional — it determines module structure. Retrofitting purity boundaries after implementation is significantly more expensive. The pure core is the target for formal verification in Phase 5; the effectful shell is not formally verifiable by definition.
+Designing this boundary in Phase 1 is not optional — it determines module structure. Retrofitting purity after implementation is significantly more expensive. The pure core is the target for formal verification in Phase 5; the effectful shell is not formally verifiable by definition.
 
 ## Convergence Criterion
 
@@ -67,11 +67,25 @@ The loop exits when the Adversary's findings shift from genuine to invented:
 - Implementation findings require the Adversary to invent implausible inputs, not observe actual flaws
 - All formal properties pass proof; fuzzing finds nothing new
 
-This is a qualitative signal, not a counter. Tracking whether each Adversary finding is "substantive" vs "hypothetical" across rounds makes the shift visible. [unverified]
+This is a qualitative signal, not a counter. Tag each finding on intake as "substantive" or "hypothetical" and track the ratio across rounds — when the Adversary can only raise hypothetical issues, the loop has converged.
+
+## When This Backfires
+
+VSDD's cost is proportional to convergence cycles. Skip it when:
+
+- **Low-stakes changes.** Routine refactoring or single-line patches produce low-signal Adversary critiques; convergence stalls on style.
+- **Thin specs.** Underspecified contracts cause the Adversary to invent gaps rather than find real ones — the pipeline amplifies spec quality, not compensates for its absence.
+- **Narrow specialist domains.** General-purpose adversary models hallucinate plausible-sounding but incorrect findings in embedded systems, cryptography, or other deep-context domains. Domain-specific tests must validate Adversary output before acting on it.
 
 ## The Waterfall Trap
 
 Treating Phase 1 specs as a fixed gate repeats waterfall's failure mode. Implementation is discovery — edge cases emerge during building, not beforehand. When Phase 3 finds a genuine behavioral gap, update the spec. Route minor edge case additions directly to Phase 2; reserve Phase 1 revision for findings that change the behavioral contract.
+
+## When This Backfires
+
+- **Overhead exceeds benefit on small tasks.** A six-phase adversarial loop adds substantial orchestration cost — multiple model calls per phase, context management, finding triage. For throwaway scripts, prototypes, or any task where correctness failure is cheap to fix post-deployment, the pipeline cost exceeds the defect-prevention value.
+- **Convergence stalls with a weak Adversary prompt.** If the Adversary role receives an under-specified prompt, it defaults to surface-level stylistic feedback rather than substantive behavioral attacks. Phases 3 and 4 then cycle without meaningful signal — producing the illusion of convergence rather than the reality. Multi-agent systems are specifically susceptible to premature consensus when reviewer incentives are not explicitly orthogonal ([Failure Modes in LLM Systems, 2025](https://arxiv.org/abs/2511.19933)).
+- **Purity boundary retrofitting breaks the model.** If Phase 1 skips the Purity Boundary Map, the effectful shell typically becomes entangled with the pure core during Phase 2. Attempting to separate them after implementation is significantly more expensive than designing the boundary upfront, often requiring near-full rewrites.
 
 ## Example
 
@@ -146,3 +160,6 @@ The Adversary call passes only the artifacts under review — no prior conversat
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
+- [System-Level Optimization Pipeline](system-level-optimization-pipeline.md)
+- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)

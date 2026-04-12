@@ -76,7 +76,7 @@ GitHub's implementation mitigates silent stalls with automated weekly reports an
 
 ## Example
 
-GitHub's accessibility pipeline uses `issues: [opened, labeled]` to route between three tiers. The AI intake workflow fires on `issues.opened`, calls the GitHub Models API with prompts stored in `.github/copilot-instructions.md`, populates ~80% of metadata (severity, WCAG mapping, affected groups), then applies the next label. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/) A separate workflow fires when a human applies `validated`, routing to the service team.
+GitHub's accessibility pipeline uses `issues: [opened, labeled]` to route between three tiers. The AI intake workflow fires on `issues.opened`, calls the [GitHub Models API](../tools/copilot/github-models-in-actions.md) with prompts stored in `.github/copilot-instructions.md`, populates ~80% of metadata (severity, WCAG mapping, affected groups), then applies the next label. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/) A separate workflow fires when a human applies `validated`, routing to the service team.
 
 ```yaml
 # .github/workflows/ai-intake.yml
@@ -92,7 +92,7 @@ jobs:
         # calls GitHub Models API, applies labels based on response
 ```
 
-Prompts live in `.github/copilot-instructions.md` and are modified via pull requests — no ML expertise needed to update AI behavior. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
+Prompts live in [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) and are modified via pull requests — no ML expertise needed to update AI behavior. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
 
 ## Key Takeaways
 
@@ -108,10 +108,6 @@ Prompts live in `.github/copilot-instructions.md` and are modified via pull requ
 - [Events that trigger workflows (GitHub Docs)](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#issues)
 - [projects_v2_item webhook (GitHub Docs)](https://docs.github.com/en/webhooks/webhook-events-and-payloads#projects_v2_item)
 - [Multi-Agent Research System (Anthropic)](https://www.anthropic.com/engineering/multi-agent-research-system)
-
-## Unverified Claims
-
-- `projects_v2_item` webhook delivery via GitHub Actions (as distinct from webhook delivery to external services) is documented as public preview — behavior may differ from the stable `issues` trigger. `[unverified]`
 
 ## Related
 

@@ -89,6 +89,20 @@ JIT context loading applies directly to triage: load issue metadata lightly (tit
 
 For high-volume repos, schedule batch triage rather than triggering on every event. This amortizes the cost — each run processes accumulated issues in a single agent session rather than spawning separate sessions per issue.
 
+## Why It Works
+
+The classify-then-route pattern outperforms a single general-purpose triage prompt because LLMs lose classification accuracy when one prompt must handle disjoint intent types simultaneously — each category pulls the generation distribution toward different output structures. Routing to a specialized prompt per category lets each prompt be tuned to a narrower label space, improving both precision and reliability. Research on LLM-based intent detection confirms that narrowing the label space reduces out-of-scope errors and increases confidence on in-scope classifications ([Intent Detection in the Age of LLMs, arXiv 2410.01627](https://arxiv.org/abs/2410.01627)).
+
+## When This Backfires
+
+Continuous AI triage adds cost and complexity that manual triage avoids on low-volume repos. Three conditions make it worse than the alternative:
+
+- **Small repos with predictable issue types** — when a repo receives fewer than 20 issues per month and labels rarely change, a human can triage in seconds with better judgment on edge cases than a general-purpose model.
+- **High-volume bursts with large context** — models handling hundreds of issues simultaneously can fail to follow instructions or skip tasks when context windows fill with accumulated issue content. GitHub's own documentation of Agentic Workflows notes that large context and complex tasks cause tasks to be skipped or instructions to be ignored ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/building-ai-powered-github-issue-triage-with-the-copilot-sdk/)).
+- **Non-determinism in mission-critical routing** — the same workflow can produce different label assignments on different runs. Where incorrect routing causes SLA breaches or security escalation misses, AI triage requires a human review layer rather than operating fully autonomously ([GitHub Agentic Workflows technical preview](https://github.blog/changelog/2026-02-13-github-agentic-workflows-are-now-in-technical-preview/)).
+
+Service-level failures are also a real risk: AI services go down and rate limits apply. Triage pipelines should degrade gracefully — falling back to unlabeled open state rather than blocking issue creation when the model is unavailable.
+
 ## Rollout Sequencing
 
 1. **Read-only first** — start with summarization only (no labels, no routing). Observe classification quality in comments before enabling writes.
@@ -98,7 +112,7 @@ For high-volume repos, schedule batch triage rather than triggering on every eve
 
 ## Cost Model
 
-Copilot-powered triage workflows typically cost two premium requests per run — one for agent work, one for guardrail checks. For event-triggered workflows, this cost scales linearly with issue volume. Scheduled batch workflows (daily or weekly) amortize the cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)) [unverified].
+Copilot-powered triage workflows consume Copilot premium requests per run — event-triggered workflows scale linearly with issue volume, while scheduled batch workflows amortize cost across all accumulated issues ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Key Takeaways
 
@@ -144,10 +158,6 @@ Classify this issue into exactly one category:
 ```
 
 **Result**: when a new issue is opened, the workflow runs the classifier prompt against the issue body, applies the matching label, posts a structured summary comment, and assigns the issue to the team mapped to that label. The entire pipeline executes within the safe-output constraints — at most one label, one comment, and one assignee per run.
-
-## Unverified Claims
-
-- Copilot-powered triage workflows typically cost two premium requests per run [unverified]
 
 ## Related
 

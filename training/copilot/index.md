@@ -15,7 +15,7 @@ tags:
 | Module | Topic | Duration |
 |--------|-------|----------|
 | [Platform Surface Map](surface-map.md) | All surfaces (VS Code, GitHub.com, CLI, coding agent, mobile), Spaces, code review, third-party agents — what exists and when to use it | 30–45 min |
-| [Customization Primitives](customization-primitives.md) | Instructions, prompt files, agents, skills, hooks, MCP, memory, Spaces, content exclusions — how to extend each surface | 30–45 min |
+| [Customization Primitives](customization-primitives.md) | Instructions, prompt files, agents, skills, hooks, MCP, memory, Spaces, [content exclusions](../../instructions/content-exclusion-gap.md) — how to extend each surface | 30–45 min |
 | [Context Engineering & Agent Workflows](context-and-workflows.md) | Context engineering vs prompt engineering, [progressive disclosure](../../agent-design/progressive-disclosure-agents.md), [context rot](../../context-engineering/context-window-dumb-zone.md), task decomposition, delegation contracts, steering, review workflows, anti-patterns | 30–45 min |
 | [Harness Engineering](harness-engineering.md) | Making codebases agent-ready — [backpressure](../../agent-design/agent-backpressure.md), repo legibility, linter messages as context, mechanical enforcement, multi-session scaffolding, safe operations, [convergence detection](../../agent-design/convergence-detection.md) | 30–45 min |
 | [Team Adoption & Governance](team-adoption.md) | [Progressive autonomy](../../human/progressive-autonomy-model-evolution.md), tiered code review, cost management, security boundaries, shared configuration, measuring impact, adoption anti-patterns, rollout timeline | 30–45 min |

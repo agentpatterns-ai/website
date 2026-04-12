@@ -66,7 +66,7 @@ Structured log entries with readable field names outperform abbreviation-heavy f
 
 ### 7. Classical Anti-Patterns
 
-Anti-patterns like the God Object emerged to protect human cognition from overwhelm. Under agent consumption, consolidating related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation — the paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files remains an open risk [unverified].
+Anti-patterns like the God Object emerged to protect human cognition from overwhelm. Under agent consumption, consolidating related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation — the paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files is a documented LLM limitation ([Liu et al., 2024](https://arxiv.org/abs/2307.03172)); the paper does not measure it in the consolidation context, so treat this recommendation as provisional.
 
 ## The Program Skeleton Artifact
 
@@ -106,7 +106,16 @@ log.e(f"|PS|pf|o={oid}|rs={rs}")
 logger.error(f"Payment failed for order #{order_id}: {reason}")
 ```
 
-The compressed version uses fewer input tokens per log line [unverified]. But when the agent reads this log during debugging, it must decode `PS`, `pf`, and the abbreviated field names — spending reasoning tokens that exceed the original savings. The readable version is immediately parseable; the agent proceeds without an intermediate decoding step.
+The compressed version uses fewer input tokens per log line — the savings are real but modest. When the agent reads this log during debugging, it must decode `PS`, `pf`, and the abbreviated field names — spending reasoning tokens that exceed the original savings. The readable version is immediately parseable; the agent proceeds without an intermediate decoding step.
+
+## When This Backfires
+
+Semantic density optimization trades human ergonomics for agent performance. The trade-off is not always favorable:
+
+- **Human teams dominate the workflow.** If agents touch the codebase rarely — for code review, one-off generation, or ad hoc queries — optimizing conventions for agents degrades the daily experience of the human developers who live in the code.
+- **Single-study basis.** The evidence comes from one controlled experiment on log formats. Applying its conclusions to naming conventions, file structure, and SOLID principles is an extrapolation the paper acknowledges as theoretically motivated.
+- **Flatter files create their own problems.** Consolidating logic into fewer large files reduces agent traversal cost but increases merge conflict frequency, complicates code ownership, and may exceed the attention range of the model on very large files.
+- **Context window sizes are growing.** As models handle larger windows with better long-range attention, the navigation cost advantage of flatter structures shrinks; human-oriented organization may dominate again.
 
 ## Key Takeaways
 
@@ -125,9 +134,3 @@ The compressed version uses fewer input tokens per log line [unverified]. But wh
 - [Prompt Compression](prompt-compression.md) — reducing instruction token count without semantic loss
 - [Context Compression Strategies](context-compression-strategies.md) — broader techniques for managing context size in long-running agents
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md) — designing system interfaces for agent consumption; this page covers internal codebase conventions
-
-## Unverified Claims
-
-- God Object consolidation — theoretically reduces agent traversal cost but empirical impact on attention quality in large files is unknown
-- Program skeleton adoption — CODEMAP.md is proposed in the paper; production adoption is unconfirmed
-- Compressed log format uses fewer input tokens per log line — illustrative estimate in example, not an experimental measurement

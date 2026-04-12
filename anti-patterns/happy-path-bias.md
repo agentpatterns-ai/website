@@ -105,3 +105,4 @@ The first version works when the file exists and contains valid JSON. The second
 - [The Yes-Man Agent](yes-man-agent.md) — Executes requests without flagging missing error handling
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) — Underestimating the effort needed to make AI-generated code production-ready
 - [Shadow Tech Debt](shadow-tech-debt.md) — Hidden quality issues accumulating in AI-generated code
+- [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Progressive failure hierarchy for agents that encounter errors at runtime

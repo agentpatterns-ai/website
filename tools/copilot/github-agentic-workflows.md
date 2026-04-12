@@ -14,7 +14,7 @@ tags:
 
 ## Two-File Architecture
 
-Agentic Workflows use a compilation model that separates authoring from execution. Developers write a Markdown file with YAML frontmatter and natural-language instructions. The `gh aw compile` CLI command produces a `.lock.yml` file — the executable GitHub Actions workflow. Only the Markdown file is hand-edited; the lock file is generated and committed alongside it ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Developers write a Markdown file with YAML frontmatter and natural-language instructions. `gh aw compile` produces a `.lock.yml` — the executable GitHub Actions workflow. Only the Markdown file is hand-edited; the lock file is generated and committed alongside it ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 The frontmatter declares:
 
@@ -26,19 +26,19 @@ The frontmatter declares:
 
 ## Seven Design Patterns
 
-GitHub defines seven named patterns for common automation scenarios ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)): [unverified]
+GitHub defines seven named patterns for common automation scenarios ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
 
 | Pattern | Use Case |
 |---------|----------|
 | **ChatOps** | Respond to issue/PR comments with agent actions |
 | **DailyOps** | Scheduled maintenance — stale issue cleanup, status reports |
 | **DataOps** | Data validation, reporting, dashboard generation |
-| **IssueOps** | Issue triage, labeling, routing, duplicate detection |
+| **IssueOps** | [Issue triage](../../workflows/continuous-triage.md), labeling, routing, duplicate detection |
 | **ProjectOps** | Project board management, milestone tracking |
 | **MultiRepoOps** | Cross-repository coordination, dependency updates |
 | **Orchestration** | Multi-step workflows chaining multiple agent actions |
 
-Patterns are combinable — an Orchestration workflow might trigger IssueOps triage followed by a ChatOps response.
+Patterns are combinable — Orchestration can chain IssueOps triage with a ChatOps response.
 
 ## Configurable Engine
 
@@ -46,7 +46,7 @@ Agentic Workflows support multiple execution engines — Copilot CLI, Claude Cod
 
 ## Safe Outputs: Constraining Agent Writes
 
-Agents operate read-only by default. Write operations require explicit declaration as "safe outputs" — a bounded list of GitHub operations (create issue, post comment, open PR). Each safe output passes through a four-stage pipeline ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)):
+Agents operate read-only by default. Write operations require explicit declaration as "safe outputs" — a bounded list of permitted GitHub API calls. Each passes through a four-stage pipeline ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)):
 
 1. **Operation filtering** — restricts which GitHub API calls the agent can make
 2. **Volume limiting** — caps maximum operations per run (e.g., max 3 PRs)
@@ -70,33 +70,42 @@ graph TD
 
 **Substrate layer** — VM isolation on Actions runners with kernel-enforced communication boundaries.
 
-**Configuration layer** — Declarative artifacts control component loading and privilege assignment. Tokens are bound here; agent containers never hold secrets directly.
+**Configuration layer** — Declarative artifacts control privilege assignment; tokens are bound here, never inside agent containers.
 
-**Planning layer** — Staged workflows with explicit data exchanges. Agent outputs pass through the safe outputs pipeline before any downstream effect.
+**Planning layer** — Staged workflows with explicit data exchanges; agent outputs pass through safe outputs before any downstream effect.
 
 ### Secret Segregation
 
-Agents receive zero direct secret access. Credentials are compartmentalized across isolated containers ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)):
+Credentials are compartmentalized across isolated containers ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)):
 
-- **API proxy container** — holds LLM authentication tokens; the agent calls through the proxy without seeing keys
-- **MCP gateway container** (`gh-aw-mcpg`) — holds MCP authentication materials; routes MCP calls via HTTP with guard policies per repository
-- **Agent container** — firewalled egress, read-only filesystem mounts at `/host`, selective writable `tmpfs` overlays, `chroot` jails limiting discoverable surface
+- **API proxy container** — holds LLM auth tokens; agent calls through the proxy without seeing keys
+- **MCP gateway container** (`gh-aw-mcpg`) — holds MCP credentials; routes MCP calls via HTTP with per-repo guard policies
+- **Agent container** — firewalled egress, read-only `/host` mounts, `tmpfs` overlays, `chroot` jails
 
 ### Observability
 
-Logging at each trust boundary — firewall, API proxy, MCP gateway, and container instrumentation — enables end-to-end forensic reconstruction ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)).
+Logging at firewall, API proxy, MCP gateway, and container layers enables end-to-end forensic reconstruction ([GitHub Blog: Security Architecture](https://github.blog/ai-and-ml/generative-ai/under-the-hood-security-architecture-of-github-agentic-workflows/)).
 
 ## Fragment and Import System
 
-Shared fragments — tool definitions, MCP configs, formatting conventions — can be imported via `imports: [shared/name.md]`, avoiding duplication across workflows ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Shared fragments — tool definitions, MCP configs, formatting conventions — import via `imports: [shared/name.md]`, avoiding duplication across workflows ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Rollout Sequencing
 
-Start with read-only, comment-only workflows. Prove low-noise behavior before enabling labeling or PR creation. Human review remains mandatory — PRs created by agentic workflows are never auto-merged ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Start read-only, comment-only. Prove low-noise behavior before enabling labeling or PR creation. PRs created by agentic workflows are never auto-merged ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Cost Model
 
-Copilot-engine workflows typically incur two premium requests per run, relevant for teams managing Copilot seat budgets ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Copilot-engine workflows incur two premium requests per run ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+
+## When This Backfires
+
+Not a replacement for standard GitHub Actions YAML workflows ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
+
+- **Deterministic CI/CD** — build, test, deploy pipelines belong in standard Actions; agentic workflows are for subjective reasoning tasks
+- **High-volume automation** — two premium requests per run compounds fast at scale
+- **Broad credential access** — zero-secret-access is a security constraint; cross-repo credential workflows belong in standard Actions
+- **Latency-sensitive gates** — agent reasoning adds latency; pre-merge checks and deployments belong outside the agentic loop
 
 ## Key Takeaways
 
@@ -140,10 +149,6 @@ git commit -m "add: ChatOps summarize workflow"
 
 The compiled `summarize.lock.yml` is the executable GitHub Actions workflow. The safe-outputs declaration limits the agent to posting one comment per run, and the `issues: read` permission prevents any mutations beyond that comment.
 
-## Unverified Claims
-
-- Seven named design patterns (ChatOps, DailyOps, DataOps, IssueOps, ProjectOps, MultiRepoOps, Orchestration) as templates for common automation scenarios [unverified]
-
 ## Related
 
 - [Copilot Coding Agent](coding-agent.md)
@@ -153,6 +158,7 @@ The compiled `summarize.lock.yml` is the executable GitHub Actions workflow. The
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md)
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — premium request costs for workflow runs
+- [Cloud Agent Organization Controls](cloud-agent-org-controls.md) — runner configuration, firewall policy, and org-level governance for agentic workflow execution
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [GitHub Models in Actions](github-models-in-actions.md)
 - [GitHub Copilot MCP Integration](mcp-integration.md)

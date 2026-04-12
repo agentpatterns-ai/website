@@ -17,7 +17,7 @@ tags:
 
 ## The Problem
 
-Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)).
+Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)). The distinction is independently recognized in the API design community: agents need structured, machine-readable interfaces rather than human-readable affordances ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)).
 
 ## Three Layers
 
@@ -50,9 +50,9 @@ flowchart LR
 What the model sees. Curate context for inference quality, not human readability:
 
 - **Structured tool output** -- JSON or typed returns, not prose descriptions
-- **Compressed summaries** -- preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro [unverified]
+- **Compressed summaries** -- preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))
 - **Machine-readable error signals** -- stack traces and error codes, not user-friendly messages
-- **Hindsight failure notes** -- recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement [unverified]
+- **Hindsight failure notes** -- recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
 
 Human-readable output is often *worse* for the model -- verbose messages and decorative formatting consume context without improving inference.
 
@@ -84,7 +84,22 @@ DX degrades when internals are opaque or when AX concerns leak into the extensio
 | AX = DX | Debug traces in agent context add noise; configuration complexity leaks into prompts |
 | UX = DX | End users exposed to debug interfaces; developers forced to polish internal tools |
 
-CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds. [unverified]
+CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds ([CCA paper](https://arxiv.org/abs/2512.10398)).
+
+## Why It Works
+
+Each conflation introduces a specific failure mode at the information channel level. AX suffers from *context overflow and spurious anchors* when human-readable formatting (whitespace, decorative headings, verbose status prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations are entangled, because extension authors must reason about both audiences simultaneously ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
+
+The triad works by routing the same underlying data through separate transformation layers -- each optimized for one consumer's constraints.
+
+## When This Backfires
+
+The AX/UX/DX separation adds engineering overhead. It is less valuable when:
+
+- **Simple single-user tools**: a CLI agent with one consumer doesn't need three output formats; one well-structured log serves all audiences.
+- **Prototype or exploratory work**: maintaining separate transformation layers slows iteration when requirements change frequently.
+- **Thin context budgets**: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own.
+- **Scale constraints from CCA's own evaluation**: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad doesn't remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398)).
 
 ## Applying the Triad
 
@@ -121,12 +136,6 @@ The model receives compact JSON it can parse. The user sees a one-line summary. 
 - The most common failure is conflating AX and UX -- feeding human-formatted output to models or raw agent traces to users
 - Scaffold quality dominates model capability: weaker models with strong scaffolds outperform stronger models with weaker scaffolds
 - Each boundary needs an explicit transformation layer -- shared data, different format
-
-## Unverified Claims
-
-- CCA performance figures (52.7% SWE-Bench-Pro, 42.0% to 48.6% from Architect Agent) are self-reported [unverified]
-- The 53.0% to 54.4% cross-session improvement from hindsight failure notes is from CCA's own evaluation [unverified]
-- CCA's claim of exceeding "OpenAI's reported 56.0%" at 59% with GPT-5.2 involves potentially different benchmark conditions [unverified]
 
 ## Related
 

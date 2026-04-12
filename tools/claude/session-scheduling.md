@@ -58,9 +58,8 @@ in 45 minutes, check whether the integration tests passed
 - **Fires between turns** — the scheduler enqueues at low priority; if Claude is mid-response, the task waits until the current turn ends
 - **Local timezone** — `0 9 * * *` means 9am wherever you run Claude Code, not UTC
 - **Jitter** — recurring tasks fire up to 10% of their period late (capped at 15 min); one-shot tasks near `:00`/`:30` fire up to 90s early. Derived from task ID, so deterministic per task
-- **3-day expiry** — recurring tasks auto-delete after 3 days; recreate before expiry if needed
+- **7-day expiry** — recurring tasks fire one final time then auto-delete 7 days after creation; recreate before expiry if needed
 - **No catch-up** — if a fire is missed while Claude is busy, it fires once when idle, not once per missed interval
-- **Survives `/clear`** — background tasks continue after `/clear`; foreground tasks do not
 
 [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
@@ -68,10 +67,10 @@ in 45 minutes, check whether the integration tests passed
 
 - Session-scoped only — closing the terminal or restarting Claude Code cancels everything
 - One-minute granularity — second-level precision is not available
-- Not available on custom `ANTHROPIC_BASE_URL`, Bedrock, Vertex, Foundry, or when telemetry is disabled
+- On Bedrock, Vertex AI, and Microsoft Foundry, a prompt with no interval runs on a fixed 10-minute schedule instead of a Claude-chosen dynamic interval, and bare `/loop` prints the usage message instead of starting the maintenance loop
 - Set `CLAUDE_CODE_DISABLE_CRON=1` to disable the scheduler entirely
 
-For durable scheduling that persists across sessions, use [Desktop Scheduled Tasks](https://code.claude.com/docs/en/desktop#schedule-recurring-tasks) or a [GitHub Actions workflow](https://code.claude.com/docs/en/github-actions) with a `schedule` trigger. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+For durable scheduling that persists across sessions, use [Cloud Scheduled Tasks](https://code.claude.com/docs/en/web-scheduled-tasks), [Desktop Scheduled Tasks](https://code.claude.com/docs/en/desktop-scheduled-tasks), or a [GitHub Actions workflow](https://code.claude.com/docs/en/github-actions) with a `schedule` trigger. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
 ## Example
 
@@ -92,8 +91,8 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 ## Key Takeaways
 
 - `/loop` provides quick interactive scheduling; cron tools provide programmatic control for agents and skills
-- All tasks are session-scoped with a 3-day expiry — they are not persistent infrastructure
-- Background scheduled tasks survive `/clear` but not session exit
+- Tasks are session-scoped; recurring tasks expire 7 days after creation — they are not persistent infrastructure
+- For durable scheduling across restarts, reach for Cloud or Desktop scheduled tasks, or a GitHub Actions `schedule` trigger
 - Use one-time reminders via natural language for deferred checks without recurring overhead
 
 ## Related

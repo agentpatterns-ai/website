@@ -120,6 +120,7 @@ This file converts a generic agent into a project-aware one: it knows to use `bu
 ## Related
 
 - [AGENTS.md as Table of Contents, Not Encyclopedia](../instructions/agents-md-as-table-of-contents.md)
+- [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](../instructions/instruction-file-ecosystem.md)
 - [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)

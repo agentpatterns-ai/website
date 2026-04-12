@@ -49,7 +49,7 @@ A primitive qualifies as unique when it enables or precludes a class of patterns
 |-----------|-------------------|------------------------------|
 | Parallel context windows (multi-agent) | Independent subagent execution without [context pollution](../anti-patterns/session-partitioning.md) | Single-agent architectures must serialize or share context |
 | JSONL bead storage + advisory locks | Durable, resumable task graphs | In-memory context cannot survive process restart or be locked |
-| [Dynamic Tool Discovery](../anti-patterns/dynamic-tool-fetching-cache-break.md) | 85% token reduction via on-demand schema loading [unverified] | Static tool registration bloats context at session start |
+| [Dynamic Tool Discovery](../anti-patterns/dynamic-tool-fetching-cache-break.md) | 85% token reduction via on-demand schema loading ([Anthropic, 2025](https://www.anthropic.com/engineering/advanced-tool-use)) | Static tool registration bloats context at session start |
 | SequentialAgent / ParallelAgent primitives (ADK) | Constrained orchestration patterns per agent type | Generic agents lack enforced composition boundaries |
 
 ## Worked Example: NATS vs. Agent Flywheel Primitives
@@ -82,14 +82,18 @@ Example questions:
 - "A bead store that survives process restart — what recovery patterns does this enable that in-memory context cannot?"
 - "On-demand schema loading — what does this enable that a static 200-tool context cannot?"
 
-## Constraint: Real Differentiation Required
+## Why It Works
 
-Inversion produces value proportional to primitive uniqueness. It works best when your system has a non-standard primitive and the reference system would require restructuring to replicate it. Teams on commodity LLM wrappers find few genuine inversions — shared primitives leave nothing structurally precluded.
+Inversion works because architectural constraints are asymmetric: what a system *cannot* do is determined by its foundational model, not its feature set. A competitor can copy a UI, a pricing tier, or a workflow — but replicating a structural primitive (a bead store, an advisory lock model, parallel context windows) requires rebuilding core infrastructure. The inversion question forces analysis at the layer where structural constraints live, bypassing the surface-level feature comparison that standard competitive analysis produces.
 
-## Unverified Claims
+## When This Backfires
 
-- The 85% token reduction figure for Dynamic Tool Discovery is from the Anthropic Advanced Tool Use post; not independently reproducible
-- "Graph routing" attributed to Agent Flywheel refers to an internal implementation ("Asupersync") without independent documentation
+Inversion produces poor results when applied to weak structural differences:
+
+- **Shared primitives**: Teams on commodity LLM wrappers share nearly all primitives with competitors. Inversions exist in name only — the same architecture is replicable overnight.
+- **Novelty bias**: Enthusiastic inversion can justify maintaining unusual primitives *because* they are unique, even when a standard approach would serve better. Structural preclusivity does not imply value.
+- **Reference system mismatch**: Inverting against a system in a different domain (e.g., a batch pipeline versus a real-time agent) yields false differentiation — the competitor never intended to support those patterns, not that they *cannot*.
+- **Premature commitment**: Running inversion before adequate study of the external system produces shallow outputs. Step 1 (Study) must be thorough or Step 3 (Invert) generates noise.
 
 ## Related
 
@@ -102,5 +106,5 @@ Inversion produces value proportional to primitive uniqueness. It works best whe
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Convergence Detection](convergence-detection.md)
-- [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md) — the Anthropic post source for the 85% token reduction figure via Dynamic Tool Discovery
+- [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)

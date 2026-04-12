@@ -38,7 +38,7 @@ Specific query instructions cause agents to issue overly narrow searches. A brea
 
 Before committing to a tool strategy, a lead agent can use extended thinking to assess query complexity, select tool paths, determine subagent count, and plan division of labour. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents then use interleaved thinking after each tool result to evaluate quality and decide whether to continue, pivot, or escalate.
 
-Include "ultrathink" in a Claude Code skill to enable extended thinking [unverified] — see [Claude Code skills documentation](https://code.claude.com/docs/en/skills).
+Include "ultrathink" anywhere in a Claude Code skill to enable extended thinking for that invocation — see [Claude Code skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns).
 
 ## Parallelization Rules
 
@@ -68,7 +68,17 @@ Avoid large test sets at the refinement stage — they slow the loop without pro
 
 ## Runtime Effort Adjustment in Claude Code
 
-Claude Code's `/effort` command sets the reasoning effort level (low, medium, high). It can be adjusted while Claude is actively responding [unverified], allowing mid-task escalation rather than re-prompting. The system prompt encodes default scaling heuristics; `/effort` lets the operator override in real time.
+Claude Code's `/effort` command sets the reasoning effort level for the session (low, medium, high, or max). Run it between turns to escalate or reduce effort without re-prompting from scratch. The system prompt encodes default scaling heuristics; `/effort` lets the operator override them at runtime — see [model configuration documentation](https://code.claude.com/docs/en/model-config#adjust-effort-level).
+
+## When This Backfires
+
+Heuristic effort scaling adds coordination overhead and multiplies token consumption. [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) documented that multi-agent architectures consume roughly 15× more tokens than single-agent chat interactions. Three specific conditions make the trade-off unfavorable:
+
+1. **High inter-dependency tasks** — if subtasks must share state or a later step depends on the output of an earlier one, spawning parallel subagents causes duplication and merge conflicts. Most coding tasks fall here: file-level changes can conflict, and agents exploring the same module independently produce overlapping results.
+2. **Cost-sensitive or latency-sensitive workloads** — the per-query overhead of spawning 10+ subagents is justified only when the value of the answer scales with thoroughness. Routine lookups routed to a Tier 3 agent by a miscalibrated tier classifier will over-spend by an order of magnitude.
+3. **Synchronous execution constraints** — the lead agent cannot steer subagents after spawning them, and subagents cannot coordinate with each other mid-run. If the search space shifts partway through (a tool returns no results, or a discovered file invalidates the decomposition), the system cannot adapt until the full subagent batch completes.
+
+Apply effort-scaling heuristics selectively: research, synthesis, and audit workloads fit well; implementation tasks with shared mutable state typically do not.
 
 ## Example
 
@@ -104,12 +114,13 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - Extended thinking gives lead agents a planning phase before committing to a tool strategy.
 - Parallelization gains compound: parallel subagents and parallel tool calls within subagents are independent multipliers.
 - Small test sets (~20 queries) are sufficient for detecting regressions during prompt refinement.
-- Claude Code's `/effort` command allows runtime effort adjustment, even during an active response [unverified], complementing prompt-level heuristics.
+- Claude Code's `/effort` command allows runtime effort adjustment between turns, complementing prompt-level heuristics.
 
 ## Related
 
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
+- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md) — parallel fan-out with a dedicated synthesis step to merge the strongest elements
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [The Think Tool](think-tool.md)

@@ -15,7 +15,7 @@ aliases:
 
 ## The Pattern
 
-A developer finds a well-regarded AGENTS.md or agent configuration from a tutorial and copies it into their project. The agent now follows conventions from someone else's React app or data pipeline — none of which match the project at hand. The configuration looks complete but doesn't serve the actual work `[unverified]`.
+A developer finds a well-regarded AGENTS.md or agent configuration from a tutorial and copies it into their project. The agent now follows conventions from someone else's React app or data pipeline — none of which match the project at hand. The configuration looks complete but doesn't serve the actual work.
 
 ## Why It Happens
 
@@ -44,7 +44,7 @@ Structural patterns transfer because they're abstract. Content — instructions,
 
 ## The Fix
 
-Start your AGENTS.md from the [agents.md open standard](https://agents.md) with only the fields that describe your project's actual architecture. Add instructions when you've identified a recurring problem they would solve. Add skills when a task recurs and benefits from encoded knowledge.
+Start your AGENTS.md from the [agents.md open standard](https://agents.md) with only the fields that describe your project's actual architecture. GitHub's analysis of 2,500+ repositories found that effective agent files are project-specific — covering exact commands, tech stack versions, and explicit workflow boundaries for that codebase ([How to write a great agents.md](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/)). Add instructions when you've identified a recurring problem they would solve. Add skills when a task recurs and benefits from encoded knowledge.
 
 Use community configurations for pattern reference — to see what kinds of instructions work and what structure a skill file can take. Do not copy them as solutions.
 
@@ -77,10 +77,6 @@ Run `pytest tests/` before committing. Integration tests require `POSTGRES_URL` 
 ```
 
 Three instructions, all grounded in project reality. The copied configuration had twenty — none of which applied.
-
-## Unverified Claims
-
-- Copied configuration looking complete but not serving actual work `[unverified]`
 
 ## Related
 

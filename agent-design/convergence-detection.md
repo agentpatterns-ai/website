@@ -81,11 +81,8 @@ Running a sixth pass would likely produce cosmetic changes that may degrade qual
 
 ## Sources
 
-- Agent Flywheel Complete Guide — primary source for the three-signal model, convergence scoring, and [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) (original URL unreachable as of 2026-03-23)
-
-## Unverified Claims
-
-- Convergence score thresholds (0.75 = stable, 0.90 = diminishing returns) are specific to the Agent Flywheel methodology; no independent source corroborates these exact values `[unverified]`
+- Agent Flywheel Complete Guide — primary source for the three-signal model and [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) (original URL unreachable as of 2026-03-23)
+- Madaan et al., [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.17651) (2023) — demonstrates iterative LLM refinement with quantitative stopping criteria based on feedback scores; underpins the convergence-signal approach
 
 ## Related
 
@@ -99,3 +96,5 @@ Running a sixth pass would likely produce cosmetic changes that may degrade qual
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — iteration mechanics within a single agent turn
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — convergence signals applied to self-improvement cycles
 - [Execution-First Delegation](execution-first-delegation.md) — stopping and refinement decisions in delegated execution
+- [Graph of Thoughts](graph-of-thoughts.md) — graph-structured reasoning that surfaces convergence as a termination signal when node evaluations stabilise
+- [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for instrumenting iteration signals and injecting stopping logic

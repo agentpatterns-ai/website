@@ -12,7 +12,7 @@ tags:
 
 ## The Problem
 
-A single review pass catches surface-level issues and stops. The model that wrote the content is also the reviewer: it shares the same blind spots and framing. It finds 15–20 issues, declares the document satisfactory, and moves on. [^2]
+A single review pass catches surface-level issues and stops. The model that wrote the content is also the reviewer: it shares the same blind spots and framing. It finds a satisfying number of issues, declares the document satisfactory, and moves on.
 
 The problems that remain — inconsistencies, rationale gaps, dependency conflicts — require holding the whole document in mind simultaneously. A single-pass reviewer normalises them.
 
@@ -31,13 +31,7 @@ Each pass does two things:
 1. **Normalises its own findings** — issues it surfaces are resolved or acknowledged, shifting focus away from them
 2. **Shifts the attention distribution** — with resolved issues de-emphasised, the model's subsequent pass is more likely to attend to previously overlooked material
 
-The result is a progressive descent into document quality:
-
-| Pass | Typical findings |
-|------|-----------------|
-| 1–2 | Missing sections, obvious contradictions, unclear terminology |
-| 3–4 | Scope creep, decision rationale gaps, dependency conflicts |
-| 5 | Subtle logical flaws, inconsistencies that only emerge once prior issues are resolved |
+The result is a progressive descent into document quality. Early passes surface the most visible issues — missing sections, obvious contradictions, unclear terminology. Later passes reach structural and logical flaws that were obscured until the surface problems were cleared.
 
 ## Convergence Is the Stopping Criterion
 
@@ -47,7 +41,7 @@ Five is a heuristic. The real signal is convergence:
 - **Output similarity is increasing** — consecutive critique responses resemble each other
 - **No new categories of problem appear** — only refinements of already-identified issues
 
-Stop when a pass finds nothing new. If you reach pass five before convergence, continue until a pass finds nothing new. Set a hard cap at six passes [unverified] — beyond that, noise outweighs new signal.
+Stop when a pass finds nothing new. If you reach pass five before convergence, continue until a pass finds nothing new. Beyond five or six passes, returns typically diminish to noise — reframe the document or accept the remaining findings rather than continuing.
 
 **Oscillation is a stop signal.** If the model alternates between contradictory assessments, further passes will not resolve it. Reframe the section and restart.
 
@@ -66,6 +60,16 @@ Most effective on artefacts that:
 - Have no formal correctness verifier (plans, specs, architectural documents)
 
 Does not apply to outputs with externally verifiable correctness — code with tests, structured data against a schema. Use deterministic validators instead. [^1]
+
+## When This Backfires
+
+**False convergence.** If earlier passes resolve formatting and terminology issues, the model may report clean passes even when structural logic remains flawed. Convergence on superficial similarity is not the same as convergence on correctness — read the pass-5 output rather than just counting findings.
+
+**Anchoring to prior pass output.** Each critique pass receives the document plus (implicitly) the context of prior exchange. The model may anchor to the same framing used in pass 1 and miss an entirely different class of problems. When this occurs, run one pass with a differently-framed prompt to break the anchor before resuming.
+
+**Oscillation on genuinely ambiguous sections.** Pass N flags a section; pass N+1 approves it; pass N+2 flags it again. This is not a document quality signal — the section is genuinely ambiguous. Continuing passes will not resolve the ambiguity; the section needs human clarification or explicit scoping.
+
+**Not appropriate for formally verifiable outputs.** For code with a test suite, SQL with a schema, or structured data with a validator, use those tools directly. [^1] Multiple critique passes on verifiable artefacts produce false positives that waste resolve cycles.
 
 ## Example
 
@@ -98,7 +102,7 @@ When a pass returns fewer findings than expected, prompt with an inflated target
 This document has at least 40 issues. Find them.
 ```
 
-Models stop after finding a satisfying number of issues. A higher target prevents premature satisfaction. [^2] Count inflation addresses thoroughness within a single pass; five-pass addresses depth across passes.
+Models stop after finding a satisfying number of issues. A higher target prevents premature satisfaction. Count inflation addresses thoroughness within a single pass; five-pass addresses depth across passes.
 
 ## Key Takeaways
 
@@ -107,10 +111,6 @@ Models stop after finding a satisfying number of issues. A higher target prevent
 - Convergence signals (decreasing findings, increasing similarity) are the stopping criterion
 - Oscillation means stop and reframe
 - Applies to artefacts without formal verifiers — plans, specs; not code with test suites
-
-## Unverified Claims
-
-- The claim that passes 3–4 specifically surface scope creep and dependency conflicts while pass 5 surfaces logical flaws is a heuristic from practitioner experience, not controlled study data [unverified]
 
 ## Related
 
@@ -121,4 +121,3 @@ Models stop after finding a satisfying number of issues. A higher target prevent
 - [Convergence Detection in Iterative Refinement](../agent-design/convergence-detection.md) — three-signal model (change velocity, output size, content similarity) underlying the stopping criterion
 
 [^1]: Olausson et al. (2023), [Can Large Language Models Really Improve by Self-critiquing Their Own Plans?](https://arxiv.org/abs/2310.08118) — self-critique diminishes performance compared to external validators for formally verifiable planning tasks.
-[^2]: [agent-flywheel.com/complete-guide](https://agent-flywheel.com/complete-guide) — source for five-pass blunder hunt methodology and count inflation technique.

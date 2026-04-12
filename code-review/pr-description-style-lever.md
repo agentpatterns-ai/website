@@ -62,9 +62,20 @@ Note: GitHub Copilot's built-in PR summary generator ignores existing PR descrip
 
 The study's authors frame communication quality as a first-class agent capability: "accelerating the adoption of SE 3.0 requires AI coding agents to possess the capability to appropriately articulate and convey their changes" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
-The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode: descriptions that require reviewers to reconstruct intent from prose. Structured headers offload that reconstruction work from the reviewer [unverified].
+The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode correlated with descriptions that require reviewers to reconstruct intent from prose. The study does not establish causality, but the pattern is consistent with structured headers reducing the clarification overhead that generates review churn ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
 The authors also note: "presentation alone does not determine acceptance — structured descriptions do not guarantee merges, and code quality remains a central factor" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+
+## When This Backfires
+
+Structured PR description templates are not universally beneficial. Specific conditions where the pattern adds overhead without proportional value:
+
+- **Solo or inner-source repos with no external reviewers**: when the author is also the sole reviewer, template overhead produces no engagement benefit.
+- **Trivial or mechanical PRs**: dependency bumps, formatting-only changes, and single-line fixes generate template friction that delays the PR without aiding comprehension.
+- **Teams with strong ambient context**: when reviewers have high familiarity with the codebase and the agent's task domain, structured summaries may duplicate context already known.
+- **Code quality is the binding constraint**: the study confirms presentation is a secondary lever. Applying templates to fundamentally weak code shifts attention away from the root problem.
+
+In these cases, skip the template or make it opt-in rather than mandatory for all PR types.
 
 ## Applying the Pattern
 

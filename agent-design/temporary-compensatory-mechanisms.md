@@ -38,7 +38,7 @@ The classification question: *If the model were perfect at this capability, woul
 
 ### Forced Verification Passes
 
-[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before declaring completion. Models currently optimize for plausible output over verified correctness [unverified].
+[Pre-completion checklists](../verification/pre-completion-checklists.md) force agents through verification before declaring completion. Without an explicit gate, agents frequently declare success before running tests or checking linter output — treating apparent completion as actual completion.
 
 **Design for removal**: separate the gate from the criteria. The criteria (tests pass, linter clean) are permanently valuable. The gate forcing the agent to check them is compensatory.
 

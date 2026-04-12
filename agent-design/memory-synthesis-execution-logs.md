@@ -38,7 +38,7 @@ graph LR
     style E fill:#777,stroke:#bbb
 ```
 
-**Passive recording**: Claude Code saves observations to `MEMORY.md` -- build commands, debugging insights, style preferences [unverified -- only ~200 lines load per session per community reports].
+**Passive recording**: Claude Code saves observations to `MEMORY.md` -- build commands, debugging insights, style preferences. Context window constraints mean only a portion of a large memory file influences any given session.
 
 **Verbal reflection** (Reflexion): [Shinn et al., 2023](https://arxiv.org/abs/2303.11366) adds self-critique after failure, injected as context on retry. HumanEval pass@1 rose from 80% to 91%. Limitation: lessons are ephemeral and task-specific.
 
@@ -55,8 +55,7 @@ Self-critique without objective checks fails because models rationalize ([nibzar
 
 ## Mining Failures for Training Signal
 
-- **SiriuS** ([NeurIPS 2025](https://yoheinakajima.com/better-ways-to-build-self-improving-ai-agents/)): Repairs failed trajectories into positive training examples, yielding 2.86--21.88% accuracy gains [unverified -- figures cited via secondary source].
-- **STaSC / SEAL** [unverified -- no primary citation located]: Generates edit instructions from failures that become fine-tuning examples.
+- **SiriuS**: Repairs failed trajectories into positive training examples that become fine-tuning signal -- turning execution failures into direct model improvements.
 
 A success confirms a path worked; a failure reveals *why* alternatives did not.
 
@@ -109,7 +108,7 @@ In `MEMORY.md`, separate observations from lessons:
 
 ### Environmental Scaffolding as Alternative
 
-Anthropic's [harness engineering](harness-engineering.md) pattern -- progress files, git-based state, feature checklists -- often outperforms synthesis because the artifacts are **verifiable and auditable** [unverified]. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
+Anthropic's [harness engineering](harness-engineering.md) pattern -- progress files, git-based state, feature checklists -- offers a complementary approach: artifacts are **verifiable and auditable** without requiring a synthesis step. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
 
 ## Example
 

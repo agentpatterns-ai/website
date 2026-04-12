@@ -38,7 +38,7 @@ The scale signal:
 
 - AI referral traffic grew 357–632% year-over-year ([Superlines, 2026](https://www.superlines.io/articles/ai-search-statistics/))
 - Google AI Overviews appear in 50%+ of searches ([Digital Bloom, 2025](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/))
-- ~93% of AI search sessions end without clicking an external link — visibility in the answer *is* the goal [unverified]
+- AI search drives fundamentally different user behavior than traditional search: the answer itself is the destination, not a gateway to clicks
 
 ## What GEO Optimizes For
 
@@ -54,11 +54,24 @@ The [Princeton/ACM KDD 2024 GEO paper](https://arxiv.org/abs/2311.09735) defined
 
 GEO techniques boosted visibility by up to 40% in benchmark testing. Effectiveness varies by domain.
 
+## Why It Works
+
+Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, cited statistics give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation, reducing the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
+
 ## The Citation Economy
 
 AI answer engines exhibit a citation gap: [only 11% of domains appear across both ChatGPT and Perplexity citations](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/). Citation patterns also vary drastically by platform — the same brand can see a [615× difference in citation rate](https://www.superlines.io/articles/ai-search-statistics/) between the highest-citing and lowest-citing AI platform.
 
 This fragmentation means GEO is not a one-time optimization — it requires per-platform awareness and measurement. See [Measuring GEO Performance](measuring-geo-performance.md) for tooling and metrics.
+
+## When This Backfires
+
+GEO investments carry real costs: structured data, freshness cycles, per-platform tracking, and ongoing rework as engines change retrieval strategies. These costs outweigh benefits when:
+
+- **Niche audiences**: if total readership is small, citation volume is a small target regardless of optimization quality.
+- **Fast-moving technical domains**: the Princeton paper notes generative engines are "black-box" systems that are "fast-moving" — techniques tuned to current behavior become stale quickly.
+- **Low query volume**: AI engines cite content only when users ask relevant questions; low-query topics yield little return.
+- **Credential-dependent verticals**: legal and medical content depends on institutional trust signals that structural optimization cannot replicate.
 
 ## Example
 

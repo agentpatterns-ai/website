@@ -120,7 +120,7 @@ Pair with `tool_result` events (which carry `tool_parameters`) for full audit co
 
 ## Progress Files as Human-Readable Audit Trails
 
-OTel traces are machine-readable. For human-readable audit trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits at each task providing a diff-linked audit trail. Watch for [goal drift](../anti-patterns/objective-drift.md) (repeated clarifications, premature completion post-compaction) via diffs.
+OTel traces are machine-readable. For human-readable audit trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits at each task providing a diff-linked audit trail. Watch for [goal drift](../anti-patterns/objective-drift.md) (repeated clarifications, premature completion post-compaction) via diffs. When post-compaction drift is detected, the [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores behavioral compliance.
 
 ## Key Takeaways
 

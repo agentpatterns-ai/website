@@ -16,9 +16,9 @@ tags:
 
 When Claude Code [compacts](../context-engineering/context-compression-strategies.md) a long session, it summarises older turns to free context space. The summary preserves task state — what was done, what remains — but paraphrases instruction file references, losing precision. The agent continues working with degraded rule fidelity rather than any visible error signal.
 
-Users document Claude following rules perfectly before compaction and violating them 100% of the time after — not because CLAUDE.md was removed, but because the paraphrased summary no longer carries the full constraint set. `[unverified]`
+Users report consistent behavioral drift after compaction — rules followed reliably before the event are violated afterward — not because CLAUDE.md was removed, but because the paraphrased summary no longer carries the full constraint set.
 
-Claude Code does reload CLAUDE.md after compaction (the `InstructionsLoaded` hook fires with `load_reason: "compact"`), but reload alone does not reliably restore behavioral compliance. The re-read protocol makes the refresh explicit and confirms it took effect.
+Claude Code does reload CLAUDE.md after compaction (the `InstructionsLoaded` hook fires with `load_reason: "compact"`), but reload alone does not reliably restore behavioral compliance ([anthropics/claude-code#14258](https://github.com/anthropics/claude-code/issues/14258)). The re-read protocol makes the refresh explicit and confirms it took effect.
 
 ## How It Works
 
@@ -82,7 +82,7 @@ EOF
 
 The mandatory language and confirmation requirement are intentional — a polite suggestion is treated as optional; an explicit stop-and-confirm prompt is not.
 
-Note: `PostCompact` (added in v2.1.76) fires after compaction but has no decision control and cannot inject prompts into Claude's context. It is appropriate for observability tasks (logging, external updates) rather than re-read injection.
+Note: `PostCompact` (added in v2.1.76) fires after compaction but has no decision control and cannot inject prompts into Claude's context. It is appropriate for observability tasks (logging, external updates) rather than re-read injection. This pattern is independently documented in the [post_compact_reminder](https://github.com/Dicklesworthstone/post_compact_reminder) reference implementation.
 
 ## Trade-offs
 
@@ -118,11 +118,6 @@ sequenceDiagram
 - Confirmation requirements ("state the key rules you found") improve compliance versus directive-only prompts.
 - For multi-agent sessions, each subagent's context can compact independently — the re-read must be applied per-agent, not just at the orchestrator.
 
-## Unverified Claims
-
-- "Appears in 80%+ of production sessions as the most cost-effective single-prompt intervention" — no primary source found; characterisation based on agent-flywheel.com session archives `[unverified]`
-- ~95% skill compliance improvement with marker-based hook approach vs ~60-70% baseline — reported by a single community contributor in a GitHub issue, not a controlled study `[unverified]`
-
 ## Related
 
 - [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md)
@@ -134,3 +129,5 @@ sequenceDiagram
 - [Frozen Spec File](frozen-spec-file.md) — pairs with this protocol: the frozen spec survives compaction on disk; this protocol ensures the agent re-reads it
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — broader hook patterns for behavioral enforcement, including SessionStart hooks used here
 - [CLAUDE.md Convention](claude-md-convention.md) — the instruction file that this protocol ensures is re-read after compaction
+- [Instruction File Ecosystem](instruction-file-ecosystem.md) — the broader set of instruction files (CLAUDE.md, AGENTS.md, sub-directory files) that benefit from post-compaction re-reads
+- [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — layered instruction scopes across directories; per-scope re-reads may be needed after compaction in multi-directory projects

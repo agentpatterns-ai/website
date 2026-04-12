@@ -11,38 +11,27 @@ aliases:
 
 # SEO vs GEO — Signals, Metrics, Optimization Targets
 
-> GEO (Generative Engine Optimization) and traditional SEO share a foundation but diverge sharply on the signals that drive visibility. Understanding which practices transfer, which conflict, and which are new determines where effort delivers the most return.
-
-## The Core Shift
-
-Traditional SEO puts your link in a ranked list; the user decides whether to click. GEO puts your content inside the AI's answer — the user never sees your URL but associates the knowledge with your brand. The optimization target shifts from *rank position* to *citation share*.
+> Traditional SEO optimises for rank position in a list of links; GEO optimises for citation share inside synthesised answers. The signals that drive each outcome differ substantially — some SEO practices transfer, others conflict, and several GEO-specific ones have no SEO equivalent.
 
 ## Signal Comparison
 
 | Signal | Traditional SEO | GEO | Direction |
 |--------|-----------------|-----|-----------|
-| Backlinks | Primary ranking factor | Weak predictor (0.10 correlation) | Deprioritise for GEO |
-| Brand search volume | Secondary | Strongest predictor (0.334 correlation) | Invest heavily |
-| Off-site brand mentions | Nice-to-have | 3.2x more predictive than links [unverified] | Build deliberately |
+| Backlinks | Primary ranking factor | Weak predictor of AI citation | Deprioritise for GEO |
+| Brand search volume | Secondary | Strong predictor of AI citation; correlated with entity prominence | Invest heavily |
+| Off-site brand mentions | Nice-to-have | Stronger predictor than backlinks; earned media dominates AI citations | Build deliberately |
 | Keyword density | Neutral to positive | Actively harmful -- decreases visibility | Abandon |
-| Content freshness | Important | High: 65% of AI bot traffic targets past 12 months | Carry over |
+| Content freshness | Important | High: AI engines weight recency in source selection | Carry over |
 | Structured data / schema | Helpful | Required for entity clarity | Expand |
 | Authoritative writing | Important | Important | Carry over |
-| Statistics and quotations | Marginal SEO benefit | 21-37% visibility improvement [unverified] | New priority |
-| Rank position | Primary goal | 4.5% correlation with AI citation | Not a GEO proxy |
-
-## What Transfers from SEO
-
-- **Content freshness** -- regular updates serve both disciplines
-- **Authoritative, accurate writing** -- remains the baseline
-- **Structured data** -- [schema markup](schema-and-structured-data.md) (Article, Organization, FAQ) helps AI parse entities
-- **Technical accessibility** -- [blocking GPTBot or ClaudeBot in robots.txt](ai-crawler-policy.md) is the GEO equivalent of blocking Googlebot
+| Statistics and quotations | Marginal SEO benefit | 22-37% visibility improvement ([Princeton GEO study](https://arxiv.org/html/2311.09735v3)) | New priority |
+| Rank position | Primary goal | Low correlation with AI citation | Not a GEO proxy |
 
 ## What Conflicts
 
 **Keyword density is a direct conflict.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found keyword stuffing decreases AI citation rates — the opposite of its historical SEO effect. A keyword-dense paragraph burns tokens; a data table is cheaper to parse and more likely cited.
 
-**Rank position is not a GEO proxy.** High-ranking pages are not reliably cited by AI engines (4.5% correlation); rank-5 websites gained 115% visibility from citation-oriented techniques while top-ranked sites lost share [unverified].
+**Rank position is not a GEO proxy.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites while top-ranked sites saw a 30% decrease.
 
 ## What Is New
 
@@ -56,13 +45,9 @@ graph LR
     B --> G[User Sees Your Brand In Answer]
 ```
 
-**91% of AI citations come from third-party sources [unverified].** Owned content captures at most 9% of citations. The rest requires off-site presence:
+**The majority of AI citations come from third-party earned media**, not brand-owned content: forums, review platforms, industry press, Wikipedia, YouTube, LinkedIn. Owned content at most supplements; it does not dominate.
 
-- Unlinked brand mentions on forums, review platforms, community sites
-- YouTube and LinkedIn content (top off-site citation sources)
-- Wikipedia entries and industry press
-
-**Content structure determines extractability.** AI systems pull isolated passages, not pages. Self-contained paragraphs with direct answers outperform long-form guides. FAQ sections, data tables, and standalone sub-headings are high-value.
+**Content structure determines extractability.** AI systems pull isolated passages, not pages. Self-contained paragraphs, data tables, and FAQ sections are high-value; long-form narrative guides are low-value for extraction.
 
 ## Metric Comparison
 
@@ -73,23 +58,30 @@ graph LR
 | Competitive standing | Share of SERP clicks | AI share of voice vs. competitors |
 | Reach | Impressions | Prompts where brand appears |
 | Sentiment | Not tracked | Brand sentiment in AI responses |
-| Source health | Domain authority | Citation volatility (40-60% of sources change monthly) |
+| Source health | Domain authority | Citation volatility — AI citation pools shift frequently |
 
 ## Where to Invest
 
 | Action | Rationale |
 |--------|-----------|
-| Build off-site brand presence (forums, reviews, press) | Off-site mentions are 3.2x more predictive than links [unverified] |
-| Add statistics and direct quotations to existing pages | 21-37% citation improvement with minimal rewrite [unverified] |
+| Build off-site brand presence (forums, reviews, press) | Off-site earned media is a stronger predictor of AI citation than backlinks |
+| Add statistics and direct quotations to existing pages | 22-37% citation improvement per the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) |
 | Restructure key pages for extractable passages | AI cites standalone paragraphs, not full pages |
 | Stop keyword-stuffing; optimise for token efficiency | Keyword density actively harms GEO |
-| Instrument AI citation tracking | Rank-based metrics miss 95.5% of AI citation signal |
+| Instrument AI citation tracking | Rank-based metrics do not capture AI citation signal — AI engines cite low-ranked and non-ranked pages |
 
-## Unverified Claims
+## Why These Signals Work
 
-- Correlation values, the 65% freshness figure, the 3.2x mentions ratio, and the 21-37% visibility lift are from the [2025 AI Citation LLM Visibility Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/), not the original academic paper
-- 91% third-party citation share — from a 2026 industry report; methodology undisclosed [unverified]
-- Citation volatility (40-60% monthly) — source unidentified [unverified]
+AI engines build entity representations from training-data co-occurrence, not the link graph. Brand mentions in forums, reviews, and editorial coverage teach a model what a brand stands for — independently of any site links. Backlinks route crawlers; they do not contribute to entity association.
+
+Keyword density is a token cost. Repeating the same keyword consumes token budget without adding semantic signal. A data table encodes equivalent facts more compactly and is a better extraction candidate.
+
+## When This Backfires
+
+- **Measurement opacity**: AI citation share has no standardised tracking equivalent to Google Search Console — campaigns may run months before lift is detectable.
+- **Small-brand cold-start**: Citation pools favour established earned media — Wikipedia, major press, G2-tier review platforms. New brands must build that inventory before GEO techniques gain traction.
+- **Model-specific variability**: Citation signals don't transfer uniformly across AI engines. A source prominent in ChatGPT responses may not appear in Gemini or Perplexity. Track per model.
+- **Attribution bleed**: Brand-mention campaigns may also lift organic rankings, making it hard to isolate the GEO contribution without prompt-based measurement.
 
 ## Related
 

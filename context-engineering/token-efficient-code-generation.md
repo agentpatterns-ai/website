@@ -81,11 +81,11 @@ for item in data:
 
 ### For Tool and Harness Designers
 
-Idiomatic code compounds savings across turns as generated code re-enters context [unverified].
+Idiomatic code compounds savings across turns: each time the model references code it generated previously, shorter code means fewer tokens consumed from the context budget.
 
 Apply structural approaches at the right layer:
 
-- **Model selection**: Models trained on high-quality Python already favor idiomatic patterns [unverified]
+- **Model selection**: Models fine-tuned on high-quality Python corpora tend to favor idiomatic patterns; check whether your target model already applies them before adding post-processing
 - **Post-processing**: Lint rules or AST transforms catch non-idiomatic output before context entry
 - **[Example-driven instructions](../instructions/example-driven-vs-rule-driven-instructions.md)**: Code samples in prompts guide style without competing objectives
 
@@ -121,7 +121,8 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 
 - **Python-only evidence**: ShortCoder targets Python; other languages need language-specific rules.
 - **Small benchmark**: Results are on HumanEval (164 problems). Production codebases may differ.
-- **Diminishing returns with frontier models**: Frontier models already produce relatively idiomatic code [unverified]; biggest gains come from smaller or older models.
+- **Diminishing returns with frontier models**: ShortCoder tested against smaller models; frontier models tend to produce more idiomatic output by default, so measure actual token savings before investing in systematic transforms.
+- **Accuracy-conciseness trade-off**: The paper reports that reductions exceeding 30% correlate with an 18.7% drop in unit test pass rates in DeepSeek Code experiments — aggressive compression can collapse multi-step logic into single expressions that fail edge cases. Validate transformed code against a test suite.
 
 ## Key Takeaways
 
@@ -143,9 +144,3 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — Where tokens get lost in large windows
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Controlling what models generate beyond correctness
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context retrieval using ASTs and dependency graphs
-
-## Unverified Claims
-
-- Compounding savings across turns — logical but not empirically measured
-- Frontier models favoring idiomatic patterns — no benchmark comparison across model tiers
-- Diminishing returns with frontier models — inferred from ShortCoder testing smaller models only

@@ -87,9 +87,14 @@ According to BABILong benchmarks, reasoning tasks degrade to 10-20% effective ut
 
 **Revised budget**: Trim system prompt to 20K (remove rarely-used skills), limit history to 5K (rolling window), load only directly-relevant project files at 10K. Preloaded context drops to 35K, leaving 165K for the task — well inside the effective reasoning range.
 
-## Unverified Claims
+## When This Backfires
 
-- The [claude-code-best-practice repository](https://github.com/shanraisshan/claude-code-best-practice) recommends manual `/compact` at 50%, but whether Anthropic endorses this specific threshold is unverified. [unverified]
+The guidance to keep reasoning-task context under 32K tokens is conservative and may be unnecessarily restrictive:
+
+- **Current-generation frontier models improve on this curve.** Research benchmarks like RULER and BABILong reflect model generations from 2023–2024. Models released since then show measurable improvements at longer context lengths; apply the 32K ceiling to the model version you're actually deploying, not the benchmark generation.
+- **The 32K ceiling applies to reasoning tasks only.** Applying it to retrieval-heavy or code-comprehension tasks discards legitimate context capacity — simple retrieval benchmarks show >99% recall well past 32K. Over-compacting these tasks introduces unnecessary summarization loss.
+- **Compaction has its own failure mode.** Compressing a long context into a shorter summary discards detail. For multi-step tasks with hard dependencies on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before applying a blanket early-compact policy.
+- **Auto-compaction threshold is configurable.** Claude Code's auto-compaction triggers at ~95%; `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower this. Setting it to 50% is common advice but introduces a fixed overhead cost on every session regardless of task type or actual degradation onset.
 
 ## Related
 
