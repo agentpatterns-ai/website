@@ -1,7 +1,7 @@
 title: Brownfield to Agent-First
 nav:
   - index.md
-  - "L0 → L1: Making the Repo Readable": level-0-to-1
-  - "L1 → L2: Adding Feedback Loops": level-1-to-2
-  - "L2 → L3: Building Mechanical Enforcement": level-2-to-3
-  - "L3 → L5: Reaching Agent-First": level-3-to-5
+  - "L0 → L1: Making the Repo Readable": level-0-to-1.md
+  - "L1 → L2: Adding Feedback Loops": level-1-to-2.md
+  - "L2 → L3: Building Mechanical Enforcement": level-2-to-3.md
+  - "L3 → L5: Reaching Agent-First": level-3-to-5.md
