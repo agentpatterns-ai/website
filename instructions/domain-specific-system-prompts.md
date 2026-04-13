@@ -15,10 +15,10 @@ tags:
 
 ## The Gap Between Generic and Domain-Specific
 
+A generic instruction like "reason carefully before acting" gives the model no information about what good reasoning looks like in your domain. It has no worked examples, no domain vocabulary, and no model of what edge cases matter. The result is reasoning that looks thoughtful but misses the specific failures you care about.
+
 !!! note "Also known as"
     Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
-
-A generic instruction like "reason carefully before acting" gives the model no information about what good reasoning looks like in your domain. It has no worked examples, no domain vocabulary, and no model of what edge cases matter. The result is reasoning that looks thoughtful but misses the specific failures you care about.
 
 [Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool) documents this gap quantitatively: on the τ-Bench airline domain, switching from a baseline prompt to one with detailed domain-specific guidance and examples produced a **54% relative improvement** in task pass rate. The model and tools were identical; only the prompt changed.
 
@@ -31,7 +31,7 @@ A domain-specific system prompt includes:
 - **Explicit edge case guidance** — what to do when inputs are ambiguous, when resources are missing, when multiple valid paths exist
 - **Success and failure definitions** — what a correct outcome looks like, stated specifically enough that the agent can self-check
 
-Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability"). [Chain-of-thought research](https://arxiv.org/abs/2201.11903) establishes that showing intermediate reasoning steps in prompts produces substantially better performance on complex tasks than stating rules alone — the mechanism is that exemplars guide which reasoning path the model follows.
+Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability"). [Chain-of-thought research](https://arxiv.org/abs/2201.11903) establishes that showing intermediate reasoning steps in prompts produces substantially better performance on complex tasks than stating rules alone — the mechanism is that exemplars guide which reasoning path the model follows. Earlier [few-shot prompting research](https://arxiv.org/abs/2005.14165) found a similar pattern at the task level: worked examples in the prompt produced substantially better performance than task descriptions alone across a wide range of benchmarks.
 
 ## Where Examples Belong
 

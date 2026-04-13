@@ -33,7 +33,7 @@ Agents do not seek clarification or push back on ambiguity ([Osmani, 2025](https
 
 The mechanism is training-driven: RLHF reward models are biased toward high-confidence responses — the model is rewarded for authoritative output, not for surfacing uncertainty ([Leng et al., ICLR 2025](https://arxiv.org/abs/2410.09724)). On underspecified tasks, models make unwarranted assumptions rather than ask clarifying questions, even when interaction would improve outcomes by up to 74% ([Mohajer Ansari et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 
-The root cause is architectural: current coding agents are optimised for autonomous execution rather than interaction. Underspecification detection is not decoupled from code generation, so the agent treats every instruction as complete and immediately actionable — even when it is not ([Rashid et al., 2026](https://arxiv.org/abs/2603.26233)).
+The root cause is architectural: current coding agents are optimised for autonomous execution rather than interaction. Underspecification detection is not decoupled from code generation, so the agent treats every instruction as complete and immediately actionable — even when it is not ([Edwards & Schuster, 2026](https://arxiv.org/abs/2603.26233)).
 
 ## Detection Signals
 
@@ -71,22 +71,6 @@ A separate agent reviews output against the spec with no access to the implement
 
 Write tests derived from the spec before implementation. The agent passes tests it did not write — tests that encode the requirement, not its interpretation.
 
-## When This Backfires
-
-Requiring agents to restate tasks adds friction. For well-defined, low-ambiguity tasks — a clearly scoped bug fix, a routine refactor — upfront restatement is overhead without proportional benefit. The mitigation ladder calibrates to ambiguity: apply Level 1 when the spec is genuinely unclear; skip it when the task is explicit and bounded.
-
-Propagation risk also scales with agent autonomy. In tightly supervised flows where a human reviews each step, a wrong assumption surfaces quickly and cheaply. The pattern is most damaging in long agentic runs, background tasks, or multi-agent pipelines where the error compounds for tens of steps before any human sees output. Calibrate oversight to match the autonomy granted.
-
-Spec-first development (Level 2) introduces its own failure mode: the spec itself can be ambiguous. A specification file does not prevent assumption propagation — it relocates it. An agent that misreads the spec produces the same compounding error against a different document.
-
-## When This Backfires
-
-The mitigation ladder adds friction. That friction is a net negative in three situations:
-
-- **Well-specified tasks.** When requirements are precise and unambiguous, requiring a restate step wastes cycles. Teams that apply Level 1 universally train developers to rubber-stamp summaries rather than read them.
-- **Fast-path workflows.** Agentic pipelines running in CI or batch mode have no human present to review a restatement. Forcing a checkpoint that nobody reads gives false confidence without catching errors.
-- **Spec-first guarantees are assumed.** If the spec is wrong, propagating faithfully against a wrong spec still produces a wrong result. The mitigations here catch interpretation errors, not requirement errors — those require separate review upstream.
-
 ## Example
 
 **Task:** "Add a `--dry-run` flag to the deploy command that shows what would be deployed without deploying."
@@ -103,12 +87,14 @@ The agent assumed "shows what would be deployed" meant "deploys and then shows w
 
 Mitigation adds cost. The ladder is not worth climbing when:
 
-- **The spec is already precise.** Requiring a restatement of an unambiguous requirement adds friction with no upside.
+- **The spec is already precise.** Requiring a restatement of an unambiguous requirement adds friction with no upside. Teams that apply Level 1 universally train developers to rubber-stamp summaries rather than read them.
 - **The task is low-stakes and reversible.** A wrong first attempt on a throwaway script is cheaper to discard than to prevent with upfront checks.
+- **Fast-path workflows have no reviewer.** Agentic pipelines running in CI or batch mode have no human present to read a restatement. A checkpoint that nobody reviews gives false confidence without catching errors.
 - **Deliberate ambiguity is intentional.** Forcing restatement collapses design decisions that should stay open until implementation reveals constraints.
 - **Requirements drift mid-task.** A Level 1 restatement goes stale if the spec changes during implementation, giving false confidence that alignment holds.
+- **The spec itself is wrong.** Spec-first development (Level 2) catches interpretation errors, not requirement errors. An agent that propagates faithfully against a wrong spec still produces a wrong result — upstream review of the spec is a separate problem.
 
-Apply the ladder when the cost of a wrong direction exceeds the cost of the check.
+Propagation risk scales with autonomy: in tightly supervised flows a wrong assumption surfaces quickly, but in long agentic runs or multi-agent pipelines the error compounds for tens of steps before any human sees output. Apply the ladder when the cost of a wrong direction exceeds the cost of the check, and calibrate oversight to match the autonomy granted.
 
 ## Related
 
@@ -123,3 +109,5 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Context Poisoning](context-poisoning.md)
 - [Demo-to-Production Gap](demo-to-production-gap.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
+- [Abstraction Bloat](abstraction-bloat.md)
+- [Copy-Paste Agent](copy-paste-agent.md)

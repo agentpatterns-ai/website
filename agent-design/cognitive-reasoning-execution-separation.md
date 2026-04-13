@@ -119,3 +119,4 @@ The reasoning layer never opens files. The execution layer never decides what to
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Context Engineering](../context-engineering/context-engineering.md)
+- [Permission-Gated Custom Commands](../security/permission-gated-commands.md)

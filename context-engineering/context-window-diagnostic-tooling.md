@@ -34,7 +34,7 @@ Per-tool attribution typically surfaces a short list of offenders:
 
 | Tool type | Why it's expensive | Remediation |
 |-----------|-------------------|-------------|
-| Large file reads | Entire file enters context regardless of relevance | Truncate to relevant sections; use semantic loading |
+| Large file reads | Entire file enters context regardless of relevance | Truncate to relevant sections; use [semantic loading](semantic-context-loading.md) |
 | Verbose tool outputs | Grep results, build logs, test output without filtering | Add `--max-count`, pipe through filtering before surfacing |
 | Accumulated error traces | Repeated errors with full stack traces compound quickly | Apply [error preservation](error-preservation-in-context.md) discipline — keep the first occurrence, drop duplicates |
 | Memory files | CLAUDE.md or scratch files that grow unbounded across sessions | Periodically compact or reset memory entries |
@@ -58,7 +58,7 @@ Run the diagnostic before applying [context compression strategies](context-comp
 
 Claude Code's `/context` command surfaces per-tool attribution directly to the developer — exposing which specific tool calls are inflating the window rather than compressing behind the scenes. No other major AI coding harness currently documents an equivalent developer-facing diagnostic. The pattern generalizes: any harness that tracks per-tool token contribution can expose the same diagnostic surface.
 
-LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) handles long contexts through auto-summarization but does not surface per-tool token breakdowns to the developer. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which uses tiered compression beginning at 70% budget and progressively reduces older observations — but the attribution logic is internal to the compaction system, not visible to the practitioner.
+LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) handles long contexts through auto-summarization but does not surface per-tool token breakdowns to the developer. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which "applies progressively aggressive compaction as token usage grows" by reducing older observations — but the attribution logic is internal to the compaction system, not visible to the practitioner.
 
 For harnesses without built-in diagnostics, instrument at the tool-call boundary: log token counts before and after each tool invocation, then aggregate by tool type to identify the distribution. A simple diff of token count per tool call surfaces the same attribution data.
 

@@ -31,7 +31,7 @@ This still spawns a subprocess to immediately exit. The filtering happens inside
 
 ## The `if` Field
 
-Claude Code v2.1.85 introduced an `if` field on individual hook handlers. It uses [permission rule syntax](https://code.claude.com/docs/en/permissions) — the same syntax as `allow`/`deny` rules — to filter by both tool name and arguments. The full `if` field behavior is documented in the [hooks reference](https://code.claude.com/docs/en/hooks-guide#filter-by-tool-name-and-arguments-with-the-if-field).
+Claude Code v2.1.85 introduced an `if` field on individual hook handlers. It uses [permission rule syntax](https://code.claude.com/docs/en/permissions) — the same syntax as `allow`/`deny` rules — to filter by both tool name and arguments. The full `if` field behavior is documented in the [hooks guide](https://code.claude.com/docs/en/hooks-guide#filter-by-tool-name-and-arguments-with-the-if-field) and [hooks reference](https://code.claude.com/docs/en/hooks).
 
 The execution flow:
 
@@ -43,6 +43,12 @@ Tool call fires
 ```
 
 When `if` does not match, the handler process is never spawned. The filter is evaluated in Claude Code's process before any subprocess is launched.
+
+## Why It Works
+
+Hooks run synchronously in the agent loop — Claude Code waits for each matched handler to exit before the tool call proceeds. Each `"type": "command"` handler requires spawning a shell subprocess, which on most systems means a fork/exec pair plus shell startup before the handler script even reads stdin. An in-script filter still pays this cost on every matched call, exits fast, and returns.
+
+The `if` field moves the filter into Claude Code's own process, where it is evaluated against the already-parsed tool input. Non-matching calls skip the subprocess entirely, so the only cost is a string match against the permission-rule pattern.
 
 ## Configuration
 
@@ -103,7 +109,7 @@ The `if` value follows `ToolName(argument_pattern)`:
 
 The `if` field is only evaluated on tool events: `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`, `PermissionDenied`. On session-level events, a hook with `if` set never runs.
 
-Compound commands (`ls && git push`) and env-var prefixes (`FOO=bar git push`) are handled correctly — the pattern is matched against each subcommand independently, so `Bash(git *)` does not match `ls && git push` as a single string.
+Compound commands (`ls && git push`) and env-var prefixes (`FOO=bar git push`) interact with pattern matching the same way they do in permission rules. Test patterns against representative commands before relying on them — see the [permission rule reference](https://code.claude.com/docs/en/permissions) for current matching semantics.
 
 ## Composing Multiple Hooks
 

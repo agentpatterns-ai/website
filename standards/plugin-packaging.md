@@ -16,6 +16,16 @@ You build useful agent configurations: a custom research agent, a set of writing
 
 Plugin packaging solves the distribution problem: bundle capabilities into a versioned, installable unit that travels to wherever it is needed.
 
+## Why Git-Based Plugins
+
+Plugin packaging works by collapsing the distribution surface to a single git reference. Alternatives trade off on different axes:
+
+- **Git submodules** require consumers to initialize and update nested repos and do not bundle heterogeneous components (agents, hooks, MCP servers) behind one install verb.
+- **Package registries** (npm, PyPI) demand registry accounts, publish workflows, and language-specific runtimes — overkill for config files and shell scripts.
+- **Shared config repos** with custom sync scripts reinvent version pinning, partial updates, and rollback poorly compared to git tags.
+
+A git repository plus a manifest gives a single source of truth per tag, atomic install of all plugin components from one reference, and uses tooling every developer already has installed. Updating a plugin is a git pull; pinning a plugin is a tag; auditing a plugin is a git log.
+
 ## What a Plugin Contains
 
 A plugin bundles any combination of:

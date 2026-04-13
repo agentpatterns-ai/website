@@ -11,7 +11,7 @@ tags:
 
 # Permission-Gated Custom Commands
 
-> Pre-approve which tools a Claude Code slash command may use without prompting by declaring an `allowed-tools` list in its frontmatter — reducing interruptions while signaling the expected tool surface for shared commands.
+> Pre-approve which tools a Claude Code slash command may use without prompting by declaring an `allowed-tools` list in its frontmatter — reducing interruptions while signaling the expected tool surface for shared commands. To actually block tools, use `deny` rules in `settings.json` or `/permissions`; the `allowed-tools` field is pre-approval only.
 
 ## The Default Exposure Problem
 

@@ -21,6 +21,10 @@ Tool schemas specify inputs statically at registration time. Some inputs are onl
 
 Use elicitation when the valid values or required fields depend on server-side state that cannot be known when the tool is called.
 
+## Why It Works
+
+Tool schemas are registered before any call runs, so they can only describe inputs that are knowable at registration. When a required field depends on state the server discovers at runtime — the set of existing entities, the result of a lookup, the branch of a decision tree — encoding it as a static parameter forces the server either to accept a wider input than it actually supports or to reject calls after the fact with an error. Elicitation resolves the mismatch by deferring input collection to the moment the server knows what it needs: the server pauses the in-flight call, describes the missing fields as a form, and the client supplies values. The `Elicitation` and `ElicitationResult` hooks work because they sit at the two boundaries of that pause — before the user sees the form, and after the user responds — giving automation a point to substitute, validate, or suppress input without changing the server or the tool schema.
+
 ## How Elicitation Works
 
 When an MCP server triggers elicitation, Claude Code [fires two hook events](https://code.claude.com/docs/en/hooks.md):

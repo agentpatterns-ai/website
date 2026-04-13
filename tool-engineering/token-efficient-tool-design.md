@@ -129,5 +129,6 @@ The agent receives `"3 checks passed, 1 failed: lint"` and can immediately decid
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
+- [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — applies the same token-efficiency principles at the MCP server boundary
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Context Priming](../context-engineering/context-priming.md)

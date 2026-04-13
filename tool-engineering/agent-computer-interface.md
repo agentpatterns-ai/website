@@ -46,6 +46,8 @@ Claude 3.5 Sonnet achieved state-of-the-art on SWE-bench after "precise refineme
 
 Composio reported a **10x reduction in tool failures** after applying ACI-style principles: snake_case consistency, one-atomic-action tools, explicit constraint documentation, strong typing with enums. ([Composio field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide))
 
+These gains are not incidental. Models are trained on next-token prediction against human-readable text, so tool names, descriptions, and outputs that match that distribution reduce the inferential distance between observation and next action. Conversely, opaque identifiers, silent empty returns, and unconstrained inputs all increase cognitive overhead — the agent must spend tokens reasoning about what happened and which paths remain valid. ([Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents))
+
 Tool descriptions are the agent's only way to understand what a tool does and what to expect back. Write them like onboarding docs for a developer who will never ask a clarifying question.
 
 ## Semantic Output Design

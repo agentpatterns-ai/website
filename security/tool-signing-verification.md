@@ -124,7 +124,7 @@ Every request produces audit traces; ephemeral runners contain blast radius ([In
 
 ## Practical Limitations
 
-- **No major MCP client verifies tool signatures natively** — third-party middleware like [MCPS](https://mcp-secure.dev/) fills this gap; native client support remains absent as of 2025
+- **No major [MCP client](../tool-engineering/mcp-client-design.md) verifies tool signatures natively** — third-party middleware like [MCPS](https://mcp-secure.dev/) fills this gap; native client support remains absent as of 2025
 - **sigstore-a2a is early-stage** — feasibility demonstrated but adoption is limited
 - **CI/CD-only signing** limits keyless signing to automated pipelines; ad-hoc workflows need alternatives
 - **Performance overhead** of per-call verification needs profiling in latency-sensitive agents

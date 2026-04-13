@@ -50,6 +50,14 @@ Three recurring failure modes (via [Mike Mason](https://mikemason.ca/writing/ai-
 
 **Excessive mocking.** Test suites that mock so aggressively they validate the mocks rather than the code.
 
+## Why It Happens
+
+Coding agents retrieve context by syntactic and semantic similarity, not by quality. When an agent searches the codebase for "how do we fetch with retry here," the retriever surfaces the nearest matching implementation — it has no signal distinguishing golden-path code from deprecated workarounds. A `# TODO: remove` comment or a 2021 deprecation note is not a weighting feature in the retrieval step.
+
+Generation then amplifies the match. Few-shot conditioning on in-repo examples dominates prose instructions in system prompts or rules files — the model treats the surrounding code as higher-fidelity evidence of "what this codebase does" than any natural-language guidance. Every new usage the agent writes becomes additional training context for the next retrieval, closing the feedback loop shown in the diagram above.
+
+This is why mechanical enforcement outperforms guidance. A linter rejecting the deprecated pattern removes it from the retrieval surface entirely; a prompt asking the agent to "prefer the new API" competes with N existing calls to the old one and usually loses.
+
 ## Why This Differs From Related Anti-Patterns
 
 - [Copy-Paste Agent](copy-paste-agent.md): duplicates agent *configuration* across projects; pattern replication risk duplicates *codebase patterns* within a project.
@@ -65,7 +73,7 @@ OpenAI's Harness team spent [20% of sprint time cleaning up "AI slop"](https://a
 
 ## When This Backfires
 
-Three conditions where clean-first is worse than proceeding directly:
+Conditions where clean-first is worse than proceeding directly:
 
 **Mid-migration codebases.** Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist during a transition. Lint rules require pattern stability to add value.
 
@@ -73,15 +81,11 @@ Three conditions where clean-first is worse than proceeding directly:
 
 **Insufficient review bandwidth.** Auto-generated refactoring PRs create review load. If the team can't merge them before scaling agent usage, queued debt compounds the original problem.
 
-In these cases, narrow lint rules scoped to new files reduce blast radius without triggering false positives on existing code.
+**Large legacy codebases.** Pre-remediation spanning months may eliminate the productivity gain before agents are even enabled.
 
-## When This Backfires
+**Metrics without baselines.** Duplication and complexity scores spike when agent adoption rolls out incrementally — comparing against a pre-agent baseline that used different review norms produces misleading signals.
 
-- **Large legacy codebases.** Pre-remediation spanning months may eliminate the productivity gain before agents are even enabled.
-- **Intentional compatibility shims.** Load-bearing wrappers around deprecated APIs exist for a reason. Blanket CI rules that reject them generate false positives and slow valid work.
-- **Metrics without baselines.** Duplication and complexity scores spike when agent adoption rolls out incrementally — comparing against a pre-agent baseline that used different review norms produces misleading signals.
-
-In high-legacy environments, lint rules targeting the highest-frequency anti-patterns only are more practical than blocking agent usage wholesale.
+In these cases, narrow lint rules scoped to new files and targeting the highest-frequency anti-patterns reduce blast radius without triggering false positives on existing code or blocking agent usage wholesale.
 
 ## Example
 

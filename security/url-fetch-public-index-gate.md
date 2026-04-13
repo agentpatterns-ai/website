@@ -34,7 +34,7 @@ At fetch time, the agent's tool checks the requested URL against this index:
 - **URL found in index**: fetch can proceed automatically — the URL was publicly observable before this user session existed
 - **URL not found in index**: treat as unverified — block automatic fetch, or surface to the user with an explicit warning requesting manual approval
 
-The same check applies to embedded resources (images, iframes, script tags) — not just top-level navigation links. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
+The same check applies to embedded resources (images, iframes, script tags) — not just top-level navigation links. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/), [Exploiting Web Search Tools of AI Agents for Data Exfiltration](https://arxiv.org/abs/2510.09093)]
 
 ## Handling False Negatives
 
@@ -120,6 +120,8 @@ A URL like `https://docs.python.org/3/library/os.html` is in the Common Crawl in
 ## Related
 
 - [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
+- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Design Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)

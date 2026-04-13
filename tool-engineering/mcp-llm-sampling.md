@@ -18,7 +18,7 @@ GitHub [Copilot CLI](../tools/copilot/copilot-cli-agentic-workflows.md) v1.0.13 
 
 ## The sampling/createMessage Request
 
-The server sends a [`sampling/createMessage`](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx) request with these fields:
+The server sends a `sampling/createMessage` request with the fields defined in the [MCP sampling specification](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx):
 
 | Field | Required | Description |
 |-------|----------|-------------|
@@ -34,8 +34,8 @@ The response (`CreateMessageResult`) returns the generated content, the name of 
 
 Two constraints apply regardless of server preferences:
 
-1. **Model selection is the client's decision.** `modelPreferences` expresses hints — `intelligencePriority`, `speedPriority`, `costPriority`, and ordered model name hints — but the client retains full discretion. A server cannot force a specific model.
-2. **The user approves each sampling request.** The host presents a review prompt before inference runs; users can allow or deny. This is a spec-level requirement, not an implementation detail.
+1. **Model selection is the client's decision.** `modelPreferences` expresses hints — `intelligencePriority`, `speedPriority`, `costPriority`, and ordered model name hints — but the client retains full discretion. A server cannot force a specific model: [hints are advisory, and clients make the final model selection](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx).
+2. **The user approves each sampling request.** The host presents a review prompt before inference runs; users can allow or deny. This is a [spec-level SHOULD](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx) requiring a human in the loop with the ability to deny sampling requests, not an implementation detail.
 
 ## When to Use Sampling
 

@@ -45,7 +45,7 @@ The explicit note is auditable: any reviewer can see that MCP tools are excluded
 
 ## Per-Source Trust Boundaries
 
-When building harnesses that compose heterogeneous tools, define trust boundaries per tool source:
+When building harnesses that compose heterogeneous tools, define trust boundaries per tool source. MCP server deployments span distinct trust contexts shaped by where the code originates (first-party, open source, third-party), where it executes, and which resources it can access. [Source: [MCP Security — CoSAI OASIS](https://github.com/cosai-oasis/ws4-secure-design-agentic-systems/blob/main/model-context-protocol-security.md)]
 
 | Tool Source | Who Enforces Guardrails |
 |-------------|------------------------|
@@ -67,6 +67,14 @@ Third-party MCP servers require separate security review. The harness cannot be 
 
 Document the answers. The harness sandbox policy is not a substitute for this review.
 
+## When This Backfires
+
+Explicit scoping is not a cure-all. Specific failure conditions:
+
+1. **Exclusion confusion**: Stating "sandbox rules apply to shell tool only" can leave the model uncertain whether MCP tools have any restrictions at all, leading it to invoke them in contexts where the absent policy would have said no. Pair the exclusion with a brief statement of what governs MCP calls (e.g., "MCP tools enforce their own authorization").
+2. **False audit comfort**: A visibly scoped sandbox policy can create the impression that security has been addressed because the boundary is documented. Reviewers may skip auditing each MCP server's guardrails, assuming the explicit exclusion signals that MCP security was considered. Documentation of a gap is not closure of it.
+3. **Drift across tool upgrades**: A harness-owned tool can be reimplemented as an MCP server (or vice versa) without updating the sandbox rules. The explicit scoping then misdescribes the current surface. Treat the "which tools the sandbox covers" list as part of tool registration, not a one-time doc edit.
+
 ## Key Takeaways
 
 - Harness sandbox rules only control tools the harness owns; MCP tools execute under their own policies
@@ -77,6 +85,11 @@ Document the answers. The harness sandbox policy is not a substitute for this re
 
 ## Related
 
+- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
+- [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
+- [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md)

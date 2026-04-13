@@ -16,7 +16,7 @@ aliases:
 
 ## The Problem
 
-A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times, misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
+A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times — including the systematic [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) where LLMs misclassify correct code as non-compliant — misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
 
 The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first. An [empirical study of 278,790 AI-reviewed pull requests](https://arxiv.org/abs/2603.15911) found AI agent suggestions achieve 16.6% adoption — roughly a third of the 56.5% rate for human reviewers — a gap that persists in part because agents cannot adjust their defaults based on team-specific dismissal patterns.
 
@@ -91,4 +91,5 @@ The mechanism is not Cursor-specific. Any review agent with structured output ca
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
+- [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md)
 - [Committee Review Pattern](committee-review-pattern.md)

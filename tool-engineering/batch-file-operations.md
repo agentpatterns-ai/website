@@ -17,7 +17,15 @@ tags:
 
 When an agent modifies multiple files one at a time, each edit incurs overhead: tool-call validation, context switching, and network round-trips. For a task that modifies 20 files, that overhead multiplies by 20. The per-call cost is small individually but compounds across large-scale refactoring, code generation, or configuration changes.
 
-Batching file operations into a single script execution is a well-known token-efficiency technique — one tool call replaces many. Anthropic's engineering guidance on [writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) notes that tools should consolidate multiple discrete operations under the hood to reduce context consumption.
+Consolidating these operations into a single script is one way to reduce that overhead. Anthropic's engineering guidance on [writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) states that "tools can consolidate functionality, handling potentially multiple discrete operations (or API calls) under the hood," which reduces "the context that would have otherwise been consumed by intermediate outputs."
+
+## Why It Works
+
+The mechanism has two parts: context consumption and LLM reasoning cost per call.
+
+Every tool call adds to the agent's context window — the request, the tool response, and any intermediate output all persist in conversation history. Anthropic's [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) note that "Claude's context window holds your entire conversation, including every message, every file Claude reads, and every command output," and "LLM performance degrades as context fills." Twenty sequential file edits produce twenty round-trips of tool input and output, each contributing tokens. A single batched script produces one request and one response.
+
+The second cost is reasoning. Between each tool call, the model re-evaluates state and decides the next step. Collapsing 20 edits into one script execution replaces 20 decision points with one, which removes redundant reasoning tokens and reduces the surface area for drift or error.
 
 ## The Pattern
 

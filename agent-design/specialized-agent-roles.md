@@ -64,15 +64,6 @@ The mechanism was characterized in the MetaGPT multi-agent framework: narrow rol
 
 A [literature review of LLM-based multi-agent systems for software engineering](https://arxiv.org/html/2404.04834v4) identifies task-role alignment — instructions matched to a specific responsibility — as the core mechanism behind quality gains in multi-agent code generation pipelines.
 
-## When This Backfires
-
-Specialized roles degrade when tasks are inherently cross-cutting:
-
-- **Shared-file contention**: A refactor that requires both performance and style changes cannot be cleanly split. The performance agent and code quality agent will both modify the same functions, and neither has authority to make the final structural decision. The merge step absorbs the coordination cost that specialization was meant to avoid.
-- **Over-narrow scope causes tunnel vision**: A deduplication agent instructed to merge redundant code may consolidate functions whose apparent similarity hides behavioral differences — a problem a context-aware agent would catch but a scope-limited agent may not.
-- **Role boundary ambiguity**: "Performance" and "code quality" often overlap (e.g., extracting a well-named helper function improves both). Without a defined priority rule for overlapping domains, agents produce conflicting changes and the merge step requires human judgment to resolve.
-- **Small codebases**: Below a certain scale, the coordination overhead of defining roles, managing merge conflicts, and reconciling outputs exceeds the parallelism benefit. A single capable agent outperforms a specialized team when the codebase fits comfortably in one context window.
-
 ## Versus Unspecialized Parallel Agents
 
 | Approach | Output coverage | Conflict risk | Redundancy |
@@ -136,9 +127,14 @@ Each agent's exclusive scope prevents overlap: the documentation agent cannot al
 
 ## When This Backfires
 
-1. **Tightly-coupled domains.** When performance, style, and correctness cannot change independently — a hot loop where variable naming and algorithmic choice are inseparable — exclusive role boundaries generate contradictory edits requiring manual resolution.
-2. **Small codebases.** A single agent that fits the entire codebase in context covers all improvement dimensions in one pass; multiple specialized agents multiply cost without multiplying coverage.
-3. **Role boundary violations.** [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) finds agents frequently disobey role specifications and attempt changes outside their scope — when this happens, conflicts increase rather than decrease.
+Specialized roles degrade when tasks are inherently cross-cutting:
+
+- **Shared-file contention.** A refactor that requires both performance and style changes cannot be cleanly split. The performance agent and code quality agent will both modify the same functions, and neither has authority to make the final structural decision. The merge step absorbs the coordination cost that specialization was meant to avoid.
+- **Tightly-coupled domains.** When performance, style, and correctness cannot change independently — a hot loop where variable naming and algorithmic choice are inseparable — exclusive role boundaries generate contradictory edits requiring manual resolution.
+- **Over-narrow scope causes tunnel vision.** A deduplication agent instructed to merge redundant code may consolidate functions whose apparent similarity hides behavioral differences — a problem a context-aware agent would catch but a scope-limited agent may not.
+- **Role boundary ambiguity.** "Performance" and "code quality" often overlap (e.g., extracting a well-named helper function improves both). Without a defined priority rule for overlapping domains, agents produce conflicting changes and the merge step requires human judgment to resolve.
+- **Small codebases.** A single agent that fits the entire codebase in context covers all improvement dimensions in one pass; multiple specialized agents multiply cost without multiplying coverage.
+- **Role boundary violations.** [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) finds agents frequently disobey role specifications and attempt changes outside their scope — when this happens, conflicts increase rather than decrease.
 
 ## Key Takeaways
 

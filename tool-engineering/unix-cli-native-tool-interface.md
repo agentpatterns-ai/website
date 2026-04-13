@@ -123,12 +123,12 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
 - [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) -- code actions outperform JSON/text by 20%
 - [CLI-Anything (HKU)](https://github.com/HKUDS/CLI-Anything) -- agent-native CLI generation pipeline
-- Rewrite Your CLI for AI Agents (Justin Poehnelt) -- agent-first CLI design
 - [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- ~27 tools + CodeAct in practice
 
 ## Related
 
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
+- [CLI-First Skill Design](cli-first-skill-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Agent-Computer Interface](agent-computer-interface.md)

@@ -1,6 +1,6 @@
 ---
 title: "Reactive Environment Hooks: CwdChanged and FileChanged"
-description: "Use CwdChanged and FileChanged hook events to automatically reload environment managers like direnv when the agent changes directory or edits a config file — without requiring a prompt."
+description: "CwdChanged and FileChanged hook events reload environment managers like direnv when the agent changes directory or edits a config file."
 tags:
   - agent-design
   - claude
@@ -18,7 +18,7 @@ aliases:
 
 Developers using Claude Code across projects with different toolchains — Node versions, Python environments, Nix shells — must either pre-configure the environment before the session or manually prompt the agent to reload it after a directory change. Neither option is reliable: pre-configuration is fragile, and prompts are easy to forget.
 
-Claude Code v2.1.83 added two state-change hook events that address this: [`CwdChanged`](https://code.claude.com/docs/en/hooks) fires when the agent's working directory changes; [`FileChanged`](https://code.claude.com/docs/en/hooks) fires when a watched file is modified on disk. Both are observational — they cannot block execution — but they have access to `CLAUDE_ENV_FILE`, the same environment persistence mechanism used by `SessionStart`, which lets hooks propagate shell variables to all subsequent Bash tool calls.
+Claude Code [v2.1.83](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) added two state-change hook events that address this: [`CwdChanged`](https://code.claude.com/docs/en/hooks) fires when the agent's working directory changes; [`FileChanged`](https://code.claude.com/docs/en/hooks) fires when a watched file is modified on disk. Both are observational — they cannot block execution — but they have access to `CLAUDE_ENV_FILE`, the same environment persistence mechanism used by `SessionStart`, which lets hooks propagate shell variables to all subsequent Bash tool calls.
 
 ## CwdChanged
 
@@ -146,5 +146,7 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to 
 
 - [Hooks and Lifecycle Events](hooks-lifecycle-events.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
+- [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
+- [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PostToolUse BSD/GNU Detection](posttooluse-bsd-gnu-detection.md)

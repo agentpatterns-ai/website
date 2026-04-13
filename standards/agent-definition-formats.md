@@ -60,7 +60,7 @@ Key frontmatter fields:
 
 ## GitHub Copilot Format
 
-GitHub Copilot agent definitions use a similar frontmatter-plus-body structure to Claude Code, with tool-specific field names. Consult the current [GitHub Copilot Extensions documentation](https://docs.github.com/en/copilot) for the canonical directory location and supported frontmatter fields, as the format continues to evolve.
+VS Code Copilot custom agents use markdown files with YAML frontmatter and the `.agent.md` extension, stored in `.github/agents` at the workspace level or `~/.copilot/agents` for user profiles ([VS Code docs](https://code.visualstudio.com/docs/copilot/customization/custom-chat-modes)). Supported frontmatter fields include `description`, `tools` (tool or tool set allowlist), and `model` (single name or prioritized list), alongside `name`, `argument-hint`, `agents`, `user-invocable`, and `handoffs`. The body is the system prompt — the same split Claude Code uses ([Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents)).
 
 ## Portable Patterns
 
@@ -103,6 +103,7 @@ Structured agent definition files add overhead that isn't always justified. Thre
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [Agent Cards: Capability Discovery Standard](agent-cards.md)
+- [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md)
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)

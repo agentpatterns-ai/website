@@ -138,6 +138,8 @@ For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/c
 
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [Skill Tool as Enforcement: Loading Command Prompts at Runtime](skill-tool-runtime-enforcement.md)
+- [CLI-First Skill Design](cli-first-skill-design.md)
+- [MCP Elicitation](mcp-elicitation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Narrow Task Instructions](../security/task-scope-security-boundary.md)
 - [Instruction Polarity](../instructions/instruction-polarity.md)

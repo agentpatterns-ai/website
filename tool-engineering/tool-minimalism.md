@@ -23,6 +23,8 @@ OpenAI's data agent team found: "We exposed our full tool set to the agent, and 
 
 Redundancy is a liability, not a safety net. When two tools can both accomplish a task, the model spends reasoning on the selection decision rather than on the task itself. When it selects the wrong one, the error is introduced before any work has been done.
 
+Anthropic's engineering team reaches the same conclusion from the tool-authoring side: "When tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and "Too many tools or overlapping tools can also distract agents from pursuing efficient strategies." [Source: [Writing effective tools for AI agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+
 ## Removing Overlapping Tools
 
 The first audit: identify tool pairs that have overlapping functionality. For coding agents, common overlaps:
@@ -99,6 +101,10 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Tool Selection Guidance](tool-description-quality.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
+- [Semantic Tool Output](semantic-tool-output.md)
+- [MCP Server Design](mcp-server-design.md)
+- [Unix CLI Native Tool Interface](unix-cli-native-tool-interface.md)
+- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)

@@ -25,13 +25,11 @@ A review agent operating as sole authority blocks correct code from merging. The
 
 ## Why LLMs Overcorrect
 
-The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) authors taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). These are semantic failures — models construct plausible critiques without falsifiable counterexamples.
+The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) authors' taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). These are semantic failures — models construct plausible critiques without falsifiable counterexamples.
 
-Explanation-requiring prompts worsen the rate because generating a critique becomes the path of least resistance; the rationale then anchors the verdict toward rejection.
+The mechanism behind each category is the same: when a model must explain its verdict and propose a correction, it rationalizes rejection through invented problems rather than applying balanced judgment. Hallucinated constraints drive the "Added Requirement" class — the model introduces requirements absent from the specification. Unverified logic-error claims drive the "Logic Error" class — the model asserts failure modes without a falsifiable counterexample. "Boundary Error" and "Misread Specification" reflect a stricter interpretation of the requirement, against which the literal spec then fails.
 
-## Why It Happens
-
-The paper's rejection taxonomy identifies the root mechanisms. When a model must explain its verdict and propose a correction, it rationalizes rejection through invented problems rather than applying balanced judgment. The main drivers are hallucinated constraints — the model introduces requirements absent from the specification ("Added Requirement" accounts for 14.1% of false rejections) — and unverified logic-error claims (48.2% of false rejections) asserted without a falsifiable counterexample. Explanation generation reinforces the initial bias: the model over-emphasizes edge cases and speculates about runtime failures with no concrete evidence. The prompt structure that is meant to improve reasoning instead amplifies fault-finding.
+Explanation-requiring prompts amplify this: forcing a reasoning chain before the verdict locks the model into its initial misread. Generating a critique becomes the path of least resistance; the rationale anchors the verdict toward rejection, and each subsequent reasoning step compounds the error rather than reconsidering the premise. Binary prompts avoid this commitment.
 
 ## Fix-Guided Verification Filter
 
@@ -42,12 +40,6 @@ The research proposes a countermeasure: treat the LLM's proposed fix as an execu
 - Both fail: fix is also broken — escalate to human review
 
 This filter converts the bias into a falsifiable test. It requires that proposed fixes are executable — review prompts must elicit code-level fixes, not prose descriptions.
-
-## Why LLMs Overcorrect
-
-The paper's error taxonomy: Logic Error 48.2%, Added Requirement 14.1%, Boundary Error 13.2%, Misread Specification 11.7%. In each case the model generates a stricter interpretation of the requirement, then classifies the code against that interpretation rather than the literal spec.
-
-Explanation-requiring prompts amplify this: forcing a reasoning chain before the verdict locks the model into its initial misread. Each subsequent reasoning step compounds the error rather than reconsidering the premise. Binary prompts avoid this commitment.
 
 ## Mitigations
 

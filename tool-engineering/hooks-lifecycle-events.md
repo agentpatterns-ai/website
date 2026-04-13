@@ -1,6 +1,6 @@
 ---
 title: "Hooks and Lifecycle Events: Intercepting Agent Behavior"
-description: "How Hooks Work · Hook Lifecycle · Hook Lifecycle Events. For practical enforcement patterns using hooks, see Hook Catalog: Guardrails, Sandboxing, and CLI"
+description: "Hooks run deterministic code at defined points in an agent's execution — before and after tool calls, at session boundaries — for enforcement and audit."
 aliases:
   - How Hooks Work
   - Hook Lifecycle
@@ -188,6 +188,7 @@ Specific failure conditions to watch for:
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [Conditional Hook Execution](conditional-hook-execution.md)
+- [Reactive Environment Hooks](reactive-environment-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
