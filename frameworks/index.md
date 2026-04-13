@@ -29,3 +29,8 @@ A concept qualifies as a framework when it meets **all** of:
 5. **Evidence of use** — ≥1 real-world practitioner, implementation, or case study
 
 Frameworks are captured as epics via `/save-epic` (≥4 angles required) and expanded to constituent idea issues via `/expand-epic`.
+
+## Current Frameworks
+
+- [Brownfield to Agent-First](brownfield-to-agent-first/index.md) — staged transformation of an existing codebase from human-only to agent-first
+- [Team OS](team-os/index.md) — coding-agent repo as the shared cognitive substrate for a cross-functional team

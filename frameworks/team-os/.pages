@@ -1,0 +1,10 @@
+title: Team OS
+nav:
+  - index.md
+  - Functional folder taxonomy: functional-folder-taxonomy.md
+  - Cross-Functional Knowledge Artifacts: cross-functional-artifacts.md
+  - Consistent-format customer capture: consistent-format-customer-capture.md
+  - Plan mode for knowledge artifacts: plan-mode-knowledge-artifacts.md
+  - Natural-language git: natural-language-git.md
+  - Plan files as resumable artifacts: plan-files-resumable-artifacts.md
+  - Self-explanation loop: self-explanation-loop.md
