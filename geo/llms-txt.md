@@ -44,7 +44,7 @@ File lists use `[name](url)` with an optional colon-prefixed description. Conten
 
 ## How Agents Use It
 
-When an agent needs to research a site, it checks `/llms.txt` first — a structured index replacing undirected crawling with a single fetch and curated list:
+Per the spec's intended usage model ([llmstxt.org](https://llmstxt.org)), an agent researching a site fetches `/llms.txt` first — a structured index replacing undirected crawling with a single fetch and curated list:
 
 1. Fetch `{site}/llms.txt`
 2. Identify the relevant section
@@ -68,7 +68,7 @@ LLM context windows impose a hard ceiling on how much a site can serve to an age
 
 - No major AI provider (Anthropic, OpenAI, Google) has published documentation confirming they read `llms.txt` at inference time
 - The spec itself frames the format as inference-time tooling with no defined role in training or citation pipelines ([llmstxt.org](https://llmstxt.org))
-- Citation signals are dominated by content authority, structured data, and entity recognition — not file conventions
+- Citation signals are dominated by content authority, structured data, and entity recognition — not file conventions ([How AI Engines Cite](how-ai-engines-cite.md))
 
 ## Real Adoption Examples
 

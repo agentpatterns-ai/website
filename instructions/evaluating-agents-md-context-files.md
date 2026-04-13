@@ -84,6 +84,8 @@ Both studies evaluated well-documented open-source repositories. Context file va
 
 This gap is untested — the evidence applies to the open-source case.
 
+The two studies also used different model and agent sets, so it is unclear whether the efficiency gains Lulla et al. measured would hold for the models Gloaguen et al. tested, or vice versa.
+
 ## Key Takeaways
 
 - Auto-generated context files duplicate discoverable information and increase costs 20%+ with no accuracy gain
@@ -98,12 +100,6 @@ This gap is untested — the evidence applies to the open-source case.
 - [Lulla et al. — On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents](https://arxiv.org/abs/2601.20404)
 - [InfoQ — New Research Reassesses the Value of AGENTS.md Files for AI Coding](https://www.infoq.com/news/2026/03/agents-context-file-value-review/)
 - [Upsun — The research is in: your AGENTS.md is probably too long](https://devcenter.upsun.com/posts/agents-md-less-is-more/)
-
-## Unverified Claims
-
-- The 2.7% improvement when documentation is removed `[unverified — cited from secondary source; may be derivative interpretation]`
-- Whether findings generalize to closed-source enterprise codebases `[unverified — acknowledged gap in both studies]`
-- Whether Lulla et al. efficiency gains hold across models tested by Gloaguen et al. `[unverified — different model/agent sets]`
 
 ## Related
 

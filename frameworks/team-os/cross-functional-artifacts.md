@@ -33,6 +33,10 @@ Three elements compose:
 
 Retrieval then becomes deterministic: glob the folder for the artifact type, read the feature-index for cross-discipline siblings, compose. No embeddings required for structured lookups.
 
+## Why It Works
+
+Consistent shape converts retrieval from a similarity problem into a lookup: glob a folder, read a YAML key. Embedding distance does not encode path hierarchy or schema membership; the feature-index encodes those relationships explicitly, making them queryable in O(1) without a similarity inference step ([structured domain retrieval](../../context-engineering/structured-domain-retrieval.md)).
+
 ## The Artifact Matrix
 
 All paths and artifact types are drawn from the [Team OS example repo](https://github.com/in-the-weeds-hannah-stulberg/team-os-example-repo) and the [Aakash Gupta writeup](https://www.news.aakashg.com/p/claude-code-team-os).
@@ -51,11 +55,21 @@ Design typically stays in Figma as a link from the feature-index rather than rel
 
 Primary evidence for the full matrix is a single practitioner (Hannah Stulberg, PM at DoorDash) documented in one writeup and a public reference repo. Individual mechanisms — hierarchical `CLAUDE.md`, skill-enforced shapes, structured retrieval — are corroborated elsewhere. The cross-discipline synthesis claim as an integrated system is single-witness. Treat the matrix as a case study to adapt, not a measured standard.
 
-## Example — Pricing RFC Churn Synthesis (aspirational)
+## Example
 
-The artifact matrix is designed to enable queries like: *"Why did churn spike after the pricing RFC?"* With the index populated, the agent reads `feature-index.yaml` for the `billing/credit-usage` feature, pulls `engineering/rfcs/billing/pricing-change-rfc.md`, pulls `analytics/investigations/2026-03-10-credit-depletion-churn-analysis.md`, pulls `analytics/queries/billing/credit-burn-rate.sql`, and composes a single answer citing all three.
+**Demonstrated (within-discipline synthesis)**: The source writeup documents this working query against the analytics subfolder ([source](https://www.news.aakashg.com/p/claude-code-team-os)):
 
-This specific multi-discipline synthesis is **not demonstrated verbatim** in the source material. The writeup documents the weaker demonstrated query ("metric + SQL + schema" within analytics). Present this framing as what the matrix unlocks, not as a witnessed result.
+> *"How do we calculate generation success rate? Show the metric definition, the SQL, and the schema."*
+
+The agent resolves this by reading `analytics/metrics/generation-success-rate.md`, pulling `analytics/queries/billing/generation-success.sql`, and joining the `schemas/` entry for the relevant table — three artifacts, one glob pattern per type, zero embedding inference.
+
+**Aspirational (cross-discipline synthesis)**: With a populated feature-index, a query like *"Why did churn spike after the pricing RFC?"* would have the agent read `feature-index.yaml` for the `billing/credit-usage` feature, pull `engineering/rfcs/billing/pricing-change-rfc.md`, pull `analytics/investigations/2026-03-10-credit-depletion-churn-analysis.md`, pull `analytics/queries/billing/credit-burn-rate.sql`, and compose a single answer citing all three. This cross-discipline join is the design target — it is not demonstrated verbatim in the source material.
+
+## When This Backfires
+
+- **Small teams** — overhead is fixed; synthesis benefit scales with artifact count. Below ~3 disciplines and ~10 active features, a shared root CLAUDE.md and docs folder delivers comparable retrieval at lower cost.
+- **Inconsistent artifact quality** — one undisciplined discipline poisons cross-discipline queries for every feature it touches. The launch gate precondition must be enforced.
+- **No git-fluent anchor per discipline** — Markdown/Git literacy in at least one role is required for shape conventions to hold ([Grab Engineering](https://engineering.grab.com/facilitating-docs-as-code-with-markdown)).
 
 ## Key Takeaways
 
@@ -73,3 +87,4 @@ This specific multi-discipline synthesis is **not demonstrated verbatim** in the
 - [CLAUDE.md convention](../../instructions/claude-md-convention.md) — shape of the root and per-folder instruction files
 - [Structured domain retrieval](../../context-engineering/structured-domain-retrieval.md) — why consistent shape enables deterministic retrieval
 - [Skill authoring patterns](../../tool-engineering/skill-authoring-patterns.md) — the write-time enforcement layer for artifact shape
+- [Plan mode for knowledge artifacts](plan-mode-knowledge-artifacts.md) — using plan mode to author PRDs, strategy memos, and architectural briefs in the Team OS structure

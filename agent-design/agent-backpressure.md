@@ -95,6 +95,7 @@ The full loop completes without human involvement. Each tool in the chain catche
 - [Agent Pushback Protocol](agent-pushback-protocol.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Harness Engineering](harness-engineering.md) — making codebases agent-ready by building backpressure coverage into the repo
+- [L1 → L2: Adding Feedback Loops](../frameworks/brownfield-to-agent-first/level-1-to-2.md) — step-by-step guide to enabling types, test coverage, and linter rules on a brownfield repo
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [The Yes-Man Agent](../anti-patterns/yes-man-agent.md)

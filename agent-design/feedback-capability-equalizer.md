@@ -108,13 +108,10 @@ Path B produces higher overall success rates at lower cost. The model did not ch
 - Models cannot self-evaluate reliably. External feedback signals (tests, linters, type checkers) are not optional — they are the mechanism that enables iterative improvement.
 - Optimize iteration budgets using the efficiency-coverage tradeoff: fast resolution (MRR) and broad coverage (Recall) are different goals requiring different strategies.
 
-## Unverified Claims
-
-- Models instruction-tuned with execution feedback may respond better to execution-based feedback than models fine-tuned primarily on text [unverified — inferred from the ReflectionCoder generalization failure, but not explicitly tested across RLHF variants]
-
 ## Related
 
 - [Agent Backpressure](agent-backpressure.md) — the automated feedback loops this pattern depends on
+- [L1 → L2: Adding Feedback Loops](../frameworks/brownfield-to-agent-first/level-1-to-2.md) — how to implement compilation, execution, and structured verbal feedback in a brownfield repo
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — routing by complexity; feedback quality changes which tier is needed
 - [Harness Engineering](harness-engineering.md) — designing the environment that provides high-quality feedback
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — the generator-evaluator loop that operationalizes iterative feedback

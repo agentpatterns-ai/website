@@ -73,7 +73,7 @@ This maps to the [agent pushback protocol](agent-pushback-protocol.md) — pushb
 
 The 74% improvement is the peak result (Claude Sonnet 3.5, synthetic underspecification). Caveats:
 
-- Stronger models showed **diminishing gains** — Sonnet 4 recovered 61% vs. Sonnet 3.5's 80%, suggesting the bottleneck shifts from extraction to integration [unverified: whether this holds outside the benchmark]
+- Stronger models show **compounding gains** — Sonnet 4 recovered 89% of fully-specified performance vs. Sonnet 3.5's 80%, suggesting capability shifts the bottleneck from detection to integration ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
 - Some models showed "complete non-responsiveness to interaction prompts" — following rigid protocols regardless of input ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
 - High extraction does not guarantee success — integrating answers matters more than asking the right questions
 
@@ -95,13 +95,7 @@ The agent resolved the navigational ambiguity (which file, which bug) independen
 - Explore first to resolve navigational gaps; ask only about informational gaps requiring human knowledge
 - Fewer, targeted questions outperform broad ones — integration quality matters more than extraction quantity
 - Match strategy to reversibility: surface assumptions for low-cost decisions, block for high-cost ones
-- For stronger models, the bottleneck shifts from extraction to integration
-
-## Unverified Claims
-
-- Whether exploration-first holds when codebases are very large or entirely unfamiliar
-- Whether diminishing returns for stronger models persists outside Ambig-SWE
-- Applicability of benchmark results to real-world (non-synthetic) underspecification
+- Stronger models gain more from interactivity — the bottleneck shifts from detection to integration as capability scales
 
 ## Related
 

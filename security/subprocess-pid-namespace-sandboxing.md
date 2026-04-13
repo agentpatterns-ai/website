@@ -28,7 +28,7 @@ Setting this variable activates subprocess sandboxing. When set, Claude Code:
 1. Launches Bash subprocesses inside a Linux PID namespace
 2. Strips sensitive environment variables from the subprocess environment before execution
 
-PID namespace isolation confines the subprocess's view of the process tree: it cannot see or signal processes outside its namespace, and its child processes are reaped when the namespace exits [unverified: Claude Code's exact implementation detail; the reaping behavior is a standard Linux PID namespace property]. Background daemons spawned inside the namespace cannot persist after the session ends.
+PID namespace isolation confines the subprocess's view of the process tree: it cannot see or signal processes outside its namespace, and all processes inside the namespace receive `SIGKILL` when its init process (PID 1) exits — a standard Linux kernel guarantee documented in [`pid_namespaces(7)`](https://man7.org/linux/man-pages/man7/pid_namespaces.7.html). Background daemons spawned inside the namespace cannot persist after the session ends.
 
 Env var scrubbing prevents secrets in the parent environment from leaking into child process environments — a common vector when a subprocess calls out to a tool that logs its environment, dumps it on error, or passes it through to a further child.
 
@@ -65,6 +65,30 @@ claude --dangerously-skip-permissions
 These controls augment the built-in `/sandbox` command; they do not replace it. The existing sandbox (enabled via `/sandbox` or `sandbox.enabled` in settings) enforces filesystem and network boundaries using bubblewrap. Subprocess PID sandboxing adds process-level isolation on top.
 
 Enabling `/sandbox` without `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` still provides filesystem and network isolation. Adding `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` closes the process persistence and env leakage gaps that bubblewrap's filesystem/network controls leave open.
+
+## Example
+
+A CI pipeline running on a Linux host invokes Claude Code to perform automated code review. Without subprocess sandboxing, the agent's Bash tool can spawn long-running background processes — for example, a build daemon — that persist after the session ends, consuming resources and retaining access to environment-inherited secrets.
+
+With subprocess sandboxing enabled:
+
+```bash
+export CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1
+export CLAUDE_CODE_SCRIPT_CAPS=100   # sufficient for a typical review pipeline
+claude --dangerously-skip-permissions --print "Review the diff and run the test suite"
+```
+
+The agent's Bash invocations run inside a PID namespace. Any background process started by the agent — intentionally or via prompt injection — is killed when the namespace's init exits at session end. `ANTHROPIC_API_KEY` and cloud provider credentials present in the CI environment are stripped from subprocesses before execution.
+
+## When This Backfires
+
+**Linux-only**: macOS and Windows deployments get no benefit from `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`. On those platforms the env scrubbing still applies, but PID namespace isolation is silently skipped — process persistence remains possible.
+
+**Env scrubbing breaks tools that expect inherited credentials**: Some subprocess tools (e.g., AWS CLI, gcloud, GitHub CLI) rely on inheriting credentials from the environment. Scrubbing removes those variables, causing auth failures. Mitigation: pass credentials explicitly via config files, credential helpers, or application-default mechanisms rather than raw env vars.
+
+**Misconfigured `CLAUDE_CODE_SCRIPT_CAPS` terminates valid workloads**: A cap set too low for the actual workload (e.g., `CLAUDE_CODE_SCRIPT_CAPS=10` for a build agent that runs 80 test shards) causes the session to abort mid-task. Calibrate the cap against the actual script invocation profile before deploying.
+
+**Namespace isolation is not a substitute for network sandboxing**: A process inside a PID namespace can still make outbound network calls. Process-level isolation must be combined with bubblewrap network namespacing to prevent exfiltration.
 
 ## Key Takeaways
 

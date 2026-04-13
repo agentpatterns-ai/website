@@ -80,7 +80,7 @@ Not every task needs your most expensive model. Route by complexity:
 
 | Task type | Model tier | Rationale |
 |-----------|-----------|-----------|
-| Boilerplate, CRUD, pattern replication | Cheaper / faster | Low novelty, high predictability |
+| Boilerplate, CRUD, [pattern replication](../anti-patterns/pattern-replication-risk.md) | Cheaper / faster | Low novelty, high predictability |
 | Refactoring with clear specs | Mid-tier | Moderate complexity, constrained scope |
 | Novel architecture, security-sensitive | Most capable | High stakes, needs strongest reasoning |
 

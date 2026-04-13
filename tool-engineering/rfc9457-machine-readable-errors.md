@@ -145,9 +145,13 @@ def rate_limit_error(retry_after: int):
 
 This pattern connects three cost and reliability concerns under a single design decision: token spend, retry waste, and escalation routing.
 
-## Unverified Claims
+## When This Backfires
 
-- The issue body cites "58x smaller" — the Cloudflare source documents 64.5x (Markdown) and 55.7x (JSON) for the 1015 error type specifically. A cross-error-type average is not confirmed in the source material.
+RFC 9457 adoption is uneven. Most third-party APIs do not support `application/problem+json` and silently ignore the `Accept` header, returning HTML regardless. Three conditions make this pattern unreliable:
+
+1. **Third-party APIs without RFC 9457 support** — the agent still receives an HTML error body. Parse defensively: always attempt structured extraction first, then fall back to plain-text error extraction.
+2. **Middleware that rewrites Accept headers** — some proxies, API gateways, or WAFs strip or replace `Accept` before the request reaches the origin. Verify that the `Accept` header survives the full request path.
+3. **First-party services that haven't adopted the format** — emitting RFC 9457 requires active implementation work. The pattern pays off once agents make enough API calls to justify the engineering cost; for low-volume integrations, generic error handling may be sufficient.
 
 ## Related
 

@@ -65,6 +65,17 @@ The principle for developers: when building agent workflows, prompt chains, or c
 
 This intersects with [comprehension debt](../anti-patterns/comprehension-debt.md): simpler implementations are easier to understand, debug, and replace. Complex workarounds compound both technical and comprehension debt simultaneously.
 
+## When This Backfires
+
+These shifts assume the organization can tolerate rapid reprioritization. Several conditions undercut them:
+
+- **Large coordination overhead**: Short sprints work for small teams. Multi-team organizations with shared roadmaps cannot drop quarterly commitments because a model shipped. Realignment cost may exceed the benefit.
+- **Prototypes promoted to production**: Prototype-first breaks down when time pressure converts a proof-of-concept into the production system without architectural review. Cheap prototyping flips when prototypes accumulate unreviewable complexity.
+- **Revisit fatigue**: Re-evaluating features each model release creates prioritization instability. Teams with large legacy surfaces cannot affordably audit them each cycle.
+- **Simplicity misapplied**: "Simplest thing that works" defers necessary complexity rather than eliminating it. Some edge cases require complex handling regardless of model capability.
+
+These shifts are most reliable for small, fast-moving teams building AI-native products.
+
 ## Key Takeaways
 
 - Exponential model improvement (35x in 16 months per METR) makes multi-quarter feature plans unreliable

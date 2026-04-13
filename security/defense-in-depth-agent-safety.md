@@ -18,7 +18,7 @@ aliases:
 
 Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail, and designs so that each layer catches failures the others miss.
 
-The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2025 §2.1](https://arxiv.org/abs/2603.05344)):
+The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
 
 1. **Prompt guardrails** — safety instructions in the system prompt
 2. **Schema restrictions** — subagents see only tools in their allowlist
@@ -26,27 +26,27 @@ The OPENDEV agent implements five independent safety layers, each operating at a
 4. **Tool validation** — inputs validated before execution
 5. **Lifecycle hooks** — pre-tool hooks can block execution with an explanation
 
-Each layer is independent. Failure of one does not compromise the others ([Bui, 2025 §2.1](https://arxiv.org/abs/2603.05344)).
+Each layer is independent. Failure of one does not compromise the others ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)).
 
 ## Schema-Level Tool Filtering
 
-The strongest form of tool restriction prevents the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2025 §3.3](https://arxiv.org/abs/2603.05344)).
+The strongest form of tool restriction prevents the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)).
 
 This is stronger than runtime rejection. A runtime check says "you called a forbidden tool, denied." Schema filtering means the model never forms the intent to call it. The attack surface shrinks at the schema level, before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
 
 ## Three-Level Approval System
 
-Runtime approvals use a three-level system ([Bui, 2025 §2.4.1](https://arxiv.org/abs/2603.05344)):
+Runtime approvals use a three-level system ([Bui, 2026 §2.4.1](https://arxiv.org/abs/2603.05344)):
 
 - **Manual** — every tool call requires explicit user approval
 - **Semi-Auto** — only dangerous commands require approval; safe patterns execute freely
 - **Auto** — all tool calls approved without user interaction
 
-Approval persistence prevents fatigue: users grant blanket permission for safe patterns, and the agent remembers these grants across turns ([Bui, 2025 §3.3](https://arxiv.org/abs/2603.05344)). Pattern-based rules match command prefixes, danger patterns, and command types. Without persistence, repeated approval prompts train users to rubber-stamp everything — undermining the safety layer entirely.
+Approval persistence prevents fatigue: users grant blanket permission for safe patterns, and the agent remembers these grants across turns ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)). Pattern-based rules match command prefixes, danger patterns, and command types. Without persistence, repeated approval prompts train users to rubber-stamp everything — undermining the safety layer entirely.
 
 ## Designing for Approximate Outputs
 
-Agents produce approximate outputs. Safety-conscious harness design accounts for this rather than treating it as a bug ([Bui, 2025 §3.4](https://arxiv.org/abs/2603.05344)):
+Agents produce approximate outputs. Safety-conscious harness design accounts for this rather than treating it as a bug ([Bui, 2026 §3.4](https://arxiv.org/abs/2603.05344)):
 
 - Auto-promote server commands to background tasks when the LLM misformats long-running commands
 - Auto-install missing dependencies when the agent produces incomplete execution plans
@@ -103,6 +103,16 @@ fi
 ```
 
 Even if the prompt guardrail is bypassed by injection, the hook still blocks production-targeted commands. Schema filtering ensures the agent cannot commit changes even if both the prompt and hook are somehow circumvented. Each layer catches what the others miss.
+
+## When This Backfires
+
+Defense-in-depth adds real costs. Each layer requires configuration, testing, and maintenance — misconfigured layers can block legitimate operations or, worse, create a false sense of coverage while remaining ineffective.
+
+- **Approval fatigue compounds across layers.** Adding more gates does not always reduce risk. If each layer generates its own approval prompts, users optimize for throughput by approving everything, converting safety layers into security theater. The three-level system mitigates this only when safe patterns are correctly classified upfront.
+- **Schema filtering limits legitimate capability.** Subagents with narrow schemas cannot adapt to tasks outside their defined scope. In exploratory or general-purpose contexts where tool needs are unpredictable, strict schema restrictions may require constant operator intervention or multiple specialized agents where one broader agent would suffice.
+- **Hooks and validation add latency.** In latency-sensitive pipelines — streaming responses, high-frequency tool calls, real-time integrations — per-call lifecycle hooks compound response time. A single well-tuned runtime approval gate may be more appropriate than five independent layers with inspection overhead at each level.
+
+Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks, for example) may deliver sufficient protection with lower operational cost.
 
 ## Key Takeaways
 

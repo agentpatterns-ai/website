@@ -46,7 +46,7 @@ Avoid putting area-specific rules in the root file — they add noise to every t
 
 ## Concrete Examples as Anchors
 
-Standards with examples are more reliably followed than standards without them [unverified — consistent with observed agent behavior but not independently benchmarked]. An agent reading "no filler phrases" must infer what counts. An agent reading:
+Standards with examples are more reliably followed than standards without them — few-shot prompting research consistently shows that concrete examples improve adherence over rule-only prompts ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). An agent reading "no filler phrases" must infer what counts. An agent reading:
 
 ```
 No filler phrases: "in this guide", "let's explore", "as you may know", "it's worth noting"
@@ -100,6 +100,22 @@ Scope: directory name or filename stem
 
 A human reviewer reads these rules and checks a pull request against them. An agent reads the same file as its instruction set and produces output that satisfies every rule on the first pass. No translation layer, no separate prompt — one document serves both.
 
+## Why It Works
+
+Agents lack the sociolinguistic context that humans use to interpret vague norms. When a human reads "be concise," they draw on domain conventions, genre norms, and professional context to calibrate their output. An agent, given the same instruction, pattern-matches against training data — producing output that is concise *in the general sense* rather than in the project-specific sense. Precision replaces that missing context: the rule "max 500 words for pattern pages" gives the agent a verifiable target that doesn't depend on contextual inference. The same mechanism explains why examples help — they narrow the interpretation space by demonstrating the intended form directly, bypassing the inference step entirely.
+
+## When This Backfires
+
+Precision in standards improves adherence only when the standards file stays short. As file length grows, adherence degrades — practitioners report unreliable compliance once instruction files exceed a few hundred lines, and [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends keeping CLAUDE.md files under 200 lines.
+
+Three specific failure modes:
+
+1. **Context bloat**: A 400-line standards file loads every session regardless of relevance. At high context utilization, precision on rule 300 offers no advantage — the rule is there, but its competition for attention makes it unreliable.
+2. **Priority saturation**: When everything is stated with equal precision, nothing signals higher priority. An agent following 80 precisely-worded rules has no principled way to break ties when rules conflict or when a relevant rule is buried among irrelevant ones.
+3. **Scope mismatch**: Project-wide standards that include area-specific rules inject irrelevant constraints into every task. A rule about database schema conventions appearing in every React component edit adds noise without benefit. Use directory-scoped files (`.claude/rules/`, nested `CLAUDE.md`) to keep standards contextually relevant.
+
+The pattern works as stated when standards are short, scoped to current context, and enforcing a small set of high-priority conventions. When standards files grow large, the correct response is decomposition — not more precision.
+
 ## Key Takeaways
 
 - Actionable standards require no translation to serve as agent instructions — precision serves both audiences
@@ -107,10 +123,7 @@ A human reviewer reads these rules and checks a pull request against them. An ag
 - Scope rules via file hierarchy: project-wide at root, area-specific in nested files
 - Include concrete examples — correct and incorrect forms — to eliminate the ambiguity zone
 - Design for reviewability (binary pass/fail per rule) to force precision that works for agents
-
-## Unverified Claims
-
-- Standards with examples are more reliably followed than standards without them `[unverified — consistent with observed agent behavior but not independently benchmarked]`
+- Keep standards files short; precision degrades as file length grows past ~200 lines
 
 ## Related
 
@@ -128,3 +141,8 @@ A human reviewer reads these rules and checks a pull request against them. An ag
 - [The Specification as Prompt: Existing Artifacts as Agent Instructions](specification-as-prompt.md)
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
 - [Prompt Governance via PR](prompt-governance-via-pr.md)
+- [Deferred Standards Enforcement via Review Agents](../code-review/deferred-standards-enforcement.md)
+- [Wrap Framework Agent Instructions](wrap-framework-agent-instructions.md)
+- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Prompt File Libraries](prompt-file-libraries.md)

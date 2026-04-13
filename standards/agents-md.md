@@ -109,6 +109,14 @@ Bun; the frontend uses Vite + React.
 
 This file converts a generic agent into a project-aware one: it knows to use `bun test`, where types live, and what to read before touching the auth layer — without embedding that documentation inline.
 
+## When This Backfires
+
+AGENTS.md degrades in three conditions:
+
+- **Stale content**: as the codebase evolves, AGENTS.md drifts. A file that correctly described tooling six months ago now misleads agents into using deprecated commands. Static files require active maintenance discipline — they do not self-update as conventions change.
+- **Context overconsumption**: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — can consume 10–20% of a context window before work begins. The file works against itself when it embeds knowledge instead of linking to it.
+- **Mismatch with dynamic environments**: AGENTS.md is a static snapshot. Projects with frequent toolchain changes, multiple distinct workflows, or environment-specific constraints that vary per run are poorly served by a single root file. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
+
 ## Key Takeaways
 
 - AGENTS.md is project orientation for agents: conventions, constraints, and pointers — not documentation
@@ -131,3 +139,4 @@ This file converts a generic agent into a project-aware one: it knows to use `bu
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [Agent-to-Agent (A2A) Protocol](a2a-protocol.md)
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)
+- [Portable Agent Definitions](portable-agent-definitions.md)

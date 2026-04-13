@@ -21,15 +21,19 @@ The implication: reviewers are spending time on code that a pre-filter could hav
 
 ## Deletion Reason Categories
 
-Functions deleted in review fall into three categories with distinct structural signatures [unverified — the category names "Dead code," "Over-engineering," and "Spec mismatch" are the author's taxonomy and may not match the exact terminology used in the cited paper]:
+The paper identifies structural features that distinguish deleted from surviving functions — it does not provide a formal taxonomy of deletion reasons. Based on those structural signals, deleted functions cluster into three practitioner-facing categories:
 
-**Dead code**: Functions generated but never called from the PR's entry points. They are structurally identifiable by missing call graph edges.
+**Dead code**: Functions generated but never called from the PR's entry points. Structurally, they exhibit lower call counts and fewer inbound references — consistent with the paper's finding that deleted functions have higher internal complexity but lower integration with surrounding code.
 
-**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. They are identifiable by generality exceeding the immediate use case.
+**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. Structurally, they appear as longer method names, higher line counts, and greater Halstead volume — the paper's three strongest predictors of deletion — because they implement more than the task asked for.
 
-**Spec mismatch**: Functions that implement a different behavior than the spec required — wrong signature, wrong return type, wrong preconditions. They are identifiable by divergence from the spec's type contracts.
+**Spec mismatch**: Functions that implement a different behavior than the spec required — wrong signature, wrong return type, wrong preconditions. They diverge from the spec's type contracts and often carry redundant documentation that mirrors, rather than extends, the spec language.
 
-Each category requires a different remediation signal sent back to the agent.
+Each category calls for a different remediation signal sent back to the agent.
+
+## Why It Works
+
+Structural metrics expose scope overreach before a reviewer reads a single line. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) found that the strongest predictors of deletion are method name length (word count), total lines of code, and Halstead volume — all proxies for "more was generated than the task required." A function with a long descriptive name and high Halstead volume encodes more conceptual surface area than a focused function; that excess surface area is what reviewers remove. The model achieves AUC 87.1% using only these static, syntax-level features — no semantic understanding of the spec is needed to flag probable deletions.
 
 ## Applying Predictive Pre-Flagging
 
@@ -72,6 +76,21 @@ When pre-flagging is not integrated into the pipeline, human reviewers can apply
 - Verify type signatures against the spec before reading implementation bodies
 
 This ordering surfaces the likely deletions before investing in line-by-line reading.
+
+## Why It Works
+
+Deletion during review is a structural signal: code the agent generated that does not match what the reviewer needs to approve. Each deletion category has a mechanical trace — call graph edges are absent, spec scope is exceeded, or type contracts diverge. These traces are computable before a human reads the code. The AUC 87.1% result ([arXiv:2602.17091](https://arxiv.org/abs/2602.17091)) follows from the same principle: deletion reasons correlate with structural properties, and structural properties are extractable from the diff without running the code or understanding its semantics.
+
+## When This Backfires
+
+Pre-flagging is not cost-free:
+
+- **False positives on valid abstraction**: A shared utility helper may be called from a future PR, not the current one. Single-module call graph analysis flags it as dead code; it isn't.
+- **Cross-file blindness**: Structural analysis scoped to the generated module misses call sites in files the agent didn't modify. This inflates the dead-code false-positive rate in multi-file PRs.
+- **Spec ambiguity**: If the spec is underspecified, "spec mismatch" becomes the reviewer's judgment call, not a structural signal. Pre-flagging then adds friction without surfacing real problems.
+- **Pipeline integration cost**: Instrumenting call graph extraction per PR requires tooling investment. For low-volume PR teams, the ROI may not justify the setup.
+
+Apply pre-flagging where agent PR volume is high enough that reviewer time is the binding constraint.
 
 ## Example
 
@@ -120,6 +139,17 @@ python flag_dead_code.py generated_module.py
 ```
 
 These two functions would be candidates for deletion. Returning this report to the agent — rather than a human reviewer — eliminates the review cycle for spec-mismatched generated code before a human sees it.
+
+## When This Backfires
+
+Pre-flagging adds value when the cost of reviewer time exceeds the cost of running structural analysis, but several conditions undermine that trade-off:
+
+- **Infrastructure and setup functions**: Functions not yet called within the PR — setup hooks, migration helpers, exported API surface — will appear as dead code to a call-graph analyzer. Treat entry-point configuration as a first-class parameter, not an afterthought.
+- **Cross-file call graphs are expensive**: Dead code detection that only inspects the generated module (as in the example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
+- **Single-study generalization risk**: The AUC 87.1% result comes from one codebase and one AI model. Structural feature importance will differ across languages, project types, and model generations — validate false-positive rates on local data before routing suppressions to the agent.
+- **False negatives pass bad code unexamined**: A 12.9% error rate means roughly 1-in-8 deletable functions is not flagged. Reviewers who rely on the report may skip unflagged code more quickly than they should, increasing the cost of each missed deletion.
+- **False positives block valid abstractions**: A utility function called only once looks like over-engineering by metrics but may be essential for testability or future extension. Flags routed back to the agent can cause regeneration that removes intentional design decisions.
+- **Feedback loop without calibration**: Returning flagged functions to the agent for regeneration without calibrating what "spec scope" means can cause under-generation in future tasks. A regeneration count limit and human fallback are necessary to prevent loops.
 
 ## Key Takeaways
 

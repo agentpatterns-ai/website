@@ -21,7 +21,7 @@ Claude Code's managed settings system delivers organizational policy — permiss
 
 This creates a brief unenforced window on first launch and a permanent gap whenever the policy store is unreachable: the agent starts, operates, and commits changes under policy that may be revoked, expired, or absent.
 
-The pattern is analogous to hard-fail certificate revocation in TLS. An OCSP responder that is unreachable fails closed in hard-fail mode — the handshake is rejected rather than proceeding without revocation data. The cost (occasional connection failure) is lower than the risk (connecting to a server whose certificate has been revoked). The same logic applies here: an agent that cannot verify its current policy should not operate.
+The pattern is analogous to hard-fail certificate revocation in TLS. An OCSP responder that is unreachable fails closed in hard-fail mode — the handshake is rejected rather than proceeding without revocation data ([RFC 6960, §2.6](https://www.rfc-editor.org/rfc/rfc6960#section-2.6)). The cost (occasional connection failure) is lower than the risk (connecting to a server whose certificate has been revoked). The same logic applies here: an agent that cannot verify its current policy should not operate.
 
 ## Enabling Fail-Closed Enforcement
 

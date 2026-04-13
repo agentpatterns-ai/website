@@ -61,6 +61,8 @@ Loading all six layers for every request is impractical — the combined volume 
 
 This keeps latency predictable regardless of corpus size. The agent receives the context most relevant to its current task, not everything that might be relevant.
 
+A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confirms that production systems combine heterogeneous sources — structured queries, semantic search, graph knowledge bases, and tool APIs — with specialized agents handling each source in parallel.
+
 ## Priority of Layers
 
 Layers are not equal. When layers conflict — a human annotation contradicts what the pipeline code suggests — the resolution order should be defined explicitly. Human annotations typically take priority over code-derived enrichment, which takes priority over schema inference. Persistent memory corrections take priority over general institutional knowledge.
@@ -104,6 +106,17 @@ async function buildContext(symbolName: string): Promise<string[]> {
 
 Each `chunks.push` call adds a layer. The type signature tells the agent what the function accepts; the git log tells it what recently changed and why; the ADR captures the design rationale; the memory entry surfaces a correction that isn't recorded anywhere else. No single layer would be sufficient — the type signature says nothing about the rationale, and the ADR says nothing about the current signature.
 
+## When This Backfires
+
+The six-layer model is optimized for large, complex corpora — it carries real engineering overhead.
+
+- **Small corpora** — a codebase that fits entirely in a context window gains nothing from RAG latency. Loading all context directly is simpler and faster.
+- **Infrastructure cost** — offline aggregation pipelines, embedding refresh schedules, and vector stores add operational surface area. For teams without existing data infrastructure, the maintenance burden can outweigh the accuracy gain.
+- **Layer staleness** — when offline pipelines and live runtime queries diverge significantly (e.g., a schema change that hasn't propagated through the enrichment pipeline), the agent may act on contradictory context. The architecture requires reliable refresh cadences to be useful.
+- **Priority rule complexity** — as layers multiply, explicit priority rules become harder to maintain. An undocumented exception in the resolution order silently produces wrong answers that are difficult to trace back to their cause.
+
+A two-layer approach (schema + live queries) suffices for many agent use cases. Add layers when each additional source demonstrably closes a blind spot that causes agent errors in production.
+
 ## Key Takeaways
 
 - Schema or file structure alone cannot ground an agent in the meaning of a dataset or codebase.
@@ -128,3 +141,5 @@ Each `chunks.push` call adds a layer. The type signature tells the agent what th
 - [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
 - [Repository Map Pattern](repository-map-pattern.md)
 - [Lost in the Middle: Understanding U-Shaped Attention](lost-in-the-middle.md)
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)

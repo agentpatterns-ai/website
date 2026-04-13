@@ -124,6 +124,14 @@ jq -n --arg name "$CLEAN" \
     content: {entity_name: $name}}}'
 ```
 
+## When This Backfires
+
+**Client support is not universal.** Elicitation was added to the MCP spec in June 2025. Not all clients implement it — clients that don't will either block silently, return a "Method not found" error, or crash during the capability handshake. Verify client support before designing a tool that depends on elicitation. [GitHub Copilot in VS Code supports it](https://github.blog/ai-and-ml/github-copilot/building-smarter-interactions-with-mcp-elicitation-from-clunky-tool-calls-to-seamless-user-experiences/); other hosts vary.
+
+**Headless pipelines stall without a hook.** Any elicitation request in a CI or non-interactive agent context blocks indefinitely unless an `Elicitation` hook is pre-configured to auto-accept or decline. The tool call hangs — it does not time out on its own. The fix is an explicit hook (see Headless Automation Pattern above), but that requires anticipating every server that might elicit and configuring coverage in advance.
+
+**Schema complexity is deliberately limited.** Elicitation only supports flat primitive fields (`text`, `number`, `boolean`, `select`). Conditional fields, nested objects, and array inputs are not expressible in the elicitation form schema. If the required input is structurally complex, elicitation is the wrong mechanism — model it as a tool parameter or use a multi-step tool sequence instead.
+
 ## Key Takeaways
 
 - Elicitation collects structured input mid-task, after the server knows what it needs — unlike tool schema parameters, which are defined at registration time.
@@ -136,6 +144,7 @@ jq -n --arg name "$CLEAN" \
 
 - [Hooks and Lifecycle Events](hooks-lifecycle-events.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
+- [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
 - [Override Interactive Commands](override-interactive-commands.md)

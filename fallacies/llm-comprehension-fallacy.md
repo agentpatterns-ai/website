@@ -47,6 +47,18 @@ A developer asks the model to "update the auth flow to match the new spec" witho
 
 The developer primes the model with the existing auth code, the new spec document, and a note on the error-handling convention. They request a diff, not a full rewrite. They run the existing test suite against the output before review. The model's output is constrained to the provided context; deviations from it are visible and reviewable.
 
+## When This Backfires
+
+Treating the fallacy as universally dangerous can itself produce errors:
+
+**Over-priming on stable task types.** For well-bounded tasks the model has high training coverage for — standard library usage, boilerplate generation, format conversion — extensive context priming yields diminishing returns. The pattern match is reliable; time spent priming is overhead.
+
+**Verification paralysis on low-stakes outputs.** Applying external verification to every output regardless of consequence (a one-line docstring, a variable rename) slows delivery without proportional risk reduction. The fallacy's danger scales with the cost of a silent failure, not uniformly across all output types.
+
+**Misattributing inconsistency to comprehension gaps.** Some output variance stems from temperature, prompt phrasing, or context placement — not from the model "not understanding." Framing every inconsistency as a comprehension failure obscures tractable prompt-engineering fixes.
+
+The practical boundary: apply comprehension-skeptic discipline where silent failures are expensive (auth flows, data migrations, security-sensitive logic) and relax it where failures are cheap and immediately visible.
+
 ## Key Takeaways
 
 - Correct output signals pattern alignment, not comprehension — calibrate trust accordingly

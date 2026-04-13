@@ -159,6 +159,16 @@ fi
 
 An external cron job polls `~/agent-failures.jsonl`. When it finds a `rate_limit` entry, it waits and re-launches the agent from the last git checkpoint. The hook writes the signal; the cron job acts on it.
 
+## Why It Works
+
+`StopFailure` is non-blocking by design because it fires after an unrecoverable error — the turn has already ended. Claude Code distinguishes pre-action hooks (which can block: `PreToolUse`, `UserPromptSubmit`, `PermissionRequest`) from post-action hooks (observational only: `PostToolUse`, `StopFailure`). Control hooks execute *before* the action and can influence it; observational hooks execute *after* and cannot. At the point `StopFailure` fires, the API call has already failed and no exit code from the hook can alter that outcome. The design keeps the runtime's error path clean: it executes the notification command, ignores what it returns, and terminates. See the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) for the full hook lifecycle and exit-code behavior table.
+
+## When This Backfires
+
+- **Slow hooks delay shutdown** — `StopFailure` runs synchronously before the process exits. A hook that calls a slow external service (webhook, metrics endpoint) or has no timeout holds the process open. Add a timeout (`timeout` field in the hook config, or `timeout` in your shell script) and always use `|| true` on external calls.
+- **`unknown` error type limits scoping** — matchers can't distinguish the root cause when `error_type` is `unknown`. A hook scoped to `rate_limit` will silently skip genuine rate-limit failures that the runtime couldn't classify. Maintain a catch-all unscoped hook for audit logging alongside any type-scoped hooks.
+- **Log files fill on repeated crashes** — an agent restart loop (cron re-launches on every failure) combined with an append-only log hook writes one entry per crash indefinitely. Cap log file size or use a structured logging system with rotation.
+
 ## Key Takeaways
 
 - `StopFailure` fires when a Claude Code turn ends due to an API error — exit codes and output are ignored
@@ -170,6 +180,8 @@ An external cron job polls `~/agent-failures.jsonl`. When it finds a `rate_limit
 
 - [Hooks and Lifecycle Events](hooks-lifecycle-events.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
+- [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
+- [Reactive Environment Hooks: CwdChanged and FileChanged](reactive-environment-hooks.md)
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)

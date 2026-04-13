@@ -136,3 +136,4 @@ The goal is not to avoid AI, but to apply it within architectures that maximize 
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — Matching model capability to task complexity rather than defaulting to the most autonomous option
 - [Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md) — The two-layer architecture that the agentless approach implicitly follows
 - [Agents vs Commands](agents-vs-commands.md) — Separating agent roles from workflow execution, reinforcing when command-style simplicity beats full autonomy
+- [Specialized Agent Roles](specialized-agent-roles.md) — When parallel execution is warranted, how to assign distinct scopes so agents complement rather than duplicate

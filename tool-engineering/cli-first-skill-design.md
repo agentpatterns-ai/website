@@ -30,7 +30,7 @@ trello.sh create <LIST_ID> "Title"  # write
 
 This mirrors how `gh`, `aws`, and other agent-friendly CLIs work — tools the agent already knows from pretraining.
 
-**Adaptive output.** Return JSON for programmatic use; human-readable text when attached to a TTY. Detect with `[ -t 1 ]` (POSIX) or `sys.stdout.isatty()` in Python. The agent always gets structured output; a human running the script manually gets formatted text [unverified: no primary source links `isatty()` specifically to skill CLIs — derived from Unix convention].
+**Adaptive output.** Return JSON for programmatic use; human-readable text when attached to a TTY. Detect with `[ -t 1 ]` (POSIX) or [`sys.stdout.isatty()`](https://docs.python.org/3/library/io.html#io.IOBase.isatty) in Python. The agent always gets structured output; a human running the script manually gets formatted text.
 
 **Standard exit codes.** Use POSIX conventions ([IEEE Std 1003.1](https://pubs.opengroup.org/onlinepubs/9699919799/)): `0` success, `1` error, `2` usage problem, `127` command not found. Agents branch on exit codes rather than parsing error messages.
 
@@ -128,10 +128,6 @@ An agent calling `github.sh issues` receives a JSON array it can filter with `jq
 - Credentials always via environment variables — never hardcoded
 - Composition via pipes replaces complex multi-service skills with thin orchestration scripts
 - Choose a different approach for high-frequency calls, complex data structures, or real-time streaming
-
-## Unverified
-
-- The specific threshold ("100 calls/second") cited in some sources for when process spawn becomes a bottleneck has no primary benchmark behind it — treat as a rough heuristic
 
 ## Related
 

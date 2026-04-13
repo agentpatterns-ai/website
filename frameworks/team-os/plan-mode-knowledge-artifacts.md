@@ -12,16 +12,16 @@ tags:
 
 > The plan is the work: for PRDs, strategy memos, and architectural briefs, freezing direction in a reviewed plan before any prose is generated compounds the gains plan mode already delivers for code.
 
-Plan mode's value on knowledge artifacts is higher than on code, not lower. Prose errors do not fail a test suite — they hide in reviewer fatigue, anchor downstream readers on the first draft, and only surface after someone has already built on a wrong assumption. Hannah Stulberg, who runs her PM workflow through this pattern, states the thesis plainly: "The plan is not overhead. The plan is the work" ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)). The default failure mode is under-planning — letting the agent generate a first draft and then trying to correct it, instead of investing the time to get direction right before any prose is produced.
+Plan mode's value on knowledge artifacts is higher than on code, not lower. Prose errors do not fail a test suite — they hide in reviewer fatigue, anchor downstream readers on the first draft, and only surface after someone has already built on a wrong assumption. Hannah Stulberg, who runs her PM workflow through this pattern, states the thesis plainly: "The plan is not overhead. The plan is the work" ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 
 ## Why Knowledge Artifacts Suffer More
 
-Two mechanisms documented in the LLM behavioral literature compound for prose:
+Two mechanisms compound for prose:
 
-- **Action bias.** LLMs exhibit excessive switching and bias toward taking an action each round ([Maini, Goldstone & Tiganj, 2026, arXiv:2604.02578](https://arxiv.org/abs/2604.02578)). Stulberg translates the same finding to the tool surface: "Claude's bias for action is removed" once plan mode is engaged ([source](https://www.news.aakashg.com/p/claude-code-team-os)).
-- **Reflection-before-production.** Structured self-reflection significantly improves LLM problem-solving performance (p < 0.001) ([Renze & Guven, 2024, arXiv:2405.06682](https://arxiv.org/abs/2405.06682)). Plan mode forces a reflect-then-act decomposition before any token of output is generated.
+- **Action bias.** LLMs bias toward taking an action each round ([Maini, Goldstone & Tiganj, 2026, arXiv:2604.02578](https://arxiv.org/abs/2604.02578)). Plan mode removes that bias: "Claude's bias for action is removed" once plan mode is engaged ([source](https://www.news.aakashg.com/p/claude-code-team-os)).
+- **Reflection-before-production.** Structured self-reflection significantly improves LLM problem-solving performance (p < 0.001) ([Renze & Guven, 2024, arXiv:2405.06682](https://arxiv.org/abs/2405.06682)). Plan mode forces a reflect-then-act decomposition before output.
 
-For code, a failing test catches a misread intent. For a PRD or strategy memo, no such gate exists — the reader is the gate, and the reader is fatigued. The reflection pass has to happen before the draft.
+For code, a failing test catches misread intent. For a PRD, no such gate exists — the reader is the gate, and the reader is fatigued.
 
 ## Activating Plan Mode
 
@@ -31,26 +31,26 @@ Shift+Tab cycles Normal → Auto-Accept → Plan; the status bar reads `⏸ plan
 
 For knowledge artifacts, the plan-mode gate replaces first-draft generation with three disciplined moves:
 
-- **Parallel research subagents.** For long-form docs, one agent reading forty context files and writing the draft loses to a fan-out where "each agent writes to a temp file" and "the orchestrating agent compiles the final document from temp files" ([source](https://www.news.aakashg.com/p/claude-code-team-os)). The plan enumerates the subagent tasks; execution happens after acceptance.
-- **`AskUserQuestion` to push back on framing.** Plan mode uses `AskUserQuestion` verbatim to gather requirements and clarify goals before proposing a plan ([common workflows](https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis)). Stulberg inverts the default use: "invite Claude to push my thinking … use the ask-user-question tool to push me on my thinking and help me consider other angles" ([source](https://www.news.aakashg.com/p/claude-code-team-os)). The agent is a thinking partner, not a producer.
-- **Self-verification clauses in the plan.** Commit the plan to require cited sources, linkable URLs, and a named audience before prose is generated. Plan mode is a prompt wrapper, not a sandbox — Armin Ronacher's teardown shows the read-only constraint is enforced via system reminders, not technical gating ([Ronacher, 2025](https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/)). The reminders still cover the author who would otherwise under-specify.
+- **Parallel research subagents.** Fan out to subagents where "each agent writes to a temp file" and "the orchestrating agent compiles the final document from temp files" ([source](https://www.news.aakashg.com/p/claude-code-team-os)). The plan enumerates subagent tasks; execution happens after acceptance.
+- **`AskUserQuestion` to push back on framing.** Plan mode uses `AskUserQuestion` to gather requirements before proposing a plan ([common workflows](https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis)). Stulberg inverts this: the agent surfaces gaps and challenges framing — a thinking partner, not a producer ([source](https://www.news.aakashg.com/p/claude-code-team-os)).
+- **Self-verification clauses in the plan.** Commit the plan to require cited sources and a named audience before prose is generated. Plan mode is a prompt wrapper, not a sandbox — the read-only constraint is enforced via system reminders, not technical gating ([Ronacher, 2025](https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/)).
 
 ## When NOT to Use
 
-Plan mode is a ritual tax when the artifact is shorter than the plan would be, or when write-to-think iteration is the point:
+Skip plan mode when the artifact is shorter than the plan would be, or when write-to-think iteration is the point:
 
-- **Short or templated artifacts.** Standup updates, single-page memos, fixed-template postmortems. Anthropic's own caveat: if you "could describe the diff in one sentence, skip the plan" ([best practices](https://code.claude.com/docs/en/best-practices)).
-- **High-iteration exploratory drafts.** Discovery writing where the author is working out what they think — plan mode freezes direction before the thinking has happened.
-- **Strong outline discipline.** Practitioners already writing tight structured prompts can capture most of the same benefit with a plain markdown plan file on disk — Armin Ronacher prefers this for control ("I feel like I'm more in control of that experience if I have a file on disk somewhere that I can see, that I can read, that I can review, that I can edit before actually acting on it") while explicitly acknowledging that plan mode's end-of-plan user prompt is UX his approach does not replicate ([Ronacher, 2025](https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/)).
-- **Known friction modes.** Users have requested an opt-out because automatic plan-mode entry interrupts workflows and lacks a configuration switch ([claude-code#30042](https://github.com/anthropics/claude-code/issues/30042)). Separate bug reports document plan mode breaking the CLI message-routing path ([#29725](https://github.com/anthropics/claude-code/issues/29725)) and context auto-compaction re-entering plan mode without user request ([#29956](https://github.com/anthropics/claude-code/issues/29956)).
+- **Short or templated artifacts.** Standup updates, fixed-template postmortems. Anthropic's caveat: if you "could describe the diff in one sentence, skip the plan" ([best practices](https://code.claude.com/docs/en/best-practices)).
+- **High-iteration exploratory drafts.** When the author is working out what they think, plan mode freezes direction too early.
+- **Strong outline discipline.** A plain markdown plan file on disk captures most of the same benefit; Armin Ronacher prefers this, while noting plan mode's end-of-plan user prompt is UX his approach doesn't replicate ([Ronacher, 2025](https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/)).
+- **Known friction modes.** Automatic plan-mode entry lacks an opt-out switch ([#30042](https://github.com/anthropics/claude-code/issues/30042)); separate bugs document it breaking CLI message-routing ([#29725](https://github.com/anthropics/claude-code/issues/29725)) and re-entering after auto-compaction ([#29956](https://github.com/anthropics/claude-code/issues/29956)).
 
 ## When the Recommendation Backfires
 
 Plan-mode-for-PRDs underperforms a write-to-think workflow under three specific conditions:
 
-- **Fast-moving discovery.** When the author is still working out what the artifact even is, an over-specified plan freezes direction before the thinking has happened — every accepted plan becomes a constraint on learning the next iteration would have surfaced.
-- **Low-fidelity orchestrator synthesis.** Parallel research subagents only pay off if the orchestrator faithfully composes their temp-file outputs. When subagents return overlapping or contradictory findings and the orchestrator silently picks one, the plan-mode posture produces a confidently-wrong synthesis that single-agent reading would have surfaced as ambiguity.
-- **Plan-file drift after acceptance.** A plan committed at hour zero becomes stale by hour twenty as the customer evidence shifts, the metrics resolve differently, or scope contracts. Without a supersession discipline ([plan files as resumable artifacts](plan-files-resumable-artifacts.md)), the accepted plan keeps anchoring the draft against reality the author has already moved past.
+- **Fast-moving discovery.** An over-specified plan freezes direction before thinking has happened — every accepted plan becomes a constraint on learning the next iteration would have surfaced.
+- **Low-fidelity orchestrator synthesis.** Parallel subagents pay off only when the orchestrator faithfully composes their outputs. Contradictory findings silently resolved produce a confidently-wrong synthesis that single-agent reading would have surfaced as ambiguity.
+- **Plan-file drift after acceptance.** A plan committed at hour zero becomes stale as evidence shifts and scope contracts. Without supersession discipline ([plan files as resumable artifacts](plan-files-resumable-artifacts.md)), the accepted plan anchors the draft against reality the author has already moved past.
 
 ## Example
 

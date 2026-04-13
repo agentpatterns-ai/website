@@ -25,7 +25,7 @@ Static best-of-N policies ("always run 10 sandboxes") break in two ways:
 
 **Redundant success:** If the first three runs converge on a high-confidence winner, the remaining seven produce near-duplicate outputs at full cost. Early stopping could have yielded the same result for 30% of the spend.
 
-Most systems still use static caps rather than true signal-driven adaptation. The adaptive controller replaces the fixed-N decision with a control loop. See [nibzard/awesome-agentic-patterns: adaptive-sandbox-fanout-controller.md](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification.
+Static caps are the default in most frameworks — adaptive control loops are a less common pattern. The adaptive controller replaces the fixed-N decision with a signal-driven control loop. See [nibzard/awesome-agentic-patterns: adaptive-sandbox-fanout-controller.md](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification.
 
 ## The Four Signals
 

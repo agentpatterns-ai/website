@@ -110,6 +110,19 @@ The caller surfaces this in its own UI, collects `"Yes"`, then resumes. On resum
 }
 ```
 
+## Why It Works
+
+`"defer"` works because Claude Code serializes the full session transcript — conversation history, tool call state, and the pending tool invocation — to disk under the session ID before exiting. The `--resume` flag rehydrates that transcript rather than starting a new session, so the model context is byte-identical to the moment before the exit. The `deferred_tool_use` payload in the exit JSON gives the caller exactly what it needs to surface the approval decision: tool name, tool ID, and the full input object. On resume, `PreToolUse` fires again for the same tool call, and returning `"allow"` with `updatedInput` injects the collected answer before the tool executes. The design separates the *approval moment* (owned by the caller's UI) from the *execution moment* (owned by Claude Code), without requiring the session to block, poll, or restart.
+
+## When This Backfires
+
+`"defer"` adds caller-side complexity. Consider the alternatives when:
+
+- **Task state is negligible.** For short, stateless tasks where a restart costs less than wiring up pause/resume logic, splitting into a pre-approval phase and post-approval invocation is simpler and avoids lifecycle management.
+- **Multi-tool turns are unavoidable.** If the agent reliably issues several tool calls per turn — common with complex reasoning steps — `"defer"` silently no-ops with a warning. Restructuring prompts to force single-tool turns can degrade agent quality more than it gains safety.
+- **Session storage is constrained.** Deferred sessions persist indefinitely. In high-volume CI environments with many concurrent agents, accumulated unresumed sessions consume disk and require explicit cleanup pipelines the caller must own.
+- **The caller has no UI surface.** `"defer"` assumes the calling process can route `deferred_tool_use` to a human. Fully automated pipelines with no approval channel will hang indefinitely unless the hook logic unconditionally falls back to `"allow"` or `"deny"` after a timeout — reintroducing the ambiguity `"defer"` was meant to resolve.
+
 ## Comparison with PermissionDenied Hook
 
 v2.1.89 also added a `PermissionDenied` hook event that fires when the auto-mode classifier denies a tool call. Returning `{retry: true}` tells Claude it can retry. This is distinct from deferred permission:
@@ -136,3 +149,4 @@ v2.1.89 also added a `PermissionDenied` hook event that fires when the auto-mode
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [Rollback-First Design](rollback-first-design.md)
+- [Override Pattern: Reusing Interactive Commands in Automated Pipelines](../tool-engineering/override-interactive-commands.md)

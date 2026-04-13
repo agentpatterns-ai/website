@@ -127,6 +127,13 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to 
 }
 ```
 
+## When This Backfires
+
+- **direnv not available**: The hook silently no-ops when direnv is absent. On Windows dev containers or minimal CI images, you need a fallback or a different environment loader entirely.
+- **Malformed `.envrc`**: `direnv allow` succeeds but `direnv export bash` fails on syntax errors in `.envrc`. The hook exits 0, `CLAUDE_ENV_FILE` receives no writes, and the agent proceeds with a stale environment — no error surfaced.
+- **CwdChanged fires unconditionally**: Every `cd` invocation triggers the hook, including directory changes inside a single task. On repos with many subdirectories, this adds latency on each directory change.
+- **Observational constraint**: Hooks cannot block the agent from proceeding. If environment loading fails, the next Bash invocation runs in the wrong environment with no signal to the agent.
+
 ## Key Takeaways
 
 - `CwdChanged` fires on every directory change — no matcher, no blocking, observational only
@@ -134,10 +141,6 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to 
 - Write to `CLAUDE_ENV_FILE` to persist environment variables to subsequent Bash calls — without it, hook-level changes don't propagate
 - Both events compose with existing PreToolUse/PostToolUse hooks; they add a new trigger class (state-change) to the lifecycle
 - direnv is the canonical integration: one hook covers all toolchain switching for the entire repo tree
-
-## Unverified
-
-- nvm, rbenv, and pyenv are implied by the direnv pattern but are not individually listed as examples in the official documentation
 
 ## Related
 

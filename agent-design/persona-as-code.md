@@ -73,7 +73,7 @@ Git-versioning the artifacts adds auditability. Every human and AI contribution 
 
 ## Role Boundaries and Conflict Resolution
 
-When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules, two agents modifying the same artifact create a merge conflict with no principled resolution; with explicit priority, the spec resolves it.
+When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules, two agents modifying the same artifact create a merge conflict with no principled resolution; with explicit priority, the spec resolves it. A survey of multi-agent collaboration mechanisms identifies interdependency between role-scoped agents as the primary source of cascade failures in LLM systems — explicit scope exclusions directly address this ([Tran et al., 2025](https://arxiv.org/abs/2501.06322)).
 
 This mirrors the principle behind [Specialized Agent Roles](specialized-agent-roles.md): mutually exclusive scopes prevent redundant overlap. Persona-as-code makes that exclusivity durable across sessions.
 
@@ -134,6 +134,14 @@ Content drafting from research. You translate findings into publishable pages.
 
 Each persona operates within its file. The boundary is enforced by the spec, not by the model.
 
+## When This Backfires
+
+Persona-as-code adds coordination surface area. Three conditions where it is worse than a unified prompt:
+
+1. **Scope boundaries are ambiguous.** If the line between two personas is unclear — both can reasonably claim a decision — explicit exclusions do not resolve the conflict; they just relocate it to a boundary dispute. Role-based systems can show rigidity when task requirements deviate from predefined scope, resulting in disputes or functional deficiencies ([Tran et al., arXiv 2501.06322](https://arxiv.org/abs/2501.06322)).
+2. **Single-agent or short-session workflows.** Maintaining separate persona files and artifact handoff conventions adds overhead with no benefit when a single agent handles a bounded task end-to-end. A well-structured system prompt is simpler.
+3. **Rapidly changing requirements.** Persona files encode stable role definitions. When the domain or team structure is still evolving, keeping multiple files consistent costs more than the clarity they provide.
+
 ## Key Takeaways
 
 - Role confusion is a specification failure, not a model failure — make roles explicit in persona files
@@ -158,3 +166,4 @@ Each persona operates within its file. The boundary is enforced by the spec, not
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Delegation Decision](delegation-decision.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)
+- [Sprint Contracts](sprint-contracts.md)

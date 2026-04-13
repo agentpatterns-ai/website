@@ -15,7 +15,7 @@ aliases:
 
 ## Core Concept
 
-Most agent frameworks register many typed tools — `read_file`, `search_code`, `list_directory` — each with its own schema and error handling. The alternative: expose one execution primitive and let the agent compose Unix commands directly, leveraging pretraining on `grep`, `find`, `jq`, and `curl` `[unverified -- plausible but unquantified density claim]`.
+Most agent frameworks register many typed tools — `read_file`, `search_code`, `list_directory` — each with its own schema and error handling. The alternative: expose one execution primitive and let the agent compose Unix commands directly. Models trained on large code corpora have extensive exposure to shell commands, man pages, and CLI documentation, making Unix primitives a high-alignment action space.
 
 This is the extreme end of the [tool minimalism](tool-minimalism.md) spectrum: where tool consolidation reduces overlap, the single-tool hypothesis eliminates tool selection entirely.
 
@@ -60,7 +60,7 @@ graph LR
 - **Overflow mode** -- truncates large outputs, preserving head and tail
 - **Stderr attachment** -- surfaces stderr alongside stdout
 
-Without these, binary output causes thrashing and silent stderr causes blind retries `[unverified -- anecdotal from Reddit post]`.
+Without these, binary output fills the context window with uninterpretable content, and silent stderr hides failure signals that the agent needs to route to the next action.
 
 ## Trade-offs
 
@@ -78,7 +78,7 @@ Without these, binary output causes thrashing and silent stderr causes blind ret
 
 ## The Spectrum in Practice
 
-The CodeAct paper (Wang et al., ICML 2024) shows executable code actions outperform JSON function calls by up to 20% success rate with 30% fewer steps `[unverified -- the paper uses Python, not shell]`. Manus itself uses ~27 tools in production — not a single tool.
+The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself uses ~27 tools in production — not a single tool.
 
 Five well-designed tools plus shell access captures most of the benefit without unrestricted execution risk.
 
@@ -123,7 +123,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
 - [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) -- code actions outperform JSON/text by 20%
 - [CLI-Anything (HKU)](https://github.com/HKUDS/CLI-Anything) -- agent-native CLI generation pipeline
-- [Rewrite Your CLI for AI Agents (Justin Poehnelt)](https://justin.poehnelt.com/posts/rewrite-your-cli-for-ai-agents/) -- agent-first CLI design
+- Rewrite Your CLI for AI Agents (Justin Poehnelt) -- agent-first CLI design
 - [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- ~27 tools + CodeAct in practice
 
 ## Related

@@ -10,13 +10,13 @@ tags:
 
 # L0 → L1: Making the Repo Readable
 
-> Agents cannot orient in a codebase that relies on tribal knowledge. The L0→L1 transition externalizes what humans carry in their heads — architecture, conventions, build commands — into structured, machine-readable artifacts.
+> Agents cannot orient in a codebase that relies on [tribal knowledge](../../anti-patterns/implicit-knowledge-problem.md). The L0→L1 transition externalizes what humans carry in their heads — architecture, conventions, build commands — into structured, machine-readable artifacts.
 
 ---
 
 ## What L0 Looks Like
 
-An L0 codebase relies on implicit knowledge:
+An L0 codebase relies on [implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md) — conventions, decisions, and constraints that exist only in Slack threads and team memory:
 
 - No project instructions file — a new agent session starts with no context
 - Directory structure reflects historical accident, not architectural intent
@@ -43,7 +43,7 @@ At L1, the agent can read the repo and understand the system without being told:
 
 ### Step 1: Write the Project Instructions File
 
-The project instructions file ([CLAUDE.md](../../instructions/instruction-file-ecosystem.md), [AGENTS.md](../../standards/agents-md.md), `.github/copilot-instructions.md`) is the single highest-leverage action for an L0 repo. It gives every agent session persistent context that cannot be inferred from code alone.
+The project instructions file ([CLAUDE.md](../../instructions/instruction-file-ecosystem.md), [AGENTS.md](../../standards/agents-md.md), [`.github/copilot-instructions.md`](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) is the single highest-leverage action for an L0 repo. It gives every agent session persistent context that cannot be inferred from code alone.
 
 Anthropic's `/init` command analyzes your codebase and generates a starter `CLAUDE.md` automatically ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)). Run it, then refine the output.
 
@@ -168,6 +168,18 @@ Run this exit check:
 3. The response should correctly name the layers, identify the right directories, and reference the conventions in your project instructions file
 
 If the agent invents architecture or mislocates new code, your project instructions or directory structure needs more clarity.
+
+---
+
+## When This Backfires
+
+**CLAUDE.md becomes a liability.** Instructions added early become stale as the codebase evolves. A CLAUDE.md that says "routes use Express middleware" when the team has migrated to a different pattern actively misdirects agents — stale instructions produce more errors than no instructions. Treat CLAUDE.md as production code: prune on every significant architectural change, not just when agents start behaving oddly.
+
+**Architecture documents drift faster than code.** A diagram created at L1 that says "routes → services → repositories" becomes incorrect the moment the team introduces a message queue, an event layer, or a service mesh. Agents read the document before reading the code. An outdated architecture document causes agents to pattern-match against the wrong structure and place new code incorrectly. Keep architecture documents short enough to update in minutes, not hours.
+
+**Directory restructuring has a high blast radius.** Renaming `src/models/` to `src/services/` touches every import in every file. On a large brownfield codebase, a directory rename can generate hundreds of merge conflicts and break CI for a day. For teams without strong test coverage or automated import rewriting, the cost of restructuring outweighs the benefit until L2 (when CI is reliable enough to catch breakage). Prefer documenting the inconsistency in CLAUDE.md over restructuring when the codebase is too fragile.
+
+**CI setup stalls on legacy test suites.** "Add smoke tests" is straightforward on a greenfield project. On a brownfield repo with no tests or a flaky, slow suite, getting CI green can take weeks. If CI is blocked on test quality, start with a build-only gate (`npm run build`) and lint. A consistent build check provides most of the L1 value until tests are reliable enough to run in CI.
 
 ---
 

@@ -65,7 +65,7 @@ Each signed receipt contains ([asqav-sdk](https://github.com/jagmarques/asqav-sd
 
 ## IETF SCITT Alignment
 
-The append-only signed receipt architecture maps onto [IETF SCITT (RFC 9334)](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cryptographic-governance-audit-trail.md) — Supply Chain Integrity, Transparency, and Trust. SCITT defines how statements (agent actions) are registered with a Transparency Service, which issues receipts as cryptographic proof of registration. Alignment with SCITT enables interoperability with compliance tooling built on the standard.
+The append-only signed receipt architecture maps onto [IETF SCITT](https://datatracker.ietf.org/wg/scitt/) (Supply Chain Integrity, Transparency, and Trust) — an active IETF working group defining how statements (agent actions) are registered with a Transparency Service, which issues receipts as cryptographic proof of registration. Alignment with SCITT enables interoperability with compliance tooling built on the standard.
 
 ## Enforcement Tiers
 
@@ -119,7 +119,7 @@ This pattern targets compliance-first use cases where the regulatory credibility
 - **SOC 2 audit trails** — demonstrable, tamper-evident action logs support Type II audits
 - **Litigation defense** — a verifiable chain of agent actions with policy-validation outcomes provides evidentiary proof of compliant operation
 
-Missing audit trails are identified as a top vulnerability class in agentic systems [unverified — OWASP Agentic Top 10; source blocked in this environment].
+The [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/) lists insufficient logging and observability as a cross-cutting mitigation requirement, recommending signed, immutable audit logs of agent tool invocations and context changes across multiple risk categories.
 
 ## Key Takeaways
 
@@ -127,12 +127,47 @@ Missing audit trails are identified as a top vulnerability class in agentic syst
 - Three-phase middleware (validate → execute → sign) leaves tool behavior unchanged while producing signed receipts
 - Hash-chaining receipts makes modification or omission detectable without a trusted third party holding the full log
 - ML-DSA-65 (FIPS 204) provides quantum-resistant signatures for long-term regulatory validity
-- IETF SCITT alignment enables interoperability with compliance tooling built on the RFC 9334 standard
+- IETF SCITT alignment enables interoperability with compliance tooling built on the standard
 - Three enforcement tiers let practitioners choose between maximum assurance and minimum integration friction
 
-## Unverified
+## Example
 
-- OWASP Agentic Top 10 classifies missing audit trails as a top agentic vulnerability — referenced in the nibzard catalog but the OWASP URL was inaccessible for direct verification
+A financial agent processes customer transactions. Each tool call passes through the three-phase middleware:
+
+```python
+import asqav
+
+# Decorator wraps each tool — no changes to tool logic required
+@asqav.sign
+def query_account(account_id: str) -> dict:
+    return ledger_api.get(account_id)
+
+@asqav.sign
+def post_transaction(account_id: str, amount: float) -> dict:
+    return ledger_api.post(account_id, amount)
+
+# Multi-step workflow: all steps form a single verifiable session
+with asqav.session() as s:
+    s.sign("step:validate", {"account_id": "acct_123", "policy": "rate_limit_ok"})
+    s.sign("step:query",    {"account_id": "acct_123"})
+    s.sign("step:post",     {"account_id": "acct_123", "amount": 500.00})
+```
+
+Each call produces a receipt chained to the previous one:
+
+```json
+{
+  "signature_id": "sig_c4d5e6",
+  "agent_id":     "agt_finance_01",
+  "action":       "step:post",
+  "algorithm":    "ML-DSA-65",
+  "timestamp":    "2026-04-06T18:30:05Z",
+  "chain_hash":   "a7f3c912...",
+  "prev_hash":    "b94d27b9..."
+}
+```
+
+To verify the chain for a compliance audit, a verifier checks that each `chain_hash` matches the hash of the prior receipt. Any inserted, deleted, or modified entry breaks the hash chain at that point — no trusted log server required.
 
 ## Related
 

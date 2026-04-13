@@ -11,7 +11,7 @@ aliases:
 ---
 # Loop Detection
 
-> **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md).
+> **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
 
 > Track file edit history within a session; when the same files are edited repeatedly without progress, signal the agent to try a different approach rather than continue repeating the same failing steps.
 

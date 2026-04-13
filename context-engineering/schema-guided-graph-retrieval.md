@@ -79,14 +79,15 @@ Skip it when:
 | Factor | Impact |
 |--------|--------|
 | Schema governance | Upfront design and ongoing maintenance; bad schemas suppress relevant evidence |
-| Schema evolution | High-confidence type additions reduce ontology sprawl risk but require strict thresholds |
+| Schema evolution | High-confidence type additions reduce ontology sprawl risk but require strict thresholds; whether this prevents sprawl in long-running deployments is not established |
 | Parallel retrieval | Concurrent sub-question searches improve throughput but increase latency variance and orchestration complexity |
 | Interpretability | Explicit typed sub-questions produce traceable reasoning chains |
 | Domain transfer | Reusing one schema across ingestion and retrieval is cleaner than per-stage ontology redesign |
+| Benchmark scope | The 90.71% token savings and 16.62% accuracy gains are from Youtu-GraphRAG's self-reported evaluation across six benchmarks; generalizability to other domains is unverified |
 
 ## Example
 
-A legal knowledge base covering contract law, case precedents, and regulatory filings. Flat semantic search on "which cases support the indemnification clause in jurisdiction X" retrieves entity nodes, keyword nodes, and summary nodes indiscriminately.
+A legal knowledge base covering contract law, case precedents, and regulatory filings — one of the domain types used in the Youtu-GraphRAG benchmarks ([Dong et al., 2025](https://arxiv.org/abs/2508.19855)). Flat semantic search on "which cases support the indemnification clause in jurisdiction X" retrieves entity nodes, keyword nodes, and summary nodes indiscriminately.
 
 **Schema definition** (excerpt):
 
@@ -116,11 +117,6 @@ Retrieval for each sub-question filters to nodes tagged with the declared types 
 - Typed sub-questions are the critical coupling: decomposition without type annotations provides minimal retrieval benefit.
 - Typed filtering narrows candidates before semantic scoring — precision comes from the filter, not from a larger semantic model.
 - Schema governance is a real cost; domains with unstable ontologies are poor candidates.
-
-## Unverified Claims
-
-- The 90.71% token savings figure comes from Youtu-GraphRAG's self-reported evaluation; generalizability beyond the six tested benchmarks is not independently verified.
-- Whether schema evolution mechanisms effectively prevent ontology sprawl in long-running production deployments is not established.
 
 ## Related
 

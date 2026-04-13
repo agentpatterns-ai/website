@@ -85,7 +85,7 @@ A test suite gives the agent a binary answer to "did I break anything?" Agents c
 | Route handlers | Most new features add or modify routes | High |
 | Service layer | Layer boundary violations concentrate here | High |
 | Data access / repositories | ORM and schema errors caught by integration tests, not static analysis | High |
-| Utilities and helpers | Pattern replication amplifies here — agents copy existing utilities ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)) | Medium |
+| Utilities and helpers | [Pattern replication](../../anti-patterns/pattern-replication-risk.md) amplifies here — agents copy existing utilities ([GitClear, 2025](https://www.gitclear.com/ai_assistant_code_quality_2025_research)) | Medium |
 | Configuration loading | Subtle misuse difficult to catch without test assertions | Medium |
 
 You do not need 100% coverage to move to L2. You need coverage on the paths agents are most likely to modify — a test suite that provides meaningful signal when an agent makes a common error. Aim for the critical paths above before worrying about edge cases.
@@ -209,6 +209,14 @@ If the agent consistently requires your intervention to correct mechanical error
 - Linter rules that flag violations without remediation messages
 - Type system enabled but too many `any` types remaining
 - Tests exist but don't cover the paths the agent modifies
+
+## When This Backfires
+
+The L1→L2 transition is high-leverage but not free. Three conditions make it a poor investment:
+
+- **Large existing `any` surface**: Enabling TypeScript strict mode on a codebase with hundreds of implicit `any` types produces a flood of errors across unrelated files. The cost to fix them dwarfs the agent benefit until the bulk of the `any` types are already annotated. Start with `noImplicitAny` scoped to new files only; expand incrementally.
+- **High-churn paths with low test stability**: If the integration tests covering agent-critical paths break frequently due to schema changes or environment drift, agents learn to ignore failing tests rather than treat them as signal. Test maintenance cost exceeds test signal value. Stabilize the test environment before relying on it as a feedback source.
+- **Monorepos with shared strict mode config**: Enabling strict mode on one package in a monorepo often cascades type errors into shared libraries consumed by other packages. The migration cannot be isolated to the package the agent works in. Coordinate across package owners before enabling — or use path-scoped tsconfig overrides to contain the blast radius.
 
 ---
 

@@ -87,6 +87,13 @@ Before delegating execution to an agent, verify:
 - [ ] **Scope is bounded** — no permission escalation or scope expansion without a checkpoint (see [Blast Radius Containment](../security/blast-radius-containment.md))
 - [ ] **Irreversible operations are gated** — deploys, deletes, and external writes require explicit authorization
 
+## When This Backfires
+
+- **Auditable workflows** — regulated domains require step-by-step execution records. An autonomous loop produces a goal-oriented trace, not a procedure audit trail.
+- **Tightly coupled codebases** — when system boundaries are unclear, specifying safe constraints is harder than listing the steps. The contract grows more complex than the scripted alternative.
+- **High-volume predictable operations** — autonomous loops cost more tokens and produce non-deterministic paths. Prompt chains are cheaper and easier to test.
+- **Contract specification failure** — the pattern shifts complexity from steps to boundaries. Under-specified contracts produce the same loop-failure modes the pattern is meant to prevent.
+
 ## Example
 
 A delegated release-preparation task with a well-formed contract:
@@ -108,23 +115,21 @@ Recovery: If a link is broken and cannot be fixed by editing docs/,
 
 Compare this to an under-specified version: "Update the docs for the release." The latter gives the agent no constraints, no boundary on scope, and no way to know when it's done.
 
+## Key Takeaways
+
+- Execution-first delegation shifts the developer's role from writing instructions to writing contracts — goal, constraints, success condition, and recovery path.
+- Boundary quality determines safety; phrasing quality is secondary in autonomous workflows.
+- Appropriate when steps are unpredictable upfront; inappropriate when every step can be defined in advance.
+- Under-specified contracts produce the same failures as under-specified prompts — just harder to debug.
+- MCP provides structured runtime tool access, replacing fragile prompt-embedded context.
+
 ## Related
 
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md)
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [Controlling Agent Output](controlling-agent-output.md)
 - [Rollback-First Design](rollback-first-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
 - [Agent-First Software Design](agent-first-software-design.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Agents vs Commands](agents-vs-commands.md)
-- [Convergence Detection in Iterative Refinement](convergence-detection.md)
-- [Idempotent Agent Operations](idempotent-agent-operations.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
-- [Empowerment Over Automation](empowerment-over-automation.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
-- [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
+- [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)

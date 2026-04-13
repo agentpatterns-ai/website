@@ -21,28 +21,40 @@ Counterintuitively, prompts that require the model to explain its reasoning and 
 
 ## The Risk in Review Pipelines
 
-A review agent that operates as the sole authority will block correct code from merging. The downstream effects:
+A review agent operating as sole authority blocks correct code from merging. The downstream effects: engineers dismiss LLM comments as noise, real defects get buried in false positives, and review latency increases as developers refute valid-code rejections.
 
-- Engineers learn to dismiss LLM review comments as noise, defeating the purpose of automated review
-- Real defects get buried in a high volume of false positives
-- Review latency increases as engineers spend time refuting valid-code rejections
+## Why LLMs Overcorrect
+
+The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) authors taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). These are semantic failures — models construct plausible critiques without falsifiable counterexamples.
+
+Explanation-requiring prompts worsen the rate because generating a critique becomes the path of least resistance; the rationale then anchors the verdict toward rejection.
+
+## Why It Happens
+
+The paper's rejection taxonomy identifies the root mechanisms. When a model must explain its verdict and propose a correction, it rationalizes rejection through invented problems rather than applying balanced judgment. The main drivers are hallucinated constraints — the model introduces requirements absent from the specification ("Added Requirement" accounts for 14.1% of false rejections) — and unverified logic-error claims (48.2% of false rejections) asserted without a falsifiable counterexample. Explanation generation reinforces the initial bias: the model over-emphasizes edge cases and speculates about runtime failures with no concrete evidence. The prompt structure that is meant to improve reasoning instead amplifies fault-finding.
 
 ## Fix-Guided Verification Filter
 
-The research proposes a countermeasure: when the LLM flags code as non-compliant, treat its proposed fix as an executable counterfactual. Run both the original code and the proposed fix against the test suite:
+The research proposes a countermeasure: treat the LLM's proposed fix as an executable counterfactual. Run both the original and the fix against the test suite:
 
-- If both pass: the original code was likely correct; the LLM found a style difference, not a defect
-- If original fails, fix passes: the flag is substantiated; proceed with the review finding
-- If both fail: the LLM's proposed fix is wrong; do not accept the review verdict without human examination
+- Both pass: the LLM found a style difference, not a defect — do not block
+- Original fails, fix passes: flag substantiated — accept the finding
+- Both fail: fix is also broken — escalate to human review
 
-This filter converts the model's "problem finding" bias into a falsifiable test. It requires that proposed fixes are executable — review prompts must elicit code-level fixes, not prose descriptions.
+This filter converts the bias into a falsifiable test. It requires that proposed fixes are executable — review prompts must elicit code-level fixes, not prose descriptions.
+
+## Why LLMs Overcorrect
+
+The paper's error taxonomy: Logic Error 48.2%, Added Requirement 14.1%, Boundary Error 13.2%, Misread Specification 11.7%. In each case the model generates a stricter interpretation of the requirement, then classifies the code against that interpretation rather than the literal spec.
+
+Explanation-requiring prompts amplify this: forcing a reasoning chain before the verdict locks the model into its initial misread. Each subsequent reasoning step compounds the error rather than reconsidering the premise. Binary prompts avoid this commitment.
 
 ## Mitigations
 
 - **Never use LLM review as sole authority**: all verdicts require either human confirmation or execution-based validation
 - **Apply the fix-guided verification filter**: run original and proposed fix against tests before acting on any flag
 - **Avoid explanation-requiring prompts** when the goal is a binary pass/fail verdict; binary prompts produce fewer false positives than explanation prompts
-- **Track false positive rate**: if the LLM flags more than a threshold percentage of code that humans subsequently approve, treat the reviewer as miscalibrated
+- **Track false positive rate**: if the LLM flags more than a threshold of code that humans subsequently approve, treat the reviewer as miscalibrated
 
 ## Example
 
@@ -71,6 +83,19 @@ def apply_fix_guided_filter(original_path: str, fix_path: str) -> str:
 ```
 
 A verdict of `"false_positive"` means the model found a stylistic difference, not a defect — the original code should not be blocked. Only a `"substantiated"` result justifies acting on the LLM's flag.
+
+## When This Backfires
+
+The fix-guided verification filter depends on executable tests. Without a test suite, both branches of the counterfactual are unverifiable and the filter cannot distinguish false positives from real defects. Specific failure conditions:
+
+- **No test suite / no test coverage**: the filter requires that tests exist and run against the submitted code; a codebase with low or missing test coverage cannot use execution as evidence
+- **Non-deterministic tests**: flaky tests produce inconsistent pass/fail results for the same code, making the original-vs-fix comparison unreliable
+- **Sparse coverage**: both original and fix pass regardless of correctness; `false_positive` verdicts become unreliable
+- **Style-only codebases**: if the team's review bar is stylistic rather than functional, LLM review may still flag genuine style regressions that tests never catch; the filter will classify these as false positives and suppress valid signals
+- **Prose-only fixes**: natural language corrections are not runnable; review prompts must elicit code-level fixes
+- **Large test suites**: two suite executions per flag adds latency that may outweigh the benefit for low-severity findings
+
+Without automated tests, fall back to binary pass/fail prompts and require human confirmation for all flags.
 
 ## Key Takeaways
 

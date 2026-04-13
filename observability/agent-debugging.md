@@ -33,7 +33,7 @@ Debugging means determining which category applies before changing anything.
 
 **Check which skills were available.** Skills only load when invoked or deemed relevant. If the agent missed a domain-specific workflow, the relevant skill may not have loaded.
 
-**Check context usage.** When the context window fills, earlier instructions are dropped. An agent that followed rules early may stop later — not because it ignored them but because they fell out of the active window. [unverified: context window sizes and falloff behavior vary by model and implementation]
+**Check context usage.** When Claude Code compacts a long session, path-scoped rules and nested CLAUDE.md files are dropped from context and only reload when a matching file is read again ([context window — what survives compaction](https://code.claude.com/docs/en/context-window#what-survives-compaction)). An agent that followed rules early may stop later because those rules fell out after compaction — not because the model ignored them.
 
 ### Step 2: What Was the Agent Told?
 
@@ -53,7 +53,7 @@ Check:
 - Whether any tool calls failed silently — the agent may have pivoted to a workaround
 - Whether the agent needed a tool it never had (e.g., web search, a specific CLI)
 
-In Claude Code, [tool permissions are configured in `.claude/settings.json`](https://code.claude.com/docs/en/settings). The session transcript shows which tools were attempted and whether they succeeded [unverified — transcript access for debugging is not discussed in the settings documentation].
+In Claude Code, [tool permissions are configured in `.claude/settings.json`](https://code.claude.com/docs/en/settings). Review the session to identify which tools were attempted and whether they succeeded.
 
 ### Step 4: Was the Model Right for the Task?
 
@@ -61,9 +61,7 @@ Some failures are capability problems, not context problems. A smaller model pro
 
 ## Transcript Analysis
 
-Claude Code stores session transcripts under `~/.claude/projects/<project>/sessions/` [unverified — path inferred from observed behavior; not documented]. Each file is a JSON log of every tool call, result, and message in order.
-
-Use the transcript to trace: what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether the agent flagged a missing resource.
+Claude Code stores session history under `~/.claude/projects/` ([configuration file locations](https://code.claude.com/docs/en/troubleshooting#configuration-file-locations)). Use the session history to trace: what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether the agent flagged a missing resource.
 
 The [troubleshooting documentation](https://code.claude.com/docs/en/troubleshooting) recommends `/doctor` to surface environment issues (malformed config, MCP server errors, oversized instruction files) not visible during normal operation.
 
@@ -96,6 +94,14 @@ An agent consistently generates test files with the wrong naming convention (`*.
 **Step 3 — Reproduce:** Fresh session, same task. The agent now produces `*.test.ts` files consistently.
 
 Root cause: stale user-level instruction conflicting with project convention. Fix: remove the outdated entry, not the model or prompt.
+
+## When This Backfires
+
+The diagnostic sequence assumes the failure is structural. Three conditions where it adds overhead rather than insight:
+
+1. **Transient errors** — rate limits, network timeouts, and API hiccups produce one-off bad output. Running the full diagnostic sequence wastes time; a retry in a fresh session is faster.
+2. **Novel capability gaps** — if the task genuinely exceeds any available model tier's capability, no amount of context or instruction tuning will fix it. Reaching Step 4 too late delays this conclusion.
+3. **Over-instrumented environments** — dense instruction files with many CLAUDE.md layers make conflict scanning slow. In these setups, reducing instruction surface area is a higher-leverage intervention than per-failure diagnosis.
 
 ## Related
 

@@ -138,6 +138,16 @@ if task["status"]["state"] == "completed":
 
 The client agent handles each terminal state explicitly — `completed`, `failed`, `canceled`, `rejected` — providing deterministic error handling regardless of what the remote agent produces.
 
+## When This Backfires
+
+A2A is the wrong choice in three common situations:
+
+- **Tightly coupled single-framework systems**: If all agents share a runtime, framework, and memory space, the HTTP round-trip overhead and task-lifecycle complexity of A2A add latency and code surface with no benefit over native framework calls. Direct orchestration is cheaper.
+- **Simple tool access**: A2A wraps tool-call semantics in a full agent boundary. When you need a function call — not an autonomous agent — use MCP. Adding A2A just to call a deterministic function creates unnecessary infrastructure.
+- **High-frequency or low-latency paths**: Every A2A operation carries HTTP overhead. Polling adds one request per tick; streaming holds a persistent connection. For control loops, real-time collaboration, or sub-second decision cycles, this latency is prohibitive.
+
+A2A also pushes security enforcement to each agent implementation: the protocol does not centrally audit what agents expose or access, so cross-agent access control must be handled externally via RBAC or a gateway.
+
 ## Key Takeaways
 
 - A2A standardizes agent-to-agent communication the way MCP standardizes agent-to-tool communication.

@@ -17,7 +17,7 @@ tags:
 
 ## The Three Topologies
 
-The [arXiv:2602.10479 survey](https://arxiv.org/abs/2602.10479) identifies three coordination topologies across production platforms.
+Production multi-agent systems converge on three coordination topologies. The [arXiv:2602.10479 survey](https://arxiv.org/abs/2602.10479) covers related patterns — orchestrator-worker, router-solver, hierarchical, and swarm architectures — which map onto these categories.
 
 ### Centralised Orchestration
 
@@ -115,6 +115,7 @@ A document processing pipeline that ingests legal contracts, extracts clauses, c
 ## Related
 
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)

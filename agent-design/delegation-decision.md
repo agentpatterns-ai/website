@@ -19,6 +19,8 @@ The delegation decision is not "can an agent do this?" but "does using an agent 
 
 If describing what you want takes longer than doing it, do it yourself. A one-line variable rename takes ten seconds to execute and thirty seconds to prompt and verify. A codebase-wide API migration takes hours manually and minutes with an agent.
 
+Anthropic's [Claude Code best practices](https://code.claude.com/docs/en/best-practices) applies the same test for planning overhead: "If you could describe the diff in one sentence, skip the plan." The same threshold applies to delegation itself.
+
 ## When to Delegate
 
 Delegate tasks with these characteristics:
@@ -52,6 +54,16 @@ The review tax decreases as:
 ## Progressive Delegation
 
 If you're unsure where to draw the line, start conservatively. Use agents for review and research before using them for implementation. As trust builds with specific task types, expand delegation in those categories. This builds calibrated confidence rather than oscillating between over-delegation and under-delegation.
+
+## When This Backfires
+
+**[Skill atrophy](../human/skill-atrophy.md).** Developers who delegate codebase changes without reading the diffs lose familiarity with the code. The agent does the work; the developer loses the context. Reserve enough hands-on work to keep your mental model current.
+
+**Specification overhead underestimated.** The describe-it test assumes you can articulate the task. When requirements are only partially formed, the cost of specification is higher than the estimate — and the agent produces output that requires rework because the spec was wrong, not the execution.
+
+**"Verifiable" in practice is harder than in theory.** A task seems verifiable ("tests pass") but the test suite doesn't cover the relevant behavior. Agent output can satisfy the stated criterion while introducing an unlisted failure mode. The review tax is non-zero even for test-covered tasks.
+
+**Automation bias.** The tendency to trust agent output without sufficient scrutiny increases after repeated successful delegations. This creates a trust gap: the agent's actual error rate doesn't change, but the review depth decreases ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)).
 
 ## Anti-Patterns
 

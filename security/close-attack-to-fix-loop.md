@@ -55,6 +55,18 @@ As base models improve, automated attackers naturally become more capable (see [
 
 This means each training cycle must produce a model that is harder to attack than the last — the automated attacker, now more capable than when the defender was trained, must find new attack vectors to succeed.
 
+## Why It Works
+
+Preference optimization constructs pairs of prompt-injected inputs with secure outputs (follows the real task) versus insecure outputs (follows the injection), then updates weights to prefer the secure response. This shifts attention allocation: weight updates reduce the influence of late-arriving imperative text in the data portion of the context, so injected instructions compete less effectively against the system prompt. [Source: [Sandoval et al., 2025](https://arxiv.org/abs/2509.14271)]
+
+## When This Backfires
+
+- **No weight access**: API-only deployments cannot apply model-level hardening.
+- **Capability regression**: Fine-tuning on adversarial examples can degrade general task performance — a direct tension between robustness and utility.
+- **Limited generalization**: Architecture-aware adaptive attacks achieve 85–95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
+- **Operational overhead**: Requires fine-tuning infrastructure and a rapid deployment pipeline — investment that may not be justified for low-autonomy agents.
+- **Arms race ceiling**: Prompt injection "is unlikely to ever be fully solved" — the rapid cycle reduces risk materially but does not eliminate it; model-level hardening complements, not replaces, architectural controls.
+
 ## Scope and Prerequisites
 
 This approach requires:

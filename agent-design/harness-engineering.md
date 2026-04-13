@@ -180,6 +180,8 @@ Three specific conditions where the investment pays off less:
 - [Empowerment Over Automation](empowerment-over-automation.md) -- enforcement and linter-based constraints as agent empowerment
 - [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md) -- guardrail-based correction of agent behavior
 - [Agent Loop Middleware](agent-loop-middleware.md) -- wrapping the agent loop to guarantee critical enforcement steps happen regardless of agent behavior
+- [L2 → L3: Building Mechanical Enforcement](../frameworks/brownfield-to-agent-first/level-2-to-3.md) -- step-by-step implementation of PreToolUse hooks, structured task definitions, and session scaffolding
 - [Agent Backpressure](agent-backpressure.md) -- linter and guardrail signals that slow agent execution when quality degrades
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) -- short-lived linter rules and harness patches that bridge capability gaps
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) -- mapping harness and guardrail patterns across agent frameworks
+- [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) -- diagnosing harness failures when agent output is wrong or unexpected

@@ -78,6 +78,14 @@ Skip when:
 - Tasks complete in a single session with a single agent
 - Context degradation is not yet a demonstrated failure mode for your task length
 
+## When This Backfires
+
+**Infrastructure overhead exceeds benefit for short tasks.** ESAA requires an orchestrator process, schema validation layer, append-only log storage, and a materialized view projection. For single-session tasks, this adds latency and complexity with no payoff — direct mutation is faster to implement and operate.
+
+**Schema rigidity slows early iteration.** `AGENT_CONTRACT.yaml` enforces a typed boundary at runtime. Early in a project, the event schema changes frequently; every schema change requires updating contracts, regenerating validation logic, and migrating historical logs. Rapid prototyping phases may find contract overhead exceeds the cost of context degradation.
+
+**Central orchestrator becomes a throughput bottleneck.** Event persistence is serialized to prevent write conflicts. At high concurrency, this limits aggregate throughput. Sharding state by domain (each shard with its own orchestrator) mitigates this but adds coordination complexity.
+
 ## Example
 
 The following shows the boundary contract and the event an agent emits, demonstrating how cognitive intention is separated from filesystem mutation.

@@ -104,7 +104,7 @@ Prior to v2.1.69, `.mcp.json` silently trusted all servers without approval dial
 
 ## Deprecation: /output-style → /config
 
-The `/output-style` command was deprecated in v2.1.73, replaced by `/config` ([changelog](https://code.claude.com/docs/en/changelog)). Output style is now fixed at session start to improve [prompt cache hit rates](../../context-engineering/static-content-first-caching.md) — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/` and `.claude/output-styles/`) still work.
+The `/output-style` command was deprecated in v2.1.73, replaced by `/config` ([changelog](https://code.claude.com/docs/en/changelog)). Output style is now fixed at session start to improve [prompt cache hit rates](../../context-engineering/static-content-first-caching.md) — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/` and `.claude/output-styles/`) still work. See [System Prompt Replacement](../../instructions/system-prompt-replacement.md) for the pattern of using output styles to substitute a domain-specific identity for the default engineering persona.
 
 ## Example
 

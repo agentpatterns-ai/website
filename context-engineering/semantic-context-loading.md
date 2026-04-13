@@ -34,7 +34,7 @@ Each query returns exactly the relevant symbols, not the full file contents. The
 
 ## Serena: LSP for Agents
 
-Serena is an MCP server that exposes LSP capabilities to Claude Code agents [unverified — Serena is described as an MCP server with LSP integration, but its exact API surface and supported languages are not verified against official documentation]. It allows agents to navigate codebases using semantic queries rather than file reads. The pattern applies to any LSP-compatible tooling, not just Serena — what matters is the capability, not the specific implementation.
+Serena is an open-source MCP server that provides semantic code retrieval and editing tools — symbol lookup, reference finding, type hierarchies, and safe refactoring — across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). It allows agents to navigate codebases using semantic queries rather than file reads. The pattern applies to any LSP-compatible tooling, not just Serena — what matters is the capability, not the specific implementation.
 
 Agents using LSP-backed tools can answer questions like:
 
@@ -46,7 +46,7 @@ without loading any file into context until they have a specific location to rea
 
 ## Comparison with Native Indexing
 
-Tools like GitHub Copilot and Cursor implement their own codebase indexing that approximates semantic lookup [unverified — the internal mechanisms of Copilot's and Cursor's codebase indexing are not publicly documented in detail]. The distinction matters:
+Tools like GitHub Copilot and Cursor implement their own codebase indexing that approximates semantic lookup. Copilot builds a semantic index over repository files and combines it with text search and symbol tracing ([VS Code Copilot workspace context docs](https://code.visualstudio.com/docs/copilot/workspace-context)); Cursor's internal indexing mechanism is not publicly documented. The distinction matters:
 
 | Approach | How It Works | When It Helps |
 |----------|-------------|---------------|

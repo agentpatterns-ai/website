@@ -159,6 +159,7 @@ The harness calls `build_context` after each tool failure and appends the return
 - [Loop Detection](../observability/loop-detection.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Tool Engineering](../tool-engineering/tool-engineering.md)
+- [Machine-Readable Error Responses (RFC 9457)](../tool-engineering/rfc9457-machine-readable-errors.md) — Structured upstream errors that make context injection more precise
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Observation Masking](observation-masking.md)

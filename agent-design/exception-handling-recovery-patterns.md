@@ -122,6 +122,7 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 ## Related
 
 - [Rollback-First Design](rollback-first-design.md)
+- [Agent Circuit Breaker](agent-circuit-breaker.md) — per-tool state machine implementation with configuration thresholds
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Idempotent Agent Operations](idempotent-agent-operations.md)
 - [Agent Harness](agent-harness.md)

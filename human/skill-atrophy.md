@@ -33,7 +33,7 @@ The METR perception gap compounds the problem: developers cannot self-diagnose c
 
 **Junior developers** are most acutely affected. The Anthropic study measured this directly — participants who fully delegated code generation showed the steepest learning deficits.
 
-**Senior developers** are not immune. Experienced engineers who delegate specific domains (e.g., CSS, database migrations, build configuration) progressively lose depth there [unverified: no formal study validates domain-specific atrophy in experienced developers]. The loss erodes the reviewer's ability to catch subtle errors in delegated areas ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+**Senior developers** are not immune. The same cognitive offloading mechanism applies when experienced engineers consistently delegate specific domains (e.g., CSS, database migrations, build configuration) — reduced practice in those areas reduces depth over time. The loss erodes the reviewer's ability to catch subtle errors in delegated areas ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
 ## Interaction Patterns That Preserve vs. Erode Skill
 
@@ -73,14 +73,14 @@ Periodically code without AI assistance — the same principle behind pilots fly
 
 When using an agent, ask for an explanation of the approach *before* requesting implementation. This forces engagement with the reasoning, not just the output.
 
-```
-# Instead of:
-"Write a rate limiter for this API endpoint"
+```text
+Instead of:
+  "Write a rate limiter for this API endpoint"
 
-# Try:
-"What rate limiting algorithm would you recommend for this endpoint and why?
-What are the tradeoffs vs alternatives?"
-# Then implement yourself or request implementation after understanding
+Try:
+  "What rate limiting algorithm would you recommend for this endpoint and why?
+  What are the tradeoffs vs alternatives?"
+  Then implement yourself or request implementation after understanding
 ```
 
 ### Deliberate Practice Blocks
@@ -101,6 +101,14 @@ Treat AI-generated code review as a skill exercise, not a rubber-stamp. Before a
 
 Fatigue makes you tired *during* work; atrophy makes you less capable *between* sessions; comprehension debt makes you a stranger to your own codebase.
 
+## Key Takeaways
+
+- Skill atrophy is cumulative and distinct from temporary cognitive fatigue — it persists between sessions.
+- Junior developers are most acutely affected; evidence shows ~17 percentage-point comprehension deficits with full delegation.
+- The perception gap is the compounding danger: developers cannot self-diagnose capability loss.
+- How you use AI determines outcomes: thinking-partner patterns preserve skill; code-dispenser patterns erode it.
+- Mitigations (dual-mode practice, explain-then-code, deliberate practice blocks) require sustained discipline, not one-time fixes.
+
 ## Related
 
 - [Cognitive Load & AI Fatigue](cognitive-load-ai-fatigue.md) — temporary exhaustion, distinct from cumulative capability loss
@@ -108,10 +116,6 @@ Fatigue makes you tired *during* work; atrophy makes you less capable *between* 
 - [Vibe Coding](../workflows/vibe-coding.md) — the workflow pattern where atrophy risk is highest
 - [Rigor Relocation](rigor-relocation.md) — engineering discipline shifts rather than disappears when agents write code
 - [Process Amplification](process-amplification.md) — strong engineering practices matter more, not less, when delegating to agents
-- [Attention Management with Parallel Agents](attention-management-parallel-agents.md) — cognitive load and delegation across parallel workflows
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — expanding delegation scope safely without losing underlying skill
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — AI commoditizes code production, forcing practitioners to relocate professional identity
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight
-- [Strategy Over Code Generation](strategy-over-code-generation.md) — prioritizing architectural thinking over raw code output
-- [Initiatives and Community](initiatives-community.md) — communities and resources for practitioners navigating skill preservation alongside AI adoption

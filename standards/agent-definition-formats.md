@@ -54,13 +54,13 @@ The YAML frontmatter is machine-readable configuration. The markdown body is the
 Key frontmatter fields:
 
 - `tools`: explicit allowlist restricts what tools the agent can invoke
-- `permissionMode`: controls human-agent interaction (`default`, `acceptEdits`, `dontAsk`, `bypassPermissions`)
+- `permissionMode`: controls human-agent interaction (`default`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`, `plan`)
 - `skills`: skill names to load — the agent reads these on startup or on demand
 - `hooks`: lifecycle event handlers scoped to this agent
 
 ## GitHub Copilot Format
 
-GitHub Copilot uses `.github/agents/` directories with markdown agent files [unverified — Copilot agent format is evolving; verify against current docs.github.com]. The structure mirrors Claude Code: frontmatter for configuration, markdown body for instructions. The specific field names differ.
+GitHub Copilot agent definitions use a similar frontmatter-plus-body structure to Claude Code, with tool-specific field names. Consult the current [GitHub Copilot Extensions documentation](https://docs.github.com/en/copilot) for the canonical directory location and supported frontmatter fields, as the format continues to evolve.
 
 ## Portable Patterns
 
@@ -85,6 +85,10 @@ The runtime reads frontmatter for configuration. The model reads the body for in
 - Body changes (instructions, quality bar) take effect immediately — the model reads the new text
 - Skills are read by the model, not the runtime — they extend the body, not the frontmatter
 
+## When This Backfires
+
+Structured agent definition files add overhead that isn't always justified. Three conditions where inline prompts or command files are the better choice: (1) **single-use tasks** — if the agent runs once and is never reused, a definition file is indirection without benefit; (2) **solo projects** — maintaining a `.claude/agents/` directory structure imposes file management cost that pays off only when multiple agents or multiple team members reuse the definitions; (3) **rapidly evolving instructions** — when the agent's operating constraints change on every run (dynamic config, per-invocation tool restrictions), frontmatter-based configuration is less flexible than programmatic construction. The definition-plus-skills split also creates a coherence risk: the body and the loaded skill content can drift independently, producing an agent whose identity contradicts its expertise.
+
 ## Key Takeaways
 
 - Agent definitions answer six questions: identity, instructions, tools, model, permissions, skills
@@ -92,10 +96,6 @@ The runtime reads frontmatter for configuration. The model reads the body for in
 - The markdown body can be written portably; frontmatter is tool-specific
 - Frontmatter is parsed by the runtime; the body is read by the model — update accordingly
 - Monolithic definitions that embed all knowledge in the body are harder to maintain than definition + skills
-
-## Unverified Claims
-
-- GitHub Copilot agent format uses `.github/agents/` directories with markdown agent files `[unverified — Copilot agent format is evolving; verify against current docs.github.com]`
 
 ## Related
 

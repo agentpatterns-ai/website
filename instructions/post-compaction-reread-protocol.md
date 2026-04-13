@@ -131,3 +131,4 @@ sequenceDiagram
 - [CLAUDE.md Convention](claude-md-convention.md) — the instruction file that this protocol ensures is re-read after compaction
 - [Instruction File Ecosystem](instruction-file-ecosystem.md) — the broader set of instruction files (CLAUDE.md, AGENTS.md, sub-directory files) that benefit from post-compaction re-reads
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — layered instruction scopes across directories; per-scope re-reads may be needed after compaction in multi-directory projects
+- [Layered Instruction Scopes](layered-instruction-scopes.md) — the general pattern for structuring agent instructions in concentric layers; directly relevant to post-compaction re-read scope decisions

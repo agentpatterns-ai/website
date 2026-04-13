@@ -142,6 +142,7 @@ Apply wrapper-script isolation and pre-commit scanning together; neither alone c
 
 ## Related
 
+- [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — the standard format that defines skill structure, discovery paths, and frontmatter
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — runtime injection: keeping credentials out of agent context during execution
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — runtime isolation: proxy-held credentials that the agent never touches
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — permission rules to block agent reads of credential files

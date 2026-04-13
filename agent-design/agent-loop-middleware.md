@@ -196,3 +196,4 @@ Post-loop safety nets rely on idempotency — if a net fires when the agent alre
 - [Rollback-First Design](rollback-first-design.md) — designing every agent action to be reversible, complementing safety-net guarantees
 - [Classical SE Patterns as Agent Design Vocabulary](classical-se-patterns-agent-analogues.md) — GoF and SOLID patterns including middleware and observer analogues for agent systems
 - [Idempotent Agent Operations](idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps
+- [Lane-Based Execution Queueing](lane-based-execution-queueing.md) — named isolated queues with per-lane concurrency limits; the scheduling complement to loop-level middleware

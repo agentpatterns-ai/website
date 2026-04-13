@@ -21,6 +21,8 @@ tags:
 
 Instructions are processed by the model; hooks are processed by the shell. A model under task pressure may deprioritize an instruction — a hook executes unconditionally. Hooks enforce rules that cannot tolerate exceptions.
 
+This works because hooks are shell subprocesses spawned by the agent runtime, not messages routed through the model's context window. The runtime intercepts the event before (or after) the model acts on it, runs the hook script, and only proceeds — or blocks — based on the hook's exit code and JSON response. The model never sees the hook logic and cannot override it through reasoning or instruction-following.
+
 ## Lifecycle Events
 
 Agent runtimes expose hooks at several lifecycle points:
@@ -36,7 +38,7 @@ Agent runtimes expose hooks at several lifecycle points:
 
 `PreToolUse` is the primary enforcement point — it receives tool name and inputs, can block execution, and returns a reason the model must adapt to. `PostToolUse` is the primary automation and audit point — it cannot block but triggers side effects like logging, linting, and notifications.
 
-Claude Code's hook system is documented at [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks). GitHub Copilot's coding agent exposes session-level hooks (`sessionStart`, `sessionEnd`) [unverified — verify against current Copilot documentation].
+Claude Code's hook system is documented at [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks). GitHub Copilot's coding agent exposes `SessionStart`, `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, and `Stop` hooks — documented at [code.visualstudio.com/docs/copilot/customization/hooks](https://code.visualstudio.com/docs/copilot/customization/hooks).
 
 ## Hook Input and Output
 
@@ -171,13 +173,21 @@ fi
 
 When the agent runs `npm install lodash`, the hook denies the call and the model sees: *"Use bun instead of npm. Replace npm install with bun install, npm run with bun run."* The agent retries with `bun install lodash`.
 
-## Unverified Claims
+## When This Backfires
 
-- GitHub Copilot's coding agent exposes session-level hooks (sessionStart, sessionEnd) [unverified — verify against current Copilot documentation]
+Hooks are shell subprocesses — every tool call that matches a hook incurs the subprocess startup cost. In latency-sensitive workflows, a hook that spawns a slow script on `PreToolUse` delays every matched tool invocation.
+
+Specific failure conditions to watch for:
+
+- **Pattern match misses**: Regex or string matchers that don't cover all variants of a disallowed command (e.g., `npm` vs `npx` vs `npm.cmd` on Windows) allow violations to slip through silently.
+- **Hook errors suppress feedback**: If a hook exits non-zero without printing a valid JSON response, the runtime may silently swallow the error, leaving the agent with no redirect and no explanation.
+- **Re-entrancy loops**: A `PostToolUse` hook that itself invokes a tool (e.g., runs a linter via Bash) can trigger the same hook recursively, causing infinite loops unless the hook checks the invoking context.
+- **Scope creep**: Hooks without matchers fire for every event of that type. An un-scoped `PreToolUse` hook that performs expensive work degrades all tool calls, not just the targeted ones.
 
 ## Related
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
+- [Conditional Hook Execution](conditional-hook-execution.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)

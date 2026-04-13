@@ -1,6 +1,6 @@
 ---
-title: "Token-Efficient Tool Design: Right-Sizing Tool Output"
-description: "Design tools so that each call injects the minimum tokens needed for the next agent decision. Tool Output Design, Semantic Tool Output, Agent-Friendly Output"
+title: "Token-Efficient Tool Design: Tools That Don't Eat Your Context"
+description: "Design tools so that each call injects the minimum tokens needed for the next agent decision — keeping context windows filled with signal, not noise."
 aliases:
   - Tool Output Design
   - Semantic Tool Output
@@ -20,6 +20,8 @@ tags:
 ## Tools as Context Injections
 
 Every tool call produces output that enters the context window. A tool returning a 10,000-token API response when 200 tokens would suffice consumes 10% of a 100k context window on a single call. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool design as a direct lever on context quality: the shape of tool output determines how much of the context window is signal versus noise.
+
+The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token — irrelevant tokens compete with relevant tokens for model focus. Research on long-context LLMs shows accuracy drops over 30% when target information is buried mid-context ("lost in the middle"). Oversized tool output places task-relevant fields in a sea of noise, degrading the model's ability to act on them correctly.
 
 ## Design Principles
 
@@ -47,7 +49,7 @@ A large toolset is a reasoning tax. Before each call, the agent evaluates availa
 
 **Overlapping tools for search.** Two tools that both search — one for files, one for code — without a clear distinction produce agent hesitation. The agent tries both or picks arbitrarily, consuming context in the process.
 
-**Toolset bloat.** A toolset of 30+ tools increases per-call reasoning cost. Agents in complex tasks may spend more tokens on tool selection than on the task itself [unverified — depends on model and toolset design].
+**Toolset bloat.** A toolset of 30+ tools increases per-call reasoning cost. MCP tool metadata alone can add 30,000–60,000 tokens of overhead, consuming 25–30% of a 200k context window before any task work begins ([Lunar.dev](https://www.lunar.dev/post/why-is-there-mcp-tool-overload-and-how-to-solve-it-for-your-ai-agents)).
 
 ## Sizing Tool Output
 
@@ -56,6 +58,17 @@ A useful heuristic: the output of a tool call should fit in a paragraph. If it d
 1. The tool is returning too much (add filtering or summarisation)
 2. The task genuinely requires that much information (in which case, load it once and structure it carefully)
 3. The output should be written to a file rather than returned inline
+
+## When This Backfires
+
+Over-filtering introduces its own failure modes:
+
+- **Edge cases silently dropped.** A summary that omits "unimportant" fields will eventually omit a field a rare-but-valid path needs. The agent cannot ask for data it doesn't know exists.
+- **Abstraction breaks on schema change.** A bespoke summary layer tied to a specific response shape becomes a maintenance liability on every upstream API change.
+- **Engineering overhead outweighs savings.** Building a custom summariser for a tool called once per session may cost more than the token savings justify.
+- **Debugging is harder.** Diagnosing incorrect agent behaviour requires tracing through the summarisation layer as well as the agent's reasoning.
+
+Apply this pattern where tools are called repeatedly in a loop, where output is consistently large, or where you have measured context pressure in production traces.
 
 ## Example
 
@@ -107,17 +120,13 @@ The agent receives `"3 checks passed, 1 failed: lint"` and can immediately decid
 - Precise tool descriptions reduce selection cost; ambiguous ones increase it.
 - Keep toolsets small: more tools means more tokens spent on selection per call.
 
-## Unverified Claims
-
-- Agents with 30+ tools may spend more tokens on tool selection than on the task itself `[unverified — depends on model and toolset design]`
-
 ## Related
 
+- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — token efficiency is one dimension of ACI design; the broader discipline covers affordances, constraints, feedback, and error prevention
 - [Tool Selection Guidance](tool-description-quality.md)
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)

@@ -197,6 +197,18 @@ Run this exit check:
 
 ---
 
+## When This Backfires
+
+Hook-based enforcement trades flexibility for safety. Three conditions where it degrades agent utility:
+
+**Over-constrained scope.** Hooks written too broadly block legitimate operations. A hook that denies any `Write` to a `migrations/` directory also blocks the agent from reading migration files to understand schema context. Audit hooks regularly against real session transcripts — if agents work around a hook more than twice, the constraint is mis-scoped.
+
+**False positives in hook logic.** Shell-based hooks that match on substrings (e.g., `grep -q 'db:reset'`) will trigger on commands like `db:reset-cache` that are safe. False positives that produce terminal `deny` responses leave the agent in an unrecoverable state mid-task. Prefer exact-match conditions and test hooks against a suite of representative tool calls before deploying.
+
+**Hook proliferation without a removal process.** Teams add hooks reactively after incidents. Without a sunset process, hooks accumulate and the constrained solution space shrinks until agents can no longer complete tasks without human intervention. Maintain a hook registry with an owner and last-reviewed date; review annually.
+
+---
+
 ## Key Takeaways
 
 - **Instructions provide context; hooks provide enforcement.** Use instructions for things the agent should understand; use hooks for things the agent must not do regardless of instruction.
@@ -210,5 +222,6 @@ Run this exit check:
 - [Skill-Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md) — combining hooks with skills for layered enforcement
 - [Agent Harness](../../agent-design/agent-harness.md) — initializer + coding agent pattern for long-running work
 - [Rollback-First Design](../../agent-design/rollback-first-design.md) — making agent operations reversible by default
+- [L0 → L1: Making the Repo Readable](level-0-to-1.md) — first module
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — previous module
 - [L3 → L5: Reaching Agent-First](level-3-to-5.md) — next module

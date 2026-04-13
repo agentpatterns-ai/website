@@ -12,7 +12,7 @@ tags:
 
 ## Two Categories of Pushback
 
-Most agent instructions focus on the happy path: receive task, execute task, return result. A pushback protocol adds evaluation before execution, split into two distinct categories.
+Most agent instructions focus on the happy path: receive task, execute task, return result — this is the same optimization pressure behind [happy path bias](../anti-patterns/happy-path-bias.md) in generated code. A pushback protocol adds evaluation before execution, split into two distinct categories.
 
 **Implementation concerns** (code quality): the request introduces tech debt, duplication, or unnecessary complexity. A simpler approach exists. The scope is too large or vague for one pass.
 
@@ -58,6 +58,16 @@ Concrete trigger conditions work better than vague instructions to "push back wh
 
 Pushback protocols gate on *request quality*: "this request is a bad idea, here's why." The trigger is the agent's evaluation of the task, not the category of tool being invoked. Both patterns complement each other — gates prevent dangerous actions while pushback prevents misguided ones.
 
+## When This Backfires
+
+The pattern degrades in three conditions:
+
+**High-frequency, low-stakes edits.** When a developer is iterating quickly on minor changes — renaming a variable, adjusting styling, reordering output fields — a pushback gate on every request adds more interruption overhead than it saves. Reserving pushback for genuinely risky or ambiguous requests avoids automation fatigue.
+
+**Poorly calibrated trigger conditions.** Vague triggers ("push back when something seems off") cause agents to flag too many routine requests, which trains developers to dismiss concerns reflexively. When the real risky request arrives, the gate gets bypassed on habit. Concrete, enumerated conditions (as in the Anvil agent) solve this, but require upfront calibration per project context.
+
+**Over-reliance on agent judgment for domain correctness.** The pattern assumes the agent can reliably detect requirements-level mistakes. For novel domains, proprietary systems, or under-documented codebases, the agent lacks sufficient context to distinguish "this edge case is dangerous" from "I'm uncertain." A pushback gate backed by shallow context can produce false confidence — the check ran, so the request must have been validated. Pairing the protocol with explicit context-injection (system prompt with architecture docs, domain constraints) reduces this risk.
+
 ## Key Takeaways
 
 - Split pushback into implementation concerns (code quality) and requirements concerns (product correctness)
@@ -65,6 +75,7 @@ Pushback protocols gate on *request quality*: "this request is a bad idea, here'
 - Frame agents as senior engineers with opinions, not order-takers — instruction framing shapes evaluation depth
 - Define concrete trigger conditions rather than vague "push back when appropriate" instructions
 - Pushback gates on request quality; human-in-the-loop gates on action type — use both
+- Reserve pushback for genuinely ambiguous or risky requests — overuse creates automation fatigue and causes developers to dismiss valid concerns
 
 ## Related
 

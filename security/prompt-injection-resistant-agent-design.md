@@ -28,7 +28,7 @@ Six patterns provide formally verifiable resistance. [Source: [Beurer-Kellner et
 
 | Pattern | Mechanism | When to use |
 |---------|-----------|-------------|
-| **Action-Selector** | LLM picks from a fixed set of actions | Routing, triage agents |
+| **[Action-Selector](action-selector-pattern.md)** | LLM picks from a fixed set of actions | Routing, triage agents |
 | **Plan-Then-Execute** | Plan generated before untrusted content is seen | Multi-step workflows |
 | **[LLM Map-Reduce](../multi-agent/llm-map-reduce.md)** | Each LLM sees only a data partition | Batch document processing |
 | **Dual LLM** | Privileged LLM decides; quarantined LLM reads untrusted content | Reasoning over untrusted input |
@@ -68,7 +68,7 @@ Never allow an agent to simultaneously process untrusted inputs, access sensitiv
 
 ## How Vendors Defend Their Agents
 
-OpenAI's Atlas layers adversarial training, an instruction hierarchy, SafeUrl exfiltration detection, and confirmation gates. [Source: [OpenAI](https://openai.com/index/designing-agents-to-resist-prompt-injection/)] Anthropic achieves ~1% attack success rate on Claude browser agent via RL training, content classifiers, and red teaming. [Source: [Anthropic](https://www.anthropic.com/research/prompt-injection-defenses)]
+OpenAI's Atlas layers [adversarial training](close-attack-to-fix-loop.md), an instruction hierarchy, SafeUrl exfiltration detection, and confirmation gates. [Source: [OpenAI](https://openai.com/index/designing-agents-to-resist-prompt-injection/)] Anthropic achieves ~1% attack success rate on Claude browser agent via RL training, content classifiers, and red teaming. [Source: [Anthropic](https://www.anthropic.com/research/prompt-injection-defenses)]
 
 ## Coding Assistant Attack Surfaces
 

@@ -19,7 +19,7 @@ tags:
 
 **Too vague**: "Be helpful, accurate, and concise." This gives the agent no real constraint. Any output can satisfy it. The agent defaults to its pre-training distribution rather than task-specific behaviour.
 
-[Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies prompt altitude as a core design decision: effective system prompts function as strong heuristics that generalize, not lookup tables that enumerate cases [unverified — paraphrased concept; exact wording not found in cited source].
+[Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies prompt altitude as a core design decision: effective system prompts sit in "the Goldilocks zone" — specific enough to guide behaviour, flexible enough to serve as strong heuristics — rather than hardcoding brittle, enumerated logic.
 
 ## The Right Altitude
 
@@ -53,6 +53,19 @@ Background sections can be general. Tool guidance should be precise. Mixing alti
 The practical test for altitude calibration: introduce an edge case the prompt didn't anticipate, then observe behaviour. A well-altitude prompt degrades gracefully — the agent applies the nearest applicable heuristic. A too-brittle prompt breaks or falls through to vague default behaviour. A too-vague prompt was never constrained to begin with.
 
 If adding one new instruction requires adding three others to handle its edge cases, the original instruction was too brittle. Raise the altitude — describe the principle, not the case.
+
+## Why It Works
+
+Instruction-tuned models generalise from principle-level guidance by applying stated reasoning to novel inputs rather than pattern-matching enumerated cases. A heuristic like "treat authentication code as high-risk" activates the model's existing knowledge of session and token effects — knowledge that would require dozens of rules to approximate. Enumerated rules also consume context budget: [instruction-count scaling research](https://arxiv.org/abs/2507.11538) shows frontier models lose significant accuracy beyond ~150 simultaneous constraints. Altitude trades case coverage for generalisability and context efficiency.
+
+## When This Backfires
+
+Altitude-calibrated prompts are a worse choice than enumeration in specific conditions:
+
+- **Fixed-schema extraction**: When output must conform precisely to a regulated format (FHIR, EDI, ISO financial messages), enumerated field-level rules are more auditable and verifiable than heuristic guidance. Auditors need to trace each rule to a requirement.
+- **Low-capability or fine-tuned models**: Smaller models and heavily fine-tuned models may not generalise from principle statements — they pattern-match more reliably against explicit examples and conditions. Test generalisation before relying on heuristics.
+- **Security and safety boundaries**: Edge cases in security rules can have severe consequences. A heuristic like "treat sensitive data carefully" may leave gaps that an explicit rule ("never log values from the `credentials` object") would close. For hard boundaries, enumerate the boundary explicitly even if you also state the principle.
+- **Debugging and auditability**: When an agent misbehaves, enumerated rules are easier to trace to a failure cause. High-altitude prompts can make it harder to identify which principle was applied incorrectly.
 
 ## Key Takeaways
 
@@ -93,10 +106,6 @@ methods). Do not flag stylistic choices that vary by framework.
 ```
 
 This version works across Go, TypeScript, Ruby, Python, and any future test framework because it describes the reasoning principle, not the per-language checklist.
-
-## Unverified Claims
-
-- Anthropic's context engineering guide identifies prompt altitude as a core design decision: effective system prompts function as strong heuristics that generalize, not lookup tables [unverified — paraphrased concept; exact wording not found in cited source]
 
 ## Related
 

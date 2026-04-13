@@ -94,6 +94,7 @@ The 23-point gap was measured on HuggingFace-hosted ML/AI repositories; generali
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — design principle for raising signal ratio: silence as valid output, confidence thresholds, severity filtering
 - [Tiered Code Review](tiered-code-review.md) — risk-based routing that provides the structural framework for CRA-first plus human-last review
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — agent-as-author merge rates; this page covers agent-as-reviewer — complementary data points
+- [Agent-Authored PR Integration](agent-authored-pr-integration.md) — collaboration signals (reviewer engagement, force pushes, change size) that predict merge success for agent-authored PRs; logistic regression on same AIDev dataset
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md) — how PR description structure (not just reviewer composition) affects merge outcomes using the same AIDev dataset
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — prescriptive guide for structuring the AI first pass
 - [Committee Review Pattern](committee-review-pattern.md) — multi-agent verification as an alternative to single CRA deployment

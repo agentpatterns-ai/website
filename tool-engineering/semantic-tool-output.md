@@ -146,6 +146,7 @@ The agent now has exactly what it needs — a human-readable name, the contact a
 
 ## Related
 
+- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — semantic output is one of four ACI design principles; affordances, constraints, and error prevention are the other three
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)

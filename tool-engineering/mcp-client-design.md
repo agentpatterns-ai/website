@@ -71,7 +71,7 @@ Cache `tools/list` locally; re-fetch on `notifications/tools/list_changed`, TTL 
 
 ### Dynamic discovery
 
-Expose a search interface; the agent fetches schemas only for matched tools at execution time — cutting input tokens by 96–99% [unverified — vendor blog benchmarks].
+Expose a search interface; the agent fetches schemas only for matched tools at execution time — Anthropic's Tool Search Tool reports ~85% token reduction versus loading all definitions upfront ([advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## Timeout and Cancellation
 
@@ -130,6 +130,16 @@ Local Streamable HTTP servers must validate `Origin`, bind to localhost, and req
 | `call_tool` latency (avg, p95) | Identifies slow or degraded servers |
 | Error rate per tool and server | Surfaces reliability issues per integration |
 | Tool registry size (token count) | Tracks context window cost of tool descriptions |
+
+## When This Backfires
+
+**Caching stales tool schemas.** Static TTL caching works against servers that push frequent schema updates. If a server changes a required parameter between cache refreshes, the agent issues malformed calls. Short TTLs or relying on `notifications/tools/list_changed` reduce this risk but increase `tools/list` traffic.
+
+**Tool list stability affects provider-side caching.** Model providers use prompt caching keyed on the tool list. Adding or removing tools mid-session invalidates that cache, raising per-turn costs. Avoid routing designs that change the visible tool set between turns in a session.
+
+**Full routing stack is overhead for single-server agents.** Namespace maps, priority ordering, and session-per-server lifecycle add complexity that yields no benefit when connecting to one server. Apply multi-server routing only when collision risk is real.
+
+**OAuth 2.1 PKCE + resource indicators assumes a browser or capable HTTP client.** For CLI tools or embedded agents running in constrained environments, the authorization flow may require human interaction or unavailable system capabilities.
 
 ## Example
 

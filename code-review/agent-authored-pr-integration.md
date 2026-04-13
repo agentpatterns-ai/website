@@ -57,6 +57,15 @@ GitHub Copilot's coding agent cannot force push by design — branch restriction
 
 [GitHub's best practices for Copilot tasks](https://docs.github.com/en/copilot/using-github-copilot/coding-agent/best-practices-for-using-copilot-to-work-on-tasks) converge on the same principles: well-scoped tasks, pre-validated changes, and batched review comments reduce friction and align with these findings.
 
+## When This Backfires
+
+Optimizing for reviewer engagement assumes reviewers are available, willing to engage, and that their expectations are technically sound. Four conditions undermine the pattern:
+
+- **Chronic reviewer scarcity**: High engagement correlates with merge success only because those PRs captured a scarce resource — not because engagement can be manufactured. Agents generating high PR volume compete for the same reviewer bandwidth, reducing engagement rates overall.
+- **Design disagreement without recourse**: The dominant failure mode (10 of 30 failed PRs) is architectural divergence. When an agent cannot propose an alternative design, no review loop resolves the disagreement — task scoping and upfront context injection are prerequisites.
+- **Reviewer abandonment after initial engagement**: High time-to-first-review correlates with better outcomes only when reviewers eventually engage. If a PR waits in the queue and the reviewer abandons it, initial wait time becomes noise; large diffs compound that abandonment risk.
+- **CRA-only review**: The pattern assumes human reviewers with discretionary merge authority. Repositories using only automated agents for review see significantly lower merge rates (45% vs 68%) — engagement signals lose predictive power.
+
 ## Example
 
 An agent opens a 200-line PR adding a new webhook handler. The reviewer comments: "This should use the existing `EventBus` abstraction rather than calling handlers directly." The agent replies in a single follow-up commit that reroutes through `EventBus` and updates the test fixture -- no rebase, no force push. The reviewer approves in the next pass. This is the actionable review loop: specific feedback, targeted atomic response, convergence. Contrast with a failed pattern: the agent interprets the same feedback as a signal to rewrite the entire event handling layer, force pushes 600 lines, and the reviewer abandons the thread -- losing shared context and triggering the strongest negative predictor.

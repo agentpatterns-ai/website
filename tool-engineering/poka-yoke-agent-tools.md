@@ -107,6 +107,7 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 
 ## Related
 
+- [Agent-Computer Interface (ACI)](agent-computer-interface.md) — the discipline that frames poka-yoke as one of four core ACI design principles
 - [Tool Engineering](tool-engineering.md) — broader tool design principles including poka-yoke
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md) — complementary: documentation quality alongside structural constraints
 - [Tool Description Quality](tool-description-quality.md) — selection signals and description iteration

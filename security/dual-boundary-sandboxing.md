@@ -15,7 +15,7 @@ A common assumption is that restricting an agent to its working directory is suf
 
 The inverse is equally incomplete: restricting network access while leaving filesystem paths unrestricted allows the agent to write to sensitive locations (startup scripts, crontabs, shell configuration files) that execute with elevated permissions on the next trigger.
 
-Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineering/claude-code-sandboxing), effective sandboxing requires both boundaries enforced simultaneously at the OS level.
+Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineering/claude-code-sandboxing) and the [Claude Code sandboxing documentation](https://code.claude.com/docs/en/sandboxing), effective sandboxing requires both boundaries enforced simultaneously at the OS level.
 
 ## The Two Boundaries
 
@@ -103,6 +103,7 @@ Both examples enforce the filesystem boundary (write access restricted to `$PROJ
 
 ## Related
 
+- [Subprocess PID Namespace Sandboxing](subprocess-pid-namespace-sandboxing.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Protecting Sensitive Files](protecting-sensitive-files.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)

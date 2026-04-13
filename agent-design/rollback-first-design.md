@@ -32,7 +32,7 @@ Design agent workflows to stay in the left half. When a step must land in the ri
 
 ## Reversible Primitives
 
-**Git branches.** Agent work on a branch is completely reversible: delete the branch. Nothing on main is affected. This is the foundational primitive — agent file changes should always happen on a branch.
+**Git branches.** Agent work on a branch is completely reversible: delete the branch. Nothing on main is affected. This is the foundational primitive — agent file changes should always happen on a branch. Git's [branching model](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell) makes branch creation and deletion nearly free, which is what makes it viable as a per-task primitive.
 
 **Draft PRs.** A draft PR is visible and reviewable but not merged. Closing it discards the changes without affecting the main branch. Use draft PRs instead of direct pushes to main.
 
@@ -85,6 +85,16 @@ An agent refactors a module across 40 files. Halfway through, it makes a wrong a
 
 The design choice was made before execution: work on a branch, open a draft PR, require human approval before merge. Each step has a one-command undo at the point it was created.
 
+## When This Backfires
+
+Rollback-first design adds overhead that is not always justified:
+
+- **Low-stakes personal repos.** A solo developer with full trust in the agent output and no collaborators may find the branch-per-change ritual slower than working directly on main. The cost of a wrong assumption is a few manual file fixes, not a blocked team.
+- **High-throughput agentic pipelines.** When agents run dozens of tasks per hour, requiring a draft PR and human review before merge creates a bottleneck that defeats the purpose of automation. Reserve gates for actions with real blast radius.
+- **Ephemeral environments.** If the entire environment is throwaway (a container spun up per task, a test database that resets on each run), branch-level isolation is redundant — the environment itself is the rollback primitive.
+
+The pattern scales with stakes. Apply it fully for agents touching shared codebases, production systems, or customer-facing data. Relax it proportionally when the blast radius is small and recovery is already trivial.
+
 ## Key Takeaways
 
 - Treat undo cost as a design constraint, not an afterthought
@@ -103,6 +113,7 @@ The design choice was made before execution: work on a branch, open a draft PR, 
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
 - [The Think Tool](think-tool.md)
+- [Harness Hill-Climbing](harness-hill-climbing.md)
 - [Execution-First Delegation](execution-first-delegation.md)
 - [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md)
 - [Steering Running Agents](steering-running-agents.md)

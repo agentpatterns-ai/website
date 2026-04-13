@@ -46,7 +46,7 @@ A subagent can violate project conventions the parent was following unless the p
 
 When an agent ignores an instruction, diagnose by layer:
 
-1. **Which layer does the instruction come from?** An instruction buried in the middle of a long AGENTS.md competes with primacy bias — models show measurable performance degradation on constraints placed later in multi-constraint prompts ([Chen et al., 2024](https://arxiv.org/abs/2407.01419)); instructions near the top receive more reliable attention.
+1. **Which layer does the instruction come from?** An instruction buried in the middle of a long AGENTS.md competes with primacy bias — models show measurable performance degradation on constraints placed later in multi-constraint prompts ([Chen et al., 2024](https://arxiv.org/abs/2407.01419)); instructions near the top receive more reliable attention. For critical rules, [repeat them at both ends](../instructions/critical-instruction-repetition.md).
 2. **Is there a conflicting instruction closer to the task?** A user message that says "skip tests for now" overrides a project instruction to always write tests.
 3. **Is the agent a subagent?** If so, the project-level instructions may not be in its context.
 4. **Is the instruction past the compliance ceiling?** The more rules in the stack, the more likely lower-priority rules are ignored.
@@ -98,3 +98,4 @@ Prompt layering assumes the model will respect layer precedence — but that ass
 - [Layered Context Architecture](layered-context-architecture.md)
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
 - [Seeding Agent Context](seeding-agent-context.md)
+- [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) — diagnosing instruction conflicts using the layer stack

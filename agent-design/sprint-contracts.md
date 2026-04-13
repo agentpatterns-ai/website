@@ -54,7 +54,7 @@ Weights are explicit and agreed upfront. A contract that emphasizes design quali
 
 ## Evaluator Calibration
 
-An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)).
+An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Research on LLM-as-judge systems identifies self-enhancement bias and position bias as common failure modes — evaluators score outputs they "authored" or encountered first more favorably regardless of quality ([Zheng et al., NeurIPS 2023](https://arxiv.org/abs/2306.05685)).
 
 Calibration process:
 
@@ -90,6 +90,51 @@ Skip them when:
 Sprint contracts extend the [evaluator-optimizer pattern](evaluator-optimizer.md) with an upfront commitment step. The evaluator-optimizer has no pre-agreement: the evaluator scores whatever the generator produces. Sprint contracts add the contract phase, which fixes the scoring rubric before generation.
 
 The [critic agent pattern](critic-agent-plan-review.md) reviews the *plan* before execution. Sprint contracts have the evaluator agree to *scoring criteria* before generation — a later gate, focused on measurable outcomes rather than plan validity.
+
+## Example
+
+A sprint contract for a UI component generator might look like:
+
+```yaml
+# sprint-contract-v1.yaml
+task: "Build a dashboard header component"
+chunk: "Navigation bar with user avatar and notifications"
+
+dimensions:
+  design_quality:
+    weight: 0.35
+    criteria: "Consistent color palette, readable typography, logical layout hierarchy"
+  originality:
+    weight: 0.30
+    criteria: "Custom decisions over Bootstrap defaults; no generic card/shadow patterns"
+  craft:
+    weight: 0.20
+    criteria: "Accessible contrast ratios, consistent spacing (8px grid), responsive breakpoints"
+  functionality:
+    weight: 0.15
+    criteria: "Avatar renders, notification badge updates, mobile menu collapses"
+
+passing_threshold: 0.72
+```
+
+Harness flow:
+
+```python
+contract = load_contract("sprint-contract-v1.yaml")
+
+# Evaluator commits to rubric before generation starts
+evaluator_session = create_session(system_prompt=build_evaluator_prompt(contract))
+evaluator_session.send("Acknowledge the scoring dimensions and weights.")
+
+# Generator runs in an isolated session — no access to evaluator session
+generator_session = create_session(system_prompt=build_generator_prompt(contract))
+artifact = generator_session.send("Implement the component per the spec.")
+
+# Evaluator scores the artifact, not the generator's reasoning
+score = evaluator_session.send(f"Score this artifact:\n\n{artifact}")
+```
+
+The evaluator session holds no memory of the generator's reasoning — it receives only the contract and the artifact. If `score.total < contract.passing_threshold`, the harness feeds the structured feedback back to the generator for another cycle.
 
 ## Key Takeaways
 

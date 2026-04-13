@@ -52,7 +52,7 @@ optimizer = dspy.MIPROv2(metric=my_metric, auto="medium")
 compiled_pipeline = optimizer.compile(pipeline, trainset=train_examples)
 ```
 
-[MIPROv2](https://arxiv.org/abs/2310.03714) uses Bayesian Optimization: it bootstraps candidate demonstrations from high-scoring traces, generates instruction variants by inspecting the program structure and data, then searches combinations across all modules jointly. COPRO uses coordinate ascent (hill-climbing per module). BootstrapFewShot adds demonstrations without changing instructions.
+[MIPROv2](https://arxiv.org/abs/2406.11695) uses Bayesian Optimization: it bootstraps candidate demonstrations from high-scoring traces, generates instruction variants by inspecting the program structure and data, then searches combinations across all modules jointly. COPRO uses coordinate ascent (hill-climbing per module). BootstrapFewShot adds demonstrations without changing instructions.
 
 ## Compound System Advantage
 
@@ -100,5 +100,7 @@ class ReviewPipeline(dspy.Module):
 
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — iterative refinement loop where an evaluator critiques generator output
 - [Harness Hill-Climbing](harness-hill-climbing.md) — systematic improvement of agent harnesses through metric-driven iteration
+- [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts without external optimization
+- [Agentic Flywheel](agentic-flywheel.md) — closed loop where agents analyze traces and metrics to generate harness improvements
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh-context loop strategies
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — routing by complexity to match model cost to task difficulty

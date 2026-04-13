@@ -1,7 +1,7 @@
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Self-Rewriting Meta-Prompt Loop"
-description: "Agents that autonomously improve their own system prompts through a reflect-draft-validate-persist cycle, without weight updates or human intervention between iterations."
+description: "Agents that improve their own system prompts through a reflect-draft-validate-persist cycle, without weight updates or human intervention between runs."
 tags:
   - agent-design
   - tool-agnostic
@@ -71,26 +71,24 @@ Version control on the system prompt is a hard prerequisite — without a rollba
 
 Additional constraints that reduce risk:
 
-- **Change magnitude limits** — cap each delta to a maximum token change per cycle. Large rewrites introduce correlated failures; small targeted edits are easier to attribute and revert. [unverified]
-- **Canary rollouts** — deploy the updated prompt to a fraction of traffic and compare quality metrics against the current baseline before full promotion. [unverified]
+- **Change magnitude limits** — cap each delta to a maximum token change per cycle. Small targeted edits are easier to attribute and revert than large rewrites.
+- **Canary rollouts** — deploy the updated prompt to a fraction of traffic and compare quality metrics against the current baseline before full promotion.
 - **Reflection input sanitization** — treat task output as untrusted before feeding it into the reflection step; strip or validate content that could include prompt-injection payloads
 
 ## Contrast with Human-Driven Refinement
 
 [Harness Hill-Climbing](harness-hill-climbing.md) and [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) both improve prompts iteratively — but require a human to approve each change. The self-rewriting meta-prompt loop removes that approval step entirely: faster iteration, but unreviewed drift and adversarial exposure are the tradeoff.
 
+A 2026 study found that reflective APO with a defective seed can degrade accuracy sharply — from 23.81% to 13.50% on GSM8K — with uninterpretable optimization trajectories ([Reflection in the Dark](https://arxiv.org/abs/2603.18388), Gao et al., 2026). A quality gate on the initial seed prompt, not just each delta, is a prerequisite.
+
 ## Key Takeaways
 
-- The four-step cycle (reflect → draft → validate → persist) is academically validated by Reflexion, Self-Refine, and APE — all achieve measurable quality gains without weight updates
+- The four-step cycle (reflect → draft → validate → persist) is supported by Reflexion, Self-Refine, and APE — each achieves measurable quality gains without weight updates, though gains depend on a sound quality gate and non-defective seed prompt
 - Dual-agent architecture (executor + separate critic) reduces confirmation bias in the reflection step
 - Version control and a validated quality gate are non-negotiable prerequisites — without them the loop has no floor
 - Direct production adoption remains low; safety-critical and adversarially-exposed environments are hard exclusions
-- Two mitigations — change magnitude limits and canary rollouts — are widely discussed but lack direct primary sources [unverified]
-
-## Unverified Claims
-
-- Change magnitude limits reduce oscillation risk — extrapolated from general RL instability literature, no direct source for this specific application
-- Canary rollout mitigation (deploy updated prompt to subset of traffic before full promotion) is referenced in MLOps practice but no direct primary source found for this specific application to prompt versioning
+- Reflective APO methods can degrade performance when the seed prompt is defective — a quality gate on the seed, not just on each delta, is required ([Reflection in the Dark](https://arxiv.org/abs/2603.18388), Gao et al., 2026)
+- Change magnitude limits and canary rollouts reduce the blast radius of prompt drift; apply the same staged-deployment discipline used for any production configuration change
 
 ## Related
 

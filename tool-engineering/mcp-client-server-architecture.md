@@ -41,7 +41,7 @@ Each tool should have a single, clear purpose. Overlapping tools force selection
 
 ### Use tool search for large surfaces
 
-When a server must expose many tools, use lazy loading. Claude Code defers MCP tool definitions exceeding 10% of the context window, achieving an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) versus pre-loading. Servers supporting `listChanged` can emit `notifications/tools/list_changed` so clients refresh dynamically.
+When a server must expose many tools, use lazy loading. Claude Code defers MCP tool definitions when definitions exceed ~10 000 tokens, achieving an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) versus pre-loading. Servers supporting `listChanged` can emit `notifications/tools/list_changed` so clients refresh dynamically.
 
 ### Apply poka-yoke to parameters
 
@@ -53,7 +53,7 @@ Each description must stand alone — include domain context, return shape, and 
 
 ### Annotate behavioral hints
 
-Tool annotations — `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` — signal properties to clients for confirmation decisions. Per the [MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/server/tools), clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
+Tool annotations — `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` — signal properties to clients for confirmation decisions. Per the [MCP specification schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are: `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world assumptions. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
 
 ## Error Handling
 
@@ -151,9 +151,15 @@ A well-designed MCP server for a deployment tool applies the principles above: f
 
 The `environment` uses an enum, `version` enforces semver via regex, and the description includes a selection signal pointing to `rollback_service`. `destructiveHint` tells clients to require confirmation. On failure, the server returns `isError: true` with a domain-specific message — not a generic JSON-RPC error.
 
-## Unverified Claims
+## When This Backfires
 
-- Tool annotation hints (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) — confirmed in spec schema, but the annotation reference page returned 404; defaults could not be independently verified
+**stdio couples server lifecycle to client process.** When the client restarts, the server restarts too — all in-flight operations are dropped. For long-running tools or shared state, a Streamable HTTP server with independent lifecycle is safer despite the infrastructure overhead.
+
+**Tool annotations are advisory, not enforcement.** `destructiveHint: true` prompts client confirmation dialogs but does not prevent execution. Servers that rely on annotations for access control instead of server-side validation are vulnerable when clients ignore hints or when annotation defaults change.
+
+**Capability negotiation is silent on feature gaps.** If a server negotiates away a capability the client expected (e.g., sampling, elicitation), the client receives no structured error explaining which capability is absent — it sees a method-not-found response. Build explicit fallback paths for optional capabilities.
+
+**Large tool surfaces degrade even with lazy loading.** Lazy loading reduces token cost but not selection accuracy. An agent that can search 200 tools still chooses worse than one that has 10 focused tools. Lazy loading is a mitigation, not a substitute for tool surface curation.
 
 ## Related
 
@@ -167,3 +173,7 @@ The `environment` uses an enum, `version` enforces semver via regex, and the des
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md)
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
 - [RFC 9457 Machine-Readable Errors](rfc9457-machine-readable-errors.md)
+- [MCP LLM Sampling](mcp-llm-sampling.md)
+- [MCP Elicitation](mcp-elicitation.md)
+- [Advanced Tool Use](advanced-tool-use.md)
+- [Browser Automation for Research](browser-automation-for-research.md)

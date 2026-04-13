@@ -129,6 +129,7 @@ LLM inference is stateless between calls, but context is not — each tool call 
 
 ## Related
 
+- [Rollback-First Design](rollback-first-design.md) — design agent actions to be reversible before irreversible side-effects execute
 - [Escape Hatches](../workflows/escape-hatches.md) — reactive recovery mechanisms for stuck agents
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — auto-correcting misbehaving agents mid-run

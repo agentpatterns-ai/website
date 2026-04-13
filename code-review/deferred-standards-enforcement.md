@@ -37,7 +37,7 @@ Post-hoc-checkable standards belong in a reviewer agent. Generation-shaping stan
 
 ## Implementation: CLAUDE.md and REVIEW.md
 
-Anthropic's Claude Code Review product formalizes this split directly. The [Code Review documentation](https://code.claude.com/docs/en/code-review) defines two files:
+Anthropic's [Claude Code Review](../tools/claude/code-review.md) product formalizes this split directly. The [Code Review documentation](https://code.claude.com/docs/en/code-review) defines two files:
 
 - **`CLAUDE.md`**: shared project instructions for all Claude Code tasks, including implementation sessions
 - **`REVIEW.md`**: review-only guidance, read exclusively during code reviews — "for rules that are strictly about what to flag or skip during review and would clutter your general `CLAUDE.md`"
@@ -104,3 +104,7 @@ The implementation agent carries only what shapes code decisions. The review age
 - [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md)
 - [Rigor Relocation](../human/rigor-relocation.md)
 - [Committee Review Pattern](committee-review-pattern.md)
+- [Learned Review Rules](learned-review-rules.md)
+- [Review-Then-Implement Loop](review-then-implement-loop.md)
+- [Tiered Code Review](tiered-code-review.md)
+- [PR Description Style as a Lever](pr-description-style-lever.md)

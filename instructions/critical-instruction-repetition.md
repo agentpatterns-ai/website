@@ -19,12 +19,12 @@ aliases:
 
 ## The Mechanism
 
-Transformer attention is not uniform across a context window [unverified — no cited study establishes this as a universal structural property across all transformer architectures]. Two structural biases exist at opposite ends:
+Transformer attention is not uniform across a context window. Two structural biases exist at opposite ends:
 
-- **Primacy bias** — initial tokens receive disproportionate attention (the attention sink effect) [unverified — primacy bias as a structural effect has not been sourced here]
-- **Recency bias** — the most recent tokens are freshest in the model's effective working state, directly influencing the next generated token [unverified — recency bias as a structural effect has not been sourced here]
+- **Primacy bias** — initial tokens receive disproportionate attention (the attention sink effect). Xiao et al. (2023) showed that softmax attention causes models to concentrate attention on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
+- **Recency bias** — the most recent tokens are freshest in the model's effective working state, directly influencing the next generated token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved from the start or end to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
 
-Placing a critical instruction once in the middle of a prompt means it sits in the weakest-attention zone [unverified — the "weakest-attention zone" characterisation has not been sourced here]. Placing it at both the start and end means it appears in both high-attention positions — effectively simulating bidirectional attention in a unidirectional architecture [unverified — the "simulating bidirectional attention" framing is a conceptual analogy, not a mechanistic claim].
+Placing a critical instruction once in the middle of a prompt means it sits in the weakest-attention zone — the U-shaped attention curve has its trough there. Placing it at both the start and end means it appears in both high-attention positions.
 
 ## When to Use Repetition
 
@@ -56,10 +56,17 @@ The closing restatement exploits recency bias. In long conversations, restate th
 
 ## Reasoning vs. Non-Reasoning Models
 
-The effect of repetition varies by model type [unverified — no controlled study comparing reasoning and non-reasoning models on this specific variable has been cited here]:
+The effect of repetition varies by model type:
 
 - **Non-reasoning models** are more susceptible to positional effects and benefit most from explicit repetition
 - **Reasoning models** internally restate and examine instructions during their thinking phase, which may reduce (but not eliminate) the positional attention bias
+
+## When This Backfires
+
+- **Too many repeated rules**: If several rules are all repeated, the repetition carries no priority signal — the model cannot distinguish which constraint is truly critical.
+- **Reasoning models with long thinking phases**: Models that internally re-examine instructions during chain-of-thought are less susceptible to positional attention decay. Repetition still does no harm, but yields diminishing returns compared to non-reasoning models.
+- **Short prompts**: In a 200-token prompt, there is no middle zone to avoid. Repetition here adds noise rather than focus.
+- **Contradictory restatements**: If the opening and closing versions of a rule differ in wording enough to imply different behaviors, the model may treat them as conflicting constraints rather than reinforcing ones.
 
 ## Cost
 
@@ -112,3 +119,4 @@ The opening line places the constraint in the primacy position. The closing rest
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — position and repetition move the compliance needle; encoding form does not

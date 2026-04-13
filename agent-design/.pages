@@ -48,6 +48,7 @@ nav:
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
       - goal-monitoring-progress-tracking.md
+      - grill-me-technique.md
       - loop-strategy-spectrum.md
       - progressive-disclosure-agents.md
       - self-rewriting-meta-prompt-loop.md

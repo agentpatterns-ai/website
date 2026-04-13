@@ -19,7 +19,7 @@ Team conventions, architectural decisions, and domain rules live in Slack thread
 
 ## Why It Fails Silently
 
-When a convention is missing, agents infer rather than ask. The inference compiles, passes review, and ships. Across 283 sessions on a 108k-line system, missing specs caused silent failures -- wrong decisions that looked correct ([Vasilopoulos](https://arxiv.org/html/2602.20478v1)).
+Each session starts fresh: no persistent memory of prior sessions, established conventions, or past mistakes ([Vasilopoulos](https://arxiv.org/html/2602.20478v1)). Without explicit conventions, agents default to training-data patterns — broad programming knowledge that may contradict project requirements. The output compiles, passes review, and ships. Across 283 sessions on a 108k-line system, missing specs caused silent failures — wrong decisions that looked correct, never surfaced as errors.
 
 ## What Knowledge Is Invisible
 
@@ -55,6 +55,15 @@ Use AGENTS.md, CLAUDE.md, or equivalent files to capture conventions not inferab
 ### 3. Mechanical enforcement of taste
 
 Encode conventions as lint rules and CI checks. Agents respond to pass/fail signals, not rationale ([Wadia](https://dev.to/monarchwadia/convention-as-code-enforcing-architecture-with-scripts-ci-and-ai-agents-hgd), [Sng](https://factory.ai/news/using-linters-to-direct-agents)).
+
+## When This Backfires
+
+Knowledge externalization adds overhead proportional to churn. Conditions where the cure is worse than the disease:
+
+- **Rapidly-changing conventions** — in early-stage projects where naming, structure, and patterns shift weekly, an AGENTS.md capturing yesterday's convention actively misleads agents. Stale documentation causes more silent errors than no documentation.
+- **One-person projects** — the problem is social: conventions exist only in one mind because there is no institutional memory to externalize. An instruction file in a solo codebase adds write cost with minimal agent benefit; discoverable code structure does more.
+- **The convention is already discoverable** — agents read code. Naming patterns evident from 50+ files don't need an AGENTS.md entry; adding them creates redundancy with no enforcement benefit.
+- **Overly large instruction files** — monolithic AGENTS.md that capture everything become noisy enough that agents hallucinate compliance. Keep files thin and point to reference directories; prefer mechanical enforcement over documentation for stable rules.
 
 ## Example
 
@@ -98,5 +107,8 @@ The agent reads the convention from `AGENTS.md`, and even if it guesses wrong, t
 - [Comprehension Debt](comprehension-debt.md) -- gap between agent-produced code and developer understanding
 - [Spec Complexity Displacement](spec-complexity-displacement.md) -- implicit knowledge relocated into overly detailed specs
 - [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- bootstrap an instruction file from zero
+- [L0 → L1: Making the Repo Readable](../frameworks/brownfield-to-agent-first/level-0-to-1.md) -- step-by-step process for externalizing implicit knowledge in a brownfield codebase
 - [The Copy-Paste Agent](copy-paste-agent.md) -- embedding tribal conventions in duplicated definitions instead of shared rules
 - [The Prompt Tinkerer](prompt-tinkerer.md) -- refining prompts instead of externalizing conventions into structural enforcement
+- [Abstraction Bloat](abstraction-bloat.md) -- agents applying generic patterns when project-specific conventions are absent
+- [Context Poisoning](context-poisoning.md) -- stale or wrong conventions in instruction files causing downstream failures

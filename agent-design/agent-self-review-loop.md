@@ -76,7 +76,7 @@ For agents without built-in self-review:
 
 ## Limitations
 
-**Confirmation bias.** An agent reviewing its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review — a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is operationally simpler and faster than coordinating separate reviewers, at the cost of that independence.
+**Confirmation bias.** An agent reviewing its own output in the same context tends to validate the same assumptions it made during generation. This is structurally less independent than cross-agent or cross-model review — a single-context reviewer shares the same training biases and blind spots as the generator. The pattern is operationally simpler and faster than coordinating separate reviewers, at the cost of that independence. When an external LLM reviewer is added, a separate failure mode applies: LLMs systematically flag correct code as non-compliant, and adding explanation requirements worsens the false positive rate — see [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md).
 
 **Scope ceiling.** Self-review catches mechanical issues — style, known vulnerability patterns, dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems that require domain knowledge beyond the agent's context.
 

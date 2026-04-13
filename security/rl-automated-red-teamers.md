@@ -60,6 +60,16 @@ This approach requires:
 
 It is a technique for teams with established agent security programs, not a first-line measure. The prerequisite is having working confirmation gates, least-privilege permissions, and narrow task instructions already in place.
 
+## When This Backfires
+
+**Attack diversity collapse**: RL optimizes for reward, which causes the attacker to converge on a narrow cluster of similar successful payloads rather than exploring the full attack surface. The diversity vs. success-rate tradeoff means a high-performing RL attacker may miss entire attack categories that lower-reward exploratory strategies would surface. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
+
+**White-box privilege gap**: The internal attacker's access to defender reasoning traces is not representative of real adversaries, who operate in a black-box setting. An agent hardened against a white-box attacker may still be vulnerable to adversaries who probe from the outside without trace access.
+
+**Sparse reward instability**: Standard RL training against strong defenses fails under extreme reward sparsity — most injected prompts are blocked, causing policy entropy collapse before the attacker discovers effective strategies. Mitigation requires techniques like adaptive entropy regularization and dynamic advantage weighting, which add implementation complexity. [Source: [PISmith: RL-based Red Teaming for Prompt Injection Defenses](https://arxiv.org/abs/2603.13026)]
+
+**Infrastructure floor**: The compute and tooling requirements for RL training loops make this impractical for teams that haven't already invested in agent simulation infrastructure. Attempting it without a stable simulator produces misleading coverage signals.
+
 ## Example
 
 The following shows a minimal attacker-simulator evaluation loop in Python. The attacker LLM proposes injection payloads; the simulator runs them against the defender agent and returns the full reasoning trace as feedback signal.

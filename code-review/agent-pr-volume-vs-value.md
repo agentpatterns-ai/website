@@ -54,7 +54,7 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 
 ## Why Acceptance Rates Lag
 
-The AIDev study attributes the acceptance gap to structural and contextual factors: agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context that shapes what changes are worth making at a given moment. Without access to unwritten priorities — roadmap direction, tribal knowledge about which subsystems are frozen — agents optimize for correctness within a local scope rather than relevance within a broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The AIDev study attributes the acceptance gap to structural and contextual factors: agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context that shapes what changes are worth making at a given moment. Without access to unwritten priorities — roadmap direction, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md) about which subsystems are frozen — agents optimize for correctness within a local scope rather than relevance within a broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
 ## When This Backfires
 

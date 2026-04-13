@@ -90,7 +90,7 @@ Per-lane metrics let you diagnose starvation (a busy `subagent` lane blocking `c
 | Concurrency tuning | Each lane's `maxConcurrent` must be sized to available resources — over-parallelization exhausts file handles and memory |
 | Starvation risk | High-priority lanes with unbounded throughput can starve low-priority ones without explicit priority controls |
 
-This pattern draws on established foundations: Actor Model isolation (1973), Work-Stealing scheduling (1995), and queue-based routing in Sidekiq, BullMQ, and Airflow pool systems.
+This pattern draws on established foundations: Actor Model isolation (1973), Work-Stealing scheduling (1995), and queue-based routing in [Sidekiq](https://github.com/sidekiq/sidekiq), [BullMQ](https://github.com/taskforcesh/bullmq), and Airflow pool systems.
 
 ## Relation to Worktree Isolation
 
@@ -108,6 +108,7 @@ Worktree isolation operates at the process and filesystem level — each agent g
 
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
+- [Agent Loop Middleware](agent-loop-middleware.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)

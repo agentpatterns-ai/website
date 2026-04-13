@@ -112,6 +112,7 @@ The steelman: if your agent population already fails gracefully on its own — r
 
 ## Related
 
+- [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — tool-level state machine that blocks calls to degraded external tools; complementary to loop-level breakers here
 - [Loop Detection](loop-detection.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)

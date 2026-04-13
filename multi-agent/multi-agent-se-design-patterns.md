@@ -72,6 +72,19 @@ Three under-researched areas represent practical production risks:
 2. **MAS maintainability** — evolving agent prompts, roles, and protocols as requirements change is under-studied.
 3. **MAS security** — resistance to injection, manipulation, and trust boundary violations receives minimal attention.
 
+## Why It Works
+
+Role-Based Cooperation produces quality gains because narrowing each agent's task scope aligns its prompt to tighter constraints. A reviewer agent can be primed to critique without sunk-cost bias toward the original output — the mechanism that makes peer review catch errors single-agent self-correction misses ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)). Gains are most reliable for code generation, where correctness is verifiable; open-ended tasks with ambiguous success criteria show weaker returns.
+
+## When This Backfires
+
+Multi-agent patterns are optimized for quality on benchmarks; production failure modes differ ([arXiv:2503.13657](https://arxiv.org/abs/2503.13657)):
+
+1. **Coordination overhead exceeds quality gain** — parallel agents multiply LLM calls; latency is bounded by the slowest worker. When the quality delta over a strong single-agent is small, the cost increase rarely justifies the architecture.
+2. **Role adherence degrades under drift** — as tasks lengthen or models update, inter-agent misalignment accounts for 36.9% of failures in the MAST taxonomy (communication breakdowns, inconsistent goal understanding, protocol violations).
+3. **Strong single-agent baselines close the gap** — 41.8% of MAST failures trace to design issues, not model capability; capable frontier models often match multi-agent orchestration on SE tasks while avoiding specification complexity.
+4. **Trust surface expands without security benefit** — adding agents multiplies attack surfaces; role and prompt evolution introduces brittleness absent in single-agent systems.
+
 ## Using the Taxonomy
 
 The 16 patterns provide a shared vocabulary for design reviews. When evaluating an existing architecture or planning a new one:
@@ -124,9 +137,12 @@ During the design review, the team notes they are optimizing for Functional Suit
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
+- [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
+- [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md)
+- [Opponent Processor / Multi-Agent Debate Pattern](opponent-processor-debate.md)

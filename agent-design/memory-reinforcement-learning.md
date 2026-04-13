@@ -41,9 +41,9 @@ Retrieval separates semantic matching from effectiveness ranking:
 ```mermaid
 graph TD
     A[Query: current intent] --> B[Phase 1: Semantic filter]
-    B -->|Embed + cosine similarity| C[Candidate pool\nlooks like the problem]
+    B -->|Embed + cosine similarity| C[Candidate pool<br>looks like the problem]
     C --> D[Phase 2: Utility re-ranking]
-    D -->|Sort by utility score| E[Top-ranked memories\nhistorically effective]
+    D -->|Sort by utility score| E[Top-ranked memories<br>historically effective]
     E --> F[Inject into agent context]
 ```
 
@@ -75,6 +75,8 @@ This is reinforcement learning applied to the memory index rather than to model 
 
 MemRL occupies the space between the two: it enables continuous improvement from outcome signals like reinforcement learning, without modifying the model. The base model's reasoning capability is the stable substrate; the utility layer provides the adaptive signal. This matches the [context layer](continual-learning-layers.md) in the three-layer continual learning taxonomy — the cheapest and most reversible update target.
 
+A predecessor approach, Reflexion ([Shinn et al., 2023 — arXiv:2303.11366](https://arxiv.org/abs/2303.11366)), demonstrated that verbal RL on episodic memory — storing natural-language reflections rather than numeric utility scores — could lift HumanEval pass@1 from 80% (GPT-4 baseline) to 91%. MemRL extends this by replacing verbal reflection with quantitative utility scores, enabling retrieval-time re-ranking rather than context-stuffing.
+
 ## Limitations
 
 - **Requires reliable outcome signals.** Utility updates depend on consistent success/failure signals. Tasks where "success" is ambiguous or hard to measure automatically produce noisy utility estimates that degrade retrieval quality.
@@ -98,10 +100,6 @@ After several failed outcomes, the lock-escalation entry accumulates a low utili
 - MemRL's two-phase retrieval separates the semantic filter (finding relevant candidates) from the effectiveness ranking (surfacing historically useful ones).
 - Utility scores update from outcome signals using temporal difference learning; the base model is never modified.
 - The approach requires reliable outcome signals and sufficient episode volume — cold-start and reward signal definition are the primary engineering challenges.
-
-## Unverified Claims
-
-- Reflexion (Shinn et al., 2023) achieved 91% vs 80% baseline on HumanEval using verbal RL with episodic memory [unverified — cited in nibzard catalog, not independently verified against the Reflexion paper].
 
 ## Related
 

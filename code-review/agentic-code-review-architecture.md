@@ -98,6 +98,7 @@ The same PR with GitHub Copilot's agentic review can be triggered from the CLI: 
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
+- [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Review-Then-Implement Loop](review-then-implement-loop.md)

@@ -17,7 +17,7 @@ aliases:
 
 ## The Problem
 
-Long-running autonomous loops — agents working over hours or days across repeated sessions — fail in three predictable ways when cross-session state is unstructured:
+Long-running autonomous loops — agents working over hours or days across repeated sessions — fail in three predictable ways when cross-session state is unstructured. [Anthropic's engineering team identified this directly](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "each new session begins with no memory of what came before," requiring explicit structured handoff artifacts so agents can "quickly understand the state of work when starting with a fresh context window."
 
 - **Drift**: Each restart discards prior decisions. The agent restarts without awareness of what was already resolved.
 - **Repetition**: Agents re-debate questions settled in earlier cycles, wasting tokens and compute on resolved trade-offs.

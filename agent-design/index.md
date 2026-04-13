@@ -14,7 +14,7 @@ tags:
 Foundational architecture decisions — how to structure agents, delegate work, and separate concerns.
 
 - [Agent-First Software Design](agent-first-software-design.md) — Architect systems where AI agents are the primary consumers, using machine-readable APIs and structured outputs instead of visual UIs
-- [Emergent Architecture in AI-Driven Codebases](agent-driven-codebase-fingerprint.md) — AI coding agents produce codebases with measurable architectural biases — pattern replication, abstraction bloat, and stack convergence — that compound across agent runs
+- [Emergent Architecture in AI-Driven Codebases](agent-driven-codebase-fingerprint.md) — AI coding agents produce codebases with measurable architectural biases — [pattern replication](../anti-patterns/pattern-replication-risk.md), abstraction bloat, and stack convergence — that compound across agent runs
 - [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md) — Reference architecture separating cognitive reasoning from execution, a topology taxonomy for multi-agent coordination, and an enterprise hardening checklist
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md) — Commands define what to do; agents define who does it — separating orchestration from expertise lets you change either without touching the other
@@ -65,6 +65,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two distinct LLM roles in a loop: a generator produces output and an evaluator critiques it, feeding structured feedback back until a quality threshold is met
 - [Event-Driven Agent Routing](event-driven-agent-routing.md) — Route work between agents and human teams by reacting to status-change events rather than maintaining a central coordinator that owns the full workflow
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — Planning tells the agent what to do; monitoring tells you whether it actually did it and whether it wandered off
+- [Grill Me: Developer-Initiated Plan Interrogation](grill-me-technique.md) — Direct the agent to challenge your plan rather than execute it, surfacing hidden assumptions and decision gaps before implementation begins
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates by 17% on average
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md) — Choose between accumulated-context loops, within-session compression, and fresh-context loops based on workload type, not habit

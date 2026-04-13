@@ -11,9 +11,9 @@ tags:
 
 ## The Problem
 
-Frameworks reduce boilerplate. They also hide the mechanics that matter when things go wrong. When an agent misbehaves in a framework-built system, the failure source is ambiguous: the prompt formatting, memory layer, tool routing, or framework error handling may each be contributing. Debugging requires understanding the full abstraction stack, not just the code you wrote.
+Frameworks reduce boilerplate. They also hide the mechanics that matter when things go wrong. When an agent misbehaves in a framework-built system, the failure source is ambiguous: the prompt formatting, memory layer, tool routing, or framework error handling may each be contributing. The mechanism is hidden intermediate state — each abstraction layer transforms inputs and outputs without exposing them, so a single misbehavior requires traversing every layer to locate the source. An empirical study of agent developer practices found 42% of LangChain developers reported deeply nested abstractions hindered debugging efficiency, with some tracing a single change through seven layers of code structure ([Deng et al., 2024](https://arxiv.org/abs/2512.01939)). Debugging requires understanding the full abstraction stack, not just the code you wrote.
 
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), starting simple — often a single LLM call or a short chain — covers a surprising share of real use cases. The instinct to reach for a framework inverts the appropriate development order.
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), starting simple — often a single LLM call or a short chain — covers a surprising share of real use cases. The instinct to reach for a framework inverts the appropriate development order. LangChain's own analysis of [how to think about agent frameworks](https://blog.langchain.com/how-to-think-about-agent-frameworks/) acknowledges that once custom logic or unusual orchestration flows are needed, the abstraction becomes a ceiling rather than a foundation.
 
 ## What Gets Hidden
 
@@ -32,6 +32,16 @@ When adopting, read the framework's source code for the paths you rely on. Treat
 - Debugging requires reading framework source to understand what prompt is sent
 - Simple tasks require framework-specific abstractions that raw API calls would not
 - The team cannot reproduce framework behavior with a direct API call
+
+## When This Backfires
+
+Framework-first development causes the most damage in these conditions:
+
+- **Requirements are unknown** — locking in a framework's memory and routing model before you understand your data flow forces refactoring once real constraints emerge; the abstraction locks in the wrong decisions.
+- **Team lacks framework internals knowledge** — when the first failure occurs (wrong tool selected, context truncated, unexpected retry), no one can read the framework source fast enough to diagnose it under production pressure.
+- **Simple use case** — a single-turn Q&A or one-tool workflow routed through an agent executor adds latency, complexity, and failure surface for no capability gain; the framework's orchestration overhead exceeds its value.
+
+The counterargument has merit: frameworks provide provider-agnostic interfaces and pre-built retry/error handling that save real time on complex multi-agent systems. Starting with LangGraph for a system that genuinely requires stateful graph orchestration is defensible — but that threshold is higher than most teams assume.
 
 ## Example
 
@@ -99,3 +109,5 @@ Every step — the tool schema, the message array, the tool-result injection —
 - [Comprehension Debt](comprehension-debt.md)
 - [Abstraction Bloat](abstraction-bloat.md)
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
+- [Demo-to-Production Gap](demo-to-production-gap.md)
+- [Pattern Replication Risk](pattern-replication-risk.md)

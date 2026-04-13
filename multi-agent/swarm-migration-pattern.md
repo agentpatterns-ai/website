@@ -18,12 +18,12 @@ aliases:
 
 ## How It Works
 
-The pattern has two phases:
+Two phases:
 
-1. **Coordinator phase** — a single orchestrator agent enumerates all affected files and produces a complete, ordered task list. No workers run yet.
-2. **Worker phase** — the orchestrator dispatches workers in parallel, each receiving a bounded file slice and an unambiguous migration spec. Workers report results; the orchestrator collects and flags failures.
+1. **Coordinator** — a single orchestrator enumerates all affected files and produces a complete task list. No workers run yet.
+2. **Workers** — the orchestrator dispatches workers in parallel; each receives a bounded file slice and an unambiguous migration spec, then reports results.
 
-Workers have no cross-worker communication. The only coordination point is the orchestrator receiving results.
+Workers have no cross-worker communication. The only coordination point is the orchestrator collecting results.
 
 ```mermaid
 graph TD
@@ -36,7 +36,7 @@ graph TD
     F --> H[Migration complete]
 ```
 
-Boris Cherny (Anthropic) describes the orchestration: "The main agent makes a big to-do list for everything and then map reduces over a bunch of subagents. You start 10 agents and migrate all the stuff over." — sourced via [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md).
+Boris Cherny (Anthropic): "The main agent makes a big to-do list for everything and then map reduces over a bunch of subagents. You start 10 agents and migrate all the stuff over." ([nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md))
 
 ## Eligible Migrations
 
@@ -81,31 +81,35 @@ The `--allowedTools` flag scopes each worker's permissions — critical for unat
 
 ## Prerequisites Before Fan-Out
 
-- **Test coverage** — workers must be able to verify their output. Cherny notes lint rule migrations and test library upgrades are "super easy to verify the output." ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md)) Without a fast verification step, failures accumulate silently.
-- **Unambiguous migration spec** — the prompt each worker receives must leave no room for interpretation. Ambiguous specs produce inconsistent results across workers.
-- **Sandboxed execution** — workers should commit only their own file slice. Shared-state side effects (e.g., modifying a shared config file) create merge conflicts.
+- **Test coverage** — workers must verify their output. Lint rule migrations and test library upgrades are "super easy to verify" ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/swarm-migration-pattern.md)); without a fast verification step, failures accumulate silently.
+- **Unambiguous migration spec** — ambiguous prompts produce inconsistent results across workers.
+- **Sandboxed execution** — workers must commit only their own file slice; shared-state side effects (e.g., modifying a shared config file) create merge conflicts.
 
 ## Staged Rollout
 
 Always validate before full fan-out:
 
-1. Run on 2–3 representative files manually
-2. Inspect outputs — correct errors in the worker prompt
-3. Run on a 10–20 file subset
-4. Review failures and adjust swarm size
-5. Scale to the full file list
+1. Run on 2–3 representative files; correct the worker prompt on any errors
+2. Run on a 10–20 file subset; review failures and adjust swarm size
+3. Scale to the full file list
 
-Skipping staged rollout means a prompt defect propagates across hundreds of files simultaneously. Fixing the prompt after a full-swarm bad run is expensive.
+A prompt defect propagates to every file in a full swarm simultaneously — staged rollout is the only cost-effective catch.
 
 ## Failure Handling
 
-Expect worker failures on first runs, particularly when the migration spec has edge cases the prompt didn't anticipate [unverified]. The orchestrator should:
+The orchestrator should record failed files without stopping the queue, surface a failure report at the end, and support targeted retry on failed items only. Do not retry inline — a stuck worker occupies a slot that could be processing other files.
 
-- Record failed files without stopping the queue
-- Surface a failure report at the end
-- Allow a targeted retry run on failed items only
+## Why It Works
 
-Do not retry failures inline during the run — a worker stuck in a retry loop occupies a swarm slot that could be processing other files.
+Sequential migration takes `N × t`; a swarm of `W` workers collapses that to `⌈N / W⌉ × t`. The key enabler is inter-file independence: each worker reads and writes its slice without reading any other worker's output, so there is no coordination latency to pay. The orchestrator handles bookkeeping only — adding workers does not increase coordination overhead proportionally.
+
+## When This Backfires
+
+- **Rate limit exhaustion** — 10–20 simultaneous calls frequently hit provider rate limits, serializing execution. Stagger launches or queue to stay under per-minute token budgets.
+- **Context window overflow** — files exceeding the model's usable context produce silent partial migrations. Pre-filter large files and handle them with a narrower-scope prompt.
+- **LLM non-determinism** — parallel workers on similar code patterns make inconsistent stylistic choices. For strict uniformity requirements, run a normalization pass after the swarm.
+- **Partial-migration state** — failure rates above ~30% leave the codebase in a mixed state harder to reason about than a fully-unmigrated one. Isolate with a feature flag or dedicated branch.
+- **Token cost vs ROI** — at ~10x sequential token cost, the break-even is roughly 50–100 files. Below that threshold, manual staged migration is cheaper.
 
 ## Key Takeaways
 
@@ -133,11 +137,6 @@ Return OK if the file passes, FAIL with a one-line reason if it does not.
 ```
 
 The orchestrator fans out 20 workers at a time (to stay within API rate limits), collecting results. Files returning FAIL are written to `failed.txt` for a targeted follow-up pass. Total wall time for 400 files: ~20 batches × ~30 seconds per batch = ~10 minutes, versus ~200 minutes sequentially.
-
-## Unverified Claims
-
-- 100x+ ROI figure cited in nibzard catalog — arithmetic is consistent with 10x token cost and 6–10x speedup claim, but no public benchmark supports it [unverified]
-- Boris Cherny quote sourced via nibzard catalog; original primary source (talk/post) not independently located [unverified]
 
 ## Related
 

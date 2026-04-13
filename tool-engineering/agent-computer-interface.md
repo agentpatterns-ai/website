@@ -71,6 +71,12 @@ LlamaIndex recommends: **ask the agent "what arguments does this tool take?"** D
 
 From Anthropic's [Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use) guidance: keep 3-5 most-used tools always loaded; defer the rest behind tool search; evaluate each tool definition as a context-budget item.
 
+## Why It Works
+
+LLMs are trained on next-token prediction against text that is predominantly human-readable — documentation, code comments, variable names derived from natural language. ([Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)) When tool output matches this distribution — semantic identifiers over opaque UUIDs, natural language over raw data structures — the model needs fewer inferential steps to interpret the result and select a follow-on action.
+
+Constraints work by the same principle in reverse: they eliminate branches the agent might otherwise explore. An absolute-path requirement means the model never generates a relative-path token that would require a correction step. A 100-line window prevents the model from attempting to reason about a full file dump that would overflow the attention window. Each constraint removes one error class from the action space entirely, which is why the SWE-agent authors found interface changes more reliably effective than prompt changes — prompts guide behavior, constraints remove paths.
+
 ## When This Backfires
 
 ACI design has real failure modes:

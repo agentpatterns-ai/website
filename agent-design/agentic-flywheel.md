@@ -62,7 +62,7 @@ Not every harness change should be auto-applied. Kief Morris describes three lev
 | **Backlog** | Agent adds suggestions to the product queue for later triage | Improvements needing broader discussion or affecting multiple projects |
 | **Autonomous** | High-confidence recommendations auto-apply with monitoring | Well-tested, narrow-scope changes with rollback capability (e.g., adjusting a retry count, adding a lint rule) -- see [Rollback-First Design](rollback-first-design.md) |
 
-Start at interactive. Move to autonomous only for categories with a proven track record.
+Start at interactive. Move to autonomous only for categories with a proven track record. Fully autonomous tier 3 adoption remains rare in practice — most documented implementations keep a human in the loop for all but the narrowest change categories.
 
 ## Harness Modifications That Work
 
@@ -88,11 +88,6 @@ A team running nightly agent batches across 50 repositories implements the flywh
 2. **Analyze traces**: A morning trace-analysis job filters to failed tasks, clusters them by error type (timeout, test failure, loop), and generates a report
 3. **Generate modifications**: For the most common [failure cluster](behavioral-drivers-agent-success.md), the analyzer proposes a harness change -- e.g., adding a file-count guardrail after observing agents creating excessive temporary files
 4. **Escalate**: The team reviews the first three proposals interactively. After two weeks of safe applications, they promote "add missing test import" fixes to autonomous
-
-## Unverified Claims
-
-- Whether any production team has fully implemented the autonomous approval tier (level 3) of the flywheel -- sources describe it as aspirational or partially implemented
-- The distinction between [entropy reduction agents](../workflows/entropy-reduction-agents.md) and system-improving agents (which improve the agent harness itself) is asserted in the issue but not explicitly drawn in any source found
 
 ## Related
 

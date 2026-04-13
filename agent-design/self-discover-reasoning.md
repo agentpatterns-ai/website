@@ -75,6 +75,16 @@ Skip it when:
 - Failures are computational (arithmetic errors) rather than reasoning failures — structure won't help
 - Per-query latency is the primary constraint and caching is not applicable
 
+## Why It Works
+
+SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms identified in the original paper ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
+
+1. **Multi-perspective integration** — a single CoT pass applies one reasoning lens. Composing multiple modules (e.g., root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks requiring world knowledge and structured state benefit most.
+2. **Task-specific composition** — generic prompting applies the same approach regardless of problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) removes mismatched reasoning overhead.
+3. **Explicit structure** — the JSON plan forces the model to state its reasoning approach before executing it. This prevents the model from silently switching strategies mid-response, making errors inspectable and correctable.
+
+The gains are not uniform: algorithmic tasks see only moderate improvement, while world-knowledge and multi-step planning tasks (T4D: +29pp over CoT) benefit most. Computational errors remain outside the framework's reach.
+
 ## Compute Trade-offs
 
 Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. Once composed, the plan is reused at no extra overhead per instance — one inference call per instance, same as plain CoT.
@@ -119,3 +129,4 @@ The model fills in each key with instance-specific reasoning, producing a struct
 - [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — When structured reasoning adds cost without benefit
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Pair a generator with a structured critic; shares the explicit-structure philosophy
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md) — Explicit gates between planning, task decomposition, and implementation
+- [Graph of Thoughts: Directed Graph Reasoning for Multi-Path Problems](graph-of-thoughts.md) — Model reasoning as a directed graph with branch, aggregate, and backtrack operations; complementary topology to SELF-DISCOVER's module-composed plans

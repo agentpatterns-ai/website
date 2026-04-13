@@ -37,7 +37,7 @@ At L5, the agent operates as a first-class contributor:
 
 **L4 is an intermediate state**: the agent can operate autonomously with bounded risk. L5 builds on L4 by adding goal-driven planning and CI integration.
 
-The [Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent-autonomy) shows experienced users (~750 sessions) enable full auto-approve in 40%+ of their work — but 80% of deployments still include human oversight mechanisms. L5 is the objective, not an expectation for every task type.
+The [Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent-autonomy) shows experienced users (~750 sessions) enable full auto-approve in 40%+ of their work — but 80% of tool calls come from agents with at least one safeguard (restricted permissions or human approval). L5 is the objective, not an expectation for every task type.
 
 ---
 
@@ -125,7 +125,7 @@ Before enabling broader agent autonomy, define the conditions under which agent 
 | Diff size exceeds limit (e.g., >500 lines) | Flag for human review before merge approval |
 | Agent PR modifies security-sensitive paths | Require security team approval |
 
-Define these in CI before granting agents broader scope. The Anthropic autonomy research confirms that 80% of deployments include oversight mechanisms — L4 formalizes and automates those mechanisms ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)).
+Define these in CI before granting agents broader scope. The Anthropic autonomy research confirms that 80% of tool calls come from agents with at least one safeguard — L4 formalizes and automates those safeguards ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)).
 
 ---
 
@@ -250,6 +250,21 @@ Run this exit check for L5:
 
 1. Create a well-scoped issue with a clear acceptance criterion. Apply the `agent-implement` label. Does the agent produce a PR that meets the acceptance criterion without clarification?
 2. Compare agent PR review time to human PR review time. L5 review should focus on design decisions, not mechanical errors.
+
+---
+
+## When to Stay at L3 or L4
+
+Not every team or codebase warrants the full L3→L5 pipeline. Stop at L3 if:
+
+- **Low agent PR volume** — if the team runs fewer than a handful of agent sessions per week, the CI automation overhead (eval maintenance, issue-triggered workflows, coverage gates) costs more in setup and upkeep than it saves in review time.
+- **Unstable codebase structure** — eval suites break every time the architecture changes. In fast-moving brownfield repos where the service/repository/route pattern itself is evolving, evals require constant rewrites and quickly become a maintenance burden rather than a quality gate.
+- **Unbounded API cost exposure** — issue-triggered CI agent sessions fire on every label application with no per-task budget cap. Without explicit cost controls, a backlog of labeled issues can generate unexpected API spend before the PR pipeline catches a systematic agent failure.
+
+Stop at L4 if:
+
+- **Tasks are not goal-decomposable** — L5 goal specifications require acceptance criteria that the agent can verify independently. Open-ended exploratory work ("investigate why performance degraded"), cross-cutting refactors, or tasks that depend on unwritten requirements stay safely at L4 with structured task definitions.
+- **The codebase lacks test coverage for agent output** — evals are only meaningful if the behaviors being measured are testable. If the parts of the codebase the agent touches have <50% coverage, evals will give false confidence rather than real quality signals.
 
 ---
 

@@ -605,7 +605,7 @@ Select the agent from the chat mode selector in VS Code, use it in the CLI, or a
 
 ### Hooks (`.github/hooks/`)
 
-**What it is**: JSON files that execute shell commands at specific points in the Copilot agent lifecycle. For the coding agent, hooks fire in the Actions sandbox. For the CLI, hooks fire locally on your machine. VS Code also supports hooks in Preview (v1.109+).
+**What it is**: JSON files that execute shell commands at specific points in the Copilot agent lifecycle. For the coding agent, hooks fire in the Actions sandbox. For the CLI, hooks fire locally on your machine. VS Code also supports hooks in Preview (v1.109+). For a tool-agnostic overview of hook lifecycle events and enforcement patterns, see [Hooks and Lifecycle Events: Intercepting Agent Behavior](../../tool-engineering/hooks-lifecycle-events.md).
 
 **Used for**: Security validation before tool use, audit logging, enforcing policy (e.g., block writes to certain paths), custom notifications.
 

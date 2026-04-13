@@ -22,7 +22,7 @@ In the CodeCRDT study, multi-agent code generation systems failed to realize exp
 
 ## CRDT-Based Shared State
 
-**Conflict-free Replicated Data Types (CRDTs)** are data structures that support concurrent updates with deterministic convergence — no locks, no conflict resolution steps, no coordination messages required. Agents observe the shared CRDT state and make local updates; the CRDT guarantees all replicas converge to the same final state regardless of update order.
+**Conflict-free Replicated Data Types (CRDTs)** are data structures that support concurrent updates with deterministic convergence — no locks, no conflict resolution steps, no coordination messages required ([Preguiça et al., 2018](https://arxiv.org/abs/1805.06358)). Agents observe the shared CRDT state and make local updates; the CRDT guarantees all replicas converge to the same final state regardless of update order.
 
 In the coding context:
 

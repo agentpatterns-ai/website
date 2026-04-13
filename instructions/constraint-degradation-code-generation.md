@@ -132,3 +132,4 @@ Turn-by-turn constraint application assumes the model preserves all prior constr
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the same degradation mechanism applied to behavioral rules rather than code constraints
 - [Critical Instruction Repetition](critical-instruction-repetition.md) — exploiting primacy and recency bias to boost compliance on specific constraints
 - [Negative Space Instructions](negative-space-instructions.md) — explicit "what not to do" constraints as an alternative to positive-only constraint lists
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form (natural language vs. compact headers) has no measurable effect on compliance; token savings are the only real benefit

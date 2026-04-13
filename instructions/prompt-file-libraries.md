@@ -1,6 +1,6 @@
 ---
 title: "Prompt File Libraries for Reusable Agent Instructions"
-description: "Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand, reducing prompt variation and embedding"
+description: "Version-controlled prompt templates invoked on demand via slash commands, reducing variation and embedding real project file context into repeatable agent workflows."
 tags:
   - instructions
 aliases:
@@ -66,14 +66,11 @@ File references are the differentiating feature. They transform a generic prompt
 
 ### Variable Substitution
 
-Prompts support dynamic values ([VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)) [unverified — the specific variable names `${workspaceFolder}`, `${selectedText}`, `${file}`, and `${fileBasename}` have not been independently confirmed in the cited documentation]:
+Prompts support dynamic values ([VS Code: Prompt Files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)):
 
 | Variable | Resolves to |
 |----------|-------------|
-| `${workspaceFolder}` | Root workspace path |
-| `${selectedText}` | Current editor selection |
-| `${file}` | Active file path |
-| `${fileBasename}` | Active filename without path |
+| `${selection}` | Current editor selection |
 | `${input:name:placeholder}` | User-provided value at invocation |
 
 ## Where Prompt Files Fit in the Instruction Hierarchy
@@ -100,7 +97,7 @@ When a prompt file specifies `tools` in frontmatter, the resolution order is: pr
 | Claude Code | Skills (`SKILL.md`) | `.claude/skills/<name>/` | `/` slash commands |
 | Cursor | Project Rules | `.cursor/rules/` | Auto-apply or glob-matched |
 
-**Claude Code Skills** follow the [Agent Skills open standard](https://agentskills.io) — see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) [unverified — adoption count not confirmed] — supporting `$ARGUMENTS` substitution, subagent execution via `context: fork`, and dynamic shell injection.
+**Claude Code Skills** follow the [Agent Skills open standard](https://agentskills.io) — see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — supporting `$ARGUMENTS` substitution, subagent execution via `context: fork`, and dynamic shell injection.
 
 **Cursor Rules** activate based on context via glob-pattern scoping ([Cursor: Rules](https://cursor.com/docs/context/rules)) — unlike prompt files, they are not manually invoked.
 
@@ -149,10 +146,14 @@ For the given resource:
 
 A developer invokes `/add-endpoint` in Copilot Chat, enters "invoices" as the argument, and receives scaffolded code that follows the team's existing routing, validation, and test patterns — because the prompt file references those real project files rather than relying on the model's generic knowledge.
 
-## Unverified Claims
+## When This Backfires
 
-- Variable names `${workspaceFolder}`, `${selectedText}`, `${file}`, and `${fileBasename}` have not been independently confirmed in the cited VS Code documentation.
-- The Agent Skills open standard adoption count (30+ products) has not been independently verified.
+Prompt file libraries degrade in several predictable conditions:
+
+- **Stale file references** — prompt files embed relative paths to real project files (test examples, schemas, convention docs). When those source files are renamed, moved, or updated, the prompt silently generates output based on outdated context — often worse than a generic prompt because the model follows stale patterns.
+- **Single-workspace scope** — prompt files in `.github/prompts/` apply only to that workspace. Teams sharing conventions across multiple repos must copy and synchronize the same files, reintroducing the prompt variation the library was meant to solve.
+- **Tool unavailability degrades silently** — if a tool declared in `tools:` frontmatter is unavailable at invocation (not installed, not authorized), it is ignored without warning. Prompts that depend on specific tool access produce different results without any signal that capabilities are missing.
+- **Maintenance overhead on small teams** — creating, reviewing, and updating prompt files through a PR workflow adds process. For teams with fewer than three developers or infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
 
 ## Related
 
@@ -165,3 +166,5 @@ A developer invokes `/add-endpoint` in Copilot Chat, enters "invoices" as the ar
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [@import Composition Pattern](import-composition-pattern.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
+- [CLAUDE.md Convention for Structuring Agent Instructions](claude-md-convention.md)
+- [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)

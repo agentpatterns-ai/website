@@ -22,7 +22,7 @@ AI coding agents systematically neglect error handling, edge cases, and type saf
 
 ## Why It Happens
 
-Happy paths dominate training data; error paths are contextual and underrepresented. A catch-all handler or type escape hatch is the path of least resistance — the code compiles, the task appears done, and failures surface in production.
+The agent's objective is task completion: the code compiles, the tests pass, and the requested feature exists. Error handling, validation, and edge-case coverage are implicit requirements that rarely appear in the task description. A catch-all handler or type escape hatch satisfies the surface-level goal — the code compiles, the task appears done — while deferring failures to production.
 
 ## Detection
 
@@ -57,6 +57,19 @@ repos:
 **In CI:** Lint, type check, then test every agent-generated change — catches roughly 60% of AI code failures ([Augment Code](https://www.augmentcode.com/guides/debugging-ai-generated-code-8-failure-patterns-and-fixes)).
 
 **In review:** Look for what the agent *omitted* — missing `finally` blocks, absent validation, no error paths in tests.
+
+## When This Backfires
+
+Adding exhaustive error handling is not always the right call. Conditions where the pattern overreaches:
+
+- **Prototyping and throwaway scripts** — early-stage code that will never reach production can reasonably defer error paths; the cost of comprehensive handling outweighs the signal it provides at that stage.
+- **Framework-managed boundaries** — when a runtime, web framework, or CLI harness already catches and logs unhandled exceptions at a top-level boundary, adding redundant try/catch inside every function creates noise without adding recovery logic.
+- **Tight feedback loops with known input** — test harnesses, local dev scripts, and internal tooling operating on controlled, well-understood input rarely need the same defensive depth as user-facing production code.
+- **Over-specified exception types** — catching `FileNotFoundError` and `PermissionError` separately is correct; catching 15 distinct OS-level exceptions per function creates noise that obscures intent and discourages reading error paths at all.
+- **Linter false positives in exploratory code** — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems or test harnesses where catching `Exception` is intentional. Blanket rule application without `# noqa` discipline generates suppression churn.
+- **Prompt over-specification** — injecting long error-handling instructions into every prompt dilutes the task signal; agents may produce verbose try/except scaffolding that technically satisfies the prompt but obscures the logic under test.
+
+The anti-pattern targets *production-bound* code. Apply enforcement at the CI boundary, not the prompt boundary, to separate signal from noise.
 
 ## Example
 
@@ -106,3 +119,7 @@ The first version works when the file exists and contains valid JSON. The second
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) — Underestimating the effort needed to make AI-generated code production-ready
 - [Shadow Tech Debt](shadow-tech-debt.md) — Hidden quality issues accumulating in AI-generated code
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Progressive failure hierarchy for agents that encounter errors at runtime
+- [The Test Homogenization Trap](test-homogenization-trap.md) — AI-generated tests share the model's blind spots, missing the same edge cases the code misses
+- [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) — systematic process for tracing why an agent produced wrong or incomplete output
+- [Comprehension Debt](comprehension-debt.md) — Unreviewed agent output accumulates as code the team doesn't understand
+- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — Reviews focus on style while error-handling gaps go unnoticed

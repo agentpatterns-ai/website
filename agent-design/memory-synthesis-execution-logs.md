@@ -108,7 +108,7 @@ In `MEMORY.md`, separate observations from lessons:
 
 ### Environmental Scaffolding as Alternative
 
-Anthropic's [harness engineering](harness-engineering.md) pattern -- progress files, git-based state, feature checklists -- offers a complementary approach: artifacts are **verifiable and auditable** without requiring a synthesis step. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
+Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress files, git-based state, feature checklists](goal-monitoring-progress-tracking.md) -- offers a complementary approach: artifacts are **verifiable and auditable** without requiring a synthesis step. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
 
 ## Example
 

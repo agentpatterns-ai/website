@@ -278,6 +278,7 @@ Instructions drift in long sessions; hooks do not.
 - [Protecting Sensitive Files from Agent Context](../security/protecting-sensitive-files.md)
 - [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)

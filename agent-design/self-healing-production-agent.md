@@ -39,7 +39,7 @@ LangChain applied this to their GTM Agent: after every deploy, the system compar
 
 ### 1. Regression Detection
 
-Compare a fixed eval suite or functional test results before and after each deploy. A score drop or new failure triggers the loop. Use the same deterministic graders used for [harness hill-climbing](harness-hill-climbing.md) — test suite pass/fail and schema checks are more reliable than LLM-as-judge for repeated automated runs.
+Compare a fixed eval suite or functional test results before and after each deploy. A score drop or new failure triggers the loop. Use the same deterministic graders used for [harness hill-climbing](harness-hill-climbing.md) — test suite pass/fail and schema checks are more reliable than LLM-as-judge for repeated automated runs ([Anthropic: Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)).
 
 Trigger condition: post-deploy score falls below a threshold or one or more test cases that previously passed now fail.
 
@@ -83,6 +83,47 @@ This pattern handles *post-deploy regression detection and remediation*. It does
 - Improve overall agent quality offline (see [Agentic Flywheel](agentic-flywheel.md))
 - Tune harness configuration against an eval suite (see [Harness Hill-Climbing](harness-hill-climbing.md))
 - Catch regressions introduced by the fix PR itself — the same pipeline re-runs after the fix PR merges
+
+## Example
+
+A Python service uses pytest as its eval suite. A GitHub Actions workflow triggers on every deploy:
+
+```yaml
+# .github/workflows/self-heal.yml
+on:
+  deployment_status:
+    types: [success]
+
+jobs:
+  regression-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run post-deploy eval suite
+        id: eval
+        run: |
+          pytest tests/evals/ --json-report --json-report-file=results.json
+          python scripts/compare_baselines.py results.json baseline.json > diff.json
+      - name: Dispatch fix agent if regression detected
+        if: steps.eval.outputs.regression == 'true'
+        run: |
+          python scripts/triage_and_dispatch.py \
+            --diff diff.json \
+            --causal-commit ${{ github.sha }} \
+            --fix-agent claude-code \
+            --circuit-breaker-key "${{ github.repository }}-${{ github.sha }}"
+```
+
+`compare_baselines.py` compares pass/fail per test case. `triage_and_dispatch.py` checks whether each newly failing test passed in the pre-deploy baseline; if so, it attributes the regression to the current commit and calls the fix agent with three inputs: the failing test path, the git diff, and a PR-creation instruction. It increments a counter keyed by `(repo, failing_test)` in a shared store; once the counter hits N, it opens a human escalation ticket instead of dispatching.
+
+## When This Backfires
+
+The pattern adds overhead that only pays off under specific conditions:
+
+- **Low deploy frequency**: teams shipping once a week or less rarely need automated causality triage — the deploy-to-failure gap is wide enough for manual triage to remain fast.
+- **No stable eval suite**: the loop requires a fixed set of deterministic graders to compare pre- and post-deploy scores. If the eval suite itself is changing between deploys, the causal diff becomes unreliable and triage produces false positives.
+- **Fix agent exceeds the scope constraint**: if the fix agent regularly writes changes outside the failing test's coverage area, human reviewers face a growing review burden that can exceed the time saved by automated dispatch. This typically signals that the regression is architectural, not surgical.
+- **High flake rate in the test suite**: intermittent failures that are not caused by any deploy trigger the triage agent repeatedly, exhaust the circuit breaker budget, and escalate noise to human tickets — the opposite of what the pattern promises.
 
 ## Key Takeaways
 

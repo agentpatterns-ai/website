@@ -22,7 +22,7 @@ Hyper-personalized software is custom-built tooling tailored to a single busines
 
 2. **SaaS consolidation (~2005-2023)** — Web applications replaced custom tools. Businesses adopted Salesforce, Zendesk, HubSpot — generic products that required the business to adapt its processes. Integration gaps were filled with Zapier, webhook plumbing, and middleware.
 
-3. **AI-driven RAD (~2024-present)** — Coding agents can produce functional software in minutes. The economics shift: building a custom feature may cost less than a monthly SaaS subscription plus integration maintenance.
+3. **AI-driven RAD (~2024-present)** — Coding agents compress development cycles significantly. The economics shift: agent-driven development cost is measured per session, while SaaS subscriptions plus integration maintenance compound monthly with no ceiling.
 
 Geoffrey Huntley argues this cycle is completing ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)): "The last time we had hyper-personalised software for business was Microsoft Access, Delphi and Visual Basic... every business had hyper-personalised software. They didn't have to bend or conform to someone else's product vision."
 
@@ -35,7 +35,7 @@ SaaS has hidden costs beyond the subscription:
 - **Data fragmentation** — customer data scattered across vendors, each with its own API and export format
 - **Vendor lock-in** — switching costs accumulate as integrations deepen
 
-When an AI agent can build a functional CRM, support desk, or analytics dashboard in hours, the total cost of ownership comparison changes. The build cost drops; the SaaS overhead stays constant.
+The shift works because LLM inference cost scales with tokens, not developer headcount. A 4-hour agent session generating 2,000 lines of code costs a few dollars in API fees; a developer achieving the same output would cost orders of magnitude more. SaaS subscriptions, by contrast, scale with usage and users — costs that recur every month and increase as the business grows. When an AI agent compresses the build time for a functional CRM, support desk, or analytics dashboard from weeks to days, the total cost of ownership comparison changes. One-time build cost shrinks; ongoing SaaS subscription and integration overhead remains fixed.
 
 ## What "Every Business Needs"
 
@@ -58,7 +58,7 @@ The RAD era ended for reasons that still apply:
 - **Scaling limits** — custom Access databases broke at hundreds of concurrent users; custom agent-built software may hit similar walls
 - **Knowledge concentration** — when the one developer who built the system leaves, the system becomes unmaintainable
 
-AI agents partially address the maintenance argument (agents can maintain what agents built), but security, compliance, and organizational knowledge remain open challenges.
+AI agents partially address the maintenance argument (agents can maintain what agents built), but security, compliance, and organizational knowledge remain open challenges. One important caveat: peer-reviewed research shows that iterative AI code generation increases critical vulnerabilities by 37.6% after just five refinement cycles — even security-focused prompts introduced new flaws ([Security Degradation in Iterative AI Code Generation, IEEE-ISTAS 2025](https://arxiv.org/abs/2506.11022)). Using agents to maintain agent-built code without human review between iterations may deepen the security gap rather than close it.
 
 ## Example
 

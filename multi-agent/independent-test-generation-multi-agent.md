@@ -74,6 +74,13 @@ The non-linear jump when all three collaborate shows that closing the loop with 
 
 Each refinement iteration yields ~1-2% improvement with diminishing returns by iteration 4. Cap at 3-5 rounds — beyond that, failures indicate a fundamental approach problem. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
 
+## When This Backfires
+
+- **Test designer inherits spec errors**: both agents receive the same requirements document, so ambiguities, underspecifications, or outright errors propagate to both. The pattern eliminates code-context bias but cannot compensate for a flawed or incomplete specification.
+- **Generated tests can be wrong themselves**: independent generation does not guarantee test correctness. [BACE (arXiv:2603.28653)](https://arxiv.org/abs/2603.28653) documents how "incorrect code frequently passes faulty or trivial tests, while valid solutions are often degraded to satisfy incorrect assertions" — treating agent-generated tests as ground truth is fragile. Use public reference tests or a human-reviewed test suite as an anchor when correctness guarantees matter.
+- **Benchmark gap**: AgentCoder's results were measured on single-function HumanEval tasks. Multi-file codebases introduce cross-module dependencies and integration constraints that a spec-only test designer cannot fully anticipate — test accuracy improvements may be smaller in practice.
+- **Token overhead is real**: running three agents uses ~57K tokens per task versus a single-agent approach, roughly doubling cost. For high-volume, low-complexity tasks (e.g., boilerplate generation), the accuracy gain may not justify the overhead.
+
 ## Applying the Pattern
 
 - **Multi-agent frameworks**: Assign distinct system prompts. The test designer's prompt excludes code context; the programmer receives only execution errors, not test source.
@@ -124,6 +131,7 @@ The test designer generates tests from the spec alone — including edge cases l
 ## Sources
 
 - [AgentCoder: Multi-Agent Code Generation with Effective Testing and Self-optimisation](https://arxiv.org/abs/2312.13010) — Huang et al., 2023. Primary source for all quantitative claims on this page.
+- [BACE: Bayesian Anchored Co-Evolution for Code Generation](https://arxiv.org/abs/2603.28653) — 2026. Critiques treating agent-generated tests as ground truth; proposes modeling them as noisy sensors with Bayesian updates anchored to reference examples.
 
 ## Unverified Claims
 

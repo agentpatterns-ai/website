@@ -67,9 +67,9 @@ Sub-agents are a budget tool, not just an architecture pattern. Each sub-agent r
 
 ## Measuring What You Load
 
-Skill descriptions in Claude Code's skill architecture [use a total budget of 2% of context for all skill descriptions combined](https://code.claude.com/docs/en/skills). Full skill content loads only on invocation.
+Skill descriptions in Claude Code's skill architecture [use a dynamic budget of 1% of the context window for all skill descriptions combined](https://code.claude.com/docs/en/skills), with a fallback cap of 8,000 characters. Full skill content loads only on invocation.
 
-All skill descriptions share that 2% budget, so adding more skills means each description must be leaner.
+All skill descriptions share that budget, so adding more skills means each description must be leaner.
 
 ## Anti-Patterns
 

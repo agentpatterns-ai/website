@@ -88,7 +88,7 @@ The technique generalizes beyond Claude Code. Any agent platform with a configur
 
 ## Risks
 
-- **Lost safety guardrails.** The default prompt includes security and safety instructions. Full replacement in the SDK requires manually re-adding these. [Claude Code output styles](https://code.claude.com/docs/en/output-styles) replace coding-specific instructions while retaining the underlying tool ecosystem [unverified: source does not explicitly confirm whether built-in safety instructions are preserved or removed].
+- **Lost safety guardrails.** The default prompt includes security and safety instructions. Full replacement in the SDK requires manually re-adding these — the [Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts) confirm that custom `systemPrompt` strings lose both default tools and built-in safety, while output styles and `systemPrompt` with `append` preserve both. [Claude Code output styles](https://code.claude.com/docs/en/output-styles) replace coding-specific instructions while retaining the underlying tool ecosystem and safety guardrails.
 - **Tool misuse without domain framing.** An agent with file system access but no coding heuristics may use tools in unexpected ways. Domain-specific tool guidance in the replacement prompt mitigates this.
 - **Maintenance burden.** A custom system prompt does not benefit from upstream improvements to the default prompt. Each platform update requires reviewing and potentially updating replacement prompts.
 

@@ -18,7 +18,7 @@ A hint is a path reference: "follow the repository pattern in `src/repos/UserRep
 Code samples in instruction files create a shadow codebase. The real implementation changes while the prompt example stays frozen. Two failure modes emerge:
 
 - **Divergence.** The agent follows the frozen example, producing outdated patterns or incompatible signatures.
-- **Token waste.** A 30-line sample loaded at session start consumes context budget on every task, including unrelated ones. Multiply by several examples and a meaningful share of the window holds stale reference material.
+- **Token waste.** A 30-line sample loaded at session start consumes [context budget](../context-engineering/context-budget-allocation.md) on every task, including unrelated ones. Multiply by several examples and a meaningful share of the window holds stale reference material.
 
 ## How Hints Work
 

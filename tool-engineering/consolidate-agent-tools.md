@@ -36,6 +36,12 @@ When multiple related tools are necessary, group them under a common namespace p
 
 This is preferable to flat naming (`search`, `project_search`, `create_task`) where the relationship between tools is implicit.
 
+## Why It Works
+
+LLMs select tools by attending to their descriptions in the context window. When descriptions for ten narrow tools compete for attention, the model must reason about which subset achieves the goal — a multi-step inference problem layered on top of the actual task. Fewer, well-scoped tools reduce the selection decision to a direct mapping: intent → tool, rather than intent → combination of tools.
+
+The mechanism is not merely ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) found that expanding a tool catalog from small to large (up to 120,000 context tokens) caused accuracy drops of 7–86% depending on the model, with a pronounced "lost-in-the-middle" effect where the correct tool becomes harder to locate among many distractors. Consolidation removes the distractors at the source rather than relying on the model to filter them.
+
 ## Context Window Impact
 
 Each tool definition consumes context tokens. A large tool set with many narrow tools consumes context on definitions the agent may never use in a given task. Consolidating tools reduces context footprint proportionally — fewer tools means more context available for task data and reasoning.
@@ -44,13 +50,15 @@ This matters most in long-running tasks where context pressure accumulates. A to
 
 ## When Not to Consolidate
 
-Consolidation has limits. Do not merge tools that:
+Consolidation has limits and backfires in specific conditions. Do not merge tools that:
 
-- Serve genuinely distinct sub-tasks that are not always performed together
-- Have significantly different permission requirements (combining them would grant excess access)
-- Have output schemas so different that a merged interface becomes incoherent
+- Serve genuinely distinct sub-tasks that are not always performed together — forcing the agent to call a merged tool when it only needs one sub-operation wastes tokens and obscures intent
+- Have significantly different permission requirements — combining them grants excess access to every caller regardless of which sub-task they need
+- Have output schemas so different that a merged interface becomes incoherent — the agent can't reliably pattern-match on the response
 
-The test is whether the merged tool still maps to a single, clear human-understandable action. If it requires a paragraph to describe, it has been over-consolidated.
+**Drawbacks of over-consolidation:** A merged tool that handles too much becomes a black box. When it fails, the agent can't reason about which step failed. A merged `find_and_book_flight` that silently fails at the hold step looks identical to one that fails at confirmation. Narrow tools preserve failure granularity; merged tools trade it away for call-count efficiency.
+
+**The test:** Does the merged tool still map to a single, clear human-understandable action? If it requires a paragraph to describe, it has been over-consolidated. If two sub-tasks are *sometimes* called together but not always, keep them separate and let the agent compose them.
 
 ## Example
 

@@ -50,6 +50,12 @@ Later instructions take priority over earlier ones when they conflict. A directo
 
 Priority is implicit in the concatenation order, not declared with explicit keywords: global config provides defaults, project root narrows them, subdirectory files override for their scope.
 
+## Why It Works
+
+LLMs exhibit recency bias: instructions appearing later in a prompt carry higher effective weight when they conflict with earlier ones. By concatenating from general to specific, the harness exploits this property to produce scoped behavior without requiring the model to evaluate conditionals.
+
+A flat file saying "if in `api/`, use uv; otherwise use pip" requires the model to evaluate that condition correctly every time. A concatenated prompt replaces it with a later, unconditional "use uv" — the latter wins without conditional reasoning.
+
 ## AGENTS.override.md: Per-Directory Alternative to AGENTS.md
 
 [Codex's harness](https://openai.com/index/unlocking-the-codex-harness/) supports `AGENTS.override.md`: when both files exist in the same directory, the harness selects `AGENTS.override.md` and ignores `AGENTS.md` for that directory. Parent directory files are still concatenated normally — the override only affects which file is chosen within its own directory.
@@ -75,7 +81,15 @@ Any [agent harness](../agent-design/agent-harness.md) that reads instruction fil
 3. Enforce a total size cap
 4. Check for override files and prefer `AGENTS.override.md` over `AGENTS.md` within the same directory when both exist — parent directory files are still concatenated regardless
 
-The [AGENTS.md standard](https://agents.md) describes the directory traversal convention. Tools that implement AGENTS.md support — including GitHub Copilot and Cursor — load these files automatically [unverified — the AGENTS.md standard lists compatible tools but automatic loading behavior is not confirmed in each tool's public docs].
+The [AGENTS.md standard](https://agents.md) describes the directory traversal convention. Tools that implement AGENTS.md support — including [GitHub Copilot](https://github.blog/changelog/2025-08-28-copilot-coding-agent-now-supports-agents-md-custom-instructions/) and Cursor — load these files automatically when working within a repository.
+
+## When This Backfires
+
+Layering works when scopes are independent. It degrades in several conditions:
+
+- **Conflicting rules without clear resolution**: If a global file says "always use TypeScript" and a directory file says "use JavaScript", the directory file wins by position — but only if the agent respects concatenation order. Agents that weight by relevance rather than position may resolve the conflict unpredictably.
+- **Instruction bloat in deep hierarchies**: A file six directories deep inherits instructions from every ancestor. A few verbose ancestor files saturate the 32 KiB Codex default before task-specific content reaches the model.
+- **Inconsistent tool support**: Not all tools implement the full traversal spec. Some load only the root AGENTS.md; others support nesting but not `AGENTS.override.md`. Instructions written assuming full traversal may be silently ignored.
 
 ## Example
 
@@ -116,3 +130,5 @@ The instruction "use uv not pip" from `api/AGENTS.md` appears last and takes pri
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
+- [When to Use Examples vs Rules in Agent Instructions](example-driven-vs-rule-driven-instructions.md)
+- [WRAP Framework for Writing Agent-Ready Issue Descriptions](wrap-framework-agent-instructions.md)

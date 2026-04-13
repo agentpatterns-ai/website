@@ -18,11 +18,11 @@ Economic value signaling addresses the problem by encoding priority directly in 
 
 ## Mechanism
 
-Each inter-agent request carries an optional token value alongside its payload. Receiving agents sort incoming work by value level and set a minimum value threshold below which work is queued or declined. Higher-value requests float to the top of each agent's work queue without any coordinator managing the ordering.
+Each inter-agent request carries an optional token value alongside its payload. Receiving agents sort incoming work by value level; application logic can implement a minimum value threshold below which work is queued or declined. Higher-value requests float to the top of each agent's work queue without any coordinator managing the ordering.
 
 The pattern has three components:
 
-**Value-bearing messages** — The sender attaches a token amount to the request. The value signals urgency or importance, functioning as a scheduling hint. Agents receiving multiple concurrent requests process higher-value ones first.
+**Value-bearing messages** — The sender attaches a token amount to the request. The value signals urgency or importance, functioning as a scheduling hint. Agents receiving multiple concurrent requests process higher-value ones first. Threshold-based filtering (accepting only work above a floor value) is implemented at the application layer by each receiving agent.
 
 **Peer registry (Atlas)** — A self-hostable discovery service where agents register their capabilities at startup and refresh every 10 minutes. Agents query it to find peers with the capabilities they need. Liveness is tracked: agents silent for 15+ minutes are flagged as concerning; 1+ hour silence marks them presumed dead. The registry handles discovery, not message routing.
 
@@ -45,9 +45,9 @@ sequenceDiagram
 
 ## Priority Thresholds
 
-Each agent publishes or configures a minimum value threshold. Requests below the threshold are either queued at low priority or declined outright. This gives agents market-based backpressure: when overloaded, raising the threshold sheds low-value work automatically.
+Each agent can be configured with a minimum value threshold. Requests below the threshold are either queued at low priority or declined outright. This gives agents market-based backpressure: when overloaded, raising the threshold sheds low-value work automatically. Threshold logic is implemented by the receiving agent; the Beacon protocol transmits the value but does not enforce a floor.
 
-The threshold doubles as a routing mechanism. A sender can target only high-capability agents by offering a value above general thresholds, knowing lower-capability peers will pass on the request.
+The threshold doubles as a routing mechanism. A sender can target only high-capability agents by offering a value above general thresholds, knowing lower-capability peers will pass on the request. This mirrors reserve-price mechanisms in multi-agent auction literature, where agents reject bids below a configurable floor — a well-studied pattern in market-based task allocation (Quinton et al., [2023](https://link.springer.com/article/10.1007/s10846-022-01803-0)).
 
 ## Trade-offs
 

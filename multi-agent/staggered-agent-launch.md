@@ -133,5 +133,6 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
+- [Swarm Migration Pattern](swarm-migration-pattern.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md) — the standard enabling MCP server-based coordination patterns

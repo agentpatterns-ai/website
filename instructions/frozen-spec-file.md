@@ -139,6 +139,14 @@ The frozen spec works alongside mutable files — plan, progress, and status. Th
 
 OpenAI's Codex long-horizon guide uses this exact split: Prompt.md is frozen (goals and constraints), while Plan.md and Implement.md are mutable working documents ([Run Long-Horizon Tasks with Codex](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)).
 
+## When This Backfires
+
+A frozen spec adds overhead that only pays off under specific conditions. Skip it or treat it as mutable when:
+
+- **Requirements are genuinely exploratory.** If the goal is discovery — figuring out what to build, not building a known thing — locking constraints early causes thrash. Spec-first only works when you know what done looks like.
+- **Sessions are short enough that context doesn't compact.** The re-read loop is the core benefit. For tasks that complete in a single context window, the spec provides no protection that a well-written system prompt doesn't already provide.
+- **Scope changes are legitimate and frequent.** A frozen spec becomes adversarial when stakeholders update requirements mid-session. Agents blocked by an outdated constraint will either stall or find workarounds. Treat the spec as mutable — and accept the drift risk — when requirements aren't stable enough to freeze.
+
 ## Key Takeaways
 
 - A frozen spec contains goals, non-goals, hard constraints, deliverables, and done-when criteria — nothing else
@@ -158,3 +166,6 @@ OpenAI's Codex long-horizon guide uses this exact split: Prompt.md is frozen (go
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — tiered offloading and summarisation techniques that determine what context survives compaction
 - [The Specification as Prompt](specification-as-prompt.md) — using formal artifacts (types, schemas, tests) as agent instructions
 - [Layer Agent Instructions by Specificity](layered-instruction-scopes.md) — structural approach to organizing agent instruction files
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — why writing constraints into a spec is not the same as agents following them
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — limits on how reliably agents follow written instructions regardless of format
+- [Event-Driven System Reminders](event-driven-system-reminders.md) — injecting constraint reminders at specific events to reinforce spec adherence across a long session

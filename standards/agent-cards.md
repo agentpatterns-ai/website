@@ -25,24 +25,25 @@ Clients retrieve the card via a simple HTTP GET request. This follows the [RFC 8
 
 ## Card Structure
 
-An [agent card](https://a2a-protocol.org/latest/specification/) contains these top-level fields:
+An [agent card](https://github.com/google/A2A/blob/main/docs/specification.md) contains these top-level fields:
 
 | Field | Type | Purpose |
 |-------|------|---------|
 | `name` | string | Agent identifier |
 | `description` | string | What the agent does |
-| `url` | string | Service endpoint |
+| `supportedInterfaces` | array | Service endpoints with protocol bindings |
 | `version` | string | Agent version |
 | `provider` | object | Organization name and URL |
 | `capabilities` | object | Feature flags (streaming, push notifications, extended cards) |
-| `authentication` | object | Required auth schemes and credentials |
+| `securitySchemes` | object | Authentication scheme definitions (OpenAPI-compatible) |
+| `security` | array | Which security schemes apply to the agent |
 | `defaultInputModes` | string[] | Accepted MIME types for input |
 | `defaultOutputModes` | string[] | Produced MIME types for output |
 | `skills` | array | Individual capability units |
 
 ## Skills Schema
 
-Each [skill](https://a2a-protocol.org/latest/tutorials/python/3-agent-skills-and-card/) describes a specific capability the agent can perform:
+Each [skill](https://github.com/google/A2A/blob/main/docs/specification.md#agentskill) describes a specific capability the agent can perform:
 
 ```json
 {
@@ -60,7 +61,7 @@ Skills carry their own input and output modes, overriding the card-level default
 
 ## Capabilities Declaration
 
-The [capabilities object](https://a2a-protocol.org/latest/specification/) declares protocol-level features the agent supports:
+The [capabilities object](https://github.com/google/A2A/blob/main/docs/specification.md#agentcapabilities) declares protocol-level features the agent supports:
 
 - **`streaming`**: SSE-based real-time update delivery
 - **`pushNotifications`**: Webhook-based update delivery to client endpoints
@@ -70,7 +71,7 @@ Client agents read these flags to select the appropriate communication pattern b
 
 ## Authentication
 
-Agent cards declare required authentication schemes using formats compatible with OpenAPI security schemes:
+Agent cards declare authentication requirements using two fields: `securitySchemes` defines available schemes in OpenAPI-compatible format; `security` specifies which schemes apply. Supported scheme types:
 
 - API keys
 - OAuth2 (with flow types, token URLs, scopes)
@@ -83,13 +84,22 @@ This allows client agents to determine authentication requirements before attemp
 
 **Static cards** are fixed JSON files suitable for agents with a single capability set for all callers. Serve as a static file with standard HTTP caching.
 
-**Dynamic cards** are generated per-request based on the caller's identity or permissions. An agent may expose different skills to different callers — an authenticated enterprise user sees internal skills that anonymous callers do not. A2A supports this through the `GetExtendedAgentCard` operation, which returns a [richer card after authentication](https://a2a-protocol.org/latest/specification/).
+**Dynamic cards** are generated per-request based on the caller's identity or permissions. An agent may expose different skills to different callers — an authenticated enterprise user sees internal skills that anonymous callers do not. A2A supports this through the `GetExtendedAgentCard` operation, which returns a [richer card after authentication](https://github.com/google/A2A/blob/main/docs/specification.md).
 
 ## Card Signing
 
-Agent cards may be [digitally signed using JWS (RFC 7515)](https://a2a-protocol.org/latest/specification/) to verify authenticity and integrity. The card JSON is canonicalized per RFC 8785 before signing, ensuring consistent hash values regardless of property ordering.
+Agent cards may be [digitally signed using JWS (RFC 7515)](https://github.com/google/A2A/blob/main/docs/specification.md) to verify authenticity and integrity. The card JSON is canonicalized per RFC 8785 before signing, ensuring consistent hash values regardless of property ordering.
 
 Signing is relevant in federated environments where a client agent needs to verify that a card was published by the claimed provider, not a man-in-the-middle.
+
+## When This Backfires
+
+Agent cards add friction that outweighs their value in three common situations:
+
+- **Single-consumer integrations**: When exactly one client calls one agent, a shared config file or environment variable is simpler than maintaining a published well-known URL with correct caching headers.
+- **Rapidly-changing capability sets**: Static cards become stale when skills are added or removed frequently. Dynamic cards add server complexity that requires careful cache invalidation.
+- **Cold-start bootstrapping**: The card solves *what* an agent can do once you know its base URL, not *how to find that URL*. Discovery registries or service meshes still require out-of-band coordination.
+- **A2A schema coupling**: Card consumers written against an early A2A schema version may break when the spec evolves; the `url` → `supportedInterfaces` rename in the spec is one example of this drift.
 
 ## Key Takeaways
 
@@ -107,21 +117,29 @@ A complete agent card for a code-review agent published at `https://review.examp
 {
   "name": "CodeReviewAgent",
   "description": "Automated code review for pull requests — checks style, bugs, and security vulnerabilities",
-  "url": "https://review.example.com",
   "version": "1.2.0",
   "provider": {
     "organization": "Acme Engineering",
     "url": "https://acme.example.com"
   },
+  "supportedInterfaces": [
+    {
+      "url": "https://review.example.com",
+      "protocolBinding": "HTTP+JSON"
+    }
+  ],
   "capabilities": {
     "streaming": true,
     "pushNotifications": false,
     "extendedAgentCard": true
   },
-  "authentication": {
-    "schemes": ["Bearer"],
-    "credentials": "OAuth2 token from https://auth.acme.example.com"
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer"
+    }
   },
+  "security": [{"bearerAuth": []}],
   "defaultInputModes": ["text/plain", "application/json"],
   "defaultOutputModes": ["text/markdown"],
   "skills": [
@@ -156,3 +174,5 @@ An orchestrator agent discovers this card via `GET /.well-known/agent-card.json`
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)
+- [AGENTS.md: A README for AI Coding Agents](agents-md.md)
+- [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)

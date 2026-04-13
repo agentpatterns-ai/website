@@ -33,7 +33,7 @@ DATABASE_URL="postgres://..." OPENAI_API_KEY="sk-..." claude
 
 The agent's tools can call scripts that consume `$DATABASE_URL` internally — the variable's value never needs to appear in a prompt or tool call.
 
-For persistent configuration, use a tool like `direnv` to load `.envrc` into your shell automatically when you enter the project directory [unverified — third-party tool behavior not verified against official docs].
+For persistent configuration, use a tool like `direnv`, which hooks into your shell and evaluates `.envrc` whenever you `cd` into the project directory ([direnv.net](https://direnv.net/)).
 
 ## Wrapper Scripts
 
@@ -63,7 +63,7 @@ Do not store secrets in:
 - AGENTS.md, system prompts, or instruction files
 - Comments in code files
 
-Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets at process start and inject them as environment variables. The agent never sees the retrieval output if secrets are injected before the session begins [unverified — depends on specific secrets manager CLI behavior].
+Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets at process start and inject them as environment variables. When secrets are fetched in a shell script that runs before the agent process starts, the retrieval command's output exists only in that parent shell context — the agent session inherits the exported variable value, not the command that produced it.
 
 ## Auditing Agent Environment Access
 
@@ -80,12 +80,12 @@ Remove any credential not required for the task. A minimal permission set reduce
 
 In CI/CD pipelines where agents run autonomously:
 
-- Use short-lived tokens scoped to the minimum required permissions [unverified — specific token lifetimes depend on provider]
+- Use short-lived tokens scoped to the minimum required permissions — most CI providers and cloud platforms support OIDC-based federated identities that eliminate long-lived secrets entirely
 - Rotate tokens between pipeline runs rather than using long-lived credentials
 - Store secrets in the CI platform's native secret store (GitHub Actions secrets, GitLab CI variables), not in repo files
-- Mask secret values in CI logs — most platforms do this automatically for registered secrets [unverified — platform-specific behavior]
+- Mask secret values in CI logs — GitHub Actions automatically redacts all registered secret values that appear in stdout or stderr ([GitHub Docs](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions))
 
-GitHub Actions example — secrets injected as environment variables, never written to disk [unverified — exact Claude Code CLI invocation flag may differ]:
+GitHub Actions example — secrets injected as environment variables, never written to disk:
 
 ```yaml
 - name: Run agent task
@@ -94,6 +94,20 @@ GitHub Actions example — secrets injected as environment variables, never writ
     API_KEY: ${{ secrets.API_KEY }}
   run: claude --print "run the migration"
 ```
+
+## Why It Works
+
+Environment variables are inherited by child processes but are not transmitted as text through tool calls. When an agent invokes a tool, it sends a command string — not the contents of its environment. The shell executing that command inherits the env, but the agent's context window never contains the variable's value; it only contains the command name and arguments. Wrapper scripts extend this boundary: the script consumes the credential internally via the shell, and the agent receives only the script's stdout — the credential value traverses no channel the agent can read or log.
+
+## When This Backfires
+
+Env var injection has specific failure modes practitioners should anticipate:
+
+- **Shared container environments**: In multi-tenant or sidecar-based deployments, sibling processes may be able to read `/proc/<pid>/environ` on Linux unless the container is hardened with user namespaces or seccomp restrictions.
+- **Sub-process env stripping**: Some agent frameworks spawn sandboxed sub-processes with a cleaned environment. If the agent runs tools in an isolated subprocess, env vars set in the parent shell may not be inherited — verify the tool execution model before relying on this pattern.
+- **Env var logging by the agent itself**: Some agents log their startup environment for debugging. Confirm the agent's own log output is not captured in session context or written to files the agent can read.
+- **Secrets manager retrieval inside the session**: Fetching a secret with a CLI tool *during* an agent task (rather than before session start) risks the retrieval command and its output appearing in the context window. Retrieve all required secrets before the agent session begins.
+- **Env sprawl**: Injecting all available credentials rather than just the ones needed for the current task expands blast radius unnecessarily — see [Blast Radius Containment](blast-radius-containment.md).
 
 ## Example
 
@@ -129,17 +143,11 @@ The agent calls `scripts/stripe-balance.sh` and `scripts/query-db.sh` as tools. 
 - In CI pipelines, use short-lived scoped tokens stored in the platform's native secret store
 - Blocking agent reads of credential files is a complementary control, not a replacement for this pattern
 
-## Unverified Claims
-
-- `direnv` loads `.envrc` into your shell automatically when you enter the project directory [unverified — third-party tool behavior not verified against official docs]
-- The agent never sees the retrieval command's output if secrets are injected before the session begins [unverified — depends on specific secrets manager CLI behavior]
-- Use short-lived tokens scoped to the minimum required permissions [unverified — specific token lifetimes depend on provider]
-- Most platforms mask secret values in CI logs automatically for registered secrets [unverified — platform-specific behavior]
-- Exact Claude Code CLI invocation flag may differ [unverified — exact Claude Code CLI invocation flag may differ]
-
 ## Related
 
+- [Credential Hygiene for Agent Skills](credential-hygiene-agent-skills.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
+- [Reactive Environment Hooks: CwdChanged and FileChanged](../tool-engineering/reactive-environment-hooks.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)

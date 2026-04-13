@@ -17,7 +17,7 @@ aliases:
 
 ## The Architectural Insight
 
-Probabilistic defenses (detection classifiers, adversarial training, instruction hierarchies) reduce injection success rates but cannot eliminate them. CaMeL, proposed by Debenedetti et al. at Google DeepMind, takes a different approach: enforce the instruction/data boundary at the harness level so the model's susceptibility to injection is irrelevant. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Probabilistic defenses (detection classifiers, [adversarial training](close-attack-to-fix-loop.md), instruction hierarchies) reduce injection success rates but cannot eliminate them. CaMeL, proposed by Debenedetti et al. at Google DeepMind, takes a different approach: enforce the instruction/data boundary at the harness level so the model's susceptibility to injection is irrelevant. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
 The key observation: prompt injection succeeds because untrusted data (tool outputs, web pages, emails) and trusted control flow (the user's query) enter the same context. CaMeL separates them.
 

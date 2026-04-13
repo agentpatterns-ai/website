@@ -1,6 +1,6 @@
 ---
 title: "Domain-Specific System Prompts with Concrete Examples"
-description: "Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see System Prompt"
+description: "How domain-specific system prompts with worked examples improve agent reasoning quality, where to place them, and when the technique has no effect."
 aliases:
   - Domain-Specific Personas
   - Domain-Specific System Prompts
@@ -13,10 +13,10 @@ tags:
 
 > Generic instructions produce mediocre reasoning. Domain-specific system prompts with worked examples produce consistent, high-quality agent behavior in your specific context.
 
+## The Gap Between Generic and Domain-Specific
+
 !!! note "Also known as"
     Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
-
-## The Gap Between Generic and Domain-Specific
 
 A generic instruction like "reason carefully before acting" gives the model no information about what good reasoning looks like in your domain. It has no worked examples, no domain vocabulary, and no model of what edge cases matter. The result is reasoning that looks thoughtful but misses the specific failures you care about.
 
@@ -31,7 +31,7 @@ A domain-specific system prompt includes:
 - **Explicit edge case guidance** — what to do when inputs are ambiguous, when resources are missing, when multiple valid paths exist
 - **Success and failure definitions** — what a correct outcome looks like, stated specifically enough that the agent can self-check
 
-Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability").
+Abstract rules ("be careful with edge cases") are harder to apply than concrete examples ("when the requested flight is full, check for connecting routes before returning no availability"). [Chain-of-thought research](https://arxiv.org/abs/2201.11903) establishes that showing intermediate reasoning steps in prompts produces substantially better performance on complex tasks than stating rules alone — the mechanism is that exemplars guide which reasoning path the model follows.
 
 ## Where Examples Belong
 
@@ -61,6 +61,17 @@ The examples should come from your actual domain. Invented examples based on ima
 6. Repeat
 
 This is not a one-time effort. As the agent encounters new cases and as the domain evolves, the example set needs maintenance.
+
+## When This Backfires
+
+Domain-specific prompts with worked examples do not help uniformly. [Anthropic's analysis](https://www.anthropic.com/engineering/claude-think-tool) identifies conditions where the approach produces no measurable gains:
+
+- **Single or parallel tool calls** — if the task requires only one tool call, or multiple parallel calls with no sequential dependency, there is no multi-step reasoning chain for examples to shape
+- **Low-constraint tasks** — when the agent's default behavior is already adequate and few constraints need to be enforced, adding examples increases prompt length without improving outcomes
+- **Insufficient production data** — examples written from imagined failure cases tend to miss actual failure modes; without instrumented production traffic, the example set reflects guesswork rather than observed gaps
+- **High-churn domains** — if the domain vocabulary, tool signatures, or business rules change frequently, example sets can become stale or actively misleading; the maintenance cost rises proportionally with change velocity
+
+The token overhead of a detailed example set is non-trivial. For short, simple tasks where the model already performs near ceiling, a domain-specific prompt adds latency and cost without observable benefit.
 
 ## Example
 

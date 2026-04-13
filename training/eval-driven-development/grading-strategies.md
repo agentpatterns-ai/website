@@ -108,7 +108,7 @@ Output as JSON: {"factual_accuracy": {"score": N, "reason": "..."}, ...}
 See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-judge-evaluation.md) for the full pipeline.
 
 !!! warning "The Test Homogenization Trap"
-    When LLMs generate test cases, the tests systematically mirror the generating model's own error patterns — they cluster around the same solution strategies the model uses and miss the exact edge cases the model also misses. This "homogenization trap" means a model-generated test suite provides false confidence: tests pass because they share the model's blind spots, not because the code is correct. Mitigate by combining LLM-generated structural tests with human-authored edge cases, or use differential analysis that compares failed vs corrected submissions to target specific error patterns. [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
+    When LLMs generate test cases, the tests systematically mirror the generating model's own error patterns — they cluster around the same solution strategies the model uses and miss the exact edge cases the model also misses. This ["homogenization trap"](../../anti-patterns/test-homogenization-trap.md) means a model-generated test suite provides false confidence: tests pass because they share the model's blind spots, not because the code is correct. Mitigate by combining LLM-generated structural tests with human-authored edge cases, or use differential analysis that compares failed vs corrected submissions to target specific error patterns. [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
 
 ---
 

@@ -24,7 +24,7 @@ A pipeline agent invokes the Skill tool with an instruction override prepended t
 IMPORTANT: Do not use AskUserQuestion. Process this issue directly.
 ```
 
-The model's instruction-following suppresses the interactive tool call. The agent infers the values that would have come from user input and continues execution without pausing.
+The model's instruction-following suppresses the interactive tool call. The agent infers the values that would have come from user input and continues execution without pausing. (Note: background subagents suppress `AskUserQuestion` automatically — the tool call fails silently — but lack the explicit "infer values" framing this override provides. See [Claude Code subagent docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents) for the distinction between foreground and background subagent behavior.)
 
 ```mermaid
 flowchart LR
@@ -116,6 +116,16 @@ Prompt-level suppression is not guaranteed. The model may still occasionally att
 - When the command text explicitly names the tool ("Use AskUserQuestion to confirm")
 
 For higher reliability, combine the prompt override with `disallowedTools: [AskUserQuestion]` in subagent frontmatter. The prompt override handles graceful degradation (the agent infers values instead of prompting); the tool restriction provides a hard block if the model attempts the call anyway.
+
+## When This Backfires
+
+The prompt-level override trades reliability for simplicity. Avoid it when the cost of a wrong inference is high:
+
+- **Critical or irreversible operations** — if the agent guesses wrong (wrong deployment target, wrong file to delete), a stalled prompt would have caught the error. The override lets it proceed silently.
+- **Commands with many decision points** — each suppressed prompt is a value the agent must infer. Compound inference errors multiply; a command that asks three questions in sequence has three opportunities to diverge from intent.
+- **Shared command definitions used across multiple callers** — an override tuned for one pipeline context may produce unexpected behavior when another pipeline invokes the same command with different implicit assumptions.
+
+For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/claude-code/sub-agents#subagent-configuration) at the subagent level (which makes the restriction explicit and auditable) or [headless mode](../workflows/headless-claude-ci.md) (which removes the interactive layer entirely rather than suppressing it).
 
 ## Key Takeaways
 

@@ -88,7 +88,7 @@ Because failure sets are non-overlapping, combining agents is more effective tha
 
 Practical approaches:
 - **Majority vote**: run three agents on the same task, apply the most common patch
-- **Confidence-weighted selection**: route to a specialized agent based on task characteristics (reproduction-heavy vs. localization-heavy)
+- **Confidence-weighted selection**: route to a [specialized agent](specialized-agent-roles.md) based on task characteristics (reproduction-heavy vs. localization-heavy)
 - **Sequential fallback**: if agent A fails (detected by test suite), route to agent B
 
 The ensemble gain is proportional to failure-set divergence. Agents using different frameworks with different exploration strategies diverge more than agents using the same framework with different models.
@@ -114,6 +114,7 @@ Applying behavioral-pattern auditing and ensembling strategies has diminishing r
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — two-phase constrained approaches outperforming autonomous agents on SWE-bench
 - [Agent Self-Review Loop](agent-self-review-loop.md) — implementing the post-patch verification loop pattern
 - [Harness Engineering](harness-engineering.md) — environment design as the primary lever on agent behavioral patterns
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — why feedback loop quality outperforms model upgrades; hierarchy of feedback types
 - [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md) — structuring long-running agent work with initializer and execution phases
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — trajectory-level misbehavior classification (30% misbehavior rate in production)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role loop for iterative quality improvement

@@ -15,7 +15,7 @@ tags:
 
 Static system prompts lose effectiveness over extended sessions. The model progressively deprioritizes initial instructions as conversation history grows — even when those instructions remain present in context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).
 
-This is distinct from context compression. Instructions may survive compaction but still fail to influence behavior because they occupy a low-attention region of the context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)).
+This is distinct from context compression. Instructions may survive compaction but still fail to influence behavior because they occupy a low-attention region of the context ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)). Research on long-context LLMs confirms that models attend most reliably to content at the beginning and end of context, with degraded recall for middle-positioned content ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
 
 ## Event Detectors
 
@@ -99,6 +99,17 @@ class ReminderMiddleware:
 
 A reminder is only generated when the failure count crosses the threshold. The `inject` method appends it as a `user` message — not a system prompt addition — consistent with the user-role injection pattern described above. If `record_tool_result` is never called (e.g., the detector crashes), `messages` is returned unchanged, preserving graceful degradation.
 
+## When This Backfires
+
+Event-driven reminders add value for long-running, multi-step agents but introduce real costs in simpler contexts:
+
+- **Short sessions**: Reminder infrastructure is pure overhead when a session rarely exceeds a few dozen exchanges. Instruction fade-out is negligible; detector and template machinery adds complexity without benefit.
+- **Detector false positives**: A badly tuned failure threshold fires on normal retry behavior, injecting redundant guidance into a functioning flow. Accumulated user-role injections consume tokens and can themselves occupy low-attention context positions — recreating the problem they're meant to solve.
+- **Template drift**: If reminder templates are not kept consistent with the system prompt, injected user messages can contradict baseline instructions, producing confused behavior that is harder to debug than simple fade-out.
+- **Context token pressure**: Each injected reminder consumes tokens. Under tight context budgets, frequent reminder injection accelerates the context pressure it aims to mitigate ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
+
+Prefer event-driven reminders for long-running or safety-critical agents. For short-lived, well-scoped tasks, a well-structured static system prompt is lower risk.
+
 ## Key Takeaways
 
 - Static system prompts fade in effectiveness over extended sessions; event-driven reminders counter this.
@@ -116,3 +127,4 @@ A reminder is only generated when the failure count crosses the threshold. The `
 - [Domain-Specific System Prompts](domain-specific-system-prompts.md)
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md)
 - [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — the compression mechanism that event-driven reminders complement
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why adding more instructions past a threshold degrades compliance; reminders counter this without adding static rules

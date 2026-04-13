@@ -18,7 +18,7 @@ GitHub [Copilot CLI](../tools/copilot/copilot-cli-agentic-workflows.md) v1.0.13 
 
 ## The sampling/createMessage Request
 
-The server sends a `sampling/createMessage` request with these fields:
+The server sends a [`sampling/createMessage`](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2025-03-26/client/sampling.mdx) request with these fields:
 
 | Field | Required | Description |
 |-------|----------|-------------|

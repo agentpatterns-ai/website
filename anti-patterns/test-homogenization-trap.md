@@ -38,7 +38,17 @@ The root cause is error clustering. [LLM-induced errors are highly clustered aro
 
 **Combine testing methodologies.** [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297). Different methods expose different blind spots.
 
-**Measure test quality, not just coverage.** Four metrics distinguish effective test suites from homogenized ones: Detection Rate, Verifier Accuracy, Distinct Error Pattern Coverage, and normalized AUC. [A suite scoring high on verifier accuracy but low on error pattern coverage catches common bugs while missing rare-but-critical failure modes.](https://arxiv.org/abs/2507.06920)
+**Measure test quality, not just coverage.** Four metrics distinguish effective suites from homogenized ones: Detection Rate, Verifier Accuracy, Distinct Error Pattern Coverage, and normalized AUC. [High verifier accuracy with low error-pattern coverage catches common bugs while missing rare-but-critical failure modes.](https://arxiv.org/abs/2507.06920)
+
+## When This Backfires
+
+Three conditions make the mitigation overhead unjustified:
+
+1. **Throwaway scripts and prototypes.** A one-off proof-of-concept with no production SLA does not warrant mutation-guided generation. Cost exceeds risk.
+2. **Pure-function, well-bounded algorithms.** No side effects, no I/O, small input domain — model blind spots approximate human blind spots.
+3. **Different model for tests than for code.** Error clustering diverges when the test-generating model has different training data or architecture. Tests from Model B are not blind to Model A's gaps.
+
+The trap is most damaging when one model generates both code and tests in a single pass and the green suite is treated as proof of correctness.
 
 ## Example
 
@@ -73,6 +83,16 @@ def test_median_no_mutation():
 
 The fix: use `sorted()` instead of `.sort()`. A human tester thinks about side effects; the model does not.
 
+## When This Doesn't Apply
+
+Extra mitigation effort — mutation testing, differential analysis, human edge cases — is unwarranted when:
+
+- **Throwaway scripts** — one-off migrations or prototypes read once and discarded; false-positive confidence causes no downstream harm.
+- **Trivial-domain pure functions** — stateless utilities whose input space an LLM can exhaust (a two-argument comparator, a unit converter). Error clustering only bites when the blind-spot space is large.
+- **Thin wrappers over hardened libraries** — code that adds no logic of its own; LLM tests covering the call signature are sufficient.
+
+Production paths, functions with side effects, and any code handling untrusted input fall outside these exceptions.
+
 ## Key Takeaways
 
 - LLM-generated tests cluster around the model's own solution strategies and miss the same edge cases the code misses
@@ -87,3 +107,4 @@ The fix: use `sorted()` instead of `.sort()`. A human tester thinks about side e
 - [Trust Without Verify](trust-without-verify.md) — accepting polished output without independent verification
 - [TDD Agent Development](../verification/tdd-agent-development.md) — write tests first so the agent implements against human-defined expectations
 - [Behavioral Testing for Agents](../verification/behavioral-testing-agents.md) — testing what agents do, not how they do it
+- [The Yes-Man Agent](yes-man-agent.md) — a single agent shares its own blind spots; separate reviewer agents expose what the implementer misses

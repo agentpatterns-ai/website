@@ -44,7 +44,7 @@ Snyk's February 2026 audit of 3,984 skills across ClawHub and skills.sh found:
 - **13.4%** (534 skills) contain critical issues including malware distribution and credential theft
 - **100%** of confirmed malicious skills combined code payloads with prompt injection — attacking both the code execution layer and the natural language instruction layer simultaneously
 
-The ClawHavoc campaign compromised 1,184+ skills across the ClawHub registry, with five of the top seven most-downloaded skills at peak infection confirmed as malware delivering Atomic Stealer (AMOS) to macOS users.
+The ClawHavoc campaign compromised 1,184+ skills across the ClawHub registry, with five of the top seven most-downloaded skills at peak infection confirmed as malware delivering Atomic Stealer (AMOS) to macOS users ([Snyk ToxicSkills study](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)).
 
 Responsible disclosure from the DDIPE research produced 4 confirmed CVEs and 2 deployed fixes across production frameworks ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)).
 
@@ -92,6 +92,17 @@ Only 1.6% of adversarial payloads bypass all tested models simultaneously. Runni
 
 Contain blast radius by running agents that load external skills with minimal OS-level permissions: a dedicated user, scoped filesystem access (not blanket home directory access), and deny-by-default network egress with an allowlist of required domains. See [Blast Radius Containment](blast-radius-containment.md) and [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md).
 
+## When This Backfires
+
+The defense stack carries real operational costs that make partial adoption common — and partial adoption leaves residual exposure:
+
+- **Intake scanner false positives**: LLM-based semantic scanners misclassify legitimate skills as malicious, blocking productivity and eroding team confidence in the gate. Teams that lower the threshold to reduce noise also lower detection of genuine payloads.
+- **Pinning maintenance burden**: Every skill update requires a new review cycle and hash rotation. For teams managing dozens of skills, this creates a backlog that delays patching even when a malicious skill is discovered upstream.
+- **Multi-model verification latency**: Requiring consensus across two models roughly doubles inference time per skill invocation. Latency-sensitive workflows may disable the check to meet SLAs, removing the strongest runtime control.
+- **Internal mirror scope creep**: Mirrors require a governance process — who can approve? who audits the auditors? Without a clear owner, the mirror becomes a rubber stamp and new skills bypass the intake gate informally.
+
+The defense stack is most justified when agents operate with broad filesystem or network access. For read-only agents over a fixed, small skill set sourced from a single trusted author, the full stack is disproportionate — hash pinning alone may be sufficient.
+
 ## Example
 
 A skill intake gate using `skill-scanner` and hash pinning before internal registry entry:
@@ -128,6 +139,17 @@ sha256sum --check candidate-skill/SKILL.md.sha256 || {
 
 The agent config blocks runtime pulls from public registries. `skill-scanner` catches malicious patterns before any skill reaches the mirror, and the hash pin detects post-approval mutations ("rug pulls").
 
+## When This Backfires
+
+The defense stack described above is the correct posture for production agents with broad skill access, but applying it uniformly has real costs:
+
+- **False-positive blocking**: LLM-based semantic scanners generate false positives on obfuscated-looking-but-legitimate examples (security research tools, penetration testing utilities, encrypted configuration). Teams that fail-on-high without review capacity will block productive skills and erode trust in the intake gate.
+- **Registry maintenance overhead**: An internal mirror requires a maintainer workflow — intake, review, version management, and revocation. For teams of fewer than five engineers pulling from a small, trusted set of first-party skills, the operational cost may exceed the risk.
+- **Multi-model verification latency**: Running every skill execution through two independent models adds round-trip cost. For high-throughput or latency-sensitive agents, this may be prohibitive. Profile the latency increase before deploying; consider restricting multi-model verification to first-use or high-privilege operations rather than every call.
+- **Hash pinning vs. update velocity**: Pinning at the hash level prevents rug-pull mutations but also blocks legitimate security patches. Establish a re-vetting workflow before pinning — otherwise teams bypass the gate rather than update it.
+
+The defense stack is most justified when agents load skills from third-party or community registries at runtime. For fully internal skill sets authored and maintained by the same team, threat exposure is lower and the full stack may be replaced with code review and signed commits.
+
 ## Key Takeaways
 
 - DDIPE hides payloads inside skill documentation code examples; in-context learning causes agents to reproduce them without explicit instruction, bypassing alignment that blocks direct injection at 0% under the same conditions
@@ -146,3 +168,5 @@ The agent config blocks runtime pulls from public registries. `skill-scanner` ca
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Defending Against Code Injection in Multi-Agent Systems](code-injection-multi-agent-defence.md)

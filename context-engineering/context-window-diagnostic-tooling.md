@@ -56,11 +56,25 @@ Run the diagnostic before applying [context compression strategies](context-comp
 
 ## Generalizing to Other Harnesses
 
-The Claude Code `/context` command is the first known shipping implementation of per-tool attribution in a major AI coding harness [unverified — no other harness confirmed to surface this]. The pattern generalizes: any harness that tracks per-tool token contribution can expose the same diagnostic surface.
+Claude Code's `/context` command surfaces per-tool attribution directly to the developer — exposing which specific tool calls are inflating the window rather than compressing behind the scenes. No other major AI coding harness currently documents an equivalent developer-facing diagnostic. The pattern generalizes: any harness that tracks per-tool token contribution can expose the same diagnostic surface.
 
-LangChain's Deep Agents framework monitors context budget thresholds and applies tiered compression, but attribution is internal to the compaction logic — it does not surface per-tool breakdowns to the developer [unverified — based on published documentation]. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which logs context pressure beginning at 70% budget, but without per-tool attribution visible to the practitioner.
+LangChain's [Deep Agents framework](https://github.com/langchain-ai/deepagents) handles long contexts through auto-summarization but does not surface per-tool token breakdowns to the developer. [Bui (2026)](https://arxiv.org/abs/2603.05344) describes OPENDEV's Adaptive Context Compaction, which uses tiered compression beginning at 70% budget and progressively reduces older observations — but the attribution logic is internal to the compaction system, not visible to the practitioner.
 
 For harnesses without built-in diagnostics, instrument at the tool-call boundary: log token counts before and after each tool invocation, then aggregate by tool type to identify the distribution. A simple diff of token count per tool call surfaces the same attribution data.
+
+## Why It Works
+
+Aggregate context metrics (total tokens used, percentage full) tell you *that* you have a problem but not *which tool* caused it. Token counts are additive and stable: each tool call appends a fixed number of tokens to the context, and that delta persists for the session's lifetime. Per-tool attribution exposes the delta at invocation time, so skew is visible immediately — one tool type dominating the distribution pinpoints the bottleneck. The mechanism is measurement-then-act rather than compress-and-hope; the same principle as per-query profiling in databases.
+
+## When This Backfires
+
+Per-tool attribution is most useful when the expensive tool is also *avoidable*. It produces no actionable output when:
+
+- **The tool cost is unavoidable** — a required full-repository scan, a mandatory large-payload API response, or a system prompt that cannot be shortened. Attribution correctly identifies the culprit, but there is no remediation.
+- **Inflation is outside tool calls** — long conversation histories, large system prompts injected by the harness, or accumulated reasoning traces do not show up in per-tool attribution. The diagnostic can show tool costs as modest while context is still full.
+- **Short-lived or stateless agents** — if context is reset between turns or tasks, instrumentation overhead rarely pays off; there is no compounding to diagnose.
+- **Tool-sparse pipelines** — agents that call one or two tools repeatedly have a trivially uniform attribution distribution; optimizing the single tool directly is faster.
+- **The harness lacks attribution APIs** — most frameworks don't expose per-tool token counts. Manual instrumentation (log before/after each call) adds overhead and is impractical at scale without dedicated observability infrastructure; aggregate sampling at intervals is the more practical substitute.
 
 ## Key Takeaways
 
@@ -78,3 +92,4 @@ For harnesses without built-in diagnostics, instrument at the tool-call boundary
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Context Window Dumb Zone](context-window-dumb-zone.md)
 - [Context Window Anxiety](context-window-anxiety.md)
+- [Semantic Context Loading](semantic-context-loading.md)

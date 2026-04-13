@@ -15,7 +15,7 @@ Include every instruction that might be relevant. Cover all cases. Make the inst
 
 ## Why It Fails
 
-Softmax attention is zero-sum: every token competes for the model's attention budget. Semantically similar tokens pull attention toward each other, so instructions *related to* the applicable instruction draw attention *away* from it [unverified — the mechanism as described involves well-established softmax attention properties, but the specific degradation of compliance from semantically similar distractors in instruction following has not been independently sourced here].
+LLMs show significantly degraded performance when irrelevant but contextually plausible content is present alongside applicable instructions — [Shi et al. (2023)](https://arxiv.org/abs/2302.00093) found accuracy drops of over 60% in reasoning tasks when irrelevant but domain-coherent context was added. The same principle applies to instruction sets: instructions *related to* the applicable instruction compete for the model's attention, drawing it *away* from the one that matters.
 
 An instruction that is accurate in general and related to the current task domain, but not applicable to this specific task, is not a neutral presence in the context. It is a distractor that reduces compliance with the instruction that does apply.
 
@@ -25,17 +25,29 @@ A prompt for a task that writes integration tests might include instructions abo
 
 The model attends to all three. The applicable instruction competes for the model's focus with two related-but-wrong instructions. Compliance on the applicable instruction is lower than if the other two were absent.
 
-This effect scales. A comprehensive instruction file covering every testing pattern is not a safety net — it is an attention distribution problem where every inapplicable instruction dilutes the signal from the applicable one.
+This effect scales. A comprehensive instruction file is not a safety net — every inapplicable instruction dilutes the signal from the applicable one, with performance degrading non-linearly as irrelevant context grows ([Zhong et al., 2026](https://arxiv.org/abs/2601.11564)).
 
 ## Remediation
 
-**Load task-scoped context** — Rather than loading all instructions for a domain, load only the instructions applicable to the current task. Skill-based architectures support this: skill content loads on invocation, so the agent receives only the instructions for the skills it is using.
+**Load task-scoped context** — Load only instructions applicable to the current task. Skill-based architectures support this: skill content loads on invocation, so the agent receives only what it is using.
 
-**Prune before loading** — Remove instructions that are accurate but not applicable to the current task. The test is not "is this instruction correct?" but "does including this instruction improve the agent's output on this specific task?"
+**Prune before loading** — Remove instructions accurate-but-inapplicable to this task. The test is not "is this correct?" but "does including this improve output on this specific task?"
 
-**Modular instruction files** — Organise instructions by task type rather than by domain. A file for "integration test writing" loads separately from "unit test writing". The agent loads the file for the task it is performing, not the comprehensive domain file.
+**Modular instruction files** — Organise by task type, not domain. A file for "integration test writing" loads separately from "unit test writing".
 
-**Test by removal** — If compliance seems lower than expected, remove instructions unrelated to the current task and observe whether compliance improves. Improvement indicates distractor interference.
+**Test by removal** — If compliance seems low, remove unrelated instructions and observe whether it improves. Improvement indicates distractor interference.
+
+## When This Backfires
+
+Over-pruning creates its own failure mode. Narrowing context too aggressively risks:
+
+- **Under-informing the model** — edge cases that live in adjacent instructions get stripped, producing technically-compliant-but-wrong output on the margins.
+- **Brittle task detection** — if task classification is wrong, the model loads the wrong instruction set entirely; a broad fallback provides a partial safety net.
+- **Cross-domain tasks** — a task spanning two instruction domains genuinely needs both files; pruning one causes real compliance failures, not interference.
+
+## When This Backfires
+
+Aggressive pruning carries its own failure modes. A too-narrow instruction set loses calibration cues — removing error-handling conventions while writing integration tests can push the model toward patterns inconsistent with the broader codebase. Pruning also introduces maintenance overhead: each task type needs its own file, and gaps appear when tasks span multiple domains. The pattern works best for well-defined, bounded tasks; it offers less benefit for open-ended work where the applicable instruction set is uncertain at load time.
 
 ## Key Takeaways
 

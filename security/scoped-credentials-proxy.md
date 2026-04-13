@@ -20,7 +20,7 @@ aliases:
 
 Credentials stored inside an agent sandbox — environment variables, config files, shell history — are accessible to any code the agent executes or is manipulated into executing. A [prompt injection](prompt-injection-threat-model.md) that causes the agent to run `printenv` or read `~/.ssh/id_rsa` immediately converts a confused agent into a credential exfiltration channel.
 
-Giving an agent access to a credential file — even with limited permissions — still means every tool call, subprocess, and injected instruction has potential access to that credential [unverified — general security principle; the specific "just read access" scenario is not discussed in the cited source]. [Source: [Claude Code Sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)]
+Giving an agent access to a credential file — even with limited permissions — still means every tool call, subprocess, and injected instruction has potential access to that credential. Anthropic's sandbox design explicitly keeps "sensitive credentials (such as git credentials or signing keys) never inside the sandbox with Claude Code" for exactly this reason. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
 
 ## Proxy-Based Credential Pattern
 
@@ -36,7 +36,7 @@ Agent (sandbox) → unauthenticated request → Proxy (external)
                                          Upstream service
 ```
 
-The agent never holds credentials. A compromised agent can only make requests the proxy permits. [Source: [Claude Code Sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)]
+The agent never holds credentials. A compromised agent can only make requests the proxy permits. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
 
 ## Scoping Tokens to Operations
 
@@ -46,7 +46,7 @@ Token scope should match the narrowest operation the agent needs:
 - A database connection role with `SELECT` only for read-heavy tasks
 - An API key that can POST to one endpoint, not an admin key
 
-This limits the blast radius: even if a token is misused, it can only affect the specific resource it was scoped to [unverified — general least-privilege principle; token scoping strategy not discussed in the cited source].
+This limits the blast radius: even if a token is misused, it can only affect the specific resource it was scoped to — a direct application of the least-privilege principle to agent credentials.
 
 ## Request Validation Before Token Attachment
 
@@ -115,18 +115,26 @@ export GITHUB_SCOPED_TOKEN="ghp_your-fine-grained-pat-here"  # or retrieve from 
 caddy run --config Caddyfile
 ```
 
+## Why It Works
+
+The security guarantee comes from OS-level process isolation. The agent process and the proxy process are separate OS processes with distinct address spaces; the agent cannot read another process's environment variables, open file descriptors, or memory — even with the same user account. Anthropic's Claude Code sandbox is "built on top of OS level primitives such as Linux bubblewrap and MacOS seatbelt to enforce these restrictions at the OS level," covering "not just Claude Code's direct interactions, but also any scripts, programs, or subprocesses that are spawned by the command." [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing) Placing credentials in the proxy's process environment puts them behind this kernel-enforced boundary.
+
+## When This Backfires
+
+- **Proxy is itself compromised**: A supply chain attack on the proxy process (e.g., Caddy, a misconfigured admin API) exposes all credentials. The proxy becomes a high-value target — harden it accordingly.
+- **Allowlist is too permissive**: A wildcard like `/repos/*` allows any org repo. Misconfigured allowlists provide false confidence with unchanged blast radius.
+- **Single point of failure**: If the proxy is unreachable, the agent cannot authenticate. Production deployments need health checks and restart policies.
+- **Latency overhead**: Every authenticated call adds a local network hop. Measurable for high-frequency tool use — benchmark before adopting this pattern in latency-sensitive workflows.
+- **Operational complexity**: An additional process to deploy and secure. For low-blast-radius dev tasks, environment variable injection is simpler and sufficient.
+
 ## Key Takeaways
 
 - Credentials inside the sandbox are reachable by any code the agent runs or is tricked into running
 - An external proxy holds credentials and attaches them only to validated, allowlisted requests
+- OS-level process isolation enforces the boundary — the agent process cannot read another process's environment
 - Scope tokens to the minimum required operation — one repo, one endpoint, one role
 - Proxy-level request validation prevents injection-driven misuse of legitimate credentials
 - All authenticated actions are auditable at the proxy layer independent of the agent's own session logs
-
-## Unverified Claims
-
-- Giving an agent "just read access" to a credential file still means every tool call has potential access [unverified — general security principle; the specific "just read access" scenario is not discussed in the cited source]
-- Token scoping limits blast radius to the specific resource [unverified — general least-privilege principle; token scoping strategy not discussed in the cited source]
 
 ## Related
 

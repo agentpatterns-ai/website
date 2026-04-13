@@ -46,9 +46,9 @@ Conditional blocks inject provider-optimized instructions — Claude-specific, G
 
 ## Caching-Aware Structure
 
-Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders). OPENDEV's separation achieved significant cost reduction through effective cache hit rates ([Bui, 2025 §3.1](https://arxiv.org/abs/2603.05344)) [unverified — the specific ~40% figure is not stated in the cited section].
+Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders). OPENDEV's architecture separates prompt composition into stable and dynamic layers, enabling higher cache hit rates at the API level ([Bui, 2025 §3.1](https://arxiv.org/abs/2603.05344)).
 
-The design principle: place stable content first so the cacheable prefix remains constant across requests.
+The design principle: place stable content first so the cacheable prefix remains constant across requests. Anthropic's prompt caching works by checking whether the prompt prefix up to a designated breakpoint matches a cached entry — any change to earlier tokens invalidates the cache for all tokens that follow ([Anthropic, Prompt Caching](https://claude.com/blog/prompt-caching)). Modular composition enforces this structurally: the stable sections (identity, tool schemas) are always assembled first, so the stable prefix never shifts between requests even as dynamic sections vary.
 
 ## Two-Tier Fallback
 
@@ -126,9 +126,17 @@ Sections at priority 10–45 are stable across requests and can be cached at the
 - Separate cacheable (stable) from dynamic (session-specific) sections for API cache efficiency.
 - Fall back to default sections on load failure to maintain agent functionality.
 
-## Unverified Claims
+## When This Backfires
 
-- OPENDEV's caching-aware prompt separation achieved significant cost reduction through effective cache hit rates [unverified — the specific ~40% figure is not stated in the cited section]
+Dynamic composition adds complexity that static prompts avoid. Three specific failure conditions:
+
+1. **Combination explosion in testing.** With N independent sections and M modes, the testable combinations grow multiplicatively. A section that works in isolation may degrade model behavior when combined with another that contradicts its framing or duplicates its instructions.
+
+2. **Prompt injection via dynamic sections.** Session-state and user-provided content injected into dynamic sections can introduce adversarial instructions. Static sections have no injection surface; dynamic ones require sanitization before inclusion.
+
+3. **Cache invalidation from over-modulation.** Toggling too many sections between requests defeats the caching benefit. If a conditionally included section appears early in priority order, its presence or absence invalidates the cache for all higher-priority tokens that follow. Reserve dynamic sections for the end of the priority stack to protect the stable prefix.
+
+When the task set is narrow and well-defined, a single authored system prompt is simpler to test, audit, and reason about. Reach for dynamic composition when the agent operates across genuinely distinct modes or providers — not as a default.
 
 ## Related
 
@@ -143,3 +151,4 @@ Sections at priority 10–45 are stable across requests and can be cached at the
 - [Prompt Cache Economics: Comparing Costs by Provider](./prompt-cache-economics.md)
 - [Context Engineering](./context-engineering.md)
 - [Layered Context Architecture](./layered-context-architecture.md)
+- [Disable Attribution Headers to Preserve KV Cache in Local Inference](./kv-cache-invalidation-local-inference.md)

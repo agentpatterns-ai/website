@@ -32,7 +32,7 @@ The [Anthropic (Shen & Tamkin, 2026) RCT](https://www.anthropic.com/research/AI-
 | Hybrid code-explanation — request explanations alongside code | ~65% | Comprehension built in parallel |
 | Conceptual inquiry — ask only "why", resolve errors independently | ~65% | Retains independent problem-solving |
 
-The skill-leveling effect compounds this: less experienced developers receive disproportionate benefit from AI assistance when using it correctly, narrowing the gap with senior developers [unverified: Microsoft/Princeton/UPenn RCT (2025), 4,000+ developers — cited by nibzard/awesome-agentic-patterns; paper title and DOI not independently verified].
+The Anthropic study's differentiated outcomes suggest the largest gains from deliberate interaction patterns accrue to developers who default to passive delegation — a pattern more common among less experienced practitioners still building mental models of unfamiliar domains.
 
 ## Interaction Patterns That Build Skill
 
@@ -107,11 +107,7 @@ The Anthropic study found debugging scores showed the steepest divergence betwee
 - Interaction pattern determines whether AI use builds or erodes skill — tool choice is secondary
 - Socratic prompting, generation-then-comprehension, and fading support keep cognitive work with the learner
 - Debugging independently is the highest-signal check on whether learning is genuine
-- The skill-leveling effect means junior developers gain the most from deliberate techniques — and lose the most when they default to full delegation
-
-## Unverified
-
-- Microsoft/Princeton/UPenn RCT (2025), 4,000+ developers, skill-leveling effect — cited by nibzard/awesome-agentic-patterns; paper title and DOI not independently verified; remove or replace with verified citation before publishing
+- Developers new to a domain gain the most from deliberate techniques — passive delegation forfeits the learning benefit precisely when foundational mental models are still forming
 
 ## Related
 

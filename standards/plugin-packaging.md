@@ -41,7 +41,7 @@ Organization-managed distribution is significant for enterprise use: a security 
 
 ## The Marketplace Model
 
-The [github/awesome-copilot](https://github.com/github/awesome-copilot) repository demonstrates community-scale distribution: curated agents, skills, and instructions that teams install by URL. The [Agent Skills standard](https://agentskills.io) enables skills to be distributed across tools — a skill written to the standard installs in Claude Code, GitHub Copilot, and Cursor.
+The [github/awesome-copilot](https://github.com/github/awesome-copilot) repository demonstrates community-scale distribution: curated agents, skills, and instructions that teams install by URL. The [Agent Skills standard](agent-skills-standard.md) enables skills to be distributed across tools — a skill written to the standard works in Claude Code, GitHub Copilot, and Cursor.
 
 Plugin discovery via [llms.txt](../geo/llms-txt.md) enables machine-readable indexing: an agent can discover available plugins from a site's `llms.txt` and recommend relevant ones for a project's needs.
 
@@ -61,6 +61,15 @@ The convenience of community plugins comes with the same risks as installing any
 Plugins are git repositories, so versioning uses git primitives: tags for releases, branches for development versions. Installing a plugin at a specific tag pins the version. Updating means pulling the new tag.
 
 For organization-managed plugins, the org controls the version deployed to all members — teams cannot inadvertently update to a breaking version without the org's review.
+
+## When This Backfires
+
+Plugin packaging adds overhead that may not be justified in every context:
+
+- **Air-gapped environments**: Organizations that restrict outbound network access block marketplace-based installs entirely; committed `.claude/` files are the only viable distribution path.
+- **Small, stable teams**: When a configuration is used by one or two people on a single project, the plugin overhead (manifest, versioning, marketplace registration) outweighs the benefit over a committed `.claude/` directory.
+- **Ecosystem fragility**: Cross-tool skill portability depends on each tool implementing the standard consistently; a skill that works in Claude Code may require adjustments for other tools if they implement the spec differently.
+- **Version management complexity**: Pinning plugins by tag prevents unintended updates but creates a maintenance burden — teams must explicitly track and apply version bumps rather than inheriting improvements automatically.
 
 ## Anti-Pattern: Copy-Paste Distribution
 

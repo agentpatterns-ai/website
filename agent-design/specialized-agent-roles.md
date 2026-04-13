@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
   - multi-agent
+  - long-form
 aliases:
   - Narrow Agent Scope Over Broad Role
   - Task-Specific Agents vs Role-Based Agents (parallel context)
@@ -24,7 +25,7 @@ When parallel agents receive the same instructions, they tend to identify the sa
 
 Role specialization reframes the parallel team. Each agent is responsible for a distinct improvement dimension. Agents do not compete; they complement. The aggregate output covers more ground than any single agent could — or any set of unspecialized agents would.
 
-Per [Anthropic's C compiler case study](https://www.anthropic.com/engineering/building-c-compiler), assigning distinct roles (deduplication, performance optimization, code quality, documentation) produced breadth of improvement that no single agent could achieve alone.
+Per [Anthropic's C compiler case study](https://www.anthropic.com/engineering/building-c-compiler), assigning distinct roles (deduplication, performance optimization, architecture review, documentation) produced breadth of improvement that no single agent could achieve alone.
 
 ## Defining Roles
 
@@ -55,12 +56,31 @@ Specialized agents still need coordination to avoid conflicts when their domains
 
 Role specialization reduces conflicts; it does not eliminate them when multiple agents legitimately need to modify the same file.
 
+## Why It Works
+
+Role specialization limits each agent's objective function to a single domain. An agent with an exclusive scope has no incentive to drift into adjacent concerns, so it spends its full context window on the one dimension it owns. The result is deeper coverage within each domain rather than shallow coverage across all of them.
+
+The mechanism was characterized in the MetaGPT multi-agent framework: narrow roles prevent cascading errors caused by overlapping agents that hallucinate in response to each other's conflicting changes. When two agents independently modify the same code for different reasons, each may interpret the other's changes as bugs and attempt to "fix" them, creating a compounding correction loop. Exclusive scopes eliminate the shared surface area where this interference occurs ([Hong et al., 2023](https://arxiv.org/abs/2308.00352)).
+
+A [literature review of LLM-based multi-agent systems for software engineering](https://arxiv.org/html/2404.04834v4) identifies task-role alignment — instructions matched to a specific responsibility — as the core mechanism behind quality gains in multi-agent code generation pipelines.
+
+## When This Backfires
+
+Specialized roles degrade when tasks are inherently cross-cutting:
+
+- **Shared-file contention**: A refactor that requires both performance and style changes cannot be cleanly split. The performance agent and code quality agent will both modify the same functions, and neither has authority to make the final structural decision. The merge step absorbs the coordination cost that specialization was meant to avoid.
+- **Over-narrow scope causes tunnel vision**: A deduplication agent instructed to merge redundant code may consolidate functions whose apparent similarity hides behavioral differences — a problem a context-aware agent would catch but a scope-limited agent may not.
+- **Role boundary ambiguity**: "Performance" and "code quality" often overlap (e.g., extracting a well-named helper function improves both). Without a defined priority rule for overlapping domains, agents produce conflicting changes and the merge step requires human judgment to resolve.
+- **Small codebases**: Below a certain scale, the coordination overhead of defining roles, managing merge conflicts, and reconciling outputs exceeds the parallelism benefit. A single capable agent outperforms a specialized team when the codebase fits comfortably in one context window.
+
 ## Versus Unspecialized Parallel Agents
 
 | Approach | Output coverage | Conflict risk | Redundancy |
 |----------|----------------|---------------|------------|
 | Identical instructions | Concentrated on most salient issues | High (same files, same changes) | High |
 | Specialized roles | Distributed across improvement dimensions | Lower (different scopes) | Low |
+
+Research on multi-agent specialization shows the benefit depends on task parallelizability: when subtasks are tightly coupled and cannot change independently, specialized agents produce conflicting edits that increase merge cost. See [Predicting Multi-Agent Specialization via Task Parallelizability](https://arxiv.org/abs/2503.15703) for conditions under which generalist agents outperform specialists.
 
 ## Example
 
@@ -114,6 +134,12 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
 
 Each agent's exclusive scope prevents overlap: the documentation agent cannot alter the code the performance agent optimizes, and the deduplication agent cannot drift into style changes. A merge step reviews the four outputs for file conflicts before applying them.
 
+## When This Backfires
+
+1. **Tightly-coupled domains.** When performance, style, and correctness cannot change independently — a hot loop where variable naming and algorithmic choice are inseparable — exclusive role boundaries generate contradictory edits requiring manual resolution.
+2. **Small codebases.** A single agent that fits the entire codebase in context covers all improvement dimensions in one pass; multiple specialized agents multiply cost without multiplying coverage.
+3. **Role boundary violations.** [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) finds agents frequently disobey role specifications and attempt changes outside their scope — when this happens, conflicts increase rather than decrease.
+
 ## Key Takeaways
 
 - Identical instructions produce redundant outputs; specialized roles produce complementary ones
@@ -134,3 +160,5 @@ Each agent's exclusive scope prevents overlap: the documentation agent cannot al
 - [Persona-as-Code: Defining Agent Roles as Structured Documents](persona-as-code.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
 - [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
+- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Heuristic Effort Scaling](heuristic-effort-scaling.md)

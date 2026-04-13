@@ -18,7 +18,7 @@ The engineering disciplines that make agent systems production-ready — from to
 
 ## [Tool Engineering](tool-engineering/index.md)
 
-Design, implement, and optimize the tools agents use — MCP servers, CLI wrappers, hook lifecycles, skill authoring, and token-efficient tool interfaces.
+Design, implement, and optimize the tools agents use — MCP servers, CLI wrappers, [hook lifecycles](tool-engineering/hooks-lifecycle-events.md), skill authoring, and token-efficient tool interfaces.
 
 ## [Code Review](code-review/index.md)
 

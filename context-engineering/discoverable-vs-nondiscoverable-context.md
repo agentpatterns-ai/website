@@ -53,6 +53,10 @@ For each candidate entry in an instruction file, ask:
 
 The pointer form is especially useful for discoverable content that benefits from direction. "Use the repository pattern in `src/repos/`" tells the agent where to look without duplicating what it will find there.
 
+## Why It Works
+
+Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space, and creates a second source of truth that diverges from the codebase as the project evolves. An agent given a stale directory tree may read from paths that no longer exist or skip newly created modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — because agents given high-level structural context explore the codebase more broadly, not more precisely ([Shi et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
+
 ## Anti-Patterns
 
 **Directory trees in instruction files**: The agent can run a glob. The tree in the file is stale within a sprint.
@@ -102,6 +106,14 @@ Tests use Jest with `@testing-library/react`. Run with `npm test`.
 ```
 
 The "after" version is shorter and will never go stale: the project structure, API signatures, and test runner are all readable directly from the codebase. The architectural decisions and operational constraints cannot be inferred from any file in the repository — these are the only entries that earn a place in the instruction file.
+
+## When This Backfires
+
+**Agents without exploration tools**: If the agent lacks file-read or search capabilities, the discoverable/non-discoverable distinction collapses — structural information becomes non-discoverable by that agent. Audit actual tool access before applying this filter.
+
+**Large monorepos**: In codebases with hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including if it prevents broad traversal to find the right directory. The pointer form — a path, not a full tree — limits the token cost.
+
+**High-churn codebases**: Context files go stale within a sprint during rapid restructuring. Bias toward non-discoverable content and keep any structural pointers in a separate, frequently-updated file rather than the main instruction file.
 
 ## Key Takeaways
 

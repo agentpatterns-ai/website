@@ -76,6 +76,15 @@ Confirmation gates are not a substitute for other defenses — they are the last
 
 Gates placed too early (gating on every minor action) create alert fatigue. Gates placed at the right level cover the irreversible and high-stakes actions where the cost of a mistake exceeds the cost of the interruption.
 
+## When This Backfires
+
+- **Confirmation fatigue**: High gate frequency causes reviewers to rubber-stamp without evaluation. Adversaries can exploit this deliberately — flooding the approval queue is classified as threat T10 in Rippling's 2025 Agentic AI Security guide. [Source: [The Agent Approval Fatigue Problem](https://molten.bot/blog/agent-approval-fatigue/)]
+- **Lies-in-the-Loop attacks**: Injected content manipulates how the confirmation dialog renders — pushing dangerous commands out of view or exploiting Markdown rendering — so the user approves an action that appears safe. Demonstrated against Claude Code and Copilot Chat in 2025. [Source: [Bypassing AI Agent Defenses With Lies-In-The-Loop](https://checkmarx.com/zero-post/bypassing-ai-agent-defenses-with-lies-in-the-loop/)]
+- **Headless pipelines**: Background jobs and server-side agents cannot pause for interactive review; gates either block execution or are bypassed by design.
+- **Injections that mimic legitimate actions**: A well-crafted injection within normal operating parameters may pass review because it resembles an expected action.
+
+Mitigations: limit gates to the genuinely irreversible subset, constrain dialog rendering, validate that the approved operation matches what was shown, and use out-of-band confirmation for the highest-stakes actions.
+
 ## Example
 
 The following Python snippet shows a confirmation gate implemented before an agent sends an email. The gate surfaces the exact recipient, subject, and body — not a summary — so that an injected recipient address is immediately visible.
@@ -127,3 +136,5 @@ Because the recipient is shown verbatim, `attacker@external.com` is immediately 
 - [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [Action Selector Pattern](action-selector-pattern.md)
+- [Indirect Injection Discovery](indirect-injection-discovery.md)

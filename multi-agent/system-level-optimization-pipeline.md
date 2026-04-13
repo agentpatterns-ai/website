@@ -76,7 +76,7 @@ The verification agent validates functional correctness (existing tests pass) an
 | p50 latency (ms) | 13.0 | 9.0 | **-30.8%** |
 | p99 latency (ms) | 26.0 | 23.0 | **-11.5%** |
 
-The three optimizations were well-known patterns: HTTP client reuse via singleton, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was in **automated discovery** across service boundaries, not novelty of the fixes.
+The three optimizations were well-known patterns: HTTP client reuse via singleton, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was in **automated discovery** across service boundaries, not novelty of the fixes. [TeaStore](https://github.com/DescartesResearch/TeaStore) is an open-source Java microservices benchmark maintained by the Descartes Research Group.
 
 !!! warning "Early-stage research"
     These results come from a single benchmark system. Comparative evaluations against existing tools (OpenCode, CodeX, SysLLMatic) are planned but not yet conducted. The framework assumes comprehensive existing test suites for correctness validation.
@@ -128,6 +128,15 @@ components:
 
 None of these fixes are novel. The value is that the pipeline found cross-service bottlenecks no single-file agent pass would detect.
 
+## When This Backfires
+
+The pipeline requires conditions that not all codebases meet:
+
+1. **No existing test suite** — Stage 4 (verification) depends on passing tests to validate correctness. Without them, the pipeline cannot distinguish a valid optimization from a regression. A single failing assumption in the optimization stage silently ships broken code.
+2. **Simple or monolithic codebases** — Cross-component bottlenecks don't emerge in single-service or small-monolith systems. The four-agent coordination overhead (summarization, analysis, optimization, verification) adds latency and cost that outweighs the benefit vs. a direct single-agent pass.
+3. **Poorly documented service boundaries** — The summarization stage extracts dependency maps and call graphs from code and config. If service contracts are implicit or undocumented, summaries will be incomplete and the analysis stage will miss bottlenecks that cross those boundaries.
+4. **Single-benchmark evidence** — Current results come from one Java microservices benchmark (TeaStore). Applying the pattern to heterogeneous stacks, stateful services, or event-driven architectures may produce different outcomes.
+
 ## Key Takeaways
 
 - System-level bottlenecks emerge from cross-component interactions that no single-file agent pass can detect
@@ -142,7 +151,9 @@ None of these fixes are novel. The value is that the pipeline found cross-servic
 - [Agent Handoff Protocols](agent-handoff-protocols.md) — the summarization output serves as the contract between stages
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — the verification stage provides the feedback signal
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — sequential pipeline is one coordination topology among several
+- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) — MAS performance and scalability are identified as under-addressed quality attributes in current research
 
 ## References
 
 - [Peng et al. (2026). Beyond Local Code Optimization: Multi-Agent Reasoning for Software System Optimization. arXiv:2603.14703](https://arxiv.org/abs/2603.14703)
+- [TeaStore: A Micro-Service Reference Application. DescartesResearch, GitHub](https://github.com/DescartesResearch/TeaStore)

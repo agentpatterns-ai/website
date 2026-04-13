@@ -127,6 +127,7 @@ The model sees only the error lines for the target date, not the full log file.
 
 ## Related
 
+- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md) — tool-by-tool fetching patterns and their cache cost implications
 - [Filesystem-Based Tool Discovery](../tool-engineering/filesystem-tool-discovery.md)
 - [Semantic Tool Output: Designing for Agent Readability](../tool-engineering/semantic-tool-output.md)
 - [Context Compression Strategies](context-compression-strategies.md)

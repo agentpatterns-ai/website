@@ -67,7 +67,7 @@ Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) m
 | Pattern | Leg removed | Mechanism |
 |---------|-------------|-----------|
 | **Dual LLM** | Untrusted input | Privileged LLM decides; quarantined LLM handles untrusted content |
-| **Action-Selector** | Untrusted input | LLM picks from a fixed action set; injected instructions can't add new actions |
+| **[Action-Selector](action-selector-pattern.md)** | Untrusted input | LLM picks from a fixed action set; injected instructions can't add new actions |
 | **Plan-Then-Execute** | Untrusted input | Plan formed before untrusted content is seen; execution is deterministic |
 | **Context-Minimization** | Untrusted input | Only minimum necessary untrusted content enters context |
 | **Code-Then-Execute** | Untrusted input | LLM generates code; sandboxed runtime executes without LLM re-evaluation |
@@ -105,6 +105,16 @@ Controls ([Harang, 2025](https://developer.nvidia.com/blog/practical-security-gu
 - **Config file protection** — prevent modification of `.cursorrules`, `CLAUDE.md`, MCP configs
 - **Secret injection** — short-lived, minimal-permission tokens; never in agent-accessible paths
 
+## When This Backfires
+
+The trifecta model is a structural heuristic, not a guarantee. Three specific failure conditions:
+
+1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and outputting to external endpoints has all three legs by design. Removing one breaks the agent's purpose. The model does not address risk-acceptance paths for architecturally unavoidable trifectas — teams in this position still need compensating controls (output scanning, rate-limiting, anomaly detection on egress volume).
+
+2. **Partial-leg states are underspecified.** "Read-only egress" (e.g., fetching but not posting) and "tokenized private data" (real values never in context) sit between leg-present and leg-absent. The checklist's binary Yes/No columns produce false confidence when a leg is partially present.
+
+3. **Leg removal migrates risk rather than eliminating it.** Removing private data access by tokenizing PII shifts the attack to the token resolver. Removing egress via sandboxing shifts the attack to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
+
 ## Related
 
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
@@ -127,3 +137,5 @@ Controls ([Harang, 2025](https://developer.nvidia.com/blog/practical-security-gu
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
+- [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)

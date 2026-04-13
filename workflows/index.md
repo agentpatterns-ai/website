@@ -22,6 +22,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — Build a small library of purpose-built skills that encode your engineering process from ideation through architecture
+- [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](sdlc-skill-taxonomy.md) — Organize a skill library around SDLC phases so phase-entry commands activate only the relevant skills at each stage
 - [Introspective Skill Generation](introspective-skill-generation.md) — Mine agent patterns across sessions to generate new skills, agents, and hooks
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — Define evaluation tasks and success criteria before implementing agent features to make "done" objective and prevent requirement drift
 - [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md) — Create and iterate on your first CLAUDE.md, AGENTS.md, or copilot-instructions.md in under thirty minutes
@@ -50,3 +51,4 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Background-to-Foreground Handoff](background-foreground-handoff.md) — Transfer work from a background agent to a human at the ~90% completion mark using distilled summaries and artifact-based handoff points
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — Gate agent policy updates behind a traffic-split rollout so regressions surface on a small blast radius before full deployment
 - [Burn the Boats — Commitment-Forcing Deprecation](burn-the-boats.md) — Remove a working feature entirely with a hard deadline to force full commitment to a new paradigm and stop anchoring to obsolete approaches
+- [The 7 Phases of AI-Assisted Feature Development](7-phases-ai-development.md) — Feature-level workflow model with entry and exit criteria: Research, Prototype, PRD, Issues, Implement, QA, Ship

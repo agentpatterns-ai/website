@@ -97,9 +97,15 @@ Skip when:
 
 ## Cost Profile
 
-Minimum: 2× the token cost of a single-agent run. With cross-critique rounds and third-agent synthesis, expect 3–4×. This is the primary trade-off: debate is justified only where decision quality has asymmetric value relative to compute cost.
+Minimum: 2× the token cost of a single-agent run. With cross-critique rounds and third-agent synthesis, expect 3–4×. Debate is justified only where decision quality has asymmetric value relative to compute cost.
 
-For comparison: the [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 runs costs 3× but skips the critique phase. Debate adds the critique overhead on top, which is where the quality improvement comes from.
+The [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 costs 3× but skips the critique phase. Debate adds critique overhead on top, which is where the quality improvement comes from.
+
+## Empirical Caveats
+
+Controlled studies show mixed results. [Zhang et al. (2025)](https://arxiv.org/abs/2502.08788) found MAD often fails to outperform Chain-of-Thought or Self-Consistency at equal compute. [Becker et al. (2025)](https://arxiv.org/abs/2502.18965) document problem drift: 35% of debate rounds show lack of progress. Majority pressure can suppress independent correction — agents converge on a confident wrong answer.
+
+Debate earns its cost only for hard-to-reverse decisions with genuine value conflicts. For tasks with an objectively correct answer, single-agent scaling or voting is more efficient.
 
 ## Example
 

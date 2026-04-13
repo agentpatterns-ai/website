@@ -130,7 +130,7 @@ An audit log for a RAG system must capture enough information to answer: who que
 
 `chunk_id` must map back to the source document and page number — this is the link that compliance reviewers use to verify the system served content from authorized sources only.
 
-Write logs to append-only storage. For HIPAA and FedRAMP, tamper-evidence is a requirement: use a write-once log store or a log integrity mechanism ([NIST SP 800-53 AU-9](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) specifies audit log protection controls). A simple approach: periodically hash the log file and store the hash in a separate tamper-evident location.
+Write logs to append-only storage. For HIPAA and FedRAMP, tamper-evidence is a requirement: use a write-once log store or a log integrity mechanism ([NIST SP 800-53 AU-9](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final) specifies audit log protection controls). For AI agents that call tools directly, a [cryptographic audit trail with hash-chained receipts](../../security/cryptographic-governance-audit-trail.md) provides stronger tamper-evidence and satisfies EU AI Act Article 12 record-keeping requirements. A simple approach for the RAG query layer: periodically hash the log file and store the hash in a separate tamper-evident location.
 
 ---
 

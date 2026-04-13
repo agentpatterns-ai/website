@@ -361,6 +361,7 @@ Custom agents appear in the same agents dropdown as Ask, Agent, and Plan. The di
 - [Custom Agents & Skills in Copilot](../../tools/copilot/custom-agents-skills.md) — defining custom agents with specialized tools and MCP servers
 - [Domain-Specific System Prompts](../../instructions/domain-specific-system-prompts.md) — building system prompts for specialized agents
 - [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md) — how agents compose with other primitives
+- [Specialized Agent Roles](../../agent-design/specialized-agent-roles.md) — assigning distinct, non-overlapping responsibilities to parallel agents
 - [Controlling Agent Output](../../agent-design/controlling-agent-output.md) — constraining what agents produce
 
 ---

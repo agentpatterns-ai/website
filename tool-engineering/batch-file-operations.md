@@ -17,7 +17,7 @@ tags:
 
 When an agent modifies multiple files one at a time, each edit incurs overhead: tool-call validation, context switching, and network round-trips. For a task that modifies 20 files, that overhead multiplies by 20. The per-call cost is small individually but compounds across large-scale refactoring, code generation, or configuration changes.
 
-Batching file operations into a single script execution is a well-known token-efficiency technique — one tool call replaces many.
+Batching file operations into a single script execution is a well-known token-efficiency technique — one tool call replaces many. Anthropic's engineering guidance on [writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) notes that tools should consolidate multiple discrete operations under the hood to reduce context consumption.
 
 ## The Pattern
 
@@ -80,7 +80,7 @@ Batch writes are harder to review than individual edits. Mitigations:
 
 ## Signaling Availability to the Agent
 
-To make this technique discoverable, document the batch script pattern in your project's instruction files (e.g., `CLAUDE.md` or `AGENTS.md`). Specify when the agent should prefer batch scripts over sequential edits — for example, "when modifying 5+ files with similar changes, use a bash script to batch the operations" [unverified — threshold depends on task complexity and per-call overhead].
+To make this technique discoverable, document the batch script pattern in your project's instruction files (e.g., `CLAUDE.md` or `AGENTS.md`). Specify when the agent should prefer batch scripts over sequential edits — for example, "when modifying multiple files with similar changes, use a bash script to batch the operations." The right threshold depends on task complexity and per-call overhead for your environment.
 
 ## Key Takeaways
 
@@ -89,10 +89,6 @@ To make this technique discoverable, document the batch script pattern in your p
 - Batch scripts trade speed for token efficiency — faster than sequential edits, slower than parallel sub-agents.
 - Apply `set -euo pipefail` and echo operations for safety in batch write scripts.
 - Signal batch script availability in project instruction files so agents opt into the pattern for large-scale changes.
-
-## Unverified Claims
-
-- Agent should prefer batch scripts over sequential edits when modifying 5+ files with similar changes [unverified — threshold depends on task complexity and per-call overhead]
 
 ## Related
 

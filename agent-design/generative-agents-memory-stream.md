@@ -21,9 +21,9 @@ The architecture has three integrated layers that work as a unit:
 
 ```mermaid
 graph TD
-    A[Observation\nstream] -->|scored retrieval| B[Retrieval\nmodule]
-    B -->|top-k nodes| C[Planning\ncontext]
-    A -->|importance threshold| D[Reflection\ntrigger]
+    A[Observation<br>stream] -->|scored retrieval| B[Retrieval<br>module]
+    B -->|top-k nodes| C[Planning<br>context]
+    A -->|importance threshold| D[Reflection<br>trigger]
     D -->|focal points| B
     D -->|synthesized insights| A
 
@@ -93,3 +93,5 @@ The generative agents architecture is an integrated system, not a single techniq
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
+- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
+- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)

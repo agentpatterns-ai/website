@@ -128,3 +128,4 @@ The team uses this scan to prioritize: the retry-logic inconsistency affects 14 
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — linters and CI as the primary enforcement layer
 - [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) — why architectural rationale is invisible to agents by default
+- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the machine-readable instruction file standard for encoding architectural rules

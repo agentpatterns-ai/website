@@ -140,5 +140,7 @@ Decomposition is not the only fix. Reducing total rule count — not just distri
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form has no measurable effect on compliance; the compliance lever is constraint design, not format
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — the same degradation mechanism applied to code generation constraints
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — empirical data on when instruction files reduce compliance and increase cost
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form has no measurable effect on compliance; the compliance lever is constraint design, not format

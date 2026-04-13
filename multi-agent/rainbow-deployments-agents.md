@@ -14,6 +14,8 @@ aliases:
 
 > Shift traffic between agent versions gradually rather than atomically. New versions prove themselves alongside old ones before full cutover, preventing broken in-flight sessions.
 
+Rainbow deployment keeps N versions of an agent running simultaneously. New sessions route to the latest version; existing sessions continue on whichever version started them and drain naturally when they complete. There is no forced cutover and no two-version ceiling.
+
 ## Why Agents Cannot Blue-Green
 
 Traditional services are stateless HTTP handlers. Swap the load balancer, drain connections, done. Agents are different:
@@ -90,6 +92,14 @@ A typical progression: 5% of new sessions to the new version, then 25%, then 50%
 
 Rollback is changing the router to point new traffic at the previous version. Old versions are still running (they were draining), so rollback is near-instant -- no redeployment required. This is the primary advantage over blue-green, where the previous environment may already be torn down.
 
+## When This Backfires
+
+Rainbow deployment is not always the right choice. Three specific conditions make it worse than the alternative:
+
+- **Version sprawl with long-lived sessions**: If agents run tasks that span hours or days (deep research, multi-day planning pipelines), old versions may never fully drain. Each deployment adds another live version consuming infrastructure. Without an explicit session timeout or forced drain policy, the fleet fragments indefinitely.
+- **Cross-version debugging complexity**: Behavioral regressions that span a version boundary are harder to isolate. If v2 and v3 sessions coexist and users report degraded output, correlating errors to a specific version tuple (code × model × prompt × tools) requires robust version tagging on every log line and trace. Teams without mature observability often spend more time on version attribution than on the fix itself.
+- **Short-lived stateless agents**: For agents with sessions under a few seconds -- single-turn Q&A, inline completions, code suggestions -- atomic blue-green deployment is simpler, equally safe, and eliminates the operational overhead of running multiple concurrent deployments. The rainbow model's value scales with session duration.
+
 ## Example
 
 A Kubernetes implementation using label selectors:
@@ -140,11 +150,6 @@ Rollback: change `version: e5f6` to `version: c3d4`. Old pods are still running 
 - Agent versions are tuples of (code, model, prompt, tools) -- all four layers must be tracked
 - Monitor accuracy, error rate, latency, and cost before advancing traffic percentages
 - Rollback is a selector change, not a redeployment
-
-## Unverified Claims
-
-- Tool versioning causes 60% of production agent failures `[unverified -- cited in n8n blog without primary source]`
-- Model drift causes 40% of production agent failures `[unverified -- cited in rollback strategies blog without primary source]`
 
 ## Related
 

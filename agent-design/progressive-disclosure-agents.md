@@ -148,6 +148,7 @@ The pattern is most effective when tasks are clearly scoped and skills are genui
 ## Related
 
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
+- [Agent Definition Formats: How Tools Define Agent Behavior](../standards/agent-definition-formats.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)

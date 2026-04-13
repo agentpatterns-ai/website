@@ -47,7 +47,7 @@ Agents perform best against APIs with predictable behavior. [Idempotent operatio
 
 **Model Context Protocol (MCP)** — An [open standard](https://modelcontextprotocol.io) for connecting agents to external tools and data sources. MCP servers expose capabilities in a structured, discoverable format agents consume programmatically.
 
-**[Agent Cards](../standards/agent-cards.md)** — Machine-readable capability declarations that let agents discover what other agents can do — the A2A protocol formalised agent cards as its discovery mechanism for multi-agent composition.
+**[Agent Cards](../standards/agent-cards.md)** — Machine-readable capability declarations that let agents discover what other agents can do — the [A2A protocol](../standards/a2a-protocol.md) formalised agent cards as its discovery mechanism for multi-agent composition.
 
 **[OpenAPI as tool spec](../standards/openapi-agent-tool-spec.md)** — API specifications designed for human developers double as agent tool definitions when enriched with descriptive metadata and clear parameter constraints — an OpenAPI operation maps directly to tool schema fields consumed by agents.
 

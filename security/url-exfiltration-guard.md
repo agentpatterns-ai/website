@@ -25,7 +25,7 @@ The leak occurs at the HTTP request level. The attacker's server logs the URL. T
 
 Redirect chains extend this: a URL pointing to a trusted domain (which the agent might allowlist) immediately forwards to an attacker-controlled destination. The agent follows the redirect and the attacker receives the request with full query parameters. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
 
-The same attack applies to embedded resources — not just top-level navigation. Images, iframes, and other embedded content are fetched before the user can inspect them. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/)]
+The same attack applies to embedded resources — not just top-level navigation. Images, iframes, and other embedded content are fetched before the user can inspect them. [Source: [AI Agent Link Safety](https://openai.com/index/ai-agent-link-safety/), [Exploiting Web Search Tools of AI Agents for Data Exfiltration](https://arxiv.org/abs/2510.09093)]
 
 ## Why Domain Allow-Lists Are Insufficient
 
@@ -54,6 +54,16 @@ Defenses against URL exfiltration layer with prompt injection defenses:
 - Narrow task instructions that specify what the agent is and is not allowed to fetch
 - Skepticism toward instructions embedded in external content
 - Confirmation gates before fetching URLs constructed from conversation context
+
+## When This Backfires
+
+The public-web index gate is not a complete solution. Three specific failure conditions apply:
+
+1. **Index coverage gaps**: Session-specific URLs — those with per-user tokens or dynamic state — are unlikely to appear in any public crawl index. The gate correctly flags these, but a determined attacker who pre-seeds a crafted URL into the index (via public pages that embed it) can still pass the check.
+2. **Newly published legitimate URLs**: Recently published pages that a public crawler has not yet indexed are blocked alongside attacker-crafted URLs. Agents that need to fetch fresh content will produce false positives that erode user trust in the warning system.
+3. **Non-URL exfiltration channels**: The index gate only protects against query-string exfiltration. DNS tunneling, timing side channels, and covert channels in request headers are not addressed. Teams that treat this control as a complete exfiltration defense will have a false sense of security.
+
+For deployments where these failure modes are unacceptable, strict egress controls — blocking all outbound network access from the agent process and allowing only explicitly whitelisted API endpoints — provide a stronger and simpler guarantee.
 
 ## Key Takeaways
 

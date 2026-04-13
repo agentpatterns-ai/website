@@ -16,7 +16,7 @@ tags:
 
 ## The Experiment
 
-A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms (natural language, structured headers, formal specification) and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
 
 **Token reduction**: compact headers cut constraint-portion tokens by ~71% and full-prompt tokens by 25–30%. This result replicated across three independent rounds.
 
@@ -66,6 +66,15 @@ implementation under 50 lines.
 
 Both forms produce the same constraint satisfaction rate. Use the compact form to reduce token consumption, not to improve compliance.
 
+## When This Backfires
+
+Compact headers are token-efficient and compliance-neutral, but the trade-off is not zero:
+
+- **Human readability drops**: dense key-value constraint blocks are harder to audit and debug than prose when a constraint silently fails and you need to trace why
+- **Token savings are irrelevant at low volume**: for single-use or infrequent prompts, optimising for constraint-token count adds complexity with no practical benefit
+- **Ambiguity at the edges**: extreme compression can introduce parsing ambiguity on unusual inputs where the model must infer the intent behind a terse rule — prose constraints leave less room for misinterpretation in edge cases
+- **Counter-intuitive constraints remain unsolved**: neither compact nor verbose encoding improves compliance for constraints that conflict with model training priors; encoding form is the wrong lever regardless of format
+
 ## Key Takeaways
 
 - Encoding form (natural language vs. structured headers vs. formal spec) has no measurable effect on constraint compliance — Cliff's δ < 0.01 across 830+ invocations
@@ -81,8 +90,4 @@ Both forms produce the same constraint satisfaction rate. Use the compact form t
 - [Critical Instruction Repetition](critical-instruction-repetition.md) — position and repetition as compliance levers, independent of encoding
 - [Prompt Compression](../context-engineering/prompt-compression.md) — reduce token cost of all instruction content
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — move constraints that must not fail to deterministic enforcement outside the prompt
-
-## Unverified Claims
-
-- Specific encoding form names (natural language, compact header, formal specification) are inferred from the abstract; the full paper's exact taxonomy may differ [unverified]
-- Propagation mode names (in-context examples, explicit instructions, system-level guidance, hybrid) are inferred from the abstract summary, not confirmed from the full paper text [unverified]
+- [Negative Space Instructions](negative-space-instructions.md) — ban-list and exclusion constraints as a complement to positive compliance requirements

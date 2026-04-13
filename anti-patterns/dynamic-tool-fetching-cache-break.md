@@ -44,7 +44,7 @@ Languages like Swift and Go randomize dictionary key ordering during JSON serial
 
 Anthropic's [Tool Search Tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool) achieves the same goal without breaking the cache prefix. Tools marked `defer_loading: true` are excluded from the prompt; the agent discovers them on demand.
 
-Anthropic's evaluations:
+Anthropic's [evaluations](https://www.anthropic.com/engineering/advanced-tool-use):
 
 | Metric | All tools loaded | Deferred + search |
 |---|---|---|
@@ -55,13 +55,32 @@ The cache prefix stays **identical** across turns; deferred tools load into mess
 
 ## Recommended Tool Architecture
 
-Philipp Schmid's [hierarchical action space](https://www.philschmid.de/context-engineering-part-2):
+Anthropic's [advanced tool use guidance](https://www.anthropic.com/engineering/advanced-tool-use) recommends stratifying tools by access frequency:
 
 | Level | Contents | Cache impact |
 |---|---|---|
-| L1: Core tools (~20) | Stable, always loaded | Cached prefix, never changes |
-| L2: General utilities | bash, code execution | Part of stable prefix |
-| L3: Specialized tools | Domain-specific, MCP servers | Deferred; loaded via search on demand |
+| Core tools (3–5) | Most-used, always loaded | Cached prefix, never changes |
+| General utilities | bash, code execution | Part of stable prefix |
+| Specialized tools | Domain-specific, MCP servers | Deferred; loaded via search on demand |
+
+## When This Backfires
+
+Deferred loading adds a tool search round-trip per undiscovered tool. It provides no benefit when:
+
+- **Tool library is small (<10 tools)**: Upfront loading costs less than repeated search overhead.
+- **All tools are needed every request**: Deferring tools you always use forces a search penalty with no savings.
+- **Latency is the primary constraint**: Real-time pipelines may not tolerate extra inference passes for tool discovery.
+- **Tool search accuracy is low**: Poor search hits cause missed tools, degrading task completion more than cache breaks cost.
+
+## When This Doesn't Apply
+
+Stable tool sets are the right default for multi-turn agents, but there are cases where dynamic selection is fine:
+
+- **Single-turn, cold-start requests**: if every invocation is a fresh session with no prior cache to preserve, there is no accumulated prefix to protect. Cache continuity only pays off across turns.
+- **Local inference without shared KV cache**: some self-hosted backends (e.g., llama.cpp, Ollama) do not implement cross-request KV cache reuse. The 10x cost differential disappears entirely.
+- **Very small tool sets (<5 tools, <500 tokens total)**: when tool definitions are negligible relative to message history, the absolute savings from cache hits may not justify the added complexity of a deferred-loading architecture.
+
+In all other cases — multi-turn agents, API-hosted models, or any setup with repeated context — the cost asymmetry dominates and dynamic per-step fetching is counterproductive.
 
 ## Key Takeaways
 

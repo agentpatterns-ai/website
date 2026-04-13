@@ -43,7 +43,7 @@ The key distinction from simple retry: during Open state, the agent receives an 
 
 ## Configuration
 
-Thresholds vary by tool class. Fast tools fail quickly and recover quickly; slow tools need more patience before declaring failure:
+Thresholds vary by tool class. Fast tools fail quickly and recover quickly; slow tools need more patience before declaring failure. The values below are starting-point heuristics from [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/agent-circuit-breaker.md) — optimal values vary by tool latency profile and require empirical tuning per workload:
 
 | Tool type | Failure threshold | Cooldown |
 |-----------|-------------------|----------|
@@ -72,6 +72,16 @@ The two are complementary: loop-level breakers prevent runaway agents; tool-leve
 ## Unverified Claims
 
 - **40–60% token savings** — this figure is sourced from the nibzard/awesome-agentic-patterns catalog (evidence grade: medium). No independent study has confirmed this range. Actual savings depend on session length, tool reliability, and whether graceful degradation is implemented.
+
+## When This Backfires
+
+Circuit breakers add overhead that outweighs the benefit in several common scenarios:
+
+- **Tools are locally hosted or highly reliable** — state tracking and threshold tuning add indirection with no payoff when the tool never actually degrades. Measure failure rates before adding a breaker.
+- **Single-shot or short sessions** — the pattern assumes repeated invocations where retry compounding is possible. An agent that calls each tool once gains nothing and pays the configuration cost.
+- **Transient errors are the norm** — a fast API with brief blips will open circuits unnecessarily if the threshold is too tight, blocking calls that would succeed on the next attempt. Misconfigured thresholds cause false positives that are harder to debug than the token waste they prevent.
+- **No fallback exists** — without graceful degradation logic the circuit opens and the agent stalls anyway. The state machine only stops the waste; it does not preserve progress. Implementing fallback routing requires non-trivial system prompt design and adds its own failure modes.
+- **Agent updates system prompt dynamically** — injecting tool-status context when a circuit opens can cause prompt injection risks or context pollution in security-sensitive deployments.
 
 ## Key Takeaways
 

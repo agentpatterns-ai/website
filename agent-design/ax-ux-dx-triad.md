@@ -51,7 +51,7 @@ What the model sees. Curate context for inference quality, not human readability
 
 - **Structured tool output** -- JSON or typed returns, not prose descriptions
 - **Compressed summaries** -- preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))
-- **Machine-readable error signals** -- stack traces and error codes, not user-friendly messages
+- **Machine-readable error signals** -- stack traces and [RFC 9457 structured error fields](../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
 - **Hindsight failure notes** -- recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
 
 Human-readable output is often *worse* for the model -- verbose messages and decorative formatting consume context without improving inference.

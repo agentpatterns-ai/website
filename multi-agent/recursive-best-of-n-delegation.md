@@ -44,11 +44,11 @@ graph TD
     J2 -->|Best result| O
 ```
 
-This is distinct from the [voting/ensemble pattern](voting-ensemble-pattern.md) (flat parallel evaluation of the same task) and from [fan-out synthesis](fan-out-synthesis.md) (merging complementary strengths). Here, selection happens at each internal node of a decomposition tree, not at a single top-level aggregation point.
+This is distinct from the [voting/ensemble pattern](voting-ensemble-pattern.md) (flat parallel evaluation of the same task) and from [fan-out synthesis](fan-out-synthesis.md) (merging complementary strengths). Here, selection happens at each internal node of a decomposition tree, not at a single top-level aggregation point. The [ReDel toolkit](https://arxiv.org/abs/2408.02248) provides a reference implementation of recursive multi-agent delegation with configurable delegation schemes.
 
 ## Judge Design
 
-Judge quality determines the pattern's reliability. A judge that rationalizes poor outputs is worse than no judge.
+Judge quality determines the pattern's reliability. A judge that rationalizes poor outputs is worse than no judge. Failure analysis of multi-agent systems consistently identifies task verification as a primary failure cluster — judges that accept weak outputs propagate errors rather than catching them ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)).
 
 | Signal type | Examples | Role |
 |-------------|----------|------|
@@ -92,6 +92,31 @@ Each node with K=3 costs roughly 3× the per-node compute of single-path recursi
 - The verification signal is cheap relative to the subtask cost
 
 Targeted K allocation — concentrating extra candidates only on uncertain or high-stakes nodes — recovers most of the reliability benefit at a fraction of the uniform-K cost.
+
+## Example
+
+A large refactor task is decomposed into three subtasks: rename a public API, update call sites, and update tests. Each subtask spawns K=3 candidate workers in isolated sandboxes:
+
+```python
+# Pseudocode: recursive best-of-N node
+async def delegate_with_selection(subtask, k=3, threshold=0.8):
+    candidates = await asyncio.gather(*[
+        run_worker(subtask, sandbox_id=i) for i in range(k)
+    ])
+    # Objective gate: eliminate candidates failing hard checks
+    passing = [c for c in candidates if c.tests_pass and c.lint_clean]
+    if not passing:
+        # No candidate cleared — escalate
+        return await delegate_with_selection(subtask, k=k+2, threshold=threshold)
+    # LLM-as-judge scores remaining candidates
+    scored = await judge.rank(passing, rubric=subtask.rubric)
+    best = scored[0]
+    if best.score < threshold:
+        return await delegate_with_selection(subtask, k=k+2, threshold=threshold)
+    return best.result
+```
+
+The rename subtask uses K=3 because it touches a public API boundary (high-blast-radius). The test-update subtask uses K=1 because the existing test suite provides a tight verification signal — any broken candidate fails immediately. The judge for the rename subtask runs `mypy --strict` and checks diff size before LLM scoring; the LLM rubric only runs on candidates that pass both hard gates.
 
 ## Key Takeaways
 

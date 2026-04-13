@@ -18,7 +18,7 @@ aliases:
 
 Agents learn from what they find. When an agent scans your codebase for patterns, it treats golden-path implementations and legacy workarounds equally. Suboptimal patterns propagate faster than any team can review them.
 
-This is faithful reproduction — not a prompting failure or model limitation.
+In practice, this behaves like faithful reproduction rather than a prompting failure — the agent is doing exactly what it was implicitly instructed to do by the surrounding code.
 
 ```mermaid
 graph LR
@@ -40,8 +40,6 @@ graph LR
 | 67.3% of AI-generated PRs rejected vs 15.6% for manual code | [LinearB via Mike Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) |
 | AI magnifies strengths of high-performing orgs and dysfunctions of struggling ones | [DORA Report 2025](https://dora.dev/research/2025/dora-report/) |
 
-The initial productivity spike fades by month three while quality issues persist (CMU study).
-
 ## Specific Manifestations
 
 Three recurring failure modes (via [Mike Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/)):
@@ -61,11 +59,29 @@ Three recurring failure modes (via [Mike Mason](https://mikemason.ca/writing/ai-
 
 OpenAI's Harness team spent [20% of sprint time cleaning up "AI slop"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/) before arriving at a systematic approach:
 
-1. **Encode golden patterns as mechanical rules.** Linters and CI checks that reject known anti-patterns -- agents don't reliably follow prose guidance when contradicted by codebase examples.
+1. **Encode golden patterns as mechanical rules.** Linters and CI checks that reject known anti-patterns -- prose guidance in prompts is routinely overridden by contradicting examples already in the codebase.
 2. **Auto-generate refactoring PRs.** Replace deprecated patterns with approved alternatives before scaling agent usage.
 3. **Track quality metrics.** Monitor duplication rates, lint violations, and complexity scores. Degradation signals replication is outpacing remediation.
 
-Remediate existing anti-patterns *before* scaling agent usage.
+## When This Backfires
+
+Three conditions where clean-first is worse than proceeding directly:
+
+**Mid-migration codebases.** Blanket lint rules fire on valid compatibility shims when two patterns intentionally coexist during a transition. Lint rules require pattern stability to add value.
+
+**Load-bearing deprecated APIs.** Some APIs persist because the replacement isn't available in all deploy targets. Encoding a rejection rule before the replacement is universally reachable creates CI failures with no resolution path.
+
+**Insufficient review bandwidth.** Auto-generated refactoring PRs create review load. If the team can't merge them before scaling agent usage, queued debt compounds the original problem.
+
+In these cases, narrow lint rules scoped to new files reduce blast radius without triggering false positives on existing code.
+
+## When This Backfires
+
+- **Large legacy codebases.** Pre-remediation spanning months may eliminate the productivity gain before agents are even enabled.
+- **Intentional compatibility shims.** Load-bearing wrappers around deprecated APIs exist for a reason. Blanket CI rules that reject them generate false positives and slow valid work.
+- **Metrics without baselines.** Duplication and complexity scores spike when agent adoption rolls out incrementally — comparing against a pre-agent baseline that used different review norms produces misleading signals.
+
+In high-legacy environments, lint rules targeting the highest-frequency anti-patterns only are more practical than blocking agent usage wholesale.
 
 ## Example
 

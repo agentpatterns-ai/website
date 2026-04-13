@@ -42,6 +42,16 @@ A team delegates a complex architectural refactoring task to Claude Code. The mo
 
 The architectural task was heavily represented in training patterns. The validation logic required algorithmic precision the model approximated badly. From the model's perspective, these were not similar tasks.
 
+## When This Backfires
+
+Treating all tasks as independent capability questions imposes overhead. This becomes counterproductive when:
+
+- **The task class is narrow and well-characterized** — for highly repetitive, formulaic operations (e.g., generating boilerplate CRUD endpoints against a fixed schema), repeated success is evidence that the training distribution covers the pattern well. Per-task verification is still warranted, but autonomy calibration based on prior runs is reasonable.
+- **The domain has high benchmark saturation** — tasks that appear verbatim or structurally in widely-used public benchmarks (standard algorithm implementations, common regex patterns) show more stable performance than tasks in unseen problem spaces. The jaggedness is real, but not uniform across all task types.
+- **Verification cost exceeds failure cost** — for low-stakes, easily-reverted operations, requiring explicit re-verification of each task type may slow delivery more than occasional failures cost. The pattern's guidance must be weighed against the practical verification budget.
+
+The fallacy is most dangerous for tasks that appear familiar but require compositional reasoning the model has not practiced in exactly that combination.
+
 ## Key Takeaways
 
 - Capability on task A does not predict capability on task B, even when A and B appear related to a human observer.

@@ -37,7 +37,7 @@ Natural language descriptions introduce several problems:
 - **Verbosity**: writing a complete description of a complex API takes more tokens and more effort than pointing at the schema
 - **Verifiability**: prose output cannot be automatically checked; spec-grounded output can be tested, validated, or linted
 
-The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction.
+The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction. Research on [spec-driven development](https://arxiv.org/html/2602.00180v1) confirms that grounding agent instructions in existing contracts reduces hallucinated structural details — column names, route shapes, field types — compared to prose descriptions.
 
 ## Applying the Pattern
 
@@ -59,6 +59,14 @@ Implement the `UserRepository` class to satisfy the `IUserRepository` interface 
 ```
 
 The agent reads the interface, derives the implementation contract, and produces code that satisfies it.
+
+## When This Backfires
+
+The pattern assumes a specification exists and is correct. When that assumption breaks, the approach adds friction rather than reducing it:
+
+- **The spec is incomplete or wrong.** An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that doesn't reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system — and the mismatch is harder to diagnose than a prose description that was vague.
+- **No formal spec exists yet.** Early in a project, types and schemas may not exist. Blocking on spec creation before any agent work is often the wrong order of operations; prose is the right tool until the formal artifacts stabilize.
+- **The spec is a ceiling, not a floor.** An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent — naming conventions, error-handling patterns, layering rules — that the type system doesn't encode. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that aren't covered by the test suite.
 
 ## Key Takeaways
 
@@ -99,3 +107,5 @@ The agent reads the interface, derives the method signatures, parameter types, r
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
+- [Constraint Encoding Compliance Gap](constraint-encoding-compliance-gap.md)
+- [Hints Over Code Samples](hints-over-code-samples.md)

@@ -110,3 +110,4 @@ The human's constraint is now PR review throughput, not agent execution speed.
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Fan-Out and Synthesis](../multi-agent/fan-out-synthesis.md)
+- [Swarm Migration Pattern](../multi-agent/swarm-migration-pattern.md)

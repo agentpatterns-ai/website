@@ -12,7 +12,7 @@ aliases:
 
 # Skill Authoring Patterns: Description to Deployment
 
-> Practical patterns for building, testing, and troubleshooting agent skills — the categories they fall into, how to write descriptions that trigger reliably, implementation patterns, and what to do when things break.
+> Skill authoring patterns are repeatable structures that make agent skills reliable — covering how to write descriptions that trigger at the right time, which implementation shape fits each task type, and how to diagnose failures when they occur.
 
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
@@ -132,9 +132,9 @@ CLI-backed scripts should follow Unix philosophy: one script per skill, subcomma
 
 Three existing skills in this repo are written CLI-first and can be used as templates:
 
-- [`add-missing-meta`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/add-missing-meta) — script at `scripts/add-missing-meta.py`; SKILL.md body is a thin wrapper naming the trigger, the command, and the constraints
-- [`parse-citations`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/parse-citations) — Python module importable from other scripts, with the SKILL.md documenting the public API
-- [`create-audit-backlog`](https://github.com/agentpatterns-ai/content/tree/main/.claude/skills/create-audit-backlog) — argparse-based CLI with flags documented in a table; SKILL.md names the triggers and the post-run steps
+- `add-missing-meta` — script at `scripts/add-missing-meta.py`; SKILL.md body is a thin wrapper naming the trigger, the command, and the constraints
+- `parse-citations` — Python module importable from other scripts, with the SKILL.md documenting the public API
+- `create-audit-backlog` — argparse-based CLI with flags documented in a table; SKILL.md names the triggers and the post-run steps
 
 ### Authoring checklist
 
@@ -179,6 +179,19 @@ Iterate on a single challenging task until the agent succeeds, then extract the 
 
 For critical validations, bundle a script — code is deterministic; language interpretation is not.
 
+## Why It Works
+
+Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
+
+## When This Backfires
+
+Apply skill authoring patterns selectively — over-engineering is a real cost:
+
+1. **Simple one-off tasks** — a skill with YAML frontmatter, a Gotchas section, and a CLI entry point for a two-command workflow adds setup overhead with no reliability gain. Inline shell or a single README block is sufficient.
+2. **Rapidly changing APIs** — skills encode domain knowledge that becomes wrong when the underlying API changes. A skill with stale Gotchas is worse than no skill: it actively misdirects the agent. Skills for fast-moving surfaces need an explicit owner and update cadence.
+3. **Skill proliferation** — with many skills loaded, descriptions are shortened to fit a character budget, which strips the trigger keywords that drive selection ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). A library of 40+ skills degrades all skills' triggering reliability; consolidating rarely-used skills reduces this pressure.
+4. **Security surface expansion** — each skill loaded from an external registry is a potential prompt-injection vector. Malicious skills can direct the agent to invoke tools in ways that don't match their stated purpose. Review all third-party skills before installation, especially those bundling shell scripts.
+
 ## Example
 
 The following YAML frontmatter shows the Description Craft pattern in practice. A Linear MCP skill uses the `[What it does] + [When to use it] + [Key capabilities]` structure with explicit trigger phrases and a negative trigger to prevent over-firing.
@@ -213,6 +226,7 @@ Asking the agent "When would you use the linear-issue-manager skill?" after savi
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
+- [CLI-First Skill Design](cli-first-skill-design.md)
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
 - [Skill as Knowledge](skill-as-knowledge.md)
 - [Skill Library Evolution](skill-library-evolution.md)

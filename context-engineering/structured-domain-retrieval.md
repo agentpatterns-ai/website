@@ -16,7 +16,7 @@ aliases:
 
 ## The Problem with Flat Retrieval
 
-Standard RAG retrieves context by embedding similarity — vectorize the query, return the closest chunks. This fails for domain-specific code generation because API knowledge is **hierarchical**: a function belongs to a module, belongs to a package, with specific parameter types and return conventions. Embedding distance does not encode these relationships.
+Standard RAG retrieves context by embedding similarity — vectorize the query, return the closest chunks. This fails for domain-specific code generation because API knowledge is **hierarchical**: a function belongs to a module, belongs to a package, with specific parameter types and return conventions. Embedding distance does not encode these relationships. Graph-structured retrieval was shown to better capture relational context in knowledge-intensive tasks ([Edge et al., "From Local to Global", 2024](https://arxiv.org/abs/2404.16130)).
 
 DomAgent demonstrated this: a 7B model with flat retrieval scored ~40% pass@1 on truck software tasks; with structured KG retrieval plus case-based reasoning it scored 96.6% ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
 
@@ -59,7 +59,7 @@ Working code examples show how API functions are actually used. The key insight 
 2. **Select cases iteratively** — add a case if it covers a new package or cluster
 3. **Stop at coverage thresholds** — typically 90% of packages and 90% of clusters
 
-DomAgent found that 30% of cases selected this way matched the performance of 80% selected randomly [unverified — generalizability beyond the tested benchmarks is not established].
+DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain); generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
 
 ## Refinement Gate
 
@@ -74,7 +74,7 @@ Structured domain retrieval pays off when:
 - **Repetitive tasks** — the same API patterns recur, making case curation worthwhile
 - **High accuracy requirements** — regulated or safety-critical domains where 40% pass@1 is unacceptable
 
-Skip it when the API fits in a system prompt, tasks are exploratory, or the team cannot maintain the knowledge graph.
+Skip it when the API fits in a system prompt, tasks are exploratory, or the team cannot maintain the knowledge graph. For APIs with fewer than ~100 functions, the construction and maintenance overhead typically exceeds the accuracy benefit.
 
 ## Construction
 
@@ -146,14 +146,18 @@ send_frame(result.frame, timeout_ms=100)
 - A refinement gate removes superficially similar but irrelevant context before generation.
 - Expose KG and case base as on-demand tools rather than preloading into the context window.
 
-## Unverified Claims
+## When This Backfires
 
-- The finding that 30% coverage-selected cases match 80% randomly selected cases may not generalize beyond the specific benchmarks tested (DS-1000, truck CAN signal domain)
-- Whether KG construction overhead is justified for domains with fewer than ~100 API functions is not established
+Structured domain retrieval adds significant upfront cost and ongoing maintenance. Three failure conditions to assess before committing:
+
+- **API churn outpaces graph updates** — when the API surface changes faster than the KG and case base can be refreshed, the agent retrieves stale signatures and outdated examples. Fast-moving internal SDKs or pre-release frameworks are high-risk.
+- **KG construction ROI is negative below ~100 functions** — parsing, embedding, and indexing a small API surface costs more in engineering time than switching to curated few-shot examples in the system prompt. Measure actual retrieval failures before building graph infrastructure.
+- **Case base diversity is insufficient** — coverage-driven selection depends on having enough working examples to form meaningful clusters. Projects with thin test suites or sparse documentation produce a case base that mimics the gaps of flat retrieval.
 
 ## Related
 
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — simpler baseline this page extends
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — typed graph retrieval using a shared domain schema across construction, decomposition, and retrieval
 - [Repository Map Pattern](repository-map-pattern.md) — AST + graph importance for code context
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-based structured code navigation
 - [Context Hub](context-hub.md) — on-demand API docs without hierarchical structure

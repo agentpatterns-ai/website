@@ -1,15 +1,16 @@
 ---
-title: "Tool Minimalism: High-Level Prompting for AI Agents"
-description: "Expose fewer, non-overlapping tools and use goal-oriented instructions â€” counter-intuitive decisions that production data shows improve reliability."
+title: "Tool Minimalism and High-Level Prompting"
+description: "Expose fewer, non-overlapping tools and use goal-oriented instructions — counter-intuitive decisions that production data shows improve reliability."
 aliases:
   - Tool Schema Design
 tags:
   - agent-design
   - instructions
 ---
+
 # Tool Minimalism and High-Level Prompting
 
-> Expose fewer, non-overlapping tools and provide goal-oriented instructions rather than step-by-step procedures â€” both counter-intuitive decisions that production data shows improve reliability.
+> Expose fewer, non-overlapping tools and provide goal-oriented instructions rather than step-by-step procedures — both counter-intuitive decisions that production data shows improve reliability.
 
 !!! info "Also known as"
     Tool Calling Schema Standards, Subagent Schema-Level Tool Filtering, Tool Schema Design
@@ -18,7 +19,7 @@ tags:
 
 Developers instinctively add more tools for coverage: multiple ways to read files, search the codebase, run code. The intent is to ensure the agent always has something that works. The effect is ambiguity the model must resolve on every call.
 
-OpenAI's data agent team found: "We exposed our full tool set to the agent, and quickly ran into problems with overlapping functionality... it's confusing to agents." Consolidating and restricting tool calls â€” even removing valid options â€” reduced ambiguity and improved end-to-end reliability. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+OpenAI's data agent team found: "We exposed our full tool set to the agent, and quickly ran into problems with overlapping functionality... it's confusing to agents." Consolidating and restricting tool calls — even removing valid options — reduced ambiguity and improved end-to-end reliability. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 Redundancy is a liability, not a safety net. When two tools can both accomplish a task, the model spends reasoning on the selection decision rather than on the task itself. When it selects the wrong one, the error is introduced before any work has been done.
 
@@ -48,20 +49,20 @@ Shifting to higher-level guidance and trusting the model's own reasoning to choo
 **Goal-oriented (prefer):**
 > "Find all places in the codebase that interact with the `users` table, including schema, queries, and migrations. Provide a summary of recent changes and current usage patterns."
 
-The prescriptive version anchors the agent to one search sequence. The goal-oriented version lets the agent choose whether to start with schema, queries, or migrations based on what it finds â€” which is often the right decision.
+The prescriptive version anchors the agent to one search sequence. The goal-oriented version lets the agent choose whether to start with schema, queries, or migrations based on what it finds — which is often the right decision.
 
 ## For Coding Agent Design
 
 The practical implications:
 
 - Define the outcome and the constraints, not the step-by-step procedure
-- Let the model decide whether to read a file, search symbols, or inspect git history â€” it has information about what it found that the system prompt author didn't have
+- Let the model decide whether to read a file, search symbols, or inspect git history — it has information about what it found that the system prompt author didn't have
 - Consolidate overlapping tools into the smallest set that covers the task space without redundancy
 - Add explicit selection criteria only when use cases are genuinely distinct
 
 ## Key Takeaways
 
-- Overlapping tools create ambiguity the model resolves on every call â€” redundancy is a liability, not a safety net
+- Overlapping tools create ambiguity the model resolves on every call — redundancy is a liability, not a safety net
 - Consolidating and restricting tool calls improves reliability, even when it removes valid options
 - Prescriptive step-by-step prompts produce rigid behavior that fails when task details vary
 - Goal-oriented instructions with outcome definitions outperform procedure specifications
@@ -90,7 +91,7 @@ After consolidation:
 | `search` | Text or regex search across files (supports path filter) |
 | `find_symbol` | Find definitions by name (distinct use case: structured symbol lookup) |
 
-Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via an optional parameter. `search` absorbed `grep_file`, `grep_codebase`, and `semantic_search` â€” the model no longer decides which search variant to use. `find_symbol` remains because its use case (structured symbol lookup) is clearly distinct from text search.
+Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via an optional parameter. `search` absorbed `grep_file`, `grep_codebase`, and `semantic_search` — the model no longer decides which search variant to use. `find_symbol` remains because its use case (structured symbol lookup) is clearly distinct from text search.
 
 ## Related
 
@@ -101,6 +102,4 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
-- [Explicit, Narrow Task Instructions to Reduce Injection Susceptibility](../security/task-scope-security-boundary.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
-- [Write Tool Descriptions as Agent Onboarding Documents](tool-descriptions-as-onboarding.md)

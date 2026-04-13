@@ -33,7 +33,7 @@ graph LR
     E -->|Fail| H
 ```
 
-Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), prompt chaining is the foundational sequential pattern — appropriate when a task has discrete phases that benefit from focused attention and intermediate verification.
+Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), prompt chaining is the foundational sequential pattern — appropriate when a task has discrete phases that benefit from focused attention and intermediate verification. The [Anthropic cookbook](https://platform.claude.com/cookbook/patterns-agents-basic-workflows) characterises it as decomposing a task into sequential subtasks where each step builds on previous results.
 
 ## When to Use
 

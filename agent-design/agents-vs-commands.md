@@ -107,6 +107,7 @@ The principle derives from [separation of concerns](https://en.wikipedia.org/wik
 
 ## Related
 
+- [Agent Definition Formats: How Tools Define Agent Behavior](../standards/agent-definition-formats.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)

@@ -29,27 +29,27 @@ This is distinct from the [context window dumb zone](context-window-dumb-zone.md
 [Anthropic's best-practices documentation](https://code.claude.com/docs/en/best-practices) confirms that performance degrades as context fills and that models may "forget earlier instructions or make more mistakes" — but frames this as cognitive load, not a behavioral mode shift. The behavioral framing comes from practitioner observation, not benchmarks.
 
 !!! note "Observed, not benchmarked"
-    Specific token thresholds at which anxiety-driven behavior triggers are model-dependent and not publicly benchmarked. [unverified] Treat threshold claims skeptically; the mitigations below are applicable regardless of exact trigger points.
+    Specific token thresholds at which anxiety-driven behavior triggers are model-dependent and not publicly benchmarked. Treat threshold claims skeptically; the mitigations below are applicable regardless of exact trigger points.
 
 ## How It Differs from Related Patterns
 
 | Pattern | Mechanism | Trigger | Mitigation |
 |---------|-----------|---------|------------|
 | [Context Window Dumb Zone](context-window-dumb-zone.md) | Quality/accuracy degrades | Context fill ([10-20% of window for reasoning](context-window-dumb-zone.md)) | Compact earlier, budget by task type |
-| Context Window Anxiety | Behavioral shortcuts, premature closure | Approaching context limit [unverified] | Buffer allocation, counter-prompting, budget transparency |
+| Context Window Anxiety | Behavioral shortcuts, premature closure | Approaching context limit (practitioner-observed, not benchmarked) | Buffer allocation, counter-prompting, budget transparency |
 | Compaction | Memory loss via summarization | ~95% fill (auto-compaction) | Manual compaction before degradation onset |
 
 ## Three Mitigations
 
 ### 1. Context Buffer Allocation
 
-Provision a larger context window than you need for the task, then cap actual usage well below it. The model infers available space from the window size it perceives — a 1M-token window capped at 200K use gives the model a perception of spaciousness even as usage climbs. [unverified]
+Provision a larger context window than you need for the task, then cap actual usage well below it. The rationale — per the [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/context-window-anxiety-management.md) — is that a 1M-token window capped at 200K use provides perceived "runway" that reduces premature-closure behavior; this is practitioner-reported and has not been independently benchmarked.
 
 This is an architectural decision, not a per-request one. It applies when you control the API parameters or harness configuration.
 
 ### 2. Counter-Prompting
 
-Embed explicit instructions that directly override premature-closure behavior. Place these at both the start and end of the system prompt to exploit [primacy and recency effects](lost-in-the-middle.md):
+Embed explicit instructions that directly override premature-closure behavior. Place these at both the start and end of the system prompt to exploit [primacy and recency effects](lost-in-the-middle.md) — see [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) for the full technique:
 
 **Example counter-prompt:**
 
@@ -68,7 +68,6 @@ Tell the model explicitly how many tokens remain. A model that underestimates av
 Practical approaches:
 - Include a token budget field in your system prompt that the harness updates each turn
 - Use a status line showing current context usage (Claude Code supports [custom status lines](https://code.claude.com/docs/en/statusline))
-- The Claude Code `/context` command (v2.1.74+) provides capacity warnings and optimization suggestions
 
 ## When to Apply
 
@@ -104,9 +103,3 @@ None of these mitigations eliminates the underlying behavior — they reduce its
 - [Context Budget Allocation](context-budget-allocation.md) — allocating tokens deliberately across preloaded context and working space
 - [Goal Recitation](goal-recitation.md) — periodically rewriting objectives at the tail of context to prevent goal drift
 - [Context Compression Strategies](context-compression-strategies.md) — strategies for reducing context fill before limits are approached
-
-## Unverified Claims
-
-- Specific token thresholds at which anxiety-driven behavior triggers are model-dependent and not publicly benchmarked. [unverified]
-- Provisioning a large window (e.g., 1M tokens) while capping actual usage reduces behavioral anxiety triggers — plausible but not independently verified. [unverified]
-- Counter-prompting effectiveness at scale across different model families has not been systematically evaluated. [unverified]
