@@ -13,7 +13,7 @@ tags:
 
 ## The Problem
 
-Developers work across multiple surfaces: web-based GitHub interfaces, local IDEs, and terminal CLIs. Without explicit handoff mechanisms, switching between a cloud agent and a local environment means losing conversation history, restarting context, and manually checking out branches. Cloud-local handoff eliminates this friction by treating the agent session as portable state that moves between surfaces.
+Developers work across multiple surfaces: web-based GitHub interfaces, local IDEs, and terminal CLIs. Without explicit handoff mechanisms, switching between a [cloud agent](../tools/copilot/cloud-agent-org-controls.md) and a local environment means losing conversation history, restarting context, and manually checking out branches. Cloud-local handoff eliminates this friction by treating the agent session as portable state that moves between surfaces.
 
 ## Cloud to Local
 

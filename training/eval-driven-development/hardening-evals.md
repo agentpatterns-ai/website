@@ -28,7 +28,7 @@ Hardening addresses all three.
 
 ## Benchmark Contamination
 
-Static benchmarks degrade as models train on their data. SWE-rebench demonstrated this concretely: DeepSeek-V3 scored 39.7% on older SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination, not capability. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+Static benchmarks degrade as models train on their data (see [Benchmark Contamination as Eval Risk](../../verification/benchmark-contamination-eval-risk.md) for the full pattern). SWE-rebench demonstrated this concretely: DeepSeek-V3 scored 39.7% on older SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination, not capability. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
 
 Teams that rely solely on published benchmarks for model comparison or upgrade decisions risk selecting models that memorized the benchmark rather than models that generalize. Two defenses:
 

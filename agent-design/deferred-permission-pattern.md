@@ -125,7 +125,7 @@ The caller surfaces this in its own UI, collects `"Yes"`, then resumes. On resum
 
 ## Comparison with PermissionDenied Hook
 
-v2.1.89 also added a `PermissionDenied` hook event that fires when the auto-mode classifier denies a tool call. Returning `{retry: true}` tells Claude it can retry. This is distinct from deferred permission:
+v2.1.89 also added a `PermissionDenied` hook event that fires when the [auto-mode](../tools/claude/auto-mode.md) classifier denies a tool call. Returning `{retry: true}` tells Claude it can retry. This is distinct from deferred permission:
 
 | | Deferred Permission | PermissionDenied Hook |
 |---|---|---|

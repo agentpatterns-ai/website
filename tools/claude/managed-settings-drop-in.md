@@ -18,7 +18,7 @@ aliases:
 
 Enterprise Claude Code deployments typically start with a single `managed-settings.json` owned by one team. As more teams need to add policies — security, platform, product — the file becomes a shared resource with contention. Each change requires coordination, review, and deployment by whoever owns the file, creating a bottleneck.
 
-The `managed-settings.d/` drop-in directory follows the [systemd convention](https://code.claude.com/docs/en/settings#settings-files): each team deploys its own fragment independently, and Claude Code composes them at runtime.
+The `managed-settings.d/` drop-in directory follows the [systemd drop-in convention](https://manpages.ubuntu.com/manpages/bionic/man5/systemd.unit.5.html) — fragments in a `.d/` directory are [parsed alphabetically after the base file](https://code.claude.com/docs/en/settings#settings-files). Each team deploys its own fragment independently, and Claude Code composes them at runtime.
 
 ## How Fragments Merge
 

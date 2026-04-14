@@ -32,7 +32,7 @@ As of [VS Code 1.113](https://code.visualstudio.com/updates/v1_113), MCP servers
 
 ## CLI + MCP
 
-Copilot CLI ships with the GitHub MCP server built in [unverified — not confirmed in public CLI docs] and supports adding custom MCP servers for extended capabilities.
+Copilot CLI ships with the [GitHub MCP server built in](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) and supports adding custom MCP servers via the interactive `/mcp add` command or the `~/.copilot/mcp-config.json` file.
 
 ## Example
 
@@ -70,9 +70,12 @@ The following VS Code `settings.json` snippet configures two MCP servers for Cop
 - The coding agent supports MCP tools (not resources or prompts)
 - VS Code 1.113+ bridges registered MCP servers to CLI and Claude agent sessions automatically
 
-## Unverified Claims
+## When This Backfires
 
-- Copilot CLI ships with the GitHub MCP server built in [unverified — not confirmed in public CLI docs]
+- **Tool sprawl inflates context and cost.** Every registered MCP server exposes tool schemas into the agent's context window. Ten servers can add thousands of tokens per turn before the agent does anything useful, pushing common workflows toward larger models or context truncation.
+- **Each custom server is a new supply-chain surface.** `npx`-launched or community-maintained MCP servers execute with the agent's permissions and see whatever prompts you route through them. A compromised server package can exfiltrate secrets from environment variables (like the `POSTGRES_CONNECTION_STRING` above) or inject instructions into tool output.
+- **Remote MCP endpoints become availability dependencies.** Agent sessions that rely on a remote MCP server inherit its uptime, rate limits, and auth expiry. An expired token or flaky provider surfaces as opaque agent failures rather than clear infrastructure errors.
+- **Built-in capabilities often suffice.** For tasks covered by Copilot's native file, terminal, and GitHub tools, adding an MCP server duplicates capability without adding value. Reach for MCP when the data or action genuinely lives outside the agent's default surface.
 
 ## Related
 
@@ -82,4 +85,3 @@ The following VS Code `settings.json` snippet configures two MCP servers for Cop
 - [GitHub Copilot Extensions](copilot-extensions.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
 - [MCP Protocol](../../standards/mcp-protocol.md)
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)

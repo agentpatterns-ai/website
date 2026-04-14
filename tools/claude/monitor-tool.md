@@ -76,6 +76,16 @@ Both Monitor and [session scheduling](session-scheduling.md) handle recurring ba
 
 Use Monitor when the process already emits events and you want zero-latency reactions. Use scheduling when you want Claude to run a fresh check on a timer.
 
+## When This Backfires
+
+Push beats poll when events are rare and meaningful. It loses when any of the following hold:
+
+- **Chatty processes flood context.** Every stdout line becomes a notification. Watching a verbose test runner, webpack rebuild, or `pytest -vv` pipes thousands of events into the conversation and crowds out the task Claude is actually working on. Pipe through `grep` before monitoring, or capture to a file and `Read` on demand.
+- **Stderr and exit codes are invisible.** Monitor forwards stdout only. A script that logs errors to stderr, crashes silently, or communicates via non-zero exit status will look healthy to Monitor. Use `Bash` with captured output for anything where failure is silent.
+- **Low-cadence checks don't need streaming.** If the thing you're watching changes every few minutes (a slow CI run, a nightly build), scheduled polling with `CronCreate` or `/loop` is just as responsive, does not hold a background process open, and survives across idle windows.
+- **Session-scoped lifetime.** Monitors die when the Claude session exits. For batch jobs that need to outlive a conversation, or monitoring across reboots, use an external supervisor (systemd, cron, CI) instead.
+- **Not available on Amazon Bedrock, Google Vertex AI, or Microsoft Foundry**, or when `DISABLE_TELEMETRY` / `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference)]
+
 ## Example
 
 Monitor a Docker Compose deployment and surface errors the moment they appear:

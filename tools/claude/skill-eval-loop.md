@@ -15,7 +15,7 @@ aliases:
 
 > Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing eval-driven development to skill authoring without writing code.
 
-Skills fail on two independent axes: **output quality** (does the skill produce good results?) and **trigger precision** (does it activate at the right time?). The skill-creator eval framework addresses both with a structured loop: define evals, run benchmarks, compare versions, and optimize descriptions. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+Skills fail on two independent axes: **output quality** (does it produce good results?) and **trigger precision** (does it activate at the right time?). The skill-creator framework addresses both through a structured loop. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 ---
 
@@ -35,13 +35,7 @@ graph TD
 
 ### Step 1: Define Test Cases
 
-Each eval has three parts stored in `evals/evals.json`:
-
-- **Prompt** — a realistic user message with concrete details (file paths, column names, context)
-- **Expected output** — a human-readable description of success
-- **Input files** (optional) — files the skill needs to work with
-
-Start with 2-3 test cases. Add assertions after the first run — you often cannot define "good" until you see what the skill produces. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+Each eval in `evals/evals.json` has three parts: a realistic **prompt** with concrete details (paths, columns, context), an **expected output** description, and optional **input files**. Start with 2-3 cases; add assertions after the first run — you often cannot define "good" until you see what the skill produces. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 ```json
 {
@@ -59,7 +53,7 @@ Start with 2-3 test cases. Add assertions after the first run — you often cann
 
 ### Step 2: Run Evals in Parallel
 
-The skill-creator spawns independent agents for each eval — one with the skill, one without (or with the previous version). Each agent operates in a clean context with isolated token and timing metrics. This prevents context bleeding between runs and produces comparable measurements. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+skill-creator spawns independent agents per eval — one with the skill, one without (or the prior version). Each runs in an isolated context, preventing bleed between runs. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 Workspace structure after a run:
 
@@ -80,7 +74,7 @@ csv-analyzer-workspace/
 
 ### Step 3: Grade and Benchmark
 
-Assertions are verifiable statements about what the output should contain. Good assertions are specific and observable ("The bar chart has labeled axes"), not vague ("The output is good"). Grade with code-based checks for deterministic properties, LLM-as-judge for nuanced quality, or human review as the gold standard. [Source: [Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Assertions should be specific and observable ("The bar chart has labeled axes"), not vague ("The output is good"). Grade with code-based checks for deterministic properties, LLM-as-judge for nuanced quality, or human review as the gold standard. [Source: [Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 Benchmark aggregation produces three metrics per configuration:
 
@@ -98,55 +92,58 @@ Benchmark aggregation produces three metrics per configuration:
 }
 ```
 
-The delta quantifies what the skill costs (more time, more tokens) and what it buys (higher pass rate). A 13-second overhead for a 50-point pass rate improvement is a different trade-off than doubling tokens for a 2-point gain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+The delta quantifies skill cost (time, tokens) vs benefit (pass rate). A 13-second overhead for a 50-point gain is a different trade-off than doubling tokens for a 2-point gain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 ### Step 4: Analyze and Iterate
 
-After each iteration, examine the results for actionable patterns: [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+Examine each iteration for actionable patterns: [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
-- **Assertions that always pass in both configurations** — not discriminating; remove or replace them
-- **Assertions that always fail in both** — broken assertion or impossible task; fix before next iteration
+- **Always pass in both** — not discriminating; remove or replace
+- **Always fail in both** — broken assertion or impossible task; fix before next iteration
 - **Pass with skill, fail without** — where the skill adds clear value; understand why
 - **High variance across runs** — ambiguous instructions; add examples or tighten guidance
 
-Revise `SKILL.md` based on failed assertions, human feedback, and execution transcripts. Generalize fixes rather than patching individual test cases. Rerun in `iteration-N+1/` and compare.
+Revise `SKILL.md` from failed assertions and transcripts. Generalize fixes rather than patching individual cases. Rerun in `iteration-N+1/` and compare.
 
 ---
 
 ## Blind A/B Comparison
 
-When iterating on prompts or instructions, sequential evaluation introduces anchoring bias — the second version is judged relative to the first. The skill-creator's comparator agents eliminate this: a separate agent receives outputs from version A and version B without labels and grades which is better on each criterion. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
-
-This applies beyond skill-vs-no-skill. Compare two skill versions, two different skills that solve the same problem, or the same skill running on two different models.
+Sequential evaluation introduces anchoring bias — the second version is judged relative to the first. Comparator agents eliminate this: a grader receives A and B outputs without labels and scores each criterion blindly. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)] This extends beyond skill-vs-no-skill to comparing versions, competing skills, or the same skill across models.
 
 ---
 
 ## Trigger Description Optimization
 
-Output quality evals only matter if the skill triggers. The description optimization loop tests and improves trigger precision:
+Output quality evals only matter if the skill triggers. The description optimization loop:
 
-1. **Generate trigger queries** — ~20 queries: 8-10 that should trigger the skill, 8-10 that should not. Should-trigger queries use varied phrasings (casual, formal, implicit). Should-not-trigger queries are near-misses with shared keywords but different intent. [Source: [Skill-creator SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)]
+1. **Generate ~20 trigger queries** — 8-10 should-trigger (varied phrasings: casual, formal, implicit) and 8-10 should-not-trigger (near-misses with shared keywords, different intent). [Source: [Skill-creator SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md)]
+2. **Run the loop** — skill-creator scores the current description against the queries and suggests edits that cut false positives and false negatives.
+3. **Apply and verify** — update the `description` field in `SKILL.md` frontmatter and rerun the set.
 
-2. **Run the optimization loop** — the skill-creator analyzes the current description against sample prompts and suggests edits to reduce false positives and false negatives.
+Testing across public document-creation skills improved triggering on 5 of 6. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
-3. **Apply and verify** — update the `description` field in `SKILL.md` frontmatter and rerun the trigger eval set.
-
-Testing across public document-creation skills showed improved triggering on 5 of 6 skills. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
-
-Effective trigger queries are realistic and detailed, not generic:
-
-**Weak**: `"Format this data"` — too vague; could match many skills.
-
-**Strong**: `"my boss sent me Q4_sales_final_v2.xlsx and wants a profit margin column — revenue is in C and costs are in D"` — concrete details, casual tone, no skill name mentioned.
+Queries must be realistic and detailed. **Weak**: `"Format this data"` — too vague. **Strong**: `"my boss sent me Q4_sales_final_v2.xlsx and wants a profit margin column — revenue is in C, costs in D"` — concrete, casual, no skill name mentioned.
 
 ---
 
 ## Model Upgrade Eval Strategies
 
-The two skill categories require different eval approaches on model upgrades: [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+Two skill categories need different eval approaches on model upgrades: [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
-- **Capability uplift** skills encode techniques the base model cannot do consistently. Compare the skill-augmented agent against the raw model — if the raw model matches or exceeds the skill, retire it.
-- **Encoded preference** skills sequence capabilities according to team-specific workflows. Verify workflow fidelity (step ordering, output format, required checks) rather than raw output quality — the model cannot infer your process.
+- **Capability uplift** — encodes techniques the base model cannot do consistently. Compare skill-augmented vs raw model; if raw matches or exceeds, retire the skill.
+- **Encoded preference** — sequences capabilities to fit team workflows. Verify workflow fidelity (step order, output format, required checks) rather than raw quality — the model cannot infer your process.
+
+---
+
+## When This Backfires
+
+The loop has real overhead and fails predictably:
+
+- **Rarely-triggered or single-use skills** — harness cost (parallel runs, grading, bookkeeping) can exceed lifetime savings; ad-hoc manual QA may win.
+- **Same-model LLM-as-judge grading** — grader agents inherit the target model's biases, inflating pass rates on outputs the model itself would not critique. Prefer code-based assertions and human spot-checks for subjective quality. [Source: [Demystifying evals](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+- **Assertion over-fitting** — a fixed eval set can tune the skill to that set while drifting on real traffic. Refresh cases from production prompts.
+- **Subjective skills** — writing style, design, and taste resist objective assertions; force-fitting produces a green benchmark that tells you nothing. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 ---
 

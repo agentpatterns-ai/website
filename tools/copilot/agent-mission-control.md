@@ -1,6 +1,6 @@
 ---
 title: "Agent Mission Control for Orchestrating Agent Tasks"
-description: "GitHub's centralized dashboard for assigning, steering, and tracking Copilot coding agent tasks across repositories. Announced October 2025, Mission Control"
+description: "GitHub's centralized dashboard for assigning, steering, and tracking Copilot coding agent tasks across repositories, announced October 2025."
 tags:
   - agent-design
   - workflows
@@ -27,7 +27,7 @@ Tasks can be created from multiple entry points:
 
 ## Parallel Orchestration
 
-Mission Control supports running multiple agents simultaneously rather than sequentially [unverified — based on dashboard UI; GitHub has not documented explicit concurrency guarantees].
+Mission Control lets you [kick off multiple tasks in minutes across one repo or many](https://github.blog/ai-and-ml/github-copilot/how-to-orchestrate-agents-using-mission-control/) rather than managing one agent at a time.
 
 ```mermaid
 graph LR
@@ -46,7 +46,7 @@ For task decomposition guidance — what runs well in parallel vs. what should s
 
 Two surfaces for steering a session mid-run:
 
-1. **Chat panel** — send a redirect message while the session runs; Copilot applies it after its current tool call completes [unverified — queuing behavior may vary]
+1. **Chat panel** — send a redirect message while the session runs; per GitHub, [Copilot adapts "as soon as its current tool call completes"](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)
 2. **Files Changed view** — comment directly on specific lines to correct implementation details
 
 **Session logs** expose Copilot's reasoning alongside the Overview and Files Changed tabs. Check logs before reviewing code — a reasoning error caught in the log is cheaper to correct than one traced through a diff.
@@ -118,10 +118,12 @@ A team uses Mission Control to parallelize a feature rollout across three concer
 - Custom agents reduce per-task context overhead; define them once, reuse across sessions
 - Enterprise session filters provide governance visibility across the organization
 
-## Unverified Claims
+## When This Backfires
 
-- Mission Control supports running multiple agents simultaneously rather than sequentially [unverified — based on dashboard UI; GitHub has not documented explicit concurrency guarantees]
-- Chat panel redirect messages are applied after the current tool call completes [unverified — queuing behavior may vary]
+- **Review is the bottleneck.** Five parallel sessions only help if one reviewer can evaluate five concurrent PRs without rubber-stamping; otherwise dispatch accelerates churn, not delivery (see [parallel agent sessions](../../workflows/parallel-agent-sessions.md)).
+- **Cloud-only feedback loop.** Iteration latency is bounded by round-trips to github.com. For tight inner-loop work, an IDE-attached session (Copilot agent mode or a local CLI) gives faster steering than a dashboard.
+- **Single-repo scoping.** A Mission Control task scopes to one repository; work that spans repos still needs per-repo decomposition or a multi-repo harness.
+- **Silent drift.** It is easy to dispatch more sessions than you have attention to read logs for — abandoned sessions accumulate unnoticed.
 
 ## Related
 

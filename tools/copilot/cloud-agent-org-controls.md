@@ -66,7 +66,7 @@ Each commit message links back to the agent session log, enabling code review an
 
 ## Comparison: Claude Code Enterprise Controls
 
-Claude Code's enterprise governance works through `managed-settings.json` deployed via MDM (JAMF, Intune) or OS-level configuration. Settings apply at the endpoint level and cannot be overridden by user or project settings. Server-managed settings offer a lighter alternative — pushed via Anthropic's servers on startup and hourly polls, without MDM infrastructure.
+Claude Code's enterprise governance works through [`managed-settings.json`](https://code.claude.com/docs/en/settings) deployed via MDM (JAMF, Intune) or OS-level configuration. Settings apply at the endpoint level and cannot be overridden by user or project settings. Server-managed settings offer a lighter alternative — pushed via Anthropic's servers on startup and hourly polls, without MDM infrastructure.
 
 The models differ in trust anchor: Copilot's controls live in GitHub.com settings (platform-managed), while Claude Code's controls live on the endpoint or Anthropic's servers (IT-managed). Neither approach is strictly stronger — the right choice depends on whether your threat model prioritizes platform-side enforcement or endpoint-level enforcement.
 

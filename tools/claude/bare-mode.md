@@ -59,9 +59,15 @@ Because `--bare` skips everything, you load only what the task actually needs ([
 
 `--bare -p` is approximately 14% faster to the first API request compared to standard `-p` ([changelog](https://code.claude.com/docs/en/changelog)). For CI pipelines that run Claude on every push or PR, this compounds across many invocations. `--bare` also sets the `CLAUDE_CODE_SIMPLE` environment variable ([CLI reference](https://code.claude.com/docs/en/cli-reference)), which downstream scripts can read to detect bare-mode context.
 
-## Example
+## When This Backfires
 
-A GitHub Actions workflow that runs a security review on every pull request. Using `--bare` ensures the same tools and configuration run in CI regardless of what any contributor has in their local `~/.claude`.
+`--bare` is deliberately blunt. It strips everything and asks you to add back what you need. That is the right default for reproducible scripts, but it is the wrong default in these cases:
+
+- **CI is meant to mirror the repo's configured environment.** If your team relies on a checked-in `.mcp.json`, project hooks in `.claude/`, or repo-scoped skills for the CI task itself, `--bare` will silently skip them. You must re-add each one with `--mcp-config`, `--settings`, and `--plugin-dir`, and keep those flags in sync with the project config.
+- **The task depends on CLAUDE.md context.** Project CLAUDE.md files often encode repo conventions (naming, test commands, style rules). A bare run has none of that and will happily violate them. If you need that context, re-inject it via `--append-system-prompt-file`.
+- **You already use `ANTHROPIC_API_KEY` and a locked-down `settings.json`.** If your non-bare `-p` runs are already deterministic — no local hooks, no auto-memory, explicit API key — `--bare` mostly adds flag noise for the ~14% startup saving. Measure before adopting it.
+
+## Example
 
 ```yaml
 name: security-review

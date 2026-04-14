@@ -27,7 +27,7 @@ Four artifact types participate in discovery:
 | Agents (`.github/agents/*.md`) | Specialized agents with their own tools and MCP servers |
 | MCP servers (`.mcp.json`) | External tool connections |
 
-A fifth scope applies to personal skills: `~/.agents/skills/` is loaded as a personal discovery directory, enabling developer-specific skills that are not checked into any repository [unverified whether this applies outside the VS Code extension].
+A fifth scope applies to personal skills: the Copilot CLI also loads skills from `~/.copilot/skills/`, `~/.claude/skills/`, and `~/.agents/skills/` in the user's home directory, enabling developer-specific skills that are not checked into any repository ([GitHub Docs: Creating agent skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills)).
 
 ## Monorepo Layout
 
@@ -56,13 +56,13 @@ When you run `copilot` from `frontend/`, the agent loads the root instructions p
 
 ## Override Direction
 
-Package-level configuration takes precedence over root-level configuration. When both levels define the same MCP server name [unverified — merge vs. override behavior is not specified in release notes], the package-level definition wins. Root-level config provides shared defaults; package-level config specializes for context.
+Package-level configuration takes precedence over root-level configuration. MCP servers use last-wins precedence — when both levels define the same server name, the package-level definition overrides the root-level one ([GitHub Docs: Adding MCP servers for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers)). Root-level config provides shared defaults; package-level config specializes for context.
 
 This mirrors the precedence model in [Layered Instruction Scopes](../../instructions/layered-instruction-scopes.md), where more specific scopes override less specific ones. The difference here is that Copilot CLI handles the traversal automatically — no harness configuration required.
 
 ## Session Working Directory
 
-The `/cd` command changes the working directory within an active session. When you `/cd` into a different package, Copilot re-evaluates which configuration applies to the new path [unverified whether re-discovery is immediate or requires `/clear`]. This allows a single session to work across packages with appropriate context at each location.
+The `/cd` (or `/cwd`) command changes the working directory within an active session ([GitHub Copilot CLI slash commands](https://github.blog/ai-and-ml/github-copilot/a-cheat-sheet-to-slash-commands-in-github-copilot-cli/)). This lets a single session move across packages instead of starting a new process per location. If reloaded configuration does not appear to take effect after `/cd`, run `/clear` to reset session state.
 
 ## When to Structure for Discovery
 
@@ -73,6 +73,17 @@ Discovery adds value when packages in your monorepo have genuinely different:
 - **Coding conventions**: language versions, testing frameworks, or style rules diverge by package
 
 For monorepos with uniform conventions across all packages, root-level configuration is sufficient. Avoid duplicating identical configuration at multiple levels — that creates maintenance overhead without benefit.
+
+## When This Backfires
+
+Hierarchical configuration is worse than root-only configuration when:
+
+- **Packages drift silently.** Per-package instructions let each subtree encode its own conventions. Without a review cadence that diffs package-level config against root defaults, drift accumulates and a developer moving between packages gets conflicting guidance.
+- **Debugging becomes path-sensitive.** When agent behavior depends on the current working directory, reproducing a reported issue requires knowing exactly where the session was started. "It worked from the repo root but not from `packages/api/`" is a failure mode that root-only config does not produce.
+- **Precedence confusion.** Last-wins override across four artifact types (instructions, skills, agents, MCP servers) multiplied by multiple directory levels makes it non-obvious which configuration is active. A small monorepo can expose this without real benefit.
+- **Onboarding cost.** New contributors must learn both the hierarchical discovery model and the per-package layout. If packages share most of their agent surface, centralizing at the root reduces the number of places to look.
+
+If your packages mostly share conventions, prefer root-level config and introduce per-package overrides only for directories with genuinely different tool contexts.
 
 ## Relationship to Cross-Repo Distribution
 
@@ -85,12 +96,6 @@ Hierarchical discovery solves the per-package problem within a single repo. For 
 - `~/.agents/skills/` provides a personal discovery scope outside any repository
 - Discovery is automatic — no harness configuration needed; package placement determines what the agent loads
 - Use hierarchical discovery when packages need different MCP servers, skills, or conventions; use root-level config when conventions are uniform
-
-## Unverified
-
-- `~/.agents/skills/` as a personal discovery directory may apply only to the VS Code extension, not all Copilot surfaces
-- Merge vs. override behavior when the same MCP server name appears at multiple levels
-- Whether `/cd` triggers immediate re-discovery or requires `/clear` to reload configuration
 
 ## Related
 

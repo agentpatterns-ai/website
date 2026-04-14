@@ -63,7 +63,7 @@ Before approving a plan, verify:
 |---------|--------|---------|
 | `plansDirectory` | Where plan files are stored | `~/.claude/plans` |
 | `showClearContextOnPlanAccept` | Show "clear context" option on plan accept | `false` |
-| `useAutoModeDuringPlan` | Use auto mode semantics during plan mode | `true` |
+| `useAutoModeDuringPlan` | Use [auto mode](../tools/claude/auto-mode.md) semantics during plan mode | `true` |
 
 Set these in `.claude/settings.json` or via `/config`.
 

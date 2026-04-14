@@ -17,11 +17,11 @@ aliases:
 
 ## The Permission Friction Problem
 
-Every agentic coding session hits the same tradeoff: approve each action manually (safe but slow) or skip all checks with `--dangerously-skip-permissions` (fast but dangerous). Manual approval causes fatigue-driven rubber-stamping on long tasks. Blanket bypass removes all safety. Auto mode fills the gap with a classifier that makes per-action safety decisions without human intervention ([Anthropic blog](https://claude.com/blog/auto-mode)).
+Agentic sessions force a tradeoff: manual approval (slow, invites rubber-stamping) or `--dangerously-skip-permissions` (fast, unsafe). Auto mode fills the gap with a classifier that decides per action ([Anthropic blog](https://claude.com/blog/auto-mode)).
 
 ## How the Classifier Works
 
-Auto mode interposes a separate classifier model between Claude's tool calls and their execution. The classifier runs on Sonnet 4.6 regardless of the session model ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+A classifier model sits between tool calls and execution, running on Sonnet 4.6 regardless of session model ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
 ```mermaid
 graph TD
@@ -36,22 +36,22 @@ graph TD
     H -->|Block| I[Deny + Claude tries alternative]
 ```
 
-**Three-tier evaluation order** — the first matching step wins ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+**Three-tier evaluation order** — first matching step wins ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-1. **User rules**: explicit allow or deny rules in permissions settings resolve immediately
-2. **Safe operations**: reads and file edits within the working directory auto-approve (except [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths))
-3. **Classifier**: everything else goes through the two-stage pipeline
+1. **User rules**: explicit allow/deny in permissions settings resolve immediately
+2. **Safe operations**: reads and working-directory edits auto-approve (except [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths))
+3. **Classifier**: everything else runs the two-stage pipeline
 
 ### Two-Stage Pipeline
 
-The classifier uses a two-stage design optimized for cost and accuracy ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
+The classifier design trades cost against accuracy ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
 
 | Stage | Method | Purpose |
 |-------|--------|---------|
-| **Stage 1** | Single-token filter, no chain-of-thought | Fast screening; tuned for high recall (catches most threats) |
-| **Stage 2** | Chain-of-thought reasoning | Activated only when Stage 1 flags an action; reduces false positives |
+| **Stage 1** | Single-token filter, no chain-of-thought | Fast screen; tuned for high recall |
+| **Stage 2** | Chain-of-thought reasoning | Fires only when Stage 1 flags; reduces false positives |
 
-Stage 2 reuses Stage 1's prompt with a different final instruction, making it almost entirely a cache hit. This keeps the cost of the reasoning layer low.
+Stage 2 reuses Stage 1's prompt with a different final instruction — almost entirely a cache hit, keeping reasoning cheap.
 
 **Performance on real traffic** ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
 
@@ -61,72 +61,81 @@ Stage 2 reuses Stage 1's prompt with a different final instruction, making it al
 | False negative rate (overeager, n=52) | 6.6% | 17% |
 | False negative rate (synthetic exfil, n=1,000) | 1.8% | 5.7% |
 
-The 17% false-negative rate on overeager behaviors means the classifier sometimes misjudges user consent scope — it correctly identifies danger but assumes the user intended the action. Auto mode is safer than `bypassPermissions` but not a replacement for review on sensitive operations.
+The 17% overeager false-negative rate reflects consent-scope misjudgement — the classifier spots danger but assumes intent. Safer than `bypassPermissions`, not a review substitute.
 
-### What the Classifier Sees (and Does Not See)
+### What the Classifier Sees
 
-The classifier receives user messages, tool call commands, and CLAUDE.md content. Tool results are deliberately stripped — hostile content in a file or web page cannot manipulate the classifier directly. A separate input-layer probe scans incoming tool results for injection-like content and flags suspicious patterns before Claude reads them ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
+Inputs: user messages, tool call commands, CLAUDE.md. Tool results are stripped — hostile file or web content cannot reach the classifier. A separate input-layer probe scans tool results for injection patterns before Claude reads them ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
-On entering auto mode, broad allow rules that grant arbitrary code execution are dropped ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+Entering auto mode drops broad allow rules ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-- Blanket `Bash(*)` rules
+- Blanket `Bash(*)`
 - Wildcarded interpreters (`Bash(python*)`)
 - Package-manager run commands
 - `Agent` allow rules
 
-Narrow rules like `Bash(npm test)` carry over. Dropped rules are restored when you leave auto mode.
+Narrow rules like `Bash(npm test)` carry over and restore on exit.
 
 ## Default Allow and Block Lists
 
-The classifier trusts only the working directory and the repo's configured remotes by default ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+Only the working directory and configured remotes are trusted by default ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-**Allowed by default**: local file operations in the working directory, installing declared dependencies, reading `.env` and sending credentials to their matching API, read-only HTTP requests, pushing to the current or Claude-created branch.
+**Allowed**: working-directory file ops, declared-dependency installs, reading `.env` and sending credentials to its matching API, read-only HTTP, pushing to the current or Claude-created branch.
 
-**Blocked by default**: downloading and executing code (`curl | bash`), sending data to external endpoints, production deploys and migrations, mass cloud deletion, granting IAM or repo permissions, modifying shared infrastructure, destroying pre-session files, force push, pushing directly to `main`.
+**Blocked**: `curl | bash`, exfil to external endpoints, production deploys and migrations, mass cloud deletion, IAM or repo-permission grants, shared-infra changes, destroying pre-session files, force push, pushing to `main`.
 
-Run `claude auto-mode defaults` to inspect the full rule lists.
+Inspect the full lists with `claude auto-mode defaults`.
 
 ## Escalation and Fallback
 
-When the classifier blocks an action, Claude receives the reason and attempts an alternative approach. Denied actions appear in `/permissions` under the Recently denied tab, where pressing `r` retries with manual approval ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+Blocked actions return a reason; Claude tries an alternative. Denied actions show in `/permissions` under Recently denied — press `r` to retry with manual approval ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
 **Escalation thresholds** (not configurable):
 
-- **3 consecutive blocks**: auto mode pauses, prompts user
-- **20 total blocks in a session**: auto mode pauses, prompts user
-- Any allowed action resets the consecutive counter; the total counter persists until its own limit triggers
+- **3 consecutive blocks**: pause, prompt user
+- **20 total blocks per session**: pause, prompt user
+- Any allowed action resets the consecutive counter; total persists
 
-In headless mode (`-p`), repeated blocks abort the session since no user is available to prompt.
+Headless (`-p`) aborts on repeated blocks.
 
 ## Subagent Oversight
 
-The classifier checks subagent work at three points ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+The classifier checks [subagent](sub-agents.md) work at three points ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-1. **Spawn**: the delegated task description is evaluated; dangerous tasks are blocked before the subagent starts
-2. **Runtime**: each subagent action goes through the same classifier rules; `permissionMode` in the subagent's frontmatter is ignored
-3. **Return**: the classifier reviews the subagent's full action history; flagged concerns prepend a security warning to results
+1. **Spawn**: task description evaluated; dangerous tasks blocked
+2. **Runtime**: each action runs the classifier; subagent `permissionMode` is ignored
+3. **Return**: action history reviewed; flagged concerns prepend a warning
 
 ## Enterprise Configuration
 
-Administrators configure trust boundaries through `autoMode.environment` in managed settings, defining which domains, cloud buckets, git organizations, and internal services the classifier treats as trusted ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
+Admins set trust boundaries via `autoMode.environment` in [managed settings](managed-settings-drop-in.md) — specifying trusted domains, buckets, git orgs, services ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)).
 
 | Setting | Effect |
 |---------|--------|
 | `autoMode.environment` | Extends trust to specified repos, buckets, services |
-| `permissions.disableAutoMode: "disable"` | Locks auto mode off for the organization |
+| `permissions.disableAutoMode: "disable"` | Locks auto mode off org-wide |
 
-Start with `claude auto-mode defaults`, copy the rules, and adjust per your infrastructure. Only remove rules for risks your infrastructure already mitigates.
+Start from `claude auto-mode defaults`; remove only rules covering risks already mitigated elsewhere.
+
+## When This Backfires
+
+Predictable failure modes:
+
+- **Consent-scope misjudgement**: the 17% overeager false-negative rate means roughly one in six unsanctioned destructive actions gets through. For production configs or shared branches, manual review is still safer.
+- **Plan and provider gating**: unavailable on Pro, Max, Bedrock, Vertex, Foundry — mixed environments must fall back to explicit allowlists.
+- **Power-user flow disruption**: entering auto mode silently drops blanket `Bash(*)`, wildcarded interpreter, and `Agent` rules until exit.
+- **Classifier is an LLM**: a narrow allowlist is deterministic; the classifier is probabilistic and fails on novel injection patterns and unusual tool combinations.
 
 ## Requirements and Activation
 
-Auto mode requires all of the following ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+Auto mode requires ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-- **Plan**: Team, Enterprise, or API (not Pro or Max)
+- **Plan**: Team, Enterprise, or API (not Pro/Max)
 - **Model**: Sonnet 4.6 or Opus 4.6
-- **Provider**: Anthropic API only (not Bedrock, Vertex, or Foundry)
+- **Provider**: Anthropic API (not Bedrock, Vertex, Foundry)
 - **Version**: Claude Code v2.1.83+
 
-Enable and cycle to it:
+Enable:
 
 ```bash
 claude --enable-auto-mode    # adds auto to the Shift+Tab cycle
@@ -144,7 +153,7 @@ Set as default in `.claude/settings.json`:
 
 ## Example
 
-A CI pipeline runs Claude Code in headless mode to process a batch of documentation updates. Without auto mode, the operator must choose between `--dangerously-skip-permissions` (no safety checks) or pre-authorizing every possible tool call via `dontAsk` mode (brittle and verbose).
+A CI pipeline runs Claude Code in headless mode to process documentation updates. Without auto mode, the operator chooses between `--dangerously-skip-permissions` (no safety checks) or pre-authorizing every tool call via `dontAsk` mode (brittle and verbose).
 
 **Before** — bypass all safety checks:
 
@@ -180,3 +189,7 @@ The classifier allows file reads, code generation, and writes within the project
 - [Extension Points](extension-points.md) — choosing between CLAUDE.md, rules, hooks, and more
 - [Blast Radius Containment](../../security/blast-radius-containment.md) — scoping agent permissions and file access
 - [Plan Mode](../../workflows/plan-mode.md) — read-only exploration before implementation
+- [Channels Permission Relay](channels-permission-relay.md) — remote approval when the classifier pauses for user input
+- [Bare Mode](bare-mode.md) — the minimal-permission counterpart to auto mode
+- [Managed Settings Drop-in](managed-settings-drop-in.md) — enterprise rollout of `autoMode.environment`
+- [Sub-Agents](sub-agents.md) — classifier coverage of spawned worker agents

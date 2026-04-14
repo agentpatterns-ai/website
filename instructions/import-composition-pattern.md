@@ -159,7 +159,7 @@ Both CLAUDE.md files stay short; shared content lives once.
 - Claude Code's `@path` import syntax is shipped and documented — imported files load at session start alongside CLAUDE.md
 - Tilde expansion (`@~/...`) is unreliable; use absolute paths for home-directory imports
 - Imports and `.claude/rules/` are complementary, not alternatives — imports for external content, rules for path-scoped conventions
-- GitHub Copilot, OpenAI Codex, and AGENTS.md standard do not support file inclusion — modularity comes from hierarchical discovery, not imports
+- GitHub Copilot, OpenAI Codex, and AGENTS.md standard do not support file inclusion — modularity comes from [hierarchical discovery](../tools/copilot/monorepo-hierarchical-discovery.md), not imports
 - Unsupported `@`-syntax in other tools is not processed — it either appears as literal text or is silently ignored, with no error
 
 ## Related

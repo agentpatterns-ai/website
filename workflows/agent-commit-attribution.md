@@ -123,7 +123,7 @@ Task-Reference: #412"
 # Blame graph shows: agent identity + session link
 ```
 
-For the Copilot cloud agent, signing is automatic — no configuration required. Verify your repository has "Require signed commits" enabled to take advantage of it.
+For the [Copilot cloud agent](../tools/copilot/cloud-agent-org-controls.md), signing is automatic — no configuration required. Verify your repository has "Require signed commits" enabled to take advantage of it.
 
 ## Key Takeaways
 

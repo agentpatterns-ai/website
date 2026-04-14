@@ -52,6 +52,17 @@ You do not need to build a 21,000-task pipeline. Three practices protect against
 
 3. **Treat public benchmarks as upper bounds.** Use them for directional comparison, not absolute measurement. When two models score within a few points of each other on a public benchmark, the difference may be contamination rather than capability.
 
+## When This Backfires
+
+Decontamination practices carry their own trade-offs:
+
+- **Loss of cross-team comparability.** A continuously refreshed private suite cannot be compared against other teams' or vendors' numbers. Standard public benchmarks remain the only shared yardstick for ecosystem-wide model ranking.
+- **Selection bias in sourced tasks.** Mining recent merged PRs or production incidents biases the suite toward whatever work your team happens to do. Capability regressions on task types outside that distribution go undetected.
+- **Pipeline maintenance cost.** Running a fresh-task pipeline with isolated execution, quality filtering, and repeated runs can cost more engineering time than the measurement precision gained — especially for small teams making infrequent model decisions.
+- **Apparent regressions from task drift.** When the eval set changes between runs, score movements conflate model changes with task-difficulty drift. Static benchmarks at least hold the measurement rod constant.
+
+For teams making single model-selection decisions per year, triangulating two or three public benchmarks may be cheaper and nearly as informative as building a decontaminated pipeline.
+
 ## Example
 
 SWE-rebench's own leaderboard demonstrates the pattern. DeepSeek-V3 leads on SWE-bench Verified at 39.7%, but drops to 21.3% on decontaminated tasks — a gap nearly as large as its reported score. Meanwhile, models with lower Verified scores show smaller drops, suggesting their original scores were less inflated by contamination. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]

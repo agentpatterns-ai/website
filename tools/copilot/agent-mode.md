@@ -31,6 +31,19 @@ For complex tasks, Copilot generates a [transparent plan](https://code.visualstu
 
 [Feed Copilot a screenshot, mockup, or image](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/provide-visual-inputs) and it generates the UI code and implementation details.
 
+## Why It Works
+
+Per [GitHub's agent mode overview](https://github.blog/ai-and-ml/github-copilot/agent-mode-101-all-about-github-copilots-powerful-mode/), the loop works because the language model reasons about the next step and issues tool calls to gather information or act — reading files, editing, running terminal commands. After each edit or command, agent mode [inspects syntax errors, terminal output, test results, and build failures to decide how to course-correct](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode). Deterministic feedback signals (compiler, linter, tests) anchor the loop — the more structured the signals, the faster it converges.
+
+## When This Backfires
+
+Agent mode degrades when the feedback loop is weak or the task exceeds its context window:
+
+- **Large refactors across many files.** GitHub's own guidance positions agent mode for [low-to-medium complexity changes in well-tested repositories and small refactors — not massive rewrites, cross-repo changes, or codebases with little test coverage](https://github.blog/developer-skills/github/less-todo-more-done-the-difference-between-coding-agent-and-agent-mode-in-github-copilot/). One module at a time; avoid "rewrite the app in one shot."
+- **Trial-and-error loops.** When the agent cannot reconcile a failing test, it can [repeatedly retry without convergence, burning premium requests](https://github.com/orgs/community/discussions/182145) before stalling. Enforce a max-retry ceiling or hand off to ask/edit mode on stalls.
+- **First-step assumption drift.** A wrong assumption in step one propagates: every later edit, test, and fix inherits it. Planning mode reduces but does not eliminate this.
+- **Rate limits and context ceilings.** Agent mode consumes [premium requests and is subject to rate limits on the most powerful models](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests), making sustained exploratory work across dozens of interconnected files costly.
+
 ## Example
 
 This example demonstrates agent mode's edit-run-fix loop. Open a project in VS Code with Copilot, switch to agent mode in the Copilot Chat panel, and submit a prompt like:

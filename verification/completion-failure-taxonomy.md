@@ -32,7 +32,7 @@ The model produced wrong output. Two sub-types:
 | Token-level mistakes | 3,835 | Wrong variable name, incorrect function call, bad literal, wrong type |
 | Statement-level errors | 1,676 | Wrong parameter count, incorrect semantics, early/late termination, rambling output |
 
-Better models directly reduce this category. Upgrading from the study's models (InCoder, UniXcoder, CodeGPT) to modern models narrows it substantially — GitHub Copilot now reports ~30% acceptance rates versus the study's 4.91%. `[unverified: exact modern acceptance rates vary by source and measurement methodology]`
+Better models directly reduce this category. Upgrading from the study's models (InCoder, UniXcoder, CodeGPT) to modern production systems narrows the gap: an Accenture deployment of GitHub Copilot reported developers accepting around 30% of suggestions, versus the Code4Me study's 4.91%. [Source: [GitHub/Accenture study](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-in-the-enterprise-with-accenture/)]
 
 ### Application-oriented errors (24.4%)
 
@@ -95,6 +95,16 @@ The 9.3% override rate means roughly 1-in-10 suggestions is correct but unwanted
 ### 4. Language-specific performance varies sharply
 
 InCoder outperformed across all 12 languages, but mainstream languages (Python, Java) consistently scored higher than less common ones. Do not assume Python performance predicts Rust or Kotlin performance — evaluate per-language.
+
+## When This Taxonomy Backfires
+
+The 66 / 24 / 9 split is a useful prior, not a fixed budget:
+
+- **Ratios are model- and cohort-specific.** The study used first-gen code LMs (InCoder, UniXcoder, CodeGPT). Better models shrink the model-oriented share and raise the relative weight of integration errors.
+- **Integration gains plateau.** Smart-invocation work raised acceptance from ~4.9% to ~18.6% [Source: [Koohestani et al., arxiv 2405.14753](https://arxiv.org/abs/2405.14753)]. Past that, gains come from model capability and context quality, not more timing heuristics.
+- **Narrow cohorts may skip harness work.** Single-language teams on recent models often clear the bar off-the-shelf; the "just upgrade the model" steelman holds in that regime.
+- **Non-mainstream languages invert priorities.** For Rust, Kotlin, or niche DSLs, thin training data dominates; invocation tuning cannot compensate.
+- **Override data needs good instrumentation.** If telemetry cannot separate "rejected because wrong" from "rejected because already typed", the 9.3% bucket is noise.
 
 ## Key Takeaways
 

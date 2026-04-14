@@ -110,7 +110,7 @@ Compare with blocking batch dispatch, where the orchestrator dispatches 10, wait
 ## Key Takeaways
 
 - Async dispatch is justified only when the orchestrator has productive work to perform while subagents execute — otherwise synchronous dispatch is simpler and safer
-- The continuation pattern (polling or event streaming) determines how the orchestrator learns about completions — Claude Code uses Monitor tool event streaming, LangChain Deep Agents uses task-ID polling
+- The continuation pattern (polling or event streaming) determines how the orchestrator learns about completions — Claude Code uses [Monitor tool](../tools/claude/monitor-tool.md) event streaming, LangChain Deep Agents uses task-ID polling
 - Backpressure (WIP limits, result buffering, dispatch gating) prevents context flooding — without it, async dispatch degenerates into unstructured fire-and-forget
 - Failure handling requires explicit timeout detection and progress reporting — blocking dispatch gets these for free at the join point
 

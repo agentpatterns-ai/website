@@ -1,5 +1,5 @@
 ---
-title: "GitHub Copilot: Building Custom Agents, Skills & Plugins"
+title: "GitHub Copilot Custom Agents and Skills Extensibility Guide"
 description: "GitHub Copilot custom agents, skills, and plugins let teams codify workflows, teach Copilot specialized tasks, and share capabilities as installable packages."
 tags:
   - agent-design
@@ -7,13 +7,13 @@ tags:
   - copilot
 ---
 
-# GitHub Copilot: Custom Agents, Skills & Plugins
+# GitHub Copilot Custom Agents and Skills Extensibility Guide
 
 > Custom agents, skills, and plugins are GitHub Copilot's three extensibility layers — agents codify team workflows, skills teach Copilot specialized tasks via progressive disclosure, and plugins bundle everything into shareable packages.
 
 ## Custom Agents
 
-Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, MCP servers, and instructions. Agents become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-custom-agents).
+Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, MCP servers, and instructions. Agents become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents).
 
 ## Agent Skills
 
@@ -31,7 +31,7 @@ Stored in `.github/prompts/`, [prompt files](../../instructions/prompt-file-libr
 
 [Plugins](https://github.com/microsoft/skills) bundle MCP servers, agents, skills, and hooks into installable packages. Install from GitHub repos with `npx skills add owner/repo`. Plugins extend Copilot's capabilities — skills from plugins appear alongside local skills.
 
-**Plugin marketplace management** (v1.113+): The command "Chat: Manage Plugin Marketplaces" lists configured marketplaces with options to browse, locate directories, and remove plugins. URL handler installation is available via `vscode://chat-plugin/install?source=<source>`.
+**Plugin marketplace management** ([VS Code 1.113+](https://code.visualstudio.com/updates/v1_113)): The `Chat: Manage Plugin Marketplaces` command lists configured marketplaces with options to browse, locate directories, and remove plugins. URL handler installation uses the format `vscode://chat-plugin/install?source=<source>`.
 
 ## Custom Instructions
 
@@ -97,10 +97,5 @@ Copilot reads only the skill metadata until `/changelog` is invoked, keeping con
 - [Agent Skills Standard](../../standards/agent-skills-standard.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
 - [Copilot Extensions](copilot-extensions.md)
-- [Migrating Copilot Extensions to MCP](../../tool-engineering/copilot-extensions-to-mcp-migration.md)
-- [Copilot MCP Integration](mcp-integration.md)
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot SDK](copilot-sdk.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
-- [Agent HQ](agent-hq.md)
-- [Agent Mission Control](agent-mission-control.md)
