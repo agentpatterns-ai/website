@@ -185,3 +185,4 @@ Three specific conditions where the investment pays off less:
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) -- short-lived linter rules and harness patches that bridge capability gaps
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) -- mapping harness and guardrail patterns across agent frameworks
 - [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) -- diagnosing harness failures when agent output is wrong or unexpected
+- [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) -- decoupled three-primitive architecture (Session / Harness / Sandbox) for long-running agents

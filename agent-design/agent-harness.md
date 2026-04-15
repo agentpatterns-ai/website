@@ -152,3 +152,5 @@ Only after this orientation does the agent select the highest-priority incomplet
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
 - [Agent Backpressure](agent-backpressure.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — consensus structure that extends the initializer/worker pattern across autonomous cycles
+- [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — full three-primitive virtualization that generalizes the initializer/worker split

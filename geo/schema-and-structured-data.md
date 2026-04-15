@@ -14,7 +14,7 @@ aliases:
 
 > FAQPage schema yields a measurable citation lift in AI responses — structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing. Independent studies cite FAQPage citation improvements ranging from 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)).
 
-Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `docs/hooks/structured_data.py` hook.
+Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `hooks/structured_data.py` hook.
 
 ## What Changed: Google vs. AI Search
 
@@ -67,7 +67,7 @@ Converts numbered step lists into extractable content blocks. Each step becomes 
 }
 ```
 
-The hook auto-detects ordered lists (`<ol>`) with three or more items, but only on pages under `patterns/` or `techniques/` paths. To enable HowTo on `geo/` pages, extend `_HOWTO_PATHS` in `docs/hooks/structured_data.py`.
+The hook auto-detects ordered lists (`<ol>`) with three or more items, but only on pages under `patterns/` or `techniques/` paths. To enable HowTo on `geo/` pages, extend `_HOWTO_PATHS` in `hooks/structured_data.py`.
 
 ### DefinedTerm
 
@@ -96,7 +96,7 @@ Each term's `@id` fragment is directly linkable — AI knowledge graphs can refe
 
 ## How This Site Generates Schema
 
-The `docs/hooks/structured_data.py` MkDocs hook runs at `on_post_page` and injects JSON-LD into every page's `<head>`:
+The `hooks/structured_data.py` MkDocs hook runs at `on_post_page` and injects JSON-LD into every page's `<head>`:
 
 ```mermaid
 graph LR

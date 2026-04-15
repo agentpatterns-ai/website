@@ -147,3 +147,4 @@ The ritual adds overhead at session start — when that cost outweighs the benef
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Agent Memory Patterns](agent-memory-patterns.md)
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
+- [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — the relay document the ritual reads before acting on a new cycle

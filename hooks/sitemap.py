@@ -18,6 +18,7 @@ Output:
   <site_dir>/sitemap.xml  — served at /sitemap.xml by nginx / any static host.
 """
 
+import json
 import subprocess
 import xml.etree.ElementTree as ET
 from datetime import date
@@ -35,6 +36,12 @@ _docs_dir: Path | None = None
 # Accumulate page entries during the build, written in on_post_build.
 _entries: list[tuple[str, str]] = []  # (loc_url, lastmod_date)
 
+# Pre-computed src_path -> YYYY-MM-DD map shipped by the content repo's
+# release workflow. Preferred over git log because the website repo only
+# retains the squash-publish commit, which would flatten every page to the
+# release date and destroy the freshness signal.
+_lastmod_manifest: dict[str, str] = {}
+
 # Files that are never indexable.
 _EXCLUDED_SRCS: frozenset[str] = frozenset({"404.md", "tags.md"})
 
@@ -46,12 +53,24 @@ _EXCLUDED_PREFIXES: tuple[str, ...] = ("training/",)
 # on_config — capture site_url and dirs
 # ---------------------------------------------------------------------------
 def on_config(config):
-    global _site_url, _site_dir, _docs_dir, _entries
+    global _site_url, _site_dir, _docs_dir, _entries, _lastmod_manifest
     _entries = []
     _site_url = (config.get("site_url") or "").rstrip("/")
     _site_dir = Path(config.get("site_dir") or "site")
     _docs_dir = Path(config.get("docs_dir") or "docs")
+    _lastmod_manifest = _load_manifest()
     return config
+
+
+def _load_manifest() -> dict[str, str]:
+    """Load the lastmod manifest that sits next to this hook file."""
+    manifest_path = Path(__file__).resolve().parent / "lastmod-manifest.json"
+    try:
+        with manifest_path.open(encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    return {k: v for k, v in data.items() if isinstance(k, str) and isinstance(v, str)}
 
 
 # ---------------------------------------------------------------------------
@@ -79,8 +98,9 @@ def on_page_context(context, *, page, config, nav, **kwargs):
     if not loc.endswith("/") and not loc.rsplit("/", 1)[-1].count("."):
         loc = loc + "/"
 
-    # lastmod from git
-    lastmod = _git_lastmod(src_path)
+    # Prefer the pre-computed manifest (accurate across the publish boundary).
+    # Fall back to git log, then to today.
+    lastmod = _lastmod_manifest.get(src_path) or _git_lastmod(src_path)
 
     _entries.append((loc, lastmod))
     return context
