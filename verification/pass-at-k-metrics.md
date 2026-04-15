@@ -129,3 +129,4 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design tests that account for agent non-determinism across multiple trials
 - [LLM-as-Judge Context Test Harness](llm-context-test-harness.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
+- [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)

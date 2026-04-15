@@ -135,3 +135,4 @@ For must-never-fail constraints, rely on enforced mechanisms — hooks, CI check
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)
+- [Guardrails Beat Guidance for Coding Agents](guardrails-beat-guidance-coding-agents.md)

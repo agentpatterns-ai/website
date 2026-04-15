@@ -119,3 +119,4 @@ Fatigue makes you tired *during* work; atrophy makes you less capable *between* 
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — expanding delegation scope safely without losing underlying skill
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight
+- [Polya Small Steps](polya-small-steps.md) — incremental problem decomposition that preserves comprehension while delegating

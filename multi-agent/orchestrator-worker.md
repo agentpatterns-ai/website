@@ -152,3 +152,4 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
 - [System-Level Optimization Pipeline](system-level-optimization-pipeline.md)
+- [Economic Value Signaling](economic-value-signaling.md)

@@ -137,3 +137,4 @@ Layered defenses reduce attack surface but do not eliminate it:
 - [Action-Selector Pattern](action-selector-pattern.md) — tool outputs never re-enter the model, eliminating the return-channel injection vector this page describes
 - [CaMeL: Separating Control and Data Flow](camel-control-data-flow-injection.md) — architectural defense that makes instruction-data confusion structurally impossible
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious tool registration via poisoned public registries, an upstream variant of the MCP attack vector
+- [Mid-Trajectory Guardrail Selection](mid-trajectory-guardrail-selection.md) — choosing guardrails that catch injection attempts mid-execution

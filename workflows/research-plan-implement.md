@@ -200,6 +200,7 @@ Without the research phase, the agent would have missed the WebSocket constraint
 - [The Plan-First Loop](plan-first-loop.md) — The general pattern of designing before coding
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — Structured exploration before making changes
 - [Context Priming](../context-engineering/context-priming.md) — Loading relevant context before implementation
+- [7 Phases of AI Development](7-phases-ai-development.md) — The outer feature lifecycle in which this per-task loop runs
 
 ## Sources
 

@@ -162,3 +162,4 @@ The compiled `summarize.lock.yml` is the executable GitHub Actions workflow. The
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [GitHub Models in Actions](github-models-in-actions.md)
 - [GitHub Copilot MCP Integration](mcp-integration.md)
+- [Dependabot Agent Assignment](dependabot-agent-assignment.md)

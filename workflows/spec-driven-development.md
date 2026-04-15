@@ -139,3 +139,4 @@ Each task is concrete and independently verifiable, matching the **Tasks** phase
 - [WRAP Framework for Agent Instructions](../instructions/wrap-framework-agent-instructions.md)
 - [Plan-First Loop](../workflows/plan-first-loop.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
+- [Multi-Agent RAG Spec-to-Test](../verification/multi-agent-rag-spec-to-test.md)

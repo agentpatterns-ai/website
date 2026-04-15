@@ -176,3 +176,4 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md)
 - [The Advisor Strategy](advisor-strategy.md)
+- [Code Health Gated Tier Routing](code-health-gated-tier-routing.md)

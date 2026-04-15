@@ -188,3 +188,4 @@ An external cron job polls `~/agent-failures.jsonl`. When it finds a `rate_limit
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [PreCompact Hook Compaction Veto](precompact-hook-compaction-veto.md)

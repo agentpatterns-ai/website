@@ -156,3 +156,4 @@ The summariser prompt structure maps to the preservation table above: objective,
 - [Context Priming](context-priming.md)
 - [Attention Sinks](attention-sinks.md)
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
+- [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md)

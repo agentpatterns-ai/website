@@ -122,3 +122,4 @@ A generator that makes marginal improvements per iteration should trigger a rede
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Controlling Agent Output](controlling-agent-output.md)
 - [Agent Harness](agent-harness.md)
+- [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)
