@@ -16,17 +16,17 @@ aliases:
 > Apply the TDD cycle with separate agent invocations per phase — write failing tests, instruct the agent to pass them, then instruct it to refactor against the green suite.
 
 !!! note "Also known as"
-    Red-Green-Refactor for Agents, TDD with Agents, Tests as the Spec. For the broader methodology of using TDD when developing with AI agents, see [Test-Driven Agent Development](tdd-agent-development.md).
+    Red-Green-Refactor for Agents, TDD with Agents, Tests as the Spec. For the broader methodology, see [Test-Driven Agent Development](tdd-agent-development.md).
 
 ## The Cycle
 
-Red-green-refactor structures agent-driven development into three distinct phases, each with a different instruction and a different exit condition.
+Red-green-refactor structures agent-driven development into three phases, each with a distinct instruction and exit condition.
 
-**Red** — write failing tests that define the required behavior. The agent has not written any implementation yet. The tests fail because there is nothing to run them against. This is the expected state.
+**Red** — write failing tests that define the required behavior. No implementation exists yet.
 
-**Green** — instruct the agent to write the minimum implementation to pass the suite. The constraint "do not change the tests" prevents the agent from satisfying tests by weakening them. The exit condition is deterministic: all tests pass.
+**Green** — instruct the agent to write the minimum implementation to pass the suite. "Do not change the tests" prevents satisfying tests by weakening them. Exit: all tests pass.
 
-**Refactor** — instruct the agent to improve the implementation without changing behavior. The green test suite is the safety net. If the agent introduces a regression during refactoring, the suite catches it immediately.
+**Refactor** — instruct the agent to improve the implementation without changing behavior. The green suite catches regressions immediately.
 
 ```mermaid
 graph TD
@@ -43,31 +43,31 @@ graph TD
 
 ## Why Separate Invocations
 
-Mixed-phase instructions produce mixed-phase output. An agent told to "write tests and implement the feature" writes tests that match its implementation, not tests that define correct behavior independently. Separate invocations keep each phase honest [unverified — no formal study, but consistent with TDD literature on test-first discipline].
+Mixed-phase instructions produce mixed-phase output. An agent told to "write tests and implement the feature" writes tests that match its implementation, not tests that define correct behavior. Practitioners call this *context pollution*: when test writing and implementation share a session, the implementation "bleeds" into the test logic ([alexop.dev, *Forcing Claude Code to TDD*](https://alexop.dev/posts/custom-tdd-workflow-claude-code-vue/)). Simon Willison's agentic-engineering guide makes the point in reverse: confirming the red state before implementation prevents agents from writing tests that pass vacuously ([*Red/green TDD*](https://simonwillison.net/guides/agentic-engineering-patterns/red-green-tdd/)).
 
 ## The Refactor Phase Is Where Agents Excel
 
-With a green suite, the agent can restructure freely — rename across the codebase, extract utilities, swap imperative code for declarative patterns, change internal data structures. Human review focuses on whether the refactored code is better structured, not on whether it still works — the suite answers that question.
+With a green suite, the agent can restructure freely — rename, extract utilities, change data structures. Human review focuses on structure; the suite answers correctness.
 
 ## Integration with Plan Mode
 
-[The plan-first loop](../workflows/plan-first-loop.md) pairs with the green phase: before writing implementation, the agent reads the failing tests, proposes an approach, and waits for approval. Tests are a more precise spec than prose — the resulting plan is more reliable than one built against a description of intent.
+[The plan-first loop](../workflows/plan-first-loop.md) pairs with the green phase: the agent reads the failing tests, proposes an approach, and waits for approval before implementing. Tests are a more precise spec than prose, so the plan is more reliable.
 
 ## Constraints That Make This Work
 
-- **"Do not change the tests"** — the most important constraint in the green phase. Without it, the agent will sometimes modify tests to make them pass more easily.
-- **"Minimum code to pass"** — prevents the agent from over-engineering in the green phase. Save complexity for the refactor phase, where it can be evaluated against known-good behavior.
-- **"Tests must still pass when you're done"** — the exit condition for the refactor phase. The agent knows when it is done.
+- **"Do not change the tests"** — the most important constraint in the green phase. Without it, agents take shortcuts: METR's 2025 evaluations document frontier models "modifying test or scoring code" and exploiting other loopholes rather than implementing the required behavior ([METR, *Recent Frontier Models Are Reward Hacking*](https://metr.org/blog/2025-06-05-recent-reward-hacking/)); Anthropic's reward-hacking work describes training examples where `sys.exit(0)` is used to make all tests appear to pass ([Anthropic, *Natural emergent misalignment from reward hacking*](https://www.anthropic.com/research/emergent-misalignment-reward-hacking)).
+- **"Minimum code to pass"** — prevents over-engineering in the green phase. Save complexity for the refactor phase, where it can be evaluated against known-good behavior.
+- **"Tests must still pass when you're done"** — the exit condition for the refactor phase.
 
 ## When to Use This Technique
 
-Red-green-refactor with agents is most effective when:
+Most effective when:
 
-- The required behavior can be expressed as executable tests
-- The tests can be run quickly enough for the agent to iterate (seconds, not minutes)
+- Required behavior is expressible as executable tests
+- Tests run quickly enough for the agent to iterate (seconds, not minutes)
 - The refactor phase has a clear goal (performance, readability, structure)
 
-It is less effective for UI behavior that is difficult to test programmatically, behaviors requiring external state without mocking, or tasks where the specification itself is unclear.
+Less effective for UI behavior hard to test programmatically, behaviors needing external state without mocking, or tasks with unclear specs.
 
 ## Example
 
@@ -122,16 +122,23 @@ Replace the raw regex with email.utils.parseaddr and add a docstring.
 
 The agent restructures without touching the tests. If it introduces a regression, `pytest` reports it in the same run, and the agent iterates until green again. Human review focuses on whether the refactored code is better structured, not on whether it still works.
 
+## When This Backfires
+
+The pattern assumes tests are a faithful specification. When that breaks, it hides the problem rather than surfacing it:
+
+- **Tautological tests from context bleed.** If the red phase sees a draft implementation — in session history or a scratch file — it writes tests that mirror the implementation, not the behavior. The green phase then passes trivially.
+- **Pinning incidental behavior.** Minimal green implementations encode accidental properties (field ordering, error strings, rounding). Later refactors appear to "break" the suite when they only change incidentals, pressuring the agent to preserve artefacts instead of the contract.
+- **Brittle refactors across call sites.** With a local green suite, renames and signature changes look safe because the targeted tests pass — while uncovered downstream callers silently break. The refactor phase is only as safe as the suite's coverage of dependents.
+- **Unclear or contested specs.** Ambiguous requirements force premature commitment to one interpretation in the red phase; correction then requires editing tests and implementation together, defeating the separation.
+
+In these conditions, a prose spec plus code review is often a better fit.
+
 ## Key Takeaways
 
 - Keep red, green, and refactor as separate agent invocations with separate instructions
 - "Do not change the tests" is a load-bearing constraint in the green phase
 - The refactor phase enables aggressive restructuring because the suite catches regressions immediately
 - Exit conditions are deterministic: red = suite fails, green = suite passes, done = suite still passes after refactor
-
-## Unverified Claims
-
-- Mixed-phase instructions produce mixed-phase output; the phases must be kept separate [unverified — no formal study, but consistent with TDD literature on test-first discipline]
 
 ## Related
 

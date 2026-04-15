@@ -63,6 +63,16 @@ These three additions convert an underspecified task into an actionable spec.
 
 On SWE-bench Verified, CodeScout achieves a 20% improvement in resolution rates and resolves 27 additional issues compared to baseline. The gain comes from better task framing, not improved agent capability. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))
 
+## When This Backfires
+
+The 20% headline figure is an average. Pre-execution enhancement is not universally beneficial, and three failure modes surface in practice:
+
+- **Hint-induced anchoring.** Exploration hints that point at the wrong file or function anchor the agent on an incorrect location. The CodeScout paper acknowledges it "may omit code segments that are important for understanding or resolving an issue but do not require direct modification" — the augmented statement narrows the search and can hide the real fix site. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))
+- **Diminishing returns with strong runtime agents.** Pairing a weaker augmenter with a stronger agent yields marginal gains — in the CodeScout evaluation, a weak-augmenter + GPT-5-mini combination produced only ~1.0% improvement. The enhancement cost does not amortize when the runtime model is already capable of self-orientation. ([arXiv:2603.05744](https://arxiv.org/abs/2603.05744))
+- **Stale or context-mismatched guidance.** Pre-specified exploration hints or skill files that conflict with current project context actively degrade performance. SWE-Skills-Bench found that skills with version-mismatched guidance reduce resolution rates by up to 10% compared to a no-skill baseline. Enhanced problem statements inherit this failure mode when the hints were drafted against an older repository state. ([arXiv:2603.15401](https://arxiv.org/abs/2603.15401))
+
+Use pre-execution enhancement when the underlying task is genuinely underspecified and the augmenter has current repository context. Skip it for trivial changes, for runs on frontier-class models that already orient quickly, and when the hints cannot be kept in sync with the code.
+
 ## Example
 
 The two prompts below show a vague task that causes over-exploration versus an enhanced version that adds the three elements the page identifies: reproduction steps, expected behaviour, and exploration hints.

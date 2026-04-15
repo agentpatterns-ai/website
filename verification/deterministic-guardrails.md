@@ -40,7 +40,7 @@ Common CI guardrails:
 - **Test suites** — automated tests the agent must not break
 - **Type checking** — compile-time or static type analysis across the full codebase
 - **Build verification** — the artifact must build without errors
-- **Coverage thresholds** — agent-written code must maintain test coverage minimums [unverified — threshold enforcement depends on CI configuration]
+- **Coverage thresholds** — fail the build when total coverage drops below a floor; [`pytest --cov-fail-under=N`](https://pytest-cov.readthedocs.io/en/latest/config.html) exits non-zero below `N`
 
 ### Schema Validation
 
@@ -121,7 +121,7 @@ repos:
 ```yaml
 - run: pytest --tb=short          # test suite must pass
 - run: pyright src/               # type checking across full codebase
-- run: pytest --cov=src --cov-fail-under=80  # coverage threshold [unverified — threshold enforcement depends on CI configuration]
+- run: pytest --cov=src --cov-fail-under=80  # coverage threshold — exits non-zero below 80%
 ```
 
 **PostToolUse hook** (`.claude/settings.json`):

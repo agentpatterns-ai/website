@@ -107,7 +107,7 @@ A lightweight process that scales:
 | Medium | 10–100 | Quarterly |
 | Low | <10 | On significant platform updates |
 
-For each high-traffic skill, maintain a small set of representative test inputs and expected outputs. Run the skill against these inputs manually or via a CI job that triggers on skill file changes. An LLM-as-judge evaluation can score outputs against a rubric without requiring exact match — see [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md). [unverified: no native skill eval harness exists in the platform]
+For each high-traffic skill, maintain a small set of representative test inputs and expected outputs. Run the skill against these inputs manually or via a CI job that triggers on skill file changes. An LLM-as-judge evaluation can score outputs against a rubric without requiring exact match — see [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md). Anthropic's enterprise guidance requires skill authors to submit evaluation suites and re-run them to detect drift, but provides no built-in eval runner — the suite and harness are the team's responsibility. [Source: [Skills for enterprise](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/enterprise)]
 
 ### Quality Gates for Updates
 
@@ -137,10 +137,6 @@ This prevents a popular skill from silently regressing after an update. The gate
 - High invocation count without quality review creates liability — usage data and eval cadence must be paired
 - Quality evals are a manual practice; no native eval infrastructure exists in the platform
 - Governance lives in the git repo hosting the marketplace: access control = publish control
-
-## Unverified Claims
-
-- LLM-as-judge CI eval gate for skills above usage threshold [unverified: no native skill eval harness documented]
 
 ## Related
 

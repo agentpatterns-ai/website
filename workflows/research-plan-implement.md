@@ -40,6 +40,8 @@ With research in hand, outline the approach. Identify which files change, what n
 
 Execute the plan with focused scope. Implementation becomes mechanical when the research and plan are solid. Deviations from the plan signal missing research, not creative latitude.
 
+The back-edge in the diagram — implementation surfacing new information that invalidates the plan — is a deliberate replan gate, not a bug. The nibzard [Agentic AI Handbook](https://www.nibzard.com/agentic-handbook) describes production agent work as "plan, controlled execution, and replan gates," where gates trigger reassessment rather than silent drift when assumptions break.
+
 ## Why This Ordering Matters
 
 The research phase prevents the most expensive failure mode: **implementing against wrong assumptions**. Addy Osmani [reports](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) that successful agent-assisted developers spend roughly 70% of effort on problem definition and verification, 30% on execution — inverting traditional ratios.
@@ -111,6 +113,17 @@ Signs you're in implement-first mode:
 - Agent asks clarifying questions *after* writing code
 - Multiple reverts in a single session
 - Agent re-reads files it already examined because earlier findings were pushed out of context
+
+## When This Backfires
+
+The pattern assumes research compounds — more reading yields a better plan. That assumption breaks in several conditions:
+
+- **Well-mapped domains** — when the task is a routine change in familiar code, a research phase produces a summary the implementer already knew. The token cost of the summary outweighs any correction it provides.
+- **Stale or wrong research summaries** — a condensed summary the implementer cannot audit cheaply can confidently omit a relevant constraint, seeding the plan with a silent false assumption that is harder to recover from than implementing first and hitting the constraint directly.
+- **Fast feedback loops** — when tests run in seconds and failures are compile or runtime errors, try-and-fix can converge faster than plan-and-verify. The pattern shines when errors are expensive to surface, not when the environment surfaces them for free.
+- **Open-ended exploration** — early prototyping benefits from discovering the problem shape through code. A plan written before the shape is known ossifies premature structure.
+
+The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, long implementation phases where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
 
 ## When to Skip Phases
 
@@ -198,7 +211,4 @@ Without the research phase, the agent would have missed the WebSocket constraint
 - [Context Engineering for AI Agents (Manus)](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)
 - [The 80% Problem in Agentic Coding (Addy Osmani)](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
 - [OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)
-
-## Unverified Claims
-
-- The nibzard Agentic Handbook prescribes replan gates that trigger reassessment when new information invalidates assumptions [not directly verified from primary source]
+- [The Agentic AI Handbook: Production-Ready Patterns (nibzard)](https://www.nibzard.com/agentic-handbook)

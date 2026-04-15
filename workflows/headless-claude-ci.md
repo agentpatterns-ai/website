@@ -89,6 +89,17 @@ Three flags limit spend in automated contexts ([CLI reference](https://code.clau
 
 Set workflow-level timeouts in GitHub Actions as a second layer against hung jobs.
 
+## When This Backfires
+
+Headless Claude in CI is not a free improvement — it shifts work from humans to a pipeline that runs without review. Conditions where gated interactive sessions beat print mode:
+
+- **Ambiguous or exploratory tasks** — `--max-turns` cuts off mid-solution when the task underspecifies the goal; the run exits non-zero but the partial work still costs budget. Interactive sessions let a human redirect before the spend accumulates.
+- **Auto-merged output** — when the workflow commits or merges without review, low-quality patches ship silently. Every PR carries noise that downstream reviewers learn to ignore, eroding review discipline across the repo.
+- **Rate-limit regressions on the underlying plan** — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
+- **Tasks requiring `PermissionRequest` hooks** — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
+
+For sensitive operations in headless mode, combine the [deferred permission pattern](../agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
+
 ## Example
 
 A GitHub Actions workflow that runs Claude on every pull request to review changed files, capped at 5 turns and $1.00 spend:

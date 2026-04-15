@@ -49,7 +49,7 @@ graph LR
 
 ## Why It Happens
 
-The study identifies a direct complexity effect: even controlling for codebase growth, AI tool adoption increases code complexity by ~9% independently. The hypothesized mechanism is multi-file edits introducing architectural inconsistencies — generated code that is locally correct but structurally incoherent. [unverified: the paper measures the effect but does not directly observe the architectural mechanism]
+The study identifies a direct complexity effect: even controlling for codebase growth, AI tool adoption increases code complexity by ~9% independently ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). The paper measures this effect statistically but does not directly observe the architectural mechanism; the authors hypothesize that multi-file edits introduce architectural inconsistencies — generated code that is locally correct but structurally incoherent.
 
 Independent data corroborates the pattern:
 
@@ -99,6 +99,16 @@ Use this window deliberately:
 2. **Invest the freed time in QA infrastructure** — automated gates, agent reviewers, complexity monitoring
 3. **Set a complexity baseline before adoption** — you cannot detect drift without a starting point
 4. **Review AI-generated multi-file changes with extra scrutiny** — this is where architectural inconsistencies enter
+
+## When This Backfires
+
+The QA-scaling recommendation is strongest for long-lived production codebases. It weakens or reverses in three cases:
+
+- **Throwaway prototypes and spikes** — code slated for deletion within weeks does not accrue debt that matters. Imposing complexity budgets and coverage gates on exploratory work wastes the velocity windfall the tooling provides.
+- **Small teams without review capacity** — if a two-person team cannot staff either human reviewers or an agent-reviewer pipeline, mandatory quality gates become a merge bottleneck that erases the velocity gain before the quality debt would have. The correct response may be to limit AI-generated code volume rather than scale QA.
+- **Early-stage products seeking product-market fit** — shipping the wrong feature fast is often cheaper than shipping the right feature correctly. Teams whose dominant risk is building something nobody wants may rationally accept the quality debt in exchange for faster learning cycles, then pay it down once the product direction stabilizes.
+
+The underlying asymmetry still holds — velocity fades and debt compounds. The question is whether compounding debt is a problem on your timeline. For short-horizon work it may not be.
 
 ## Example
 
@@ -169,8 +179,3 @@ By investing the velocity windfall in QA infrastructure during weeks 1-2, the te
 - [Tiered Code Review](../code-review/tiered-code-review.md) — routing review effort by risk level
 - [The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) — Osmani on bottleneck migration from writing to verification
 - [The Bottleneck Migration](../human/bottleneck-migration.md) — review becomes the new bottleneck as code generation gets cheaper
-
-## Unverified Claims
-
-- The hypothesis that multi-file edits are the primary mechanism for AI-induced complexity increase is proposed but not directly observed in the He et al. study
-- The ~9% direct complexity effect (independent of codebase growth) has not been replicated outside the original study

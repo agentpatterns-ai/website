@@ -56,7 +56,7 @@ Store skill prompts in editable documents (Notion, Google Docs, or any wiki acce
 
 ### Loop 3 — Log-Driven Refinement
 
-Route production logs (e.g., via a Datadog MCP integration) into the skill repository. A central AI team applies this to platform-level skills — those used across many workflows by many teams.
+Route production logs (e.g., via a [Datadog MCP integration](https://docs.datadoghq.com/bits_ai/mcp_server/)) into the skill repository. A central AI team applies this to platform-level skills — those used across many workflows by many teams.
 
 **What it catches**: failure patterns not reported through Slack; systematic errors that emerge at volume; cross-workflow inconsistencies only visible in aggregate.
 
@@ -113,10 +113,6 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 - Loop 3 (log-driven) earns its cost only for platform-level skills maintained by a central team with an observability stack already in place
 - Loop 4 (dashboard) adds prioritisation signal; pair it with quality evals — invocation count alone does not measure output correctness
 - Add loops as the library grows; don't build the full infrastructure stack for a five-skill team
-
-## Unverified Claims
-
-- Specific Datadog MCP integration configuration details (exact server name, config format) [unverified — not independently verified against Datadog docs]
 
 ## Related
 

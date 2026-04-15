@@ -42,7 +42,7 @@ Agents navigate by convention. A clear, predictable directory structure lets age
 
 ### Project Instructions
 
-[AGENTS.md and equivalent project instruction files](https://agents.md) provide [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md): decisions that can't be inferred from code alone. Architecture choices, external constraints, "don't do X because" rules.
+[AGENTS.md and equivalent project instruction files](https://agents.md) provide [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md): decisions that can't be inferred from code alone. Architecture choices, external constraints, "don't do X because" rules. The AGENTS.md format is now an [open standard stewarded by the Linux Foundation's Agentic AI Foundation](https://www.infoq.com/news/2025/08/agents-md/), with wide adoption across coding-agent tools.
 
 ## Readiness Signals
 
@@ -58,6 +58,15 @@ Agents navigate by convention. A clear, predictable directory structure lets age
 ## Compounding Investment
 
 Improving codebase readiness benefits agents and human developers identically — it's the same work. Adding types, writing tests, and documenting decisions are not agent-specific investments. They pay off regardless of whether an agent is involved.
+
+## When Readiness Investment Backfires
+
+Readiness work has real costs and does not always dominate. Consider deferring it when:
+
+- **The code is throwaway.** Prototypes, spikes, and one-off scripts may never survive long enough to amortise the investment. Strict types and test scaffolding slow the exploration loop.
+- **Patterns are premature.** Locking in conventions before the shape of the problem is understood produces rigid scaffolding that agents then faithfully extend in the wrong direction. Early code is often better left malleable.
+- **The codebase is large enough that local readiness doesn't help.** Pattern-matching breaks down across enterprise codebases with hundreds of thousands of files regardless of how clean any single module is ([Qodo, 2025](https://www.qodo.ai/reports/state-of-ai-code-quality/)). Readiness is necessary but not sufficient at scale; retrieval, sub-agents, and architectural boundaries carry more weight than local hygiene.
+- **Documentation drifts faster than it helps.** Large AGENTS.md files and verbose decision comments that go stale produce false confidence — agents trust out-of-date guidance and make it worse. If you cannot maintain the prose, terser is safer.
 
 ## Example
 

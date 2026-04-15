@@ -48,7 +48,7 @@ The `"Edit|Write"` matcher is a regex that limits the hook to file-editing tools
 
 ## Composing Multiple Quality Checks
 
-Multiple hooks on the same event [fire in parallel](https://code.claude.com/docs/en/hooks#hook-execution). If you need a specific sequence — formatter first, then linter — chain them in a single command:
+Multiple hooks on the same event [fire in parallel](https://code.claude.com/docs/en/hooks#hook-lifecycle). If you need a specific sequence — formatter first, then linter — chain them in a single command:
 
 ```json
 {
@@ -145,6 +145,16 @@ Project-level hooks make formatting automatic for all team members without any p
 `PostToolUse` is the correct event for formatting — the file must exist and be written before a formatter can run. `PreToolUse` on the same tools fires before the write and cannot access the file content Claude is about to write.
 
 `PostToolUse` hooks also cannot block the tool call (the file is already written). They are side-effect hooks, not gates. If you want to block writes to specific files, use [`PreToolUse` with a file path check](https://code.claude.com/docs/en/hooks#pretooluse) instead.
+
+## When This Backfires
+
+Auto-formatting on every write is not universally correct. Prefer manual invocation, a pre-commit hook, or CI-side formatting when any of the following holds:
+
+- **Formatter and linter disagree.** Running a formatter and a fix-on-save linter (e.g., `prettier` and an `eslint` config with stylistic rules) in the same hook can produce oscillating edits where each tool reverses the other's output. Community implementations of Claude Code auto-format hooks explicitly sequence or fall back between formatters for this reason — for example, [`claude-format-hook`](https://github.com/ryanlewis/claude-format-hook) tries Biome first and falls back to Prettier rather than running both.
+- **The formatter is slow or network-bound.** Running a multi-second formatter synchronously on every `Edit` turns small iterative changes into latency-heavy operations. Setting `"async": true` avoids blocking but loses the ability to surface formatter errors in-loop.
+- **Generated or intentionally non-standard files.** Vendored code, fixture files, or diff-style snapshots may be checked in unformatted on purpose. A blanket `Edit|Write` matcher rewrites those files and introduces noise. Scope the matcher narrowly or guard the formatter command with a path allow-list.
+- **Partial edits where the surrounding file is broken.** Formatters that require syntactically valid input (e.g., `gofmt`, `rustfmt`) will fail loudly after every mid-refactor edit, polluting the transcript and triggering Claude to "fix" formatter errors that are not real issues.
+- **Team already enforces format at commit time.** If a pre-commit hook or CI job already blocks unformatted code, the `PostToolUse` hook is redundant work that runs on every edit instead of once per commit.
 
 ## Key Takeaways
 

@@ -48,7 +48,7 @@ Converting these to formal eval tasks avoids duplicating effort and anchors the 
 
 Eval tasks function as executable specifications. When a task is well-defined, it answers the question "does this feature work?" with a reproducible, automatable check rather than a manual judgment call.
 
-This has a compounding benefit during model upgrades: teams with evals in place can adopt new model releases in days; teams without them face weeks of manual regression testing per upgrade. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+This has a compounding benefit during model upgrades: teams with evals in place can adopt new model releases in days; teams without them face weeks of manual regression testing per upgrade. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] A broader reference architecture places evaluation as a continuous governing function across both offline (development-time) and online (runtime) stages rather than a terminal checkpoint. [Source: [Evaluation-Driven Development and Operations of LLM Agents (arxiv 2411.13768)](https://arxiv.org/abs/2411.13768)]
 
 ## Common Pitfalls
 

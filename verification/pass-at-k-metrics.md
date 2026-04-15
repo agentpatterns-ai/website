@@ -13,19 +13,15 @@ tags:
 
 ## The Problem with a Single Pass Rate
 
-AI agents are non-deterministic. The same prompt, same task, same environment can produce different results on successive runs. A single pass/fail result tells you what happened once — not what to expect across your workflow.
+AI agents are non-deterministic: the same prompt and environment can produce different results across runs. A single pass/fail result tells you what happened once — not what to expect across your workflow.
 
-Reporting a single pass rate from a single trial hides the signal. An agent that solves a benchmark 60% of the time on one run might score anywhere from 40% to 80% depending on sampling temperature and task complexity. Worse, it treats an agent that always scores 6/10 identically to one that randomly scores 0/10 or 10/10.
+A single pass rate also treats an agent that always scores 6/10 identically to one that randomly scores 0/10 or 10/10. The two have very different production behaviour, and one number cannot distinguish them.
 
 ## The Two Metrics
 
-**pass@k** — the probability the agent produces at least one correct solution across *k* attempts.
+**pass@k** — the probability the agent produces at least one correct solution across *k* attempts. As *k* increases, pass@k rises. It measures the capability ceiling: given enough chances, can the agent ever get this right?
 
-As *k* increases, pass@k rises. It measures capability ceiling: given enough chances, can the agent ever get this right? It answers: "Is this problem solvable at all with this agent?"
-
-**pass^k** — the probability *all k* attempts succeed.
-
-As *k* increases, pass^k falls. It measures consistency: does the agent reliably solve this, or does it sometimes succeed and sometimes fail? It answers: "Can I trust this agent to get it right in production?"
+**pass^k** — the probability *all k* attempts succeed. As *k* increases, pass^k falls. It measures consistency: can you trust the agent to get it right every time in production?
 
 [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -41,9 +37,9 @@ An agent with high pass@k and low pass^k signals a specific failure mode: it occ
 
 ## Choosing the Right Primary Metric
 
-**Human-in-the-loop workflows**: pass@k is the relevant metric. If a developer reviews every agent output before it takes effect, a single correct answer in three attempts is often sufficient. The agent's job is to surface a good option.
+**Human-in-the-loop workflows**: pass@k is the relevant metric. If a developer reviews every output, a single correct answer in three attempts is often enough — the agent's job is to surface a good option.
 
-**Automated pipelines**: pass^k is the critical metric. If the agent's output is consumed directly without review — merging code, sending messages, modifying databases — you need high consistency across all attempts, not just occasional success. A 90% pass rate means roughly 1-in-10 automated runs fails.
+**Automated pipelines**: pass^k is critical. If output is consumed directly — merging code, sending messages, modifying databases — you need consistency across all attempts. A 90% pass rate still means roughly 1-in-10 automated runs fails.
 
 ## How to Run the Measurement
 
@@ -53,15 +49,26 @@ An agent with high pass@k and low pass^k signals a specific failure mode: it occ
 4. Compute pass^k: did all runs succeed?
 5. Aggregate across the task suite to get rates
 
-Report both numbers. A benchmark that reports only pass@1 is hiding the consistency story. A benchmark that reports only pass^1 is reporting a single data point as if it were stable.
+Report both numbers. A benchmark that reports only pass@1 hides the consistency story; one that reports only pass^1 treats a single data point as if it were stable.
 
 ## Practical Guidance
 
-Run at least k=3 for any task that matters. Single-trial evaluation is a sample of size one. Temperature and context variation mean two identical prompts can produce qualitatively different results.
+Run at least k=3 for any task that matters — single-trial evaluation is a sample of size one.
 
 Use pass^k to set deployment thresholds. If your automated pipeline cannot tolerate a failure rate above 5%, require pass^k ≥ 0.95 before promoting a model or prompt change.
 
-Use pass@k during development to identify capability gaps vs. consistency gaps. If pass@k is low, the agent cannot solve the problem. If pass@k is high but pass^k is low, the problem is consistency — address it with better instructions, lower temperature, or added verification steps rather than retraining.
+Use pass@k during development to separate capability gaps from consistency gaps. If pass@k is low, the agent cannot solve the problem. If pass@k is high but pass^k is low, address consistency with better instructions, lower temperature, or added verification steps — not retraining.
+
+## When This Backfires
+
+Both metrics have failure modes worth weighing before treating them as a headline result.
+
+- **pass@k is "exponentially forgiving" at larger k.** As *k* grows, almost any non-zero-capability agent eventually hits the right answer, so pass@k inflates perceived performance and can rank a lucky agent above a more reliable one — users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
+- **Small-suite, small-k estimates are statistically unstable.** With a handful of tasks and *k*=3, both metrics have wide confidence intervals that most reports omit; Bayesian posterior estimates over the underlying success probability give more honest uncertainty [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
+- **pass^k is dominated by the flakiest test.** A single noisy oracle — a timing-race integration test, an LLM-as-judge with temperature > 0 — can collapse pass^k even when the agent is correct. Verify the correctness check is itself deterministic before using pass^k as a deployment gate.
+- **pass@k assumes independent attempts.** If your harness shares context, seeds, or cached state across the *k* runs, the samples are correlated and the metric no longer measures what its definition claims.
+
+When these conditions apply, pair the point estimates with posterior intervals rather than reporting them alone.
 
 ## Example
 

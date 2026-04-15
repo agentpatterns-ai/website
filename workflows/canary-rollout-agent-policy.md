@@ -108,6 +108,15 @@ Skip phases only when volume is high enough to reach statistical significance fa
 
 Skip canary rollout for: documentation-only prompt changes, fixing obvious bugs with no behavioral surface, and internal tooling with a single operator.
 
+## When This Backfires
+
+Canary rollout is not a default — it is a control that assumes enough traffic to produce statistically significant signal within a reasonable observation window, and metrics that actually capture the kind of regression the change can produce. Several conditions flip the cost-benefit:
+
+- **Low-volume agent traffic.** With fewer than roughly 50 samples per metric inside the bake window, threshold breaches become dominated by noise and the router oscillates between canary and stable. Google's SRE-led canary analysis work emphasises that thin canary populations produce more false-positive rollbacks than real-signal catches ([canary-analysis lessons](https://cloud.google.com/blog/products/devops-sre/canary-analysis-lessons-learned-and-best-practices-from-google-and-waze)). For low-QPS internal tools, shadow-traffic replay against production inputs produces cleaner signal without exposing any user to the candidate policy.
+- **Multi-turn conversational agents.** Randomised per-request routing splits a single session across both policies, which confuses users and masks per-policy behaviour. Route at the session or user level, or prefer shadow testing until the candidate is ready for a flagged cohort.
+- **Regressions that only appear across long trajectories.** Goal-achievement, compounding drift, and retention effects cannot be measured inside a 1–4 hour bake window. A canary that passes on p95 latency and safety-flag rate can still ship a policy that degrades week-over-week user outcomes.
+- **Quantitative thresholds alone miss behavioural regressions.** OpenAI's April 2025 GPT-4o sycophancy post-mortem reported that offline evals and A/B tests indicated positive results while expert testers flagged that the model "felt" off; the quantitative signals did not capture the qualitative shift before full rollout ([OpenAI post-mortem](https://openai.com/index/sycophancy-in-gpt-4o/), [expanded analysis](https://openai.com/index/expanding-on-sycophancy/)). Pair every canary with a human "vibe check" gate on behavioural dimensions that the threshold table cannot enumerate.
+
 ## Key Takeaways
 
 - Gate every substantive policy change behind a traffic split — do not full-cutover by default

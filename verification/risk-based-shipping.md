@@ -14,14 +14,14 @@ tags:
 
 Two common defaults in agent-driven pipelines:
 
-- **Review everything** — every agent change gets manual review. Safe, but slow. The human becomes the bottleneck, and review fatigue degrades quality over time.
+- **Review everything** — every agent change gets manual review. Safe, but slow. Review quality is empirically tied to coverage and reviewer participation ([McIntosh et al. 2016](https://link.springer.com/article/10.1007/s10664-015-9381-9)); as changeset volume grows, both decline.
 - **Trust everything** — agent changes ship without review. Fast, but one bad change reaches production unchecked.
 
-Neither scales. Teams that review everything abandon the workflow when the volume exceeds their review capacity. Teams that trust everything learn the hard way when an agent introduces a breaking change.
+Neither scales. Review-everything teams abandon the workflow when volume exceeds capacity; trust-everything teams learn the hard way when an agent ships a breaking change.
 
 ## The Risk Matrix
 
-Risk-based shipping assigns each change type a risk tier. The tier determines whether the change auto-ships or requires manual review.
+Risk-based shipping assigns each change type a tier. The tier determines whether the change auto-ships or requires manual review.
 
 | Change Type | Risk Tier | Action |
 |------------|-----------|--------|
@@ -34,29 +34,39 @@ Risk-based shipping assigns each change type a risk tier. The tier determines wh
 | Dependency updates (major version) | High | Halt for manual review |
 | Infrastructure/deployment config | Critical | Halt for manual review |
 
-The matrix is project-specific. A content site might auto-ship everything except deployment config. A payments platform might halt for review on any logic change.
+The matrix is project-specific. A content site might auto-ship everything except deployment config; a payments platform might halt on any logic change. Stripe's "Minions" agents apply a related tier philosophy — local lint, selective CI on only tests relevant to the diff, and a hard cap of two self-healing CI rounds before surfacing to a human — to merge 1,000+ PRs per week unattended ([Stripe Engineering, 2026](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents)).
 
 ## Classification Approaches
 
-The agent harness needs to classify each change before deciding how to ship it. Three approaches:
+The harness classifies each change before shipping it. Three approaches:
 
-**File-path heuristics** — map file paths to risk tiers. Changes to `auth/`, `migrations/`, or `infrastructure/` are high risk. Changes to `content/`, `docs/`, or `styles/` are low risk. Simple, deterministic, easy to audit.
+**File-path heuristics** — map paths to tiers. `auth/`, `migrations/`, `infrastructure/` are high risk; `content/`, `docs/`, `styles/` are low. Simple, deterministic, auditable.
 
-**Diff analysis** — analyze the diff content. Schema alterations, permission changes, or new environment variables signal higher risk. More accurate than path heuristics but requires parsing logic.
+**Diff analysis** — parse the diff. Schema alterations, permission changes, or new environment variables signal higher risk. More accurate than paths but requires parsing logic.
 
-**Agent self-classification** — ask the coding agent to classify its own change risk. Cheap and context-aware, but the agent may underestimate risk. Use as a signal combined with heuristics, not as the sole classifier.
+**Agent self-classification** — ask the agent to tier its own change. Cheap and context-aware, but the agent may underestimate risk. Use as a signal combined with heuristics, not as the sole classifier.
+
+## When This Backfires
+
+The matrix is only as safe as its classifier. Conditions that flip the pattern net-negative:
+
+- **Misclassified diffs slip through** — a change that touches `auth/` via an indirect import, or a schema-adjacent change in `api/`, gets tagged medium. Path heuristics are blind to dependency graphs.
+- **Cross-cutting interactions** — two low-risk edits combine into a broken state, or a string change breaks a downstream parser. Per-diff tiering misses defects in the interaction.
+- **Monitoring decays** — if the medium-tier alert channel is noisy or on-call ignores it, "auto-ship with monitoring" collapses into "auto-ship".
+- **Tier-boundary gaming** — an agent that learns schema changes block auto-merge may split one logical change into two diffs that each stay under the threshold.
+- **Small teams, high-consequence domains** — on a two-engineer team in a regulated codebase (medical, financial, safety-critical), blanket-review overhead is tolerable; one bad auto-shipped change dwarfs the throughput gain.
+
+Use the matrix when volume is the bottleneck and a misclassification is recoverable, not catastrophic.
 
 ## On the Loop, Not In the Loop
 
-Risk-based shipping changes the developer's supervision mode. Instead of reviewing every change (in the loop), the developer monitors the stream of shipped changes and intervenes when something looks wrong (on the loop).
+Risk-based shipping changes the supervision mode. Instead of reviewing every change (in the loop), the developer monitors the shipped stream and intervenes when something looks wrong (on the loop). Geoffrey Huntley: "I just open up my phone and watch the output get made. I'm on the loop, not in the loop" ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)).
 
-Geoffrey Huntley describes this supervision model ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)): "When I want something built, I just open up my phone and watch the output get made. I'm supervising it. I'm on the loop, not in the loop."
-
-This connects to [human-in-the-loop placement](../workflows/human-in-the-loop.md) — the risk matrix determines *where* the gates go, and the supervision mode determines *how* the human engages.
+This connects to [human-in-the-loop placement](../workflows/human-in-the-loop.md) — the matrix determines *where* the gates go, the supervision mode determines *how* the human engages.
 
 ## Implementation
 
-A minimal risk-based shipping pipeline:
+A minimal pipeline:
 
 ```mermaid
 graph TD
@@ -105,16 +115,14 @@ def classify(changed_files: list[str]) -> str:
 #     subprocess.run(["gh", "pr", "merge", "--auto", "--squash"])
 ```
 
-The classifier returns the most severe tier across all changed files. The CI step auto-merges on `low`/`medium` and exits non-zero on `high`/`critical`, blocking the merge until a reviewer approves.
+The classifier returns the most severe tier across all changed files. CI auto-merges on `low`/`medium` and exits non-zero on `high`/`critical`, blocking the merge until a reviewer approves.
 
 ## Relationship to Existing Patterns
 
-Risk-based shipping connects to several established patterns:
-
-- **[Circuit breakers](../observability/circuit-breakers.md)** — if auto-shipped changes trigger errors above a threshold, halt all auto-shipping until the issue is resolved
-- **[Blast radius containment](../security/blast-radius-containment.md)** — limit what any single auto-shipped change can affect (e.g. feature flags, canary deployments)
+- **[Circuit breakers](../observability/circuit-breakers.md)** — if auto-shipped changes trigger errors above a threshold, halt auto-shipping until resolved
+- **[Blast radius containment](../security/blast-radius-containment.md)** — limit what any single auto-shipped change can affect (feature flags, canary deploys)
 - **[Diff-based review](../code-review/diff-based-review.md)** — when manual review is triggered, review the diff, not the full output
-- **[Deterministic guardrails](deterministic-guardrails.md)** — automated checks (tests, linting, type checking) run on all tiers, not just high-risk ones
+- **[Deterministic guardrails](deterministic-guardrails.md)** — automated checks run on all tiers, not only high-risk ones
 
 ## Key Takeaways
 

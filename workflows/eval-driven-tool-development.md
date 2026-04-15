@@ -19,7 +19,7 @@ tags:
 
 Agent tools that appear capable during demos often degrade on real tasks. The gap usually lies in untested assumptions: unclear parameter descriptions that cause wrong tool selection, overlapping tool functionality that creates ambiguity, or response formats that waste context budget on irrelevant detail.
 
-Building tools without evaluations means discovering these problems through user complaints [unverified — the "user complaints" framing is the author's characterization and may not appear verbatim in the cited source] rather than systematic testing. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Without evaluations, debugging is reactive: teams wait for complaints, reproduce issues manually, fix the bug, and hope nothing else regressed. [Source: [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] Systematic tool evaluation surfaces these failures before deployment. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 ## The Loop
 
@@ -152,10 +152,6 @@ Re-running the same tasks after v2 shows accuracy rising to 80% and average tool
 - Transcripts explain why metrics are bad; agent-assisted transcript analysis scales this step
 - Each iteration targets one specific failure with a grounded hypothesis, not a broad rewrite
 - Hold out a test set and only evaluate against it after development is complete
-
-## Unverified Claims
-
-- Building tools without evaluations means discovering problems through user complaints rather than systematic testing [unverified — the "user complaints" framing is the author's characterization and may not appear verbatim in the cited source]
 
 ## Related
 

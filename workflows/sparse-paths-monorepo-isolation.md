@@ -1,6 +1,6 @@
 ---
 title: "Sparse-Checkout Worktrees for Monorepo Agent Isolation"
-description: "Use worktree.sparsePaths to limit an agent's file-system view to one service subtree — reducing context noise, startup time, and accidental blast radius in large monorepos"
+description: "Use worktree.sparsePaths to limit an agent's file-system view to one service subtree — reducing context noise, startup time, and accidental blast radius in large monorepos."
 tags:
   - agent-design
   - workflows

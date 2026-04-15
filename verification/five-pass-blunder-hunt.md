@@ -71,6 +71,8 @@ Does not apply to outputs with externally verifiable correctness — code with t
 
 **Not appropriate for formally verifiable outputs.** For code with a test suite, SQL with a schema, or structured data with a validator, use those tools directly. [^1] Multiple critique passes on verifiable artefacts produce false positives that waste resolve cycles.
 
+**Self-critique can collapse on hard reasoning tasks.** Empirical work on Game of 24, graph colouring, and STRIPS planning found that LLM self-critique loops can perform *worse* than a single guess, because errors in verification, critique generation, and critique consideration stack. [^2] Use five-pass on under-specified design artefacts where the model's own structural-inconsistency detection is reasonably reliable — not on domains where a sound external verifier exists.
+
 ## Example
 
 A plan document for a multi-agent coding task has been drafted. Before handing it to the implementation agents:
@@ -121,3 +123,5 @@ Models stop after finding a satisfying number of issues. A higher target prevent
 - [Convergence Detection in Iterative Refinement](../agent-design/convergence-detection.md) — three-signal model (change velocity, output size, content similarity) underlying the stopping criterion
 
 [^1]: Olausson et al. (2023), [Can Large Language Models Really Improve by Self-critiquing Their Own Plans?](https://arxiv.org/abs/2310.08118) — self-critique diminishes performance compared to external validators for formally verifiable planning tasks.
+
+[^2]: Stechly, Valmeekam, Kambhampati (2024), [On the Self-Verification Limitations of Large Language Models on Reasoning and Planning Tasks](https://arxiv.org/abs/2402.08115) — across Game of 24, graph colouring, and STRIPS planning, self-critique loops exhibited significant performance collapse relative to sound external verification; errors in verification, critique generation, and critique consideration compound.

@@ -15,7 +15,7 @@ aliases:
 
 ## The Problem
 
-Headless Claude Code sessions (invoked with `-p`) cannot display interactive permission prompts. When an agent running in CI or inside an Agent SDK subprocess reaches a sensitive operation — a deployment command, a file deletion, an `AskUserQuestion` — the session either blocks waiting for input that will never come, or it fails.
+[Headless Claude Code sessions](../workflows/headless-claude-ci.md) (invoked with `-p`) cannot display interactive permission prompts. When an agent running in CI or inside an Agent SDK subprocess reaches a sensitive operation — a deployment command, a file deletion, an `AskUserQuestion` — the session either blocks waiting for input that will never come, or it fails.
 
 The alternatives before `"defer"` existed:
 

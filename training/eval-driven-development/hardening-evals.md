@@ -43,7 +43,9 @@ Outcome-based grading — checking only the final state — is the right default
 
 Agents can reach correct final states through unsafe intermediate steps — deleting and recreating files rather than editing them, executing commands with excessive permissions, or accessing data outside their scope. These violations are invisible when only the output is graded.
 
-For production safety evals, augment outcome grading with trajectory evidence from at least two of: execution traces, audit logs, and environment snapshots. The research also found that Pass^k (consistency across trials) drops up to 24% under error injection while Pass@k (peak capability) remains stable — confirming that reliability and capability require separate measurement.
+For production safety evals, augment outcome grading with trajectory evidence from at least two of: execution traces, audit logs, and environment snapshots. The research also found that [Pass^k (consistency across trials) drops up to 24% under error injection while Pass@k (peak capability) remains stable](../../verification/pass-at-k-metrics.md) — confirming that reliability and capability require separate measurement.
+
+See [Trajectory-Opaque Evaluation Gap](../../verification/trajectory-opaque-evaluation-gap.md) for the three-channel evidence model and when to add trajectory auditing.
 
 ---
 
@@ -163,4 +165,5 @@ After hardening, the suite catches three regressions in the next quarter that wo
 - [Golden Query Pairs as Regression Tests](../../verification/golden-query-pairs-regression.md)
 - [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md)
 - [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md)
+- [Trajectory-Opaque Evaluation Gap](../../verification/trajectory-opaque-evaluation-gap.md)
 - [Eval Engineering](../foundations/eval-engineering.md) — complementary module in Foundational Disciplines

@@ -13,7 +13,7 @@ aliases:
 
 # Skill Eval Loop
 
-> Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing eval-driven development to skill authoring without writing code.
+> Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing [eval-driven development](../../workflows/eval-driven-development.md) to skill authoring without writing code.
 
 Skills fail on two independent axes: **output quality** (does it produce good results?) and **trigger precision** (does it activate at the right time?). The skill-creator framework addresses both through a structured loop. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
