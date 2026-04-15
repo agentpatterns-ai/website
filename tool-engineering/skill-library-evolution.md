@@ -136,6 +136,7 @@ Lifecycle governance adds overhead that may exceed its value in certain contexts
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md)
 - [Tool Description Quality](tool-description-quality.md)
+- [Video Transcript Skill: Meeting Recording to Markdown](../workflows/video-transcript-skill.md) — multi-tool skill example that motivates lifecycle concerns like external dependencies and availability constraints
 - [Skill Tool as Enforcement: Loading Command Prompts at Runtime](skill-tool-runtime-enforcement.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
 - [MCP Client Design](mcp-client-design.md)

@@ -166,3 +166,4 @@ Prefer manual or semi-automated updates when the documentation surface is small,
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md) — applies the same drift-detection pattern to agent instruction files
 - [Content & Skills Audit Workflow](content-skills-audit.md) — automated staleness detection across documentation and skill libraries
 - [Headless Claude in CI](headless-claude-ci.md) — running Claude in CI pipelines with safe, non-interactive execution
+- [Shared Link Registry for Docs Sites](link-registry.md) — single-source external URL management so drift-prone links update in one place

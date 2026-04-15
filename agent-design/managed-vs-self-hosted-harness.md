@@ -85,3 +85,4 @@ This is the pattern to consider when compliance concerns are about execution art
 - [Cursor Self-Hosted Cloud Agents](../tools/cursor/self-hosted-cloud-agents.md) — hybrid deployment: managed orchestration, self-hosted execution
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — routing by complexity, relevant when multi-provider routing is in scope
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — assigning competing agents to the same task, a self-hosted-only pattern
+- [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the three-primitive architecture inside either deployment mode

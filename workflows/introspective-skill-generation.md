@@ -184,3 +184,4 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
 - [Eval-Driven Tool Development](eval-driven-tool-development.md)
 - [Content Skills Audit](content-skills-audit.md)
+- [Video Transcript Skill: Meeting Recording to Markdown](video-transcript-skill.md) — worked example of a multi-tool skill orchestrating Whisper, ffmpeg, and the Files API

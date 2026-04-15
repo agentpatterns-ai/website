@@ -140,3 +140,4 @@ The agent prompt instructs it to read state, complete one bounded task, and writ
 - [Rollback-First Design](rollback-first-design.md) — plan recovery before execution, complementing fresh-context recovery
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — progressive failure response strategies that complement fresh-context recovery
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — tracking progress across the multi-session iterations this pattern creates
+- [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — structured relay document that preserves decisions and forward momentum across fresh-context cycles
