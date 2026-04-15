@@ -107,3 +107,4 @@ A team running nightly agent batches across 50 repositories implements the flywh
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Convergence Detection](convergence-detection.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
+- [Self-Healing Production Agent](self-healing-production-agent.md) — online incident-driven loop that patches production regressions between offline flywheel cycles

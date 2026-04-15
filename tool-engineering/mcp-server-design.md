@@ -163,3 +163,4 @@ Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)
+- [MCP Result Persistence Annotation](mcp-result-persistence-annotation.md)

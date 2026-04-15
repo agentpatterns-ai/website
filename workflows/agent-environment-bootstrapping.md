@@ -96,3 +96,4 @@ Deterministic bootstrapping works because it moves environment reasoning out of 
 - [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)
 - [Headless Claude in CI](headless-claude-ci.md)
+- [Dependency Gap Validation](../verification/dependency-gap-validation.md)

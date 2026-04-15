@@ -147,3 +147,4 @@ The first two sections belong in the project `CLAUDE.md` (version-controlled, sh
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
 - [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
 - [Memory Reinforcement Learning](memory-reinforcement-learning.md)
+- [Generative Agents Memory Stream](generative-agents-memory-stream.md)

@@ -220,3 +220,4 @@ The pipeline adds coordination overhead that only pays off when review is the bo
 - [Continuous Documentation](continuous-documentation.md)
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)
 - [Shared Link Registry for Docs Sites](link-registry.md) — central registry that keeps external references consistent across pipeline-published pages
+- [OG Image Generation](og-image-generation.md) — automated social preview images produced as part of the publish step

@@ -153,3 +153,4 @@ Each layer is independent: the PostToolUse hook catches issues file-by-file as t
 - [Verification Ledger](verification-ledger.md)
 - [Red-Green-Refactor with Agents: Tests as the Spec](red-green-refactor-agents.md)
 - [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md)
+- [Demand-Driven Repo Auditing](demand-driven-repo-auditing.md)

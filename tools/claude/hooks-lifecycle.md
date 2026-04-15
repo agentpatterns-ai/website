@@ -149,3 +149,4 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 - [Hooks vs Prompts](../../verification/hooks-vs-prompts.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../../tool-engineering/hook-catalog.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../../workflows/posttooluse-auto-formatting.md)
+- [PowerShell Tool](powershell-tool.md)

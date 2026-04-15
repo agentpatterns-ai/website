@@ -144,3 +144,4 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — Where tokens get lost in large windows
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Controlling what models generate beyond correctness
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — Cross-file context retrieval using ASTs and dependency graphs
+- [Semantic Density Optimization](semantic-density-optimization.md) — Codebase conventions that raise information-per-token for agents

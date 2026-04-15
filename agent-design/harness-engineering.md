@@ -186,3 +186,4 @@ Three specific conditions where the investment pays off less:
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) -- mapping harness and guardrail patterns across agent frameworks
 - [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) -- diagnosing harness failures when agent output is wrong or unexpected
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) -- decoupled three-primitive architecture (Session / Harness / Sandbox) for long-running agents
+- [Agent-Driven Codebase Fingerprint](agent-driven-codebase-fingerprint.md) -- codebase-level signals the harness uses to route agents and enforce conventions

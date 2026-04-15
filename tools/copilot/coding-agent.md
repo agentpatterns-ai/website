@@ -94,3 +94,4 @@ With the MCP server registered, the coding agent can query live table schemas du
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Agent HQ](agent-hq.md)
+- [Cloud Agent Research-Plan-Code](cloud-agent-research-plan-code.md)

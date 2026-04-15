@@ -85,3 +85,4 @@ The pattern degrades in three conditions:
 - [Agent Backpressure](agent-backpressure.md)
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md)
 - [Steering Running Agents](steering-running-agents.md)
+- [Grill Me Technique](grill-me-technique.md)

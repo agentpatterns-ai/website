@@ -121,3 +121,4 @@ Coverage increases to 34%. The agent continues iterating until coverage plateaus
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Incremental Verification](incremental-verification.md)
+- [FLARE: Multi-Agent Fuzzing](flare-multi-agent-fuzzing.md)

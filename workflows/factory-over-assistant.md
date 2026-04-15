@@ -111,3 +111,4 @@ The human's constraint is now PR review throughput, not agent execution speed.
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Fan-Out and Synthesis](../multi-agent/fan-out-synthesis.md)
 - [Swarm Migration Pattern](../multi-agent/swarm-migration-pattern.md)
+- [Burn the Boats](burn-the-boats.md) — Commitment-forcing deprecation that enables the factory paradigm

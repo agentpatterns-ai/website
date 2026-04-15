@@ -166,3 +166,4 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating iteration budget across reasoning and review phases
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — handling errors that self-review cycles cannot resolve within the iteration cap
 - [Behavioral Drivers of Agent Success](behavioral-drivers-agent-success.md) — quality gates and verification behaviors that determine whether self-review loops converge reliably
+- [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — self-review extended to agents rewriting their own system prompts

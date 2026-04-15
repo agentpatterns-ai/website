@@ -84,3 +84,4 @@ A team using SWE-bench Verified scores alone to choose between models would rank
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using realistic benchmarks for tool evaluation
 - [Golden Query Pairs as Regression Tests](golden-query-pairs-regression.md) — private regression suites as contamination-resistant measurement
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — converting production incidents into fresh eval tasks
+- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — idealized retrieval conditions as an adjacent eval-inflation mechanism

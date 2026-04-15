@@ -112,3 +112,4 @@ Audit whether each skill is firing when expected before adding the next one. A t
 - [Red-Green-Refactor with Agents](../verification/red-green-refactor-agents.md)
 - [The Research-Plan-Implement Pattern](research-plan-implement.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [SDLC Skill Taxonomy](sdlc-skill-taxonomy.md)

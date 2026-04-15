@@ -131,3 +131,4 @@ Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that u
 - [Incremental Verification](incremental-verification.md)
 - [Anti-Reward Hacking](anti-reward-hacking.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
+- [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md)

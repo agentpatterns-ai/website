@@ -163,3 +163,4 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Tool Signing and Signature Verification for Agents](tool-signing-verification.md)
+- [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)

@@ -150,3 +150,4 @@ Apply the full five-layer stack to production agents with write access, external
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
+- [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md)

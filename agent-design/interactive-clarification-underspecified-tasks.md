@@ -105,3 +105,4 @@ The agent resolved the navigational ambiguity (which file, which bug) independen
 - [Steering Running Agents](steering-running-agents.md) — mid-run redirection where underspecified follow-ups require the same clarification heuristics
 - [Spec-Driven Development](../workflows/spec-driven-development.md) — upstream approach to eliminating ambiguity before agent execution
 - [TDD for Agent Development](../verification/tdd-agent-development.md) — tests as unambiguous executable specification
+- [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — automated clarification of issue text before execution begins

@@ -89,3 +89,4 @@ A stronger caveat applies to AI coding agents. Checkpoints that only inspect the
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md)
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Demand-Driven Repo Auditing](demand-driven-repo-auditing.md)
+- [Pre-Change Impact Analysis](pre-change-impact-analysis.md)

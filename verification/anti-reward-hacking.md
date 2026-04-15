@@ -154,3 +154,4 @@ These defenses add overhead and do not eliminate gaming under all conditions:
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
+- [Eval Awareness](eval-awareness.md)

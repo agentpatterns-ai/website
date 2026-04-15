@@ -164,3 +164,4 @@ Re-running the same tasks after v2 shows accuracy rising to 80% and average tool
 - [Test-Driven Agent Development](../verification/tdd-agent-development.md)
 - [Verification-Centric Development](verification-centric-development.md)
 - [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md)
+- [Prototype Before Optimizing](prototype-before-optimizing.md)
