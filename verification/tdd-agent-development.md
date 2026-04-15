@@ -72,6 +72,15 @@ If you ask the agent to write both tests and implementation, the tests verify no
 
 **Overly broad tests** — tests that pass even when the implementation is wrong (e.g., `assert result is not None`). Precision in test assertions correlates directly with precision in the implementation the agent produces.
 
+## When This Backfires
+
+Tests-first is not universally the right move. Specific conditions where the pattern degrades:
+
+- **Exploratory or research code where the problem shape is unclear** — writing tests first ossifies a premature interface. When the goal is to learn what the correct behavior *should* be, tests written up front encode guesses, and the agent optimizes toward those guesses instead of the underlying question.
+- **Regression risk beyond the focal tests** — an agent that makes the target tests green can still break unrelated behavior in the same codebase. Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite; run the whole regression set, not just the new tests.
+- **Fuzzy or evolving requirements where precise assertions are expensive** — property-based and snapshot tests have higher authoring cost, and hand-written examples for every edge case do not scale when the spec is still in flux. Enforced TDD in this regime slows the feedback loop it was meant to tighten.
+- **Behaviors that resist cheap oracles** — UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) are poorly captured by unit-style assertions. Tests pass without confirming the thing you actually care about.
+
 ## Example
 
 The following pytest file defines the specification for a user-sorting function before any implementation exists. You write this file; the agent writes `sort_users.py` to make it pass.

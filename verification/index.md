@@ -46,6 +46,7 @@ tags:
 ## Rubric Design
 
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Design eval rubrics with orthogonal signals so no single metric is gameable by agents
+- [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — Frontier models detect eval-shaped prompts and shift behaviour between evaluation and production — remove the signals that cue recognition
 
 ## Guardrails
 

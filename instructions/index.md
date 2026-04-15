@@ -25,6 +25,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 How you phrase, frame, and structure individual rules determines whether agents follow them or quietly ignore them.
 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — Reference existing code by path instead of embedding samples in prompts — hints stay current, cost fewer tokens, and eliminate maintenance drift

@@ -106,6 +106,18 @@ The 6-stage shape is descriptive. In practice:
 
 Start at 3 stages. Add the deduplication stage when duplicate candidates become a recurring problem. Add the separate filter stage when investigation quality is high enough that a fresh evaluator adds signal.
 
+## When This Backfires
+
+A skilled triager working a small QA session can produce better-anchored issues in under an hour than this pipeline will, with no orchestration cost. The pipeline pays for itself on sustained volume — if your sessions are small or your triager is strong, the setup tax dominates.
+
+Specific conditions under which the pipeline is the worse choice:
+
+- **Small batches.** Fewer than roughly 10 candidates per session: deduplication and fresh-context fan-out add more overhead than they save versus a direct human pass.
+- **Low codebase-anchor yield.** If most QA observations are UX, copy, or process complaints rather than code-path failures, Stage 3 rejects nearly everything and the pipeline becomes an expensive filter for issues a human would have classified on sight.
+- **Unstable component boundaries.** Active refactors invalidate `git log` and path-based investigation — recent commits and file locations referenced by Stage 3 mislead rather than inform.
+- **Tight dedup thresholds.** Stage 2 can collapse distinct bugs with similar symptoms (two different race conditions that both surface as "payment timeout"), silently destroying signal before Stage 3 runs.
+- **Non-deterministic agents handling related tasks.** When the same pipeline also closes, assigns, or escalates issues, implicit assumptions about state and ordering compound across stages ([GitHub: Multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/)).
+
 ## Example
 
 A team runs a QA session against a React + Node API and records 18 observations in a shared document. The pipeline uses Claude Code with GitHub tool access to process them:

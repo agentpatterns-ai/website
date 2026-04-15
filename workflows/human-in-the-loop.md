@@ -110,6 +110,17 @@ The progressive trust model described earlier is, in practice, a migration betwe
 
 Each migration reduces human effort and increases throughput — but only when the workflow has demonstrated reliability at the current supervision level.
 
+## When This Backfires
+
+Gates are not free insurance — they degrade as workload rises. A reasonable counter-position: placing humans in the loop at all creates a false sense of safety that can be worse than no gate.
+
+- **Rubber-stamping under load** — when reviewers approve dozens or hundreds of agent actions per day, decision fatigue turns review into a reflex. The gate exists in the workflow diagram but not in practice.
+- **Automation complacency** — the more reliable the agent appears, the less vigilant the human becomes. Operators whose job is "mostly approving" lose the ability to catch the rare error they were hired to catch ([source](https://www.defensenews.com/opinion/2026/03/26/the-militarys-fabled-human-in-the-loop-for-ai-is-dangerously-misleading/)).
+- **Bottleneck batching** — gates that require synchronous approval force the agent to queue work. Humans then review in batches, which compresses attention per item and pushes reviewers toward "approve all" heuristics.
+- **Mismatched cadence** — at machine speed, a single human cannot meaningfully supervise an agent that fires tens of actions per minute. The gate becomes either a rubber stamp or a throughput cap.
+
+Mitigations: rotate reviewers to prevent complacency, include negative-sample injections in review queues to keep attention calibrated, and prefer asynchronous on-the-loop monitoring with alerting over synchronous gates once the workflow's error rate is measured.
+
 ## Key Takeaways
 
 - Gate before irreversible actions; skip gates for reversible execution steps
@@ -126,6 +137,7 @@ Each migration reduces human effort and increases throughput — but only when t
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)
+- [Humans and Agents in Software Engineering Loops](humans-agents-development-loops.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
 - [Agent Governance Policies for AI Agent Development](agent-governance-policies.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)

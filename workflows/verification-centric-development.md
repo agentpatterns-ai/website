@@ -1,6 +1,6 @@
 ---
 title: "Verification-Centric Development for AI-Generated Code"
-description: "Shift developer value from writing code to designing verification systems — layered quality gates that make LLM-generated code production-viable"
+description: "Shift developer value from writing code to designing verification systems — layered quality gates that make LLM-generated code production-viable."
 tags:
   - workflows
   - testing-verification
@@ -117,11 +117,6 @@ dotnet test --filter "Category=Snapshot"
 - Snapshot testing prevents silent scope creep in LLM output by requiring explicit approval of structural changes
 - Planning is the most commonly skipped and highest-leverage step — LLMs amplify the cost of missing architecture decisions
 - [Comprehension debt](../anti-patterns/comprehension-debt.md) is the primary risk: verification-centric development is powerful but dangerous if developers stop understanding what they approve
-
-## Unverified Claims
-
-- TextForge MVP completion timeline (~10 days) cannot be independently verified from public sources
-- The specific claim that LLM hallucinations are "mathematical" limitations unsolvable through scaling is the author's framing; the degree to which scaling helps remains actively debated
 
 ## Related
 

@@ -1,5 +1,5 @@
 ---
-title: "Pre-Change Impact Analysis: Preventing Agent Regressions"
+title: "Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions"
 description: "Build a graph of code-to-test dependencies and deliver it as a lightweight agent skill — agents query which tests are at risk before committing, cutting regressions by 70%."
 tags:
   - testing-verification
@@ -17,7 +17,7 @@ aliases:
 
 ## The Problem
 
-AI coding agents fix issues but frequently break things that were working. On SWE-bench Verified, vanilla agent runs show a 6% test-level regression rate. Roughly half of passing patches would not be merged by real maintainers due to regressions. [unverified — attributed to METR in the TDAD paper but specific source not independently verified]
+AI coding agents fix issues but frequently break things that were working. On SWE-bench Verified, vanilla agent runs show a 6.08% test-level regression rate ([TDAD paper](https://arxiv.org/abs/2603.17973), Table 3). [METR's March 2026 review](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/) of 296 SWE-bench Verified patches found roughly half would not be merged by maintainers — with regressions and code quality cited among top rejection reasons.
 
 Agents lack visibility into which tests exercise the code they modify.
 

@@ -62,14 +62,14 @@ The model never sees the raw telemetry — it sees the post-aggregation summary.
 
 ## Context Budget Discipline
 
-Each observability backend has its own MCP server or tool definition. Loading all three tool schemas unconditionally adds ~55K tokens when five or more backends are connected. The Tool Search Tool pattern defers discovery: the skill loads only the tool definitions it actually needs for this incident, reducing per-lookup cost to ~3K tokens. `[unverified for incident workloads]` [Source: [Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)]
+Each observability backend has its own MCP server or tool definition. Anthropic reports that a typical five-server setup (e.g., GitHub, Slack, Sentry, Grafana, Splunk) consumes ~55K tokens in definitions before the model does any work, and that the Tool Search Tool reduces that by over 85% by loading only the 3–5 tools needed for a given request. [Source: [Tool Search Tool — Claude API Docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)]
 
 | Loading strategy | Token cost (5 backends) |
 |-----------------|------------------------|
 | All tool definitions always loaded | ~55K tokens |
-| On-demand via Tool Search Tool | ~3K tokens per lookup |
+| On-demand via Tool Search Tool | >85% reduction — 3–5 tools per request |
 
-At 50 incidents per week across a five-person team, the difference between strategies is roughly 2.5M vs 150K tokens per week — about a 16× reduction in tool-definition overhead.
+The same ratio applied to an incident-investigation workload of 50 incidents per week compounds into a meaningful per-team context saving, though the exact figure depends on how many of the connected backends each incident actually touches.
 
 ## Progressive Disclosure Routing
 
@@ -138,6 +138,15 @@ False positives on known red herrings should reduce the score — surfacing a mi
 - Incidents with tight time windows (seconds, not hours) — tests time-window precision
 - Incidents where the service name is ambiguous (multiple services with similar names) — tests disambiguation
 
+## When This Backfires
+
+Parallel multi-system correlation with a strict "discard uncorroborated signals" rule has failure modes worth naming.
+
+- **Rare single-system root causes get filtered out.** When the authoritative signal only appears in one backend — for example, an application-level panic captured by Snowflake logs but not yet visible in traces or metrics — the correlation rule drops it. Tune the corroboration threshold to the incident class rather than hard-coding a 2-of-3 minimum.
+- **Cross-system crosstalk produces false correlations.** Time-window alignment across heterogeneous clocks and sampling rates can surface signals that co-occur by coincidence. Practitioners consistently flag unrefined correlation rules as a leading source of alert-fatigue noise. [Source: [IT Event Correlation — Splunk](https://www.splunk.com/en_us/blog/learn/it-event-correlation.html)]
+- **Eval overhead is not free.** Building and maintaining a held-out set of incidents with verified root causes, red herrings, and graders is substantial work. For teams with infrequent incidents or mature human runbooks, the eval investment may outweigh the precision gains.
+- **The skill is only as good as its inputs.** An AI incident triage tool without full environmental context — identities, permissions, network exposure, dependencies — produces the same noise as traditional rule-based systems. [Source: [AI Incident Response — Wiz](https://www.wiz.io/academy/detection-and-response/ai-for-incident-response)]
+
 ## Example
 
 A payment processing service (`checkout-api`) starts returning elevated 500 errors at 14:32 UTC. The on-call engineer triggers the incident agent with:
@@ -202,10 +211,9 @@ Confidence: high.
 
 The generalist incident agent receives only this summary — not the raw query results — and routes to the database on-call team.
 
-## Unverified Claims
+## Provenance Note
 
-- The specific Intercom implementation (Snowflake + Honeycomb + Datadog combination, high-quality evals, progressive disclosure routing) is sourced from a Twitter/X post that requires authentication and could not be independently verified. All architectural claims above are sourced independently.
-- The 37% token reduction figure for programmatic tool calling is reported by Anthropic for complex research tasks and may not transfer directly to incident investigation workloads `[unverified for this specific domain]`.
+The specific Intercom implementation (Snowflake + Honeycomb + Datadog combination, high-quality evals, progressive disclosure routing) that inspired this page is sourced from a Twitter/X post that requires authentication and could not be independently verified. All architectural claims on this page are sourced independently from Anthropic's engineering guidance and the Claude API docs.
 
 ## Related
 

@@ -17,7 +17,7 @@ tags:
 
 ## The Problem with Self-Reported Verification
 
-Agent workflows typically rely on the agent's own prose assertions about verification: "Build passed. Tests green. No issues found." These claims are unfalsifiable within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the actual tool. See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.
+Agent workflows typically rely on the agent's own prose assertions about verification: "Build passed. Tests green. No issues found." These claims are unfalsifiable within the conversation. The agent may hallucinate that checks passed, skip steps silently, or assert results without running the actual tool. Spotify's Honk team observed the same pattern and responded by wiring deterministic verifiers (format, build, test) into the agent loop and blocking PR creation when any verifier fails ([Spotify Engineering, "Background Coding Agents: Predictable Results Through Strong Feedback Loops"](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3)). See [Trust Without Verify](../anti-patterns/trust-without-verify.md) for the full anti-pattern.
 
 ## Structured Proof
 
@@ -73,6 +73,16 @@ The full SQL-backed ledger requires tooling that supports persistent databases a
 - **CI integration**: pipe verification records into existing CI reporting, making agent-produced evidence auditable alongside human CI runs
 
 The key constraint is that evidence must be produced by tool calls, not asserted by the agent. See [Deterministic Guardrails](deterministic-guardrails.md) for the broader principle.
+
+## When This Backfires
+
+The ledger is not free — schema, INSERTs, gate queries, and bundle reads all cost time. Conditions where it costs more than it returns:
+
+- **Throwaway or exploratory work**: one-shot edits, spikes, and scratch scripts do not need baseline/after bookkeeping; the overhead outweighs regression-detection value on work that will be discarded.
+- **Unreliable underlying checks**: flaky tests or false-positive linters mean the ledger faithfully records noise. Green rows mislead reviewers when the checks themselves do not discriminate signal.
+- **Wrong checks recorded**: complete rows for the wrong surface (e.g., unit tests when the change breaks an integration contract) produce a clean bundle for a broken change. Ledger completeness is not verification completeness.
+- **Agent writes its own rows**: if the same agent runs the tool and writes the row, it can fake exit codes or skip the INSERT when a check fails. The ledger only holds when execution and recording are separated — CI, a harness, or a hook.
+- **Single-turn agents without persistent state**: a SQL ledger is architecturally heavy here; inline structured output (JSON per check) captures the same invariants with less plumbing.
 
 ## Example
 

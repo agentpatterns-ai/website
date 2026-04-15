@@ -40,6 +40,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [MCP Elicitation](mcp-elicitation.md) — How MCP servers collect structured user input mid-task, and how Elicitation and ElicitationResult hooks let you automate, validate, or block those requests
 - [MCP LLM Sampling](mcp-llm-sampling.md) — How MCP servers request host LLM inference mid-execution via sampling/createMessage, creating hybrid tools that combine deterministic logic with embedded AI reasoning
 - [MCP Server Design](mcp-server-design.md) — A server author's checklist for tool naming, schema design, error handling, resource exposure, and token efficiency
+- [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md) — Mark individual MCP tool outputs as durable through Claude Code's compaction pipeline with `_meta["anthropic/maxResultSizeChars"]`
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md) — When a proprietary extension system gets replaced by an open protocol, rebuild on the standard rather than port the old architecture
 
 ## Skills
@@ -63,6 +64,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md) — Register PreToolUse hooks through a skill invocation to arm strict guardrails for a single session without imposing friction on every workflow
 - [PostToolUse BSD/GNU Detection](posttooluse-bsd-gnu-detection.md) — Catch BSD/GNU CLI incompatibilities at runtime with a PostToolUse hook, feed fixes back via additionalContext, and persist knowledge to CLAUDE.md
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md) — The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — Claude Code's PreCompact hook can now block compaction outright, deferring context compression until the agent reaches a safer checkpoint
 
 ## Specialized Tools
 

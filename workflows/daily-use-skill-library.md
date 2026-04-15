@@ -84,6 +84,17 @@ Key constraints:
 - Skills should compose — the output of one becomes the input for the next
 - Keep descriptions specific enough to trigger reliably, narrow enough to avoid over-triggering
 
+## When This Backfires
+
+The pattern assumes skills fire at the right moment and that their cost is covered by the process gates they enforce. Several failure conditions break that assumption:
+
+- **Trigger reliability is probabilistic.** At startup, agents see only the `name` and `description` from each installed skill's YAML frontmatter — the body, including any "When to Use" section, is not indexed. A vague description, keyword collisions with neighbouring skills, or a user phrasing that doesn't match the description will leave the skill sitting there unused while the agent proceeds without it. ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices))
+- **Description budgets shrink as the library grows.** Descriptions are capped at 1024 characters individually and share an aggregate budget that scales with context window size. Past a few dozen skills, practitioners report descriptions getting truncated or deprioritised, which strips the keywords needed for matching. ([Skill authoring best practices — Claude docs](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices))
+- **Process gates can rigidify exploration.** A strict `/grill-me → /write-a-prd → /prd-to-issues → /tdd` sequence is appropriate for well-understood feature work. For exploratory spikes, migrations, or incident response, the ceremony cost can exceed the information it surfaces — a plain CLAUDE.md plus direct prompting is often faster.
+- **Maintenance cost is real.** Every skill needs evaluations, description tuning, and periodic re-testing against new model releases. Solo developers and small teams frequently find that a single well-edited instruction file outperforms a library of five skills they don't exercise often enough to keep calibrated.
+
+Audit whether each skill is firing when expected before adding the next one. A three-skill library that triggers reliably beats a ten-skill library half of which sit idle.
+
 ## Key Takeaways
 
 - Agent statelessness means process must be embedded in skills, not assumed from context

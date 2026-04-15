@@ -83,6 +83,7 @@ nav:
       - harness-hill-climbing.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
+      - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md

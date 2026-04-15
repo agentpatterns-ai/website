@@ -23,8 +23,8 @@ The study tested each agent across Python, JavaScript, and Java in pristine AWS 
 | Language | Success Rate | Runtime Multiplier | Why |
 |----------|:---:|:---:|-----|
 | Python | 89.2% | 12.3x | Flat `requirements.txt` is easiest for LLMs to enumerate |
-| JavaScript | 61.9% | 9.7x | npm auto-resolves some transitive deps, masking gaps |
-| Java | 44.0% | 18.4x | Deep Maven dependency graphs are hardest to declare completely |
+| JavaScript | 61.9% | 9.7x | [npm](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/) auto-resolves transitive deps into `package-lock.json`, masking gaps in the manifest |
+| Java | 44.0% | 18.4x | [Maven transitive resolution](https://maven.apache.org/resolver/transitive-dependency-resolution.html) produces deep dependency graphs that LLMs rarely declare completely |
 
 Agent performance also varies by language:
 
@@ -114,6 +114,17 @@ Make clean-environment validation a gate, not a manual step. A [deterministic gu
     pip install -r requirements.txt
     python -c "import main"  # Fails fast on missing imports
 ```
+
+## When This Backfires
+
+Clean-environment validation is not free. It is worse than the alternatives under these conditions:
+
+- **Prototype or throwaway code** — if the project will never leave a developer's laptop, the 30–60s clean-env rebuild per iteration outweighs a 10% chance of `ModuleNotFoundError`
+- **Tight inner loop** — when the agent is iterating in a harness that already imports and runs the code each turn, import errors surface immediately; a separate CI gate adds latency without new signal
+- **Managed runtimes with implicit deps** — platforms like AWS Lambda layers, Databricks notebooks, or Jupyter kernels pre-install common packages; a strict "only OS packages" baseline flags false positives that are guaranteed to exist in the target environment
+- **Monorepos with shared lockfiles** — if a root lockfile already pins the transitive closure for all sub-projects, re-resolving per agent-authored change is wasted work
+
+Weigh the gate cost against failure cost: for production deployments and external releases, clean-env validation pays for itself; for experiments and spike branches, it often does not.
 
 ## Key Takeaways
 

@@ -11,15 +11,15 @@ tags:
 > Feature branches work for humans reviewing PRs one at a time. At 10+ parallel agents making frequent small commits, branching becomes the bottleneck. Single-branch git with mechanical coordination guards is the alternative — but only when the guards are in place first.
 
 !!! warning "Conflicts with Claude Code's official recommendation"
-    Claude Code's documented best practice is [worktree isolation](worktree-isolation.md) — one worktree per agent, one branch per task. The single-branch model described here is a direct counterpoint from the Agent Flywheel methodology, which explicitly rejects worktrees as "a bad pattern." Both positions have real tradeoffs. This page presents both.
+    Claude Code's documented best practice is [worktree isolation](worktree-isolation.md) — one worktree per agent, one branch per task. The single-branch model described here is a direct counterpoint from the [Agent Flywheel methodology](https://agent-flywheel.com/core-flywheel), which rejects worktrees in favor of all agents committing directly to `main`. Industry practitioner guides [default to worktrees](https://nx.dev/blog/git-worktrees-ai-agents) for parallel agents; single-branch is the contrarian position.
 
 ## Why Branches Break at Scale
 
-The standard branch-per-feature model assumes a small number of long-lived branches with human reviewers. At 10+ parallel agents each making frequent small commits, three failure modes compound:
+The standard branch-per-feature model assumes a small number of long-lived branches with human reviewers. As agent count rises, three failure modes compound — the [Agent Flywheel complete guide](https://agent-flywheel.com/complete-guide) reports this breakdown at 10+ parallel agents making frequent small commits:
 
 | Problem | Mechanism |
 |---------|-----------|
-| **Merge conflicts grow combinatorially** | With n agents each touching shared files, potential conflicts scale with agent count. The author's operational experience puts the threshold at 10+ agents. |
+| **Merge conflicts grow with agent count** | With n agents each touching shared files, potential conflict surface scales with the number of concurrent branches. Practitioner guides that rely on worktree isolation [cap their recommendation at 3–5 parallel agents](https://superset.sh/blog/parallel-coding-agents-guide) for this reason — beyond that, the codebase's ability to absorb parallel changes becomes the bottleneck, not agent capacity. |
 | **Rebase burns agent context** | Resolving merge conflicts and rebasing branches consumes context that should be spent on implementation. An agent that spends half its context window on git hygiene is half as productive. |
 | **Logical conflicts survive textual merges** | A function signature change on one branch and a new callsite on another merge cleanly but fail to compile. On a single branch, the second agent sees the change immediately and adapts. Branches hide this class of conflict until merge time. |
 
@@ -39,7 +39,7 @@ graph TD
 
 ### 1. Advisory File Reservations with TTL
 
-Each agent registers a reservation file listing the files it intends to modify, plus a TTL timestamp. The reservation is advisory — other agents check it before starting work, not a hard lock enforced by the OS.
+Each agent registers a reservation file listing the files it intends to modify, plus a TTL timestamp. The reservation is advisory — other agents check it before starting work, not a hard lock enforced by the OS. The [MCP Agent Mail coordination infrastructure](https://mcpagentmail.com/) implements this pattern with date-partitioned messages and advisory locking for safe concurrent access.
 
 **TTL expiry is the key property**: if an agent crashes, its reservation expires and another agent can proceed without manual intervention. Hard locks from crashed agents require human cleanup; TTL-expiring advisory locks degrade gracefully.
 
@@ -57,7 +57,7 @@ A git hook that runs before each commit. It reads the active reservation files, 
 
 ### 3. Destructive Command Guard (DCG)
 
-A shell-level interceptor that mechanically blocks dangerous operations:
+A shell-level interceptor that mechanically blocks dangerous operations. The [Agent Flywheel core flywheel guide](https://agent-flywheel.com/core-flywheel) lists DCG as one of the three mechanisms that replaces branch isolation:
 
 | Blocked command | Why |
 |----------------|-----|
@@ -68,9 +68,7 @@ A shell-level interceptor that mechanically blocks dangerous operations:
 | `rm -rf` | Unrecoverable file deletion |
 | `DROP TABLE` | Database destruction |
 
-**The origin story**: On December 17, 2025, an agent ran `git checkout --` on uncommitted work. Files were recovered via `git fsck --lost-found`, but the incident proved that instructions alone do not prevent execution — mechanical enforcement does. DCG was built the next day.
-
-Instructions tell agents not to run dangerous commands. DCG prevents it regardless of what the agent decides.
+Instructions tell agents not to run dangerous commands. DCG prevents it regardless of what the agent decides. This is the same failure mode that drives [stale `.git/index.lock` recovery](https://www.augmentcode.com/guides/git-worktrees-parallel-ai-agent-execution) — when an agent crashes mid-operation, the surrounding system has to recover mechanically, not through agent instructions.
 
 ## Required Pre-Conditions
 
@@ -101,15 +99,9 @@ Claude Code's documented recommendation is worktrees. If you are running fewer t
 
 - Feature branches create merge overhead that grows with agent count; single-branch keeps all agents synchronized on a live shared view of the codebase.
 - Three mechanical guards replace branch isolation: advisory file reservations with TTL expiry, a pre-commit guard, and a Destructive Command Guard at the shell level.
-- The DCG exists because instructions do not prevent execution — the December 2025 incident proved this in production.
+- The DCG exists because instructions do not prevent execution — only mechanical blocks at the shell layer do.
 - Single-branch requires coordination infrastructure, fungible agents, and pre-partitioned work to be safe. Without those pre-conditions, it is strictly riskier than branching.
 - Worktrees (Claude Code's recommendation) and single-branch (Agent Flywheel's recommendation) reflect genuinely different architectural positions with different tradeoff profiles — choose based on your agent count and coordination infrastructure.
-
-## Unverified Claims
-
-- The "O(n²) merge conflicts" framing is stated as operational experience by the Agent Flywheel author; no formal analysis or controlled study is cited.
-- The "10+" threshold where branches become problematic is based on personal experience running 10–25 parallel agents; no comparative benchmark exists.
-- Agent Mail, bv (the reservation tool), and DCG are tools in the Agent Flywheel ecosystem; adoption beyond that ecosystem is unverified.
 
 ## Related
 

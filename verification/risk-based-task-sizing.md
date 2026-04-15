@@ -15,7 +15,7 @@ tags:
 
 ## The Problem
 
-Most agent workflows apply uniform verification: every change runs the same checks regardless of whether it touches a comment or an authentication module. This creates two failure modes. Low-risk changes waste time on unnecessary review cycles. High-risk changes pass with insufficient scrutiny because the verification bar was set for average tasks.
+Most agent workflows apply uniform verification: every change runs the same checks regardless of whether it touches a comment or an auth module. Low-risk changes waste cycles; high-risk changes pass with insufficient scrutiny because the bar was set for average tasks.
 
 ## File Risk Classification
 
@@ -64,6 +64,17 @@ Every verification step is recorded as structured data — an INSERT, not prose.
 
 The ledger captures baseline state before changes and post-change state, enabling regression detection by comparing the two phases programmatically.
 
+## When This Backfires
+
+Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wikipedia.org/wiki/Risk-based_testing): assignment is subjective, classifications drift, and focus on high-risk paths can leave low-risk areas under-tested. Specific conditions where this pattern underperforms uniform verification:
+
+- **Tier drift after refactors.** Static per-file tiers assume file purpose is stable. A tests helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
+- **Subjective classification.** Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments become inconsistent and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
+- **High-risk-file fatigue.** Auto-escalating every touch of an auth file to Large review discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
+- **Low-tier blind spots.** Concentrating verification on High-tier files under-weights defects from interactions between Low-tier modules. A documentation change that silently invalidates a runbook can cause an incident the tiered cascade never catches.
+
+If the risk map is not reviewed regularly, or the team lacks a shared rubric for the tier boundaries, uniform verification may be more honest than a stale tier map masquerading as risk awareness.
+
 ## Key Takeaways
 
 - Classify files by what they control (data integrity, security surface), not by change size
@@ -105,3 +116,4 @@ If the same task only touched `tests/test_deploy.py` (Low tier), it would stay S
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Delegation Decision](../agent-design/delegation-decision.md)
 - [Risk-Based Shipping](risk-based-shipping.md)
+- [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)

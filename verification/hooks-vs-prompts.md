@@ -49,7 +49,7 @@ High-value enforcement targets:
 - **File restrictions** — block writes to infrastructure or secrets files
 - **Tool allowlisting** — permit only a defined set of shell commands
 
-All share a property: absolute, binary, and the agent has a training prior toward the wrong behavior (more `npm` than `pnpm` in training data [unverified — no public source confirms training data composition]).
+All share a property: absolute, binary, and the agent has a training prior toward the wrong behavior — e.g. reaching for `npm install` over `pnpm install` by default.
 
 ## What Prompts Do That Hooks Cannot
 
@@ -100,6 +100,16 @@ The enforcement vs. guidance distinction is tool-agnostic. The mechanism varies:
 
 Git hooks and CI gates predate AI agents — a `pre-commit` hook enforces its rule regardless of whether the commit came from a developer, an agent, or a script.
 
+## When Hooks Cannot Enforce
+
+Hooks are deterministic at the tool-call boundary, not everywhere. Three failure modes narrow the rule ([Boucle, *190 Things Claude Code Hooks Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o); [Anthropic hooks reference](https://code.claude.com/docs/en/hooks)):
+
+- **Substitution.** Block one tool call and the model finds an unblocked path. A matcher on `Bash(rm *)` misses `/bin/rm` or a `Write` that truncates the file. Each call is evaluated in isolation, so `mkdir` + `cd` + `rm -rf *` slips past single-command matchers.
+- **Intent-blindness.** Hooks see parameters, not reasoning — they cannot distinguish legitimate `sudo` from suspect `sudo`, or a `git push --force` on a personal branch from one aimed at `main`.
+- **Execution-path gaps.** Only the standard session path is hooked. Pipe mode, bare mode, some IDE integrations, and events between tool calls (prompt assembly, compaction) are unreachable. Rules that must hold everywhere also need CI or git-level enforcement.
+
+Reach for a hook when the rule is absolute, binary, and expressible as a tool-call-boundary predicate; use prompts, CI, or repository-level gates for anything that isn't.
+
 ## Example
 
 The package-manager rule goes into a hook (absolute, binary, strong training prior toward `npm`); the architectural guidance stays in the prompt (requires judgment, context-dependent).
@@ -138,10 +148,6 @@ Write a unit test for any change to business logic in `src/domain/`.
 ```
 
 These instructions require evaluating context a hook cannot inspect mechanically — they belong in the prompt.
-
-## Unverified Claims
-
-- Training data contains more `npm` than `pnpm` [unverified — no public source confirms training data composition]
 
 ## Related
 

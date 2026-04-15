@@ -132,6 +132,18 @@ Mitigations:
 
 Documentation drift and instruction drift are parallel problems. CLAUDE.md files, copilot-instructions.md, and other agent instruction files decay the same way documentation does — code evolves but instructions remain static. The detection and remediation patterns are identical: scheduled comparison, PR-based correction, human review.
 
+## When This Backfires
+
+Continuous documentation is not universally net-positive. The pattern degrades or inverts in several conditions:
+
+- **Hallucinated updates that pass casual review** — LLM-generated documentation can confidently reference non-existent methods, parameters, or behaviors, especially in large or proprietary codebases ([DocAgent, ACL 2025](https://arxiv.org/abs/2504.08725)). A plausible-looking PR that aligns with the wrong mental model is worse than acknowledged drift, because it launders incorrect claims into the "reviewed and merged" tier.
+- **PR backlog noise** — scheduled runs on a large documentation surface generate steady PR volume regardless of whether the changes improve the docs. Reviewers who are paged for low-signal updates start rubber-stamping, which re-creates the hallucination-passes-review failure above.
+- **Reviewer bandwidth worse spent than on direct edits** — when documentation is already roughly accurate, the time a maintainer spends reviewing an agent-generated correction PR can exceed the time needed to fix the drift directly. The pattern pays off only when drift is frequent enough that human detection is the bottleneck.
+- **Drift-loop churn** — two agents (or the same agent across runs) with slightly different context can rewrite each other's output, producing PRs that oscillate between equivalent phrasings without converging. Scope runs narrowly and cache prior outputs to break the loop.
+- **Stylistic homogenization** — agents trained on generic documentation regress voice and structure toward a mean, eroding project-specific conventions over time. Explicit style anchors in the prompt and a human approval gate mitigate this but do not eliminate it.
+
+Prefer manual or semi-automated updates when the documentation surface is small, drift is rare, or the codebase is private enough that the agent lacks the context to reason about it accurately.
+
 ## Key Takeaways
 
 - Continuous documentation treats documentation maintenance as a pipeline with detection, orchestration, and review layers

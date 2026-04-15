@@ -18,7 +18,7 @@ aliases:
 
 When teams support old and new workflows in parallel, neither wins. Users stick with what they know; the team splits engineering attention across both; the product attracts users whose primary criterion is "doesn't change things." Gradual sunset timelines extend this split indefinitely.
 
-The core issue is credibility. A soft deprecation sends the signal that the old path might persist indefinitely — which is often true. This pattern is sourced from the [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/burn-the-boats.md), which applies Thomas Schelling's credible commitment theory from *The Strategy of Conflict* (1960): eliminating retreat options makes a commitment believable to both users and the team itself.
+The core issue is credibility. A soft deprecation sends the signal that the old path might persist indefinitely — which is often true. This pattern is sourced from the [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/burn-the-boats.md), which applies Thomas Schelling's credible commitment theory from [*The Strategy of Conflict*](https://www.hup.harvard.edu/books/9780674840317) (Harvard University Press, 1960): eliminating retreat options makes a commitment believable to both users and the team itself.
 
 ## What This Pattern Looks Like
 
