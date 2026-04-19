@@ -50,7 +50,7 @@ The conventional 50-character limit is agent-hostile. When agents trace history 
 
 ### 3. Abstraction Depth
 
-Deep call hierarchies force agents to traverse multiple files per task. Flat call chains with well-named functions reduce cross-file navigation. Java Spring Boot endpoints often exhibit 8:1 ceremony-to-logic ratios — agents pay that read cost on every lookup.
+Deep call hierarchies force agents to traverse multiple files per task. Flat call chains with well-named functions reduce cross-file navigation. Enterprise frameworks that distribute a single request across many scaffolding layers make agents pay that read cost on every lookup.
 
 ### 4. File Splitting
 

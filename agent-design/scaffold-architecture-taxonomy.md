@@ -16,9 +16,9 @@ aliases:
 
 ## Why Scaffold Architecture Matters
 
-Coding agents are commonly evaluated by what they can do: pass tests, fix bugs, generate patches. Less attention goes to *how* they are built. [Source-code analysis of 13 open-source coding agent scaffolds](https://arxiv.org/abs/2604.03515) finds that architecturally distinct systems produce identical surface capabilities — trajectory studies observe outputs without explaining why they differ. The scaffolding code surrounding the model is the differentiating variable.
+Coding agents are usually evaluated by what they do — pass tests, fix bugs, generate patches — not *how* they are built. [Source-code analysis of 13 open-source coding agent scaffolds](https://arxiv.org/abs/2604.03515) finds architecturally distinct systems produce identical surface capabilities; trajectory studies observe outputs without explaining differences.
 
-LangChain's harness engineering results confirm the leverage: pure harness changes — no model upgrade — improved Terminal Bench 2.0 scores from 52.8% to 66.5% ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). The scaffold is not boilerplate around the model; it is a primary determinant of outcomes.
+LangChain confirms the leverage: pure harness changes — no model upgrade — improved Terminal Bench 2.0 scores from 52.8% to 66.5% ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). The scaffold is a primary determinant of outcomes, not boilerplate.
 
 ## Three-Layer Taxonomy
 
@@ -50,51 +50,51 @@ graph TD
 
 How the scaffold decides what to do next and when to stop.
 
-**Loop topology** spans a continuous spectrum — not discrete categories. Fixed linear pipelines execute a predetermined sequence of steps. Adaptive loops react to tool output before selecting the next action. At the far end, Monte Carlo Tree Search (MCTS) scaffolds build a search tree of possible action sequences, exploring branches and backtracking when paths fail — Moatless Tools implements full MCTS with numeric reward values and backpropagation ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)).
+**Loop topology** is a spectrum, not discrete categories. Fixed pipelines run a predetermined sequence. Adaptive loops react to tool output before the next action. MCTS scaffolds build a search tree, exploring branches and backtracking on failure — Moatless Tools implements full MCTS with numeric reward and backpropagation ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)).
 
 | Topology | Predictability | Compute | Best for |
 |----------|---------------|---------|----------|
-| Fixed pipeline | High — steps are known | Low | Well-defined, repeatable tasks |
-| Adaptive loop | Medium — branches on tool output | Medium | Tasks requiring observation-reaction cycles |
-| MCTS / search | Low — branches on speculation | High | Tasks where the solution path is unknown |
+| Fixed pipeline | High | Low | Well-defined, repeatable tasks |
+| Adaptive loop | Medium | Medium | Observation-reaction cycles |
+| MCTS / search | Low | High | Unknown solution paths |
 
-**Planning strategy** determines whether the scaffold reasons about future steps before acting. Planning-first scaffolds emit a plan then execute — easier to audit, but rigid when reality diverges. Interleaved scaffolds adapt more readily but produce less inspectable reasoning.
+**Planning strategy** decides whether the scaffold reasons about future steps before acting. Planning-first emits a plan then executes — auditable but rigid when reality diverges. Interleaved planning adapts more readily at the cost of less inspectable reasoning.
 
-**Error recovery** ranges from aborting on first failure to retry loops, exception-specific handlers, and rollback to prior checkpoints. Recovery strategy determines whether a scaffold degrades gracefully or fails catastrophically. See [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md).
+**Error recovery** ranges from aborting on first failure to retry loops, exception-specific handlers, and rollback to checkpoints. It decides whether a scaffold degrades gracefully or fails catastrophically. See [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md).
 
 ### Layer 2: Tool and Environment Interface
 
 How the scaffold exposes capabilities to the model and receives environment feedback.
 
-**Tool abstraction level** varies from direct shell access to typed tool registries with schema-validated arguments. Direct shell access maximizes flexibility but provides no boundary for testing or auditing. Typed interfaces reject malformed calls before execution and enable [reasoning/execution separation](cognitive-reasoning-execution-separation.md).
+**Tool abstraction level** varies from direct shell to typed registries with schema-validated arguments. Shell maximizes flexibility but provides no boundary for testing or auditing. Typed interfaces reject malformed calls before execution and enable [reasoning/execution separation](cognitive-reasoning-execution-separation.md).
 
-**Environment access model** sets what the agent can observe and modify. Read-only access prevents side effects during exploration; sandboxed environments (containers, isolated filesystems) provide a recoverable surface for destructive operations.
+**Environment access model** sets what the agent can observe and modify. Read-only access prevents side effects during exploration; sandboxes give a recoverable surface for destructive operations.
 
-**Feedback routing** controls where tool results go. Returning all output to the context window is simple but expensive. Routing large outputs to disk with a summary preserves context budget; programmatic post-processing filters results before they enter context ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+**Feedback routing** controls where tool results go. Returning all output to context is simple but expensive. Routing large outputs to disk with a summary preserves budget; post-processing filters results before they enter context ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 ### Layer 3: Resource Management
 
-How the scaffold handles the bounded resources of a model-in-a-loop: context window, wall time, and cost.
+How the scaffold handles the bounded resources of a model-in-a-loop: context, time, and cost.
 
-**Context budget strategy** determines what enters the context window and when it is pruned. Accumulated-context scaffolds let context grow until compaction or window limits force action; fresh-context scaffolds reset per iteration; compression scaffolds summarize at configurable thresholds. See [Loop Strategy Spectrum](loop-strategy-spectrum.md) for the trade-offs.
+**Context budget strategy** decides what enters context and when it is pruned. Accumulated-context scaffolds let context grow until compaction or window limits force action; fresh-context resets per iteration; compression summarizes at thresholds. See [Loop Strategy Spectrum](loop-strategy-spectrum.md) for the trade-offs.
 
-**State persistence** determines what survives between iterations or sessions. In-memory state is lost on failure or context reset. File-backed state enables resumption across sessions — the approach in [Agent Harness](agent-harness.md). Structured artifacts — [progress files](../observability/trajectory-logging-progress-files.md) and [feature list files](../instructions/feature-list-files.md) — serve as both human-readable state and agent-readable context that persists across sessions.
+**State persistence** decides what survives between iterations or sessions. In-memory state is lost on failure. File-backed state enables resumption — the approach in [Agent Harness](agent-harness.md). Structured artifacts like [progress files](../observability/trajectory-logging-progress-files.md) and [feature list files](../instructions/feature-list-files.md) serve as both human-readable state and agent-readable context.
 
-**Tool-call capping** and **cost guardrails** bound unbounded loops. Without explicit caps, adaptive and MCTS scaffolds can exhaust budgets before completing a task. Caps apply at session level (max turns), tool level (max calls per type), or cost level (max token spend).
+**Tool-call capping** and **cost guardrails** bound unbounded loops. Without caps, adaptive and MCTS scaffolds can exhaust budgets before finishing. Caps apply per session (max turns), per tool (max calls per type), or per cost (max token spend).
 
 ## The Classification Problem
 
-A key finding: scaffold architectures **resist discrete classification** ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)). Real systems blend strategies — a scaffold may use a fixed outer pipeline with an adaptive inner loop, or apply fresh-context resets only when context exceeds a threshold. Treating taxonomy dimensions as continuous scales — not binary choices — reflects how real scaffolds are built.
+Scaffold architectures **resist discrete classification** ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)). Real systems blend strategies — a fixed outer pipeline with an adaptive inner loop, or fresh-context resets only above a threshold. Treat dimensions as continuous scales, not binary choices.
 
-When evaluating or selecting a scaffold, interrogating each dimension independently gives more useful information than assigning a categorical label. Ask "where does this scaffold sit on the control strategy spectrum?" rather than "is this a pipeline or an agent?"
+Interrogating each dimension independently gives more useful signal than assigning a categorical label. Ask "where does this scaffold sit on the control strategy spectrum?" rather than "is this a pipeline or an agent?"
 
 ## Example
 
-A developer choosing between two open-source scaffolds for automated bug fixing can apply the taxonomy directly:
+Choosing between two open-source scaffolds for automated bug fixing:
 
-**Scaffold A** uses a fixed pipeline (locate → reproduce → patch → verify), direct shell access, and accumulated context with no compaction. Predictable, auditable, cheap to run. Degrades when bug reproduction requires exploration or when context fills before the verify step.
+**Scaffold A** uses a fixed pipeline (locate → reproduce → patch → verify), direct shell access, and accumulated context with no compaction. Predictable, auditable, cheap to run. Degrades when reproduction requires exploration or context fills before the verify step.
 
-**Scaffold B** uses an adaptive loop with typed tool registry, feedback routed to disk summaries, and per-session turn caps. More robust to unexpected reproduction paths; higher per-run cost; easier to test tool calls in isolation.
+**Scaffold B** uses an adaptive loop with typed tool registry, feedback routed to disk summaries, and per-session turn caps. More robust to unexpected paths; higher per-run cost; easier to test tool calls in isolation.
 
 Neither is universally better. The taxonomy surfaces the trade-offs so the choice is deliberate.
 
@@ -102,9 +102,9 @@ Neither is universally better. The taxonomy surfaces the trade-offs so the choic
 
 The taxonomy adds overhead without value in several conditions:
 
-- **Simple, bounded tasks**: A single-tool script that runs a linter and reports output has no meaningful control architecture to classify. Applying a 12-dimension framework to it introduces vocabulary without insight.
-- **Hybrid systems that defy placement**: 11 of 13 agents analyzed compose multiple loop primitives rather than implementing one ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)). Forcing a blended system into a single dimension value produces a misleading label rather than useful information.
-- **Evaluation as a proxy for selection**: Classifying an existing scaffold after the fact tells you what was built, not whether it was the right design. The taxonomy is most useful before committing to an architecture, not as a retrospective audit.
+- **Simple, bounded tasks**: A single-tool linter script has no meaningful control architecture to classify. A 12-dimension framework adds vocabulary without insight.
+- **Hybrid systems that defy placement**: 11 of 13 agents analyzed compose multiple loop primitives rather than implementing one ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)). Forcing a blended system into a single value produces a misleading label.
+- **Retrospective audits**: Classifying an existing scaffold tells you what was built, not whether the design was right. The taxonomy is most useful before committing to an architecture.
 
 ## Key Takeaways
 

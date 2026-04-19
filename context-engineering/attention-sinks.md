@@ -1,6 +1,6 @@
 ---
-title: "Attention Sinks and Why Token Position Shapes Focus"
-description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance"
+title: "Attention Sinks: Why First Tokens Always Win"
+description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance."
 tags:
   - context-engineering
 aliases:
@@ -89,17 +89,10 @@ Content that must be reliably followed belongs at either end. Content the agent 
 ## Related
 
 - [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
-- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](../instructions/critical-instruction-repetition.md)
 - [Goal Recitation](goal-recitation.md)
 - [Prompt Layering](prompt-layering.md)
-- [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
-- [Context Priming](context-priming.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
 - [Layered Context Architecture](layered-context-architecture.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Prompt Cache Economics Across Providers](prompt-cache-economics.md)
+- [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
+- [Context Compression Strategies](context-compression-strategies.md)
+- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)

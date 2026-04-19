@@ -138,3 +138,5 @@ Because the recipient is shown verbatim, `attacker@external.com` is immediately 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Action Selector Pattern](action-selector-pattern.md)
 - [Indirect Injection Discovery](indirect-injection-discovery.md)
+- [Permission-Gated Custom Commands](permission-gated-commands.md)
+- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)

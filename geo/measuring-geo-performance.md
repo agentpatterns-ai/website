@@ -84,13 +84,13 @@ Brand web mention volume correlates with AI Overview visibility — brands with 
 
 ## When This Backfires
 
-GEO monitoring can produce misleading signals or waste investment under specific conditions:
+GEO monitoring can mislead or waste investment under specific conditions:
 
-- **High-drift queries**: Broad, ambiguous prompts ("best tools for X") produce results that vary so widely session-to-session that sampled data reflects random noise more than actual visibility. Narrow, brand-specific prompts are more stable.
-- **Small sample budgets**: Running fewer than 20–30 prompts daily gives insufficient statistical coverage to distinguish genuine visibility change from session variance. Under-sampling leads to false positives and missed drops.
-- **Single-platform fixation**: A brand optimised for ChatGPT citation may see zero lift on Perplexity or Gemini — models differ in training data, retrieval architecture, and citation behaviour. Per-platform results are not portable.
-- **Attribution substitution**: Teams that treat AI citation counts as a proxy for revenue confuse visibility with intent. A brand appearing in an AI response about a category may receive no commercial consideration from that mention.
-- **Model update blindness**: Providers update models without changelogs. A sustained visibility drop may reflect a model weight change, not any content failure — acting on it by rewriting content can cause SEO regressions with no GEO benefit.
+- **High-drift queries**: Broad prompts ("best tools for X") vary so widely session-to-session that sampled data reflects noise, not visibility. Narrow, brand-specific prompts are more stable.
+- **Small sample budgets**: Fewer than 20–30 prompts daily cannot distinguish genuine change from session variance — under-sampling causes false positives and missed drops.
+- **Single-platform fixation**: A brand optimised for ChatGPT may see zero lift on Perplexity or Gemini — models differ in training data, retrieval, and citation behaviour. Per-platform results are not portable.
+- **Attribution substitution**: Treating citation counts as a revenue proxy confuses visibility with intent. A mention in a category response may yield no commercial consideration.
+- **Model update blindness**: Providers update models without changelogs. A sustained drop may reflect a weight change, not content failure — rewriting in response can cause SEO regressions for no GEO benefit.
 
 ## Example
 

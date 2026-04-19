@@ -15,13 +15,13 @@ tags:
 
 AI coding tools compress the time between idea and implementation. Code production is no longer the bottleneck. What remains scarce is the reasoning trail: why a decision was made, what alternatives were considered, and what constraints shaped the solution.
 
-Developers who maintain visible thinking — explicit documentation of intent and rationale throughout the development lifecycle — produce work that is reviewable, maintainable, and trustworthy. GitHub's guidance frames this directly: "Speed and control aren't trade-offs. They reinforce each other" ([GitHub Blog: Speed Is Nothing Without Control](https://github.blog/ai-and-ml/generative-ai/speed-is-nothing-without-control-how-to-keep-quality-high-in-the-ai-era/)).
+Visible thinking — explicit documentation of intent and rationale across the development lifecycle — makes work reviewable, maintainable, and trustworthy. GitHub frames it directly: "Speed and control aren't trade-offs. They reinforce each other" ([GitHub Blog: Speed Is Nothing Without Control](https://github.blog/ai-and-ml/generative-ai/speed-is-nothing-without-control-how-to-keep-quality-high-in-the-ai-era/)).
 
 ## Quality Signals Across the Lifecycle
 
 ### Issues as Specifications
 
-Capture the problem, success criteria, constraints, and risks in the issue before engaging an agent. A well-structured issue serves dual purposes: it guides the AI toward the right solution and creates a reviewable record of intent for human collaborators.
+Capture the problem, success criteria, constraints, and risks in the issue before engaging an agent. A well-structured issue both guides the AI toward the right solution and creates a reviewable record of intent.
 
 ### Branch Naming
 
@@ -52,7 +52,7 @@ How you prompt an agent is itself a form of visible thinking. GitHub recommends 
 - **Context**: Reference related files, architecture decisions, and existing conventions.
 - **Output format**: Define the expected shape of the result.
 
-Saving prompts alongside code (in commit messages, PR descriptions, or instruction files) preserves the decision context that would otherwise vanish when the chat session ends. This aligns with Anthropic's guidance to "prioritize transparency by explicitly showing the agent's planning steps" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — the same principle applied to the human side of the workflow. Anthropic's Claude Code best practices reinforce this by recommending CLAUDE.md be checked into git so constraints and conventions persist across sessions and team members ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)).
+Saving prompts alongside code — in commit messages, PR descriptions, or instruction files — preserves decision context that would otherwise vanish when the chat session ends. This mirrors Anthropic's guidance to "prioritize transparency by explicitly showing the agent's planning steps" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)), and Claude Code best practices recommend checking CLAUDE.md into git so constraints persist across sessions ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)).
 
 ## Anti-Patterns
 

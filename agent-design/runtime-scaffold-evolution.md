@@ -19,7 +19,7 @@ aliases:
 
 A sufficiently capable LLM already knows how to write code and reason about tooling. The missing piece is *permission and prompting* — explicitly asking the agent to consider tool creation as a first-class action alongside tool use.
 
-Live-SWE-agent demonstrated this by starting with bash-only access and autonomously evolving its toolkit — achieving 77.4% on SWE-bench Verified and 45.8% on SWE-Bench Pro without offline training or pre-built tool libraries ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
+Live-SWE-agent demonstrated this by starting with bash-only access and autonomously evolving its toolkit — achieving 77.4% on SWE-bench Verified and 45.8% on SWE-Bench Pro without offline training or pre-built tool libraries ([Xia et al., 2025](https://arxiv.org/abs/2511.13646); [live-swe-agent leaderboard](https://live-swe-agent.github.io/); [reference implementation](https://github.com/OpenAutoCoder/live-swe-agent)).
 
 ## How It Works
 

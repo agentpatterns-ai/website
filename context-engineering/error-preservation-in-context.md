@@ -61,7 +61,7 @@ graph TD
 
 **Compact** when the same error has repeated three or more times (doom loop), or early errors are no longer relevant to the current task.
 
-OpenDev implements five-stage progressive compaction: error traces are preserved in full during active recovery, then progressively summarized as the session continues ([Bui, 2025](https://arxiv.org/abs/2603.05344)).
+OpenDev implements five-stage progressive compaction: error traces are preserved in full during active recovery, then progressively summarized as the session continues ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
 
 ## Error Messages as Teaching Mechanisms
 
@@ -125,3 +125,5 @@ Removing the first failed tool call would cause the model to retry `/etc/config.
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Lost in the Middle](lost-in-the-middle.md)
 - [Attention Sinks](attention-sinks.md)
+- [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md)
+- [Environment Specification as Context](environment-specification-as-context.md)

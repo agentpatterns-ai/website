@@ -40,7 +40,7 @@ Failures route back to an earlier stage. A blocked implementer means the plan wa
 - **Orchestrators** need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.
 - **Workers** need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
 
-Giving both agents the same context bundle tends to cause drift: orchestrators get distracted by implementation details, workers carry planning artifacts that crowd out actionable context.
+Giving both agents the same context bundle tends to cause drift: orchestrators get distracted by implementation details, workers carry planning artifacts that crowd out actionable context. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) makes this split explicit: the lead agent coordinates and decomposes, while each subagent "needs an objective, an output format, guidance on the tools and sources to use, and clear task boundaries" — role-specific context rather than a shared bundle.
 
 ## JIT Loading over Upfront Loading
 
@@ -76,7 +76,7 @@ The environment — repo structure, tests, linters — shapes what context is us
 
 ## Claude Code Native Implementation
 
-Claude Code's sub-agents implement phase-specific context directly. Each receives only the tools relevant to its phase: **Explore** gets read-only file navigation, **Plan** gets research access before entering [Plan Mode](../workflows/plan-first-loop.md), and the general-purpose sub-agent gets full tool access with a targeted system prompt per skill.
+Claude Code's [built-in sub-agents](https://code.claude.com/docs/en/sub-agents) implement phase-specific context directly. Each receives only the tools relevant to its phase: **Explore** is read-only (Write and Edit denied), **Plan** is a read-only research agent used during [Plan Mode](../workflows/plan-first-loop.md) to gather context before presenting a plan, and the general-purpose sub-agent has all tools available for multi-step tasks requiring both exploration and modification.
 
 ## When This Backfires
 

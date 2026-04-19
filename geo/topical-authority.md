@@ -27,7 +27,7 @@ Topical authority means AI systems recognize your domain as a trusted node for a
 | Rank individual pages | Become the recognized entity for a subject |
 | Linear returns per page | Compounding returns as coverage grows |
 
-Brand search volume is a stronger predictor of AI citation rates than backlinks. Topical authority drives brand recall, which drives citations.
+Brand search volume is a stronger predictor of AI citation rates than backlinks ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Topical authority drives brand recall, which drives citations.
 
 ## How It Works
 
@@ -47,7 +47,7 @@ Internal links are semantic relationships between entities and topics — not na
 Topical Authority = Content Engineering + Information Architecture + Internal Linking
 ```
 
-All three must be present. Strong content without link structure leaves the entity graph incomplete; link structure around thin content degrades authority signals. Body links outweigh navigation or footer links.
+All three must be present. Strong content without link structure leaves the entity graph incomplete; link structure around thin content degrades authority signals. Body links outweigh navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
 
 ### Knowledge Graph Participation
 

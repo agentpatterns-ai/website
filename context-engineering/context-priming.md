@@ -84,7 +84,7 @@ Contrast this with a cold prompt that provides none of the above context — the
 
 ## Why It Works
 
-Transformer models generate each token conditioned on all tokens currently in context — there is no separate "memory" step. When the agent generates code, it pattern-matches against the examples it can see right now. Loading your actual middleware signature, naming conventions, and config shape before the task puts those patterns directly in the distribution the model samples from, making project-specific outputs more probable and generic boilerplate less probable. This is the same mechanism that makes few-shot prompting effective: in-context examples shift output distribution without any weight update.
+Transformer models generate each token conditioned on all tokens currently in context — there is no separate "memory" step. When the agent generates code, it pattern-matches against the examples it can see right now. Loading your actual middleware signature, naming conventions, and config shape before the task puts those patterns directly in the distribution the model samples from, making project-specific outputs more probable and generic boilerplate less probable. This is the same mechanism that makes [few-shot prompting effective](https://arxiv.org/abs/2005.14165): in-context examples shift output distribution without any weight update. [Repository-level prompt generation research](https://arxiv.org/abs/2206.12839) shows that conditioning code models on relevant repository files measurably improves output fit compared to single-file prompts.
 
 ## When This Backfires
 

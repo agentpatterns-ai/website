@@ -57,7 +57,7 @@ Claude Code's Edit and Write tools reject calls if the file has not been read in
 
 ### Output Truncation Boundaries
 
-The Read tool caps output at 2,000 lines; the Bash tool enforces a 120-second default timeout (max 600s). Both prevent unbounded context consumption.
+Read-tool line caps and [Bash-tool command timeouts](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool) prevent unbounded context consumption even when the agent asks for everything.
 
 ### Training-Aligned Formats
 

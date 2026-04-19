@@ -1,5 +1,5 @@
 ---
-title: "Static Content First: Maximizing Prompt Cache Hits"
+title: "Structure Prompts with Static Content First to Maximize Cache Hits"
 description: "Place static prompt content first and variable content last to maximize prompt cache hits and reduce inference costs in agent loops."
 aliases:
   - "prompt prefix caching"
@@ -110,15 +110,11 @@ The key changes: tools sorted by name (deterministic order), system prompt built
 
 ## Related
 
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
 - [Prompt Cache Economics](prompt-cache-economics.md)
 - [Prompt Caching Architectural Discipline](prompt-caching-architectural-discipline.md)
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
+- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
+- [Context Compression Strategies](context-compression-strategies.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [Filesystem-Based Tool Discovery](../tool-engineering/filesystem-tool-discovery.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
-- [Prompt Compression](prompt-compression.md)
-- [Context Budget Allocation](context-budget-allocation.md)

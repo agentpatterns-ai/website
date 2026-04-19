@@ -26,7 +26,7 @@ Agents produce fluent, contextually appropriate language. That fluency activates
 
 **Inappropriate frustration.** "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless explicitly configured with persistent storage. Frustration directed at the agent is misdirected.
 
-**Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal. Reset context, don't take a break.
+**Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context, don't take a break.
 
 **Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. [LLMs are fine-tuned to avoid expressing uncertainty](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html) — an agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
 
@@ -44,7 +44,7 @@ Not: Does it understand me? Does it remember our previous work?
 
 **Build trust through verification, not rapport.** Start with small, verifiable tasks and expand scope as verified quality warrants.
 
-**Treat memory as infrastructure.** If you need cross-session memory, build it explicitly — a project file the agent reads at session start, an AGENTS.md with accumulated decisions. Assuming [implicit knowledge](implicit-knowledge-problem.md) exists is a separate anti-pattern.
+**Treat memory as infrastructure.** If you need cross-session memory, build it explicitly — a project file the agent reads at session start, an AGENTS.md with accumulated decisions. Assuming implicit knowledge exists without that infrastructure is a separate anti-pattern.
 
 **Interpret confidence skeptically.** Calibrate review effort to the [blast radius](../security/blast-radius-containment.md) of the task, not to how certain the agent sounds.
 

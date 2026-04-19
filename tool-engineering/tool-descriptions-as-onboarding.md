@@ -19,9 +19,9 @@ aliases:
 
 ## The New Hire Analogy
 
-A terse, accurate API reference is sufficient for a developer who already knows the system. An agent integrating with your system for the first time has no background knowledge. It cannot infer what "user" means in your domain, whether a date parameter expects ISO 8601 or a timestamp, or how resource A relates to resource B.
+A terse API reference is sufficient for a developer who already knows the system. An agent integrating for the first time has no background knowledge — it cannot infer what "user" means in your domain, whether a date parameter expects ISO 8601 or a timestamp, or how resource A relates to resource B.
 
-The effective framing is: write as if training a competent new hire on their first day. Not a tutorial — they can already read code and understand systems — but explicit about the things the documentation omits because experienced users know them.
+Write as if training a competent new hire on their first day: not a tutorial, but explicit about the things documentation omits because experienced users already know them.
 
 Per [Anthropic's writing tools for agents post](https://www.anthropic.com/engineering/writing-tools-for-agents), minor description refinements routinely yield dramatic accuracy improvements — precise refinements to tool descriptions dramatically reduced error rates in SWE-bench Verified evaluations. Description gaps are a leading cause of agent tool misuse; an agent cannot infer what it was never told.
 
@@ -34,7 +34,7 @@ Systems accumulate implicit knowledge over time:
 - Resource relationships (e.g., projects contain issues, issues belong to sprints — what order do you need to traverse?)
 - Encoding conventions (e.g., IDs are strings, not integers; dates are UTC, not local)
 
-None of this is typically documented in terse API references. All of it is necessary for an agent to use the tool correctly without trial and error.
+None of this is typically documented in terse API references. All of it is necessary for an agent to use the tool correctly without trial and error. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds that interfaces "remain largely human-oriented and often become a bottleneck," with targeted rewrites producing consistent accuracy gains on unseen tools.
 
 ## Unambiguous Parameter Names
 
@@ -59,7 +59,7 @@ An error message that tells the agent what to try next reduces retry failures an
 
 ## Iterating on Descriptions
 
-Description quality degrades silently. As the underlying system changes, descriptions that were accurate become stale. As agents encounter new use cases, gaps in descriptions emerge. Treat description iteration the same as code maintenance:
+Description quality degrades silently. Accurate descriptions go stale as the system changes, and new use cases expose gaps. Treat description iteration as code maintenance:
 
 - Review descriptions when the underlying API changes
 - Log agent failures that trace to tool misuse and identify the description gap
@@ -131,6 +131,8 @@ Verbose descriptions consume context budget. A description that covers every edg
 Over-specifying expected call sequences limits valid solution paths. If a description prescribes "always call `list_sprints` first," the agent cannot adapt when a sprint ID is already known from context. Describe what parameters require, not how to obtain them from scratch every time.
 
 Description maintenance is ongoing cost. As the underlying API evolves, descriptions silently go stale. An outdated description that contradicts current API behavior is worse than a terse one — it confidently misdirects the agent. Budget time for description review whenever the API changes.
+
+[Microsoft Research on tool-space interference in the MCP era](https://www.microsoft.com/en-us/research/blog/tool-space-interference-in-the-mcp-era-designing-for-agent-compatibility-at-scale/) adds that descriptions should publish runtime metadata — latency, token cost, tested model compatibility — alongside prose, and that flattening deeply nested parameter schemas lifts success rates.
 
 ## Related
 

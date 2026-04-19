@@ -24,7 +24,7 @@ The mistake is using output quality as a proxy for accuracy. An agent can produc
 
 ## Why It Happens
 
-Fluency, formatting, and confidence are mistaken for correctness. Agents are trained to produce coherent responses — a separate objective from accuracy. The correlation between surface polish and correctness is weak — fluent explanations systematically increase user confidence without reliably improving accuracy ([Bhatt et al., 2025](https://arxiv.org/abs/2604.03237)).
+Fluency, formatting, and confidence are mistaken for correctness. Agents are trained to produce coherent responses — a separate objective from accuracy. Users systematically overestimate LLM accuracy when shown default explanations, and longer explanations further inflate user confidence without improving answer accuracy ([Steyvers et al., 2025, *Nature Machine Intelligence*](https://www.nature.com/articles/s42256-024-00976-7)). A follow-up study found the same persuasion paradox in human-AI teams: fluent explanations raised confidence without improving accuracy beyond the AI prediction alone ([Cohen et al., 2026](https://arxiv.org/abs/2604.03237)).
 
 Agents are most dangerous when almost right. A fully wrong answer is easy to catch; a mostly correct answer with one subtle error propagates undetected.
 

@@ -110,7 +110,7 @@ You don't need formal tooling for this. A shared notes file or GitHub issue trac
 
 The improvement loop degrades under three conditions:
 
-**Instruction bloat.** Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
+**[Instruction bloat](../anti-patterns/prompt-tinkerer.md).** Each targeted fix adds words. Over dozens of iterations, instruction files become verbose enough to exceed context windows or dilute the signal of any single rule. The fix is periodic pruning: review the full file and consolidate overlapping rules rather than appending indefinitely.
 
 **Over-fitting to recent sessions.** If observations are drawn from a narrow slice of work — a single sprint, one team member's tasks — the updates optimize for that slice and regress on other task types. Diversify the observation sample before acting.
 

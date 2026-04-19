@@ -49,7 +49,9 @@ Task-specific design means more agents — one per task rather than one per role
 | Reusability | Low (too broad) | High ([skills](separation-of-knowledge-and-execution.md) composable) |
 | Maintenance | Touches everything | Touches one task |
 
-Smaller agents are easier to test, easier to update, and easier to replace. A broken `canary-upgrade` agent does not affect `pr-reviewer`. A new deployment strategy requires updating one agent, not refactoring a monolithic role.
+Smaller agents are easier to test, easier to update, and easier to replace. A broken `canary-upgrade` agent does not affect `pr-reviewer`. A new deployment strategy requires updating one agent, not refactoring a monolithic role. The market is moving in this direction: [Gartner predicts](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025) that 40% of enterprise applications will feature task-specific agents by the end of 2026, up from under 5% in 2025.
+
+The counter-pressure is agent sprawl. [OutSystems' State of AI survey](https://www.prnewswire.com/apac/news-releases/agentic-ai-goes-mainstream-in-the-enterprise-but-94-raise-concern-about-sprawl-outsystems-research-finds-302739251.html) reports that 94% of enterprises are concerned that proliferating agents increase complexity, technical debt, and security risk. Task-specific design is worth the extra agents only when paired with governance: shared skills for knowledge reuse, naming conventions for discoverability, and a registry so teams do not build three near-identical `pr-reviewer` agents in parallel.
 
 ## Shared Knowledge Through Skills
 

@@ -137,7 +137,7 @@ The agent invokes this with `/add-endpoint route=/users/:id/preferences method=G
 
 ### Step 3: Add Session Scaffolding
 
-Long agent sessions accumulate context and degrade quality ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). L3 repos design for short, focused sessions with clean handoff artifacts.
+Long agent sessions accumulate context and degrade quality ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see [Context Engineering](../../context-engineering/context-engineering.md)). L3 repos design for short, focused sessions with clean handoff artifacts.
 
 **Progress files for multi-session work:**
 

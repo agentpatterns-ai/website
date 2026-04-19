@@ -63,7 +63,7 @@ mem.utility += learning_rate × (reward - mem.utility)
 
 A successful outcome (`reward` above threshold) pulls the score up. A failure pulls it down. Over multiple episodes, scores converge toward the true average effectiveness of each stored approach for its problem class.
 
-This is reinforcement learning applied to the memory index rather than to model weights. The base model never changes — there is no fine-tuning step, no catastrophic forgetting risk, and no retraining cost ([arXiv:2601.03192](https://arxiv.org/abs/2601.03192)).
+This is reinforcement learning applied to the memory index rather than to model weights. The base model never changes — there is no fine-tuning step, no catastrophic forgetting risk, and no retraining cost ([arXiv:2601.03192](https://arxiv.org/abs/2601.03192)). The same family of approaches — verbal reinforcement learning over an episodic memory buffer — was shown by Reflexion to lift HumanEval pass@1 from a GPT-4 baseline of 80% to 91% without modifying model weights ([Shinn et al., 2023 — arXiv:2303.11366](https://arxiv.org/abs/2303.11366)).
 
 ## Relation to Fine-Tuning and Standard RAG
 

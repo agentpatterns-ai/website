@@ -16,13 +16,13 @@ tags:
 
 ## The Problem
 
-Agents restart cold each session. When work spans many sessions, agents rediscover completed steps, re-derive task order, and generate redundant plans. Steve Yegge coined this the ["50 First Dates" problem](https://steve-yegge.medium.com/introducing-beads-a-coding-agent-memory-system-637d7d92514a): every conversation is the agent's first.
+Agents restart cold each session and rediscover completed steps, re-derive task order, and generate redundant plans. Steve Yegge coined this the ["50 First Dates" problem](https://steve-yegge.medium.com/introducing-beads-a-coding-agent-memory-system-637d7d92514a): every conversation is the agent's first.
 
-Markdown plan files make the problem worse. Agents produce new plan files each session, none referencing the others. After weeks of development, a plans/ directory accumulates hundreds of overlapping, partially-complete files. When context is tight, agents hallucinate completion, skip phases, and disavow discovered problems rather than log them.
+Markdown plan files make it worse. Agents produce new plans each session, none referencing the others, until the `plans/` directory holds hundreds of overlapping, partially-complete files. Under context pressure, agents hallucinate completion, skip phases, and disavow discovered problems rather than log them.
 
 ## How Beads Works
 
-[Beads (`bd`)](https://github.com/steveyegge/beads) stores tasks in a [Dolt](https://github.com/dolthub/dolt)-powered version-controlled database committed to git as a `.beads/` directory, giving agents both queryability and full git versioning.
+[Beads (`bd`)](https://github.com/steveyegge/beads) stores tasks in a [Dolt](https://github.com/dolthub/dolt)-powered database committed to git as a `.beads/` directory — giving agents both queryability and git versioning.
 
 ### Task Structure
 
@@ -31,7 +31,7 @@ Each task is a first-class object with:
 - **Status**: `open`, `in_progress`, `blocked`, `closed`
 - **Priority**: 0 (critical) to 4 (backlog)
 - **Dependency edges**: `blocks`, `depends_on`, `relates_to`, `parent-child` (epics)
-- **Hash-based ID**: `bd-a1b2` format — prevents merge conflicts across parallel agents or branches
+- **Hash-based ID**: `bd-a1b2` format — reduces merge conflicts across parallel agents or branches
 
 Tasks nest into epics using dotted IDs:
 
@@ -54,15 +54,15 @@ bd ready                          # list unblocked tasks
 bd close bd-a1b2 "Done"            # mark closed
 ```
 
-`--claim` is atomic: it sets both assignee and status in one operation, preventing two parallel agents from acquiring the same task.
+`--claim` sets assignee and status atomically, preventing two parallel agents from acquiring the same task.
 
 ### Semantic Compaction
 
-Closed tasks are semantically summarised over time rather than retained in full. This bounds context overhead as work accumulates — long-lived projects do not pay an unbounded context cost for completed history.
+Closed tasks are semantically summarised over time rather than retained in full, bounding context overhead so long-lived projects do not pay an unbounded cost for completed history.
 
 ## What Beads Tracks vs. What Memory Patterns Track
 
-Beads tracks *work state* — what is done, what is blocked, what is next. It does not replace knowledge memory systems ([CLAUDE.md](../instructions/claude-md-convention.md), [agent memory patterns](agent-memory-patterns.md)), which track *learned conventions*: architectural decisions, codebase quirks, debugging solutions.
+Beads tracks *work state* — what is done, blocked, or next. It does not replace knowledge memory systems ([CLAUDE.md](../instructions/claude-md-convention.md), [agent memory patterns](agent-memory-patterns.md)), which track *learned conventions*: architectural decisions, codebase quirks, debugging solutions.
 
 | Beads (`bd`) | Knowledge memory (CLAUDE.md) |
 |---|---|
@@ -71,11 +71,11 @@ Beads tracks *work state* — what is done, what is blocked, what is next. It do
 | Who claimed which task | Debugging solutions for recurring issues |
 | What was discovered and filed mid-session | Team standards and tooling preferences |
 
-Agents use `bd ready` to find what to do next; they consult CLAUDE.md to understand how to do it correctly.
+Agents use `bd ready` to find what to do next; they consult CLAUDE.md for how to do it correctly.
 
 ## Multi-Agent Safety
 
-Hash-based IDs (`bd-a1b2`) avoid merge conflicts when multiple agents create tasks in parallel on different branches. `bd update --claim` provides atomic task acquisition to prevent duplicate work within a shared session.
+Hash-based IDs (`bd-a1b2`) reduce merge conflicts when agents create tasks on parallel branches. `bd update --claim` provides atomic acquisition to prevent duplicate work within a shared session.
 
 ## Practical Setup
 
@@ -88,9 +88,9 @@ bd init
 echo "Use 'bd' for task tracking. Start each session with bd ready." >> AGENTS.md
 ```
 
-The agent instruction in AGENTS.md is the only per-project change needed. Agents exposed to this convention [spontaneously file new issues when they discover problems mid-session](https://github.com/steveyegge/beads/blob/main/AGENTS.md), rather than silently ignoring them to save context.
+The AGENTS.md line is the only per-project change needed. Agents exposed to this convention [spontaneously file new issues when they discover problems mid-session](https://github.com/steveyegge/beads/blob/main/AGENTS.md) rather than silently ignore them to save context.
 
-For personal use on shared or open-source projects, `bd init --stealth` keeps the `.beads/` directory local and untracked.
+For shared or open-source projects, `bd init --stealth` keeps the `.beads/` directory local and untracked.
 
 ## Example
 
@@ -133,14 +133,16 @@ Agent B did not need to read plan files or ask what was already done. `bd ready`
 Beads adds real costs. Skip it when the overhead is not justified.
 
 - **Short-lived or single-session projects.** If the entire project fits in one context window, `bd ready` adds tooling friction without a meaningful payoff. A plain TASKS.md achieves the same result with zero setup.
-- **Crashed in-progress tasks.** `--claim` sets status to `in_progress` atomically, but there is no built-in watchdog. An agent that crashes mid-task leaves the task stuck in `in_progress`, blocking downstream work until a human or supervisor agent runs `bd update --status open` to reset it.
-- **Semantic compaction is irreversible.** Closed-task summaries discard detail. If a future session needs to understand *why* a task was closed a certain way — to debug a regression, for example — that detail may be gone. Dolt's git log partially mitigates this, but compact-and-forget is not a substitute for a full audit trail.
-- **Dolt overhead on constrained machines.** Dolt runs as a per-project server by default. Machines running many simultaneous Beads projects can exhaust ports or memory. Shared server mode resolves this but adds a coordination step to project setup.
+- **Crashed in-progress tasks.** `--claim` is atomic but there is no built-in watchdog. An agent that crashes mid-task leaves the task stuck in `in_progress`, blocking downstream work until a human or supervisor agent runs `bd update --status open` to reset it.
+- **Semantic compaction is irreversible.** Closed-task summaries discard detail. If a future session needs to understand *why* a task was closed a certain way, that detail may be gone. Dolt's git log partially mitigates this but is not a substitute for a full audit trail.
+- **Dolt overhead on constrained machines.** Dolt runs as a per-project server by default; machines running many simultaneous Beads projects can exhaust ports or memory. Shared server mode resolves this but adds coordination to project setup.
+- **Agent compliance decays with context.** Agents follow the `bd ready` convention only while the AGENTS.md instruction carries weight; as the session context grows, that weight fades and agents skip the ritual mid-session. Enforcement via harness hooks is more reliable than prompt instructions alone.
+- **Hash IDs reduce, do not eliminate, merge conflicts.** In practice, parallel branches still produce conflicts in the Dolt-backed store that require manual cleanup. Yegge himself describes Beads as ["a crummy architecture (by pre-AI standards) that requires AI in order to work around all its edge cases where it breaks"](https://steve-yegge.medium.com/beads-best-practices-2db636b9760c) — the pattern is viable because agents can resolve the mess, not because the mess does not occur.
 
 ## Key Takeaways
 
 - `bd ready` gives agents a dependency-resolved list of unblocked tasks without requiring them to parse plan files or re-derive project state.
-- Hash-based IDs and atomic `--claim` operations make Beads safe for parallel agents working on the same project.
+- Hash-based IDs and atomic `--claim` operations reduce (but do not eliminate) merge conflicts when parallel agents work on the same project.
 - Semantic compaction keeps context overhead bounded over long-lived projects.
 - Beads tracks work state; knowledge memory systems track conventions — the two complement rather than replace each other.
 - A single line in AGENTS.md activates the pattern for any agent on the project.

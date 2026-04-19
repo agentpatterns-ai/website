@@ -16,11 +16,11 @@ aliases:
 
 > You don't have to pre-configure your allowlist from scratch. Claude Code's `PermissionRequest` hook lets you turn every manual approval into a persistent rule — an allowlist that grows from real usage.
 
-Evidence-based allowlist auto-discovery builds an allow-list incrementally from real agent usage rather than requiring teams to pre-configure it upfront. [Manual allowlisting](safe-command-allowlisting.md) eliminates noise by pre-authorizing known-safe commands, but teams must know which commands to pre-approve before they've used the agent. The auto-discovery approach removes that requirement: each manual approval increments a counter, and once a command crosses a threshold, it is automatically written to the allow list.
+Evidence-based allowlist auto-discovery builds the allow list incrementally from real agent usage. [Manual allowlisting](safe-command-allowlisting.md) pre-authorizes known-safe commands, but teams must predict the list before they have usage data. Auto-discovery removes that requirement: each manual approval increments a counter, and once a command crosses a threshold it is written to the allow list.
 
 ## How It Works
 
-Claude Code exposes a `PermissionRequest` hook that fires before the permission dialog is shown. It receives the proposed permission and can return `updatedPermissions` with `addRules` and a `destination` to write new allow rules directly to a settings file — no manual editing required.
+Claude Code's `PermissionRequest` hook fires before the permission dialog is shown and can return `updatedPermissions` with `addRules` and a `destination` — writing allow rules directly to a settings file.
 
 ```mermaid
 sequenceDiagram
@@ -40,11 +40,11 @@ sequenceDiagram
     end
 ```
 
-A `PostToolUse` hook tracks outcomes after execution. The rule is only written once a command has been manually approved N times — and only if those runs completed without flagged side effects.
+A `PostToolUse` hook tracks outcomes after execution. The rule is written only after a command has been manually approved N times without flagged side effects.
 
 ## The Two-Hook Implementation
 
-`PermissionRequest` is the only hook with a `updatedPermissions` write-back path — confirmed in the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks). `PostToolUse` cannot write to settings.json via its return value; it writes to the counter log.
+`PermissionRequest` is the only hook with an `updatedPermissions` write-back path, per the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks). `PostToolUse` cannot write settings via its return value; it writes to the counter log.
 
 | Hook | Role | Can write to settings.json via API? |
 |------|------|-------------------------------------|
@@ -107,17 +107,19 @@ TMP=$(mktemp)
 jq --arg k "$KEY" --argjson v "$NEW" '.[$k] = $v' "$LOG_FILE" > "$TMP" && mv "$TMP" "$LOG_FILE"
 ```
 
-## Safety Considerations
+## When This Backfires
 
-Auto-promoting commands based on run count carries risk. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) fixed compound bash commands saving a single rule for the full command string instead of per-subcommand — the same broad-rule failure mode applies to counter-based auto-promotion.
+Counter-based auto-promotion assumes past approvals predict future safety. That assumption breaks under several conditions:
 
-| Risk | Mitigation |
-|------|-----------|
-| Broad key matching promotes `rm` after N successful deletions | Exclude destructive command prefixes from the counter |
-| Compound commands inflate counts for safe-looking prefixes | Count full command fingerprints, not just first tokens, for high-risk prefixes |
-| Side-effect-free syntactically but harmful semantically | Add explicit deny list for prefixes that must never auto-promote (`rm`, `curl`, `wget`, `git push`) |
+- **Broad key matching**: First-token normalization (`git` from `git status`) counts safe reads toward the same key as destructive variants. The [v2.1.77 Claude Code changelog](https://code.claude.com/docs/en/changelog) noted the related bug of compound bash commands saving a single rule for the full string rather than per-subcommand.
+- **Scripted or CI runs**: Automated pipelines can accumulate approval counts for commands no human ever consciously reviewed, silently promoting them.
+- **Accidental approvals**: Five rushed approvals promote a command permanently; threshold counts do not filter careless clicks.
 
-Add a deny list to the PermissionRequest hook before the threshold check:
+Mitigations:
+
+- Count full command fingerprints, not just first tokens, for high-risk prefixes.
+- Maintain an explicit deny list (`rm`, `curl`, `wget`, `git push`, `mv`, `dd`) that always falls through to the dialog.
+- For shared or version-controlled allowlists, raise the threshold and require explicit review before any auto-promoted rule lands in `projectSettings`.
 
 ```bash
 NEVER_AUTO_ALLOW="rm rmdir curl wget git-push mv dd"
@@ -126,26 +128,16 @@ for blocked in $NEVER_AUTO_ALLOW; do
 done
 ```
 
-## When This Backfires
-
-Auto-discovery relies on the assumption that past approvals are good signals for future safety. That assumption breaks in several conditions:
-
-- **Scripted or CI runs**: Automated pipelines can accumulate approval counts for commands a human never consciously reviewed, silently promoting them to the allowlist before any person sees the pattern.
-- **Accidental approvals**: A user hurrying through prompts may approve a command they meant to inspect. Five rushed approvals promote it permanently — the threshold provides no protection against systematically careless approval.
-- **Normalization prefix collisions**: First-token normalization (`git` from `git status`) means approvals for safe read commands count toward the same key as destructive ones. A deny list is mandatory, not optional; omitting it makes the scheme unsafe by default.
-
-For environments where the allowlist is shared across team members or persisted to version control, evidence-based discovery should gate on a higher threshold and require explicit review before any auto-promoted rule lands in `projectSettings`.
-
 ## Relationship to Static Allowlists
 
-These two approaches are additive, not competing:
+Static and evidence-based allowlists are additive, not competing:
 
 | Approach | Best for |
 |----------|---------|
-| Static allowlist (`settings.json`) | Known-safe commands established upfront by the team |
-| Evidence-based auto-discovery | Commands that emerge from real usage over time |
+| Static allowlist (`settings.json`) | Known-safe commands established upfront |
+| Evidence-based auto-discovery | Commands that emerge from real usage |
 
-Claude Code's own default auto-approval list has grown over successive releases to include read-only utilities (`lsof`, `pgrep`, `tput`, `ss`, `fd`, `comm`) based on observed usage patterns — static defaults and usage-derived additions coexist in the same allow list. The "Yes, don't ask again" built-in is a manual variant of the same concept; the hook-based approach automates the threshold across sessions without requiring per-prompt decisions.
+Claude Code's default auto-approval list has itself grown over releases to include read-only utilities such as `lsof`, `pgrep`, `tput`, `ss`, `fd`, and `fdfind`, per the [Claude Code changelog](https://code.claude.com/docs/en/changelog). The "Yes, don't ask again" built-in is a manual variant; the hook-based approach automates the threshold across sessions.
 
 ## Related
 

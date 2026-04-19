@@ -66,7 +66,7 @@ Levels 1–3 are synchronous; 4–5 are asynchronous — assign work and review 
 |-------|------|-------------|
 | **1. Read-Only / Suggest** | Information only | Team reliably identifies wrong suggestions |
 | **2. Supervised Execution** | Additive low-risk work (tests, docs, config) with per-action approval | Error rate on approved changes acceptable |
-| **3. Gated Autonomy with Sandboxing** | Broader execution in sandbox; 84% fewer permission prompts ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)) | Sandboxed quality matches supervised output |
+| **3. Gated Autonomy with Sandboxing** | Broader execution in sandbox; 84% fewer permission prompts ([Anthropic](https://www.anthropic.com/engineering/claude-code-sandboxing)) | Sandboxed quality matches supervised output |
 | **4. Autonomous with Monitoring** | High-autonomy modes; post-hoc audit sampling | Disagreement rate within tolerance; rollback tested |
 | **5. Asynchronous Delegation** | End-to-end from issue to PR | Comprehensive tests, clear specs, documented conventions |
 

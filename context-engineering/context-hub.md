@@ -70,7 +70,7 @@ If the agent discovers that `stream=True` requires explicit iterator handling no
 
 ## When This Backfires
 
-On-demand doc retrieval adds a network round-trip before every code-generation step — in latency-sensitive pipelines or offline environments, this is a non-starter. The pattern also requires the agent to have shell tool-calling capability; agents confined to pure text completion cannot invoke `chub get`. The public registry covers roughly 68 providers as of early 2026; for APIs not in the registry, the agent falls back to training data anyway, offering no improvement over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see marginal gains — chub's value is highest when no other retrieval layer exists.
+On-demand doc retrieval adds a network round-trip before every code-generation step — in latency-sensitive pipelines or offline environments, this is a non-starter. The pattern also requires the agent to have shell tool-calling capability; agents confined to pure text completion cannot invoke `chub get`. The public registry [covers roughly 68 providers as of March 2026](https://dev.to/aws/context-hub-has-68-apis-add-yours-33ma); for APIs not in the registry, the agent falls back to training data anyway, offering no improvement over the baseline. Finally, teams already running a well-tuned local embeddings-based retrieval system may see marginal gains — chub's value is highest when no other retrieval layer exists.
 
 ## Key Takeaways
 

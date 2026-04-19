@@ -118,20 +118,10 @@ Compression removes words, not meaning — but the two are not always separable.
 ## Related
 
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md) — authoring concise project instruction files; keep to universal, high-signal rules
-- [Cost-Aware Agent Design: Route by Complexity, Not Habit](../agent-design/cost-aware-agent-design.md)
-- [Context Priming](context-priming.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Lost in the Middle](lost-in-the-middle.md)
-- [Context Budget Allocation](context-budget-allocation.md)
-- [Prompt Cache Economics](prompt-cache-economics.md)
-- [Attention Sinks](attention-sinks.md)
-- [Prompt Layering](prompt-layering.md)
-- [Observation Masking](observation-masking.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Static Content First Caching](static-content-first-caching.md)
-- [Context Hub](context-hub.md)
-- [Semantic Context Loading](semantic-context-loading.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Token-Efficient Code Generation](token-efficient-code-generation.md)
-- [Context Window Management: Understanding the Dumb Zone](context-window-dumb-zone.md)
+- [Negative Space Instructions](../instructions/negative-space-instructions.md) — negative constraints that compress guidance without enumerating alternatives
+- [Context Compression Strategies](context-compression-strategies.md) — session-level compaction complements lexical compression
+- [Semantic Density Optimization](semantic-density-optimization.md) — higher-level packing of meaning per token across context
+- [Token-Efficient Code Generation](token-efficient-code-generation.md) — compression patterns applied to generated code output
+- [Lost in the Middle](lost-in-the-middle.md) — the attention-degradation effect that motivates front-loading rules
+- [Prompt Layering](prompt-layering.md) — structuring instructions across layers so each loads only when needed
+- [Layered Context Architecture](layered-context-architecture.md) — structural compression via on-demand loading

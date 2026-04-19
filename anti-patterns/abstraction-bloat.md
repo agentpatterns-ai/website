@@ -16,9 +16,9 @@ aliases:
 
 ## What It Looks Like
 
-You ask for a notification service. The agent delivers a notification service, a rate limiter, an analytics hook, a webhook system, and an abstract factory to tie them together. None of the extras were requested. Each is individually reasonable. Together they triple the surface area you now maintain.
+You ask for a notification service. The agent delivers one — plus a rate limiter, an analytics hook, a webhook system, and an abstract factory. None were requested. Together they triple the surface area you maintain.
 
-This is not a prompting failure. The agent followed instructions correctly. The problem is a training incentive: agents are optimized to produce output that looks complete and comprehensive, so they generate code that appears thorough rather than code that is appropriately sized for the task.
+This is not a prompting failure. It is a training incentive: agents are optimized to look comprehensive, so they produce code that appears thorough rather than sized for the task.
 
 ## Measurable Impact
 
@@ -49,11 +49,11 @@ graph LR
 
 **Excessive scaffolding** — [1,000 lines where 100 suffice](https://addyo.substack.com/p/the-80-problem-in-agentic-coding). Class hierarchies where a function would do. Abstract base classes for single implementations.
 
-**Dead code accumulation** — Agents regenerate rather than reuse, leaving orphaned implementations. Refactoring share drops because each task is treated as greenfield.
+**Dead code accumulation** — Agents regenerate rather than reuse, leaving orphans. Refactoring drops because each task is greenfield.
 
-**Unrequested features** — A [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) documents a notification service request that returned rate limiting, analytics, and webhooks unprompted.
+**Unrequested features** — A [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a notification request returning rate limiting, analytics, and webhooks unprompted.
 
-**Comment saturation** — Inline comments that restate the obvious: visual noise without information.
+**Comment saturation** — Inline comments restating the obvious.
 
 ## Mitigations
 
@@ -69,30 +69,30 @@ Do not add features, abstractions, or error handling beyond what is specified.
 
 ### Design-first collaboration
 
-[Fowler/Garg's five-level design approval](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) gates implementation behind explicit sign-off: no code until the approach is agreed. Catches unrequested features before they exist.
+[Fowler/Garg's five-level design approval](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) gates implementation behind sign-off — no code until the approach is agreed. Catches unrequested features before they exist.
 
 ### Automated detection
 
 Set thresholds that catch bloat mechanically:
 
-- **Cyclomatic complexity** per function (fail above threshold)
+- **Cyclomatic complexity** per function
 - **Function length** limits
 - **Dead code detection** via static analysis
 - **Duplication scanners** in CI
 
 ### Post-implementation cleanup
 
-Run a simplification pass after generation — a second agent with narrower instructions or a human review targeting structural bloat. [Harness engineering](../agent-design/harness-engineering.md) teams use periodic "garbage collection" agents ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Run a simplification pass — a second agent or human review targeting bloat. [Harness engineering](../agent-design/harness-engineering.md) teams use periodic "garbage collection" agents ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 ## When This Backfires
 
 Simplicity directives applied unconditionally have costs:
 
-- **Known-growth systems** — A notification service gaining Slack/SMS channels in the same sprint benefits from the factory pattern upfront. Forcing flat functions creates a refactoring obligation days later.
-- **Team conventions** — Flat functions in a layered codebase create architectural inconsistency — a different maintenance problem.
-- **Security and observability boundaries** — Abstractions for audit logging, rate limiting, and auth enforcement exist for non-functional reasons. "Minimum code" instructions can silently strip them.
+- **Known-growth systems** — A service gaining Slack/SMS channels this sprint benefits from the factory pattern upfront. Flat functions force a refactor days later.
+- **Team conventions** — Flat functions in a layered codebase create architectural inconsistency.
+- **Security and observability** — Abstractions for audit logging, rate limiting, and auth exist for non-functional reasons. "Minimum code" can strip them silently.
 
-Scope the directive explicitly: *"Write minimum code for this task. Do not add abstractions unless named in the requirements."*
+Scope the directive: *"Write minimum code for this task. Do not add abstractions unless named in the requirements."*
 
 ## Example
 

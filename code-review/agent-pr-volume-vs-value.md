@@ -63,6 +63,8 @@ Volume-first agent deployment underperforms when:
 - **Scope is poorly defined**: agents without clear, bounded task specifications generate PRs that are technically valid but strategically irrelevant — the 49% acceptance rate for Devin reflects this failure mode.
 - **Review capacity is fixed**: 10× more PRs with lower acceptance rates consumes reviewer time without proportional throughput. Bot pre-screening (already 20% of agent PR reviews) is a partial mitigation, not a solution.
 - **Complexity is the actual bottleneck**: if the team's backlog is dominated by architectural changes (cyclomatic complexity), agent output skewed toward simpler tasks contributes little to velocity. Only 9.1% of agent PRs introduce complexity changes versus 23.3% for humans.
+- **Integration friction is ignored**: a separate empirical analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with notable variation across agents ([arXiv:2604.03551](https://arxiv.org/abs/2604.03551)). Higher PR volume increases conflict exposure, so raw throughput gains erode once rebase and resolution costs are counted.
+- **Merge is treated as success**: a study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality — code smells, particularly at critical and major severities, dominate the defects introduced ([arXiv:2601.20109](https://arxiv.org/abs/2601.20109)). Acceptance rate alone over-reports value unless paired with downstream quality signals.
 
 ## Key Takeaways
 
@@ -86,6 +88,8 @@ Volume-first agent deployment underperforms when:
 ## Sources
 
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
+- [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
+- [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
 
-> All quantitative claims on this page derive from a single study. Treat specific acceptance-rate figures as initial benchmarks from one dataset snapshot, not settled industry averages.
+> Headline acceptance-rate figures derive primarily from the AIDev snapshot. Treat them as initial benchmarks corroborated by independent integration and post-merge-quality evidence, not as settled industry averages.
 

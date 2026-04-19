@@ -16,13 +16,13 @@ aliases:
 
 ## Why OTel for Agents
 
-OpenTelemetry instruments agent systems by attaching spans to LLM calls, tool invocations, and sub-agent handoffs — producing a trace tree that any compatible backend (Datadog, Grafana, Jaeger, etc.) can ingest and visualize. Ad-hoc logging lacks this structure: it’s fragile, non-composable, and locked to a single backend.
+OpenTelemetry instruments agent systems by attaching spans to LLM calls, tool invocations, and sub-agent handoffs — producing a trace tree that any compatible backend (Datadog, Grafana, Jaeger, etc.) can ingest and visualize. Ad-hoc logging is fragile, non-composable, and locked to a single backend.
 
-The mechanism is semantic conventions: the [OpenTelemetry GenAI SIG](https://opentelemetry.io/docs/specs/semconv/gen-ai/) defines standardized attribute names, span types, metrics, and events for AI systems. Because every instrumented framework writes to the same attribute schema, backends can correlate spans across agent boundaries, frameworks, and vendors without bespoke parsing. A span’s `gen_ai.operation.name`, `gen_ai.usage.input_tokens`, and parent/child relationships encode the execution tree in a form that any OTel-compatible backend understands natively — eliminating the need for per-backend log parsers and enabling multi-agent trace correlation by propagating a shared trace context through sub-agent calls.
+The mechanism is semantic conventions: the [OpenTelemetry GenAI SIG](https://opentelemetry.io/docs/specs/semconv/gen-ai/) defines standard attribute names, span types, metrics, and events for AI systems. Because every instrumented framework writes to the same attribute schema, backends correlate spans across agent boundaries, frameworks, and vendors without bespoke parsing. A span’s `gen_ai.operation.name`, `gen_ai.usage.input_tokens`, and parent/child relationships encode the execution tree natively — eliminating per-backend log parsers and enabling multi-agent trace correlation via shared trace context.
 
 ## GenAI Semantic Conventions
 
-The [GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) define standard span attributes for LLM interactions. Note that some early attributes have been deprecated as the conventions mature:
+The [GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) define standard span attributes for LLM interactions. Some early attributes have been deprecated as the conventions mature:
 
 | Attribute | Purpose |
 |-----------|---------|
@@ -33,15 +33,15 @@ The [GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen
 | `gen_ai.operation.name` | Operation type (`chat`, `create_agent`, `invoke_agent`) |
 | `gen_ai.provider.name` | Provider name |
 
-Provider-specific conventions exist for [Anthropic, OpenAI, AWS Bedrock, Azure AI Inference, and MCP](https://opentelemetry.io/docs/specs/semconv/gen-ai/).
+Provider-specific conventions cover [Anthropic, OpenAI, Bedrock, Azure AI Inference, and MCP](https://opentelemetry.io/docs/specs/semconv/gen-ai/).
 
 ## Agent Span Types
 
 The [agent span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/) define two primary span types:
 
-**Create Agent** (`gen_ai.operation.name = create_agent`): Captures agent initialization with attributes for agent ID, name, description, version, and requested model.
+**Create Agent** (`gen_ai.operation.name = create_agent`): agent initialization — attributes for agent ID, name, description, version, and requested model.
 
-**Invoke Agent** (`gen_ai.operation.name = invoke_agent`): Captures agent execution with conversation ID, input/output types, token usage metrics, temperature, and finish reasons.
+**Invoke Agent** (`gen_ai.operation.name = invoke_agent`): agent execution — conversation ID, input/output types, token usage, temperature, and finish reasons.
 
 Agent-specific attributes include `gen_ai.agent.id`, `gen_ai.agent.name`, `gen_ai.agent.description`, and `gen_ai.agent.version`.
 
@@ -67,9 +67,9 @@ Each span carries timing, token counts, and error state.
 
 Frameworks instrument OTel in [two ways](https://opentelemetry.io/blog/2025/ai-agent-observability/):
 
-**Baked-in instrumentation**: The framework emits OTel traces natively (e.g., CrewAI). Simpler adoption, but couples the framework to OTel versions.
+**Baked-in instrumentation**: framework emits OTel traces natively (e.g., CrewAI). Simpler adoption, but couples the framework to OTel versions.
 
-**External instrumentation libraries**: Separate packages add OTel spans around framework calls (e.g., Traceloop, Langtrace). Decoupled maintenance, but potential fragmentation.
+**External instrumentation libraries**: separate packages add OTel spans around framework calls (e.g., Traceloop, Langtrace). Decoupled maintenance, but potential fragmentation.
 
 Both approaches produce interoperable traces via shared semantic conventions.
 
@@ -84,7 +84,7 @@ Both approaches produce interoperable traces via shared semantic conventions.
 | Model and temperature | Reproducibility |
 | Conversation/session ID | Multi-turn correlation |
 
-Token usage and latency are the minimum viable signals. Tool I/O and model parameters add debugging depth at the cost of trace size.
+Token usage and latency are the minimum viable signals. Tool I/O and model parameters add debugging depth at trace-size cost.
 
 ## Detecting Problems from Traces
 
@@ -99,7 +99,7 @@ Structured traces enable automated detection of agent problems:
 
 OTel instrumentation is not cost-free:
 
-- **Telemetry volume at scale**: AI workloads generate 10–50× more telemetry than traditional services because every LLM call produces token-level metrics, prompt/response events, and nested tool spans. Storage costs scale with trace depth; capturing full prompt/response bodies amplifies this further.
+- **Telemetry volume at scale**: AI workloads generate [10–50× more telemetry](https://oneuptime.com/blog/post/2026-04-01-ai-workload-observability-cost-crisis/view) than traditional services because every LLM call produces token-level metrics, prompt/response events, and nested tool spans. Storage costs scale with trace depth; capturing full prompt/response bodies amplifies this further.
 - **PII exposure**: Prompts frequently contain user data. Forwarding raw tool inputs and LLM prompt content to observability backends without sanitization creates compliance risk under GDPR, HIPAA, and similar regulations.
 - **Setup overhead for prototypes**: OTel SDK configuration, exporter setup, and collector deployment add days to weeks of effort. For experimental or short-lived agents, a lightweight structured log to stdout is faster to iterate on.
 - **Spec instability**: GenAI semantic conventions are still stabilizing — attribute names have already been deprecated (e.g., `gen_ai.system` → `gen_ai.provider.name`). Baked-in instrumentation in frameworks may lag upstream spec changes.

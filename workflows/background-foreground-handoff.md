@@ -45,7 +45,7 @@ The handoff passes a compact summary, not the full conversation history. The [ni
 - Decisions made and alternatives rejected
 - Blockers and open questions for the human
 
-Anthropic's [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) describes the same mechanism for agent context resets — compaction and structured note-taking (e.g., `NOTES.md`) — directly applicable to human handoffs.
+Anthropic's [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) describes the same mechanism for agent context resets — compaction and structured note-taking (e.g., `NOTES.md`) — directly applicable to human handoffs. See [Context Engineering](../context-engineering/context-engineering.md) for the broader discipline.
 
 ### 3. Artifact-Based Handoff Points
 

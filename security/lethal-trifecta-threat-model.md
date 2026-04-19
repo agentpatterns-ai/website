@@ -109,11 +109,11 @@ Controls ([Harang, 2025](https://developer.nvidia.com/blog/practical-security-gu
 
 The trifecta model is a structural heuristic, not a guarantee. Three specific failure conditions:
 
-1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and outputting to external endpoints has all three legs by design. Removing one breaks the agent's purpose. The model does not address risk-acceptance paths for architecturally unavoidable trifectas — teams in this position still need compensating controls (output scanning, rate-limiting, anomaly detection on egress volume).
+1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and posting to external endpoints has all three legs by design. Removing one breaks the agent. For unavoidable trifectas, teams need compensating controls — output scanning, rate-limiting, egress-volume anomaly detection.
 
-2. **Partial-leg states are underspecified.** "Read-only egress" (e.g., fetching but not posting) and "tokenized private data" (real values never in context) sit between leg-present and leg-absent. The checklist's binary Yes/No columns produce false confidence when a leg is partially present.
+2. **Partial-leg states are underspecified.** "Read-only egress" (fetch but not post) and "tokenized private data" (real values never in context) sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
 
-3. **Leg removal migrates risk rather than eliminating it.** Removing private data access by tokenizing PII shifts the attack to the token resolver. Removing egress via sandboxing shifts the attack to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
+3. **Leg removal migrates risk.** Tokenizing PII shifts the attack to the token resolver. Sandboxing egress shifts the attack to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
 
 ## Related
 

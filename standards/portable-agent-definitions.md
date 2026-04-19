@@ -28,11 +28,11 @@ Agent definitions are scattered across tool-specific formats:
 
 None captures the full stack: model, tools, compliance, composition, and memory. Moving agents between tools means manual, lossy translation. ([Source: DeployHQ cross-tool comparison](https://www.deployhq.com/blog/ai-coding-config-files-guide))
 
-[Agent Definition Formats](agent-definition-formats.md) catalogues per-tool formats. This page covers the layer above: a portable definition on top of tool-specific runtimes.
+[Agent Definition Formats](agent-definition-formats.md) catalogues per-tool formats. The layer above is a portable definition that sits on top of tool-specific runtimes.
 
 ## gitagent: One Concrete Implementation
 
-[gitagent](https://github.com/open-gitagent/gitagent) (MIT, v0.1.0, ~2.7k GitHub stars as of April 2026) defines an agent as a git repository with two required files and several optional directories:
+[gitagent](https://github.com/open-gitagent/gitagent) (MIT, v0.2.0, ~2.7k GitHub stars as of April 2026) defines an agent as a git repository with two required files and several optional directories:
 
 ```
 my-agent/
@@ -114,7 +114,7 @@ The pattern is sound. The specific implementation has open questions:
 
 - **Secrets management** -- relies on `.gitignore` alone, the same mechanism behind credential leaks. ([Source: HN thread](https://news.ycombinator.com/item?id=47376584))
 - **Prompt injection surface** -- every repo file loads into agent context with no sandboxing defined
-- **Spec churn** -- at v0.1.0, adapters must track breaking changes across all supported frameworks
+- **Spec churn** -- still pre-1.0 (v0.2.0 as of April 2026), so adapters must track breaking changes across all supported frameworks
 - **Adoption** -- ~2.7k GitHub stars (April 2026), no public production data; compare [AGENTS.md](agents-md.md) at 60k+ repos under Linux Foundation
 
 ## The Pattern vs. The Tool
@@ -124,7 +124,7 @@ The underlying pattern is validated by convergent evolution:
 | Implementation | Scope | Governance |
 |---|---|---|
 | gitagent | Full agent definition (portable) | Git-native |
-| GitHub Enterprise AI Controls | Agent definitions + MCP allowlists (GitHub-only) | Org-level policies |
+| GitHub Enterprise AI Controls | Agent definitions (GitHub-only; MCP allowlists still in preview) | Org-level policies |
 | AGENTS.md | Project-level instructions (any tool) | Git-native |
 | Claude Code agents | Identity, tools, permissions (Claude-only) | Git-native |
 
@@ -136,7 +136,7 @@ The open question: can a single portable format survive framework evolution, or 
 
 - Agent config fragmentation is real: each tool defines agents differently, no conversion is lossless
 - Portable definitions extend config-as-code to the full stack: model, tools, compliance, composition
-- gitagent (MIT, v0.1.0) is useful as a reference architecture even if adoption remains limited
+- gitagent (MIT, v0.2.0) is useful as a reference architecture even if adoption remains limited
 - Git-native governance applies unchanged to full agent definitions
 - Export adapters are necessarily lossy -- treat outputs as starting points
 - Convergent evolution (GitHub Enterprise AI Controls, AGENTS.md, Claude Code agents) validates the pattern

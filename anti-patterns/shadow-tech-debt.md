@@ -62,6 +62,8 @@ Mitigation overhead may exceed benefit when:
 | 3 | Medium | **Review gates** — autonomous agents must not merge without human review on shared repositories. |
 | 4 | High | **Garbage-collection agents** — background scans for architectural inconsistencies ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html); [Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)). Requires step 1. |
 
+**Caveat on step 1.** An ETH Zurich evaluation (Gloaguen et al., [arXiv:2602.11988](https://arxiv.org/abs/2602.11988)) found that LLM-generated or overly detailed AGENTS.md files reduced task success rates by ~3% and increased inference cost by >20% — agents obediently followed unnecessary instructions. The finding narrows, rather than overturns, step 1: limit instruction files to non-inferable details (custom build commands, repository-specific conventions) and omit content an agent would infer from the code itself.
+
 ## What Good Looks Like
 
 ```mermaid

@@ -11,7 +11,7 @@ tags:
 
 # Advanced Tool Use: Scaling Agent Tool Libraries
 
-> Advanced tool use covers three Anthropic API features — deferred tool loading with tool search, programmatic calling, and input examples — that address context bloat and selection accuracy degradation when tool libraries grow beyond ~30 tools.
+> Advanced tool use is a set of Anthropic API features — deferred tool loading with tool search, programmatic calling, and input examples — that trade extra orchestration for smaller context, faster inference, and higher selection accuracy once tool libraries grow past ~30 tools.
 
 Well-designed tools ([Tool Engineering](tool-engineering.md)) and precise descriptions ([Tool Selection Guidance](tool-description-quality.md)) work at small scale. Past 30–50 tools, two problems compound: tool definitions consume the context budget before work begins, and selection accuracy degrades as the model evaluates more options. These are API-level features from [Anthropic's advanced tool use post](https://www.anthropic.com/engineering/advanced-tool-use) that address the scaling problem directly.
 
@@ -60,7 +60,7 @@ Two search variants exist:
 
 This keeps `search_files` always available while deferring the rest of the Google Drive tools.
 
-**Custom implementation:** You can build client-side tool search by returning `tool_reference` blocks from your own search logic. This is useful when you need ZDR compliance (server-side tool search is not ZDR-eligible) or want custom ranking. For a client-side alternative that does not depend on API-level features, see [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md).
+**Custom implementation:** You can build client-side tool search by returning `tool_reference` blocks from your own search logic, which is useful when you want custom ranking (e.g., embeddings-based retrieval) ([source](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#custom-tool-search-implementation)). For a client-side alternative that does not depend on API-level features, see [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md).
 
 Use when tool definitions exceed 10K tokens, you have 10+ infrequently-used tools, or you're experiencing wrong-tool selection. Skip for small tool libraries (<10 tools) or when all tools are used frequently in every session.
 
@@ -140,6 +140,8 @@ These three examples teach the model:
 
 Use for complex nested structures, domain-specific conventions not captured in schemas, or similar tools that need examples to clarify distinction. Skip for simple single-parameter tools, standard formats (URLs, emails), or when validation concerns are better handled by JSON Schema constraints.
 
+`input_examples` and the server-side tool search tool are mutually exclusive — the server-side tool search tool cannot surface tools that carry examples ([Anthropic tool search docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#error-handling)). Pick examples-with-standard-calling or tool-search-without-examples per catalog.
+
 ## Layering Strategy
 
 These features address different bottlenecks. Identify yours before adding complexity:
@@ -150,7 +152,7 @@ These features address different bottlenecks. Identify yours before adding compl
 | Large intermediate results polluting context | Programmatic Calling | Multi-step workflows with data-heavy tool outputs |
 | Parameter errors and malformed calls | Tool Use Examples | Recurring invocation failures on complex tools |
 
-Start with one. Layer when the next bottleneck surfaces. The features are independent — you can adopt any combination:
+Start with one. Layer when the next bottleneck surfaces. The features largely compose freely, with one documented caveat: tool search is **not** compatible with tool use examples — if a tool catalog needs `input_examples` on any tool, that catalog must use standard tool calling without tool search ([Anthropic tool search docs — error handling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#error-handling)). Pick one of those two per catalog; programmatic calling can layer on either.
 
 ```mermaid
 graph TD
@@ -174,13 +176,15 @@ These features add complexity that is only justified by specific bottlenecks.
 
 **Tool search backfires when:**
 - Tool libraries are small or all tools are used frequently — the extra search round-trip adds latency with no benefit
-- You need ZDR (Zero Data Retention) compliance — server-side tool search is not ZDR-eligible; use client-side tool_reference blocks instead
+- You also want tool use examples — the two features are mutually exclusive; pick whichever solves the bigger bottleneck ([source](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#error-handling))
 - Tools have similar names or overlapping descriptions — the model may retrieve the wrong set of tools, and the failure is harder to debug than a selection miss in a flat list
+- Real-world retrieval quality is below your accuracy floor — independent testing across 4,027 tools reported 56% retrieval accuracy for regex and 64% for BM25, well below Anthropic's published benchmarks ([source](https://www.arcade.dev/blog/anthropic-tool-search-4000-tools-test/))
 
 **Programmatic calling backfires when:**
 - Workflows require the model to reason about intermediate results — sandboxed execution returns only `stdout`, so intermediate reasoning is lost
 - The task involves a small number of well-defined API calls in fixed order — the infrastructure overhead (sandboxing, container management) isn't justified
-- Container cold starts are unacceptable — PTC containers expire after ~4.5 minutes of inactivity, adding latency on the first call after idle
+- Container cold starts are unacceptable — PTC containers idle out after 4.5 minutes of inactivity (30-day hard maximum), adding latency on the first call after idle ([source](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#container-lifecycle))
+- You need Zero Data Retention (ZDR) — programmatic calling runs on the code execution sandbox, which is not ZDR-eligible ([source](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#data-retention))
 
 **Tool use examples backfire when:**
 - Examples are outdated and no longer reflect real tool behavior — the model will learn the wrong conventions

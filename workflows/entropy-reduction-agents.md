@@ -17,7 +17,7 @@ aliases:
 
 Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.
 
-Codebases accumulate entropy between changes. Documentation drifts from implementation. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches. OpenAI's harness engineering team calls this proactive scanning **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Codebases accumulate entropy between changes. Documentation drifts from implementation. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches. OpenAI's [harness engineering](../agent-design/harness-engineering.md) team calls this proactive scanning **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 Before adopting this pattern, the OpenAI harness team spent 20% of weekly capacity on cleanup — "AI slop" that proved unsustainable at scale ([Alex Lavaee — OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 

@@ -136,3 +136,5 @@ Tight instructions reduce flexibility — a narrow-scope agent cannot handle req
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)

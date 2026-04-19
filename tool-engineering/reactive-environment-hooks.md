@@ -133,6 +133,7 @@ For `FileChanged`, use the same `CLAUDE_ENV_FILE` pattern but scope the hook to 
 - **Malformed `.envrc`**: `direnv allow` succeeds but `direnv export bash` fails on syntax errors in `.envrc`. The hook exits 0, `CLAUDE_ENV_FILE` receives no writes, and the agent proceeds with a stale environment — no error surfaced.
 - **CwdChanged fires unconditionally**: Every `cd` invocation triggers the hook, including directory changes inside a single task. On repos with many subdirectories, this adds latency on each directory change.
 - **Observational constraint**: Hooks cannot block the agent from proceeding. If environment loading fails, the next Bash invocation runs in the wrong environment with no signal to the agent.
+- **FileChanged is blind to Bash-driven edits**: `FileChanged` only fires for changes made by Claude Code's Edit/Write tools — not for files modified via the Bash tool ([claude-code#44925](https://github.com/anthropics/claude-code/issues/44925)). If the agent runs `mise use`, appends to `.envrc` via a shell redirect, or otherwise edits a watched file through Bash, the hook does not fire and the environment remains stale. Trigger a reload explicitly or depend on `CwdChanged` instead.
 
 ## Key Takeaways
 

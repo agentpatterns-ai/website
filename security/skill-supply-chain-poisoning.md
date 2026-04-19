@@ -67,7 +67,7 @@ graph TD
 
 ### 1. Never Pull Directly from Public Registries
 
-Block agents from pulling skills directly from open marketplaces at runtime. Maintain an internal registry of vetted skills. Agents load only from this mirror — the public registry is never an execution-time dependency.
+Block runtime fetches from open marketplaces. Agents load only from an internal mirror of vetted skills — the public registry is never an execution-time dependency.
 
 ### 2. Intake Gates Before Registration
 
@@ -86,22 +86,11 @@ Lock skills to specific, audited versions with immutable content hashes — neve
 
 ### 4. Multi-Model Verification at Runtime
 
-Only 1.6% of adversarial payloads bypass all tested models simultaneously. Running skill execution through two independent models and requiring consensus on tool call patterns provides a high-confidence runtime check. Defense layers interact asymmetrically — removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged — so test the specific model combination before relying on it.
+Only 1.6% of adversarial payloads bypass all tested models simultaneously. Running skill execution through two independent models and requiring consensus on tool call patterns provides a high-confidence runtime check. Defense layers interact asymmetrically — removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged — test the specific combination before relying on it.
 
 ### 5. Least-Privilege Execution
 
-Contain blast radius by running agents that load external skills with minimal OS-level permissions: a dedicated user, scoped filesystem access (not blanket home directory access), and deny-by-default network egress with an allowlist of required domains. See [Blast Radius Containment](blast-radius-containment.md) and [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md).
-
-## When This Backfires
-
-The defense stack carries real operational costs that make partial adoption common — and partial adoption leaves residual exposure:
-
-- **Intake scanner false positives**: LLM-based semantic scanners misclassify legitimate skills as malicious, blocking productivity and eroding team confidence in the gate. Teams that lower the threshold to reduce noise also lower detection of genuine payloads.
-- **Pinning maintenance burden**: Every skill update requires a new review cycle and hash rotation. For teams managing dozens of skills, this creates a backlog that delays patching even when a malicious skill is discovered upstream.
-- **Multi-model verification latency**: Requiring consensus across two models roughly doubles inference time per skill invocation. Latency-sensitive workflows may disable the check to meet SLAs, removing the strongest runtime control.
-- **Internal mirror scope creep**: Mirrors require a governance process — who can approve? who audits the auditors? Without a clear owner, the mirror becomes a rubber stamp and new skills bypass the intake gate informally.
-
-The defense stack is most justified when agents operate with broad filesystem or network access. For read-only agents over a fixed, small skill set sourced from a single trusted author, the full stack is disproportionate — hash pinning alone may be sufficient.
+Run skill-loading agents with a dedicated user, scoped filesystem access, and deny-by-default network egress with an allowlisted domain set. See [Blast Radius Containment](blast-radius-containment.md) and [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md).
 
 ## Example
 
@@ -141,14 +130,14 @@ The agent config blocks runtime pulls from public registries. `skill-scanner` ca
 
 ## When This Backfires
 
-The defense stack described above is the correct posture for production agents with broad skill access, but applying it uniformly has real costs:
+The full stack carries real operational costs, and partial adoption is common — but partial adoption leaves residual exposure:
 
-- **False-positive blocking**: LLM-based semantic scanners generate false positives on obfuscated-looking-but-legitimate examples (security research tools, penetration testing utilities, encrypted configuration). Teams that fail-on-high without review capacity will block productive skills and erode trust in the intake gate.
-- **Registry maintenance overhead**: An internal mirror requires a maintainer workflow — intake, review, version management, and revocation. For teams of fewer than five engineers pulling from a small, trusted set of first-party skills, the operational cost may exceed the risk.
-- **Multi-model verification latency**: Running every skill execution through two independent models adds round-trip cost. For high-throughput or latency-sensitive agents, this may be prohibitive. Profile the latency increase before deploying; consider restricting multi-model verification to first-use or high-privilege operations rather than every call.
-- **Hash pinning vs. update velocity**: Pinning at the hash level prevents rug-pull mutations but also blocks legitimate security patches. Establish a re-vetting workflow before pinning — otherwise teams bypass the gate rather than update it.
+- **Scanner false positives**: LLM-based semantic scanners misclassify legitimate security tooling, pen-test utilities, and obfuscated-but-valid configuration as malicious. Teams that fail-on-high without review capacity block productive skills and erode trust in the gate; teams that lower the threshold lose detection of real payloads.
+- **Pinning vs. patch velocity**: Hash pinning prevents rug-pull mutations but blocks legitimate security patches. Without a re-vetting workflow, pinning creates a backlog that delays patching even when an upstream skill is confirmed malicious.
+- **Multi-model latency**: Consensus across two models roughly doubles per-invocation inference time. Latency-sensitive workflows disable the check to meet SLAs, removing the strongest runtime control. Restrict it to first-use or high-privilege calls rather than every invocation.
+- **Mirror governance drift**: Without a clear owner, the internal mirror becomes a rubber stamp and new skills bypass the intake gate informally.
 
-The defense stack is most justified when agents load skills from third-party or community registries at runtime. For fully internal skill sets authored and maintained by the same team, threat exposure is lower and the full stack may be replaced with code review and signed commits.
+The full stack is most justified when agents load third-party skills at runtime with broad filesystem or network access. For fully internal skill sets authored by the same team, or read-only agents over a small trusted set, hash pinning plus code review may be sufficient.
 
 ## Key Takeaways
 

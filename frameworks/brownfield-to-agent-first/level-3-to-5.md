@@ -17,9 +17,7 @@ tags:
 
 ## What L3 Looks Like
 
-At L3, the agent can execute well-defined, scoped tasks reliably without per-action supervision. Mechanical enforcement prevents categories of error. Structured tasks define repeatable workflows. Progress files bridge sessions.
-
-The remaining gaps:
+At L3, the agent executes scoped tasks reliably without per-action supervision. Mechanical enforcement, structured tasks, and progress files are in place. Remaining gaps:
 
 - Agent PRs require full human review — no automated quality gate beyond lint/tests
 - No measurement of agent output quality over time
@@ -35,9 +33,9 @@ At L5, the agent operates as a first-class contributor:
 - The agent receives goal specifications (intent + success criteria) rather than step-by-step tasks
 - Agent work integrates into CI/CD — issues trigger agent sessions, agent sessions produce PRs
 
-**L4 is an intermediate state**: the agent can operate autonomously with bounded risk. L5 builds on L4 by adding goal-driven planning and CI integration.
+**L4 is an intermediate state**: bounded-risk autonomy. L5 adds goal-driven planning and CI integration on top.
 
-The [Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent-autonomy) shows experienced users (~750 sessions) enable full auto-approve in 40%+ of their work — but 80% of tool calls come from agents with at least one safeguard (restricted permissions or human approval). L5 is the objective, not an expectation for every task type.
+[Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent-autonomy) shows experienced users (~750 sessions) enable full auto-approve in 40%+ of their work, but 80% of tool calls still come from agents with at least one safeguard. L5 is the objective, not an expectation for every task type.
 
 ---
 
@@ -45,7 +43,7 @@ The [Anthropic autonomy data](https://www.anthropic.com/research/measuring-agent
 
 ### Step 1: Define Output Validation Rules
 
-At L3, the agent's output passes if lint, types, and tests pass. At L4, you add policy-level validation: rules that check what the agent changed, not just whether the code compiles.
+At L3, agent output passes if lint, types, and tests pass. L4 adds policy-level validation: rules that check what the agent changed, not just whether the code compiles.
 
 **Diff validation in CI:**
 
@@ -85,19 +83,15 @@ jobs:
           node scripts/check-test-pairing.js
 ```
 
-**Coverage enforcement on changed files** is more effective than global coverage thresholds for brownfield repos with uneven coverage. It prevents coverage erosion on new code without requiring a big-bang coverage increase across the whole repo.
+**Coverage enforcement on changed files** beats global coverage thresholds in brownfield repos with uneven coverage: it prevents erosion on new code without forcing a big-bang coverage rewrite.
 
 ### Step 2: Add Observability for Agent Sessions
 
-At L4, you need visibility into what agents did and why, not just whether the output is correct. This enables audit and debugging when agent work produces unexpected results.
+L4 requires visibility into what agents did and why — not just whether the output is correct — for audit and debugging when results surprise.
 
-**Structured agent work branches:**
+**Structured agent work branches:** name them consistently (`agent/issue-123-add-rate-limiting`, `copilot/feature/user-preferences`) so agent PRs are identifiable and CI can apply agent-specific validation rules.
 
-Name agent branches consistently — `agent/issue-123-add-rate-limiting` or `copilot/feature/user-preferences`. This makes agent PRs identifiable in the PR list and allows CI to apply agent-specific validation rules.
-
-**Commit annotation:**
-
-When the agent commits, include a structured trace in the commit message or as a PR comment:
+**Commit annotation:** include a structured trace in the commit message or as a PR comment:
 
 ```
 feat(rate-limit): implement sliding window rate limiter
@@ -112,11 +106,11 @@ Lint: clean
 Type check: clean
 ```
 
-This creates an audit trail without requiring separate tooling. It enables human reviewers to understand agent decision-making without reading the full session transcript.
+An in-band audit trail — reviewers understand agent decisions without reading the full session transcript.
 
 ### Step 3: Define Rollback Triggers
 
-Before enabling broader agent autonomy, define the conditions under which agent work is automatically rejected or flagged:
+Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy:
 
 | Trigger | Response |
 |---------|----------|
@@ -125,7 +119,7 @@ Before enabling broader agent autonomy, define the conditions under which agent 
 | Diff size exceeds limit (e.g., >500 lines) | Flag for human review before merge approval |
 | Agent PR modifies security-sensitive paths | Require security team approval |
 
-Define these in CI before granting agents broader scope. The Anthropic autonomy research confirms that 80% of tool calls come from agents with at least one safeguard — L4 formalizes and automates those safeguards ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)).
+[Anthropic's autonomy research](https://www.anthropic.com/research/measuring-agent-autonomy) confirms 80% of tool calls come from agents with at least one safeguard — L4 formalizes and automates those safeguards.
 
 ---
 
@@ -133,9 +127,7 @@ Define these in CI before granting agents broader scope. The Anthropic autonomy 
 
 ### Step 1: Write Goal Specifications
 
-At L3, tasks tell the agent what to do step by step. At L5, goal specifications tell the agent what outcome to achieve and let it plan the steps.
-
-A goal specification:
+L3 tasks prescribe steps; L5 goal specifications declare the outcome and acceptance criteria, leaving the plan to the agent.
 
 ```yaml
 # goals/add-user-preferences.yaml
@@ -159,15 +151,13 @@ out_of_scope:
   - Preference versioning or history
 ```
 
-The agent reads the goal specification, decomposes it into implementation steps, executes those steps, verifies against the success criteria, and submits a PR. The human reviews the PR, not the plan.
+The agent decomposes the spec into steps, executes them, verifies against success criteria, and submits a PR. The human reviews the PR, not the plan.
 
-**Why goal specs outperform step-by-step tasks at L5**: Structured task definitions constrain how the agent reaches the goal. Goal specs define what "done" looks like and let the agent find the best path — which may be better than the path a human would prescribe. The [SASE paper (arXiv:2509.06216)](https://arxiv.org/abs/2509.06216) frames this as the SE 3.0 → SE 4.0 transition: from goal-agentic (human sets goals, agent executes) to domain-autonomous.
+**Why goal specs outperform step-by-step tasks at L5**: structured task definitions constrain *how* the agent works; goal specs define *what* "done" means and let the agent find a better path than a human would prescribe. The [SASE paper (arXiv:2509.06216)](https://arxiv.org/abs/2509.06216) frames this as the SE 3.0 → SE 4.0 transition: goal-agentic to domain-autonomous.
 
 ### Step 2: Add Evals for Continuous Quality Measurement
 
-Evals measure agent output quality across runs and over time. They answer "is the agent getting better or worse?" in a way that pass/fail CI tests cannot.
-
-**Why evals matter at L5**: At L4, you know if the agent's output passes lint, types, and tests. At L5, you need to know if the agent's output is correct, complete, and consistent with your quality bar — not just syntactically valid.
+Evals measure agent output quality across runs and over time — answering "is the agent getting better or worse?" in a way pass/fail CI cannot. CI checks syntactic validity; evals check whether output is correct, complete, and consistent with your quality bar.
 
 A minimal eval suite for a brownfield repo:
 
@@ -201,7 +191,7 @@ See the [Eval-Driven Development](../../workflows/eval-driven-development.md) an
 
 ### Step 3: Integrate Agents into CI/CD
 
-At L5, agents participate in the development pipeline without being manually invoked. A GitHub issue triggers an agent session; the session produces a PR; CI validates the PR; human review focuses on design and completeness, not mechanical correctness.
+At L5, agents enter the pipeline without manual invocation: an issue triggers a session, the session produces a PR, CI validates it, and human review focuses on design — not mechanical correctness.
 
 **GitHub Actions workflow for issue-triggered agent work:**
 
@@ -237,34 +227,34 @@ jobs:
         run: gh issue edit ${{ github.event.issue.number }} --add-label "agent-in-progress"
 ```
 
-This workflow requires L3 and L4 infrastructure to function safely — the hooks, output validation gates, and rollback triggers are what make it safe to run agents in CI without manual oversight per task.
+This depends on L3 and L4 infrastructure: hooks, output validation gates, and rollback triggers are what make per-task autonomy safe.
 
 ### Step 4: Verify the Transition
 
-Run this exit check for L4:
+L4 exit check:
 
-1. Open a PR from an agent branch that introduces a direct DB import (violating the layer rule). Verify the CI validation step catches and blocks it.
-2. Review 10 recent agent PRs. What percentage required human corrections beyond code review comments? Target: below 20%.
+1. Open a PR from an agent branch that introduces a direct DB import (layer-rule violation). Verify CI validation catches and blocks it.
+2. Review 10 recent agent PRs — what share required human corrections beyond review comments? Target: below 20%.
 
-Run this exit check for L5:
+L5 exit check:
 
-1. Create a well-scoped issue with a clear acceptance criterion. Apply the `agent-implement` label. Does the agent produce a PR that meets the acceptance criterion without clarification?
-2. Compare agent PR review time to human PR review time. L5 review should focus on design decisions, not mechanical errors.
+1. Create a well-scoped issue with a clear acceptance criterion. Apply the `agent-implement` label. Does the agent ship a PR that meets the criterion without clarification?
+2. Compare agent PR review time to human PR review time. L5 review should focus on design, not mechanical errors.
 
 ---
 
 ## When to Stay at L3 or L4
 
-Not every team or codebase warrants the full L3→L5 pipeline. Stop at L3 if:
+Not every team needs the full L3→L5 pipeline. Stop at L3 if:
 
-- **Low agent PR volume** — if the team runs fewer than a handful of agent sessions per week, the CI automation overhead (eval maintenance, issue-triggered workflows, coverage gates) costs more in setup and upkeep than it saves in review time.
-- **Unstable codebase structure** — eval suites break every time the architecture changes. In fast-moving brownfield repos where the service/repository/route pattern itself is evolving, evals require constant rewrites and quickly become a maintenance burden rather than a quality gate.
-- **Unbounded API cost exposure** — issue-triggered CI agent sessions fire on every label application with no per-task budget cap. Without explicit cost controls, a backlog of labeled issues can generate unexpected API spend before the PR pipeline catches a systematic agent failure.
+- **Low agent PR volume** — under a handful of agent sessions per week, CI automation overhead (evals, issue-triggered workflows, coverage gates) costs more than it saves.
+- **Unstable codebase structure** — eval suites break with every architecture change; in fast-moving repos where the service/repository pattern itself is evolving, they become a maintenance burden, not a quality gate.
+- **Unbounded API cost exposure** — issue-triggered sessions fire on every label with no per-task budget cap; backlogs can generate surprise spend before PR review catches systematic failure.
 
 Stop at L4 if:
 
-- **Tasks are not goal-decomposable** — L5 goal specifications require acceptance criteria that the agent can verify independently. Open-ended exploratory work ("investigate why performance degraded"), cross-cutting refactors, or tasks that depend on unwritten requirements stay safely at L4 with structured task definitions.
-- **The codebase lacks test coverage for agent output** — evals are only meaningful if the behaviors being measured are testable. If the parts of the codebase the agent touches have <50% coverage, evals will give false confidence rather than real quality signals.
+- **Tasks are not goal-decomposable** — open-ended exploration, cross-cutting refactors, or work that depends on unwritten requirements lacks the verifiable acceptance criteria L5 needs.
+- **Insufficient test coverage** — evals are only meaningful for testable behaviors. Below ~50% coverage on the touched code paths, evals give false confidence rather than real signal.
 
 ---
 

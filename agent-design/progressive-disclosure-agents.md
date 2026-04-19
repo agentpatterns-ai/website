@@ -15,19 +15,19 @@ tags:
 
 ## The Problem with Monolithic Definitions
 
-Every token in an agent definition consumes [context budget](../context-engineering/context-budget-allocation.md) on every invocation, whether or not that instruction is relevant to the current task. A monolithic agent definition embedding all possible instructions, checklists, and procedures for every task the agent might handle will be mostly irrelevant noise for any given task.
+Every token in an agent definition consumes [context budget](../context-engineering/context-budget-allocation.md) on every invocation, whether relevant to the current task or not. A monolithic definition embedding every checklist and procedure is mostly noise for any given task.
 
-An agent asked to draft a blog post does not need its complete code review checklist loaded into context. An agent running a deployment does not need its content style guide. Yet monolithic definitions load everything unconditionally.
+An agent drafting a blog post does not need its code review checklist loaded. An agent running a deployment does not need its content style guide. Monolithic definitions load everything unconditionally.
 
 ## The Pattern
 
 Structure agent definitions in two layers:
 
-**Layer 1 — The definition (always loaded):** Identity, scope, quality bar, and references to available skills. This is small — typically under 50 lines. It answers: who is this agent, what is it for, what standards does it hold, and where can it find detailed procedures?
+**Layer 1 — The definition (always loaded):** Identity, scope, quality bar, and references to available skills. Typically under 50 lines. Answers: who is this agent, what is it for, what standards apply, and where are detailed procedures?
 
-**Layer 2 — Skills (loaded on demand):** Detailed how-to knowledge, checklists, step-by-step procedures, domain-specific rules. Each skill is self-contained and loaded by the agent when a task requires it.
+**Layer 2 — Skills (loaded on demand):** Detailed how-to knowledge, checklists, step-by-step procedures, domain-specific rules. Each skill is self-contained and loaded when a task requires it.
 
-The agent reads the definition, understands its role and capabilities, then reads only the skills relevant to the current task.
+The agent reads the definition, then reads only the skills relevant to the current task.
 
 ## What Goes Where
 

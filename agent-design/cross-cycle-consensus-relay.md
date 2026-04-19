@@ -63,7 +63,7 @@ EOF
 mv memories/.consensus.tmp memories/consensus.md
 ```
 
-Write to a temp file in the same directory, then rename. The rename is atomic on POSIX filesystems — the relay is either fully updated or unchanged, never in a partial state.
+Write to a temp file in the same directory, then rename. The rename is atomic on POSIX filesystems — the relay is either fully updated or unchanged, never in a partial state ([`rename(2)`](https://man7.org/linux/man-pages/man2/rename.2.html): "If newpath already exists, it will be atomically replaced").
 
 ## Convergence Detection
 
@@ -161,3 +161,6 @@ The agent is responsible for writing the relay at cycle end using the temp-file-
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — tracking agent progress across the multi-session loops this pattern enables
 - [Idempotent Agent Operations](idempotent-agent-operations.md) — design operations for safe retry across relay cycles
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages
+- [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems that persist knowledge across sessions and complement the relay
+- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons that the relay's Key Decisions field preserves forward
+- [Memory Reinforcement Learning](memory-reinforcement-learning.md) — reinforcing agent behavior via cross-cycle memory updates

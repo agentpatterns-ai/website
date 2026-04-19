@@ -44,7 +44,7 @@ graph TD
 | **Graph-based** | Dependency graphs, call graphs, ASTs | Captures cross-file relationships | Expensive to build and maintain |
 | **Hybrid** | Combines semantic + structural signals | Best accuracy on complex tasks | Highest computational cost |
 
-Graph-based retrieval captures dependencies that text similarity misses: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior [unverified -- graph-based "consistently" outperforming other methods may be benchmark-dependent].
+Graph-based retrieval captures dependencies that text similarity misses: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior. Relative performance is task-dependent: [one study](https://arxiv.org/abs/2503.20589) reports that retrieved similar code can introduce noise and degrade generation accuracy by up to 15%, while graph-based retrieval provides the largest gains on tasks whose required dependencies share no vocabulary with the task description.
 
 ## How Repository-Level Retrieval Works
 
@@ -87,11 +87,6 @@ Aider uses a repository map built from ASTs (tree-sitter) and PageRank to select
 4. Includes the top-ranked context (signatures, docstrings, import chains) in the generation prompt alongside the target file
 
 The resulting prompt contains cross-file type signatures and conventions that a single-file approach would miss, reducing errors from mismatched function signatures or unknown error types.
-
-## Unverified Claims
-
-- Graph-based retrieval "consistently" outperforms lexical and semantic methods across all task types [unverified -- survey aggregates across studies; individual results vary by task type and codebase size]
-- Clear dependency structure improves AI retrieval quality [unverified -- logically sound but not directly tested in the survey]
 
 ## Related
 

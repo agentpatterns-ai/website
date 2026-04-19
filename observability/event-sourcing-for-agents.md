@@ -27,7 +27,7 @@ Both failure modes worsen as task length increases.
 
 ## The ESAA Pattern
 
-[arXiv:2602.23193](https://arxiv.org/abs/2602.23193) presents the Event Sourcing for Autonomous Agents (ESAA) pattern, validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs.
+[arXiv:2602.23193](https://arxiv.org/abs/2602.23193) presents the Event Sourcing for Autonomous Agents (ESAA) pattern — applying [Fowler's event sourcing model](https://martinfowler.com/eaaDev/EventSourcing.html) to LLM agents — validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs.
 
 The pattern applies event sourcing to agent execution:
 
@@ -154,3 +154,4 @@ If the derived state diverges from the filesystem, `esaa verify` reports which e
 - [Making Application Observability Legible to Agents](observability-legible-to-agents.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
 - [Agent Debugging: Diagnosing and Fixing Bad Agent Output](agent-debugging.md)
+- [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](agent-debug-log-panel.md)

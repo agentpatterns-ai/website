@@ -17,9 +17,9 @@ aliases:
 
 ## The Compliance Gap
 
-Mutable logs carry no compliance weight. An agent that logs every tool call to a writable file gives no proof that the log was not altered after the fact. Regulated environments — finance, healthcare, EU AI Act Article 12 — require evidence that agents operated within defined bounds and that the record of that operation cannot be modified retroactively.
+Mutable logs carry no compliance weight. An agent that logs tool calls to a writable file gives no proof the log was not altered after the fact. Regulated environments — finance, healthcare, EU AI Act Article 12 — require evidence that agents operated within defined bounds and that the record cannot be modified retroactively.
 
-A cryptographic audit trail closes this gap: each action produces a signed receipt, and receipts are hash-chained so that any modification or omission is detectable by verifying the chain.
+A cryptographic audit trail closes this gap: each action produces a signed receipt, and receipts are hash-chained so any modification or omission is detectable on verification.
 
 ## Architecture: Three-Phase Middleware
 
@@ -41,13 +41,13 @@ graph TD
 | **Tool execution** | Run the tool normally — no change to tool behavior |
 | **Receipt signing** | Sign the action record (tool name, parameters, result hash, timestamp, policy outcome) with ML-DSA-65 and append to the chain |
 
-The chain is tamper-evident by construction: each receipt includes a hash of the previous receipt. Modifying or omitting any entry breaks the chain at that point — verification fails automatically ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)).
+The chain is tamper-evident by construction: each receipt includes a hash of the previous one. Modifying or omitting any entry breaks the chain — verification fails automatically ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)).
 
 ## Post-Quantum Signatures: ML-DSA
 
-Standard ECDSA or RSA signatures provide adequate security today but are vulnerable to quantum computers. For long-term regulatory validity — where audit records must remain verifiable for years or decades — the signature algorithm must remain secure against quantum attack.
+Standard ECDSA or RSA signatures are adequate today but vulnerable to quantum attack. For audit records that must remain verifiable for years or decades, the signature algorithm must stay secure against a quantum adversary.
 
-ML-DSA (FIPS 204) is a module-lattice-based digital signature standard finalized by NIST. It is quantum-resistant and is the algorithm used in the reference implementation for this pattern ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)). The ML-DSA-65 parameter set provides security equivalent to AES-192.
+ML-DSA (FIPS 204) is a module-lattice-based digital signature standard finalized by NIST and used in this pattern's reference implementation ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)). The ML-DSA-65 parameter set targets security equivalent to AES-192.
 
 Each signed receipt contains ([asqav-sdk](https://github.com/jagmarques/asqav-sdk)):
 
@@ -77,7 +77,7 @@ Three deployment configurations trade enforcement strength for integration compl
 | **Bounded** | Pre-execution gate (`gate_action`) + post-execution close (`complete_action`) | Approval is cryptographically linked to outcome |
 | **Detectable** | Sign and chain each action post-hoc | Tampering or omission is detectable on verification |
 
-Strong enforcement is the highest assurance tier but requires routing all tool calls through a proxy. Detectable enforcement adds minimal latency and suits workflows where post-hoc verification is acceptable.
+Strong enforcement has the highest assurance but requires routing all tool calls through a proxy. Detectable enforcement adds minimal latency and suits workflows where post-hoc verification is acceptable.
 
 ## Implementation: Decorator Pattern
 
@@ -111,7 +111,7 @@ with asqav.session() as s:
 | **Regulatory credibility** | Tamper-evident receipts carry evidentiary weight that mutable logs do not |
 | **Quantum durability** | ML-DSA receipts remain verifiable against quantum computers; ECDSA receipts do not |
 
-This pattern targets compliance-first use cases where the regulatory credibility benefit outweighs the infrastructure cost. It is not a security hardening mechanism — it does not prevent a malicious agent from acting; it produces unforgeable evidence of what the agent did. Pair with [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) for preventive controls.
+This pattern targets compliance-first use cases where regulatory credibility outweighs infrastructure cost. It is not a hardening mechanism — it does not prevent a malicious agent from acting; it produces unforgeable evidence of what the agent did. Pair with [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) for preventive controls.
 
 ## Regulatory Targets
 
@@ -178,5 +178,4 @@ To verify the chain for a compliance audit, a verifier checks that each `chain_h
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Permission-Gated Commands](permission-gated-commands.md)
 - [Secrets Management for Agents](secrets-management-for-agents.md)
-- [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)

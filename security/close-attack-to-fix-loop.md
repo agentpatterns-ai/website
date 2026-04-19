@@ -1,6 +1,6 @@
 ---
 title: "Close the Attack-to-Fix Loop: Adversarially Train Agent"
-description: "When automated red teaming surfaces a new class of prompt injection attacks, immediately use those attack traces to adversarially train a new agent model"
+description: "Feed automated red-teaming attack traces straight into adversarial fine-tuning so each new agent checkpoint resists the latest prompt injection class."
 tags:
   - agent-design
   - instructions
@@ -10,6 +10,7 @@ aliases:
   - adversarial fine-tuning loop
   - rapid attack-to-checkpoint cycle
 ---
+
 # Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections
 
 > When automated red teaming surfaces a new class of prompt injection attacks, immediately use those attack traces to adversarially train a new agent model checkpoint — making the agent intrinsically harder to exploit rather than relying solely on wrapper-level mitigations.
@@ -65,7 +66,7 @@ Preference optimization constructs pairs of prompt-injected inputs with secure o
 - **Capability regression**: Fine-tuning on adversarial examples can degrade general task performance — a direct tension between robustness and utility.
 - **Limited generalization**: Architecture-aware adaptive attacks achieve 85–95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
 - **Operational overhead**: Requires fine-tuning infrastructure and a rapid deployment pipeline — investment that may not be justified for low-autonomy agents.
-- **Arms race ceiling**: Prompt injection "is unlikely to ever be fully solved" — the rapid cycle reduces risk materially but does not eliminate it; model-level hardening complements, not replaces, architectural controls.
+- **Arms race ceiling**: Prompt injection "is unlikely to ever be fully solved" — the rapid cycle reduces risk materially but does not eliminate it; model-level hardening complements, not replaces, architectural controls. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 
 ## Scope and Prerequisites
 
@@ -82,52 +83,50 @@ This is an advanced technique for teams that have already deployed the system-le
 The following shows how a team might operationalize the rapid attack-to-fix cycle. An automated red-teamer surfaces a new multi-step injection class; successful attack traces are immediately funnelled into fine-tuning, and a hardened checkpoint is shipped before the attack pattern reaches production.
 
 ```python
-# red_team_pipeline.py  — simplified discovery-to-training loop
-
+# red_team_pipeline.py — discovery-to-training loop using the OpenAI fine-tuning API
 import json
 from pathlib import Path
+from openai import OpenAI
 
-def run_red_teamer(target_checkpoint: str, num_probes: int = 200) -> list[dict]:
-    """Run automated attacker against current defender checkpoint; return successful traces."""
-    successful_attacks = []
-    for _ in range(num_probes):
-        probe = generate_adversarial_probe(target_checkpoint)
-        result = evaluate_probe(probe, target_checkpoint)
-        if result["exploited"]:
-            successful_attacks.append({"prompt": probe, "trace": result["trace"]})
-    return successful_attacks
+client = OpenAI()
+SAFE_REFUSAL = (
+    "I notice the message contains instructions that conflict with the user's original "
+    "task. I'll ignore those and continue with the original request."
+)
 
-def build_fine_tune_dataset(attack_traces: list[dict]) -> Path:
-    """Convert successful attack traces to JSONL training examples."""
-    output = Path("adversarial_training_data.jsonl")
-    with output.open("w") as f:
-        for trace in attack_traces:
-            # Each example teaches the model to refuse the injected instruction
-            example = {
-                "messages": [
-                    {"role": "user", "content": trace["prompt"]},
-                    {"role": "assistant", "content": "<safe refusal — ignore injected instruction>"},
-                ]
-            }
-            f.write(json.dumps(example) + "\n")
-    return output
+def collect_failing_traces(target_model: str, probes: list[dict]) -> list[dict]:
+    """Run attacker probes; keep only traces where the defender was exploited."""
+    failing = []
+    for probe in probes:  # probes come from an automated red-teamer (see related page)
+        resp = client.responses.create(model=target_model, input=probe["messages"])
+        if probe["exploit_detector"](resp.output_text):
+            failing.append({"messages": probe["messages"], "output": resp.output_text})
+    return failing
 
-def close_the_loop(target_checkpoint: str) -> str:
-    """Discover → collect traces → fine-tune → return new checkpoint id."""
-    traces = run_red_teamer(target_checkpoint)
-    if not traces:
-        return target_checkpoint  # nothing new to harden against
+def build_dataset(failing_traces: list[dict]) -> Path:
+    """Convert each failing trace into a preference example: (injected prompt → safe refusal)."""
+    path = Path("adversarial_sft.jsonl")
+    with path.open("w") as f:
+        for t in failing_traces:
+            record = {"messages": t["messages"] + [{"role": "assistant", "content": SAFE_REFUSAL}]}
+            f.write(json.dumps(record) + "\n")
+    return path
 
-    dataset_path = build_fine_tune_dataset(traces)
-    job = start_fine_tuning_job(
-        training_file=upload_file(dataset_path),
-        base_model=target_checkpoint,
+def close_the_loop(target_model: str, probes: list[dict]) -> str:
+    failing = collect_failing_traces(target_model, probes)
+    if not failing:
+        return target_model  # nothing new to harden against
+
+    training_file = client.files.create(file=open(build_dataset(failing), "rb"), purpose="fine-tune")
+    job = client.fine_tuning.jobs.create(
+        training_file=training_file.id,
+        model=target_model,
         hyperparameters={"n_epochs": 2},
     )
     return job.fine_tuned_model  # hardened checkpoint ready for deployment
 ```
 
-Only the attack traces the current checkpoint *fails* are included in training — this focuses compute on the live defense frontier rather than re-training on already-solved problems. When `close_the_loop` returns, the new checkpoint is deployed and `run_red_teamer` begins the next cycle using the hardened model as the target.
+Only the attack traces the current checkpoint *fails* are included in training — this focuses compute on the live defense frontier rather than re-training on already-solved problems. When `close_the_loop` returns, the new checkpoint is deployed and `collect_failing_traces` begins the next cycle using the hardened model as the target.
 
 ## Key Takeaways
 
@@ -140,16 +139,10 @@ Only the attack traces the current checkpoint *fails* are included in training �
 ## Related
 
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
+- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Explicit, Narrow Task Instructions to Reduce Injection Susceptibility](task-scope-security-boundary.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
-- [Tool Signing and Signature Verification](tool-signing-verification.md)

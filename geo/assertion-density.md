@@ -30,7 +30,7 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 | Fluency Optimization | +15–30% |
 | Keyword Stuffing | –10% |
 
-**Caveats**: All three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, limiting real-world applicability. The directional finding — specific over vague — is robust; exact percentages are an upper bound.
+**Caveats**: All three top techniques add content rather than modifying it — PAWC rewards length, giving content-addition techniques a structural advantage. The study permitted fabricated statistics, limiting real-world applicability (see [Sandbox SEO's critique](https://sandboxseo.com/generative-engine-optimization-experiment/) of the methodology). The directional finding — specific over vague — is robust; exact percentages are an upper bound.
 
 ## What Counts
 
@@ -51,20 +51,18 @@ The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.
 
 ## Rewrite Guide
 
-Find vague qualifiers and replace with specifics. If you don't have a source, tag with `[unverified]` rather than inventing one.
+Find vague qualifiers and replace with specifics. If no source exists for a claim, weaken it to a factually-supportable form or remove it — do not invent statistics or use hedge tags.
 
 | Before | After |
 |--------|-------|
-| "Context priming significantly improves output quality." | "Context priming reduces rework — agents that read relevant files before implementing produce output that matches existing conventions without manual correction. `[unverified]`" |
+| "Context priming significantly improves output quality." | "Context priming reduces rework — agents that read relevant files before implementing produce output that matches existing conventions, because the retrieved context constrains generation to existing patterns." |
 | "Most developers use AI coding assistants." | "75% of developers surveyed by GitHub in 2024 reported using AI coding tools at least weekly." |
 | "Keyword stuffing is counterproductive." | "Keyword stuffing reduced source visibility by 10% in the Princeton GEO benchmark (Aggarwal et al., KDD 2024)." |
 | "Large context windows help with complex tasks." | "Claude 3.5 Sonnet supports a 200K-token context window, sufficient to load an entire mid-size codebase before implementing." |
 
-## The `[unverified]` Convention
+## Unsourceable Claims
 
-- `[unverified]` claims are retrieval liabilities — the GEO study found that PAWC rewards length and attributed specificity, not vague generalities; unverifiable assertions offer neither
-- Find a source and cite it, or keep the tag to signal the gap
-- Removing the tag without adding a source creates a worse false confidence signal
+If a claim cannot be backed by a real source, rewrite it in a weaker factually-supportable form or remove it entirely. Hedge tags produce a false-confidence signal without adding retrieval value — the GEO study found PAWC rewards length and attributed specificity, not vague generalities.
 
 ## Limits
 

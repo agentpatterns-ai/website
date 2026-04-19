@@ -55,35 +55,24 @@ Start at N=10-20. Reduce if hitting 429s; increase if headroom exists and throug
 
 ## Why Not a True Sliding Window
 
-A sliding window would maintain exactly N agents at all times — the moment one completes, immediately spawn a replacement. This maximises throughput by eliminating the wait for the slowest agent in each batch.
-
-**It isn't implementable with LLM orchestrators.** A sliding window requires `wait-for-any` semantics — block until the first of N tasks completes, then act. LLM orchestrators only support `wait-for-all` — they spawn a group of background agents and resume when the entire group finishes. Claude Code's agent teams architecture confirms this: the lead waits for all teammates to complete, with no mechanism to act on whichever finishes first ([Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)).
-
-The practical consequence is minor: a slow agent slightly delays the next batch. For workloads where items have similar duration, the difference is negligible.
-
-A true sliding window requires an external process or queue worker outside the LLM context — a background service that polls for completed tasks and enqueues new ones.
+A sliding window keeps exactly N agents in flight, spawning a replacement the moment one finishes. It eliminates head-of-line waits but requires `wait-for-any` semantics — block until the first of N tasks completes, then act. LLM orchestrators only support `wait-for-all`: they spawn a group of background agents and resume when the entire group finishes ([Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)). A true sliding window therefore needs an external queue worker outside the LLM context — a service that polls for completions and enqueues replacements. For workloads where items have similar duration, the throughput gap is negligible.
 
 ## Error Handling
 
-When an agent in a batch fails:
-
-- Collect whatever results completed in the batch
-- Record the failed item
-- Continue to the next batch — do not abort the queue
-
-Failed items surface in the final report for manual follow-up or a targeted retry run. A single failure never stops subsequent work.
+When an agent in a batch fails, collect completed results, record the failed item, and continue to the next batch. Failed items surface in the final report for targeted retry. A single failure never stops subsequent work.
 
 ## When This Backfires
 
-**Head-of-line blocking** — the slowest agent delays the entire batch. For highly variable item durations, consider a [staggered launch](staggered-agent-launch.md) or [adaptive fan-out](adaptive-sandbox-fanout-controller.md) instead.
-
-**Fixed N doesn't adapt** — batch size is calibrated once at run start. If model latency spikes or your rate-limit tier changes mid-run, N is miscalibrated with no feedback loop to correct it.
-
-**Context isolation has a cost** — one agent per item means one full context initialisation per item. For large queues with shared context (system prompt, rubric, reference data), prompt caching becomes essential to avoid ITPM exhaustion.
+- **Head-of-line blocking.** The slowest agent delays the entire batch. For highly variable item durations, consider a [staggered launch](staggered-agent-launch.md) or [adaptive fan-out](adaptive-sandbox-fanout-controller.md) instead.
+- **Fixed N doesn't adapt.** Batch size is calibrated once at run start. If model latency spikes or your rate-limit tier changes mid-run, N is miscalibrated with no feedback loop to correct it.
+- **Interdependent items.** If item 30 needs output from item 12, batching breaks the dependency — use sequential processing when items have ordering constraints.
+- **Very short items at low N.** Agent spawn overhead can exceed work duration for trivial tasks; a single agent processing items sequentially is faster.
+- **Context isolation has a cost.** One agent per item means one full context initialisation per item. For large queues with shared context (system prompt, rubric, reference data), prompt caching becomes essential to avoid ITPM exhaustion.
+- **N near the rate-limit ceiling.** Failed agents retrying simultaneously can push the next burst over the limit. Keep N at 60–80% of the RPM ceiling.
 
 ## Why It Works
 
-Sequential batches cap concurrent requests at N. Because N agents fire simultaneously, peak RPM is bounded: at most N × (1 / avg_agent_duration_minutes) — below the rate ceiling when N is set correctly. Cost predictability follows: with fixed N and known average token consumption, total cost equals queue_size × avg_tokens × token_price, computable upfront. Each agent's isolated context window prevents state leakage, so failures stay local and never cascade. Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this synchronous batch model, noting that "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
+Sequential batches cap concurrent requests at N, so peak RPM is bounded at N × (1 / avg_agent_duration_minutes) — below the rate ceiling when N is set correctly. Cost is computable upfront because N is fixed: `queue_size × avg_tokens × token_price`. Context isolation is structural — each agent receives only its own work item, with no shared state to corrupt, so failures stay local and never cascade. Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this synchronous batch model, noting that "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
 
 ## When to Use
 
@@ -95,17 +84,6 @@ Use bounded batch dispatch when:
 - Cost predictability is required before starting the run
 
 Use unbounded fan-out for small queues (under ~15 items) where rate limits are not a concern. Use sequential processing when items have strict ordering dependencies.
-
-## Why It Works
-
-With N fixed below the RPM ceiling, a full batch fits within one rate-limit window. The token bucket replenishes continuously, so batch completion time recharges capacity before the next burst. Cost is computable upfront because N is fixed: `N × avg_tokens × price`. Context isolation is structural — each agent receives only its own work item, with no shared state to corrupt.
-
-## When This Backfires
-
-- **High variance in item duration.** One slow agent delays the entire batch. Reduce N or switch to sequential processing for workloads with unpredictable duration.
-- **Interdependent items.** If item 30 needs output from item 12, batching breaks the dependency. Use sequential processing when items have ordering constraints.
-- **Very short items at low N.** Agent spawn overhead can exceed work duration for trivial tasks. A single agent processing items sequentially is faster.
-- **N near the rate-limit ceiling.** Failed agents retrying simultaneously can push the next burst over the limit. Keep N at 60–80% of the RPM ceiling.
 
 ## Key Takeaways
 

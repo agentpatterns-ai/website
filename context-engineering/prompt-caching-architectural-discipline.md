@@ -10,7 +10,7 @@ tags:
   - cost-performance
 ---
 
-# Prompt Caching as Architectural Discipline
+# Prompt Caching: Architectural Discipline for Agents
 
 > Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context — not as an optimization you toggle on after the fact.
 
@@ -83,6 +83,16 @@ Track `cache_read_input_tokens` / total as a session metric. A healthy session s
 
 Claude Code's SDK `query()` method contained a bug (fixed in [v2.1.72](https://github.com/anthropics/claude-code/releases/tag/v2.1.72)) that caused cache invalidation on every call, reducing input token costs up to 12x when fixed. Cache misses are silent — the API charges the full rate without erroring. Monitor `cache_read_input_tokens` vs `cache_creation_input_tokens`; anomalies indicate structural problems.
 
+## When This Backfires
+
+Three conditions where prefix-first discipline loses to the alternative:
+
+- **Memory-augmented agents with shifting context.** In systems like MemGPT, archival documents and recalled conversations move across turns. Prefix caching misses the reuse because the same content sits at a different offset; block-based caching recovers more. [Source: [MemGPT: Where Prefix Caching Fails](https://medium.com/@tensormesh/memgpt-where-prefix-caching-fails-and-non-prefix-caching-succeeds-c6f3351bcc69)]
+- **Mostly-dynamic prompts.** If the prefix stabilises for only a few turns, the 25–100% write premium is paid repeatedly without enough reads to amortise it. An uncached flow is cheaper. [Source: [Don't Break the Cache (arxiv 2601.06007)](https://arxiv.org/abs/2601.06007)]
+- **Memory-bound deployments.** Each live prefix occupies KV memory on the server. In self-hosted or high-concurrency setups, reserved cache slots cap concurrent requests; letting caches expire can raise throughput. [Source: [Don't Break the Cache (arxiv 2601.06007)](https://arxiv.org/abs/2601.06007)]
+
+Audit the hit-rate trace first; if reads do not dominate writes after a few turns, the cost is not paid back.
+
 ## Key Takeaways
 
 - Stable prefix first, dynamic content last — this determines whether you pay 10% or 100% per turn.
@@ -143,10 +153,6 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Prompt Cache Economics: Comparing Costs by Provider](prompt-cache-economics.md)
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
 - [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [Context Compression Strategies](context-compression-strategies.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
-- [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
+- [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Layered Context Architecture](layered-context-architecture.md)

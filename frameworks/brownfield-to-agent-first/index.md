@@ -31,7 +31,7 @@ graph LR
 
 | Level | Label | Defining quality | Agent capability |
 |-------|-------|-----------------|-----------------|
-| **L0** | Human-Only | Implicit knowledge; tribal conventions | Cannot orient without hand-holding |
+| **L0** | Human-Only | [Implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md); tribal conventions | Cannot orient without hand-holding |
 | **L1** | Agent-Readable | Structure and context are explicit | Can explain the system; cannot execute reliably |
 | **L2** | Agent-Assisted | Automated feedback loops in place | Can execute scoped changes with self-correction |
 | **L3** | Agent-Operable | Mechanical enforcement; task interfaces | Can run reliably without per-action supervision |

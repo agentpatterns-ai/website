@@ -113,3 +113,5 @@ For lower-risk contexts, the [defense-in-depth](defense-in-depth-agent-safety.md
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
+- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
+- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)

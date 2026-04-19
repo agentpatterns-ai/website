@@ -115,11 +115,11 @@ def run_spec_chain(feature_request: str) -> str:
     review = client.messages.create(
         model="claude-opus-4-5",
         max_tokens=512,
-        messages=[{"role": "user", "content": f"Review this specification for gaps and risks:
+        messages=[{"role": "user", "content": f"""Review this specification for gaps and risks:
 
 {draft}
 
-Return JSON: {{"issues": [...], "approved": true/false}}"}]
+Return JSON: {{"issues": [...], "approved": true/false}}"""}]
     ).content[0].text
 
     import json
@@ -130,10 +130,10 @@ Return JSON: {{"issues": [...], "approved": true/false}}"}]
     final = client.messages.create(
         model="claude-opus-4-5",
         max_tokens=1024,
-        messages=[{"role": "user", "content": f"Finalise this specification addressing: {review_result['issues']}
+        messages=[{"role": "user", "content": f"""Finalise this specification addressing: {review_result['issues']}
 
 Draft:
-{draft}"}]
+{draft}"""}]
     ).content[0].text
 
     return final

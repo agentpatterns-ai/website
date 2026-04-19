@@ -145,4 +145,3 @@ During the design review, the team notes they are optimizing for Functional Suit
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md)
-- [Opponent Processor / Multi-Agent Debate Pattern](opponent-processor-debate.md)

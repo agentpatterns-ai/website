@@ -14,7 +14,7 @@ tags:
 
 ## The Problem
 
-Standard code completion benchmarks measure whether generated code passes tests — HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores models on functional correctness via unit tests, with no signal on whether the model followed the developer's instructions about *how* to implement it. In practice, developers specify implementation constraints: use a specific algorithm, follow a structural pattern, limit completion to a particular scope. C3-Bench results show that most models treat scale instructions as suggestions — open-source models score as low as 5–7% on scale-control tasks — while implementation-control adherence reaches only 50–60% even for top proprietary models.
+Standard benchmarks measure whether generated code passes tests — HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness via unit tests and gives no signal on *how* the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions — open-source models score as low as 5–7% on scale-control tasks — while implementation-control adherence reaches only 50–60% even for top proprietary models.
 
 C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
@@ -30,19 +30,19 @@ graph LR
 
 **Implementation-Control (ICC)** instructions specify *how* to implement: use recursion instead of iteration, follow a specific design pattern, constrain parameter types. Models handle these reasonably well — proprietary models reach 50-60% instruction-following rates.
 
-**Scale-Control (SCC)** instructions specify *how much* to generate: complete only the next three lines, fill in just the if-block, stop at the function boundary. Models handle these poorly. Even advanced models like Gemini-2.0-Flash (7.0% SCC) and GPT-4o (24.1% SCC) fail to respect scope boundaries in most cases.
+**Scale-Control (SCC)** instructions specify *how much* to generate: complete only the next three lines, fill in just the if-block, stop at the function boundary. Even advanced models like Gemini-2.0-Flash (7.0% SCC) and GPT-4o (24.1% SCC) fail to respect scope boundaries in most cases.
 
 ## Benchmark Rankings Mislead
 
 Open-source models that top standard leaderboards underperform on instruction adherence. Qwen2.5-Coder-32B scores 49.2% on CrossCodeEval but only 38.7% on ICC instruction-following. Claude 3.5 Sonnet reaches 60.9% ICC — a gap invisible in standard rankings.
 
-The practical implication: if your workflow involves guided completions (Cursor Composer, Copilot Chat, agent-driven code generation), benchmark scores are not a reliable proxy for how well the model will follow your instructions.
+If your workflow involves guided completions (Cursor Composer, Copilot Chat, agent-driven code generation), benchmark scores are not a reliable proxy for how well the model will follow your instructions.
 
 ## What Works
 
 ### Be Explicit About Implementation Constraints
 
-Ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same. The instructions are not redundant — models do respond to fine-grained guidance. Specify:
+Ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same — models do respond to fine-grained guidance. Specify:
 
 - **Algorithmic approach**: "Use iterative depth-first search, not recursion"
 - **Structural patterns**: "Implement as a generator that yields results"

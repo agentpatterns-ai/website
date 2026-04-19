@@ -56,7 +56,7 @@ The cost asymmetry is stark:
 
 ## The Reasoning Sandwich
 
-LangChain's [harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) found that allocating maximum reasoning effort at the beginning (planning) and end (verification) — with lower reasoning during implementation — improved benchmark scores to 66.5%. The implementation phase doesn't need creative problem-solving; it needs disciplined execution of a known approach.
+LangChain's [harness engineering research](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) found that allocating maximum reasoning effort at the beginning (planning) and end (verification) — with lower reasoning during implementation — improved benchmark scores to 66.5%. The implementation phase doesn't need creative problem-solving; it needs disciplined execution of a known approach. See [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) for the full pattern breakdown.
 
 ```mermaid
 graph LR
@@ -84,11 +84,11 @@ This pattern isn't just a best practice — it's built into tool infrastructure.
 
 **OpenAI's Harness team** structures agent execution as a sequential pipeline: `research → spec → feature-list → implementation`, with each phase producing versioned artifacts that feed subsequent stages ([source](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
-**Manus** uses `todo.md` files updated step-by-step to keep objectives in the model's recent attention span, preventing lost-in-the-middle issues during long tasks ([source](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+**Manus** uses `todo.md` files updated step-by-step to keep objectives in the model's recent attention span, preventing [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) issues during long tasks ([source](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## Sub-Agents Isolate Phases
 
-Each phase can run in a separate agent or sub-agent. This is the key context engineering benefit: research findings are condensed into a summary (often 1,000–2,000 tokens) before entering the implementation context. The main agent never pays the token cost of reading every file the research agent examined.
+Each phase can run in a separate agent or sub-agent. This is the key [context engineering](../context-engineering/context-engineering.md) benefit: research findings are condensed into a summary (often 1,000–2,000 tokens) before entering the implementation context. The main agent never pays the token cost of reading every file the research agent examined.
 
 Anthropic's [long-running agent harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) uses a two-agent architecture — an **initializer agent** for environment setup and research, and a **coding agent** for incremental implementation. The structural separation prevents research from consuming the implementation budget.
 

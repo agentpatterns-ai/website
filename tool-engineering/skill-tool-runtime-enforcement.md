@@ -26,7 +26,7 @@ When you instruct an agent to "read `commands/deploy.md` for instructions," thre
 | **Truncation / paraphrase** | Agent follows a partial or reworded version | Long files get summarized; critical details dropped |
 | **Path drift** | Agent reads the wrong file or fails to find it | Working directory changed, file moved, or wrong path constructed |
 
-These failures are silent: the agent produces output that looks reasonable but diverges from the canonical instructions. In scaled pipelines, drift compounds undetected across every agent running the same command.
+These failures are silent: output looks reasonable but diverges from canonical instructions, and in scaled pipelines drift compounds undetected.
 
 ## How the Skill Tool Eliminates All Three
 
@@ -58,9 +58,7 @@ flowchart LR
 
 ## Why This Works: The Canonical Invocation Path
 
-The Skill tool uses the same mechanism as the human `/command` invocation -- if a command's definition changes, every agent automatically gets the updated version on its next call. No propagation step, no cache invalidation.
-
-This is the [JIT context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) principle from Anthropic's context engineering guide applied to agent instructions: load via tools at runtime rather than embedding in the static prompt.
+The Skill tool uses the same mechanism as human `/command` invocation: change a command's definition and every agent picks up the new version on the next call. No propagation step, no cache invalidation. This is [JIT context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) applied to agent instructions.
 
 ## Progressive Disclosure Budget
 
@@ -76,7 +74,7 @@ This layering prevents the [Mega-Prompt anti-pattern](../instructions/instructio
 
 ## Dynamic Context with Shell Interpolation
 
-Skills support `` !`command` `` syntax: the output replaces the placeholder before the skill content reaches the agent, injecting live data on every invocation:
+Skills support `` !`command` `` syntax: output replaces the placeholder before content reaches the agent, injecting live data on every invocation:
 
 ```markdown
 ## Current deployment targets
@@ -86,7 +84,7 @@ Skills support `` !`command` `` syntax: the output replaces the placeholder befo
 !`cat config/flags.json | jq '.enabled[]'`
 ```
 
-Shell interpolation extends enforcement beyond static instructions -- the agent receives *live system state* at invocation time rather than file contents at read time.
+Shell interpolation extends enforcement beyond static instructions: the agent receives *live system state* at invocation time rather than file contents at read time.
 
 ## When Read-Based Loading Is Appropriate
 
@@ -97,6 +95,17 @@ Use direct file reading when:
 - **No execution context change is needed** -- reference material, not a command
 
 Use Read to *inform*; use Skill tool to *direct*.
+
+## When This Backfires
+
+Skill invocation eliminates path drift and per-call caching, but four failure modes take over as the skill count grows:
+
+- **Description-match failures under load.** Skill descriptions sit in context so the model can decide what to invoke; each is capped at 1,536 characters and the listing budget is roughly 1% of the context window. Over budget, descriptions are truncated, stripping "the keywords Claude needs to match your request" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). A 650-trial experiment found Anthropic's recommended passive phrasing (`Use when...`) activates ~77% of the time in clean conditions, versus 100% for a directive `ALWAYS invoke...` ([Seleznov, 2026](https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1)).
+- **Post-compaction drop-out.** Invoked skills share a 25k-token re-attach budget after auto-compaction, filled most-recent-first; "older skills can be dropped entirely after compaction if you have invoked many in one session" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
+- **Opaque injection.** The runtime splices the body in without surfacing it in the transcript the way a Read call does, so "did the agent see the new version?" is harder to debug.
+- **Harness dependency.** Skill invocation only works in environments that expose the tool. Plain Read-based instructions run anywhere.
+
+When a playbook must never drop mid-session and silent activation failure is unacceptable, prefer Read or a hook over description-based Skill invocation.
 
 ## Example
 

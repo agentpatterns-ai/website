@@ -74,6 +74,7 @@ Compact headers are token-efficient and compliance-neutral, but the trade-off is
 - **Token savings are irrelevant at low volume**: for single-use or infrequent prompts, optimising for constraint-token count adds complexity with no practical benefit
 - **Ambiguity at the edges**: extreme compression can introduce parsing ambiguity on unusual inputs where the model must infer the intent behind a terse rule — prose constraints leave less room for misinterpretation in edge cases
 - **Counter-intuitive constraints remain unsolved**: neither compact nor verbose encoding improves compliance for constraints that conflict with model training priors; encoding form is the wrong lever regardless of format
+- **Scope caveat on encoding neutrality**: the null result applies to constraint blocks inside a coding prompt. Broader prompt-format work has found format can move task performance by up to 40% on smaller models, with larger models more robust ([He et al., 2024](https://arxiv.org/abs/2411.10541)) — so encoding neutrality should not be generalised beyond the constraint-satisfaction setting
 
 ## Key Takeaways
 

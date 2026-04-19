@@ -24,7 +24,7 @@ A pipeline agent invokes the Skill tool with an instruction override prepended t
 IMPORTANT: Do not use AskUserQuestion. Process this issue directly.
 ```
 
-The model's instruction-following suppresses the interactive tool call. The agent infers the values that would have come from user input and continues execution without pausing. (Note: background subagents suppress `AskUserQuestion` automatically — the tool call fails silently — but lack the explicit "infer values" framing this override provides. See [Claude Code subagent docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents) for the distinction between foreground and background subagent behavior.)
+The model's instruction-following suppresses the interactive tool call. The agent infers the values that would have come from user input and continues execution without pausing. (Note: background subagents suppress `AskUserQuestion` automatically — the tool call fails silently — but lack the explicit "infer values" framing this override provides. See [Claude Code subagent docs](https://docs.anthropic.com/en/docs/claude-code/sub-agents) for the distinction between foreground and background subagent behavior, and [anthropics/claude-code#18721](https://github.com/anthropics/claude-code/issues/18721) documenting that `AskUserQuestion` calls from subagents spawned via the Task tool are unavailable without explicit fallback guidance.)
 
 ```mermaid
 flowchart LR

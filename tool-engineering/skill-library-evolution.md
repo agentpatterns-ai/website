@@ -88,7 +88,7 @@ Two registry approaches with distinct trade-offs:
 | Velocity | Slower — must pass gates | Faster — lower barrier |
 | Trust model | Verify then trust | Trust then verify |
 
-Specification quality is the primary gate: audited registries require passing quality gates before entry; curated-but-not-audited registries leave validation to consumers. Research into automated skill library construction confirms that iterative quality refinement — validating and revising skills based on execution feedback — consistently improves task success rates compared to static repositories. [Source: [SkillX: Automatically Constructing Skill Knowledge Bases for Agents](https://arxiv.org/abs/2604.04804)]
+Specification quality is the primary gate. Research into automated skill library construction shows iterative refinement — validating and revising skills on execution feedback — improves task success over static repositories. [Source: [SkillX: Automatically Constructing Skill Knowledge Bases for Agents](https://arxiv.org/abs/2604.04804)]
 
 ## Versioning and Deprecation
 

@@ -1,6 +1,6 @@
 ---
 title: "Tiered Code Review: AI-First with Human Escalation"
-description: "Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory"
+description: "Route review effort by risk: AI handles the first pass, non-critical code merges after AI-only review, and critical code escalates to human review."
 aliases:
   - tiered review
   - AI-first code review
@@ -16,7 +16,7 @@ tags:
 
 ## The Problem
 
-AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is now the rate limiter. Applying the same human review depth to every change does not scale.
+AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is the rate limiter, and uniform human depth does not scale.
 
 Tiered code review treats review as a **risk-routing problem**: classify code by criticality, then match review effort to risk level.
 
@@ -44,11 +44,11 @@ Three tiers, each with a different review bar:
 
 ## Real-World Implementations
 
-**OpenAI Codex team** runs AI review automatically via GitHub webhook when a PR transitions from draft to review. Their custom review model achieves [~90% accuracy (nine out of ten comments identify valid issues)](https://newsletter.pragmaticengineer.com/p/how-codex-is-built). Non-critical code merges after AI-only review; core agent code and open source components require mandatory human review.
+**OpenAI Codex team** runs AI review via GitHub webhook when a PR transitions from draft to review. Their custom model achieves [~90% accuracy](https://newsletter.pragmaticengineer.com/p/how-codex-is-built). Non-critical code merges after AI-only review; core agent code and open source components require human review.
 
-**GitHub Copilot code review** reached [60M+ reviews](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) and can be enabled automatically on all PRs at org/repo level. It surfaces actionable feedback in 71% of reviews and says nothing in the remaining 29%.
+**GitHub Copilot code review** passed [60M+ reviews](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) and can be enabled on all PRs at org/repo level. It surfaces actionable feedback in 71% of reviews and stays silent on the remaining 29%.
 
-**Claude Code** provides [automated security review](https://claude.com/blog/automate-security-reviews-with-claude-code) via CLI and GitHub Actions. Anthropic uses this internally as a CI gate, catching RCE and SSRF vulnerabilities before merge.
+**Claude Code** provides [automated security review](https://claude.com/blog/automate-security-reviews-with-claude-code) via CLI and GitHub Actions. Anthropic uses it internally as a CI gate, catching RCE and SSRF vulnerabilities before merge.
 
 ## Implementing with GitHub Native Tools
 
@@ -95,12 +95,12 @@ This [severity-driven pattern](https://www.qodo.ai/blog/5-ai-code-review-pattern
 
 ## Classification Framework
 
-The hardest part of tiered review is deciding what counts as "critical." Start with these heuristics:
+Deciding what counts as "critical" is the hardest part. Four heuristics:
 
-- **Security boundary**: Does this code handle authentication, authorization, encryption, or PII? Human review required.
-- **Financial impact**: Does this code process payments, calculate billing, or manage subscriptions? Human review required.
-- **Blast radius**: Does a bug here affect all users or a single feature? Higher [blast radius](../security/blast-radius-containment.md) demands human review.
-- **Reversibility**: Can a mistake be rolled back in minutes, or does it corrupt persistent state? Irreversible changes need human eyes.
+- **Security boundary**: code handling authentication, authorization, encryption, or PII requires human review.
+- **Financial impact**: code processing payments, billing, or subscriptions requires human review.
+- **Blast radius**: bugs that affect all users rather than one feature. Higher [blast radius](../security/blast-radius-containment.md) demands human review.
+- **Reversibility**: changes that corrupt persistent state rather than rolling back in minutes need human eyes.
 
 Non-critical is everything else: tests, docs, configuration, CSS, build scripts, and reversible migrations.
 

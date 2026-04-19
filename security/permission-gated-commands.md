@@ -93,6 +93,7 @@ Command-level `allowed-tools` operates on top of session-level permissions, not 
 ## Related
 
 - [Blast Radius Containment: Least Privilege for AI Agents](./blast-radius-containment.md)
+- [Transcript-Driven Permission Allowlist](./transcript-driven-permission-allowlist.md)
 - [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Protecting Sensitive Files](./protecting-sensitive-files.md)

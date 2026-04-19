@@ -1,6 +1,6 @@
 ---
 title: "Context-Injected Error Recovery for AI Agent Development"
-description: "When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference"
+description: "When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops."
 aliases:
   - error context injection
   - structured error recovery
@@ -9,6 +9,7 @@ tags:
   - workflows
   - source:opendev-paper
 ---
+
 # Context-Injected Error Recovery
 
 > When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops before they form.
@@ -73,6 +74,8 @@ The harness maintains a per-session log of failed tool calls keyed by operation 
 4. Inject the block into the next prompt, positioned immediately after the error result
 
 Recovery suggestions should be generic enough to avoid prescribing a single fix, but specific enough to exclude approaches already attempted. The suggestion catalog is maintained as a static mapping — no LLM inference is needed to generate suggestions.
+
+This aligns with emerging ReAct-agent reliability guidance: the LangGraph [Production Reliability RFC](https://github.com/langchain-ai/langgraph/issues/6617) proposes classifying errors and surfacing structured reasoning so retries are informed rather than blind.
 
 ## When This Backfires
 
@@ -162,6 +165,5 @@ The harness calls `build_context` after each tool failure and appends the return
 - [Machine-Readable Error Responses (RFC 9457)](../tool-engineering/rfc9457-machine-readable-errors.md) — Structured upstream errors that make context injection more precise
 - [Error Preservation in Context](error-preservation-in-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Observation Masking](observation-masking.md)
 - [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Broader taxonomy of agent failure modes and recovery strategies

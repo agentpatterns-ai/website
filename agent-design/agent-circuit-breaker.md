@@ -69,10 +69,6 @@ This pattern operates at the **tool call level** — each individual tool has it
 
 The two are complementary: loop-level breakers prevent runaway agents; tool-level breakers prevent token waste from degraded external dependencies.
 
-## Unverified Claims
-
-- **40–60% token savings** — this figure is sourced from the nibzard/awesome-agentic-patterns catalog (evidence grade: medium). No independent study has confirmed this range. Actual savings depend on session length, tool reliability, and whether graceful degradation is implemented.
-
 ## When This Backfires
 
 Circuit breakers add overhead that outweighs the benefit in several common scenarios:
@@ -80,8 +76,9 @@ Circuit breakers add overhead that outweighs the benefit in several common scena
 - **Tools are locally hosted or highly reliable** — state tracking and threshold tuning add indirection with no payoff when the tool never actually degrades. Measure failure rates before adding a breaker.
 - **Single-shot or short sessions** — the pattern assumes repeated invocations where retry compounding is possible. An agent that calls each tool once gains nothing and pays the configuration cost.
 - **Transient errors are the norm** — a fast API with brief blips will open circuits unnecessarily if the threshold is too tight, blocking calls that would succeed on the next attempt. Misconfigured thresholds cause false positives that are harder to debug than the token waste they prevent.
-- **No fallback exists** — without graceful degradation logic the circuit opens and the agent stalls anyway. The state machine only stops the waste; it does not preserve progress. Implementing fallback routing requires non-trivial system prompt design and adds its own failure modes.
+- **No fallback exists** — without graceful degradation logic the circuit opens and the agent stalls anyway. The state machine stops the waste but does not preserve progress, and fallback routing adds its own failure modes.
 - **Agent updates system prompt dynamically** — injecting tool-status context when a circuit opens can cause prompt injection risks or context pollution in security-sensitive deployments.
+- **Failures are semantic, not transport-level** — LLM-backed tools routinely return HTTP 200 while producing hallucinated or malformed output. A counter keyed on transport errors never trips, so the circuit stays Closed while the agent burns tokens on bad responses ([Hannecke, 2025](https://medium.com/@michael.hannecke/resilience-circuit-breakers-for-agentic-ai-cc7075101486); [Pan, 2026](https://tianpan.co/blog/2026-04-14-treating-your-llm-provider-as-an-unreliable-upstream)). Detecting these requires inline quality evaluation in addition to a state machine.
 
 ## Key Takeaways
 

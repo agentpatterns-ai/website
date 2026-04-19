@@ -6,7 +6,7 @@ tags:
   - context-engineering
 ---
 
-# Prompt Cache Economics Across Providers
+# Prompt Cache Economics: Comparing Costs by Provider
 
 > Prompt caching discounts range from 50% to 90% depending on the provider, but each has different activation rules, TTLs, and hidden costs.
 
@@ -97,6 +97,13 @@ graph TD
 
 A creation-token spike mid-session signals prefix mutation -- see [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md).
 
+## Key Takeaways
+
+- Discount depth varies widely: Anthropic and Gemini offer ~90% off cached reads; OpenAI offers 50%. Only Anthropic charges a cache-write premium; only Gemini (explicit mode) charges storage fees.
+- Break-even turns matter more than headline discount: Anthropic's 1.25x or 2x write premium needs 2--3 cache reads to recoup, so short sessions can lose money even at a 90% read discount.
+- Cache activation has preconditions: minimum token thresholds (1,024--4,096 on Anthropic; 1,024 on OpenAI), prefix stability, and (for Anthropic) sequencing the first request before fanning out.
+- Monitor `cache_read_input_tokens` (Anthropic) or `usage.prompt_tokens_details.cached_tokens` (OpenAI) — a creation-token spike mid-session signals a broken prefix, not a pricing question.
+
 ## Related
 
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
@@ -104,10 +111,6 @@ A creation-token spike mid-session signals prefix mutation -- see [Prompt Cachin
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Context Engineering](context-engineering.md)
 - [Disable Attribution Headers to Preserve KV Cache](kv-cache-invalidation-local-inference.md)
 - [Context Budget Allocation](context-budget-allocation.md)
-- [Prompt Compression](prompt-compression.md)
-- [Attention Sinks](attention-sinks.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Context Priming](context-priming.md)
+- [Context Engineering](context-engineering.md)

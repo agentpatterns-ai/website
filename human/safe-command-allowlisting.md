@@ -75,6 +75,17 @@ Anthropic's sandboxing covers "not just Claude Code's direct interactions, but a
 
 An allowlist without sandbox boundaries relies entirely on the accuracy of your classification. A sandbox without an allowlist retains the fatigue problem. Together they achieve high-signal oversight and a contained [blast radius](../security/blast-radius-containment.md) if a classification is wrong.
 
+## When This Backfires
+
+Broad globs trade fatigue for new failure modes:
+
+- **Parser-bypass exposure.** `Bash(echo *)` assumes the matcher separates the prefix from injected suffixes. [CVE-2025-54795](https://nvd.nist.gov/vuln/detail/CVE-2025-54795) (patched in v1.0.20) and the command-chaining bypass fixed in v1.0.93 show that parser bugs can let a trusted prefix smuggle an untrusted command. Keep Claude Code current and prefer narrow patterns over broad globs.
+- **Incomplete deny lists.** `Bash(cat *)` can read secrets if `deny` misses sensitive paths (dotfiles, `~/.ssh`, vendored credentials). Enumerate them deliberately.
+- **"Read-only" with side effects.** `git status` can trigger filesystem writes via hooks or `fsmonitor` daemons. Classification by command name alone is not enough in foreign repos.
+- **Scope creep.** A glob appropriate in the project root may be dangerous inside a submodule or mounted volume. Review allowlists when the working set changes.
+
+If any of these apply, narrow the patterns, extend `deny`, or keep the action in `ask`.
+
 ## What This Is Not
 
 Allowlisting eliminates noise so that genuine risk prompts stand out; it is not a reduction in oversight. The measure of a well-configured allowlist is whether the prompts that remain reliably signal actions worth reviewing — not how many prompts were suppressed.

@@ -15,7 +15,7 @@ tags:
 
 Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with what you read; error density is highest in what is new.
 
-Design agent workflows so human review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
+Design agent workflows so review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
 
 ## The PR Model as Review Boundary
 
@@ -29,7 +29,7 @@ The PR model enforces that review happens on changes, not on totals.
 
 ## Checkpoints and Known-Good States
 
-[Claude Code's checkpointing](https://code.claude.com/docs/en/checkpointing) automatically captures file state before each user prompt. When agent work goes wrong, you can restore code to a prior checkpoint, then use `git diff` to compare the restored state against the current working tree. Checkpoints do not provide a built-in diffing view [unverified — this claim about Claude Code checkpointing is not confirmed by cited documentation] — pair them with git to get reviewable diffs.
+[Claude Code's checkpointing](https://code.claude.com/docs/en/checkpointing) captures file state before each prompt. When agent work goes wrong, restore to a prior checkpoint, then use `git diff` against the working tree. The documented rewind options are "restore code", "restore conversation", or both — there is no built-in side-by-side diff view, and the docs note that checkpoints "complement but don't replace proper version control". Pair them with git to get reviewable diffs.
 
 Structuring work around checkpoints keeps the diff scope predictable:
 
@@ -38,7 +38,7 @@ Structuring work around checkpoints keeps the diff scope predictable:
 
 ## Review Fatigue and Output Size
 
-Review fatigue grows with output size, not diff size. An agent producing 2,000 lines across ten files gets reviewed less carefully than one producing 20 lines in a single file.
+Review fatigue grows with output size. An agent producing 2,000 lines across ten files gets reviewed less carefully than one producing 20 lines in a single file.
 
 Designing for diff-based review means:
 
@@ -46,7 +46,7 @@ Designing for diff-based review means:
 - Committing checkpoints between logical stages
 - Opening separate PRs for separate concerns rather than one large PR
 
-A series of five 20-line PRs gets better review coverage than one 100-line PR [unverified — no formal study on review quality vs. diff size, but consistent with code review best practice literature].
+The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200–400 lines and drops off beyond that, with reviewers faster than 450 lines per hour below average in 87% of cases ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
 
 ## Staged Review
 
@@ -56,7 +56,15 @@ Multi-stage pipelines have multiple natural diff boundaries:
 2. **Draft stage** — diff the draft against the research notes. Verify the writer only used sourced material.
 3. **Revision stage** — diff the revised draft against the original draft. Verify reviewer feedback was applied correctly.
 
-Each diff is small, focused, and reviewable in isolation. Reviewing the final published page against nothing is the hardest review; reviewing a 10-line diff against a known state is the easiest.
+Each diff is small and reviewable in isolation. Reviewing a 10-line diff against a known state is far easier than reviewing the final artifact against nothing.
+
+## When This Backfires
+
+Diff-only review has blind spots. Graphite notes that diff-only reviewers "may miss violations of global invariants, API misuse, or architectural consistency problems", and that larger context is needed to catch cross-file issues like "a change in one module that breaks usage elsewhere" ([Graphite, "How much context do AI code reviews need?"](https://graphite.com/guides/ai-code-review-context-full-repo-vs-diff)). Pair diff-based review with codebase-aware checks when:
+
+- **Cross-file invariants are at stake.** A one-line schema change looks trivial but can silently break downstream consumers — run a repo-wide search, type check, or contract test alongside the diff.
+- **The PR spans many files from one AI session.** Reviewers who read only the diff must reassemble intent from disconnected fragments; require a clear PR description or split the change before reviewing.
+- **The change touches architectural seams.** Refactors, interface migrations, and dependency upgrades change behavior that is not visible in the diff — supplement with full-file review of the seam and integration tests.
 
 ## Anti-Patterns
 
@@ -118,3 +126,5 @@ Each `git diff` is 10–30 lines. The reviewer never re-reads the full page — 
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
 - [Human-AI Review Synergy in Agentic Code Review](human-ai-review-synergy.md)
 - [Agent PR Volume vs. Value: The Productivity Paradox](agent-pr-volume-vs-value.md)
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
+- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)

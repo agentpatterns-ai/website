@@ -19,6 +19,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — Capture team-specific patterns, style rules, and tooling requirements in AGENTS.md files throughout the codebase
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — Auto-generated context files reduce task success rates; human-written files improve success only when they contain minimal, specific instructions
+- [Natural-Language Customization Bootstrap](natural-language-customization-bootstrap.md) — Describe the customization in plain language; the agent drafts the instruction file, skill, subagent, or hook for you to review and commit
 
 ## Instruction Design
 

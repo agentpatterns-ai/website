@@ -12,59 +12,46 @@ tags:
 
 ## The Dual-Audience Property
 
-Project standards files — `STANDARDS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` — are read by two audiences: humans checking their own work, and agents producing output. When a standard is precise enough to serve as an agent instruction, it needs no translation layer. When it is vague, it fails both audiences.
+Standards files — `STANDARDS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` — are read by humans checking their own work and by agents producing output. A precise standard needs no translation layer; a vague one fails both audiences.
 
-The distinguishing property is actionability. Compare:
+The distinguishing property is actionability:
 
-| Vague (fails both audiences) | Actionable (serves both) |
-|-------------------------------|--------------------------|
+| Vague (fails both) | Actionable (serves both) |
+|--------------------|--------------------------|
 | "Be concise" | "Max 500 words for pattern pages; max 750 for techniques" |
 | "Follow naming conventions" | "Use kebab-case file names; no prefixes or numbering" |
 | "Write good commit messages" | "Use conventional commits: `type(scope): description`" |
 | "Avoid filler" | `"No phrases: 'in this guide', 'let's explore', 'as you may know'"` |
 
-The actionable form gives the agent a verifiable rule. The vague form gives the agent interpretive latitude, which produces inconsistent output.
+The actionable form gives a verifiable rule; the vague form gives interpretive latitude, which produces inconsistent output.
 
 ## Why Agents Read Standards Literally
 
-Humans read standards with context: they know what "concise" means in their domain, they have judgment about edge cases, they apply intent rather than letter. Agents apply the rule as written. Ambiguity in a rule does not produce a reasonable interpretation — it produces the interpretation most consistent with training data, which may not match project conventions.
-
-This is a constraint to design for, not a failure mode to work around. Standards that agents can follow without interpretation are also clearer for humans.
+Humans read standards with context — domain knowledge, edge-case judgment, intent over letter. Agents apply the rule as written. Ambiguity does not yield a reasonable interpretation; it yields the interpretation most consistent with training data, which may not match project conventions. Standards designed so agents can follow them without interpretation are also clearer for humans.
 
 ## File Hierarchy
 
 Standards work at multiple scopes. Claude Code reads `CLAUDE.md` in a hierarchy: managed policy → project → user ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). GitHub Copilot reads `.github/copilot-instructions.md` at the repository level ([Copilot customization docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)).
 
-The practical consequence: a root standards file applies to all tasks; nested files add specificity for particular areas. A rule in `src/auth/CLAUDE.md` overrides or extends the root when an agent works in that directory.
-
-Structure the hierarchy as:
-
-- Root: project-wide conventions that apply to every task
-- Area-specific: constraints that only apply in a particular directory or domain
-
-Avoid putting area-specific rules in the root file — they add noise to every task even when irrelevant.
+A root standards file applies to all tasks; nested files add specificity. A rule in `src/auth/CLAUDE.md` overrides or extends the root when an agent works in that directory. Keep area-specific rules out of the root — they add noise to every task even when irrelevant.
 
 ## Concrete Examples as Anchors
 
-Standards with examples are more reliably followed than standards without them — few-shot prompting research consistently shows that concrete examples improve adherence over rule-only prompts ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). An agent reading "no filler phrases" must infer what counts. An agent reading:
+Standards with examples are more reliably followed than rule-only prompts — few-shot prompting research consistently shows this ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). An agent reading "no filler phrases" must infer what counts. An agent reading:
 
 ```
 No filler phrases: "in this guide", "let's explore", "as you may know", "it's worth noting"
 ```
 
-has a concrete reference set. The examples anchor the rule against ambiguity and provide pattern-matching targets.
-
-Where a rule has a clear correct form and a clear incorrect form, include both. The contrast eliminates the ambiguity zone where most interpretation errors occur.
+has a concrete reference set. Where a rule has clear correct and incorrect forms, include both — the contrast eliminates the ambiguity zone where interpretation errors occur.
 
 ## Standards as Quality Gates
 
-When reviewers check agent output against the standards file, they are using it as a diff target: the output either satisfies the rule or it does not. This only works if the rule is precise enough to produce a binary determination.
-
-"Be concise" fails as a gate — any output can be argued to satisfy it. "Max 500 words" succeeds — word count is measurable. Designing standards for reviewability forces the precision that also makes them work as agent instructions.
+Reviewers use the standards file as a diff target: output either satisfies the rule or it does not. This works only if the rule produces a binary determination. "Be concise" fails as a gate — any output can be argued to satisfy it. "Max 500 words" succeeds — word count is measurable. Designing standards for reviewability forces the precision that also makes them work as agent instructions.
 
 ## Example
 
-A `STANDARDS.md` excerpt from a documentation project, written so both a human reviewer and an agent can apply every rule without interpretation:
+A `STANDARDS.md` excerpt written so both a human reviewer and an agent can apply every rule without interpretation:
 
 ```markdown
 ## Commit Messages
@@ -102,19 +89,19 @@ A human reviewer reads these rules and checks a pull request against them. An ag
 
 ## Why It Works
 
-Agents lack the sociolinguistic context that humans use to interpret vague norms. When a human reads "be concise," they draw on domain conventions, genre norms, and professional context to calibrate their output. An agent, given the same instruction, pattern-matches against training data — producing output that is concise *in the general sense* rather than in the project-specific sense. Precision replaces that missing context: the rule "max 500 words for pattern pages" gives the agent a verifiable target that doesn't depend on contextual inference. The same mechanism explains why examples help — they narrow the interpretation space by demonstrating the intended form directly, bypassing the inference step entirely.
+Agents lack the sociolinguistic context humans use to interpret vague norms. A human reading "be concise" draws on domain conventions and professional context to calibrate output; an agent pattern-matches against training data, producing output that is concise *in general* rather than in the project-specific sense. Precision replaces that missing context — "max 500 words for pattern pages" gives a verifiable target independent of inference. Examples work by the same mechanism: they narrow the interpretation space by demonstrating the intended form directly.
 
 ## When This Backfires
 
-Precision in standards improves adherence only when the standards file stays short. As file length grows, adherence degrades — practitioners report unreliable compliance once instruction files exceed a few hundred lines, and [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends keeping CLAUDE.md files under 200 lines.
+Precision improves adherence only while the standards file stays short. Adherence degrades as length grows — [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends keeping CLAUDE.md files under 200 lines.
 
-Three specific failure modes:
+Three failure modes:
 
-1. **Context bloat**: A 400-line standards file loads every session regardless of relevance. At high context utilization, precision on rule 300 offers no advantage — the rule is there, but its competition for attention makes it unreliable.
-2. **Priority saturation**: When everything is stated with equal precision, nothing signals higher priority. An agent following 80 precisely-worded rules has no principled way to break ties when rules conflict or when a relevant rule is buried among irrelevant ones.
-3. **Scope mismatch**: Project-wide standards that include area-specific rules inject irrelevant constraints into every task. A rule about database schema conventions appearing in every React component edit adds noise without benefit. Use directory-scoped files (`.claude/rules/`, nested `CLAUDE.md`) to keep standards contextually relevant.
+1. **Context bloat**: A 400-line file loads every session regardless of relevance. At high context utilization, precision on rule 300 offers no advantage — competition for attention makes it unreliable.
+2. **Priority saturation**: When every rule is stated with equal precision, nothing signals higher priority. An agent following 80 precisely-worded rules has no principled way to break ties.
+3. **Scope mismatch**: Project-wide standards that include area-specific rules inject irrelevant constraints into every task. Use directory-scoped files (`.claude/rules/`, nested `CLAUDE.md`) to keep standards contextually relevant.
 
-The pattern works as stated when standards are short, scoped to current context, and enforcing a small set of high-priority conventions. When standards files grow large, the correct response is decomposition — not more precision.
+When standards files grow large, the correct response is decomposition — not more precision.
 
 ## Key Takeaways
 

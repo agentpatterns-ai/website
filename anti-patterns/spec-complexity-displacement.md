@@ -76,3 +76,4 @@ The second version is precise enough to drive reliable generation — but it is 
 - [Trust Without Verify](trust-without-verify.md)
 - [Effortless AI Fallacy](effortless-ai-fallacy.md)
 - [Prompt Tinkerer](prompt-tinkerer.md)
+- [Abstraction Bloat](abstraction-bloat.md)

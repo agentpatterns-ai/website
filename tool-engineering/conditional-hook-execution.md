@@ -168,5 +168,6 @@ The `if` field is not always the right choice:
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
 - [Reactive Environment Hooks: CwdChanged and FileChanged](reactive-environment-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)

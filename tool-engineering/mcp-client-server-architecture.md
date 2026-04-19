@@ -11,53 +11,51 @@ tags:
 
 # MCP Client/Server Architecture
 
-> A well-designed MCP server is invisible to the agent. A poorly designed one creates systematic failures across every client that connects — wrong tool selection, bloated context, silent error swallowing, and security gaps.
+> A well-designed MCP server is invisible to the agent. A poor one fails systematically across every client — wrong tool selection, bloated context, silent error swallowing, security gaps.
 
-Five decisions determine whether an MCP integration is reliable or fragile: transport, tool surface, error handling, capability negotiation, and security. The [MCP protocol page](../standards/mcp-protocol.md) covers what MCP is.
+Five decisions determine whether an MCP integration holds up: transport, tool surface, error handling, capability negotiation, security. See [MCP protocol](../standards/mcp-protocol.md) for background.
 
 ## Transport Selection
 
-Transport is a deployment topology decision, not just a latency choice.
+Transport is a deployment topology decision, not a latency choice.
 
 | Factor | stdio | Streamable HTTP |
 |--------|-------|-----------------|
-| **Deployment** | Subprocess of the client | Runs independently |
-| **Clients** | Single client per instance | Multiple concurrent clients |
-| **Infrastructure** | None — no network, no ports | HTTP server, session management |
-| **Security surface** | Process isolation only | Network exposure, requires auth |
+| **Deployment** | Subprocess of the client | Independent process |
+| **Clients** | Single per instance | Multiple concurrent |
+| **Infrastructure** | None | HTTP server, session management |
+| **Security surface** | Process isolation | Network exposure, requires auth |
 | **Use case** | Local dev tools | Shared team servers, cloud services |
 
-**Decision rule:** Use stdio unless you need multiple clients or the server must run on a different machine.
-
-Streamable HTTP requires [specific security measures](https://modelcontextprotocol.io/docs/concepts/transports): validate `Origin` headers (DNS rebinding), bind local servers to localhost, and implement authentication.
+Use stdio unless you need multiple clients or remote hosting. Streamable HTTP adds [required security measures](https://modelcontextprotocol.io/docs/concepts/transports): validate `Origin` (DNS rebinding), bind local servers to localhost, authenticate callers.
 
 ## Tool Surface Design
 
-Tool count directly affects agent performance — [Anthropic identifies bloated tool sets as a top failure mode](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
+Tool count directly affects agent performance — [Anthropic names bloated tool sets as a top failure mode](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents).
 
 ### Keep tools focused and few
 
-Each tool should have a single, clear purpose. Overlapping tools force selection reasoning that costs tokens and introduces compounding errors.
+One tool, one clear purpose. Overlapping tools force selection reasoning that costs tokens and compounds errors.
 
 ### Use tool search for large surfaces
 
-When a server must expose many tools, use lazy loading. Claude Code defers MCP tool definitions when definitions exceed ~10 000 tokens, achieving an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) versus pre-loading. Servers supporting `listChanged` can emit `notifications/tools/list_changed` so clients refresh dynamically.
+Lean on client-side deferral for big tool sets. [Claude Code defers MCP tool definitions by default](https://code.claude.com/docs/en/mcp); `ENABLE_TOOL_SEARCH=auto` loads schemas upfront when they fit in 10% of context, deferring the overflow. Anthropic's benchmark on 50+ MCP tools reports an [85% token reduction](https://www.anthropic.com/engineering/advanced-tool-use) (77K → 8.7K). Servers supporting `listChanged` emit `notifications/tools/list_changed` for dynamic refresh.
 
 ### Apply poka-yoke to parameters
 
-Design parameters so misuse is structurally impossible — see [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md). Absolute paths over relative [eliminated path errors entirely](https://www.anthropic.com/engineering/building-effective-agents). Prefer enums over free-text.
+Make misuse structurally impossible — see [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md). Prefer enums to free-text; absolute paths [eliminated path errors entirely](https://www.anthropic.com/engineering/building-effective-agents).
 
 ### Write self-contained descriptions
 
-Each description must stand alone — include domain context, return shape, and selection signals. Better descriptions [reduced task completion time by 40%](https://www.anthropic.com/engineering/multi-agent-research-system). See [Tool Description Quality](tool-description-quality.md).
+Each description stands alone — domain context, return shape, selection signals. Better descriptions [cut task completion time by 40%](https://www.anthropic.com/engineering/multi-agent-research-system). See [Tool Description Quality](tool-description-quality.md).
 
 ### Annotate behavioral hints
 
-Tool annotations — `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` — signal properties to clients for confirmation decisions. Per the [MCP specification schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are: `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world assumptions. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
+`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint` signal properties clients use for confirmation. Per the [MCP spec schema](https://raw.githubusercontent.com/modelcontextprotocol/specification/main/schema/2025-03-26/schema.ts), defaults are `destructiveHint: true`, `openWorldHint: true`, `readOnlyHint: false`, `idempotentHint: false` — servers must explicitly override destructive/open-world defaults. Clients MUST treat annotations as untrusted unless the server is trusted. `idempotentHint` maps to the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
 
 ## Error Handling
 
-MCP has two distinct error reporting mechanisms. Conflating them causes silent failures.
+MCP has two error mechanisms — conflating them causes silent failures.
 
 ```mermaid
 flowchart LR
@@ -71,19 +69,19 @@ flowchart LR
     content]
 ```
 
-**Protocol-level errors** (JSON-RPC): unknown tool, malformed arguments, server unavailable. The call never reached tool logic.
+**Protocol-level errors** (JSON-RPC): unknown tool, malformed arguments, server unavailable — the call never reached tool logic.
 
-**Tool execution errors** (`isError: true`): the tool ran but failed — invalid input, API down, permission denied. The agent can reason about these.
+**Tool execution errors** (`isError: true`): the tool ran but failed — invalid input, API down, permission denied. Agents can reason about these.
 
-Servers MUST implement both. A generic JSON-RPC error for a database timeout hides recovery information. `isError: true` with `"Database connection timed out — retry in 5 seconds"` gives an actionable path.
+Servers MUST implement both. A generic JSON-RPC error for a database timeout hides recovery info; `isError: true` with `"Database timed out — retry in 5s"` is actionable.
 
 ### Output schemas
 
-Tools can declare an `outputSchema` for [structured results](typed-schemas-at-agent-boundaries.md). Servers MUST conform; clients SHOULD validate — enabling typed integrations without free-text parsing.
+Tools can declare an `outputSchema` for [structured results](typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
 
 ## Capability Negotiation
 
-Capability negotiation is a mandatory initialization handshake, not an optional feature.
+Capability negotiation is a mandatory initialization handshake.
 
 ```mermaid
 sequenceDiagram
@@ -95,34 +93,21 @@ sequenceDiagram
     Note over C,S: Session active — both parties<br/>MUST respect negotiated capabilities
 ```
 
-**Version negotiation:** client sends its latest supported version; if the server cannot match, it responds with its own latest. If the client cannot support that version, it SHOULD disconnect — no silent degradation.
-
-Both parties MUST respect negotiated capabilities for the entire session.
+Client sends its latest version; the server matches or replies with its own. If the client cannot support that, it SHOULD disconnect — no silent degradation. Both parties MUST respect negotiated capabilities for the whole session.
 
 ## Security Boundaries
 
-MCP enforces server isolation by design. Each connection is isolated, servers receive only necessary context, conversation history stays with the host, and cross-server interactions are controlled by the host.
+MCP isolates servers by design: each connection is isolated, servers see only necessary context, conversation history stays with the host, cross-server interactions are host-controlled.
 
-### Server requirements (from the spec)
+**Server MUSTs:** validate inputs, enforce access controls, rate-limit, sanitize outputs.
 
-- MUST validate all tool inputs
-- MUST implement appropriate access controls
-- MUST rate-limit tool invocations
-- MUST sanitize tool outputs
+**Client SHOULDs:** timeout calls, log for audit, show inputs before calling ([confirmation gates](../security/human-in-the-loop-confirmation-gates.md)).
 
-### Client requirements (from the spec)
-
-- SHOULD implement timeouts for tool calls
-- SHOULD log tool usage for audit
-- SHOULD show tool inputs to users before calling ([confirmation gates](../security/human-in-the-loop-confirmation-gates.md))
-
-### Enterprise governance
-
-For team deployments: centralized configuration via `managed-mcp.json`, allowlist/denylist policies, project-scoped `.mcp.json` for sharing, and OAuth 2.0 for authentication. Prefer OAuth over personal access tokens.
+**Team deployments:** centralized `managed-mcp.json`, allowlist/denylist policies, project-scoped `.mcp.json`, OAuth 2.0 over PATs.
 
 ## Example
 
-A well-designed MCP server for a deployment tool applies the principles above: focused tools, poka-yoke parameters, both error types, and behavioral annotations.
+A deployment-tool MCP server applying the principles above — focused tools, poka-yoke parameters, both error types, behavioral annotations.
 
 ```json
 {
@@ -149,17 +134,17 @@ A well-designed MCP server for a deployment tool applies the principles above: f
 }
 ```
 
-The `environment` uses an enum, `version` enforces semver via regex, and the description includes a selection signal pointing to `rollback_service`. `destructiveHint` tells clients to require confirmation. On failure, the server returns `isError: true` with a domain-specific message — not a generic JSON-RPC error.
+`environment` is an enum, `version` enforces semver via regex, and the description routes rollbacks to a separate tool. `destructiveHint` triggers confirmation. On failure, the server returns `isError: true` with a domain-specific message — not a generic JSON-RPC error.
 
 ## When This Backfires
 
-**stdio couples server lifecycle to client process.** When the client restarts, the server restarts too — all in-flight operations are dropped. For long-running tools or shared state, a Streamable HTTP server with independent lifecycle is safer despite the infrastructure overhead.
+**stdio couples server lifecycle to client.** Client restart drops in-flight operations — prefer Streamable HTTP for long-running tools or shared state.
 
-**Tool annotations are advisory, not enforcement.** `destructiveHint: true` prompts client confirmation dialogs but does not prevent execution. Servers that rely on annotations for access control instead of server-side validation are vulnerable when clients ignore hints or when annotation defaults change.
+**Annotations are advisory.** `destructiveHint: true` prompts confirmation but does not block execution. Servers leaning on annotations for access control break when clients ignore hints.
 
-**Capability negotiation is silent on feature gaps.** If a server negotiates away a capability the client expected (e.g., sampling, elicitation), the client receives no structured error explaining which capability is absent — it sees a method-not-found response. Build explicit fallback paths for optional capabilities.
+**Capability negotiation is silent on gaps.** A client expecting sampling or elicitation sees method-not-found, not a structured error. Build explicit fallbacks for optional capabilities.
 
-**Large tool surfaces degrade even with lazy loading.** Lazy loading reduces token cost but not selection accuracy. An agent that can search 200 tools still chooses worse than one that has 10 focused tools. Lazy loading is a mitigation, not a substitute for tool surface curation.
+**Lazy loading doesn't fix selection accuracy.** An agent searching 200 tools still chooses worse than one with 10 focused tools — deferral mitigates but does not substitute for curation.
 
 ## Related
 
@@ -175,5 +160,6 @@ The `environment` uses an enum, `version` enforces semver via regex, and the des
 - [RFC 9457 Machine-Readable Errors](rfc9457-machine-readable-errors.md)
 - [MCP LLM Sampling](mcp-llm-sampling.md)
 - [MCP Elicitation](mcp-elicitation.md)
+- [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Advanced Tool Use](advanced-tool-use.md)
 - [Browser Automation for Research](browser-automation-for-research.md)

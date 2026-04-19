@@ -1,12 +1,12 @@
 ---
-title: "Domain-Specific Agent Challenges: Frontend, Infrastructure, Data"
-description: "Agent effectiveness varies by domain; frontend, infrastructure, and data engineering each impose distinct constraints that require different configurations"
+title: "Domain-Specific Agent Challenges"
+description: "Agent effectiveness varies by domain. Each domain imposes distinct constraints that require different configurations, verification, and autonomy levels."
 tags:
   - human-factors
   - agent-design
 ---
 
-# Domain-Specific Agent Challenges: Frontend, Infrastructure, Data
+# Domain-Specific Agent Challenges
 
 > Agent effectiveness varies by domain; frontend, infrastructure, and data engineering each impose distinct constraints that require different configurations, verification approaches, and autonomy levels.
 
@@ -121,14 +121,11 @@ Constraining component choice converts visual judgment into a structural check: 
 
 ## Related
 
-- [The Anthropomorphized Agent](../anti-patterns/anthropomorphized-agent.md)
-- [Cargo Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md)
 - [Rigor Relocation](rigor-relocation.md)
 - [Safe Command Allowlisting](safe-command-allowlisting.md)
-- [Process Amplification](process-amplification.md)
-- [Skill Atrophy](skill-atrophy.md)
+- [Blast Radius Containment](../security/blast-radius-containment.md)
+- [Plan-First Loop](../workflows/plan-first-loop.md)
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
 - [Evidence-Based Allowlist Auto-Discovery](evidence-based-allowlist-auto-discovery.md)
-- [The Context Ceiling](context-ceiling.md)
 - [Empirical Baseline: How Developers Configure Agentic AI Coding Tools](empirical-baseline-agentic-config.md)

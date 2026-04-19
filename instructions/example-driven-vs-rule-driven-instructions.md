@@ -105,6 +105,7 @@ Rules and examples engage different mechanisms in how transformers process instr
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md)
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — empirical evidence on negative-vs-positive rule polarity for coding agents
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
 - [Context Priming for AI Agent Development](../context-engineering/context-priming.md)

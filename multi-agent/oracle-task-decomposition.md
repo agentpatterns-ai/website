@@ -5,6 +5,11 @@ tags:
   - agent-design
   - testing-verification
   - workflows
+aliases:
+  - oracle pattern
+  - oracle-based decomposition
+  - differential testing oracle
+  - reference oracle pattern
 ---
 # Oracle-Based Task Decomposition
 

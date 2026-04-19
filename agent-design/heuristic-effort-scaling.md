@@ -16,7 +16,7 @@ aliases:
 
 ## The Problem with Rigid Instructions
 
-Fixed instructions like "always use three subagents" waste tokens on simple fact-finding and under-invest on complex tasks. "Be thorough" gives no actionable constraint. [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) encountered this directly: early versions spawned up to 50 subagents for queries that needed one. Encoding explicit complexity tiers solved it.
+Fixed instructions like "always use three subagents" waste tokens on simple fact-finding and under-invest on complex tasks. "Be thorough" gives no actionable constraint. [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) spawned up to 50 subagents for queries needing one until explicit complexity tiers were encoded.
 
 ## Complexity Tiers
 
@@ -28,15 +28,15 @@ Define tiers in the system prompt with concrete resource ceilings:
 | Direct comparison | "Compare approach A vs B" | 2–4 | 10–15 each |
 | Complex research | "Audit the entire auth surface" | 10+ | Parallelized |
 
-These numbers come from [Anthropic's documented experience](https://www.anthropic.com/engineering/multi-agent-research-system) building a production research system. The exact thresholds depend on your domain — the critical principle is that tiers exist and are explicit, not inferred.
+These numbers come from [Anthropic's documented experience](https://www.anthropic.com/engineering/multi-agent-research-system) building a production research system. Thresholds depend on your domain — the principle is that tiers exist and are explicit, not inferred.
 
 ## Breadth-First Before Narrowing
 
-Specific query instructions cause agents to issue overly narrow searches. A breadth-first heuristic outperforms step-by-step specificity because the agent can adapt to what it discovers. Encode it directly: "Start with short, broad queries. Evaluate what's available. Then progressively narrow focus." [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) explicitly prompted this pattern after observing the failure mode — a broad pattern returning 50 filterable results beats a specific pattern returning zero.
+Specific query instructions cause agents to issue narrow searches. A breadth-first heuristic outperforms step-by-step specificity because the agent can adapt to what it discovers. Encode it directly: "Start with short, broad queries. Evaluate what's available. Then progressively narrow focus." [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) prompted this pattern after observing the failure mode — a broad pattern returning 50 filterable results beats a specific pattern returning zero.
 
 ## Extended Thinking as a Planning Phase
 
-Before committing to a tool strategy, a lead agent can use extended thinking to assess query complexity, select tool paths, determine subagent count, and plan division of labour. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents then use interleaved thinking after each tool result to evaluate quality and decide whether to continue, pivot, or escalate.
+Before committing to a tool strategy, a lead agent can use extended thinking to assess complexity, select tool paths, determine subagent count, and plan division of labour. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents use interleaved thinking after each tool result to decide whether to continue, pivot, or escalate.
 
 Include "ultrathink" anywhere in a Claude Code skill to enable extended thinking for that invocation — see [Claude Code skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns).
 
@@ -51,11 +51,11 @@ Combining both reduced complex query time by up to 90%. The system prompt should
 
 ## Agent Self-Diagnosis
 
-Claude models can identify their own failure modes when prompted to. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) used a "tool-testing agent" that analysed poor [MCP](../standards/mcp-protocol.md) tool descriptions and rewrote them — a 40% reduction in completion time. Route those diagnostic observations back into the prompt refinement loop.
+Claude models can identify their own failure modes when prompted to. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) used a "tool-testing agent" that rewrote poor [MCP](../standards/mcp-protocol.md) tool descriptions — a 40% reduction in completion time. Route diagnostic observations back into the prompt refinement loop.
 
 ## Iterative Refinement Protocol
 
-[Anthropic's team](https://www.anthropic.com/engineering/multi-agent-research-system) found that ~20-query test sets are sufficient to detect regressions when refining effort-scaling prompts. Early iterations showed prompt tweaks moving success rates from 30% to 80%.
+[Anthropic's team](https://www.anthropic.com/engineering/multi-agent-research-system) found ~20-query test sets sufficient to detect regressions when refining effort-scaling prompts. Early iterations showed prompt tweaks moving success rates from 30% to 80%.
 
 The refinement loop:
 
@@ -72,11 +72,11 @@ Claude Code's `/effort` command sets the reasoning effort level for the session 
 
 ## When This Backfires
 
-Heuristic effort scaling adds coordination overhead and multiplies token consumption. [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) documented that multi-agent architectures consume roughly 15× more tokens than single-agent chat interactions. Three specific conditions make the trade-off unfavorable:
+Heuristic effort scaling adds coordination overhead and multiplies token consumption. [Anthropic's research system](https://www.anthropic.com/engineering/multi-agent-research-system) documented multi-agent architectures using roughly 15× more tokens than single-agent chat. Three conditions make the trade-off unfavorable:
 
-1. **High inter-dependency tasks** — if subtasks must share state or a later step depends on the output of an earlier one, spawning parallel subagents causes duplication and merge conflicts. Most coding tasks fall here: file-level changes can conflict, and agents exploring the same module independently produce overlapping results.
-2. **Cost-sensitive or latency-sensitive workloads** — the per-query overhead of spawning 10+ subagents is justified only when the value of the answer scales with thoroughness. Routine lookups routed to a Tier 3 agent by a miscalibrated tier classifier will over-spend by an order of magnitude.
-3. **Synchronous execution constraints** — the lead agent cannot steer subagents after spawning them, and subagents cannot coordinate with each other mid-run. If the search space shifts partway through (a tool returns no results, or a discovered file invalidates the decomposition), the system cannot adapt until the full subagent batch completes.
+1. **High inter-dependency tasks** — if subtasks must share state or a later step depends on an earlier output, parallel subagents cause duplication and merge conflicts. Most coding tasks fall here: file-level changes conflict, and agents exploring the same module independently produce overlapping results.
+2. **Cost-sensitive or latency-sensitive workloads** — spawning 10+ subagents is justified only when the answer's value scales with thoroughness. Routine lookups routed to Tier 3 by a miscalibrated classifier over-spend by an order of magnitude.
+3. **Synchronous execution constraints** — the lead agent cannot steer subagents after spawning, and subagents cannot coordinate mid-run. If the search space shifts partway through, the system cannot adapt until the full batch completes.
 
 Apply effort-scaling heuristics selectively: research, synthesis, and audit workloads fit well; implementation tasks with shared mutable state typically do not.
 
@@ -122,6 +122,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
 - [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md) — parallel fan-out with a dedicated synthesis step to merge the strongest elements
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health as a pre-generation signal
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [The Think Tool](think-tool.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)

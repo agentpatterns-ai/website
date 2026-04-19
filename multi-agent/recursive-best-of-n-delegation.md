@@ -134,6 +134,5 @@ The rename subtask uses K=3 because it touches a public API boundary (high-blast
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) — scoring candidate outputs with rubric-based LLM judges at scale

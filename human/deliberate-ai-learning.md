@@ -102,6 +102,15 @@ Two signals that engagement is superficial:
 
 The Anthropic study found debugging scores showed the steepest divergence between interaction patterns. Debugging requires independent reconstruction of understanding — it cannot be offloaded.
 
+## When This Backfires
+
+The pattern degrades under specific conditions:
+
+- **Hard deadline pressure.** Socratic dialog and fading support lengthen time-to-working-code. When the goal is shipping, not skill-building, full delegation is faster — deferring learning to a calmer window is the honest trade-off.
+- **Missing foundational vocabulary.** Socratic prompting assumes the learner can parse the AI's response. In a genuinely unfamiliar domain, "why" questions yield answers the learner cannot evaluate, producing confident misunderstanding rather than growth.
+- **Unverifiable domains.** When output cannot be independently checked (obscure libraries, niche regulatory logic, specialised hardware), interrogating the AI creates a feedback loop with no ground truth. Pairing with a human expert beats deliberate AI dialog here.
+- **Rote or mechanical tasks.** Generation-then-comprehension on boilerplate or well-understood refactors wastes cognition without retention benefit. The ZPD only exists at the edge of capability; below that edge, delegation is correct.
+
 ## Key Takeaways
 
 - Interaction pattern determines whether AI use builds or erodes skill — tool choice is secondary

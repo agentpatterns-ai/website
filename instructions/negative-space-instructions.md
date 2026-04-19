@@ -64,6 +64,8 @@ A well-formed negative constraint is one you can verify automatically. If the co
 
 The effectiveness of negative constraints comes from reducing the interpretation surface. A constraint like "no filler phrases" collapses to a binary outcome — the phrase either appears or it doesn't. The agent cannot partially comply; the output is deterministically checkable. Positive guidance like "write concisely" leaves the interpretation open: the agent must model what "concise" means in context, and that model can drift.
 
+Mechanically, negative constraints eliminate entire token sequences from consideration during generation, which has a discrete and binary effect rather than a soft preference. Positive guidance ("be concise") narrows the output distribution without hard-cutting regions, so it must compete against other objectives in the model's output distribution. Negative constraints behave more like hard constraints in optimization: they create a feasibility boundary rather than a preference gradient.
+
 Palantir's prompt engineering guidance documents this directly: banning specific undesired outputs is more reliable than describing desired characteristics, because banned patterns can be verified while quality attributes require judgment ([Palantir AIP prompt engineering best practices](https://www.palantir.com/docs/foundry/aip/best-practices-prompt-engineering)).
 
 This specificity advantage also applies at enforcement time. A CI step can grep for banned phrases and block a commit; it cannot evaluate whether prose is "information-dense." The constraint is only as strong as your ability to verify it.
@@ -100,14 +102,11 @@ Complete the task in a single session. Be thorough.
 
 Each positive directive ("Write clear, self-documenting code") sets the goal. The negative constraints close off the most common violations — and every one is verifiable with a grep or a git diff.
 
-## Why It Works
-
-Negative constraints reduce the agent's search space. When a model generates text, every possible token is a candidate. A negative constraint eliminates entire token sequences from consideration, which has a discrete and binary effect: the banned phrase either appears or it doesn't. Positive guidance ("be concise") adds a soft preference that must compete against other objectives in the model's output distribution — it narrows the distribution without hard-cutting regions. Negative constraints are closest to hard constraints in optimization: they create a feasibility boundary rather than a preference gradient.
-
 ## When This Backfires
 
 Negative constraints fail in predictable ways:
 
+- **Negation comprehension**: Models do not always interpret negation reliably. A "Pink Elephant" or "white bear" effect occurs when the prohibited concept becomes a stronger prior in the model and the rate of prohibited output goes *up*, not down. [Negation: A Pink Elephant in the Large Language Models' Room? (Truhn et al., arxiv:2503.22395, 2025)](https://arxiv.org/abs/2503.22395) finds that negation handling varies substantially across model sizes and languages, and is not a solved capability. [Do not think about pink elephant! (Liu et al., arxiv:2404.15154, CVPR 2024 Responsible GenAI Workshop)](https://arxiv.org/abs/2404.15154) shows the same pattern in generative models and that prompt-based defenses can mitigate but not eliminate it. Reframing as a positive instruction often outperforms a literal "do not" — see [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) for the trade-off.
 - **Unknown failure modes**: A constraint list only covers mistakes the author anticipated. When an agent finds a new way to violate the spirit of an instruction, no existing negative constraint catches it — the list must be updated reactively.
 - **Superficial compliance**: An agent can satisfy the letter of a negative constraint while preserving the underlying problem. Banning "in this guide" doesn't prevent wordy preambles; it just changes the wording.
 - **Constraint explosion**: As edge cases accumulate, the constraint list grows until it dominates the prompt. Long constraint lists are harder to reason about and more likely to conflict internally.

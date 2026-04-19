@@ -75,7 +75,7 @@ instructions:
 
 ## Setup Config Pattern
 
-Store initial setup in `config.json` under `${CLAUDE_PLUGIN_DATA}`. If absent on first run, prompt via `AskUserQuestion` before proceeding ([source](https://x.com/trq212/status/2033949937936085378)) — this avoids hard-coding team-specific values.
+Store initial setup in `config.json` under `${CLAUDE_PLUGIN_DATA}`. If absent on first run, prompt via `AskUserQuestion` before proceeding ([source](https://x.com/trq212/status/2033949937936085378)) — this avoids hard-coding team-specific values. For pipeline contexts where `AskUserQuestion` is unusable, see the [Override Pattern](override-interactive-commands.md) for suppressing interactive prompts while reusing the same skill definition.
 
 ```markdown
 ## Setup

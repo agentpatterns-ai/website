@@ -11,15 +11,13 @@ tags:
 
 > Use permission rules and hooks to prevent agents from reading credentials and secrets, even when those files are present in the working directory.
 
-## Scope
-
-The principles here apply to any agent with filesystem access. The specific configuration examples use Claude Code — other tools implement equivalent mechanisms differently.
+Sensitive-file protection is enforced by a combination of path-based permission rules and pre-read hooks that intercept tool calls before the agent can observe file contents. The principles below apply to any agent with filesystem access; the configuration examples use Claude Code — other tools implement equivalent mechanisms differently.
 
 ## The Exposure Problem
 
 Agents exploring a codebase will read whatever files they encounter. A `.env` file with production database credentials, `~/.aws/credentials`, or a `secrets.yaml` can end up in the context window — and from there, in API requests sent to the model, in generated code, and in session logs. The exposure is often invisible: the developer does not see the agent reading the file.
 
-Advisory instructions ("don't read .env files") are unreliable. Models that follow system prompt rules in simple scenarios routinely ignore them when a task requires resolving an ambiguity — instruction-following yields to task completion pressure. Mechanical enforcement is required.
+Advisory instructions ("don't read .env files") are unreliable. Instruction-following degrades as the number of simultaneous constraints grows — the [Curse of Instructions](https://openreview.net/forum?id=R6q67CDBCH) paper shows multiplicative failure when models must satisfy many rules at once, and [practitioner reports](https://github.com/run-llama/llama_index/issues/13343) describe system-prompt rules being ignored mid-task. Mechanical enforcement is required.
 
 ## Permission Rules in settings.json
 

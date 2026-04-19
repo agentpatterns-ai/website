@@ -2,6 +2,7 @@ title: Agent Design
 nav:
   - index.md
   - "Core Design":
+      - agent-discoverable-slash-commands.md
       - agent-driven-codebase-fingerprint.md
       - agent-first-software-design.md
       - agentic-ai-architecture-evolution.md
@@ -20,6 +21,7 @@ nav:
       - inversion-analysis.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md
+      - role-orchestration-single-model.md
       - graph-of-thoughts.md
       - petri-net-of-thoughts.md
       - self-discover-reasoning.md
@@ -33,11 +35,16 @@ nav:
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
       - cross-cycle-consensus-relay.md
+      - dual-trace-memory-encoding.md
+      - durable-interactive-artifacts.md
       - episodic-memory-retrieval.md
       - generative-agents-memory-stream.md
+      - layered-mutability.md
       - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
+      - memory-transfer-learning.md
       - session-initialization-ritual.md
+      - session-recap.md
       - subtask-level-memory.md
   - "Control & Orchestration":
       - controlling-agent-output.md
@@ -50,7 +57,9 @@ nav:
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
       - loop-strategy-spectrum.md
+      - plan-compliance-in-agents.md
       - progressive-disclosure-agents.md
+      - remote-session-control.md
       - self-rewriting-meta-prompt-loop.md
       - specialized-agent-roles.md
       - sprint-contracts.md
@@ -79,6 +88,7 @@ nav:
       - agent-pushback-protocol.md
       - agent-turn-model.md
       - deferred-permission-pattern.md
+      - tool-confirmation-carousel.md
       - harness-engineering.md
       - harness-hill-climbing.md
       - lane-based-execution-queueing.md

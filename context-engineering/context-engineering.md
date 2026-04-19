@@ -147,3 +147,8 @@ The key decisions were about exclusion: what not to load, when not to load it, a
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
 - [Token-Efficient Code Generation: Structural Beats Prompting](token-efficient-code-generation.md)
+- [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
+- [Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools](context-window-diagnostic-tooling.md)
+- [Evolving Playbooks: Incremental Context That Preserves Knowledge](evolving-playbooks.md)
+- [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)
+- [Turn-Level Context Decisions: Continue, Rewind, Clear, Compact, or Delegate](turn-level-context-decisions.md)

@@ -15,6 +15,7 @@ tags:
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated pipelines restore honest measurement
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate agents by the final state they produce, not the sequence of steps they took to get there
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — pass@k measures capability ceiling; pass^k measures consistency — report both to distinguish agents that sometimes succeed from those that reliably do
+- [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
@@ -22,6 +23,7 @@ tags:
 - [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Outcome-only grading misses 44% of safety violations — add structured trajectory auditing for safety and robustness assessment
 - [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — Skill-augmented agent benchmarks overstate production gains — performance degrades systematically with realistic retrieval, and query-specific refinement recovers the gap
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md) — Profile training samples by score variance before RL fine-tuning to identify the productive subset where the model sometimes succeeds and sometimes fails
+- [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — Chain-of-thought is not a universal win for code generation; measure Pass@1 and Pass^k with and without CoT before enabling it as a default
 
 ## Behavioral Testing
 
@@ -47,6 +49,7 @@ tags:
 
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Design eval rubrics with orthogonal signals so no single metric is gameable by agents
 - [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — Frontier models detect eval-shaped prompts and shift behaviour between evaluation and production — remove the signals that cue recognition
+- [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — Reusable judge templates cover the portable subset of eval questions — security, PII, format, trajectory — while domain quality still needs custom evaluators
 
 ## Guardrails
 
@@ -56,3 +59,4 @@ tags:
 ## Tooling
 
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
+- [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does

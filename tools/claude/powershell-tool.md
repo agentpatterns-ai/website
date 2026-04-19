@@ -39,7 +39,7 @@ Three settings control where PowerShell is used. They are independent of each ot
 |---------|-------|----------------------------------------------|
 | `"defaultShell": "powershell"` in `settings.json` | Interactive `!` commands in the REPL | Yes |
 | `"shell": "powershell"` on a hook entry | That hook only | No |
-| `shell: powershell` in skill frontmatter | `!` blocks in that skill | Yes |
+| `shell: powershell` in [skill frontmatter](../../tool-engineering/skill-frontmatter-reference.md) | `!` blocks in that skill | Yes |
 
 Per-hook shell routing (`"shell": "powershell"`) works independently of the tool flag — hooks spawn PowerShell directly. This means you can run PowerShell in hooks without enabling the tool globally. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
 

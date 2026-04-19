@@ -17,10 +17,32 @@ A companion convention is `/llms-full.txt`: all linked pages concatenated for co
 ## When This Backfires
 
 - **Static sites with infrequent updates** benefit most; high-churn sites risk serving stale link lists that mislead agents
-- **No major LLM provider has published documentation confirming they read `llms.txt` at inference time** — treat adoption as forward-compatible infrastructure, not a guaranteed citation signal
+- **No major LLM provider has published documentation confirming they read `llms.txt` at inference time** — Google's John Mueller stated in June 2025 that "no AI system currently uses llms.txt" and that server logs show AI bots are not fetching it ([Search Engine Roundtable](https://www.seroundtable.com/google-ai-llms-txt-39607.html)); treat adoption as forward-compatible infrastructure, not a guaranteed citation signal
+- **Empirical 2026 data shows no citation uplift**: an analysis of 300,000 domains found no measurable effect of `llms.txt` presence on AI citation likelihood, and adoption remains ~10% even among tech-forward publishers ([Search Engine Journal](https://www.searchenginejournal.com/llms-txt-shows-no-clear-effect-on-ai-citations-based-on-300k-domains/561542/); [ALLMO analysis of 94k cited URLs](https://www.allmo.ai/articles/llms-txt))
 - A poorly curated `llms.txt` pointing to dead links is worse than none — agents that follow broken links waste context and may return errors
 
 See [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) for full adoption landscape and known limitations.
+
+## Example
+
+A minimal `llms.txt` for a documentation site:
+
+```markdown
+# Acme Docs
+
+> Developer documentation for the Acme platform — REST API, SDKs, and tutorials.
+
+## Core Documentation
+
+- [Quick Start](/docs/quickstart): First app in 5 minutes
+- [API Reference](/docs/api): Full endpoint reference
+
+## Optional
+
+- [Changelog](/changelog): Release notes
+```
+
+The H1 is the only required element per the [spec](https://llmstxt.org); sections and the `## Optional` block are conventions that help agents budget context. Publish `/llms-full.txt` alongside it to give agents the full concatenated content in one fetch.
 
 ## Related
 

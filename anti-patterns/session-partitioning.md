@@ -18,7 +18,7 @@ aliases:
 
 It is tempting to keep one Claude Code session running all day and pile tasks onto it — review a PR, then start a feature, then debug a test failure. Each task leaves residue: file contents, command outputs, failed approaches, and off-topic reasoning. As the context fills, Claude begins making decisions influenced by stale information from earlier tasks.
 
-The [Claude Code best practices](https://code.claude.com/docs/en/best-practices) documentation describes this as the "kitchen sink session" anti-pattern: context full of irrelevant information that degrades performance on the current task. According to the same source, LLM performance degrades as context fills — the context window is the primary resource to manage.
+The [Claude Code best practices](https://code.claude.com/docs/en/best-practices) documentation describes this as the "kitchen sink session" anti-pattern: context full of irrelevant information that degrades performance on the current task. According to the same source, LLM performance degrades as context fills — the context window is the primary resource to manage. Independent research by Chroma on [context rot](https://github.com/chroma-core/context-rot) corroborates this: across 18 frontier models, performance varies significantly with input length even on simple tasks, and irrelevant tokens degrade reliability more than length alone would predict.
 
 Token costs reflect this directly. A session that runs through code review, feature development, and a debugging investigation accumulates far more context than three focused sessions would. You pay for the noise.
 

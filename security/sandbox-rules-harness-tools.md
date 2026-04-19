@@ -8,7 +8,7 @@ tags:
   - agent-design
   - human-factors
 ---
-# Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools
+# Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party
 
 > When composing tools from multiple sources, define sandbox and guardrail rules only for the tools your harness controls — and document explicitly that external tools must enforce their own guardrails.
 

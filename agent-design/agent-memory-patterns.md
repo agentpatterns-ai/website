@@ -35,9 +35,9 @@ Every agent conversation starts with an empty context. [Claude Code's memory sys
 
 ## Temporal Memory: Episodic and Working
 
-The scope-based model organizes memory by *where* it lives. OPENDEV adds a temporal dimension separating cross-session recall from within-session observations ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)).
+Scope organizes memory by *where* it lives. OPENDEV adds a temporal dimension separating cross-session recall from within-session observations ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)).
 
-**Episodic memory** persists across sessions: the agent summarizes key decisions and failed approaches at session end, re-injected on the next start. This reduced redundant exploration by ~30% ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)).
+**Episodic memory** persists across sessions: the agent summarizes key decisions and failed approaches at session end, re-injected on the next start.
 
 **Working memory** is session-scoped: observations accumulated during execution, re-injected each iteration, bounded to prevent context growth. Episodic maps to project or user scope; working maps to session-local state.
 
@@ -51,21 +51,15 @@ Effective memory entries are stable, general, and verified.
 
 ### Non-Obvious Corrections: The Highest-Value Memory Category
 
-[OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/) targets "non-obvious corrections, filters, and constraints critical for correctness but difficult to infer from other layers alone." General model knowledge does not belong in memory — only domain-specific deviations the model would otherwise get wrong.
-
-Examples:
+[OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/) targets "non-obvious corrections, filters, and constraints critical for correctness but difficult to infer from other layers alone." General model knowledge does not belong in memory — only domain-specific deviations the model would otherwise get wrong. Examples:
 
 - "`sessions` excludes first-party traffic — always filter `source_type = 'third_party'` for comparable metrics"
-- "API key rotation in March 2024 means queries on earlier data use a different auth scheme"
+- "API key rotation in March 2024 split auth schemes for earlier data"
 - "This client's 'active user' definition excludes weekend-only users"
 
 ### Proactive Save Prompts
 
 When the agent receives a correction, it should prompt the user to save it ([OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/)). Without the prompt, corrections evaporate at session end.
-
-## Memory Curation
-
-Memory is how an agent improves without retraining. Append-only memory degrades: stale entries cause outdated patterns and [contradictory entries force the agent to guess which version is correct, producing inconsistent behavior](https://arxiv.org/html/2603.10062v1). Update or remove entries when patterns change; if an entry hasn't influenced behavior in several sessions, move it to code comments.
 
 ## Memory vs. Codebase Breadcrumbs
 
@@ -82,26 +76,18 @@ For shared conventions, seeded context (AGENTS.md, inline comments) is more appr
 
 ## Why It Works
 
-Agents start each session with an empty context window. Without external persistence, the agent rediscovers the same facts — codebase conventions, recurring failure modes, domain-specific exceptions — on every session. Scoped memory works by injecting relevant prior knowledge into the context at session start, so the model reasons from accumulated state rather than ground zero. The OPENDEV study found this reduced redundant exploration by ~30% ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)) by eliminating re-discovery loops that otherwise repeat the same investigative steps. Scoping prevents cross-contamination: org-level policies stay separate from personal preferences, so one user's corrections don't override another's conventions.
+Without external persistence, the agent rediscovers the same facts — codebase conventions, recurring failure modes, domain-specific exceptions — on every session. Injecting relevant prior knowledge at session start lets the model reason from accumulated state rather than ground zero; OPENDEV measured a ~30% drop in redundant exploration from eliminating these re-discovery loops ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)). Scoping prevents cross-contamination: org policies stay separate from personal preferences, so one user's corrections don't override another's conventions.
 
 ## When This Backfires
 
-Persistent memory introduces failure modes that an amnesiac agent avoids:
+Persistent memory introduces failure modes an amnesiac agent avoids:
 
-- **Stale entries silently degrade output.** A correction that was accurate six months ago may now contradict a refactored API or updated convention. The agent applies it confidently because it has no way to know the context has changed.
-- **Contradictory entries produce unpredictable behavior.** When the same topic accumulates conflicting instructions across sessions — an updated rule added without removing the old one — the agent guesses which version is correct, producing inconsistent results.
-- **High-volume environments cause context pollution.** Agents operating across many domains or users can fill memory with low-signal entries that dilute retrieval quality and exceed token budgets.
-- **Shared-scope memory creates coordination problems.** In multi-agent systems, concurrent writes to shared project memory can introduce race conditions or leave stale artifacts visible after updates ([multi-agent memory challenges](https://arxiv.org/html/2603.10062v1)).
+- **Stale entries silently degrade output.** A correction accurate six months ago may now contradict a refactored API. The agent applies it confidently because it has no way to know the context changed.
+- **Contradictory entries produce unpredictable behavior.** When conflicting instructions accumulate — an updated rule added without removing the old one — the agent guesses which is correct, producing inconsistent results.
+- **High-volume environments cause context pollution.** Agents across many domains or users fill memory with low-signal entries that dilute retrieval quality and exceed token budgets.
+- **Shared-scope memory creates coordination problems.** Concurrent writes to shared project memory can introduce race conditions or leave stale artifacts visible after updates ([multi-agent memory challenges](https://arxiv.org/html/2603.10062v1)).
 
 Use memory only for stable, general, verified facts. Establish a curation cadence: review entries that haven't influenced behavior in several sessions and either revalidate or remove them.
-
-## Anti-Patterns
-
-**Never remember anything.** Agents repeat the same discoveries each session.
-
-**Remember everything.** Memory fills with low-signal entries; stale guidance degrades performance.
-
-**Persist session state.** In-progress state expires immediately and clutters memory.
 
 ## Example
 

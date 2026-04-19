@@ -51,14 +51,14 @@ Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bing
 
 - Runs its own large-scale index; real-time search fires on every query without exception
 - **21.87 citations per response** — 2.8x more than ChatGPT ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
-- Strongest freshness weighting of any major platform; recent content is heavily favored over older material
+- Strongest freshness weighting of any major platform; recent content is heavily favored over older material ([Metrics Rule, 2026](https://www.metricsrule.com/research/rag-author-markup-publication-date-citations/))
 - Favors niche and community-generated sources at higher rates than other platforms ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
 
 ### Gemini — Google AI Overviews
 
 - Draws from Google's own index and Knowledge Graph — no external backend
 - **52.15% of Gemini citations come from brand-owned websites** — highest brand preference of any platform ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
-- Multimodal content (text + images + video) receives higher citation rates than text-only pages
+- Multimodal content (text + images + video) receives higher citation rates than text-only pages ([ConvertMate Gemini Visibility Study](https://www.convertmate.io/research/gemini-visibility))
 - Citation placement averages later in responses than ChatGPT ([Qwairy Q3 2025](https://www.qwairy.co/blog/provider-citation-behavior-q3-2025))
 
 ## Citation Volume by Platform
@@ -80,7 +80,7 @@ Most AI crawlers cannot render JavaScript — only Googlebot, Applebot, and Bing
 
 ## Why Citation Behavior Differs
 
-Citation profiles follow retrieval architecture. ChatGPT routes through Bing — Bing ranking signals dominate. Claude routes through Brave Search, which underweights ad-heavy domains and over-indexes on factual content. Perplexity's own crawler has a short TTL cache, making freshness the primary signal. Gemini draws from Google's Knowledge Graph, where brand authority (E-E-A-T, entity associations) filters quality. Citation signals are not transferable because the underlying ranking mechanisms differ structurally.
+Citation profiles follow retrieval architecture. ChatGPT inherits Bing ranking signals. Claude inherits Brave's bias toward factual content and away from ad-heavy domains. Perplexity's short-TTL crawler makes freshness the primary signal. Gemini filters through Google's Knowledge Graph, where brand authority (E-E-A-T) dominates. Signals do not transfer because the ranking mechanisms differ structurally.
 
 ## When This Backfires
 

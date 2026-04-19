@@ -21,7 +21,7 @@ An agent dropped into an active project mid-session has no inherent awareness of
 
 ## The Ritual
 
-[Anthropic's harness engineering guidance](harness-engineering.md) describes an initializer agent pattern for long-running workflows. Applied to coding sessions, the ritual maps to five ordered steps:
+[Anthropic's harness engineering guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) describes an initializer agent pattern for long-running workflows, a design also documented in the [ZenML LLMOps case study](https://www.zenml.io/llmops-database/long-running-agent-harness-for-multi-context-software-development) of the same system. Applied to coding sessions, the ritual maps to five ordered steps:
 
 ```mermaid
 graph TD
@@ -53,7 +53,7 @@ Only after steps 1–4 complete successfully does the agent write code. If any p
 
 ## Enforcing the Ritual
 
-The ritual is only reliable when it is non-negotiable. [Anthropic's effective harnesses guidance](harness-engineering.md) notes that initializer agents differ from working agents in their initial user prompts — the harness enforces sequence, not the agent's discretion.
+The ritual is only reliable when it is non-negotiable. Anthropic's [effective harnesses guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) notes that initializer agents differ from working agents in their initial user prompts — the harness enforces sequence, not the agent's discretion. Parallel Web Systems' [harness overview](https://parallel.ai/articles/what-is-an-agent-harness) makes the same point: the harness is the deterministic scaffold around a non-deterministic model, and startup steps belong to the scaffold rather than the model's discretion.
 
 In practice:
 
@@ -144,6 +144,7 @@ The ritual adds overhead at session start — when that cost outweighs the benef
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory](subtask-level-memory.md)
 - [Agent Harness](agent-harness.md)
+- [Harness Engineering](harness-engineering.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Agent Memory Patterns](agent-memory-patterns.md)
 - [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)

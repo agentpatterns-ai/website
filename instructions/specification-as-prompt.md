@@ -101,11 +101,10 @@ The agent reads the interface, derives the method signatures, parameter types, r
 ## Related
 
 - [Context Engineering](../context-engineering/context-engineering.md)
-- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Context Priming](../context-engineering/context-priming.md)
 - [Frozen Spec File](frozen-spec-file.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Constraint Encoding Compliance Gap](constraint-encoding-compliance-gap.md)
 - [Hints Over Code Samples](hints-over-code-samples.md)
+- [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — natural-language specifications as a sufficient substrate to regenerate the implementation

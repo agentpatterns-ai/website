@@ -1,6 +1,6 @@
 ---
 title: "AGENTS.md as a Table of Contents, Not an Encyclopedia"
-description: "Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory treated as the system of record. Pointer Map, AGENTS.md"
+description: "Keep AGENTS.md to ~100 lines as a pointer map and put structured knowledge in a versioned docs/ directory treated as the system of record."
 tags:
   - context-engineering
   - instructions
@@ -9,7 +9,7 @@ aliases:
   - AGENTS.md Content Strategy
 ---
 
-# AGENTS.md as Table of Contents, Not Encyclopedia
+# AGENTS.md as a Table of Contents, Not an Encyclopedia
 
 > Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory treated as the system of record.
 
@@ -47,7 +47,9 @@ This follows the same principle as [retrieval-augmented context loading](../cont
 
 ## Enforcing Freshness Mechanically
 
-Pointers only work if the linked documents exist and are current. The Harness team enforces this mechanically with linters and CI jobs [unverified — exact approach not detailed in the public post]. Practical approaches:
+Pointers only work if the linked documents exist and are current. The Harness team runs "dedicated linters and CI jobs [that] validate that the knowledge base is up to date, cross-linked, and structured correctly," plus a recurring "doc-gardening" agent that scans for obsolete documentation and opens fix-up pull requests ([OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)). Mechanical enforcement of this kind is the same class of deterministic sensor that Martin Fowler catalogs as part of the harness: tests, linters, type checkers, and structural analysis that run fast and produce reliable signals ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/harness-engineering.html)).
+
+Practical approaches:
 
 - CI that breaks if AGENTS.md contains a broken link to docs/
 - Lint rules that flag docs/ files not referenced from AGENTS.md
@@ -107,29 +109,27 @@ done
 
 If any linked document is deleted or renamed without updating AGENTS.md, the CI job fails before the stale pointer reaches a running agent.
 
+## When This Backfires
+
+The pointer-map pattern assumes the agent will follow pointers on demand. An ETH Zurich study of 138 Python tasks across four agents found that repository-level context files — even human-written ones — consistently drive up inference cost by raising the number of agent steps by 19-20%, and that LLM-generated context files reduced task success by ~3% on average compared to no context file at all ([Gloaguen et al. 2026, *Evaluating AGENTS.md*](https://arxiv.org/abs/2602.11988)). The pattern is worse than the alternative when:
+
+- **The repository is small or conventional.** If a single `README.md` and obvious file layout already answer "what is this and where does it live," an AGENTS.md pointer map just adds tokens without directing behavior.
+- **Agents do not reliably follow pointers.** Some agent harnesses pre-load AGENTS.md but never traverse the linked docs, leaving the agent with a table of contents and no content. The study found instructions are followed, but context files "do not function as effective repository overviews."
+- **The docs/ directory is drafted by an agent rather than maintained by humans.** LLM-generated context files in the study degraded performance; without the discipline of human authorship and the CI/doc-gardening machinery described above, the pointer map decays into stale links.
+
 ## Key Takeaways
 
 - Monolithic AGENTS.md crowds context, dilutes attention, and rots — structural fix: a ~100-line pointer map backed by a versioned `docs/` directory.
 - Enforce freshness mechanically — CI link validation is more reliable than human maintenance.
 - The principle is tool-agnostic: applies equally to CLAUDE.md, Copilot instructions, and Cursor rules.
 
-## Unverified Claims
-
-- Harness team enforces knowledge base freshness with linters and CI jobs `[unverified — the exact CI validation approach is not detailed in the public post; mechanical freshness enforcement as a practice is attributed to the Harness team's account]`
-
 ## Related
 
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — complementary technique covering *where* to place AGENTS.md files
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md) — structural patterns for organizing AGENTS.md content
-- [CLAUDE.md Convention](claude-md-convention.md) — conventions for instruction files in Claude projects
+- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — research on when AGENTS.md files degrade agent performance
+- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — the broader principle of pulling context on demand
+- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the underlying AGENTS.md standard
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md) — layering instruction files across directory levels
-- [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md) — overview of instruction file types across agent platforms
-- [Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes](layered-instruction-scopes.md) — scoping instruction files to the right context level
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
-- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
-- [Context Priming](../context-engineering/context-priming.md)
-- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — when AGENTS.md files hurt more than they help
-- [Production System Prompt Architecture](production-system-prompt-architecture.md) — structural patterns for large-scale instruction files
+- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md) — why knowledge belongs in docs, not instructions
 - [Harness Engineering](../agent-design/harness-engineering.md) — the discipline of designing agent environments so agents succeed by default

@@ -59,12 +59,13 @@ GitHub Copilot's coding agent cannot force push by design — branch restriction
 
 ## When This Backfires
 
-Optimizing for reviewer engagement assumes reviewers are available, willing to engage, and that their expectations are technically sound. Four conditions undermine the pattern:
+Optimizing for reviewer engagement assumes reviewers are available and their expectations are sound. Five conditions undermine the pattern:
 
-- **Chronic reviewer scarcity**: High engagement correlates with merge success only because those PRs captured a scarce resource — not because engagement can be manufactured. Agents generating high PR volume compete for the same reviewer bandwidth, reducing engagement rates overall.
-- **Design disagreement without recourse**: The dominant failure mode (10 of 30 failed PRs) is architectural divergence. When an agent cannot propose an alternative design, no review loop resolves the disagreement — task scoping and upfront context injection are prerequisites.
-- **Reviewer abandonment after initial engagement**: High time-to-first-review correlates with better outcomes only when reviewers eventually engage. If a PR waits in the queue and the reviewer abandons it, initial wait time becomes noise; large diffs compound that abandonment risk.
-- **CRA-only review**: The pattern assumes human reviewers with discretionary merge authority. Repositories using only automated agents for review see significantly lower merge rates (45% vs 68%) — engagement signals lose predictive power.
+- **Chronic reviewer scarcity**: Engagement correlates with merge success because those PRs captured a scarce resource, not because engagement can be manufactured. High-volume agents compete for the same reviewer bandwidth.
+- **Design disagreement without recourse**: The dominant failure mode (10 of 30 failed PRs) is architectural divergence. If an agent cannot propose an alternative design, no review loop resolves the disagreement.
+- **Reviewer abandonment after queueing**: High time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise; large diffs compound this risk.
+- **CRA-only review**: The pattern assumes human reviewers with discretionary merge authority. Repositories reviewed only by automated agents show much lower merge rates (45% vs 68%).
+- **High comment volume as a correction signal**: Each extra reviewer comment *decreases* agentic-PR merge odds by 2.8% (vs +2.7% for human PRs), interpreted as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749)); related work reports 1-10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753)).
 
 ## Example
 

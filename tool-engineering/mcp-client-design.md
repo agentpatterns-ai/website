@@ -12,11 +12,11 @@ tags:
 
 # MCP Client Design: Building Robust Host-Side Logic
 
-> MCP client design is the host-side logic that connects to one or more MCP servers, negotiates capabilities, routes tool calls to the right server, caches tool descriptions, enforces timeouts, and degrades gracefully when servers fail.
+> MCP client design is the host-side logic that connects to MCP servers, negotiates capabilities, routes tool calls, caches descriptions, enforces timeouts, and degrades gracefully on failure.
 
 ## Host, Client, Server
 
-MCP architecture separates three participants:
+MCP separates three participants. Each client handles one server connection with its own session state, capabilities, and transport:
 
 | Role | Responsibility |
 |------|---------------|
@@ -24,11 +24,9 @@ MCP architecture separates three participants:
 | **Client** | One instance per server connection; handles protocol lifecycle |
 | **Server** | Exposes tools, resources, and prompts over MCP |
 
-The host creates one client per server; each client maintains its own session state, capabilities, and transport.
-
 ## Connection Lifecycle
 
-Initialization is a strict three-step sequence ([MCP lifecycle spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle)):
+Initialization is a strict three-step sequence ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle)):
 
 ```mermaid
 sequenceDiagram
@@ -40,7 +38,7 @@ sequenceDiagram
     Note over Client,Server: Session active — tool calls permitted
 ```
 
-Client rules: do not batch `initialize` with other requests; send no non-ping requests until capability response arrives; disconnect on unsupported protocol version; only use negotiated capabilities.
+Client rules: do not batch `initialize`; send no non-ping requests before the capability response; disconnect on unsupported protocol versions; use only negotiated features.
 
 ### Shutdown
 
@@ -53,60 +51,47 @@ Shutdown differs by transport:
 
 ## Multi-Server Tool Routing
 
-MCP defines no collision resolution. When servers expose tools with the same name, the host resolves routing:
+MCP defines no collision resolution. When servers share a tool name, the host picks:
 
-**Namespace by server ID.** Maintain a `serverId -> tools[]` map; route `tools/call` to the correct client based on namespace.
-
-**Priority ordering.** Assign precedence to servers; higher-priority server wins on name collision.
-
-**User disambiguation.** Let the user choose. Interactive sessions only.
+- **Namespace by server ID.** Maintain a `serverId -> tools[]` map; route `tools/call` to the owning client.
+- **Priority ordering.** Assign precedence; higher-priority server wins on collision.
+- **User disambiguation.** Ask the user. Interactive sessions only.
 
 ## Tool Description Caching
 
-Two approaches to cut `tools/list` latency and token cost:
+Two approaches cut `tools/list` latency and tokens:
 
-### Static caching
-
-Cache `tools/list` locally; re-fetch on `notifications/tools/list_changed`, TTL expiry, or explicit refresh.
-
-### Dynamic discovery
-
-Expose a search interface; the agent fetches schemas only for matched tools at execution time — Anthropic's Tool Search Tool reports ~85% token reduction versus loading all definitions upfront ([advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+- **Static caching.** Cache `tools/list` locally; re-fetch on `notifications/tools/list_changed`, TTL expiry, or explicit refresh.
+- **Dynamic discovery.** Expose a search interface; the agent fetches schemas only for matched tools at call time — Anthropic's Tool Search Tool reports ~85% token reduction versus loading all definitions upfront ([advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## Timeout and Cancellation
 
-Establish per-request timeouts. When a timeout fires:
-
-1. Send `notifications/cancelled` with the request ID
-2. Stop waiting for the response
-3. Log the timeout
-
-Progress notifications MAY reset the clock, but enforce a hard maximum to prevent stalling.
+On timeout: send `notifications/cancelled` with the request ID, stop waiting, log. Progress notifications MAY reset the clock; enforce a hard maximum to prevent stalling.
 
 ### Health checks
 
-Either side can send a `ping` request to verify liveness. Multiple failed pings should trigger a reconnection attempt or session reset. Make ping frequency configurable — aggressive pinging wastes resources on stable connections.
+Either side can send `ping` to verify liveness. Multiple failures trigger reconnection or session reset. Keep ping frequency configurable — aggressive pinging wastes resources.
 
 ## Streamable HTTP Session Management
 
 For remote servers using Streamable HTTP:
 
-- Servers MAY assign an `Mcp-Session-Id` at initialization; clients MUST include it on all subsequent requests
-- If the server returns 404 for a known session ID, the client MUST reinitialize — the session has expired or been invalidated
-- SSE event IDs and the `Last-Event-ID` header enable resumability after disconnects, protecting against message loss
+- Servers MAY assign `Mcp-Session-Id` at init; clients MUST include it on later requests
+- On 404 for a known session, the client MUST reinitialize — the session expired or was invalidated
+- SSE event IDs and `Last-Event-ID` enable resumability after disconnects, preventing message loss
 
 ## Security
 
 ### Tool description integrity
 
-A server can change tool descriptions post-approval without triggering re-consent — a "rug pull" attack. Defenses:
+A server can change descriptions post-approval without re-consent — a "rug pull" attack. Defenses:
 
-- **Version-pin descriptions.** Hash the manifest at approval and flag post-approval changes.
+- **Version-pin descriptions.** Hash the manifest at approval; flag post-approval changes.
 - **Treat descriptions as untrusted.** Poisoned descriptions can manipulate reasoning to exfiltrate data or trigger unintended actions.
 
 ### Authorization
 
-OAuth 2.1 for remote servers: use PKCE with S256; [Dynamic Client Registration (RFC 7591)](https://datatracker.ietf.org/doc/html/rfc7591) for registration; consider [Resource Indicators (RFC 8707)](https://datatracker.ietf.org/doc/html/rfc8707) against confused deputy attacks.
+OAuth 2.1 for remote servers: PKCE with S256, [Dynamic Client Registration (RFC 7591)](https://datatracker.ietf.org/doc/html/rfc7591), and [Resource Indicators (RFC 8707)](https://datatracker.ietf.org/doc/html/rfc8707) against confused-deputy attacks.
 
 ### Defense layers
 
@@ -119,7 +104,7 @@ OAuth 2.1 for remote servers: use PKCE with S256; [Dynamic Client Registration (
 
 ### Local server hardening
 
-Local Streamable HTTP servers must validate `Origin`, bind to localhost, and require auth to prevent DNS rebinding.
+Local Streamable HTTP servers must validate `Origin`, bind to localhost, and require auth — preventing DNS rebinding.
 
 ## Observability
 
@@ -133,17 +118,17 @@ Local Streamable HTTP servers must validate `Origin`, bind to localhost, and req
 
 ## When This Backfires
 
-**Caching stales tool schemas.** Static TTL caching works against servers that push frequent schema updates. If a server changes a required parameter between cache refreshes, the agent issues malformed calls. Short TTLs or relying on `notifications/tools/list_changed` reduce this risk but increase `tools/list` traffic.
+**Caching stales tool schemas.** Static TTL caching fails against servers pushing frequent updates. If a required parameter changes between refreshes, the agent issues malformed calls. Short TTLs or `notifications/tools/list_changed` cut risk but raise `tools/list` traffic.
 
-**Tool list stability affects provider-side caching.** Model providers use prompt caching keyed on the tool list. Adding or removing tools mid-session invalidates that cache, raising per-turn costs. Avoid routing designs that change the visible tool set between turns in a session.
+**Tool list churn invalidates provider prompt caches.** Providers key prompt caching on the tool list; mid-session changes raise per-turn costs. Avoid designs that shift the visible tool set between turns.
 
-**Full routing stack is overhead for single-server agents.** Namespace maps, priority ordering, and session-per-server lifecycle add complexity that yields no benefit when connecting to one server. Apply multi-server routing only when collision risk is real.
+**Full routing stack overhead on single-server agents.** Namespace maps, priority ordering, and per-server lifecycle yield no benefit with one server. Apply multi-server routing only when collision risk is real.
 
-**OAuth 2.1 PKCE + resource indicators assumes a browser or capable HTTP client.** For CLI tools or embedded agents running in constrained environments, the authorization flow may require human interaction or unavailable system capabilities.
+**OAuth 2.1 PKCE assumes a capable HTTP client.** CLI or embedded agents may lack the browser or system capabilities the flow expects.
 
 ## Example
 
-A TypeScript host managing two MCP servers with namespace-based routing and cached tool lists:
+A TypeScript host with namespace routing and cached tool lists:
 
 ```typescript
 interface ServerSession {
@@ -174,13 +159,16 @@ class McpHost {
 }
 ```
 
-The host creates one `ServerSession` per MCP server. Tool calls are routed by scanning the namespace map. Tool lists are cached and refreshed only after the TTL expires or a `listChanged` notification arrives.
+One `ServerSession` per MCP server; tool calls route through the namespace map; lists refresh only on TTL expiry or a `listChanged` notification.
 
 ## Related
 
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Server Design](mcp-server-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
+- [MCP Elicitation: Servers Requesting Structured Input Mid-Task](mcp-elicitation.md)
+- [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](mcp-llm-sampling.md)
+- [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Token-Efficient Tool Design: Tools That Don't Eat Your Context](token-efficient-tool-design.md)
 - [Copilot Extensions to MCP Migration](copilot-extensions-to-mcp-migration.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)

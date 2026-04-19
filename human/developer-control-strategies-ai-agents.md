@@ -79,11 +79,22 @@ The control loop works because it:
 2. **Preserves comprehension** — reviewing every output prevents the [skill atrophy](skill-atrophy.md) from blind acceptance
 3. **Builds calibrated trust** — repeated validate cycles teach developers which tasks the agent handles reliably, enabling [progressive disclosure](../agent-design/progressive-disclosure-agents.md) of autonomy
 
+## When This Backfires
+
+Control overhead is not free. The loop costs more than it saves when:
+
+- **Work is trivial or throwaway** — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../workflows/vibe-coding.md) is the better default.
+- **Supervision is theatre** — rubber-stamping diffs without real review is nominal control only, and recreates [comprehension debt](../anti-patterns/comprehension-debt.md) under a veneer of diligence.
+- **Plans ossify against changing requirements** — over-specifying exploratory work locks the agent out of useful pivots.
+- **Agent count exceeds attention budget** — too many parallel agents degrades validation across all of them; see [attention management](attention-management-parallel-agents.md).
+
+Apply the full loop when work is production-bound, touches shared surfaces, or is hard to revert. Relax it when work is cheap to throw away.
+
 ## Developer Sentiment
 
 Despite the overhead, developers are positive. One 20-year veteran: "there is no way I'll EVER go back to coding by hand." Satisfaction depends on maintaining control — developers in control report a productivity multiplier; those who lose control report frustration and rework.
 
-Approximately 25% of professional developers use AI agents weekly (StackOverflow 2025 survey) [unverified against original survey].
+About 23% of developers already use AI agents at least weekly, per the [2025 Stack Overflow Developer Survey](https://survey.stackoverflow.co/2025/ai) — a sizeable minority, but still well short of majority adoption.
 
 ## Practical Implications
 

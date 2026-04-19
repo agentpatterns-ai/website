@@ -14,9 +14,9 @@ aliases:
 
 ## The Concept
 
-Prompt files are Markdown files (`.prompt.md`) stored in a repository that encode repeatable agent tasks — generating tests, reviewing code, creating components, or migrating patterns. Unlike always-on repository instructions, prompt files are invoked manually for specific tasks. They sit in the **task-specific, on-demand layer** of the instruction hierarchy.
+Prompt files are Markdown files (`.prompt.md`) stored in a repository that encode repeatable agent tasks — generating tests, reviewing code, creating components, or migrating patterns. Unlike always-on repository instructions, they are invoked manually and sit in the **task-specific, on-demand layer** of the instruction hierarchy.
 
-The value is standardization: when five developers each write their own prompt for "add unit tests to this module," they get five different results. A shared prompt file with embedded file references and structured conventions produces consistent output across the team.
+The value is standardization: five developers writing their own "add unit tests" prompt produce five different results, while a shared prompt file with embedded file references and structured conventions produces consistent output across the team.
 
 ## Anatomy of a Prompt File
 
@@ -62,7 +62,7 @@ Prompt files embed workspace context through two mechanisms:
 - **Markdown links**: `[label](../../relative/path)` — injects the referenced file's content
 - **Hash references**: `#file:../../relative/path` — alternative syntax for the same purpose
 
-File references are the differentiating feature. They transform a generic prompt into one grounded in your project's actual schemas, conventions, and examples. A test generation prompt that references your real test files produces output matching your patterns, not generic ones.
+File references are the differentiating feature: they ground a generic prompt in the project's actual schemas, conventions, and examples. A test generation prompt that references real test files produces output matching the team's patterns rather than the model's defaults.
 
 ### Variable Substitution
 
@@ -83,7 +83,7 @@ Copilot uses three instruction layers, each with different scoping and activatio
 | Path-specific | `.github/instructions/*.instructions.md` | Automatic when file path matches glob | Domain-specific rules |
 | Task-specific | `.github/prompts/*.prompt.md` | Manual invocation via `/` command | On-demand workflows |
 
-All applicable layers combine — they do not replace each other. A prompt file invocation receives repository-wide instructions, any matching path-specific instructions, and the prompt file content.
+Applicable layers combine rather than replace each other: a prompt file invocation receives repository-wide instructions, matching path-specific instructions, and the prompt file content together.
 
 ### Tool Priority Resolution
 
@@ -114,7 +114,7 @@ Organize prompt files by workflow stage or domain:
   create-component.prompt.md
 ```
 
-Each file references the relevant project artifacts — test conventions, API schemas, component templates — so the agent receives tight, grounded context rather than broad codebase scanning.
+Each file references the relevant project artifacts — test conventions, API schemas, component templates — giving the agent tight, grounded context instead of broad codebase scanning.
 
 ## Example
 
@@ -150,10 +150,10 @@ A developer invokes `/add-endpoint` in Copilot Chat, enters "invoices" as the ar
 
 Prompt file libraries degrade in several predictable conditions:
 
-- **Stale file references** — prompt files embed relative paths to real project files (test examples, schemas, convention docs). When those source files are renamed, moved, or updated, the prompt silently generates output based on outdated context — often worse than a generic prompt because the model follows stale patterns.
-- **Single-workspace scope** — prompt files in `.github/prompts/` apply only to that workspace. Teams sharing conventions across multiple repos must copy and synchronize the same files, reintroducing the prompt variation the library was meant to solve.
-- **Tool unavailability degrades silently** — if a tool declared in `tools:` frontmatter is unavailable at invocation (not installed, not authorized), it is ignored without warning. Prompts that depend on specific tool access produce different results without any signal that capabilities are missing.
-- **Maintenance overhead on small teams** — creating, reviewing, and updating prompt files through a PR workflow adds process. For teams with fewer than three developers or infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
+- **Stale file references** — embedded paths to test examples, schemas, or convention docs go silently wrong when the source files are renamed, moved, or updated, leaving the prompt to generate output from outdated context.
+- **Single-workspace scope** — files in `.github/prompts/` apply only to that workspace; teams sharing conventions across repos must copy and synchronize, reintroducing the variation the library was meant to solve.
+- **Silent tool unavailability** — tools declared in `tools:` frontmatter that are not installed or authorized at invocation are ignored without warning, producing different results with no signal that capabilities are missing.
+- **Overhead on small teams** — PR-driven creation and review adds process; for teams under three developers or with infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
 
 ## Related
 

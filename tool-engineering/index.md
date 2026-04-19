@@ -29,6 +29,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — Redesign tool interfaces so the wrong call cannot compile -- prevention over documentation
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries
+- [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — Request structured errors from HTTP APIs using Accept headers to replace brittle HTML parsing with deterministic control flow
 
 ## MCP (Model Context Protocol)
@@ -74,6 +75,7 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Browser Automation for Research](browser-automation-for-research.md) — When an agent's HTTP client is blocked by CDN bot detection, switch to browser automation tools like Playwright to fetch content
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md) — Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) — Structure MCP tools as files in a directory tree and let the agent load only the definitions it needs, reducing token overhead by up to 98%
+- [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md) — Back an agent's regex search with a trigram or suffix-array index so query latency stays bounded on large repositories, at the cost of freshness machinery
 - [Next Edit Suggestions](next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode
 - [Override Interactive Commands](override-interactive-commands.md) — Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and automated execution
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists

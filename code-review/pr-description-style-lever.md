@@ -12,11 +12,9 @@ tags:
 
 ## The Finding
 
-A study of 5 AI coding agents across the AIDev dataset found statistically significant variation in PR description structure across agents. Structural differences correlate with reviewer engagement metrics and merge rates ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+A study of 5 AI coding agents across the AIDev dataset found statistically significant variation in PR description structure, correlated with reviewer engagement and merge rates — partly independent of code quality ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
-Merge rates by agent: OpenAI Codex 82.6%, Cursor 65.22%, Claude Code 59.0%, Devin 53.76%, GitHub Copilot 43.0%. All cross-agent differences were statistically significant at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4).
-
-Merge rate variance is partly explained by description style differences, not code quality alone ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+Merge rates by agent: OpenAI Codex 82.6%, Cursor 65.22%, Claude Code 59.0%, Devin 53.76%, GitHub Copilot 43.0%. All cross-agent differences were significant at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4).
 
 ## Structural Differences Across Agents
 
@@ -30,11 +28,7 @@ The study identifies systematic per-agent patterns ([arXiv:2602.17084](https://a
 | Devin | Frequent commit splits; structured commit history |
 | GitHub Copilot | Extensive reviewer discussion generated; lowest merge rate |
 
-GitHub Copilot generated the most reviewer discussion but had the lowest merge rate — indicating review churn, not engagement volume, is the outcome to optimize ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
-
-Time-to-completion also varied sharply: OpenAI Codex at approximately 0.02 hours vs GitHub Copilot at 13.0 hours, with structured descriptions correlating with faster reviewer responses ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4).
-
-Effect sizes were meaningful: comments-per-PR showed a medium-to-large effect (ε²=0.280); reviewer sentiment showed V=0.128 (chi-square) ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+Copilot generated the most reviewer discussion but had the lowest merge rate — review churn, not engagement volume, is the outcome to optimize. Time-to-completion also varied sharply: Codex ~0.02 hours vs Copilot 13.0 hours ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4). Effect sizes: comments-per-PR ε²=0.280 (medium-to-large); reviewer sentiment V=0.128.
 
 ## The Configuration Mechanism
 
@@ -52,38 +46,34 @@ Every PR description must include these sections:
 - **Breaking Changes**: Explicit note if none
 ```
 
-**GitHub Copilot custom agent instructions** (`.github/agents/AGENT-NAME.md`): Inject the same template in the agent's instruction file. Neither Copilot nor Claude Code enforces structure by default ([Claude Code docs](https://code.claude.com/docs); [GitHub Blog](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
+**Copilot custom agent instructions** (`.github/agents/AGENT-NAME.md`): Inject the same template. Neither Copilot nor Claude Code enforces structure by default ([Claude Code docs](https://code.claude.com/docs); [GitHub Blog](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
 
-**AGENTS.md open standard** ([agents.md](https://agents.md)): PR and commit conventions can be embedded as project-level configuration, making them tool-agnostic and version-controlled alongside the codebase.
+**AGENTS.md open standard** ([agents.md](https://agents.md)): conventions become tool-agnostic and version-controlled alongside the codebase.
 
-Note: GitHub Copilot's built-in PR summary generator ignores existing PR description content and generates from code changes alone — it has no configuration options for structure or format ([GitHub Docs](https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-for-pull-requests/creating-a-pull-request-summary-with-github-copilot)).
+Copilot's built-in PR summary generator ignores existing description content and generates from the diff alone, with no configuration options for structure ([GitHub Docs](https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-for-pull-requests/creating-a-pull-request-summary-with-github-copilot)).
 
 ## Why High Volume Without Structure Fails
 
-The study's authors frame communication quality as a first-class agent capability: "accelerating the adoption of SE 3.0 requires AI coding agents to possess the capability to appropriately articulate and convey their changes" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
-
-The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode correlated with descriptions that require reviewers to reconstruct intent from prose. The study does not establish causality, but the pattern is consistent with structured headers reducing the clarification overhead that generates review churn ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
-
-The authors also note: "presentation alone does not determine acceptance — structured descriptions do not guarantee merges, and code quality remains a central factor" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode: descriptions that force reviewers to reconstruct intent from prose. The study does not establish causality, but the pattern is consistent with structured headers reducing the clarification overhead that generates review churn. The authors caveat that "presentation alone does not determine acceptance — structured descriptions do not guarantee merges, and code quality remains a central factor" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
 ## When This Backfires
 
-Structured PR description templates are not universally beneficial. Specific conditions where the pattern adds overhead without proportional value:
+Conditions where templates add overhead without proportional value:
 
-- **Solo or inner-source repos with no external reviewers**: when the author is also the sole reviewer, template overhead produces no engagement benefit.
-- **Trivial or mechanical PRs**: dependency bumps, formatting-only changes, and single-line fixes generate template friction that delays the PR without aiding comprehension.
-- **Teams with strong ambient context**: when reviewers have high familiarity with the codebase and the agent's task domain, structured summaries may duplicate context already known.
-- **Code quality is the binding constraint**: the study confirms presentation is a secondary lever. Applying templates to fundamentally weak code shifts attention away from the root problem.
+- **Solo or inner-source repos with no external reviewers**: the author is also the reviewer; templates produce no engagement benefit.
+- **Trivial or mechanical PRs**: dependency bumps, formatting-only changes, and single-line fixes generate template friction that delays without aiding comprehension.
+- **Teams with strong ambient context**: reviewers familiar with the codebase and task domain get duplicated context.
+- **Code quality is the binding constraint**: presentation is a secondary lever. Applying templates to weak code shifts attention from the root problem.
 
-In these cases, skip the template or make it opt-in rather than mandatory for all PR types.
+In these cases, make the template opt-in rather than mandatory.
 
 ## Applying the Pattern
 
 1. Add a PR description template to `CLAUDE.md`, `.github/agents/`, or `AGENTS.md` for every agent that opens PRs
 2. Specify required sections (Summary, Changes, Testing, Breaking Changes at minimum)
-3. Do not rely on model defaults — defaults differ across models and will produce variance
-4. If using GitHub Copilot's PR summary generator, replace it by adding a post-PR-creation workflow step where an agent rewrites the description using your template from agent instructions, rather than relying on the diff-based summary alone
-5. Treat description style as a reviewable artifact in agent eval runs — spot-check for section completeness alongside code correctness
+3. Do not rely on model defaults — they vary across models and produce variance
+4. If Copilot's PR summary generator is in use, add a post-PR-creation step where an agent rewrites the description from your template rather than relying on the diff-based summary
+5. Treat description style as a reviewable artifact in agent eval runs — spot-check section completeness alongside code correctness
 
 ## Example
 

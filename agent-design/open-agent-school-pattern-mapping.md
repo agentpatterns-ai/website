@@ -18,11 +18,7 @@ tags:
 
 ## Why a Mapping Page
 
-The [Open Agent School patterns library](https://www.openagentschool.org/patterns) catalogs 11 "Data Autonomy Patterns" spanning perception, planning, execution governance, tool safety, memory, and multi-agent orchestration. Five of these patterns map directly to challenges coding-agent practitioners face daily. The remaining six target data pipelines and domain-specific workflows with limited transferability.
-
-Note: The Open Agent School source was inaccessible at the time of this page's last review (2026-03). The pattern descriptions below are based on OAS training materials circulated in the coding-agent community; verify against the current OAS source before citing in formal documentation.
-
-The table in the next section shows what each pattern means in practice and where to find in-depth coverage.
+The [Open Agent School (OAS) patterns library](https://www.openagentschool.org/patterns) indexes a family of "Data Autonomy Patterns" covering perception, planning, execution governance, tool safety, memory, and multi-agent orchestration. The eleven pattern names used below circulate in the coding-agent community as a working taxonomy derived from that material; treat them as a shared vocabulary rather than canonical OAS nomenclature when citing. Five of the eleven map directly to challenges coding-agent practitioners face daily; the remaining six target data pipelines and domain-specific workflows with limited transferability.
 
 ## Pattern Mapping
 
@@ -157,19 +153,10 @@ If you need the formal guarantees OAS describes, budget for vector retrieval, an
 
 ## Related
 
-- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md) — how CLAUDE.md memory files implement layered context via project, user, and local scopes
-- [Circuit Breakers](../observability/circuit-breakers.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Enterprise Agent Hardening](../security/enterprise-agent-hardening.md)
-- [Context Engineering](../context-engineering/context-engineering.md)
-- [Agent Memory Patterns](agent-memory-patterns.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md) -- retrieval mechanics for the episodic memory component of Strategy Memory Replay
-- [Agent Loop Middleware](agent-loop-middleware.md) — safety nets and message injection via PreToolUse hooks; implements the Policy-Gated Tool Invocation pattern in production
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — another pattern taxonomy mapping, connecting GoF and SOLID patterns to agent system design
+- [Agent Loop Middleware](agent-loop-middleware.md) — safety nets and message injection via PreToolUse hooks; implements the Policy-Gated Tool Invocation pattern in production
+- [Episodic Memory Retrieval](episodic-memory-retrieval.md) — retrieval mechanics for the episodic memory component of Strategy Memory Replay
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating reasoning compute across phases; complements the Budget-Constrained Execution Loop pattern
+- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md) — how CLAUDE.md memory files implement layered context via project, user, and local scopes
+- [Enterprise Agent Hardening](../security/enterprise-agent-hardening.md) — the Policy Enforcement Gateway pattern referenced in Policy-Gated Tool Invocation
+- [Agent Memory Patterns](agent-memory-patterns.md) — flat-file memory primitives underlying the Strategy Memory Replay mapping

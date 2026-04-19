@@ -14,11 +14,11 @@ aliases:
 
 ## What It Looks Like
 
-The agent does exactly what it's told. Add this feature — done. Refactor this file — done. Update this config — done. Each response looks correct at a glance, but subtle problems accumulate: broken conventions, violated constraints, introduced vulnerabilities. The agent never flags them because it was never instructed to look.
+The agent does exactly what it's told. Each response looks correct at a glance, but subtle problems accumulate: broken conventions, violated constraints, introduced vulnerabilities. The agent never flags them because it was never instructed to look.
 
 ## Why It Happens
 
-Agents are trained to be helpful, and helpfulness correlates with compliance — human raters consistently favor responses that agree with them, which RLHF amplifies into a structural bias toward compliance over correction ([Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)). Instructions written as task descriptions ("research this topic, write a page, create a PR") focus entirely on the happy path. There are no instructions for what to check, when to pause, or what problems would warrant stopping.
+Agents are trained to be helpful, and helpfulness correlates with compliance — human raters favor responses that agree with them, which RLHF amplifies into a structural bias toward compliance over correction ([Towards Understanding Sycophancy in Language Models](https://arxiv.org/abs/2310.13548)). Task-oriented instructions ("research this topic, write a page, open a PR") focus on the happy path, specifying nothing about what to check, when to pause, or what warrants stopping.
 
 ## The Fix
 
@@ -35,25 +35,27 @@ Add three categories of instruction to any agent definition:
 
 ## Separation of Reviewer and Implementer
 
-A single agent cannot effectively review its own work — it shares the same blind spots as its own output. The fix is a separate review agent that examines the implementer's output. [Claude Code sub-agent architecture](https://code.claude.com/docs/en/sub-agents) supports this: spawn a reviewer subagent with different instructions focused on finding problems, not producing work.
+A single agent cannot effectively review its own work — it shares its own blind spots. Spawn a separate reviewer agent with instructions focused on finding problems, not producing work ([Claude Code sub-agent architecture](https://code.claude.com/docs/en/sub-agents)).
 
 ## Structured Output with Required Concerns
 
-Requiring an agent to output a structured result with a mandatory `concerns` or `issues` field forces critical evaluation. An agent that must populate a `risks` field will consider risks. An agent with no such requirement will not.
+A mandatory `concerns`, `issues`, or `risks` field in structured output forces critical evaluation. An agent that must populate such a field will consider risks; one without the field will not.
 
 ## When This Backfires
 
-Adding verification gates to every agent definition can fail in three ways:
+Adding verification gates to every agent definition can fail in four ways:
 
 **Over-specified stop conditions.** Halting on non-blockers produces agents that escalate constantly; reviewers dismiss every flag and the conditions become noise.
 
-**False-positive pre-task checks.** A loose duplicate check blocks legitimate work. An agent told to skip if "a page on this topic exists" stops on tangential matches. Scope the check precisely.
+**False-positive pre-task checks.** A loose duplicate check blocks legitimate work — an agent told to skip if "a page on this topic exists" stops on tangential matches. Scope checks precisely.
 
-**Validator blindness.** In-task validation catches structural errors, not semantic ones. An agent cannot reliably catch the reasoning errors it produced — separate reviewer agents close this gap but add latency and cost.
+**Validator blindness.** In-task validation catches structural errors, not semantic ones. An agent cannot reliably catch its own reasoning errors — separate reviewer agents close this gap but add latency and cost.
+
+**Prompt-level ceiling.** Verification instructions reduce sycophantic compliance but do not eliminate it. The bias is rooted in RLHF training, not prompt scaffolding; mitigation requires combined fine-tuning, decoding strategies, and post-deployment controls alongside instructions ([Sycophancy in Large Language Models: Causes and Mitigations](https://arxiv.org/html/2411.15287v1)). Treat prompts as a floor-raiser, not a fix.
 
 ## The Counter-Anti-Pattern: The Cry-Wolf Agent
 
-An agent that flags everything — every minor issue, every edge case, every theoretical risk — produces output that gets ignored. The yes-man problem and the cry-wolf problem are opposite failure modes. Calibrate stop conditions to genuine blockers, not every deviation.
+An agent that flags every minor issue, edge case, and theoretical risk produces output that gets ignored. Yes-man and cry-wolf are opposite failure modes; calibrate stop conditions to genuine blockers, not every deviation.
 
 ## Example
 

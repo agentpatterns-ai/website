@@ -11,9 +11,9 @@ tags:
 
 ## What Agent Cards Solve
 
-Orchestrators in multi-agent systems need to discover what sub-agents can do. Without a standard format, this requires reading documentation, hardcoding capability lists, or manual configuration per agent. Agent cards provide a structured capability contract — analogous to [OpenAPI specs for HTTP APIs](openapi-agent-tool-spec.md) — that a client agent can read programmatically.
+Orchestrators in multi-agent systems need to discover what sub-agents can do. Without a standard format, discovery requires reading docs, hardcoding capability lists, or per-agent config. Agent cards provide a structured capability contract — analogous to [OpenAPI specs for HTTP APIs](openapi-agent-tool-spec.md) — that a client agent reads programmatically.
 
-The A2A protocol [formalized agent cards](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) as its discovery mechanism. The concept is useful independently of A2A: any system that needs machine-readable capability advertisements can publish an agent card.
+The A2A protocol [formalized agent cards](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) as its discovery mechanism, but the concept is useful independently of A2A for any system that needs machine-readable capability advertisements.
 
 ## Publishing Location
 
@@ -21,7 +21,7 @@ Agent cards are hosted at a well-known path under the agent's base URL:
 
 `{base-url}/.well-known/agent-card.json`
 
-Clients retrieve the card via a simple HTTP GET request. This follows the [RFC 8615](https://www.rfc-editor.org/rfc/rfc8615) well-known URI convention.
+Clients fetch the card via HTTP GET, following the [RFC 8615](https://www.rfc-editor.org/rfc/rfc8615) well-known URI convention.
 
 ## Card Structure
 
@@ -57,49 +57,49 @@ Each [skill](https://github.com/google/A2A/blob/main/docs/specification.md#agent
 }
 ```
 
-Skills carry their own input and output modes, overriding the card-level defaults. Tags enable filtering — a client agent searching for "security" capabilities matches this skill without parsing the description.
+Per-skill `inputModes`/`outputModes` override card-level defaults. Tags enable filtering: a client searching for "security" matches this skill without parsing descriptions.
 
 ## Capabilities Declaration
 
-The [capabilities object](https://github.com/google/A2A/blob/main/docs/specification.md#agentcapabilities) declares protocol-level features the agent supports:
+The [capabilities object](https://github.com/google/A2A/blob/main/docs/specification.md#agentcapabilities) declares protocol-level features:
 
 - **`streaming`**: SSE-based real-time update delivery
-- **`pushNotifications`**: Webhook-based update delivery to client endpoints
-- **`extendedAgentCard`**: Support for the `GetExtendedAgentCard` operation, returning richer cards after authentication
+- **`pushNotifications`**: webhook delivery to client endpoints
+- **`extendedAgentCard`**: support for `GetExtendedAgentCard`, which returns richer cards after authentication
 
-Client agents read these flags to select the appropriate communication pattern before sending any task.
+Clients read these flags to pick a communication pattern before sending a task.
 
 ## Authentication
 
-Agent cards declare authentication requirements using two fields: `securitySchemes` defines available schemes in OpenAPI-compatible format; `security` specifies which schemes apply. Supported scheme types:
+Two fields declare auth: `securitySchemes` defines available schemes in OpenAPI-compatible format; `security` specifies which apply. Supported scheme types:
 
 - API keys
-- OAuth2 (with flow types, token URLs, scopes)
+- OAuth2 (flow types, token URLs, scopes)
 - Mutual TLS
 - OpenID Connect
 
-This allows client agents to determine authentication requirements before attempting a connection.
+Clients determine auth requirements before attempting a connection.
 
 ## Static vs Dynamic Cards
 
-**Static cards** are fixed JSON files suitable for agents with a single capability set for all callers. Serve as a static file with standard HTTP caching.
+**Static cards** are fixed JSON files for agents with one capability set for all callers — served as a static file with standard HTTP caching.
 
-**Dynamic cards** are generated per-request based on the caller's identity or permissions. An agent may expose different skills to different callers — an authenticated enterprise user sees internal skills that anonymous callers do not. A2A supports this through the `GetExtendedAgentCard` operation, which returns a [richer card after authentication](https://github.com/google/A2A/blob/main/docs/specification.md).
+**Dynamic cards** are generated per-request based on caller identity or permissions, exposing different skills to different callers (e.g., authenticated enterprise users see internal skills hidden from anonymous callers). A2A supports this through [`GetExtendedAgentCard`](https://github.com/google/A2A/blob/main/docs/specification.md), which returns a richer card after authentication.
 
 ## Card Signing
 
-Agent cards may be [digitally signed using JWS (RFC 7515)](https://github.com/google/A2A/blob/main/docs/specification.md) to verify authenticity and integrity. The card JSON is canonicalized per RFC 8785 before signing, ensuring consistent hash values regardless of property ordering.
+Cards may be [signed with JWS (RFC 7515)](https://github.com/google/A2A/blob/main/docs/specification.md) for authenticity and integrity. The JSON is canonicalized per RFC 8785 before signing, producing consistent hashes regardless of property order.
 
-Signing is relevant in federated environments where a client agent needs to verify that a card was published by the claimed provider, not a man-in-the-middle.
+Signing matters in federated environments where a client must verify the card was published by the claimed provider, not a man-in-the-middle.
 
 ## When This Backfires
 
-Agent cards add friction that outweighs their value in three common situations:
+Agent cards add friction that outweighs their value in four situations:
 
-- **Single-consumer integrations**: When exactly one client calls one agent, a shared config file or environment variable is simpler than maintaining a published well-known URL with correct caching headers.
-- **Rapidly-changing capability sets**: Static cards become stale when skills are added or removed frequently. Dynamic cards add server complexity that requires careful cache invalidation.
-- **Cold-start bootstrapping**: The card solves *what* an agent can do once you know its base URL, not *how to find that URL*. Discovery registries or service meshes still require out-of-band coordination.
-- **A2A schema coupling**: Card consumers written against an early A2A schema version may break when the spec evolves; the `url` → `supportedInterfaces` rename in the spec is one example of this drift.
+- **Single-consumer integrations**: when one client calls one agent, a shared config or env var beats maintaining a well-known URL with correct caching.
+- **Rapidly-changing capability sets**: static cards go stale as skills change; dynamic cards add server complexity and cache-invalidation risk.
+- **Cold-start bootstrapping**: the card tells you *what* an agent does once you know its base URL — not *how to find that URL*. Registries or service meshes still need out-of-band coordination.
+- **A2A schema coupling**: consumers written against an early A2A version may break as the spec evolves; the `url` → `supportedInterfaces` rename is one example.
 
 ## Key Takeaways
 

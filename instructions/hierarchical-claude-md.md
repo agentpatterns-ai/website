@@ -1,5 +1,5 @@
 ---
-title: "Hierarchical CLAUDE.md: Layered Context File Scoping"
+title: "Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels"
 description: "Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location."
 tags:
   - context-engineering
@@ -9,6 +9,7 @@ aliases:
   - "Hierarchical CLAUDE.md"
   - "Layered Instruction Scopes"
   - "Directory-Level Instruction Hierarchy"
+  - "Hierarchical CLAUDE.md: Layered Context File Scoping"
 ---
 
 # Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels
@@ -58,28 +59,15 @@ CLAUDE.md files are loaded in full at the start of every session, consuming toke
 
 ## Directory-Level Files for Monorepos
 
-A monorepo with distinct services typically has different lint rules, test commands, and conventions per service. Without directory-level files, the root must either:
-
-- Enumerate all variants (creating an instruction compliance problem as rule count grows), or
-- Omit service-specific rules (forcing the agent to guess or ask)
-
-Directory-level files solve this cleanly: each service documents its own conventions in its own file, and Claude Code loads subdirectory files on demand when working in those directories ([docs](https://code.claude.com/docs/en/memory#how-claude-md-files-load)).
+A monorepo with distinct services typically has different lint rules, test commands, and conventions per service. Without directory-level files, the root must either enumerate all variants (growing the instruction count until compliance degrades) or omit service-specific rules (forcing the agent to guess). Directory-level files solve this: each service documents its own conventions, and Claude Code [loads them on demand](https://code.claude.com/docs/en/memory#how-claude-md-files-load) when working in those directories.
 
 ## Maintenance
 
-CLAUDE.md files degrade when not updated alongside the codebase. Treat them as living documentation:
+Treat CLAUDE.md files as living documentation:
 
 - When a convention changes, update the CLAUDE.md that documents it
-- When a directory-level file contradicts the project root, the specific file wins — make the contradiction explicit rather than implicit
+- When a directory-level file contradicts the project root, the specific file wins — make the contradiction explicit
 - Remove instructions that duplicate what is already expressed in code, types, or tests
-
-## When This Backfires
-
-Hierarchical scoping adds value only if each file stays concise and consistent. Three conditions where it makes things worse:
-
-- **Conflicting instructions across files**: All loaded CLAUDE.md files are concatenated; when two files give contradictory guidance, Claude picks one non-deterministically. The official docs note: "If two files give different guidance for the same behavior, Claude may pick one arbitrarily." A single well-organized root file avoids this class of failure.
-- **Compliance degradation at scale**: Instruction-following accuracy drops as total instruction count grows — see [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md). Splitting instructions across many files can mask this — the aggregate instruction load matters, not which file the rules come from. Prefer trimming rules over adding more files.
-- **Stale subdirectory files**: A subdirectory CLAUDE.md that contradicts updated root conventions silently wins for all agent sessions in that directory. Without regular audits, subdirectory files accumulate stale overrides that are harder to find than stale content in a single file.
 
 ## Example
 
@@ -131,7 +119,7 @@ All PRs require `pre-commit run --all-files` to pass before merge.
 - Run `npm run lint` and `npm run typecheck` before committing
 ```
 
-When Claude Code is working inside `frontend/`, it loads the root file plus `frontend/CLAUDE.md`. It does not load `backend/CLAUDE.md`, so backend conventions do not pollute the frontend agent's context. The reverse applies when working in `backend/`. Each file stays short because it only documents what is not evident from the code itself.
+When Claude Code works inside `frontend/`, it loads the root file plus `frontend/CLAUDE.md` — backend conventions stay out of its context. The reverse applies when working in `backend/`.
 
 ## Key Takeaways
 
@@ -144,29 +132,24 @@ When Claude Code is working inside `frontend/`, it loads the root file plus `fro
 
 ## Why It Works
 
-Hierarchical loading reduces context noise through structural separation. When an agent works in `frontend/`, it only loads instructions relevant to that directory — backend conventions never enter its context window. Fewer instructions mean less risk of conflicting rules, lower token overhead before the first task token is spent, and faster orientation. This mirrors the software principle of least authority applied to context: each agent session receives exactly the knowledge its working location requires, and nothing else.
+Hierarchical loading reduces context noise through structural separation. Fewer loaded instructions mean less risk of conflicting rules, lower token overhead before the first task token, and faster orientation. This applies the principle of least authority to context: each session receives only the knowledge its working location requires.
 
 ## When This Backfires
 
-- **Maintenance fragmentation**: Each CLAUDE.md file must be updated independently. When a shared convention changes (e.g., a new CI command), every directory-level file that documents it needs a manual update. A single root file is easier to keep consistent.
-- **Inconsistent agent behavior across directories**: If two subdirectory files contradict each other on a shared pattern, an agent switching between directories will apply different rules to the same codebase. The contradiction may be silent and hard to diagnose.
-- **Small projects with one team**: For projects with a single, uniform codebase and one team, a well-organized root CLAUDE.md avoids the overhead of multiple files with no contextual benefit.
-- **Version skew during refactors**: A renamed directory leaves its CLAUDE.md behind but the root may reference the old path. File moves do not propagate instruction updates.
+Hierarchical scoping adds value only when each file stays concise and consistent. Conditions where a single root file is better:
+
+- **Conflicting instructions across files**: All loaded CLAUDE.md files are concatenated; the [official docs](https://code.claude.com/docs/en/memory#write-effective-instructions) note that "if two rules contradict each other, Claude may pick one arbitrarily." A stale subdirectory file that contradicts updated root conventions silently wins for agent sessions in that directory.
+- **Compliance degradation at scale**: Splitting instructions across files does not lower the aggregate instruction load — see [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md). Prefer trimming rules over adding more files.
+- **Maintenance fragmentation**: When a shared convention changes, every directory-level file that documents it needs a manual update. File renames leave CLAUDE.md behind while the root references the old path.
+- **Small, uniform projects**: A single team working on one codebase gains nothing from extra files and pays the cost of keeping them in sync.
 
 ## Related
 
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
 - [Layer Agent Instructions by Specificity](layered-instruction-scopes.md)
-- [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md)
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md)
-- [Prompt Governance via PR](prompt-governance-via-pr.md)
-- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Post-Compaction Re-Read Protocol](post-compaction-reread-protocol.md)
-- [Negative Space Instructions](negative-space-instructions.md)
+- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)

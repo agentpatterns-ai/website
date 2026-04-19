@@ -17,7 +17,7 @@ aliases:
 
 ## The Problem with Standards in CLAUDE.md
 
-CLAUDE.md is loaded into every Claude Code session. Every line it contains costs tokens on every task, regardless of whether those tokens are relevant to the work in that session ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: the token-pair cost of a fully packed context means preloaded content competes with task instructions, tool results, and code for the model's attention ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+CLAUDE.md is loaded into every Claude Code session. Every line it contains costs tokens on every task, regardless of whether those tokens are relevant to the work in that session ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: the token-pair cost of a fully packed context means preloaded content competes with task instructions, tool results, and code for the model's attention ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); see also [Context Engineering](../context-engineering/context-engineering.md)).
 
 Standards documents can be large. Style guides, compliance checklists, naming conventions, and API requirements accumulate. Loading all of them into every implementation session means the agent that is writing code carries the same context as the agent that should be reviewing it — a phase mismatch.
 

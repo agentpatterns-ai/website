@@ -41,13 +41,13 @@ graph TD
 
 ## Why Multiple Reviewers Beat Self-Review
 
-A single agent reviewing its own output exhibits confirmation bias — it agrees with decisions it already made. Splitting implementer and reviewer into separate agents with separate prompts removes this bias. Splitting reviewers by domain (correctness, style, security, test coverage) narrows each reviewer's scope so the full context window and attention is applied to a single dimension rather than spread across competing concerns.
+A single agent reviewing its own output exhibits confirmation bias — it agrees with decisions it already made. Separate implementer and reviewer prompts remove this bias. Domain-split reviewers (correctness, style, security, test coverage) narrow each reviewer's scope so attention applies to one dimension rather than competing concerns.
 
-The iterative loop — implement → review → fix → re-review — mirrors the human PR cycle. Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
+Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
 
 ### Why It Works
 
-The mechanism is attentional narrowing combined with role-induced perspective shift. Research on LLM peer-review simulation ([EMNLP 2024](https://aclanthology.org/2024.emnlp-main.70)) shows that prompting agents with distinct reviewer personas reliably shifts which defects they surface — a security-scoped reviewer activates different reasoning pathways than a correctness-scoped one given the same diff. Running them in parallel means their error populations are largely non-overlapping; the committee catches defects that any single reviewer — or the implementer itself — would miss because no one reviewer's attention is split across competing concerns.
+The mechanism is attentional narrowing plus role-induced perspective shift. Research on LLM peer-review simulation ([EMNLP 2024](https://aclanthology.org/2024.emnlp-main.70)) shows distinct reviewer personas reliably shift which defects they surface — a security-scoped reviewer activates different reasoning pathways than a correctness-scoped one on the same diff. Running them in parallel makes their error populations largely non-overlapping, so the committee catches defects any single reviewer would miss.
 
 ## Reviewer Design
 
@@ -69,8 +69,8 @@ The committee pattern adds cost, latency, and orchestration complexity that can 
 
 - **Low-risk or trivial changes** — typo fixes, config tweaks, and one-liners rarely benefit from multi-reviewer overhead. A single scoped reviewer or no agent review costs less and finishes faster.
 - **Misaligned reviewer criteria** — when two reviewers evaluate overlapping dimensions (e.g., both correctness and security flag the same auth logic from different angles), the orchestrator receives contradictory feedback that is harder to act on than a single consolidated review.
-- **High-frequency iteration loops** — if the implementer generates many small revisions, running three or more reviewers per iteration multiplies token cost and latency at every turn; reviewers should be reduced or consolidated until the implementation stabilizes.
-- **Underspecified tasks** — if the original task lacks clear acceptance criteria, adding reviewers multiplies the surface area for divergent verdicts. Reviewers will FAIL for different reasons across rounds with no convergence; address task specification before scaling reviewer count.
+- **High-frequency iteration loops** — many small revisions with three or more reviewers per round multiply token cost and latency; consolidate reviewers until the implementation stabilizes.
+- **Underspecified tasks** — without clear acceptance criteria, reviewers FAIL for different reasons across rounds with no convergence. Fix task specification before scaling reviewer count.
 
 ## Cross-Model Adversarial Review
 

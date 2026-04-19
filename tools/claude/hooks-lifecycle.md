@@ -39,7 +39,7 @@ Claude Code fires 25+ hook events across session, prompt, tool, subagent, task, 
 | `TaskCreated` / `TaskCompleted` | Around task-tool lifecycle |
 | `Stop` / `StopFailure` | Turn ends cleanly or via API error |
 | `ConfigChange` | Settings change during a session |
-| `CwdChanged` / `FileChanged` | Working dir or watched file changes |
+| [`CwdChanged` / `FileChanged`](../../tool-engineering/reactive-environment-hooks.md) | Working dir or watched file changes |
 | `WorktreeCreate` / `WorktreeRemove` | Around worktree operations |
 
 See the [official event list](https://code.claude.com/docs/en/hooks) for the complete set and per-event matcher semantics.

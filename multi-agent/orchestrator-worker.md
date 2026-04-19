@@ -38,7 +38,7 @@ graph TD
 
 ## When Parallelization Helps
 
-Parallelization is effective when the task requires "multiple independent directions simultaneously" -- per [Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system). A systematic review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)) confirms that parallelism and specialization are the primary rationale for multi-agent over single-agent architectures, delivering quality gains that a single generalist agent cannot achieve. This includes:
+Parallelization is effective when the task requires "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)). A review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)) confirms parallelism and specialization as the primary rationale for multi-agent over single-agent architectures. This includes:
 
 - Research tasks spanning multiple independent sources or domains
 - Analysis requiring different methodologies applied to the same dataset
@@ -68,7 +68,7 @@ Workers returning results to the orchestrator is the only coordination point. An
 
 ## Orchestrator Sensitivity
 
-[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) notes that prompt engineering was the primary lever for improving agent behavior, and that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator is the highest-leverage point in the system: its decomposition decisions determine which subtasks workers receive and how. Treat the orchestrator prompt as the most sensitive component in the architecture, and test decomposition behavior explicitly across a range of input queries.
+[Anthropic's post](https://www.anthropic.com/engineering/multi-agent-research-system) reports that small changes to the orchestrator's prompt can unpredictably affect subagent behavior. The orchestrator's decomposition decisions determine which subtasks workers receive, making it the highest-leverage component. Test decomposition behavior explicitly across a range of input queries.
 
 ## Synthesis
 
@@ -82,18 +82,11 @@ If the orchestrator simply concatenates worker outputs, the pattern adds latency
 
 ## Token Economics
 
-Multi-agent orchestration multiplies token consumption. [Anthropic's research system data](https://www.anthropic.com/engineering/multi-agent-research-system) provides concrete multipliers:
-
-| Mode | Token Multiplier vs Chat |
-|------|--------------------------|
-| Single agent | ~4x |
-| Multi-agent (orchestrator + workers) | ~15x |
-
-Token usage explains roughly 80% of performance variance across research tasks. The effort-scaling rules in the orchestrator's prompt are the primary cost-control mechanism -- without them, orchestrators spawn excessive workers for simple queries.
+Multi-agent orchestration multiplies token consumption. [Anthropic's research system data](https://www.anthropic.com/engineering/multi-agent-research-system) reports multipliers of ~4x for single agents and ~15x for multi-agent (orchestrator + workers), with token usage explaining roughly 80% of performance variance across research tasks. Effort-scaling rules in the orchestrator's prompt are the primary cost-control mechanism.
 
 ## Performance
 
-[Anthropic's internal evaluations](https://www.anthropic.com/engineering/multi-agent-research-system) report multi-agent systems with a stronger lead model (Opus 4) coordinating cheaper workers (Sonnet 4) outperformed single-agent Opus by 90.2% on complex research tasks. The asymmetry matters: the orchestrator needs stronger reasoning for decomposition and synthesis, while workers need adequate capability for bounded subtasks.
+[Anthropic's internal evaluations](https://www.anthropic.com/engineering/multi-agent-research-system) report multi-agent systems with Opus 4 orchestrating Sonnet 4 workers outperformed single-agent Opus by 90.2% on complex research tasks. The orchestrator needs stronger reasoning for decomposition and synthesis; workers need adequate capability for bounded subtasks.
 
 ## Common Failure Modes
 
@@ -101,6 +94,8 @@ Token usage explains roughly 80% of performance variance across research tasks. 
 - **Source quality drift** -- workers selecting SEO-optimized content farms over authoritative sources
 - **Premature termination** -- workers stopping after first results rather than exploring thoroughly
 - **Sequential bottleneck** -- synchronous wait for all workers creates latency spikes when one worker is slow
+- **Orchestrator as single point of failure** -- misclassified decompositions route every worker to the wrong subtask, and the orchestrator's own LLM call caps throughput ([Cogent, *Multi-Agent Orchestration Failure Playbook for 2026*](https://cogentinfo.com/resources/when-ai-agents-collide-multi-agent-orchestration-failure-playbook-for-2026))
+- **Synthesis context overflow** -- the orchestrator must hold the task plus every worker's results; beyond 4+ substantive outputs this routinely exceeds practical context budgets
 
 ## Example
 
@@ -137,6 +132,8 @@ The orchestrator dispatches 50 workers simultaneously, each scoped to one reposi
 - [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md)
 - [LLM Map-Reduce](llm-map-reduce.md)
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)

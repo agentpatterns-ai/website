@@ -11,6 +11,7 @@ tags:
   - context-engineering
   - tool-agnostic
 ---
+
 # LLM Map-Reduce Pattern
 
 > Split a large input into context-window-sized chunks, process each chunk independently (map), then combine chunk-level results into a coherent output (reduce).
@@ -136,12 +137,12 @@ For file-system isolation during map phases that write files, use `isolation: wo
 
 ## When This Backfires
 
-Map-reduce underperforms or fails entirely in several conditions:
+Map-reduce underperforms or fails in several conditions:
 
-- **Cross-chunk dependencies** — if answering the query requires synthesizing evidence spread across multiple chunks (e.g., a refactoring that changes an interface used across 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. The reduce agent receives outputs that individually look clean but miss the systemic issue.
-- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret partial context. The reduce agent then reconciles contradictory or truncated findings without knowing they are artifacts of the split.
-- **Hierarchical reduce error propagation** — at each reduce level, summaries lose information. A two-level hierarchy that reduces 50 map outputs to 5 intermediate summaries, then to 1 final output, compounds extraction errors at every stage. The final output can be coherent but wrong in ways that are invisible without comparison to the raw inputs.
-- **Thin map outputs** — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent must process N near-identical outputs; cost scales linearly while output quality plateaus.
+- **Cross-chunk dependencies** — when answering requires evidence spread across chunks (e.g., a refactor changing an interface used in 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. Outputs look clean individually but miss the systemic issue.
+- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret partial context. The reduce agent reconciles contradictory findings without knowing they are artifacts of the split.
+- **Hierarchical reduce error propagation** — each reduce level loses information. A two-level hierarchy reducing 50 map outputs to 5 summaries to 1 final output compounds extraction errors at every stage — coherent but wrong in ways invisible without the raw inputs.
+- **Thin map outputs** — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent processes N near-identical outputs; cost scales linearly while output quality plateaus.
 
 ## Failure Handling
 
@@ -174,11 +175,6 @@ A 200-file codebase with 15 modules, each too large for casual review in a singl
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md) — implementation guidance
 - [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md) — why chunk sizing matters
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — context partitioning across agents
-- [Distributed Computing Parallels](../human/distributed-computing-parallels.md) — MapReduce in the pattern mapping table
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — rate-limited parallel dispatch
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md) — vote/filter reduce strategy for classification
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — coordination topology reference
-- [Staggered Agent Launch](staggered-agent-launch.md) — de-synchronizing parallel agent starts
-- [Semantic Caching in Multi-Agent Systems](semantic-caching-multi-agent.md) — reducing token cost across parallel agents
-- [Oracle Task Decomposition](oracle-task-decomposition.md) — reference-oracle approach for interconnected decomposition
-- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) — systematic pattern catalog including map-reduce variants
