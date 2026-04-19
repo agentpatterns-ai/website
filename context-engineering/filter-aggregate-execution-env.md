@@ -15,7 +15,7 @@ tags:
 
 When an agent fetches a dataset to find a subset of matching records, the naive approach passes the full dataset through the model's context. A 10,000-row dataset fetched to find three matching records wastes 9,997 rows of context. This limits the size of datasets agents can reason about and increases cost proportionally.
 
-[Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) describes the pattern of running filtering and aggregation inside a sandboxed execution environment as the primary mechanism for keeping datasets of arbitrary size manageable.
+[Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) describes running filtering and aggregation inside a sandboxed execution environment as the primary mechanism for keeping arbitrarily large datasets manageable.
 
 ## The Pattern
 
@@ -29,7 +29,7 @@ graph TD
     D --> E[Agent reasons over result]
 ```
 
-The model sees only the output — not the intermediate data. The sandbox acts as a compute boundary that keeps large datasets out of context entirely.
+The model sees only the output, not the intermediate data — the sandbox acts as a compute boundary that keeps large datasets out of context.
 
 ## What Can Be Processed in the Sandbox
 
@@ -45,7 +45,7 @@ The same pattern applies to any large intermediate representation:
 
 An agent that achieves filtering through a sequence of tool calls — fetch all, filter, paginate, aggregate — incurs overhead at each step: the intermediate results enter context at each stage, and the agent must reason about each result before issuing the next call.
 
-Code in a sandbox replaces the chain with a single execution: fetch, filter, aggregate, return. [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) notes that familiar programming constructs (loops, conditionals) enable this consolidation, reducing both "time to first token" latency and total token consumption.
+Code in a sandbox replaces the chain with a single execution: fetch, filter, aggregate, return. [Anthropic's MCP code execution research](https://www.anthropic.com/engineering/code-execution-with-mcp) notes that familiar programming constructs (loops, conditionals) enable this consolidation, reducing both "time to first token" latency and total token consumption. Anthropic's [programmatic tool calling](https://www.anthropic.com/engineering/advanced-tool-use) generalises the same idea — tool results are processed by an agent-written script rather than consumed by the model — and reports a roughly 37% reduction in token consumption on complex research tasks because intermediate results never enter context.
 
 ## Sandbox Requirements
 

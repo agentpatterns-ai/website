@@ -15,13 +15,13 @@ aliases:
 
 ## From HCI to ACI
 
-Human-Computer Interaction (HCI) is a mature discipline: clear labels, constrained inputs, informative feedback, error prevention by design. Agent-Computer Interface (ACI) applies the same principles to the tools an LM agent uses. The term was formalized in the [SWE-agent paper](https://arxiv.org/abs/2405.15793) (Yang et al., NeurIPS 2024), which demonstrated that custom-designed tool interfaces significantly improved agent performance -- 12.5% pass@1 on SWE-bench -- without modifying model weights.
+Agent-Computer Interface (ACI) applies the discipline of Human-Computer Interaction — clear labels, constrained inputs, informative feedback, error prevention by design — to the tools an LM agent uses. The [SWE-agent paper](https://arxiv.org/abs/2405.15793) (Yang et al., NeurIPS 2024) formalized the term and showed custom tool interfaces lifted SWE-bench pass@1 by 12.5% with no change to model weights.
 
-Anthropic adopted the framing directly: "Think about how much effort goes into human-computer interfaces (HCI), and plan to invest just as much effort in creating good agent-computer interfaces (ACI)." ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents))
+Anthropic adopted the framing directly: "plan to invest just as much effort in creating good agent-computer interfaces (ACI)" as in HCI. ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents))
 
 ## The HCI-to-ACI Mapping
 
-Each HCI principle has a direct ACI equivalent:
+Each HCI principle maps directly:
 
 | HCI Principle | ACI Equivalent | Example |
 |---|---|---|
@@ -32,13 +32,13 @@ Each HCI principle has a direct ACI equivalent:
 
 ## Poka-Yoke: Error-Proofing for Agents
 
-Poka-yoke (mistake-proofing) is the highest-leverage ACI technique. One constraint change can eliminate an entire failure class.
+Poka-yoke (mistake-proofing) is the highest-leverage ACI technique: one constraint change can eliminate an entire failure class.
 
-The SWE-agent team documented specific design choices: a constrained 100-line file viewer stopped context loss from full dumps; search returning filenames only improved downstream tool selection; a syntax-validating linter before edits prevented cascading failures; explicit empty-output messages replaced silent empty returns.
+The SWE-agent team documented several: a 100-line file viewer stopped context loss from full dumps; search returning filenames only improved downstream tool selection; a syntax-validating linter blocked cascading failures; explicit empty-output messages replaced silent returns.
 
-Anthropic's SWE-bench implementation required absolute filepaths after observing repeated directory-change errors. A single parameter constraint -- not a prompt change, not a model change -- eliminated the failure pattern. ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents))
+Anthropic's SWE-bench implementation required absolute filepaths after repeated directory-change errors — one parameter constraint, not a prompt or model change, eliminated the failure pattern. ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents))
 
-Other patterns: [Loop detection](../observability/loop-detection.md) prevents repeated failed edits from consuming the context budget; middleware can inject environment knowledge automatically to reduce misunderstanding. See [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md) for implementation patterns.
+See [Loop detection](../observability/loop-detection.md) and [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md) for related patterns.
 
 ## Tool Description Quality Has Measurable Impact
 
@@ -46,16 +46,14 @@ Claude 3.5 Sonnet achieved state-of-the-art on SWE-bench after "precise refineme
 
 Composio reported a **10x reduction in tool failures** after applying ACI-style principles: snake_case consistency, one-atomic-action tools, explicit constraint documentation, strong typing with enums. ([Composio field guide](https://composio.dev/blog/how-to-build-tools-for-ai-agents-a-field-guide))
 
-These gains are not incidental. Models are trained on next-token prediction against human-readable text, so tool names, descriptions, and outputs that match that distribution reduce the inferential distance between observation and next action. Conversely, opaque identifiers, silent empty returns, and unconstrained inputs all increase cognitive overhead — the agent must spend tokens reasoning about what happened and which paths remain valid. ([Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents))
-
 Tool descriptions are the agent's only way to understand what a tool does and what to expect back. Write them like onboarding docs for a developer who will never ask a clarifying question.
 
 ## Semantic Output Design
 
-Return values that the agent can reason about directly:
+Return values the agent can reason about directly:
 
-- Return 'name' and 'file_type' instead of 'uuid' and 'mime_type' -- human-readable identifiers map directly to tokens the agent already understands, reducing the reasoning step needed to act on the result
-- Structure output for the agent's next decision, not for API completeness
+- Prefer 'name' and 'file_type' over 'uuid' and 'mime_type' — human-readable identifiers map to tokens the agent already understands.
+- Shape output for the agent's next decision, not for API completeness.
 
 ```mermaid
 flowchart LR
@@ -75,20 +73,18 @@ From Anthropic's [Advanced Tool Use](https://www.anthropic.com/engineering/advan
 
 ## Why It Works
 
-LLMs are trained on next-token prediction against text that is predominantly human-readable — documentation, code comments, variable names derived from natural language. ([Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)) When tool output matches this distribution — semantic identifiers over opaque UUIDs, natural language over raw data structures — the model needs fewer inferential steps to interpret the result and select a follow-on action.
+LLMs are trained on next-token prediction against predominantly human-readable text — documentation, code comments, variable names derived from natural language. ([Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)) Semantic identifiers and natural-language output match that distribution, so fewer inferential steps separate the result from the next action.
 
-Constraints work by the same principle in reverse: they eliminate branches the agent might otherwise explore. An absolute-path requirement means the model never generates a relative-path token that would require a correction step. A 100-line window prevents the model from attempting to reason about a full file dump that would overflow the attention window. Each constraint removes one error class from the action space entirely, which is why the SWE-agent authors found interface changes more reliably effective than prompt changes — prompts guide behavior, constraints remove paths.
+Constraints work by the same principle in reverse: they eliminate branches the agent might otherwise explore. An absolute-path requirement stops the model from emitting a relative-path token that would need correcting; a 100-line window stops it from reasoning about a full-file dump. Each constraint removes one error class from the action space — which is why the SWE-agent authors found interface changes more reliably effective than prompt changes. Prompts guide behavior; constraints remove paths.
 
 ## When This Backfires
 
-ACI design has real failure modes:
+- **Over-specialization**: Tools tuned to one model's quirks break when the model changes; customized formats and constraints often need rework each generation.
+- **Hidden failures**: Middleware that intercepts errors before the agent sees them prevents the agent from adapting — the tool absorbs signal it should be learning from.
+- **Abstraction overhead**: Wrapping generic tools in ACI layers adds maintenance surface; teams with simple tools and stronger prompts sometimes outperform teams maintaining complex tooling.
+- **Constraint mismatch**: Tight input rules (e.g., absolute paths only) fail in environments where those assumptions don't hold — containerized builds, cross-platform paths, dynamically mounted filesystems.
 
-- **Over-specialization**: A tool tuned to one model's quirks becomes brittle when the model changes. Highly customized output formats and constrained inputs may need rework with each new model generation.
-- **Hidden failures**: Middleware and validation layers intercept errors before the agent sees them. If the agent never observes raw failure signals, it cannot adapt its strategy — the tool absorbs errors the agent should be learning from.
-- **Abstraction overhead**: Wrapping generic tools in ACI-friendly layers adds maintenance surface. Teams that move fast with simple tools and better prompts sometimes outperform teams maintaining complex ACI tooling.
-- **Constraint mismatch**: Tight input constraints (e.g., absolute paths only) fail when the agent operates in environments where those constraints don't hold (containerized builds, cross-platform paths, dynamically mounted filesystems).
-
-These failure modes are most pronounced when the ACI design is done once and not iterated against real agent transcripts.
+These failure modes surface most when ACI is designed once and not iterated against real agent transcripts.
 
 ## Example
 

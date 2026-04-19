@@ -17,9 +17,9 @@ aliases:
 
 ## The Compliance Asymmetry
 
-Negative instructions require suppression: the agent must hold the prohibited action in mind while choosing not to take it. Positive instructions require execution: the agent identifies the target behavior and performs it. Token generation favors positive selection — the model chooses what comes next rather than explicitly avoiding tokens — so positive instructions directly boost the probability of desired outputs ([The Pink Elephant Problem](https://eval.16x.engineer/blog/the-pink-elephant-negative-instructions-llms-effectiveness-analysis)), producing higher compliance rates for positive forms across equivalent rule sets. Anthropic's own prompt engineering guidance reflects this: ["Tell Claude what to do instead of what not to do."](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)
+Negative instructions require suppression: the agent must hold the prohibited action in mind while choosing not to take it. Positive instructions require execution: the agent identifies the target behavior and performs it. Token generation favors positive selection — the model chooses what comes next rather than avoiding tokens — so positive instructions boost the probability of desired outputs ([The Pink Elephant Problem](https://eval.16x.engineer/blog/the-pink-elephant-negative-instructions-llms-effectiveness-analysis)), producing higher compliance across equivalent rule sets. Anthropic's prompt engineering guidance reflects this: ["Tell Claude what to do instead of what not to do."](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct)
 
-The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules tend to degrade first under a large instruction set because the suppression signal must compete with a growing context of execution targets.
+The practical difference is small when instructions are few. It compounds as instruction count grows. Negative rules degrade first under a large instruction set because the suppression signal competes with a growing context of execution targets.
 
 ## Reframing Common Rules
 
@@ -43,7 +43,7 @@ Some prohibitions are genuinely clearer in negative form. Use negative phrasing 
 - The prohibition is absolute and the positive form would be ambiguous: "Never push directly to main" vs. "Push to feature branches" (which main? which branches?)
 - You are naming a specific banned item: "No `console.log` in production code"
 
-In these cases, keep the negative instruction and move it toward the top of the instruction set. LLMs exhibit position-dependent attention effects — instructions placed earlier tend to receive stronger weighting in typical prompt lengths, though this can reverse in very long contexts where recency effects dominate.
+In these cases, keep the negative instruction and move it toward the top of the instruction set. LLMs exhibit position-dependent attention — earlier instructions tend to receive stronger weighting, though this can reverse in very long contexts where recency dominates.
 
 ## Hooks for True Prohibitions
 
@@ -102,6 +102,7 @@ The pattern is a default, not a universal. Apply it where the compliance benefit
 ## Related
 
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — the coding-agent-specific refinement where negative constraints outperform positive directives
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md)

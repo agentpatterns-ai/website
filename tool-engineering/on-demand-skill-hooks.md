@@ -27,7 +27,7 @@ Skills can declare a `hooks` field in their YAML frontmatter using the same conf
 
 Per the [Claude Code documentation](https://code.claude.com/docs/en/hooks), skill hooks "use the same configuration format as settings-based hooks but are scoped to the component's lifetime and cleaned up when it finishes." The hooks are component-scoped — active while the skill is running — rather than persistent across the whole session. This makes skills an effective way to temporarily arm guardrails for the duration of a specific task.
 
-Skill hooks support all the same event types as settings hooks — `PreToolUse`, `PostToolUse`, `PermissionRequest`, `Stop` — plus one additional field not available in `settings.json` or agents: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
+Skill hooks support all hook event types — including `PreToolUse`, `PostToolUse`, `PermissionRequest`, and `Stop` — plus one additional field not available in `settings.json` or agents: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
 Hook source is shown in the `/hooks` menu with a `Session` label, distinguishing skill-registered hooks from project or user-level settings hooks ([changelog v2.1.75](https://code.claude.com/docs/en/changelog)).
 
@@ -152,8 +152,10 @@ When the skill finishes, the hook is removed. No cleanup required.
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
+- [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
 - [SKILL.md Frontmatter Reference: All Fields Explained](skill-frontmatter-reference.md)
+- [Skill Tool as Enforcement: Loading Command Prompts at Runtime](skill-tool-runtime-enforcement.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Protecting Sensitive Files from Agent Context](../security/protecting-sensitive-files.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

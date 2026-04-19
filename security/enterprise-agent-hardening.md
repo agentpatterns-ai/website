@@ -75,6 +75,8 @@ Claude Code's persistent memory scopes (`user`, `project`, `local`) carry instit
 
 Verifiability and safe autonomy remain unsolved. Current hardening reduces but does not eliminate human oversight ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Hard-wiring governance to one provider creates rewrite-level switching costs; the survey paper notes conformance testing and interoperability contracts as open research directions but does not prescribe specific migration strategies ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)).
 
+Passing these gates is not sufficient. Industry data from early 2026 identifies a "governance-containment gap" — 58–59% of organizations report continuous monitoring and human-in-the-loop oversight, but only 37% have purpose binding and 40% have kill-switch capability, a 15–20 point spread between *watching* agents and *stopping* them ([CSA AI Agent Governance Framework Gap, April 2026](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-governance-framework-gap-20260403/); [RSAC 2026 coverage](https://www.techrepublic.com/article/news-agentic-ai-governance-rsac-2026-insights/)). Observability without containment leaves the response path unimplemented: alerts fire, but nothing halts the agent. Pair the observability gate with enforceable containment — kill-switches, purpose binding, network isolation — or the audit trail only documents incidents after the fact.
+
 ## Example
 
 The following `.claude/settings.json` wires up all three gates for a production deployment. Governance uses deny lists and a `PreToolUse` hook to block destructive operations; observability is enabled via environment variable; reproducibility is enforced through a `claude-progress.txt` convention referenced in `CLAUDE.md`.
@@ -138,6 +140,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections](close-attack-to-fix-loop.md)
+- [Cryptographic Governance and Audit Trail](cryptographic-governance-audit-trail.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Event Sourcing for Agents: Separating Cognitive Intention from State Mutation](../observability/event-sourcing-for-agents.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
@@ -145,6 +148,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Lifecycle Security Architecture](lifecycle-security-architecture.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
@@ -157,6 +161,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 - [Secrets Management for Agents](secrets-management-for-agents.md)
 - [Task Scope Security Boundary](task-scope-security-boundary.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
+- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)

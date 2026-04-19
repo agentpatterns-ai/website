@@ -22,11 +22,11 @@ Every generated token costs compute, latency, and context budget. When generated
 
 ### Prompt Engineering (Fragile)
 
-Adding "write concise code" creates a competing objective — the agent does less work, not better work. Cursor found GPT-5-Codex refused tasks because it was "not supposed to waste tokens" ([Token Preservation Backfire](../anti-patterns/token-preservation-backfire.md)).
+Adding "write concise code" creates a competing objective — the agent does less work, not better work. [Cursor reported](https://cursor.com/blog/codex-model-harness) that GPT-5-Codex refused tasks, replying "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!" after harness instructions pushed token preservation.
 
 ### Structural Optimization (Reliable)
 
-[ShortCoder (Liu et al., 2026)](https://arxiv.org/abs/2601.09703) shows that AST-preserving syntax transformations achieve 18.1-37.8% token reduction on HumanEval without degrading correctness.
+[ShortCoder (Liu et al., 2026)](https://arxiv.org/abs/2601.09703) shows that AST-preserving syntax transformations achieve 18.1-37.8% token reduction on [HumanEval](https://arxiv.org/abs/2107.03374) without degrading correctness.
 
 ```mermaid
 flowchart LR
@@ -59,7 +59,7 @@ ShortCoder's ten AST-equivalent transforms:
 | 9 | String formatting | `"a" + str(b) + "c"` | `f"a{b}c"` |
 | 10 | Context managers | `open()`/`close()` | `with open() as f:` |
 
-Applied systematically to LLM output, these standard idioms produce measurable token savings.
+These align with long-standing Python idioms codified in [PEP 8](https://peps.python.org/pep-0008/). Applied systematically to LLM output, they produce measurable token savings.
 
 ## Practical Implications
 

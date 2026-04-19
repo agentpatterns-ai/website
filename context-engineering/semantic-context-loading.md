@@ -18,35 +18,31 @@ tags:
 !!! info "Also known as"
     [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md), [Context Hub](context-hub.md), JIT Context, RAG
 
+## What It Is
+
+Semantic context loading is a retrieval pattern where the agent queries a codebase through Language Server Protocol (LSP) operations — symbol lookup, reference finding, type hierarchy — instead of reading whole files. Each query returns only the requested symbol's definition, signature, or call sites, so token cost scales with the result, not the file size.
+
 ## The Problem with File-Based Context Loading
 
-The default agent approach to understanding a codebase is file reading: open a file, scan for relevant content, repeat. This loads everything in the file — imports, unrelated functions, comments, boilerplate — regardless of what the agent actually needs. A 500-line module loaded to find one function signature consumes all 500 lines of context.
+The default agent approach is file reading: open a file, scan, repeat. This loads imports, unrelated functions, comments, and boilerplate regardless of what the agent needs. A 500-line module loaded to find one function signature consumes all 500 lines of context.
 
 ## Semantic Queries as an Alternative
 
-Language Server Protocol (LSP) is the interface that powers IDE features like "Go to Definition" and "Find All References." An agent with access to LSP-backed tools can make targeted queries instead of reading files:
+LSP powers IDE features like "Go to Definition" and "Find All References." An agent with LSP-backed tools can issue targeted queries:
 
 - `findSymbol("AuthService")` — returns the definition location and signature
 - `findReferences("AuthService")` — returns all call sites
 - `getTypeHierarchy("User")` — returns parent and child types
 
-Each query returns exactly the relevant symbols, not the full file contents. The token cost is proportional to the result, not to the file size.
-
 ## Serena: LSP for Agents
 
-Serena is an open-source MCP server that provides semantic code retrieval and editing tools — symbol lookup, reference finding, type hierarchies, and safe refactoring — across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). It allows agents to navigate codebases using semantic queries rather than file reads. The pattern applies to any LSP-compatible tooling, not just Serena — what matters is the capability, not the specific implementation.
+Serena is an open-source MCP server that provides semantic code retrieval and editing tools across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). The pattern applies to any LSP-compatible tooling — what matters is the capability, not the specific implementation.
 
-Agents using LSP-backed tools can answer questions like:
-
-- Where is this type defined?
-- What implements this interface?
-- What calls this function?
-
-without loading any file into context until they have a specific location to read.
+Agents using LSP-backed tools can answer: where is this type defined? what implements this interface? what calls this function? — without loading any file into context until they have a specific location to read.
 
 ## Comparison with Native Indexing
 
-Tools like GitHub Copilot and Cursor implement their own codebase indexing that approximates semantic lookup. Copilot builds a semantic index over repository files and combines it with text search and symbol tracing ([VS Code Copilot workspace context docs](https://code.visualstudio.com/docs/copilot/workspace-context)); Cursor's internal indexing mechanism is not publicly documented. The distinction matters:
+GitHub Copilot and Cursor implement their own codebase indexing that approximates semantic lookup. Copilot combines a semantic index over repository files with text search and symbol tracing ([VS Code Copilot workspace context docs](https://code.visualstudio.com/docs/copilot/workspace-context)); Cursor's internal mechanism is not publicly documented.
 
 | Approach | How It Works | When It Helps |
 |----------|-------------|---------------|
@@ -54,19 +50,21 @@ Tools like GitHub Copilot and Cursor implement their own codebase indexing that 
 | Native indexing | Tool's built-in semantic search | When available and configured |
 | LSP-backed queries | Direct semantic protocol | Precise navigation, large codebases |
 
-LSP-backed queries are most valuable when the codebase is large, the agent's task requires cross-file navigation, and an LSP server is already configured for the language in use.
+LSP-backed queries are most valuable when the codebase is large, the task requires cross-file navigation, and an LSP server is already configured for the language.
 
 ## Trade-offs
 
-**Setup cost.** LSP-backed tools require a running language server. Not all languages have mature LSP implementations, and not all repos are configured for LSP. The tooling layer is more complex than file reading.
+**Setup cost.** LSP-backed tools need a running language server; not all repos are configured for one, and the tooling layer is more complex than file reading.
 
-**Precision vs. breadth.** Semantic queries retrieve exactly what is requested. If the agent doesn't know the right symbol name or doesn't know what it's looking for, it may miss relevant context that a file scan would surface. Semantic loading works best when the agent has a clear target — a specific function, type, or reference — rather than an exploratory task.
+**Precision vs. breadth.** Semantic queries return exactly what is asked for. If the agent doesn't know the right symbol or is exploring blindly, it may miss context a file scan would surface. Semantic loading works best with a clear target.
 
-**Language coverage.** LSP quality varies by language. TypeScript, Python, Go, and Rust have strong LSP implementations. Less common languages may have limited or no LSP support.
+**Language coverage.** TypeScript, Python, Go, and Rust have strong LSP implementations; less common languages may have limited or no support.
+
+**Protocol-level critique.** LSP was designed for editors, not agents. Armin Ronacher argues LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet) and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level agent-native operations on top of LSP to avoid this overhead ([github.com/lsp-client/LSAP](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor — wrappers like Serena or LSAP-style protocols carry most of the benefit.
 
 ## Example
 
-The following shows the contrast between file-based and LSP-backed context loading for the same navigation task using Serena's MCP tools in Claude Code.
+Contrast between file-based and LSP-backed context loading for the same navigation task using Serena's MCP tools in Claude Code.
 
 **File-based approach** — loads the entire module to find one function signature:
 

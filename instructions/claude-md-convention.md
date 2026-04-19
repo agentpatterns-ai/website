@@ -1,6 +1,6 @@
 ---
 title: "CLAUDE.md Convention for Structuring Agent Instructions"
-description: "CLAUDE.md is Claude Code's project-level instruction file -- a Markdown file that Claude Code reads at session start to understand project conventions"
+description: "CLAUDE.md is Claude Code's project-level instruction file — read at session start to convey conventions, tooling, and behavioral rules."
 tags:
   - instructions
 aliases:
@@ -157,24 +157,21 @@ paths:
 - Return errors using the `ApiError` class from `shared/errors`
 ```
 
+## Key Takeaways
+
+- CLAUDE.md is context loaded into the session, not enforced configuration — specificity yields compliance.
+- Four scopes layer from managed policy down to local overrides; more specific scopes win on conflict.
+- Keep it under 200 lines of scannable headers and bullets; longer files erode adherence.
+- Link to deeper docs and use `@path` imports or `.claude/rules/` for path-scoped content instead of inlining everything.
+- Omit discoverable knowledge and task-specific instructions — those belong in tools or prompts, not the instruction file.
+
 ## Related
 
 - [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)
-- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [Layer Agent Instructions by Specificity](layered-instruction-scopes.md)
-- [Instruction Polarity](instruction-polarity.md)
+- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
 - [@import Composition Pattern](import-composition-pattern.md)
+- [Layer Agent Instructions by Specificity](layered-instruction-scopes.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
-- [When to Use Examples vs Rules in Agent Instructions](example-driven-vs-rule-driven-instructions.md)
-- [Critical Instruction Repetition via Primacy and Recency](critical-instruction-repetition.md)
-- [Domain-Specific System Prompts](domain-specific-system-prompts.md)
-- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
+- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Content Exclusion Gap](content-exclusion-gap.md)
-- [Frozen Spec File](frozen-spec-file.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [Prompt File Libraries](prompt-file-libraries.md)
-- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
-- [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md)
-- [Prompt Governance via PR](prompt-governance-via-pr.md)

@@ -114,7 +114,7 @@ This file converts a generic agent into a project-aware one: it knows to use `bu
 AGENTS.md degrades in three conditions:
 
 - **Stale content**: as the codebase evolves, AGENTS.md drifts. A file that correctly described tooling six months ago now misleads agents into using deprecated commands. Static files require active maintenance discipline — they do not self-update as conventions change.
-- **Context overconsumption**: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — can consume 10–20% of a context window before work begins. The file works against itself when it embeds knowledge instead of linking to it.
+- **Context overconsumption**: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
 - **Mismatch with dynamic environments**: AGENTS.md is a static snapshot. Projects with frequent toolchain changes, multiple distinct workflows, or environment-specific constraints that vary per run are poorly served by a single root file. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
 
 ## Key Takeaways

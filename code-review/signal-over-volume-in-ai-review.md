@@ -65,7 +65,7 @@ The mechanism is attentional: reviewers have a fixed budget of attention per PR.
 ## When This Backfires
 
 - **Cross-file false negatives.** A strict confidence floor silences bugs that span multiple files — the model cannot reach high confidence without full context. This defect class is missed unless the agent receives sufficient scope.
-- **Silent failure on novel patterns.** Confidence thresholds reflect known patterns. A new vulnerability type may score low confidence because it is rare in training data, not because it is low risk. The agent's silence is indistinguishable from a clean bill of health.
+- **Silent failure on novel patterns.** Confidence thresholds reflect known patterns. A new vulnerability type may score low confidence because it is rare in training data, not because it is low risk. The agent's silence is indistinguishable from a clean bill of health — an [empirical evaluation of Copilot code review on labelled vulnerable samples](https://arxiv.org/abs/2509.13650) found it frequently misses SQL injection, XSS, and insecure deserialization while still returning clean reviews.
 - **Trust inversion.** When the agent comments rarely, developers may interpret silence as implicit approval and reduce manual review. A "No high-confidence findings." response creates false completeness if secondary review has been dropped.
 - **Threshold decay.** Confidence floors drift as codebases evolve. Without periodic recalibration against resolved findings, signal quality degrades silently.
 

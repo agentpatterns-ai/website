@@ -1,6 +1,6 @@
 ---
-title: "Building Dynamic System Prompts with Modular Sections"
-description: "Build system prompts from modular, priority-ordered sections rather than monolithic static text — enabling mode-specific variants, provider-specific injection"
+title: "Dynamic System Prompt Composition"
+description: "Assemble system prompts at runtime from priority-ordered sections — toggle by mode and provider, separate cacheable and dynamic regions."
 tags:
   - context-engineering
   - instructions
@@ -18,11 +18,11 @@ aliases:
 
 A single static system prompt works for simple agents. As capabilities grow, prompts accumulate sections for identity, code quality rules, safety constraints, interaction guidance, and context awareness. The result: every conversation pays the token cost for every section, regardless of relevance.
 
-Dynamic composition addresses this by assembling the system prompt at runtime from modular sections, including only what applies to the current mode, provider, and session state ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)).
+Dynamic composition addresses this by assembling the system prompt at runtime from modular sections, including only what applies to the current mode, provider, and session state ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)).
 
 ## Priority-Ordered Sections
 
-Each section carries a numeric priority that determines assembly order ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)). The paper identifies five functional tiers — Core Identity, Tool Definitions, Safety & Rules, Provider-Specific Guidance, and Dynamic Context — without assigning specific numeric ranges. The following table illustrates one way to map those tiers to a numeric scheme:
+Each section carries a numeric priority that determines assembly order ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)). The paper identifies five functional tiers — Core Identity, Tool Definitions, Safety & Rules, Provider-Specific Guidance, and Dynamic Context — without assigning specific numeric ranges. The following table illustrates one way to map those tiers to a numeric scheme:
 
 | Priority Range | Functional Tier (illustrative) | Example Content |
 |---------------|--------------------------------|-----------------|
@@ -32,27 +32,25 @@ Each section carries a numeric priority that determines assembly order ([Bui, 20
 | 70--80 | Provider-specific guidance | Provider-optimized instructions |
 | 85--95 | Dynamic context | Session state, memory injection |
 
-Only enabled sections are included in the final prompt. Sections can be toggled per conversation mode — planning mode omits code quality rules; execution mode omits planning heuristics ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)).
+Only enabled sections are included in the final prompt. Sections can be toggled per conversation mode — planning mode omits code quality rules; execution mode omits planning heuristics ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)).
 
 ## Mode-Specific Variants
 
-Different execution modes require different prompt emphasis. OPENDEV defines planning, thinking, and normal execution modes, each with a distinct prompt variant that includes only the constraints relevant to that mode ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)).
+Different execution modes require different prompt emphasis. OPENDEV defines planning, thinking, and normal execution modes, each with a distinct prompt variant that includes only the constraints relevant to that mode ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)).
 
 This prevents irrelevant instructions from consuming context and attention. A planning-mode prompt does not include code formatting rules; an execution-mode prompt does not include strategic reasoning scaffolds.
 
 ## Provider-Specific Sections
 
-Conditional blocks inject provider-optimized instructions — Claude-specific, GPT-specific, or open-source model instructions — without bloating the prompt for other providers. The prompt assembly layer selects the appropriate blocks based on the active model ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)).
+Conditional blocks inject provider-optimized instructions — Claude-specific, GPT-specific, or open-source model instructions — without bloating the prompt for other providers. The prompt assembly layer selects the appropriate blocks based on the active model ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)).
 
 ## Caching-Aware Structure
 
-Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders). OPENDEV's architecture separates prompt composition into stable and dynamic layers, enabling higher cache hit rates at the API level ([Bui, 2025 §3.1](https://arxiv.org/abs/2603.05344)).
-
-The design principle: place stable content first so the cacheable prefix remains constant across requests. Anthropic's prompt caching works by checking whether the prompt prefix up to a designated breakpoint matches a cached entry — any change to earlier tokens invalidates the cache for all tokens that follow ([Anthropic, Prompt Caching](https://claude.com/blog/prompt-caching)). Modular composition enforces this structurally: the stable sections (identity, tool schemas) are always assembled first, so the stable prefix never shifts between requests even as dynamic sections vary.
+Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders) so the stable prefix never shifts between requests ([Bui, 2026 §3.1](https://arxiv.org/abs/2603.05344)). Anthropic's prompt caching matches the prefix up to a designated breakpoint — any change to earlier tokens invalidates the cache for everything that follows ([Anthropic, Prompt Caching](https://claude.com/blog/prompt-caching)). Modular composition enforces this structurally: identity and tool schemas are always assembled first, so the cacheable prefix remains constant even as dynamic sections vary.
 
 ## Two-Tier Fallback
 
-If custom section loading fails (corrupted config, missing files), prompt assembly falls back to default sections. The agent remains functional with baseline capabilities rather than failing entirely ([Bui, 2025 §2.3.1](https://arxiv.org/abs/2603.05344)).
+If custom section loading fails (corrupted config, missing files), prompt assembly falls back to default sections. The agent remains functional with baseline capabilities rather than failing entirely ([Bui, 2026 §2.3.1](https://arxiv.org/abs/2603.05344)).
 
 ## Example
 
@@ -118,6 +116,20 @@ system_prompt = compose_prompt(
 
 Sections at priority 10–45 are stable across requests and can be cached at the API level. The mode-specific sections at 60 and 75 are mutually exclusive, so only one is ever included. The provider-specific block at priority 80 is injected only for Anthropic and is absent for OpenAI calls — avoiding cross-provider [prompt bloat](../anti-patterns/prompt-tinkerer.md) without branching the calling code.
 
+## When This Backfires
+
+Runtime composition can defeat the caching goal it was meant to enable. Lumer et al. show that naive composition — dynamic content sprinkled through the prompt or tool results left inside the cached region — can *increase* latency and cost for long-horizon agent tasks; their empirical guidance is to place dynamic content at the end and exclude tool results from the cacheable region ([Lumer et al., 2026](https://arxiv.org/abs/2601.06007)). The pattern is also worse than a single static prompt when:
+
+1. **Combination explosion in testing.** With N sections and M modes, testable combinations grow multiplicatively; a section that works in isolation may degrade behavior when combined with another that contradicts or duplicates its framing.
+
+2. **Prompt injection via dynamic sections.** Session-state and user-provided content require sanitization before inclusion; static sections have no injection surface.
+
+3. **Cache invalidation from over-modulation.** A conditionally included section appearing early in priority order invalidates the cache for every token that follows. Reserve dynamic sections for the end of the priority stack.
+
+4. **Churn across deploys.** Re-ordering or re-wording mode- or provider-specific blocks between releases invalidates cached prefixes across all sessions — composition amplifies the blast radius of wording changes.
+
+When the task set is narrow and well-defined, a single authored system prompt is simpler to test and audit. Reach for dynamic composition when the agent operates across genuinely distinct modes or providers — not as a default.
+
 ## Key Takeaways
 
 - Assemble system prompts from priority-ordered modular sections, not monolithic text.
@@ -126,29 +138,13 @@ Sections at priority 10–45 are stable across requests and can be cached at the
 - Separate cacheable (stable) from dynamic (session-specific) sections for API cache efficiency.
 - Fall back to default sections on load failure to maintain agent functionality.
 
-## When This Backfires
-
-Dynamic composition adds complexity that static prompts avoid. Three specific failure conditions:
-
-1. **Combination explosion in testing.** With N independent sections and M modes, the testable combinations grow multiplicatively. A section that works in isolation may degrade model behavior when combined with another that contradicts its framing or duplicates its instructions.
-
-2. **Prompt injection via dynamic sections.** Session-state and user-provided content injected into dynamic sections can introduce adversarial instructions. Static sections have no injection surface; dynamic ones require sanitization before inclusion.
-
-3. **Cache invalidation from over-modulation.** Toggling too many sections between requests defeats the caching benefit. If a conditionally included section appears early in priority order, its presence or absence invalidates the cache for all higher-priority tokens that follow. Reserve dynamic sections for the end of the priority stack to protect the stable prefix.
-
-When the task set is narrow and well-defined, a single authored system prompt is simpler to test, audit, and reason about. Reach for dynamic composition when the agent operates across genuinely distinct modes or providers — not as a default.
-
 ## Related
 
 - [System Prompt Altitude](../instructions/system-prompt-altitude.md)
 - [Prompt Layering: How Instructions Stack and Override](./prompt-layering.md)
 - [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md)
-- [Hierarchical CLAUDE.md: Layered Context File Scoping](../instructions/hierarchical-claude-md.md)
-- [Context Budget Allocation: Every Token Has a Cost](./context-budget-allocation.md)
 - [Prompt Caching as Architectural Discipline](./prompt-caching-architectural-discipline.md)
 - [Structure Prompts with Static Content First to Maximize Cache Hits](./static-content-first-caching.md)
 - [Phase-Specific Context Assembly for AI Agent Development](./phase-specific-context-assembly.md)
 - [Prompt Cache Economics: Comparing Costs by Provider](./prompt-cache-economics.md)
-- [Context Engineering](./context-engineering.md)
 - [Layered Context Architecture](./layered-context-architecture.md)
-- [Disable Attribution Headers to Preserve KV Cache in Local Inference](./kv-cache-invalidation-local-inference.md)

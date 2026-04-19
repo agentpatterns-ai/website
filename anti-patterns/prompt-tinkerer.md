@@ -19,13 +19,9 @@ Each time an agent makes a recurring mistake, the prompt grows: another sentence
 
 ## Why Prompts Fail at Enforcement
 
-A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale benchmark testing across 20 frontier models](https://arxiv.org/abs/2507.11538) found instruction-following accuracy degrades measurably as instruction count rises, with top models reaching only 68% compliance at high densities.
+A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale across 20 frontier models](https://arxiv.org/abs/2507.11538) found compliance drops to 68% at high instruction densities, with patterns ranging from threshold decay to exponential collapse. [ManyIFEval](https://arxiv.org/abs/2509.21051) calls this the "curse of instructions": all-rule compliance falls as per-rule accuracy raised to the rule count.
 
-Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. It changes token distribution slightly but does not enforce the rule.
-
-## Why It Works
-
-LLMs treat instructions as competing signals, not ordered rules. [Research on instruction density](https://arxiv.org/abs/2507.11538) shows all frontier models degrade as instruction count rises; patterns range from threshold decay to exponential collapse. Each new prohibition dilutes the attention budget for existing ones. A hook blocks a write regardless of what the model attended to.
+Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. Each new prohibition dilutes attention for the existing ones. A hook blocks a write regardless of what the model attended to.
 
 ## The Escalation Ladder
 

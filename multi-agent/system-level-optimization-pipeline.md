@@ -17,15 +17,15 @@ aliases:
 !!! info "Also known as"
     Multi-Agent Performance Optimization, System-Wide Optimization Pipeline
 
-## The Problem with Local Optimization
+## Why Local Optimization Misses System Bottlenecks
 
-Most AI coding agents optimize at the function or file level — point at a function, ask the agent to "make it faster," and it restructures the algorithm. This works for CPU-bound hot paths but misses the bottlenecks that matter most in distributed systems: connection pool exhaustion across services, lock contention on shared request paths, redundant object allocation in serialization layers.
+The system-level optimization pipeline is a sequential multi-agent workflow that splits performance engineering across four specialized agents — summarizer, analyst, optimizer, and verifier — each reasoning within a bounded scope while collectively surfacing bottlenecks that span multiple services.
 
-These system-level problems emerge from **cross-component interactions** — how services call each other, share resources, and contend for locks. No single-file pass can find them because the evidence is spread across multiple services and configuration layers.
+Most AI coding agents optimize at the function level: point at a function, ask for it to be faster, and the agent restructures the algorithm. This misses the bottlenecks that matter most in distributed systems — connection pool exhaustion, lock contention on shared request paths, redundant allocation in serialization layers. These emerge from **cross-component interactions** that no single-file pass can find, because the evidence is spread across services and configuration layers.
 
 ## The Four-Stage Pipeline
 
-The system-level optimization pipeline assigns each phase of performance engineering to a specialized agent role, following the [orchestrator-worker pattern](orchestrator-worker.md) with sequential handoff.
+The pipeline assigns each phase of performance engineering to a specialized agent role, following the [orchestrator-worker pattern](orchestrator-worker.md) with sequential handoff.
 
 ```mermaid
 graph LR
@@ -51,7 +51,7 @@ The summarization agent extracts architectural context that downstream agents ne
 | **Behavior Summary** | Call graphs, control-flow complexity, database interactions, concurrency patterns |
 | **Environment Summary** | Build config, runtime settings, deployment topology |
 
-This stage differentiates system-level from local optimization. Without architectural context, agents default to function-level reasoning.
+Without this architectural context, agents default to function-level reasoning.
 
 ### Stage 2: Analysis
 
@@ -76,27 +76,20 @@ The verification agent validates functional correctness (existing tests pass) an
 | p50 latency (ms) | 13.0 | 9.0 | **-30.8%** |
 | p99 latency (ms) | 26.0 | 23.0 | **-11.5%** |
 
-The three optimizations were well-known patterns: HTTP client reuse via singleton, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was in **automated discovery** across service boundaries, not novelty of the fixes. [TeaStore](https://github.com/DescartesResearch/TeaStore) is an open-source Java microservices benchmark maintained by the Descartes Research Group.
+The three optimizations were well-known patterns: singleton HTTP client reuse, replacing synchronized methods with volatile flags, and sharing static ObjectMapper instances. The value was **automated discovery** across service boundaries, not novelty. [TeaStore](https://github.com/DescartesResearch/TeaStore) is maintained by the Descartes Research Group.
 
 !!! warning "Early-stage research"
-    These results come from a single benchmark system. Comparative evaluations against existing tools (OpenCode, CodeX, SysLLMatic) are planned but not yet conducted. The framework assumes comprehensive existing test suites for correctness validation.
+    Results come from a single benchmark. Comparisons against existing tools (OpenCode, CodeX, SysLLMatic) are planned but not yet conducted, and the framework assumes comprehensive existing test suites.
 
-## Practical Takeaway: Context Shapes Optimization Scope
+## Context Shapes Optimization Scope
 
-**The context you provide determines the scope of optimization the agent can perform.**
+The context you provide determines the scope of optimization the agent can perform:
 
-- **File-level context** → agents find local algorithm improvements
-- **Repository-level context** → agents find cross-file refactoring opportunities
-- **System-level context** (dependency maps, call graphs, deployment config) → agents reason about cross-service bottlenecks
+- **File-level** → local algorithm improvements
+- **Repository-level** → cross-file refactoring
+- **System-level** (dependency maps, call graphs, deployment config) → cross-service bottlenecks
 
-If you want agents to find system-level performance issues, provide system-level context:
-
-1. **Dependency maps** — which services call which, and how
-2. **Call graphs** — interprocedural flow across service boundaries
-3. **Runtime configuration** — connection pools, thread counts, cache settings
-4. **Deployment topology** — co-located vs. networked services, resource constraints
-
-Without this, agents default to the optimization scope their context window supports — usually a single file.
+To surface system-level issues, provide dependency maps, call graphs, runtime configuration (connection pools, thread counts, cache settings), and deployment topology. Without them, agents default to the optimization scope their context window supports — usually a single file.
 
 ## Example
 

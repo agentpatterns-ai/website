@@ -35,7 +35,7 @@ SaaS has hidden costs beyond the subscription:
 - **Data fragmentation** — customer data scattered across vendors, each with its own API and export format
 - **Vendor lock-in** — switching costs accumulate as integrations deepen
 
-The shift works because LLM inference cost scales with tokens, not developer headcount. A 4-hour agent session generating 2,000 lines of code costs a few dollars in API fees; a developer achieving the same output would cost orders of magnitude more. SaaS subscriptions, by contrast, scale with usage and users — costs that recur every month and increase as the business grows. When an AI agent compresses the build time for a functional CRM, support desk, or analytics dashboard from weeks to days, the total cost of ownership comparison changes. One-time build cost shrinks; ongoing SaaS subscription and integration overhead remains fixed.
+The shift works because LLM inference cost scales with tokens, not developer headcount. Claude Sonnet 4.6 is priced at roughly $3 per million input tokens and $15 per million output tokens ([Claude API pricing](https://platform.claude.com/docs/en/about-claude/pricing)), and enterprise telemetry puts average Claude Code spend near $13 per active developer day ([Verdent, *Claude Code Pricing 2026*](https://www.verdent.ai/guides/claude-code-pricing-2026)). SaaS subscriptions, by contrast, scale with usage and users — costs that recur every month and increase as the business grows. When an AI agent compresses the build time for a functional CRM, support desk, or analytics dashboard, the total cost of ownership comparison changes. One-time build cost shrinks; ongoing SaaS subscription and integration overhead remains fixed.
 
 ## What "Every Business Needs"
 
@@ -71,7 +71,7 @@ logs them to a SQLite database, and sends a templated follow-up email via
 SendGrid. Include a /tickets admin view listing open cases."
 ```
 
-The resulting service runs on a $5/month VPS. Monthly SaaS equivalent (Zendesk Lite + Mailchimp Essentials) was $85/month. The custom build took 4 hours including review; ongoing maintenance (dependency updates, schema migrations) is handled by re-prompting the same agent with the existing codebase as context.
+The resulting service runs on a $5/month VPS. The displaced SaaS stack — an entry-tier helpdesk seat (Zendesk Support Team starts at $19/agent/month, [Zendesk pricing](https://www.zendesk.com/pricing/)) plus a small newsletter plan and a hosted dashboard — adds up to roughly $80–$100/month for a single operator. The custom build is iterated by re-prompting the same agent with the existing codebase as context for ongoing maintenance (dependency updates, schema migrations).
 
 This illustrates the economics argument: the conformity cost (adapting business processes to fit Zendesk's ticket model) is eliminated, and the integration overhead (syncing Stripe events to Zendesk via Zapier) no longer exists.
 

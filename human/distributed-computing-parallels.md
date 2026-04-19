@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - multi-agent
 ---
+
 # Distributed Computing Parallels in Agent Architecture
 
 > Agent architectures reuse structural patterns from distributed systems — recognizing the mapping lets you apply decades of operational wisdom instead of relearning it.
@@ -84,16 +85,10 @@ Without recognizing these as known patterns, teams reinvent each mechanism ad ho
 ## Related
 
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
-- [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)
 - [Orchestrator-Worker](../multi-agent/orchestrator-worker.md)
+- [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Rollback-First Design](../agent-design/rollback-first-design.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
-- [Retrieval-Augmented Agent Workflows: On-Demand Context](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Attention Management with Parallel Agents](attention-management-parallel-agents.md)
-- [The Context Ceiling](context-ceiling.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
-- [Process Amplification](process-amplification.md)
-- [Rigor Relocation](rigor-relocation.md)

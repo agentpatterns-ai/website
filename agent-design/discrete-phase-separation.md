@@ -84,15 +84,15 @@ The separation enables workload-appropriate model routing. Research and planning
 
 ## Trade-offs
 
-- **Latency**: ~35% latency increase from separate conversation setup overhead ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441))
-- **Tool use accuracy**: 72% → 94% in deliberation-first approaches ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441))
+- **Latency**: Spinning up a fresh conversation per phase adds setup overhead compared to continuing one session.
 - **Artifact quality ceiling**: If the research summary omits a critical finding, the plan cannot recover it. The distillation step is a lossy compression.
 - **Orchestration overhead**: Requires a harness to spawn phases, pass artifacts, and handle phase-level failures.
+- **Loss of implicit context**: Intuitions the model formed during research (e.g., which files looked suspicious) do not survive the boundary unless written into the artifact.
 
 ## Distinction from Related Patterns
 
 - **[Cognitive Reasoning vs Execution Separation](cognitive-reasoning-execution-separation.md)** — enforces the boundary via typed tool interfaces within an architecture, not conversation resets. This pattern is structural; discrete phase separation is temporal.
-- **[Research-Plan-Implement Workflow](../workflows/research-plan-implement.md)** — describes the three-phase shape as a workflow; this page covers the isolation enforcement mechanism — why conversation boundary is stronger than prompt-level separation.
+- **[Research-Plan-Implement Workflow](../workflows/research-plan-implement.md)** — describes the three-phase shape as a workflow; discrete phase separation is the isolation enforcement mechanism — why conversation boundary is stronger than prompt-level separation.
 - **[Loop Strategy Spectrum](loop-strategy-spectrum.md)** — addresses when to use fresh-context loops vs accumulated context; discrete phase separation is a specific application of fresh-context isolation.
 
 ## Key Takeaways
@@ -101,7 +101,7 @@ The separation enables workload-appropriate model routing. Research and planning
 - Only distilled artifacts (summaries, plans) cross boundaries — not raw history.
 - Conversation boundary eliminates attention crosstalk; prompt-level separation does not.
 - The distillation step is lossy: artifact quality sets the ceiling for all downstream phases.
-- ~35% latency overhead is the primary cost; deliberation-first approaches improve tool use accuracy from 72% to 94% ([Parisien et al., ICLR 2024](https://arxiv.org/abs/2403.05441)).
+- Costs are higher orchestration overhead and lost implicit context — whatever the research agent noticed but did not write down is gone.
 
 ## Related
 
@@ -113,3 +113,4 @@ The separation enables workload-appropriate model routing. Research and planning
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
+- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

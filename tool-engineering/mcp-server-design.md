@@ -13,38 +13,30 @@ tags:
 
 ## First Decision: Tool, Resource, or Prompt?
 
-Choosing the wrong primitive creates friction before naming or schema design matters.
+Picking the wrong primitive creates friction before naming or schema design matters.
 
 | Primitive | Controlled By | Use When | Example |
 |-----------|--------------|----------|---------|
-| **Tool** | Model (agent invokes) | The agent needs to take an action or fetch dynamic data | `create_issue`, `search_logs` |
-| **Resource** | Application (client attaches) | Read-only context the agent should see but not invoke | Project config, schema definitions, environment info |
-| **Prompt** | User (slash command) | Reusable multi-step workflows triggered by the user | `/summarize-pr`, `/deploy-staging` |
+| **Tool** | Model (agent invokes) | Agent takes action or fetches dynamic data | `create_issue`, `search_logs` |
+| **Resource** | Application (client attaches) | Read-only context the agent sees but cannot invoke | Project config, schema, env info |
+| **Prompt** | User (slash command) | Reusable multi-step workflows | `/summarize-pr`, `/deploy-staging` |
 
-Resources support `audience` and `priority` annotations for client-side filtering. Tools return `resource_link` references instead of embedding full content.
+Resources support `audience` and `priority` annotations for client-side filtering; tools can return `resource_link` references instead of embedding full content.
 
 ## Tool Naming
 
-The MCP spec allows 1--128 characters using `A-Z a-z 0-9 _ - .` with no spaces.
-
-**Conventions that work:**
+The spec allows 1--128 characters using `A-Z a-z 0-9 _ - .` with no spaces. Conventions that work:
 
 - **snake_case** -- used by >90% of public MCP servers ([zazencodes analysis](https://zazencodes.com/blog/mcp-server-naming-conventions))
-- **verb_noun pattern** -- `search_customer_orders` not `query_db_orders`; `create_jira_issue` not `jira_create`
-- **32 characters or fewer** -- short enough for tool search matching, long enough to be descriptive
+- **verb_noun pattern** -- `search_customer_orders` not `query_db_orders`
+- **32 characters or fewer** -- descriptive but still matches tool search
 - **No version numbers or abbreviations** -- `search_products` not `prod_lookup_v2`
 
-Tool search matches names and descriptions -- `query_db_orders` causes routing failures; `search_customer_orders` tells the agent exactly what it gets ([Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)).
+Tool search matches names and descriptions; opaque names cause routing failures ([Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## Schema Design
 
-`inputSchema` must be a valid JSON Schema object (use `{"type":"object","additionalProperties":false}` for parameterless tools).
-
-### Schemas Cannot Express Everything
-
-JSON Schema defines types and constraints, not format conventions or domain-specific usage. Supplement with examples.
-
-Providing 1--5 realistic examples improved accuracy from 72% to 90% in Anthropic tests ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
+`inputSchema` must be a valid JSON Schema object (use `{"type":"object","additionalProperties":false}` for parameterless tools). Schemas define types and constraints but not format conventions or domain usage -- supplement with examples. In Anthropic tests, 1--5 realistic examples raised accuracy from 72% to 90% ([Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ### What Good Schema Design Looks Like
 
@@ -75,13 +67,11 @@ Providing 1--5 realistic examples improved accuracy from 72% to 90% in Anthropic
 }
 ```
 
-Key moves: enums reduce guesswork, defaults handle common cases, descriptions state constraints with examples, negative guidance says when *not* to use the tool.
+Enums reduce guesswork, defaults handle common cases, descriptions pair constraints with examples, and negative guidance tells the agent when *not* to call.
 
 ### Output Schema and Annotations
 
-`outputSchema` enables structured content validation. Return both `structuredContent` (validated) and serialized JSON in `content` for backwards compatibility.
-
-Tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) describe behavior for clients. Treat them as metadata -- clients must not trust them from untrusted servers. Set `idempotentHint: true` for tools that follow the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md) -- same inputs produce the same end state on repeated calls.
+`outputSchema` enables structured content validation. Return both `structuredContent` (validated) and serialized JSON in `content` for backwards compatibility. Tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) are metadata only, not trustable from untrusted servers. Set `idempotentHint: true` for tools following the [idempotent operations pattern](../agent-design/idempotent-agent-operations.md).
 
 ## Error Handling
 
@@ -95,9 +85,7 @@ flowchart LR
     D --> E["Agent reads error,<br/>self-corrects, retries"]
 ```
 
-**Protocol errors** (JSON-RPC codes) signal structural problems -- wrong method, missing parameters. These are for the client, not the agent.
-
-**Tool execution errors** (`isError: true` in the result) are for the agent. The spec states these should contain "actionable feedback that language models can use to self-correct and retry."
+**Protocol errors** (JSON-RPC codes) are for the client. **Tool execution errors** (`isError: true`) are for the agent; the spec states these should contain "actionable feedback that language models can use to self-correct and retry."
 
 ### Actionable Error Pattern
 
@@ -107,11 +95,11 @@ flowchart LR
 | `"Invalid date format"` | Maybe |
 | `"Invalid departure date: must be in the future. Current date is 2026-03-13."` | Yes |
 
-Include: what was wrong, what the constraint is, and enough context to fix it. This is the poka-yoke principle applied to error messages -- eliminate guesswork that leads to retry loops ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)).
+Include what was wrong, the constraint, and context to fix it -- the poka-yoke principle applied to errors, eliminating guesswork that drives retry loops ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)).
 
 ## Token Efficiency
 
-Tool definitions consume 50,000+ tokens before an agent processes a single request -- a server design problem, not just a client problem.
+Large tool catalogs can consume tens of thousands of tokens before the agent processes a request -- a server problem, not just a client problem.
 
 ### The Scale of the Problem
 
@@ -126,10 +114,19 @@ Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [
 
 ### Server-Side Mitigations
 
-- **Keep tool lists small.** Single responsibility per server; curate minimal, non-overlapping toolsets.
-- **Design for lazy discovery.** Agents discover tools contextually, not upfront ([Bui 2025](https://arxiv.org/abs/2603.05344)). Write clear server instructions so tool search finds your tools.
+- **Keep tool lists small.** Single responsibility per server; non-overlapping toolsets.
+- **Design for lazy discovery.** Agents discover tools contextually, not upfront ([Bui 2026](https://arxiv.org/abs/2603.05344)). Write clear server instructions so tool search finds yours.
 - **Make responses clearable.** Return only what the agent needs next. Tool result clearing is "one of the safest lightest touch forms of compaction" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
-- **Input schemas dominate per-tool token cost.** Trim optional fields that agents rarely use. Consider `$ref` deduplication for shared types.
+- **Schemas dominate per-tool token cost.** Trim optional fields; consider `$ref` deduplication for shared types.
+
+## When This Backfires
+
+The checklist assumes a stable, internally-owned API. Conditions that invert that:
+
+- **Enums vs. evolving upstream APIs.** Enumerated values encode a snapshot; when the upstream adds one, agents hit validation failures until redeploy. Thin string types trade strict validation for durability.
+- **Schemas do not cover input sanitization.** The STDIO execution model in Anthropic's official MCP SDKs runs commands even when the local process fails to start, exposing servers to command injection unless the author sanitizes inputs ([OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem), [SecurityWeek](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/)). Argument sanitization is the mitigation, not richer schemas.
+- **Description drift.** Hand-written descriptions are an artifact to keep in sync. Auto-generated wrappers lose prose quality but cannot drift.
+- **Over-consolidation hurts routing.** One polymorphic tool pushes disambiguation into the schema; the right ceiling depends on description distinctness, not count.
 
 ## Server Design Checklist
 
@@ -149,6 +146,9 @@ Sources: [Anthropic](https://www.anthropic.com/engineering/advanced-tool-use), [
 
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Client Design](mcp-client-design.md)
+- [MCP Elicitation](mcp-elicitation.md)
+- [MCP LLM Sampling](mcp-llm-sampling.md)
+- [Copilot Extensions to MCP Migration](copilot-extensions-to-mcp-migration.md)
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Tool Description Quality](tool-description-quality.md)

@@ -29,7 +29,7 @@ graph TD
 
 ## Where It Lives in the MCP Shape
 
-MCP reserves the `_meta` object on requests, responses, and tool results as a vendor-namespaced extension point for implementation-specific metadata that travels with the payload without polluting the protocol schema. Claude Code reads the `anthropic/maxResultSizeChars` key from that object:
+MCP reserves the `_meta` object on requests, responses, and tool results as a vendor-namespaced extension point for implementation-specific metadata that travels with the payload without polluting the protocol schema ([MCP specification — _meta](https://modelcontextprotocol.io/specification/2025-06-18/basic)). Claude Code reads the `anthropic/maxResultSizeChars` key from that object:
 
 ```json
 {
@@ -71,7 +71,7 @@ The annotation creates a natural split in MCP server tool design: small default 
 - Default tools return a semantic, filtered response ([Semantic Tool Output](semantic-tool-output.md)) — summary fields, human-readable values, no persistence annotation.
 - A companion tool (or a `response_format: "full"` enum) returns the durable reference payload with `maxResultSizeChars` set. The agent picks based on whether downstream turns will re-read the result.
 
-This mirrors the MCP spec's guidance for read-only context: expose it as a resource or a dedicated fetch tool, not as a side effect of every tool call.
+This mirrors the MCP spec's guidance for read-only context: expose it as a resource or a dedicated fetch tool, not as a side effect of every tool call ([MCP resources](https://modelcontextprotocol.io/specification/2025-06-18/server/resources)).
 
 ## Differentiation from Adjacent Primitives
 
@@ -121,3 +121,4 @@ The agent calls `dump_full_schema` once at the start of a migration task. The fu
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Elicitation](mcp-elicitation.md)
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)

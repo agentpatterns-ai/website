@@ -17,7 +17,7 @@ aliases:
 
 ## How It Differs from Related Patterns
 
-The debate pattern is easy to conflate with three other multi-agent approaches — each solves a different problem:
+The pattern is often conflated with three others — each solves a different problem:
 
 | Pattern | Structure | Critique phase |
 |---------|-----------|---------------|
@@ -26,7 +26,7 @@ The debate pattern is easy to conflate with three other multi-agent approaches �
 | **Critic Agent** | Primary agent plans → critic gates before execution | One-directional, pre-execution |
 | **Opponent Processor (this page)** | Two co-equal agents with opposing incentives → mutual critique | Bidirectional, structured debate |
 
-The defining feature is structural: opposition is role-encoded in the system prompts from the start. The two agents are co-equal and each critiques the other's output before synthesis.
+The defining feature is structural: opposition is role-encoded in system prompts from the start, and each co-equal agent critiques the other before synthesis.
 
 ## Mechanism
 
@@ -44,14 +44,14 @@ graph TD
     D -->|High-stakes| G[Human review]
 ```
 
-The key mechanism is **uncorrelated context windows**: each agent receives the same input but operates independently before seeing the other's output. This prevents the first agent's framing from anchoring the second's reasoning — the primary source of groupthink in single-agent or correlated-context approaches.
+The mechanism is **uncorrelated context windows**: each agent receives the same input but reasons independently before seeing the other's output. This prevents the first agent's framing from anchoring the second — the primary source of groupthink in correlated-context approaches.
 
 Steps:
 
-1. Assign opposing system prompts with explicit, conflicting incentives (see role pairs below)
+1. Assign opposing system prompts with explicit, conflicting incentives
 2. Spawn both agents with identical input context
-3. Collect independent outputs — neither agent sees the other's result in this phase
-4. Cross-critique round: each agent reviews and challenges the other's reasoning
+3. Collect independent outputs — neither agent sees the other's result yet
+4. Cross-critique: each agent reviews and challenges the other's reasoning
 5. Route revised outputs to synthesis
 
 ## Role Pair Design
@@ -66,7 +66,7 @@ Opposing roles must be structurally incompatible to generate genuine disagreemen
 | Risk assessment | Optimistic analyst | Conservative risk officer |
 | Content moderation | Free expression advocate | Safety reviewer |
 
-The opposition must be encoded in the system prompt as a role with explicit incentives — not as a vague instruction to "be critical." An agent told to defend a decision will surface different evidence than one told to challenge it.
+Encode opposition in the system prompt as a role with explicit incentives — not a vague "be critical." An agent told to defend a decision surfaces different evidence than one told to challenge it.
 
 ## Synthesis Options
 
@@ -97,9 +97,9 @@ Skip when:
 
 ## Cost Profile
 
-Minimum: 2× the token cost of a single-agent run. With cross-critique rounds and third-agent synthesis, expect 3–4×. Debate is justified only where decision quality has asymmetric value relative to compute cost.
+Minimum 2× the token cost of a single-agent run; with cross-critique and third-agent synthesis, expect 3–4×. Debate is justified only where decision quality has asymmetric value relative to compute cost.
 
-The [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 costs 3× but skips the critique phase. Debate adds critique overhead on top, which is where the quality improvement comes from.
+The [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 costs 3× but skips the critique phase — where debate's quality gain originates.
 
 ## Empirical Caveats
 

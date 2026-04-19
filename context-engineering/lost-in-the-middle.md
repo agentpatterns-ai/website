@@ -19,9 +19,9 @@ aliases:
 
 ## The Attention Distribution
 
-Transformer models do not process a context window uniformly. Research has consistently shown that attention is distributed in a U-shape: content near the beginning and end of the context receives the strongest attention; content in the middle zone receives substantially less ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). The precise magnitude varies by model, but the positional bias is consistent across architectures tested.
+Transformer models do not process a context window uniformly. Research has consistently shown that attention is distributed in a U-shape: content near the beginning and end of the context receives the strongest attention; content in the middle zone receives substantially less ([Liu et al., 2023](https://arxiv.org/abs/2307.03172); [Hsieh et al., 2024](https://arxiv.org/abs/2406.16008)). The precise magnitude varies by model, but the positional bias is consistent across architectures tested.
 
-This is a structural property of how transformer attention mechanisms weight earlier and later tokens, not a quirk of any particular model or instruction format.
+This is a structural property of how transformer attention mechanisms weight earlier and later tokens, not a quirk of any particular model or instruction format. Subsequent theoretical work traces the pattern to the interaction between causal masking and relative positional encodings such as RoPE, which together bias attention toward the edges of the sequence ([Wu et al., 2025](https://arxiv.org/abs/2502.01951)).
 
 ## What This Means in Practice
 

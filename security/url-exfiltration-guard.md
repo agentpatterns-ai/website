@@ -9,6 +9,7 @@ tags:
   - testing-verification
   - security
 ---
+
 # Guarding Against URL-Based Data Exfiltration in Agentic Workflows
 
 > The URL itself is a data channel — agents that construct or follow URLs from untrusted content can be manipulated to leak sensitive context before a single byte of the response is read.
@@ -109,14 +110,10 @@ The `follow_redirects=False` flag prevents redirect-chain bypasses. If the respo
 ## Related
 
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Design Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Designing Injection-Resistant Agents with Defense-in-Depth](prompt-injection-resistant-agent-design.md)
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Scoped Credentials Proxy](scoped-credentials-proxy.md)
-- [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Code Injection Defense in Multi-Agent Systems](code-injection-multi-agent-defence.md)
+- [Design Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Narrow Task Scope as a Security Boundary](task-scope-security-boundary.md)
+- [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)

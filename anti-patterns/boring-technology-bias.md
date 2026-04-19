@@ -75,12 +75,12 @@ Pin technology choices in project instruction files to override training data de
 - When generating examples, use the stack above
 ```
 
-For niche tools, provide seed examples. Few-shot examples compensate for limited training coverage: agents that receive 3-5 representative examples of a niche API produce correct implementations significantly more often than with zero-shot prompting ([arxiv.org/abs/2406.09834](https://arxiv.org/abs/2406.09834)).
+For niche tools, provide in-context grounding. Pasting official docs, a README, or a handful of representative examples into the conversation lets the model learn novel library modules well enough to produce correct code; natural-language descriptions and raw implementations can work comparably to demonstrations ([Patel et al., *Evaluating In-Context Learning of Libraries for Code Generation*, arxiv 2311.09635](https://arxiv.org/abs/2311.09635)).
 
 | Mitigation | Mechanism |
 |---|---|
 | Pin stack in instruction files | Overrides default recommendations |
-| Provide seed examples for niche tools | Compensates for limited training data |
+| Paste docs, READMEs, or seed examples into context | Compensates for limited training coverage |
 | Add compiler/linter validation loops | Catches deprecated API usage automatically |
 | Treat tool recommendations like a junior dev's | Verify reasoning, don't accept defaults |
 

@@ -13,9 +13,7 @@ tags:
 
 ## Why Tool Invocation Is Different
 
-Standard [prompt injection](prompt-injection-threat-model.md) targets instruction-following through untrusted content. Tool-invocation attacks target argument generation and return processing — a different mechanism entirely.
-
-A red-team of six agents across five LLM backends achieved RCE on every agent-LLM pair tested ([Li et al., 2025](https://arxiv.org/abs/2509.05755)).
+Standard [prompt injection](prompt-injection-threat-model.md) targets instruction-following through untrusted content. Tool-invocation attacks target argument generation and return processing — a different mechanism. A red-team of six agents across five LLM backends achieved RCE on every agent-LLM pair tested ([Li et al., 2025](https://arxiv.org/abs/2509.05755)).
 
 ```mermaid
 graph LR
@@ -31,7 +29,7 @@ graph LR
 
 ## Attack 1: ToolLeak — System Prompt Exfiltration
 
-A malicious tool defines an argument field like `"note": "system prompt"`. The model treats this as routine argument generation and fills the field with internal context — no explicit extraction request needed. Refusal training and prompt guards do not trigger because argument generation is semantically indistinguishable from normal tool use.
+A malicious tool defines an argument field like `"note": "system prompt"`. The model treats this as routine argument generation and fills the field with internal context — no explicit extraction request. Refusal training and prompt guards do not trigger because argument generation is semantically indistinguishable from normal tool use.
 
 | Backend LLM | Exfiltration Success | Detection by Prompt Guard |
 |---|---|---|
@@ -40,14 +38,14 @@ A malicious tool defines an argument field like `"note": "system prompt"`. The m
 | Gemini 2.5 Pro | Blocked by content filtering | N/A |
 | GPT-5 | Limited — output sanitization effective | N/A |
 
-ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, compared to 0.900 for the best traditional extraction baseline ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
+ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, vs. 0.900 for the best traditional extraction baseline ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
 
 ## Attack 2: Two-Channel Prompt Injection
 
 Two injection surfaces chain together:
 
-- **Channel 1 — Tool description:** Convinces the agent the tool is required initialization. Uses leaked prompt details for credibility.
-- **Channel 2 — Tool return:** Injects commands (e.g., `curl | bash`). Returns have higher salience than descriptions because models treat them as factual task output.
+- **Channel 1 — Tool description:** convinces the agent the tool is required initialization, using leaked prompt details for credibility.
+- **Channel 2 — Tool return:** injects commands (e.g., `curl | bash`). Returns outweigh descriptions because models treat them as factual task output.
 
 ```mermaid
 sequenceDiagram
@@ -86,25 +84,25 @@ Source: [Li et al., 2025](https://arxiv.org/abs/2509.05755), Table IV. Dash indi
 | **Command whitelisting** | Restrict execution to predefined safe operations | Claude Code, Cline, Trae |
 | **Non-disclosure directives** | Instructions not to reveal system prompts | Trae, Cursor, Copilot |
 
-Guard models are necessary but insufficient. Claude Code's guard correctly flagged commands as "UNSAFE," but the main model overrode the rejection when context was reinforced through both channels ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Section VI-C).
+Guard models are necessary but insufficient. Claude Code's guard flagged commands as "UNSAFE," yet the main model overrode the rejection when both channels reinforced context ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Section VI-C).
 
 ## Defensive Patterns
 
 ### Layer command validation
 
-Combine guard LLM semantic analysis, harness-level subcommand whitelisting (validate individual subcommands, not just top-level commands), and argument sanitization that strips references to system context.
+Combine guard LLM semantic analysis, harness-level subcommand whitelisting, and argument sanitization that strips references to system context.
 
 ### Isolate tool sections
 
-Keep MCP tool descriptions in a separated prompt section, distinct from system instructions. This reduces cross-contamination between tool metadata and agent directives — the pattern that made Trae most resilient. The MCP spec itself requires clients to treat tool annotations as untrusted unless the server is trusted ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/server/tools)).
+Keep MCP tool descriptions in a prompt section distinct from system instructions — the pattern that made Trae most resilient. The MCP spec requires clients to treat tool annotations as untrusted unless the server is trusted ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/server/tools)).
 
 ### Enforce instruction-data separation
 
-Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md). Spotlighting — delimiting trusted instructions from untrusted tool content — operationalises this separation ([Microsoft MCP security guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp)).
+Tool returns function as both data and instructions. Parse returns as structured data, block return content from influencing tool selection, and treat all returns as untrusted input per [defense in depth](defense-in-depth-agent-safety.md). Spotlighting — delimiting trusted instructions from untrusted tool content — operationalises this separation ([Microsoft MCP guidance](https://developer.microsoft.com/blog/protecting-against-indirect-injection-attacks-mcp)).
 
 ### Restrict tool auto-approval
 
-Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first invocation of newly registered tools, shell execution, and any tool chain longer than two steps.
+Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first invocation of newly registered tools, shell execution, and tool chains longer than two steps.
 
 ## Key Takeaways
 
@@ -112,17 +110,17 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - ToolLeak bypasses refusal training by framing prompt extraction as routine argument population
 - Two-channel injection achieved RCE on every tested agent-LLM pair
 - Guard models help but can be overridden — layer with harness-level whitelisting and tool isolation
-- Treat every MCP tool return as untrusted input — returns demonstrated as injection vectors in every tested agent-LLM pair ([Li et al., 2025](https://arxiv.org/abs/2509.05755))
+- Treat every MCP tool return as untrusted input — demonstrated as an injection vector across every tested agent-LLM pair ([Li et al., 2025](https://arxiv.org/abs/2509.05755))
 
 ## When This Backfires
 
 Layered defenses reduce attack surface but do not eliminate it:
 
-- **Guard-model override is demonstrated, not theoretical.** The paper confirms the main model overrode guard-model rejections when both channels reinforced the malicious context. Adding a guard without harness-level enforcement leaves this path open.
-- **Pre-approved tool registries create false confidence.** Registries narrow the attack surface but do not eliminate it — a compromised registry entry or a tool updated post-approval reintroduces the vector.
-- **Whitelisting breaks on novel subcommand variants.** Command whitelisting validating only top-level commands (`bash`, `python`) fails when subcommands or argument composition achieves the same effect. Validate at the subcommand and argument level.
-- **Instruction-data separation prevents two-channel injection architecturally**, but no production coding-agent implementation has been validated against this specific attack class. The pattern is well-grounded theoretically; operational deployment remains the open question.
-- **Success rates shift with model versions.** The study used specific model snapshots; newer releases with stronger output sanitization (e.g., GPT-5's 20% RCE rate in Cline) suggest the attack surface is model-version-sensitive.
+- **Guard-model override is demonstrated.** The main model overrode guard rejections when both channels reinforced the malicious context. Guards without harness-level enforcement leave this path open.
+- **Pre-approved registries create false confidence.** A compromised or post-approval-updated entry reintroduces the vector.
+- **Whitelisting breaks on novel subcommand variants.** Validating only top-level commands (`bash`, `python`) fails when subcommands or argument composition achieves the same effect.
+- **Instruction-data separation is architecturally sound**, but no production coding-agent implementation has been validated against this specific attack class.
+- **Success rates shift with model versions** — newer releases with stronger output sanitization (GPT-5's 20% RCE in Cline) suggest model-version sensitivity.
 
 ## Related
 

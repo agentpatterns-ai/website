@@ -102,6 +102,7 @@ The workflow above is a single-practitioner case study (N=1). The underlying mec
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md) — the primary context-delivery mechanism
 - [CLAUDE.md convention](../../instructions/claude-md-convention.md) — root instruction file shape
 - [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md) — tool-agnostic equivalent for mixed-tool teams
+- [AGENTS.md standard](../../standards/agents-md.md) — the underlying open standard for project-level agent instructions
 - [Progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md) — why functional folder depth saves tokens
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why PM-as-router stops scaling
 - [Plan mode](../../workflows/plan-mode.md) — the gate Team OS uses for high-stakes artifacts

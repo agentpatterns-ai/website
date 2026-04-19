@@ -130,8 +130,6 @@ With this structure, updating the source list in `source-list.md` propagates imm
 - [Agents vs Commands](agents-vs-commands.md)
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md) — how task-specific design applies at the agent level
 - [Agent Composition Patterns](agent-composition-patterns.md) — how agents compose skills and tools at different scales
 - [Progressive Disclosure for Layered Agent Definitions](progressive-disclosure-agents.md) — keeping agent definitions minimal by loading task knowledge through skills on demand

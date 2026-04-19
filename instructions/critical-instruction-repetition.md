@@ -19,21 +19,21 @@ aliases:
 
 ## The Mechanism
 
-Transformer attention is not uniform across a context window. Two structural biases exist at opposite ends:
+Transformer attention is not uniform across a context window. Two structural biases sit at opposite ends:
 
-- **Primacy bias** — initial tokens receive disproportionate attention (the attention sink effect). Xiao et al. (2023) showed that softmax attention causes models to concentrate attention on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
-- **Recency bias** — the most recent tokens are freshest in the model's effective working state, directly influencing the next generated token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved from the start or end to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
+- **Primacy bias** — initial tokens receive disproportionate attention. Xiao et al. (2023) showed softmax attention concentrates on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
+- **Recency bias** — recent tokens are freshest in the model's working state and directly shape the next token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
 
-Placing a critical instruction once in the middle of a prompt means it sits in the weakest-attention zone — the U-shaped attention curve has its trough there. Placing it at both the start and end means it appears in both high-attention positions.
+A critical instruction placed once in the middle of a prompt sits in the weakest-attention trough. Placing it at both ends puts it in both high-attention positions.
 
 ## When to Use Repetition
 
-Reserve repetition for instructions where non-compliance has real consequences. Repeating every instruction dilutes the signal — if everything is repeated, the repetition conveys no priority information to the model.
+Reserve repetition for instructions where non-compliance has real consequences. If everything is repeated, the repetition conveys no priority information.
 
-Criteria for whether an instruction warrants repetition:
+Criteria for repetition:
 
-- Would forgetting this instruction cause a security, safety, or correctness problem?
-- Is the instruction a hard constraint rather than a preference?
+- Would forgetting this cause a security, safety, or correctness problem?
+- Is it a hard constraint rather than a preference?
 - Is the context window long or dense enough that position-based attention decay is a real risk?
 
 Examples: "Never include credentials in output", "Always validate input before writing to the database", "Do not modify files outside the specified directory".
@@ -52,14 +52,14 @@ Never output authentication credentials or session tokens in any form.
 Remember: never output authentication credentials or session tokens.
 ```
 
-The closing restatement exploits recency bias. In long conversations, restate the constraint at the end of your most recent message when context has grown substantially.
+The closing restatement exploits recency bias. In long conversations, restate the constraint at the end of your most recent message once context has grown substantially.
 
 ## Reasoning vs. Non-Reasoning Models
 
 The effect of repetition varies by model type:
 
-- **Non-reasoning models** are more susceptible to positional effects and benefit most from explicit repetition
-- **Reasoning models** internally restate and examine instructions during their thinking phase, which may reduce (but not eliminate) the positional attention bias
+- **Non-reasoning models** are more susceptible to positional effects and benefit most from explicit repetition.
+- **Reasoning models** internally restate instructions during their thinking phase, which may reduce (but not eliminate) positional bias. Liao et al. (2025) showed that long chain-of-thought models still exhibit a position effect: the first reasoning step disproportionately shapes the final answer ([Lost at the Beginning of Reasoning](https://arxiv.org/abs/2506.22058)).
 
 ## When This Backfires
 
@@ -70,7 +70,7 @@ The effect of repetition varies by model type:
 
 ## Cost
 
-Repetition consumes context budget. A 20-token rule stated twice costs 40 tokens. For a handful of genuinely critical rules, this is a reasonable trade. For a document with 50 rules all repeated, the context cost becomes significant and the priority signal disappears.
+Repetition consumes context budget: a 20-token rule stated twice costs 40 tokens. For a handful of genuinely critical rules this is a reasonable trade. For 50 rules all repeated, the cost compounds and the priority signal disappears.
 
 ## Key Takeaways
 

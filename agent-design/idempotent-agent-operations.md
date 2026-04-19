@@ -58,6 +58,17 @@ Some operations are inherently non-idempotent and should be gated or deduplicati
 
 For these, log the operation with a unique key before executing and check the log before re-executing. The log is the idempotency record.
 
+## When This Backfires
+
+Check-before-act idempotency has known failure modes that make it the wrong tool in some contexts:
+
+- **Concurrency introduces TOCTOU gaps.** Two runs that read "no branch exists" at the same moment will both create it. The [AWS Builders' Library](https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/) recommends server-side idempotency keys with atomic claim semantics — a client-side existence check is not enough when multiple actors can target the same resource.
+- **Partial state defeats existence checks.** If the first run crashed after creating the branch but before posting the comment, the second run still needs to finish the comment. Guard each artifact, not the workflow.
+- **Silent skip hides drift.** Short-circuiting on pre-existing state also skips when that state came from a different actor or a stale run. "Fail loudly" surfaces conflicts that silent skips bury.
+- **Marker stores have TTLs.** A 24-hour deduplication table silently stops protecting older replays. For Kafka-style replays or offline queues, the idempotency record must outlive the worst-case retry horizon.
+
+Prefer atomic upserts, database-backed keys, or server-enforced unique constraints when duplicates are costly.
+
 ## Example
 
 A multi-step agent workflow that creates a GitHub issue, branches off it, and posts a comment — each step made idempotent.

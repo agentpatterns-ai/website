@@ -26,13 +26,13 @@ graph LR
     style D fill:#5a1a1a
 ```
 
-**Self-correct**: the agent detects the error and retries or adjusts. Most tool errors resolve here — a failed file read triggers a path correction, a syntax error triggers a fix.
+**Self-correct**: detect the error and retry or adjust. Most tool errors resolve here — a failed file read triggers a path correction, a syntax error triggers a fix.
 
-**Fallback**: the primary approach fails repeatedly, so the agent switches to an alternative strategy or model.
+**Fallback**: when the primary approach fails repeatedly, switch to an alternative strategy or model.
 
-**Degrade gracefully**: the agent cannot complete the full task but delivers partial results rather than failing entirely.
+**Degrade gracefully**: deliver partial results rather than failing entirely.
 
-**Escalate**: the agent surfaces the failure to a human with enough context to resolve it. Last resort, not first response.
+**Escalate**: surface the failure to a human with enough context to resolve it. Last resort, not first response.
 
 ## Git-Based Recovery
 
@@ -42,20 +42,20 @@ Git is the primary recovery mechanism for coding agents. Anthropic's approach fo
 - **Write progress files** (e.g., `claude-progress.txt`) that survive session crashes — see [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - **Revert to known-good states** with `git revert` when changes go wrong
 
-Git operations are cheap, atomic, and reversible — an agent that commits after each meaningful change can always roll back without losing everything. See [Rollback-First Design](rollback-first-design.md) for the broader design principle.
+Git operations are cheap, atomic, and reversible. See [Rollback-First Design](rollback-first-design.md) for the broader principle.
 
 ## Model-Driven Error Adaptation
 
-Anthropic's finding from their [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system): telling the model a tool is failing and letting it adapt works "surprisingly well". The model reroutes to alternative tools or changes approach — without explicit fallback logic in the harness.
+Anthropic's finding from their [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system): telling the model a tool is failing and letting it adapt works "surprisingly well". The model reroutes or changes approach without explicit fallback logic in the harness.
 
-The simplest error handling strategy: catch the tool error, include the error message in the agent's next context, let the model decide what to do. This outperforms rigid retry logic for novel failure modes.
+The simplest strategy: catch the tool error, include the message in the agent's next context, let the model decide. This outperforms rigid retry logic for novel failure modes.
 
 !!! warning "When model-driven adaptation fails"
-    This approach breaks down for **silent failures** — the agent produces output without detecting the underlying error (stale data, partial writes, skipped validation). Model-driven adaptation requires the model to *know* something went wrong. Add output validation and data freshness checks for failure modes the model cannot observe directly.
+    This breaks down for **silent failures** — the agent produces output without detecting the underlying error (stale data, partial writes, skipped validation). Model-driven adaptation requires the model to *know* something went wrong. Add output validation and freshness checks for failure modes the model cannot observe directly.
 
 ## Durable Execution
 
-For agents that must survive process crashes (not just tool errors), durable execution frameworks checkpoint state after every step:
+For agents that must survive process crashes, durable execution frameworks checkpoint state after every step:
 
 **LangGraph** provides [three durability modes](https://docs.langchain.com/oss/python/langgraph/durable-execution):
 
@@ -65,19 +65,19 @@ For agents that must survive process crashes (not just tool errors), durable exe
 | `async` | Persist asynchronously while next step runs | Long-running research |
 | `sync` | Persist synchronously before each step starts | Mission-critical workflows |
 
-State is checkpointed to a configurable backend (Postgres, DynamoDB, and others). After a crash, the agent resumes from the last checkpoint rather than restarting.
+State is checkpointed to a configurable backend (Postgres, DynamoDB, and others); after a crash, the agent resumes from the last checkpoint.
 
-**DBOS** takes a decorator-based approach: [`@DBOS.workflow` and `@DBOS.step`](https://docs.dbos.dev/typescript/reference/workflows-steps) persist execution state automatically, providing exactly-once semantics.
+**DBOS** takes a decorator-based approach: [`@DBOS.workflow` and `@DBOS.step`](https://docs.dbos.dev/typescript/reference/workflows-steps) persist execution state automatically with exactly-once semantics.
 
-Both solve the same problem: an agent that ran for 30 minutes should not lose all progress to a process crash.
+Both solve the same problem: a 30-minute agent run should not lose all progress to a process crash.
 
 ## Model Fallback
 
-When a model provider fails, route to an alternative. LangChain's [`ModelFallbackMiddleware`](https://docs.langchain.com/oss/python/langchain/middleware/built-in) chains alternative models automatically (`Primary → Fallback 1 → Fallback 2`). This handles outages and rate limits, though different models may produce different results for the same prompt.
+When a model provider fails, route to an alternative. LangChain's [`ModelFallbackMiddleware`](https://docs.langchain.com/oss/python/langchain/middleware/built-in) chains models automatically (`Primary → Fallback 1 → Fallback 2`), handling outages and rate limits — though different models may produce different results for the same prompt.
 
 ## Circuit Breakers for Tool Calls
 
-Adapted from distributed systems: a circuit breaker tracks consecutive failures for a specific tool and temporarily disables it after a threshold.
+Adapted from distributed systems: a circuit breaker tracks consecutive failures for a tool and disables it after a threshold.
 
 ```mermaid
 stateDiagram-v2
@@ -88,13 +88,13 @@ stateDiagram-v2
     HalfOpen --> Open: Probe fails
 ```
 
-**Closed**: tool calls proceed normally, failures are counted. **Open**: tool calls are blocked, agent uses alternatives. **Half-open**: a single probe call tests recovery.
+**Closed**: calls proceed, failures are counted. **Open**: calls are blocked, agent uses alternatives. **Half-open**: a single probe tests recovery.
 
-In practice, most coding agents use a lighter-weight version: count failures, inform the model the tool is unreliable, and let model-driven adaptation handle routing. Full circuit breaker state machines are more common in multi-agent systems with shared tool infrastructure.
+In practice, most coding agents use a lighter-weight version: count failures, tell the model the tool is unreliable, and let model-driven adaptation handle routing. Full state machines are more common in multi-agent systems with shared tool infrastructure.
 
 ## The Rollback-Over-Prevention Philosophy
 
-Let agents make recoverable mistakes rather than preventing all mistakes: sandbox execution, review gates before permanent effects, session trees for fork/explore/discard, and checkpoints at every meaningful boundary. Restrictive permissions limit capability more than they reduce risk. See [Rollback-First Design](rollback-first-design.md) for this tradeoff in detail.
+Let agents make recoverable mistakes rather than preventing all mistakes: sandbox execution, review gates before permanent effects, session trees for fork/explore/discard, and checkpoints at every meaningful boundary. Restrictive permissions limit capability more than they reduce risk. See [Rollback-First Design](rollback-first-design.md).
 
 ## When This Backfires
 
@@ -117,7 +117,6 @@ A coding agent tasked with refactoring a module hits a test failure after changi
 7. **Escalate** — the agent opens a draft PR with its completed work and flags the config change for human review, including the error message and the intended edit.
 
 Throughout, the agent commits after each successful file change (`git commit -m "refactor: update signature in <file>"`), so any revert affects only one file.
-
 
 ## Related
 

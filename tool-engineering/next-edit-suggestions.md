@@ -14,7 +14,7 @@ tags:
 
 ## Three Paradigms of AI-Assisted Editing
 
-Next Edit Suggestions is a proactive editing mode: it watches your edits in progress and predicts the next location and change you will need to make, rather than waiting for you to position your cursor and type. This fills the gap between line-level autocomplete (reactive, cursor-bound) and agent mode (autonomous, multi-file). AI code assistance operates across three distinct paradigms, each with different initiative and scope ([GitHub Docs, features overview](https://docs.github.com/en/copilot/get-started/features)):
+Next Edit Suggestions watches edits in progress and predicts the next location and change, rather than waiting for the cursor to arrive. It fills the gap between line-level autocomplete (reactive, cursor-bound) and agent mode (autonomous, multi-file) ([GitHub Docs, features overview](https://docs.github.com/en/copilot/get-started/features)).
 
 | Paradigm | Initiative | Scope | Trigger |
 |----------|-----------|-------|---------|
@@ -24,35 +24,29 @@ Next Edit Suggestions is a proactive editing mode: it watches your edits in prog
 
 ## How NES Works
 
-NES monitors your editing patterns and predicts the next related edit. A gutter arrow indicates the location; pressing Tab navigates to it, pressing Tab again accepts it ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
-
-The key distinction from autocomplete: NES predicts edits to *existing* code at *predicted* locations, not completions at the cursor ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
+NES monitors editing patterns and predicts the next related edit. A gutter arrow marks the location; Tab navigates to it, Tab again accepts it. The key distinction from autocomplete: NES predicts edits to *existing* code at *predicted* locations, not completions at the cursor ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
 
 ### Core Use Cases
 
-**Error correction.** Typos, inverted conditionals, incorrect operators. NES detects the error pattern and suggests the fix at the right location ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
-
-**Intent propagation.** Rename `Point` to `Point3D` in one location, and NES suggests cascading updates throughout dependent code. The edit intent propagates from a single change to all affected locations ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
-
-**Refactoring assistance.** After pasting code, NES suggests style adjustments to match surrounding conventions. Variable renames, formatting alignment, and pattern consistency across related code sections ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
+- **Error correction.** Typos, inverted conditionals, incorrect operators.
+- **Intent propagation.** Rename `Point` to `Point3D` once, and NES suggests cascading updates across dependent code.
+- **Refactoring assistance.** After pasting code, NES suggests style adjustments to match surrounding conventions ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
 
 ## Custom Model Architecture
 
-NES does not use a general-purpose LLM. It runs a purpose-built, low-latency, task-specific model designed for real-time in-editor response. General frontier models were "accurate but too slow for an in-editor experience" ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
+NES does not use a general-purpose LLM. It runs a purpose-built, low-latency, task-specific model designed for real-time in-editor response — frontier models were "accurate but too slow for an in-editor experience" ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
 
 ### Training on Editing Sessions, Not Code Snapshots
 
-PR diffs were insufficient for training because they "show only the final state, not the intermediate edits." The team collected real editing session data from internal volunteers, capturing the temporal sequence of changes rather than just before/after states. A smaller volume of high-quality edit data produced better models than larger volumes of less curated data ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
+PR diffs were insufficient because they "show only the final state, not the intermediate edits." The team collected real editing session data from internal volunteers, capturing the temporal sequence of changes. A smaller volume of high-quality edit data produced better models than larger volumes of less curated data ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
 
 ### Reinforcement Learning Refinement
 
-Supervised fine-tuning teaches good edits but cannot explicitly penalize bad ones. The team applied reinforcement learning using a "large reasoning model with specific grading criteria" to identify qualities of unhelpful suggestions. This helps NES "better avoid generating bad edit suggestions when faced with out-of-distribution cases" ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
+Supervised fine-tuning teaches good edits but cannot explicitly penalize bad ones. The team applied reinforcement learning using a "large reasoning model with specific grading criteria" to help NES "better avoid generating bad edit suggestions when faced with out-of-distribution cases" ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
 
 ## Knowing When Not to Suggest
 
-NES must suppress suggestions that would not help — too many break focus; too few miss opportunities. The model infers intent from local context to decide whether a suggestion would be helpful or disruptive ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
-
-The November 2025 release demonstrated this principle with measurable results ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)):
+NES must suppress suggestions that would not help — too many break focus; too few miss opportunities. The November 2025 release reported ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)):
 
 | Metric | Change vs. Baseline |
 |--------|-------------------|
@@ -64,7 +58,7 @@ Fewer suggestions shown, more accepted, fewer dismissed.
 
 ## Configuration
 
-NES is available in VS Code ([GitHub changelog](https://github.blog/changelog/2025-02-06-next-edit-suggestions-agent-mode-and-prompts-files-for-github-copilot-in-vs-code-january-release-v0-24/)). Business and Enterprise users require admin opt-in to "Editor Preview Features." Configure NES behavior via the VS Code setting `github.copilot.nextEditSuggestions.enabled` ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
+NES is generally available in VS Code and Visual Studio, and in public preview for JetBrains IDEs ([GitHub changelog, Aug 2025](https://github.blog/changelog/2025-08-29-copilots-next-edit-suggestion-nes-in-public-preview-in-jetbrains/)) and for Xcode and Eclipse ([GitHub changelog, Nov 2025](https://github.blog/changelog/2025-11-18-github-copilot-next-edit-suggestions-nes-now-in-public-preview-for-xcode-and-eclipse/)). Business and Enterprise users require admin opt-in to "Editor Preview Features." In VS Code, toggle `github.copilot.nextEditSuggestions.enabled` ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
 
 ## Pattern Implications
 
@@ -74,34 +68,26 @@ NES surfaces a general principle: match the AI's initiative level to the task.
 - **NES** works for cascading edits where one change implies others the developer would make manually.
 - **Agent mode** works for well-scoped tasks where the developer can specify the goal and verify the result.
 
-Selecting the wrong paradigm creates friction. Using agent mode for a simple rename is overhead. Using autocomplete for a cross-file refactor requires visiting each location manually. NES fills the gap: proactive enough to find related edit locations, constrained enough to suggest only the edit rather than taking autonomous action.
+Selecting the wrong paradigm creates friction: agent mode for a simple rename is overhead; autocomplete for a cross-file refactor requires visiting each location manually. NES fills the gap — proactive enough to find related edit locations, constrained enough to suggest only the edit rather than take autonomous action.
 
 ## When This Backfires
 
-- **Exploratory sessions.** When the developer doesn't yet know what the code should look like, NES suggestions may reflect a pattern that doesn't exist — producing noise rather than useful propagation.
-- **Semantic refactors.** NES propagates syntactic patterns; it does not understand semantic intent. Renaming a method whose callers need different argument signatures produces plausible but wrong suggestions.
-- **Divergent intent.** Two changes sharing surface similarity but different purpose (e.g., `count` in two unrelated loops) cause NES to suggest the second change incorrectly. Dismissing it adds interruption.
-- **Editor availability.** NES is currently a VS Code feature. Teams on other editors must use agent mode or manual multi-location edits instead.
+- **Exploratory sessions.** When the target shape of the code is unsettled, NES suggestions reflect a pattern that doesn't yet exist — noise rather than useful propagation.
+- **Semantic refactors.** NES propagates syntactic patterns; it does not reason about semantic intent. Renaming a method whose callers need different argument signatures produces plausible-but-wrong suggestions.
+- **Overloaded symbol semantics.** When a renamed symbol has different meanings in different contexts (e.g., `id` as both a DOM attribute and a database key), NES conflates the two.
+- **Tab key conflict.** Tab-to-navigate and Tab-to-accept conflict with Tab-for-indentation habits and with snippet extensions, causing false acceptances during the learning period.
+- **Admin friction.** Business and Enterprise orgs require admin opt-in to "Editor Preview Features" ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)), delaying availability in locked-down environments.
 
 ## Example
 
-A developer renames a TypeScript interface property from `userId` to `accountId` in one file. NES detects the rename pattern and places a gutter arrow at the next usage of `userId` in the same file. Pressing Tab jumps to that location; pressing Tab again accepts the suggested replacement `accountId`. The developer continues pressing Tab to navigate and accept each cascading change across the file — function parameters, destructuring assignments, JSDoc references — without manually searching for each occurrence.
+A developer renames a TypeScript interface property from `userId` to `accountId` in one file. NES detects the rename and places a gutter arrow at the next usage of `userId`. Tab jumps to the location; Tab again accepts the replacement. The developer continues Tab-Tab across function parameters, destructuring assignments, and JSDoc references — and, via the same gutter-arrow flow, through imported modules and test files — without manually searching for occurrences. Escape at any arrow dismisses that suggestion.
 
-For cross-file propagation, the same Tab-Tab workflow applies: NES surfaces usages in imported modules or test files as gutter arrows, navigating the developer to each location in turn. The developer retains full control — pressing Escape at any arrow dismisses that suggestion without accepting it.
+## Key Takeaways
 
-Configuration: enable with `"github.copilot.nextEditSuggestions.enabled": true` in VS Code settings. The feature is on by default for individual accounts; Business and Enterprise require admin opt-in to Editor Preview Features.
-
-## When This Backfires
-
-**IDE coverage is limited.** NES is available in VS Code, Xcode, and Eclipse. Developers using JetBrains IDEs, Neovim, or Emacs get no NES support regardless of Copilot subscription tier.
-
-**Business/Enterprise admin friction.** NES requires admin opt-in to "Editor Preview Features" for Business and Enterprise orgs. Teams in security-sensitive or locked-down environments may wait weeks for enablement, making NES unavailable when needed.
-
-**Tab key conflict.** The Tab-to-navigate, Tab-to-accept interaction conflicts with Tab-for-indentation habits and with snippets or other extensions that use Tab. Developers with strong Tab muscle memory from non-Copilot workflows report false acceptances during the learning period.
-
-**Overloaded symbol semantics.** When a renamed symbol has different meanings in different contexts (e.g., `id` used as both a DOM attribute and a database key), NES may suggest cascading updates that conflate the two. The model infers intent from local edit patterns; it cannot distinguish semantically distinct uses of the same identifier.
-
-**Suggestion noise during exploratory edits.** When a developer is actively exploring a refactor — making and undoing changes to evaluate an approach — NES fires suggestions on every intermediate edit. This can create visual noise and interrupt the exploratory flow before intent is settled.
+- NES sits between autocomplete and agent mode: proactive enough to find related edit locations, constrained enough to suggest only the edit rather than act autonomously.
+- It runs a purpose-built low-latency model, trained on editing sessions rather than PR diffs, and refined with RL to suppress unhelpful suggestions.
+- Match the paradigm to the task: autocomplete for forward composition, NES for cascading edits, agent mode for well-scoped goals.
+- NES is GA in VS Code and Visual Studio and in public preview for JetBrains, Xcode, and Eclipse — admin opt-in is required for Business/Enterprise orgs.
 
 ## Related
 

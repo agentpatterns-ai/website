@@ -82,12 +82,12 @@ Effective flywheel improvements target the harness, not the model.
 
 ## Example
 
-A team running nightly agent batches across 50 repositories implements the flywheel:
+LangChain's Terminal Bench 2.0 run illustrates the flywheel stages concretely ([Improving Deep Agents with Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)):
 
-1. **Embed signals**: Each agent task includes a pre-completion checklist that runs tests and validates output against the issue spec
-2. **Analyze traces**: A morning trace-analysis job filters to failed tasks, clusters them by error type (timeout, test failure, loop), and generates a report
-3. **Generate modifications**: For the most common [failure cluster](behavioral-drivers-agent-success.md), the analyzer proposes a harness change -- e.g., adding a file-count guardrail after observing agents creating excessive temporary files
-4. **Escalate**: The team reviews the first three proposals interactively. After two weeks of safe applications, they promote "add missing test import" fixes to autonomous
+1. **Embed signals**: Pre-completion checklist middleware intercepted the agent before exit, forcing verification against the task spec
+2. **Analyze traces**: Trace review surfaced recurring failure clusters -- premature completion, doom loops, and uniform-maximum reasoning timeouts
+3. **Generate modifications**: Targeted harness changes followed -- self-verification loops, loop-detection middleware tracking per-file edit counts, and the xhigh-high-xhigh reasoning sandwich
+4. **Escalate**: Each modification was evaluated on the held-out Terminal Bench task set before promotion; the combined harness changes lifted scores from 52.8% to 66.5% with no model change
 
 ## Related
 
@@ -108,3 +108,6 @@ A team running nightly agent batches across 50 repositories implements the flywh
 - [Convergence Detection](convergence-detection.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Self-Healing Production Agent](self-healing-production-agent.md) — online incident-driven loop that patches production regressions between offline flywheel cycles
+- [Harness Hill-Climbing](harness-hill-climbing.md) — eval-driven local-search loop for systematically tuning harness configuration
+- [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts
+- [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — agents that synthesize and modify tools during active problem-solving

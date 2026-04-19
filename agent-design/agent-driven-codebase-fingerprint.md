@@ -36,6 +36,8 @@ Agents read existing code and reproduce patterns faithfully — including deprec
 
 A legacy `fetchWithRetry` utility with three existing usages becomes 23 usages after two sprints of agent work. Each usage is correct in isolation. The utility now costs 23-file migrations to remove.
 
+A counter-finding qualifies the headline duplication number: a 2026 MSR mining study of agent-first and IDE-first repositories reports duplication effects are "small and inconsistent" and locates the quality risk in structural complexity rather than copy/paste proliferation ([Agarwal et al., MSR 2026](https://arxiv.org/abs/2601.13597)). Treat raw copy/paste rate as a weak signal on its own; cognitive complexity and static-analysis warnings are the more stable indicators.
+
 ### 2. Abstraction Bloat
 
 Agents optimize for comprehensive-looking output: a notification sender returns a rate limiter, analytics hook, and abstract factory never requested. LoC increases 76% in agent-assisted repositories; cognitive complexity rises 39% ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)). The bias is directional: agents add abstractions rather than collapse them, and refactoring drops because each task is treated as greenfield.

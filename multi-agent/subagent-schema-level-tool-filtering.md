@@ -18,13 +18,13 @@ aliases:
 
 ## Schema Filtering vs. Runtime Checks
 
-Runtime checks reject forbidden tool calls after the model has already planned to use them. Schema filtering removes tools from the subagent's schema entirely, so the model cannot form the intent to call tools it has never seen ([Bui, 2025 §2.2.2](https://arxiv.org/abs/2603.05344)).
+Runtime checks reject forbidden tool calls after the model has already planned to use them. Schema filtering removes tools from the subagent's schema entirely, so the model cannot form the intent to call tools it has never seen ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)).
 
 This distinction matters. A runtime rejection occurs after the model has already expended tokens planning the call; recovery requires an additional inference turn. Schema filtering eliminates the failure mode at the structural level — the model selects only from tools it can see.
 
 ## Filtered Tool Sets by Role
 
-The OPENDEV agent defines built-in subagent types, each receiving a filtered subset of the shared tool registry ([Bui, 2025 §2.2.7, App G](https://arxiv.org/abs/2603.05344)):
+The OPENDEV agent defines built-in subagent types, each receiving a filtered subset of the shared tool registry ([Bui, 2026 §2.2.7, App G](https://arxiv.org/abs/2603.05344)):
 
 | Subagent | Tool Access |
 |----------|-------------|
@@ -35,13 +35,13 @@ Additional specialized subagents are registered in the subagent capability matri
 
 ## Prompt + Schema Dual Constraint
 
-Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that emphasize constraints and responsibilities ([Bui, 2025 §2.2.7](https://arxiv.org/abs/2603.05344)). Anthropic's guidance on writing effective agent tools makes the same point: giving an agent only the tools relevant to its task reduces ambiguity and improves selection accuracy ([Anthropic Engineering, 2025](https://www.anthropic.com/engineering/writing-tools-for-agents)).
+Schema filtering pairs with prompt specialization. Subagent prompts inherit the base system prompt plus role-specific sections that emphasize constraints and responsibilities ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Anthropic's guidance on writing effective agent tools makes the same point: giving an agent only the tools relevant to its task reduces ambiguity and improves selection accuracy ([Anthropic Engineering, 2025](https://www.anthropic.com/engineering/writing-tools-for-agents)).
 
 The prompt tells the model what to do; the schema prevents it from doing anything else. Neither mechanism alone is sufficient — prompts can be overridden by strong context, and schema filtering does not guide the model toward the *right* tool among those available. Together, they create a dual constraint that is harder to violate than either alone.
 
 ## Declarative Subagent Specs
 
-The design evolved from inline subagent code to a declarative SubAgentSpec registry ([Bui, 2025 §2.2.1](https://arxiv.org/abs/2603.05344)). Each spec declares:
+The design evolved from inline subagent code to a declarative SubAgentSpec registry ([Bui, 2026 §2.2.1](https://arxiv.org/abs/2603.05344)). Each spec declares:
 
 - Role description and specialized prompt sections
 - Tool allowlist (schema filter)
@@ -51,7 +51,7 @@ Compilation (SubAgentSpec → CompiledSubAgent) shares the tool registry for che
 
 ## Parallel Execution
 
-Multiple subagents with filtered schemas can run concurrently for independent exploration tasks ([Bui, 2025 §2.2.7](https://arxiv.org/abs/2603.05344)). Schema filtering makes this safe — each subagent operates within its structural capability boundary regardless of what other subagents are doing.
+Multiple subagents with filtered schemas can run concurrently for independent exploration tasks ([Bui, 2026 §2.2.7](https://arxiv.org/abs/2603.05344)). Schema filtering makes this safe — each subagent operates within its structural capability boundary regardless of what other subagents are doing.
 
 ## Example
 
@@ -104,6 +104,7 @@ Schema filtering adds structural rigidity — when it fails to match the actual 
 - **Allowlist maintenance lag**: Adding a new tool to the shared registry does not automatically grant it to existing subagents. Conversely, removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer requires synchronization with the live tool registry.
 - **Misuse within the allowlist**: Schema filtering prevents calls to *absent* tools but does not prevent misuse of *present* ones. A Code Explorer subagent with `search_code` can still perform excessive queries or leak discovered content — prompt specialization must handle intra-allowlist safety.
 - **Parallel execution overhead**: Spawning multiple filtered subagents introduces orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
+- **"Structurally impossible" is a ceiling, not a guarantee**: Schema filtering narrows intent to the visible tool set, but tools inside the allowlist still expose indirect pathways. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed that Cursor Agent's terminal allowlist could be bypassed through shell built-ins and environment-variable manipulation — poisoning the environment of allowed commands produced effects the allowlist never sanctioned. The same pattern recurs whenever an allowlisted tool (shell, package manager, HTTP client) can be steered into unintended behavior via its inputs. Treat schema filtering as one layer of defense in depth, not as a boundary the model cannot reason around.
 
 ## Key Takeaways
 
@@ -122,6 +123,8 @@ Schema filtering adds structural rigidity — when it fails to match the actual 
 - [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md)
+- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)

@@ -33,7 +33,7 @@ Models trained on web-scale code corpora see more examples of older API surfaces
 
 This compounds in fast-evolving domains. ML libraries — `torch`, `transformers`, `datasets` — show the steepest accuracy drops because their API surfaces change across minor versions ([Liu et al., 2026](https://arxiv.org/abs/2601.12262)). An independent benchmark (GitChameleon) confirms: enterprise models achieve only 48–51% on version-conditioned Python tasks across 26 libraries ([Vidal et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367)).
 
-31.7% of AI-generated code fails at runtime due to environment mismatches in reproducibility studies ([Siddiq et al., "AI-Generated Code Is Not Reproducible (Yet)," 2024](https://arxiv.org/pdf/2512.22387)).
+31.7% of AI-generated code fails at runtime due to environment mismatches in reproducibility studies ([Vangala et al., "AI-Generated Code Is Not Reproducible (Yet)," 2025](https://arxiv.org/pdf/2512.22387)).
 
 ## Techniques
 
@@ -113,7 +113,7 @@ One renamed parameter — a `FutureWarning` or outright failure depending on ver
 
 - [Liu et al., "Environment-Aware Code Generation: How far are We?" ICSE 2026](https://arxiv.org/abs/2601.12262) — EACG framework, VersiBCB benchmark, three adaptation strategies
 - [Vidal et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367) — version-conditioned coding benchmark, 328 problems across 26 Python libraries
-- [Siddiq et al., "AI-Generated Code Is Not Reproducible (Yet)," 2024](https://arxiv.org/pdf/2512.22387) — 31.7% runtime failure rate from environment mismatches
+- [Vangala et al., "AI-Generated Code Is Not Reproducible (Yet)," 2025](https://arxiv.org/pdf/2512.22387) — 31.7% runtime failure rate from environment mismatches
 
 ## Related
 

@@ -18,13 +18,13 @@ tags:
 
 ## Why Schema Alone Is Insufficient
 
-Developers building domain-specific agents often start with the most obvious context source: the data schema or codebase structure. Schema is necessary but not sufficient. Tables that look similar may differ in critical ways that only the pipeline code that produces them can clarify — for example, whether a table includes first-party-only traffic or all traffic.
+Schema is necessary but not sufficient. Tables that look similar may differ in critical ways that only the pipeline code producing them clarifies — for example, whether a table includes first-party-only traffic or all traffic.
 
-[OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/) demonstrates this concretely. For a corpus of 70,000 datasets, schema metadata alone could not distinguish between tables with similar names but different inclusion criteria. The difference lived in the transformation code.
+[OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/) demonstrates this. For a corpus of 70,000 datasets, schema metadata alone could not distinguish tables with similar names but different inclusion criteria. The difference lived in the transformation code.
 
 ## The Six-Layer Model
 
-OpenAI's data agent uses six distinct context layers, aggregated offline and retrieved at runtime:
+OpenAI's data agent uses six context layers, aggregated offline and retrieved at runtime:
 
 | Layer | What It Provides |
 |-------|-----------------|
@@ -35,11 +35,11 @@ OpenAI's data agent uses six distinct context layers, aggregated offline and ret
 | Persistent memory | Corrections and constraints accumulated from prior agent interactions |
 | Live runtime queries | Fresh values queried at request time for volatile data |
 
-Each layer addresses blind spots in the others. Code enrichment fills the gap schema leaves. Institutional knowledge explains historical anomalies that neither schema nor code captures. Persistent memory surfaces corrections that are not documented anywhere else.
+Each layer addresses blind spots in the others. Code enrichment fills the gap schema leaves. Institutional knowledge explains anomalies neither schema nor code captures. Persistent memory surfaces corrections not documented elsewhere.
 
 ## The Coding Agent Analogue
 
-For a coding agent, the equivalent layers map to:
+For a coding agent, the layers map to:
 
 | Layer | Coding agent equivalent |
 |-------|------------------------|
@@ -50,24 +50,28 @@ For a coding agent, the equivalent layers map to:
 | Memory | Per-repo conventions the agent has learned from corrections |
 | Live queries | Current build status, open issues, recent test results |
 
-No single layer is complete. Types express intent but not rationale. Git history records what changed but not why a given approach was chosen over alternatives. ADRs record decisions but not the code patterns that implement them.
+No single layer is complete. Types express intent but not rationale. Git history records what changed but not why. ADRs record decisions but not the code that implements them.
 
 ## Offline Pipeline, Runtime RAG
 
-Loading all six layers for every request is impractical — the combined volume exceeds any context window. The effective architecture separates concerns:
+Loading all six layers per request is impractical — volume exceeds any context window. The architecture separates concerns:
 
 - **Offline**: aggregate all layers into normalized embeddings, refreshed on a schedule
 - **Runtime**: retrieve the most relevant subset for the current query via retrieval-augmented generation (RAG)
 
-This keeps latency predictable regardless of corpus size. The agent receives the context most relevant to its current task, not everything that might be relevant.
+Latency stays predictable regardless of corpus size. The agent receives the context most relevant to its task, not everything that might be relevant.
 
-A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confirms that production systems combine heterogeneous sources — structured queries, semantic search, graph knowledge bases, and tool APIs — with specialized agents handling each source in parallel.
+A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confirms production systems combine heterogeneous sources — structured queries, semantic search, graph knowledge bases, and tool APIs — with specialized agents handling each source in parallel.
 
 ## Priority of Layers
 
-Layers are not equal. When layers conflict — a human annotation contradicts what the pipeline code suggests — the resolution order should be defined explicitly. Human annotations typically take priority over code-derived enrichment, which takes priority over schema inference. Persistent memory corrections take priority over general institutional knowledge.
+Layers are not equal. When a human annotation contradicts what the pipeline code suggests, the resolution order must be explicit. Human annotations typically take priority over code-derived enrichment, which takes priority over schema inference. Persistent memory corrections outrank general institutional knowledge.
 
-Document the resolution order. An agent that silently ignores a human annotation in favor of a code-derived interpretation will be wrong in the cases where the annotation exists precisely because the code is misleading.
+Document the resolution order. An agent that silently favors code over an annotation will be wrong in exactly the cases the annotation exists to correct.
+
+## Retrieval Noise Is Real
+
+More layers do not monotonically improve accuracy. An [arxiv analysis of RAG as noisy in-context learning](https://arxiv.org/abs/2506.03100) derives bounds showing retrieval gains shrink with more examples and can flip to hurt performance past a threshold. Practitioner reports on [RAG at scale](https://www.goml.io/blog/stanford-ai-research-rag-systems) describe precision drops beyond ~10,000 documents and collapse past ~50,000. Before adding a layer, confirm the blind spot it closes causes real production errors, not a theoretical gap.
 
 ## Example
 
@@ -108,14 +112,14 @@ Each `chunks.push` call adds a layer. The type signature tells the agent what th
 
 ## When This Backfires
 
-The six-layer model is optimized for large, complex corpora — it carries real engineering overhead.
+The six-layer model is optimized for large, complex corpora. It carries real engineering overhead.
 
-- **Small corpora** — a codebase that fits entirely in a context window gains nothing from RAG latency. Loading all context directly is simpler and faster.
-- **Infrastructure cost** — offline aggregation pipelines, embedding refresh schedules, and vector stores add operational surface area. For teams without existing data infrastructure, the maintenance burden can outweigh the accuracy gain.
-- **Layer staleness** — when offline pipelines and live runtime queries diverge significantly (e.g., a schema change that hasn't propagated through the enrichment pipeline), the agent may act on contradictory context. The architecture requires reliable refresh cadences to be useful.
-- **Priority rule complexity** — as layers multiply, explicit priority rules become harder to maintain. An undocumented exception in the resolution order silently produces wrong answers that are difficult to trace back to their cause.
+- **Small corpora** — a codebase that fits in a context window gains nothing from RAG latency. Loading directly is simpler and faster.
+- **Infrastructure cost** — aggregation pipelines, embedding refresh, and vector stores add operational surface. For teams without existing data infrastructure, maintenance can outweigh accuracy gain.
+- **Layer staleness** — when offline pipelines and live queries diverge (e.g., an un-propagated schema change), the agent acts on contradictory context.
+- **Priority rule complexity** — as layers multiply, explicit priority rules get harder to maintain. An undocumented exception silently produces wrong answers that are difficult to trace.
 
-A two-layer approach (schema + live queries) suffices for many agent use cases. Add layers when each additional source demonstrably closes a blind spot that causes agent errors in production.
+A two-layer approach (schema + live queries) suffices for many agents. Add layers only when each source closes a production error, not a theoretical gap.
 
 ## Key Takeaways
 
@@ -143,3 +147,5 @@ A two-layer approach (schema + live queries) suffices for many agent use cases. 
 - [Lost in the Middle: Understanding U-Shaped Attention](lost-in-the-middle.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
+- [Structured Domain Retrieval](structured-domain-retrieval.md)
+- [Environment Specification as Context](environment-specification-as-context.md)

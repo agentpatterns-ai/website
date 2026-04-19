@@ -72,7 +72,7 @@ The non-linear jump when all three collaborate shows that closing the loop with 
 
 ## Iteration Budget
 
-Each refinement iteration yields ~1-2% improvement with diminishing returns by iteration 4. Cap at 3-5 rounds — beyond that, failures indicate a fundamental approach problem. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
+[AgentCoder](https://arxiv.org/abs/2312.13010) evaluated up to five refinement rounds on HumanEval and MBPP; accuracy rises fastest in the first two iterations and flattens afterward. A 3–5 round cap is a reasonable starting point — beyond that, continued failures indicate a spec or approach problem rather than something iteration will fix. See also [agent self-review loops](../agent-design/agent-self-review-loop.md).
 
 ## When This Backfires
 
@@ -132,9 +132,3 @@ The test designer generates tests from the spec alone — including edge cases l
 
 - [AgentCoder: Multi-Agent Code Generation with Effective Testing and Self-optimisation](https://arxiv.org/abs/2312.13010) — Huang et al., 2023. Primary source for all quantitative claims on this page.
 - [BACE: Bayesian Anchored Co-Evolution for Code Generation](https://arxiv.org/abs/2603.28653) — 2026. Critiques treating agent-generated tests as ground truth; proposes modeling them as noisy sensors with Bayesian updates anchored to reference examples.
-
-## Unverified Claims
-
-- The pattern's effectiveness for multi-file, real-world codebases (paper benchmarks test single-function generation only)
-- Whether shared-context bias affects reasoning-focused models (o1, o3) to the same degree as chat-optimized models
-- The specific iteration-budget sweet spot of 3-5 rounds as a general recommendation (derived from AgentCoder's 5-iteration experiments, may vary by task complexity)

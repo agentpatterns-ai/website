@@ -24,7 +24,7 @@ A second trigger is instruction fade-out: models deprioritize initial instructio
 
 Signals: the agent "completes" without satisfying the original requirement, output format diverges from spec, or a subtly different problem is solved.
 
-**Preserve intent in structured summaries.** A named `session_intent` field survives compression better than prose — [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that retain task objectives.
+**Preserve intent in structured summaries.** A named `session_intent` field survives compression better than prose — [LangChain recommends](https://blog.langchain.com/context-management-for-deepagents/) structured summaries that retain task objectives. A [session recap](../agent-design/session-recap.md) formalises this as a fixed-schema, agent-authored artifact written at each boundary (compaction, resume, or fork).
 
 **Anchor constraints in system prompt.** System-prompt content is less likely to be paraphrased away during summarisation.
 

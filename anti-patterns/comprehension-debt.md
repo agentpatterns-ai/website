@@ -54,7 +54,7 @@ What are the invalidation tradeoffs?"
 
 ## Why It Accumulates
 
-Code generation bypasses the retrieval effort that consolidates memory. Writing code requires applying knowledge; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). Recognition fades; recall persists. The Anthropic study's [debugging score gap](https://www.anthropic.com/research/AI-assistance-coding-skills) confirms this: the largest comprehension deficit appeared on debugging tasks — understanding when code fails and why requires the highest retrieval effort.
+Code generation bypasses the retrieval effort that consolidates memory. Writing code requires applying knowledge; accepting generated code substitutes recognition ("this looks right") for recall ("I can reconstruct why this works"). [Retrieval-practice research](https://pmc.ncbi.nlm.nih.gov/articles/PMC5912918/) finds that effortful recall — not re-reading or recognition — integrates new knowledge with prior memory and drives consolidation. Recognition fades; recall persists. The Anthropic study's [debugging score gap](https://www.anthropic.com/research/AI-assistance-coding-skills) is consistent with this: the largest comprehension deficit appeared on debugging tasks — understanding when code fails and why requires the highest retrieval effort.
 
 ## When This Backfires
 

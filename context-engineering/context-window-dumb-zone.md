@@ -102,6 +102,8 @@ The guidance to keep reasoning-task context under 32K tokens is conservative and
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction: Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
+- [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
+- [Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools](context-window-diagnostic-tooling.md)
 - [Lost in the Middle](lost-in-the-middle.md)
 - [The Infinite Context](../anti-patterns/infinite-context.md)
 - [Attention Sinks](attention-sinks.md)

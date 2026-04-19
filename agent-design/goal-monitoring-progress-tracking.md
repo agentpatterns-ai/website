@@ -174,3 +174,6 @@ fi
 - [Steering Running Agents](steering-running-agents.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Agent Harness](agent-harness.md)
+- [Goal Recitation](../context-engineering/goal-recitation.md)
+- [Frozen Spec File](../instructions/frozen-spec-file.md)
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md)

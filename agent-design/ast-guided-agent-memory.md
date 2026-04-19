@@ -67,7 +67,7 @@ AST-guided memory is not universally applicable:
 
 ## Practical Implications
 
-**For agent builders:** If your agent maintains session memory, check whether it encodes code structure or just text descriptions. Tree-sitter and language server protocols provide the required AST parsing.
+**For agent builders:** If your agent maintains session memory, check whether it encodes code structure or just text descriptions. Tree-sitter and language server protocols provide the required AST parsing. Independent work on Tree-sitter-based knowledge graphs for code exploration reports comparable efficiency gains: 10× fewer tokens and 2.1× fewer tool calls at 83% of file-exploration answer quality across 31 real-world repositories. ([arXiv:2603.27277](https://arxiv.org/abs/2603.27277))
 
 **For agent users:** Error recurrence — the agent fixing something, then breaking it two turns later — signals lost structural context. Shorter sessions, "do not change X" constraints, or diffing against validated state can mitigate this.
 

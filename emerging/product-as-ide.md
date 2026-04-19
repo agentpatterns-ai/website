@@ -12,9 +12,9 @@ tags:
 
 ## The Concept
 
-Traditional development assumes a separation: you write code in an IDE, build it, deploy it, and then use the product. Product-as-IDE collapses this boundary. The application includes a "designer mode" — a toggle that exposes an editing substrate within the running product. This lets the developer (or operator) modify the application's behavior from within the application itself.
+Traditional development assumes a separation: you write code in an IDE, build it, deploy it, and then use the product. Product-as-IDE collapses this boundary. The application exposes a "designer mode" — a toggle that surfaces an editing substrate inside the running product, letting an operator modify behaviour from within the app itself.
 
-This is not a new admin panel or CMS. The modification layer has access to the full application codebase, uses coding agents to implement changes, and ships those changes to production through an automated pipeline.
+This is not an admin panel or CMS. The modification layer has access to the full codebase, uses coding agents to implement changes, and ships those changes to production through an automated pipeline.
 
 ## How It Works in Practice
 
@@ -39,7 +39,7 @@ Product-as-IDE argues the cycle is completing: AI agents restore the instant-fee
 
 ## Why It Works
 
-The pattern reduces cognitive switching cost. Observing a problem in a running product and fixing it in a separate IDE requires context reconstruction: translate what you see into a codebase location, open that context in a different tool, implement the change, navigate back to verify. Product-as-IDE eliminates the translation step — the modification intent is expressed in the same context as the observation, and the agent handles the codebase mapping. Interface latency research establishes that delays above ~1 second interrupt flow and require deliberate context reconstruction; eliminating the IDE context switch keeps the improvement loop below that threshold.
+The pattern reduces cognitive switching cost. Observing a problem in a running product and fixing it in a separate IDE requires context reconstruction: translate what you see into a codebase location, open that context in a different tool, implement the change, navigate back to verify. Product-as-IDE eliminates the translation step — the modification intent is expressed in the same context as the observation, and the agent handles the codebase mapping. Nielsen's [response-time research](https://www.nngroup.com/articles/response-times-3-important-limits/) places the threshold for uninterrupted flow at roughly one second; eliminating the IDE context switch keeps the improvement loop near that threshold.
 
 ## When This Backfires
 

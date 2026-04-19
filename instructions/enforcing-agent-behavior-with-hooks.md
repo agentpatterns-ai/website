@@ -18,7 +18,7 @@ aliases:
 
 ## The Enforcement Spectrum
 
-Agent behavioral rules exist on a spectrum from advisory to deterministic. Most teams leave their highest-stakes rules at the mercy of model attention.
+Behavioral rules sit on a spectrum from advisory to deterministic. Most teams leave high-stakes rules at the mercy of model attention.
 
 ```mermaid
 graph LR
@@ -32,23 +32,23 @@ graph LR
     style D fill:#d6d8db,stroke:#383d41
 ```
 
-**Advisory** — Rules in CLAUDE.md or AGENTS.md. The model may ignore them under task pressure, [context compaction](../context-engineering/context-compression-strategies.md), or conflicting training priors ([Lavaee, 2025](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+**Advisory** — Rules in CLAUDE.md or [AGENTS.md](../standards/agents-md.md). The model may ignore them under task pressure, [context compaction](../context-engineering/context-compression-strategies.md), or conflicting training priors ([Lavaee, 2025](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 **Probabilistic** — System prompts or event-driven reminders. Higher attention weight, but still subject to drift in long sessions ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)).
 
-**Deterministic** — Shell hooks executing outside the context window. Exit code 2 blocks the tool call unconditionally — the model cannot override, argue with, or forget it ([Claude Code hooks](https://code.claude.com/docs/en/hooks)).
+**Deterministic** — Shell hooks executing outside the context window. Exit code 2 is documented to block the tool call and feed stderr back to the model ([Claude Code hooks](https://code.claude.com/docs/en/hooks)); the model cannot argue with or forget a shell process. Coverage varies by event and tool — see [When This Backfires](#when-this-backfires) for current gaps.
 
-**Organizational** — Managed policies via MDM or enterprise configuration, enforcing organization-wide standards beyond project or user control.
+**Organizational** — Managed policies via MDM, enforcing org-wide standards beyond project or user control.
 
-The key insight: **[rigor relocation](../human/rigor-relocation.md)**. Move enforcement to a layer the model cannot influence. Every rule that shifts from advisory to deterministic stops failing silently.
+The key insight: **[rigor relocation](../human/rigor-relocation.md)** — move enforcement to a layer the model cannot influence. Every rule shifted from advisory to deterministic stops failing silently.
 
 ## Three Hook Patterns
 
-Claude Code hooks fire on lifecycle events (`PreToolUse`, `PostToolUse`, `Notification`, `Stop`) and receive JSON via stdin. Three patterns cover most needs ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)):
+Claude Code hooks fire on lifecycle events (`PreToolUse`, `PostToolUse`, `Notification`, `Stop`) and receive JSON via stdin ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)):
 
 ### Block: Exit Code 2
 
-The hook inspects the tool call and exits with code 2 if it violates a rule. Claude Code blocks the call and shows the hook's stderr as the reason.
+The hook exits with code 2 to block the tool call; stderr becomes the block reason.
 
 ```jsonc
 // .claude/settings.json
@@ -75,11 +75,11 @@ if "push" in cmd and ("--force" in cmd or "-f" in cmd):
     sys.exit(2)
 ```
 
-Exit code 2 means "blocked." Exit code 0 means "allowed." Any other exit code is treated as a hook error and does not block.
+Exit 2 blocks; exit 0 allows; any other code is treated as a hook error and does not block.
 
 ### Rewrite: Transform Inputs via `updatedInput`
 
-A hook can modify the tool call rather than blocking it. Output a JSON object with `updatedInput` to stdout, and Claude Code replaces the original input.
+A hook can modify the tool call instead of blocking. Print JSON with `updatedInput` to stdout and Claude Code replaces the original input.
 
 ```python
 # .claude/hooks/enforce-uv.py
@@ -93,11 +93,11 @@ if cmd.startswith("pip install"):
     json.dump(result, sys.stdout)
 ```
 
-The model sees the rewritten command in its output, reinforcing the correct pattern for future calls.
+The model sees the rewritten command, reinforcing the correct pattern for future calls.
 
 ### Completion Gates: Stop Hooks
 
-`Stop` hooks fire when the agent is about to end its turn. Use them to enforce completion criteria — running a linter, checking test coverage, or validating spec updates.
+`Stop` hooks fire when the agent is about to end its turn. Use them to run a linter, check test coverage, or validate spec updates before "done."
 
 ```jsonc
 {
@@ -111,11 +111,11 @@ The model sees the rewritten command in its output, reinforcing the correct patt
 }
 ```
 
-If the Stop hook exits with code 2, the agent does not stop — it continues working with the hook's stderr as feedback. This creates a completion gate: the agent cannot declare "done" until the gate passes.
+Exit 2 from a Stop hook prevents the agent from stopping; it continues with the hook's stderr as feedback. The agent cannot declare "done" until the gate passes.
 
 ## Hook Scoping Hierarchy
 
-Hooks resolve from four scopes, each with different trust and override properties ([Claude Code hooks](https://code.claude.com/docs/en/hooks)):
+Hooks resolve from four scopes with different trust and override properties ([Claude Code hooks](https://code.claude.com/docs/en/hooks)):
 
 | Scope | Location | Override by user? | Use case |
 |---|---|---|---|
@@ -124,15 +124,13 @@ Hooks resolve from four scopes, each with different trust and override propertie
 | **Local** | `.claude/settings.local.json` | Yes | Per-machine overrides |
 | **Managed** | Enterprise MDM policy | No | Organization-wide mandates |
 
-Managed hooks cannot be disabled by project or user settings — this is how organizations enforce security policies regardless of individual developer configurations.
+Managed hooks cannot be disabled by project or user settings, so organizations can enforce security policies regardless of developer configuration.
 
 ## Why Hooks Beat Instructions
 
-Models revert to training defaults under pressure — attention-based architectures lose instruction compliance when the context window fills or priors conflict ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). Hooks are immune: they execute in the shell, outside the context window.
+Models revert to training defaults under pressure — attention-based architectures lose instruction compliance as the context window fills or priors conflict ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). Hooks execute in the shell, outside the context window.
 
 ## When to Use Each Layer
-
-The decision depends on violation cost and whether the rule requires judgment.
 
 | Rule type | Layer | Example |
 |---|---|---|
@@ -143,11 +141,18 @@ The decision depends on violation cost and whether the rule requires judgment.
 | Completion criteria | Deterministic (Stop hook) | "Tests must pass before done" |
 | Security policy | Organizational (managed) | "No secrets in source" |
 
-Rules requiring judgment belong in instructions. Binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md) for the decision framework.
+Judgment rules belong in instructions; binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md).
+
+## When This Backfires
+
+- **Exit code 2 has coverage gaps.** `PreToolUse` exit code 2 has failed to block `Write` and `Edit` while still blocking `Bash` ([anthropics/claude-code #13744](https://github.com/anthropics/claude-code/issues/13744)), and has caused the agent to halt idle rather than act on stderr ([#24327](https://github.com/anthropics/claude-code/issues/24327)). Prefer JSON stdout with explicit `decision` fields when tool-level nuance matters.
+- **False positives cost more than the rule saves.** Broad matchers block legitimate commands; rewrite hooks break projects with intentional exceptions. Scope matchers narrowly.
+- **Hooks fail open silently.** Any exit code other than 0 or 2 is treated as hook error and does not block. Teammates with missing dependencies get no enforcement and no warning ([5 Claude Code hook mistakes](https://dev.to/yurukusa/5-claude-code-hook-mistakes-that-silently-break-your-safety-net-58l3)).
+- **Judgment rules regress when forced binary.** "Prefer descriptive names" or "add tests when changing behavior" lose nuance compressed into a regex. Keep ambiguous rules in CLAUDE.md.
 
 ## Key Takeaways
 
-- Exit code 2 blocks a tool call unconditionally — no model can override a shell process
+- Exit code 2 is the documented block signal — a shell process sits outside the context window, but coverage gaps exist across tools and events
 - Relocate rigor from instructions to hooks for every binary, non-negotiable rule
 - Use Block hooks for prohibitions, Rewrite hooks for corrections, and Stop hooks for completion gates
 - Managed hooks enforce organizational policy beyond individual developer control
@@ -160,5 +165,6 @@ Rules requiring judgment belong in instructions. Binary, non-negotiable rules be
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — where instruction text stops working, hooks start
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)

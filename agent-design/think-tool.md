@@ -40,9 +40,7 @@ Critically, the tool only fires when the model chooses to use it. If the task is
 
 ## Why It Works
 
-The mechanism: separating observation from action-selection forces implicit state into the context as text. In a standard tool-call chain, the model carries its interpretation of each tool result implicitly — encoded in the residual stream rather than as retrievable text. A model that must immediately emit the next tool call carries unverified interpretations of the previous output without examining them. The think call materializes those interpretations as tokens, allowing the model to check policy constraints, update its world model, and evaluate multiple next-step candidates before committing.
-
-This is the same mechanism behind chain-of-thought prompting ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), applied at the inter-tool boundary rather than within a single prompt. It explains the [τ-bench](https://arxiv.org/abs/2406.12045) airline-domain gains: those tasks require checking specific policies against specific account states — exactly the class of problem where unexamined intermediate state causes downstream errors. On τ-Bench's retail domain, where constraints are lighter, the gain was only 3.7%.
+Separating observation from action-selection forces implicit state into the context as text. A model that must immediately emit the next tool call carries unverified interpretations of the previous output in the residual stream. The think call materialises those interpretations as tokens so the model can check policy constraints and evaluate candidate next steps before committing — the same mechanism as chain-of-thought prompting ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), applied at the inter-tool boundary. That is why [τ-Bench](https://arxiv.org/abs/2406.12045) airline tasks gained 54% while its retail domain — with lighter constraints — gained only 3.7%.
 
 ## Token Budget
 
@@ -56,20 +54,18 @@ Monitor what the model writes in think calls and refine the system prompt based 
 
 ## Prefer Extended Thinking on Modern Claude Models
 
-Anthropic [now recommends extended thinking](https://www.anthropic.com/engineering/claude-think-tool) over a dedicated think tool in most cases. Extended thinking is better integrated into current Claude models and covers the same reflection workload without adding a custom tool. On Claude Sonnet and Opus 4.x, adaptive thinking — which scales reasoning depth to the difficulty of the step — further supersedes the think tool pattern.
-
-Reach for the think tool when extended thinking is unavailable: older model versions, API tiers without extended-thinking access, or deployments where explicit mid-stream checkpoints must be inspectable as discrete tool calls rather than hidden reasoning tokens.
+Anthropic [now recommends extended thinking](https://www.anthropic.com/engineering/claude-think-tool) over a dedicated think tool in most cases. On Claude Sonnet and Opus 4.x, adaptive thinking scales reasoning depth to the difficulty of each step and further supersedes the pattern. Reach for the think tool when extended thinking is unavailable — older model versions, API tiers without access, or deployments where mid-stream checkpoints must be inspectable as discrete tool calls rather than hidden reasoning tokens.
 
 ## When This Backfires
 
 The think tool adds cost without benefit in several conditions:
 
-- **Modern Claude models with native reasoning**: Extended thinking and adaptive thinking subsume what the think tool provides; implementing a custom think tool on these models is largely redundant.
-- **Parallel or independent tool calls**: When tool calls do not depend on each other's outputs, there is no accumulated context to reconcile. A think call here burns tokens without changing the decision.
-- **Low-constraint sequential tasks**: The 54% gain is specific to high-constraint, multi-branch domains — on τ-Bench's retail domain, the gain was only 3.7%. When each tool output has an obvious follow-up, reflection adds latency with no accuracy benefit.
-- **Well-defined decision trees**: When the system prompt already encodes the decision tree precisely, the think step can cause the model to re-examine resolved choices and introduce unnecessary caveats.
-- **No domain-specific prompting**: Without concrete examples of what good mid-stream reasoning looks like in your domain, think output is verbose but vacuous. Per [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool), generic "reason carefully" instructions yield modest gains.
-- **Token overhead scaling with frequency**: Each think call adds output tokens; on high-frequency loops the fixed per-step overhead accumulates fast and can outweigh accuracy gains on time-sensitive or cost-sensitive pipelines.
+- **Modern Claude models with native reasoning**: extended thinking and adaptive thinking subsume the think tool; a custom implementation on these models is redundant.
+- **Parallel or independent tool calls**: with no accumulated context to reconcile, a think call burns tokens without changing the decision.
+- **Low-constraint sequential tasks**: the 54% gain is specific to high-constraint, multi-branch domains; on τ-Bench's retail domain the gain was only 3.7%.
+- **Well-defined decision trees**: when the system prompt already encodes the path, a think step can cause the model to re-examine resolved choices and inject unnecessary caveats.
+- **No domain-specific prompting**: without concrete examples of good mid-stream reasoning in your domain, think output is verbose but vacuous.
+- **High-frequency loops**: per-step token overhead accumulates fast and can outweigh accuracy gains on latency- or cost-sensitive pipelines.
 
 ## Example
 

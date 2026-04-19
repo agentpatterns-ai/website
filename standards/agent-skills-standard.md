@@ -116,11 +116,12 @@ Portability comes from two design decisions. First, the `SKILL.md` entrypoint is
 
 ## When This Backfires
 
-The standard adds value only when skills need to cross tool or team boundaries. Three conditions make it the wrong choice:
+The standard adds value only when skills need to cross tool or team boundaries. Four conditions make it the wrong choice:
 
 - **Single-tool, single-developer projects** — if one person uses one tool, the portability guarantee is unused overhead. A plain markdown file in `CLAUDE.md` or a tool-specific command has less structure with no loss.
 - **Rapidly changing instructions** — skill files are versioned assets. When guidance evolves daily, the structure and tooling overhead of maintaining SKILL.md directories slows iteration relative to ad-hoc prompting.
 - **Tool mismatch on frontmatter extensions** — tools extend the standard with non-portable frontmatter fields (Claude Code adds `disable-model-invocation`, `context: fork`; VS Code adds its own fields). Skills that rely on these extensions lose portability silently — the file loads, but tool-specific behavior is silently ignored.
+- **Untrusted skill sources** — the same portability that enables cross-tool reuse also enables prompt-injection payloads to run wherever the standard is implemented. Snyk's [ToxicSkills audit of 3,984 published skills](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) found 534 (13.4%) contained critical-severity issues — 76 confirmed malicious payloads including credential theft and data exfiltration, with 91% of malicious skills combining native code patterns and prompt injection. Skills from community registries should be treated like any other third-party code dependency — reviewed, pinned, and sandboxed — not trusted by default because they loaded cleanly.
 
 ## Key Takeaways
 

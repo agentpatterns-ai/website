@@ -28,7 +28,7 @@ Five signals warrant a circuit break:
 
 **3. Repetition detected.** The agent is doing the same thing it already did — fetching the same URL, reading the same file, attempting the same fix. Repetition without new information is a stuck loop.
 
-**4. Context budget exceeded.** The context window is approaching the zone where output quality degrades — the "dumb zone." Stopping before it is better than continuing into degraded reasoning. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found that every model degrades as input length grows — non-uniformly, with the onset depending on task similarity and distractor density. There is no universal percentage; monitor for the degradation pattern on your task and trip the breaker when recall or coherence drops, not at a fixed token count.
+**4. Context budget exceeded.** The context window is approaching the "dumb zone" where output quality degrades. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your task, not at a fixed token count.
 
 **5. Cost threshold exceeded.** The task has consumed more than the expected budget — cost overrun often correlates with loops.
 
@@ -53,7 +53,7 @@ Partial results are more useful than nothing. Return what you have; do not disca
 | Repetition | Agent instruction + hook | Instruction / hook |
 | Context usage | Agent instruction | Instruction |
 
-Runtime enforcement (maxTurns, cost budgets) cannot be overridden by the model. Instruction-level enforcement depends on the model following instructions — less reliable for safety-critical stops. Hooks offer a middle ground: deterministic scripts that monitor and signal a stop.
+Runtime enforcement (maxTurns, cost budgets) cannot be overridden by the model. Instruction-level enforcement depends on the model obeying instructions — less reliable for safety-critical stops. Hooks offer a middle ground: deterministic scripts that monitor and trigger a stop.
 
 Circuit breakers are the enforcement mechanism for [context health](../context-engineering/context-window-dumb-zone.md) — without them, context management guidelines are advisory rather than operational limits.
 

@@ -88,7 +88,7 @@ Embed verification in the codebase, not in downstream review. Linters, structura
 
 Constrain agent output so it remains reviewable:
 
-- Atomic PRs under 400 LOC — defect detection drops measurably as diff size grows beyond the range a reviewer can hold in working memory
+- Atomic PRs under 400 LOC — defect detection drops measurably as diff size grows beyond the range a reviewer can hold in working memory ([SmartBear/Cisco study](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf))
 - Diff-first review with abstracted code representation
 - Stacked PRs to decouple progress from review
 

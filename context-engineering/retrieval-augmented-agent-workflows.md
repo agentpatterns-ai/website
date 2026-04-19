@@ -25,7 +25,7 @@ Retrieval-augmented agent workflows structure context in two layers: a small sta
 
 Every token loaded at startup consumes budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites does not need all five loaded before the first message — it needs to know they exist and how to access them.
 
-Loading context speculatively "just in case" produces two failure modes: the agent runs out of context mid-task, or the [U-shaped attention curve](lost-in-the-middle.md) buries the preloaded material where the model rarely attends to it [unverified — specific attention curve effect on preloaded agent context not sourced here].
+Loading context speculatively "just in case" produces two failure modes: the agent runs out of context mid-task, or the [U-shaped attention curve](lost-in-the-middle.md) leaves the preloaded material in the middle of the window, where [models attend less reliably than they do to content near the start or end](https://arxiv.org/abs/2307.03172).
 
 ## On-Demand Retrieval Pattern
 
@@ -107,10 +107,6 @@ A task requiring only one of five documentation sections consumes context for th
 - Use tool calls (MCP, web fetch, file search) to pull content when a task step needs it.
 - On-demand retrieval preserves context budget for reasoning but adds per-call latency.
 - Sub-agents provide isolated context windows for retrieval-heavy subtasks, returning compressed summaries to the coordinator.
-
-## Unverified Claims
-
-- The U-shaped attention curve buries preloaded material where the model rarely attends to it [unverified — specific attention curve effect on preloaded agent context not sourced here]
 
 ## Related
 

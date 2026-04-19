@@ -160,6 +160,7 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
+- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health metrics rather than task type
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Agent Loop Middleware](agent-loop-middleware.md)
@@ -176,4 +177,3 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md)
 - [The Advisor Strategy](advisor-strategy.md)
-- [Code Health Gated Tier Routing](code-health-gated-tier-routing.md)

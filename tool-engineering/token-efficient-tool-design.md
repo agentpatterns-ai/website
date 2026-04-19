@@ -21,7 +21,7 @@ tags:
 
 Every tool call produces output that enters the context window. A tool returning a 10,000-token API response when 200 tokens would suffice consumes 10% of a 100k context window on a single call. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool design as a direct lever on context quality: the shape of tool output determines how much of the context window is signal versus noise.
 
-The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token — irrelevant tokens compete with relevant tokens for model focus. Research on long-context LLMs shows accuracy drops over 30% when target information is buried mid-context ("lost in the middle"). Oversized tool output places task-relevant fields in a sea of noise, degrading the model's ability to act on them correctly.
+The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token — irrelevant tokens compete with relevant tokens for model focus. [Liu et al. (2023)](https://arxiv.org/abs/2307.03172) show accuracy drops over 30% on multi-document QA when the target document is placed in the middle of a long context versus the beginning or end — the "lost in the middle" effect. Oversized tool output places task-relevant fields in a sea of noise, degrading the model's ability to act on them correctly.
 
 ## Design Principles
 

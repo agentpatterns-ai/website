@@ -74,7 +74,7 @@ Anthropic's [evaluator-optimizer](../agent-design/evaluator-optimizer.md) patter
 
 For long-running agents, Anthropic recommends running "a basic end-to-end test before implementing a new feature" at session start, catching undocumented bugs from previous sessions. Git-based recovery ("use git to revert bad code changes and recover working states") creates structured fallback points when iteration stalls ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-LangChain's harness engineering research validates the approach with a structured "Plan & Discovery, Build, Verify, Fix" cycle. [Pre-completion checklists](../verification/pre-completion-checklists.md) force verification before the agent exits, preventing premature completion without testing ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
+LangChain's [harness engineering](../agent-design/harness-engineering.md) research validates the approach with a structured "Plan & Discovery, Build, Verify, Fix" cycle. [Pre-completion checklists](../verification/pre-completion-checklists.md) force verification before the agent exits, preventing premature completion without testing ([LangChain: Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).
 
 ## When to Stop Iterating
 

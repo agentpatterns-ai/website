@@ -14,7 +14,7 @@ aliases:
 
 > FAQPage schema yields a measurable citation lift in AI responses — structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing. Independent studies cite FAQPage citation improvements ranging from 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)).
 
-Schema markup's primary value has shifted from SEO to AI search citation — ChatGPT, Perplexity, Gemini, and Claude all process schema during indexing. This site auto-injects FAQPage, HowTo, and Article schemas via the `hooks/structured_data.py` hook.
+Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects FAQPage, HowTo, and Article schemas via `hooks/structured_data.py`.
 
 ## What Changed: Google vs. AI Search
 
@@ -26,13 +26,13 @@ Schema markup's primary value has shifted from SEO to AI search citation — Cha
 | Perplexity | Indexed schema aids entity disambiguation | High — citation footnotes |
 | Gemini | Renders JavaScript; processes schema | High |
 
-**Key nuance**: AI chatbots do not read JSON-LD during live page fetches — the citation benefit comes from schema's role in the indexing and training pipeline.
+**Key nuance**: chatbots don't read JSON-LD on live fetch — benefit accrues at indexing and training.
 
 ## The Three Schema Types
 
 ### FAQPage
 
-Structures Q&A blocks for direct AI extraction. Answers should be 40–80 words — standalone, citable length for AI response units.
+Structures Q&A blocks for direct AI extraction. Keep answers 40–80 words — standalone, citable length.
 
 ```json
 {
@@ -49,11 +49,11 @@ Structures Q&A blocks for direct AI extraction. Answers should be 40–80 words 
 }
 ```
 
-The `structured_data.py` hook detects `## FAQ` or `## Frequently Asked Questions` followed by `**Question**` / answer pairs and auto-generates this schema.
+The hook detects `## FAQ` or `## Frequently Asked Questions` followed by `**Question**` / answer pairs and emits this schema automatically.
 
 ### HowTo
 
-Converts numbered step lists into extractable content blocks. Each step becomes a quotable unit.
+Converts numbered step lists into extractable blocks — each step is a quotable unit.
 
 ```json
 {
@@ -67,11 +67,11 @@ Converts numbered step lists into extractable content blocks. Each step becomes 
 }
 ```
 
-The hook auto-detects ordered lists (`<ol>`) with three or more items, but only on pages under `patterns/` or `techniques/` paths. To enable HowTo on `geo/` pages, extend `_HOWTO_PATHS` in `hooks/structured_data.py`.
+Auto-detection triggers on ordered lists (`<ol>`) with 3+ items, restricted to `patterns/` and `techniques/` paths. Extend `_HOWTO_PATHS` in `hooks/structured_data.py` to widen coverage.
 
 ### DefinedTerm
 
-Establishes machine-readable definitions for named concepts — useful where terms like "agent" and "context window" are ambiguous across tools.
+Machine-readable definitions for named concepts — useful where terms like "agent" are ambiguous across tools.
 
 ```json
 {
@@ -92,11 +92,11 @@ Establishes machine-readable definitions for named concepts — useful where ter
 }
 ```
 
-Each term's `@id` fragment is directly linkable — AI knowledge graphs can reference it as an authoritative definition.
+Each term's `@id` fragment is directly linkable as an authoritative definition.
 
 ## How This Site Generates Schema
 
-The `hooks/structured_data.py` MkDocs hook runs at `on_post_page` and injects JSON-LD into every page's `<head>`:
+The hook runs at `on_post_page` and injects JSON-LD into every page's `<head>`:
 
 ```mermaid
 graph LR
@@ -113,13 +113,13 @@ graph LR
     C & E & F & G & I & K --> L[Inject before head close]
 ```
 
-No per-page config required — add an FAQ section and the schema appears automatically.
+No per-page config — add an FAQ section and schema appears.
 
 ## Writing for Schema Auto-Detection
 
 ### FAQ Section
 
-The hook matches `## FAQ` or `## Frequently Asked Questions` followed by `**Question text**` / paragraph pairs:
+The hook matches `## FAQ` (or `## Frequently Asked Questions`) plus `**Question**` / paragraph pairs:
 
 ```markdown
 ## FAQ
@@ -139,16 +139,16 @@ that happen to have numbered sections.
 
 ### HowTo Steps
 
-Steps should be self-contained sentences — each is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` or `techniques/` paths.
+Write each step as a self-contained sentence — it is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` and `techniques/`.
 
 ## When This Backfires
 
-Schema markup improves AI citation probability in aggregate, but fails to deliver under specific conditions:
+Schema lifts citation rates in aggregate, but fails under specific conditions:
 
-- **Stale schema after content edits** — if body text diverges from the auto-generated schema (e.g., FAQ answers updated without matching the `**Question**` / answer format the hook detects), AI engines receive contradictory signals and may deprioritize the page.
-- **Thin or low-authority domains** — citation lift is relative to baseline authority; a new or low-traffic domain injecting FAQPage schema does not overcome trust deficits. Schema accelerates existing signal; it does not manufacture credibility.
-- **Wrong schema type for content shape** — applying HowTo schema to conceptual explanations, or FAQPage to unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalise.
-- **AI engine indexing changes** — citation benefit accrues at indexing time, not during live fetch. If an AI provider changes its indexing pipeline to ignore or discount structured data, pages relying on schema lift lose the advantage without any change to the page itself.
+- **Stale schema after edits** — if body text drifts from the auto-generated schema (e.g., FAQ answers edited outside the `**Question**` / answer format), engines see contradictory signals and may deprioritize the page.
+- **Thin or low-authority domains** — lift is relative to baseline authority. Schema accelerates existing signal; it doesn't manufacture credibility.
+- **Wrong type for content shape** — HowTo on conceptual explanations, or FAQPage on unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalise.
+- **Indexing pipeline changes** — benefit accrues at indexing time; if a provider downweights structured data, pages relying on the lift lose it with no on-page change.
 
 ## Testing Schema
 
@@ -162,19 +162,19 @@ Run locally:
 
 ```bash
 mkdocs build --strict
-# Copy a built page's head block into the Schema Markup Validator
+# Paste a built page's <head> into the Schema Markup Validator
 ```
 
 ## Sources
 
-- [FAQPage Structured Data — Google Search Central](https://developers.google.com/search/docs/appearance/structured-data/faqpage) — required properties, content guidelines, eligibility restrictions
-- [DefinedTerm — Schema.org](https://schema.org/DefinedTerm) — official spec: name, termCode, description, inDefinedTermSet
-- [Using Schema.org's DefinedTermSet for Industry Terminology — DEV Community](https://dev.to/mark_mcneece_365i/using-schemaorgs-definedtermset-for-industry-terminology-a-case-study-1mm2) — fragment @id, bidirectional TermSet linking
-- [Schema.org Is Your Secret Weapon for AI Citations — DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3) — citation rate data: FAQPage +45%, HowTo +38%
-- [FAQ Schema for AI Search, GEO and AEO — Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo) — 3.2x AI Overview appearance lift, platform citation patterns
-- [Schema Markup and AI in 2025 — Searchviu](https://www.searchviu.com/en/schema-markup-and-ai-in-2025-what-chatgpt-claude-perplexity-gemini-really-see/) — JSON-LD ignored during direct chatbot fetch; benefits accrue at indexing
-- [How to Use Structured Data in MkDocs](https://v-schipka.github.io/posts/schema-in-mkdocs/) — MkDocs Material extrahead block and frontmatter template approach
-- [Structured Data for SEO and GEO — Digidop](https://www.digidop.com/blog/structured-data-secret-weapon-seo) — GPT-4 accuracy: 16% to 54% on structured-data-backed content
+- [FAQPage Structured Data — Google Search Central](https://developers.google.com/search/docs/appearance/structured-data/faqpage) — spec and eligibility
+- [DefinedTerm — Schema.org](https://schema.org/DefinedTerm) — official spec
+- [DefinedTermSet for Industry Terminology — DEV](https://dev.to/mark_mcneece_365i/using-schemaorgs-definedtermset-for-industry-terminology-a-case-study-1mm2) — fragment `@id` and TermSet linking
+- [Schema.org Is Your Secret Weapon for AI Citations — DEV](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3) — FAQPage +45%, HowTo +38%
+- [FAQ Schema for AI Search, GEO and AEO — Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo) — 3.2x AI Overview lift
+- [Schema Markup and AI in 2025 — Searchviu](https://www.searchviu.com/en/schema-markup-and-ai-in-2025-what-chatgpt-claude-perplexity-gemini-really-see/) — JSON-LD ignored on live fetch; benefits at indexing
+- [Structured Data in MkDocs](https://v-schipka.github.io/posts/schema-in-mkdocs/) — MkDocs Material approach
+- [Structured Data for SEO and GEO — Digidop](https://www.digidop.com/blog/structured-data-secret-weapon-seo) — GPT-4 accuracy 16% → 54%
 
 ## Related
 

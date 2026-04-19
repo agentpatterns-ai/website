@@ -14,7 +14,7 @@ tags:
 
 Every choice an agent makes is an opportunity for a wrong answer. Where should this file go? What should this branch be called? Which label applies? When the answer isn't obvious, an agent guesses — and inconsistent guesses compound over time into a codebase that's hard to navigate and hard to automate further.
 
-Convention over configuration solves this by making the right choice the only obvious choice. [AGENTS.md](https://agents.md) and similar project instruction standards exist specifically to document these conventions in a form agents can read once and apply everywhere.
+Convention over configuration solves this by making the right choice the only obvious choice. The [AGENTS.md standard](../standards/agents-md.md) and similar project instruction standards exist specifically to document these conventions in a form agents can read once and apply everywhere.
 
 ## Common Convention Categories
 

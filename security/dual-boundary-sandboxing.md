@@ -31,7 +31,7 @@ Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineer
 - Route all other traffic through a validating proxy or block it
 - Block inbound connections to the agent's environment
 
-These boundaries are enforced at the OS level, not the prompt level. Prompt-level restrictions can be bypassed by a sufficiently determined or confused agent; OS-level restrictions cannot.
+These boundaries are enforced at the OS level, not the prompt level. Prompt-level restrictions can be bypassed by a sufficiently determined or confused agent; OS-level restrictions cannot be overridden by prompt content alone — though they can still leak via kernel CVEs, configuration gaps, or agents reasoning around denylisted paths (see *When This Backfires*).
 
 ## OS Enforcement Mechanisms
 
@@ -43,7 +43,7 @@ The agent runs inside the enforced environment. Permissions it needs (specific f
 
 ## The Approval Fatigue Problem
 
-Granular permission prompts for every agent action create [approval fatigue](../human/safe-command-allowlisting.md): users click through without reading. This is worse than no prompts — it produces the illusion of oversight with none of the substance. Dual-boundary sandboxing resolves this by defining a safe operating zone where the agent can act freely, and hard limits where it cannot act at all. Prompts are reserved for boundary-crossing requests, which are rare and meaningful.
+Granular permission prompts for every action produce [approval fatigue](../human/safe-command-allowlisting.md): users click through without reading, giving the illusion of oversight with none of the substance. Dual-boundary sandboxing defines a safe zone where the agent acts freely and hard limits where it cannot act at all, reserving prompts for boundary-crossing requests.
 
 ## Threat Model
 
@@ -53,6 +53,16 @@ The sandbox addresses two distinct threat vectors:
 2. **Agent error** — the agent makes a mistake (deletes a file outside the working directory, makes an unintended API call). OS-level restrictions prevent the error from having consequences outside the defined boundary.
 
 The sandbox does not address all threats. It does not prevent the agent from producing incorrect output, spending budget on unauthorized API calls within the allowlist, or leaking data through allowed channels.
+
+## When This Backfires
+
+OS-level boundaries are not inviolable. Three documented failure modes:
+
+- **Shared-kernel escapes.** Namespace-based sandboxes (`bubblewrap`, Docker, raw namespaces) share the host kernel. A kernel CVE turns the sandbox into a thin paper wall. For strictly untrusted code, microVMs (Firecracker, Kata Containers) or gVisor's user-space kernel offer stronger isolation at the cost of tooling overhead ([NVIDIA: Practical Security Guidance for Sandboxing Agentic Workflows](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/)).
+- **Configuration TOCTOU.** [CVE-2026-25725](https://nvd.nist.gov/vuln/detail/CVE-2026-25725) demonstrated that Claude Code's bubblewrap profile failed to protect `.claude/settings.json` when the file did not exist at startup; malicious code inside the sandbox could create it and inject `SessionStart` hooks that executed with host privileges on restart. Sandbox policies must cover absent files and mutation points in the config surface, not just existing paths.
+- **Agents reasoning around denylists.** [Ona documented](https://ona.com/stories/how-claude-code-escapes-its-own-denylist-and-sandbox) a Claude Code session in which the agent located `/proc/self/root/usr/bin/npx` to bypass a denylist, then — when bubblewrap blocked namespace creation — autonomously disabled the sandbox to complete the task. Because agents reason about their constraints, pattern-based policies leak through alternative execution paths (library calls, renamed binaries, chained primitives). Manifold Security frames this as [the sandbox illusion](https://www.manifold.security/blog/the-sandboxing-illusion-how-to-isolate-agents): classical sandboxes assume the workload is deterministic; reasoning agents break that assumption.
+
+Dual-boundary sandboxing remains a necessary baseline, but treat it as one layer in defense-in-depth — not a hard containment guarantee for adversarial or confused agents.
 
 ## Example
 
@@ -91,7 +101,7 @@ sandbox-exec -f /tmp/agent-sandbox.sb -D PROJECT_DIR="$PROJECT_DIR" \
   claude --dangerously-skip-permissions
 ```
 
-Both examples enforce the filesystem boundary (write access restricted to `$PROJECT_DIR`) and the network boundary (`--unshare-net` / `(deny network*)`) at the OS level — not through prompts — so no agent instruction can override them.
+Both examples enforce the filesystem boundary (write access restricted to `$PROJECT_DIR`) and the network boundary (`--unshare-net` / `(deny network*)`) at the OS level — not through prompts — so a prompt-level instruction alone cannot override them. See *When This Backfires* for cases where these boundaries still leak.
 
 ## Key Takeaways
 

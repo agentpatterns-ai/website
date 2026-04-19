@@ -16,9 +16,9 @@ aliases:
 
 ## The Problem with Agent Self-Report
 
-Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete based on whether its implementation looks plausible — not whether it actually passes acceptance criteria. This produces partially implemented work labeled as done, which compounds across multi-session projects.
+Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete based on whether the implementation looks plausible — not whether it passes acceptance criteria. Partially implemented work gets labeled as done, and the error compounds across multi-session projects.
 
-A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract. Per [Anthropic's effective harnesses post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents), this structure is the foundation of reliable long-running agent work.
+A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract — the foundation of reliable long-running agent work per Anthropic's harness post.
 
 ## Structure
 
@@ -53,9 +53,9 @@ The explicit instruction from [Anthropic's harness post](https://www.anthropic.c
 
 ## Validation Strategy
 
-Unit tests alone are insufficient for many feature validations. As the [Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) observed: "Claude tended to make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." [Browser automation](../tool-engineering/browser-automation-for-research.md) (Playwright, Puppeteer) validates user-facing features the way a human user would — navigating UI flows, submitting forms, checking rendered output.
+Unit tests alone are insufficient for many feature validations. Per the [Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "Claude tended to make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." [Browser automation](../tool-engineering/browser-automation-for-research.md) (Playwright, Puppeteer) validates user-facing features the way a human user would.
 
-The acceptance criteria in each feature entry should specify which validation method applies: automated test suite, browser automation, or both.
+Each feature entry's acceptance criteria should specify which validation method applies: automated test suite, browser automation, or both.
 
 ## The Feature List as Cross-Session State
 
@@ -69,7 +69,7 @@ This triad replaces context window memory. The feature list does not forget, doe
 
 ## Scale
 
-[Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents using 200+ features defined upfront, with all initial statuses set to failing. At this scale, the feature list becomes a project management artifact as well as an agent contract — it shows scope, progress, and remaining work in a format both agents and humans can read.
+[Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents using 200+ features defined upfront, all initial statuses set to failing. At this scale the feature list becomes a project management artifact as well as an agent contract — it shows scope, progress, and remaining work in one format both agents and humans read.
 
 ## When This Backfires
 
@@ -78,6 +78,8 @@ Feature list files add overhead that outweighs the benefit in several situations
 - **Exploratory or greenfield work**: when requirements are unknown upfront, writing acceptance criteria before any implementation forces premature specification. The list becomes a fiction that diverges from what actually gets built.
 - **Short single-session tasks**: for a task completing in one session with no state continuity needed, a feature list is unnecessary scaffolding. The agent's own working memory is sufficient.
 - **Criteria that can be gamed**: acceptance criteria defined as command outputs can be satisfied by hardcoding responses. A poorly designed criterion (`task list` shows a checkmark) can be met without the underlying feature working correctly — the list gives false confidence rather than genuine verification.
+- **Feature list staleness**: in fast-moving projects requirements shift mid-build. Without a human reviewing and updating the list between sessions, the agent dutifully implements outdated entries while actual priorities diverge.
+- **Scale without decomposition**: at 200+ features a flat list with no dependency ordering forces the agent to attempt entries whose prerequisites have not been built. Priority order alone does not capture dependency graphs.
 
 ## Example
 
@@ -129,13 +131,6 @@ You are building a CLI task manager. Your contract is features.json in the repo 
 ```
 
 After the agent completes feat-1, the file updates in place — `feat-1` moves to `"status": "passing"` and the agent proceeds to feat-2. A new session reads the same file and picks up exactly where the previous session stopped.
-
-## When This Backfires
-
-- **Exploratory or greenfield work**: When requirements are unknown upfront, defining all features before implementation forces premature commitment. The feature list becomes a fiction that the agent satisfies formally while missing the actual goal — criteria pass but the product is wrong.
-- **Criteria that can be gamed**: Acceptance criteria like "page loads without errors" or "API returns 200" can be satisfied trivially without implementing real functionality. Agents optimize for the letter of the criteria, not the intent. Weak criteria produce false confidence.
-- **Feature list staleness**: In fast-moving projects, requirements shift mid-build. A static feature list accumulates entries that no longer reflect what the project needs. The agent dutifully implements outdated features while the actual priorities diverge. Without a human reviewing and updating the list between sessions, it drifts from reality.
-- **Scale without decomposition**: At 200+ features, a flat list with no grouping or dependency ordering forces the agent to implement features that depend on unbuilt prerequisites. Priority order alone does not capture dependency graphs — the agent may attempt feature 47 before the infrastructure from feature 12 exists.
 
 ## Key Takeaways
 

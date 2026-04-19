@@ -16,9 +16,9 @@ aliases:
 
 ## Two Metering Philosophies
 
-**Copilot: request-level abstraction.** Each interaction counts as one premium request regardless of length. Model choice determines the multiplier, but token volume is invisible to billing.
+**Copilot: request-level abstraction.** Each interaction is one premium request regardless of length. Model choice sets the multiplier; token volume is invisible.
 
-**Claude: token-level proportionality.** Every input and output token is metered. Caching, batching, and model selection shift the per-token rate, giving direct cost levers.
+**Claude: token-level proportionality.** Every input and output token is metered. Caching, batching, and model selection shift the per-token rate.
 
 ```mermaid
 flowchart LR
@@ -56,9 +56,9 @@ flowchart LR
 | Claude Opus 4.5/4.6 | 3x | 2.7x |
 | o1, Gemini 2.5 Pro | 1x | 0.9x |
 
-**Zero-cost base models are Copilot's key advantage.** GPT-4o and GPT-4.1 consume no premium requests on paid plans. Claude has no equivalent zero-cost tier.
+**Zero-cost base models are Copilot's key advantage.** GPT-4o and GPT-4.1 consume no premium requests on paid plans; Claude has no equivalent zero-cost tier.
 
-Auto model selection gives a 10% discount ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Overages cost $0.04 per premium request; unused requests reset on the first of each calendar month and do not roll over ([GitHub Docs: Premium requests](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests)).
+Auto model selection gives a 10% discount ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Overages cost $0.04 per request; unused requests reset monthly and do not roll over ([GitHub Docs: Premium requests](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests)).
 
 ## Claude API Token Pricing
 
@@ -85,9 +85,9 @@ flowchart TD
     E --> H[Copilot for routine,<br/>Claude for deep tasks]
 ```
 
-**Copilot seat wins** when most usage is routine completions (GPT-4o at 0x) and predictable billing matters.
+**Copilot seat wins** when routine completions dominate (GPT-4o at 0x) and predictable billing matters.
 
-**Claude API/Max wins** when agentic workflows dominate or workloads are spiky — billing scales to zero when idle.
+**Claude API/Max wins** for agentic workflows or spiky workloads — billing scales to zero when idle.
 
 **Hybrid** is the default: Copilot for completions, Claude for agentic sessions.
 
@@ -104,9 +104,9 @@ flowchart TD
 
 ## Agentic Session Billing
 
-Copilot coding agent sessions consume 1 premium request per session (multiplied by model rate); autonomous tool calls within a session do not add additional premium requests ([GitHub community: Coding Agent now uses one Premium Request per session](https://github.com/orgs/community/discussions/165798)). Coding agent and Spark use separate SKUs tracked from November 2025.
+Copilot coding agent sessions consume 1 premium request per session (× model rate); tool calls within a session don't add requests ([GitHub community: Coding Agent now uses one Premium Request per session](https://github.com/orgs/community/discussions/165798)). Coding agent and Spark use separate SKUs tracked from November 2025.
 
-Claude Code sessions are billed by total tokens consumed — costs scale with codebase size and conversation length.
+Claude Code bills by total tokens consumed — costs scale with codebase size and conversation length.
 
 ## Example
 
@@ -138,13 +138,13 @@ With prompt caching covering repeated system prompts: ~$900–1,000/month.
 
 ## When This Backfires
 
-**Copilot overages spike with premium model adoption.** Teams that shift even a fraction of routine usage to Claude Opus (3× multiplier) or o1 can exhaust monthly premium request quotas before mid-month. The 0× base model advantage disappears if GPT-4o is deprecated, repriced, or policy-restricted at your organization.
+**Copilot overages spike with premium model adoption.** Shifting even a fraction of routine usage to Claude Opus (3× multiplier) or o1 can exhaust quotas before mid-month. The 0× base model advantage disappears if GPT-4o is deprecated, repriced, or policy-restricted.
 
-**Managing two billing models adds overhead.** Hybrid setups (Copilot seat + Claude API) require separate cost dashboards, budget owners, and approval workflows. For teams below ~10 developers or shops running purely agentic workloads, the operational cost of dual vendors may exceed any savings.
+**Managing two billing models adds overhead.** Hybrid setups need separate cost dashboards, budget owners, and approval workflows. For teams under ~10 developers or purely agentic shops, the dual-vendor overhead can exceed any savings.
 
-**Token-level billing is unpredictable for spiky teams.** Claude API costs scale with codebase size and conversation length, not headcount. A single large refactor or multi-hour agentic session can cost $50–100 alone. Teams without per-developer spend limits risk unexpected monthly totals.
+**Token-level billing is unpredictable for spiky teams.** Claude API costs scale with codebase size and conversation length, not headcount. A single large refactor or multi-hour session can cost $50–100. Without per-developer spend limits, monthly totals are hard to forecast.
 
-**Idle seat cost is unavoidable with Copilot.** Developers on leave, onboarding, or working in non-IDE contexts still consume seat fees. Claude API, which scales to zero when idle, is more economical for contractors or teams with variable active developer counts.
+**Idle seat cost is unavoidable with Copilot.** Developers on leave, onboarding, or in non-IDE contexts still consume seat fees. Claude API scales to zero when idle — better for contractors or variable-headcount teams.
 
 ## Related
 

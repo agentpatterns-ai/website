@@ -22,7 +22,7 @@ aliases:
 
 ## Enable OTel on Claude Code
 
-Claude Code ships native OTel support. Set one env var to turn it on, then configure where data goes.
+Claude Code ships native OTel support — one env var enables it, then configure the exporter.
 
 ```bash
 # Minimum: enable telemetry
@@ -38,7 +38,7 @@ export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 ```
 
-For faster feedback during setup, reduce export intervals:
+For faster setup feedback, reduce export intervals:
 
 ```bash
 export OTEL_METRIC_EXPORT_INTERVAL=10000   # 10 s (default: 60 000 ms)
@@ -49,7 +49,7 @@ Reset before production — short intervals add overhead.
 
 ### Lock telemetry org-wide via managed settings
 
-Use the [managed settings file](https://code.claude.com/docs/en/settings#settings-files) (higher precedence than user config, distributable via MDM):
+Use the [managed settings file](https://code.claude.com/docs/en/settings#settings-files) (higher precedence than user config, MDM-distributable):
 
 ```json
 {
@@ -91,40 +91,40 @@ All carry: `session.id`, `user.account_uuid`, `organization.id`, `user.email`, `
 | `claude_code.tool_decision` | Tool permission decided — includes `tool_name`, `decision`, `source` |
 | `claude_code.tool_result` | Tool finishes — includes `success`, `duration_ms`, `decision_source` |
 
-All events in a prompt cycle share a `prompt.id` (UUID v4). Excluded from metrics (unbounded cardinality) — event-level queries only.
+All events in a prompt cycle share a `prompt.id` (UUID v4), excluded from metrics (unbounded cardinality) — event-level queries only.
 
 ## Cost Dashboards
 
-`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog — the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) note Prometheus suits time-series aggregations while columnar stores handle distinct-count queries. Cost values are approximations — use the billing console for authoritative figures.
+`claude_code.cost.usage` supports per-user (`user.account_uuid`), per-team (`OTEL_RESOURCE_ATTRIBUTES="team.id=platform"`), and per-model attribution. For unique-user counts, prefer ClickHouse or Datadog — the [official monitoring docs](https://code.claude.com/docs/en/monitoring-usage#backend-considerations) note Prometheus suits time-series aggregations while columnar stores handle distinct-counts. Values are approximations; reconcile against the billing console.
 
 ## Prometheus + Grafana Monitoring Stack
 
-The [claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide) ships a Docker Compose stack with OTel Collector, Prometheus, and Grafana pre-configured. Set `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_METRICS_EXPORTER=prometheus`, then use it as a starting point before integrating into an existing platform.
+The [claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide) ships a Docker Compose stack with OTel Collector, Prometheus, and Grafana pre-configured — a starting point before integrating into an existing platform.
 
 ## Compliance Audit Trail via Tool Decision Events
 
-`claude_code.tool_decision` records every tool permission decision: `tool_name`, `decision` (`accept`/`reject`), and `source` (`config` = allow/deny rule; `hook` = PreToolUse hook; `user_permanent` = standing permission). This answers "what tool ran, when, by whom, under what authorization" — no custom instrumentation required.
+`claude_code.tool_decision` records every tool permission decision: `tool_name`, `decision` (`accept`/`reject`), and `source` (`config` = allow/deny rule; `hook` = PreToolUse hook; `user_permanent` = standing permission). This answers "what tool ran, when, by whom, under what authorization" — no custom instrumentation needed.
 
-Pair with `tool_result` events (which carry `tool_parameters`) for full completeness; store in Elasticsearch, Loki, or ClickHouse. **Note**: `tool_parameters` may include secrets — configure your backend to redact it.
+Pair with `tool_result` events (which carry `tool_parameters`); store in Elasticsearch, Loki, or ClickHouse. `tool_parameters` may include secrets — configure backend redaction.
 
 ## LangSmith Trajectory Tracing for LangChain Agents
 
-LangSmith records each agent action as a trace entry with tool name, inputs, outputs, latency, and token counts. Retrieving traces and running parallel analysis agents over them to synthesize harness improvements is a natural automation loop on top of this data.
+[LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. Running parallel analysis agents over retrieved traces to synthesize harness improvements is a natural automation loop.
 
 ## Progress Files as Human-Readable Audit Trails
 
-OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../anti-patterns/objective-drift.md) via diffs; the [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance when drift appears.
+OTel traces are machine-readable. For human-readable trails that survive context resets, use the [trajectory logging pattern](trajectory-logging-progress-files.md): `claude-progress.txt` read at session start and written at end, with git commits providing a diff-linked trail. Watch for [goal drift](../anti-patterns/objective-drift.md) via diffs; the [post-compaction re-read protocol](../instructions/post-compaction-reread-protocol.md) restores compliance.
 
 ## Why It Works
 
-OTel's push-based model fits agent workloads because agents emit bursts of activity across many tool calls — a pull-based model (e.g., Prometheus scraping) risks missing short-lived sessions. `prompt.id` is necessary because a single prompt triggers dozens of API calls; without it, tracing a cost spike post-hoc is infeasible. Structured audit trails let teams query by authorization source without parsing free text.
+OTel's push-based model fits agent workloads: agents emit bursts of activity across many tool calls, so pull-based scraping risks missing short-lived sessions. `prompt.id` is necessary because a single prompt triggers dozens of API calls; without it, tracing a cost spike post-hoc is infeasible. Structured audit trails let teams query by authorization source without parsing free text.
 
 ## When This Backfires
 
-- **Label cardinality explosion**: Per-request identifiers as metric labels create unbounded time series. `prompt.id` is excluded from metrics for this reason — apply the same discipline to custom `OTEL_RESOURCE_ATTRIBUTES`.
-- **Secrets in tool parameters**: `tool_parameters` on `tool_result` events may include credentials. Without backend redaction, `OTEL_LOG_TOOL_DETAILS=1` leaks secrets into your telemetry store.
-- **Context loss across agent boundaries**: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands rather than end-to-end traces.
-- **Cost approximations masquerade as billing data**: `claude_code.cost.usage` values are estimates — chargebacks built on metric values drift from actual invoices; reconcile against the billing console.
+- **Label cardinality explosion**: per-request IDs as metric labels create unbounded time series. `prompt.id` is excluded from metrics for this reason — apply the same discipline to custom `OTEL_RESOURCE_ATTRIBUTES`.
+- **Secrets in tool parameters**: `tool_parameters` on `tool_result` events may include credentials. Without backend redaction, `OTEL_LOG_TOOL_DETAILS=1` leaks secrets.
+- **Context loss across agent boundaries**: `TRACEPARENT` propagates only to direct subprocesses. Agents communicating via queues, webhooks, or separate processes produce data islands, not end-to-end traces.
+- **Cost approximations as billing data**: `claude_code.cost.usage` values are estimates — chargebacks built on them drift from actual invoices.
 
 ## Key Takeaways
 
@@ -139,6 +139,7 @@ OTel's push-based model fits agent workloads because agents emit bursts of activ
 - [OpenTelemetry for Agent Observability](../standards/opentelemetry-agent-observability.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Agent Debugging](agent-debugging.md)
+- [Agent Debug Log Panel](agent-debug-log-panel.md)
 - [Circuit Breakers for Agent Loops](circuit-breakers.md)
 - [Loop Detection](loop-detection.md)
 - [Event Sourcing for Agents](event-sourcing-for-agents.md)

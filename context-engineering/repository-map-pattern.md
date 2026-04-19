@@ -17,7 +17,7 @@ tags:
 
 ## The Orientation Problem
 
-When an agent encounters a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
+In a large codebase, directory listings, file samples, and keyword greps waste tokens on low-signal content. The agent needs to know which functions exist, which classes matter, and how they connect — not implementation details.
 
 The repository map pattern builds a weighted structural overview fitted to a token budget.
 
@@ -35,7 +35,7 @@ graph LR
 
 ### 1. Parse: Tree-Sitter AST Extraction
 
-Tree-sitter parses source files into abstract syntax trees and extracts structural elements: function signatures, class definitions, method names, and call signatures. Unlike full file reads, this captures *what exists* without loading implementation bodies.
+Tree-sitter parses source into ASTs and extracts structural elements: function signatures, class definitions, method names, and call signatures. Unlike full file reads, this captures *what exists* without loading implementation bodies.
 
 | Feature | ctags | tree-sitter |
 |---------|-------|-------------|
@@ -50,11 +50,11 @@ Tree-sitter parses source files into abstract syntax trees and extracts structur
 
 Source files become nodes in a directed graph; edges connect files sharing symbol references. PageRank with personalization scores each node: files being edited get higher weight, heavily-referenced symbols rank higher, and the result emphasizes task-relevance over sheer size.
 
-PageRank works here because importance propagates through the call graph: a function referenced by 20 other files scores higher than a private helper called once, and symbols referenced *by* important symbols gain transitively elevated scores. This property — which BM25 keyword ranking and recency-based weighting lack — means the top-ranked symbols surface the architectural spine of the codebase without any explicit query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
+PageRank works here because importance propagates through the call graph: a function referenced by 20 files outranks a helper called once, and symbols referenced *by* important symbols gain transitively elevated scores. BM25 and recency weighting lack this property — the top-ranked symbols surface the architectural spine without any query. ([Aider repo map docs](https://aider.chat/docs/repomap.html))
 
 ### 3. Fit: Binary Search to Token Budget
 
-The `get_ranked_tags_map()` method binary-searches for the maximum ranked tags that fit within `max_map_tokens` (default: 1,024), targeting within 15% of budget. With fewer files in context the map expands; with more files it shrinks — the agent always gets the most important symbols that fit.
+The `get_ranked_tags_map()` method binary-searches for the maximum ranked tags that fit within `max_map_tokens` (default: 1,024), targeting within 15% of budget. Fewer files in context expands the map; more files shrinks it — the agent always gets the most important symbols that fit.
 
 ([RepoMapper](https://github.com/pdavis68/RepoMapper))
 
@@ -94,7 +94,7 @@ Higher budget: more files with full type annotations. Lower budget: only the mos
 
 ## Benchmark Impact
 
-Aider's system achieved a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate *where* to make changes before attempting *what* to change. The SWE-bench post credits the repo map as part of the system but does not isolate its contribution in an ablation; the benchmark figure reflects the full Aider stack, not the map alone. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
+Aider's system achieved a then-SOTA 26.3% resolve rate on SWE-bench Lite, with 70.3% correct file identification. The map helps the agent locate *where* to change before deciding *what* to change. The SWE-bench post credits the repo map but does not isolate its contribution in an ablation; the figure reflects the full Aider stack. ([Aider SWE-bench blog post](https://aider.chat/2024/05/22/swe-bench-lite.html))
 
 ## Alternative Approaches
 
@@ -106,7 +106,7 @@ Codebase orientation strategies:
 | **Agentic search** (Claude Code) | On-demand Glob, Grep, Read | Frequent changes; freshness matters more than structure |
 | **Vector embeddings** (Cursor, Windsurf) | Semantic similarity search | Natural-language queries against code |
 
-Claude Code skips indexing entirely, using agentic search instead of a pre-built map — early RAG experiments showed agentic search performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
+Claude Code skips indexing and uses agentic search — early RAG experiments showed agentic search performed better. ([Vadim's blog: Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)) Cursor and Windsurf use vector stores with re-ranking. ([Mike Mason: AI Coding Agents in 2026](https://mikemason.ca/writing/ai-coding-agents-jan-2026/))
 
 ## MCP Server Availability
 

@@ -1,5 +1,5 @@
 ---
-title: "Wink: Coding Agent Misbehavior Classification and Correction"
+title: "Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors"
 description: "An async trajectory-observer system that classifies coding agent misbehaviors into three categories and injects targeted course-corrections without restarting."
 aliases:
   - trajectory observer
@@ -15,19 +15,19 @@ tags:
 
 ## Misbehavior Rate in Production Trajectories
 
-Production coding agent trajectories contain misbehaviors at a rate that makes manual intervention unscalable. Analysis of 10,000+ real trajectories from [arXiv:2602.17037](https://arxiv.org/abs/2602.17037) shows approximately 30% contain at least one misbehavior — normal production behavior requiring a systematic response.
+Production coding agent trajectories misbehave at a rate that makes manual intervention unscalable. Analysis of 10,000+ real trajectories ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) shows ~30% contain at least one misbehavior — normal production behavior, not a tail event.
 
 ## Three Misbehavior Categories
 
 Wink classifies misbehaviors into three mutually exclusive categories:
 
-**Specification Drift** — the agent departs from its task instructions. The agent continues executing, but its trajectory diverges from the stated goal. Common causes: ambiguous instructions, long-horizon context dilution, or the agent reprioritizing based on intermediate findings.
+**Specification Drift** — the trajectory diverges from the stated goal. Common causes: ambiguous instructions, long-horizon context dilution, or the agent reprioritizing based on intermediate findings.
 
-**Reasoning Problems** — the agent's internal logic fails. Examples: circular reasoning loops, incorrect inferences from tool outputs, and incorrect assumptions about the codebase state. The agent is not ignoring instructions; it is applying them incorrectly.
+**Reasoning Problems** — internal logic fails. Examples: circular reasoning loops, incorrect inferences from tool outputs, and wrong assumptions about codebase state. The agent applies instructions incorrectly rather than ignoring them.
 
 **Tool Call Failures** — incorrect tool invocations: wrong arguments, non-existent file paths, malformed API calls, or tool sequences that violate execution preconditions.
 
-Each category has distinct correction strategies. Injecting the same generic nudge for all three categories degrades performance; the classifier enables category-specific corrections.
+Each category requires a distinct correction strategy. A generic nudge applied to all three degrades performance; classification enables category-specific corrections.
 
 ## Async Intervention Architecture
 
@@ -46,7 +46,7 @@ graph TD
     H --> A
 ```
 
-The observer runs asynchronously — it watches the trajectory without blocking the agent's execution. When it detects a misbehavior signal, it classifies the event and injects a targeted course-correction into the agent's next inference call. The agent continues without a full restart.
+The observer runs asynchronously — it watches the trajectory without blocking execution. On a detected misbehavior signal, it classifies the event and injects a targeted course-correction into the agent's next inference call. The agent continues without a full restart.
 
 Unlike synchronous guardrails that block execution, async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
 
@@ -68,32 +68,32 @@ Three observable signals trigger the observer:
 2. **Contradiction signals** — the agent's stated reasoning contradicts a tool output it received in the same session
 3. **Precondition violations** — a tool call references a resource (file path, API endpoint, variable) that does not exist or has not yet been created
 
-These signals are detectable from the tool call log and conversation history without access to model internals.
+These signals are detectable from the tool call log and conversation history without access to model internals. Training-time approaches such as Agent-R ([arXiv:2501.11425](https://arxiv.org/abs/2501.11425)) teach agents to self-reflect and recover internally; trajectory observation is the runtime complement when the model will not self-correct.
 
 ## Deployment Implication
 
-The 30% misbehavior rate means every production agent deployment needs a trajectory observer. Without one, a third of runs silently degrade.
-
-The minimum viable observer:
+At a 30% baseline misbehavior rate, a production agent without an observer silently degrades on roughly a third of runs. The minimum viable observer:
 
 - Records each tool call and its arguments
 - Detects repetition patterns (same tool + args appearing 3+ times without a successful result)
-- Detects precondition violations (file read before file creation in the same session)
-- Injects a single corrective message when triggered; escalates to human when repeated interventions fail
+- Detects precondition violations (e.g., file read before file creation in the same session)
+- Injects a single corrective message when triggered; escalates to human on repeated failure
 
 ## Why It Works
 
-Category-specific corrections target the actual failure mode rather than issuing a generic nudge. The Wink taxonomy was constructed bottom-up from 10,000+ production trajectories and developer feedback to ensure construct validity — each category maps to a distinct correction strategy. A Specification Drift correction re-anchors the agent to the original task; a Tool Call Failure correction changes the retrieval or invocation strategy; a Reasoning Problem correction supplies the missing inference step. Applying the wrong correction type (e.g., re-anchoring an agent with a tool invocation error) adds context noise without addressing the root cause.
+Category-specific corrections target the actual failure mode rather than issuing a generic nudge. The Wink taxonomy was constructed bottom-up from 10,000+ production trajectories and developer feedback — each category maps to a distinct correction strategy. A Specification Drift correction re-anchors the agent to the original task; a Tool Call Failure correction changes the retrieval or invocation strategy; a Reasoning Problem correction supplies the missing inference step. Applying the wrong correction type (e.g., re-anchoring an agent with a tool invocation error) adds context noise without addressing the root cause.
 
 ## When This Backfires
 
 Async injection does not guarantee recovery. The Wink A/B test ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) documents these non-recovery patterns:
 
-- **Agent ignores the correction** (37% of non-recovered sessions) — the agent processes the injected message but continues on the same trajectory, often because the correction arrives too late in a long context or conflicts with strong prior context.
-- **Premature termination** (22%) — the agent exits early after receiving a correction, treating it as a signal that the task is unresolvable rather than as guidance.
-- **Mechanical failures** (19%) — IDE, tool, or environment errors prevent the correction from having any effect regardless of content.
-- **Novel failure modes** — the classifier's training distribution does not cover all production misbehaviors; out-of-distribution events get misclassified and receive the wrong correction type.
-- **Classification latency** — the async observer adds an inference step; for short-running agents this overhead can exceed the recovery benefit.
+- **Agent ignores the correction** (37% of non-recovered sessions) — the injected message is processed but the trajectory continues unchanged, often because the correction arrives too late or conflicts with strong prior context.
+- **Premature termination** (22%) — the agent exits early, treating the correction as a signal that the task is unresolvable.
+- **Mechanical failures** (19%) — IDE, tool, or environment errors prevent the correction from taking effect.
+- **Novel failure modes** — out-of-distribution events get misclassified and receive the wrong correction type.
+- **Classification latency** — the observer adds an inference step; for short-running agents this overhead can exceed the recovery benefit.
+
+The figures above come from Meta's internal VSCode agent traffic and may not transfer to other platforms or models without re-calibration.
 
 ## Example
 
@@ -122,16 +122,8 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md)
-- [Agent Backpressure](agent-backpressure.md)
 - [Steering Running Agents](steering-running-agents.md)
 - [Agent Loop Middleware](agent-loop-middleware.md)
-- [Harness Engineering](harness-engineering.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Convergence Detection](convergence-detection.md)
 - [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Rollback-First Design](rollback-first-design.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)
+- [Convergence Detection](convergence-detection.md)
+- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)

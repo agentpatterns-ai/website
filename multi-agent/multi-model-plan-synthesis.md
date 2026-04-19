@@ -99,6 +99,16 @@ Research on LLM ensembles for software architecture decisions confirms that comb
 
 Not warranted for routine well-defined tasks with strong single-model baselines.
 
+## When This Backfires
+
+The strongest case against this pattern: for most tasks, a single capable planner combined with fast iteration exposes architectural errors earlier and more cheaply than any amount of pre-implementation synthesis. Specific conditions under which the pattern underperforms:
+
+- **Synthesizer bias dominates.** The synthesis model anchors on its own perspective and silently downweights the other plans, producing a hybrid that mostly reflects a single training distribution while inheriting coordination overhead. This failure mode is hard to detect from the synthesis output alone.
+- **Decision paralysis on disagreements.** When models disagree on many decisions, the "tradeoff review" step expands into an open-ended architecture debate. Teams stall waiting for human adjudication on questions a prototype would answer in an hour.
+- **Cheap-to-revert tasks.** For greenfield work where architectural pivots are inexpensive (internal tools, early prototypes, throwaway spikes), delayed implementation costs more than any planning-error it might prevent.
+- **Tight model correlation.** Frontier models trained on overlapping corpora increasingly converge on similar architectural defaults. When plans are near-duplicates, the synthesis step adds overhead without adding diversity signal.
+- **Well-defined problems with canonical answers.** For tasks with a dominant community solution (standard CRUD app, standard CI pipeline), all models tend to converge on the canonical answer. The synthesis step is pure overhead.
+
 ## Key Takeaways
 
 - Different frontier models have different training distributions and therefore different architectural biases — independent plans expose those biases

@@ -16,7 +16,7 @@ tags:
 
 ## Raw Commands Waste Context
 
-When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Scripts that pre-filter at the source reduce that expenditure.
+When an agent runs `kubectl get pods`, it receives hundreds of lines for a production cluster but may need only pod names and states. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool output as a direct context expenditure — the agent processes everything returned, useful or not. Anthropic reports a related pattern where [executing code that filters MCP tool output](https://www.anthropic.com/engineering/code-execution-with-mcp) before returning it to the model cut a representative workload from 150,000 to 2,000 tokens. Scripts that pre-filter at the source reduce that expenditure.
 
 ## The Pattern
 
@@ -43,19 +43,16 @@ Return structured output (JSON or concise text) when possible. Structured output
 
 Scripts as agent tools are most effective when:
 
-**Log queries.** `grep` and `awk` pipelines that extract error counts, specific log lines, or time-windowed summaries from log files — rather than streaming raw logs.
-
-**Database lookups.** Queries that return specific records or aggregates, not table dumps. An agent checking order status should get `"ORDER-4821: shipped 2026-03-07"`, not all columns from all joined tables.
-
-**API status checks.** Scripts that call an API and return a single status field or a formatted summary, not the full JSON response.
-
-**Cloud resource inspection.** Scripts that query a cloud provider and return resource names, states, and anomalies — not raw API output with timestamps and metadata.
+- **Log queries.** `grep` and `awk` pipelines that extract error counts or time-windowed summaries rather than streaming raw logs.
+- **Database lookups.** Queries that return specific records or aggregates, not table dumps — `"ORDER-4821: shipped 2026-03-07"` rather than all joined columns.
+- **API status checks.** Scripts that return a single status field or formatted summary, not the full JSON response.
+- **Cloud resource inspection.** Scripts that return resource names, states, and anomalies — not raw API output with timestamps and metadata.
 
 ## Abstraction and Access Control
 
-Scripts decouple the agent's interface from the underlying system. If a Kubernetes cluster migrates to a different orchestrator, the script changes — the agent's tool interface does not. Particularly valuable in workflows that run repeatedly.
+Scripts decouple the agent's interface from the underlying system. If a Kubernetes cluster migrates to a different orchestrator, the script changes — the tool interface does not.
 
-Scripts also enforce read-only access as a side effect: an agent using a status script cannot mutate the system because the script exposes no write operations.
+Scripts also enforce read-only access as a side effect: a status script exposes no write operations, so the agent cannot mutate the system through it.
 
 ## Design Checklist
 
@@ -69,7 +66,7 @@ When writing a CLI script for agent consumption:
 
 ## Tight Feedback Loops: Agents Writing and Iterating on Scripts
 
-A complementary pattern is agents creating bash scripts as the development artifact and iterating through a write-execute-debug cycle. Bash offers a short feedback loop for agents: zero startup time, no compilation step, and error output in the same terminal context the agent already occupies.
+A complementary pattern is agents authoring bash scripts and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal context the agent already occupies.
 
 ### The Write-Execute-Debug Cycle
 
@@ -82,11 +79,11 @@ graph TD
     E --> A
 ```
 
-Each iteration costs seconds, not minutes — compiled languages add a build step and more context consumption per cycle.
+Each iteration costs seconds rather than the build-step overhead of compiled languages.
 
 ### Making the Cycle Effective
 
-**Specify input/output signatures.** Give the agent explicit contracts for what the script receives and what it should produce:
+**Specify input/output signatures.** Give the agent explicit contracts:
 
 ```text
 Write a bash script that:
@@ -95,31 +92,25 @@ Write a bash script that:
 - Exit 1 with a message if the directory does not exist
 ```
 
-Clear signatures reduce iteration rounds because the agent's first attempt is closer to correct.
+Clear signatures reduce iteration rounds because the first attempt is closer to correct.
 
-**Keep scripts modular.** A monolithic script is harder to debug when one part fails. Design the architecture yourself and delegate individual components to the agent. Each script should fit within the agent's context window.
+**Keep scripts modular.** Monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent.
 
-**Document edge cases during iteration.** After the script works, have the agent add comments on edge cases and platform assumptions (GNU vs BSD tools) as context for future modifications.
+**Document edge cases after iteration.** Once the script works, have the agent add comments on platform assumptions (GNU vs BSD tools) for future modifications.
 
 ### When This Pattern Applies
 
-The write-execute-debug cycle with bash is most effective for:
-
-- **Data processing pipelines** — transforming, filtering, and aggregating files or API responses
-- **Build and deployment automation** — scripts that orchestrate existing tools
-- **Exploratory prototyping** — testing an approach before committing to a compiled language
-
-Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
+Best for data processing pipelines, build and deployment automation, and exploratory prototyping. Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
 
 ## When This Backfires
 
-**Script maintenance burden.** Wrapper scripts hard-code assumptions about command output format. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or produces wrong output. Every wrapper is a synchronization point between the agent's interface and the system it queries.
+**Script maintenance burden.** Wrappers hard-code assumptions about command output. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or produces wrong output. Every wrapper is a synchronization point.
 
-**Over-filtering hides signals.** A script that filters to "only errors" will miss warnings that precede errors, or status transitions the agent needs to make a correct decision. Pre-filtering is a bet that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
+**Over-filtering hides signals.** A script that filters to "only errors" will miss warnings that precede errors or status transitions the agent needs. Pre-filtering bets that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
 
-**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper script adds a layer to the investigation. The agent saw filtered output; reconstructing what the raw command returned requires running it manually.
+**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper adds a layer to the investigation. Reconstructing what the raw command returned requires running it manually.
 
-These conditions most often arise in **novel incident types** (new failure modes the script wasn't written for), **rapidly evolving systems** (CLI output changes frequently), and **exploratory tasks** (the agent needs broad context, not a narrow summary).
+These conditions most often arise in novel incident types, rapidly evolving CLIs, and exploratory tasks where broad context beats a narrow summary.
 
 ## Example
 
@@ -164,16 +155,21 @@ It then calls `pod_errors("payments-worker-7f8b9")` and receives:
 
 Two tool calls, two concise responses. The agent identifies the root cause (database connection failure) without parsing full pod tables or scrolling through log streams.
 
+## Key Takeaways
+
+- Raw CLI output is a direct context expenditure — wrapper scripts that pre-filter at the source reduce that cost.
+- Return structured, decision-ready output (JSON or concise text); bound the output and include a clear empty state.
+- Scripts double as an abstraction layer and enforce read-only access as a side effect.
+- Bash enables a tight write-execute-debug cycle: specify input/output signatures, keep scripts modular, document edge cases after iteration.
+- Wrappers backfire when the underlying CLI schema changes, when over-filtering hides signals, or during exploratory tasks that need broad context.
+
 ## Related
 
-- [PostToolUse Hook for BSD/GNU Tool Miss Detection](posttooluse-bsd-gnu-detection.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Tool Selection Guidance](tool-description-quality.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
+- [PostToolUse Hook for BSD/GNU Tool Miss Detection](posttooluse-bsd-gnu-detection.md)
+- [Tool Selection Guidance](tool-description-quality.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Test-Driven Agent Development](../verification/tdd-agent-development.md)
-- [Loop Detection](../observability/loop-detection.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

@@ -64,10 +64,6 @@ tools:
 
 Worktrees provide hard isolation for file-writing agents — the agent operates in a separate working directory and cannot affect the main branch or other agents' workspaces. See [Worktree Isolation](../workflows/worktree-isolation.md).
 
-## Reasoning by Analogy
-
-Apply the same reasoning used in OAuth scopes and Unix file permissions: request only what the operation requires. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
-
 ## Auditing Permissions Before Deployment
 
 Audit tools and data sources exposed to an agent before deployment. Questions:
@@ -154,6 +150,8 @@ Each agent's worst-case injection outcome is bounded to its operation. A prompt 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
+- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
+- [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Protecting Sensitive Files from Agent Context Access](protecting-sensitive-files.md)

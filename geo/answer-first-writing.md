@@ -19,7 +19,7 @@ tags:
 
 RAG systems score passages by cosine similarity between a query embedding and a chunk embedding. The chunk is typically 256–512 tokens. When a section opens with a direct answer, the chunk's dominant semantic signal is that answer — strongly similar to queries asking about that topic.
 
-When a section opens with context, caveats, or throat-clearing, the embedding averages across the preamble and the eventual answer, producing a weaker signal for any single query. [Weaviate's chunking research](https://weaviate.io/blog/chunking-strategies-for-rag) describes this as "noisy, averaged embeddings" that reduce retrieval precision.
+When a section opens with context, caveats, or throat-clearing, the embedding averages across the preamble and the eventual answer, producing a weaker signal for any single query. [Weaviate's chunking research](https://weaviate.io/blog/chunking-strategies-for-rag) describes this as "noisy, averaged embeddings" that reduce retrieval precision, and [Anthropic's Contextual Retrieval study](https://www.anthropic.com/news/contextual-retrieval) showed that adjusting the text embedded at the start of each chunk reduced retrieval failure by up to 49% — direct evidence that chunk-opening content dominates retrieval quality.
 
 ## The 40–60 Word Pattern
 

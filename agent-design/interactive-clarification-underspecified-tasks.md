@@ -13,7 +13,7 @@ tags:
 
 ## The Problem: Agents Assume Instead of Asking
 
-When given incomplete instructions, agents fill gaps with assumptions and produce output that looks correct but solves the wrong problem. This is [assumption propagation](../anti-patterns/assumption-propagation.md) — the default behavior across models.
+When given incomplete instructions, agents fill gaps with assumptions and produce output that looks correct but solves the wrong problem. This is [assumption propagation](../anti-patterns/assumption-propagation.md) — the default behavior across models. Knowing *when* to ask is itself an open research problem: estimating the utility of a clarifying question requires reasoning over the space of possible user intents, not just the immediate input ([Zhang & Choi, NAACL 2025](https://arxiv.org/abs/2311.09469)).
 
 The Ambig-SWE benchmark tested this by creating underspecified variants of real GitHub issues. Interactivity improved resolution rates by up to 74% on underspecified tasks, but models consistently struggled to detect underspecification without explicit prompting ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 

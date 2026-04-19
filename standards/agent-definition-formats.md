@@ -1,6 +1,6 @@
 ---
 title: "Agent Definition Formats: How Tools Define Agent Behavior"
-description: "Agent definitions control system prompt, tool access, model selection, and permissions — the format varies by tool but the concerns are the same across all"
+description: "Agent definitions control system prompt, tool access, model selection, and permissions — the format varies by tool but the concerns are the same across tools."
 tags:
   - agent-design
   - tool-agnostic
@@ -106,6 +106,4 @@ Structured agent definition files add overhead that isn't always justified. Thre
 - [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [AGENTS.md: A README for AI Coding Agents](agents-md.md)
-- [Tool Calling Schema Standards](tool-calling-schema-standards.md)
-- [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)

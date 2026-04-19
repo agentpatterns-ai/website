@@ -1,5 +1,5 @@
 ---
-title: "Initiatives and Community: Tracking Agentic Engineering"
+title: "Initiatives and Community: Tracking the Agentic Engineering Landscape"
 description: "A curated map of active initiatives, communities, and learning resources for practitioners tracking the rapidly evolving agentic engineering field."
 tags:
   - human-factors
@@ -11,15 +11,9 @@ tags:
 
 > Agentic engineering has an active community producing standards (agents.md, agentskills.io), trend analysis (o16g.com), and learning resources — tracking these initiatives is how practitioners stay ahead of a field that changes faster than any single source can cover.
 
-## Why This Exists
-
-New patterns, tools, and governance frameworks emerge weekly in the agentic engineering space — faster than any single practitioner can track. The organizations and resources below produce consistent signal worth following.
-
-A project's internal source list curates research inputs for content production. The resources here serve a different purpose: helping practitioners stay current with where the field is heading.
-
 ## Why Community Tracking Works
 
-Release notes document what shipped; communities surface what is being designed. The mechanism: standards bodies and open-source repositories expose architectural decisions weeks to months before they stabilize in tooling. A practitioner reading agents.md discussions when the spec was a draft understood AGENTS.md file conventions before tool support was widespread — lowering adoption cost when support did land. The same dynamic applies to governance: o16g tracks organizational response patterns to AI capability jumps, which precede enterprise tooling mandates by months. Courses and practitioners on social channels function as a distributed sensing layer — they encounter capability changes in daily work and report friction or breakthroughs faster than any centralized source can.
+New patterns, tools, and governance frameworks emerge weekly — faster than any single practitioner can track. Release notes document what shipped; communities surface what is being designed. Standards bodies and open-source repositories expose architectural decisions weeks to months before they stabilize in tooling. Practitioners reading agents.md discussions when the spec was a draft understood AGENTS.md conventions before tool support was widespread, lowering adoption cost when support landed. The same dynamic applies to governance: o16g tracks organizational response patterns to AI capability jumps, which precede enterprise tooling mandates by months. Courses and practitioners on social channels act as a distributed sensing layer — encountering capability changes in daily work and reporting friction or breakthroughs faster than any centralized source can.
 
 ## Standards and Open Protocols
 

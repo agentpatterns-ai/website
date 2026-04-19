@@ -68,23 +68,23 @@ Mitigations:
 
 ## When This Backfires
 
-Hill-climbing finds a local optimum, not a global one. If the baseline sits in a poor region of configuration space, iterating converges to the nearest local peak rather than the best achievable configuration. Three further conditions degrade the loop:
+Hill-climbing finds a local optimum, not a global one — if the baseline sits in a poor region of configuration space, iteration converges to the nearest local peak. Three further conditions degrade the loop:
 
-- **Benchmark acquisition cost exceeds benefit**: Building a graded task suite takes significant effort. For narrow-scope agents, ad-hoc prompt editing reaches good-enough performance faster.
-- **Component interdependencies**: Single-variable iteration assumes harness components are approximately orthogonal. When system-prompt phrasing, tool descriptions, and reasoning budget interact — as they often do for tool-call accuracy — changing one variable masks or amplifies effects of another.
-- **Benchmark-to-production drift**: The eval suite is a snapshot. If production workload distribution shifts after tuning, the optimized configuration may degrade on new task types. Periodic eval rotation (see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md)) is the mitigation.
+- **Benchmark cost exceeds benefit**: Building a graded task suite takes significant effort. For narrow-scope agents, ad-hoc prompt editing reaches good-enough performance faster.
+- **Component interdependencies**: Single-variable iteration assumes harness components are approximately orthogonal. When prompt phrasing, tool descriptions, and reasoning budget interact, changing one variable masks or amplifies effects of another.
+- **Benchmark-to-production drift**: The eval suite is a snapshot. If production workload shifts after tuning, the optimized configuration may degrade on new task types — see [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md).
 
 ## One Change at a Time
 
 The hill-climbing loop depends on isolating variables. Changing system prompt wording and tool descriptions in the same iteration conflates two signals — you cannot attribute a score delta to either change specifically.
 
-Single-variable changes make rollback trivial: reverting is unambiguous. Multi-variable changes require untangling which component caused the regression. Same principle as [incremental verification](../verification/incremental-verification.md): small, checkpointed steps, each independently reversible.
+Single-variable changes make rollback unambiguous; multi-variable changes require untangling which component caused the regression. Same principle as [incremental verification](../verification/incremental-verification.md): small, checkpointed steps, each independently reversible.
 
 ## Relationship to Continuous Improvement
 
-Hill-climbing is an eval-mediated version of the [continuous agent improvement](../workflows/continuous-agent-improvement.md) loop — that loop uses human observation to identify failure patterns; hill-climbing replaces observation with measurement. Use continuous improvement to identify *which component* to target, then hill-climbing to find the best configuration.
+Hill-climbing is an eval-mediated version of the [continuous agent improvement](../workflows/continuous-agent-improvement.md) loop — that loop uses human observation; hill-climbing substitutes measurement. Use continuous improvement to identify *which component* to target, then hill-climbing to find the best configuration.
 
-The [agentic flywheel](agentic-flywheel.md) extends this further: agents propose candidate changes automatically, with the eval loop as the validation gate.
+The [agentic flywheel](agentic-flywheel.md) extends this: agents propose candidate changes automatically, with the eval loop as the validation gate.
 
 ## Key Takeaways
 

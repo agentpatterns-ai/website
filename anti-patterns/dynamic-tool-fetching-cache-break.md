@@ -26,7 +26,7 @@ graph LR
     style C fill:#fbc02d,color:#000
 ```
 
-Cached tokens cost **10x less** than uncached (Claude Sonnet: $0.30/MTok cached vs $3/MTok uncached). A single cache break per turn erases all savings from fewer tools.
+Cached tokens cost **10x less** than uncached — Claude Sonnet 4's cache-read rate is $0.30/MTok against a $3/MTok base input ([Anthropic prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). A single cache break per turn erases all savings from fewer tools.
 
 | Approach | Tools in context | Cache hit rate | Effective cost |
 |---|---|---|---|

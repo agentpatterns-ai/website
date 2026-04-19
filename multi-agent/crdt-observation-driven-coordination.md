@@ -1,6 +1,6 @@
 ---
 title: "Observation-Driven Coordination: CRDT-Based Parallel Agent"
-description: "CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts, but parallel speedup depends entirely on task"
+description: "CRDT-based shared state lets parallel coding agents converge without locks or merge conflicts, but yields speedup only on truly independent subtasks."
 tags:
   - agent-design
   - cost-performance
@@ -16,9 +16,7 @@ aliases:
 
 ## The Coordination Overhead Problem
 
-In the CodeCRDT study, multi-agent code generation systems failed to realize expected parallel speedups because coordination overhead consumed the gains. When agents must explicitly communicate to share state — passing messages, acquiring locks, resolving conflicts — the coordination cost can exceed the time saved by parallelism.
-
-[arXiv:2510.18893](https://arxiv.org/abs/2510.18893) (CodeCRDT) evaluates this across 600 trials and quantifies when parallelism helps and when it hurts.
+Multi-agent code generation systems often fail to realize expected parallel speedups because coordination overhead consumes the gains. When agents must explicitly communicate to share state — passing messages, acquiring locks, resolving conflicts — the coordination cost can exceed the time saved by parallelism. [arXiv:2510.18893](https://arxiv.org/abs/2510.18893) (CodeCRDT) evaluates this across 600 trials.
 
 ## CRDT-Based Shared State
 
@@ -33,7 +31,7 @@ In the coding context:
 
 ## Key Results from 600 Trials
 
-**Zero merge failures** — CRDT convergence guarantees that concurrent agent updates always produce a structurally consistent combined state. Message-passing systems accumulate merge failures as concurrency increases.
+**Zero merge failures** — CRDT convergence guarantees concurrent agent updates produce a structurally consistent combined state. Message-passing systems accumulate merge failures as concurrency rises.
 
 **Semantic conflict rate: 5–10%** — structural conflicts (two agents edit the same line) are rare and resolved by the CRDT. Semantic conflicts (two agents make structurally compatible but functionally incompatible changes) occur in 5–10% of parallel sessions and require resolution that the CRDT cannot automate.
 
@@ -42,7 +40,7 @@ In the coding context:
 - Up to **21.1% speedup** on tasks with parallelizable subtasks
 - Up to **39.4% slowdown** on tightly-coupled tasks
 
-The slowdown occurs because parallel agents on interdependent code generate more semantic conflicts and rework than a serial agent that processes dependencies in order.
+Parallel agents on interdependent code generate more semantic conflicts and rework than a serial agent processing dependencies in order.
 
 ## The Task Structure Decision
 
@@ -55,7 +53,7 @@ graph TD
     D --> F[No coordination overhead]
 ```
 
-The routing decision is the critical design choice. Parallelizing tasks with tight internal dependencies produces worse outcomes than serial execution — more coordination overhead, more semantic conflicts, more rework.
+Parallelizing tasks with tight internal dependencies produces worse outcomes than serial execution — more semantic conflicts, more rework.
 
 Signals of parallelizable structure:
 
@@ -78,7 +76,18 @@ The study compares CRDT-based observation with explicit message passing between 
 | Explicit message passing | High | Yes | Eliminated by overhead |
 | CRDT observation | Near-zero | None (structural) | Up to 21.1% |
 
-Message passing requires each agent to serialize state, send it to peers, wait for acknowledgment, and process incoming messages — overhead that accumulates with agent count. CRDT updates propagate passively as a side effect of normal execution.
+Message passing requires each agent to serialize state, send it to peers, wait for acknowledgment, and process replies — overhead that grows with agent count. CRDT updates propagate as a side effect of normal execution.
+
+## When This Backfires
+
+The 21.1% speedup is a ceiling, not an average. Several conditions flip the trade-off:
+
+- **Implementation cost outweighs the gain** — integrating a CRDT runtime (state representation, observation hooks, AST/file convergence rules) is non-trivial. If most tasks in a codebase have implicit coupling (shared types, config, naming), the parallelizable share may not amortize the build cost.
+- **Semantic conflict resolution is still bespoke** — the 5–10% semantic conflict rate forces a separate resolution layer; CRDTs eliminate structural merges, not the merge problem.
+- **Scaling beyond small fleets is unverified** — the [CodeCRDT paper](https://arxiv.org/abs/2510.18893) measures 5-agent stress tests; behavior at 10+ agents is not characterized.
+- **Generalization beyond the evaluated stack is open** — the study used TypeScript/React; transfer to typed compilers, generated code, or schema migrations is not established.
+
+Where the parallelizable task share is small, simpler patterns — orchestrator-worker on isolated worktrees, or serial execution — may produce more value than a CRDT-backed workspace.
 
 ## Implication for Architecture
 
@@ -141,10 +150,7 @@ class CodeAgent:
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
-- [LLM Map-Reduce](llm-map-reduce.md)
-- [Oracle Task Decomposition](oracle-task-decomposition.md)

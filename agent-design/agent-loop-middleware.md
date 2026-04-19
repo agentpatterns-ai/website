@@ -41,7 +41,7 @@ flowchart TD
 
 A post-loop safety net runs after the agent loop terminates. If the agent performed the step, the safety net is a no-op; otherwise it performs the step deterministically.
 
-The canonical example from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase:
+The canonical example comes from [Open SWE](https://github.com/langchain-ai/open-swe) — LangChain's open-source coding agent modeled on internal agents built independently by Stripe, Ramp, and Coinbase. Stripe's ["Minions" engineering post](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2) describes the same blueprint architecture, sequencing deterministic nodes around agentic loops:
 
 ```python
 # open_pr_if_needed — runs after the agent loop exits

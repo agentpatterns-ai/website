@@ -57,7 +57,7 @@ Rules extracted from feedback fall into two categories:
 | Developer accepts fix | Positive rule | Reinforce: flag this pattern in future reviews |
 | Developer dismisses comment | Suppression rule | Filter: do not flag this pattern in future reviews |
 
-Over time, suppression rules reduce false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent's behavior shifts toward the team's established conventions rather than the model's default priors — a narrowing that practitioners report as the system starting to "sound like" the team's senior reviewers.
+Over time, suppression rules reduce false positive rate. Positive rules sharpen detection of patterns the team cares about. The agent's behavior shifts toward the team's established conventions rather than the model's default priors. Cursor's aggregate data across 110,000+ repos that enabled learning shows [more than 44,000 rules generated](https://cursor.com/blog/bugbot-learning), with resolution rates climbing from 52% at general availability in July 2025 to near 80% by April 2026.
 
 ## Building This Pattern Without Bugbot
 

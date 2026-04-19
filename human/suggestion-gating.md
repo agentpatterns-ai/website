@@ -17,7 +17,7 @@ aliases:
 
 ## The Waste Problem
 
-JetBrains measured their completion pipeline end-to-end: only 31% of inferences produce a shown suggestion, and only 31% of those get accepted — roughly [10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust. The pattern mirrors the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) seen in AI code review: when signal-to-noise drops, developers begin ignoring the signal.
+JetBrains measured their completion pipeline: only 31% of inferences produce a shown suggestion, and 31% of those get accepted — [~10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust, mirroring the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) in AI code review: when signal-to-noise drops, developers ignore the signal.
 
 ## How Gating Works
 
@@ -33,11 +33,11 @@ flowchart LR
     F -->|High quality| S[Show to developer]
 ```
 
-**Trigger model** — decides whether to invoke the LLM at all. Suppresses inference when context signals indicate an unwanted completion (mid-word typing, rapid deletion, ambiguous scope).
+**Trigger model** — decides whether to invoke the LLM. Suppresses inference on signals of an unwanted completion (mid-word typing, rapid deletion, ambiguous scope).
 
 **Filter model** — evaluates the completion before display. Catches suggestions the LLM produced confidently but the developer would reject.
 
-Both are tiny. JetBrains' production filter compiles to [2.5 MB, predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
+JetBrains' production filter compiles to [2.5 MB and predicts in 1–2 ms](https://blog.jetbrains.com/ai/2025/03/ai-code-completion-less-is-more/), running locally with zero latency overhead.
 
 ## Production Evidence
 
@@ -59,7 +59,7 @@ Cursor trains the Tab model to avoid bad suggestions via [online reinforcement l
 
 ### GitHub Copilot: logistic regression trigger
 
-As of 2022, Copilot used a logistic regression model with 11 features to decide when to invoke inference ([Thakkar, 2022](https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals.html)). The 2022 reverse-engineering predates major Copilot architecture revisions; the feature set will differ in current releases.
+As of 2022, Copilot used a logistic regression with 11 features to decide when to invoke inference ([Thakkar, 2022](https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals.html)). The feature set will differ in current releases.
 
 ### GitHub NES: custom model suppression
 
@@ -82,15 +82,15 @@ Kotlin benefits more from post-generation filtering while PHP benefits more from
 
 ## The Perception Gap
 
-Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Higher interruption rates from ungated completions can widen this gap; reducing noise via gating is one lever for realigning perceived and actual productivity.
+Open-source developers perceived +20% productivity while producing −19% less ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Higher interruption rates from ungated completions widen this gap; gating is one lever for realigning perceived and actual productivity.
 
 ## Implications for Developers
 
 **Acceptance rate matters more than volume.** A tool showing 40 suggestions at 45% acceptance beats one showing 100 at 15%.
 
-**Configure aggressively.** GitHub Copilot and VS Code extensions expose completion sensitivity and trigger delay settings. If you routinely dismiss suggestions, raise thresholds before reaching for a different tool.
+**Configure aggressively.** Copilot and VS Code extensions expose sensitivity and trigger delay settings. If you routinely dismiss suggestions, raise thresholds before switching tools.
 
-**Context signals improve over time.** Cursor's RL-based Tab model trains directly on accept/reject history ([Cursor, 2024](https://cursor.com/blog/tab-rl)); tools using online learning get better at individual preference modeling as usage accumulates.
+**Context signals improve over time.** Cursor's RL-based Tab model trains on accept/reject history ([Cursor, 2024](https://cursor.com/blog/tab-rl)); tools using online learning get better at individual preference modeling as usage accumulates.
 
 ## Key Takeaways
 
@@ -100,13 +100,13 @@ Open-source developers perceived +20% productivity while producing −19% less (
 
 ## When This Backfires
 
-Gating classifiers trained on aggregate accept/reject data may not generalize well to every developer or context:
+Classifiers trained on aggregate accept/reject data may not generalize to every developer:
 
-- **Atypical coding patterns** — developers who work in narrow domains (e.g., embedded systems, novel DSLs) may have accept/reject patterns that diverge from the training distribution, causing a filter calibrated on the majority to suppress their highest-value completions.
-- **Exploratory sessions** — during low-familiarity work (learning a new framework, prototyping), a developer’s natural accept rate drops. A filter tuned to production accept rates may suppress at exactly the moment when completions are most valuable, forcing more manual typing when cognitive load is already high.
-- **Rapid style evolution** — as a developer changes habits (moving from verbose to terse code, adopting new idioms), a static or slow-updating filter lags behind. Suggestion volume may not recover to the useful level until the model observes enough new accept/reject signal to recalibrate.
+- **Atypical coding patterns** — narrow domains (embedded, novel DSLs) diverge from the training distribution, so a filter calibrated on the majority suppresses high-value completions.
+- **Exploratory sessions** — learning a framework or prototyping drops natural accept rate. A filter tuned to production rates suppresses exactly when completions are most valuable.
+- **Rapid style evolution** — as habits change (verbose to terse, new idioms), a slow-updating filter lags until it observes enough fresh signal to recalibrate.
 
-When gating degrades rather than improves DX, the fix is exposure controls: disable or loosen the filter, accumulate fresh data, then re-enable.
+When gating degrades DX, the fix is exposure controls: loosen the filter, accumulate fresh data, then re-enable.
 
 ## Related
 

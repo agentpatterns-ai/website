@@ -197,4 +197,7 @@ If the agent invents architecture or mislocates new code, your project instructi
 - [AGENTS.md Standard](../../standards/agents-md.md) — open standard for cross-tool agent project instructions
 - [Codebase Readiness for Agents](../../workflows/codebase-readiness.md) — agent-hostile vs agent-friendly code qualities
 - [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline this transition begins
+- [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — next module
+- [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — adds hooks and structured task definitions
+- [L3 → L5: Reaching Agent-First](level-3-to-5.md) — evals, validation gates, and agentic CI

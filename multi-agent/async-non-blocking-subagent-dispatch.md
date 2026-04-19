@@ -17,11 +17,11 @@ aliases:
 
 ## The Qualifying Condition
 
-Standard [fan-out patterns](sub-agents-fan-out.md) and [bounded batch dispatch](bounded-batch-dispatch.md) treat the orchestrator as a passive waiter: launch N agents, block until all return, synthesize results. When the orchestrator itself has productive work — planning next dispatch waves, processing partial results, managing cross-agent state — blocking wastes its execution budget.
+Standard [fan-out patterns](sub-agents-fan-out.md) and [bounded batch dispatch](bounded-batch-dispatch.md) treat the orchestrator as a passive waiter: launch N agents, block until all return, synthesize. When the orchestrator itself has productive work — planning next waves, processing partial results, managing cross-agent state — blocking wastes its execution budget.
 
-Async dispatch decouples orchestration from subagent lifecycle. The orchestrator dispatches work and continues its own processing loop, handling results as they arrive.
+Async dispatch decouples orchestration from subagent lifecycle. The orchestrator dispatches and continues its own loop, handling results as they arrive.
 
-**The condition matters.** When the orchestrator is purely a dispatch-and-synthesize node with no intermediate processing, async dispatch adds coordination complexity — task tracking, timeout detection, partial-result reconciliation — without throughput gain. The orchestrator just busy-waits or idle-polls instead of blocking cleanly. Anthropic's own [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) deliberately chose synchronous execution because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
+**The condition matters.** When the orchestrator is a pure dispatch-and-synthesize node with no intermediate work, async adds coordination complexity — task tracking, timeout detection, partial-result reconciliation — without throughput gain. The orchestrator busy-waits or idle-polls instead of blocking cleanly. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous execution because "asynchronicity adds challenges in result coordination, state consistency, and error propagation across the subagents."
 
 ## Blocking vs Non-Blocking Dispatch
 
@@ -53,7 +53,7 @@ sequenceDiagram
     end
 ```
 
-The difference is what the orchestrator does between dispatch and result collection. In blocking dispatch, it idles. In async dispatch, it performs productive work — planning, partial synthesis, state management, or dispatching additional tasks.
+The difference is what the orchestrator does between dispatch and result collection. Blocking idles; async dispatch performs productive work — planning, partial synthesis, state management, or further dispatch.
 
 ## The Continuation Pattern
 
@@ -77,10 +77,10 @@ Without backpressure, async dispatch degenerates into the ["bag of agents" anti-
 
 Blocking dispatch gets failure detection for free — if a subagent fails, the join point raises an error. Async dispatch requires explicit mechanisms:
 
-- **Timeout detection.** Background subagents that hang must be detected and cancelled. There is no implicit join to surface the timeout.
-- **Partial-progress reporting.** Claude Code v2.1.89 added [partial-progress reporting](https://code.claude.com/docs/en/changelog) for failed background subagents. Previously, failures could go undetected.
-- **Ghost agents.** Context compaction can make background subagents invisible, causing duplicate spawns. This was [fixed in Claude Code v2.1.83](https://code.claude.com/docs/en/changelog) but illustrates the class of bugs async dispatch introduces.
-- **Permission model.** Background subagents in Claude Code prompt for all tool permissions upfront. Once running, the subagent auto-denies anything not pre-approved. If a background subagent needs to ask a clarifying question, that tool call fails but the subagent continues without the answer ([source](https://code.claude.com/docs/en/sub-agents)).
+- **Timeout detection.** Hung background subagents must be detected and cancelled — no implicit join surfaces the timeout.
+- **Partial-progress reporting.** Claude Code v2.1.89 added [partial-progress reporting](https://code.claude.com/docs/en/changelog) for failed background subagents; previously failures could go undetected.
+- **Ghost agents.** Context compaction can make background subagents invisible, causing duplicate spawns. [Fixed in Claude Code v2.1.83](https://code.claude.com/docs/en/changelog), but illustrative of the bug class async introduces.
+- **Permission model.** Background subagents in Claude Code prompt for all tool permissions upfront; once running, they auto-deny anything not pre-approved. A clarifying-question tool call fails but the subagent continues without the answer ([source](https://code.claude.com/docs/en/sub-agents)).
 
 ## When Not to Use Async Dispatch
 

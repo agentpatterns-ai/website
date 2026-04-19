@@ -21,11 +21,15 @@ AI crawlers are not monolithic. Each major provider now operates separate bots f
 
 | Tier | Purpose | User-agents | robots.txt behaviour |
 |------|---------|-------------|----------------------|
-| **Tier 1 — User-facing retrieval** | Powers real-time citations in AI chat and search | `ChatGPT-User`, `OAI-SearchBot`, `Claude-User`, `Claude-SearchBot`, `PerplexityBot`, `Perplexity-User` | **Allow** — drives referral traffic and AI citations |
+| **Tier 1 — User-facing retrieval** | Powers real-time citations in AI chat and search | `ChatGPT-User`*, `OAI-SearchBot`, `Claude-User`, `Claude-SearchBot`, `PerplexityBot`†, `Perplexity-User`† | **Allow** — drives referral traffic and AI citations |
 | **Tier 2 — Training scrapers** | Ingests content for model training datasets | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Meta-ExternalAgent` | **Disallow** — no citation benefit; opts out of training data |
 | **Tier 3 — Non-compliant bots** | Crawlers documented to ignore robots.txt | `Bytespider` (ByteDance) | **CDN/WAF block** — robots.txt is ineffective |
 
 The tier distinction matters: blocking training crawlers without also blocking retrieval bots keeps your content eligible for AI search citations while opting out of model training datasets.
+
+\* As of OpenAI's December 2025 policy update, `ChatGPT-User` no longer respects robots.txt; disallow rules are ignored ([coverage](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/)).
+
+† Cloudflare documented Perplexity rotating user-agents and ASNs to bypass robots.txt ([August 2025 report](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/)). Use WAF for hard blocks.
 
 ## Decision Matrix
 
@@ -92,7 +96,8 @@ Sitemap: https://agentpatterns.ai/sitemap.xml
 robots.txt is **advisory, not enforceable**. Key nuances:
 
 - **Major providers comply**: OpenAI (GPTBot, OAI-SearchBot), Anthropic (ClaudeBot, Claude-SearchBot, Claude-User), and Google (Google-Extended) respect robots.txt directives.
-- **OpenAI caveat**: `ChatGPT-User` robots.txt compliance status is not documented consistently across OpenAI's crawler pages — verify against current [OpenAI crawler documentation](https://platform.openai.com/docs/bots) before relying on it. Only `GPTBot` and `OAI-SearchBot` are listed in OpenAI's main robots.txt guidance.
+- **ChatGPT-User exempt (Dec 2025)**: OpenAI's updated [crawler documentation](https://platform.openai.com/docs/bots) reclassified `ChatGPT-User` as a user-initiated agent and [removed its robots.txt compliance requirement](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/). Disallow rules for `ChatGPT-User` are now ignored; interactive ChatGPT browsing can only be blocked at the CDN/WAF layer.
+- **Perplexity stealth crawling documented**: [Cloudflare reported in August 2025](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) that Perplexity rotates user-agents and ASNs to evade blocks and has been observed ignoring robots.txt. Treat `PerplexityBot` and `Perplexity-User` allow-listing as directional only; use WAF rules for any hard block.
 - **Bytespider ignores it**: ByteDance's Bytespider is documented to not respect robots.txt — block at CDN/WAF level. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
 - **No legal enforcement**: robots.txt does not prevent crawling. It signals intent. Legal protection requires ToS, CFAA claims, or contractual agreements.
 - **EU AI Act alignment**: The EU regulatory framework encourages GPAI providers to document and respect publisher opt-out signals — robots.txt disallow for training crawlers is the de facto mechanism. Verify specific commitments against the published Code of Practice text as obligations evolve.
@@ -107,7 +112,7 @@ robots.txt is **advisory, not enforceable**. Key nuances:
 | Perplexity | *(PerplexityBot serves both)* | `PerplexityBot` | `Perplexity-User` |
 | Meta | `Meta-ExternalAgent` | `Meta-ExternalFetcher` | — |
 
-*ChatGPT-User — verify compliance status against current OpenAI crawler documentation.
+*ChatGPT-User — no longer bound by robots.txt as of OpenAI's December 2025 policy update; block at CDN/WAF if required.
 
 ## Why Allow Tier 1
 
@@ -121,7 +126,7 @@ Blocking all AI crawlers has a compounding cost:
 
 - The three-tier taxonomy (retrieval / training / non-compliant) maps directly to three distinct robots.txt strategies: allow / disallow / CDN block
 - Blocking training crawlers does not block retrieval bots — they use separate user-agent strings
-- robots.txt compliance is voluntary; major providers respect it, Bytespider does not
+- robots.txt compliance is voluntary; most major providers respect it, but `ChatGPT-User` was exempted in December 2025 and Perplexity has been documented evading blocks — use CDN/WAF rules when hard enforcement is required
 - The default strategy for documentation sites: allow Tier 1, disallow Tier 2, WAF-block Bytespider
 
 ## Related

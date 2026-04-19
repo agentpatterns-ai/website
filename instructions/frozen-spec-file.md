@@ -169,3 +169,5 @@ A frozen spec adds overhead that only pays off under specific conditions. Skip i
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — why writing constraints into a spec is not the same as agents following them
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — limits on how reliably agents follow written instructions regardless of format
 - [Event-Driven System Reminders](event-driven-system-reminders.md) — injecting constraint reminders at specific events to reinforce spec adherence across a long session
+- [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the failure mode when specs accumulate code-like precision
+- [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the endpoint where a sufficiently precise frozen spec can regenerate the entire implementation

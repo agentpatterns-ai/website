@@ -1,5 +1,5 @@
 ---
-title: "Security Drift in Iterative LLM-Driven Code Refinement"
+title: "Security Drift in Iterative LLM Code Refinement"
 description: "Iterative LLM fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test ever exercises."
 tags:
   - agent-design
@@ -119,15 +119,11 @@ Three conditions make checkpointing worse than the alternative:
 
 ## Related
 
+- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Incremental Verification](../verification/incremental-verification.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Red-Green-Refactor with Agents](../verification/red-green-refactor-agents.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
+- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Prompt-Injection-Resistant Agent Design](prompt-injection-resistant-agent-design.md)

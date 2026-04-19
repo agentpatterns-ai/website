@@ -22,7 +22,7 @@ The critical finding was not that AI causes skill loss. It was that **interactio
 
 ## The Four-Step Structure
 
-George Polya's problem-solving framework from *How to Solve It* (1945) is a practitioner-applied lens for LLM-assisted coding — the mapping below is a structured application of the original four steps, not a published finding:
+George Polya's problem-solving framework from *[How to Solve It](https://en.wikipedia.org/wiki/How_to_Solve_It)* (1945) is a practitioner-applied lens for LLM-assisted coding — the mapping below is a structured application of the original four steps, not a published finding:
 
 | Polya step | What it means with AI |
 |-----------|----------------------|
@@ -35,7 +35,7 @@ The discipline is explicit about the fourth step: **comprehension is the exit ga
 
 ## Why Small Steps
 
-Working in small increments is not just about catching errors early. It keeps the developer's mental model current with the codebase. Large-batch generation produces output faster than review speed — the [velocity-comprehension gap](../anti-patterns/comprehension-debt.md) that accumulates comprehension debt.
+Working in small increments is not just about catching errors early. It keeps the developer's mental model current with the codebase. Large-batch generation produces output faster than review speed — the [velocity-comprehension gap](../anti-patterns/comprehension-debt.md) that accumulates comprehension debt. This tracks a core result from [cognitive load theory](https://journals.sagepub.com/doi/10.1177/0963721420922183): working memory is bounded, so learners build durable schemas when new material arrives in chunks small enough to process — not when it arrives faster than it can be integrated.
 
 Small steps also expose reasoning gaps: a gap in a 3-line function is recoverable; the same gap across 200 lines of generated code is structural.
 

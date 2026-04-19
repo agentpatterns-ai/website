@@ -103,6 +103,7 @@ Knowledge-only skills fail when:
 
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
+- [CLI-First Skill Design](cli-first-skill-design.md)
 - [Skill Library Evolution](skill-library-evolution.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)

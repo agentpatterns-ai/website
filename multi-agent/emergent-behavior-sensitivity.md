@@ -50,7 +50,7 @@ Rigid, step-by-step instructions create brittle multi-agent systems:
 
 ## Framework Prompts Over Prescriptive Prompts
 
-Effective multi-agent prompts [encode "heuristics rather than rigid rules"](https://www.anthropic.com/engineering/multi-agent-research-system) -- striking "a balance: specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics."
+Effective multi-agent prompts [encode "heuristics rather than rigid rules"](https://www.anthropic.com/engineering/multi-agent-research-system). Anthropic's guidance on prompt altitude describes the goal as ["specific enough to guide behavior effectively, yet flexible enough to provide the model with strong heuristics"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) -- the Goldilocks zone between brittle hard-coded logic and vague high-level guidance.
 
 | Prompt Style | Characteristic | Cascade Behavior |
 |---|---|---|

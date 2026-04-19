@@ -110,6 +110,16 @@ In `MEMORY.md`, separate observations from lessons:
 
 Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress files, git-based state, feature checklists](goal-monitoring-progress-tracking.md) -- offers a complementary approach: artifacts are **verifiable and auditable** without requiring a synthesis step. Synthesis pays off when the same *class* of problem recurs across projects or sessions.
 
+## When This Backfires
+
+Three conditions where skipping synthesis is the better call:
+
+- **N=1 generalization**: A single failure can produce a confidently-stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. Heuristics from guided trajectories are also less transferable, reflecting prior guidance rather than independent discovery ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
+- **Tool/model churn**: A workaround for a 2024-era context limit becomes wrong advice once the limit lifts, but the lesson sits in `MEMORY.md` for months. The deeper cost is *trusting* aged advice without re-verification.
+- **Context budget pressure**: Retained lessons compete with task-relevant context; accumulated memory inflates cost and degrades selectivity ([SSGM Framework, 2026](https://arxiv.org/abs/2603.11768)). When the lesson library exceeds what retrieval can selectively surface, environmental scaffolding (progress files, git state) often pays off more reliably.
+
+If the same *class* of problem does not recur across projects, do not synthesize.
+
 ## Example
 
 A Claude Code session debugging a flaky test produces this raw `MEMORY.md` entry:
@@ -141,6 +151,9 @@ The raw observation records *what happened*; the synthesized lesson records *wha
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
 - [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
+- [Generative Agents Memory Stream: Three-Layer Architecture for Long-Running Agent Sessions](generative-agents-memory-stream.md)
+- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
+- [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](continual-learning-layers.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)

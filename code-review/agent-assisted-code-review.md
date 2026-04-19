@@ -15,23 +15,19 @@ aliases:
 
 ## The Technique
 
-Human reviewers excel at judgment; agents excel at checklists. Agent-assisted code review assigns each to the work it does well.
+Human reviewers excel at judgment; agents excel at checklists. The agent handles the first pass — style consistency, type correctness, test coverage gaps, security patterns, naming conventions — while humans focus on design, architecture fit, and scalability.
 
-The agent handles the first pass: style consistency, type correctness, test coverage gaps, security patterns, naming conventions. Humans then focus on design, architecture fit, and scalability — questions that require judgment agents do not reliably provide.
-
-The mechanism is attention allocation: by eliminating repetitive pattern-matching from the human review queue, agents reduce cognitive load on mechanical checks and direct reviewer attention to architectural concerns. Research on developer engagement with AI-assisted review confirms that human reviewers engage differently — and more substantively — when mechanical issues are already resolved ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092)).
+The mechanism is attention allocation: eliminating repetitive pattern-matching from the human review queue directs reviewer attention to architectural concerns. An interview study of 20 engineers reports that engagement with AI-assisted review is distinct from peer review along cognitive, emotional, and behavioral dimensions ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092)).
 
 ## How It Works
 
 ### GitHub Copilot Code Review
 
-GitHub Copilot reviews PRs directly in the pull request interface. [Per the documentation](https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review), Copilot "always leaves a 'Comment' review, not an 'Approve' review or a 'Request changes' review" — findings are non-binding and do not count toward required approvals. Reviews typically complete in under 30 seconds ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/)).
-
-Customize focus areas through instruction files at `.github/copilot-instructions.md` or `.github/instructions/**/*.instructions.md` to target security checklists, readability standards, or domain-specific conventions.
+Copilot [always leaves a 'Comment' review](https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review), never 'Approve' or 'Request changes' — findings are advisory and do not count toward required approvals. Reviews typically complete in under 30 seconds ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/)). Customize focus via `.github/copilot-instructions.md` or `.github/instructions/**/*.instructions.md`.
 
 ### Claude Code Subagents
 
-Claude Code's [subagents documentation](https://code.claude.com/docs/en/sub-agents) includes a `code-reviewer` example. A review subagent is read-only (no `Edit` or `Write` tools), runs `git diff` to see changes, and returns findings by priority.
+Claude Code's [subagents documentation](https://code.claude.com/docs/en/sub-agents) includes a `code-reviewer` example — read-only, runs `git diff`, returns findings by priority.
 
 ```markdown
 ---
@@ -42,43 +38,32 @@ model: inherit
 ---
 ```
 
-The `tools` field excludes `Edit` and `Write` — review agents suggest fixes, they do not apply them. This is a structural constraint, not a behavioral one.
-
-For specialized domains, deploy multiple focused review agents — security, performance, style — rather than one general-purpose reviewer.
+Excluding `Edit` and `Write` is structural: review agents suggest fixes, they do not apply them. For specialized domains, deploy multiple focused reviewers — security, performance, style — rather than one general-purpose agent.
 
 ## Structuring Review Output
 
-Unstructured free-form comments from agents are hard to triage. Structure findings by severity:
+Free-form comments are hard to triage. Structure findings by severity:
 
-- **Critical** — correctness issues, security vulnerabilities, data integrity risks
-- **High** — test coverage gaps on changed code paths, API contract violations
-- **Medium** — style inconsistencies, naming issues, documentation missing
+- **Critical** — correctness, security, data integrity
+- **High** — test coverage gaps, API contract violations
+- **Medium** — style, naming, missing documentation
 - **Low** — suggestions, minor improvements
 
 ## Calibrating False Positives
 
-Agents over-flag — surfacing style issues in generated code and flagging intentional patterns as problems. Industry data puts false positive rates at 5–15% for well-configured tools, with poorly tuned configurations reaching higher ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Mitigations:
-
-1. **Tune the prompt** — specify what to check and what to ignore so intentional patterns are not flagged.
-2. **Severity thresholds** — treat low-severity findings as optional. Focus human attention on critical and high findings.
-
-## Constraints
-
-**Context limits constrain PR size.** Large PRs exceed context limits and produce lower-quality reviews — a structural argument for keeping PRs small.
-
-**Agents should not review their own output.** A review agent in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer instead. See [Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md) for when fresh-context vs accumulated-context loops apply.
-
-**Agents are not sufficient alone.** Agent review reduces mechanical overhead but does not replace human review. An empirical study of 3,109 PRs shows CRA-only review achieves a 45% merge rate versus 68% for human-involved review — and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always pair agent review with at least one human reviewer.
+Agents over-flag — surfacing style issues in generated code and flagging intentional patterns. False positive rates run 5–15% for well-configured tools, higher when poorly tuned ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Tune prompts to specify what to ignore, and apply severity thresholds so low-severity findings are optional.
 
 ## When This Backfires
 
-**CRA-only configurations.** Using agent review without any human reviewer achieves significantly lower merge rates than human-involved review. Agent review is a first pass, not a replacement; always require at least one human approval.
+**CRA-only configurations.** An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate versus 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Always require at least one human approval.
 
-**PRs exceeding context limits.** Large diffs degrade review quality below the threshold of usefulness — the agent produces generic, low-signal comments across truncated context. This is a structural argument for small PRs, not a reason to skip agent review on large ones.
+**PRs exceeding context limits.** Large diffs produce generic, low-signal comments across truncated context. Keep PRs small.
 
-**Teams that skip human review after agent approval.** The pattern only works if human reviewers remain accountable for design and architecture. Teams that treat agent approval as sufficient quickly accumulate architectural debt the agent cannot see.
+**Agent reviewing its own output.** A reviewer in the same session validates the same assumptions the generating agent made. Route to a fresh-context reviewer ([Loop Strategy Spectrum](../agent-design/loop-strategy-spectrum.md)).
 
-**Uncalibrated false positive rates.** Before trusting agent output, teams must tune prompts and establish severity thresholds. AI suggestions are adopted at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)) — high false positive rates degrade trust and reduce adoption even for correct findings.
+**Skipping human review after agent approval.** The pattern only works if humans remain accountable for design. Treating agent approval as sufficient accumulates architectural debt the agent cannot see.
+
+**Uncalibrated false positive rates.** AI suggestions are adopted at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)) — untuned prompts reduce adoption even for correct findings.
 
 ## Example
 

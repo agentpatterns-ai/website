@@ -102,7 +102,7 @@ Strong elicitation reduces drift but does not eliminate it.
 Goal recitation addresses within-session attention decay but not:
 
 - **Post-compaction drift** — if the todo file is lost during context compression, recitation cannot help. Instruct compaction to preserve it verbatim ([LangChain](https://blog.langchain.com/context-management-for-deepagents/)).
-- **Instruction fade-out** — after ~15 tool calls, agents violate foundational instructions regardless of recitation ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)). This threshold varies across models and context configurations. Event-driven system reminders are the complementary defense.
+- **Instruction fade-out** — over long-running sessions, agents drift from foundational instructions regardless of recitation ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)). Event-driven system reminders are the complementary defense.
 - **Cross-session continuity** — recitation is ephemeral. For persistence, use [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md).
 
 ## Related

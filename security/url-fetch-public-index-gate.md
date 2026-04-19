@@ -126,3 +126,4 @@ A URL like `https://docs.python.org/3/library/os.html` is in the Common Crawl in
 - [Design Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md)
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

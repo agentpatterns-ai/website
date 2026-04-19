@@ -1,5 +1,5 @@
 ---
-title: "Semantic Caching to Reduce Cost in Multi-Agent Systems"
+title: "Semantic Caching for Multi-Agent Code Systems"
 description: "Semantic caching with LLM-based equivalence detection achieves 67% cache hit rates and reduces token consumption by 40–60% with intent-driven filtering."
 tags:
   - context-engineering
@@ -12,19 +12,19 @@ tags:
 
 ## The Cost Problem
 
-Multi-agent systems amplify per-query token costs: each user request may trigger several LLM calls across orchestrators, sub-agents, and reviewers. Exact-match caching provides near-zero benefit because users rarely phrase the same query identically. Semantic caching closes this gap by detecting equivalence rather than requiring exact repetition.
+Multi-agent systems amplify token costs: each request may trigger several LLM calls across orchestrators, sub-agents, and reviewers. Exact-match caching helps little because users rarely phrase the same query identically. Semantic caching closes the gap by detecting equivalence rather than requiring exact repetition.
 
-MeanCache (2025) finds that repeated queries constitute approximately 31% of total LLM queries in production — establishing the practical ceiling for semantic cache hit rates. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
+MeanCache (2025) finds repeated queries constitute about 31% of production LLM queries — the practical ceiling for semantic cache hit rates. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
 
 ## Semantic Caching
 
-Semantic caching replaces exact string matching with embedding-based similarity comparison. Two queries are considered equivalent if their semantic representations exceed a similarity threshold, regardless of surface phrasing.
+Semantic caching replaces exact string matching with embedding-based similarity comparison. Two queries are considered equivalent if their embeddings exceed a similarity threshold, regardless of surface phrasing.
 
 A production deployment processing 10,000+ natural language-to-code queries achieves a 67% cache hit rate using this approach. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
 
 ### Dual-Threshold Mechanism
 
-A single similarity threshold is insufficient: a query very close to a cached result can be served directly, but a query that resembles a cached result without fully matching it still benefits from a scaffolded response. A dual-threshold mechanism handles both:
+A single similarity threshold is insufficient: very close queries can be served directly, while weaker matches still benefit from scaffolded reuse. A dual-threshold mechanism handles both:
 
 | Similarity range | Action |
 |-----------------|--------|
@@ -32,7 +32,7 @@ A single similarity threshold is insufficient: a query very close to a cached re
 | `lower_threshold <= similarity < upper_threshold` | Reference-guided generation: scaffold response from cached result |
 | `similarity < lower_threshold` | Full generation — no usable cache entry |
 
-The middle tier (reference-guided generation) extracts value from partial matches that a single-threshold system would discard. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
+The middle tier extracts value from partial matches that single-threshold systems discard. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
 
 ### Open-Source Implementation
 
@@ -40,17 +40,15 @@ GPTCache provides a production-ready open-source implementation with pluggable e
 
 ## Intent-Driven Context Filtering
 
-Semantic caching reduces cost for repeat queries. Intent-driven filtering reduces cost for every query, regardless of cache state.
+Semantic caching reduces cost for repeat queries; intent-driven filtering reduces cost for every query, cache hit or miss.
 
-The approach: classify the incoming query's intent, then filter the context provided to the LLM to include only the schemas, tools, or documents relevant to that intent. A query about inventory analytics receives only inventory-related schemas; payment schemas are excluded. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
+Classify the incoming query's intent, then include only the schemas, tools, or documents relevant to it. A query about inventory analytics receives only inventory schemas; payment schemas are excluded. This yields 40–60% token reduction without accuracy loss. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
 
-This produces 40–60% token reduction without accuracy loss. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
-
-Anthropic's just-in-time [context engineering](../context-engineering/context-engineering.md) pattern implements the same principle architecturally: agents maintain lightweight references to available context and load only what is needed at runtime, rather than pre-loading the full context into every call. ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
+Anthropic's just-in-time [context engineering](../context-engineering/context-engineering.md) pattern applies the same principle architecturally: agents keep lightweight references to available context and load only what is needed at runtime. ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
 
 ## Combining Both Mechanisms
 
-The two techniques are orthogonal and independently applicable:
+The two techniques are orthogonal:
 
 ```mermaid
 graph TD
@@ -62,9 +60,9 @@ graph TD
     D -->|Miss| G[Full generation with filtered context]
 ```
 
-- Semantic caching reduces cost for repeat queries by serving or scaffolding from cached results.
-- Intent-driven filtering reduces cost for every query by shrinking the context window.
-- Applied together: both savings stack — cached queries also pay reduced token cost on lookup.
+- Semantic caching serves or scaffolds responses from cached results on repeat queries.
+- Intent-driven filtering shrinks the context window on every query.
+- Applied together, the savings stack — cached queries also pay reduced token cost on lookup.
 
 ## Distinction from Provider Prompt Caching
 
@@ -73,25 +71,25 @@ Semantic caching and provider-level prompt caching are complementary, not compet
 | | Semantic caching | Provider prompt caching |
 |--|-----------------|------------------------|
 | What is cached | Full query results | KV states of static prompt prefixes |
-| Savings | Cost of the entire LLM call | Cost of recomputing unchanged prefix tokens |
+| Savings | Entire LLM call | Recomputation of unchanged prefix tokens |
 | Hit condition | Semantic similarity | Exact byte-level prefix match |
 | Implementation | Application layer | API parameter (`cache_control`) |
 
-Anthropic's prompt caching delivers 90% cost reduction on cache hits for the static prefix (system prompt, tool definitions) at a minimum 1,024–4,096 token threshold. ([Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)) Both can be active simultaneously: prompt caching reduces per-call token cost; semantic caching eliminates the call entirely on high-similarity hits.
+Anthropic's prompt caching delivers 90% cost reduction on cache hits for the static prefix (system prompt, tool definitions) at a 1,024–4,096 token minimum. ([Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)) Both can run simultaneously: prompt caching cuts per-call token cost; semantic caching eliminates the call entirely on high-similarity hits.
 
 ## Applicability
 
-Semantic caching delivers the highest return in systems with repetitive query patterns: analytics agents, code-generation pipelines, and customer support bots. Systems with highly varied queries will see hit rates closer to the 31% theoretical baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
+Return is highest in systems with repetitive query patterns: analytics agents, code-generation pipelines, and customer support bots. Highly varied query mixes see hit rates closer to the 31% baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
 
 ## When This Backfires
 
-Semantic caching adds overhead on every request — an embedding computation plus a vector-store lookup — before determining whether to call the LLM. On low-repetition workloads this overhead increases mean latency without delivering proportional savings; a cache miss after the vector search adds more than 2× the latency of a direct LLM call in some deployments. ([Catchpoint, 2025](https://www.catchpoint.com/blog/semantic-caching-what-we-measured-why-it-matters))
+Every request pays for an embedding computation plus a vector-store lookup before the cache decision. On low-repetition workloads this overhead raises mean latency without proportional savings; a cache miss can cost more than 2× the latency of a direct LLM call. ([Catchpoint, 2025](https://www.catchpoint.com/blog/semantic-caching-what-we-measured-why-it-matters))
 
-Three specific conditions where the pattern underperforms:
+Three conditions where the pattern underperforms:
 
-1. **Threshold instability**: A single similarity threshold applied across diverse query types produces either excessive false positives (wrong cached responses served) or false negatives (valid matches missed). Each query category requires calibrated thresholds; systems with heterogeneous query mixes make this impractical without per-intent threshold management.
-2. **Embedding drift on model updates**: Cached embeddings are computed by a specific embedding model. When that model is updated or replaced, existing cache entries no longer match incoming queries reliably, requiring a full cache flush and warm-up period — negating accumulated savings.
-3. **Cache invalidation complexity**: Results that were correct when cached can become stale — a product inventory query cached Tuesday may return wrong stock levels by Thursday. Unlike prompt caching (which caches computation, not semantics), semantic caches cache *answers*, requiring explicit invalidation strategies for any domain where ground truth changes.
+1. **Threshold instability**: One similarity threshold across diverse query types produces either false positives (wrong cached responses served) or false negatives (valid matches missed). Heterogeneous query mixes demand per-intent thresholds.
+2. **Embedding drift on model updates**: Cached embeddings are tied to a specific embedding model. When that model is replaced, existing entries no longer match reliably, requiring a full cache flush and warm-up period.
+3. **Cache invalidation complexity**: Results correct when cached can go stale — a product inventory answer from Tuesday may be wrong by Thursday. Unlike prompt caching (which caches computation), semantic caches cache *answers*, requiring explicit invalidation for any domain where ground truth changes.
 
 ## Example
 

@@ -140,3 +140,5 @@ Each task is concrete and independently verifiable, matching the **Tasks** phase
 - [Plan-First Loop](../workflows/plan-first-loop.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Multi-Agent RAG Spec-to-Test](../verification/multi-agent-rag-spec-to-test.md)
+- [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the failure mode when specs become code-adjacent
+- [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the theoretical extension where the spec alone is sufficient to regenerate the implementation

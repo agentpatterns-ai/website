@@ -57,7 +57,7 @@ PNoT pays off when the reasoning process has **known structure** — a defined s
 - **Code review workflows** — check style, check logic, check security, aggregate findings
 - **Regulatory or compliance checks** — sequential gates with defined pass/fail criteria
 
-MedVerse (2026) independently validated this approach for medical diagnosis, reformulating differential diagnosis as a [DAG-structured parallel execution framework based on Petri net theory](https://arxiv.org/abs/2602.07529). The result: 4.8-8.9% accuracy gains over CoT and 1.3x latency reduction through topology-aware parallel execution.
+MedVerse (2026) independently applied Petri net theory to medical diagnosis, reformulating differential diagnosis as a [DAG-structured parallel execution framework](https://arxiv.org/abs/2602.07529). Reported results: 4.8-8.9% accuracy gains over CoT baselines (Qwen2.5-7B, Llama-3.1-8B), and a 1.3x inference-latency reduction with 1.7x throughput gain relative to specialized medical LLMs.
 
 ## When Simpler Approaches Suffice
 
@@ -67,7 +67,7 @@ The overhead of defining a Petri net — places, transitions, firing rules — i
 - **Single-step tasks** — one decision, one action; [structured reasoning adds no benefit](../anti-patterns/reasoning-overuse.md)
 - **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; adding external scaffolding introduces overhead that may not improve outcomes for tasks where the model's native reasoning already covers the necessary decision structure
 
-The formal taxonomy of reasoning topologies ([Besta et al., IEEE TPAMI 2025](https://arxiv.org/abs/2401.14295)) positions PNoT alongside CoT (chain), ToT (tree), and GoT (graph) — each suited to different task structures. PNoT is strongest when the structure is derivable from evidence rather than designed by intuition.
+[Besta et al. (IEEE TPAMI 2025)](https://arxiv.org/abs/2401.14295) provides the formal taxonomy of CoT (chain), ToT (tree), and GoT (graph) reasoning topologies — each suited to different task structures. The PNoT paper itself ([Gavric, Bork, and Proper 2025](https://doi.org/10.18420/EMISA2025_15)) situates Petri nets as an additional topology that is strongest when the structure is derivable from evidence rather than designed by intuition.
 
 ## Key Takeaways
 

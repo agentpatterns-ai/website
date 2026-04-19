@@ -20,7 +20,7 @@ tags:
 
 ## The Anti-Pattern
 
-The naive approach — pasting an API key into the prompt — sends the secret to the model API, writes it into session logs, and risks the agent echoing it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
+Pasting an API key into the prompt sends it to the model API, writes it into session logs, and risks the agent echoing it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
 
 ## Environment Variable Injection
 
@@ -31,9 +31,9 @@ Inject secrets at the shell level before the agent process starts. Agents consum
 DATABASE_URL="postgres://..." OPENAI_API_KEY="sk-..." claude
 ```
 
-The agent's tools can call scripts that consume `$DATABASE_URL` internally — the variable's value never needs to appear in a prompt or tool call.
+Tools call scripts that consume `$DATABASE_URL` internally — the value never appears in a prompt or tool call.
 
-For persistent configuration, use a tool like `direnv`, which hooks into your shell and evaluates `.envrc` whenever you `cd` into the project directory ([direnv.net](https://direnv.net/)).
+For persistent configuration, use `direnv` to evaluate `.envrc` on `cd` into the project ([direnv.net](https://direnv.net/)).
 
 ## Wrapper Scripts
 
@@ -47,7 +47,7 @@ RESULT=$(psql "$DATABASE_URL" -t -c "$1")
 echo "$RESULT"
 ```
 
-The agent invokes `scripts/query-db.sh "SELECT count(*) FROM users"` — the `DATABASE_URL` never appears in the tool call or context window. Design wrappers to accept intent and return results; keep credential consumption inside the script boundary.
+The agent invokes `scripts/query-db.sh "SELECT count(*) FROM users"` — `DATABASE_URL` never appears in the tool call or context. Design wrappers to accept intent and return results; keep credential consumption inside the script.
 
 ## Never Store Secrets in Agent-Readable Files
 
@@ -63,7 +63,7 @@ Do not store secrets in:
 - AGENTS.md, system prompts, or instruction files
 - Comments in code files
 
-Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets at process start and inject them as environment variables. When secrets are fetched in a shell script that runs before the agent process starts, the retrieval command's output exists only in that parent shell context — the agent session inherits the exported variable value, not the command that produced it.
+Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets at process start and inject them as environment variables. Fetch secrets in a parent shell before launching the agent — the retrieval command stays in the parent context; the session inherits only the exported value.
 
 ## Auditing Agent Environment Access
 
@@ -97,11 +97,11 @@ GitHub Actions example — secrets injected as environment variables, never writ
 
 ## Why It Works
 
-Environment variables are inherited by child processes but are not transmitted as text through tool calls. When an agent invokes a tool, it sends a command string — not the contents of its environment. The shell executing that command inherits the env, but the agent's context window never contains the variable's value; it only contains the command name and arguments. Wrapper scripts extend this boundary: the script consumes the credential internally via the shell, and the agent receives only the script's stdout — the credential value traverses no channel the agent can read or log.
+Environment variables are inherited by child processes but are not transmitted as text through tool calls. The agent sends a command string; the shell executing it inherits the env, but the context window only records the command name and arguments. Wrapper scripts extend this boundary: the script consumes the credential internally, and the agent receives only stdout — the credential traverses no channel the agent can read or log.
 
 ## When This Backfires
 
-Env var injection has specific failure modes practitioners should anticipate:
+Env var injection has specific failure modes:
 
 - **Shared container environments**: In multi-tenant or sidecar-based deployments, sibling processes may be able to read `/proc/<pid>/environ` on Linux unless the container is hardened with user namespaces or seccomp restrictions.
 - **Sub-process env stripping**: Some agent frameworks spawn sandboxed sub-processes with a cleaned environment. If the agent runs tools in an isolated subprocess, env vars set in the parent shell may not be inherited — verify the tool execution model before relying on this pattern.

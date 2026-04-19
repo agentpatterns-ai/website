@@ -1,5 +1,5 @@
 ---
-title: "Inversion Analysis: Find Capabilities Rivals Cannot Copy"
+title: "Inversion Analysis: Surface Capabilities Competitors Cannot Replicate"
 description: "Find capabilities your unique primitives enable that competitors structurally cannot replicate by inverting standard competitive analysis."
 tags:
   - agent-design
@@ -19,7 +19,7 @@ Inversion breaks this. After extracting the strongest ideas, ask:
 
 > "What can we do with our unique primitives that the external system simply could not do?"
 
-The answer identifies capability gaps that competitors' architectures structurally preclude.
+The answer identifies capability gaps that competitors' architectures structurally preclude — the Jacobi/Munger inversion mental model ("many hard problems are best solved only when they are addressed backwards", [Farnam Street](https://fs.blog/inversion/)) applied to architectural differentiation.
 
 ## The Three-Step Method
 
@@ -39,7 +39,7 @@ flowchart LR
 | **2. Extract** | Which ideas are worth carrying forward? | Filtered pattern list |
 | **3. Invert** | What do our primitives enable that theirs foreclose? | Novel capability candidates |
 
-Without Step 3, the output is imitation. With it, the output is differentiation.
+Without Step 3, the output is imitation; with it, differentiation.
 
 ## What Makes a Primitive Unique
 
@@ -56,23 +56,23 @@ A primitive qualifies as unique when it enables or precludes a class of patterns
 
 Inversion against NATS (Go pub/sub):
 
-**Study NATS strengths**: high-throughput message routing, durable subscriptions, subject-based filtering.
+**Study**: high-throughput message routing, durable subscriptions, subject-based filtering.
 
-**Extract ideas**: durable message queues, subject routing for task dispatch, at-least-once delivery.
+**Extract**: durable message queues, subject routing for task dispatch, at-least-once delivery.
 
-**Invert**: NATS routes messages between processes but has no task graph with execution state, resumable context, or advisory locking. The Flywheel's JSONL bead model + graph routing + advisory locks enables:
+**Invert**: NATS routes messages but has no task graph with execution state, resumable context, or advisory locking. The Flywheel's JSONL bead model + graph routing + advisory locks enables:
 
 - Tasks that resume mid-execution after failure
 - Lock-free parallelism across steps with explicit dependency edges
 - Context snapshots at each bead for downstream retrieval
 
-NATS cannot replicate this — its message model has no execution state or bead-level resumability. The result is structurally distinct.
+NATS cannot replicate this without rebuilding around an execution-state model.
 
 ## Applying Inversion to Agent Architecture
 
 Apply during:
 
-- **[Research-plan-implement](../workflows/research-plan-implement.md) phase** — run inversion against the reference system before committing to a design
+- **[Research-plan-implement](../workflows/research-plan-implement.md)** — invert against the reference system before committing to a design
 - **Architectural planning** — invert against the paths not taken when choosing between primitives
 - **Competitive design reviews** — invert before matching a competitor feature to verify it is the right goal
 
@@ -95,16 +95,21 @@ Inversion produces poor results when applied to weak structural differences:
 - **Reference system mismatch**: Inverting against a system in a different domain (e.g., a batch pipeline versus a real-time agent) yields false differentiation — the competitor never intended to support those patterns, not that they *cannot*.
 - **Premature commitment**: Running inversion before adequate study of the external system produces shallow outputs. Step 1 (Study) must be thorough or Step 3 (Invert) generates noise.
 
+## Key Takeaways
+
+- Standard competitive analysis converges on imitation; inversion asks what your primitives enable that others structurally cannot replicate.
+- Inversion is Step 3 of a study → extract → invert sequence; without it, the output is feature parity rather than differentiation.
+- A primitive is worth inverting against only when it enables or precludes a class of patterns — shared, commodity primitives produce false differentiation.
+- The mechanism is asymmetry: surface features can be copied overnight, but structural primitives require rebuilding core infrastructure.
+- Inversion backfires when applied to weak structural differences, when novelty bias justifies unusual primitives for their own sake, or when Step 1 (Study) is shallow.
+
 ## Related
 
 - [Agentic Flywheel](agentic-flywheel.md)
-- [Plan-First Loop](../workflows/plan-first-loop.md)
-- [Beads, Task Graphs, and Agent Memory](beads-task-graph-agent-memory.md)
-- [Delegation Decision](delegation-decision.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Convergence Detection](convergence-detection.md)
+- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
+- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
+- [Beads, Task Graphs, and Agent Memory](beads-task-graph-agent-memory.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md)
-- [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
+- [Plan-First Loop](../workflows/plan-first-loop.md)

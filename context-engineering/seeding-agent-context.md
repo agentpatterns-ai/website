@@ -40,7 +40,7 @@ Mechanical enforcement outperforms written guidelines: the agent encounters the 
 
 ### Directory-Scoped Context Files
 
-The [AGENTS.md open standard](https://agents.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms. Agents read the nearest AGENTS.md in the directory tree; subdirectory files override project-level instructions.
+The [AGENTS.md open standard](../standards/agents-md.md) defines a dedicated file for agent context, adopted by 60k+ projects and 25+ platforms ([agents.md](https://agents.md)). Agents read the nearest AGENTS.md in the directory tree; subdirectory files override project-level instructions.
 
 Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with the same scoping. The `.claude/rules/` directory adds path-scoped rules for matching files (e.g., `src/api/**/*.ts`).
 

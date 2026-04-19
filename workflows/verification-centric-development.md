@@ -70,7 +70,7 @@ The infrastructure works, but only if developers actually use it. Current eviden
 - 38% find reviewing AI logic harder than reviewing human code ([Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
 - [**Comprehension debt**](../anti-patterns/comprehension-debt.md) accumulates: developers become comfortable approving code they could no longer write independently, leading to rubber-stamp reviews
 
-Martin Fowler's team calls this **rigor relocation** — quality assurance shifts from code authorship to environment design, feedback loops, and control systems ([Fowler, harness engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The developer who once ensured quality by writing careful code now ensures quality by building careful verification infrastructure.
+Martin Fowler's team calls this **rigor relocation** — quality assurance shifts from code authorship to environment design, feedback loops, and control systems, an emerging discipline known as [harness engineering](../agent-design/harness-engineering.md) ([Fowler, harness engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The developer who once ensured quality by writing careful code now ensures quality by building careful verification infrastructure.
 
 This relocation is not free. Structural linting and architectural constraints prove conformance but do not prove behavioral correctness. The verification pipeline reduces risk; it does not eliminate it.
 

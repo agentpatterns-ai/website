@@ -89,6 +89,7 @@ MCP adds a protocol layer that is not always justified:
 - **Version skew**: Host and server must agree on the same MCP protocol version. When Anthropic or a tool vendor ships a breaking spec change, servers built against the old spec stop working until updated — a maintenance burden that native integrations avoid.
 - **Subprocess overhead for stdio**: Each Claude Code session spawns MCP servers as subprocesses. For latency-sensitive or resource-constrained environments, this startup cost is measurable.
 - **Organizational overhead**: Remote MCP servers require hosting, auth, and availability SLAs. Teams without existing infra for hosted services may find the operational cost exceeds the portability benefit.
+- **Supply-chain attack surface**: The stdio execution model leaves input sanitization to each server author. [Ox Security disclosed a systemic RCE-class flaw](https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/) in the official MCP SDKs in April 2026 affecting 150M+ downloads and 7,000+ exposed servers; [Anthropic confirmed the behaviour is by design](https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/). Running third-party MCP servers is closer in risk profile to running third-party shell scripts than to calling a vendored SDK — treat server selection, pinning, and sandboxing accordingly. See [Blast Radius Containment](../security/blast-radius-containment.md).
 
 Use MCP when building reusable tool servers shared across multiple hosts or developers. For one-off integrations or tightly coupled tooling, evaluate whether the indirection adds value.
 
@@ -103,7 +104,9 @@ Use MCP when building reusable tool servers shared across multiple hosts or deve
 ## Related
 
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
+- [AGENTS.md: A README for AI Coding Agents](agents-md.md)
 - [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)
+- [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
 - [OpenTelemetry for Agent Observability](opentelemetry-agent-observability.md)
@@ -112,3 +115,5 @@ Use MCP when building reusable tool servers shared across multiple hosts or deve
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Tool Calling Schema Standards for AI Agent Development](tool-calling-schema-standards.md)
+- [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)
+- [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)

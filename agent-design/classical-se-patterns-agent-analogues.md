@@ -1,5 +1,5 @@
 ---
-title: "GoF Patterns and SOLID as Agent Design Vocabulary Bridge"
+title: "Classical SE Patterns as Agent Design Analogues"
 description: "Strategy, Observer, Circuit Breaker, Composite, and Saga map to agent system design — with a concern shift from reuse to control and safety."
 aliases:
   - "GoF patterns for agents"
@@ -23,56 +23,51 @@ Classical patterns are a **starting point**, not a blueprint. They solve code-or
 
 ## Pattern Mapping
 
-| Classical Pattern | Agent Analogue | Where It Appears |
-|---|---|---|
-| Strategy | [Cost-aware agent design](cost-aware-agent-design.md); tool selection | Routing classifies input and dispatches to specialised handlers — identical to Strategy's interchangeable algorithms |
-| Observer | `PreToolUse`/`PostToolUse` hooks; tracing middleware | Hook pipelines and LangSmith-style middleware are structural Observer implementations |
-| Circuit Breaker | `maxTurns`; [loop detection](../observability/loop-detection.md); backpressure | Budget-Constrained Execution Loop opens the circuit on repeated failure rather than retrying infinitely |
-| Composite | [Orchestrator-worker](../multi-agent/orchestrator-worker.md); hierarchical decomposition | Hierarchical agent trees structurally mirror Composite — a root agent delegates to sub-agents that share the same callable interface |
-| Saga | Multi-step agentic workflows with compensating actions | Each tool call is a saga step; the agent coordinates compensation when a step fails |
-| Factory / Abstract Factory | [Dynamic tool](../anti-patterns/dynamic-tool-fetching-cache-break.md) instantiation; agent spawning | Tool Search Tool manufactures tool definitions on demand; sub-agent spawning is a factory operation |
-| Decorator | Context injection middleware; summarisation wrapping | Middleware that adds context headers or wraps outputs before passing downstream |
-| Chain of Responsibility | Hook pipelines; permission escalation chains | Sequential hook evaluation where each handler can accept, modify, or reject a tool call |
-| Memento | Checkpointing; session recovery | Multi-session state resumption mirrors Memento — save state externally, restore on next session |
-| Facade | `AGENTS.md` / `CLAUDE.md` as system interface | A single instruction file that hides internal complexity behind a stable interface |
+| Classical Pattern | Agent Analogue |
+|---|---|
+| Strategy | [Cost-aware routing](cost-aware-agent-design.md); classifier dispatches to specialised handlers |
+| Observer | `PreToolUse`/`PostToolUse` hooks; tracing middleware as independent subscribers |
+| Circuit Breaker | `maxTurns`; [loop detection](../observability/loop-detection.md); backpressure on repeated failure |
+| Composite | [Orchestrator-worker](../multi-agent/orchestrator-worker.md); sub-agents share the callable interface |
+| Saga | Multi-step workflows where each tool call is a step with compensating actions on failure |
+| Factory / Abstract Factory | [Dynamic tool](../anti-patterns/dynamic-tool-fetching-cache-break.md) instantiation; sub-agent spawning |
+| Decorator | Context-injection middleware; summarisation wrapping outputs before passing downstream |
+| Chain of Responsibility | Hook pipelines; permission escalation chains that approve, modify, or reject |
+| Memento | Checkpointing; multi-session state resumption stored externally |
+| Facade | `AGENTS.md` / `CLAUDE.md` as a stable interface hiding internal complexity |
 
 ## Behavioral Patterns (Strongest Transfer)
 
-**Observer** — `PreToolUse`/`PostToolUse` hooks subscribe to tool-call events without coupling to the tool; safety gates and telemetry handlers are independent subscribers.
-
-**Chain of Responsibility** — Hook pipelines pass tool calls through sequential handlers; each can approve, reject, or modify.
-
-**Strategy** — [Anthropic's routing workflow](https://www.anthropic.com/engineering/building-effective-agents) classifies input and dispatches to a specialised model or prompt; the classifier is the Strategy context, the per-class handlers are the interchangeable algorithms.
+- **Observer** — `PreToolUse`/`PostToolUse` hooks subscribe to tool-call events; safety gates and telemetry are independent subscribers.
+- **Chain of Responsibility** — Hook pipelines pass calls through sequential handlers; each can approve, reject, or modify.
+- **Strategy** — [Anthropic's routing workflow](https://www.anthropic.com/engineering/building-effective-agents) classifies input and dispatches to a specialised model; per-class handlers are the interchangeable algorithms.
 
 ## Resilience Patterns (Strong Transfer)
 
-**Circuit Breaker** — `maxTurns` and loop-detection middleware open the circuit on repeated failure.
-
-**Saga** — Each tool call is a saga step; on failure the agent runs compensating actions.
+- **Circuit Breaker** — `maxTurns` and loop-detection middleware open the circuit on repeated failure.
+- **Saga** — Each tool call is a saga step; on failure the agent runs compensating actions.
 
 ## Creational Patterns (Moderate Transfer)
 
-**Factory / Abstract Factory** — Tool Search manufactures tool definitions on demand; sub-agent spawning is a factory operation — **context isolation** is the key constraint.
-
-**Memento** — A `progress.md` checkpoint is Memento: store and retrieve state without exposing internals.
+- **Factory / Abstract Factory** — Tool Search manufactures tool definitions on demand; sub-agent spawning is a factory operation — **context isolation** is the key constraint.
+- **Memento** — A `progress.md` checkpoint is Memento: store and retrieve state without exposing internals.
 
 ## Structural Patterns (Weakest Transfer)
 
-**Composite** — Hierarchical agent frameworks structurally mirror Composite: a root agent delegates to sub-agents that expose the same callable interface, so the orchestrator treats a single agent or a whole subtree identically. The [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this with an orchestrator-worker structure where a lead agent coordinates specialised subagents running in parallel.
-
-**Facade** — `CLAUDE.md` and `AGENTS.md` act as Facades: a stable interface hiding internal complexity.
+- **Composite** — Hierarchical agent frameworks mirror Composite: the orchestrator treats a single sub-agent or a whole subtree identically. The [Anthropic multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this with a lead agent coordinating specialised subagents in parallel.
+- **Facade** — `CLAUDE.md` and `AGENTS.md` act as Facades: a stable interface hiding internal complexity.
 
 ## Why It Works
 
-Classical patterns capture stable structural relationships — how components connect and delegate — not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs because they are defined at the call-boundary level, not the computation level. An Observer hook doesn't care whether the subscribed handler executes a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift — from reuse and maintainability to control, safety, and non-determinism — happens *within* each pattern's role, not at the structural connection between roles.
+Classical patterns capture stable structural relationships — how components connect and delegate — not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs because they are defined at the call-boundary level, not the computation level. An Observer hook does not care whether the handler runs a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift — from reuse to control and safety — happens *within* each role, not at the structural connection between roles.
 
 ## When This Backfires
 
-Pattern vocabulary imports assumptions alongside structure. Apply these with caution in three situations:
+Pattern vocabulary imports assumptions alongside structure. Apply with caution:
 
-- **Composite assumes a uniform interface**: classical Composite works because every node exposes the same method signature. Sub-agents return unstructured natural language by default; the uniform interface only holds if you enforce a strict output schema on every sub-agent, which adds engineering overhead that the pattern's simplicity hides.
-- **Circuit Breaker assumes retriable failures**: the pattern opens on repeated failure and resets after a timeout. LLM failures are often prompt failures — retrying the same call after a timeout will fail again. The agent analogue needs a *different retry strategy* (reformulate the prompt, reduce scope), not just a wait.
-- **Factory conflates instantiation with configuration**: in OOP, a factory creates an object with a fixed interface. Spawning a sub-agent requires also providing context, tools, and a system prompt — the "factory" must manage configuration state that has no analogue in classical Factory, making the metaphor leaky for teams who take it literally.
+- **Composite assumes a uniform interface**: sub-agents return unstructured natural language by default; the uniform interface holds only if you enforce a strict output schema on every sub-agent, which hides real engineering overhead.
+- **Circuit Breaker assumes retriable failures**: LLM failures are often prompt failures — retrying the same call after a timeout fails again. The agent analogue needs a *different retry strategy* (reformulate, reduce scope), not just a wait.
+- **Factory conflates instantiation with configuration**: spawning a sub-agent also requires context, tools, and a system prompt — state that has no analogue in classical Factory, making the metaphor leaky.
 
 ## Example
 

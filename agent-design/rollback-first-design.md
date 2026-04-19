@@ -44,6 +44,8 @@ Design agent workflows to stay in the left half. When a step must land in the ri
 
 **Staging environments.** Agent output affecting live systems should go through staging before production. A bad draft in staging costs nothing to discard; a bad production deployment costs recovery time.
 
+**Transactional boundaries.** IBM Research's STRATUS multi-agent system uses a "transactional-no-regression" rule: mitigation agents may only take reversible actions within a transaction, and the number of commands per transaction is capped to keep rollbacks tractable ([IBM Research, 2025](https://research.ibm.com/blog/undo-agent-for-cloud)). The same constraint applies to coding agents — bound each agent turn to a set of changes that can be undone in one step.
+
 ## What Cannot Be Made Reversible
 
 Some actions have inherent irreversibility:
@@ -65,6 +67,14 @@ Checklist for each agent action:
 4. If this action fails or is wrong, what is the one-command undo?
 
 If the one-command undo does not exist, redesign the step before shipping the workflow.
+
+## When This Backfires
+
+Rollback-first design is not free. Three conditions where it is worse than the alternative:
+
+- **Reversibility hides root cause.** When the rollback is trivial, teams lean on "undo and retry" instead of fixing the underlying bug. A reliable undo path can delay diagnosis of a systemic problem — the retry-loop masks the failure until it surfaces somewhere harder to reverse.
+- **Gate latency dominates.** In low-stakes, high-frequency loops (inner-loop code edits, agent self-review cycles), forcing every action through a draft/approval gate adds human-scale delay to machine-scale work. The recovery saved is smaller than the throughput lost.
+- **The action is already cheap to redo.** For pure, idempotent operations where re-running from scratch is faster than engineering a rollback primitive, the reversibility machinery is overhead. Prefer [idempotent design](idempotent-agent-operations.md) when the natural answer is "just run it again."
 
 ## Example
 

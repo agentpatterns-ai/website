@@ -11,9 +11,9 @@ tags:
 
 ## The Handoff Problem
 
-Each agent in a pipeline operates in its own context window. The research agent's findings don't automatically transfer to the draft agent. Each handoff is a potential information loss point: too little context and the next agent makes wrong assumptions; too much and it's burdened with noise.
+Each agent in a pipeline operates in its own context window. The research agent's findings don't automatically transfer to the draft agent. Each handoff is an information loss point: too little context and the next agent makes wrong assumptions; too much and it's burdened with noise. The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) (MAST) annotates over 1,600 production traces and identifies inter-agent misalignment as one of three primary failure categories.
 
-The handoff protocol is the contract between agents: a defined structure that the upstream agent writes and the downstream agent reads.
+The handoff protocol is the contract between agents: a defined structure the upstream agent writes and the downstream agent reads.
 
 ## Structured Handoff Formats
 
@@ -24,7 +24,7 @@ Define what each pipeline stage produces. Common fields across handoff formats:
 - **What needs attention** — items the next agent must address
 - **What is unresolved** — open questions or blockers
 
-A research agent producing structured JSON or a defined markdown schema produces a more reliable handoff than prose notes: field extraction is deterministic and does not depend on the receiving agent's ability to parse unstructured natural language. The receiving agent can extract the right fields without guessing at the format.
+A research agent producing structured JSON or a defined markdown schema is more reliable than prose notes: field extraction is deterministic and does not depend on the receiving agent's ability to parse unstructured natural language.
 
 ## Summarize, Don't Forward
 
@@ -36,7 +36,7 @@ The receiving agent needs conclusions, not transcripts. Passing raw exploration 
 
 ## Persistent Handoff Media
 
-GitHub issues and PRs function as durable handoff artifacts: they're persistent, reviewable, and linkable. A research agent commenting findings on an issue creates a handoff that survives context resets and is auditable by humans. A draft agent reading that issue comment gets a clean, structured input without needing access to the research agent's full session.
+GitHub issues and PRs function as durable handoff artifacts: they're persistent, reviewable, and linkable. A research agent commenting findings on an issue creates a handoff that survives context resets and is auditable by humans. A draft agent reading that comment gets clean, structured input without access to the predecessor's full session.
 
 Labels encode pipeline state — they tell the next agent what stage the work is in and what format to expect.
 
@@ -96,18 +96,9 @@ The following shows a research agent producing a structured JSON handoff that a 
 
 The writer agent's system prompt references this schema explicitly: it reads `findings` for content, `needs_attention` for required coverage, and `unresolved` for items to flag as open questions rather than assert as facts. This prevents the writer from inventing answers for gaps the research agent deliberately left open.
 
-## When This Backfires
-
-Structured handoff protocols add overhead that is not always justified:
-
-- **Short-lived or single-agent pipelines**: defining and maintaining a schema costs more than it saves when the task can complete in one agent's context.
-- **Rapidly evolving pipelines**: schema fields go stale as agent responsibilities change; stale fields either get silently ignored or cause parse failures downstream.
-- **Unstructured creative tasks**: when the downstream agent's value is precisely its ability to synthesize freeform input, forcing upstream output into rigid fields discards nuance that structured schemas can't represent.
-- **Schema mismatch at version boundaries**: if upstream and downstream agents are updated independently, a schema change on either side breaks the contract until both are redeployed.
-
 ## Why It Works
 
-Structured schemas eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs.
+Structured schemas eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs — a pattern GitHub Engineering describes in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
 
 ## Key Takeaways
 

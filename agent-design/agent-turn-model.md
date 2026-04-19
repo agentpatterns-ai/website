@@ -10,6 +10,7 @@ tags:
   - workflows
   - source:opendev-paper
 ---
+
 # Model a Single Agent Turn as Many Inference and Tool-Call Iterations
 
 > A single user-facing "turn" is an iterative sequence of model inference and tool execution steps that repeats until the model emits an assistant message with no pending tool calls — not a single round-trip inference call.
@@ -113,7 +114,7 @@ Unbounded turn loops become liabilities in production under these conditions:
 
 3. **Latency opacity**: a turn that takes 30 seconds of silent tool execution is indistinguishable from a hung process to the end user. Streaming intermediate tool results is the only signal available; omitting it produces a wall of silence that triggers retries or abandonment.
 
-4. **Doom loops in multi-agent systems**: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the Extended ReAct loop explicitly targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)).
+4. **Doom loops in multi-agent systems**: when multiple agents share a loop, conflicting termination conditions cause tasks to bounce without resolution, burning turns without progress. Phase 3 of the Extended ReAct loop explicitly targets doom-loop detection as a separate concern ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)); see [Loop Detection](../observability/loop-detection.md) for the intra-session intervention patterns.
 
 ## Key Takeaways
 
@@ -124,28 +125,11 @@ Unbounded turn loops become liabilities in production under these conditions:
 
 ## Related
 
-- [Stateless Agent Loop for Prompt Caching and Zero Data Retention](../context-engineering/prompt-caching-architectural-discipline.md)
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
-- [Observation Masking: Filter Tool Outputs from Context](../context-engineering/observation-masking.md)
-- [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
-- [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md)
-- [Agent Harness](agent-harness.md)
-- [Harness Engineering](harness-engineering.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
-- [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Context Budget Allocation](../context-engineering/context-budget-allocation.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Convergence Detection in Iterative Agent Refinement](convergence-detection.md)
-- [Agentic AI Architecture: From Prompt to Goal-Directed](agentic-ai-architecture-evolution.md)
-- [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why reasoning traces from extended thinking phases should not be trusted as proof of correct decisions
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
-- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
+- [Agent Harness](agent-harness.md) — the runtime that executes tool calls and appends results within each turn iteration
+- [Harness Engineering](harness-engineering.md) — design decisions for the surrounding loop that drive inference and tool dispatch
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — alternatives and variations on the iterative inference-tool loop
+- [Agent Loop Middleware](agent-loop-middleware.md) — interception points that wrap inference and tool execution steps
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — strategies for mid-turn tool failures and error recovery
 - [The Think Tool](think-tool.md) — explicit thinking phase during Phase 1 of the Extended ReAct loop
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — how to keep the intra-turn prompt within budget
+- [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md) — proactively compacting context before the turn's budget is exhausted

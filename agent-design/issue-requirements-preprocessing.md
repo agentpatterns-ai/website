@@ -17,17 +17,17 @@ aliases:
 
 ## The Problem: Agents Take Issues at Face Value
 
-Most coding agents treat the issue description as the task specification and immediately proceed to codebase exploration and patch generation — the REAgent paper characterizes this as the default baseline behavior across the five agent systems it benchmarks against ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)). This fails because real issues routinely contain:
+Most coding agents treat the issue description as the task specification and proceed directly to codebase exploration and patch generation — the REAgent paper characterizes this as default behavior across the five agent systems it benchmarks ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)). Real issues routinely contain:
 
 - **Omissions** — missing reproduction steps, expected behavior, or environment details
 - **Ambiguities** — descriptions with multiple valid interpretations that lead to different patches
-- **Conflicts** — requirements that contradict each other or diverge from the actual codebase state
+- **Conflicts** — requirements that contradict each other or the actual codebase state
 
-The REAgent study ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) tested this hypothesis at scale: across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770)) using two LLMs, preprocessing issue descriptions into structured requirements improved average resolution rates by 17.40% compared to five baselines that used raw issue text as input.
+Across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770)) using two LLMs, REAgent's preprocessing improved average resolution rates by 17.40% over five baselines using raw issue text.
 
 ## The Preprocessing Approach
 
-Rather than acting on raw issue text, REAgent introduces a requirement construction phase before patch generation begins. The agent explores the codebase and synthesizes findings into a structured format covering nine attribute categories:
+REAgent inserts a requirement construction phase before patch generation. The agent explores the codebase and synthesizes findings into nine attribute categories:
 
 | Attribute | What It Captures |
 |-----------|-----------------|
@@ -41,11 +41,11 @@ Rather than acting on raw issue text, REAgent introduces a requirement construct
 | Solution | Modification locations, change scope |
 | Additional Notes | Edge cases, related issues |
 
-This transforms a paragraph of user-written text into a structured specification the agent can reason about precisely.
+This converts user-written prose into a structured specification the agent can reason about precisely.
 
 ## Quality Classification and Refinement Loop
 
-After constructing requirements, a separate assessment phase classifies any deficiencies into three categories:
+A separate assessment phase classifies deficiencies into three categories:
 
 ```mermaid
 graph TD
@@ -65,7 +65,7 @@ graph TD
 **Omission** — requirements underspecify intended behavior or constraints.  
 **Ambiguity** — vague descriptions that generate multiple valid interpretations.
 
-The Requirement Assessment Score (RAS = tests passed / total tests) drives iteration. A high-temperature sampling strategy generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement strategy and the requirements are regenerated. Non-improving feedback is recorded as a counterexample so the agent avoids repeating the same refinement in the next iteration. After at most four iterations, the highest-RAS requirement set is selected.
+The Requirement Assessment Score (RAS = tests passed / total tests) drives iteration. High-temperature sampling generates ten test scripts per issue. If RAS < 1.0, the classified deficiency triggers a targeted refinement and the requirements regenerate. Non-improving feedback is logged as a counterexample so the agent avoids repeating failed refinements. After at most four iterations, the highest-RAS set is selected.
 
 ## What the Ablation Study Shows
 
@@ -78,15 +78,15 @@ Four ablation variants isolate which components matter most ([Kuang et al., 2026
 | Codebase retrieval (use BM25 only) | 9.50% | — |
 | Requirement assessment (use LLM-as-judge) | **7.67%** | **24.67%** |
 
-Replacing the test-based requirement assessment with LLM-as-judge scoring caused the largest drop — particularly in the applied rate (syntactically correct patches). Using generated tests as indirect quality signals, despite their imperfect correctness (23%–46%), proved significantly more reliable than model-based scoring.
+Replacing test-based assessment with LLM-as-judge caused the largest drop, particularly in applied rate (syntactically correct patches). Generated tests, despite imperfect correctness (23%–46%), outperformed model-based scoring as quality signals.
 
 ## Practical Implications
 
-**For teams writing issues**: The structured attribute list is a concrete checklist. Issues that specify reproduction steps, environment, expected vs. actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
+**For teams writing issues**: The attribute list is a concrete checklist. Issues that specify reproduction steps, environment, expected vs. actual behavior, and root cause give agents the same advantage REAgent constructs automatically.
 
-**For teams building agent pipelines**: A preprocessing agent before the coding agent — exploring the codebase and filling in the attribute schema — adds one model call but recovers a meaningful share of failed patches. The benchmark cost was $1.47 per resolved issue with DeepSeek-V3.2.
+**For teams building agent pipelines**: A preprocessing agent before the coding agent adds one model call but recovers a meaningful share of failed patches. The benchmark cost was $1.47 per resolved issue with DeepSeek-V3.2.
 
-**Test generation as requirement validation**: Imperfect tests (23%–46% correctness) are still useful quality signals. Pass rate as a proxy for requirement quality is more reliable than asking a model to evaluate requirements directly.
+**Test generation as validation**: Imperfect tests (23%–46% correctness) still beat asking a model to evaluate requirements directly — pass rate is a more reliable quality proxy.
 
 ## Example
 
@@ -105,12 +105,12 @@ The coding agent receives a specification, not a report. The resulting patch han
 
 ## When This Backfires
 
-Preprocessing adds latency and an extra model call per issue. The cost-benefit calculation inverts in several conditions:
+Preprocessing adds latency and an extra model call. The cost-benefit inverts in several conditions:
 
-- **Well-specified issues**: When the issue already contains reproduction steps, environment details, and expected behavior, the preprocessing phase adds overhead without improving the input quality the coding agent receives.
-- **Simple single-file fixes**: Typo corrections, obvious off-by-one errors, and single-symbol renames don't benefit from a nine-attribute requirement schema — the overhead exceeds the gain.
-- **Low test-generation fidelity**: The RAS signal degrades when the codebase has sparse test infrastructure or when the issue domain produces tests with low correctness rates. At the low end of the 23–46% correctness range observed in the REAgent study, the RAS score may mislead the refinement loop, causing it to converge on worse requirements than the original.
-- **Non-Python / non-SWE-bench codebases**: The 17.40% improvement is measured on SWE-bench Python repositories. Generalization to other languages and issue structures remains unstudied; the structured schema may require adaptation for codebases with different conventions.
+- **Well-specified issues**: If the issue already contains reproduction steps, environment, and expected behavior, preprocessing adds overhead without improving input quality.
+- **Simple single-file fixes**: Typo corrections, off-by-one errors, and single-symbol renames don't benefit from a nine-attribute schema.
+- **Low test-generation fidelity**: At the low end of the 23–46% correctness range, RAS may mislead the refinement loop into worse requirements than the original.
+- **Non-Python / non-SWE-bench codebases**: The 17.40% improvement is measured on SWE-bench Python repositories. Generalization to other languages and issue structures remains unstudied.
 
 ## Key Takeaways
 

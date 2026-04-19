@@ -15,7 +15,7 @@ tags:
 
 ## The Gap Between Generic and Domain-Specific
 
-A generic instruction like "reason carefully before acting" gives the model no information about what good reasoning looks like in your domain. It has no worked examples, no domain vocabulary, and no model of what edge cases matter. The result is reasoning that looks thoughtful but misses the specific failures you care about.
+A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. No worked examples, no domain vocabulary, no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about.
 
 !!! note "Also known as"
     Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
@@ -35,9 +35,7 @@ Abstract rules ("be careful with edge cases") are harder to apply than concrete 
 
 ## Where Examples Belong
 
-Complex guidance belongs in the system prompt, not in tool descriptions. Tool descriptions answer "what does this tool do?"; the system prompt answers "how should you reason about this domain?". The model integrates system prompt content more broadly — it applies across all reasoning steps, not just at tool selection time.
-
-Per [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool), complex guidance in tool descriptions is fragmented; the same content in the system prompt produces more consistent application.
+Complex guidance belongs in the system prompt, not in tool descriptions. Tool descriptions answer "what does this tool do?"; the system prompt answers "how should you reason about this domain?". System prompt content applies across all reasoning steps, not just at tool-selection time. Per [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool), complex guidance in tool descriptions is fragmented; the same content in the system prompt produces more consistent application.
 
 ## Writing Effective Examples
 
@@ -47,7 +45,7 @@ Effective examples in a system prompt:
 2. Show the reasoning chain explicitly — what the agent should consider, in what order
 3. Show the correct action at the end — grounded in the reasoning shown
 
-The examples should come from your actual domain. Invented examples based on imagined cases miss the real failure patterns. Instrument your agent in production, observe where reasoning fails, and write examples for those cases.
+Use examples from your actual domain. Invented examples miss real failure patterns. Instrument your agent in production, observe where reasoning fails, and write examples for those cases.
 
 ## Iterative Refinement
 
@@ -60,7 +58,7 @@ The examples should come from your actual domain. Invented examples based on ima
 5. Measure improvement via benchmark or targeted eval
 6. Repeat
 
-This is not a one-time effort. As the agent encounters new cases and as the domain evolves, the example set needs maintenance.
+This is not a one-time effort. The example set needs maintenance as the agent encounters new cases and the domain evolves.
 
 ## When This Backfires
 
@@ -118,16 +116,10 @@ The after version encodes the tool call sequence, the conditions that gate each 
 ## Related
 
 - [The Think Tool](../agent-design/think-tool.md)
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
-- [Critical Instruction Repetition](critical-instruction-repetition.md)
-- [Event-Driven System Reminders](event-driven-system-reminders.md)
-- [Instruction Polarity](instruction-polarity.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
-- [CLAUDE.md Convention](claude-md-convention.md)
-- [Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Critical Instruction Repetition](critical-instruction-repetition.md)
+- [Instruction Polarity](instruction-polarity.md)
 - [Negative Space Instructions](negative-space-instructions.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
-- [Prompt Governance via PR](prompt-governance-via-pr.md)
-- [Tool Descriptions as Onboarding](../tool-engineering/tool-descriptions-as-onboarding.md) — writing tool descriptions with implicit context agents need

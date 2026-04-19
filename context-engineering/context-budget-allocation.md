@@ -19,13 +19,13 @@ aliases:
 
 ## The Budget Framing
 
+Context budget allocation is the practice of deciding, before a task starts, which content goes into the always-on layer and which loads on demand — treating the context window as a finite budget that must cover preloaded instructions, tool calls, reasoning, and file reads within a single session.
+
 A 200K token context window sounds large. Load AGENTS.md, five skill definitions, three reference files, and the system prompt, and the agent may start a task with 150K tokens already consumed. The remaining 50K must cover tool calls, intermediate reasoning, file reads, and implementation — and shrinks further as the conversation accumulates turns.
 
 Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively — no beta header required, at flat pricing. Older models (Sonnet 4.5 and Sonnet 4) still require the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use 1M context when retaining full history matters; prefer compaction when prior context can be safely summarized.
 
 [Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as an attention budget: the n² cost of token-pair relationships means a fully packed context is computationally thinner. Signal injected early competes with signal injected later.
-
-Context budget allocation is deciding what goes into which layer and when.
 
 ## The Two Loading Strategies
 
@@ -108,11 +108,14 @@ At session start, Claude Code loads only the two `description` strings (~30 toke
 - Context is a budget: every preloaded token displaces a token available for work.
 - Preload only what every task needs; load everything else on-demand.
 - Sub-agents isolate context cost — research in one context, synthesis in another.
-- Target task completion within 50% of the context window, accounting for preloaded content.
+- Reserve meaningful headroom beyond preloaded content for tool calls, reasoning, and file reads — the [n² attention cost](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) of a fully packed window makes late-session reasoning computationally thinner.
 
 ## Related
 
 - [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
+- [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
+- [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md)
+- [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Context Compression Strategies](context-compression-strategies.md)

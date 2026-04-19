@@ -30,6 +30,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — Auto-compaction fires at ~95% context fill, long after reasoning quality has degraded; manual compaction reframes context management as reasoning quality preservation
 - [Observation Masking](observation-masking.md) — Strip intermediate tool results from conversation history once they have served their purpose to keep active context lean without losing the work product
 - [Context Window Anxiety](context-window-anxiety.md) — Advanced models exhibit behavioral shortcuts as context limits approach; strategic buffers, counter-prompting, and token budget transparency counteract premature task closure
+- [Turn-Level Context Decisions](turn-level-context-decisions.md) — Every completed turn is a branching point with five options: continue, rewind, clear, compact, or delegate to a subagent; choosing well is the core skill of context management
 
 ## Compression & Caching
 
@@ -50,10 +51,12 @@ Strategies for fitting more useful content into less space, and for making repea
 How to build, layer, and route context to the right agent at the right time rather than dumping everything into a single prompt.
 
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — Build system prompts from modular, priority-ordered sections rather than monolithic static text, enabling mode-specific variants and efficient API caching
+- [Narrative Problem Reformulation for Code Generation](narrative-problem-reformulation.md) — Rewriting a fragmented coding problem as a coherent three-part narrative measurably shifts which algorithms a code LLM selects, with reported 18.7% zero-shot pass@10 gains concentrated on harder competitive-programming tasks
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md) — Optimise the orchestration layer that prepares each agent per phase; planners get summaries, workers get targeted file excerpts and validation commands
 - [Prompt Chaining](prompt-chaining.md) — Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage
 - [Prompt Layering](prompt-layering.md) — Agent instructions arrive from multiple sources simultaneously; understanding the precedence order and conflict resolution prevents unpredictable behavior
 - [Filter and Aggregate in the Execution Environment](filter-aggregate-execution-env.md) — Run data processing logic inside the code execution sandbox before surfacing results to the model, so only the relevant subset of data enters context
+- [Evolving Playbooks](evolving-playbooks.md) — Replace monolithic prompt rewrites with structured delta entries that accumulate, refine, and organize agent strategies without losing domain knowledge
 
 ## Loading & Retrieval
 

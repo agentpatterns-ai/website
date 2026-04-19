@@ -78,16 +78,6 @@ CRA-only review performs closest to human-only when the CRA is narrowly scoped a
 
 The 23-point gap was measured on HuggingFace-hosted ML/AI repositories; generalizability to other software domains is not established by this study. Signal ratio as a calibration metric was validated across 13 CRAs — whether it transfers equally to CRA tools outside that set is not confirmed.
 
-## Limitations
-
-CRA-only review performs closest to human-only when the CRA is narrowly scoped and the repository has low merge-rate stakes. Three conditions favor CRA-only:
-
-- **Bot-generated PRs**: dependency bumps, automated refactors, and chore PRs where merge criteria are explicit and mechanical
-- **Signal ratio above 80%**: if a CRA has been calibrated to exceed this threshold on your codebase, the 60.2% abandonment finding may not apply
-- **Low-volume, low-risk contexts**: internal tooling repositories where abandonment is acceptable and human review bandwidth is the binding constraint
-
-The 23-point gap was measured on HuggingFace-hosted ML/AI repositories; generalizability to other software domains is not established by this study. Signal ratio as a calibration metric was validated across 13 CRAs — whether it transfers equally to CRA tools outside that set is not confirmed.
-
 ## Related
 
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — adoption rate data (16.6% vs. 56.5%) and complexity effects that explain why CRA comments produce lower merge credibility

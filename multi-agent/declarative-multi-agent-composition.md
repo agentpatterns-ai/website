@@ -70,7 +70,7 @@ Effective multi-agent profiling surfaces:
 - **Message flow between agents** — traces the actual coordination path versus the intended one
 - **Per-agent timing** — exposes bottleneck agents in sequential workflows
 
-When agent definitions are declarative, the runtime can instrument every agent boundary automatically. Imperative code requires manual instrumentation at each handoff point.
+These per-agent attributes map directly to the [OpenTelemetry GenAI agent span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/), which standardize `invoke_agent` spans with token-usage, tool-call, and timing attributes for each agent invocation. When agent definitions are declarative, the runtime can emit those spans at every agent boundary automatically. Imperative code requires manual instrumentation at each handoff point.
 
 ## The Export-to-Code Path
 
@@ -157,6 +157,7 @@ Adding a fourth agent requires one new block under `agents:` and one new entry u
 ## Related
 
 - [Agent Handoff Protocols](agent-handoff-protocols.md) — structured contracts between pipeline stages
+- [Declarative Multi-Agent Topology: Topology-as-Code](declarative-multi-agent-topology.md) — the broader topology-as-code variant covering the whole agent graph
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — choosing the right coordination structure
 - [Framework-First Development](../anti-patterns/framework-first.md) — why starting with frameworks before understanding the raw API is risky
 - [Agent Debugging](../observability/agent-debugging.md) — diagnosing bad output in single-agent systems

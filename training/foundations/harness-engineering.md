@@ -84,7 +84,7 @@ Each layer catches what the layer above missed. Written conventions rely on agen
 
 ## Feedback Loop Quality
 
-The quality of error messages determines whether the agent self-corrects or spirals. Linter error messages are just-in-time context: the failure output enters the agent's context at the exact moment it needs to make a different decision.
+The quality of error messages determines whether the agent self-corrects or spirals. Linter error messages are just-in-time context: the failure output enters the agent's context at the exact moment it needs to make a different decision. Investing in feedback loop quality often outperforms upgrading the model — see [Feedback as Capability Equalizer](../../agent-design/feedback-capability-equalizer.md).
 
 Write messages as actionable remediation, not violation flags ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)):
 

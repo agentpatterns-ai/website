@@ -20,7 +20,7 @@ aliases:
 
 Credentials stored inside an agent sandbox — environment variables, config files, shell history — are accessible to any code the agent executes or is manipulated into executing. A [prompt injection](prompt-injection-threat-model.md) that causes the agent to run `printenv` or read `~/.ssh/id_rsa` immediately converts a confused agent into a credential exfiltration channel.
 
-Giving an agent access to a credential file — even with limited permissions — still means every tool call, subprocess, and injected instruction has potential access to that credential. Anthropic's sandbox design explicitly keeps "sensitive credentials (such as git credentials or signing keys) never inside the sandbox with Claude Code" for exactly this reason. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
+Giving an agent access to a credential file — even with limited permissions — still means every tool call, subprocess, and injected instruction has potential access to that credential. Anthropic's sandbox design explicitly keeps "sensitive credentials (such as git credentials or signing keys) never inside the sandbox with Claude Code" for this reason. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
 
 ## Proxy-Based Credential Pattern
 
@@ -46,7 +46,7 @@ Token scope should match the narrowest operation the agent needs:
 - A database connection role with `SELECT` only for read-heavy tasks
 - An API key that can POST to one endpoint, not an admin key
 
-This limits the blast radius: even if a token is misused, it can only affect the specific resource it was scoped to — a direct application of the least-privilege principle to agent credentials.
+This limits the blast radius: a misused token can only affect its scoped resource — a direct application of least-privilege to agent credentials. OWASP's AI Agent Security Cheat Sheet recommends the same pattern: "issue short-lived tokens that are narrowly scoped to a specific task" so an agent cannot reuse privileges across unrelated operations. [[Source]](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)
 
 ## Request Validation Before Token Attachment
 
@@ -60,17 +60,17 @@ This prevents the agent from being tricked into making an authenticated request 
 
 ## Audit Logging
 
-All authenticated actions the agent takes — including the full request and attaching credential — are logged at the proxy layer. This produces a complete audit trail independent of the agent's own logs or conversation history, which may be truncated or manipulated.
+All authenticated actions — including the full request and attached credential — are logged at the proxy layer, producing an audit trail independent of the agent's own logs or conversation history, which may be truncated or manipulated.
 
 ## Comparison with Environment Variable Injection
 
-Environment variable injection (the simpler alternative) keeps secrets out of context but still places them inside the sandbox process. The proxy pattern is appropriate when:
+Environment variable injection keeps secrets out of context but still places them inside the sandbox process. The proxy pattern is appropriate when:
 
 - The credential has significant blast radius (org-wide token, prod database)
 - The agent processes untrusted external content (email, web pages, user uploads)
 - Compliance or audit requirements mandate authenticated-action logging
 
-For low-stakes local dev tasks, environment variable injection is sufficient. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md).
+For low-stakes dev tasks, environment variable injection is sufficient. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md).
 
 ## Example
 
@@ -117,7 +117,7 @@ caddy run --config Caddyfile
 
 ## Why It Works
 
-The security guarantee comes from OS-level process isolation. The agent process and the proxy process are separate OS processes with distinct address spaces; the agent cannot read another process's environment variables, open file descriptors, or memory — even with the same user account. Anthropic's Claude Code sandbox is "built on top of OS level primitives such as Linux bubblewrap and MacOS seatbelt to enforce these restrictions at the OS level," covering "not just Claude Code's direct interactions, but also any scripts, programs, or subprocesses that are spawned by the command." [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing) Placing credentials in the proxy's process environment puts them behind this kernel-enforced boundary.
+The security guarantee comes from OS-level process isolation. Agent and proxy run as separate OS processes with distinct address spaces; the agent cannot read another process's environment variables, open file descriptors, or memory — even under the same user account. Anthropic's Claude Code sandbox is "built on top of OS level primitives such as Linux bubblewrap and MacOS seatbelt to enforce these restrictions at the OS level," covering "any scripts, programs, or subprocesses that are spawned by the command." [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing) Placing credentials in the proxy's process environment puts them behind this kernel-enforced boundary.
 
 ## When This Backfires
 
@@ -139,6 +139,7 @@ The security guarantee comes from OS-level process isolation. The agent process 
 ## Related
 
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)

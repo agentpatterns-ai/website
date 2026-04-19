@@ -85,7 +85,7 @@ Restrict blocks to `trigger: "auto"`. The user pressing `/compact` is a delibera
 
 ## The Release Condition
 
-An indefinite block exhausts the context window. Every hook that vetoes compaction must define an explicit release condition — a sentinel the harness has crossed before the hook allows the next compaction through. Without it, the harness will keep retrying, the window will fill, and the session will terminate harder than a summary would have.
+An indefinite block exhausts the context window. Every hook that vetoes compaction must define an explicit release condition — a sentinel the harness has crossed before the hook allows the next compaction through. Without it, the window fills and the session terminates harder than a summary would have.
 
 Two practical forms:
 
@@ -176,6 +176,8 @@ sequenceDiagram
 - **High-velocity tool output** — sessions generating large tool payloads (repo-wide greps, large file reads) cross the 99% threshold quickly; blocking past that point forces the harness to truncate arbitrarily, which is worse than the summary would have been ([Context Compression Strategies](../context-engineering/context-compression-strategies.md)).
 - **Low compaction frequency** — for short sessions where compaction rarely fires, the hook wiring and sentinel tracking are pure overhead. Prefer the simpler [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) when recovery is cheaper than prevention.
 - **Stale sentinel logic** — a sentinel file that the agent forgets to touch (or that a hook race condition leaves stale) blocks compaction even at safe points. Pair the sentinel check with the retry counter so a bug in one doesn't strand the session.
+
+> **"Block" cancels; it does not defer.** `{"decision": "block"}` cancels the current compaction — the harness does not auto-retry the same trigger. A retry only happens when the next trigger fires (pressure re-crosses the threshold, or the user reissues `/compact`), which is why the sentinel-plus-counter pattern above is mandatory: the hook's own bookkeeping is what re-evaluates on the next trigger. Edge case: if auto-compaction fired to *recover* from an API context-limit error, blocking surfaces that error and fails the in-flight request ([practitioner report: block cancels instead of deferring](https://github.com/MemPalace/mempalace/issues/856); [block prevents compaction at context limit](https://github.com/MemPalace/mempalace/issues/906)). Near window exhaustion, prefer allowing compaction or using `systemMessage` for advisory instructions rather than `decision: "block"`.
 
 ## Key Takeaways
 

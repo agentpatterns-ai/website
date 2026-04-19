@@ -17,11 +17,11 @@ tags:
 
 ## The Over-Tooling Problem
 
-Developers instinctively add more tools for coverage: multiple ways to read files, search the codebase, run code. The intent is to ensure the agent always has something that works. The effect is ambiguity the model must resolve on every call.
+Developers add tools for coverage: multiple ways to read files, search the codebase, run code. The intent is redundancy; the effect is ambiguity the model resolves on every call.
 
 OpenAI's data agent team found: "We exposed our full tool set to the agent, and quickly ran into problems with overlapping functionality... it's confusing to agents." Consolidating and restricting tool calls — even removing valid options — reduced ambiguity and improved end-to-end reliability. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
-Redundancy is a liability, not a safety net. When two tools can both accomplish a task, the model spends reasoning on the selection decision rather than on the task itself. When it selects the wrong one, the error is introduced before any work has been done.
+Redundancy is a liability, not a safety net. When two tools can accomplish the same task, the model spends reasoning on selection rather than the task itself — and a wrong selection introduces the error before any work is done.
 
 Anthropic's engineering team reaches the same conclusion from the tool-authoring side: "When tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and "Too many tools or overlapping tools can also distract agents from pursuing efficient strategies." [Source: [Writing effective tools for AI agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
@@ -39,9 +39,9 @@ For each overlap, decide: consolidate into one tool, or add explicit selection c
 
 The complementary mistake: writing detailed step-by-step system prompts that prescribe exactly how the agent should execute the task.
 
-The data agent team found: "rigid instructions often pushed the agent down incorrect paths" when question details varied. Highly prescriptive prompts anchor the agent to a procedure that was designed for one variant of the task; when the task varies slightly, the procedure doesn't fit and the agent follows it anyway.
+The data agent team found: "rigid instructions often pushed the agent down incorrect paths" when question details varied. Prescriptive prompts anchor the agent to a procedure designed for one variant of the task; when the task shifts slightly, the procedure no longer fits and the agent follows it anyway.
 
-Shifting to higher-level guidance and trusting the model's own reasoning to choose execution paths produced more robust outcomes. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+Shifting to higher-level guidance and trusting the model's reasoning to choose execution paths produced more robust outcomes. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 ## High-Level Prompting in Practice
 
@@ -51,7 +51,7 @@ Shifting to higher-level guidance and trusting the model's own reasoning to choo
 **Goal-oriented (prefer):**
 > "Find all places in the codebase that interact with the `users` table, including schema, queries, and migrations. Provide a summary of recent changes and current usage patterns."
 
-The prescriptive version anchors the agent to one search sequence. The goal-oriented version lets the agent choose whether to start with schema, queries, or migrations based on what it finds — which is often the right decision.
+The prescriptive version anchors the agent to one search sequence. The goal-oriented version lets the agent start with schema, queries, or migrations based on what it finds.
 
 ## For Coding Agent Design
 
@@ -61,6 +61,15 @@ The practical implications:
 - Let the model decide whether to read a file, search symbols, or inspect git history — it has information about what it found that the system prompt author didn't have
 - Consolidate overlapping tools into the smallest set that covers the task space without redundancy
 - Add explicit selection criteria only when use cases are genuinely distinct
+
+## When This Backfires
+
+Minimalism is not a universal rule. Common failure conditions:
+
+- **Multi-system orchestrators.** Agents coordinating distinct systems (ticketing, CRM, deployment) benefit from one tool per system operation. Collapsing into a generic `do_action(system, verb, payload)` moves the selection decision into parameter space and loses per-tool schemas.
+- **Consolidation that expands the parameter surface.** A unified `search` tool with `mode={text,semantic,symbol}` only helps if the model picks the mode reliably. If parameter choice is as ambiguous as tool choice, you have traded one ambiguity for another.
+- **Compliance-driven work.** Goal-oriented prompts assume a shared definition of "done". For regulated workflows where the procedure itself is the artifact (audit trails), prescriptive steps are safer.
+- **Weaker models.** Gains from trusting model reasoning shrink with capability. Smaller models benefit more from procedural scaffolding than open-ended goals.
 
 ## Key Takeaways
 

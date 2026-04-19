@@ -9,6 +9,7 @@ aliases:
   - thundering herd prevention
   - staggered launch pattern
 ---
+
 # Staggered Agent Launch
 
 > Launch parallel agents 30 seconds apart to break the thundering-herd dynamic — each agent claims work before the next one reads the queue.
@@ -21,7 +22,7 @@ When multiple agents start simultaneously, they all read the same queue snapshot
 - Wasted compute re-reading and re-evaluating already-claimed work
 - Inconsistent throughput as agents pile onto a narrow frontier
 
-This is the agent-swarm analog of the thundering-herd problem in distributed caching: all clients simultaneously request a cold cache entry, generating a burst of redundant backend calls.
+This is the agent-swarm analog of the [thundering-herd problem](https://en.wikipedia.org/wiki/Thundering_herd_problem) in distributed systems: many processes wake simultaneously and contend for a single resource, and only one succeeds — the rest burn cycles failing to claim it.
 
 ## The Staggered Launch Pattern
 
@@ -126,13 +127,8 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Agent Backpressure](../agent-design/agent-backpressure.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
-- [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
-- [Observation-Driven Coordination: CRDT-Based Parallel Agent](crdt-observation-driven-coordination.md)
-- [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [LLM Map-Reduce Pattern](llm-map-reduce.md)
+- [Agent Backpressure](../agent-design/agent-backpressure.md)
+- [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Swarm Migration Pattern](swarm-migration-pattern.md)
-- [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
-- [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md) — the standard enabling MCP server-based coordination patterns

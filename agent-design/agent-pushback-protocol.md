@@ -62,7 +62,7 @@ Pushback protocols gate on *request quality*: "this request is a bad idea, here'
 
 The pattern degrades in three conditions:
 
-**High-frequency, low-stakes edits.** When a developer is iterating quickly on minor changes — renaming a variable, adjusting styling, reordering output fields — a pushback gate on every request adds more interruption overhead than it saves. Reserving pushback for genuinely risky or ambiguous requests avoids automation fatigue.
+**High-frequency, low-stakes edits.** When a developer iterates quickly on minor changes — renaming a variable, reordering output fields — a gate on every request adds more interruption than it saves. SOC alert-fatigue research documents the same dynamic: at high volume, analysts disable, ignore, or offload alerts rather than triage each one ([Tariq et al., 2025](https://dl.acm.org/doi/10.1145/3723158)). Reserve pushback for genuinely risky or ambiguous requests.
 
 **Poorly calibrated trigger conditions.** Vague triggers ("push back when something seems off") cause agents to flag too many routine requests, which trains developers to dismiss concerns reflexively. When the real risky request arrives, the gate gets bypassed on habit. Concrete, enumerated conditions (as in the Anvil agent) solve this, but require upfront calibration per project context.
 

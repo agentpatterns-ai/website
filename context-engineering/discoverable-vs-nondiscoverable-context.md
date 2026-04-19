@@ -14,7 +14,7 @@ tags:
 
 ## The Cost of Instruction Files
 
-Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) are loaded into context on every interaction. Every line in those files consumes context budget before the agent starts any work. This makes the question of what to include a resource allocation decision, not a documentation exercise.
+Agent instruction files (AGENTS.md, CLAUDE.md, [copilot-instructions.md](../tools/copilot/copilot-instructions-md-convention.md)) load into context on every interaction. Every line consumes context budget before the agent starts work, making inclusion a resource-allocation decision, not a documentation exercise.
 
 The test for inclusion is simple: can the agent discover this information itself using the tools available to it — file reads, grep, glob searches? If yes, the information does not belong in the instruction file.
 
@@ -29,7 +29,7 @@ Agents have read, search, and exploration tools. Everything reachable through th
 - **Code conventions**: variable naming, imports, error handling — visible in any existing file
 - **Configuration**: .eslintrc, tsconfig.json, pyproject.toml are readable
 
-Including any of these in an instruction file creates a maintenance problem: the instruction diverges from the real codebase as the project evolves. The agent follows a stale description of how things work rather than what is actually there.
+Including any of these creates a maintenance problem: the instruction diverges from the real codebase as the project evolves, and the agent then follows a stale description rather than what is actually there.
 
 ## What Is Non-Discoverable
 
@@ -41,7 +41,7 @@ Some information cannot be inferred from the codebase through reading files:
 - **Non-obvious conventions**: "the `*Service` suffix is reserved for classes that talk to external APIs" — present in the pattern but not stated anywhere
 - **Out-of-band context**: dependencies, integrations, or constraints that live outside the repository
 
-These are the only things that earn a place in agent instruction files. The [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) pattern applies the same logic at the macro level: keep the file as a pointer map, not an encyclopedia.
+These are the only things that earn a place in agent instruction files. Anthropic's own Claude Code guide draws the same line: exclude "anything Claude can figure out by reading code," because "bloated CLAUDE.md files cause Claude to ignore your actual instructions" ([Anthropic, "Best Practices for Claude Code"](https://code.claude.com/docs/en/best-practices)). The [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) pattern applies the same logic at the macro level: keep the file as a pointer map, not an encyclopedia.
 
 ## Applying the Test
 
@@ -51,11 +51,11 @@ For each candidate entry in an instruction file, ask:
 2. If yes: remove it. Add a pointer if helpful ("see `src/repos/` for repository patterns").
 3. If no: include it.
 
-The pointer form is especially useful for discoverable content that benefits from direction. "Use the repository pattern in `src/repos/`" tells the agent where to look without duplicating what it will find there.
+The pointer form is useful for discoverable content that benefits from direction: "Use the repository pattern in `src/repos/`" tells the agent where to look without duplicating what it will find there.
 
 ## Why It Works
 
-Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space, and creates a second source of truth that diverges from the codebase as the project evolves. An agent given a stale directory tree may read from paths that no longer exist or skip newly created modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — because agents given high-level structural context explore the codebase more broadly, not more precisely ([Shi et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
+Instruction files are prepended to every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space and creates a second source of truth that diverges from the codebase over time. An agent given a stale directory tree may read from paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files increase inference cost by over 20% when they include structural overviews, with no improvement in task success — agents given high-level structural context explore the codebase more broadly, not more precisely ([Shi et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
 
 ## Anti-Patterns
 
@@ -111,7 +111,7 @@ The "after" version is shorter and will never go stale: the project structure, A
 
 **Agents without exploration tools**: If the agent lacks file-read or search capabilities, the discoverable/non-discoverable distinction collapses — structural information becomes non-discoverable by that agent. Audit actual tool access before applying this filter.
 
-**Large monorepos**: In codebases with hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including if it prevents broad traversal to find the right directory. The pointer form — a path, not a full tree — limits the token cost.
+**Large monorepos**: With hundreds of modules, a scoped pointer ("see `services/payments/`") crosses into discoverable territory but may be worth including to prevent broad traversal. The pointer form — a path, not a full tree — limits token cost.
 
 **High-churn codebases**: Context files go stale within a sprint during rapid restructuring. Bias toward non-discoverable content and keep any structural pointers in a separate, frequently-updated file rather than the main instruction file.
 

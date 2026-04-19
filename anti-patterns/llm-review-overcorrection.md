@@ -25,11 +25,9 @@ A review agent operating as sole authority blocks correct code from merging. The
 
 ## Why LLMs Overcorrect
 
-The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) authors' taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). These are semantic failures — models construct plausible critiques without falsifiable counterexamples.
+The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). Across all four, the model constructs a plausible critique without a falsifiable counterexample — hallucinating constraints, asserting failure modes it cannot demonstrate, or reading a stricter spec than the one given.
 
-The mechanism behind each category is the same: when a model must explain its verdict and propose a correction, it rationalizes rejection through invented problems rather than applying balanced judgment. Hallucinated constraints drive the "Added Requirement" class — the model introduces requirements absent from the specification. Unverified logic-error claims drive the "Logic Error" class — the model asserts failure modes without a falsifiable counterexample. "Boundary Error" and "Misread Specification" reflect a stricter interpretation of the requirement, against which the literal spec then fails.
-
-Explanation-requiring prompts amplify this: forcing a reasoning chain before the verdict locks the model into its initial misread. Generating a critique becomes the path of least resistance; the rationale anchors the verdict toward rejection, and each subsequent reasoning step compounds the error rather than reconsidering the premise. Binary prompts avoid this commitment.
+[Turpin et al. (2023)](https://arxiv.org/abs/2305.04388) explain the amplification: chain-of-thought explanations often rationalize a predisposed answer rather than derive one. Forcing a reasoning chain before the verdict locks the model into its initial misread — each step anchors rejection instead of reconsidering the premise. Binary prompts avoid this commitment.
 
 ## Fix-Guided Verification Filter
 
@@ -78,16 +76,14 @@ A verdict of `"false_positive"` means the model found a stylistic difference, no
 
 ## When This Backfires
 
-The fix-guided verification filter depends on executable tests. Without a test suite, both branches of the counterfactual are unverifiable and the filter cannot distinguish false positives from real defects. Specific failure conditions:
+The filter depends on executable tests as the ground truth. It fails when:
 
-- **No test suite / no test coverage**: the filter requires that tests exist and run against the submitted code; a codebase with low or missing test coverage cannot use execution as evidence
-- **Non-deterministic tests**: flaky tests produce inconsistent pass/fail results for the same code, making the original-vs-fix comparison unreliable
-- **Sparse coverage**: both original and fix pass regardless of correctness; `false_positive` verdicts become unreliable
-- **Style-only codebases**: if the team's review bar is stylistic rather than functional, LLM review may still flag genuine style regressions that tests never catch; the filter will classify these as false positives and suppress valid signals
-- **Prose-only fixes**: natural language corrections are not runnable; review prompts must elicit code-level fixes
-- **Large test suites**: two suite executions per flag adds latency that may outweigh the benefit for low-severity findings
+- **Coverage is sparse or absent**: both original and fix pass regardless of correctness — real defects get labelled `false_positive`
+- **Tests are flaky**: non-deterministic results corrupt the original-vs-fix comparison
+- **Review targets are non-executable**: style, documentation, or naming review produces no runnable counterfactual
+- **Fixes are prose, not code**: natural-language rewrites sidestep the mechanism
 
-Without automated tests, fall back to binary pass/fail prompts and require human confirmation for all flags.
+Without reliable tests, fall back to binary pass/fail prompts and require human confirmation for every flag.
 
 ## Key Takeaways
 

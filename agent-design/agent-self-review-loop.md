@@ -150,20 +150,10 @@ The agent parses each JSON output and fixes findings before the PR opens. If fin
 ## Related
 
 - [Review-Then-Implement Loop](../code-review/review-then-implement-loop.md)
-- [Committee Review Pattern](../code-review/committee-review-pattern.md)
+- [Committee Review Pattern](../code-review/committee-review-pattern.md) — cross-agent alternative where independent reviewers evaluate an implementer's output
 - [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Incremental Verification](../verification/incremental-verification.md)
-- [Empowerment Over Automation](empowerment-over-automation.md)
-- [Convergence Detection](convergence-detection.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that self-review extends with an extra verification pass
+- [Convergence Detection](convergence-detection.md) — deciding when self-review iterations have stopped surfacing new issues
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs fresh context tradeoffs across iteration loops
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — fresh-context iteration pattern that applies to self-review rounds
 - [Agent Harness](agent-harness.md) — the initializer + coding agent pattern that self-review integrates into as a built-in phase
-- [Harness Engineering](harness-engineering.md) — integrating review steps into agent harness configuration
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating iteration budget across reasoning and review phases
-- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — handling errors that self-review cycles cannot resolve within the iteration cap
-- [Behavioral Drivers of Agent Success](behavioral-drivers-agent-success.md) — quality gates and verification behaviors that determine whether self-review loops converge reliably
-- [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — self-review extended to agents rewriting their own system prompts
+- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)

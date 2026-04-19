@@ -21,11 +21,11 @@ aliases:
 
 Static best-of-N policies ("always run 10 sandboxes") break in two ways:
 
-**Prompt fragility:** If the prompt is underspecified, scaling N scales errors. Ten sandboxes all fail the same way. The signal was visible after three runs; you paid for ten.
+**Prompt fragility:** If the prompt is underspecified, scaling N scales errors. The signal was visible after three runs; you paid for ten.
 
-**Redundant success:** If the first three runs converge on a high-confidence winner, the remaining seven produce near-duplicate outputs at full cost. Early stopping could have yielded the same result for 30% of the spend.
+**Redundant success:** If the first three runs converge on a high-confidence winner, the remaining seven produce near-duplicate outputs at full cost. Early stopping yields the same result for 30% of the spend.
 
-Static caps are the default in most frameworks — adaptive control loops are a less common pattern. The adaptive controller replaces the fixed-N decision with a signal-driven control loop. See [nibzard/awesome-agentic-patterns: adaptive-sandbox-fanout-controller.md](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification.
+The adaptive controller replaces the fixed-N decision with a signal-driven control loop — see [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification. The same intuition is formalised in [Reinforce-Ada (Xiong et al., 2025)](https://arxiv.org/abs/2510.04996), which adaptively allocates inference budget per prompt and reports up to a 2× convergence speedup over fixed-N at equal total compute.
 
 ## The Four Signals
 
@@ -56,22 +56,22 @@ graph TD
     H --> B
 ```
 
-**Scale up** when success rate is acceptable but judge confidence is low and solutions diverge. More runs improve winner selection without changing the approach.
+**Scale up** when success rate is acceptable but judge confidence is low and solutions diverge — more runs improve winner selection without changing the approach.
 
-**Stop early** when the judge is confident, tests pass, and solutions converge. The additional runs would produce diminishing returns.
+**Stop early** when the judge is confident, tests pass, and solutions converge. Additional runs hit diminishing returns.
 
-**Refine prompt** when error clustering is high — if >70% of runs fail with the same error signature, the problem is prompt underspecification, not task difficulty. Spawning more runs repeats the same mistake.
+**Refine prompt** when error clustering is high — if >70% of runs fail with the same error signature, the problem is prompt underspecification, not task difficulty. More runs repeat the same mistake.
 
-**Decompose** when repeated refinement attempts still fail. A consistent failure across diverse attempts signals the task is too ambiguous or too large for a single-prompt approach. Switch to an investigative sub-agent.
+**Decompose** when repeated refinement still fails. Consistent failure across diverse attempts signals the task is too ambiguous or too large for a single prompt. Switch to an investigative sub-agent.
 
 ## Hysteresis Prevents Oscillation
 
-Naive threshold designs cause oscillation: the controller scales up, confidence crosses the stop threshold, it stops, next iteration falls below the scale-up threshold, it scales up again. Hysteresis breaks this by using asymmetric thresholds:
+A single threshold causes oscillation: scale up, cross the stop threshold, stop, drop below the scale-up threshold, scale up again. Asymmetric thresholds break the cycle:
 
 - **Scale up** if judge confidence < 0.65
 - **Stop** only if judge confidence > 0.75
 
-The gap between 0.65 and 0.75 creates a neutral zone where the controller holds its current N rather than switching. This is the same principle as thermostat deadbands and Schmitt triggers in control systems.
+The gap creates a neutral zone where the controller holds N — the same principle as thermostat deadbands and Schmitt triggers.
 
 ## Guardrails
 
@@ -94,7 +94,7 @@ Dynamic scaling needs hard limits to prevent runaway cost:
 
 - Tasks without cheap objective validation — diversity and confidence scoring requires an LLM judge, which adds cost and latency
 - Small queues (under ~5 tasks) where setup overhead exceeds savings
-- Tasks where prompt quality is already verified — if you know the prompt is solid, a static N is simpler and equally effective
+- Tasks where prompt quality is verified — a static N is simpler and equally effective
 
 ## Instrumentation Requirements
 
@@ -105,7 +105,7 @@ The controller is only as good as its signals. Before adopting this pattern, ver
 3. A judge that produces a calibrated confidence score with interpretable margins
 4. Error signature extraction that can cluster failures by root cause
 
-If any of these is unavailable or unreliable, the controller degrades to guessing. A static N with good post-hoc judging ([Fan-Out Synthesis](fan-out-synthesis.md)) may be more practical.
+If any of these is unavailable or unreliable, the controller degrades to guessing. A static N with good post-hoc judging ([Fan-Out Synthesis](fan-out-synthesis.md)) may be more practical. The judge-confidence signal in particular is fragile: [Landesberg (2026)](https://arxiv.org/abs/2603.12520) shows pointwise judges with moderate global correlation (r = 0.47) recover only 21% of best-of-N gains, while pairwise judging raises recovery to 61%. Prefer pairwise comparison when feasible.
 
 ## Example
 

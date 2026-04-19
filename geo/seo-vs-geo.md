@@ -45,7 +45,7 @@ graph LR
     B --> G[User Sees Your Brand In Answer]
 ```
 
-**The majority of AI citations come from third-party earned media**, not brand-owned content: forums, review platforms, industry press, Wikipedia, YouTube, LinkedIn. Owned content at most supplements; it does not dominate.
+**The majority of AI citations come from third-party earned media**, not brand-owned content: forums, review platforms, industry press, Wikipedia, YouTube, LinkedIn. A [Semrush analysis of 150,000 AI citations](https://www.semrush.com/blog/most-cited-domains-ai/) found Reddit accounted for 40.1% of LLM references, Wikipedia 26.3%, and YouTube 23.5% — corroborated by a [Search Engine Land summary of the study](https://searchengineland.com/ai-search-engines-cite-reddit-youtube-and-linkedin-most-study-473138). Owned content at most supplements; it does not dominate.
 
 **Content structure determines extractability.** AI systems pull isolated passages, not pages. Self-contained paragraphs, data tables, and FAQ sections are high-value; long-form narrative guides are low-value for extraction.
 

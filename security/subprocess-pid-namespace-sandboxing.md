@@ -100,7 +100,9 @@ The agent's Bash invocations run inside a PID namespace. Any background process 
 ## Related
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
+- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party](sandbox-rules-harness-tools.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party](sandbox-rules-harness-tools.md)

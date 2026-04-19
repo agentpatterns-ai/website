@@ -217,5 +217,6 @@ Runtime hook detection adds overhead to every failing Bash call. Three condition
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
 - [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
+- [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md)

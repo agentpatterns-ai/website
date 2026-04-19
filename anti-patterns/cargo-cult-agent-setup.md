@@ -48,6 +48,16 @@ Start your AGENTS.md from the [agents.md open standard](https://agents.md) with 
 
 Use community configurations for pattern reference — to see what kinds of instructions work and what structure a skill file can take. Do not copy them as solutions.
 
+## When This Critique Backfires
+
+Avoiding all templates can be worse than copying selectively. Cases where copy-then-prune beats blank-slate:
+
+- **First AGENTS.md in a project** — a template surfaces categories (stack, tests, commits) you would otherwise forget.
+- **Migrating between agents** — the instructions already match your project; structural copying is the point.
+- **Small configs (<50 lines)** — a practitioner can read end-to-end in one pass and keep or drop each line. Risk scales with size.
+
+The anti-pattern is copying without the prune-and-audit pass, not copying per se.
+
 ## Key Takeaways
 
 - Copied configurations follow the source project's conventions, not yours

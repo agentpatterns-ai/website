@@ -11,6 +11,7 @@ tags:
 
 ## Pages
 
+- [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](agent-debug-log-panel.md) — A persistent, chronological event-log surface separate from the user-facing transcript — lets operators replay and debug past agent sessions from the same events the agent saw
 - [Agent Debugging](agent-debugging.md) — A systematic process for tracing why an agent produced wrong, incomplete, or unexpected output
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — OpenTelemetry metrics, trajectory tracing, and structured audit trails for cost attribution, compliance, and debugging that survives context resets
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — Stop agents automatically when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt

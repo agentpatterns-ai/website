@@ -180,6 +180,14 @@ episode_store.upsert(
 | Maintenance | Episodes become stale as codebases evolve; decay mechanisms or periodic pruning are required |
 | Value threshold | Pays off for recurring problem types in stable domains; adds little for simple, non-recurring tasks |
 
+## Failure Modes to Watch
+
+Two post-2026 counter-points warrant caution before trusting an episode store blindly.
+
+**Memory poisoning.** Stored episodes become an attack surface once agents share or ingest traces from other agents, users, or pipelines. A poisoned episode -- whether from an adversary or an upstream bug -- persists until pruned and can steer future retrievals toward unsafe actions. Work on memory poisoning across semantic, episodic, and short-term memory argues this risk is under-studied and that mitigations analogous to private-knowledge retrieval are needed for multi-agent deployments ([Memory Poisoning and Secure Multi-Agent Systems, arxiv 2603.20357](https://arxiv.org/abs/2603.20357)). Treat episode sources as trust boundaries: validate provenance, isolate stores per tenant, and review writes before they reach the retrieval index.
+
+**Reflective error propagation in long-running agents.** Storing "attempts with outcomes" assumes the stored reasoning is correct. A single incorrect reflection in a short session causes limited damage; the same reflection persisting across weeks of retrievals can compound into systematic misdiagnosis -- the severity scales with agent lifetime, making it most dangerous precisely where memory is most valuable ([Memory in the Age of AI Agents, arxiv 2512.13564](https://arxiv.org/abs/2512.13564)). The `lesson` abstraction step is the natural place to audit: require a confidence signal, a reviewer pass, or periodic re-validation against production outcomes before a lesson is allowed to influence retrieval.
+
 ## Key Takeaways
 
 - Store problem-solving sequences with outcomes -- the narrative arc of attempt, failure, and resolution is the retrievable unit

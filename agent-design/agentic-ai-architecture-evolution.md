@@ -16,9 +16,9 @@ tags:
 
 ## The Architectural Shift
 
-Stateless prompt-response systems — where a user sends a message and the model returns a response — are the simplest LLM deployment pattern. Goal-directed systems extend this into autonomous multi-turn execution: the agent receives an objective, decomposes it into subtasks, executes tools, observes results, and iterates until the goal is met or a stopping condition triggers.
+Stateless prompt-response systems are the simplest LLM deployment pattern. Goal-directed systems extend this into autonomous multi-turn execution: the agent receives an objective, decomposes it into subtasks, executes tools, observes results, and iterates until the goal is met or a stopping condition triggers.
 
-[arXiv:2602.10479](https://arxiv.org/abs/2602.10479) synthesizes this architectural evolution from foundational theory (BDI, reactive, and deliberative agent models) through contemporary LLM deployment patterns. The key insight: the transition is not incremental — it requires structural separation of concerns that prompt-response systems do not need.
+[arXiv:2602.10479](https://arxiv.org/abs/2602.10479) traces this evolution from foundational theory (BDI, reactive, deliberative) through contemporary LLM patterns. The transition is not incremental — it requires structural separation of concerns that prompt-response systems do not need.
 
 ## Reference Architecture
 
@@ -42,11 +42,11 @@ graph TD
     F -->|typed result| D
 ```
 
-**Cognitive layer** — the LLM. Responsible for goal interpretation, planning, tool selection, and result synthesis. The cognitive layer never directly modifies external state; it only emits typed tool calls.
+**Cognitive layer** — the LLM. Handles goal interpretation, planning, tool selection, and result synthesis. Never modifies external state directly; only emits typed tool calls.
 
-**Typed tool interfaces** — the boundary. Tool calls are schema-validated; results are schema-validated. The cognitive layer cannot issue an untyped or malformed command. This boundary is the primary mechanism for predictable behavior.
+**Typed tool interfaces** — the boundary. Calls and results are schema-validated, so the cognitive layer cannot issue a malformed command. This is the primary mechanism for predictable behavior.
 
-**Execution layer** — deterministic infrastructure. Receives typed calls, executes them, returns typed results. The execution layer contains no reasoning; it contains only execution logic, error handling, and result formatting.
+**Execution layer** — deterministic infrastructure. Receives typed calls, executes them, returns typed results. Contains no reasoning — only execution logic, error handling, and result formatting.
 
 This separation enables independent testing of each layer and explicit auditability at the boundary.
 
@@ -54,20 +54,20 @@ This separation enables independent testing of each layer and explicit auditabil
 
 Three coordination topologies, each with distinct failure patterns (see [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) for a full breakdown; centralized vs. decentralized tradeoffs are also surveyed in [arXiv:2601.01743](https://arxiv.org/abs/2601.01743)):
 
-**Centralised orchestration** — one orchestrator agent manages all worker agents. Workers execute assigned tasks and return results; the orchestrator synthesizes and decides next steps.
+**Centralised orchestration** — one orchestrator manages all workers, which execute assigned tasks and return results.
 
 - *Advantage*: single point of coordination makes reasoning traceable
-- *Failure mode*: orchestrator becomes a bottleneck; orchestrator failure halts the entire system
+- *Failure mode*: orchestrator becomes a bottleneck; its failure halts the system
 
-**Decentralised peer-to-peer** — agents communicate directly with each other without a designated coordinator. Each agent makes local decisions based on shared state or message passing.
+**Decentralised peer-to-peer** — agents communicate directly without a coordinator, making local decisions from shared state or messages.
 
 - *Advantage*: no single point of failure; scales horizontally
 - *Failure mode*: emergent coordination failures, race conditions, and inconsistent shared state are harder to debug
 
-**Hybrid** — a lightweight coordinator handles task routing and high-level synthesis; workers communicate directly for sub-task coordination without routing through the coordinator.
+**Hybrid** — a lightweight coordinator handles routing and synthesis; workers communicate directly for sub-task coordination.
 
-- *Advantage*: reduces coordinator bottleneck while maintaining traceability at the routing level
-- *Failure mode*: boundary between coordinator and peer-to-peer communication must be explicitly defined; implicit crossing creates inconsistent behavior
+- *Advantage*: reduces coordinator bottleneck while keeping traceability at the routing level
+- *Failure mode*: the boundary between coordinator and peer-to-peer communication must be explicit; implicit crossing creates inconsistent behavior
 
 ## Enterprise Hardening Checklist
 
@@ -93,15 +93,15 @@ Production agent deployments require three categories of hardening beyond functi
 
 ## Industry Convergence Pattern
 
-The paper observes that the ecosystem is converging on shared infrastructure patterns parallel to web services maturation: standardized agent loops, tool registries, and auditable control mechanisms. Multiple frameworks now implement the cognitive/execution separation, typed tool interfaces, and governance checklists described above ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). If you build on these patterns now, you avoid architectural retrofits later.
+The paper observes ecosystem convergence on shared infrastructure parallel to web-services maturation: standardized agent loops, tool registries, and auditable control mechanisms. Multiple frameworks now implement the cognitive/execution separation, typed tool interfaces, and governance checklists above ([arXiv:2602.10479](https://arxiv.org/abs/2602.10479)). Building on these patterns now avoids architectural retrofits later.
 
 ## When This Backfires
 
-The cognitive/execution separation pattern adds structural overhead. Three conditions where it costs more than it returns:
+The cognitive/execution separation adds structural overhead. Three conditions where it costs more than it returns:
 
-1. **Simple single-turn tasks.** If the agent calls one tool and terminates, typed interfaces and a separate execution layer are engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
-2. **Rapid prototyping.** Strict schema contracts between layers slow iteration. Early-stage agents benefit from fluid coupling; formal separation is a refactoring target once the interface stabilizes.
-3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary matters when agents run autonomously at volume. A human-in-the-loop reviewing every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it creates maintenance cost with no proportionate gain.
+1. **Simple single-turn tasks.** If the agent calls one tool and terminates, typed interfaces and a separate execution layer add engineering overhead with no reliability benefit. A direct function call is cheaper and easier to test.
+2. **Rapid prototyping.** Strict schema contracts slow iteration. Early-stage agents benefit from fluid coupling; formal separation is a refactoring target once the interface stabilizes.
+3. **Low-throughput, human-supervised workflows.** Auditability at the tool boundary matters when agents run autonomously at volume. A reviewer inspecting every action replaces much of what formal audit logging provides — adding the full harness before volume justifies it is maintenance cost with no proportionate gain.
 
 ## Example
 

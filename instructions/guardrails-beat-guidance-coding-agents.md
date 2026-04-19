@@ -18,7 +18,7 @@ aliases:
 
 ## The Evidence
 
-The first large-scale empirical evaluation of CLAUDE.md / `.cursorrules`-style files scraped 679 rule files (25,532 rules) from GitHub and ran over 5,000 agent runs with a state-of-the-art coding agent on SWE-bench Verified ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Four findings matter for rule design:
+The first large-scale evaluation of CLAUDE.md / `.cursorrules`-style files scraped 679 rule files (25,532 rules) from GitHub and ran 5,000+ agent runs on SWE-bench Verified ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Four findings matter for rule design:
 
 - Rules improve performance by **7–14 percentage points** over no rules
 - **Random rules help as much as expert-curated ones** — implying rules work through context priming, not instruction content
@@ -27,9 +27,9 @@ The first large-scale empirical evaluation of CLAUDE.md / `.cursorrules`-style f
 
 ## Why It Works
 
-Zhang et al. analyze the asymmetry through potential-based reward shaping (PBRS): rules do not teach new behavior but reshape the agent's search landscape ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Negative constraints remove infeasible branches from the search — a discrete, binary cut. Positive directives add soft preferences that compete with the model's existing training-time priors, producing objective conflict that shows up as degraded task performance on the benchmark.
+Zhang et al. analyze the asymmetry through potential-based reward shaping (PBRS): rules do not teach new behavior but reshape the agent's search landscape ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Negative constraints remove infeasible branches — a discrete, binary cut. Positive directives add soft preferences that compete with training-time priors, producing the objective conflict that shows up as degraded benchmark performance.
 
-The context-priming half of the mechanism is independent: any domain-relevant text activates the coding-task subspace of the model's representations regardless of instruction content, which explains why random rules produce gains comparable to hand-written ones. Presence of rule text primes; content of rule text shapes the search. The two effects stack.
+The context-priming half is independent: any domain-relevant text activates the coding-task subspace of the model's representations regardless of content, which explains why random rules match hand-written ones. Rule presence primes; rule content shapes the search. The two effects stack.
 
 ## Applying the Pattern
 
@@ -42,19 +42,19 @@ Three rewrites follow directly from the evidence:
 | Keep changes focused | Do not refactor code outside the task scope |
 | Write thorough tests | Do not delete or skip existing tests |
 
-Each "after" rule defines a feasibility boundary the agent either crosses or doesn't — exactly the property PBRS predicts will reshape the search without competing with priors. Each "before" rule asks the agent to rank its existing behavior against a goal it has to interpret.
+Each "after" rule defines a feasibility boundary the agent either crosses or doesn't — the property PBRS predicts will reshape search without competing with priors. Each "before" rule asks the agent to rank its existing behavior against a goal it must interpret.
 
-For truly novel conventions the agent cannot discover from the codebase — an unfamiliar build command, a project-specific tool invocation — a positive directive is the only option. Keep those rules, and pair them with negative guardrails around the adjacent failure modes.
+For novel conventions the agent cannot discover from the codebase — an unfamiliar build command, a project-specific tool invocation — a positive directive is the only option. Keep those, and pair them with negative guardrails around the adjacent failure modes.
 
 ## Reconciling With Other Findings
 
 This result is narrower than it looks. Three boundaries matter:
 
-- **Coding agents on SWE-bench only.** The paper's evidence is task-specific. General prompt engineering guidance still favors positive directives; Anthropic's current docs advise ["Tell Claude what to do instead of what not to do"](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview) for clarity and output format control. The coding-agent finding is a specialization, not a reversal.
-- **Rule sets under ~50 rules.** The no-degradation window ends there. Beyond that point, the compliance ceiling dominates — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Guardrails-over-guidance does not cancel the ceiling.
-- **Complementary, not superseding.** Benchmarks of AGENTS.md files found tool-specific commands and non-inferable constraints produce the largest behavior change ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Those are positive directives, and they still work where they supply information the agent genuinely cannot infer.
+- **Coding agents on SWE-bench only.** General prompt engineering still favors positive directives; Anthropic's docs advise ["Tell Claude what to do instead of what not to do"](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) for clarity and format control. The coding-agent finding is a specialization, not a reversal.
+- **Rule sets under ~50 rules.** The no-degradation window ends there. Beyond it, the compliance ceiling dominates — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+- **Complementary, not superseding.** [AGENTS.md](../standards/agents-md.md) benchmarks found tool-specific commands and non-inferable constraints produce the largest behavior change ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)) — positive directives that still work where they supply information the agent cannot infer.
 
-The practical synthesis: write negative constraints for failure modes the agent already knows how to avoid in principle; write positive directives only for information the agent cannot reach any other way.
+The synthesis: write negative constraints for failure modes the agent already knows how to avoid; write positive directives only for information the agent cannot reach any other way.
 
 ## Example
 

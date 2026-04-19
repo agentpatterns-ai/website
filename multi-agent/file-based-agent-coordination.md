@@ -129,14 +129,10 @@ When agent-03 attempts to push a lock for the same task, git rejects the push wi
 ## Related
 
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Agent Harness](../agent-design/agent-harness.md)
+- [Single-Branch Git Agent Swarms](../workflows/single-branch-git-agent-swarms.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md)
 - [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
-- [Fan-Out Synthesis](fan-out-synthesis.md)
-- [Single-Branch Git Agent Swarms](../workflows/single-branch-git-agent-swarms.md)
-- [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)

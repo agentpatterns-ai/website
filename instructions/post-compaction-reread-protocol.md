@@ -82,7 +82,7 @@ EOF
 
 The mandatory language and confirmation requirement are intentional — a polite suggestion is treated as optional; an explicit stop-and-confirm prompt is not.
 
-Note: `PostCompact` (added in v2.1.76) fires after compaction but has no decision control and cannot inject prompts into Claude's context. It is appropriate for observability tasks (logging, external updates) rather than re-read injection. This pattern is independently documented in the [post_compact_reminder](https://github.com/Dicklesworthstone/post_compact_reminder) reference implementation.
+Note: `PostCompact` (added in [v2.1.76](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)) fires after compaction but has [no decision control](https://code.claude.com/docs/en/hooks) and cannot inject prompts into Claude's context. It is appropriate for observability tasks (logging, external updates) rather than re-read injection. This pattern is independently documented in the [post_compact_reminder](https://github.com/Dicklesworthstone/post_compact_reminder) reference implementation.
 
 ## Trade-offs
 

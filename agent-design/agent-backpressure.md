@@ -106,3 +106,4 @@ The full loop completes without human involvement. Each tool in the chain catche
 - [Delegation Decision](delegation-decision.md) — matching task characteristics to agent strengths, including backpressure availability as a factor
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — compensating for model limitations through feedback loops and linter-based enforcement
 - [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — structural patterns for control and safety including feedback-driven iteration
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant

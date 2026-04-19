@@ -71,7 +71,7 @@ Keyless signing requires CI/CD ambient OIDC credentials, preventing ad-hoc signi
 
 ## Why It Works
 
-Cryptographic signing binds a tool artifact's content to a hash: any modification produces a different digest, invalidating the original signature. The agent gateway rejects mismatches before the tool description ever reaches the LLM — fail-closed by design. Transparency logs (Rekor) make every signing event append-only in a Merkle tree, so retroactive log manipulation is computationally infeasible. Identity-binding via short-lived OIDC certificates means the signature attests *who* built the artifact, not just *what* it contains, defeating impersonation. Post-load monitoring compares live tool schemas against the signed baseline to catch rug pulls where a tool mutates after initial verification ([Cullinan et al., 2025](https://arxiv.org/html/2601.23132v1)).
+Cryptographic signing binds a tool artifact's content to a hash: any modification produces a different digest, invalidating the original signature. The agent gateway rejects mismatches before the tool description ever reaches the LLM — fail-closed by design. Transparency logs (Rekor) make every signing event append-only in a Merkle tree, so retroactive log manipulation is computationally infeasible. Identity-binding via short-lived OIDC certificates means the signature attests *who* built the artifact, not just *what* it contains, defeating impersonation. Post-load monitoring compares live tool schemas against the signed baseline to catch rug pulls where a tool mutates after initial verification ([Jamshidi et al., 2026](https://arxiv.org/abs/2601.23132)).
 
 ## Runtime Enforcement Patterns
 
@@ -168,6 +168,10 @@ A `non-zero exit` from `cosign verify-blob` signals a mismatch — the agent gat
 ## Related
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md)
+- [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md)
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)

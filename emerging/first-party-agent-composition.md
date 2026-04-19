@@ -34,7 +34,7 @@ The data lives in your own database. Features share the same data model. No webh
 
 ## How It Works
 
-Geoffrey Huntley demonstrates this approach at Latent Patterns ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)):
+Geoffrey Huntley demonstrates this approach at Latent Patterns, where he describes prompting his coding harness with *"Hey, I want PipeDrive, Trello, and ZenDesk"* and having the equivalent functionality emerge in his own codebase ([Huntley, "rapid application dev is back"](https://ghuntley.com/rad/)). He has separately reported cloning Posthog, Jira, Pipedrive, and Calendly the same way, framing it as building "a hyper-personalised business... with full control and everything first-party" ([Huntley, "Software development now costs less than the wage of a minimum wage worker"](https://ghuntley.com/real/)):
 
 1. **Describe the capability** — rough instruction to the coding harness: "I want Pipedrive, Trello, and Zendesk"
 2. **Agent builds it** — the coding agent implements the feature against the existing codebase and data model
@@ -86,6 +86,7 @@ It is less appropriate when:
 - Compliance requires vendor-certified infrastructure (SOC 2, HIPAA)
 - The capability requires deep domain expertise (payment processing, advanced analytics)
 - You need to scale to thousands of concurrent users immediately
+- The function is *deterministic* — accounting, payroll, ERP reconciliation, regulated workflows where 100% precision is required and probabilistic agent-built code is a poor substitute for hardened SaaS ([UncoverAlpha, "The Great SaaS Unbundling"](https://www.uncoveralpha.com/p/the-great-saas-unbundling-why-ai))
 
 ## Example
 

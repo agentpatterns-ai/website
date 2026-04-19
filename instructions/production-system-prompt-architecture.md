@@ -155,15 +155,15 @@ A minimal production system prompt skeleton applying the patterns above:
 
 **Verbosity amplifies, not compresses.** XML tags add token overhead. For short prompts (under ~500 tokens), concern isolation via XML sections costs more tokens than it saves in cache hits. The economics flip only when sections are individually stable and the prompt is large enough that cache savings offset tag overhead.
 
+**Section sprawl.** Prompts with 25+ named sections become hard to audit; rules buried in obscure sections get ignored by operators and missed in code reviews.
+
+**Cache invalidation from reordering.** Renaming or repositioning a section invalidates everything below it in the prefix cache, making refactoring expensive once the prompt reaches production scale.
+
+**Over-isolation.** Separating concerns too finely can cause contradictions between sections that the model resolves inconsistently; a `<safety>` section that overrides `<code_generation>` without a defined precedence rule is a latent conflict.
+
 ## Scope Notes
 
 The CL4R1T4S capture is a computer-use session prompt. The exact parameter names for reasoning effort and thinking mode at the prompt tail are visible in that capture but not publicly documented by Anthropic. The ~25-section count and XML tag naming conventions may be specific to the computer-use configuration rather than consistent across API, mobile, or enterprise deployments.
-XML-sectioned prompts impose structure that helps at scale but creates friction in simpler deployments:
-
-- **Section sprawl** — prompts with 25+ named sections become hard to audit; rules buried in obscure sections get ignored by operators and missed in code reviews
-- **Cache invalidation from reordering** — renaming or repositioning a section invalidates everything below it in the prefix cache; this makes refactoring expensive once the prompt reaches production scale
-- **Over-isolation** — separating concerns too finely can cause contradictions between sections that the model resolves inconsistently; a `<safety>` section that overrides `<code_generation>` without a defined precedence rule is a latent conflict
-- **Not needed at low scale** — for single-task agents or short prompts under ~2K tokens, XML structure adds syntax noise with no cache or attention benefit; flat prose with clear headings is preferable
 
 ## Sources
 

@@ -16,13 +16,13 @@ tags:
 
 ## The Pattern
 
-Parkinson's Law of Triviality (1957): time spent on an item is inversely proportional to its complexity. In code review, small diffs get thorough attention while large diffs overwhelm reviewers into approval.
+Parkinson's Law of Triviality (1957): attention scales inversely with complexity. Small diffs get scrutinized; large diffs get rubber-stamped.
 
-AI amplifies this. Agents produce PRs well beyond the threshold where review remains effective -- trivial hand-written changes attract debate while substantial AI-generated diffs pass unexamined. Distinct from [PR Scope Creep](pr-scope-creep-review-bottleneck.md): the law of triviality is about **reviewer psychology**, the cognitive response to diff size.
+Agents routinely produce PRs past the threshold where review stays effective -- hand-written tweaks attract debate while AI diffs pass unexamined. Distinct from [PR Scope Creep](pr-scope-creep-review-bottleneck.md): this is **reviewer psychology**, not scope.
 
 ## Defect Detection Collapses with Size
 
-The [SmartBear/Cisco study](https://mikeconley.ca/blog/2009/09/14/smart-bear-cisco-and-the-largest-study-on-code-review-ever/) (2,500 reviews) found optimal review is 100-300 LOC in 30-60 minutes; effectiveness drops sharply beyond 400 LOC. The [Propel study](https://www.propelcode.ai/blog/pr-size-impact-code-review-quality-data-study) quantifies the drop:
+The [SmartBear/Cisco study](https://mikeconley.ca/blog/2009/09/14/smart-bear-cisco-and-the-largest-study-on-code-review-ever/) (2,500 reviews) puts optimal review at 100-300 LOC in 30-60 minutes; effectiveness drops past 400. [Propel](https://www.propelcode.ai/blog/pr-size-impact-code-review-quality-data-study) quantifies the drop:
 
 | PR Size (lines) | Defect Detection Rate | Review Time | Comments per PR |
 |---|---|---|---|
@@ -31,15 +31,15 @@ The [SmartBear/Cisco study](https://mikeconley.ca/blog/2009/09/14/smart-bear-cis
 | 301-600 | 65% | ~2 hr | 2.4 |
 | 1,000+ | 28% | ~4.2 hr | 1.8 |
 
-Reviewers spending 4.2 hours on large PRs leave fewer comments than those spending 45 minutes -- fatigue drives disengagement, not deeper analysis.
+Four hours on 1,000 LOC yields fewer comments than 45 minutes on 200 -- fatigue drives disengagement, not depth.
 
 ## AI Makes It Worse
 
-[CodeRabbit's report](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI-generated PRs contain 1.7x more issues than human-written code, with 3x more readability issues and 75% more logic/correctness defects. Three cognitive mechanisms compound the problem:
+[CodeRabbit](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report) finds AI PRs contain 1.7x more issues than human code -- 3x more readability issues, 75% more logic defects. Three mechanisms compound the problem:
 
-- **Template blindness.** AI code follows similar structural patterns, causing reviewers to skim; subtle bugs hide inside familiar-looking boilerplate. ([AsyncSquad Labs](https://asyncsquadlabs.com/blog/code-review-bottleneck-ai-era/))
-- **AI brain fry.** Sustained AI oversight produces mental fog and increased error rates. ([Help Net Security / HBR](https://www.helpnetsecurity.com/2026/03/09/harvard-business-review-ai-workplace-fatigue-report/))
-- **Nyquist under-sampling.** Code production increased 3x+ while review sampling stayed flat -- defects alias as passing. ([Bryan Finster](https://bryanfinster.substack.com/p/ai-broke-your-code-review-heres-how))
+- **Template blindness.** AI output follows familiar patterns; reviewers skim, bugs hide in boilerplate. ([AsyncSquad Labs](https://asyncsquadlabs.com/blog/code-review-bottleneck-ai-era/))
+- **AI brain fry.** Sustained AI oversight produces mental fog and higher error rates. ([HBR / Help Net Security](https://www.helpnetsecurity.com/2026/03/09/harvard-business-review-ai-workplace-fatigue-report/))
+- **Nyquist under-sampling.** Code production tripled; review sampling stayed flat -- defects alias as passing. ([Bryan Finster](https://bryanfinster.substack.com/p/ai-broke-your-code-review-heres-how))
 
 ```mermaid
 graph LR
@@ -55,11 +55,11 @@ graph LR
 
 ### 1. Constrain batch size
 
-Target 100-300 LOC per PR. Break agent work into atomic commits. Use CI diff-size checks to reject oversized PRs before review.
+Target 100-300 LOC per PR. Split agent work into atomic commits; enforce size gates in CI.
 
 ### 2. Tiered review
 
-Use a [tiered code review](../code-review/tiered-code-review.md) approach:
+Use [tiered code review](../code-review/tiered-code-review.md):
 
 | Tier | Reviewer | Scope |
 |---|---|---|
@@ -71,15 +71,15 @@ See [Agentic Code Review Architecture](../code-review/agentic-code-review-archit
 
 ### 3. Semantic diffing
 
-Review abstracted behavior changes rather than raw line diffs. AST-based diffs and API contract analysis surface what actually changed.
+Review behavior changes, not raw lines. AST diffs and API-contract analysis surface what moved.
 
 ### 4. BDD-first specification
 
-Define expected behavior before the agent codes. Review becomes validation against pre-agreed criteria per [Spec-Driven Development](../workflows/spec-driven-development.md).
+Define expected behavior before the agent codes; review becomes validation against pre-agreed criteria. See [Spec-Driven Development](../workflows/spec-driven-development.md).
 
 ## When This Backfires
 
-Size limits fail when changes are genuinely atomic (cross-cutting refactors, schema migrations), when coordination overhead exceeds review benefit in tightly coupled monorepos, or when hard LOC gates produce superficial splitting — many small PRs that are individually below threshold but collectively incoherent.
+Size limits fail for genuinely atomic changes (cross-cutting refactors, schema migrations), when monorepo coordination exceeds review benefit, or when LOC gates force superficial splits — many small PRs, collectively incoherent.
 
 ## Example
 

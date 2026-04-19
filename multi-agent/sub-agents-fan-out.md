@@ -21,16 +21,16 @@ tags:
 
 ## The Problem
 
-Sequential in-thread research exhausts context fast. An agent tasked with reviewing ten files, fetching five URLs, or analyzing multiple data sources accumulates all raw material in its context window. By the time it synthesizes results, the window is crowded with exploration artifacts — partial reads, dead ends, intermediate notes — that compete with the work that actually matters.
+Sequential in-thread research exhausts context fast. An agent reviewing ten files or fetching five URLs accumulates all raw material in its context window. By the time it synthesizes results, the window is crowded with exploration artifacts — partial reads, dead ends, intermediate notes — that compete with the work that matters.
 
 ## Context Isolation as the Core Benefit
 
-Sub-agents solve two problems, but isolation is the more important one:
+Sub-agents solve two problems, and isolation is the more important one:
 
-1. **Parallelism** — spawn N sub-agents simultaneously instead of doing N things sequentially
+1. **Parallelism** — spawn N sub-agents simultaneously instead of running N tasks sequentially
 2. **Context isolation** — each sub-agent has its own context window; its exploration never enters the main thread
 
-The main thread dispatches tasks and receives only synthesized results. The raw work — file reads, URL fetches, error handling, retries — happens entirely within sub-agent contexts that are discarded when the sub-agent finishes.
+The main thread dispatches tasks and receives only synthesized results. Raw work — file reads, URL fetches, retries — happens entirely within sub-agent contexts that are discarded when the sub-agent finishes.
 
 This is the principle behind [context engineering](../context-engineering/context-engineering.md) ([Anthropic's framing](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)): sub-agents as a context management strategy, not just a parallelism strategy.
 
@@ -61,19 +61,9 @@ Key frontmatter fields for sub-agents:
 
 ## Agent Teams
 
-[Agent teams](../tools/claude/agent-teams.md) ([docs](https://code.claude.com/docs/en/agent-teams)) are a distinct pattern from sub-agents: multiple coordinated agents working in parallel on related tasks with shared state. Sub-agents are fire-and-forget with isolated context; teams are persistent with coordination overhead.
+[Agent teams](../tools/claude/agent-teams.md) ([docs](https://code.claude.com/docs/en/agent-teams)) are a distinct pattern: multiple coordinated agents working in parallel on related tasks with shared state. Sub-agents are fire-and-forget with isolated context; teams are persistent with coordination overhead.
 
-Use sub-agents when:
-
-- Tasks are independent and produce distillable results
-- Context isolation matters more than shared state
-- You want fast fan-out with minimal coordination
-
-Use agent teams when:
-
-- Agents need to share evolving state
-- Tasks are interdependent
-- Coordination is worth the overhead
+Use sub-agents when tasks are independent, produce distillable results, and context isolation matters more than shared state. Use agent teams when agents need to share evolving state, tasks are interdependent, or coordination is worth the overhead.
 
 ## What to Return from Sub-Agents
 
@@ -82,7 +72,7 @@ Sub-agents should return the minimum needed for synthesis, not the raw material:
 - Not: full file contents, raw HTML, complete API responses
 - Yes: extracted findings, structured summaries, specific facts with source attribution
 
-A sub-agent reading a 5000-token documentation page should return a 200-token summary of the relevant facts. The 4800 tokens of context it consumed vanish when it finishes.
+A sub-agent reading a 5000-token page should return a 200-token summary of the relevant facts. The 4800 tokens it consumed vanish when it finishes.
 
 ## Example
 
@@ -122,18 +112,18 @@ The main thread receives three 200-token summaries. The raw file contents — po
 
 ## Error Isolation in Parallel Tool Calls
 
-As of [Claude Code v2.1.72](https://code.claude.com/docs/en/changelog), parallel tool calls for `Read`, `WebFetch`, and `Glob` isolate failures — a single failed call no longer cancels sibling tool calls running in parallel. Only `Bash` errors still cascade and abort concurrent calls.
+As of [Claude Code v2.1.72](https://code.claude.com/docs/en/changelog), parallel tool calls for `Read`, `WebFetch`, and `Glob` isolate failures — a single failed call no longer cancels siblings running in parallel. Only `Bash` errors still cascade and abort concurrent calls.
 
-This matters for fan-out patterns because sub-agents routinely issue parallel reads and fetches. Before this change, one bad file path or unreachable URL would abort every parallel call in flight. Now, the successful calls complete and return results; only the failed call reports an error. Fan-out sub-agents can handle partial failures gracefully instead of losing all concurrent work.
+This matters for fan-out because sub-agents routinely issue parallel reads and fetches. Previously, one bad path or unreachable URL would abort every parallel call in flight; now successful calls complete and only the failed call reports an error. Fan-out sub-agents handle partial failures gracefully instead of losing all concurrent work.
 
 ## When This Backfires
 
 Fan-out sub-agents add overhead that makes them worse than in-thread execution in several conditions:
 
-- **Small task count with low token volume** — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. The isolation benefit is real only when each sub-agent's exploration would otherwise pollute the main context.
-- **Interdependent tasks** — when sub-task B depends on sub-task A's output, fan-out forces a two-phase structure (fan-out then sequential dependency resolution) that eliminates the parallelism benefit.
-- **Cost-sensitive workloads** — N parallel sub-agents means N simultaneous model invocations. If the sub-tasks are simple, a single agent with context compaction is cheaper.
-- **Result synthesis is the bottleneck** — if assembling N summaries requires reading most of the raw detail anyway, isolation provides no advantage; the main thread context fills up regardless.
+- **Small tasks, low token volume** — spawning three sub-agents to read three 100-token files costs more latency and money than three sequential in-thread reads. Isolation pays off only when each sub-agent's exploration would otherwise pollute the main context.
+- **Interdependent tasks** — when sub-task B depends on sub-task A's output, fan-out collapses into a two-phase sequence that eliminates the parallelism benefit.
+- **Cost-sensitive workloads** — N parallel sub-agents means N simultaneous model invocations. For simple sub-tasks, a single agent with context compaction is cheaper.
+- **Synthesis is the bottleneck** — if assembling N summaries requires reading most of the raw detail anyway, the main thread context fills up regardless.
 
 ## Key Takeaways
 

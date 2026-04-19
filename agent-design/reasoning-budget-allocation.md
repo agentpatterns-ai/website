@@ -126,11 +126,13 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 ## Related
 
 - [Think Tool](think-tool.md)
+- [Discrete Phase Separation](discrete-phase-separation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — pre-generation model tier selection via code health metrics
 - [Harness Engineering](harness-engineering.md)
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md)

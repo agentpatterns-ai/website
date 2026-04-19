@@ -16,7 +16,7 @@ aliases:
 
 ## Why Layers Matter
 
-Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail, and designs so that each layer catches failures the others miss.
+Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail, and designs so that each layer catches failures the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies." ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
 
 The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
 

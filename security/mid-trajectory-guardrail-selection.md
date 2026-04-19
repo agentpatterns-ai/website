@@ -16,20 +16,17 @@ aliases:
 
 ## The Mid-Trajectory Gap
 
-Most safety benchmarks evaluate guardrails on single-turn outputs — a model produces a response, the guardrail classifies it. Agentic systems expose a different surface: a sequence of tool calls where harmful intent can be distributed across steps, each individually appearing benign.
+Most safety benchmarks evaluate guardrails on single-turn outputs. Agentic systems expose a different surface: a sequence of tool calls where harmful intent can be distributed across steps, each individually benign.
 
-TraceSafe-Bench, the first benchmark targeting mid-trajectory safety, evaluated 13 LLM-as-a-guard models and 7 specialized guardrail systems across 1,000+ multi-step tool-calling trajectories and 12 risk categories ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). The benchmark spans two risk families:
+TraceSafe-Bench evaluated 13 LLM-as-a-guard models and 7 specialized guardrails across 1,000+ multi-step trajectories and 12 risk categories — security threats (prompt injection, privacy leaks, parameter manipulation) and operational failures (hallucinations, interface inconsistencies) ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Pre-execution guardrail work confirms that trajectory-level detection is distinct from output filtering ([Pre-Exec Bench, 2025](https://arxiv.org/abs/2510.09781)).
 
-- **Security threats**: prompt injection, privacy leaks, tool parameter manipulation, chained instruction overrides
-- **Operational failures**: hallucinations, interface inconsistencies, state desynchronization
-
-The finding: guardrail performance in this context is not well predicted by single-turn safety benchmarks.
+Guardrail performance here is not well predicted by single-turn safety benchmarks.
 
 ## Structural Competence Predicts Performance
 
-TraceSafe found that guardrail efficacy correlates strongly (ρ=0.79) with structured data benchmarks — JSON parsing accuracy, schema adherence — while showing minimal correlation with jailbreak robustness scores ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+Guardrail efficacy correlates strongly (ρ=0.79) with structured-data benchmarks — JSON parsing, schema adherence — and shows minimal correlation with jailbreak robustness ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
 
-The reason is mechanical: tool-calling trajectories consist of structured JSON inputs and outputs. A guardrail must parse these correctly to reason about what each step did, what parameters were passed, and whether the sequence constitutes a policy violation. A model that struggles with structured data will misread trajectories before it can apply any safety logic.
+The reason is mechanical: trajectories are structured JSON. A guardrail must parse them to reason about what each step did, what parameters were passed, and whether the sequence violates policy. A model weak at structured data misreads trajectories before any safety logic runs.
 
 ```mermaid
 graph TD
@@ -43,23 +40,23 @@ graph TD
     style F fill:#1a7f37,color:#fff
 ```
 
-General-purpose LLMs consistently outperformed specialized safety guardrails on trajectory analysis — model architecture dominated model scale and safety-specific fine-tuning ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+General-purpose LLMs outperformed specialized safety guardrails on trajectory analysis; architecture dominated scale and safety fine-tuning ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
 
 ## Multi-Step Obfuscation Evades Single-Turn Defenses
 
-The primary evasion pattern in multi-step trajectories is distributing harmful intent across tool calls. Each individual step passes single-turn guardrails; the violation only manifests when steps are read as a sequence ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+The primary evasion pattern distributes harmful intent across calls. Each step passes single-turn guardrails; the violation manifests only when steps are read as a sequence ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Step-level analysis of tool-invocation safety reaches the same conclusion ([ToolSafe, 2026](https://arxiv.org/abs/2601.10156)).
 
-This is structurally distinct from the injection attacks that [single-layer defenses](../anti-patterns/single-layer-injection-defence.md) fail to address. Single-turn guardrails evaluate calls in isolation; they cannot detect:
+This is structurally distinct from injection attacks that [single-layer defenses](../anti-patterns/single-layer-injection-defence.md) fail to address. Single-turn guardrails evaluate calls in isolation; they cannot detect:
 
 - **Chained instruction overrides** — tool result at step 3 re-scopes authority granted at step 1
 - **Context confusion** — guardrail loses track of which principal issued which instruction across a long trajectory
-- **Multi-step obfuscation** — harmful parameter values assembled across calls rather than passed in one call
+- **Multi-step obfuscation** — harmful parameter values assembled across calls rather than passed in one
 
-Accuracy of guardrail models improves over extended trajectories as models accumulate dynamic execution behavior rather than relying solely on static tool definitions ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). This suggests positioning guardrail evaluation at trajectory checkpoints — not only at each individual tool call.
+Guardrail accuracy improves over longer trajectories as models accumulate dynamic execution behavior rather than relying on static tool definitions ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)) — evaluate at trajectory checkpoints, not only per call.
 
 ## Guardrail Selection Criteria
 
-When selecting a guard model for a multi-step tool-calling workflow:
+When selecting a guard model for multi-step tool-calling:
 
 | Criterion | Why it matters |
 |-----------|----------------|
@@ -68,26 +65,27 @@ When selecting a guard model for a multi-step tool-calling workflow:
 | **General-purpose capability** | Outperforms specialized safety guardrails on trajectory tasks |
 | **Jailbreak benchmark scores** | Weak predictor of mid-trajectory performance — necessary but not sufficient |
 
-Specialized safety guardrails tuned for single-turn output classification are not the strongest choice for trajectory analysis. A general-purpose LLM with high structured data competence and long-context accuracy is a stronger baseline ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+Safety guardrails tuned for single-turn classification are not the strongest choice for trajectory analysis; a general-purpose LLM with structured-data competence and long-context accuracy is a stronger baseline ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
 
 ## Positioning Guardrails in the Harness
 
 Three placement strategies, ordered from weakest to strongest coverage:
 
-1. **Per-call evaluation** — guardrail sees each tool call independently. Catches single-call violations; misses multi-step patterns. Lowest cost.
-2. **Trajectory checkpoint evaluation** — guardrail reviews the full trajectory at defined checkpoints (e.g., every 5 calls, at task phase transitions). Catches distributed obfuscation. Highest accuracy per TraceSafe findings.
+1. **Per-call evaluation** — guardrail sees each call independently. Catches single-call violations; misses multi-step patterns. Lowest cost.
+2. **Trajectory checkpoint evaluation** — guardrail reviews the trajectory at checkpoints (every N calls, at phase transitions). Catches distributed obfuscation.
+3. **Full-trajectory review** — guardrail re-evaluates the full trajectory before any high-impact action. Highest coverage and cost; reserve for security-critical workflows.
 
-Combine per-call evaluation for obvious violations with trajectory checkpoints for sequence-level detection. Reserve the full-trajectory review for security-critical workflows where false negatives carry high cost.
+Combine per-call evaluation for obvious violations with trajectory checkpoints for sequence-level detection.
 
 ## When This Backfires
 
-Three conditions where trajectory checkpoint evaluation is weaker than per-call:
+Conditions where checkpoint evaluation is weaker than per-call:
 
-- **Short-lived agents** — agents completing in 2–3 tool calls accumulate no cross-step signal; any trajectory is too short for distributed obfuscation to materialize.
-- **Long-context accuracy degradation** — guardrail models vary in coherence across long trajectories. Validate long-context accuracy before committing to checkpoint evaluation.
-- **Operational failure detection** — TraceSafe found guardrails score substantially lower on operational anomalies (hallucinations, interface inconsistencies) than on explicit security threats ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Checkpoint evaluation does not close this gap; schema validators and dedicated monitors are more effective here.
+- **Short-lived agents** — 2–3 tool calls accumulate no cross-step signal; too short for distributed obfuscation.
+- **Long-context degradation** — guardrail coherence varies across long trajectories. Validate long-context accuracy before adopting.
+- **Operational failures** — TraceSafe found guardrails score substantially lower on operational anomalies (hallucinations, interface inconsistencies) than on explicit security threats ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Schema validators and dedicated monitors fit better here.
 
-General-purpose LLMs with strong structured-data performance exhibit "hyper-sensitive decision boundaries" producing over-refusal ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Calibrate thresholds on representative trajectories before production deployment.
+General-purpose LLMs with strong structured-data performance exhibit "hyper-sensitive decision boundaries" producing over-refusal ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Calibrate thresholds on representative trajectories before production.
 
 ## Example
 

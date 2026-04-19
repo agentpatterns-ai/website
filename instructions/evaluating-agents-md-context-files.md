@@ -104,6 +104,7 @@ The two studies also used different model and agent sets, so it is unclear wheth
 ## Related
 
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — complementary empirical finding on negative-vs-positive rule polarity for coding agents
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)

@@ -14,17 +14,17 @@ aliases:
 
 > Shift traffic between agent versions gradually rather than atomically. New versions prove themselves alongside old ones before full cutover, preventing broken in-flight sessions.
 
-Rainbow deployment keeps N versions of an agent running simultaneously. New sessions route to the latest version; existing sessions continue on whichever version started them and drain naturally when they complete. There is no forced cutover and no two-version ceiling.
+Rainbow deployment keeps N versions of an agent running simultaneously. New sessions route to the latest version; existing sessions stay on whichever version started them and drain as they complete. No forced cutover, no two-version ceiling.
 
 ## Why Agents Cannot Blue-Green
 
-Traditional services are stateless HTTP handlers. Swap the load balancer, drain connections, done. Agents are different:
+Stateless HTTP services cut over atomically — swap the load balancer, drain connections, done. Agents differ:
 
-- **Stateful execution** -- agents maintain conversation context, tool state, and multi-step plans across long-running sessions
-- **Behavioral sensitivity** -- minor changes to prompts, tools, or models cascade into large behavioral changes
-- **Expensive restarts** -- forcing a session restart loses accumulated context and progress, which is costly for users and for compute
+- **Stateful execution** -- conversation context, tool state, and multi-step plans persist across long sessions
+- **Behavioral sensitivity** -- small prompt, tool, or model changes cascade into large behavioral shifts
+- **Expensive restarts** -- forced restarts lose accumulated context and waste compute
 
-Blue-green deployment assumes you can atomically cut over. With agents, active sessions cannot be interrupted without data loss. Canary deployment improves this with gradual traffic percentages, but limits you to two concurrent versions. Rainbow deployments remove the version ceiling entirely.
+Blue-green assumes atomic cutover. Canary improves this with gradual traffic shifting but caps you at two concurrent versions. Rainbow removes the version ceiling.
 
 ## The Rainbow Model
 
@@ -43,13 +43,13 @@ graph LR
     R -->|new sessions| V3
 ```
 
-Each deployment is identified by a unique label (typically a git SHA). New traffic routes to the latest version. Existing sessions continue on whatever version started them. Old versions drain naturally as their sessions complete. There is no two-environment limit -- any number of versions coexist.
+Each deployment gets a unique label (typically a git SHA). New traffic routes to the latest version; existing sessions drain on their original version. Any number of versions coexist.
 
 The term originates from [Brandon Dimcheff's work at Olark (2018)](https://brandon.dimcheff.com/2018/02/rainbow-deploys-with-kubernetes/), solving the same problem for stateful WebSocket chat services on Kubernetes. Anthropic adopted the concept for their [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system).
 
 ## What Changes Require Rainbow Deploys
 
-Not every change needs gradual migration. The cost is worth it when the change affects agent behavior in ways that are hard to predict or test exhaustively.
+Not every change needs gradual migration. The cost is worth it when a change alters behavior in ways that are hard to predict or test exhaustively.
 
 | Change Type | Risk Level | Rainbow Deploy? |
 |---|---|---|
@@ -61,7 +61,7 @@ Not every change needs gradual migration. The cost is worth it when the change a
 
 ## The Four-Layer Version Problem
 
-Agent behavior depends on four independently versioned layers. A change to any one can alter output.
+Agent behavior depends on four independently versioned layers; a change to any one can alter output.
 
 ```mermaid
 graph TB
@@ -71,11 +71,11 @@ graph TB
     D["Layer 4: Tools<br/>(definitions, schemas, endpoints)"] --> E
 ```
 
-Each layer needs independent version tracking. A deployment version is the tuple of all four. Rollback means reverting to a known-good tuple, not just rolling back code.
+Track each layer independently. A deployment version is the tuple of all four; rollback means reverting to a known-good tuple, not just the code.
 
 ## Monitoring During Migration
 
-During traffic shifting, compare canary metrics against the baseline version before increasing the percentage.
+Compare the new version against the baseline before each percentage increase.
 
 | Metric | What to Watch |
 |---|---|
@@ -86,15 +86,15 @@ During traffic shifting, compare canary metrics against the baseline version bef
 | Hallucination rate | Is the new version fabricating more? |
 | User feedback | Are users rejecting or correcting outputs more often? |
 
-A typical progression: 5% of new sessions to the new version, then 25%, then 50%, then 100% -- advancing only when metrics hold steady at each stage.
+Typical progression: 5% → 25% → 50% → 100%, advancing only when metrics hold steady at each stage.
 
 ## Rollback
 
-Rollback is changing the router to point new traffic at the previous version. Old versions are still running (they were draining), so rollback is near-instant -- no redeployment required. This is the primary advantage over blue-green, where the previous environment may already be torn down.
+Rollback is a router change pointing new traffic at the previous version. Old versions are still running (draining), so rollback is near-instant — no redeployment. This is the primary advantage over blue-green, where the previous environment may already be torn down.
 
 ## When This Backfires
 
-Rainbow deployment is not always the right choice. Three specific conditions make it worse than the alternative:
+Three conditions make rainbow deployment worse than the alternative:
 
 - **Version sprawl with long-lived sessions**: If agents run tasks that span hours or days (deep research, multi-day planning pipelines), old versions may never fully drain. Each deployment adds another live version consuming infrastructure. Without an explicit session timeout or forced drain policy, the fleet fragments indefinitely.
 - **Cross-version debugging complexity**: Behavioral regressions that span a version boundary are harder to isolate. If v2 and v3 sessions coexist and users report degraded output, correlating errors to a specific version tuple (code × model × prompt × tools) requires robust version tagging on every log line and trace. Teams without mature observability often spend more time on version attribution than on the fix itself.

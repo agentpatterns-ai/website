@@ -12,7 +12,7 @@ aliases:
   - refinement termination detection
 ---
 
-# Convergence Detection in Iterative Refinement
+# Convergence Detection in Iterative Agent Refinement
 
 > Monitor three observable signals across refinement passes to replace intuition-based stopping with a mechanical criterion.
 
@@ -71,6 +71,10 @@ A developer is running critique passes on a system prompt for a coding agent. Af
 
 Running a sixth pass would likely produce cosmetic changes that may degrade quality by introducing unnecessary variation.
 
+## When Signal Convergence Misleads
+
+Convergence signals measure whether the output is *stabilising*, not whether it is *correct*. Lee et al., [RefineBench: Evaluating Refinement Capability of Language Models via Checklists](https://arxiv.org/abs/2511.22173) (2025), evaluated Gemini 2.5 Pro, GPT-5, and DeepSeek-R1 on 1,000 problems across 11 domains and found that self-refinement without external feedback yielded gains of +1.8 percentage points or less over five iterations, while guided refinement approached near-perfect scores — and that models routinely halt early due to overconfidence even when errors remain. When signals converge without an external evaluator, the stable state may reflect self-bias, not quality. For high-stakes outputs, pair convergence detection with an external checker (tests, a second model, a human reviewer) rather than relying on the signals alone.
+
 ## Key Takeaways
 
 - Three signals — change velocity, output size, content similarity — replace intuitive stopping with observable criteria
@@ -81,20 +85,16 @@ Running a sixth pass would likely produce cosmetic changes that may degrade qual
 
 ## Sources
 
-- Agent Flywheel Complete Guide — primary source for the three-signal model and [five-pass blunder hunt](../verification/five-pass-blunder-hunt.md) (original URL unreachable as of 2026-03-23)
 - Madaan et al., [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.17651) (2023) — demonstrates iterative LLM refinement with quantitative stopping criteria based on feedback scores; underpins the convergence-signal approach
+- Lee et al., [RefineBench: Evaluating Refinement Capability of Language Models via Checklists](https://arxiv.org/abs/2511.22173) (2025) — counter-evidence that self-refinement without external feedback is unreliable and that frontier models halt prematurely
 
 ## Related
 
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Failure-Driven Iteration](../workflows/failure-driven-iteration.md)
-- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md) — architectural context for convergence as a loop-termination mechanism
-- [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — iterative refinement and effort allocation across passes
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing accumulated vs fresh context across iteration loops
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — iteration mechanics within a single agent turn
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md) — convergence signals applied to self-improvement cycles
-- [Execution-First Delegation](execution-first-delegation.md) — stopping and refinement decisions in delegated execution
-- [Graph of Thoughts](graph-of-thoughts.md) — graph-structured reasoning that surfaces convergence as a termination signal when node evaluations stabilise
-- [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for instrumenting iteration signals and injecting stopping logic
+- [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — external evaluator that complements convergence signals
+- [Agent Self-Review Loop](agent-self-review-loop.md) — self-review as a convergence signal source
+- [Five-Pass Blunder Hunt](../verification/five-pass-blunder-hunt.md) — applied convergence on critique loops
+- [Ralph Wiggum Loop](ralph-wiggum-loop.md) — fixed-prompt iteration that benefits from convergence stopping
+- [Failure-Driven Iteration](../workflows/failure-driven-iteration.md) — failure signals that override convergence
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — accumulated vs fresh context across iteration loops
+- [Agentic Flywheel](agentic-flywheel.md) — convergence signals applied to self-improvement cycles
+- [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for instrumenting stopping logic

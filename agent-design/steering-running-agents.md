@@ -115,7 +115,7 @@ Both messages preserve the file reads and reasoning the agent has already accumu
 
 ## Why It Works
 
-LLM inference is stateless between calls, but context is not — each tool call appends its inputs and outputs to the conversation history that feeds the next call. When you steer mid-run, you prepend a new instruction to that accumulated history. The model reads the correction together with everything it has already learned: file contents, error messages, prior tool results. A restart, by contrast, discards all accumulated context and forces the model to re-read files and re-derive conclusions it had already reached, paying both token and latency costs again. Steering is efficient precisely because LLM context windows are readable in both directions: past results inform future steps regardless of when the instruction arrived.
+LLM inference is stateless between calls, but context is not — each tool call appends its inputs and outputs to the conversation history resent on the next call ([Anthropic Messages API](https://platform.claude.com/docs/en/build-with-claude/working-with-messages)). Steering mid-run prepends a new instruction to that accumulated history, so the model reads the correction alongside everything it has already learned: file contents, errors, prior tool results. A restart discards that context and forces the model to re-read files and re-derive conclusions it had already reached, paying token and latency costs again.
 
 ## When This Backfires
 
@@ -123,7 +123,7 @@ LLM inference is stateless between calls, but context is not — each tool call 
 
 **Interfaces that only queue, not interrupt**: Sending a follow-up when you mean to interrupt does not stop the current step. In Claude Code, typed messages queue until the next turn boundary; only Ctrl+C produces an immediate interrupt ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). If the current step consumes significant context in the wrong direction, a queued correction arrives too late to be cost-effective.
 
-**Heavily cached sub-agent architectures**: In orchestrator-worker setups where workers run in isolated context windows, a steering message to the orchestrator does not propagate to already-dispatched workers. The worker completes its current task with the original instruction; only the next dispatch receives the correction.
+**Heavily cached sub-agent architectures**: In [orchestrator-worker](../multi-agent/orchestrator-worker.md) setups where workers run in isolated context windows, a steering message to the orchestrator does not propagate to already-dispatched workers. The worker completes its current task with the original instruction; only the next dispatch receives the correction.
 
 **Accumulated context is itself the problem**: If earlier tool calls introduced noise — verbose error traces, irrelevant file contents, or conflicting outputs — preserving that context may hurt the subsequent steps rather than help them. Restart with a cleaner prompt when the context itself is contaminated.
 

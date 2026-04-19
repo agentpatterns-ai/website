@@ -39,7 +39,7 @@ Enterprise administrators control which AI models are available to Copilot users
 
 ### MCP Server Allowlists
 
-The MCP servers policy controls access to Model Context Protocol server support where it is generally available. MCP is disabled by default for Business and Enterprise plans — administrators must explicitly enable it and can maintain allowlists of approved servers ([GitHub Docs: Configure MCP server access](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-mcp-server-access)).
+The MCP servers policy controls access to [Model Context Protocol](../standards/mcp-protocol.md) server support where it is generally available. MCP is disabled by default for Business and Enterprise plans — administrators must explicitly enable it and can maintain allowlists of approved servers ([GitHub Docs: Configure MCP server access](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-mcp-server-access)).
 
 This default-deny posture prevents unvetted MCP servers from accessing repository context without administrative approval.
 

@@ -15,9 +15,9 @@ aliases:
 
 ## What It Is (and What It Is Not)
 
-Added in [Claude Code v2.1.78](https://code.claude.com/docs/en/changelog), `StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block behavior, initiate a retry, or resume the session. It fires after the turn has already failed.
+Added in [Claude Code v2.1.78](https://code.claude.com/docs/en/changelog), `StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block, retry, or resume the session; it fires after the turn has already failed.
 
-The hook's role is notification: log the error, push a metric, trigger an alert. Any retry or re-launch logic must live in an external process — a CI supervisor, a cron job, a shell wrapper — that reads the hook's output and decides what to do next.
+The hook's role is notification: log the error, push a metric, trigger an alert. Retry or re-launch logic must live in an external process — a CI supervisor, cron job, or shell wrapper — that reads the hook's output and decides what to do next.
 
 Contrast with `Stop`, which fires on successful turn completion. Both are non-blocking; `StopFailure` is the error branch.
 
@@ -161,16 +161,16 @@ An external cron job polls `~/agent-failures.jsonl`. When it finds a `rate_limit
 
 ## Why It Works
 
-`StopFailure` is non-blocking by design because it fires after an unrecoverable error — the turn has already ended. Claude Code distinguishes pre-action hooks (which can block: `PreToolUse`, `UserPromptSubmit`, `PermissionRequest`) from post-action hooks (observational only: `PostToolUse`, `StopFailure`). Control hooks execute *before* the action and can influence it; observational hooks execute *after* and cannot. At the point `StopFailure` fires, the API call has already failed and no exit code from the hook can alter that outcome. The design keeps the runtime's error path clean: it executes the notification command, ignores what it returns, and terminates. See the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) for the full hook lifecycle and exit-code behavior table.
+`StopFailure` is non-blocking by design because it fires after an unrecoverable error — the turn has already ended. Claude Code splits pre-action hooks that can block (`PreToolUse`, `UserPromptSubmit`, `PermissionRequest`) from post-action hooks that cannot (`PostToolUse`, `StopFailure`). Once `StopFailure` fires, the API call has already failed and no hook exit code can alter that outcome. The runtime executes the notification command, ignores its return, and terminates. See the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) for the full lifecycle and exit-code behavior table.
 
 ## When This Backfires
 
-- **Short-lived or interactive sessions rarely justify the overhead** — for a developer running `claude` in a terminal, inspecting the CLI's [exit code](https://code.claude.com/docs/en/hooks#exit-code-output) directly is simpler than wiring a `StopFailure` hook plus an external supervisor. The hook pays off for long-running, unattended agents (overnight refactors, CI, cron loops) where no human watches the exit code. If a human is already present, skip it.
-- **Silent hook script failures** — `StopFailure`'s exit code is ignored, so a broken hook script (missing `jq`, typo in the path, unset `$SLACK_WEBHOOK_URL`) fails invisibly. No alert fires, no log line appears, and the operator believes the supervisor is healthy. Test hook scripts in isolation and monitor the log file itself for staleness.
-- **Supervisor polling lag defers recovery** — the hook writes to a log; the external supervisor polls on an interval. Polling lag (30s, 1min) stacks on top of the API failure, extending mean time to recovery. Push-based signaling (the hook calls the supervisor directly) trades hook latency for faster reaction.
-- **Slow hooks delay shutdown** — `StopFailure` runs synchronously before the process exits. A hook that calls a slow external service (webhook, metrics endpoint) or has no timeout holds the process open. Add a timeout (`timeout` field in the hook config, or `timeout` in your shell script) and always use `|| true` on external calls.
-- **`unknown` error type limits scoping** — matchers can't distinguish the root cause when `error_type` is `unknown`. A hook scoped to `rate_limit` will silently skip genuine rate-limit failures that the runtime couldn't classify. Maintain a catch-all unscoped hook for audit logging alongside any type-scoped hooks.
-- **Log files fill on repeated crashes** — an agent restart loop (cron re-launches on every failure) combined with an append-only log hook writes one entry per crash indefinitely. Cap log file size or use a structured logging system with rotation.
+- **Interactive sessions rarely justify the overhead** — for a developer running `claude` in a terminal, inspecting the CLI's [exit code](https://code.claude.com/docs/en/hooks#exit-code-output) directly is simpler than wiring a hook plus a supervisor. The hook pays off for long-running unattended agents (overnight refactors, CI, cron loops) where no human watches the exit code.
+- **Silent hook script failures** — exit code is ignored, so a broken hook (missing `jq`, bad path, unset `$SLACK_WEBHOOK_URL`) fails invisibly: no alert, no log line, yet the operator believes the supervisor is healthy. Test hooks in isolation and monitor the log file for staleness.
+- **Supervisor polling lag defers recovery** — the hook writes to a log; the supervisor polls on an interval. Polling lag (30s, 1min) stacks on top of the API failure, extending mean time to recovery. Push-based signaling (the hook calls the supervisor directly) trades hook latency for faster reaction.
+- **Slow hooks delay shutdown** — `StopFailure` runs synchronously before the process exits. A hook calling a slow webhook or metrics endpoint holds the process open. Add a `timeout` and use `|| true` on external calls.
+- **`unknown` error type limits scoping** — matchers can't distinguish root cause when `error_type` is `unknown`. A hook scoped to `rate_limit` silently skips genuine rate-limit failures the runtime couldn't classify. Keep a catch-all unscoped hook for audit logging alongside type-scoped hooks.
+- **Log files fill on repeated crashes** — a cron restart loop plus an append-only log hook writes one entry per crash indefinitely. Cap log file size or use a rotating logger.
 
 ## Key Takeaways
 

@@ -15,21 +15,19 @@ aliases:
 
 ## The Evidence
 
-An empirical study of 278,790 code review conversations across 300 GitHub projects (2022-2025) quantifies how AI and human reviewers differ ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). The findings replace intuition with numbers.
+An empirical study of 278,790 code review conversations across 300 GitHub projects (2022-2025) quantifies how AI and human reviewers differ ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
 
 ### Adoption Rate Gap
 
-Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
-
-AI review output requires triage — you cannot treat it as equivalent to a human review comment.
+Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review output requires triage — not equivalence to a human comment.
 
 ### Complexity Cost
 
-Adopted AI suggestions produce larger increases in cyclomatic complexity (+0.085 vs -0.002 for humans) and code size (+0.216 statements vs +0.108 for humans) ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI suggestions may introduce technical debt even when correct — human reviewers tend toward simplification while AI agents tend toward addition.
+Adopted AI suggestions produce larger increases in cyclomatic complexity (+0.085 vs -0.002 for humans) and code size (+0.216 statements vs +0.108 for humans) ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Human reviewers tend toward simplification; AI agents tend toward addition, risking technical debt even when correct.
 
 ### Verbosity and Focus
 
-AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Over 95% of AI comments target code improvement or defect detection, while humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review misses entire categories of review value: mentoring, architectural questioning, and team knowledge sharing.
+AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Over 95% of AI comments target code improvement or defect detection, while humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review misses mentoring, architectural questioning, and team knowledge sharing.
 
 ### Conversation Dynamics
 
@@ -72,7 +70,7 @@ Teams without confidence threshold or severity filter tooling will experience th
 
 ## Why It Works
 
-AI agents excel at pattern-matching against large defect databases and applying consistent rules across every line of code without fatigue. Human reviewers provide contextual judgment that AI agents lack: architectural fit, knowledge transfer, and team-specific conventions that change over time. The sequential model works because AI pre-triage reduces the human reviewer's cognitive load — by the time a human reviews, known-pattern defects are already addressed, freeing attention for higher-level concerns. The data confirms this role division: over 95% of AI comments target defects and improvements, while human comments distribute across understanding, knowledge transfer, and design ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+AI agents excel at pattern-matching defect databases and applying consistent rules without fatigue. Human reviewers contribute judgment AI lacks: architectural fit, knowledge transfer, and evolving team conventions. The sequential model works because AI pre-triage reduces the human reviewer's cognitive load — known-pattern defects are addressed first, freeing attention for higher-level concerns. The data confirms the role division: over 95% of AI comments target defects and improvements, while human comments distribute across understanding, knowledge transfer, and design ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
 
 ## Key Takeaways
 

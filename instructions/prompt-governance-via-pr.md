@@ -45,6 +45,15 @@ The PR review process applies unchanged:
 | Model fine-tuning | Days | None (weight update) | ML infrastructure | Retrain from prior checkpoint |
 | Ad-hoc prompt iteration | Minutes | None | None | Manual reconstruction |
 
+## When This Backfires
+
+PR-gated prompt changes are not the right default in every context:
+
+- **Fast experimental iteration.** Eval-driven prompt tuning often involves dozens of variants per session. Routing each through a review queue adds latency that swamps the experiment loop; a sandboxed prompt registry or feature-flag system fits better until a winner is promoted to the reviewed file.
+- **Reviewers lack prompt-engineering literacy.** A diff is only as useful as the reviewer's ability to predict its behavioural effect. If approvers cannot reason about how a wording change shifts model output, the review becomes a rubber stamp — what some practitioners call "liability laundering" rather than governance ([Dev.to, 2026](https://dev.to/amit_kochman/ai-code-without-governance-is-now-a-legal-liability-520p)).
+- **No canary stage.** Because instruction files load on the next agent run, a merged PR is effectively an instant production deploy with full blast radius. Teams that need staged rollouts (percentage-based, cohort-gated) must layer additional infrastructure on top — branching alone does not provide it.
+- **Secrets or sensitive context in prompts.** Anything committed to git is recoverable from history. Prompts that legitimately contain customer data, credentials, or proprietary policy text need a separate secret-management path; PR review does not redact what the diff exposes.
+
 ## Example
 
 GitHub's accessibility team runs a triage pipeline that calls the [GitHub Models API](../tools/copilot/github-models-in-actions.md). Their instruction file serves two roles: classifying issues by WCAG violation severity, and coaching engineers on accessible code. The file references internal accessibility policies and their component library.

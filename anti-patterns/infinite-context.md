@@ -16,11 +16,9 @@ Load as much context as possible into the agent's prompt. Include every potentia
 
 ## Why It Fails
 
-Attention is finite even when the context window is not. As total tokens increase, the model's ability to attend to specific tokens degrades. Anthropic's context engineering guide describes this as "context rot" — the model's ability to recall and use information degrades as token count grows ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+Attention is finite even when the context window is not. Anthropic's context engineering guide calls this "context rot" — recall and use of information degrades as token count grows ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Symptoms: the agent ignores instructions that worked at shorter prompt lengths, produces generic outputs, or loses constraints stated early in the conversation.
 
-The symptoms are recognisable: the agent ignores instructions that were followed reliably when the prompt was shorter, produces increasingly generic outputs, or loses track of constraints stated early in the conversation.
-
-Adding irrelevant context does not add capability — it adds noise that competes with the signal for the model's attention. The Anthropic guide recommends identifying "the smallest possible set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising context volume ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+Irrelevant context adds noise that competes with signal. The Anthropic guide recommends identifying "the smallest possible set of high-signal tokens that maximize the likelihood of your desired outcome" rather than maximising volume ([Anthropic, 2025](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 ## Common Causes
 
@@ -35,25 +33,25 @@ Adding irrelevant context does not add capability — it adds noise that compete
 Replace volume with precision:
 
 - **Load on-demand**: fetch reference material when the task requires it, not at startup
-- **Use skill descriptions**: give the agent metadata about available tools without loading their full content; the content loads only when the agent invokes the skill
-- **Compact conversation history**: when context fills, summarise prior turns rather than continuing to accumulate them
-- **Isolate with sub-agents**: delegate retrieval-heavy subtasks to isolated context windows; the coordinator receives only the compressed result
-- **Prune tool results**: store large tool outputs externally and provide the agent with a summary plus a path to retrieve the full content if needed
+- **Use skill descriptions**: expose tool metadata; load full content only when the agent invokes the skill
+- **Compact conversation history**: summarise prior turns rather than accumulating them
+- **Isolate with sub-agents**: delegate retrieval-heavy subtasks to isolated windows; the coordinator receives only the compressed result
+- **Prune tool results**: store large outputs externally and pass the agent a summary plus a retrieval path
 
-LangChain's Deep Agents implements this through tiered compression: offloading large results, truncating older tool calls, and summarising conversation history — applied in sequence as context pressure increases ([LangChain, 2025](https://blog.langchain.com/context-management-for-deepagents/)).
+LangChain's Deep Agents applies tiered compression — offloading large results, truncating older tool calls, summarising history — in sequence as pressure rises ([LangChain, 2025](https://blog.langchain.com/context-management-for-deepagents/)).
 
 ## Mechanism
 
-Transformer attention computes relevance scores between every token in the context. As context length grows, the signal-to-noise ratio drops: each relevant token must compete with more irrelevant tokens for the model's limited attention budget. Empirically, models exhibit a "lost in the middle" effect — tokens at the start and end of a long context are retrieved reliably, while tokens in the middle receive disproportionately less attention ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Irrelevant content is not inert; it acts as a distractor that displaces attention from genuinely relevant tokens.
+Transformer attention computes relevance scores between every token in the context. As length grows, the signal-to-noise ratio drops: relevant tokens compete with more irrelevant ones for a fixed attention budget. Models exhibit a "lost in the middle" effect — tokens at the start and end are retrieved reliably, while middle tokens receive less attention ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Irrelevant content is not inert; it displaces attention from relevant tokens.
 
 ## When This Backfires
 
-Loading more context is not always wrong. This remediation is worse than the anti-pattern under specific conditions:
+Loading more context is not always wrong. The remediation loses to the anti-pattern under specific conditions:
 
-- **Retrieval is unreliable**: when the task requires reasoning over a large space and semantic search returns poor recall, loading more context directly may outperform retrieval-augmented generation with high miss rates.
-- **Latency budget is tight**: on-demand retrieval adds round-trip overhead. If response latency matters more than accuracy, preloading reduces tool calls.
-- **Context is truly homogeneous**: a task that genuinely requires every file (e.g., a whole-repo rename) has no irrelevant content to exclude — the anti-pattern does not apply.
-- **Sub-agent overhead is prohibitive**: spawning isolated context windows adds orchestration cost and failure modes; for short, focused tasks, a single larger context can be cheaper and more reliable.
+- **Retrieval is unreliable**: when semantic search has poor recall over a large space, loading directly may outperform RAG with high miss rates.
+- **Latency budget is tight**: on-demand retrieval adds round-trip overhead. If latency matters more than accuracy, preloading reduces tool calls.
+- **Context is truly homogeneous**: a task that genuinely needs every file (e.g., whole-repo rename) has no irrelevant content to exclude.
+- **Sub-agent overhead is prohibitive**: isolated windows add orchestration cost and failure modes; for short tasks, a single larger context is cheaper.
 
 ## Example
 
@@ -74,10 +72,8 @@ The fix was not in the extra context — the extra context is why the fix failed
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md)
-- [Context Poisoning](context-poisoning.md)
-- [Objective Drift](objective-drift.md)
-- [Distractor Interference](distractor-interference.md)
-- [Session Partitioning](session-partitioning.md)
-- [Dynamic Tool Fetching and Cache Break](dynamic-tool-fetching-cache-break.md)
 - [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md)
+- [Context Poisoning](context-poisoning.md)
+- [Distractor Interference](distractor-interference.md)
+- [Session Partitioning](session-partitioning.md)

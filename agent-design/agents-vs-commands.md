@@ -96,7 +96,7 @@ The pattern adds overhead without payoff in three conditions:
 2. **Rapidly changing scope**: When both the pipeline *and* the domain expertise are in flux simultaneously, maintaining the boundary actively slows iteration — every decision requires updating two files to stay coherent.
 3. **Solo projects without reuse**: On projects where agent definitions are never shared across commands, the abstraction is notional. The separation only pays off when the same agent genuinely serves multiple callers, or when the pipeline genuinely evolves independent of the expert definition.
 
-The principle derives from [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns), a foundational software design heuristic with well-documented trade-offs: it improves long-term maintainability at the cost of upfront complexity and indirection. The same cost-benefit calculus applies here.
+The principle derives from [separation of concerns](https://en.wikipedia.org/wiki/Separation_of_concerns) and the [single-responsibility principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) — foundational software design heuristics with well-documented trade-offs: they improve long-term maintainability at the cost of upfront complexity and indirection. The same cost-benefit calculus applies here.
 
 ## Key Takeaways
 

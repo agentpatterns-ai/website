@@ -41,7 +41,7 @@ Most fields are optional. The [Agent Skills standard](https://agentskills.io) de
 | `disable-model-invocation: true` | Yes | No | No |
 | `user-invocable: false` | No | Yes | Yes |
 
-Use `disable-model-invocation: true` for side-effect workflows (deployments, commits) where you control timing. Use `user-invocable: false` for background knowledge (style guides, domain rules) Claude should load automatically.
+Use `disable-model-invocation: true` for side-effect workflows (deploys, commits) where timing matters. Use `user-invocable: false` for background knowledge Claude should auto-load.
 
 ```yaml
 ---
@@ -61,7 +61,7 @@ user-invocable: false
 
 ## allowed-tools
 
-Tools that may run without per-use approval while this skill is active. Unlisted tools follow normal permission rules.
+Tools that may run without per-use approval while this skill is active. Unlisted tools follow normal permissions.
 
 ```yaml
 ---
@@ -73,7 +73,7 @@ allowed-tools: Read, Grep, Glob
 
 Skills specifying `allowed-tools` or `hooks` require user approval before first use — the runtime treats them as elevated-permission requests ([Claude Code changelog, 2.1.19](https://code.claude.com/docs/en/changelog)).
 
-The base Agent Skills standard marks `allowed-tools` as experimental; support varies across other implementations.
+The Agent Skills standard marks `allowed-tools` as experimental; support varies across implementations.
 
 ## model
 
@@ -89,7 +89,7 @@ model: haiku
 
 ## context and agent
 
-`context: fork` runs the skill in an isolated subagent. The skill body becomes the task prompt; the agent type provides system prompt, tools, and permissions.
+`context: fork` runs the skill in an isolated subagent. The skill body becomes the task prompt; the agent type provides tools and permissions.
 
 ```yaml
 ---
@@ -116,8 +116,6 @@ Built-in `agent` values:
 
 [Custom agents](../tools/copilot/custom-agents-skills.md) in `.claude/agents/` can also be referenced by name.
 
-`context: fork` requires explicit task instructions in the skill body. Reference-only skills (style guides, API conventions) produce no output when forked.
-
 ## hooks
 
 Lifecycle hooks scoped to this skill. Same format as `.claude/settings.json` hooks; all four types supported: `command`, `http`, `prompt`, `agent`.
@@ -141,7 +139,7 @@ With `context: fork`, `Stop` hooks convert to `SubagentStop` events at runtime (
 
 ## argument-hint
 
-Display-only hint shown in the `/` autocomplete menu. Does not affect parsing.
+Display-only hint shown in the `/` autocomplete menu; does not affect parsing.
 
 ```yaml
 ---
@@ -158,7 +156,7 @@ The value must be a string. YAML arrays or non-string types are coerced to strin
 
 ## Arguments in Skill Body
 
-Substitution variables available in the skill body:
+Substitution variables in the skill body:
 
 | Variable | Description |
 |----------|-------------|

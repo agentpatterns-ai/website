@@ -16,11 +16,9 @@ tags:
 
 ## The Pattern
 
-AI coding assistants shift the constraint in software delivery from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times. Generation velocity has outpaced reviewer capacity.
+AI coding assistants shift the delivery constraint from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times and 154% larger PRs — pushing changesets past the threshold for effective review.
 
-When a PR sits unreviewed, adding dependent work to it is your rational local response. On high-adoption teams, Faros reports average PR size increases of 154%, pushing changesets past the cognitive threshold for effective review.
-
-[SmartBear's study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) (10-month, 2,500 reviews) establishes the threshold: reviewers detect defects most effectively in 200-400 lines, with effectiveness dropping sharply beyond that.
+When a PR sits unreviewed, adding dependent work to it is the rational local response. [SmartBear's 10-month, 2,500-review study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) sets the threshold: defect detection peaks at 200–400 lines and drops sharply beyond.
 
 ## The Feedback Loop
 
@@ -34,29 +32,27 @@ graph TD
     F --> B
 ```
 
-The loop is self-reinforcing. [Pullflow's practitioner analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope causes developers to batch changes, further inflating PR size and compounding delay.
-
-[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) finds larger changes reduce merge likelihood in agent-authored PRs. [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code, making each added line more expensive to review.
+The loop is self-reinforcing. [Pullflow's analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope pushes developers to batch changes, inflating PR size and compounding delay. [arXiv:2602.19441](https://arxiv.org/abs/2602.19441) finds larger changes reduce merge likelihood in agent-authored PRs, and [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code — making each added line more expensive to review.
 
 ## Mitigations
 
-**Stacked PRs.** [Stacked PRs](https://graphite.com/blog/stacked-prs) let you open a new branch on top of an unmerged one, continuing work without adding to the stalled changeset. Development and review run in parallel; no blocking pressure accumulates.
+**Stacked PRs.** [Stacked PRs](https://graphite.com/blog/stacked-prs) let you branch on top of an unmerged PR, running development and review in parallel without adding to the stalled changeset.
 
-**Atomic PR discipline.** One logical change per PR, under 400 lines. Enforce in CI with diff-size checks. See the [SmartBear study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) for threshold evidence.
+**Atomic PR discipline.** One logical change per PR, under 400 lines; enforce with CI diff-size checks.
 
-**AI pre-review.** Use AI pre-review to triage issues and flag high-risk areas before human review, reducing per-PR cognitive load. See [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md).
+**AI pre-review.** Triage issues and flag high-risk areas before human review to reduce per-PR cognitive load. See [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md).
 
-**Distribute review load.** Concentrated review load — a small set of senior reviewers handling all PRs — amplifies the bottleneck. Rotate reviewers and use risk-based assignment to reduce queue depth.
+**Distribute review load.** Concentrated review on a small senior cohort amplifies the bottleneck. Rotate reviewers and use risk-based assignment.
 
 ## When This Backfires
 
 Stacked PRs and strict atomic discipline create overhead that outweighs the benefit in some contexts:
 
-- **Small or solo teams.** When one person reviews everything, stacking adds branching complexity without shortening the queue — the same reviewer still sees all the work sequentially.
-- **Fast-merge workflows.** Teams that merge to trunk multiple times per day may find the overhead of maintaining stacked branch chains slower than batching changes and merging once.
-- **Tooling gaps.** Stacked PRs require explicit tooling support (Graphite, ghstack, or equivalent). Without it, rebasing chains is error-prone and can break dependent branches on force-push.
+- **Small or solo teams.** One person reviewing everything still sees all the work sequentially; stacking adds branching complexity without shortening the queue.
+- **Fast-merge workflows.** Teams merging to trunk multiple times per day may find maintaining stacked chains slower than batching and merging once.
+- **Tooling gaps.** Stacked PRs need explicit support (Graphite, ghstack); without it, rebasing chains is error-prone and breaks dependents on force-push.
 
-The 400-line threshold is a heuristic, not a hard rule — a 600-line rename-only diff may be trivially reviewable while a 200-line cryptographic change is not. Apply size limits to complexity, not character count.
+The 400-line threshold is a heuristic — a 600-line rename diff may be trivial while a 200-line cryptographic change is not. Apply limits to complexity, not character count.
 
 ## Example
 

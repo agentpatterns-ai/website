@@ -19,30 +19,28 @@ tags:
 
 ## The Role of Hooks
 
-Instructions are processed by the model; hooks are processed by the shell. A model under task pressure may deprioritize an instruction — a hook executes unconditionally. Hooks enforce rules that cannot tolerate exceptions.
-
-This works because hooks are shell subprocesses spawned by the agent runtime, not messages routed through the model's context window. The runtime intercepts the event before (or after) the model acts on it, runs the hook script, and only proceeds — or blocks — based on the hook's exit code and JSON response. The model never sees the hook logic and cannot override it through reasoning or instruction-following.
+Instructions are processed by the model; hooks are processed by the shell. Under task pressure the model may deprioritize an instruction — a hook executes unconditionally. The runtime spawns the hook as a subprocess before (or after) the model acts, then proceeds or blocks based on its exit code and JSON response. The model cannot override hook logic through reasoning.
 
 ## Lifecycle Events
 
-Agent runtimes expose hooks at several lifecycle points:
+Agent runtimes expose hooks at these points:
 
 | Event | When it fires | Can block |
 |-------|--------------|-----------|
-| `PreToolUse` | Before any tool call executes | Yes |
-| `PostToolUse` | After a tool call completes | No (observational) |
-| `UserPromptSubmit` | When the user sends a message | Yes (in some tools) |
-| `Stop` | When the agent finishes a turn | No |
-| `InstructionsLoaded` | When CLAUDE.md or `.claude/rules/*.md` files are loaded | No |
-| `SubagentStart` / `SubagentStop` | When a sub-agent is spawned or completes | No |
+| `PreToolUse` | Before a tool call executes | Yes |
+| `PostToolUse` | After a tool call completes | No |
+| `UserPromptSubmit` | User sends a message | Yes (some tools) |
+| `Stop` | Agent finishes a turn | No |
+| `InstructionsLoaded` | CLAUDE.md or `.claude/rules/*.md` loads | No |
+| `SubagentStart` / `SubagentStop` | Sub-agent spawns or completes | No |
 
-`PreToolUse` is the primary enforcement point — it receives tool name and inputs, can block execution, and returns a reason the model must adapt to. `PostToolUse` is the primary automation and audit point — it cannot block but triggers side effects like logging, linting, and notifications.
+`PreToolUse` enforces — it receives the tool name and inputs, can block, and returns a reason the model must adapt to. `PostToolUse` automates — observational, but triggers side effects like logging or linting.
 
-Claude Code's hook system is documented at [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks). GitHub Copilot's coding agent exposes `SessionStart`, `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, and `Stop` hooks — documented at [code.visualstudio.com/docs/copilot/customization/hooks](https://code.visualstudio.com/docs/copilot/customization/hooks).
+See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks).
 
 ## Hook Input and Output
 
-Hooks receive JSON on stdin with the event context:
+Hooks receive event-context JSON on stdin:
 
 ```json
 {
@@ -53,7 +51,7 @@ Hooks receive JSON on stdin with the event context:
 }
 ```
 
-A `PreToolUse` hook blocks by returning:
+`PreToolUse` blocks by returning:
 
 ```json
 {
@@ -65,11 +63,11 @@ A `PreToolUse` hook blocks by returning:
 }
 ```
 
-The `permissionDecisionReason` is surfaced to the model — write it as a clear redirect.
+The `permissionDecisionReason` is surfaced to the model — write it as a redirect.
 
 ## Scoping
 
-Hooks can be scoped with matchers to fire only for specific tools:
+Matchers scope hooks to specific tools:
 
 ```json
 {
@@ -82,52 +80,52 @@ Hooks can be scoped with matchers to fire only for specific tools:
 }
 ```
 
-A hook without a matcher fires for every event of that type. Session-level events (`Stop`, `UserPromptSubmit`) do not support matchers.
+Un-matched hooks fire on every event of that type. Session-level events (`Stop`, `UserPromptSubmit`) don't support matchers.
 
 ## Hook Placement by Use Case
 
 | Use case | Event | Approach |
 |----------|-------|----------|
-| Block disallowed commands | `PreToolUse` (Bash) | Exit with deny + redirect |
-| Enforce package manager | `PreToolUse` (Bash) | Pattern match, deny npm, redirect to bun |
-| Auto-lint after edits | `PostToolUse` (Edit/Write) | Run linter, write results to disk |
-| Audit all tool calls | `PostToolUse` | Append to audit log |
-| Notify on completion | `Stop` | Send desktop notification |
-| Scan for secrets | `PreToolUse` (Write) | Pattern match file content, deny if found |
+| Block disallowed commands | `PreToolUse` (Bash) | Deny + redirect |
+| Enforce package manager | `PreToolUse` (Bash) | Match `npm`, redirect to `bun` |
+| Auto-lint after edits | `PostToolUse` (Edit/Write) | Run linter |
+| Audit tool calls | `PostToolUse` | Append to log |
+| Notify on completion | `Stop` | Desktop notification |
+| Scan for secrets | `PreToolUse` (Write) | Match content, deny if found |
 
 ## Agent Identity and Worktree Context
 
-Hook events carry additional context fields for per-agent observability in multi-agent workflows (v2.1.69):
+In multi-agent workflows (Claude Code v2.1.69), hook events carry extra context:
 
-- **`agent_id` and `agent_type`** — distinguish between main agent, sub-agents, and team members for per-agent enforcement or audit tagging.
-- **`worktree`** — status hook commands receive worktree name, path, and branch info, enabling worktree-aware behavior.
+- **`agent_id` / `agent_type`** — distinguish main agent, sub-agents, and team members for per-agent enforcement or audit tagging.
+- **`worktree`** — status hooks receive worktree name, path, and branch.
 
-`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` files are loaded — use it to log which instruction files loaded at session start for configuration consistency auditing.
+`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` load — log it to audit which files were in effect at session start.
 
 ## What Hooks Are Not For
 
-Hooks enforce what the model should not decide. They are not suited for:
+Hooks enforce what the model should not decide. Avoid them for:
 
-- **Creative choices** — architecture decisions, style preferences — model judgment is the point
-- **Conversation-dependent logic** — hooks receive only the immediate tool call context, not conversation history
-- **Complex workflows** — hooks are scripts, not agents; keep them short and deterministic
+- **Creative choices** — architecture or style; model judgment is the point.
+- **Conversation-dependent logic** — hooks see only the immediate tool call.
+- **Complex workflows** — hooks are scripts; keep them short and deterministic.
 
 ## Configuration Levels
 
-Configure hooks at project level (`.claude/settings.json`, committed) or user level (`~/.claude/settings.json`, local only). Project hooks travel with the repo and enforce team conventions.
+Configure at project level (`.claude/settings.json`, committed) or user level (`~/.claude/settings.json`, local). Project hooks travel with the repo and enforce team conventions.
 
 ## Key Takeaways
 
-- Hooks execute in the shell — they cannot be overridden by model task pressure
-- `PreToolUse` is the enforcement point; `PostToolUse` is the automation point
+- Hooks execute in the shell — the model cannot override them
+- `PreToolUse` enforces; `PostToolUse` automates
 - Matchers scope hooks to specific tools; session events fire unconditionally
-- Project-level hooks in `.claude/settings.json` enforce team conventions for all contributors
-- `InstructionsLoaded` enables auditing which instruction files loaded at session start
-- `agent_id`/`agent_type` fields enable per-agent enforcement in multi-agent workflows
+- Project hooks in `.claude/settings.json` enforce team conventions
+- `InstructionsLoaded` audits which instruction files loaded at session start
+- `agent_id` / `agent_type` enable per-agent enforcement in multi-agent workflows
 
 ## Example
 
-Enforce `bun` over `npm` for every `Bash` tool call. The hook script reads the tool input from stdin, checks for `npm` commands, and blocks with a redirect.
+Enforce `bun` over `npm` for every `Bash` call. The hook reads tool input from stdin, matches `npm` commands, and blocks with a redirect.
 
 **`.claude/hooks/enforce-bun.sh`**:
 
@@ -171,18 +169,19 @@ fi
 }
 ```
 
-When the agent runs `npm install lodash`, the hook denies the call and the model sees: *"Use bun instead of npm. Replace npm install with bun install, npm run with bun run."* The agent retries with `bun install lodash`.
+When the agent runs `npm install lodash`, the hook denies the call and surfaces the redirect. The agent retries with `bun install lodash`.
 
 ## When This Backfires
 
-Hooks are shell subprocesses — every tool call that matches a hook incurs the subprocess startup cost. In latency-sensitive workflows, a hook that spawns a slow script on `PreToolUse` delays every matched tool invocation.
+Hooks are subprocesses — each matched call pays the startup cost, so a slow `PreToolUse` script delays every matched invocation.
 
-Specific failure conditions to watch for:
-
-- **Pattern match misses**: Regex or string matchers that don't cover all variants of a disallowed command (e.g., `npm` vs `npx` vs `npm.cmd` on Windows) allow violations to slip through silently.
-- **Hook errors suppress feedback**: If a hook exits non-zero without printing a valid JSON response, the runtime may silently swallow the error, leaving the agent with no redirect and no explanation.
-- **Re-entrancy loops**: A `PostToolUse` hook that itself invokes a tool (e.g., runs a linter via Bash) can trigger the same hook recursively, causing infinite loops unless the hook checks the invoking context.
-- **Scope creep**: Hooks without matchers fire for every event of that type. An un-scoped `PreToolUse` hook that performs expensive work degrades all tool calls, not just the targeted ones.
+- **The model routes around blocks**: hooks enforce at the tool-call boundary, not the intent boundary. Block `Write` and the model uses a `Bash` heredoc; block `rm` and it deletes via `perl -e 'unlink(...)'`. Denies need coverage of every tool that can achieve the same effect ([Boucle, *What Claude Code Hooks Can and Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o)).
+- **Enforcement doesn't follow into subagents, MCP, or pipe mode**: a hook that works in the parent session can silently fail in sub-agents, MCP server calls, or pipe mode. For boundaries that must hold everywhere, use OS-level controls — file permissions, network policy, containers.
+- **Pattern match misses**: matchers that don't cover all variants (`npm` vs `npx` vs `npm.cmd`) let violations through silently.
+- **Errors suppress feedback**: a hook that exits non-zero without valid JSON may have its error swallowed.
+- **Re-entrancy loops**: a `PostToolUse` hook that invokes a tool can retrigger itself.
+- **Non-deterministic input rewrites**: multiple `PreToolUse` hooks returning `updatedInput` for the same tool race — last to finish wins.
+- **Scope creep**: un-scoped hooks fire on every event of that type, taxing all tool calls.
 
 ## Related
 
@@ -191,8 +190,6 @@ Specific failure conditions to watch for:
 - [Reactive Environment Hooks](reactive-environment-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
-- [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)

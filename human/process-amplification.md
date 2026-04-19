@@ -12,7 +12,7 @@ tags:
 
 ## The Amplifier Effect
 
-Agents do not raise or lower your engineering standards. They accelerate whatever trajectory you are already on. The DORA 2025 report confirmed this empirically: high-performing teams using AI saw [55--70% faster delivery](https://addyo.substack.com/p/the-80-problem-in-agentic-coding), while struggling teams saw accelerated dysfunction. Teams with high AI adoption [merged 98% more PRs, but review times increased 91% and PR size grew 154%](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) -- organizational delivery metrics stayed flat even as individual output surged.
+Agents do not raise or lower your engineering standards. They accelerate whatever trajectory you are already on. The [2025 DORA report](https://dora.dev/research/2025/dora-report/) frames AI as a "mirror and multiplier" of existing organizational capability ([IT Revolution analysis](https://itrevolution.com/articles/ais-mirror-effect-how-the-2025-dora-report-reveals-your-organizations-true-capabilities/)). Teams with high AI adoption [merged 98% more PRs, but review times increased 91% and PR size grew 154%](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) -- organizational delivery metrics stayed flat even as individual output surged.
 
 The gap is not the model. It is the environment the model operates in.
 
@@ -20,7 +20,7 @@ The gap is not the model. It is the environment the model operates in.
 
 Agent output quality is a function of environment quality. At each step, an agent needs ground truth -- tool results, test output, compiler errors -- to assess progress. Without accurate signals, errors compound across turns.
 
-Feedback loops matter more than prompts. The tighter the loop (agent writes code, automated check verifies, agent iterates), the more trustworthy the output. The weaker the loop, the more the human becomes the bottleneck.
+The tighter the feedback loop (agent writes code, automated check verifies, agent iterates), the more trustworthy the output. The weaker the loop, the more the human becomes the bottleneck.
 
 ```mermaid
 graph LR
@@ -48,9 +48,9 @@ graph LR
 
 **[Assumption propagation](../anti-patterns/assumption-propagation.md).** Without clear specs and tests, agents build on faulty premises. Each commit deepens the wrong assumption until the cascade spans multiple files.
 
-**Abstraction bloat.** In poorly-constrained environments, agents optimize for comprehensiveness over maintainability, adding layers and indirection that no signal stops.
+**Abstraction bloat.** In poorly-constrained environments, agents add layers and indirection that no signal stops.
 
-**Dead code accumulation.** Missing architecture principles allow debris to persist. Agents generate utilities and fallback paths that are never called but never flagged.
+**Dead code accumulation.** Missing architecture principles let debris persist. Agents generate utilities and fallback paths that are never called but never flagged.
 
 ## Readiness Audit
 
@@ -67,12 +67,21 @@ Before scaling, audit your feedback infrastructure.
 
 ## The Compounding Problem
 
-Agents chain errors across commits at machine speed. Without automated gates, incorrect assumptions span multiple commits before anyone catches them. The answer is not more human review — it is better automated verification.
+Agents chain errors across commits at machine speed. Without automated gates, incorrect assumptions span multiple commits before anyone catches them. The answer is better automated verification, not more human review.
+
+## When This Backfires
+
+Invest-in-environment-first is a default, not a law. The advice is weaker in these cases:
+
+- **Throwaway exploration.** For spikes and prototypes that will be discarded, a pre-built test harness and CI pipeline is pure overhead. Amplification cannot cascade without downstream consumers.
+- **Greenfield projects.** Day-one codebases have no conventions or tests to amplify. Agents can bootstrap the scaffolding itself — including the first test suite and CI config — before any feedback loops exist.
+- **Research code where the artifact is the ground truth.** ML scripts and simulation rigs are validated by the result, not by unit tests. Agents producing wrong intermediate code but correct final artifacts can still be net-positive.
+- **Legacy systems with no retrofit path.** Narrowly-scoped agent use (doc generation, localized refactors under review) can still pay off when none of this page's preconditions are met. Blocking agents on infrastructure that will never be built is worse than using them cautiously.
 
 ## Key Takeaways
 
 - Agent output quality is determined by environment quality, not model or prompt quality
-- DORA 2025 data confirms measurable amplification: high-performing teams accelerate, struggling teams degrade faster ([Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
+- DORA 2025 data confirms measurable amplification: high-performing teams accelerate, struggling teams degrade faster ([DORA 2025](https://dora.dev/research/2025/dora-report/); [Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding))
 - Feedback loops (tests, linters, CI) are the highest-leverage investment for agent adoption
 - Audit verification infrastructure before scaling
 
