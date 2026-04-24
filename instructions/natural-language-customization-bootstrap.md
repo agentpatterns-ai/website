@@ -35,6 +35,26 @@ graph TD
     C -->|Discard| E[Redescribe or write by hand]
 ```
 
+## Example
+
+Invoking Claude Code's `/agents` command and selecting "Generate with Claude" opens a description prompt. A prose input like:
+
+> An agent that reviews a pull request diff, flags missing tests for changed functions, and leaves inline comments on the PR.
+
+produces a draft file under `.claude/agents/` along the lines of:
+
+```markdown
+---
+name: test-coverage-reviewer
+description: Reviews PR diffs for functions that lack accompanying tests and posts inline review comments.
+tools: Bash, Read, Grep, Glob
+---
+
+You are a pull-request reviewer focused on test coverage...
+```
+
+The frontmatter keys (`name`, `description`, `tools`), the file location, and the system-prompt skeleton come from the agent's knowledge of the subagent schema. ([Claude Code — Create custom subagents](https://code.claude.com/docs/en/sub-agents)) The user reviews, tightens the description, edits the system prompt, then commits — the file in the repo is the one the user approved.
+
 ## Why It Works
 
 The agent encodes the schema because it is the consumer at runtime. The same model that validates frontmatter fields, resolves tool scopes, and interprets system prompts produces those structures from a description. The user contributes the only part the agent cannot infer — intent — and inherits schema compliance for free.

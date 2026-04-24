@@ -62,11 +62,9 @@ Filter results before they enter the agent's context:
 
 ### Synthesis
 
-Combine findings into a coherent answer with source attribution. Flag uncertainty where evidence conflicts.
+Combine findings into a coherent answer with source attribution. Flag conflicting evidence.
 
 ## Termination Strategies
-
-From simplest to most sophisticated:
 
 | Strategy | Mechanism | Tradeoff |
 |---|---|---|

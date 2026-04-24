@@ -14,11 +14,11 @@ tags:
 
 ## The Problem
 
-When 150 Claude Code agents (Sonnet and Opus) independently analyzed the same NYSE market microstructure dataset and answered the same research questions, they did not converge on the same answers. They diverged substantially — not due to random noise, but due to *systematic methodological preferences* that are stable within each model family.
+When 150 Claude Code agents (Sonnet and Opus) independently analyzed the same NYSE market microstructure dataset, they diverged substantially — not from random noise, but from *systematic methodological preferences* stable within each model family.
 
-This is the AI analog of **nonstandard errors (NSEs)** from human-researcher studies: variation arising from discretionary analytical choices rather than sampling or measurement error. [Gao & Xiao (2026)](https://arxiv.org/abs/2603.16744) documented this directly in a controlled 150-agent experiment.
+This is the AI analog of **nonstandard errors (NSEs)** from human-researcher studies: variation from discretionary analytical choices rather than sampling or measurement error. [Gao & Xiao (2026)](https://arxiv.org/abs/2603.16744) documented this in a controlled 150-agent experiment.
 
-The practical implication: if you run one agent on an analysis task and report the result, you are reporting one point from a distribution you have never sampled.
+Run one agent and report its result, and you report one point from a distribution you have never sampled.
 
 ## Empirical Styles by Model Family
 
@@ -31,36 +31,34 @@ Different model families exhibit **stable, systematic methodological preferences
 | Volume measure | Mixed | Volume-weighted (dominant) |
 | H1 measure | Autocorrelation (87%) | Variance ratio (100%) |
 
-The H1 finding is striking: Sonnet and Opus agents chose *different statistical tests* for the same hypothesis. They were running different experiments on the same question.
+On H1, Sonnet and Opus chose *different statistical tests* for the same hypothesis — they ran different experiments on the same question.
 
-For hypothesis H4 (trading volume trends), measure choice alone flipped the conclusion:
+For H4 (trading volume trends), measure choice alone flipped the conclusion:
 
 - Dollar-volume agents: ~+6.1%/year growth
 - Share-volume agents: ~−4.6%/year decline
 - IQR across agents: 10.69%/year
 
-This is not a marginal difference. Two agents with different empirical styles, given identical instructions and identical data, would report opposite conclusions.
+Two agents with different empirical styles, given identical instructions and identical data, would report opposite conclusions.
 
 ## Why Peer Review Between Agents Does Not Fix This
 
-A common response is to add a review loop: have one agent critique another's output. The evidence does not support this.
+A common response is to add a review loop — one agent critiques another's output. The evidence does not support it: AI peer review had **minimal effect** on dispersion, and agents did not revise their methodological choices based on written critiques.
 
-In the study, AI peer review had **minimal effect** on reducing agent-to-agent dispersion. Agents did not revise their methodological choices based on written critiques.
-
-This matters for pipeline designers who use evaluator-critic loops for variance reduction: critique loops address *output quality* but not *methodological bias*.
+For pipeline designers using evaluator-critic loops: critique loops address *output quality* but not *methodological bias*.
 
 ## What Does Reduce Variance: Exemplar Injection
 
-Showing agents **exemplar outputs** before they run their analysis reduced the interquartile range of estimates by **80–99%** in the study.
+Showing agents **exemplar outputs** before analysis reduced the interquartile range of estimates by **80–99%**.
 
-Agents did not reason toward a better methodology — they *imitated* the exemplar's choices, switching measure families en masse:
+Agents did not reason toward a better methodology — they *imitated* the exemplar, switching measure families en masse:
 
 - 78 of 90 dollar-volume agents switched to share volume simultaneously
 - 41 of 60 share-volume agents switched the opposite direction simultaneously
 
-This chaotic cross-switching produced apparent convergence, not analytical agreement. Estimates tightened because agents copied the exemplar's choices, not because they reasoned toward a correct method.
+Cross-switching produced apparent convergence, not analytical agreement.
 
-**Implication:** Exemplar injection is effective for variance reduction, but the exemplar choice determines the result. If you inject a flawed exemplar, agents will converge on the flaw.
+**Implication:** Exemplar injection reduces variance, but the exemplar determines the result. A flawed exemplar produces tight, wrong answers.
 
 ## Recommended Mitigation: Multiverse Analysis
 
@@ -82,13 +80,13 @@ graph TD
 
 In practice:
 
-1. Run the same analysis task with multiple agents across model families (Sonnet + Opus) or with varied configurations (temperature, system prompt phrasing)
+1. Run the task across multiple model families (Sonnet + Opus) or varied configurations (temperature, prompt phrasing)
 2. Collect results as a distribution
 3. Report the distribution, not just the modal result
-4. Flag conclusions that are sensitive to analytical choice (high IQR = low robustness)
-5. Reserve single-run reporting for conclusions that are stable across the distribution
+4. Flag conclusions sensitive to analytical choice (high IQR = low robustness)
+5. Reserve single-run reporting for conclusions stable across the distribution
 
-For software engineering tasks (code generation, architecture reviews, test writing), analogous variance is plausible: code style preferences, framework choices, security posture, and test coverage strategy may vary systematically by model family — though this has not yet been empirically documented at the same scale as the market microstructure findings.
+For software-engineering tasks (code generation, architecture reviews, test writing), analogous variance is plausible in code style, framework choice, security posture, and test-coverage strategy — though not yet documented at the scale of the market-microstructure findings.
 
 ## Example
 

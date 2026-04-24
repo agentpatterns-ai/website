@@ -22,7 +22,7 @@ The alternative: embed security rules in the specification layer so agents never
 
 ## Constitution Structure
 
-A security constitution is a versioned document where each principle maps to a specific weakness class and carries an enforcement level ([Marri, 2026](https://arxiv.org/abs/2602.02584)):
+A security constitution is a versioned document where each principle maps to a specific weakness class — typically drawn from the [MITRE CWE Top 25](https://cwe.mitre.org/top25/) — and carries an enforcement level ([Marri, 2026](https://arxiv.org/abs/2602.02584)):
 
 ```yaml
 # security-constitution.yml
@@ -95,9 +95,9 @@ graph TD
 
 A constitution in a prompt is guidance. A constitution backed by linters, CI gates, and hooks is enforcement. The document serves both roles — human-readable constraints that also feed automated checks.
 
-**Linters and static analysis** — Map each MUST principle to a linter rule. SEC-001 maps to a SQL injection scanner. SEC-002 maps to secret detection tools like `gitleaks` or `trufflehog`. See [secrets management for agents](secrets-management-for-agents.md) for the broader credential handling pattern.
+**Linters and static analysis** — Map each MUST principle to a linter rule. SEC-001 maps to a SQL injection scanner (see [CWE-89](https://cwe.mitre.org/data/definitions/89.html)). SEC-002 maps to secret detection tools like [`gitleaks`](https://github.com/gitleaks/gitleaks) or [`trufflehog`](https://github.com/trufflesecurity/trufflehog). See [secrets management for agents](secrets-management-for-agents.md) for the broader credential handling pattern.
 
-**Pre-commit hooks** — Block commits that violate MUST principles before they reach the repository. Claude Code's `PreToolUse` hooks can intercept file writes and run validation ([deterministic guardrails](../verification/deterministic-guardrails.md)).
+**Pre-commit hooks** — Block commits that violate MUST principles before they reach the repository. Claude Code's [`PreToolUse` hooks](https://docs.claude.com/en/docs/claude-code/hooks) can intercept file writes and run validation ([deterministic guardrails](../verification/deterministic-guardrails.md)).
 
 **CI gates** — Run the full constitution's MUST principles as a CI check. SHOULD principles generate warnings; MAY principles are informational.
 

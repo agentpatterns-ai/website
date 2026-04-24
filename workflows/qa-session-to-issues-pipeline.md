@@ -11,7 +11,7 @@ tags:
 
 > A multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues — reducing post-QA triage overhead by automating deduplication, codebase investigation, and quality filtering.
 
-This pipeline starts where [continuous-triage.md](continuous-triage.md) does not: before issues exist. It takes unstructured QA session output — notes, recordings, bug reports — and produces a smaller set of well-formed, codebase-anchored issues ready for human review.
+This pipeline starts where [continuous triage](continuous-triage.md) does not: before issues exist. It takes unstructured QA session output — notes, recordings, bug reports — and produces a smaller set of well-formed, codebase-anchored issues ready for human review.
 
 ## What the Pipeline Produces
 
@@ -176,10 +176,6 @@ Human review covers 6 issues instead of 18 raw notes. Each issue includes the fi
 - Separate the investigator from the quality filter to avoid self-validation
 - Fan out Stage 3 in parallel across candidates — each lookup is independent
 - Start with 3 collapsed stages; add deduplication and filter stages incrementally
-
-## Unverified
-
-- Brian Scanlan / Intercom reference — the original tweet at x.com/brian_scanlan/status/2033978300003987527 was inaccessible; the Intercom use case cannot be verified from available sources
 
 ## Related
 

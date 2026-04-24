@@ -90,6 +90,7 @@ Cursor runs the prompt across multiple models in parallel worktrees, then surfac
 
 ## Related
 
+- [Cursor Self-Hosted Cloud Agents](self-hosted-cloud-agents.md)
 - [/batch & Worktrees](../claude/batch-worktrees.md)
 - [Sub-Agents](../claude/sub-agents.md)
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)

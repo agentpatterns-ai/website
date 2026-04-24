@@ -16,9 +16,9 @@ aliases:
 
 ## The Selection Problem at Project Scale
 
-A personal skill library of five focused skills works because descriptions stay orthogonal. At 20+ skills, overlapping descriptions cause nondeterministic selection: the model cannot reliably distinguish `code-review-and-quality` from `debugging-and-error-recovery` when both apply to a broken build ([source](https://www.anthropic.com/engineering/code-execution-with-mcp)). The fix is structural, not editorial — partition skills by lifecycle phase so the active set at any point is small and orthogonal.
+A personal skill library of five focused skills works because descriptions stay orthogonal. As the library grows, overlapping descriptions cause unreliable selection: the model cannot reliably distinguish `code-review-and-quality` from `debugging-and-error-recovery` when both apply to a broken build. Anthropic's tool-authoring guidance notes that "when tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and that "too many tools or overlapping tools can also distract agents from pursuing efficient strategies" ([source](https://www.anthropic.com/engineering/writing-tools-for-agents)). The fix is structural, not editorial — partition skills by lifecycle phase so the active set at any point is small and orthogonal.
 
-SDLC-phase taxonomy is the organizing principle: skills group into six phases, and slash commands act as phase entry points that narrow the active context to that phase's skills. [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (14.6k stars, MIT, marketplace-distributed) is a worked example of this approach.
+SDLC-phase taxonomy is the organizing principle: skills group into six phases, and slash commands act as phase entry points that narrow the active context to that phase's skills. [`addyosmani/agent-skills`](https://github.com/addyosmani/agent-skills) (MIT-licensed, distributed via the Claude Code plugin marketplace) is a worked example of this approach.
 
 ## Phase Taxonomy
 
@@ -113,6 +113,7 @@ A team forking this library for a specialized domain replaces inapplicable skill
 
 - [Daily-Use Skill Library](daily-use-skill-library.md) — personal scale, 5 skills
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) — enterprise distribution, MDM
+- [Skill Library Refinement Loops](skill-library-refinement-loops.md) — iterating a skill library over time
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — library lifecycle governance
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — authoring rules
 - [Plugin and Extension Packaging](../standards/plugin-packaging.md) — plugin packaging spec

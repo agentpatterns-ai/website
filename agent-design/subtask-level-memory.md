@@ -16,15 +16,13 @@ tags:
 
 ## The Granularity Mismatch Problem
 
-Instance-level memory stores an entire problem-solving episode as a single unit. When a new task description resembles a stored episode, the retrieval system returns the full episode as context. This works when the new task requires the same reasoning throughout — but fails when only one stage of the task overlaps.
+Instance-level memory stores a whole episode as one unit. Retrieval returns the full episode when a new task resembles it — useful when reasoning matches throughout, harmful when only one stage overlaps.
 
-A bug requiring a `Reproduce` step might have the same surface description as a prior episode that required only an `Edit`. The retrieved memory misguides the specific reasoning stage that actually needs it, injecting guidance from the wrong phase. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
-
-The fix is to match the memory unit to the reasoning unit.
+A bug needing a `Reproduce` step may share surface description with a prior episode that needed only an `Edit`; the retrieved memory injects guidance from the wrong phase. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) The fix is to match the memory unit to the reasoning unit.
 
 ## Subtask-Aligned Memory Architecture
 
-A structurally aligned memory system decomposes agent tasks into functional categories and stores memory per category. The paper ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) defines four categories for software engineering agents:
+A structurally aligned system stores memory per functional category. The paper ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) defines four categories for software engineering agents:
 
 | Category | What It Covers |
 |----------|---------------|
@@ -39,11 +37,11 @@ Each memory entry is a structured triple `(z, d, e)`:
 - **d** — a structured description with objective and mechanism-level keywords (the retrieval anchor)
 - **e** — an abstracted experience with instance-specific noise removed (file paths, variable names stripped)
 
-The abstraction step is critical: raw trajectory storage yields only +1.2 pp improvement; LLM-abstracted experience entries deliver +3.9 pp, because abstraction distills transferable insights while removing artifacts that don't generalize. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+Abstraction is critical: raw trajectory storage yields +1.2 pp; LLM-abstracted entries deliver +3.9 pp because abstraction distills transferable insights and drops ungeneralizable artifacts. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 ## Two-Stage Retrieval
 
-Retrieval operates in two stages to prevent cross-phase contamination:
+Retrieval runs in two stages to prevent cross-phase contamination:
 
 ```mermaid
 graph TD
@@ -54,23 +52,27 @@ graph TD
     E --> F[Inject into agent context]
 ```
 
-Stage 1 hard-filters by category `z`, eliminating cross-phase contamination before ranking begins. Stage 2 ranks within-category entries by cosine similarity between the current description embedding and stored anchor embeddings. Only the best match is injected — not a ranked list. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+Stage 1 hard-filters by category `z`, removing cross-phase entries before ranking. Stage 2 ranks within-category entries by cosine similarity between the current description embedding and stored anchor embeddings; only the best match is injected. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 ## Implementation Notes
 
-**Transition prediction via system prompt.** The agent autonomously predicts its current functional category and synthesizes a structured description as part of its reasoning process. This is integrated into the system prompt — no separate orchestrator is required. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+**Transition prediction via system prompt.** The agent predicts its current category and synthesizes a structured description during reasoning — driven by the system prompt, no separate orchestrator required. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
-**Memory sparsity in early sessions.** The first ~200 stored instances produce a slight performance dip (−1 pp) from retrieval overhead without sufficient relevant matches; gains accelerate with density, reaching +9–10 pp after 300+ instances. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+**Memory sparsity in early sessions.** The first ~200 instances produce a slight dip (−1 pp) from retrieval overhead on sparse pools; gains accelerate with density, reaching +9–10 pp after 300+ instances. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
-**Model-agnostic.** Results are consistent across multiple model families; Gemini 2.5 Pro sees +6.8 pp. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+**Model-agnostic.** Results hold across model families; Gemini 2.5 Pro sees +6.8 pp. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
 ## Results
 
-Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified over unaligned baselines. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) The broader principle — retrieval granularity should match reasoning granularity — is independently supported by work on dual-layer episodic-semantic memory, where granular interaction logs paired with abstract concept synthesis outperform flat retrieval on multi-hop reasoning tasks. ([arXiv:2601.02744](https://arxiv.org/abs/2601.02744))
+Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified over unaligned baselines. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) The broader principle — retrieval granularity should match reasoning granularity — is independently supported by dual-layer episodic-semantic memory work, where granular logs plus abstract concept synthesis outperform flat retrieval on multi-hop tasks. ([arXiv:2601.02744](https://arxiv.org/abs/2601.02744))
 
 ## Relation to Scope-Based Memory
 
-This technique addresses a different dimension from the scope-based memory patterns (episodic, working, project, user) covered in [Agent Memory Patterns](agent-memory-patterns.md). Scope-based memory controls *where* and *for how long* memories persist. Subtask-level memory controls *at what granularity* memories are stored and retrieved. Both dimensions can be applied together: subtask-aligned entries stored in a project-scoped, episodic memory system.
+This technique is orthogonal to the scope-based patterns (episodic, working, project, user) in [Agent Memory Patterns](agent-memory-patterns.md). Scope controls *where* and *how long* memories persist; subtask-level controls *at what granularity* they are stored and retrieved. The two combine: subtask-aligned entries stored in a project-scoped, episodic system.
+
+## Caveat: Dense-Retrieval Noise
+
+The Stage-2 cosine step is a dense-retrieval operation. Follow-up work argues dense retrieval "fails to distinguish instances that are semantically similar but contextually distinct," yielding noisy matches even within a correctly filtered category; schema-constrained generation is proposed as an alternative. ([arXiv:2604.20117](https://arxiv.org/abs/2604.20117)) The category hard-filter mitigates cross-phase confusion but does not solve within-category ambiguity.
 
 ## Example
 
@@ -120,10 +122,10 @@ The injected experience is the abstracted lesson from the prior pagination episo
 
 Subtask-level memory adds overhead that outweighs benefits in several conditions:
 
-- **Cold-start penalty**: The first ~200 instances yield a slight performance dip; retrieval fires on sparse per-category pools with no good matches. For tasks that won't accumulate 200+ episodes, skip memory entirely.
-- **Category misprediction**: The agent predicts its current functional category via system prompt. Misprediction routes retrieval to the wrong pool, injecting irrelevant experience that actively misleads. Tasks with ambiguous or overlapping phases (analyze and edit interleaved) increase this risk.
-- **Abstraction cost**: Each successful subtask requires an LLM call to abstract the experience. At scale this adds latency and token cost. Raw trajectory storage avoids this but delivers only a fraction of the gain (+1.2 pp vs +3.9 pp).
-- **Non-repetitive task streams**: The pattern is optimized for agents that encounter recurring task structures. One-off or highly heterogeneous task streams never reach the density where cross-episode transfer materializes.
+- **Cold-start penalty**: The first ~200 instances yield a slight dip as retrieval fires on sparse per-category pools. Skip memory entirely for tasks that won't accumulate 200+ episodes.
+- **Category misprediction**: Misprediction routes retrieval to the wrong pool, injecting misleading experience. Ambiguous or interleaved phases (analyze and edit) raise this risk.
+- **Abstraction cost**: Each subtask requires an LLM call to abstract the experience, adding latency and token cost. Raw trajectory storage avoids this but delivers only +1.2 pp vs +3.9 pp.
+- **Non-repetitive task streams**: The pattern assumes recurring task structures. One-off or heterogeneous streams never reach the density where cross-episode transfer materializes.
 
 ## Related
 

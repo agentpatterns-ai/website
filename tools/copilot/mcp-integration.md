@@ -84,4 +84,6 @@ The following VS Code `settings.json` snippet configures two MCP servers for Cop
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [GitHub Copilot Extensions](copilot-extensions.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
+- [Monorepo Skill and Agent Discovery](monorepo-hierarchical-discovery.md)
+- [GitHub Copilot SDK](copilot-sdk.md)
 - [MCP Protocol](../../standards/mcp-protocol.md)

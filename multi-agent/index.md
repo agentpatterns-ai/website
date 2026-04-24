@@ -18,6 +18,7 @@ Choosing the right structure for agent collaboration determines failure modes, l
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel
 - [System-Level Optimization Pipeline](system-level-optimization-pipeline.md) — A four-stage agent pipeline decomposes performance engineering into summarization, analysis, optimization, and verification across component boundaries
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md) — Introduce a reference oracle to generate per-unit expected outputs, converting one monolithic task into hundreds of independently verifiable subtasks
+- [Reverse-Engineered Executable Specifications for Agentic Program Repair](reverse-engineered-executable-specifications.md) — Decompose automated program repair into specification inference then constrained patching, making the intended behaviour an inspectable intermediate artefact before any code is changed
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md) — Define agents and workflows as structured data, then compose them through explicit wiring rather than imperative code
 - [Declarative Multi-Agent Topology: Topology-as-Code](declarative-multi-agent-topology.md) — Encode an entire agent graph in a single declarative file that compiles to any target runtime, making topology auditable and portable
 
@@ -27,6 +28,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md) — Spawn N independent agents to solve the same problem in parallel, then use a synthesis agent to merge the strongest elements from each attempt
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md) — Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees
+- [Contextual Capability Calibration for Multi-Agent Delegation](contextual-capability-calibration.md) — Replace static skill-level agent profiles with context-specific Beta posteriors so routing decisions condition on the task features that actually predict success
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — Spawn sub-agents to parallelize independent work in isolated context windows; the main thread receives only distilled results
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md) — Start with a small parallel batch, monitor quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront
 - [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
@@ -63,3 +65,4 @@ Deploying, observing, and optimizing multi-agent systems in production.
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md) — Small changes to a lead agent's prompt unpredictably alter subagent behavior; multi-agent prompts must be frameworks for collaboration, not rigid instructions
 - [Semantic Caching for Multi-Agent Code Systems](semantic-caching-multi-agent.md) — Semantic caching with LLM-based equivalence detection achieves 67% cache hit rates and reduces token consumption by 40-60%
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — Restrict subagent capabilities by filtering their tool schemas, making unauthorized tool use structurally impossible
+- [Cross-Tool Subagent Comparison](cross-tool-subagent-comparison.md) — Side-by-side comparison of Claude Code, Gemini CLI, and Copilot CLI subagents on definition format, context isolation, tool scoping, and composition

@@ -24,7 +24,7 @@ The key finding: **models that rank similarly on synthetic benchmarks diverge si
 
 ### Performance is language-specific
 
-Leading models (GPT-4o, Claude 4 Sonnet) substantially outperform smaller alternatives on aggregate scores. But per-language breakdowns show that the gap narrows or reverses on specific languages — TypeScript underperforms across all models due to its complex type system and strict type-consistency requirements, while Python scores run higher overall. A model's Python performance does not predict its TypeScript or C performance. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages — TypeScript underperforms across all models due to strict type-consistency requirements, while Python scores run higher overall. A model's Python performance does not predict its TypeScript or C performance. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ### Task type matters more than overall score
 
@@ -75,13 +75,13 @@ DevBench's design choices map directly to evaluation best practices:
 
 Benchmark-driven selection fails or loses value under three conditions:
 
-- **Team lacks internal eval capacity**: Running models against real codebase PRs requires instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure will treat public benchmark scores as final answers — restoring the original problem.
-- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., from completions to large-scale refactors), the chosen model may no longer be the best fit. Selection should be revisited when language distribution or task mix changes significantly.
-- **Benchmark data becomes contaminated**: Telemetry-derived benchmarks resist contamination at creation time, but published benchmark suites become training targets once released. DevBench mitigates this with contamination-resistant design, but no public benchmark remains fully uncontaminated indefinitely. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+- **Team lacks internal eval capacity**: Running models against real codebase PRs requires instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure treat public benchmark scores as final answers — restoring the original problem.
+- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., completions to large-scale refactors), the chosen model may no longer fit. Revisit selection when language or task mix shifts.
+- **Benchmark data becomes contaminated**: Published benchmark suites become training targets once released. DevBench's contamination-resistant design mitigates this, but no public benchmark stays uncontaminated indefinitely. See [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md). [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ## Why It Works
 
-Task-language slicing outperforms aggregate scoring because aggregate metrics obscure two orthogonal sources of variance: language-specific training coverage and task-specific capability. A model trained on more Python open-source code will perform better on Python API usage regardless of its general reasoning ability. Similarly, multi-file editing requires maintaining cross-file context across long token windows — a capability that is architecturally distinct from single-function generation. Synthetic benchmarks collapse these dimensions into one score; realistic benchmarks expose each dimension independently, letting teams weight variance that matches their actual workload.
+Task-language slicing beats aggregate scoring because aggregate metrics obscure two orthogonal sources of variance: language-specific training coverage and task-specific capability. A model trained on more Python open-source code performs better on Python API usage regardless of general reasoning ability. Multi-file editing requires maintaining cross-file context across long token windows — architecturally distinct from single-function generation. Synthetic benchmarks collapse these dimensions into one score; realistic benchmarks expose each independently, letting teams weight the variance matching their workload.
 
 ## Key Takeaways
 

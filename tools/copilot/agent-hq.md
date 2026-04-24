@@ -93,13 +93,13 @@ The agent picks up the comment, makes the changes, and updates the same draft PR
 
 ## When This Backfires
 
-Parallel agent deployment only delivers value when concurrency limits allow it. Practitioner reports from 2025 flag rate limits as the primary constraint — running Copilot, Claude, and Codex simultaneously on the same issue burns through per-model quotas faster than sequential use, and hitting a cap mid-session leaves draft PRs incomplete.
+Parallel agent deployment only delivers value when concurrency and quota limits allow it. Running Copilot, Claude, and Codex simultaneously on the same issue consumes per-model tokens faster than sequential use, and a [March 2026 rate-limit recalibration produced multi-hour lockouts for customers whose workflows had grown to depend on the prior undercount](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/).
 
 Conditions where Agent HQ underperforms alternatives:
 
-- **Rate-limited environments**: Teams on Copilot Pro (not Enterprise) hit concurrent mission ceilings quickly; parallel evaluation becomes sequential in practice
-- **Merge-conflict-heavy repos**: Copilot running within Agent HQ has documented difficulty resolving merge conflicts, requiring manual intervention that erodes the asynchronous workflow benefit
-- **Custom agent workflows**: The configuration surface for custom agents is limited — model selection for the Copilot coding agent is not exposed, constraining teams that need fine-grained control
+- **Rate-limited environments**: Comparative evaluation burns through weekly token budgets quickly — GitHub's [Copilot usage limits](https://docs.github.com/en/copilot/concepts/usage-limits) enforce both session and 7-day caps, and parallel runs count against both
+- **Merge-conflict-heavy repos**: Previously a weak spot, this narrowed after GitHub shipped [`Fix with Copilot` for merge conflicts on 2026-04-13](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/) (building on the [2026-03-26 `@copilot` conflict-resolution capability](https://github.blog/changelog/2026-03-26-ask-copilot-to-resolve-merge-conflicts-on-pull-requests/)); residual failures still require manual resolution
+- **Custom agent workflows**: Model selection is [exposed for Claude and Codex agents as of 2026-04-14](https://github.blog/changelog/2026-04-14-model-selection-for-claude-and-codex-agents-on-github-com/) but not for the Copilot coding agent itself, constraining teams that need fine-grained model control across every agent
 - **Cost-sensitive teams**: Comparative evaluation means paying for N agent runs per task rather than one; without a clear decision framework for when to run parallel agents, costs scale without proportional benefit
 
 ## Related
@@ -112,3 +112,5 @@ Conditions where Agent HQ underperforms alternatives:
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot SDK](copilot-sdk.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
+- [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
+- [Dependabot Agent Assignment](dependabot-agent-assignment.md)

@@ -17,13 +17,13 @@ aliases:
 
     Narrow Agent Scope Over Broad Role, Specialized Agent Roles (sequential context)
 
-    Scope: **sequential task decomposition** — individual agents for discrete, bounded tasks that run one at a time. For **parallel specialization** — distinct roles for concurrent agents on the same codebase — see [Specialized Agent Roles](specialized-agent-roles.md).
+    Scope: **sequential task decomposition** — discrete, bounded tasks running one at a time. For **parallel specialization** — concurrent agents on the same codebase — see [Specialized Agent Roles](specialized-agent-roles.md).
 
 ## The Failure Mode of Role-Based Agents
 
-Role-based agents mirror org charts: "DevOps engineer", "frontend developer", "QA analyst". This feels natural because it mirrors how teams are described. But a role is not a task. A "kubernetes admin" handles cluster upgrades, canary deployments, secret rotation, ingress configuration, and incident response — entirely different tasks with different steps, checks, and success criteria.
+Role-based agents mirror org charts: "DevOps engineer", "frontend developer", "QA analyst". This feels natural, but a role is not a task. A "kubernetes admin" handles cluster upgrades, canary deployments, secret rotation, ingress configuration, and incident response — entirely different tasks with different steps, checks, and success criteria.
 
-Combining all of that into one agent produces an agent that is mediocre at many tasks rather than effective at specific ones. The scope is too wide for precise instructions, the context carries irrelevant expertise for any given job, and success criteria are ambiguous.
+Combining all of that into one agent produces mediocrity at many tasks rather than effectiveness at specific ones. The scope is too wide for precise instructions, context carries irrelevant expertise for any given job, and success criteria are ambiguous.
 
 ## Task-Specific Agents
 
@@ -33,7 +33,7 @@ A task-specific agent has a single, bounded job:
 - `pr-reviewer`: reviews diffs for specific categories: type safety, test coverage, security anti-patterns
 - `import-blog-post`: fetches a URL, extracts content, creates an issue with source attribution
 
-Each agent knows exactly what it is doing. The steps are explicit. The success criteria are unambiguous. The context contains only what is relevant to this task.
+Each agent knows exactly what it does. Steps are explicit, success criteria unambiguous, context scoped to the task.
 
 ## The Trade-Off
 
@@ -49,26 +49,24 @@ Task-specific design means more agents — one per task rather than one per role
 | Reusability | Low (too broad) | High ([skills](separation-of-knowledge-and-execution.md) composable) |
 | Maintenance | Touches everything | Touches one task |
 
-Smaller agents are easier to test, easier to update, and easier to replace. A broken `canary-upgrade` agent does not affect `pr-reviewer`. A new deployment strategy requires updating one agent, not refactoring a monolithic role. The market is moving in this direction: [Gartner predicts](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025) that 40% of enterprise applications will feature task-specific agents by the end of 2026, up from under 5% in 2025.
+Smaller agents are easier to test, update, and replace. A broken `canary-upgrade` agent does not affect `pr-reviewer`. A new deployment strategy updates one agent rather than refactoring a monolithic role. [Gartner predicts](https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025) 40% of enterprise applications will feature task-specific agents by the end of 2026, up from under 5% in 2025.
 
-The counter-pressure is agent sprawl. [OutSystems' State of AI survey](https://www.prnewswire.com/apac/news-releases/agentic-ai-goes-mainstream-in-the-enterprise-but-94-raise-concern-about-sprawl-outsystems-research-finds-302739251.html) reports that 94% of enterprises are concerned that proliferating agents increase complexity, technical debt, and security risk. Task-specific design is worth the extra agents only when paired with governance: shared skills for knowledge reuse, naming conventions for discoverability, and a registry so teams do not build three near-identical `pr-reviewer` agents in parallel.
+The counter-pressure is agent sprawl. [OutSystems' State of AI survey](https://www.prnewswire.com/apac/news-releases/agentic-ai-goes-mainstream-in-the-enterprise-but-94-raise-concern-about-sprawl-outsystems-research-finds-302739251.html) reports 94% of enterprises are concerned that proliferating agents increase complexity, technical debt, and security risk. Task-specific design is worth the extra agents only when paired with governance: shared skills, naming conventions, and a registry so teams do not build three near-identical `pr-reviewer` agents in parallel.
 
 ## Shared Knowledge Through Skills
 
-The concern with task-specific design is duplication: each agent needs some of the same knowledge (git conventions, coding standards, project context). Shared skills address this.
+The concern with task-specific design is duplication: each agent needs some of the same knowledge (git conventions, coding standards, project context). Shared skills address this — common knowledge lives in skills that any agent loads on demand. Each task-specific agent loads only the skills it needs; the agent definition stays small while the skill carries shared knowledge.
 
-Common knowledge lives in shared skills that any agent can load. Each task-specific agent loads the skills it needs — only those. The agent definition remains small; the skill carries the shared knowledge.
-
-This is task-specific design at the agent level with shared reuse at the skill level. See [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) for the three-layer model. Anthropic's [subagent documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents) describes the same pattern: each subagent receives a focused `description` so the orchestrator delegates to the right agent for each task, with context isolation keeping verbose output out of the main conversation.
+See [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) for the three-layer model. Anthropic's [subagent documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents) describes the same pattern: each subagent receives a focused `description` so the orchestrator delegates to the right agent, with context isolation keeping verbose output out of the main conversation.
 
 ## Identifying the Right Task Boundary
 
-The right task boundary is where the success criteria are natural and atomic. A task is at the right granularity when you can answer without ambiguity: "did this agent succeed or fail?"
+The right task boundary is where success criteria are natural and atomic. A task has the right granularity when you can answer without ambiguity: "did this agent succeed or fail?"
 
 - "Did the canary deploy and pass health checks?" — clear
 - "Did the kubernetes admin do a good job?" — unclear
 
-When success is ambiguous, the task boundary is wrong. Split or narrow until success is unambiguous.
+When success is ambiguous, split or narrow the task until it isn't.
 
 ## Example
 
@@ -116,10 +114,10 @@ The `canary-promote` agent knows exactly what it does, what tools it needs, and 
 
 Task-specific design creates overhead that becomes a liability in some contexts:
 
-- **Fluid task boundaries**: Early-stage projects with poorly understood tasks require constant agent refactoring. A single broad agent that evolves with the project is cheaper to maintain than a fleet of narrow agents rebuilt every sprint.
-- **Interactive use**: A developer querying Claude Code directly benefits from a general assistant that blends tasks naturally. Splitting "review this diff and update the changelog" across two agents adds friction where one agent with two instructions suffices.
-- **High coordination cost**: Tightly interdependent tasks that share context (e.g., a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity that narrow scope does not eliminate.
-- **Small teams with low agent volume**: The maintenance advantage only materialises when multiple agents coexist. A team running one or two automated tasks gets no isolation benefit.
+- **Fluid task boundaries**: Early-stage projects with poorly understood tasks require constant refactoring. A single broad agent evolving with the project is cheaper than narrow agents rebuilt every sprint.
+- **Interactive use**: Splitting "review this diff and update the changelog" across two agents adds friction where one agent with two instructions suffices.
+- **High coordination cost**: Tightly interdependent tasks (e.g., a canary promote that triggers secret rotation based on the deploy result) incur inter-agent communication complexity narrow scope does not eliminate.
+- **Small teams with low agent volume**: The maintenance advantage only materialises when multiple agents coexist. One or two automated tasks get no isolation benefit.
 
 ## Key Takeaways
 
@@ -127,7 +125,7 @@ Task-specific design creates overhead that becomes a liability in some contexts:
 - More agents, each smaller and independently maintainable, is a reasonable trade-off for precision
 - Test the boundary: if success criteria are ambiguous, the task is too broad
 
-Task alignment matters: empirical work on multi-agent systems confirms that agent effectiveness depends on matching coordination structure to task structure — decomposable tasks benefit from specialized agents, while sequential or tightly-coupled tasks may not ([Towards a Science of Scaling Agent Systems](https://arxiv.org/abs/2512.08296)). The architectural case for specialization — assigning distinct roles to decompose complex objectives into coordinated subtasks — is documented across multi-agent system surveys ([The Orchestration of Multi-Agent Systems](https://arxiv.org/abs/2601.13671)).
+Agent effectiveness depends on matching coordination structure to task structure: decomposable tasks benefit from specialized agents, while sequential or tightly-coupled tasks may not ([Towards a Science of Scaling Agent Systems](https://arxiv.org/abs/2512.08296)). The architectural case for specialization — distinct roles decomposing complex objectives into coordinated subtasks — is documented across multi-agent surveys ([The Orchestration of Multi-Agent Systems](https://arxiv.org/abs/2601.13671)).
 
 ## Related
 

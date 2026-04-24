@@ -114,6 +114,7 @@ Delegation degrades or fails under several conditions:
 - **Cross-cutting changes** — Tasks requiring simultaneous edits to interfaces, callers, and tests across a large codebase can exceed the agent's working-context window. The agent completes one side of the change and misses others, producing a partially applied patch.
 - **Novel architecture** — Delegation assumes the agent can infer correct patterns from the existing codebase. Greenfield code with no established precedents produces inconsistent output that is harder to review than a human draft.
 - **High-security contexts** — The agent operates with the permissions of the triggering account. In repositories with broad write access or sensitive data, a misunderstood requirement can cause damage before human review occurs.
+- **Context-window overflow** — Practitioners report the Copilot Cloud Agent hitting its ~64K-token prompt limit when diffs, file snippets, and tool outputs accumulate during multi-file reasoning, crashing the task rather than degrading gracefully ([GitHub community #184952](https://github.com/orgs/community/discussions/184952), [#180198](https://github.com/orgs/community/discussions/180198)). The failure is a hard crash, not a partial patch — retry only succeeds after the issue is narrowed or split.
 
 ## Example
 

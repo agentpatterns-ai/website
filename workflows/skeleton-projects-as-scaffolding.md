@@ -93,11 +93,11 @@ Agents search GitHub, the Go subreddit, and the Go community forum simultaneousl
 
 | Template | Stars | Last commit | CI | Tests | Auth module | Notes |
 |----------|-------|-------------|-----|-------|-------------|-------|
-| `golang-standards/project-layout` | 47k | 2 months ago | No | No | No | Structure only — no runnable code |
-| `MartinHeinz/go-project-blueprint` | 2.1k | 3 weeks ago | GitHub Actions | Yes | No | Clean layout, missing service layer |
-| `create-go-app/fiber-go-template` | 2.8k | 1 month ago | GitHub Actions | Yes | JWT example | Best fit — includes auth scaffold |
+| [`golang-standards/project-layout`](https://github.com/golang-standards/project-layout) | 47k | 2 months ago | No | No | No | Structure only — no runnable code |
+| [`MartinHeinz/go-project-blueprint`](https://github.com/MartinHeinz/go-project-blueprint) | 2.1k | 3 weeks ago | GitHub Actions | Yes | No | Clean layout, missing service layer |
+| [`create-go-app/fiber-go-template`](https://github.com/create-go-app/fiber-go-template) | 2.8k | 1 month ago | GitHub Actions | Yes | JWT example | Best fit — includes auth scaffold |
 
-**Selected**: `create-go-app/fiber-go-template`
+**Selected**: [`create-go-app/fiber-go-template`](https://github.com/create-go-app/fiber-go-template)
 
 **Step 3 — Inventory prompt:**
 

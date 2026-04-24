@@ -274,3 +274,4 @@ Stop at L4 if:
 - [Headless Claude in CI](../../workflows/headless-claude-ci.md) — running Claude Code non-interactively in CI pipelines
 - [Agent Harness](../../agent-design/agent-harness.md) — the initializer/coding-agent architecture for long-running work
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — previous module
+- [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview

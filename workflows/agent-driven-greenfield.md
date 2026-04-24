@@ -140,6 +140,18 @@ This is sufficient to produce validated output from day one. Add complexity only
 | **Primary challenge** | Getting decomposition right | Getting context loading right |
 | **Key reference** | This page | [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) |
 
+## When This Backfires
+
+The agent-first greenfield approach is worse than conventional development in several specific conditions:
+
+- **Domain uncertainty outweighs delivery speed.** Agent topology commits early to a division of responsibilities. If the product's domain model is still being discovered, those role boundaries will likely be wrong and force rework of AGENTS.md, standards, and agent definitions rather than code alone.
+- **Comprehensive AGENTS.md files hurt more than help.** Recent research evaluating repository-level context files found that LLM-generated AGENTS.md files reduced task success compared with no context at all, while increasing inference cost by over 20% and adding 2–4 extra steps per task; developer-written files gave only a ~4% gain ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Write only non-inferable tooling, commands, and constraints — not architectural overviews the agent can reconstruct.
+- **The team is still learning the codebase patterns.** Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the exploratory coding that builds intuition ([Baytech, 2026](https://www.baytechconsulting.com/blog/google-antigravity-ai-ide-2026)).
+- **Decomposition cost exceeds implementation cost.** For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the leverage. A solo developer writing the code directly often ships faster.
+- **Acceptance criteria cannot be mechanically verified.** Agent loops depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
+
+If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient.
+
 ## Example
 
 A team builds a Kubernetes deployment CLI with rollback support using the agent-first greenfield workflow.

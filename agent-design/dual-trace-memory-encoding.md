@@ -90,6 +90,8 @@ The published evidence is one paper on one benchmark with no independent replica
 
 The abstract reports no token overhead at retrieval against the fact-only baseline. Write-time cost — the LLM call that generates the scene trace — is a real addition and should factor into the decision to encode.
 
+A structural critique argues LongMemEval-style benchmarks "cannot distinguish a memory system from a long-context LLM" because all computation happens inside one context window ([Continuity Evaluation positioning, 2026](https://arxiv.org/abs/2604.10981)). The +20pp holds within that regime; carryover to deployments that cross real session boundaries — not synthetic concatenation — is unproven.
+
 ## Example
 
 A coding assistant tracking a long-running project across weeks. A fact-only memory entry stores a correction in isolation:
@@ -126,6 +128,8 @@ The scene trace answers the temporal query directly ("six months before Oct 14")
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md)
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
+- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
+- [Memory Transfer Learning: Cross-Domain Memory Reuse in Coding Agents](memory-transfer-learning.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)

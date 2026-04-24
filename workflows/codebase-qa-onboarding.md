@@ -16,7 +16,7 @@ tags:
 
 Program comprehension — reading code, tracing call paths, locating conventions — consumes a disproportionate share of developer time and is among the highest-friction activities in software engineering. The knowledge needed is scattered across files, commit history, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md), and documentation that drifts from implementation within weeks. Research into LLM-powered codebase documentation (e.g., [RepoAgent, arXiv 2402.16667](https://arxiv.org/abs/2402.16667)) confirms that repository-level comprehension is a primary bottleneck for both humans and agents.
 
-Agents with code search and file reading capabilities change the economics. They can serve as always-available guides with perfect recall of the entire codebase, answering "where does X happen?", "why is Y structured this way?", and generating documentation that stays current with the code.
+Agents with code search and file reading capabilities change the economics. They can serve as always-available guides with comprehensive search over the entire codebase, answering "where does X happen?", "why is Y structured this way?", and generating documentation that stays closer to the code than static docs. Agent answers are not infallible — repository-level code Q&A remains an open research problem with documented failure modes ([SWE-QA, arXiv 2509.14635](https://arxiv.org/abs/2509.14635)) — so verify cited files and functions rather than trusting summaries blindly.
 
 ## The Workflow
 
@@ -42,7 +42,7 @@ The [AGENTS.md standard](https://agents.md) provides an equivalent for tool-agno
 
 ### Step 2: Safe Exploration with Plan Mode
 
-Use [Plan Mode](plan-first-loop.md) (or equivalent read-only mode) for initial exploration. The agent searches, reads, and explains code without making changes -- zero risk of unintended modifications.
+Use [Plan Mode](plan-mode.md) (or equivalent read-only mode) for initial exploration. The agent searches, reads, and explains code without making changes -- zero risk of unintended modifications.
 
 Start broad, then narrow:
 

@@ -125,3 +125,4 @@ Skip it when:
 - [Outcome Grading](grade-agent-outcomes.md) — complement to trajectory decomposition for scoring
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — categorizes why code suggestions fail
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — stage-level behavioral verification approach
+- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches

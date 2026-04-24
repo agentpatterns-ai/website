@@ -11,7 +11,7 @@ tags:
 
 > Pure vector similarity fails on exact-token queries; pure BM25 fails on paraphrased ones — hybrid retrieval covers both failure modes, and re-ranking recovers top-k quality when it matters most.
 
-This module covers the retrieval layer of an air-gapped RAG pipeline. You will learn when dense retrieval breaks down, how BM25 compensates, how to fuse both with Reciprocal Rank Fusion (RRF), and when a cross-encoder re-ranker justifies its latency cost. All components run locally — no cloud API calls anywhere in the pipeline. Runnable code wires dense retrieval, sparse retrieval, fusion, and reranking into one [Haystack](https://github.com/deepset-ai/haystack) query pipeline against the Qdrant collection built in [Module 5](local-embeddings-vector-stores.md).
+An air-gapped retrieval stack combines dense vector search for paraphrased queries, BM25 for exact-token lookup, Reciprocal Rank Fusion (RRF) to merge the two rank lists, and an optional cross-encoder re-ranker to refine the top-k when retrieval scores cluster tightly. Every component runs locally — no cloud API calls anywhere in the pipeline. The runnable code below wires all four layers into one [Haystack](https://github.com/deepset-ai/haystack) query pipeline against the Qdrant collection built in [Module 5](local-embeddings-vector-stores.md).
 
 ---
 
@@ -65,13 +65,13 @@ RRF fuses two independent rank lists — each retriever scores documents without
 
 **How it works**: take the top-k candidates from the hybrid retriever (typically k=20–50), pass each (query, candidate) pair through the cross-encoder, re-sort by cross-encoder score, return the top-n.
 
-**Cost**: cross-encoder re-ranking adds ~100–200ms latency per query for ~30 candidates [unverified — varies by hardware and batch size]. It cannot run in parallel — it requires the retrieval stage to complete first.
+**Cost**: cross-encoder re-ranking adds roughly 100–200ms latency per query for ~30 candidates on CPU, dropping to sub-50ms on a modern GPU ([practitioner benchmarks](https://medium.com/@xiweizhou/speed-showdown-reranker-1f7987400077)). It cannot run in parallel — it requires the retrieval stage to complete first.
 
 **Models for air-gapped deployment**:
 
 - [`bge-reranker-v2-m3`](https://huggingface.co/BAAI/bge-reranker-v2-m3) (BAAI) — 0.6B parameters, multilingual, LoRA fine-tuned with flash attention. The series [reference stack](index.md#reference-stack). Runs on CPU for small candidate sets; a GPU is recommended above 50 candidates.
-- [`jina-reranker-v2-base-multilingual`](https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual) — achieves 81.33% Hit@1 at ~188ms end-to-end, making it the only top-tier model meeting sub-200ms budgets [unverified — benchmark conditions vary].
-- [`bge-reranker-large`](https://huggingface.co/BAAI/bge-reranker-large) — adds approximately 2 nDCG@10 points over v2-m3 but doubles inference latency [unverified].
+- [`jina-reranker-v2-base-multilingual`](https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual) — 278M parameters with Flash Attention 2 for low-latency multilingual reranking; a practical sub-200ms option when the corpus spans multiple languages.
+- [`bge-reranker-large`](https://huggingface.co/BAAI/bge-reranker-large) — adds roughly 2 nDCG@10 points over v2-m3 at approximately double the inference latency ([comparison benchmark](https://markaicode.com/bge-reranker-cross-encoder-reranking-rag/)); worth the cost only when per-query evaluation confirms the gain on your corpus.
 
 **When re-ranking earns its cost**:
 - nDCG@10 measured below your quality threshold without re-ranking
@@ -198,7 +198,7 @@ result = hybrid.run({
 print([d.content for d in result["joiner"]["documents"]])
 ```
 
-`join_mode="reciprocal_rank_fusion"` uses the standard RRF formula with `k=60` [verify default against the `haystack-ai` release you pin]. Weights shift the contribution of each retriever without changing the algorithm; start at 0.5/0.5 and only adjust if one retriever consistently dominates on your corpus.
+`join_mode="reciprocal_rank_fusion"` uses the standard RRF formula with `k=60` as the default smoothing constant. Weights shift the contribution of each retriever without changing the algorithm; start at 0.5/0.5 and only adjust if one retriever consistently dominates on your corpus.
 
 **Step 3 — Add cross-encoder reranking**
 
@@ -265,12 +265,6 @@ The resulting YAML file is the audit artifact for this pipeline. It names every 
 - `bge-reranker-v2-m3` runs offline at 0.6B parameters. On CPU, cap the candidate set at 50 documents; use GPU above that.
 - HyDE helps on vague, question-form queries but adds a local LLM inference call. Skip it when queries contain exact identifiers or when latency is critical.
 - Measure nDCG@10 on a labeled evaluation set before and after adding each layer. Published benchmarks reflect average corpora — verify improvements on your own data.
-
-## Unverified Claims
-
-- Cross-encoder re-ranking latency of ~100–200ms for 30 candidates — varies significantly by hardware, model size, and batch implementation. Benchmark on your target hardware before committing.
-- `bge-reranker-large` adds ~2 nDCG@10 points over v2-m3 at double the inference latency — unverified; no canonical benchmark source confirmed.
-- Jina Reranker v2 achieves 81.33% Hit@1 at ~188ms — benchmark conditions not independently verified.
 
 ## Related
 

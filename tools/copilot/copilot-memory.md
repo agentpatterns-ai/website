@@ -44,7 +44,7 @@ When code review discovers a naming convention violation, that knowledge becomes
 
 Every entry is grounded in specific code locations. Before applying a memory, the agent performs just-in-time verification — checking that cited locations still exist and align with the stored fact ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
-When verification reveals a contradiction, the agent generates a corrected version. GitHub tested this by seeding adversarial memories — agents consistently detected and corrected the conflicts ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)). The memory pool corrects itself through use rather than requiring manual curation.
+When verification reveals a contradiction, the agent generates a corrected version. GitHub tested this by seeding adversarial memories — agents consistently detected and corrected the conflicts ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)). The memory pool self-corrects through use rather than manual curation.
 
 ## Auto-Expiry
 
@@ -115,10 +115,10 @@ To inspect or delete stored memories for a repository, navigate to **Repository 
 
 Autonomous memory creation without human curation works against you in several conditions:
 
-- **Security-sensitive repositories**: an incorrectly stored memory about a security pattern (e.g., "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the specific violation that created the false memory.
-- **Repositories with contested conventions**: when a codebase is mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
-- **Teams using explicit context files**: organizations that manage `.github/copilot-instructions.md` as the authoritative source of truth may find autonomous memories create ambiguity when the two sources diverge — the explicit instruction file takes precedence, but the agent may still surface the contradicting memory as a suggestion.
-- **Multi-repository workflows**: memories are repository-scoped, so patterns learned in one repo do not transfer to others. Teams working across a monorepo split or separate service repos must rebuild memory independently in each context.
+- **Security-sensitive repositories**: an incorrectly stored memory (e.g., "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the violation that created the false memory.
+- **Repositories with contested conventions**: during a mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
+- **Teams using explicit context files**: organizations that treat `.github/copilot-instructions.md` as the source of truth may find autonomous memories create ambiguity when the two diverge — the instruction file takes precedence, but the agent may still surface the contradicting memory.
+- **Multi-repository workflows**: memories are repository-scoped, so patterns do not transfer across repos. Teams spanning a monorepo split or separate service repos must rebuild memory in each context.
 
 ## Related
 

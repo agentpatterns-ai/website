@@ -40,7 +40,7 @@ Phases alternate between human-led (judgment, decisions, commitments) and agent-
 
 Exit criterion: you can describe the problem clearly, identify the relevant codebase areas, and name the open questions that the prototype will resolve.
 
-Tools and patterns: Claude's [Plan Mode](plan-mode.md) (read-only exploration), the [Research-Plan-Implement pattern](research-plan-implement.md), structured "Grill Me" sessions where the agent interviews you to surface assumptions.
+Tools and patterns: Claude's [Plan Mode](plan-mode.md) (read-only exploration), the [Research-Plan-Implement pattern](research-plan-implement.md), structured [Grill Me sessions](../agent-design/grill-me-technique.md) where the agent interviews you to surface assumptions.
 
 ### 2. Prototype
 

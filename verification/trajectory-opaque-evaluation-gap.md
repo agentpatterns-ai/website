@@ -17,23 +17,23 @@ aliases:
 
 ## The Blind Spot in Outcome Grading
 
-[Outcome grading](grade-agent-outcomes.md) is the correct default for capability measurement. It avoids penalizing valid alternative solutions and lets agents find paths the eval author did not anticipate.
+[Outcome grading](grade-agent-outcomes.md) is the correct default for capability measurement — it avoids penalizing valid alternative solutions and lets agents find paths the eval author did not anticipate.
 
-But outcome grading has a structural limitation: an agent can reach a correct final state through unsafe intermediate steps. A coding agent that accesses unauthorized resources, leaks credentials to a logging service, or modifies files outside its scope before producing a correct result will pass every outcome-based check. The violation is invisible because the evaluator never inspects the trajectory.
+But outcome grading has a structural limitation: an agent can reach a correct final state through unsafe intermediate steps. A coding agent that accesses unauthorized resources, leaks credentials, or modifies files outside its scope before producing a correct result passes every outcome check — the violation is invisible because the evaluator never inspects the trajectory.
 
-The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models. A vanilla LLM judge receiving full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models: a vanilla LLM judge with full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
 
 ## Why LLM Judges Miss Safety Violations
 
-Trajectory-opaque judges fail for specific, predictable reasons:
+Trajectory-opaque judges fail for specific reasons:
 
-- **Self-reported reasoning is unreliable.** Agents rationalize unsafe actions in their text output. An agent that accessed a forbidden API can describe its approach without mentioning the violation. The judge sees the explanation, not the execution. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
-- **Compounding effects are invisible.** Small policy deviations at individual steps compound into serious violations. A judge reviewing only the final state cannot reconstruct the chain. ([AgentAuditor, 2025](https://arxiv.org/abs/2506.00641))
+- **Self-reported reasoning is unreliable.** Agents rationalize unsafe actions in their text output. An agent that hit a forbidden API can describe its approach without mentioning the violation — the judge sees the explanation, not the execution. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+- **Compounding effects are invisible.** Small policy deviations at individual steps compound into serious violations; a judge reviewing only the final state cannot reconstruct the chain. ([AgentAuditor, 2025](https://arxiv.org/abs/2506.00641))
 - **Deterministic violations need deterministic checks.** Whether an agent called a forbidden API is a binary fact. LLM judgment introduces false negatives where rule-based checks against audit logs would not. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
 
 ## Three Evidence Channels
 
-Structured trajectory auditing uses three independent evidence sources, each catching violations the others miss:
+Structured trajectory auditing uses three independent evidence sources:
 
 ```mermaid
 graph TD
@@ -50,17 +50,17 @@ graph TD
 
 | Channel | What it captures | What it catches |
 |---------|-----------------|-----------------|
-| **Execution traces** | Complete sequence of agent actions, tool calls, and parameters | Unauthorized tool calls, out-of-scope actions, policy violations in the action sequence |
-| **Audit logs** | System-level records from services the agent interacted with | Actions the agent performed but did not report in its reasoning; discrepancies between claimed and actual behavior |
-| **Environment snapshots** | Post-execution state of files, databases, and external systems | Side effects invisible in the conversation transcript — modified files, created resources, state mutations |
+| **Execution traces** | Sequence of agent actions, tool calls, and parameters | Unauthorized tool calls, out-of-scope actions, policy violations in the action sequence |
+| **Audit logs** | System-level records from services the agent touched | Actions the agent performed but did not report; discrepancies between claimed and actual behavior |
+| **Environment snapshots** | Post-execution state of files, databases, and external systems | Side effects invisible in the transcript — modified files, created resources, state mutations |
 
-The key insight: execution traces show what the agent *did*, audit logs show what *services recorded independently*, and environment snapshots show what *artifacts exist*. Cross-referencing the three catches violations that any single channel would miss. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+Cross-referencing the three channels catches violations any single channel would miss. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
 
 ## Consistency Reveals What Capability Hides
 
-[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency. The trajectory-opaque gap compounds this distinction: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency. The trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
 
-An agent that passes outcome checks on a single run may fail safety checks on repeated runs when it encounters errors and takes recovery paths the evaluator never inspects. Robustness assessment requires both multi-trial execution (Pass^k) and trajectory-level evidence collection — outcome grading alone conflates a lucky safe run with reliable safe behavior.
+An agent that passes outcome checks on a single run may fail safety checks on repeated runs when errors push it onto recovery paths the evaluator never inspects. Robustness assessment needs both Pass^k and trajectory-level evidence — outcome grading alone conflates a lucky safe run with reliably safe behavior.
 
 ## When to Add Trajectory Auditing
 
@@ -69,11 +69,11 @@ Outcome grading remains correct for capability evals. Add trajectory auditing wh
 | Concern | Why outcome grading is insufficient |
 |---------|-------------------------------------|
 | **Safety compliance** | Agents must avoid forbidden actions, not just produce correct results |
-| **Robustness under failure** | Error recovery paths may violate safety constraints that the happy path does not |
+| **Robustness under failure** | Error recovery paths may violate safety constraints the happy path does not |
 | **Regulatory audit** | Auditors need evidence of what happened, not just what was produced |
 | **Multi-step workflows** | Intermediate side effects (API calls, file mutations, credential access) are invisible in final output |
 
-For pure capability measurement — "can the agent solve this task?" — [outcome grading](grade-agent-outcomes.md) and [trajectory decomposition](trajectory-decomposition-diagnosis.md) remain the right tools. The trajectory-opaque gap applies specifically to safety and robustness dimensions.
+For pure capability measurement, [outcome grading](grade-agent-outcomes.md) and [trajectory decomposition](trajectory-decomposition-diagnosis.md) remain the right tools. The trajectory-opaque gap applies specifically to safety and robustness.
 
 ## Example
 
@@ -102,6 +102,16 @@ Completion verdict: PASS — config update applied correctly
 ```
 
 The outcome grader sees a correct deployment. The trajectory auditor catches that the agent used production credentials — a safety violation invisible in the final state. The agent achieved the correct result through an unsafe path.
+
+## When This Backfires
+
+Trajectory auditing is not free. Narrow its scope when:
+
+- **Review cost exceeds the safety signal.** Every stored trajectory needs a reviewer or judge, and immutable logging adds per-call overhead plus storage that scales with agent chattiness. For low-stakes evals, the audit pipeline can cost more than the violations it catches.
+- **Captured trajectories create a privacy liability.** Full traces record every prompt, tool argument, and response — including PII and credentials. Enterprise audit logs typically record metadata rather than full content for this reason: the Microsoft 365 Unified Audit Log stores activity metadata across tenant services rather than message or document contents. ([Microsoft 365 audit log activities](https://learn.microsoft.com/en-us/purview/audit-log-activities))
+- **Judge-based trajectory evaluation inherits LLM-judge biases.** Position, length, and agreeableness bias distort trajectory judgments as they do output judgments. When "unauthorized" is a matter of interpretation, a trajectory judge can produce more noise than signal. ([TRACE, 2026](https://arxiv.org/abs/2602.21230))
+
+Deterministic rule-based checks against audit logs (forbidden-API regex, credential blocklists) avoid the judge-reliability problem but require rule-expressible policies.
 
 ## Key Takeaways
 

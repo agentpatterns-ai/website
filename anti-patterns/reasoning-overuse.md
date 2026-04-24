@@ -88,6 +88,7 @@ To detect whether reasoning is contributing, measure pass^k — run the same tas
 - [The Think Tool](../agent-design/think-tool.md)
 - [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md)
 - [pass@k and pass^k Metrics](../verification/pass-at-k-metrics.md) — Separate capability from consistency when measuring whether reasoning helps
+- [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) — Empirical evidence that CoT can hurt, help, or do nothing for code tasks depending on model and perturbation
 - [Framework-First Anti-Pattern](framework-first.md)
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
 - [The Kitchen Sink Session](session-partitioning.md) — Another cost-performance anti-pattern: mixing unrelated tasks fills context with irrelevant history

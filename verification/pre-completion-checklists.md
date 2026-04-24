@@ -12,9 +12,9 @@ tags:
 
 ## The Premature Completion Problem
 
-Agents optimize for task completion, not task correctness. They stop as soon as output looks plausible — not when it is verified correct. Without an explicit gate, an agent will declare success after partial implementation, a failing test run it chose not to investigate, or a code change that compiles but does not satisfy the requirement.
+Agents optimize for task completion, not task correctness. Without an explicit gate, an agent will declare success after partial implementation, a failing test run it chose not to investigate, or a code change that compiles but does not satisfy the requirement.
 
-A pre-completion checklist intercepts the completion signal and forces the agent through a verification sequence before it is allowed to finish.
+A pre-completion checklist intercepts the completion signal and forces the agent through a verification sequence before it can finish.
 
 ## Impact
 
@@ -54,11 +54,9 @@ Effective checklist items are specific and verifiable, not vague:
 - "Check that no existing tests were removed or modified"
 - "Verify the implementation works end-to-end, not just at the unit level"
 
-Vague items allow the agent to nominally complete them without actually verifying anything.
-
 ## Relationship to Feature List Files
 
-Pre-completion checklists and feature list files are complementary. The feature list defines what "done" means per feature; the pre-completion checklist is the verification process the agent follows before updating that status. Together they create a closed loop: clear criteria plus a mandatory verification step before status can change.
+Pre-completion checklists and feature list files are complementary. The feature list defines what "done" means per feature; the pre-completion checklist is the verification process the agent follows before updating that status.
 
 ## Example
 
@@ -114,11 +112,11 @@ This combination — a `PostToolUse` hook plus an explicit system prompt instruc
 
 ## Why It Works
 
-Mandatory self-verification interrupts the premature-closure bias built into agent training: models optimise for appearing done, not for being correct. Forcing the agent to re-engage with the original requirement after output is generated creates a second pass that catches drift between intent and implementation.
+Mandatory self-verification interrupts the premature-closure bias built into agent training. Forcing the agent to re-engage with the original requirement after output is generated creates a second pass that catches drift between intent and implementation.
 
-The mechanism is established in LLM research: self-verification that checks conclusions backward against initial conditions — rather than only forward reasoning — measurably improves accuracy across arithmetic, commonsense, and logical tasks. ([Weng et al., 2022](https://arxiv.org/abs/2212.09561))
+The mechanism is established in LLM research: self-verification that checks conclusions backward against initial conditions — rather than only forward reasoning — measurably improves accuracy across arithmetic, commonsense, and logical tasks ([Weng et al., 2022](https://arxiv.org/abs/2212.09561)).
 
-Implementing the gate as a hook rather than a prompt instruction exploits the same principle: hooks execute at the system level, outside the LLM's reasoning context, guaranteeing execution independent of what the model remembers.
+Implementing the gate as a hook rather than a prompt exploits the same principle at the system level, outside the LLM's reasoning context — execution is guaranteed regardless of what the model remembers.
 
 ## When This Backfires
 

@@ -126,10 +126,12 @@ The retrieval step is what makes this work at scale. Without it, the generator w
 
 The pattern degrades or fails under several conditions:
 
-- **Thin corpus**: Retrieval is only as useful as the existing test library. A corpus under ~50 scripts in a given domain returns too-generic examples; the generator falls back to its training priors and produces style-inconsistent output.
+- **Thin corpus**: Retrieval is only as useful as the existing test library. When the corpus is too small or thin in a given domain, top-k results return generic examples, and the generator falls back to its training priors and produces style-inconsistent output.
 - **Unstable specs**: If acceptance criteria change frequently between writing and review, retrieved examples from an older spec style diverge from the incoming spec. Spec quality must be locked before pipeline entry, not after.
 - **High API churn**: The generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break — retrieved examples become misleading rather than grounding, and hallucination rates increase rather than decrease.
 - **Semantically narrow test suites**: If the existing corpus covers only one test pattern (e.g., all smoke tests), retrieval degenerates into retrieving the same unhelpful example for every spec regardless of type.
+
+Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did **not** improve the correctness of LLM-generated unit tests and only improved line coverage by 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682), ICSE 2026). The throughput and style-consistency gains justify the pattern; human review of assertion semantics remains load-bearing for correctness.
 
 ## Key Takeaways
 
@@ -144,3 +146,4 @@ The pattern degrades or fails under several conditions:
 - [Spec-Driven Development](../workflows/spec-driven-development.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Agent-Assisted Code Review](../code-review/agent-assisted-code-review.md)
+- [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)

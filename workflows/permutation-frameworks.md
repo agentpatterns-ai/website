@@ -4,6 +4,7 @@ description: "Define constrained code templates with shared signatures, then use
 tags:
   - instructions
 ---
+
 # Permutation Frameworks for Batch Code Generation
 
 > Define constrained code templates with shared signatures, then use agents to generate reliable variations at scale — shifting the developer role from implementer to reviewer.

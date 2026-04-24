@@ -5,11 +5,13 @@ nav:
       - agent-discoverable-slash-commands.md
       - agent-driven-codebase-fingerprint.md
       - agent-first-software-design.md
+      - agent-stack-bets.md
       - agentic-ai-architecture-evolution.md
       - agentic-flywheel.md
       - agents-vs-commands.md
       - agentless-vs-autonomous.md
       - classical-se-patterns-agent-analogues.md
+      - coding-agent-scope-expansion.md
       - cognitive-reasoning-execution-separation.md
       - discrete-phase-separation.md
       - continual-learning-layers.md
@@ -23,6 +25,7 @@ nav:
       - persona-as-code.md
       - role-orchestration-single-model.md
       - graph-of-thoughts.md
+      - hypothesis-driven-debugging.md
       - petri-net-of-thoughts.md
       - self-discover-reasoning.md
       - separation-of-knowledge-and-execution.md
@@ -31,6 +34,7 @@ nav:
       - three-reasoning-spaces.md
   - "Memory & State":
       - agent-memory-patterns.md
+      - harness-memory-coupling.md
       - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
@@ -52,6 +56,7 @@ nav:
       - convergence-detection.md
       - critic-agent-plan-review.md
       - dspy-programmatic-prompt-optimization.md
+      - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
       - goal-monitoring-progress-tracking.md
@@ -77,6 +82,7 @@ nav:
       - feedback-capability-equalizer.md
       - heuristic-effort-scaling.md
       - idempotent-agent-operations.md
+      - interactive-effort-sliders.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
@@ -89,8 +95,10 @@ nav:
       - agent-turn-model.md
       - deferred-permission-pattern.md
       - tool-confirmation-carousel.md
+      - harness-design-dimensions.md
       - harness-engineering.md
       - harness-hill-climbing.md
+      - harness-impermanence.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
       - session-harness-sandbox-separation.md

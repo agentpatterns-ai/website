@@ -17,7 +17,7 @@ aliases:
 
 A fabricated claim can survive from research through to publish if only one stage checks accuracy. Layered accuracy defense assigns each agent in the pipeline an explicit verification responsibility, so claims must survive multiple independent checkpoints before they reach the reader.
 
-This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) from security: assume each layer will sometimes fail. Build the pipeline so that one layer's failure is caught by the next.
+This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) from security — [NIST](https://csrc.nist.gov/glossary/term/defense_in_depth) defines it as layering heterogeneous controls "to ensure that attacks missed by one technology are caught by another." Assume each layer will sometimes fail, and build the pipeline so one layer's failure is caught by the next.
 
 ## Layer Responsibilities
 
@@ -50,7 +50,7 @@ A single "fact-checker" agent at the end of the pipeline has to re-examine the e
 - The writer layer prevents recalled knowledge from entering as fact
 - The reviewer layer catches anything the writer missed
 
-Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and markup completeness — an error must evade three different detection criteria to reach the reader.
+Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and markup completeness — an error must evade three different detection criteria to reach the reader. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
 
 ## What Each Layer Checks
 

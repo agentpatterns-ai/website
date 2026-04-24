@@ -19,9 +19,9 @@ tags:
 
 ## Evals as Regression Tests
 
-Agent capability degrades silently as prompts, tools, context, or models change. Without continuous evaluation, regressions surface through user complaints rather than systematic testing.
+Agent capability degrades silently as prompts, tools, context, or models change; without continuous evaluation, regressions surface through user complaints.
 
-OpenAI's data agent team treats evals as "unit tests that run continuously during development" and as "canaries in production" — a curated set of golden question-answer pairs run on every agent configuration change. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+OpenAI's data agent team treats evals as "unit tests that run continuously during development" and "canaries in production" — golden question-answer pairs run on every agent configuration change. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 ## What Makes a Good Golden Pair
 
@@ -30,13 +30,9 @@ A golden pair consists of:
 - A natural language question representing a pattern the team cares about
 - An expected output — the "golden" answer — authored by a domain expert
 
-Good golden pairs:
+Good pairs target patterns the agent is most likely to get wrong, cover edge cases that have caused past failures, and represent real user inputs rather than sanitized demos.
 
-- Target the patterns the agent is most likely to get wrong
-- Cover the edge cases that have caused failures in the past
-- Represent the variety of real user inputs, not sanitized demos
-
-Avoid pairs where the expected output has an obvious format that tempts over-rigid grading. The question "what is the total revenue for Q3?" has many correct phrasings and formats for the answer. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
+Avoid pairs where the expected output has an obvious format that tempts over-rigid grading — "what is the total revenue for Q3?" has many correct phrasings. [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 ## Semantic Grading, Not String Matching
 
@@ -52,32 +48,22 @@ For coding agents, grade the execution result alongside the artifact — differe
 
 ## Dual Role: Development Guard and Production Canary
 
-Golden pair evals serve two roles:
-
 - **Development guard**: run on every change to prompts, tools, or configuration; a degraded score blocks the change.
-- **Production canary**: run periodically against the live agent to detect drift from model updates, provider changes, or context accumulation.
+- **Production canary**: run periodically against the live agent to detect drift from model, provider, or context changes.
 
 [Source: [Inside Our In-House Data Agent](https://openai.com/index/inside-our-in-house-data-agent/)]
 
 ## Building the Suite
 
-Start with 20-50 manually authored pairs covering the most important patterns:
-
-- Real user questions that previously caused failures
-- Edge cases identified during development
-- High-volume usage scenarios
-
-Grow the suite continuously. Every production failure is a candidate for a new golden pair — fix the failure, then add the question and correct answer to prevent regression. See [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) for a systematic approach to this pipeline.
-
-Periodically review golden answers that have become outdated as the agent's scope or behavior has legitimately changed.
+Start with 20-50 manually authored pairs covering failures, edge cases, and high-volume scenarios. Grow continuously — every production failure is a candidate pair (see [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md)). Periodically review goldens for drift; a stale suite hides regressions behind [benchmark-contamination](benchmark-contamination-eval-risk.md) and [reward-hacking](anti-reward-hacking.md) dynamics.
 
 ## For Coding Agents
 
-For agents that generate code, golden pairs adapt:
+For code-generating agents:
 
 - **Question**: a coding task description (refactor, fix, implement)
-- **Golden answer**: the expected behavior or outcome, not the exact code
-- **Grading**: does the generated code pass the tests or meet the acceptance criteria?
+- **Golden answer**: the expected behavior or outcome, not exact code
+- **Grading**: does the generated code pass tests or meet acceptance criteria?
 
 The grader judges functional equivalence, not textual identity.
 
@@ -171,3 +157,5 @@ The grader outputs a structured verdict for each pair, making it straightforward
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md)
 - [Test-Driven Agent Development](tdd-agent-development.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
+- [Benchmark Contamination as an Eval Risk](benchmark-contamination-eval-risk.md)
+- [Anti Reward Hacking](anti-reward-hacking.md)

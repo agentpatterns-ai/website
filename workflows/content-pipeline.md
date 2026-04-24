@@ -78,7 +78,7 @@ For ideas that need source verification before drafting, a research agent:
    ## Research Notes
 
    ### Key Findings
-   - <finding with source link or [unverified]>
+   - <finding with source link>
 
    ### Source Material
    - `<url>` — <one-line summary>
@@ -89,7 +89,7 @@ For ideas that need source verification before drafting, a research agent:
 
 4. Transitions the issue to `researched`
 
-A work item ready for drafting has sourced key findings (linked or marked `[unverified]`), a clear content angle (not just a fact summary), no draft content in the research notes, and contradicting views noted where they exist.
+A work item ready for drafting has sourced key findings (every claim linked to a primary source; unsourceable claims are rewritten or dropped rather than hedged), a clear content angle (not just a fact summary), no draft content in the research notes, and contradicting views noted where they exist.
 
 Skip this stage for ideas where key points are already well-sourced, or when the author has done the research manually. Apply the `researched` tag directly and append a comment with source material in the standard format so the draft agent has the same structured input.
 
@@ -118,7 +118,7 @@ Two reviewers run in parallel after every draft. Each returns a structured JSON 
 
 ### Reviewer 1 — Content Quality
 
-Checks: conciseness (every sentence earns its place), accuracy (claims sourced or marked `[unverified]`), audience fit (experienced developers, no beginner explanations), actionability (reader can apply it immediately), tone (direct, no hype), diagram correctness.
+Checks: conciseness (every sentence earns its place), accuracy (every claim links to a primary source — unsourceable claims are rewritten weaker or removed, never hedged), audience fit (experienced developers, no beginner explanations), actionability (reader can apply it immediately), tone (direct, no hype), diagram correctness.
 
 ### Reviewer 2 — Structure and Standards
 
@@ -179,6 +179,14 @@ The core components you need in any implementation:
 
 The specific implementation (slash commands, GitHub issues, a task database) is secondary. The pattern holds across tools.
 
+## Why It Works
+
+Three mechanisms do the heavy lifting:
+
+- **Labels as the state machine**: stage is persisted on the issue itself, so any agent or human can pick up work without a separate coordination doc. No handoff notes to go stale; no central scheduler to fail.
+- **Independent reviewers catch independent failure modes**: the content-quality reviewer and the structure-and-standards reviewer fire on different signals (claim density, tone, filler vs. file layout, frontmatter, link resolution). Running them in parallel means one blind spot does not compound the other.
+- **Structured issue bodies constrain agent input**: requiring Concept / Context / References / Key Points in the intake step forces the human to pre-commit to scope. Agents generate thinner, more focused drafts when the prompt is already narrowed, because the research step has fewer degrees of freedom.
+
 ## When This Backfires
 
 The pipeline adds coordination overhead that only pays off when review is the bottleneck — not writing. Three conditions where it underperforms:
@@ -197,7 +205,7 @@ The pipeline adds coordination overhead that only pays off when review is the bo
 
 3. **Implementation** — an implementation agent picks issue #142 from the `researched` queue, creates branch `content/142-prompt-injection-mitigation`, writes `docs/techniques/prompt-injection-mitigation.md` with frontmatter, a blockquote summary, and sourced body content. A simplification pass trims redundant phrasing.
 
-4. **Review** — two reviewer agents run in parallel. Reviewer 1 flags one claim as unsourced; Reviewer 2 confirms file placement and link validity. The agent adds `[unverified]` to the flagged claim and re-reviews. Round 2 passes.
+4. **Review** — two reviewer agents run in parallel. Reviewer 1 flags one claim as unsourced; Reviewer 2 confirms file placement and link validity. The agent researches the claim, finds a primary source, adds an inline citation, and re-reviews. Round 2 passes.
 
 5. **PR and merge** — the agent commits with `docs(technique): prompt injection mitigation\n\nCloses #142`, pushes, and opens a PR. A human merges; issue #142 closes automatically.
 

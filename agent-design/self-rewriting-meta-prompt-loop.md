@@ -71,8 +71,8 @@ Version control on the system prompt is a hard prerequisite — without a rollba
 
 Additional constraints that reduce risk:
 
-- **Change magnitude limits** — cap each delta to a maximum token change per cycle. Small targeted edits are easier to attribute and revert than large rewrites.
-- **Canary rollouts** — deploy the updated prompt to a fraction of traffic and compare quality metrics against the current baseline before full promotion.
+- **Change magnitude limits** — cap each delta to a maximum token change per cycle. Small token-level perturbations can still alter the model's high-dimensional output space substantially ([Salinas & Morstatter, 2024](https://aclanthology.org/2024.findings-acl.275/)), so small targeted edits are easier to attribute and revert than large rewrites.
+- **Canary rollouts** — deploy the updated prompt to a fraction of traffic and compare quality metrics against the current baseline before full promotion, mirroring the prompt-version rollout patterns now supported by platforms like [Langfuse A/B testing](https://langfuse.com/docs/prompt-management/features/a-b-testing).
 - **Reflection input sanitization** — treat task output as untrusted before feeding it into the reflection step; strip or validate content that could include prompt-injection payloads
 
 ## Contrast with Human-Driven Refinement
@@ -98,5 +98,6 @@ A 2026 study found that reflective APO with a defective seed can degrade accurac
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Convergence Detection](convergence-detection.md)
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)
+- [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)
 - [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md)
 - [Rollback-First Design](rollback-first-design.md)

@@ -21,9 +21,7 @@ tags:
 
 Manually authored evals reflect what developers *think* will go wrong. Production incidents reveal what *actually* goes wrong — real users find edge cases no developer anticipates.
 
-This gap exists because developers anchor on happy-path scenarios and known failure classes during authoring. Production traffic, by contrast, explores the full input distribution — including rare phrasing, adversarial queries, and domain combinations that no dev imagines. Each incident is a proof that the failure class is real and reproducible, which is the minimum bar for a useful eval case.
-
-The suite becomes a living record of every way the system has broken.
+The gap exists because developers anchor on happy-path scenarios and known failure classes. Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
 
 ## The Pipeline
 
@@ -37,7 +35,7 @@ flowchart LR
     F -->|Monitor| A
 ```
 
-Each stage has a specific output:
+Each stage produces a specific output:
 
 | Stage | Input | Output |
 |---|---|---|
@@ -49,14 +47,14 @@ Each stage has a specific output:
 
 ## Error Analysis: From Traces to Failure Taxonomy
 
-Identifying the failure mode is harder than writing the eval. A structured error analysis methodology makes this repeatable:
+Identifying the failure mode is harder than writing the eval. A structured error analysis methodology:
 
 1. **Gather traces** -- collect 100+ production traces covering failures and near-misses
 2. **Open coding** -- domain experts review traces and journal issues without predefined categories, focusing on the first upstream failure in each trace
 3. **Axial coding** -- group journal entries into a failure taxonomy with frequency counts
 4. **Iterate** -- repeat until new traces stop producing new categories (theoretical saturation)
 
-The resulting taxonomy shows which failure modes are most common, most severe, and most amenable to automated detection.
+The taxonomy reveals which failure modes are most common, most severe, and most amenable to automated detection.
 
 [Source: [Hamel Husain -- Your AI Product Needs Evals](https://hamel.dev/blog/posts/evals/), [LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)]
 
@@ -70,8 +68,6 @@ Evals have a maintenance cost. Apply a cost-benefit filter:
 | Semantic failures (wrong answer, hallucinated facts) | LLM-as-judge eval | More expensive but necessary for subjective correctness |
 | One-off data issues (corrupt input, transient API failure) | Skip -- fix upstream | Eval would test infrastructure, not the LLM feature |
 | Security/safety violations | Mandatory P0 eval | Always worth the cost regardless of frequency |
-
-Reserve LLM-as-judge evaluators for persistent problems; use assertions for deterministic failures.
 
 [Source: [Hamel Husain -- LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)]
 
@@ -164,11 +160,11 @@ Each incident adds an entry to `INCIDENT_EVALS`. Cases are never removed, only u
 
 Practitioner-reported dataset maturity tiers:
 
-- **Minimum viable**: 50-100 cases covering the most critical failure modes
-- **Production-ready**: 200-500 cases with broad failure category coverage
+- **Minimum viable**: 50-100 cases covering critical failure modes
+- **Production-ready**: 200-500 cases with broad category coverage
 - **Mature**: 1000+ cases with tiered severity and automated CI gating
 
-Every postmortem should ask: "What eval would have caught this?" If actionable, write it before closing the incident.
+Every postmortem should ask: "What eval would have caught this?"
 
 [Source: [Maxim AI -- Building a Golden Dataset](https://www.getmaxim.ai/articles/building-a-golden-dataset-for-ai-evaluation-a-step-by-step-guide/)]
 
@@ -176,7 +172,7 @@ Every postmortem should ask: "What eval would have caught this?" If actionable, 
 
 - **Eval drift**: Expected behavior in each case is hardcoded at incident time. When the product's intended behavior changes (new policy, updated model, shifting requirements), old eval cases silently become wrong — they now test the *previous* correct behavior. Without a review cadence, the suite drifts and passing CI stops being meaningful.
 - **Grader decay for LLM-as-judge**: LLM judges require periodic calibration against human ratings. If the judge model is updated or the prompt drifts, scoring shifts without any test case changing — a passing suite may no longer reflect actual quality.
-- **Volume without triage**: Incident volume is proportional to usage. High-traffic systems generate hundreds of incidents, most of which have overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
+- **Volume without triage**: High-traffic systems generate hundreds of incidents with overlapping failure modes. Without deduplication and priority labeling, the suite balloons with redundant cases that slow CI without improving coverage.
 
 ## Key Takeaways
 

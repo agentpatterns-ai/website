@@ -88,6 +88,8 @@ Structure reduces hallucination surface but constrains legitimate flexibility. T
 
 Too much structure produces compliant but hollow output: the agent fills every field with something rather than nothing, but the content is low-quality filler. Too little structure produces unverifiable output.
 
+Two caveats are worth naming explicitly. First, format restrictions can degrade reasoning: [Tam et al.](https://arxiv.org/abs/2408.02442) report that strict JSON-mode generation reduces accuracy on reasoning-heavy tasks compared to free-form generation followed by structured conversion. For reasoning-heavy tasks, the common mitigation is to let the model think in natural language first and convert to the target format in a second step. Second, schema constraints guarantee only syntactic validity, not semantic correctness — the values inside a schema-valid JSON may still be wrong or hallucinated. Structured output reduces hallucination surface; it does not replace content-level verification.
+
 ## Anti-Pattern
 
 Asking an agent to "write about X" with no structural guidance. The agent will produce plausible prose with no verifiable properties. You cannot check whether all claims are sourced, whether the required sections are present, or whether the verdict is actionable, because none of these were required.

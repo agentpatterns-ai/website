@@ -50,7 +50,7 @@ A matcher is a string: `"*"` or empty matches all; a plain identifier or pipe-se
 
 ## Hooks vs Prompts
 
-Hooks are deterministic "must-do" rules. CLAUDE.md instructions are probabilistic "should-do" suggestions. Use hooks when compliance is non-negotiable — formatting, security checks, validation. Use prompts when flexibility is acceptable.
+Hooks are deterministic "must-do" rules — they run as shell commands regardless of the model's choices ([hooks guide](https://code.claude.com/docs/en/hooks-guide)). CLAUDE.md instructions are probabilistic "should-do" suggestions. Use hooks when compliance is non-negotiable — formatting, security checks, validation. Use prompts when flexibility is acceptable.
 
 The `/hooks` interactive command walks through setup.
 

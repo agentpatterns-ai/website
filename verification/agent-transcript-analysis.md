@@ -13,7 +13,7 @@ tags:
 
 ## The Manual Review Problem
 
-After running evaluation tasks, someone must read the transcripts and identify what went wrong. Manual review is time-consuming, inconsistent, and easy to get wrong — humans miss patterns that appear across dozens of transcripts and often focus on the most recent failure rather than the most common one.
+After running evaluation tasks, someone must read the transcripts and identify what went wrong. Manual review is slow and inconsistent — humans miss patterns that span dozens of transcripts and tend to focus on the most recent failure rather than the most common one.
 
 The same agent you are building tools for can perform this analysis at scale. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
@@ -26,9 +26,9 @@ Agents analyzing transcripts tend to surface:
 - Response format problems — fields that are never used, or structured data that forces unnecessary parsing
 - Patterns of confusion repeated across multiple tasks that look different on the surface
 
-Agents are also particularly effective at ensuring consistent changes across multiple tool definitions simultaneously — something humans tend to do inconsistently when editing several related tool descriptions in one pass. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Agents are also effective at making consistent changes across multiple tool definitions at once — something humans do unevenly when editing several related descriptions in one pass. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-The mechanism: when all transcripts and all tool definitions are held in a single context window, the agent can apply the same internal criterion uniformly across every instance — without the attention drift, recency bias, or inconsistent framing that accumulate when a human reads transcripts sequentially. Humans anchor on the most recent or most dramatic failure; models weigh all instances simultaneously.
+The mechanism: when all transcripts and tool definitions sit in a single context window, the agent applies one criterion uniformly across every instance — without the recency bias and inconsistent framing that accumulate when a human reads transcripts sequentially.
 
 ## Setup
 
@@ -46,29 +46,29 @@ The mechanism: when all transcripts and all tool definitions are held in a singl
 - Whether any tools should be consolidated, split, or removed
 
 **Instruction to trigger deeper analysis:**
-Ask the agent to output its reasoning before each proposed change. Anthropic's evaluation guidance recommends structuring agent output with reasoning blocks before tool calls — applying the same principle here separates diagnosis from prescription. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Ask the agent to output its reasoning before each proposed change. Anthropic's tool guidance recommends reasoning blocks before tool calls — the same principle here separates diagnosis from prescription. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 ## Interpreting the Output
 
-Take proposed changes as hypotheses, not conclusions. The agent is good at pattern recognition but may propose changes that fix the observed failure while introducing a new one.
+Treat proposed changes as hypotheses, not conclusions — the agent is good at pattern recognition but may fix the observed failure while introducing a new one.
 
 Before applying a proposed change:
 
-1. Verify the change addresses the actual root cause identified in the transcript, not just the symptom
-2. Consider whether the change could break correctly-functioning cases
-3. Prefer targeted changes over broad rewrites — smaller diffs are easier to evaluate
+1. Verify it addresses the root cause identified in the transcript, not just the symptom
+2. Consider whether it could break correctly-functioning cases
+3. Prefer targeted edits over broad rewrites — smaller diffs are easier to evaluate
 
-After applying changes, re-run the evaluation suite to confirm the targeted failure is resolved and no regressions were introduced.
+After applying changes, re-run the eval suite to confirm the targeted failure is resolved and no regressions appear.
 
 ## Combined Human and Agent Review
 
-Neither approach alone produces the best results. Human reviewers catch things that require domain context and judgment about intended behavior; agents excel at applying consistent criteria across large transcript volumes without attention fatigue. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+Neither approach alone is enough. Human reviewers catch issues that require domain context and judgment about intended behavior; agents apply consistent criteria across large transcript volumes without attention fatigue. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-A practical split: run agent analysis first to identify the top 3-5 issue classes, then focus human review on understanding the root causes of those specific issues and deciding whether the agent's proposed fixes are sound.
+A practical split: run agent analysis first to identify the top 3-5 issue classes, then focus human review on root causes and whether the agent's proposed fixes are sound.
 
 ## Avoiding Overfitting
 
-After agent-assisted refinement, run a held-out test set before declaring the tool improved. Changes that fix transcripts from development tasks can overfit to those specific inputs. A test set that wasn't used during refinement reveals whether improvements generalize. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+After agent-assisted refinement, run a held-out test set before declaring the tool improved. Changes that fix development-task transcripts can overfit to those inputs; a held-out set reveals whether improvements generalize. [Source: [Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
 ## Example
 
@@ -119,11 +119,13 @@ The key instruction is to reason through the root cause before proposing a rewri
 
 ## When This Backfires
 
-Agent-based transcript analysis has specific failure modes worth anticipating. Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include. LLMs don't always say what they mean." An agent that confidently lists five issue classes may be silently skipping a sixth that is harder to articulate.
+Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include." An agent that confidently lists five issue classes may silently skip a sixth that is harder to articulate.
 
-Agent-proposed fixes can also overfit to the surface presentation of a failure rather than its root cause. A proposed description rewrite may resolve the visible symptom in the evaluated transcripts while introducing a subtler ambiguity — one that only surfaces on task types not covered by your eval set. This is why re-running a held-out test set after applying changes is not optional.
+Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a held-out test set after changes is not optional.
 
-Finally, avoid relying on agent analysis as the sole quality gate for tool changes. Use it to narrow the search space for human review, not to replace the judgment required to validate proposed fixes.
+When the same model both generates and reviews, self-preference bias compounds the problem: judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
+
+Do not rely on agent analysis as the sole quality gate. Use it to narrow the search space for human review, not to replace the judgment needed to validate fixes.
 
 ## Related
 
@@ -136,3 +138,5 @@ Finally, avoid relying on agent analysis as the sole quality gate for tool chang
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
 - [Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals](incident-to-eval-synthesis.md)
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)
+- [Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations](trajectory-opaque-evaluation-gap.md)
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)

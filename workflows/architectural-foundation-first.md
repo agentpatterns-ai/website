@@ -17,6 +17,8 @@ Prompting an agent to build a feature or application from scratch without a foun
 
 [OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) discovered this directly. Their initial prompt — "Build the Sora Android app based on the iOS code. Go." — produced code that was technically functional but had structural problems: extra view models, logic placed in the wrong architectural layer, and patterns inconsistent with the team's standards.
 
+Thoughtworks frames the same phenomenon through ["ambient affordances"](https://martinfowler.com/articles/harness-engineering.html) — structural properties of the codebase that make it legible and tractable to the agent. Clear module boundaries, consistent package structure, and established patterns act as implicit constraints that raise the agent's success rate without needing to be re-specified in every prompt.
+
 ## What the Foundation Includes
 
 Human engineers should personally build:

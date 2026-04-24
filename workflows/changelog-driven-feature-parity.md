@@ -94,7 +94,7 @@ The implementation differs: Claude Code uses declarative YAML/markdown; Copilot 
 
 Both tools separate planning from execution:
 
-- Claude Code: Shift+Tab enters read-only analysis mode before code changes
+- Claude Code: Shift+Tab enters [Plan Mode](plan-mode.md), a read-only analysis mode before code changes
 - Copilot CLI v0.0.387: `/plan` with a dedicated panel; v0.0.415 adds plan approval menu with autopilot and fleet options
 
 Copilot CLI's plan mode (v0.0.387, January 2026) shipped after Claude Code's Shift+Tab plan mode, which predates the public changelog window (pre-2026), with a more structured approval UI.
@@ -160,5 +160,3 @@ gh api repos/github/copilot-cli/releases/latest --jq '.body' | head -40
 - [PostToolUse Hooks: Auto-Formatting on Every File Edit](posttooluse-auto-formatting.md)
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Copilot CLI: Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
-- [Agentic AI Architecture](../agent-design/agentic-ai-architecture-evolution.md)
-- [Parallel Agent Sessions](parallel-agent-sessions.md)

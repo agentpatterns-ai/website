@@ -32,6 +32,8 @@ The one-question-at-a-time constraint matters: it prevents the session from coll
 
 The codebase-first heuristic eliminates noise: questions whose answers already exist in code are resolved by the agent without developer input, keeping the session focused on genuine unknowns.
 
+The "walk every branch of the decision tree" framing predates the skill: Frederick Brooks catalogues this approach as a central design discipline in [_The Design of Design_ (ACM Digital Library)](https://dl.acm.org/doi/10.5555/1738960), where making the design tree explicit is what separates rigorous design from premature commitment.
+
 ## When to Trigger It
 
 Grill Me earns its overhead when:

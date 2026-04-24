@@ -52,7 +52,7 @@ The task suite must be representative and held out from production use — other
 
 **Breadth**: Include tasks where the target behavior *should* trigger and tasks where it *shouldn't*. A harness optimized only on positive cases will over-trigger. Anthropic's eval guidance specifies testing both directions explicitly ([Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)).
 
-**Grading**: Prefer deterministic outcome graders (pass/fail, schema checks) over LLM-as-judge for the tuning loop — cheaper to run repeatedly, eliminates evaluator variance from the signal. Use [pass^k](../verification/pass-at-k-metrics.md) rather than single-trial pass rate when consistency matters.
+**Grading**: Prefer [deterministic outcome graders](../verification/grade-agent-outcomes.md) (pass/fail, schema checks) over LLM-as-judge for the tuning loop — cheaper to run repeatedly, eliminates evaluator variance from the signal. Use [pass^k](../verification/pass-at-k-metrics.md) rather than single-trial pass rate when consistency matters.
 
 ## Overfitting Risk
 
@@ -108,3 +108,4 @@ The [agentic flywheel](agentic-flywheel.md) extends this: agents propose candida
 - [Incremental Verification](../verification/incremental-verification.md) — the same one-step-at-a-time principle applied to implementation
 - [Rollback-First Design](rollback-first-design.md) — applying reversibility as a design constraint so each harness change can be undone with one step
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md) — when to use LLM-as-judge vs. deterministic graders, and how to calibrate both
+- [DSPy Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md) — automated prompt search as an alternative to the manual hill-climbing loop, using the same eval signal

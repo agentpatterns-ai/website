@@ -62,10 +62,10 @@ Any agent system that supports these four properties can implement cross-surface
 
 A developer assigns an issue to the GitHub Copilot coding agent. The agent creates a branch `copilot/fix-auth-redirect`, adds three commits, and opens a draft PR — but the CI pipeline fails on an integration test that requires a local database connection.
 
-**Cloud to local** — the developer clicks "Continue in CLI" on the PR page and runs:
+**Cloud to local** — the developer clicks "Continue in Copilot CLI" on the PR page and copies the generated command, which resumes the session in Copilot CLI:
 
 ```bash
-ghcs --resume copilot/fix-auth-redirect
+copilot --resume <session-id>
 ```
 
 Copilot CLI checks out the branch, loads the session logs, and restores the conversation context. The developer sees the agent's failed test output and fixes the database connection config locally:
@@ -105,6 +105,7 @@ Cloud-local handoff depends on session state being transferable, which breaks do
 ## Related
 
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Seamless Background-to-Foreground Handoff](../workflows/background-foreground-handoff.md)
 - [Coding Agent](../tools/copilot/coding-agent.md)
 - [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)

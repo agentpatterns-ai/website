@@ -22,5 +22,6 @@ tags:
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md) — Route Dependabot alerts to Copilot for autonomous fix generation with human review at merge
+- [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md) — Install, pin, update, and publish agent skills with `gh skill` for scriptable provisioning
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol
 - [Monorepo Skill and Agent Discovery](monorepo-hierarchical-discovery.md) — Hierarchical configuration discovery from working directory to git root, enabling per-package skills and MCP servers

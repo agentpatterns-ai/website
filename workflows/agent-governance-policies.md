@@ -1,6 +1,6 @@
 ---
 title: "Agent Governance Policies for AI Agent Development"
-description: "GitHub Copilot governance controls — agent mode access, model availability, MCP server allowlists, and audit logging — applied through a three-tier hierarchy."
+description: "GitHub Copilot governance controls — agent mode access, model availability, MCP allowlists, activity metrics — applied through a three-tier hierarchy."
 tags:
   - human-factors
   - agent-design
@@ -8,7 +8,7 @@ tags:
 
 # Agent Governance Policies
 
-> Enterprise policy controls for AI agent behavior — agent mode access, model availability, MCP server allowlists, and audit logging — implemented through a hierarchical override model.
+> Enterprise policy controls for AI agent behavior — agent mode access, model availability, MCP server allowlists, and agent activity metrics — implemented through a hierarchical override model.
 
 ## Policy Hierarchy
 

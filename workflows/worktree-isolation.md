@@ -34,7 +34,7 @@ For agent workflows, this means: each agent gets a private sandbox. It reads and
 
 Worktrees enable agents to work simultaneously without coordination overhead. An agent refactoring authentication and an agent adding a new feature can run in parallel because they operate in independent directories.
 
-The batch pattern: decompose work into N units, spawn N agents each in its own worktree, each agent opens a PR. CI validates each branch independently.
+The [batch pattern](../tools/claude/batch-worktrees.md): decompose work into N units, spawn N agents each in its own worktree, each agent opens a PR. CI validates each branch independently.
 
 ```mermaid
 graph TD
@@ -63,9 +63,7 @@ git worktree add ../agent-task-1 -b agent/task-1
 git worktree remove ../agent-task-1
 ```
 
-[Claude Code's sub-agent configuration](https://code.claude.com/docs/en/sub-agents) supports `isolation: worktree` that handles this automatically for agents it spawns.
-
-Within an agent conversation, the `EnterWorktree` and `ExitWorktree` tools provide programmatic session management. `ExitWorktree` enables clean teardown — the agent returns to its original working directory rather than requiring session termination to leave a worktree.
+[Claude Code's sub-agent configuration](https://code.claude.com/docs/en/sub-agents) supports `isolation: worktree` that handles this automatically for agents it spawns. The [`--worktree` flag](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) creates an isolated worktree for a top-level session, and Claude Code auto-removes the worktree on exit if no changes were made.
 
 ## When This Backfires
 
@@ -75,6 +73,7 @@ Worktrees are not always the right tool:
 - **Disk pressure at scale**: Each worktree duplicates the working tree (not git objects, but all tracked files). Fifty agents on a large monorepo can saturate disk before the first task completes.
 - **Orchestrator complexity**: The orchestrator must track which branch lives in which worktree, handle cleanup on failure, and reconcile branches after runs. For simple sequential tasks this is pure overhead.
 - **Stateless agents don't need isolation**: If an agent only reads files and calls external APIs — never writes to disk — shared checkout is safe and worktrees add friction without benefit.
+- **Runtime state isn't isolated**: Worktrees separate files and branches but not ports, databases, caches, secrets, or background processes. Two agents running a dev server on port 3000, a shared Postgres instance, or the same Docker daemon will collide even though their checkouts are independent. For runtime isolation, pair worktrees with per-agent containers, ephemeral databases, and dynamic port allocation — see [this discussion of the runtime isolation gap](https://www.penligent.ai/hackinglabs/git-worktrees-need-runtime-isolation-for-parallel-ai-agent-development/).
 
 ## Anti-Pattern: Shared Checkout
 

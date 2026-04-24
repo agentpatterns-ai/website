@@ -11,7 +11,7 @@ tags:
 
 > Answer synthesis is the hardest hardware tradeoff in air-gapped RAG — model quality scales directly with hardware cost, and quantization format determines how much model you can fit.
 
-This module covers inference engine selection, quantization format tradeoffs, hardware tier sizing, context window budget allocation for RAG, and batching for single- vs multi-user deployments. The runnable examples use Haystack's `OllamaGenerator` — any Haystack generator component slots into the same pipeline graph, so the comparison tables below double as a guide to which Haystack component class maps to each engine.
+Local LLM inference for air-gapped RAG is the process of running an open-weight generation model entirely on-premise — no cloud API — to synthesize answers from retrieved documents. Two choices dominate cost and quality: the inference engine (which sets hardware compatibility, throughput, and batching behavior) and the quantization format (which sets how much model fits in available memory). The runnable examples use Haystack's `OllamaGenerator`; any Haystack generator component slots into the same pipeline graph, so the comparison tables below double as a guide to which Haystack component class maps to each engine.
 
 ---
 
@@ -67,7 +67,7 @@ Quantization reduces model weight precision to fit larger models into available 
 
 **GPTQ** (Generative Pre-trained Transformer Quantization) calibrates quantization against a small dataset to minimize error introduced per layer. EXL2 is based on the same optimization method as GPTQ but applies mixed precision per layer — important weights receive more bits, per the [ExLlamaV2 documentation](https://github.com/turboderp/exllamav2). The result: a 70B model at 2.55 bits-per-weight fits on a single 24GB GPU and produces coherent output.
 
-**EXL2** is the format to choose when you have a single NVIDIA GPU and want maximum throughput for one user. ExLlamaV2 at Q3 achieves 257 t/s for a 7B model on an RTX 4090 — roughly 3–5× the throughput of llama.cpp on the same hardware for the same precision [unverified — direct controlled comparison not found in sources].
+**EXL2** is the format to choose when you have a single NVIDIA GPU and want maximum single-stream throughput for one user. ExLlamaV2 at Q3 achieves 257 t/s for a 7B model on an RTX 4090, per the [ExLlamaV2 project README](https://github.com/turboderp/exllamav2). Controlled head-to-head comparisons against llama.cpp at the same precision on the same hardware are scarce; treat EXL2's speed advantage as context-dependent rather than a universal multiplier.
 
 ---
 
@@ -82,7 +82,7 @@ Match model size and quantization to your hardware tier. The numbers below are p
 | Single-GPU server | 80 GB VRAM (A100/H100) | 70B Q4 or 70B FP16 | GGUF or AWQ | vLLM |
 | Multi-GPU server | 2–8× GPU | 70B+ FP16, 405B quantized | FP16 or AWQ | vLLM with tensor parallelism |
 
-For RAG answer synthesis, 7B Q4 on a laptop produces usable quality for internal queries over well-structured documents. Quality gaps appear on ambiguous queries where the model must reconcile conflicting retrieved passages — a 13B+ model handles these better [unverified — no controlled RAG-specific benchmark found].
+For RAG answer synthesis, 7B Q4 on a laptop produces usable quality for internal queries over well-structured documents. Quality gaps appear on ambiguous queries where the model must reconcile conflicting retrieved passages; moving to a larger model (13B+ or 30B) at the same quantization generally helps, though the size of the gain depends on the retriever and the reranking stage. Evaluate on your own query set before committing to a hardware tier.
 
 ---
 
@@ -265,11 +265,6 @@ If Module 6 enabled HyDE for vague query expansion, the same Ollama instance ser
 - Quantization at Q4 sacrifices some quality but enables models two to three times larger than FP16 on the same hardware; for RAG over structured documents, the quality tradeoff is usually acceptable
 - For multi-user deployments, vLLM's continuous batching is not optional — without it, concurrency degrades throughput linearly
 - In Haystack, the choice between Ollama and vLLM is a one-component edit: `OllamaGenerator` and `OpenAIGenerator` (pointed at vLLM's OpenAI-compatible endpoint) slot into the same pipeline graph. Swap the component, re-dump the YAML, re-sign the artifact — every other stage stays identical
-
-## Unverified Claims
-
-- EXL2 at Q3 achieves 3–5× the throughput of llama.cpp at equivalent precision on the same NVIDIA hardware — ExLlamaV2 documents 257 t/s on RTX 4090 for 7B Q3, but no controlled llama.cpp vs ExLlamaV2 head-to-head comparison was found in primary sources
-- 13B+ models handle ambiguous multi-passage RAG queries better than 7B models — widely reported in community benchmarks but no air-gapped-specific controlled evaluation found in primary sources
 
 ## Related
 

@@ -1,6 +1,6 @@
 ---
-title: "Claude Code for Automated and Assisted Code Review"
-description: "A managed multi-agent review service that posts inline findings on every GitHub PR — no subagent configuration required. Code Review is a first-party feature"
+title: "Claude Code Review"
+description: "Anthropic's managed multi-agent service that reviews every GitHub PR and posts inline findings — no subagent configuration required."
 tags:
   - testing-verification
   - workflows

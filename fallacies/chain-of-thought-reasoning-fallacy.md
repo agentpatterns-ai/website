@@ -81,3 +81,4 @@ Traces retain diagnostic value as a starting point. The fallacy is treating them
 - [LLM Comprehension Fallacy](llm-comprehension-fallacy.md) — Correct output does not imply understanding; over-trust and skipped verification follow
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md) — Design eval rubrics so agents cannot exploit hidden reward signals
 - [AI Knowledge Generation Fallacy](ai-knowledge-generation-fallacy.md) — LLMs recombine training data rather than generate genuinely new knowledge
+- [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) — Empirical evidence that CoT effects on code-gen robustness vary by model, task, and prompt perturbation

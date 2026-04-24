@@ -185,3 +185,5 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - [Eval-Driven Tool Development](eval-driven-tool-development.md)
 - [Content Skills Audit](content-skills-audit.md)
 - [Video Transcript Skill: Meeting Recording to Markdown](video-transcript-skill.md) — worked example of a multi-tool skill orchestrating Whisper, ffmpeg, and the Files API
+- [Skill Library Refinement Loops](skill-library-refinement-loops.md) — complementary feedback mechanisms that keep generated skills accurate once deployed
+- [Daily-Use Skill Library](daily-use-skill-library.md) — the target library where approved generated skills accumulate

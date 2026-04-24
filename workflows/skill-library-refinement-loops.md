@@ -66,7 +66,7 @@ Route production logs (e.g., via a [Datadog MCP integration](https://docs.datado
 
 ### Loop 4 — Dashboard Tracking
 
-Monitor per-skill invocation counts, error rates, and workflow run frequency. Use the data to prioritise which skills to review and improve first.
+Monitor per-skill invocation counts, error rates, and workflow run frequency. Use the data to prioritise which skills to review and improve first. The [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/) define standard attributes (operation name, model, token counts, error types) that make this instrumentation portable across observability vendors.
 
 **What it catches**: dead skills with zero invocations; high-error skills hiding in the long tail; usage patterns that contradict assumptions about which skills matter.
 
@@ -122,3 +122,5 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — observe-categorise-update-verify loop for individual agent configs
 - [Daily-Use Skill Library](daily-use-skill-library.md) — building a personal skill library
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance, versioning, and pruning
+- [Introspective Skill Generation](introspective-skill-generation.md) — mining recurring corrections to generate new skills; complements Loops 1 and 3
+- [SDLC-Phase Skill Taxonomy](sdlc-skill-taxonomy.md) — organizing a shared library by SDLC phase so selection stays deterministic at scale

@@ -222,6 +222,7 @@ Hook-based enforcement trades flexibility for safety. Three conditions where it 
 - [Skill-Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md) — combining hooks with skills for layered enforcement
 - [Agent Harness](../../agent-design/agent-harness.md) — initializer + coding agent pattern for long-running work
 - [Rollback-First Design](../../agent-design/rollback-first-design.md) — making agent operations reversible by default
+- [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview
 - [L0 → L1: Making the Repo Readable](level-0-to-1.md) — first module
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — previous module
 - [L3 → L5: Reaching Agent-First](level-3-to-5.md) — next module

@@ -48,7 +48,7 @@ Higher dimensions store more semantic information and typically improve retrieva
 | 1024 | ~4 GB | Moderate | Quality-sensitive retrieval |
 | 4096 | ~16 GB | Slow | Maximum quality, GPU required |
 
-Storage figures are for float32 vectors. Use float16 to halve storage with minimal quality loss [unverified].
+Storage figures are for float32 vectors. Using float16 (half precision) halves storage and delivers retrieval recall within a fraction of a percent of float32 on standard benchmarks — see SingleStore's [float16 vector type benchmark](https://www.singlestore.com/blog/float16-vector-type-support-in-singlestore-cheaper-faster-better/) reporting near-identical recall and the [CoRECT evaluation framework (arXiv 2510.19340)](https://arxiv.org/abs/2510.19340) for a broader compression comparison.
 
 ### Matryoshka Embeddings
 
@@ -122,7 +122,7 @@ Best for: prototyping and single-machine deployments where operational simplicit
 
 ### LanceDB
 
-[LanceDB](https://github.com/lancedb/lancedb) stores vectors in the columnar Lance format, which enables zero-copy reads and efficient analytics queries over the embedding corpus. Wrap it in a Haystack custom Component or use LlamaIndex's LanceDB integration directly; there is no first-party `lancedb-haystack` package as of writing [unverified — check the [Haystack integrations catalog](https://haystack.deepset.ai/integrations) for current status].
+[LanceDB](https://github.com/lancedb/lancedb) stores vectors in the columnar Lance format, which enables zero-copy reads and efficient analytics queries over the embedding corpus. A community-maintained [`lancedb-haystack`](https://github.com/alanmeeson/lancedb-haystack) package is listed on the [Haystack integrations catalog](https://haystack.deepset.ai/integrations/lancedb) — it is not a first-party deepset integration, so track its release cadence before depending on it in production.
 
 Best for: large corpora where storage efficiency matters, or when you need SQL-style filtering over metadata. For a Haystack-native alternative with similar strengths, use Qdrant's server mode with the `payload_index_selector` configured for your hot metadata fields.
 
@@ -205,10 +205,6 @@ Dimension 768 matches `nomic-embed-text-v1.5`. If you swap to `bge-large-en-v1.5
 - `QdrantDocumentStore` with `use_sparse_embeddings=True` is the reference stack; `ChromaDocumentStore` is simpler but drops sparse support; Weaviate, Elasticsearch, and PGVector are available as first-party Haystack integrations when the deployment constraints demand them
 - FAISS is not a Haystack 2.x first-class store — `InMemoryDocumentStore` is the lightweight path for prototyping, Qdrant for anything production-shaped
 - Haystack pipelines serialize to YAML — the full indexing pipeline above becomes ~40 lines of `pipelines/indexing.yaml` that a security reviewer can audit end-to-end
-
-## Unverified Claims
-
-- Float16 quantization of vectors halves storage with minimal quality loss — no primary source confirmed during research
 
 ## Related
 

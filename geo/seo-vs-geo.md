@@ -78,7 +78,7 @@ Keyword density is a token cost. Repeating the same keyword consumes token budge
 
 ## When This Backfires
 
-- **Measurement opacity**: AI citation share has no standardised tracking equivalent to Google Search Console — campaigns may run months before lift is detectable.
+- **Measurement opacity**: AI citation share has no standardised tracking equivalent to [Google Search Console](../workflows/gsc-search-console-monitoring.md) — campaigns may run months before lift is detectable.
 - **Small-brand cold-start**: Citation pools favour established earned media — Wikipedia, major press, G2-tier review platforms. New brands must build that inventory before GEO techniques gain traction.
 - **Model-specific variability**: Citation signals don't transfer uniformly across AI engines. A source prominent in ChatGPT responses may not appear in Gemini or Perplexity. Track per model.
 - **Attribution bleed**: Brand-mention campaigns may also lift organic rankings, making it hard to isolate the GEO contribution without prompt-based measurement.

@@ -60,6 +60,17 @@ This has a compounding benefit during model upgrades: teams with evals in place 
 
 **Too few tasks**: 5 tasks is enough to start, but not enough to detect regression reliably. Grow the suite as edge cases are discovered.
 
+## When This Backfires
+
+Eval-driven development is not the right default for every situation. Write evals first when you have enough of a problem shape to define "done"; skip or defer it in these cases:
+
+- **Early exploration of a novel problem space**: when the team genuinely does not yet know what correct behaviour looks like, committing to pass/fail criteria upfront anchors the project to metrics that may prove irrelevant. Quick manual iteration builds the understanding needed to write meaningful evals later.
+- **Short-lived prototypes and spikes**: a throwaway script explored over a single afternoon does not pay back the cost of a 20-50 task suite. The eval harness is heavier than the artifact it evaluates.
+- **Highly subjective outputs with shifting preferences**: when success hinges on evolving aesthetic or stylistic judgment (e.g., creative copy, UX tone) that changes faster than the eval set can be updated, the suite misleads more than it informs — tasks pass while real users dislike the output.
+- **Unstable upstream dependencies**: if the tools, APIs, or data sources the agent depends on churn weekly, the eval set breaks faster than it yields signal. Defer formal evals until the environment stabilises.
+
+A practical heuristic: if you cannot get two reviewers to agree on pass/fail for 20 representative tasks, the problem is not yet eval-ready — do targeted manual iteration first, then convert the resulting observations into an eval suite.
+
 ## Example
 
 The following shows the eval-first workflow applied to a new "summarise PR diff" agent feature. Tasks and graders are written before any implementation code exists.
@@ -133,4 +144,6 @@ Running this suite against a baseline before any feature code is written produce
 - [LLM-as-Judge Evaluation with Human Spot-Check Review](llm-as-judge-evaluation.md)
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md)
 - [Failure-Driven Iteration for Improving Agent Workflows](failure-driven-iteration.md)
+- [Spec-Driven Development: Build with a Persistent Spec](spec-driven-development.md)
+- [Verification-Centric Development for AI-Generated Code](verification-centric-development.md)
 - [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md) — training module with step-by-step loop walkthrough

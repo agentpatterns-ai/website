@@ -56,30 +56,41 @@ Embedding the Copilot SDK couples your application to GitHub's subscription mode
 - **Rate limit exposure** — SDK requests count against premium request quotas; high-volume workflows can exhaust limits faster than interactive use does.
 - **Runtime lock-in** — the execution loop, tool surface, and session management are GitHub's; if the runtime changes behaviour (model swap, tool API change), embedding applications absorb the regression without direct control over the upgrade path.
 
+The rate-limit risk is not theoretical: in April 2026 GitHub [paused new Copilot sign-ups](https://thenewstack.io/github-copilot-signups-paused/) after agentic usage broke flat-rate economics, [fixed a token-counting bug](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/) that had been under-counting newer models, and [announced a shift to token-based billing with tighter rate limits for individual plans](https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/). Applications embedding the SDK inherit whatever quota regime GitHub sets for their users' plans.
+
 ## Example
 
-The following Node.js snippet illustrates the agent-in-app pattern: creating a session, sending a task prompt, and streaming the response to stdout.
+The following Node.js snippet illustrates the agent-in-app pattern: starting the client, creating a session, subscribing to streaming events, and sending a task prompt ([nodejs README](https://github.com/github/copilot-sdk/tree/main/nodejs)).
 
 ```typescript
-import { createSession } from "@github/copilot-sdk";
+import { CopilotClient, approveAll } from "@github/copilot-sdk";
 
-const session = await createSession({
-  auth: { type: "github-copilot" },
+const client = new CopilotClient();
+await client.start();
+
+const session = await client.createSession({
+  model: "gpt-5",
+  streaming: true,
+  onPermissionRequest: approveAll,
 });
 
-const stream = session.send({
+const done = new Promise<void>((resolve) => {
+  session.on("assistant.message_delta", (event) => {
+    process.stdout.write(event.data.deltaContent);
+  });
+  session.on("session.idle", () => resolve());
+});
+
+await session.send({
   prompt: "Refactor src/utils.ts to use async/await throughout",
-  tools: ["file_edit", "shell"],
 });
+await done;
 
-for await (const chunk of stream) {
-  process.stdout.write(chunk.text ?? "");
-}
-
-await session.close();
+await session.disconnect();
+await client.stop();
 ```
 
-The `tools` array limits which capabilities the agent can invoke. Omitting it grants the full built-in tool set. Pass a custom MCP server URL in `mcpServers` to extend the agent with domain-specific tools at session creation time.
+Streaming is event-based rather than async-iterable: `assistant.message_delta` fires for each incremental chunk and `session.idle` signals completion. `onPermissionRequest` controls how tool invocations are authorised — `approveAll` is appropriate only for trusted environments. Register additional MCP servers through the client configuration to extend the agent with domain-specific tools.
 
 ## Key Takeaways
 

@@ -665,7 +665,7 @@ Select the agent from the chat mode selector in VS Code, use it in the CLI, or a
 
 For the Copilot CLI, hooks are read from `.github/hooks/` in the current working directory. For the coding agent, they must be on the repo's default branch. VS Code reads them from the workspace (Preview, v1.109+).
 
-**Agent debug logs** (v1.113+): Debug logging is now available for Copilot CLI and Claude agent sessions in VS Code, providing chronological event logs of all interactions during a conversation.
+**Agent debug logs** (v1.113+): Debug logging is now available for Copilot CLI and Claude agent sessions in VS Code, providing chronological event logs of all interactions during a conversation. See [Agent Debug Log Panel](../../observability/agent-debug-log-panel.md) for the full pattern.
 
 ---
 

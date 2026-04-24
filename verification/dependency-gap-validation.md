@@ -134,11 +134,6 @@ Weigh the gate cost against failure cost: for production deployments and externa
 - Lock files only work if generated from a working environment, not from the agent's incomplete manifest
 - Clean-environment testing is a [deterministic guardrail](deterministic-guardrails.md) — add it to CI, don't rely on agents to self-check
 
-## Unverified Claims
-
-- The 15-minute average debugging time per failed project is reported in the study but measurement methodology is not detailed
-- Agent performance differences by language are attributed to training data distribution, which remains a hypothesis rather than a confirmed explanation
-
 ## Related
 
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the principle behind making dependency validation a CI gate rather than an agent instruction

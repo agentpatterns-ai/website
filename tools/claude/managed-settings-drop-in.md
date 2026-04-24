@@ -83,6 +83,10 @@ Each fragment is deployed independently — security CI can push `00-security.js
 
 The main risk with fragments is silent scalar conflicts: if two teams set the same scalar key, the alphabetically later file wins without warning. Keep teams to non-overlapping settings domains, or enforce this via policy review.
 
+## When Server-Managed Settings Apply Instead
+
+Claude Code 2.1.30+ (Enterprise) and 2.1.38+ (Teams) also support [server-managed settings](https://code.claude.com/docs/en/server-managed-settings) delivered from the Claude.ai admin console. Server-managed and endpoint-managed (file-based) settings occupy the same top tier of the [settings hierarchy](https://code.claude.com/docs/en/settings#settings-precedence) and [do not merge with each other](https://code.claude.com/docs/en/server-managed-settings) — if server-managed delivers any non-empty configuration, all endpoint-managed settings, including `managed-settings.d/` fragments, are ignored entirely. The drop-in directory pattern applies when your org deploys policy through MDM or managed files rather than through the admin console. Anthropic positions endpoint-managed as the stronger option on MDM-enrolled devices because the file can be OS-protected from user modification.
+
 ## Example
 
 Three teams each own a fragment deployed via their own CI pipeline.
@@ -147,3 +151,4 @@ At runtime, Claude Code merges these in order. The security team's `deny` rules 
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [Extension Points: When to Use What](extension-points.md)
 - [Auto Mode](auto-mode.md)
+- [Channels Permission Relay](channels-permission-relay.md)

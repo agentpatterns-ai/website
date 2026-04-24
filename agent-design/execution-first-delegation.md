@@ -94,6 +94,8 @@ Before delegating execution to an agent, verify:
 - **High-volume predictable operations** — autonomous loops cost more tokens and produce non-deterministic paths. Prompt chains are cheaper and easier to test.
 - **Contract specification failure** — the pattern shifts complexity from steps to boundaries. Under-specified contracts produce the same loop-failure modes the pattern is meant to prevent.
 
+[Anthropic's measurement of agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) reports full auto-approve runs in roughly 20% of new-user Claude Code sessions and 40% of experienced-user sessions; 32% of human interruptions supply missing technical context the agent could not infer. Treat execution-first delegation as the right tool when steps are unpredictable *and* the boundary is specifiable — not as the default mode.
+
 ## Example
 
 A delegated release-preparation task with a well-formed contract:

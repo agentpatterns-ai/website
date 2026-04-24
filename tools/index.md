@@ -18,8 +18,12 @@ Anthropic's CLI agent — hooks lifecycle, sub-agents, batch worktrees, session 
 
 ## [Cursor](cursor/index.md)
 
-Cursor's agentic interface — Agents Window for parallel multi-environment execution, `/worktree` for isolated task execution, and `/best-of-n` for model comparison.
+Cursor's agentic interface — [Agents Window](cursor/agents-window.md) for parallel multi-environment execution, `/worktree` for isolated task execution, and `/best-of-n` for model comparison.
 
 ## [GitHub Copilot](copilot/index.md)
 
-GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integration, Copilot Spaces, and custom agents and skills.
+GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integration, [Copilot Spaces](copilot/copilot-spaces.md), and custom agents and skills.
+
+## [OpenAI Agents SDK](openai/index.md)
+
+OpenAI's Python framework for sandboxed agents — a model-native harness, native sandbox execution, and configurable memory shipped as one library.

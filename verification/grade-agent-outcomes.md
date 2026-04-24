@@ -132,3 +132,6 @@ Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that u
 - [Anti-Reward Hacking](anti-reward-hacking.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md)
+- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
+- [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)

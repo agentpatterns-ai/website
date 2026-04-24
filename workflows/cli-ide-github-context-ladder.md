@@ -1,6 +1,6 @@
 ---
 title: "CLI-IDE-GitHub Context Ladder for AI Agent Development"
-description: "A three-surface workflow that matches the right AI environment to each development phase — CLI for exploration, IDE for refinement, GitHub for durable collaboration"
+description: "A three-surface workflow matching the right AI environment to each development phase: CLI for exploration, IDE for refinement, GitHub for durable collaboration."
 tags:
   - workflows
   - context-engineering
@@ -37,7 +37,7 @@ The CLI excels at low-ceremony, high-speed exploration. Nothing runs automatical
 
 **Copilot CLI** provides a `/diff` command for syntax-highlighted inline review and automatically delegates to four built-in specialized agents — Explore, Task, Code Review, and Plan — based on the nature of the request ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
-**Claude Code CLI** follows Unix philosophy — pipeable, scriptable, composable with other tools. Plan mode (`--permission-mode plan`) restricts to read-only operations, useful for exploration before implementation ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)).
+**Claude Code CLI** follows Unix philosophy — pipeable, scriptable, composable with other tools. [Plan mode](plan-mode.md) (`--permission-mode plan`) restricts to read-only operations, useful for exploration before implementation ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)).
 
 The CLI produces diffs and plans as intermediate artifacts — concrete outputs that bridge exploration to the next surface.
 

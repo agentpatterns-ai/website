@@ -29,7 +29,7 @@ The result lands as a single new commit, not a rebase. Force pushes during activ
 
 ## Why This Matters at the PR Boundary
 
-Merge conflicts appear at the seam between agent-authored PRs and the rest of the codebase — the surface where parallel agent work grows fastest. Existing patterns already identify conflict surface as the scaling bottleneck for parallel agents: rebases "burn agent context" and conflict surface scales with concurrent branches ([Single-Branch Git for Agent Swarms](../workflows/single-branch-git-agent-swarms.md)).
+Merge conflicts appear at the seam between agent-authored PRs and the rest of the codebase — the surface where parallel agent work grows fastest. Worktree-based practitioner guides [cap at 3–5 parallel agents](https://superset.sh/blog/parallel-coding-agents-guide) because beyond that, rebase work eats context that should be spent on implementation ([Agent Flywheel](https://agent-flywheel.com/complete-guide); breakdown in [Single-Branch Git for Agent Swarms](../workflows/single-branch-git-agent-swarms.md)).
 
 As parallel agent use increases, more PRs stall waiting for conflict triage. Lowering the conflict tax through a bounded interaction is higher-leverage than it appears — not because each conflict takes long, but because the friction compounds across PR volume.
 
@@ -59,7 +59,7 @@ The critical transitions:
 
 The low-friction interaction is the pattern's strength and its weakness. Four conditions degrade it:
 
-- **Semantic merges that pass the gate silently**: build and test passing is necessary but not sufficient. A test gap lets a wrong-side-chosen resolution ship without any signal. Existing content notes that "logical conflicts survive textual merges" ([Single-Branch Git for Agent Swarms](../workflows/single-branch-git-agent-swarms.md)) — the same risk applies to agent resolutions, just packaged more smoothly.
+- **Semantic merges that pass the gate silently**: build and test passing is necessary but not sufficient. A test gap lets a wrong-side-chosen resolution ship without any signal. Textual merges routinely hide logical conflicts — a signature change merging cleanly with a new callsite that then fails to compile — and the same risk applies to agent resolutions, just packaged more smoothly ([AgenticFlict](https://arxiv.org/abs/2604.03551) reports a 27.67% conflict rate across 142,000+ agent PRs).
 - **Large, deeply intertwined conflicts**: the three-click model assumes the agent can bound the conflict and propose a single merge candidate. Sprawling conflicts need human decomposition first; a one-shot agent proposal on them is more likely to hide disagreement than resolve it.
 - **Click-through acceptance bias**: the cheaper the accept action, the more it invites rubber-stamping. If the pre-populated comment does not surface the trade-off — why this side, not the other — the "human confirms" step degrades into a reflex.
 - **Reviewer is not the original author**: low-friction accept assumes shared context between the reviewer and both sides of the conflict. Unfamiliar reviewers need more context, not fewer clicks. This is the same failure mode identified for large changesets in [Agent-Authored PR Integration](agent-authored-pr-integration.md).

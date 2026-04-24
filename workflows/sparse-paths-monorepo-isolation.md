@@ -83,7 +83,7 @@ Skip it when:
 
 ## Pairing with EnterWorktree / ExitWorktree
 
-The [`EnterWorktree` and `ExitWorktree` tools](https://code.claude.com/docs/en/changelog) enable programmatic worktree session management within an agent conversation. A sub-agent can enter a sparse worktree scoped to its assigned service, complete its task, and exit — without the orchestrator needing to manage worktree lifecycle in a shell script.
+The [`EnterWorktree` and `ExitWorktree` tools](../tools/claude/batch-worktrees.md#enterworktree-exitworktree) ([changelog](https://code.claude.com/docs/en/changelog)) enable programmatic worktree session management within an agent conversation. A sub-agent can enter a sparse worktree scoped to its assigned service, complete its task, and exit — without the orchestrator needing to manage worktree lifecycle in a shell script.
 
 ## Example
 

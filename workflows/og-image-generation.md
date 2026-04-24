@@ -1,5 +1,5 @@
 ---
-title: "Per-Page OG Image Generation During the MkDocs Build"
+title: "Per-Page OG Image Generation at MkDocs Build Time"
 tags:
   - workflows
   - cost-performance
@@ -15,6 +15,8 @@ aliases:
 > Auto-generate branded 1200×630 Open Graph images from page metadata at build time, so every social share shows a unique, on-brand preview card without manual design work.
 
 Generic or missing OG images leave social shares with platform-generated previews — often just a logo or blank card. With 200+ pages, manual image design doesn't scale — move the work to the build pipeline instead.
+
+If you use the Material theme, the [built-in social plugin](https://squidfunk.github.io/mkdocs-material/plugins/social/) already generates per-page social cards using your configured site colors, fonts, and logo, and wires up the meta tags automatically. Reach for a custom MkDocs hook only when you need layouts the built-in plugin can't express, a non-Material theme, or control over fonts, accent palettes, and output paths that the plugin options don't cover.
 
 ## How MkDocs Hooks Work
 
@@ -173,7 +175,7 @@ def on_page_context(context, page, config, **kwargs):
 
 ## Serving the Meta Tag
 
-The Material theme's `social` plugin can inject `<meta property="og:image">` automatically when `page.meta.og_image` is set. Alternatively, add the tag to your `overrides/main.html`:
+The Material theme reads `page.meta.og_image` and, when the built-in social plugin is disabled, falls back to whatever `<meta>` tags you define in a template override. For non-Material themes or custom layouts, add the tag to your `overrides/main.html`:
 
 ```html
 {% extends "base.html" %}

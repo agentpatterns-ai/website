@@ -17,7 +17,7 @@ aliases:
 
 ## The Problem With Cold Starts
 
-An agent dropped into an active project mid-session has no inherent awareness of prior work, what's broken, or where to begin. Without a structured startup sequence, the agent makes assumptions: it may duplicate completed work, start in the wrong directory, or ignore bugs left by a previous session. A session initialization ritual eliminates this ambiguity by giving every session a shared on-ramp.
+An agent dropped into an active project mid-session has no inherent awareness of prior work, what's broken, or where to begin. Without a structured startup sequence it makes assumptions: duplicates completed work, starts in the wrong directory, or ignores bugs left by a previous session. A session initialization ritual eliminates this ambiguity by giving every session a shared on-ramp.
 
 ## The Ritual
 
@@ -37,29 +37,28 @@ Run `pwd` and confirm it matches the expected path. Agents operating in monorepo
 
 ### 2. Read Git Log and Progress File
 
-Read `git log --oneline -20` and any progress file (a markdown or JSON file updated by previous sessions) to establish what was completed and what remains. Without this step, the agent starts from scratch each session regardless of prior work.
+Read `git log --oneline -20` and any progress file (a markdown or JSON file updated by previous sessions) to establish what was completed and what remains. Without this step the agent starts from scratch each session regardless of prior work.
 
 ### 3. Select the Highest-Priority Incomplete Feature
 
-Identify one feature from the incomplete list and commit to it for the session. Multi-tasking within a session increases context fragmentation and produces incomplete, inconsistent output. Selecting one item — and finishing it — is the harness constraint that prevents the agent from spreading effort across several half-done tasks. Anthropic's [harness engineering practice](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) found this "incremental approach turned out to be critical to addressing the agent's tendency to do too much at once."
+Pick one feature from the incomplete list and commit to it for the session. Multi-tasking fragments context and produces incomplete output; finishing one item is the harness constraint that prevents spreading effort across half-done tasks. Anthropic's [harness engineering practice](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) found this "incremental approach turned out to be critical to addressing the agent's tendency to do too much at once."
 
 ### 4. Run Baseline Tests
 
-Before writing a line of code, run the test suite and confirm it passes. This catches bugs introduced by the previous session before the current session compounds them. An agent that skips this step risks building on broken foundations and misattributing failures to its own changes.
+Run the test suite and confirm it passes before writing code. This catches bugs from the previous session before the current one compounds them, and avoids misattributing those failures to the current change set.
 
 ### 5. Begin Implementation
 
-Only after steps 1–4 complete successfully does the agent write code. If any prior step reveals an unexpected state — wrong directory, stale progress file, failing tests — the agent pauses and surfaces the discrepancy rather than proceeding.
+Only after steps 1–4 complete does the agent write code. If any prior step reveals an unexpected state — wrong directory, stale progress file, failing tests — the agent pauses and surfaces the discrepancy rather than proceeding.
 
 ## Enforcing the Ritual
 
-The ritual is only reliable when it is non-negotiable. Anthropic's [effective harnesses guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) notes that initializer agents differ from working agents in their initial user prompts — the harness enforces sequence, not the agent's discretion. Parallel Web Systems' [harness overview](https://parallel.ai/articles/what-is-an-agent-harness) makes the same point: the harness is the deterministic scaffold around a non-deterministic model, and startup steps belong to the scaffold rather than the model's discretion.
+The ritual is only reliable when it is non-negotiable. Anthropic's [effective harnesses guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) notes that initializer agents differ from working agents in their initial user prompts — the harness enforces sequence, not agent discretion. Parallel Web Systems' [harness overview](https://parallel.ai/articles/what-is-an-agent-harness) makes the same point: startup steps belong to the deterministic scaffold around the model, not to the model itself.
 
 In practice:
 
 - Encode the ritual as system prompt instructions with explicit ordering: "You must complete steps 1 through 4 before writing any code."
 - Require the agent to output a brief status line for each step before proceeding — this creates an auditable trace and surfaces unexpected states early.
-
 - Use pre-commit hooks to enforce that git log was consulted (e.g., by requiring a commit message format that references the progress file).
 
 ## Progress Files
@@ -119,10 +118,10 @@ Step 5: Beginning implementation of password reset endpoint.
 
 The ritual adds overhead at session start — when that cost outweighs the benefit, the pattern degrades:
 
-- **Stale progress file**: If the progress file is not updated at session end, the next session reads stale state and selects the wrong task. The ritual amplifies a missing habit (updating on exit) rather than replacing it.
-- **Long baseline test suites**: Running the full test suite before every session is impractical when tests take minutes. Agents skip the step under time pressure, defeating its purpose — scope it to a fast smoke test or targeted subset.
-- **Single-session work**: For short, self-contained tasks with no prior context to retrieve, the startup sequence adds latency with no orientation benefit. Apply the ritual only when prior state actually exists to read.
-- **Context overloading**: Reading a large git log, a verbose progress file, and multiple config files front-loads context consumption. Keep progress files minimal — just enough for the next session to make a good decision quickly.
+- **Stale progress file**: If the file is not updated at session end, the next session reads stale state and picks the wrong task. The ritual amplifies a missing exit habit rather than replacing it.
+- **Long baseline test suites**: When tests take minutes, agents skip the step under time pressure — scope it to a fast smoke test or targeted subset.
+- **Single-session work**: For short tasks with no prior context, startup adds latency with no orientation benefit. Apply the ritual only when prior state exists to read.
+- **Context overloading**: A large git log, verbose progress file, and multiple config files front-load context consumption. Keep progress files minimal.
 
 ## Key Takeaways
 
@@ -135,17 +134,10 @@ The ritual adds overhead at session start — when that cost outweighs the benef
 ## Related
 
 - [Context Priming](../context-engineering/context-priming.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Subtask-Level Memory](subtask-level-memory.md)
 - [Agent Harness](agent-harness.md)
 - [Harness Engineering](harness-engineering.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Agent Memory Patterns](agent-memory-patterns.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — the relay document the ritual reads before acting on a new cycle
+- [Worktree Isolation](../workflows/worktree-isolation.md)

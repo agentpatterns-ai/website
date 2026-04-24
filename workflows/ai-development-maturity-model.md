@@ -114,7 +114,7 @@ The key observation: Phase 4 feels like the tool doesn't work. It does — the i
 The phase model is an observational heuristic, not a universal law. It breaks down in specific conditions:
 
 - **Non-linear adoption paths**: Developers who switch tools mid-career, move between teams with different AI maturity, or return after extended absences often skip phases or regress. The model assumes a single continuous adoption arc; fragmented experience violates that assumption.
-- **Phase misidentification**: Labeling yourself as "Phase 5 calibrated" can mask under-investment in verification habits. Self-assessed phase doesn't track actual output quality. The [Stack Overflow 2025 Developer Survey](https://survey.stackoverflow.co/2025/ai) found that 84% of developers use AI tools while only 29% trust them — usage and calibration are independent variables, not sequential phases.
+- **Phase misidentification**: Labeling yourself as "Phase 5 calibrated" can mask under-investment in verification habits. Self-assessed phase doesn't track actual output quality. The [Stack Overflow 2025 Developer Survey](https://survey.stackoverflow.co/2025/ai) found that 84% of developers use AI tools while only 29% trust them — usage and calibration are independent variables, not sequential phases. [METR's randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) of experienced open-source developers reinforces the gap: participants estimated AI sped them up by 20% while it actually slowed them by 19%, a perception error that is indistinguishable from "Phase 5" self-assessment.
 - **Team-level anchoring**: Teams that surface the model explicitly sometimes use phase labels to dismiss concerns ("they're just Phase 4") rather than addressing underlying tool or process problems. The model explains behavior; it doesn't excuse it.
 - **Tool category differences**: The phases describe adoption of conversational code-generation tools. Developers adopting purpose-built agents (CI agents, code review agents) often enter at Phase 5 directly because the trust boundary is narrower and the output is more auditable. Applying the full seven-phase arc to specialized tooling adds unnecessary friction.
 
@@ -128,6 +128,7 @@ The phase model is an observational heuristic, not a universal law. It breaks do
 
 ## Related
 
+- [The 7 Phases of AI-Assisted Feature Development](7-phases-ai-development.md) — feature-lifecycle phase model (distinct from this career-adoption arc)
 - [Team Onboarding for Agent Workflows](team-onboarding.md)
 - [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md)
 - [Agent Debugging](../observability/agent-debugging.md)
@@ -136,5 +137,4 @@ The phase model is an observational heuristic, not a universal law. It breaks do
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](../agent-design/steering-running-agents.md)
 - [CLI-IDE-GitHub Context Ladder for AI Agent Development](cli-ide-github-context-ladder.md)
 - [Human-in-the-Loop Placement](human-in-the-loop.md)
-- [Vibe Coding](vibe-coding.md)
 - [Compound Engineering: Learning Loops That Make Each Feature](compound-engineering.md)

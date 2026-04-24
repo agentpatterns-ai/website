@@ -82,7 +82,7 @@ The availability trade-off is explicit: a `forceRemoteSettingsRefresh: true` dep
 
 Server-managed settings are a client-side control. Users with admin or sudo access on unmanaged devices can modify the Claude Code binary or network configuration to circumvent them ([server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#security-considerations)).
 
-For stronger enforcement guarantees, combine with endpoint-managed settings deployed via MDM (macOS managed preferences, Windows registry, or Linux `managed-settings.json` at `/etc/claude-code/`). Endpoint-managed settings are protected at the OS level and cannot be bypassed without admin access to the OS itself.
+For stronger enforcement guarantees, combine with endpoint-managed settings deployed via MDM (macOS managed preferences, Windows registry, or Linux `managed-settings.json` at `/etc/claude-code/`). Endpoint-managed settings are protected at the OS level and cannot be bypassed without admin access to the OS itself. When multiple teams own different slices of endpoint policy, use the [managed-settings drop-in directory](../tools/claude/managed-settings-drop-in.md) so each team deploys its own fragment independently.
 
 | Approach | Enforcement boundary | Best for |
 |---|---|---|

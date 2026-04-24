@@ -175,6 +175,7 @@ The pattern is not appropriate as a substitute for improving the root-cause proc
 
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
+- [Continuous Documentation](continuous-documentation.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Hooks Beat Prompts](../verification/hooks-vs-prompts.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)

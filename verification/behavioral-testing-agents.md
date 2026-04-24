@@ -6,7 +6,8 @@ tags:
   - testing-verification
   - evals
 ---
-# Behavioral Testing for Agents
+
+# Behavioral Testing for Non-Deterministic AI Agents
 
 > Agent outputs are non-deterministic. Test decision quality and end-state, not exact execution paths, and define acceptable behavioral variance as a product decision.
 
@@ -160,14 +161,7 @@ Behavioral testing pays off only when outputs are genuinely non-deterministic:
 - [Eval-Driven Development](../workflows/eval-driven-development.md)
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
 - [pass@k Metrics](pass-at-k-metrics.md)
+- [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — A/B measurement of chain-of-thought as a concrete behavioral-test application
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
 - [Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals](incident-to-eval-synthesis.md)
-- [Red-Green-Refactor with Agents: Tests as the Spec](red-green-refactor-agents.md)
-- [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md)
-- [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md)
 - [Test-Driven Agent Development](tdd-agent-development.md)
-- [Test Harness Design for LLM Context Windows](llm-context-test-harness.md)
-- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
-- [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md)
-- [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md)
-- [Pre-Completion Checklists for AI Agent Development](pre-completion-checklists.md)

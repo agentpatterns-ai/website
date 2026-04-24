@@ -99,13 +99,24 @@ Mitigations:
 
 - Return only relevant fields -- every extra field is a mutation opportunity
 - Use semantic values instead of opaque identifiers -- the model is less likely to fabricate a name than a UUID
-- Paginate at the tool layer -- unbounded result sets force the model to summarize, introducing mutation risk
+- Paginate at the tool layer -- unbounded result sets force the model to compress output, introducing mutation risk
 
 See [Semantic Tool Output](../tool-engineering/semantic-tool-output.md) for the full pattern.
 
 ## Anti-Pattern
 
 Trusting the model to faithfully transcribe data because the prompt says "report exact values." Prompt instructions are probabilistic; a passthrough panel or diff-based audit is deterministic. Use both -- prompt for guidance, architecture for enforcement.
+
+## When This Backfires
+
+These guardrails impose real costs. Skip the full stack when:
+
+- **The surface cannot show structured data** -- voice, SMS, and narrow chat surfaces have no room for a raw panel; passthrough becomes noise users ignore.
+- **Stakes are low and reads are casual** -- status lookups and document summaries have small mutation blast radius; the engineering cost outweighs the protection.
+- **Data is high-cardinality or streaming** -- large result sets make raw panels unreadable and diff engines a latency bottleneck.
+- **Token or latency budgets are tight** -- logging raw responses and returning both raw fields and commentary inflates context and response time.
+
+Under these conditions, prefer typed schemas at the boundary and spot-check evals on exact values instead of the full passthrough-plus-diff stack.
 
 ## Key Takeaways
 

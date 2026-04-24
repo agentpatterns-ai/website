@@ -62,7 +62,7 @@ def grade_code_based(output, expected):
 
 **Weakness**: limited to what can be verified programmatically. Cannot assess style, coherence, factual accuracy of free-form text, or whether an explanation is helpful.
 
-For coding agents, test suites are the most reliable outcome grader — they are objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+For coding agents, test suites are the most reliable [outcome grader](../../verification/grade-agent-outcomes.md) — they are objective, fast, and path-agnostic. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 **Assessing test suite quality.** Not all test suites are equally effective graders. SAGA research identifies four metrics for evaluating whether a test suite actually catches bugs: [Source: [Rethinking Verification for LLM Code Generation](https://arxiv.org/abs/2507.06920)]
 
