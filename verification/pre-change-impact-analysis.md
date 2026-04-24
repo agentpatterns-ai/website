@@ -91,8 +91,9 @@ Simplifying from 107 lines to 20 lines of concise guidance quadrupled resolution
 ### Building the Map
 
 ```bash
-# Install TDAD (Python, MIT license)
-pip install tdad
+# Install TDAD from source (Python, MIT license)
+git clone https://github.com/pepealonso95/TDAD.git
+cd TDAD/tdad && pip install -e .
 
 # Index a repository
 tdad index /path/to/repo

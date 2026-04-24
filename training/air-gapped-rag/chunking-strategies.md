@@ -11,7 +11,7 @@ tags:
 
 > Chunking is the highest-leverage decision in a RAG pipeline — bad chunks sabotage retrieval regardless of embedding model quality or re-ranker sophistication.
 
-This module covers the five main chunking strategies, their offline-specific constraints, empirical trade-offs, and a decision framework for matching strategy to document type. Runnable code uses Haystack's [`DocumentSplitter`](https://docs.haystack.deepset.ai/docs/documentsplitter) and related preprocessors — the same classes as the indexing pipeline in [Module 2](architecture-fundamentals.md#assembling-the-pipeline-in-haystack).
+Chunking splits source documents into retrievable units before embedding. The main strategies — fixed-size, sentence-aware, passage, semantic, hierarchical parent-child, and late chunking — trade compute cost, structural awareness, and context preservation against each other, and the right choice depends on document type and the retrieval failure modes you observe. Runnable code below uses Haystack's [`DocumentSplitter`](https://docs.haystack.deepset.ai/docs/documentsplitter) and related preprocessors — the same classes as the indexing pipeline in [Module 2](architecture-fundamentals.md#assembling-the-pipeline-in-haystack).
 
 ---
 
@@ -75,7 +75,7 @@ This preserves sentence-level semantic units. A paragraph with five short senten
 
 **Weakness**: variable chunk sizes. Five long sentences of dense legal text might exceed the embedding model's max tokens; five short dialogue lines might fit in a quarter of the window.
 
-**When to use**: **this is the default for the reference stack**. Sentence-aware adds no measurable cost over word-based, measurably reduces boundary cuts, and gives the embedding model clean semantic units to work with. A February 2026 benchmark placed sentence-aware 512-token splitting first at 69% end-to-end accuracy across diverse document types, outperforming semantic and hierarchical strategies on that test set [unverified — source not directly accessed].
+**When to use**: **this is the default for the reference stack**. Sentence-aware adds no measurable cost over word-based, measurably reduces boundary cuts, and gives the embedding model clean semantic units to work with. Simple boundary-respecting splitters hold up well under benchmarks — a [February 2026 Vecta benchmark across 7 chunking strategies](https://www.runvecta.com/blog/we-benchmarked-7-chunking-strategies-most-advice-was-wrong) placed recursive character splitting at 512 tokens first with 69% accuracy on academic papers, ahead of semantic chunking at 54%.
 
 ---
 
@@ -134,7 +134,7 @@ Three threshold modes are common: percentile (split above the X percentile; reco
 
 **Cost**: O(n) embedding calls during indexing, where n is sentence count. For a 10,000-page corpus this is non-trivial on CPU-only hardware.
 
-**Weakness**: does not universally outperform sentence-aware splitting. A NAACL 2025 study found that fixed 200-word chunks matched or exceeded semantic chunking on several retrieval benchmarks [unverified — source paper not directly accessed].
+**Weakness**: does not universally outperform sentence-aware splitting. The NAACL 2025 Findings paper [*Is Semantic Chunking Worth the Computational Cost?*](https://aclanthology.org/2025.findings-naacl.114.pdf) found fixed 200-word chunks matched or exceeded semantic chunking across document retrieval, evidence retrieval, and answer generation tasks.
 
 **When to use**: documents with abrupt topic shifts that fall within paragraphs — technical specs that mix narrative and tabular data, transcripts where speakers change subject mid-paragraph.
 
@@ -189,7 +189,7 @@ This preserves anaphoric references ("it", "they", "this approach") and cross-se
 
 Gains correlate with document length — short, self-contained chunks benefit less.
 
-**Air-gapped constraint**: requires a long-context local embedding model. `jina-embeddings-v2-small-en` runs on CPU but fitting an 8192-token document in a single forward pass is memory-intensive. Plan for at least 16 GB RAM for batch ingestion on CPU; GPU significantly reduces wall-clock time [unverified — no official hardware requirements published].
+**Air-gapped constraint**: requires a long-context local embedding model. `jina-embeddings-v2-small-en` runs on CPU but fitting an 8192-token document in a single forward pass is memory-intensive — Hugging Face users have reported OOM when batching two 8192-token docs even on a 24 GB GPU ([discussion](https://huggingface.co/jinaai/jina-embeddings-v2-base-en/discussions/19)). Size the ingestion host around peak batch memory rather than the 0.27 GB model footprint alone.
 
 **When to use**: documents with dense cross-references, legal contracts with defined terms, technical papers with abbreviations defined at the top. The cost is justified when pronoun/reference resolution is a frequent retrieval failure mode.
 
@@ -269,12 +269,6 @@ The corresponding query-side expansion lives in Module 6, where the custom `Pare
 - Late chunking preserves cross-document references but requires a long-context local embedding model with substantial RAM
 - In air-gapped deployments, semantic and late chunking require local embedding inference during ingestion — plan hardware capacity for the full corpus pass
 - Establish a recursive baseline first; switch strategies only when retrieval metrics show the current approach is the bottleneck
-
-## Unverified Claims
-
-- Semantic chunking performance relative to fixed-size: the claim that fixed 200-word chunks matched or exceeded semantic chunking on several benchmarks is attributed to a NAACL 2025 study; the original paper was not directly accessed to confirm this finding
-- Recursive splitting February 2026 benchmark at 69% accuracy: cited from web search summaries; the original benchmark source was not directly accessed
-- Late chunking RAM requirement of 16 GB for CPU ingestion: no official hardware specifications were published by Jina AI; this is a practitioner estimate based on model size
 
 ## Related
 

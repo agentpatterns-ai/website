@@ -26,6 +26,7 @@ tags:
 - [Distractor Interference: Relevance Is Not Enough](distractor-interference.md) — Semantically related but inapplicable instructions reduce compliance with applicable ones
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — Loading tool definitions dynamically per step destroys prompt cache continuity, erasing cost savings that exceed the token reduction
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — After [context compression](../context-engineering/context-compression-strategies.md) events, agents can continue working on a subtly different objective than the one they started with
+- [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Coding agents stop after the first visible signal of progress and declare the task complete while failing tests remain; named by four independent research teams within a year
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents absorb existing codebase patterns and reproduce them at scale, including deprecated APIs and legacy workarounds
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to injection attacks that the single layer does not address
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust and systematic misuse

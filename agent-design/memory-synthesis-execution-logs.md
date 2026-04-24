@@ -55,7 +55,7 @@ Self-critique without objective checks fails because models rationalize ([nibzar
 
 ## Mining Failures for Training Signal
 
-- **SiriuS**: Repairs failed trajectories into positive training examples that become fine-tuning signal -- turning execution failures into direct model improvements.
+- **SiriuS** ([Zhao et al., 2025](https://arxiv.org/abs/2502.04780)): Repairs failed trajectories into positive training examples that become fine-tuning signal -- turning execution failures into direct model improvements.
 
 A success confirms a path worked; a failure reveals *why* alternatives did not.
 

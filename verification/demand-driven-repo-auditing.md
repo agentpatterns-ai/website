@@ -19,7 +19,7 @@ Feeding an entire repository into an LLM context window does not scale. A 250K-l
 
 Demand-driven analysis inverts this: start from a suspicious pattern (a potentially null pointer, an allocation without a matching free), then trace only the call chains that matter. The agent reads functions one at a time, following data flow across boundaries, and stops when the flow is resolved or a bug is confirmed.
 
-[RepoAudit](https://arxiv.org/abs/2501.18160) ([code](https://github.com/PurCL/RepoAudit)) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
+[RepoAudit](https://arxiv.org/abs/2501.18160) ([code](https://github.com/PurCL/RepoAudit); [ICML 2025 poster](https://icml.cc/virtual/2025/poster/45170)) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
 
 ## Architecture: Initiator-Explorer-Validator
 
@@ -38,7 +38,7 @@ graph TD
 
 ### Initiator
 
-Pattern-matches source code (via tree-sitter or AST queries) to find suspect sites — locations where a bug *could* exist. Each suspect site captures file path, line number, tracked variable, and bug category. This is a syntactic filter, not semantic analysis — fast and deterministic.
+Pattern-matches source code (via [tree-sitter](https://github.com/tree-sitter/tree-sitter) or AST queries) to find suspect sites — locations where a bug *could* exist. Each suspect site captures file path, line number, tracked variable, and bug category. This is a syntactic filter, not semantic analysis — fast and deterministic.
 
 The initiator also **abstracts** each function before analysis: the LLM strips irrelevant statements, keeping only those that affect the tracked variable. This improved true positive detection by 47.5% in ablation studies.
 
@@ -65,27 +65,15 @@ Removing the validator increased false positives by 245.5% in ablation — mecha
 
 ## Cache Per-Function Results
 
-When multiple suspect sites share common functions in their call chains, the agent re-analyzes the same function repeatedly without caching. RepoAudit's memory system caches results as `M(function, variable@statement)` — the analysis of a specific variable at a specific point in a specific function.
+When multiple suspect sites share functions in their call chains, the agent re-analyzes the same function repeatedly without caching. RepoAudit's memory system caches results as `M(function, variable@statement)` — a specific variable at a specific point in a specific function. This reduced LLM calls by 3-30x depending on the project, and is the primary mechanism that makes repository-scale analysis affordable.
 
-This reduced LLM calls by 3-30x depending on the project, and is the primary mechanism that makes repository-scale analysis affordable.
-
-**Cache key design matters**: caching at the function level alone is too coarse (the same function may behave differently for different tracked variables). Caching at the statement level within a function-variable pair provides the right granularity.
+**Cache key design matters**: function-level alone is too coarse (the same function may behave differently for different tracked variables). Statement granularity within a function-variable pair is the right level.
 
 ## Where LLMs Add Value Over Traditional Tools
 
-Traditional static analysis tools (Meta Infer, Amazon CodeGuru) struggle with pointer aliasing and path feasibility. On the same benchmark, Infer found 7 true bugs (2 FP) across 8 projects; CodeGuru found 0 true bugs (18 FP). RepoAudit found 40 true bugs (11 FP) across 15 projects.
+Rule-based static analysis tools ([Meta Infer](https://fbinfer.com/), Amazon CodeGuru) struggle with pointer aliasing and path feasibility — the same inter-procedural hard cases Infer's authors flag as [scaling challenges](https://engineering.fb.com/2017/09/06/android/finding-inter-procedural-bugs-at-scale-with-infer-static-analyzer/). On the RepoAudit benchmark, Infer found 7 true bugs (2 FP) across 8 projects; CodeGuru found 0 true bugs (18 FP); RepoAudit found 40 true bugs (11 FP) across 15.
 
 The LLM advantage concentrates in **alias analysis** (do two pointers reference the same memory?), **path feasibility** (can these conditions co-occur?), and **cross-function reasoning** (how does a callee affect the caller's invariants?) — precisely where rule-based tools produce the most false positives.
-
-## Practical Implications
-
-**Demand-driven over whole-codebase**: Trace specific flows across function boundaries on-demand rather than feeding entire repos into context.
-
-**Always validate mechanically**: The 245.5% false positive increase without validation reinforces the [deterministic guardrails](deterministic-guardrails.md) pattern. Re-verify findings through a separate prompt, or use a deterministic checker where possible.
-
-**Abstract before analyzing**: Filter a function to only statements relevant to the tracked property before the actual analysis.
-
-**Memoize at the right granularity**: Cache results keyed to (function, variable, statement) tuples. Function-level is too coarse; statement-level without function context is too fine.
 
 ## Limitations
 

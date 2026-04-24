@@ -41,6 +41,14 @@ Stored in `.github/prompts/`, [prompt files](../../instructions/prompt-file-libr
 
 See [custom instructions](https://docs.github.com/en/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot) in the GitHub docs.
 
+## Limitations
+
+The extensibility layers have sharp edges that the official docs flag explicitly:
+
+- **Skills silently fail to load when the `name` field contains invalid characters** — slashes, colons, dots, or manually-added namespace prefixes like `myorg/skillname` cause the skill to be dropped without an error ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)). The parent directory name must also match the `name` field exactly or the skill is not loaded.
+- **Activation depends on description quality** — Copilot reads the skill description to decide whether to load it, so vague descriptions cause Copilot to miss relevant invocations ([VS Code: Use Agent Skills](https://code.visualstudio.com/docs/copilot/customization/agent-skills)).
+- **Instruction and skill bloat degrades adherence** — skills stack on top of base instructions, and practitioners report that once combined instruction context gets long, the agent follows it less reliably ([Your Agent Instructions Are Probably Making Things Worse](https://www.wordman.dev/blog/agent-instructions)). Keep individual skills narrow and prune instruction files aggressively.
+
 ## Example
 
 The following shows a minimal custom agent definition file and a companion skill, demonstrating how the two layers work together. The agent lives at `.github/agents/release-engineer.md` and declares which tools and MCP servers it may use; the skill lives at `.github/skills/changelog/SKILL.md` and is auto-loaded by Copilot when the task is relevant.
@@ -99,3 +107,4 @@ Copilot reads only the skill metadata until `/changelog` is invoked, keeping con
 - [Copilot Extensions](copilot-extensions.md)
 - [Copilot SDK](copilot-sdk.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
+- [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md)

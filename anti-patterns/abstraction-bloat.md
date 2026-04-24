@@ -82,7 +82,7 @@ Set thresholds that catch bloat mechanically:
 
 ### Post-implementation cleanup
 
-Run a simplification pass — a second agent or human review targeting bloat. [Harness engineering](../agent-design/harness-engineering.md) teams use periodic "garbage collection" agents ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Run a simplification pass — a second agent or human review targeting bloat. [Harness engineering](../agent-design/harness-engineering.md) teams use periodic [entropy reduction agents](../workflows/entropy-reduction-agents.md) — scheduled "garbage collection" of tech debt ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 ## When This Backfires
 

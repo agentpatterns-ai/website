@@ -1,6 +1,6 @@
 ---
 title: "Security for AI Agent Development"
-description: "Patterns and techniques for building agents that resist manipulation, protect sensitive data, and fail safely. Threat models identify the structural conditions"
+description: "Patterns and techniques for building AI agents that resist prompt injection, protect sensitive data, contain blast radius, and fail safely under attack."
 tags:
   - security
   - agent-design
@@ -23,12 +23,12 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md) — Restrict the LLM to selecting from a fixed action catalog; tool outputs never re-enter the model, making control-flow hijacking structurally impossible
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — Separate trusted control flow from untrusted data flow so injection attacks cannot alter tool invocation, regardless of model susceptibility
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md) — Use new attack traces to adversarially train hardened model checkpoints immediately after discovery
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Architectural patterns and defense-in-depth strategies for building coding agents that stay resilient when untrusted input lands in context
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — External content consumed by agents is an attack surface; malicious instructions can override agent instructions at the model level
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — Narrow task scope limits both the attack surface and the blast radius of a successful injection
-- [Use Explicit, Narrow Task Instructions to Reduce Agent Susceptibility to Injection](task-scope-security-boundary.md) — Precise, constrained instructions force injected content to contradict explicit directives rather than plausibly extend vague ones
 
 **Anti-pattern:** [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to attack vectors that layer does not address
 
@@ -51,6 +51,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — Use permission rules and hooks to prevent agents from reading credentials and secrets
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — Keep broad credentials outside the sandbox; use an external proxy that attaches scoped tokens only to validated requests
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — Inject credentials as environment variables so secrets never appear in context or generated code
+- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md) — The URL itself is a data channel; agents that construct or follow URLs from untrusted content can leak context before a response is read
 
 ## Permissions
 
@@ -59,6 +60,8 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
+- [Permission-Gated Custom Commands](permission-gated-commands.md) — Pre-approve the tools a Claude Code slash command may use via frontmatter, narrowing the expected surface for shared commands
+- [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist — narrower than bypass, tighter than manual curation
 
 ## Code Injection
@@ -71,6 +74,7 @@ Code injection in multi-agent pipelines exploits agent trust in code it reads as
 
 Tool invocation exposes attack surfaces distinct from prompt injection. Malicious tools exploit argument generation and return processing to leak context and execute arbitrary commands.
 
+- [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence more than safety alignment; select guard models accordingly
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution
 
@@ -85,6 +89,15 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 
 No single safety mechanism is sufficient. Layered defenses ensure that failure of one layer does not compromise the agent.
 
+- [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — Wrap tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log for regulated environments
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
+- [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — Move agents to production through three control gates — governance, observability, reproducibility — with MUST/SHOULD checklists for each
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
+- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
+
+## Economics
+
+Sizing frames for pre-release security review when vulnerability discovery scales with inference spend.
+
+- [Security Budget as Token Economics](security-budget-token-economics.md) — Treat hardening as a budget-allocation decision: AISI's Mythos evaluation shows no diminishing returns inside 100M tokens per attempt, but the outspend frame applies only where the search curve is still climbing and triage capacity absorbs findings

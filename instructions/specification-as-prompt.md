@@ -37,7 +37,7 @@ Natural language descriptions introduce several problems:
 - **Verbosity**: writing a complete description of a complex API takes more tokens and more effort than pointing at the schema
 - **Verifiability**: prose output cannot be automatically checked; spec-grounded output can be tested, validated, or linted
 
-The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction. Research on [spec-driven development](https://arxiv.org/html/2602.00180v1) confirms that grounding agent instructions in existing contracts reduces hallucinated structural details — column names, route shapes, field types — compared to prose descriptions.
+The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction. Research on [spec-driven development](../workflows/spec-driven-development.md) confirms that grounding agent instructions in existing contracts reduces hallucinated structural details — column names, route shapes, field types — compared to prose descriptions ([Spec-Driven Development: From Code to Contract in the Age of AI Coding Assistants](https://arxiv.org/html/2602.00180v1)).
 
 ## Applying the Pattern
 

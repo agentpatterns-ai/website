@@ -54,7 +54,7 @@ LangChain demonstrated this on Terminal Bench 2.0: harness-only improvements (se
 
 ## Escalating Autonomy for Modifications
 
-Not every harness change should be auto-applied. Kief Morris describes three levels ([Humans and Agents in Software Engineering Loops](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)):
+Not every harness change should be auto-applied. Kief Morris describes three levels ([Humans and Agents in Software Engineering Loops](https://martinfowler.com/articles/exploring-gen-ai/humans-and-agents.html)), which map onto the [humans/agents loop positioning modes](../workflows/humans-agents-development-loops.md):
 
 | Level | Mechanism | When to use |
 |-------|-----------|-------------|

@@ -26,11 +26,18 @@ The coding agent can use tools provided by [MCP servers](https://docs.github.com
 
 ## CLI Handoff
 
-Prefix any CLI prompt with `&` to delegate work to the cloud-based coding agent [unverified — CLI handoff syntax not confirmed in public docs]. Use `/resume` to switch between local and remote sessions.
+Prefix any CLI prompt with `&` to delegate work to the cloud-based coding agent — [GitHub describes it as pressing "the ampersand symbol (`&`) in the CLI to delegate work back to the cloud and keep going locally"](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/). Use `/resume` to pull a cloud session back into your local CLI.
 
 ## Best For
 
 Low-to-medium complexity tasks in well-tested codebases: adding features, fixing bugs, extending tests, refactoring, and documentation improvements.
+
+## When This Backfires
+
+- **Large multi-file refactors.** Practitioners report the coding agent struggles when changes span many interconnected files and architectural concerns; a local IDE agent with richer context is often a better fit ([community report, Jan 2026](https://github.com/orgs/community/discussions/183877)).
+- **Tight iteration loops.** Webapp sessions can take 90+ seconds to spin up an Actions runner, and the cycle repeats if the agent times out before finishing — interactive local agents avoid this overhead ([community report, Jan 2026](https://github.com/orgs/community/discussions/183877)).
+- **Heavy daily usage under flat-rate plans.** Agentic workflows routinely exceed the compute included in paid tiers; in late 2025 GitHub paused new Copilot sign-ups and tightened usage limits on agent-heavy plans ([The New Stack](https://thenewstack.io/github-copilot-signups-paused/), [TNW](https://thenextweb.com/news/github-copilot-signup-pause-agentic-ai-usage-limits)).
+- **Work the agent cannot self-verify.** The self-review + test loop only catches what the repo's own tests and scanners catch; changes that need human judgement (UX, API design, security-sensitive logic) still require a close human review before merge.
 
 ## Example
 
@@ -81,10 +88,6 @@ With the MCP server registered, the coding agent can query live table schemas du
 - MCP server support extends capabilities to external tools
 - CLI handoff enables seamless switching between local and remote agent work
 
-## Unverified Claims
-
-- CLI handoff syntax (`&` prefix) for delegating to the coding agent [unverified — CLI handoff syntax not confirmed in public docs]
-
 ## Related
 
 - [Agent Mode](agent-mode.md)
@@ -95,3 +98,4 @@ With the MCP server registered, the coding agent can query live table schemas du
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Agent HQ](agent-hq.md)
 - [Cloud Agent Research-Plan-Code](cloud-agent-research-plan-code.md)
+- [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)

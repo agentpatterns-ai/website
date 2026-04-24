@@ -45,6 +45,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — Reduce token cost of AI-generated code through idiomatic syntax patterns and structural optimization rather than prompt-level efficiency instructions
 - [Semantic Density Optimization](semantic-density-optimization.md) — Maximize task-relevant tokens in a codebase by eliminating zero-information ceremony while preserving naming, documentation, and commit context that agents cannot reconstruct without inference cost
+- [Tokenizer Swap Tax](tokenizer-swap-tax.md) — When a model upgrade ships a new tokenizer, the same prompt maps to more tokens; effective cost, context window headroom, and rate limits all shift before you change a line of code
 
 ## Assembly & Composition
 

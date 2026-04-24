@@ -85,6 +85,15 @@ Guardrails check properties, not intent. A URL validator confirms a link resolve
 
 The guardrail catches what it is programmed to catch. Design guardrails to be specific. A guardrail that checks "file is valid YAML" is weaker than one that checks "file matches the required schema with all required fields present."
 
+## When This Backfires
+
+Guardrails impose fixed costs that do not scale linearly with value. The pattern is worse than the alternative when:
+
+- **Coverage is thin but visible.** A handful of cheap checks create the impression of verification without covering the classes of errors that actually ship. Teams stop scrutinising output because "the checks passed" — the false-confidence failure mode identified in [Layered Accuracy Defense](layered-accuracy-defense.md).
+- **CI latency dominates the agent loop.** When every iteration waits on a multi-minute test matrix, agents batch fixes into larger, less reviewable diffs. Short feedback cycles matter more than thoroughness during exploration; move heavy checks to merge gates and keep pre-commit hooks fast.
+- **Hook noise trains bypass behaviour.** Aggressive pre-commit checks that fire on legitimate exploratory work push operators toward `--no-verify` habitually. Once bypass is normalised, the deterministic guarantee is gone.
+- **The guardrail drifts from the property.** A linter rule or schema written years ago can encode a stale invariant. When production behaviour moves on, the check keeps passing while the thing it was meant to protect has changed. Guardrails need the same maintenance as the code they guard.
+
 ## Anti-Pattern
 
 Relying solely on prompt instructions for properties that can be checked programmatically. "Don't include broken links" in a system prompt is a suggestion. A pre-commit hook that curls every URL is a guarantee.

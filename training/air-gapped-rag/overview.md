@@ -74,7 +74,7 @@ Air-gapped RAG addresses a specific threat model. Understanding its scope preven
 **What it defends against**
 
 - Data exfiltration via the inference API: queries and retrieved content never leave your network boundary.
-- Third-party model provider data retention: cloud providers routinely retain request logs — the data you send as queries becomes part of the provider's telemetry pipeline. [unverified: exact retention periods vary by provider and contract tier]
+- Third-party model provider data retention: cloud providers typically retain request logs, and exact retention windows depend on the provider's DPA and contract tier — queries are part of that telemetry surface unless a zero-retention agreement is in place.
 - Supply chain risk from cloud model updates: a provider can silently modify model behavior; a pinned local model version does not change without your action.
 - Internet-facing attack surface: an internally-only reachable RAG system cannot be queried from the public internet.
 
@@ -107,7 +107,7 @@ The quality gap between local and cloud models has narrowed substantially:
 |-------|-----------------|-----------------|
 | Single developer / prototype | 16GB RAM, 8GB VRAM GPU | ~$1,500 (GPU) |
 | Small team (10 concurrent users) | 64GB RAM, 24GB VRAM GPU | ~$5,000–$8,000 |
-| Production (100+ concurrent users) | Multi-GPU server, NVMe storage | $30,000–$100,000+ [unverified] |
+| Production (100+ concurrent users) | Multi-GPU server, NVMe storage | Multi-GPU server class — confirm with vendor quotes before budgeting |
 
 Hardware costs are one-time but maintenance, power, and operations are ongoing. Compare against cloud API costs at expected query volume before committing.
 
@@ -120,7 +120,7 @@ This module is the opening unit of a nine-module series. Each module is a 60–9
 1. **Overview and When to Use It** ← this module
 2. Architecture Fundamentals — components, data flow, deployment topology
 3. Document Ingestion and Parsing — PDF, Word, HTML at scale without cloud OCR
-4. Chunking Strategies — fixed, semantic, hierarchical, and their retrieval tradeoffs
+4. [Chunking Strategies](chunking-strategies.md) — fixed, semantic, hierarchical, and their retrieval tradeoffs
 5. Local Embeddings and Vector Stores — model selection, ChromaDB, LanceDB, Milvus
 6. Retrieval and Re-Ranking — BM25, dense retrieval, hybrid, cross-encoders
 7. Local LLM Inference — Ollama, vLLM, llama.cpp, hardware sizing
@@ -133,7 +133,7 @@ All modules use only locally-runnable tools. No cloud API calls appear anywhere 
 
 ## Example
 
-A legal firm stores client contracts and case documents. Counsel wants to query this corpus using natural language. The constraints: attorney-client privilege prohibits third-party processing; the bar association's ethics guidance [unverified: specific bar guidance varies by jurisdiction] treats routing queries through a cloud AI provider as a potential disclosure to a third party.
+A legal firm stores client contracts and case documents. Counsel wants to query this corpus using natural language. The constraints: attorney-client privilege prohibits third-party processing; [ABA Formal Opinion 512](https://www.americanbar.org/groups/business_law/resources/business-law-today/2024-october/aba-ethics-opinion-generative-ai-offers-useful-framework/) and state-bar guidance treat sending client confidences to a third-party generative AI tool as a disclosure event that requires informed consent and adequate safeguards.
 
 The deployment is a single [Haystack](https://github.com/deepset-ai/haystack) pipeline (matches the series [reference stack](index.md#reference-stack)):
 
@@ -155,14 +155,6 @@ A query like "Which contracts include arbitration clauses expiring before 2027?"
 - The quality gap between local and cloud models has narrowed: `nomic-embed-text-v1.5` matches OpenAI's older embedding models on MTEB; 7B parameter models are viable for structured document Q&A.
 - Setup and maintenance costs are substantially higher than cloud RAG — the operational overhead compounds. Quantify this before committing.
 - Air-gapped isolation does not neutralize all vectors: insider threat, prompt injection through ingested documents, and embedding leakage within the perimeter remain in scope.
-
----
-
-## Unverified Claims
-
-- Specific bar association guidance treating cloud AI routing as third-party disclosure varies by jurisdiction and is not uniformly codified — verify with your jurisdiction's ethics board before relying on this framing.
-- Production-scale hardware cost estimates ($30,000–$100,000+) are approximations based on general server pricing; actual costs depend on vendor, configuration, and procurement channel.
-- Cloud provider request log retention periods vary by provider and contract tier — verify against your provider's current DPA before relying on contractual protections.
 
 ---
 

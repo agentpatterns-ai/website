@@ -24,7 +24,7 @@ graph TD
 
 **Enterprise-level**: Enterprise owners control whether cloud agent is available at all. Options are `Enabled everywhere`, `Let organizations decide`, or block the agent for all enterprise-owned repositories from the AI Controls tab. Cloud agent and MCP server access are [disabled by default](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-cloud-agent) for all assigned Copilot Enterprise and Copilot Business license holders.
 
-**One caveat**: enterprise policies only control users you assign a Copilot license to. Copilot Pro+ users with access to your repositories are not restricted by org or enterprise policies.
+**One caveat**: enterprise and organization policies only control users holding a [license granted by that organization](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-policies). Users on personal Copilot Pro or Pro+ subscriptions hold their own license and are not bound by those policy settings when accessing your repositories.
 
 **Organization-level**: Org owners control runner configuration, firewall settings, repository access scope, and whether repositories can customize any of these defaults.
 

@@ -118,7 +118,7 @@ A [pre-completion checklist](../../verification/pre-completion-checklists.md) in
 
 Checklist items must be specific and verifiable. "Run the test suite and confirm all tests pass" works. "Check your work" does not.
 
-Implementation options range from a mandatory final step in the system prompt to a lifecycle hook that intercepts completion signals and injects the checklist before allowing the agent to terminate. Hooks are more reliable because they intercept completion even when the agent forgets the instruction from earlier in the conversation [unverified].
+Implementation options range from a mandatory final step in the system prompt to a lifecycle hook that intercepts completion signals and injects the checklist before allowing the agent to terminate. Hooks are more reliable because they run outside the model's turn: Claude Code's `Stop` hook fires when Claude finishes responding and can return a block decision that forces the conversation to continue ([Claude Code docs](https://code.claude.com/docs/en/hooks)), whereas instructions in CLAUDE.md or the system prompt are advisory and compete with the rest of the context window.
 
 ---
 
@@ -177,6 +177,16 @@ Commit messages serve as handoff notes for the next session: what was implemente
 Codebases drift -- documentation goes stale, boundaries erode, conventions accumulate exceptions. [Entropy reduction agents](../../workflows/entropy-reduction-agents.md) run on a schedule, scanning for decay that accumulates silently between commits. OpenAI's harness team calls this "garbage collection" of technical debt ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)). The harness is maintained infrastructure, not a bootstrap step.
 
 ---
+
+## When This Backfires
+
+Harness investment has a break-even point. The steelman for the opposite recommendation: for short-lived prototypes, solo experiments, or throwaway code, the time spent wiring up types, test harnesses, custom linters, and pre-commit hooks can exceed the time the agent would spend producing plausibly-correct output that a human quickly reviews. Three concrete conditions where heavy harness engineering is the wrong call:
+
+- **Exploratory prototypes with no second session.** If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. Backpressure only compounds when the same harness catches the same bug class across many sessions.
+- **Thin codebases with weak conventions.** Mechanical enforcement codifies rules. When the rules themselves are still being discovered, premature linting freezes the wrong constraints in place and creates churn as rules are rewritten. Establish the convention first, then encode it.
+- **Low-signal or noisy checks.** A linter that emits false positives the agent has to "work around" burns context every iteration. If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
+
+The threshold: invest in harness once the cost of manual review across repeated sessions exceeds the cost of building and maintaining the check. Below that threshold, ad-hoc review is cheaper.
 
 ## Key Takeaways
 

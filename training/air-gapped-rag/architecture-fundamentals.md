@@ -9,9 +9,9 @@ tags:
 
 # Air-Gapped RAG: Architecture Fundamentals
 
-> The seven stages of the RAG pipeline — what each does, where data lives, which stages are tightly coupled, and what breaks at each stage in a fully offline deployment.
+> Air-gapped RAG is a seven-stage local pipeline — ingest, chunk, embed, store, retrieve, rerank, generate — where every component runs on your hardware and no stage calls out to a hosted API.
 
-Cloud RAG tutorials treat component boundaries as implementation details because every stage is a SaaS API call. In an air-gapped deployment, every component runs on your hardware and every boundary is a potential leak or failure point. This module gives you the mental model required to reason about the full pipeline before choosing any specific tools.
+Air-gapped RAG runs as two pipelines that share a single component. The indexing pipeline parses source documents, chunks them, embeds the chunks, and writes vectors to a local store. The query pipeline embeds a user query with the same model, retrieves top-k candidates from the store, reranks them, and passes the survivors to a locally-hosted generation model. Every boundary between stages is a potential leak or failure point, so the architectural choices — which model, which store, which wiring — matter more here than in a hosted RAG stack.
 
 The series [reference stack](index.md#reference-stack) implements every stage below as a [Haystack 2.x](https://github.com/deepset-ai/haystack) `Component`, wired into one `Pipeline`. Each stage header below names the Haystack Component the runnable code in later modules uses; readers who prefer a different framework can replace the components one-for-one without changing the seven-stage mental model.
 
@@ -87,7 +87,7 @@ Convert each text chunk into a dense vector representation. This vector encodes 
 
 **Haystack components**: `SentenceTransformersDocumentEmbedder` for indexing chunks, `SentenceTransformersTextEmbedder` for embedding queries at search time. Both live in `haystack.components.embedders` and load the same Hugging Face model — the split exists because document and query embedding paths often need different instruction prefixes (e.g., BGE, E5 families). For sparse retrieval alongside dense, use `SentenceTransformersSparseDocumentEmbedder` and `SentenceTransformersSparseTextEmbedder`. Covered in [Module 5](local-embeddings-vector-stores.md).
 
-**Air-gap consideration**: Models are downloaded to the Hugging Face cache on first use. Pre-fetch on the network side, point `HF_HOME` at the controlled cache directory, and set `HF_HUB_OFFLINE=1` in the runtime environment to raise immediately on any outbound fetch attempt. [`BGE-M3`](https://huggingface.co/BAAI/bge-m3) supports dense and sparse retrieval in one model, which maps cleanly onto Haystack's separate dense/sparse embedder components.
+**Air-gap consideration**: Models are downloaded to the Hugging Face cache on first use. Pre-fetch on the network side, point `HF_HOME` at the controlled cache directory, and set `HF_HUB_OFFLINE=1` in the runtime environment to raise immediately on any outbound fetch attempt. [`BGE-M3`](https://huggingface.co/BAAI/bge-m3) supports dense, sparse, and ColBERT-style multi-vector retrieval in one model. Ollama's `/api/embed` endpoint exposes only the dense output — sparse and multi-vector retrieval remain [an open feature request](https://github.com/ollama/ollama/issues/6230) as of this writing. Use `sentence-transformers` directly (via Haystack's `SentenceTransformers*Embedder` components) when you need sparse or multi-vector output in an air-gapped stack.
 
 ### Stage 4: Store
 
@@ -345,6 +345,18 @@ An air-gapped deployment guarantees that documents, embeddings, and generated te
 
 ---
 
+## When This Architecture Is Overkill
+
+The seven-stage pipeline is the right default for multi-gigabyte corpora where no single model context can hold the whole document set. It is not automatically the right choice in every air-gapped deployment. Consider simpler architectures when:
+
+- **The entire corpus fits in a long-context model**: Locally-hosted models with 128k–1M token context windows can preload a small corpus directly into the prompt. This eliminates the chunk/embed/retrieve/rerank scaffold at the cost of higher per-query VRAM and latency. Long-context retrieval skipping has been an active 2025–2026 discussion — see practitioner analyses of [when long context beats RAG](https://tianpan.co/blog/2026-04-09-long-context-vs-rag-production-decision-framework) for a production decision framework. The tipping point depends on corpus size, query frequency, and available VRAM.
+- **The source data is already structured**: A relational or graph database with natural join keys supports exact lookup without similarity search. Wrapping structured data in RAG trades precision for complexity. Use the structured query path for the structured fraction and keep RAG for the unstructured fraction.
+- **Queries have deterministic answers in a small document set**: For a fixed FAQ, regulation list, or product catalog, a keyword index (BM25 alone) or even grep-over-text often outperforms dense retrieval and costs nothing in embedding infrastructure.
+- **The corpus is small enough to fit in memory**: For under a few thousand chunks, `InMemoryDocumentStore` with exhaustive cosine similarity runs in milliseconds and skips the disk-based vector store entirely — no Qdrant process, no index tuning, no persistence layer to back up. Haystack supports this configuration out of the box as a drop-in replacement for `QdrantDocumentStore`.
+- **Re-indexing cost exceeds query-time cost**: If documents churn faster than the indexing pipeline completes, users consistently hit stale chunks. A long-context "re-read at query time" architecture sidesteps index staleness by never maintaining one.
+
+The pattern in this module scales down better than it scales up: removing reranking, sparse retrieval, or the vector store is straightforward, but adding them back later requires re-indexing. Start with the full pipeline only when corpus size and query volume justify it.
+
 ## Key Takeaways
 
 - **Two phases, one shared component.** Indexing is offline and async; query is online and sync. The embedding model is the only component shared between phases — pin its version before building the index.
@@ -354,11 +366,7 @@ An air-gapped deployment guarantees that documents, embeddings, and generated te
 - **Stale index is the most common silent failure.** Documents update; the index does not. Implement document hashing at ingest time and re-ingest on change detection.
 - **Reranking is not optional.** Top-k bi-encoder retrieval without reranking degrades generation quality due to the "Lost in the Middle" problem. Apply a cross-encoder to the top-20 candidates before passing context to the generation model.
 - **The seven stages map to a Haystack Pipeline one-for-one.** Indexing and query pipelines serialize to YAML — the audit artifact that accompanies every signed release. Pinning the YAML pins the architecture, the parameters, and the component classes in one reviewable document.
-
-## Unverified Claims
-
-- ColBERT-style multi-vector retrieval in BGE-M3 via Ollama's serving layer — the model supports it natively; whether Ollama exposes the multi-vector API endpoint is unconfirmed. Use sentence-transformers directly for confirmed ColBERT retrieval.
-- Exact ingest parallelism limits for PyMuPDF and Unstructured on high core-count servers.
+- **The pipeline scales down better than up.** Skip this architecture when a long-context model, structured store, or in-memory exhaustive search fits the corpus — adding stages back later is cheap; over-engineering upfront costs re-indexing.
 
 ## Related
 

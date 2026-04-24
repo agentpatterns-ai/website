@@ -130,6 +130,8 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
+- [Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents](toolset-agentization.md)
+- [Batch File Operations via Bash Scripts for AI Agents](batch-file-operations.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)

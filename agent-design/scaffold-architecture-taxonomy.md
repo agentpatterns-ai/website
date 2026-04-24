@@ -90,13 +90,15 @@ Interrogating each dimension independently gives more useful signal than assigni
 
 ## Example
 
-Choosing between two open-source scaffolds for automated bug fixing:
+Choosing between open-source scaffolds for automated bug fixing on SWE-bench-style tasks:
 
-**Scaffold A** uses a fixed pipeline (locate → reproduce → patch → verify), direct shell access, and accumulated context with no compaction. Predictable, auditable, cheap to run. Degrades when reproduction requires exploration or context fills before the verify step.
+**[Agentless](https://arxiv.org/abs/2604.03515)** runs a 10-stage pipeline of independent scripts linked by JSONL files on disk, with no feedback loop between stages. Predictable, auditable, cheap to run. Degrades when reproduction requires exploration or when an early stage's output misleads later stages.
 
-**Scaffold B** uses an adaptive loop with typed tool registry, feedback routed to disk summaries, and per-session turn caps. More robust to unexpected paths; higher per-run cost; easier to test tool calls in isolation.
+**SWE-agent** runs a single ReAct loop — thought, action, observation — over a typed tool registry and a restricted shell environment. More robust to unexpected paths; higher per-run cost; easier to test individual tool calls in isolation.
 
-Neither is universally better. The taxonomy surfaces the trade-offs so the choice is deliberate.
+**Moatless Tools** runs full MCTS with Select–Expand–Simulate–Backpropagate and numeric reward, exploring multiple branches before committing. Strongest on open-ended tasks; highest compute cost; hardest to debug when a bad branch dominates ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)).
+
+Each sits at a different point on the control architecture spectrum. The taxonomy surfaces those trade-offs so the choice is deliberate.
 
 ## When This Backfires
 
@@ -118,6 +120,10 @@ The taxonomy adds overhead without value in several conditions:
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md)
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [Harness Engineering](harness-engineering.md)
+- [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](harness-hill-climbing.md)
+- [Runtime Scaffold Evolution: Agents That Build Tools](runtime-scaffold-evolution.md)
+- [Managed vs Self-Hosted Agent Harness: Deployment Trade-offs](managed-vs-self-hosted-harness.md)
+- [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Agent Loop Middleware](agent-loop-middleware.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)

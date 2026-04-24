@@ -115,15 +115,15 @@ harness:
 
 ## When This Backfires
 
-Classifying scaffolding up front and architecting for removal is not free. The steelman for just building the mechanism directly:
+Classifying scaffolding up front is not free. The steelman for building the mechanism directly:
 
-- **Short-lived projects** — if the harness is internal tooling with a 6-month horizon, the feature-flag discipline, configuration surface, and middleware boundary cost more than the eventual removal would have.
-- **Stable model dependencies** — teams pinned to a specific model version do not get automatic capability upgrades. The compensatory mechanism never becomes obsolete within the project's lifetime, so the removability machinery is pure overhead.
-- **Teams without middleware infrastructure** — "implement as removable middleware" presumes a middleware layer exists. Retrofitting one onto an ad-hoc agent loop to support a single compensatory mechanism inverts the cost-benefit.
-- **Capabilities that improve slowly** — self-verification, instruction adherence, and loop-avoidance have improved incrementally across model generations but remain unreliable enough to warrant scaffolding years later. Predicting which mechanism will be obsoleted by the next model is error-prone; many "temporary" compensations outlive the projects that built them.
-- **Mechanism interaction** — compensatory and structural mechanisms often share state (e.g., loop detection feeds iteration caps, which feed observability). Decoupling them for independent removability can produce a thinner but more complex architecture than a tightly coupled one.
+- **Short-lived projects** — for internal tooling with a 6-month horizon, feature flags and middleware boundaries cost more than the eventual removal would have.
+- **Stable model dependencies** — teams pinned to a specific model version do not get capability upgrades, so removability machinery is pure overhead.
+- **No middleware layer** — "implement as removable middleware" presumes a middleware layer exists. Retrofitting one to support a single mechanism inverts the cost-benefit.
+- **Slow-improving capabilities** — self-verification, instruction adherence, and loop-avoidance remain unreliable years later. Many "temporary" compensations outlive the projects that built them.
+- **Mechanism interaction** — compensatory and structural mechanisms often share state (e.g., loop detection feeds iteration caps). Decoupling for independent removability can produce a thinner but more complex architecture.
 
-The classification is still useful as a design heuristic, but treat it as a tagging exercise on existing scaffolding rather than a mandate to build every mechanism behind its own feature flag.
+Treat classification as a tagging exercise on existing scaffolding, not a mandate to build every mechanism behind its own feature flag.
 
 ## Key Takeaways
 
@@ -155,3 +155,5 @@ The classification is still useful as a design heuristic, but treat it as a tagg
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)
+- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md)
+- [Feedback Capability Equalizer](feedback-capability-equalizer.md)

@@ -16,7 +16,7 @@ tags:
 
 Not all steps in an agent workflow require the same depth of reasoning. Planning and verification are high-stakes; execution is largely mechanical.
 
-[LangChain's deep agent experiments](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) tested a "reasoning sandwich" — extra-high compute at planning, high at execution, extra-high at verification (xhigh-high-xhigh). The sandwich achieved the highest completion rate (66.5% on Terminal Bench 2.0), outperforming both continuous maximum reasoning — which scored poorly (53.9%) due to agent timeouts — and uniform high reasoning (63.6%).
+[LangChain's deep agent experiments](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) tested a "reasoning sandwich" — extra-high at planning, high at execution, extra-high at verification (xhigh-high-xhigh). It scored highest on Terminal Bench 2.0 (66.5%), beating both continuous maximum reasoning (53.9%, penalized by timeouts) and uniform high reasoning (63.6%).
 
 ```mermaid
 graph LR
@@ -36,12 +36,12 @@ graph LR
 
 The OPENDEV paper implements the sandwich architecturally through two modes ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)):
 
-- **[Plan Mode](../workflows/plan-first-loop.md)**: restricts the agent to read-only tools; planning delegated to a Planner subagent whose schema contains only read-only tools ([subagent schema-level tool filtering](../multi-agent/subagent-schema-level-tool-filtering.md)) — eliminating state machine complexity
+- **[Plan Mode](../workflows/plan-first-loop.md)**: planning delegated to a Planner subagent whose schema contains only read-only tools ([subagent schema-level tool filtering](../multi-agent/subagent-schema-level-tool-filtering.md)) — eliminating state machine complexity
 - **Normal Mode**: full tool access for implementation
 
-Mode switching triggers via explicit command (`/plan`) or planning-intent heuristics ([Bui, 2026 §2.2.2](https://arxiv.org/abs/2603.05344)). This maps to the sandwich: [Plan Mode](../workflows/plan-mode.md) (extra-high compute) → Normal Mode execution (high) → verification (extra-high).
+Mode switching triggers via explicit command (`/plan`) or planning-intent heuristics. This maps to the sandwich: [Plan Mode](../workflows/plan-mode.md) (extra-high compute) → Normal Mode execution (high) → verification (extra-high).
 
-An optional thinking phase adds a separate inference call using a dedicated Thinking model *before* action selection — architecturally distinct from in-generation reasoning ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)). This amplifies any phase where deeper reasoning is needed.
+An optional thinking phase adds a separate inference call using a dedicated Thinking model *before* action selection ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)) — amplifying any phase where deeper reasoning is needed.
 
 ## Extended Thinking Budget Triggers
 
@@ -71,7 +71,7 @@ For tools without per-call configuration, approximate through prompt structure: 
 
 ## Why It Works
 
-Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploration of the possibility space and must account for requirements, edge cases, and risks — errors here propagate through every downstream step; execution follows a decided plan, making it largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark demonstrated — causes agent timeouts that degrade overall completion rates. Concentrating compute where ambiguity is highest (planning and verification) while reducing it where mechanical fidelity suffices (execution) balances cost against quality at the phase level.
+Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploring the possibility space and accounting for requirements, edge cases, and risks — errors here propagate downstream; execution follows a decided plan and is largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark showed — causes agent timeouts that degrade completion rates. Concentrating compute where ambiguity is highest balances cost against quality at the phase level.
 
 ## When to Apply
 
@@ -82,6 +82,15 @@ The sandwich pays off when:
 - Verification failures would be falsely reported as success
 
 Single-step tasks and independent parallel tool calls see no benefit from added reasoning overhead.
+
+## When This Backfires
+
+The 3% gap between the sandwich (66.5%) and uniform high (63.6%) does not always justify harness complexity. The sandwich is worse than uniform compute when:
+
+- **Phases are not cleanly separable.** Exploratory debugging and interleaved planning/execution force misclassified routing — the sandwich degrades to noisy uniform compute with routing overhead.
+- **Mode-switching adds more bugs than it prevents.** Teams without the budget for reliable planner/executor/verifier routing fare better with a single tier at uniform high reasoning.
+- **Verification is cheap relative to planning.** When correctness is checked by tests or types, extra-high model-based verification duplicates what the test harness already does.
+- **Execution dominates the trajectory.** Bulk refactors and migrations spend most tokens in execution; reducing compute there saves little while planning/verification contribute a small share of cost.
 
 ## Key Takeaways
 

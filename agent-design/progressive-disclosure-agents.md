@@ -152,6 +152,7 @@ The pattern is most effective when tasks are clearly scoped and skills are genui
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
+- [Externalization in LLM Agents](externalization-in-llm-agents.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Controlling Agent Output](controlling-agent-output.md)

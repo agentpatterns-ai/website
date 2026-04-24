@@ -60,7 +60,7 @@ Use the matrix when volume is the bottleneck and a misclassification is recovera
 
 ## On the Loop, Not In the Loop
 
-Risk-based shipping changes the supervision mode. Instead of reviewing every change (in the loop), the developer monitors the shipped stream and intervenes when something looks wrong (on the loop). Geoffrey Huntley: "I just open up my phone and watch the output get made. I'm on the loop, not in the loop" ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)).
+Risk-based shipping changes the supervision mode. Instead of reviewing every change (in the loop), the developer monitors the shipped stream and intervenes when something looks wrong (on the loop). Geoffrey Huntley: "I just open up my phone and watch the output get made. I'm on the loop, not in the loop" ([source](https://x.com/GeoffreyHuntley/status/2030683143360119292)). See [humans and agents in software engineering loops](../workflows/humans-agents-development-loops.md) for the full in/on/out framework.
 
 This connects to [human-in-the-loop placement](../workflows/human-in-the-loop.md) — the matrix determines *where* the gates go, the supervision mode determines *how* the human engages.
 

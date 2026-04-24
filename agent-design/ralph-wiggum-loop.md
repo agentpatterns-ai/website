@@ -1,6 +1,6 @@
 ---
 title: "The Ralph Wiggum Loop: Fresh-Context Iteration Pattern"
-description: "Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation"
+description: "Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation."
 aliases:
   - Fresh-Context Iteration Pattern
 tags:
@@ -80,6 +80,8 @@ The pattern assumes each iteration can be meaningfully bounded and verified. Sev
 - **No progress signal**: Without a reliable completion check (test suite, task-list marker, CI result), the loop can cycle indefinitely on a task it cannot solve, consuming tokens without converging.
 - **Shared mutable state**: If multiple concurrent loop iterations write to the same files, later iterations may overwrite earlier progress. Use per-iteration output paths or explicit locking.
 - **Context-sensitive tasks**: Tasks requiring deep continuity — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
+
+Practitioner reports add three caveats. Architectural coherence suffers — generated code reflects the agent's path to a working state, not an intentional structure ([Wiggum breakdown](https://wiggum.app/blog/what-is-the-ralph-loop/)). Cost scales fast: a fifty-iteration loop on a medium codebase typically runs $50–100+ in API credits ([Leanware analysis](https://www.leanware.co/insights/ralph-wiggum-ai-coding)). Worst, an agent facing an impossible task can "overbake" — iterate destructively, chasing a spurious error for hours — so Sondera's ["Supervising Ralph"](https://blog.sondera.ai/p/ralph-wiggum-principal-skinner-agent-reliability) argues every loop needs a supervisor that detects non-convergence and halts; an iteration cap alone is a financial circuit breaker, not a quality gate.
 
 ## Example
 

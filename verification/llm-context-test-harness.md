@@ -13,21 +13,21 @@ tags:
 
 ## The Context Window Is the Interface
 
-When an agent runs a test suite, every byte of output enters its context window. A harness designed for human readability — long stack traces, progress bars, timing breakdowns — is noise in an LLM context that consumes tokens, obscures root causes, and degrades reasoning.
+Every byte a test suite emits enters the agent's context window. A harness tuned for human readability — stack traces, progress bars, timing breakdowns — becomes noise that consumes tokens, obscures root causes, and degrades reasoning.
 
-Anthropic's [C compiler project](https://www.anthropic.com/engineering/building-c-compiler) found the test harness must be designed for the AI, not the human operator. Cursor confirmed this: [removing mid-turn communication language](https://cursor.com/blog/codex-model-harness) from prompts improved final code output.
+Anthropic's [C compiler project](https://www.anthropic.com/engineering/building-c-compiler) found the harness must be designed for the AI, not the human operator. Cursor confirmed this: [removing mid-turn communication language](https://cursor.com/blog/codex-model-harness) improved final code output.
 
 ## Principles
 
 ### Terse Stdout, Verbose Log Files
 
-Default stdout to summary-level output. Write verbose output — full stack traces, individual test results, timing data — to log files. The agent reads the summary first; if it needs detail, it greps the log file.
+Default stdout to summary-level output. Write verbose output — stack traces, per-test results, timing data — to log files. The agent reads the summary; if it needs detail, it greps the log.
 
-The agent cannot choose what to ignore from a wall of stdout — everything printed enters context. Log files give selective access without forcing it to consume everything.
+The agent cannot choose to ignore parts of stdout — everything printed enters context. Log files give selective access without forcing consumption.
 
 ### Place ERROR and Its Reason on the Same Line
 
-When a test fails, emit the error keyword and its cause on one line:
+On failure, emit the keyword and cause on one line:
 
 ```
 ERROR: test_auth_flow — expected 200, got 401
@@ -42,65 +42,58 @@ test_auth_flow
   Actual: 401
 ```
 
-Agents grep for `ERROR` to locate failures. If the cause is on a separate line, a single grep misses it — the agent spends an extra tool call reading context around the match. One line, one grep, actionable result.
+Agents grep for `ERROR` to locate failures. If the cause sits on a separate line, a single grep misses it and the agent spends an extra tool call. One line, one grep, actionable result.
 
 ### Provide Pre-Computed Summary Statistics
 
-Agents are time-blind. They cannot infer duration from timestamps or estimate pass rates from a list of results. A harness that prints:
+Agents are time-blind and cannot infer duration from timestamps or pass rates from a list of results. A harness that prints:
 
 ```
 Tests: 142 passed, 3 failed, 0 skipped — 8.2s
 ```
 
-is more useful than 145 individual result lines — the agent gets the signal it needs without consuming 145 lines of context to compute it.
+beats 145 individual result lines — the signal arrives without consuming 145 lines of context.
 
 ### Throttle Incremental Progress Output
 
-Progress indicators that print a line per test file, compilation unit, or API call flood context with liveness signals rather than information. Print incremental progress only at milestones or on failure. The agent does not need to know that test 37 of 142 is running.
+Progress indicators that print per test file, compilation unit, or API call flood context with liveness signals rather than information. Print progress only at milestones or on failure — the agent does not need to know that test 37 of 142 is running.
 
 ### Emit Machine-Readable Summaries for Structured Access
 
-For agent loops that parse results programmatically, emit a JSON summary alongside the human-readable output:
+For agent loops that parse results programmatically, emit a JSON summary alongside the human output:
 
 ```json
 {"total": 142, "passed": 139, "failed": 3, "failures": ["test_auth_flow", "test_token_refresh", "test_logout"]}
 ```
 
-Keeping it separate from stdout means it does not consume context unless the agent explicitly requests it. Anthropic's [long-running agent harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) uses structured JSON rather than Markdown for feature/test tracking because models are less likely to inappropriately modify JSON files.
+The summary stays out of stdout and consumes context only when the agent requests it. Anthropic's [long-running agent harness](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) uses JSON rather than Markdown for feature/test tracking because models are less likely to inappropriately modify JSON.
 
 ### Provide a Fast Sampling Mode
 
-For large test suites, implement a `--fast` flag that runs a random sample (1-10%) of tests, deterministic per agent invocation but varied across parallel instances. This gives rapid feedback during iteration; reserve the full suite for final verification.
+For large suites, implement a `--fast` flag that runs a 1-10% random sample, deterministic per invocation but varied across parallel instances. Reserve the full suite for final verification.
 
 ### Preserve Errors in Context
 
-A counterintuitive finding from [Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving failed actions and error messages in context helps models avoid repeating mistakes. Be terse about success but preserve failure output — error traces are the signal the agent needs to course-correct.
+A counterintuitive finding from [Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus): leaving failed actions and error messages in context helps models avoid repeating mistakes. Be terse about success but preserve failure output — error traces are the signal agents use to course-correct.
 
 ## Caveat: Terseness vs. Ambition
 
-Cursor [found](https://cursor.com/blog/codex-model-harness) that when system prompts emphasized token efficiency, models became reluctant to tackle ambitious tasks. The implication: make the harness output terse by engineering (log files, summaries, structured output) rather than by instructing the model to be brief.
+Cursor [found](https://cursor.com/blog/codex-model-harness) that when system prompts emphasized token efficiency, models became reluctant to tackle ambitious tasks. Make the harness output terse by engineering — log files, summaries, structured output — rather than by instructing the model to be brief.
 
 ## Anti-Pattern: The Human-Optimized Harness
 
-A harness optimized for human developers typically includes:
-
-- Per-test progress lines (`✓ test_login 42ms`)
-- Full stack traces on failure
-- ASCII art progress bars
-- Timing histograms
-
-Each is context overhead when the agent runs the suite. A 500-test suite emits 500 `✓` lines of noise before the failure summary, pushing failure information 500 lines deep.
+A human-optimized harness typically includes per-test progress lines (`✓ test_login 42ms`), full stack traces on failure, ASCII progress bars, and timing histograms. Each is context overhead when the agent runs the suite: a 500-test run emits 500 `✓` lines before the failure summary, burying the signal 500 lines deep.
 
 ## When This Backfires
 
 An LLM-first harness is the wrong default when:
 
-- **Humans are the primary consumers.** In shared CI, engineers triage failures by reading the full log; stripping stdout forces them to open a secondary file for every failure.
-- **The agent will load the full log anyway.** Debugging intermittent failures needs surrounding output; one extra tool call per failure beats verbose stdout only at scale.
+- **Humans are the primary consumers.** In shared CI, engineers triage failures from the full log; stripping stdout forces them to open a secondary file per failure.
+- **The agent will load the full log anyway.** Intermittent failures need surrounding output; one extra tool call per failure beats verbose stdout only at scale.
 - **Tests carry diagnostic data in the body.** Property-based suites and snapshot diffs print the offending input; a one-line reason drops the payload needed to diagnose.
 - **The suite is small.** Under a few dozen tests, per-test progress is cheap to scan and a custom reporter is not worth the effort.
 
-Reserve the LLM-first harness for suites the agent runs unattended at a scale where raw stdout crowds out reasoning.
+Reserve the LLM-first harness for suites the agent runs unattended at scale.
 
 ## Implementation Checklist
 

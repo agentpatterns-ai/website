@@ -118,6 +118,8 @@ The enhanced version lets the agent go directly to `apply_coupon` and `Coupon.am
 ## Related
 
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
+- [The Research-Plan-Implement Pattern](research-plan-implement.md)
+- [Spec-Driven Development with Spec Kit](spec-driven-development.md)
 - [Agent-Powered Codebase Q&A and Onboarding Workflow](codebase-qa-onboarding.md)
 - [Context Priming](../context-engineering/context-priming.md)
 - [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)

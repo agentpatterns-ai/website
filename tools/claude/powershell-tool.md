@@ -11,9 +11,11 @@ aliases:
 
 # PowerShell Tool: Native Windows Shell for Claude Code
 
-> Run PowerShell commands natively on Windows — no Git Bash path translation, no POSIX shim, direct access to cmdlets and .NET APIs.
+> Run PowerShell commands natively from Claude Code — no Git Bash path translation, no POSIX shim, direct access to cmdlets and .NET APIs. Rolling out on Windows; opt-in preview on Linux, macOS, and WSL.
 
 The [PowerShell tool](https://code.claude.com/docs/en/tools-reference#powershell-tool), added in Claude Code v2.1.84 (2026-03-26) as an opt-in preview, replaces Git Bash command routing with a direct `pwsh.exe` or `powershell.exe` spawn. Claude Code's default Bash tool assumes a POSIX environment; on Windows this produces path translation errors (`C:\` vs `/c/`), POSIX flags that fail on cmdlets, and encoding mismatches. The PowerShell tool eliminates the shim layer.
+
+The tool is rolling out progressively on Windows and is opt-in on Linux, macOS, and WSL; non-Windows platforms require PowerShell 7+ (`pwsh`) on `PATH`. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
 
 This is a **preview feature** with documented limitations. Read the [Preview Limitations](#preview-limitations) section before enabling.
 
@@ -29,7 +31,7 @@ Set the environment variable before launching Claude Code, or add it to `setting
 }
 ```
 
-Claude Code auto-detects `pwsh.exe` (PowerShell 7+) first, falling back to `powershell.exe` (5.1). The Bash tool remains registered alongside the PowerShell tool — Claude does not automatically prefer PowerShell. Ask Claude explicitly to use PowerShell, or configure `defaultShell` (see below). [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
+On Windows, Claude Code auto-detects `pwsh.exe` (PowerShell 7+) first, falling back to `powershell.exe` (5.1). On Linux, macOS, and WSL, `pwsh` must already be on `PATH`. The Bash tool remains registered alongside the PowerShell tool — Claude does not automatically prefer PowerShell. Ask Claude explicitly to use PowerShell, or configure `defaultShell` (see below). On Windows, set the variable to `0` to opt out of the rollout. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
 
 ## Shell Routing Settings
 
@@ -50,25 +52,25 @@ The same working-directory reset behavior that applies to Bash applies to PowerS
 PowerShell-native wins when:
 
 - The codebase targets Windows APIs, the registry, or credential stores that WSL cannot access directly
-- The team is Windows-first and has no WSL setup — eliminating an extra environment layer reduces friction
+- The team is Windows-first and eliminating an extra environment layer reduces friction
 - You need native `.NET` cmdlets or PowerShell modules without cross-boundary marshalling
 - Git Bash path translation is producing incorrect command sequences in agent output
 
-Bash-in-WSL is the better choice when:
+Bash-in-WSL (or native Bash) is the better choice when:
 
 - Auto mode is required — the PowerShell tool does not yet support auto mode
-- Your security policy requires sandboxing — the PowerShell tool has no sandboxing support during preview
+- You are on Windows and need sandboxing — sandboxing is not supported on Windows during preview
 - Managed PowerShell profiles contain required modules or org policy — profiles are not loaded by the tool
 
 ## Preview Limitations
 
 The following limitations are documented for the current preview release: [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
 
-- Auto mode does not work with the PowerShell tool
+- Auto mode does not work with the PowerShell tool yet
 - PowerShell profiles are not loaded
-- Sandboxing is not supported
-- Only supported on native Windows — not WSL
-- Git Bash is still required to start Claude Code
+- On Windows, sandboxing is not supported
+- On Windows, Git Bash is still required to start Claude Code
+- On Linux, macOS, and WSL, PowerShell 7+ is required
 
 Security hardening was applied in v2.1.89–2.1.90 (2026-04-01), fixing a trailing `&` background-job bypass, an `-ErrorAction Break` debugger hang, an archive-extraction TOCTOU, a parse-fail fallback deny-rule degradation, and PS 5.1 argument-splitting for arguments containing both double-quotes and whitespace. [Source: [Claude Code Changelog](https://code.claude.com/docs/en/changelog)]
 
@@ -98,7 +100,7 @@ This cmdlet pipeline has no direct Bash equivalent — `Get-Service` is Windows-
 - Enable with `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`; auto-detects PowerShell 7+ then 5.1
 - The Bash tool stays registered — configure `defaultShell: powershell` or ask Claude explicitly
 - Per-hook `"shell": "powershell"` works without the tool flag
-- Preview limitations: no auto mode, no sandboxing, no profile loading, not supported in WSL
+- Preview limitations: no auto mode, no profile loading; sandboxing and Git Bash requirement are Windows-only; Linux/macOS/WSL require PowerShell 7+
 - Security hardening in v2.1.89–2.1.90 addressed several permission-check and argument-handling issues
 
 ## Related

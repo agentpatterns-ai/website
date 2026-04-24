@@ -76,6 +76,10 @@ For those suites, invest in grader calibration and orthogonal signals first. See
 
 Infrastructure noise masquerades as eval awareness: Terminal-Bench 2.0 showed a 6-point gap (p < 0.01) between resource tiers, exceeding the margin between top leaderboard models. Rule out configuration drift first. [Source: [Infrastructure noise in agentic coding evals](https://www.anthropic.com/engineering/infrastructure-noise)]
 
+## Why Mimicry Has a Ceiling
+
+Mimicry raises the cost of defection without closing the gap for frontier models: humans control every input, so a capable model can treat every interaction as a potential eval. [Source: [Realistic Evaluations Will Not Prevent Evaluation Awareness](https://www.lesswrong.com/posts/7qBTcE3jqQFTuzssE/realistic-evaluations-will-not-prevent-evaluation-awareness)] OpenAI reports eval awareness in live deployment traces, not only synthetic benchmarks. [Source: [Sidestepping Evaluation Awareness with Production Evaluations](https://alignment.openai.com/prod-evals/)] Treat the two levers as harm-reduction and pair them with training-side interventions for near-frontier agents.
+
 ## Example
 
 BrowseComp's mitigation stack, deployed by Anthropic after the 4.6 analysis, is the canonical worked case:

@@ -22,7 +22,7 @@ Copilot Extensions come in two forms: [agents and skillsets](https://github.blog
 
 Skillsets are lightweight integrations where you define [up to 5 API endpoints](https://github.blog/changelog/2024-11-19-build-copilot-extensions-faster-with-skillsets/) and let Copilot handle all AI interactions. Copilot analyzes the user query, selects the appropriate skill, structures the API request using your JSON schema, calls your endpoint, and formats the response.
 
-Skillsets require no LLM logic on your side. You provide endpoints and schemas; Copilot handles routing, prompt crafting, function evaluation, and response generation. This works because Copilot's function-calling mechanism maps user intent to your JSON schema at inference time — the same mechanism underlying OpenAI function calling — so your endpoint receives a structured, schema-validated payload without you writing any prompt engineering. Use skillsets for straightforward integrations like data retrieval and basic actions.
+Skillsets require no LLM logic on your side. You provide endpoints and schemas; Copilot handles routing, prompt crafting, function evaluation, and response generation. Copilot's function-calling mechanism maps user intent to your JSON schema at inference time, so your endpoint receives a structured, schema-validated payload without prompt engineering on your side. Use skillsets for straightforward integrations like data retrieval and basic actions.
 
 ### Agents
 
@@ -30,7 +30,7 @@ Agent extensions give you full control over user interactions and custom logic. 
 
 ## Authentication
 
-Copilot Extensions use [OpenID Connect (OIDC)](https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/) for authentication, replacing the earlier X-GitHub-Token model. OIDC works by issuing short-lived signed JWTs that your extension verifies locally using a public key — no inbound API call to GitHub required per request — which is why it eliminates per-request token verification round trips and reduces latency under high-concurrency workloads.
+Copilot Extensions use [OpenID Connect (OIDC)](https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/) for authentication, replacing the earlier X-GitHub-Token model. OIDC issues short-lived signed JWTs that your extension verifies against GitHub's [published JWKS](https://docs.github.com/en/copilot/how-tos/use-copilot-extensions/set-up-oidc), which [reduces API round trips and lowers latency](https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/) compared to the earlier token exchange.
 
 You build extensions as GitHub Apps, inheriting the GitHub Apps permission model for repository and organization access.
 
@@ -68,7 +68,7 @@ Skillsets and agent extensions run as hosted services. MCP servers and local age
 
 - Skillsets require minimal setup: define endpoints and schemas, and Copilot handles all AI interaction logic.
 - Agent extensions give full control over LLM interaction and response generation.
-- OIDC authentication replaces the earlier token model with OIDC-based tokens.
+- OIDC authentication replaces the earlier X-GitHub-Token model with short-lived signed JWTs verified against GitHub's JWKS.
 - An extension is either a skillset or an agent — not both.
 - Use MCP servers instead when you need cross-tool compatibility beyond the Copilot ecosystem.
 

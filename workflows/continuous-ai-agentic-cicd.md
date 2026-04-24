@@ -101,6 +101,8 @@ Continuous AI is not a drop-in upgrade to every CI pipeline. Failure conditions 
 - **Tasks already expressible as rules** — applying LLM reasoning to checks that a linter handles precisely adds latency and cost without improving accuracy; the non-determinism becomes a liability, not an asset.
 - **Prompt-injection attack surface** — any workflow that feeds user-controlled content (issue bodies, PR titles, commit messages) into an agent prompt is a potential injection vector; safe-output guardrails reduce but do not eliminate this risk.
 
+Recent empirical work tempers the optimistic framing: an [MSR 2026 Mining Challenge study of 11,771 pull requests](https://2026.msrconf.org/details/msr-2026-mining-challenge/25/On-the-Reliability-of-Agentic-AI-in-Continuous-Integration-Pipelines) reports that agentic PRs introduce 79.15% of CI failures but perform only 60.63% of the corresponding fixes — a capability/autonomy gap where agents resolve failures quickly yet still rely on humans to repair the ones they cause. Treat Continuous AI as an augmentation that shifts repair work rather than eliminating it, and budget explicit human-review capacity for the failures agents will inevitably generate.
+
 ## Key Takeaways
 
 - Continuous AI extends CI/CD into judgment-heavy tasks that deterministic rules cannot handle

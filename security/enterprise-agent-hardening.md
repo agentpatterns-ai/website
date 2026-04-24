@@ -128,7 +128,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 
 ## Key Takeaways
 
-- **Governance**: permission modes, `PreToolUse` hooks, deny lists, managed settings.
+- **Governance**: permission modes, `PreToolUse` hooks, deny lists, [managed settings](../tools/claude/managed-settings-drop-in.md).
 - **Observability**: `CLAUDE_CODE_ENABLE_TELEMETRY=1` for `tool_decision` events and `prompt.id` correlation.
 - **Reproducibility**: session-portable artifacts (progress files, feature-state JSON, git snapshots) over memory.
 

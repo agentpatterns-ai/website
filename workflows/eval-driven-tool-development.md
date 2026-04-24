@@ -92,6 +92,15 @@ Diminishing returns set in when further transcript analysis produces no new chan
 
 At that point, run the held-out test set to measure generalization. Significant degradation on held-out tasks compared to development tasks indicates overfitting — the tool is optimized for the specific tasks you've been evaluating rather than the general capability.
 
+## When This Backfires
+
+Eval-driven tool development is not free. It is the wrong investment when:
+
+- **The tool is narrow and stable.** A thin wrapper over a well-understood API rarely justifies an evaluation harness — the cost of writing and maintaining tasks exceeds the information they yield. Ship it, monitor real calls, and invest in evaluations only if failures emerge.
+- **The eval distribution drifts from production.** Fixed task suites cover a limited slice of real inputs; they can miss issues that surface only with changing data, tools, or user behaviour. [Source: [Eval-Driven Development of LLM Agents](https://arxiv.org/html/2411.13768v3)] Treat the suite as a known floor, not a ceiling, and supplement with production monitoring.
+- **The suite becomes a benchmark to game.** Once a task set is stable, targeted changes can optimise for the suite rather than the underlying capability. Benchmark overfitting — where model or tool selection is tuned to scores rather than real-world quality — is a documented failure mode. [Source: [Why Most LLM Benchmarks Are Misleading](https://dasroot.net/posts/2026/02/llm-benchmark-misleading-accurate-evaluation/)] Rotate tasks, keep the held-out set sealed, and weight production telemetry alongside eval metrics.
+- **Real usage would reveal problems faster.** For tools deployed behind an existing agent with observable transcripts, real traffic often surfaces failures more cheaply than a synthetic suite. Treat eval-driven development as one input among several, not a gate.
+
 ## Example
 
 The following illustrates one iteration of the prototype-evaluate-analyze-iterate loop applied to a `search_issues` tool. Metrics are captured per run; transcripts are analysed to form the next change hypothesis.

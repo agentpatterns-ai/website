@@ -1,5 +1,5 @@
 ---
-title: "Getting Started: How to Set Up Your Instruction Files"
+title: "Getting Started: Setting Up Your Instruction File"
 description: "The instruction file is the single highest-leverage artifact for agent development. Set one up from zero in thirty minutes."
 tags:
   - instructions
@@ -25,7 +25,7 @@ If you use multiple tools, see [Project Instruction File Ecosystem](../instructi
 
 ## Bootstrap or Start from Scratch
 
-**Claude Code users**: run `/init`. Claude analyzes your codebase -- build systems, test frameworks, code patterns -- and generates a starting file. If a `CLAUDE.md` already exists, `/init` suggests improvements rather than overwriting.
+**Claude Code users**: run `/init`. Claude analyzes your codebase -- build systems, test frameworks, code patterns -- and generates a starting file ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)). If a `CLAUDE.md` already exists, `/init` suggests improvements rather than overwriting.
 
 **Everyone else**: create the file manually. A blank file with four sections is better than no file at all.
 
@@ -85,7 +85,7 @@ graph LR
 
 **Week 1**: project identity, build/test commands, directory layout. ~20 lines. Enough to stop the agent from guessing where things live.
 
-**Week 2**: add the convention the agent violates most often. One rule, stated specifically. "Use `unknown` over `any` in TypeScript" is useful; "follow TypeScript best practices" is not.
+**Week 2**: add the convention the agent violates most often. One rule, stated specifically. "Use `unknown` over `any` in TypeScript" is useful; "follow TypeScript best practices" is not. GitHub's guidance for `copilot-instructions.md` echoes this: "start small and iterate based on results, beginning with 10–20 specific instructions that address your most common review needs, then test whether these are influencing Copilot" ([GitHub, Adding repository custom instructions for GitHub Copilot](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)).
 
 **Week 3**: add a feedback loop -- a command the agent should run to verify its own output. "Run `npm test` before committing" or "Run `npx eslint --fix` after editing `.ts` files."
 
@@ -112,7 +112,7 @@ For rules that must never be violated, use deterministic mechanisms:
 - Linter rules
 - File permission restrictions
 
-The instruction file tells the agent what to aim for. Hooks and CI tell it what it cannot ship. Both are necessary; neither is sufficient alone.
+The instruction file tells the agent what to aim for. Hooks and CI tell it what it cannot ship. Both are necessary; neither is sufficient alone. Anthropic's own guidance agrees: "Use hooks for actions that must happen every time with zero exceptions. Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)).
 
 ## Let the Agent Write Its Own File
 
@@ -205,6 +205,15 @@ Instruction files create value when they are maintained. They create liability w
 - **Auto-generated files underperform.** Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file. Review and trim aggressively before committing.
 - **Over-specification reduces adherence.** Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
 
+## Key Takeaways
+
+- Start with a ~20-line file covering project identity, build/test commands, and directory layout — enough to stop the agent from guessing
+- Use tool-provided bootstraps (`/init` for Claude Code) rather than hand-writing from scratch
+- Grow the file in response to observed failures; do not prewrite rules the agent has not yet violated
+- Keep total length under 200 lines — instruction-following accuracy degrades as instruction density climbs
+- When the same correction repeats, encode it as a pre-commit hook, linter rule, or CI check — deterministic enforcement beats probabilistic compliance
+- Prune stale structural references (paths, file names) when the codebase changes — outdated instructions actively misdirect the agent
+
 ## Related
 
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
@@ -212,18 +221,6 @@ Instruction files create value when they are maintained. They create liability w
 - [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md)
 - [Hierarchical CLAUDE.md](../instructions/hierarchical-claude-md.md)
 - [Cargo-Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md)
-- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Central Repo and Shared Agent Standards](central-repo-shared-agent-standards.md)
 - [Team Onboarding for Agent Workflows](team-onboarding.md)
-- [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md)
-- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md)
-- [Continuous Agent Improvement](continuous-agent-improvement.md)
-- [Continuous Documentation](continuous-documentation.md)
-- [Permutation Frameworks](permutation-frameworks.md)
 - [Instruction File Fact Checker](instruction-file-fact-checker.md)
-- [Runbooks as Agent Instructions](runbooks-as-agent-instructions.md)
-- [Codebase Readiness](codebase-readiness.md)
-- [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md)
-- [Failure-Driven Iteration](failure-driven-iteration.md)

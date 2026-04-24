@@ -1,6 +1,6 @@
 ---
 title: "Test-Driven Agent Development: Tests as Spec and Guardrail"
-description: "Write tests first, then let agents implement against them — tests define what the code must do and verify that the agent did it correctly. TDD with Agents"
+description: "Write tests first, then let agents implement against them. Tests serve as an unambiguous specification and as automated verification the agent can run to prove its work."
 tags:
   - testing-verification
 aliases:
@@ -18,7 +18,7 @@ aliases:
 
 ## The Technique
 
-When you ask an agent to "implement a function that sorts users by activity," the agent interprets the requirement. When you give it a test file with five test cases defining exact expected behavior, the agent's output is constrained by the tests. Ambiguity is eliminated at the specification stage, not during review.
+Ask an agent to "implement a function that sorts users by activity" and it interprets the requirement. Hand it a test file with five cases defining exact expected behavior and the output is constrained by the tests. Ambiguity is resolved at specification time, not during review.
 
 Tests serve two roles simultaneously:
 
@@ -40,7 +40,7 @@ graph TD
     D -->|Changes needed| B
 ```
 
-You write the tests. The agent writes the implementation. The test suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures" — the agent reads test output and fixes issues in a tight feedback loop.
+You write the tests; the agent writes the implementation; the suite is the contract between them. Claude Code's [common workflows documentation](https://code.claude.com/docs/en/common-workflows) recommends asking Claude to "run tests and fix any failures" — the agent reads test output and iterates without human involvement in each cycle.
 
 ## Test Types and Their Roles
 
@@ -54,13 +54,11 @@ You write the tests. The agent writes the implementation. The test suite is the 
 
 ## What You Control, What the Agent Controls
 
-You write the tests. The agent writes the implementation. This separation matters:
-
 - You control the specification — what the code must do
 - The agent handles the labor — how to satisfy the specification
-- The test suite is the verification layer — neither you nor the agent decides if it works; the suite does
+- The test suite is the verification layer — neither party decides if it works; the suite does
 
-If you ask the agent to write both tests and implementation, the tests verify nothing. The agent will write tests that pass its own implementation, not tests that define correct behavior independently.
+If the agent writes both tests and implementation, the tests verify nothing: they pass its own code, not independently-defined behavior.
 
 ## Anti-Patterns
 
@@ -138,8 +136,6 @@ The agent cannot pass the tie-ordering test by sorting carelessly — the test e
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
 - [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Agent-Assisted Code Review: Agents as PR First Pass](../code-review/agent-assisted-code-review.md)
-- [Empowerment Over Automation](../agent-design/empowerment-over-automation.md)
-- [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md)
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)

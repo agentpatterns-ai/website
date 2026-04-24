@@ -232,3 +232,4 @@ The L1→L2 transition is high-leverage but not free. Three conditions make it a
 - [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline these steps build toward
 - [L0 → L1: Making the Repo Readable](level-0-to-1.md) — previous module
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — next module
+- [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview

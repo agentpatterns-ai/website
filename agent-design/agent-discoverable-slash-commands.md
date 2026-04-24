@@ -53,7 +53,7 @@ User invocation is an explicit authorisation signal; agent invocation is not. Co
 - **Read-only first** — a `/review` that only reads is safer to promote than a `/commit` that writes
 - **Two-step destructive ops** — plan/execute split lets the planner stage changes without committing
 
-When a command cannot be idempotent, default to `disable-model-invocation: true`.
+When a command cannot be [idempotent](idempotent-agent-operations.md), default to `disable-model-invocation: true`.
 
 ## Permission Controls
 

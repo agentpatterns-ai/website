@@ -17,7 +17,7 @@ When a coding agent starts in a bare environment, it spends tokens and time disc
 
 ## copilot-setup-steps.yml
 
-GitHub's coding agent uses [copilot-setup-steps.yml](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) as the environment configuration surface. The file lives at `.github/workflows/copilot-setup-steps.yml` on the default branch and follows GitHub Actions workflow syntax with a single job named `copilot-setup-steps`.
+GitHub's coding agent uses [copilot-setup-steps.yml](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) as the environment configuration surface. The file lives at `.github/workflows/copilot-setup-steps.yml` on the default branch and follows GitHub Actions workflow syntax with a single job named `copilot-setup-steps` — the job name is required and will not be recognized under any other name ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/onboarding-your-ai-peer-programmer-setting-up-github-copilot-coding-agent-for-success/)).
 
 Configurable attributes:
 
@@ -76,7 +76,7 @@ Deterministic bootstrapping works because it moves environment reasoning out of 
 ## When This Backfires
 
 - **One-off exploratory tasks**: Maintaining a bootstrap file is overhead; if a task is run once and the environment is discarded immediately, trial-and-error discovery may be faster than writing and debugging setup steps.
-- **Rapidly evolving dependencies**: A bootstrap spec that pins tool versions can become stale faster than it's updated, causing the agent to run with outdated tooling while developers assume the environment is current. Treat `copilot-setup-steps.yml` as production code with the same review and update discipline.
+- **Rapidly evolving dependencies**: A bootstrap spec that pins tool versions can become stale faster than it's updated, causing the agent to run with outdated tooling while developers assume the environment is current. Treat `copilot-setup-steps.yml` as production code with the same review and update discipline — GitHub recommends being explicit about versions and installation methods rather than letting the agent resolve them ad hoc, precisely to avoid unexpected versions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/onboarding-your-ai-peer-programmer-setting-up-github-copilot-coding-agent-for-success/)).
 - **Opaque partial failures**: The coding agent [proceeds with a partial environment](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment) if a setup step fails. A failing bootstrap step produces no guardrail — the agent still runs, but in a degraded state, making failures harder to attribute than a full stop would be.
 
 ## Key Takeaways

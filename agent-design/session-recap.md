@@ -56,7 +56,7 @@ current_focus: Migrating UserService tests to mock the injected dependency
 next_action: Run the updated test file and confirm all pass
 ```
 
-The schema is small on purpose. [LangChain's analysis of DeepAgents context management](https://blog.langchain.com/context-management-for-deepagents/) notes that a named `session_intent` field survives compression better than prose because compressors preserve *structure* more reliably than *salience*. A fixed schema gives the next turn a predictable handle.
+The schema is small on purpose. [LangChain's analysis of DeepAgents context management](https://blog.langchain.com/context-management-for-deepagents/) reports that adding dedicated fields for `session_intent` and next steps to the DeepAgents summarization prompt improved performance on their targeted compression evals. A fixed schema gives the next turn a predictable handle.
 
 ## Who Authors It, When
 
@@ -81,6 +81,15 @@ Claude Code implements the resume-return case directly: v2.1.108 added `/recap` 
 Compaction optimises for retaining information density. Continuity requires retaining decision-density: *why* a choice was made, *what* is open, *what* comes next. These fields appear once in the trajectory and are cheap to discard during prose compression. The [objective-drift](../anti-patterns/objective-drift.md) anti-pattern captures the failure mode — a single-instance constraint dissolves in summarisation while the core task (repeated across many messages) survives, so the agent keeps working on a subtly wrong objective.
 
 A structured recap authored before compression preserves decision-density verbatim; the next turn reads it as its seed context rather than reconstructing from a compressed history.
+
+## When This Backfires
+
+Recap is not always the right move. Conditions under which a recap is worse than no recap:
+
+- **Duplicates a continuous progress file.** If the agent already maintains a `todo.md` or runs [goal recitation](../context-engineering/goal-recitation.md) every step, a recap at the boundary introduces a second surface of truth that can drift from the progress file. The next turn now has two "seeds" that may disagree.
+- **Rigid schema outlives the task shape.** A fixed schema works when the fields (`session_intent`, `decisions_made`, `open_questions`, `current_focus`, `next_action`) map to the work. When the task mutates mid-session — scope widens, a new constraint emerges, the objective splits — the schema traps the agent in the old frame. Amp's handoff implementation explicitly rejects static compression in favour of letting users specify a *new* goal at the boundary ([Tessl analysis of Amp's handoff](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/), Nov 14 2025).
+- **Author predicts the wrong salience.** The authoring agent decides what the next turn will need. If the next turn needs a detail the author classified as disposable, the recap locks in that omission — and the next turn has no cheap path back because the full history was compressed behind it.
+- **Boundary is not real.** If the authoring step fires on every turn (or every N turns regardless of compaction/resume/fork), recap overhead compounds with no decision-density payoff. The token cost becomes pure waste.
 
 ## Example
 

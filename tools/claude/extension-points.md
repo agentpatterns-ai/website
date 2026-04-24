@@ -87,9 +87,9 @@ Commands are [merged into skills](https://code.claude.com/docs/en/skills) — ex
 
 ## Why the Determinism Boundary Matters
 
-Hooks are shell processes spawned by the Claude Code CLI at lifecycle events, independent of the model's token stream. The model never sees the hook script and has no mechanism to suppress execution. Skills, subagents, and `.claude/rules/` instructions are text delivered into the model's context — a sufficiently confusing context can cause them to be skipped. Anything routed through model reasoning is probabilistic; anything executed at the infrastructure layer is deterministic.
+Hooks are shell processes spawned by the CLI at lifecycle events, independent of the model's token stream — the model cannot see or suppress them. Skills, subagents, and `.claude/rules/` are text in the model's context; a confusing context can cause them to be skipped. Anything routed through model reasoning is probabilistic; anything executed at the infrastructure layer is deterministic.
 
-CLAUDE.md's high context cost follows: injected into every request's context window unconditionally. Skills avoid this by loading full content only on invocation.
+CLAUDE.md's high context cost follows: injected into every request unconditionally. Skills load full content only on invocation.
 
 ## When This Backfires
 
@@ -100,11 +100,11 @@ CLAUDE.md's high context cost follows: injected into every request's context win
 
 ## Security: Per-Server MCP Trust
 
-Prior to v2.1.69, `.mcp.json` silently trusted all servers without approval dialogs. Claude Code now shows a per-server trust dialog on first session ([changelog](https://code.claude.com/docs/en/changelog)). Automated setups relying on silent enablement will see a prompt per server after updating.
+Before v2.1.69, `.mcp.json` silently trusted all servers. Claude Code now shows a per-server trust dialog on first session ([changelog](https://code.claude.com/docs/en/changelog)) — automated setups relying on silent enablement will see a prompt per server after updating.
 
 ## Deprecation: /output-style → /config
 
-The `/output-style` command was deprecated in v2.1.73, replaced by `/config` ([changelog](https://code.claude.com/docs/en/changelog)). Output style is now fixed at session start to improve [prompt cache hit rates](../../context-engineering/static-content-first-caching.md) — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/` and `.claude/output-styles/`) still work. See [System Prompt Replacement](../../instructions/system-prompt-replacement.md) for the pattern of using output styles to substitute a domain-specific identity for the default engineering persona.
+`/output-style` was deprecated in v2.1.73 for `/config` ([changelog](https://code.claude.com/docs/en/changelog)). Output style is now fixed at session start to preserve [prompt cache hit rates](../../context-engineering/static-content-first-caching.md) — mid-session changes invalidated the cache. Custom style directories (`~/.claude/output-styles/`, `.claude/output-styles/`) still work. See [System Prompt Replacement](../../instructions/system-prompt-replacement.md) for substituting a domain-specific identity for the default persona.
 
 ## Example
 

@@ -86,6 +86,15 @@ The failure mode of this technique is the doom loop — iterating on the same er
 
 When iteration stalls, stop the agent, revert to the last working state, and re-approach the problem with a different strategy. Loop detection middleware (edit-count tracking, identical-failure detection) automates this judgment.
 
+### Known Failure Conditions
+
+The most concrete failure mode is **context pollution** — also called context rot. Each pasted error, failed attempt, and debug dump accumulates in the window, and the model starts referencing outdated or contradictory chunks rather than the current code. Sessions that involve large file pastes, long error dumps, or repeated iteration on the same code can see quality degrade after as few as 20–30 exchanges ([MindStudio: Context Rot in AI Coding Agents](https://www.mindstudio.ai/blog/context-rot-ai-coding-agents-explained), [Liip: Preventing Context Pollution for AI Agents](https://www.liip.ch/en/blog/preventing-context-pollution-for-ai-agents)). Two secondary failure modes follow from this:
+
+- **Out-of-distribution tasks**: when the current step is genuinely outside what the model can solve, more iterations will not converge — the signal is repeated near-identical failures rather than convergence. Switch from iteration to a fresh planning pass that decomposes the step into simpler sub-steps.
+- **Tests that validate flawed assumptions**: when the agent authors both the code and the tests, the failing-test signal can encode the same misunderstanding the fix would need to overturn, so green tests do not imply correctness. Keep the test human-authored, or review agent-authored tests separately before trusting them as the verification loop.
+
+In all three cases the mitigation is the same: start a fresh session, compact the conversation, or hand the task back to a plan-first loop rather than iterating on degraded context.
+
 ## Example
 
 A TypeScript project fails its CI build. The engineer pastes the compiler output directly into the agent prompt:
@@ -120,8 +129,5 @@ The full cycle — paste error, fix root cause, re-run tool — took one iterati
 - [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Eval-Driven Development](eval-driven-development.md)
-- [Escape Hatches](escape-hatches.md)
 - [Plan-First Loop](plan-first-loop.md)
 - [Verification-Centric Development](verification-centric-development.md)
-- [Evaluation-Driven Tool Development](eval-driven-tool-development.md)
-- [Vibe Coding](vibe-coding.md)

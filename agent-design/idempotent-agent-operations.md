@@ -119,6 +119,7 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 ## Related
 
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
+- [Agent Circuit Breaker](agent-circuit-breaker.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Agent-First Software Design](agent-first-software-design.md)

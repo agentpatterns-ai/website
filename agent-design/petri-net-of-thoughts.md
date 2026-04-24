@@ -79,6 +79,8 @@ The overhead of defining a Petri net — places, transitions, firing rules — i
 
 ## Related
 
+- [Graph of Thoughts: Directed Graph Reasoning for Multi-Path Problems](graph-of-thoughts.md) — Sibling reasoning topology where paths aggregate; PNoT adds firing-rule semantics on top of a graph structure
+- [Self-Discover Reasoning: LLM-Composed Reasoning Structures](self-discover-reasoning.md) — When the structure must be composed by the model rather than derived from process evidence
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate reasoning compute by phase rather than uniformly
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
 - [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — When structured reasoning adds cost without benefit

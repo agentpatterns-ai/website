@@ -28,9 +28,9 @@ Claude converts the interval to a cron expression and confirms the cadence and j
 |------|---------|--------|
 | Leading interval | `/loop 30m check the build` | Every 30 minutes |
 | Trailing `every` | `/loop check the build every 2 hours` | Every 2 hours |
-| No interval | `/loop check the build` | Every 10 minutes (default) |
+| No interval | `/loop check the build` | Dynamic — Claude picks a delay between 1 minute and 1 hour after each iteration based on what it observed |
 
-Supported units: `s` (seconds), `m` (minutes), `h` (hours), `d` (days). Seconds are rounded up to the nearest minute — cron has one-minute granularity. The prompt can invoke another skill: `/loop 20m /review-pr 1234` re-runs that skill on each fire. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+Supported units: `s` (seconds), `m` (minutes), `h` (hours), `d` (days). Seconds are rounded up to the nearest minute — cron has one-minute granularity. When the interval is dynamic, Claude prints the chosen delay and reason at the end of each iteration; for that shape of loop, the [Monitor tool](monitor-tool.md) often replaces polling entirely by streaming stdout from a background script as each line arrives. The prompt can invoke another command: `/loop 20m /review-pr 1234` re-runs that workflow on each fire. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
 ## Cron Tools — Programmatic Scheduling
 
@@ -99,5 +99,6 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)
 - [/batch & Worktrees](batch-worktrees.md)
+- [Monitor Tool](monitor-tool.md)
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [Feature Flags & Environment Variables](feature-flags.md)

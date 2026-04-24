@@ -1,6 +1,6 @@
 ---
 title: "Copilot CLI Agentic Workflows for AI Agent Development"
-description: "Terminal-native agentic coding with GitHub Copilot CLI — interactive and headless modes, graduated authorization, delegation to cloud agents, and MCP"
+description: "Terminal-native agentic coding with GitHub Copilot CLI — interactive and headless modes, graduated authorization, cloud delegation, and MCP integration."
 tags:
   - workflows
   - agent-design
@@ -109,6 +109,7 @@ The `--deny-tool` takes precedence over `--allow-tool`, so push is blocked even 
 - **Headless mode with underspecified prompts** — programmatic mode exits after the first attempt and cannot ask clarifying questions; ambiguous prompts produce partial or incorrect results with no opportunity for course correction.
 - **Context window exhaustion on large codebases** — auto-compaction at 95% capacity can lose earlier context that constrains later decisions; long refactoring sessions may contradict earlier choices made before compaction.
 - **`/delegate` latency mismatch** — cloud agent execution via GitHub Actions takes minutes to hours; delegating time-sensitive tasks introduces a latency gap that breaks flow if the developer expects synchronous completion.
+- **Usage caps on parallel workflows** — as of April 2026, GitHub tightened session and weekly token limits on Pro plans and explicitly warned that parallelized commands like `/fleet` consume tokens heavily enough to exhaust weekly quotas; agentic CLI workflows that fan out across monorepos can stall when limits hit, and Opus models were removed from Pro entirely ([GitHub Blog](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/)).
 
 ## Key Takeaways
 
@@ -121,20 +122,11 @@ The `--deny-tool` takes precedence over `--allow-tool`, so push is blocked even 
 
 ## Related
 
-- [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md)
-- [Copilot Coding Agent](coding-agent.md)
 - [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md)
+- [Copilot Coding Agent](coding-agent.md)
+- [Copilot Agent Mode](agent-mode.md)
 - [Custom Agents and Skills](custom-agents-skills.md)
 - [MCP Integration](mcp-integration.md)
-- [Copilot Agent Mode](agent-mode.md)
-- [Agent HQ](agent-hq.md)
-- [Agent Mission Control](agent-mission-control.md)
-- [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
 - [CLI-IDE-GitHub Context Ladder](../../workflows/cli-ide-github-context-ladder.md)
 - [Cloud-Local Agent Handoff](../../workflows/cloud-local-agent-handoff.md)
-- [GitHub Agentic Workflows](github-agentic-workflows.md)
-- [Copilot SDK](copilot-sdk.md)
-- [Copilot Extensions](copilot-extensions.md)
-- [copilot-instructions.md Convention](copilot-instructions-md-convention.md)
-- [Copilot Memory](copilot-memory.md)
-- [Copilot Spaces](copilot-spaces.md)
+- [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md)

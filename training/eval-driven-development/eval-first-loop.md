@@ -62,7 +62,7 @@ The bar should account for agent non-determinism. A 100% pass rate on a single r
 
 ### Step 5: Monitor and Grow
 
-Production incidents feed back into the suite as new eval tasks. See [Hardening Evals for Production](hardening-evals.md) for the incident-to-eval pipeline.
+Production incidents feed back into the suite as new eval tasks. See [Hardening Evals for Production](hardening-evals.md) for the [incident-to-eval pipeline](../../verification/incident-to-eval-synthesis.md).
 
 ---
 

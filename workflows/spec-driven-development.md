@@ -1,5 +1,5 @@
 ---
-title: "Spec-Driven Development: Build with a Persistent Spec"
+title: "Spec-Driven Development with Spec Kit"
 description: "Externalize project intent as a Markdown specification that agents compile into code, making the spec — not chat history — the persistent source of truth."
 aliases:
   - specification-driven development
@@ -73,6 +73,8 @@ Anthropic's context engineering research identifies structured note-taking as cr
 **Compilation slows as specs grow.** Larger specification files take longer to compile and consume more context window. The mitigation is modularization — breaking specs into multiple files scoped to subsystems ([Spec-Driven Development: Markdown as a Programming Language](https://github.blog/ai-and-ml/generative-ai/spec-driven-development-using-markdown-as-a-programming-language-when-building-with-ai/)).
 
 **JSON outperforms Markdown for machine-readable tracking.** Anthropic's harness research found that models are less likely to inappropriately modify JSON files compared to Markdown files ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). For feature status tracking alongside specs, structured JSON remains more reliable than Markdown checklists.
+
+**Specs drift from implementation and mislead agents when stale.** Static specs go out of sync with evolving code — a problem several 2025–2026 practitioner reports identify as the dominant failure mode. Isoform notes that "reality changes faster than specs do," and that keeping specs synchronized with code creates a maintenance tax that grows with system complexity ([Isoform, 2025](https://isoform.ai/blog/the-limits-of-spec-driven-development)). Augment Code argues that a stale spec misleads agents more dangerously than a stale design doc misleads humans, because agents execute the plan confidently without flagging divergence ([Augment Code, 2026](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)). Kent Beck's critique goes further: writing the entire specification before implementation encodes the assumption that nothing learned during implementation should change the spec, which contradicts how software actually evolves ([Kindred, 2026](https://brandonkindred.medium.com/same-patterns-new-hype-spec-driven-development-5183d8e8f704)). Treat the spec as a living artifact updated each cycle, not a frozen contract — and favor the approach for stable contracts and well-understood domains over exploratory work with evolving requirements.
 
 ## Ideal Use Cases
 

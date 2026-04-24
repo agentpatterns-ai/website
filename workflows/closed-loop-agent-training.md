@@ -74,7 +74,7 @@ Train the target model on validated trajectories. The training approach matters:
 | Direct Preference Optimization (DPO) | Learns from ranked pairs | 500-1,000 + preference pairs |
 | Trajectory-level RL (e.g., GRPO) | Rewards complete workflows, not tokens | 500-1,000 + reward signal |
 
-Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)).
+Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches on EnterpriseLab's benchmarks ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)); the size of the gap in other settings will depend on task complexity and tool-set size.
 
 ## Evidence: Small Models Matching Frontier Performance
 
@@ -95,7 +95,7 @@ Trajectory-level optimization amplifies this further. Token-level fine-tuning re
 
 ## Schema Evolution: Incremental Re-Training
 
-The closed loop pays off when tool schemas change -- which they always do. When 30% of API schemas were modified in EnterpriseLab's evaluation, incremental training on just 200 additional trajectories (synthesized from the updated schemas) recovered 95% of original performance.
+The closed loop pays off when tool schemas change -- which they always do. When 30% of API schemas were modified in EnterpriseLab's evaluation, incremental training on just 200 additional trajectories (synthesized from the updated schemas) recovered 95% of original performance ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)) -- a result measured across the 15 enterprise domains in the study, and one that larger or more heterogeneous schema diffs would not necessarily match.
 
 The re-training workflow:
 
@@ -183,12 +183,6 @@ After validation against a sandboxed HR API, both the trajectory and its task de
 - Small models (8B) can match frontier models on domain-specific tool-use tasks with fewer than 1,000 synthesized examples
 - Trajectory-level optimization outperforms token-level fine-tuning for multi-step agent workflows
 - The real advantage is incremental re-training: when schemas change, regenerate affected trajectories and fine-tune from the last checkpoint instead of starting over
-
-## Unverified Claims
-
-- The 8-10x cost reduction figures are point-in-time estimates from EnterpriseLab and will vary by provider and model generation
-- Whether the 95% recovery from 200 incremental examples generalizes beyond the 15 enterprise domains tested remains unconfirmed
-- Trajectory-level RL improvements (~10% over token-level) may depend on task complexity distribution and tool count
 
 ## Related
 

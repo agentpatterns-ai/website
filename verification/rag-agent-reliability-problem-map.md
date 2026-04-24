@@ -114,6 +114,7 @@ Prefer a team-local taxonomy — or a smaller published framework like the MAST 
 ## Related
 
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Three-category taxonomy of agent task completion failures (model, integration, and user override)
+- [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — Empirical 23-pattern taxonomy of real agent bug fixes; complements this diagnostic framework with repair-side data
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Per-stage precision/recall to pinpoint where agent trajectories go wrong
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md) — Curated regression tests that surface retrieval and reasoning regressions automatically
 - [Incident to Eval Synthesis](incident-to-eval-synthesis.md) — Convert classified failures into persistent eval cases to prevent recurrence

@@ -52,7 +52,7 @@ This differs from three Claude Code processes in three terminals: the Agents app
 
 ## Cursor Comparison
 
-Cursor's Agents Window introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor propagates custom instructions via project-level Rules files (`.cursor/rules/*.mdc`) and user-level settings, but MCP server configuration is not automatically inherited by background agent sessions in the same way — each session requires explicit tool configuration.
+Cursor's [Agents Window](../tools/cursor/agents-window.md) introduced the same concept — a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model with workspace-settings integration as the distinguishing property: sessions inherit custom instructions and MCP servers automatically, reducing per-session setup cost. Cursor propagates custom instructions via project-level Rules files (`.cursor/rules/*.mdc`) and user-level settings, but MCP server configuration is not automatically inherited by background agent sessions in the same way — each session requires explicit tool configuration.
 
 ## Why It Works
 

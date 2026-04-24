@@ -108,4 +108,6 @@ After several failed outcomes, the lock-escalation entry accumulates a low utili
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture covering episodic and working memory
 - [Continual Learning for AI Agents](continual-learning-layers.md) — three-layer taxonomy: model, harness, and context as independent update targets
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons from agent execution traces
+- [Generative Agents Memory Stream](generative-agents-memory-stream.md) — recency/relevance/importance scoring over an episodic observation stream
+- [Memory Transfer Learning](memory-transfer-learning.md) — cross-domain reuse of stored memories and when utility scores transfer poorly
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — on-demand context retrieval patterns

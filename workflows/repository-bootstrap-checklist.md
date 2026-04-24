@@ -21,7 +21,7 @@ Skipping ahead breaks this chain: adding CI gates before instructions creates en
 
 ### Step 1: Project Instructions File
 
-Create `AGENTS.md` in the repository root. This file is the entry point for any agent that opens the project — it tells the agent what the repo is, how it's structured, and what conventions it must follow.
+Create `AGENTS.md` in the repository root. This file is the entry point for any agent that opens the project — it tells the agent what the repo is, how it's structured, and what conventions it must follow. The [AGENTS.md open format](https://github.com/agentsmd/agents.md) is a cross-tool convention — a dedicated, predictable place for coding-agent instructions that multiple tools can read from the same file.
 
 The `AGENTS.md` convention uses standard Markdown with any headings you need. Include at minimum:
 

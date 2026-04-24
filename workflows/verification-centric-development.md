@@ -74,6 +74,15 @@ Martin Fowler's team calls this **rigor relocation** — quality assurance shift
 
 This relocation is not free. Structural linting and architectural constraints prove conformance but do not prove behavioral correctness. The verification pipeline reduces risk; it does not eliminate it.
 
+## When This Backfires
+
+A reasonable practitioner could defend the opposite recommendation in specific contexts. Verification-centric development is worse than lighter-weight alternatives when:
+
+- **The risk budget is smaller than the verification investment.** Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](vibe-coding.md) is the correct mode for that end of the spectrum.
+- **Verifiers themselves are unreliable.** LLM-based verifiers miss defects at a rate much higher than deterministic tooling, and even benchmark-grade test suites can overestimate solution quality — 20–40% of LeetCode problems that passed LiveCodeBench's private tests still failed on the online judge ([Ma et al., "Rethinking Verification for LLM Code Generation"](https://arxiv.org/abs/2507.06920)). Treat any verifier as a fallible signal, not a proof of correctness.
+- **Snapshot tests encode the wrong baseline.** Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and scope-creep checks become noise.
+- **Process load crowds out thinking.** Teams that add ceremony (plans, specs, approval steps) without pruning existing review steps slow down without catching proportionally more bugs. The pipeline should replace manual checks, not stack on top of them.
+
 ## Model Routing
 
 Not every task needs your most expensive model. Route by complexity:

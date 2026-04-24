@@ -130,6 +130,19 @@ This prevents a popular skill from silently regressing after an update. The gate
 | Rollback | Revert marketplace.json commit; pinned SHAs make this deterministic |
 | Audit trail | Git history on marketplace repo |
 
+Install-time controls alone do not constrain what a loaded plugin can do. Plugins run fully trusted code inside developer sessions — no sandboxing, no binary signing, trust is transitive through the git host and the plugin's authors. Runtime policy enforcement belongs in PreToolUse hooks shipped as part of the managed settings: block `Bash` invocations that match `curl | sh`, reject `Edit`/`Write` targets under `~/.ssh/` or `~/.aws/credentials`, log every filesystem mutation. [Source: [Your Claude Plugin Marketplace Needs More Than a Git Repo](https://dev.to/michaeltuszynski/your-claude-plugin-marketplace-needs-more-than-a-git-repo-5631)]
+
+## When This Backfires
+
+The full distribution stack — MDM policies, a private marketplace repo with SHA pinning, OTel ingestion, and a monthly manual eval rotation — is operational overhead. A reasonable practitioner can defend the shared git repo + README approach at the 50-engineer boundary when:
+
+- **Operational cost exceeds drift cost.** A small platform team running MDM policy rollouts, marketplace PR reviews, OTel pipeline maintenance, and monthly eval rotations can consume more engineer-hours than the occasional "skill out of date" incidents the infrastructure prevents.
+- **Skill churn is low and the library is narrow.** If the org uses 5–10 stable skills that change a few times a year, SHA pinning and release channels add ceremony without catching failures — reviewer attention at PR time covers the same ground.
+- **Usage telemetry is not actionable.** Invocation counts only justify eval investment if someone acts on them. Teams that collect `skill_name` events but have no reviewer capacity turn OTel into a compliance theatre — data gathered, never read.
+- **Security posture depends on runtime enforcement, not distribution control.** `strictKnownMarketplaces` prevents unreviewed plugins from being installed but does nothing about credentials and filesystem access once a reviewed plugin is loaded. Orgs that skip PreToolUse hooks and trust the allowlist ship the illusion of governance.
+
+Treat the stack as incremental: adopt managed distribution first, add telemetry when ranking decisions need data, add evals when a specific skill failure forces the investment.
+
 ## Key Takeaways
 
 - MDM-managed settings and private plugin marketplaces are the production distribution path; server-managed settings work without MDM infrastructure
@@ -141,6 +154,8 @@ This prevents a popular skill from silently regressing after an update. The gate
 ## Related
 
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
+- [Agent Governance Policies](agent-governance-policies.md)
+- [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
 - [Content & Skills Audit Workflow](content-skills-audit.md)
 - [Agent Skills Standard](../standards/agent-skills-standard.md)

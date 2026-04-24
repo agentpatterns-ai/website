@@ -183,11 +183,11 @@ Auto-plan mode is instruction-based, not runtime-enforced. For safety-critical w
 
 ## Difference from Research-Plan-Implement
 
-The research-plan-implement pattern focuses on information gathering before action. The plan-first loop adds two specific elements: the explicit correction step (where misunderstandings are surfaced and fixed before the plan is written) and the plan-as-file mechanism (for persisting plans across context boundaries). Use both together for complex, multi-session work.
+The [research-plan-implement pattern](research-plan-implement.md) focuses on information gathering before action. The plan-first loop adds two specific elements: the explicit correction step (where misunderstandings are surfaced and fixed before the plan is written) and the plan-as-file mechanism (for persisting plans across context boundaries). Use both together for complex, multi-session work.
 
 The research phase of that pattern can be delegated to sub-agents. A [Claude Code sub-agent](https://code.claude.com/docs/en/sub-agents) reads and summarizes relevant files without consuming the main agent's context on file traversal — the summary becomes the input to the planning phase.
 
-Without the research-plan-implement structure, a common failure mode is implement-fail-fix: the agent implements, hits a problem from an incorrect assumption, patches that specific problem, then hits the next problem. Each cycle burns context on incremental repair rather than correct implementation. The loop is detectable when the agent produces multiple revisions of the same function or uses error output as its primary source of codebase knowledge.
+Without the [research-plan-implement](research-plan-implement.md) structure, a common failure mode is implement-fail-fix: the agent implements, hits a problem from an incorrect assumption, patches that specific problem, then hits the next problem. Each cycle burns context on incremental repair rather than correct implementation. The loop is detectable when the agent produces multiple revisions of the same function or uses error output as its primary source of codebase knowledge.
 
 ```mermaid
 graph TD

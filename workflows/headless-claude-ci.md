@@ -1,5 +1,5 @@
 ---
-title: "Headless Claude in CI: Using -p and --max-turns for Safe"
+title: "Headless Claude in CI: Using -p and --max-turns for Safe Pipeline Integration"
 description: "Run Claude non-interactively in CI/CD pipelines using print mode (-p) and cap agentic steps with --max-turns to keep pipelines predictable and cost-bounded"
 tags:
   - workflows
@@ -140,6 +140,7 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 
 ## Related
 
+- [Claude Code `--bare` Flag](../tools/claude/bare-mode.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Worktree Isolation for Parallel Agent Sessions](worktree-isolation.md)

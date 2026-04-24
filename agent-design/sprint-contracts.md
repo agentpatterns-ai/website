@@ -16,17 +16,17 @@ aliases:
 
 ## The Problem
 
-Multi-agent loops break down when success criteria are undefined at coding time. Evaluators score output against whatever the generator produced, drifting toward approval of mediocre work because they have no prior commitment to contradict. Generators optimize for undefined targets and produce inconsistent results across runs.
+Multi-agent loops break down when success criteria are undefined at coding time. Evaluators score output against whatever the generator produced, drifting toward approval because they have no prior commitment to contradict. Generators optimize for undefined targets and produce inconsistent results.
 
-The failure mode is structural: without explicit criteria agreed *before* generation, evaluation becomes post-hoc rationalization. The evaluator sees plausible output and convinces itself the requirements were met.
+Without explicit criteria agreed *before* generation, evaluation becomes post-hoc rationalization — the evaluator sees plausible output and convinces itself the requirements were met.
 
 ## Structure
 
-The sprint contract pattern uses three agent roles, each with a distinct session and context boundary ([Anthropic Engineering, March 2026](https://www.anthropic.com/engineering/harness-design-long-running-apps)):
+The pattern uses three agent roles, each with a distinct session and context boundary ([Anthropic Engineering, March 2026](https://www.anthropic.com/engineering/harness-design-long-running-apps)):
 
-- **Planner** — expands a brief (1–4 sentences) into a product specification. Scopes deliverables for one sprint chunk, writes the contract, and hands it to the evaluator before the generator starts.
-- **Generator** — implements against the contract. Has no access to the evaluator's session or reasoning.
-- **Evaluator** — commits to the scoring rubric *before* seeing generated output, then scores the generator's result against the agreed dimensions.
+- **Planner** — expands a brief into a spec, scopes one sprint chunk, writes the contract, and hands it to the evaluator before the generator starts.
+- **Generator** — implements against the contract. No access to the evaluator's session or reasoning.
+- **Evaluator** — commits to the rubric *before* seeing output, then scores the generator's result against the agreed dimensions.
 
 ```mermaid
 graph TD
@@ -41,7 +41,7 @@ The contract is written before the generator starts — not derived from its out
 
 ## Graded Dimensions
 
-Sprint contracts define success as weighted dimensions, not binary pass/fail. The Anthropic engineering post describes four frontend design dimensions as an example:
+Sprint contracts define success as weighted dimensions, not binary pass/fail. Anthropic's engineering post describes four frontend design dimensions:
 
 | Dimension | What it measures |
 |-----------|-----------------|
@@ -50,46 +50,50 @@ Sprint contracts define success as weighted dimensions, not binary pass/fail. Th
 | Craft | Technical execution: hierarchy, spacing, contrast ratios |
 | Functionality | Usability independent of aesthetics |
 
-Weights are explicit and agreed upfront. A contract that emphasizes design quality and originality over craft and functionality produces different generator behavior than an equal-weight contract. The generator knows what matters; the evaluator cannot later shift weights to justify approval.
+Weights are explicit and agreed upfront. The generator knows what matters; the evaluator cannot later shift weights to justify approval.
 
 ## Evaluator Calibration
 
-An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Research on LLM-as-judge systems identifies self-enhancement bias and position bias as common failure modes — evaluators score outputs they "authored" or encountered first more favorably regardless of quality ([Zheng et al., NeurIPS 2023](https://arxiv.org/abs/2306.05685)).
+An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Research on LLM-as-judge systems identifies self-enhancement bias and position bias as common failure modes — evaluators score outputs they "authored" or encountered first more favorably regardless of quality ([Zheng et al., NeurIPS 2023](https://arxiv.org/abs/2306.05685)). Shankar et al. document a related "criteria drift" effect: evaluators and humans refine their criteria while grading outputs, so some rubric dimensions cannot be fully specified upfront ([Shankar et al., UIST 2024](https://arxiv.org/abs/2404.12272)). Sprint contracts treat the pre-committed rubric as a floor — expected to extend during calibration — not a frozen specification.
 
 Calibration process:
 
 1. Run the evaluator against known-good and known-bad examples.
-2. Read logs to identify where the evaluator's judgment diverged from the correct verdict.
-3. Update the evaluator's system prompt to enforce skepticism at those specific failure points.
-4. Add few-shot examples with detailed breakdowns to align evaluator preferences and reduce score drift.
+2. Identify where its judgment diverged from the correct verdict.
+3. Update the system prompt to enforce skepticism at those failure points.
+4. Add few-shot examples to reduce score drift.
 
-Calibration is iterative and continues as the generator produces new edge cases. An evaluator that passes its calibration suite but drifts on production output needs its few-shot set expanded.
+An evaluator that passes its calibration suite but drifts on production output needs its few-shot set expanded.
 
 ## Context Isolation
 
-The evaluator must not have access to the generator's reasoning. When a generator explains its decisions inline — "I chose this layout because..." — an evaluator that reads those explanations inherits the generator's framing and is more likely to accept the output.
+The evaluator must not have access to the generator's reasoning. When a generator explains decisions inline — "I chose this layout because..." — an evaluator that reads those explanations inherits the generator's framing and is more likely to accept the output.
 
-Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's session transcript. File-based communication between agents (structured artifacts on disk) supports this — one agent writes, the other reads, and no shared context window exists between them.
+Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's session transcript. File-based communication supports this — one agent writes, the other reads, with no shared context window.
 
 ## When to Apply
 
 Sprint contracts pay off when:
 
-- The task spans multiple implementation cycles where consistent evaluation matters
+- The task spans multiple implementation cycles and consistent evaluation matters
 - Success criteria are subjective enough that an unconstrained evaluator would drift (UI design, creative work, product features)
-- Generator output quality is hard to verify programmatically — human-level judgment is needed but must be consistent
+- Output quality is hard to verify programmatically — judgment is needed but must be consistent
 
 Skip them when:
 
-- Criteria are machine-checkable (tests pass, lint is clean) — the evaluator-optimizer with a test suite is simpler and more reliable
-- The task is short enough that a single generation pass is adequate
-- Evaluation dimensions cannot be agreed before implementation — the contract requires upfront clarity
+- Criteria are machine-checkable (tests pass, lint is clean) — an evaluator-optimizer with a test suite is simpler
+- The task fits in a single generation pass
+- Evaluation dimensions cannot be agreed before implementation
 
 ## Relationship to Adjacent Patterns
 
-Sprint contracts extend the [evaluator-optimizer pattern](evaluator-optimizer.md) with an upfront commitment step. The evaluator-optimizer has no pre-agreement: the evaluator scores whatever the generator produces. Sprint contracts add the contract phase, which fixes the scoring rubric before generation.
+Sprint contracts extend the [evaluator-optimizer pattern](evaluator-optimizer.md) with an upfront commitment step: the contract fixes the scoring rubric before generation, where the base pattern scores whatever the generator produces.
 
-The [critic agent pattern](critic-agent-plan-review.md) reviews the *plan* before execution. Sprint contracts have the evaluator agree to *scoring criteria* before generation — a later gate, focused on measurable outcomes rather than plan validity.
+The [critic agent pattern](critic-agent-plan-review.md) reviews the *plan* before execution. Sprint contracts gate on *scoring criteria* before generation — a later checkpoint focused on measurable outcomes rather than plan validity.
+
+## Caveat: Model Capability Changes the Trade-Off
+
+Sprint decomposition is scaffolding. It pays off when models struggle to sustain coherent work across long tasks; as frontier models improve, the overhead can outweigh the benefit. The same Anthropic post was later updated to describe removing the sprint construct once Claude Opus 4.6 could plan, sustain agentic work, and self-review over a full run — the evaluator shifted to a single end-of-run pass ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Treat the contract as conditional on model capability and revisit decomposition when a more capable model ships.
 
 ## Example
 

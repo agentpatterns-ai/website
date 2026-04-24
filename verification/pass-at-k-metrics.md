@@ -5,6 +5,10 @@ tags:
   - testing-verification
   - evals
   - cost-performance
+aliases:
+  - "pass at k"
+  - "pass power k"
+  - "pass@1 pass@k metrics"
 ---
 
 # Use pass@k and pass^k to Separate Agent Capability from Consistency
@@ -13,7 +17,7 @@ tags:
 
 ## The Problem with a Single Pass Rate
 
-AI agents are non-deterministic: the same prompt and environment can produce different results across runs. A single pass/fail result tells you what happened once — not what to expect across your workflow.
+AI agents are non-deterministic: the same prompt and environment can produce different results across runs. A single pass/fail tells you what happened once, not what to expect across your workflow.
 
 A single pass rate also treats an agent that always scores 6/10 identically to one that randomly scores 0/10 or 10/10. The two have very different production behaviour, and one number cannot distinguish them.
 
@@ -37,9 +41,9 @@ An agent with high pass@k and low pass^k signals a specific failure mode: it occ
 
 ## Choosing the Right Primary Metric
 
-**Human-in-the-loop workflows**: pass@k is the relevant metric. If a developer reviews every output, a single correct answer in three attempts is often enough — the agent's job is to surface a good option.
+**Human-in-the-loop workflows**: pass@k is the relevant metric. If a developer reviews every output, one correct answer in three attempts is often enough — the agent's job is to surface a good option.
 
-**Automated pipelines**: pass^k is critical. If output is consumed directly — merging code, sending messages, modifying databases — you need consistency across all attempts. A 90% pass rate still means roughly 1-in-10 automated runs fails.
+**Automated pipelines**: pass^k is critical. If output is consumed directly — merging code, sending messages, modifying databases — you need consistency across all attempts. A 90% pass rate still means roughly 1-in-10 runs fails.
 
 ## How to Run the Measurement
 
@@ -61,12 +65,12 @@ Use pass@k during development to separate capability gaps from consistency gaps.
 
 ## When This Backfires
 
-Both metrics have failure modes worth weighing before treating them as a headline result.
+Both metrics have failure modes worth weighing before treating them as headline results.
 
-- **pass@k is "exponentially forgiving" at larger k.** As *k* grows, almost any non-zero-capability agent eventually hits the right answer, so pass@k inflates perceived performance and can rank a lucky agent above a more reliable one — users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
-- **Small-suite, small-k estimates are statistically unstable.** With a handful of tasks and *k*=3, both metrics have wide confidence intervals that most reports omit; Bayesian posterior estimates over the underlying success probability give more honest uncertainty [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
-- **pass^k is dominated by the flakiest test.** A single noisy oracle — a timing-race integration test, an LLM-as-judge with temperature > 0 — can collapse pass^k even when the agent is correct. Verify the correctness check is itself deterministic before using pass^k as a deployment gate.
-- **pass@k assumes independent attempts.** If your harness shares context, seeds, or cached state across the *k* runs, the samples are correlated and the metric no longer measures what its definition claims.
+- **pass@k is "exponentially forgiving" at larger k.** As *k* grows, almost any non-zero-capability agent eventually hits the right answer, so pass@k can rank a lucky agent above a more reliable one — users rarely judge a tool by its best of ten attempts [Source: [Brooker, *Pass@k is Mostly Bunk*](https://brooker.co.za/blog/2026/01/21/pass-k.html)].
+- **Small-suite, small-k estimates are statistically unstable.** With a handful of tasks and *k*=3, both metrics have wide confidence intervals that most reports omit; Bayesian posterior estimates give more honest uncertainty [Source: [Hariri et al., *Don't Pass@k: A Bayesian Framework for LLM Evaluation*](https://arxiv.org/abs/2510.04265)].
+- **pass^k is dominated by the flakiest test.** A single noisy oracle — a timing-race integration test, an LLM-as-judge with temperature > 0 — can collapse pass^k even when the agent is correct. Verify the check is itself deterministic before using pass^k as a deployment gate.
+- **pass@k assumes independent attempts.** If your harness shares context, seeds, or cached state across the *k* runs, samples are correlated and the metric no longer measures what its definition claims.
 
 When these conditions apply, pair the point estimates with posterior intervals rather than reporting them alone.
 
@@ -127,6 +131,7 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Golden Query Pairs as Regression Tests](golden-query-pairs-regression.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design tests that account for agent non-determinism across multiple trials
+- [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Extends pass@k by also varying interaction depth *T* for tool-use agents
 - [LLM-as-Judge Context Test Harness](llm-context-test-harness.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)

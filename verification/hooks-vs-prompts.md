@@ -18,30 +18,28 @@ tags:
 
 ## The Core Distinction
 
-Prompt instructions are probabilistic. Under task pressure — context window filling, attention diverted — compliance degrades and the agent reverts to training defaults.
+Prompt instructions are probabilistic. Under task pressure — context filling, attention diverted — compliance degrades and the agent reverts to training defaults.
 
-Hooks are deterministic. A pre-command hook runs outside the agent's context window entirely; the model cannot overrule it. Compliance is unconditional.
+Hooks are deterministic. A pre-command hook runs outside the agent's context; the model cannot overrule it.
 
 ## The Decision Rule
 
-Use hooks for a rule when all three apply:
+Use hooks when all three apply:
 
 1. Compliance is non-negotiable — failure has real cost
 2. The rule is binary — a command either violates it or it does not
 3. The behavior has a strong opposing prior in training data
 
-Use prompts when any of the following applies:
+Use prompts when any of these apply:
 
-- The guidance is contextual ("prefer X when working in Y")
-- The rule requires model judgment to apply correctly
-- The correct behavior depends on factors the hook cannot inspect
-- The cost of false positives from over-blocking exceeds the cost of occasional non-compliance
+- Guidance is contextual ("prefer X when working in Y")
+- The rule needs model judgment to apply
+- Correct behavior depends on factors a hook cannot inspect
+- False positives from over-blocking cost more than occasional non-compliance
 
 ## What Hooks Can Enforce
 
-Hooks intercept agent lifecycle events and can allow, block, or modify what the agent is about to do.
-
-High-value enforcement targets:
+Hooks intercept agent lifecycle events and can allow, block, or modify actions. High-value targets:
 
 - **Package manager fidelity** — block `npm install`, enforce `pnpm install`
 - **Destructive git operations** — block `git reset --hard`, `git push --force`
@@ -49,26 +47,22 @@ High-value enforcement targets:
 - **File restrictions** — block writes to infrastructure or secrets files
 - **Tool allowlisting** — permit only a defined set of shell commands
 
-All share a property: absolute, binary, and the agent has a training prior toward the wrong behavior — e.g. reaching for `npm install` over `pnpm install` by default.
+All are absolute, binary, and opposed by a training prior — e.g. `npm install` over `pnpm install` by default.
 
 ## What Prompts Do That Hooks Cannot
 
-Hooks operate on observable agent actions. They cannot encode intent, context, or trade-offs.
-
-Prompts handle:
+Hooks see observable actions, not intent, context, or trade-offs. Prompts handle:
 
 - **Architectural guidance** — "prefer composition over inheritance when adding new features"
 - **Quality standards** — "write a test for any change to business logic"
 - **Situational judgment** — "raise a concern before modifying authentication code"
 - **Tone and style** — communication conventions in output
 
-These require evaluating context that a hook cannot inspect mechanically.
+These require context a hook cannot inspect mechanically.
 
 ## Injection Resistance
 
-Hooks provide a security property that prompts cannot: immunity to [prompt injection](../security/prompt-injection-threat-model.md).
-
-Injected instructions enter the model's reasoning loop and can influence what the agent *tries* to do. They cannot influence what a hook *allows*.
+Hooks provide a property prompts cannot: immunity to [prompt injection](../security/prompt-injection-threat-model.md). Injected instructions can influence what the agent *tries* to do, not what a hook *allows*.
 
 ```mermaid
 graph TD
@@ -81,15 +75,15 @@ graph TD
     I -.->|Can influence| A
 ```
 
-Without a hook, injected instructions and `CLAUDE.md` compete in the model's reasoning loop — **non-deterministic**. With a hook, `PreToolUse` fires before execution — **deterministic**.
+Without a hook, injected instructions and `CLAUDE.md` compete in the reasoning loop — **non-deterministic**. With a hook, `PreToolUse` fires before execution — **deterministic**.
 
 ## Context Cost
 
-Prompt instructions occupy context and compete for model attention — under the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md), attention has limits. Hooks have zero context cost; moving absolute rules from prompt to hook improves reliability and frees context.
+Prompt instructions occupy context and compete for attention — see the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md). Hooks have zero context cost; moving absolute rules to hooks improves reliability and frees context.
 
 ## Cross-Tool Applicability
 
-The enforcement vs. guidance distinction is tool-agnostic. The mechanism varies:
+The distinction is tool-agnostic. The mechanism varies:
 
 | Tool | Hook mechanism |
 |------|---------------|
@@ -98,17 +92,18 @@ The enforcement vs. guidance distinction is tool-agnostic. The mechanism varies:
 | CI/CD | GitHub Actions, pipeline gates |
 | Editor | Extension rules, linters on save |
 
-Git hooks and CI gates predate AI agents — a `pre-commit` hook enforces its rule regardless of whether the commit came from a developer, an agent, or a script.
+Git hooks and CI gates predate AI agents — a `pre-commit` hook enforces its rule regardless of origin (developer, agent, or script).
 
 ## When Hooks Cannot Enforce
 
-Hooks are deterministic at the tool-call boundary, not everywhere. Three failure modes narrow the rule ([Boucle, *190 Things Claude Code Hooks Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o); [Anthropic hooks reference](https://code.claude.com/docs/en/hooks)):
+Hooks are deterministic at the tool-call boundary, not everywhere. Four failure modes narrow the rule ([Boucle, *190 Things Claude Code Hooks Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o); [Anthropic hooks reference](https://code.claude.com/docs/en/hooks)):
 
-- **Substitution.** Block one tool call and the model finds an unblocked path. A matcher on `Bash(rm *)` misses `/bin/rm` or a `Write` that truncates the file. Each call is evaluated in isolation, so `mkdir` + `cd` + `rm -rf *` slips past single-command matchers.
-- **Intent-blindness.** Hooks see parameters, not reasoning — they cannot distinguish legitimate `sudo` from suspect `sudo`, or a `git push --force` on a personal branch from one aimed at `main`.
+- **Substitution.** Block one tool call and the model finds another path. A matcher on `Bash(rm *)` misses `/bin/rm` or a `Write` that truncates the file; each call is evaluated alone, so `mkdir` + `cd` + `rm -rf *` slips past.
+- **Intent-blindness.** Hooks see parameters, not reasoning — they cannot distinguish legitimate `sudo` from suspect, or a `git push --force` on a personal branch from one aimed at `main`.
 - **Execution-path gaps.** Only the standard session path is hooked. Pipe mode, bare mode, some IDE integrations, and events between tool calls (prompt assembly, compaction) are unreachable. Rules that must hold everywhere also need CI or git-level enforcement.
+- **Hook-source trust.** A hook is only as trustworthy as the file that defines it. Project-scope hooks in `.claude/settings.json` from an untrusted repo can be weaponized — Check Point demonstrated RCE and API-key exfiltration via malicious hooks firing on repo load ([CVE-2025-59536, 2026](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)). The same determinism that makes a trusted hook reliable makes a malicious one unconditional; review hook configs before opening unfamiliar repos.
 
-Reach for a hook when the rule is absolute, binary, and expressible as a tool-call-boundary predicate; use prompts, CI, or repository-level gates for anything that isn't.
+Reach for a hook when the rule is absolute, binary, and expressible at the tool-call boundary; use prompts, CI, or repo-level gates for anything else.
 
 ## Example
 

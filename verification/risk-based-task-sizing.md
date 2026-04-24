@@ -15,7 +15,7 @@ tags:
 
 ## The Problem
 
-Most agent workflows apply uniform verification: every change runs the same checks regardless of whether it touches a comment or an auth module. Low-risk changes waste cycles; high-risk changes pass with insufficient scrutiny because the bar was set for average tasks.
+Most agent workflows apply uniform verification: every change runs the same checks regardless of whether it touches a comment or an auth module. Low-risk changes waste cycles; high-risk changes pass with insufficient scrutiny because the bar is set for average tasks.
 
 ## File Risk Classification
 
@@ -27,7 +27,7 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | Existing behavior modified | Business logic, function signatures, database queries, UI state |
 | High | Security or data integrity surface | Auth, crypto, payments, data deletion, schema migrations, public API |
 
-The classification is static per file — determined by what the file controls, not by what the current change does to it. A one-line change to an authentication module is still high-risk because the [blast radius](../security/blast-radius-containment.md) of a mistake in that file is large.
+Classification is static per file — determined by what the file controls, not the current change. A one-line edit to an authentication module stays high-risk because the [blast radius](../security/blast-radius-containment.md) of a mistake there is large.
 
 ## Task Sizing
 
@@ -39,9 +39,9 @@ Task size combines scope and file risk:
 | Medium | Full verification cascade + structured ledger | 1 reviewer |
 | Large | Full cascade + operational readiness checks | 3 cross-model reviewers + human gate |
 
-The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) applies a critical escalation rule: high-risk files auto-escalate to Large regardless of task scope. A typo fix in a payments module triggers the full verification pipeline because the file's risk tier overrides the task's apparent simplicity.
+The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) applies one escalation rule: high-risk files auto-escalate to Large regardless of scope. A typo fix in a payments module triggers the full pipeline because the file's risk tier overrides apparent simplicity.
 
-The default heuristic is "if unsure, treat as Medium" — this errs toward more verification rather than less.
+The default heuristic is "if unsure, treat as Medium" — err toward more verification, not less.
 
 ## Verification Cascade
 
@@ -56,24 +56,24 @@ Verification is tiered with fallback layers:
 7. **Import/load test** — verify the module loads without crashing (fallback when tiers 3-6 produce no runtime signal)
 8. **Smoke execution** — a throwaway script exercising the changed code path (fallback when no other runtime verification exists)
 
-The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) requires that if tiers 1-6 yield only static checks with no runtime verification, at least one tier 7-8 check must run. Empty runtime verification is never acceptable.
+The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) requires at least one tier 7-8 check when tiers 1-6 yield only static signals. Empty runtime verification is never acceptable.
 
 ## Structured Verification Ledger
 
-Every verification step is recorded as structured data — an INSERT, not prose. The evidence bundle presented to the developer is a SELECT query, not a self-reported summary. This prevents hallucinated verification: if the INSERT did not happen, the check did not happen. See [Verification Ledger](verification-ledger.md) for the full pattern.
+Every verification step is recorded as structured data — an INSERT, not prose. The evidence bundle shown to the developer is a SELECT, not a self-reported summary. This prevents hallucinated verification: if the INSERT did not happen, the check did not happen. See [Verification Ledger](verification-ledger.md) for the full pattern.
 
-The ledger captures baseline state before changes and post-change state, enabling regression detection by comparing the two phases programmatically.
+The ledger captures baseline and post-change state, enabling regression detection by comparing the two phases programmatically.
 
 ## When This Backfires
 
-Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wikipedia.org/wiki/Risk-based_testing): assignment is subjective, classifications drift, and focus on high-risk paths can leave low-risk areas under-tested. Specific conditions where this pattern underperforms uniform verification:
+Risk-tier systems inherit the weaknesses of [risk-based testing](https://en.wikipedia.org/wiki/Risk-based_testing): subjective assignment, classification drift, and under-testing of low-risk areas. Specific conditions where the pattern underperforms uniform verification:
 
-- **Tier drift after refactors.** Static per-file tiers assume file purpose is stable. A tests helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
-- **Subjective classification.** Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments become inconsistent and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
-- **High-risk-file fatigue.** Auto-escalating every touch of an auth file to Large review discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
-- **Low-tier blind spots.** Concentrating verification on High-tier files under-weights defects from interactions between Low-tier modules. A documentation change that silently invalidates a runbook can cause an incident the tiered cascade never catches.
+- **Tier drift after refactors.** Static per-file tiers assume file purpose is stable. A test helper that accretes production code over six months may still be tagged Low. Teams routinely stop updating risk matrices once maintenance cost exceeds perceived benefit ([TestRail, "Pros and Cons of Risk-Based Testing"](https://www.testrail.com/blog/risk-based-testing/)).
+- **Subjective classification.** Two engineers can reasonably disagree whether a billing calculator is "business logic" (Medium) or "data integrity surface" (High). Without a rubric enforced in review, tier assignments drift and create a false sense of rigor ([Technology.org, "Benefits and disadvantages of risk-based testing"](https://www.technology.org/2024/05/22/benefits-and-disadvantages-of-risk-based-testing/)).
+- **High-risk-file fatigue.** Auto-escalating every touch of an auth file discourages defensible small improvements — typo fixes, comment updates, dead-code removal. Teams route around the policy by avoiding the file.
+- **Low-tier blind spots.** Concentrating effort on High-tier files under-weights defects from interactions between Low-tier modules. A documentation change that invalidates a runbook can cause an incident the tiered cascade never catches.
 
-If the risk map is not reviewed regularly, or the team lacks a shared rubric for the tier boundaries, uniform verification may be more honest than a stale tier map masquerading as risk awareness.
+If the risk map is not reviewed regularly, or the team lacks a shared rubric, uniform verification may be more honest than a stale tier map masquerading as risk awareness.
 
 ## Key Takeaways
 

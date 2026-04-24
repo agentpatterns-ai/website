@@ -11,9 +11,9 @@ tags:
 
 > Agents fail. The question is whether they fail forward (recover and continue) or fail catastrophically (corrupt state, lose progress, repeat work).
 
-## The Progressive Failure Hierarchy
+Exception handling for coding agents is a progressive escalation — self-correct, fallback, degrade gracefully, escalate — that absorbs tool errors, model failures, and crashes without losing accumulated work.
 
-Every agent failure response should follow this escalation:
+## The Progressive Failure Hierarchy
 
 ```mermaid
 graph LR
@@ -32,26 +32,26 @@ graph LR
 
 **Degrade gracefully**: deliver partial results rather than failing entirely.
 
-**Escalate**: surface the failure to a human with enough context to resolve it. Last resort, not first response.
+**Escalate**: surface the failure to a human with enough context. Last resort, not first response.
 
 ## Git-Based Recovery
 
 Git is the primary recovery mechanism for coding agents. Anthropic's approach for long-running agents ([multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)):
 
-- **Commit frequently** with descriptive messages — each commit is a checkpoint
+- **Commit frequently** — each commit is a checkpoint
 - **Write progress files** (e.g., `claude-progress.txt`) that survive session crashes — see [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
-- **Revert to known-good states** with `git revert` when changes go wrong
+- **Revert to known-good states** with `git revert`
 
 Git operations are cheap, atomic, and reversible. See [Rollback-First Design](rollback-first-design.md) for the broader principle.
 
 ## Model-Driven Error Adaptation
 
-Anthropic's finding from their [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system): telling the model a tool is failing and letting it adapt works "surprisingly well". The model reroutes or changes approach without explicit fallback logic in the harness.
+Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) reports that telling the model a tool is failing and letting it adapt works "surprisingly well" — the model reroutes without explicit fallback logic in the harness.
 
 The simplest strategy: catch the tool error, include the message in the agent's next context, let the model decide. This outperforms rigid retry logic for novel failure modes.
 
 !!! warning "When model-driven adaptation fails"
-    This breaks down for **silent failures** — the agent produces output without detecting the underlying error (stale data, partial writes, skipped validation). Model-driven adaptation requires the model to *know* something went wrong. Add output validation and freshness checks for failure modes the model cannot observe directly.
+    This breaks down for **silent failures** — the agent produces output without detecting the underlying error (stale data, partial writes, skipped validation). The model has to *know* something went wrong. Add output validation and freshness checks for failure modes the model cannot observe directly.
 
 ## Durable Execution
 
@@ -61,15 +61,15 @@ For agents that must survive process crashes, durable execution frameworks check
 
 | Mode | Behavior | Use case |
 |------|----------|----------|
-| `exit` | Persist only at graph exit (success, error, or interrupt) | Human-in-the-loop gates |
+| `exit` | Persist only at graph exit | Human-in-the-loop gates |
 | `async` | Persist asynchronously while next step runs | Long-running research |
-| `sync` | Persist synchronously before each step starts | Mission-critical workflows |
+| `sync` | Persist synchronously before each step | Mission-critical workflows |
 
-State is checkpointed to a configurable backend (Postgres, DynamoDB, and others); after a crash, the agent resumes from the last checkpoint.
+State is checkpointed to a configurable backend (Postgres, DynamoDB, others); after a crash, the agent resumes from the last checkpoint.
 
 **DBOS** takes a decorator-based approach: [`@DBOS.workflow` and `@DBOS.step`](https://docs.dbos.dev/typescript/reference/workflows-steps) persist execution state automatically with exactly-once semantics.
 
-Both solve the same problem: a 30-minute agent run should not lose all progress to a process crash.
+Both solve the same problem: a 30-minute run should not lose all progress to a crash.
 
 ## Model Fallback
 
@@ -77,7 +77,7 @@ When a model provider fails, route to an alternative. LangChain's [`ModelFallbac
 
 ## Circuit Breakers for Tool Calls
 
-Adapted from distributed systems: a circuit breaker tracks consecutive failures for a tool and disables it after a threshold.
+A circuit breaker tracks consecutive failures for a tool and disables it after a threshold.
 
 ```mermaid
 stateDiagram-v2
@@ -90,19 +90,19 @@ stateDiagram-v2
 
 **Closed**: calls proceed, failures are counted. **Open**: calls are blocked, agent uses alternatives. **Half-open**: a single probe tests recovery.
 
-In practice, most coding agents use a lighter-weight version: count failures, tell the model the tool is unreliable, and let model-driven adaptation handle routing. Full state machines are more common in multi-agent systems with shared tool infrastructure.
+Most coding agents use a lighter-weight version: count failures, tell the model the tool is unreliable, and let model-driven adaptation handle routing. Full state machines are more common in multi-agent systems with shared tool infrastructure.
 
 ## The Rollback-Over-Prevention Philosophy
 
-Let agents make recoverable mistakes rather than preventing all mistakes: sandbox execution, review gates before permanent effects, session trees for fork/explore/discard, and checkpoints at every meaningful boundary. Restrictive permissions limit capability more than they reduce risk. See [Rollback-First Design](rollback-first-design.md).
+Let agents make recoverable mistakes rather than preventing all mistakes: sandbox execution, review gates before permanent effects, session trees for fork/explore/discard, checkpoints at every meaningful boundary. Restrictive permissions limit capability more than they reduce risk. See [Rollback-First Design](rollback-first-design.md).
 
 ## When This Backfires
 
-The progressive failure hierarchy adds latency and complexity. These conditions favor failing fast and re-running from scratch instead:
+The progressive hierarchy adds latency and complexity. These conditions favor failing fast instead:
 
-- **Short-lived tasks with no side effects** — a task that completes in under 30 seconds and makes no external writes gains nothing from recovery logic; retry overhead exceeds the benefit.
-- **Cascading failures in multi-agent systems** — when multiple agents share infrastructure (databases, queues, tool APIs), one agent's recovery attempts can amplify load on already-stressed components. Circuit breakers and backpressure must be coordinated across agents, not just per-agent.
-- **Silent corruption without validation** — recovery only works when the agent can detect that something went wrong. If the task involves writing to external systems without output validation, an agent that "recovers" and continues may compound bad state. Fail fast with a human escalation is safer than progressive recovery when the integrity of intermediate state cannot be verified.
+- **Short-lived tasks with no side effects** — a task under 30 seconds with no external writes gains nothing from recovery logic; retry overhead exceeds the benefit.
+- **Cascading failures in multi-agent systems** — when agents share infrastructure (databases, queues, tool APIs), recovery attempts amplify load on stressed components. Circuit breakers and backpressure must be coordinated across agents, not per-agent.
+- **Silent corruption without validation** — recovery requires detection. Writing to external systems without output validation means an agent that "recovers" may compound bad state. Fail fast to a human when intermediate state cannot be verified.
 
 ## Example
 

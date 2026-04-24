@@ -4,3 +4,4 @@ nav:
   - Claude Code: claude
   - Cursor: cursor
   - GitHub Copilot: copilot
+  - OpenAI Agents SDK: openai

@@ -11,7 +11,7 @@ tags:
 
 > Parsing is where most RAG systems silently fail — text extraction that drops tables, headings, and figure captions degrades retrieval before any query runs.
 
-This module covers document ingestion for air-gapped RAG: choosing a parser, handling scanned documents with OCR, preserving structural metadata, and extracting tables in a retrieval-friendly form. The runnable examples wire parsers into a [Haystack](https://github.com/deepset-ai/haystack) indexing pipeline; the comparison tables stay framework-agnostic so you can substitute parsers without rebuilding the pipeline graph.
+Document ingestion is the first stage of an air-gapped RAG pipeline: converting source files (PDF, DOCX, HTML) into structured text plus metadata that downstream chunking and embedding can reason about. Parser choice determines table fidelity, reading-order accuracy, and whether headings and page numbers survive into the retrieved chunk. The runnable examples wire parsers into a [Haystack](https://github.com/deepset-ai/haystack) indexing pipeline; the comparison tables stay framework-agnostic so parsers are interchangeable without rebuilding the pipeline graph.
 
 ---
 
@@ -51,7 +51,7 @@ Five open-source parsers cover the main trade-off axes. All run fully offline. T
 
 **unstructured** ([Unstructured-IO/unstructured](https://github.com/Unstructured-IO/unstructured)) wraps Tesseract and [Poppler](https://poppler.freedesktop.org/) for PDF processing and auto-detects file types. It outputs typed elements (`Title`, `NarrativeText`, `Table`) that map naturally to chunking by content type. Can be deployed fully offline via Docker.
 
-**marker** ([VikParuchuri/marker](https://github.com/VikParuchuri/marker)) uses deep learning ([Surya](https://github.com/VikParuchuri/surya) for OCR, layout models for structure) to produce high-fidelity Markdown. It handles headers/footers removal, equation formatting, and multi-page tables. Runs on CPU, GPU, or Apple Silicon — but requires PyTorch and is the slowest of the five on CPU-only hardware [unverified — no neutral benchmark found].
+**marker** ([VikParuchuri/marker](https://github.com/VikParuchuri/marker)) uses deep learning ([Surya](https://github.com/VikParuchuri/surya) for OCR, layout models for structure) to produce high-fidelity Markdown. It handles headers/footers removal, equation formatting, and multi-page tables. Runs on CPU, GPU, or Apple Silicon, but requires PyTorch and runs neural inference per page — expect materially higher latency than rule-based parsers on CPU-only hardware.
 
 ---
 
@@ -188,7 +188,7 @@ indexing.connect("router.application/vnd.openxmlformats-officedocument.wordproce
 ```
 
 **What other parsers would differ on with this document:**
-- `PyPDFToDocument` (Haystack built-in): ~10× faster on native PDFs but loses multi-column reading order and table cell structure [unverified — no neutral benchmark comparing all five found]
+- `PyPDFToDocument` (Haystack built-in): much faster on native PDFs (rule-based text extraction, no ML inference) but loses multi-column reading order and table cell structure
 - `UnstructuredFileConverter`: produces typed elements (`Title`, `Table`) in document metadata; simpler for heterogeneous corpora
 - Custom `MarkerConverter` wrapper: highest Markdown fidelity for equations and code blocks; slower on CPU than docling
 
@@ -201,12 +201,6 @@ indexing.connect("router.application/vnd.openxmlformats-officedocument.wordproce
 - OCR selection depends on document complexity: Tesseract for standard layouts, PaddleOCR (or RapidOCR) for difficult scans and non-Latin scripts
 - Preserve section headings, page numbers, and element type as chunk metadata — this information is lost if not extracted at parse time
 - Extract tables as separate Markdown chunks with the parent heading attached; for multi-page tables, only docling and marker reliably reconstruct the full object
-
-## Unverified Claims
-
-- marker is the slowest of the five parsers on CPU-only hardware — based on architectural inference (deep learning inference vs. rule-based extraction); no neutral benchmark comparing all five on equivalent hardware found
-- PyMuPDF's speed advantage over ML-based parsers — relative speed claim based on architectural characteristics (rule-based vs. neural inference); no neutral benchmark comparing all five found
-- `table.export_to_markdown()` method signature on individual table objects — confirmed that `doc.tables` is a list of table items per docling's document model; per-table markdown export method signature unverified against API reference
 
 ## Related
 

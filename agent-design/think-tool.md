@@ -15,11 +15,9 @@ aliases:
 
 ## What the Think Tool Does
 
-The think tool fires between tool calls — after the agent receives a tool's output, before it decides what to do next. It gives the agent an explicit space to reflect without immediately acting.
+The think tool fires between tool calls — after the agent receives a tool's output, before it decides what to do next. It is distinct from extended thinking, which reasons before the first generation token: extended thinking is pre-action; the think tool is mid-stream, firing after the agent has observed new information from the environment.
 
-This is distinct from extended thinking, which reasons before the first generation token. Extended thinking is pre-action; the think tool is mid-stream, firing after the agent has observed new information from the environment.
-
-Per [Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool), on the [τ-Bench](https://arxiv.org/abs/2406.12045) airline domain benchmark, adding the think tool plus optimized prompting produced a **54% relative improvement** over baseline. This is a large effect for a structural change that adds no new capabilities.
+Per [Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool), on the [τ-Bench](https://arxiv.org/abs/2406.12045) airline domain benchmark, adding the think tool plus optimized prompting produced a **54% relative improvement** over baseline — a large effect for a structural change that adds no new capabilities.
 
 ## When It Helps
 
@@ -34,9 +32,9 @@ It does not help when tool calls are independent and parallel — there is nothi
 
 ## How It Works
 
-The think tool is invoked by the agent as a regular tool call. The agent writes out its reasoning as the "thought" — it is not shown to the user, but it is included in the model's context. The model can then use that reasoning when formulating the next action.
+The agent invokes the think tool as a regular tool call. The written "thought" is not shown to the user but is included in the model's context, and the model can use that reasoning when formulating the next action.
 
-Critically, the tool only fires when the model chooses to use it. If the task is simple or the next step is obvious from the tool output, the model skips it. Token overhead is proportional to how often the model judges reflection is needed.
+The tool only fires when the model chooses to use it. If the task is simple or the next step is obvious, the model skips it, so token overhead scales with how often reflection is actually needed.
 
 ## Why It Works
 
@@ -48,9 +46,7 @@ The cost is the tokens consumed by each thought. The practical optimization is t
 
 ## System Prompt Requirements
 
-The think tool alone is not sufficient. [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool) notes that the tool alone improved results, but adding domain-specific examples produced the largest gains. A generic instruction yields modest gains; a system prompt with explicit examples of what good mid-stream reasoning looks like in your domain yields large gains.
-
-Monitor what the model writes in think calls and refine the system prompt based on quality gaps.
+The tool alone is not sufficient. [Anthropic's post](https://www.anthropic.com/engineering/claude-think-tool) reports that a generic instruction yields modest gains, while a system prompt with explicit examples of good mid-stream reasoning in the target domain produces the largest gains. Monitor what the model writes and refine the prompt based on quality gaps.
 
 ## Prefer Extended Thinking on Modern Claude Models
 

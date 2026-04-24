@@ -168,5 +168,6 @@ Classify this issue into exactly one category:
 - [Continuous Documentation](continuous-documentation.md)
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md)
+- [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Safe Outputs Pattern](../security/safe-outputs-pattern.md)

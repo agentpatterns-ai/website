@@ -17,7 +17,7 @@ aliases:
 
 ## The Three Primitives
 
-A monolithic agent process couples model inference, session state, and execution environment into a single unit. When any one churns — model capabilities shift, execution targets multiply, or a crash forces recovery — the others pay the cost. The pattern splits the process along layers whose churn rates differ by orders of magnitude ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
+A monolithic agent process couples model inference, session state, and execution environment. When any one churns — models shift, execution targets multiply, or a crash forces recovery — the others pay the cost. The pattern splits the process along layers whose churn rates differ by orders of magnitude ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
 - **Session** — an append-only event log of everything that happened. The authoritative state; not any in-memory harness object.
 - **Harness** — a stateless loop that calls the model and routes tool calls. Any harness instance can resume any session.
@@ -34,7 +34,7 @@ graph TD
 
 ## Stable APIs as the Seams
 
-The power of the split is not the split itself — it is that the interfaces between primitives are narrow and stable. Anthropic documents the reference shape ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
+The split works because the interfaces between primitives are narrow and stable. Anthropic documents the reference shape ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)):
 
 | Surface | Call | Role |
 |---------|------|------|
@@ -44,7 +44,7 @@ The power of the split is not the split itself — it is that the interfaces bet
 | Session | `getEvents()` | Slice the event stream positionally for context reconstruction |
 | Harness | `wake(sessionId)` | Reboot a harness instance against an existing session |
 
-Deep Agents Deploy (LangChain, April 2026) ships the same three-layer architecture against an open model and sandbox ecosystem, confirming the shape is not Anthropic-specific: "The high level architecture (harness, agent server, sandboxes) is the same" ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
+LangChain's Deep Agents Deploy (April 2026) ships the same three-layer architecture on open models and sandboxes: "The high level architecture (harness, agent server, sandboxes) is the same" ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
 
 ## Why Statelessness Pays
 
@@ -67,7 +67,7 @@ Credentials never reach the sandbox. Two patterns hold the invariant ([Anthropic
 
 ## Many Brains, Many Hands
 
-With a stateless harness and a uniform sandbox interface, the three primitives compose into a fan-out: multiple harnesses can attach to overlapping sessions, and a single harness can dispatch to heterogeneous sandboxes. "The harness doesn't know whether the sandbox is a container, a phone, or a Pokémon emulator" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). This enables A/B model rollouts, model migrations without rewriting session logs, and work distribution across specialized execution targets.
+A stateless harness and uniform sandbox interface compose into a fan-out: multiple harnesses attach to overlapping sessions, and one harness dispatches to heterogeneous sandboxes. "The harness doesn't know whether the sandbox is a container, a phone, or a Pokémon emulator" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). This enables A/B model rollouts, migrations without rewriting session logs, and work distribution across specialized targets.
 
 ## When This Is Overbuilt
 
@@ -104,7 +104,7 @@ The user sees a brief pause, not a restart. Time-to-first-token on resume is dom
 
 ## Related
 
-- [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — which layer to run on; this page covers how the layer is structured internally
+- [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — which layer to run on, versus how the layer is structured internally
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase initializer/worker pattern that predates full virtualization
 - [Harness Engineering](harness-engineering.md) — the broader discipline of environment design for reliable agent output
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — the event-sourcing pattern that the Session log instantiates
