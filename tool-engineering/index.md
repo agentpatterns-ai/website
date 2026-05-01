@@ -25,6 +25,7 @@ Core principles for designing agent tools that are discoverable, unambiguous, an
 Structural patterns for tool interfaces, schemas, error handling, and output formatting.
 
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
+- [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — Redesign tool interfaces so the wrong call cannot compile -- prevention over documentation
@@ -77,6 +78,7 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Batch File Operations via Bash Scripts](batch-file-operations.md) — Consolidate multiple file writes into a single bash script execution to reduce per-call overhead, token consumption, and sequential latency
 - [Browser Automation for Research](browser-automation-for-research.md) — When an agent's HTTP client is blocked by CDN bot detection, switch to browser automation tools like Playwright to fetch content
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md) — Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output
+- [Cross-Repo Agent Search](cross-repo-agent-search.md) — Expose a GitHub-API-backed text-search tool to reach code outside the workspace, and compose it with local indexed search under remote-index trade-offs
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) — Structure MCP tools as files in a directory tree and let the agent load only the definitions it needs, reducing token overhead by up to 98%
 - [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md) — Back an agent's regex search with a trigram or suffix-array index so query latency stays bounded on large repositories, at the cost of freshness machinery
 - [Next Edit Suggestions](next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode

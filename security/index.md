@@ -74,6 +74,7 @@ Code injection in multi-agent pipelines exploits agent trust in code it reads as
 
 Tool invocation exposes attack surfaces distinct from prompt injection. Malicious tools exploit argument generation and return processing to leak context and execute arbitrary commands.
 
+- [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — Compile verified benign tool-call telemetry into a parameterized DFA and enforce permitted sequences and parameter bounds at runtime; fits structured workflows with stable tool catalogs
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence more than safety alignment; select guard models accordingly
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution
@@ -101,3 +102,9 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 Sizing frames for pre-release security review when vulnerability discovery scales with inference spend.
 
 - [Security Budget as Token Economics](security-budget-token-economics.md) — Treat hardening as a budget-allocation decision: AISI's Mythos evaluation shows no diminishing returns inside 100M tokens per attempt, but the outspend frame applies only where the search curve is still climbing and triage capacity absorbs findings
+
+## Deployment Models
+
+Release patterns for capabilities whose offense-defense asymmetry makes broad release the wrong default.
+
+- [Restricted-Access Defensive AI: Project Glasswing as a Deployment Model](restricted-access-defensive-ai.md) — Invitation-only gating shifts the latency budget toward defenders when a model raises the offensive ceiling more than broad access raises the defensive floor; the contract structure, exit criteria, and what AppSec teams should evaluate when offered access

@@ -83,6 +83,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Specialized Agent Roles](specialized-agent-roles.md) — Assign distinct specializations to parallel agents so they complement rather than compete on the same problems
 - [Sprint Contracts](sprint-contracts.md) — A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
+- [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour; apply at phase boundaries, not per call
 
 ## Reliability
 
@@ -105,6 +106,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
+- [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a small fine-tuned model behind a tool-call interface so a large orchestrator can offload high-volume narrow operations — search, exploration, terminal output filtering — without spending its own context budget
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — An async trajectory-observer system that classifies misbehaviors into three categories and injects targeted course-corrections
 
 ## Harness & Tools
@@ -123,6 +125,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Harness Impermanence](harness-impermanence.md) — Author agent scaffolding as depreciating capital — design for low cost of removal so native model capability can replace it cleanly
 - [Lane-Based Execution Queueing](lane-based-execution-queueing.md) — Isolate concurrent agent tasks into named queues with per-lane concurrency limits to prevent output interleaving, race conditions, and deadlocks
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — Decision framework for choosing between managed agent services and self-hosted harnesses based on compliance, memory ownership, model routing, and ops capacity
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) — Treat the backing model as a first-class harness variable — express prompt, tool, and middleware deltas as declarative model-keyed overrides instead of forcing one configuration to work everywhere
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture
 - [The Think Tool](think-tool.md) — A mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action
 - [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — Run multiple agent sessions simultaneously across projects — each session inherits workspace custom instructions and MCP servers, enabling practical fan-out task execution

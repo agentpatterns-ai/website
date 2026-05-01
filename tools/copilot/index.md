@@ -14,6 +14,7 @@ tags:
 - [Agent Mission Control](agent-mission-control.md) — Centralized dashboard for assigning, steering, and tracking coding agent tasks across repositories
 - [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md) — Connect Copilot CLI to any OpenAI-compatible provider or run fully local models for cost control, data residency, and offline workflows
 - [Agent Mode](agent-mode.md) — Local, synchronous agentic execution in VS Code, JetBrains, Eclipse, and Xcode
+- [Inline Agent Mode in JetBrains](inline-agent-mode.md) — Public-preview surface that runs agent capabilities inside the JetBrains inline chat popover instead of the chat panel
 - [Cloud Agent Organization Controls](cloud-agent-org-controls.md) — Three-tier governance model for runner configuration, firewall policy, and commit traceability
 - [Cloud Agent: Research, Plan, and Code Phases](cloud-agent-research-plan-code.md) — Three-phase execution model with explicit developer checkpoints between Research, Plan, and Code
 - [Coding Agent](coding-agent.md) — Asynchronous agent that works via GitHub Actions to plan, implement, and open PRs
