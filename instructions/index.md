@@ -65,6 +65,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Standards as Agent Instructions](standards-as-agent-instructions.md) — A standards file actionable for humans is, verbatim, an instruction file for agents — the same document does both jobs when written precisely
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents follow patterns rather than invent them
 - [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md) — A four-step checklist for writing agent-ready task descriptions that maximize autonomous execution quality
+- [Multi-Layer Specification Redundancy as a Robustness Budget](multi-layer-specification-redundancy.md) — Independent specification layers absorb prompt noise that would otherwise degrade code-generation correctness; prose repetition and brittle terminology do not
 
 ## Governance & Maintenance
 
@@ -74,3 +75,4 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behaviour changes
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — Restore behavioural contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md
 - [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md) — Security boundaries defined for one AI interaction mode may not apply across all modes; content exclusion rules for completions and chat can be silently ignored in agent mode
+- [Prompt-Rewrite Discipline on Cross-Generation Model Migration](prompt-rewrite-on-cross-generation-migration.md) — Discard the inherited prompt stack on cross-generation hops, start from the smallest prompt that preserves the product contract, and re-tune reasoning effort, verbosity, tool descriptions, and output format against representative examples

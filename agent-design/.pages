@@ -10,6 +10,7 @@ nav:
       - agentic-flywheel.md
       - agents-vs-commands.md
       - agentless-vs-autonomous.md
+      - attention-latch.md
       - classical-se-patterns-agent-analogues.md
       - coding-agent-scope-expansion.md
       - cognitive-reasoning-execution-separation.md
@@ -55,6 +56,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
+      - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md
       - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
@@ -69,6 +71,7 @@ nav:
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
+      - tool-preamble-status-update.md
   - "Reliability":
       - agent-circuit-breaker.md
       - self-healing-production-agent.md
@@ -86,6 +89,7 @@ nav:
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
+      - specialized-slm-as-agent-tool.md
       - wink-agent-misbehavior-correction.md
   - "Harness & Tools":
       - agent-composition-patterns.md
@@ -93,6 +97,7 @@ nav:
       - agent-loop-middleware.md
       - agent-pushback-protocol.md
       - agent-turn-model.md
+      - deep-agent-runtime.md
       - deferred-permission-pattern.md
       - tool-confirmation-carousel.md
       - harness-design-dimensions.md
@@ -101,6 +106,9 @@ nav:
       - harness-impermanence.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
+      - observability-driven-harness-evolution.md
+      - per-model-harness-tuning.md
+      - persistent-connection-agent-transport.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md

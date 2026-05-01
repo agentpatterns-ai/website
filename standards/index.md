@@ -24,4 +24,6 @@ tags:
 - [OpenTelemetry for Agent Observability](opentelemetry-agent-observability.md) — Vendor-neutral tracing standard for LLM calls, tool invocations, and agent spans using GenAI semantic conventions
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md) — Package agents, skills, MCP servers, and hooks into installable bundles that solve the distribution problem for agent capabilities
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md) — Package an entire agent as a version-controlled, framework-agnostic git artifact using the gitagent open standard
+- [SUDP: Secret-Use Delegation Protocol for Agentic Systems](sudp-secret-use-delegation-protocol.md) — A proposed three-role protocol — requester proposes, user authorizes, custodian redeems once — so an agent never holds reusable authority for a user's secrets
+- [Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration](symphony-orchestration-spec.md) — Symphony is OpenAI's open spec for orchestrating coding agents from an issue tracker — each open ticket becomes an isolated workspace running its own agent session
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md) — Tool definitions converge on JSON Schema across providers but differ in field names, strict modes, and wrapping structures
