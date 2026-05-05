@@ -134,6 +134,7 @@
   "agent-readiness/audit-lethal-trifecta.md": "2026-05-05",
   "agent-readiness/audit-mcp-control-plane-bypass.md": "2026-05-06",
   "agent-readiness/audit-permissions-blast-radius.md": "2026-05-05",
+  "agent-readiness/audit-pr-narrative-quality.md": "2026-05-06",
   "agent-readiness/audit-premature-completion.md": "2026-05-06",
   "agent-readiness/audit-rules-files-injection.md": "2026-05-06",
   "agent-readiness/audit-secrets-in-context.md": "2026-05-05",
