@@ -26,7 +26,7 @@ MCP is the plumbing through which agents talk to external systems. A loose `.mcp
 
 ```bash
 # Existing MCP config
-find . -maxdepth 8 \( -name "mcp.json" -o -name ".mcp.json" \) ! -path "*/node_modules/*" 2>/dev/null
+find . -maxdepth 8 \( -name "mcp.json" -o -name ".mcp.json" \) ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*" 2>/dev/null
 test -f .claude/settings.json && jq '.mcpServers // empty' .claude/settings.json
 
 # Servers reachable from this project (transcript signal)

@@ -29,7 +29,7 @@ SURFACES=$(find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o -iname "CLAUDE.local.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" -o \
   -path "*/.cursor/rules/*" -o -path "*/.cursor/mdc/*" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*")
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*")
 
 # Skill and sub-agent files (loaded on demand but counted toward the budget when active)
 SKILLS=$(find . -path "*/.claude/skills/*/SKILL.md")

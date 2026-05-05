@@ -24,10 +24,11 @@ A skill's value lives almost entirely in its description: the field the model re
 ## Step 1 — Locate Skills
 
 ```bash
-find . -path "*/.claude/skills/*/SKILL.md" \
+find . \( \
+  -path "*/.claude/skills/*/SKILL.md" \
   -o -path "*/.cursor/skills/*/SKILL.md" \
   -o -path "*/skills/*/SKILL.md" \
-  | grep -v node_modules
+\) ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*"
 ```
 
 For each found, capture: skill directory, frontmatter, body.

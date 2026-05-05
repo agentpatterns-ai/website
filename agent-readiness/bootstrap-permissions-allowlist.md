@@ -31,7 +31,7 @@ find . -maxdepth 6 \( \
   -name ".env" -o -name ".env.*" -o -name "*.pem" -o -name "*.key" -o \
   -name "id_rsa*" -o -name "id_ed25519*" -o -name "credentials" -o \
   -path "*/secrets/*" -o -path "*/.aws/*" -o -path "*/.ssh/*" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*" 2>/dev/null
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*" 2>/dev/null
 
 # Protected branches (from git remote / GitHub branch protection)
 git for-each-ref --format='%(refname:short)' refs/remotes/origin/ 2>/dev/null | grep -E "^origin/(main|master|production|release)"

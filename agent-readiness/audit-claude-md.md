@@ -29,7 +29,7 @@ find . -maxdepth 8 \( \
   -iname "copilot-instructions.md" -o \
   -path "*/.cursor/rules/*" -o -path "*/.cursor/mdc/*" -o \
   -name ".cursorrules" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*" -print
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*" -print
 ```
 
 ## Step 2 — Run Mechanical Checks
