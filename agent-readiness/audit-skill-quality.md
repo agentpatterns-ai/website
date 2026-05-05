@@ -169,6 +169,11 @@ Read-only.
 Top fix: <one-liner — usually description triggers>
 ```
 
+## Remediation
+
+- [Bootstrap Skill Template](bootstrap-skill-template.md) — opinionated `SKILL.md` skeleton for new skills or wholesale rewrites
+- [Bootstrap Tool Descriptions](bootstrap-tool-descriptions.md) — when the failing axis is description craft
+
 ## Related
 
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md)

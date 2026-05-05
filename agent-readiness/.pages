@@ -6,8 +6,14 @@ nav:
   - Bootstrap:
     - bootstrap-agents-md.md
     - bootstrap-llms-txt.md
+    - bootstrap-permissions-allowlist.md
+    - bootstrap-egress-policy.md
+    - bootstrap-mcp-config.md
+    - bootstrap-hooks-scaffold.md
     - bootstrap-precompletion-hook.md
     - bootstrap-loop-detector-hook.md
+    - bootstrap-tool-descriptions.md
+    - bootstrap-skill-template.md
     - bootstrap-eval-suite.md
   - Audit:
     - audit-agents-md.md

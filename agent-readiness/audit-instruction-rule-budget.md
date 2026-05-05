@@ -20,7 +20,7 @@ Instructions don't fail one rule at a time — they fail at the budget. Adherenc
 
 ```bash
 # Every file an agent loads on session start
-SURFACES=$(find . -maxdepth 4 \( \
+SURFACES=$(find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o -iname "CLAUDE.local.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" -o \
   -path "*/.cursor/rules/*" -o -path "*/.cursor/mdc/*" \
@@ -98,14 +98,23 @@ for surface, line, text, cls in all_rules:
 A rule is "dead" if its violation is already mechanically prevented by hooks, linters, or CI gates:
 
 ```bash
-# Rules covered by lint config
-test -f .eslintrc* && jq -r '.rules | keys[]' .eslintrc.json 2>/dev/null
-test -f biome.json && jq -r '.linter.rules | keys[]' biome.json
-test -f pyproject.toml && grep -A 50 "\[tool.ruff" pyproject.toml | grep -E "select|extend-select"
-test -f .pre-commit-config.yaml && yq '.repos[].hooks[].id' .pre-commit-config.yaml
+# Rules covered by lint config — parse explicitly so malformed configs become findings
+parse_or_finding() {
+  local f="$1" expr="${2:-empty}"
+  [[ -f "$f" ]] || return 1
+  if ! jq empty "$f" 2>/tmp/_jqerr; then
+    echo "FINDING: $f malformed JSON: $(cat /tmp/_jqerr)"; return 1
+  fi
+  jq -r "$expr" "$f"
+}
+
+[[ -f .eslintrc.json ]] && parse_or_finding .eslintrc.json '.rules | keys[]'
+[[ -f biome.json ]]     && parse_or_finding biome.json     '.linter.rules | keys[]'
+[[ -f pyproject.toml ]] && grep -A 50 "\[tool.ruff" pyproject.toml | grep -E "select|extend-select"
+[[ -f .pre-commit-config.yaml ]] && yq '.repos[].hooks[].id' .pre-commit-config.yaml
 
 # Rules covered by hooks
-test -f .claude/settings.json && jq '.hooks' .claude/settings.json
+[[ -f .claude/settings.json ]] && parse_or_finding .claude/settings.json '.hooks'
 ```
 
 For each rule in instruction surfaces, search the lint/hook coverage. A match flags the rule as dead.

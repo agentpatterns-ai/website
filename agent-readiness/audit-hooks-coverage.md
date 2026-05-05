@@ -184,11 +184,15 @@ Read-only.
 Next: <bootstrap-precompletion-hook | bootstrap-loop-detector-hook | targeted fixes>
 ```
 
+## Remediation
+
+- [Bootstrap Hooks Scaffold](bootstrap-hooks-scaffold.md) — lay down stubs for every event so enforcement has a place to land
+- [Bootstrap Pre-Completion Hook](bootstrap-precompletion-hook.md) — the single highest-leverage event; close the L2→L3 gap
+- [Bootstrap Loop Detector Hook](bootstrap-loop-detector-hook.md) — edit-count loop detection on PostToolUse
+
 ## Related
 
 - [Hooks Lifecycle](../tools/claude/hooks-lifecycle.md)
 - [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Loop Detection](../observability/loop-detection.md)
-- [Bootstrap Pre-Completion Hook](bootstrap-precompletion-hook.md)
-- [Bootstrap Loop Detector Hook](bootstrap-loop-detector-hook.md)

@@ -17,19 +17,40 @@ aliases:
 
 This section is the **entry point for an agent operating on an unfamiliar codebase**. Every page below is a self-sufficient runbook: detection commands, file templates, decision rules, validation steps, and output schemas. Pointed at a repository, an agent should be able to read one of these pages and complete the work without further research.
 
-The pages are tool-agnostic and apply to any codebase, not just this one. Background theory lives in the `docs/` sections each runbook links to; the runbooks themselves are operational.
+The principles and templates apply to any AI coding harness. The deeper detection scripts and config schemas are **shaped for Claude Code today** — paths like `.claude/settings.json`, `.claude/hooks/`, `.claude/skills/`, and the `mcp.json` schema. Cursor, Aider, Copilot, and Gemini surfaces are detected at the inventory layer (so the assess scorecard accounts for them), but parallel rubrics and config templates per harness are a follow-up — see [Status](#status). Background theory lives in the `docs/` sections each runbook links to; the runbooks themselves are operational.
 
 ## How an Agent Uses This Library
 
-If you are an AI coding agent that has been pointed at this page, follow this sequence:
+If you are an AI coding agent that has been pointed at this page, first decide the mode.
 
-1. **Establish baseline**: open [`assess-agent-readiness`](assess-agent-readiness.md) and run the inventory + scoring steps. Output the L0–L5 scorecard.
-2. **Resolve safety first**: if the scorecard flags any high-severity finding from [`audit-secrets-in-context`](audit-secrets-in-context.md) or [`audit-lethal-trifecta`](audit-lethal-trifecta.md), stop other work and remediate.
-3. **Apply the punch list in order**: the scorecard prioritizes by `(severity × ease)`. Open each named runbook and execute it.
-4. **Validate**: after each runbook, re-run [`assess-agent-readiness`](assess-agent-readiness.md). Confirm the targeted dimension's level moved.
-5. **Report**: emit a final markdown summary with before/after scores, files created, files changed, and any work that requires human approval.
+### Mode Selection
 
-If the user has pointed you at a single page (e.g. "audit our AGENTS.md"), skip the assessment and go directly to that runbook.
+**Interactive (default)** — the user opened a session with you ("follow the instructions on https://agentpatterns.ai/agent-readiness/", "run the agent readiness assessment", etc.). Narrate each step, surface findings as you go, pause at the punch list, and confirm before applying any bootstrap.
+
+**Autonomous** — the user explicitly opted out of interaction ("non-interactively", "autonomously", "headless", "no questions", invoked from CI or a scheduled job). Run the full loop, apply what is safe to apply unattended, defer the rest to a backlog, and emit a single end-of-run report.
+
+When the signal is ambiguous, default to interactive and ask one clarifying question.
+
+### Interactive Flow
+
+1. **Open** with one paragraph: what the assessment does, that you will not change files without asking, rough scope.
+2. **Assess** — run [`assess-agent-readiness`](assess-agent-readiness.md), narrating each phase ("inventorying instruction surfaces", "auditing AGENTS.md against pointer-map rules") and surfacing findings live, not only at the end.
+3. **Halt on safety** — a high finding from [`audit-secrets-in-context`](audit-secrets-in-context.md) stops everything; walk the user through rotation before any other work.
+4. **Present the punch list** — show the prioritized table; ask which items to apply now, defer, or skip.
+5. **Apply each chosen bootstrap one at a time** — explain what will change, list the files involved, apply, then re-run the matching audit and report the dimension uplift. Confirm before destructive ops (deletions, force-pushes, history rewrites) regardless of prior approvals.
+6. **Close** with a delta report (see [`assess-agent-readiness`](assess-agent-readiness.md) §Re-Run) and the list of deferred items.
+
+### Autonomous Flow
+
+1. **Assess** — run [`assess-agent-readiness`](assess-agent-readiness.md) end-to-end, no commentary.
+2. **Halt on safety** — any high finding from [`audit-secrets-in-context`](audit-secrets-in-context.md) or a `(1,1,1)` principal in [`audit-lethal-trifecta`](audit-lethal-trifecta.md) aborts the run; emit only that finding.
+3. **Auto-apply safe-by-construction items only** — pure additions where no file exists (greenfield [`bootstrap-llms-txt`](bootstrap-llms-txt.md), default-deny [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md), [`bootstrap-hooks-scaffold`](bootstrap-hooks-scaffold.md)), template scaffolds with no merge required, and config edits with punch-list `ease ≥ 4` and `severity ≥ 3`. Anything that mutates user content, requires user-supplied context (incidents, gotchas, project conventions), or is destructive is deferred.
+4. **File backlog items** — for each deferred runbook, file an issue in the project's tracker using whatever tooling you have available (GitHub via `gh`, Linear, Jira, etc., detected from the repo configuration or your own MCP/tool surface). If no tracker is reachable, append to `agent-readiness-backlog.md` at the repo root. One item per runbook, including the punch-list score, the dimension uplift it would deliver, and the reason it was deferred.
+5. **Emit the report** — the standard scorecard plus an "Applied / Deferred" split and pointers to the filed issues or backlog file.
+
+### Single-Page Invocation
+
+If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the assessment and run that page directly. Mode still applies: narrate interactively, or run silently and emit one report autonomously.
 
 ## Operating Principles
 
@@ -44,8 +65,10 @@ If the user has pointed you at a single page (e.g. "audit our AGENTS.md"), skip 
 | Type | Purpose | Pages |
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
-| **Bootstrap** | Generate or scaffold missing artifacts | 5 |
+| **Bootstrap** | Generate or scaffold missing artifacts | 11 |
 | **Audit** | Check existing artifacts; report findings | 9 |
+
+Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
 
 ### Assess
 
@@ -53,11 +76,19 @@ If the user has pointed you at a single page (e.g. "audit our AGENTS.md"), skip 
 
 ### Bootstrap
 
-- [`bootstrap-agents-md`](bootstrap-agents-md.md) — Generate root and subdirectory `AGENTS.md`
-- [`bootstrap-llms-txt`](bootstrap-llms-txt.md) — Generate `/llms.txt` and `/llms-full.txt`
-- [`bootstrap-precompletion-hook`](bootstrap-precompletion-hook.md) — Scaffold a Stop-event verification gate
-- [`bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md) — Scaffold an edit-count loop detector
-- [`bootstrap-eval-suite`](bootstrap-eval-suite.md) — Scaffold `evals/` with paired baseline/with-skill runner
+| Runbook | Closes the gap from |
+|---------|---------------------|
+| [`bootstrap-agents-md`](bootstrap-agents-md.md) — root + subdirectory `AGENTS.md` | [`audit-agents-md`](audit-agents-md.md) |
+| [`bootstrap-llms-txt`](bootstrap-llms-txt.md) — `/llms.txt` and `/llms-full.txt` | (no audit; greenfield) |
+| [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md) — default-deny `.claude/settings.json` | [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) |
+| [`bootstrap-egress-policy`](bootstrap-egress-policy.md) — host allowlist + trifecta decomposition | [`audit-lethal-trifecta`](audit-lethal-trifecta.md) |
+| [`bootstrap-mcp-config`](bootstrap-mcp-config.md) — `.mcp.json` with per-server scope | [`audit-tool-descriptions`](audit-tool-descriptions.md), [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) |
+| [`bootstrap-hooks-scaffold`](bootstrap-hooks-scaffold.md) — `.claude/hooks/` stubs for every event | [`audit-hooks-coverage`](audit-hooks-coverage.md) |
+| [`bootstrap-precompletion-hook`](bootstrap-precompletion-hook.md) — Stop-event verification gate | [`audit-hooks-coverage`](audit-hooks-coverage.md) |
+| [`bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md) — edit-count loop detector | [`audit-hooks-coverage`](audit-hooks-coverage.md) |
+| [`bootstrap-tool-descriptions`](bootstrap-tool-descriptions.md) — rewrite tool descriptions to spec | [`audit-tool-descriptions`](audit-tool-descriptions.md) |
+| [`bootstrap-skill-template`](bootstrap-skill-template.md) — opinionated `SKILL.md` skeleton | [`audit-skill-quality`](audit-skill-quality.md) |
+| [`bootstrap-eval-suite`](bootstrap-eval-suite.md) — `evals/` with paired baseline/with-skill runner | (no audit; greenfield) |
 
 ### Audit
 
@@ -73,7 +104,12 @@ If the user has pointed you at a single page (e.g. "audit our AGENTS.md"), skip 
 
 ## Status
 
-These pages are **specifications and runbooks**. They are written so an agent can execute them today using common tools (bash, grep, jq, python). Promotion to packaged `SKILL.md` files under `.claude/skills/` (or another tool's equivalent) is a follow-up; the pages are the source of truth in either form.
+These pages are **specifications and runbooks**. They are written so an agent can execute them today using common tools (bash, grep, jq, python). The pages are the source of truth.
+
+Two follow-ups are scoped but not done in this iteration:
+
+- **Promotion to packaged skills** under `.claude/skills/agent-readiness/` (or another tool's equivalent) so the runbooks are description-matched at session start, not URL-pointed by a human
+- **Parallel rubrics and config templates per harness** (Cursor, Aider, Copilot) — today the inventory detects them, but the deeper checks and bootstrap templates are Claude-Code-shaped
 
 ## Related
 
