@@ -135,6 +135,7 @@
   "agent-readiness/bootstrap-precompletion-hook.md": "2026-05-05",
   "agent-readiness/bootstrap-skill-template.md": "2026-05-05",
   "agent-readiness/bootstrap-tool-descriptions.md": "2026-05-05",
+  "agent-readiness/harness-translation.md": "2026-05-05",
   "agent-readiness/index.md": "2026-05-05",
   "anti-patterns/abstraction-bloat.md": "2026-04-25",
   "anti-patterns/anthropomorphized-agent.md": "2026-04-18",
