@@ -14,6 +14,9 @@ aliases:
 
 > Generate a network egress allowlist, decompose lethal-trifecta principals, configure URL exfiltration guards, validate the trifecta is closed.
 
+!!! info "Harness assumption"
+    Templates target Claude Code (`.claude/settings.json`, sub-agent frontmatter). The egress-allowlist principle and trifecta decomposition apply to any harness — translate to your tool's permission and sub-agent equivalents. See [Assumptions](index.md#assumptions).
+
 The cheapest leg to remove from the [lethal trifecta](../security/lethal-trifecta-threat-model.md) is usually egress — restrict to a known allowlist, route external operations through a separate non-private-data principal, and block silent side-effect channels (image loads, webhook fan-out). This is the paired remediation for [`audit-lethal-trifecta`](audit-lethal-trifecta.md). Sources: [agent network egress policy](../security/agent-network-egress-policy.md), [URL exfiltration guard](../security/url-exfiltration-guard.md), [action selector pattern](../security/action-selector-pattern.md).
 
 ## Step 1 — Detect Current State

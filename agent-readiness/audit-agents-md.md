@@ -10,9 +10,14 @@ aliases:
   - review AGENTS.md for bloat
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-agents-md`](../../.claude/skills/agent-readiness-audit-agents-md/SKILL.md)
+
 # Audit AGENTS.md
 
 > Locate every `AGENTS.md` and equivalent, run mechanical checks against pointer-map rules, validate links and commands, emit findings.
+
+!!! info "Harness assumption"
+    `AGENTS.md` is the open standard; the same checks apply to `CLAUDE.md`, `.cursor/rules/`, `copilot-instructions.md`, and `GEMINI.md`. Audit any instruction file that loads on session start. See [Assumptions](index.md#assumptions).
 
 `AGENTS.md` files drift. A file written correctly six months ago now misleads agents into deprecated commands, embeds knowledge that should have linked out, and exceeds the budget that makes it useful. This runbook produces a structured findings report against the published rules from the [table-of-contents pattern](../instructions/agents-md-as-table-of-contents.md) and [design patterns](../instructions/agents-md-design-patterns.md).
 

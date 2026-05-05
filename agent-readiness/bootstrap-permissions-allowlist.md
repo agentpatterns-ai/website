@@ -14,6 +14,9 @@ aliases:
 
 > Detect tool usage from transcripts and CI, generate a default-deny permissions block with sensitive-path deny and a tight Bash allowlist, validate against blast-radius rules.
 
+!!! info "Harness assumption"
+    Templates target Claude Code (`.claude/settings.json` allow/deny/ask schema). The default-deny posture and category-based allowlist apply to any harness — translate to Cursor's `permissions`, Copilot's tool gates, or your runtime's equivalent. See [Assumptions](index.md#assumptions).
+
 A capable agent with no permission boundary is a production incident waiting for a prompt-injection vector. This runbook generates the runtime constraint the agent operates under — paired remediation for [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md). Rules from [blast radius containment](../security/blast-radius-containment.md), [permission-gated commands](../security/permission-gated-commands.md), and [transcript-driven permission allowlist](../security/transcript-driven-permission-allowlist.md).
 
 ## Step 1 — Detect Current State

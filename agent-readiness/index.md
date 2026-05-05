@@ -17,7 +17,28 @@ aliases:
 
 This section is the **entry point for an agent operating on an unfamiliar codebase**. Every page below is a self-sufficient runbook: detection commands, file templates, decision rules, validation steps, and output schemas. Pointed at a repository, an agent should be able to read one of these pages and complete the work without further research.
 
-The principles and templates apply to any AI coding harness. The deeper detection scripts and config schemas are **shaped for Claude Code today** — paths like `.claude/settings.json`, `.claude/hooks/`, `.claude/skills/`, and the `mcp.json` schema. Cursor, Aider, Copilot, and Gemini surfaces are detected at the inventory layer (so the assess scorecard accounts for them), but parallel rubrics and config templates per harness are a follow-up — see [Status](#status). Background theory lives in the `docs/` sections each runbook links to; the runbooks themselves are operational.
+## Assumptions
+
+Three things shape what these runbooks expect of the project they run against. Read before applying — if any assumption is wrong for your project, translate or skip.
+
+### Harness
+
+Templates, paths, and config schemas are **shaped for Claude Code today** — `.claude/settings.json`, `.claude/hooks/`, `.claude/skills/`, `.mcp.json`. The principles transfer to Cursor, Aider, Copilot, and Gemini, but the file locations and config formats differ. The inventory step in [`assess-agent-readiness`](assess-agent-readiness.md) detects those harnesses; parallel rubrics and config templates per harness are a follow-up — see [Known limitations](#known-limitations). When applying a runbook on a non-Claude-Code project, treat the templates as shape — adapt paths and schemas to your harness's equivalents.
+
+### Platform
+
+Detection scripts use bash + `find` + `jq` + `yq` + `python3`. Windows users should run the runbooks under WSL or Git Bash. PowerShell-only environments will need to translate the commands. Hooks and CI templates assume a Unix-shell runtime.
+
+### Applicability
+
+Not every runbook applies to every project:
+
+- [`bootstrap-llms-txt`](bootstrap-llms-txt.md) is for projects that publish a documentation site or external API reference. Internal-only repos with no public docs should skip it.
+- [`bootstrap-eval-suite`](bootstrap-eval-suite.md) needs an agent-customizable unit (skill, sub-agent, or system prompt fragment) to measure. A project with none yet has nothing to evaluate — defer until one ships.
+- [`bootstrap-mcp-config`](bootstrap-mcp-config.md) is for projects that connect to external services through MCP. Skip if the agent talks only to the local filesystem and the user.
+- [`bootstrap-egress-policy`](bootstrap-egress-policy.md) and [`audit-lethal-trifecta`](audit-lethal-trifecta.md) become load-bearing once an agent reads private data **and** processes untrusted input **and** has egress. Single-leg agents pass these by construction.
+
+The `assess` runbook flags inapplicable pages instead of failing them. Background theory lives in the `docs/` sections each runbook links to; the runbooks themselves are operational.
 
 ## How an Agent Uses This Library
 
@@ -45,7 +66,7 @@ When the signal is ambiguous, default to interactive and ask one clarifying ques
 1. **Assess** — run [`assess-agent-readiness`](assess-agent-readiness.md) end-to-end, no commentary.
 2. **Halt on safety** — any high finding from [`audit-secrets-in-context`](audit-secrets-in-context.md) or a `(1,1,1)` principal in [`audit-lethal-trifecta`](audit-lethal-trifecta.md) aborts the run; emit only that finding.
 3. **Auto-apply safe-by-construction items only** — pure additions where no file exists (greenfield [`bootstrap-llms-txt`](bootstrap-llms-txt.md), default-deny [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md), [`bootstrap-hooks-scaffold`](bootstrap-hooks-scaffold.md)), template scaffolds with no merge required, and config edits with punch-list `ease ≥ 4` and `severity ≥ 3`. Anything that mutates user content, requires user-supplied context (incidents, gotchas, project conventions), or is destructive is deferred.
-4. **File backlog items** — for each deferred runbook, file an issue in the project's tracker using whatever tooling you have available (GitHub via `gh`, Linear, Jira, etc., detected from the repo configuration or your own MCP/tool surface). If no tracker is reachable, append to `agent-readiness-backlog.md` at the repo root. One item per runbook, including the punch-list score, the dimension uplift it would deliver, and the reason it was deferred.
+4. **File backlog items** — for each deferred runbook, file an issue in the project's tracker using whatever tooling you have available (GitHub via `gh`, Linear, Jira, etc., detected from the repo configuration or your own MCP/tool surface). If no tracker is reachable, append to `agent-readiness-backlog.md` at the repo root (a sidecar file this runbook creates if absent — rename to match the project's existing convention if one exists). One item per runbook, including the punch-list score, the dimension uplift it would deliver, and the reason it was deferred.
 5. **Emit the report** — the standard scorecard plus an "Applied / Deferred" split and pointers to the filed issues or backlog file.
 
 ### Single-Page Invocation
@@ -102,14 +123,13 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 - [`audit-secrets-in-context`](audit-secrets-in-context.md) — Live credentials in agent-readable files
 - [`audit-lethal-trifecta`](audit-lethal-trifecta.md) — Per-agent map of private data + untrusted content + egress
 
-## Status
+## Known limitations
 
-These pages are **specifications and runbooks**. They are written so an agent can execute them today using common tools (bash, grep, jq, python). The pages are the source of truth.
+These pages are **specifications and runbooks** — written so an agent can execute them with bash, `jq`, and `python` available. The pages themselves are the source of truth.
 
-Two follow-ups are scoped but not done in this iteration:
+One known limitation:
 
-- **Promotion to packaged skills** under `.claude/skills/agent-readiness/` (or another tool's equivalent) so the runbooks are description-matched at session start, not URL-pointed by a human
-- **Parallel rubrics and config templates per harness** (Cursor, Aider, Copilot) — today the inventory detects them, but the deeper checks and bootstrap templates are Claude-Code-shaped
+- **Templates are Claude-Code-shaped.** The runbooks ship as packaged Claude Code skills under `.claude/skills/agent-readiness-*` so the harness can description-match them at session start. The inventory step detects Cursor, Aider, Copilot, and Gemini, but the deeper checks and bootstrap templates use Claude Code paths and config schemas. Translating to other harnesses is a manual step until parallel templates ship.
 
 ## Related
 

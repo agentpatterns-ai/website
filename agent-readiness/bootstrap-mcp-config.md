@@ -14,6 +14,12 @@ aliases:
 
 > Detect declared MCP servers, generate or refactor `.mcp.json` with per-server scope and allowlist, wire into harness settings, validate.
 
+!!! info "Harness assumption"
+    Templates target Claude Code's `.mcp.json` and `.claude/settings.json` per-server allowlist. Cursor, Copilot, and any other MCP-aware harness use parallel mechanisms — translate the per-server scope and allowlist to your tool's equivalents. See [Assumptions](index.md#assumptions).
+
+!!! info "Applicability"
+    Skip this runbook if the agent talks only to the local filesystem and the user. MCP is for connections to external services — issue trackers, databases, hosted APIs, browser automation. A purely local agent has nothing to configure here.
+
 MCP is the plumbing through which agents talk to external systems. A loose `.mcp.json` configuration grants every connected server the same broad surface; a tight one scopes each server to the minimum it needs and pairs cleanly with [`bootstrap-egress-policy`](bootstrap-egress-policy.md) and [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md). Sources: [MCP protocol](../standards/mcp-protocol.md), [MCP server design](../tool-engineering/mcp-server-design.md).
 
 ## Step 1 — Detect Current State
@@ -169,7 +175,7 @@ In `AGENTS.md`:
 ## MCP servers
 
 Configured in `.mcp.json`. Per-server tool scopes in `.claude/settings.json`.
-Required env vars: `GITHUB_TOKEN`, `LINEAR_API_KEY` — set in your shell or via direnv.
+Required env vars: `GITHUB_TOKEN`, `LINEAR_API_KEY` — set via your shell, direnv, dotenvx, doppler, 1Password CLI, or your project's existing secret-management mechanism.
 ```
 
 ## Idempotency

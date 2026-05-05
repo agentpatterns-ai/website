@@ -10,9 +10,14 @@ aliases:
   - prompt injection trifecta map
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-lethal-trifecta`](../../.claude/skills/agent-readiness-audit-lethal-trifecta/SKILL.md)
+
 # Audit Lethal Trifecta
 
 > Enumerate every principal, classify each tool, build the per-principal three-leg matrix, flag any complete trifecta, recommend the cheapest leg to remove.
+
+!!! info "Harness assumption"
+    Principal discovery uses Claude Code paths (`.claude/settings.json`, `.claude/agents/`) and CI workflow files. The trifecta model itself (private data + untrusted content + egress) is harness-agnostic — translate principal enumeration to your harness's sub-agent and automation surfaces. See [Assumptions](index.md#assumptions).
 
 The [lethal trifecta](../security/lethal-trifecta-threat-model.md) is the smallest configuration that turns prompt injection from curiosity to exfiltration. An agent that reads private data, processes untrusted content, and can communicate externally is a complete attack surface — adding any defense to that combination is harder than removing one of the three legs.
 

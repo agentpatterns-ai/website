@@ -10,9 +10,14 @@ aliases:
   - completion gate scaffold
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-bootstrap-precompletion-hook`](../../.claude/skills/agent-readiness-bootstrap-precompletion-hook/SKILL.md)
+
 # Bootstrap Pre-Completion Hook
 
 > Detect existing CI checks, generate a Stop-event hook that runs them, ship a checklist with severity and remediation hints, wire into the harness.
+
+!!! info "Harness assumption"
+    The hook script targets Claude Code's `Stop` event and `.claude/hooks/`/`.claude/checklists/` paths. Cursor and other harnesses with task-end events use a different file format — translate the script's input parsing and checklist location accordingly. See [Assumptions](index.md#assumptions).
 
 The [pre-completion checklist](../verification/pre-completion-checklists.md) is the harness gate that holds the agent at task boundary, runs deterministic checks, and either lets the agent exit or hands back failures. This runbook generates one from the project's existing CI config — never inventing checks.
 
@@ -38,7 +43,7 @@ Decision rules:
 
 - **No harness directory** → ask the user which tool the project uses; do not create `.claude/` if the project uses Cursor
 - **Stop hook already wired** → audit it ([`audit-hooks-coverage`](audit-hooks-coverage.md)); skip generation if clean
-- **No CI checks discovered** → halt and recommend bootstrapping CI first; a pre-completion hook with no checks to run is theatre
+- **No discoverable checks** → no CI workflows, no `Makefile`/`justfile` targets, no `package.json` scripts, no `.pre-commit-config.yaml`. The hook has nothing to run. Lowest-overhead path: add a `Makefile` target wrapping the project's lint/test commands and re-run this runbook. Defer if the project genuinely has no automated checks; a pre-completion hook with nothing to run is theatre.
 
 ## Step 2 — Inventory Checks by Task Type
 
