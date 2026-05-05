@@ -46,6 +46,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Production MCP Agent Stack](production-mcp-agent-stack.md) — Sequence six MCP decisions -- server location, tool grouping, schema delivery, result processing, auth, token storage -- into a coherent production deployment
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md) — Mark individual MCP tool outputs as durable through Claude Code's compaction pipeline with `_meta["anthropic/maxResultSizeChars"]`
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md) — When a proprietary extension system gets replaced by an open protocol, rebuild on the standard rather than port the old architecture
+- [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](scoped-mcp-server-discovery.md) — Resolve duplicate MCP server definitions across user, workspace, and project config files using a most-specific-wins precedence rule
 
 ## Skills
 
@@ -55,6 +56,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [CLI-First Skill Design](cli-first-skill-design.md) — Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — Practical patterns for building, testing, and troubleshooting agent skills -- categories, description craft, implementation patterns, and debugging
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
+- [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure

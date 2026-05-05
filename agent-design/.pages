@@ -34,6 +34,7 @@ nav:
       - task-specific-vs-role-based-agents.md
       - three-reasoning-spaces.md
   - "Memory & State":
+      - abstention-aware-memory-retrieval.md
       - agent-memory-patterns.md
       - harness-memory-coupling.md
       - ast-guided-agent-memory.md
@@ -63,6 +64,7 @@ nav:
       - evaluator-optimizer.md
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
+      - inference-time-tool-call-reviewer.md
       - loop-strategy-spectrum.md
       - plan-compliance-in-agents.md
       - progressive-disclosure-agents.md
@@ -81,11 +83,13 @@ nav:
       - behavioral-drivers-agent-success.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
+      - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
       - feedback-capability-equalizer.md
       - heuristic-effort-scaling.md
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
+      - long-running-agents.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
