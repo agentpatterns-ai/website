@@ -1,6 +1,7 @@
 title: Agent Readiness
 nav:
   - index.md
+  - harness-translation.md
   - Assess:
     - assess-agent-readiness.md
   - Bootstrap:
