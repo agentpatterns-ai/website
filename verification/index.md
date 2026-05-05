@@ -33,6 +33,7 @@ tags:
 
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Test decision quality and end-state for non-deterministic agent systems using capability matrices, three grading methods, and acceptable variance thresholds
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Apply coverage-guided fuzzing to multi-agent systems using interaction path coverage as the exploration signal to surface coordination failures and emergent failure modes
+- [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
 
 ## Regression Testing
 

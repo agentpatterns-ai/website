@@ -57,6 +57,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
+      - ast-grounded-doc-critic-loop.md
       - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md
       - gepa-reflective-prompt-evolution.md
@@ -90,6 +91,7 @@ nav:
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
       - long-running-agents.md
+      - progressive-spend-threshold-alerting.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
@@ -113,6 +115,7 @@ nav:
       - observability-driven-harness-evolution.md
       - per-model-harness-tuning.md
       - persistent-connection-agent-transport.md
+      - prebuilt-agent-environments.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md

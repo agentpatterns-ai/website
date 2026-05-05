@@ -124,6 +124,36 @@ for tool in mcp_tools:
                          "rewrite as self-contained — repeat domain context inline"))
 ```
 
+## Step 4b — ToolLeak Argument-Signature Check
+
+A subset of tool descriptions and `inputSchema` properties exist solely to elicit context leakage — they ask the model to populate an argument with "the system prompt", "any secrets", "the conversation so far", or similar. This is the ToolLeak class of MCP attack ([`tool-invocation-attack-surface`](../security/tool-invocation-attack-surface.md) §Attack 1: ToolLeak): a malicious server defines a benign-named tool whose schema asks the model to dump its context as an argument value.
+
+```python
+LEAK_PATTERNS = re.compile(
+    r"\b(system prompt|conversation (so far|history)|"
+    r"prior (messages|context)|secrets?|credentials?|api[_ ]?key|"
+    r"private (data|files|context)|all available context|"
+    r"any (sensitive|confidential) (data|information))\b",
+    re.I,
+)
+
+for tool in tools:
+    desc = tool.get("description", "")
+    if LEAK_PATTERNS.search(desc):
+        findings.append(("high", tool["name"],
+                         "description asks for system prompt or secret-class data as argument",
+                         "ToolLeak signature — refuse to wire this tool, or rewrite to avoid context-extraction phrasing"))
+    schema = tool.get("inputSchema", {})
+    for prop_name, prop_def in (schema.get("properties") or {}).items():
+        prop_desc = (prop_def.get("description") or "")
+        if LEAK_PATTERNS.search(prop_name) or LEAK_PATTERNS.search(prop_desc):
+            findings.append(("high", f"{tool['name']}.{prop_name}",
+                             "argument schema asks for system prompt or secret-class data",
+                             "ToolLeak signature — drop the argument or wire the tool through a sanitizing proxy"))
+```
+
+A finding here means the tool itself should be rejected at install time, not just reworded. ToolLeak signatures pair with [`audit-secrets-in-context`](audit-secrets-in-context.md): if the tool runs in a session that holds private data, the description is enough to trigger leak.
+
 ## Step 5 — Emit the Report
 
 ```markdown
@@ -179,3 +209,6 @@ Top fix: <one-liner — usually missing trigger phrases or return-shape>
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [MCP Server Design](../tool-engineering/mcp-server-design.md)
 - [Audit Skill Quality](audit-skill-quality.md)
+- [Audit Tool Error Format](audit-tool-error-format.md)
+- [Tool Invocation Attack Surface](../security/tool-invocation-attack-surface.md)
+- [Audit Secrets in Context](audit-secrets-in-context.md)

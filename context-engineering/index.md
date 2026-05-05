@@ -70,6 +70,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour
 - [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
+- [AOCI: Symbolic-Semantic Repository Indexing](aoci-symbolic-semantic-indexing.md) — A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
 
