@@ -86,8 +86,8 @@ If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the as
 | Type | Purpose | Pages |
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
-| **Bootstrap** | Generate or scaffold missing artifacts | 15 |
-| **Audit** | Check existing artifacts; report findings | 16 |
+| **Bootstrap** | Generate or scaffold missing artifacts | 22 |
+| **Audit** | Check existing artifacts; report findings | 25 |
 
 Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
 
@@ -102,6 +102,7 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 | [`bootstrap-agents-md`](bootstrap-agents-md.md) — root + subdirectory `AGENTS.md` | [`audit-agents-md`](audit-agents-md.md) |
 | [`bootstrap-llms-txt`](bootstrap-llms-txt.md) — `/llms.txt` and `/llms-full.txt` | (no audit; greenfield) |
 | [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md) — default-deny `.claude/settings.json` | [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) |
+| [`bootstrap-evidence-based-allowlist`](bootstrap-evidence-based-allowlist.md) — `PermissionRequest` + `PostToolUse` hooks promoting Bash commands to allow rules after N successful approvals, with hard-deny list | (extends `bootstrap-permissions-allowlist`) |
 | [`bootstrap-egress-policy`](bootstrap-egress-policy.md) — host allowlist + trifecta decomposition | [`audit-lethal-trifecta`](audit-lethal-trifecta.md) |
 | [`bootstrap-mcp-config`](bootstrap-mcp-config.md) — `.mcp.json` with per-server scope | [`audit-tool-descriptions`](audit-tool-descriptions.md), [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) |
 | [`bootstrap-hooks-scaffold`](bootstrap-hooks-scaffold.md) — `.claude/hooks/` stubs for every event | [`audit-hooks-coverage`](audit-hooks-coverage.md) |
@@ -114,6 +115,12 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 | [`bootstrap-subagent-template`](bootstrap-subagent-template.md) — opinionated sub-agent skeleton with scoped tools, isolation, injection guard | [`audit-subagent-definitions`](audit-subagent-definitions.md), [`audit-handoff-protocols`](audit-handoff-protocols.md) |
 | [`bootstrap-plan-mode`](bootstrap-plan-mode.md) — plan-mode default + plan-review checklist + CI flag wiring | (no audit; configuration) |
 | [`bootstrap-tool-test-harness`](bootstrap-tool-test-harness.md) — per-tool isolated selection / parameter / output tests with CI gate | (extends `bootstrap-eval-suite`) |
+| [`bootstrap-frozen-spec-file`](bootstrap-frozen-spec-file.md) — SPEC.json + PreToolUse hook + re-read directive that survives compaction | (no audit; configuration) |
+| [`bootstrap-otel-init`](bootstrap-otel-init.md) — Claude Code OTel exporter, metrics, and tool-decision events with reachability smoke test | [`audit-debug-log-retention`](audit-debug-log-retention.md) |
+| [`bootstrap-url-fetch-gate`](bootstrap-url-fetch-gate.md) — wrap `WebFetch` with a public-web index check (Common Crawl); default-deny in headless mode | [`audit-lethal-trifecta`](audit-lethal-trifecta.md), [`audit-mcp-control-plane-bypass`](audit-mcp-control-plane-bypass.md) |
+| [`bootstrap-human-review-gate-pr`](bootstrap-human-review-gate-pr.md) — CODEOWNERS + branch protection for tiered AI/human review on agent-authored PRs | (no audit; configuration) |
+| [`bootstrap-reasoning-execution-routing`](bootstrap-reasoning-execution-routing.md) — per-role model routing (frontier for reasoning, fast/cheap for execution) with pinned model IDs and OTel smoke-test | (no audit; configuration) |
+| [`bootstrap-agent-commit-attribution`](bootstrap-agent-commit-attribution.md) — dedicated signing key, structured trailers, branch-protection rule, and rotation playbook | [`audit-agent-built-code-health`](audit-agent-built-code-health.md), [`audit-agent-pr-quality-metrics`](audit-agent-pr-quality-metrics.md) |
 
 ### Audit
 
@@ -125,15 +132,25 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 - [`audit-tool-descriptions`](audit-tool-descriptions.md) — Tool / MCP description quality (incl. ToolLeak signatures)
 - [`audit-tool-error-format`](audit-tool-error-format.md) — RFC 9457 problem+json compliance and token cost on tool error responses
 - [`audit-tool-idempotency`](audit-tool-idempotency.md) — MCP `idempotentHint` / `destructiveHint` / `readOnlyHint` annotation hygiene and retry-safety
+- [`audit-tool-output-token-cost`](audit-tool-output-token-cost.md) — Per-tool output sizing measured from real invocations; band classification and pagination remediations
 - [`audit-hooks-coverage`](audit-hooks-coverage.md) — Lifecycle event coverage
 - [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) — Allow/deny lists, sandboxing
 - [`audit-secrets-in-context`](audit-secrets-in-context.md) — Live credentials in agent-readable files
 - [`audit-lethal-trifecta`](audit-lethal-trifecta.md) — Per-agent map of private data + untrusted content + egress
+- [`audit-rules-files-injection`](audit-rules-files-injection.md) — Rules and instruction files scanned for injection markers, classified by trust tier
 - [`audit-subagent-definitions`](audit-subagent-definitions.md) — Sub-agent frontmatter, tools tightness, local trifecta, isolation
 - [`audit-slash-command-catalog`](audit-slash-command-catalog.md) — Model-invocable command surface, side-effect gates, listing budget
 - [`audit-handoff-protocols`](audit-handoff-protocols.md) — Multi-agent output schema declarations, raw-transcript forwarding, uncertainty preservation
-- [`audit-eval-suite`](audit-eval-suite.md) — Eval scaffold completeness, case provenance, idle-state / build-parity / per-model ablation coverage
-- [`audit-debug-log-retention`](audit-debug-log-retention.md) — Persisted log surfaces, secret redaction, retention bounds, default-off posture
+- [`audit-fan-out-capacity`](audit-fan-out-capacity.md) — Parallel dispatch sites validated against rate-limit tier, cost budget, staggering, and wait-for-all semantics
+- [`audit-eval-suite`](audit-eval-suite.md) — Eval scaffold completeness, case provenance, idle-state / build-parity / per-model ablation, judge-calibration coverage
+- [`audit-premature-completion`](audit-premature-completion.md) — Test suite run pre/post each agent PR; classification on the fixed-correct-code / failing-tests-remain matrix
+- [`audit-debug-log-retention`](audit-debug-log-retention.md) — Persisted log surfaces, secret redaction, backend-side processor rules, retention bounds, default-off posture
+- [`audit-confirmation-gate-logs`](audit-confirmation-gate-logs.md) — Consequential-action coverage, gate-decision log fidelity, alert-fatigue indicators, Lies-in-the-Loop dialog rendering, headless-pipeline posture
+- [`audit-mcp-control-plane-bypass`](audit-mcp-control-plane-bypass.md) — Off-protocol egress paths (shell, raw HTTP, DB drivers, headless browser, in-thread side-channels), skipped-plane clients, argument-blind policies
+- [`audit-action-audit-divergence`](audit-action-audit-divergence.md) — F1-F4 divergence taxonomy walked against the runtime; chokepoint, integrity mechanism, liveness probe, and target validator named or flagged
+- [`audit-trojan-hippo-memory`](audit-trojan-hippo-memory.md) — Long-term memory write surfaces classified by source-trust; trifecta-leg removal validated; cross-session `(1,1,1)` pivot flagged that per-session trifecta audits miss
+- [`audit-agent-built-code-health`](audit-agent-built-code-health.md) — Inventory of agent-authored files, structural-complexity ratio vs repo baseline, single-impl factories, refactoring share, shadow utilities, ADR compliance
+- [`audit-agent-pr-quality-metrics`](audit-agent-pr-quality-metrics.md) — Agent PR merge rate, comment volume, conflict rate, and post-merge defect rate against AIDev/AgenticFlict/Beyond-Bug-Fixes baselines; task-routing fit per agent class
 
 ## Known limitations
 
