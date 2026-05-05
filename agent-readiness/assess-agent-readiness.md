@@ -28,11 +28,11 @@ git rev-parse --is-bare-repository | grep -q false || { echo "FATAL: bare repo";
 
 ## Step 1 — Inventory
 
-Enumerate every agent-relevant artifact. Run these in parallel, capture results:
+Enumerate every agent-relevant artifact. Run these in parallel, capture results. `maxdepth` is set generously (8) to cover monorepos; tighten only on confirmed-flat repos.
 
 ```bash
 # Instruction surfaces
-find . -maxdepth 4 -type f \( \
+find . -maxdepth 8 -type f \( \
   -iname "AGENTS.md" -o \
   -iname "CLAUDE.md" -o \
   -iname "CLAUDE.local.md" -o \
@@ -42,30 +42,40 @@ find . -maxdepth 4 -type f \( \
   -name ".cursorrules" -o \
   -name ".aider.conf.yml" -o \
   -name "GEMINI.md" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*"
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/dist/*" ! -path "*/build/*"
 
 # Skill / sub-agent surfaces
-find . -path "*/.claude/skills/*/SKILL.md" \
-  -o -path "*/.claude/agents/*.md" \
-  -o -path "*/.claude/commands/*.md" \
-  -o -name "settings.json" -path "*/.claude/*"
+find . -maxdepth 8 \( \
+  -path "*/.claude/skills/*/SKILL.md" -o \
+  -path "*/.claude/agents/*.md" -o \
+  -path "*/.claude/commands/*.md" -o \
+  -path "*/.cursor/skills/*/SKILL.md" -o \
+  -path "*/.cursor/hooks/*" \
+\) ! -path "*/node_modules/*" ! -path "*/.git/*"
 
 # Discoverability
 ls -la llms.txt llms-full.txt docs/llms.txt docs/llms-full.txt 2>/dev/null
 
 # Verification
-find . -maxdepth 3 -type d -name "evals" -o -name "evaluations"
+find . -maxdepth 4 -type d \( -name "evals" -o -name "evaluations" \) ! -path "*/node_modules/*"
 ls -la .github/workflows/*.y*ml 2>/dev/null
 
-# Permissions / hooks
-test -f .claude/settings.json && jq '.permissions, .hooks' .claude/settings.json 2>/dev/null
+# Permissions / hooks — parse explicitly; surface malformed JSON as a finding,
+# do not silently swallow with `2>/dev/null`
+if [[ -f .claude/settings.json ]]; then
+  if ! jq empty .claude/settings.json 2>/tmp/_jqerr; then
+    echo "FINDING: settings.json malformed — $(cat /tmp/_jqerr)"
+  else
+    jq '{permissions, hooks, mcpServers}' .claude/settings.json
+  fi
+fi
 test -d .claude/hooks && ls .claude/hooks/
 
-# MCP servers
-find . -maxdepth 3 -name "mcp.json" -o -name ".mcp.json" 2>/dev/null
+# MCP servers (deeper search; some monorepos place the file in a subpackage)
+find . -maxdepth 6 \( -name "mcp.json" -o -name ".mcp.json" \) ! -path "*/node_modules/*"
 ```
 
-Record presence/absence per artifact. The result is the `inventory` object referenced below.
+Record presence/absence per artifact. The result is the `inventory` object referenced below. **Every silent failure (malformed JSON, missing-but-expected file, permission-denied read) becomes a finding** — never let a parse error short-circuit the inventory into a false negative.
 
 ## Step 2 — Run Audits in Parallel
 
@@ -137,13 +147,33 @@ The aggregate level is the **minimum across dimensions** (a project at L4 instru
 
 ## Step 4 — Build the Punch List
 
-Order recommendations by `severity × ease`:
+Score every candidate runbook on two axes and order by the product:
 
-1. Any `high` security finding → immediate action (no other work proceeds)
-2. Any L0 dimension → corresponding bootstrap runbook
-3. Any L1 dimension → audit + targeted bootstrap
-4. Mid-level gaps (L2–L3) → audit-driven refinement
-5. Polish (L4–L5) → backlog, not active
+| Axis | Values | Weight |
+|------|--------|-------:|
+| **Severity** | `5` security high, `4` L0 dimension, `3` L1 dimension, `2` audit findings without level regression, `1` polish | 1.0 |
+| **Ease** | `5` mechanical (config edit), `4` template scaffold, `3` requires user probe, `2` requires user content (incidents, gotchas), `1` requires architectural decisions | 0.6 |
+
+Score = `severity + (ease × 0.6)`. Sort descending. Ties broken by severity, then by dimension order (Security > Instructions > Harness > Verification — security gates everything).
+
+Worked examples:
+
+| Candidate | Severity | Ease | Score | Reason |
+|-----------|---------:|-----:|------:|--------|
+| `audit-secrets-in-context` finds live key | 5 | 5 | 8.0 | high security; fix is rotate-and-remove |
+| `bootstrap-permissions-allowlist` (no `.claude/settings.json`) | 4 | 4 | 6.4 | L0 security; template scaffold |
+| `bootstrap-precompletion-hook` (Stop event missing) | 4 | 4 | 6.4 | L0 harness; template scaffold |
+| `bootstrap-eval-suite` (no evals/) | 4 | 2 | 5.2 | L0 verification but content-heavy (incidents to mine) |
+| `audit-claude-md` patches | 2 | 5 | 5.0 | mid-level findings; mechanical fixes |
+| `bootstrap-llms-txt` | 1 | 4 | 3.4 | polish; nav-aware scaffold |
+
+The formula intentionally penalizes `bootstrap-eval-suite` despite its L0 weight — eval design is the work, scaffolding the directory is not. Surface this in the report so the user can override.
+
+Apply the gates:
+
+1. **Halt-on-secrets**: any `audit-secrets-in-context` high finding stops the assessment; the only emitted recommendation is rotation
+2. **Lethal trifecta close**: any `(1,1,1)` principal in `audit-lethal-trifecta` is high severity even if the dimension is mid-level
+3. **Default-deny check**: missing `permissions` block scores L0 security regardless of other dimensions
 
 For each gap, name the runbook to execute next and the expected level uplift.
 
@@ -186,7 +216,44 @@ Output the scorecard in this exact schema:
 
 ## Step 6 — Hand Off
 
-Ask the user which punch-list items to execute now. For each chosen item, open the corresponding runbook and apply it. Re-run this assessment after each batch to confirm uplift.
+Hand off according to the [mode set by the orchestrator](index.md#mode-selection):
+
+- **Interactive** — present the punch list and ask which items to apply now. For each chosen item, open the corresponding runbook, narrate the change, apply it, then re-run this assessment to confirm uplift.
+- **Autonomous** — apply only safe-by-construction items (see [`index.md` §Autonomous Flow](index.md#autonomous-flow)); file the rest to the backlog; re-run this assessment once at the end and emit the delta.
+
+## Re-Run: Delta Schema
+
+A re-run **does not** replace the previous report — it produces a delta against it. Persist the prior scorecard at `.claude/state/agent-readiness/last.json`; emit the delta:
+
+```markdown
+# Agent Readiness — Delta vs <prior YYYY-MM-DD>
+
+| Dimension | Prior | Now | Δ |
+|-----------|:-----:|:---:|:-:|
+| Instructions | L1 | L2 | ↑1 |
+| Harness | L0 | L1 | ↑1 |
+| Security | L1 | L1 | — |
+| Verification | L2 | L2 | — |
+
+**Aggregate**: L0 → L1 (limited by Harness)
+
+## Resolved
+
+- ✅ `bootstrap-permissions-allowlist` — created `.claude/settings.json` with default-deny; security L0→L1
+- ✅ `bootstrap-precompletion-hook` — wired Stop event; harness L0→L1
+
+## Still open (re-prioritized)
+
+1. [score 6.4] `bootstrap-loop-detector-hook` — close harness L1→L2
+2. [score 5.2] `audit-claude-md` patches — close instructions L2→L3
+3. [score 3.4] `bootstrap-llms-txt` — polish
+
+## Regressions
+
+(none) — or list any dimension that dropped, with the suspected cause.
+```
+
+The delta is what feeds the agent's improvement loop; the full scorecard is also emitted (for absolute state) but the delta is what the user reads.
 
 ## Operating Notes
 

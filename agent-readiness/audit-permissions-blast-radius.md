@@ -20,9 +20,21 @@ A capable agent with no permission boundary is a production incident waiting for
 
 A "principal" is anything that can take action: the main agent, each sub-agent, each automation that runs unattended.
 
+Every JSON config file is parse-checked first; a malformed file becomes a high-severity finding rather than a silent absence (a swallowed parse error reads as "no config exists" and produces a false-clean audit):
+
 ```bash
+parse_or_finding() {
+  local f="$1"
+  [[ -f "$f" ]] || return 1
+  if ! jq empty "$f" 2>/tmp/_jqerr; then
+    echo "high|$f|-|JSON parse error: $(cat /tmp/_jqerr)|fix syntax before audit can proceed"
+    return 1
+  fi
+  return 0
+}
+
 # Main agent settings
-test -f .claude/settings.json && jq '.permissions' .claude/settings.json
+parse_or_finding .claude/settings.json && jq '.permissions' .claude/settings.json
 
 # Sub-agents
 find .claude/agents -name "*.md" 2>/dev/null | while read f; do
@@ -78,7 +90,8 @@ def classify(principal):
 
 ```bash
 # Bash allowlist exists and is not "*"
-ALLOW=$(jq -r '.permissions.allow[]?' .claude/settings.json 2>/dev/null)
+# Parse-checked above; jq errors here mean the file changed mid-audit (re-run)
+ALLOW=$(jq -r '.permissions.allow[]?' .claude/settings.json)
 if [[ -z "$ALLOW" ]]; then
   echo "high|settings.json|no allowlist — every tool implicitly allowed|add explicit allow list"
 elif echo "$ALLOW" | grep -q "^Bash$"; then
@@ -91,7 +104,7 @@ fi
 ```bash
 # Required deny patterns
 REQUIRED_DENIES=(".env" ".env.production" "secrets/" "*.pem" "*.key" "id_rsa")
-DENY=$(jq -r '.permissions.deny[]?' .claude/settings.json 2>/dev/null)
+DENY=$(jq -r '.permissions.deny[]?' .claude/settings.json)
 for pattern in "${REQUIRED_DENIES[@]}"; do
   echo "$DENY" | grep -qF "$pattern" || \
     echo "high|settings.json|missing deny for $pattern|add to deny list if pattern exists in repo"
@@ -205,6 +218,11 @@ Read-only.
 
 Top fix: <one-liner — usually missing deny rule or destructive bash>
 ```
+
+## Remediation
+
+- [Bootstrap Permissions Allowlist](bootstrap-permissions-allowlist.md) — generate the default-deny `permissions` block this audit looks for
+- [Bootstrap Egress Policy](bootstrap-egress-policy.md) — narrow network egress when this audit flags it
 
 ## Related
 

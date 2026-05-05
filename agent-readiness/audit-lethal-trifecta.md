@@ -190,6 +190,11 @@ Read-only.
 Status: <SAFE | TRIFECTA — N principals at risk>
 ```
 
+## Remediation
+
+- [Bootstrap Egress Policy](bootstrap-egress-policy.md) — host allowlist + principal decomposition; the cheapest leg to remove
+- [Bootstrap Permissions Allowlist](bootstrap-permissions-allowlist.md) — when the trifecta is closed by tighter Bash + sub-agent tools
+
 ## Related
 
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)

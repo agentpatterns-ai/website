@@ -21,7 +21,7 @@ Without an eval suite, every prompt change, model upgrade, and skill rewrite is 
 
 ```bash
 # Existing evals
-find . -maxdepth 3 -type d \( -name "evals" -o -name "evaluations" -o -name "eval" \)
+find . -maxdepth 6 -type d \( -name "evals" -o -name "evaluations" -o -name "eval" \)
 
 # Candidate units to test
 find . -path "*/.claude/skills/*/SKILL.md" -o -path "*/.claude/agents/*.md"

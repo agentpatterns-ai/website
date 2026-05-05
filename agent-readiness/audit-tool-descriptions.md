@@ -163,6 +163,11 @@ Read-only.
 Top fix: <one-liner — usually missing trigger phrases or return-shape>
 ```
 
+## Remediation
+
+- [Bootstrap Tool Descriptions](bootstrap-tool-descriptions.md) — rewrite descriptions following the trigger / return / self-contained / preference rules
+- [Bootstrap MCP Config](bootstrap-mcp-config.md) — when missing-description findings stem from a loose MCP surface
+
 ## Related
 
 - [Tool Description Quality](../tool-engineering/tool-description-quality.md)

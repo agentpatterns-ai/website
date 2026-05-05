@@ -19,7 +19,7 @@ aliases:
 ## Step 1 — Locate Files
 
 ```bash
-find . -maxdepth 4 \( \
+find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" -o \
   -iname "GEMINI.md" \

@@ -20,13 +20,13 @@ aliases:
 
 ```bash
 # Existing AGENTS.md or equivalent
-find . -maxdepth 4 \( \
+find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" \
 \) ! -path "*/node_modules/*" ! -path "*/.git/*"
 
 # Subdirectories with their own toolchains (candidates for subdir AGENTS.md)
-find . -maxdepth 3 -name "package.json" -o -name "pyproject.toml" \
+find . -maxdepth 6 -name "package.json" -o -name "pyproject.toml" \
   -o -name "Cargo.toml" -o -name "go.mod" | sort
 ```
 
