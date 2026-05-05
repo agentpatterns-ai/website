@@ -28,7 +28,7 @@ find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" -o \
   -iname "GEMINI.md" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*" -print
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*" -print
 ```
 
 For each file, classify: root vs subdirectory. Root has the strictest rules (≤100 lines); subdir has ≤30.
@@ -75,7 +75,7 @@ fi
 
 ### Check 4 — Embedded Code Blocks
 
-Any code block ≥20 lines is a finding.
+The principle is [hints over code samples](../instructions/hints-over-code-samples.md): point at canonical files (`see scripts/run-tests.sh`) instead of pasting them inline. Embedded code drifts from the real source and burns context budget on every session load. The 20-line cap below is the hard floor; shorter blocks are still a smell — review each one and ask whether a path reference would do.
 
 ```bash
 awk '

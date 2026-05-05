@@ -47,7 +47,7 @@ find . -maxdepth 8 -type f \( \
   -name ".cursorrules" -o \
   -name ".aider.conf.yml" -o \
   -name "GEMINI.md" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/dist/*" ! -path "*/build/*"
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*" ! -path "*/dist/*" ! -path "*/build/*"
 
 # Skill / sub-agent surfaces
 find . -maxdepth 8 \( \
@@ -56,13 +56,13 @@ find . -maxdepth 8 \( \
   -path "*/.claude/commands/*.md" -o \
   -path "*/.cursor/skills/*/SKILL.md" -o \
   -path "*/.cursor/hooks/*" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*"
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*"
 
 # Discoverability
 ls -la llms.txt llms-full.txt docs/llms.txt docs/llms-full.txt 2>/dev/null
 
 # Verification
-find . -maxdepth 4 -type d \( -name "evals" -o -name "evaluations" \) ! -path "*/node_modules/*"
+find . -maxdepth 4 -type d \( -name "evals" -o -name "evaluations" \) ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*"
 ls -la .github/workflows/*.y*ml 2>/dev/null
 
 # Permissions / hooks — parse explicitly; surface malformed JSON as a finding,
@@ -77,7 +77,7 @@ fi
 test -d .claude/hooks && ls .claude/hooks/
 
 # MCP servers (deeper search; some monorepos place the file in a subpackage)
-find . -maxdepth 6 \( -name "mcp.json" -o -name ".mcp.json" \) ! -path "*/node_modules/*"
+find . -maxdepth 6 \( -name "mcp.json" -o -name ".mcp.json" \) ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*"
 ```
 
 Record presence/absence per artifact. The result is the `inventory` object referenced below. **Every silent failure (malformed JSON, missing-but-expected file, permission-denied read) becomes a finding** — never let a parse error short-circuit the inventory into a false negative.

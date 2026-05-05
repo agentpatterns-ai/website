@@ -28,7 +28,7 @@ Packaged as: `.claude/skills/agent-readiness-bootstrap-agents-md/`
 find . -maxdepth 8 \( \
   -iname "AGENTS.md" -o -iname "CLAUDE.md" -o \
   -iname "copilot-instructions.md" -o -name ".cursorrules" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*"
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*"
 
 # Subdirectories with their own toolchains (candidates for subdir AGENTS.md)
 find . -maxdepth 6 -name "package.json" -o -name "pyproject.toml" \

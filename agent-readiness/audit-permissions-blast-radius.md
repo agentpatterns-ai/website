@@ -117,7 +117,7 @@ done
 
 # Verify the patterns match real files
 for pattern in "${REQUIRED_DENIES[@]}"; do
-  find . -name "$pattern" ! -path "*/node_modules/*" 2>/dev/null | head -1 | grep -q . && \
+  find . -name "$pattern" ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*" 2>/dev/null | head -1 | grep -q . && \
     echo "info|repo|sensitive file matching '$pattern' present — confirm deny rule covers it"
 done
 ```

@@ -35,7 +35,7 @@ SURFACES=$(find . -maxdepth 5 \( \
   -path "*/.claude/commands/*.md" -o \
   -name "mcp.json" -o -name ".mcp.json" -o \
   -path "*/.claude/settings.json" \
-\) ! -path "*/node_modules/*" ! -path "*/.git/*")
+\) ! -path "*/node_modules/*" ! -path "*/.git/*" ! -path "*/.claude/worktrees/*")
 ```
 
 ## Step 2 — Pattern Scan
