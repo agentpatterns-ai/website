@@ -14,6 +14,9 @@ aliases:
 
 > Detect harness, generate a full `.claude/hooks/` directory with no-op stubs for every lifecycle event, register them in `settings.json`, hand off event-specific deep dives to dedicated runbooks.
 
+!!! info "Harness assumption"
+    Stubs target Claude Code's `.claude/hooks/` and `settings.json` event registration. Cursor, Aider, and Copilot have parallel lifecycle hooks but different file layouts and registration formats — translate the per-event stubs to your harness's equivalents. See [Assumptions](index.md#assumptions).
+
 [`bootstrap-precompletion-hook`](bootstrap-precompletion-hook.md) and [`bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md) cover the two highest-leverage events. This runbook is the broader scaffold — it lays down stubs for the remaining lifecycle events so the harness has a place for every kind of enforcement to land. Paired remediation for [`audit-hooks-coverage`](audit-hooks-coverage.md). Source: [hooks lifecycle](../tools/claude/hooks-lifecycle.md).
 
 ## Step 1 — Detect Current State

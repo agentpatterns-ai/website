@@ -10,9 +10,14 @@ aliases:
   - skill authoring audit
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-skill-quality`](../../.claude/skills/agent-readiness-audit-skill-quality/SKILL.md)
+
 # Audit Skill Quality
 
 > Locate every `SKILL.md`, validate frontmatter, score description craft and trigger phrases, detect missing gotchas and inline shell, emit per-skill findings.
+
+!!! info "Harness assumption"
+    `SKILL.md` lives under `.claude/skills/`, `.cursor/skills/`, or any other harness that exposes on-demand skills. Skip this runbook for harnesses with no skill primitive — there is nothing to audit. See [Assumptions](index.md#assumptions).
 
 A skill's value lives almost entirely in its description: the field the model reads to decide whether to invoke. Bodies that read like documentation, missing gotchas sections, and inline shell that should have lived in `scripts/` are the recurring failure modes that quietly degrade trigger precision and output quality. Rules from [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md).
 

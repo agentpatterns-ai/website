@@ -10,9 +10,14 @@ aliases:
   - agent loop detection scaffold
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-bootstrap-loop-detector-hook`](../../.claude/skills/agent-readiness-bootstrap-loop-detector-hook/SKILL.md)
+
 # Bootstrap Loop Detector Hook
 
 > Detect the harness, generate a PostToolUse hook that tracks per-file edit counts in a session, escalate from nudge to pause to block on threshold, persist counts safely.
+
+!!! info "Harness assumption"
+    The hook script targets Claude Code's `PostToolUse` event and `.claude/hooks/`/`.claude/state/` paths. Other harnesses with per-tool-call hooks use different formats — translate the input parsing and state path accordingly. See [Assumptions](index.md#assumptions).
 
 A common failure mode in long-running agents is the edit loop: the same file rewritten N times against the same failing test, with each pass making the code worse. [Loop detection](../observability/loop-detection.md) puts a cheap counter at the harness level so the loop is visible and breakable before it consumes the session.
 

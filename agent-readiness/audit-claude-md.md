@@ -10,9 +10,14 @@ aliases:
   - project instruction file audit
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-claude-md`](../../.claude/skills/agent-readiness-audit-claude-md/SKILL.md)
+
 # Audit CLAUDE.md
 
 > Locate `CLAUDE.md` and equivalents, run mechanical checks for size, polarity, embedded code, `@path` imports, primacy, cache stability.
+
+!!! info "Harness assumption"
+    `CLAUDE.md` is the Claude-specific instruction file by name; the same checks apply to `.github/copilot-instructions.md`, `.cursor/rules/`, `.cursorrules`, and equivalents. Run the audit against whichever instruction file your harness loads on session start. See [Assumptions](index.md#assumptions).
 
 `CLAUDE.md` is the highest-leverage instruction file in the Claude Code ecosystem — it loads on every session and frames every task. The same patterns apply to `.github/copilot-instructions.md`, `.cursor/rules/`, and similar tool-specific equivalents. This runbook catches file-level failure modes that prompt-quality reviewers cannot.
 

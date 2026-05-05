@@ -11,9 +11,14 @@ aliases:
   - brownfield agent assessment
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-assess-agent-readiness`](../../.claude/skills/agent-readiness-assess-agent-readiness/SKILL.md)
+
 # Assess Agent Readiness
 
 > Inventory the codebase, run the audit suite, score L0–L5 across four dimensions, and emit a prioritized punch list.
+
+!!! info "Harness assumption"
+    Inventory paths and config schemas in this runbook target Claude Code. Cursor, Aider, Copilot, and Gemini surfaces are detected at the inventory layer but scored against the same rubric — adapt the deeper checks if your harness uses different file locations. See [Assumptions](index.md#assumptions).
 
 This is the orchestration runbook for the [agent-readiness library](index.md). Run it first on any unfamiliar codebase. It produces the scorecard that determines which other runbooks to execute and in what order.
 
@@ -154,7 +159,7 @@ Score every candidate runbook on two axes and order by the product:
 | **Severity** | `5` security high, `4` L0 dimension, `3` L1 dimension, `2` audit findings without level regression, `1` polish | 1.0 |
 | **Ease** | `5` mechanical (config edit), `4` template scaffold, `3` requires user probe, `2` requires user content (incidents, gotchas), `1` requires architectural decisions | 0.6 |
 
-Score = `severity + (ease × 0.6)`. Sort descending. Ties broken by severity, then by dimension order (Security > Instructions > Harness > Verification — security gates everything).
+Score = `severity + (ease × 0.6)`. Sort descending. Ties broken by severity, then by dimension order: **Security > Instructions > Harness > Verification**. Rationale: security findings can manifest as live incidents (exfiltration, credential leak) and gate everything else; instruction quality compounds across every later step; the harness shapes daily work; verification has the longest lead time but the lowest immediate blast radius.
 
 Worked examples:
 
@@ -223,7 +228,7 @@ Hand off according to the [mode set by the orchestrator](index.md#mode-selection
 
 ## Re-Run: Delta Schema
 
-A re-run **does not** replace the previous report — it produces a delta against it. Persist the prior scorecard at `.claude/state/agent-readiness/last.json`; emit the delta:
+A re-run **does not** replace the previous report — it produces a delta against it. Persist the prior scorecard at `.claude/state/agent-readiness/last.json` (this runbook creates the path if absent; substitute `.cursor/state/`, `.aider/state/`, or any project-local cache directory if the project uses a different harness). Emit the delta:
 
 ```markdown
 # Agent Readiness — Delta vs <prior YYYY-MM-DD>

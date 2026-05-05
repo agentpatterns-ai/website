@@ -10,9 +10,14 @@ aliases:
   - LLM discoverability index
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-bootstrap-llms-txt`](../../.claude/skills/agent-readiness-bootstrap-llms-txt/SKILL.md)
+
 # Bootstrap llms.txt
 
 > Detect the documentation surface, extract a structured index per the [llms.txt spec](https://llmstxt.org), generate both files, validate.
+
+!!! info "Applicability"
+    Skip this runbook for internal-only projects with no public documentation site or external API reference. `llms.txt` indexes a project's published docs for AI agents discovering it from outside — it has no value for repos whose docs are not served at a stable URL.
 
 Without `llms.txt`, an agent encountering a project's docs site has to crawl undirected. With it, a single fetch gives the agent a curated map. This runbook generates the file from the project's existing nav source and validates against the spec defined in [`docs/standards/llms-txt.md`](../standards/llms-txt.md).
 

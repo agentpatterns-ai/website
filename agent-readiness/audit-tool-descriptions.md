@@ -10,9 +10,14 @@ aliases:
   - tool prompt audit
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-tool-descriptions`](../../.claude/skills/agent-readiness-audit-tool-descriptions/SKILL.md)
+
 # Audit Tool Descriptions
 
 > Enumerate tool and MCP server descriptions, score on trigger phrases, return shape, self-containment, preference signals, and token cost.
+
+!!! info "Harness assumption"
+    The runbook covers MCP servers and harness-defined tools (Claude Code, Cursor, Copilot). The scoring rubric is tool-agnostic — it applies to any description the model reads when choosing a tool. See [Assumptions](index.md#assumptions).
 
 Tool descriptions are the prompt the model reads to decide which tool to call and how. Treated as documentation they fail silently — the agent calls the wrong tool, hallucinates arguments, or skips a tool whose value is buried. Rules from [tool description quality](../tool-engineering/tool-description-quality.md), [token-efficient tool design](../tool-engineering/token-efficient-tool-design.md), and [MCP server design](../tool-engineering/mcp-server-design.md).
 

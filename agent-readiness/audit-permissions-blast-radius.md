@@ -10,9 +10,14 @@ aliases:
   - least privilege audit
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-permissions-blast-radius`](../../.claude/skills/agent-readiness-audit-permissions-blast-radius/SKILL.md)
+
 # Audit Permissions and Blast Radius
 
 > Enumerate every principal that can act, build a capability matrix against least-privilege rules, detect missing deny rules and over-permissioned sub-agents.
+
+!!! info "Harness assumption"
+    Principal enumeration parses `.claude/settings.json` and `.claude/agents/` by default. Translate the JSON paths and sub-agent file format to your harness's equivalents — the rules (least privilege, sensitive-path deny, sub-agent isolation) are tool-agnostic. See [Assumptions](index.md#assumptions).
 
 A capable agent with no permission boundary is a production incident waiting for a prompt-injection vector. [Blast radius containment](../security/blast-radius-containment.md) at the runtime layer is what prevents agent decisions from translating into agent damage. Rules from [permission-gated commands](../security/permission-gated-commands.md) and [safe outputs pattern](../security/safe-outputs-pattern.md).
 

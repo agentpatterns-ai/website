@@ -10,9 +10,14 @@ aliases:
   - agent hook coverage check
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-hooks-coverage`](../../.claude/skills/agent-readiness-audit-hooks-coverage/SKILL.md)
+
 # Audit Hooks Coverage
 
 > Inventory wired hook events, build a coverage matrix against required-by-level events, audit each hook for severity, idempotency, performance, and matcher correctness.
+
+!!! info "Harness assumption"
+    The event names (`PreToolUse`, `PostToolUse`, `Stop`, `SessionStart`) come from Claude Code's lifecycle. Cursor and other harnesses expose parallel events with different names — map your harness's event taxonomy onto the coverage matrix. See [Assumptions](index.md#assumptions).
 
 A repository can have hooks without having coverage. The default failure mode is a `PostToolUse` formatter on every edit alongside zero `Stop`-event verification — high-noise, low-protection. This runbook maps the hook inventory against the events that move the readiness needle. Rules from [hooks vs prompts](../verification/hooks-vs-prompts.md) and [hooks lifecycle](../tools/claude/hooks-lifecycle.md).
 

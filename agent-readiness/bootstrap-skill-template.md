@@ -14,6 +14,9 @@ aliases:
 
 > Generate an opinionated `SKILL.md` skeleton with frontmatter, description-craft template, CLI-first body wired to `scripts/`, and a Gotchas seed.
 
+!!! info "Harness assumption"
+    `SKILL.md` is the Claude Code skill format and Cursor's `.cursor/skills/` mirror. Other harnesses without an on-demand skill primitive have no direct equivalent — adapt the template into a system-prompt fragment or a sub-agent definition for those tools. See [Assumptions](index.md#assumptions).
+
 A new skill should follow the [skill authoring patterns](../tool-engineering/skill-authoring-patterns.md) from the start — retrofitting description craft and Gotchas onto a skill that grew organically is harder than starting right. This is the paired remediation for [`audit-skill-quality`](audit-skill-quality.md) when the audit returns "no skill exists yet" or "rewrite needed".
 
 ## Step 1 — Detect Current State

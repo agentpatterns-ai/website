@@ -14,6 +14,9 @@ aliases:
 
 > Enumerate undocumented or under-specified tools, generate descriptions following trigger / return / self-contained / preference rules, validate against the audit.
 
+!!! info "Harness assumption"
+    The runbook covers MCP servers and harness-defined tools. Description-craft rules are tool-agnostic — the only harness-specific step is where you patch the description (MCP server source, OpenAPI spec, or harness config). See [Assumptions](index.md#assumptions).
+
 Tool descriptions are the prompt the model reads to decide which tool to call and how. Treated as documentation they fail silently. This runbook is the paired remediation for [`audit-tool-descriptions`](audit-tool-descriptions.md). Rules from [tool description quality](../tool-engineering/tool-description-quality.md), [token-efficient tool design](../tool-engineering/token-efficient-tool-design.md), and [MCP server design](../tool-engineering/mcp-server-design.md).
 
 ## Step 1 — Enumerate Tools Needing Work

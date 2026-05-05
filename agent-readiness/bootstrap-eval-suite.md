@@ -11,9 +11,17 @@ aliases:
   - skill eval suite scaffold
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-bootstrap-eval-suite`](../../.claude/skills/agent-readiness-bootstrap-eval-suite/SKILL.md)
+
 # Bootstrap Eval Suite
 
 > Detect units to test, mine real signals, scaffold paired cases, generate runner and CI gate, ship the incident-to-eval template.
+
+!!! info "Harness assumption"
+    Generated case files reference `.claude/skills/` and `.claude/agents/`. The runner and grader are harness-pluggable — see the `run_unit` contract in `evals/grader.py`. Translate the unit-loading mechanism to your harness; the case schema and discriminating-assertion model are tool-agnostic. See [Assumptions](index.md#assumptions).
+
+!!! info "Applicability"
+    Defer this runbook until the project has an agent-customizable unit (skill, sub-agent, system-prompt fragment) worth measuring. Eval suites measure a unit under test — without one, the suite has nothing to discriminate against, and the scaffold becomes maintenance debt.
 
 Without an eval suite, every prompt change, model upgrade, and skill rewrite is a guess. This runbook produces the minimum scaffold a team needs to start measuring — a small live suite — not the production-grade infrastructure a mature project ends up with. Cases are mined from real signals (issues, incidents, support tickets), never invented.
 
@@ -38,7 +46,7 @@ gh issue list --state closed --label incident --limit 30 2>/dev/null
 Decision rules:
 
 - **`evals/` exists** → audit, do not overwrite; merge new cases only
-- **No skills/agents to test** → halt and recommend bootstrapping at least one skill first; an eval suite needs a unit under test
+- **No skills/agents to test** → defer this runbook (see the Applicability note above). If the project intends to ship a skill, run [`bootstrap-skill-template`](bootstrap-skill-template.md) first; a system-prompt fragment or sub-agent is also a valid unit. If no agent-customizable unit is planned, this runbook does not apply.
 - **No mineable signals** → ask the user for 5–10 representative tasks; do not invent
 
 ## Step 2 — Identify the Unit Under Test
@@ -200,7 +208,7 @@ The `run_unit` function wires to whatever harness the project uses. Document tha
 
 ## Step 7 — Generate the CI Gate
 
-`.github/workflows/evals.yml`:
+For projects on GitHub Actions, `.github/workflows/evals.yml`:
 
 ```yaml
 name: evals
@@ -221,7 +229,7 @@ jobs:
       - run: bash evals/run.sh <unit-name>
 ```
 
-Set the workflow as a required check on the default branch.
+Adapt to the project's CI: GitLab CI, CircleCI, Buildkite, or self-hosted runners need equivalent definitions; the `run.sh` invocation is what matters. Match the runner OS to a Unix-shell environment (the runner is bash). For Windows-only CI, port `run.sh` to PowerShell or run under WSL. Set the workflow as a required check on the default branch.
 
 ## Step 8 — Ship the Incident-to-Eval Template
 

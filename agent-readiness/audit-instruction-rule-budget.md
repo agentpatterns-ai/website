@@ -10,9 +10,14 @@ aliases:
   - rule count audit
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-instruction-rule-budget`](../../.claude/skills/agent-readiness-audit-instruction-rule-budget/SKILL.md)
+
 # Audit Instruction Rule Budget
 
 > Enumerate every instruction surface, tokenize rules by class, count against the ~150-rule [compliance ceiling](../instructions/instruction-compliance-ceiling.md), detect duplication and dead rules.
+
+!!! info "Harness assumption"
+    Surface enumeration covers Claude Code, Cursor, Copilot, and Gemini paths by default. Add any harness-specific instruction files your project uses; the budget itself is per-agent, not per-tool. See [Assumptions](index.md#assumptions).
 
 Instructions don't fail one rule at a time — they fail at the budget. Adherence stays high through roughly 150 rules, then degrades from full compliance to selective compliance to outright omission. Single-file audits miss this; the ceiling is across all surfaces an agent loads.
 

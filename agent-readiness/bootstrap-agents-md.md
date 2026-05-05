@@ -10,9 +10,14 @@ aliases:
   - create initial AGENTS.md
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-bootstrap-agents-md`](../../.claude/skills/agent-readiness-bootstrap-agents-md/SKILL.md)
+
 # Bootstrap AGENTS.md
 
 > Detect existing instruction surfaces, probe for non-discoverable knowledge, generate root and subdirectory `AGENTS.md` per pointer-map rules, then validate.
+
+!!! info "Harness assumption"
+    `AGENTS.md` is the [open standard](https://agents.md) — this runbook is harness-agnostic. Tool-specific examples (e.g., `@AGENTS.md` import in `CLAUDE.md`) are illustrative; substitute your harness's instruction file if applicable. See [Assumptions](index.md#assumptions).
 
 `AGENTS.md` is the [open standard](https://agents.md) discovery point for any AI coding agent. This runbook generates one (or several) following the [table-of-contents pattern](../instructions/agents-md-as-table-of-contents.md) and the [design patterns](../instructions/agents-md-design-patterns.md). The output is short, executable, and scoped — never a documentation dump.
 

@@ -10,9 +10,14 @@ aliases:
   - instruction file secret scan
 ---
 
+Packaged as: [`.claude/skills/agent-readiness-audit-secrets-in-context`](../../.claude/skills/agent-readiness-audit-secrets-in-context/SKILL.md)
+
 # Audit Secrets in Context
 
 > Enumerate every agent-readable surface, run pattern and entropy scans for live credentials, cross-check git history for rotation status, emit findings with rotate-and-purge instructions.
+
+!!! info "Harness assumption"
+    Surface enumeration includes Claude Code, Cursor, and MCP config paths by default. Add any harness-specific agent-readable files your project uses — every surface a model loads is in scope. See [Assumptions](index.md#assumptions).
 
 Secrets in code are caught by every modern scanner. Secrets in `CLAUDE.md`, in skill examples, in sub-agent system prompts are not — and they propagate further than secrets in code, because skill examples are shared across teams and registries. Rules from [secrets management for agents](../security/secrets-management-for-agents.md) and [credential hygiene for skills](../security/credential-hygiene-agent-skills.md).
 
