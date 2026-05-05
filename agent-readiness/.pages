@@ -1,0 +1,21 @@
+title: Agent Readiness
+nav:
+  - index.md
+  - Assess:
+    - assess-agent-readiness.md
+  - Bootstrap:
+    - bootstrap-agents-md.md
+    - bootstrap-llms-txt.md
+    - bootstrap-precompletion-hook.md
+    - bootstrap-loop-detector-hook.md
+    - bootstrap-eval-suite.md
+  - Audit:
+    - audit-agents-md.md
+    - audit-claude-md.md
+    - audit-instruction-rule-budget.md
+    - audit-skill-quality.md
+    - audit-tool-descriptions.md
+    - audit-hooks-coverage.md
+    - audit-permissions-blast-radius.md
+    - audit-secrets-in-context.md
+    - audit-lethal-trifecta.md
