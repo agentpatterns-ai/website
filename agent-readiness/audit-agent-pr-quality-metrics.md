@@ -116,6 +116,27 @@ jq '[.[] | .labels | map(.name) | join(",")] | group_by(.) | map({label: .[0], c
 
 Emit a routing recommendation: if doc-style PRs are < 30% of agent volume but human merge rate on doc PRs is > 80%, route more docs to agents. If feature PRs from agents have < 40% acceptance, narrow agent scope to bounded tasks.
 
+## Step 6b — Force-Push Detection
+
+Force pushes during active review are the strongest negative predictor of merge success — they invalidate prior review context, per [`agent-authored-pr-integration`](../code-review/agent-authored-pr-integration.md) and [`agent-proposed-merge-resolution`](../code-review/agent-proposed-merge-resolution.md). Land conflict resolutions as new commits, never force pushes.
+
+```bash
+for pr in $(jq -r '.[].number' /tmp/agent-prs.json); do
+  COUNT=$(gh api "repos/{owner}/{repo}/issues/$pr/events" --paginate \
+    | jq '[.[] | select(.event=="head_ref_force_pushed")] | length')
+  echo "PR #$pr force_pushes=$COUNT"
+done > /tmp/force-pushes.txt
+
+awk '$3 ~ /force_pushes=[1-9]/' /tmp/force-pushes.txt | wc -l
+```
+
+Severity rules:
+
+- Any PR with ≥1 force push during active review (after first review submitted) → **high** finding per PR
+- > 5% of agent PRs show force-push events → **medium** at the aggregate (configuration gap; agent should be wired through [`bootstrap-human-review-gate-pr`](bootstrap-human-review-gate-pr.md) which can disable force-push on agent branches)
+
+For deeper narrative-discipline coverage on the same PR set — section coverage, issue-as-spec, commit narration — pair this audit with [`audit-pr-narrative-quality`](audit-pr-narrative-quality.md).
+
 ## Step 7 — Reviewer Capacity Check
 
 20% of reviewers on agent PRs are bots vs 10% for humans ([AIDev](https://arxiv.org/abs/2507.15003)). Compute the bot-reviewer ratio.
@@ -139,6 +160,7 @@ If > 30%, flag medium: the team is leaning on automated review without [`bootstr
 | Median comments per PR | <x> | ≤1.5× human | high/med/none |
 | Conflict rate | <x>% | <25% | high/med/none |
 | Post-merge follow-ups | <n> | 0 | low/med/none |
+| Force-push rate during review | <x>% | 0% | high/med/none |
 | Bot-reviewer share | <x>% | 5–30% | high/med/none |
 
 ## Routing fit
@@ -180,5 +202,6 @@ Top fix: <one-liner — usually narrow scope of feature-class agent PRs or route
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md)
 - [Agent-Proposed Merge Resolution](../code-review/agent-proposed-merge-resolution.md)
 - [CRA-Only Review and the Merge Rate Gap](../code-review/cra-merge-rate-gap.md)
+- [Audit PR Narrative Quality](audit-pr-narrative-quality.md)
 - [Bootstrap Human Review Gate (PR)](bootstrap-human-review-gate-pr.md)
 - [Audit Premature Completion](audit-premature-completion.md)

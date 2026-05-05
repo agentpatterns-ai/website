@@ -89,6 +89,28 @@ jq -e '
 
 Non-goals must be populated — they are first-class and the section that prevents scope creep, per [Frozen Spec File](../instructions/frozen-spec-file.md) §Anatomy of a Frozen Spec.
 
+## Step 2b — Spec Quality Properties
+
+Beyond presence-of-section, validate the spec against four properties that make it usable as a regenerable source-of-truth ([`bootstrapping-coding-agents`](../emerging/bootstrapping-coding-agents.md)):
+
+- **Auditable** — under ~1,500 words, readable in 15 minutes. A reviewer must hold the full spec in working memory.
+- **Behaviorally complete** — every behavior, error condition, and edge case the deliverable must satisfy is documented. Gaps produce divergent regenerations.
+- **Convergence-testable** — two independent regenerations from the same spec produce identical external behavior. If they diverge, treat divergence as a spec-ambiguity signal, not an implementation bug.
+- **Abstraction-focused** — describes *what* the deliverable does, not *how*. Implementation detail in the spec constrains regeneration without adding correctness.
+
+```bash
+# Word count gate
+WC=$(jq -r '[.. | strings] | join(" ") | length / 6 | floor' SPEC.json)
+[ "$WC" -gt 1500 ] && echo "WARN: spec is $WC words; trim toward auditable cap of 1500"
+
+# Heuristic for implementation leakage in the constraints/done_when fields
+jq -r '(.hard_constraints + .done_when)[]' SPEC.json \
+  | grep -iE '\b(class |function |import |def |const |let |var )\b' \
+  && echo "WARN: implementation-level tokens in spec; rephrase as behavior"
+```
+
+If the spec exceeds the auditable cap, split the deliverable rather than expanding the spec — multi-deliverable tasks need one SPEC.json per deliverable. Implementation-level tokens (class/function/import) signal a how-not-what failure.
+
 ## Step 3 — Write the PreToolUse Hook (Before Wiring)
 
 Per [`bootstrap-precompletion-hook`](bootstrap-precompletion-hook.md) §Safety: write before wire, create the hook script and smoke-test it before adding the entry to `settings.json`. A registered-but-broken hook blocks every tool call.
@@ -194,6 +216,7 @@ Validation: layer-1 ✅ layer-2 ✅ layer-3 ✅
 ## Related
 
 - [Frozen Spec File](../instructions/frozen-spec-file.md)
+- [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md)
 - [Spec-Driven Development](../workflows/spec-driven-development.md)
 - [Bootstrap AGENTS.md](bootstrap-agents-md.md)
 - [Bootstrap Pre-Completion Hook](bootstrap-precompletion-hook.md)

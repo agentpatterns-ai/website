@@ -87,7 +87,7 @@ If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the as
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
 | **Bootstrap** | Generate or scaffold missing artifacts | 22 |
-| **Audit** | Check existing artifacts; report findings | 25 |
+| **Audit** | Check existing artifacts; report findings | 26 |
 
 Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
 
@@ -150,7 +150,8 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 - [`audit-action-audit-divergence`](audit-action-audit-divergence.md) — F1-F4 divergence taxonomy walked against the runtime; chokepoint, integrity mechanism, liveness probe, and target validator named or flagged
 - [`audit-trojan-hippo-memory`](audit-trojan-hippo-memory.md) — Long-term memory write surfaces classified by source-trust; trifecta-leg removal validated; cross-session `(1,1,1)` pivot flagged that per-session trifecta audits miss
 - [`audit-agent-built-code-health`](audit-agent-built-code-health.md) — Inventory of agent-authored files, structural-complexity ratio vs repo baseline, single-impl factories, refactoring share, shadow utilities, ADR compliance
-- [`audit-agent-pr-quality-metrics`](audit-agent-pr-quality-metrics.md) — Agent PR merge rate, comment volume, conflict rate, and post-merge defect rate against AIDev/AgenticFlict/Beyond-Bug-Fixes baselines; task-routing fit per agent class
+- [`audit-agent-pr-quality-metrics`](audit-agent-pr-quality-metrics.md) — Agent PR merge rate, comment volume, conflict rate, post-merge defect rate, and force-push during review against AIDev/AgenticFlict/Beyond-Bug-Fixes baselines; task-routing fit per agent class
+- [`audit-pr-narrative-quality`](audit-pr-narrative-quality.md) — Issue specs, PR descriptions, and commit messages on agent-authored PRs scored for visible-thinking discipline; section coverage, issue-as-spec, force-push, generic branch names
 
 ## Known limitations
 
