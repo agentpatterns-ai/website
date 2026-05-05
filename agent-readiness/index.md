@@ -129,7 +129,7 @@ These pages are **specifications and runbooks** — written so an agent can exec
 
 One known limitation:
 
-- **Templates are Claude-Code-shaped.** The runbooks ship as packaged Claude Code skills under `.claude/skills/agent-readiness-*` so the harness can description-match them at session start. The inventory step detects Cursor, Aider, Copilot, and Gemini, but the deeper checks and bootstrap templates use Claude Code paths and config schemas. Translating to other harnesses is a manual step until parallel templates ship.
+- **Templates are Claude-Code-shaped.** The runbooks ship as packaged Claude Code skills under `.claude/skills/agent-readiness-*` so the harness can description-match them at session start. The inventory step detects Cursor, Aider, Copilot, and Gemini, but the deeper checks and bootstrap templates use Claude Code paths and config schemas. The [Harness Translation Reference](harness-translation.md) maps the main concepts (instruction files, MCP config, lifecycle events, skills, sub-agents) to their equivalents per harness, with primary-source citations and explicit gaps where parallel features don't yet exist.
 
 ## Related
 
