@@ -10,7 +10,7 @@ aliases:
   - completion gate scaffold
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-bootstrap-precompletion-hook`](../../.claude/skills/agent-readiness-bootstrap-precompletion-hook/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-bootstrap-precompletion-hook/`
 
 # Bootstrap Pre-Completion Hook
 
@@ -18,6 +18,9 @@ Packaged as: [`.claude/skills/agent-readiness-bootstrap-precompletion-hook`](../
 
 !!! info "Harness assumption"
     The hook script targets Claude Code's `Stop` event and `.claude/hooks/`/`.claude/checklists/` paths. Cursor and other harnesses with task-end events use a different file format — translate the script's input parsing and checklist location accordingly. See [Assumptions](index.md#assumptions).
+
+!!! warning "Safety: write before wire"
+    Create the hook script on disk, `chmod +x`, **and smoke-test it standalone** before adding the entry to `settings.json`. A registered-but-missing or registered-but-broken hook exits non-zero — Claude Code reads exit 2 as "block," and every subsequent tool call (including the one that would write the missing script) is blocked. The step ordering below is load-bearing: Step 5 (smoke test) precedes Step 6 (wire). See [Recovery](#recovery) if a session is already deadlocked.
 
 The [pre-completion checklist](../verification/pre-completion-checklists.md) is the harness gate that holds the agent at task boundary, runs deterministic checks, and either lets the agent exit or hands back failures. This runbook generates one from the project's existing CI config — never inventing checks.
 
@@ -140,9 +143,30 @@ Make executable: `chmod +x .claude/hooks/pre-completion-check.sh`.
 
 Substitute discovered commands into the `cmd` fields. Do not ship the placeholder text.
 
-## Step 5 — Wire into Harness Config
+## Step 5 — Smoke Test (Before Wiring)
 
-For Claude Code, edit `.claude/settings.json`:
+Run the hook script standalone with a synthetic event payload **before** registering it in `settings.json`. If this step fails, fix the script — do not proceed to Step 6 with a broken script.
+
+```bash
+# Verify the file exists and is executable
+test -x .claude/hooks/pre-completion-check.sh || { echo "FAIL: hook missing or not executable"; exit 1; }
+
+# Pass case — checklist allows
+echo '{"task_type":"coding"}' | .claude/hooks/pre-completion-check.sh
+# Expect: {"action":"allow"} with exit 0
+
+# Fail case — checklist blocks (use a tmp file outside the repo to avoid staging side effects)
+TMP=$(mktemp); echo '# TODO: nothing' > "$TMP"; git add -N "$TMP" 2>/dev/null
+echo '{"task_type":"coding"}' | .claude/hooks/pre-completion-check.sh
+# Expect: {"action":"block",...} with exit 2
+rm -f "$TMP"
+```
+
+Both invocations must produce structured JSON. If the script exits with an unhandled error, the harness will read it as a block on every Stop event once wired — fix before proceeding.
+
+## Step 6 — Wire into Harness Config
+
+Only after Step 5 passes. For Claude Code, edit `.claude/settings.json`:
 
 ```json
 {
@@ -169,21 +193,6 @@ jq '.hooks.Stop = (.hooks.Stop // []) + [{matcher:"*", hooks:[{type:"command", c
 
 For Cursor or other harnesses, follow the equivalent registration mechanism for that tool.
 
-## Step 6 — Smoke Test
-
-Trigger the hook with a synthetic Stop event to confirm it works:
-
-```bash
-# Pass case
-echo '{"task_type":"coding"}' | .claude/hooks/pre-completion-check.sh
-# Expect: {"action":"allow"} with exit 0
-
-# Fail case (force a TODO into a file, stage it)
-echo '# TODO: nothing' >> /tmp/_smoke.py && git add -N /tmp/_smoke.py 2>/dev/null
-echo '{"task_type":"coding"}' | .claude/hooks/pre-completion-check.sh
-# Expect: {"action":"block",...} with exit 2
-```
-
 ## Step 7 — Document in AGENTS.md
 
 Add a one-line pointer so the agent knows the gate exists:
@@ -193,6 +202,17 @@ Add a one-line pointer so the agent knows the gate exists:
 
 A pre-completion hook runs the project checklist on Stop. See `.claude/checklists/` for what is enforced.
 ```
+
+## Recovery
+
+If a hook is wired into `settings.json` but the script is missing, broken, or non-executable, the harness blocks every tool call on the relevant event and the agent cannot fix it from inside the session. Break the loop from outside:
+
+1. Open `.claude/settings.json` in an editor that does not go through the agent (e.g., open the file directly in the IDE, `code .claude/settings.json`, or any external editor)
+2. Remove the broken Stop hook entry from `.hooks.Stop[]` (or temporarily empty the array)
+3. Save and resume the agent — it can now read and write files normally
+4. Restart from Step 5 (smoke test) before re-wiring
+
+The same recovery applies if a script is missing the executable bit or has a syntax error — the harness will read non-zero exit as block until the entry is removed.
 
 ## Idempotency
 

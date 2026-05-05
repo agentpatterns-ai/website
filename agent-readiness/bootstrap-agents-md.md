@@ -10,7 +10,7 @@ aliases:
   - create initial AGENTS.md
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-bootstrap-agents-md`](../../.claude/skills/agent-readiness-bootstrap-agents-md/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-bootstrap-agents-md/`
 
 # Bootstrap AGENTS.md
 

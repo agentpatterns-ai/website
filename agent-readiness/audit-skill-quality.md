@@ -10,7 +10,7 @@ aliases:
   - skill authoring audit
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-skill-quality`](../../.claude/skills/agent-readiness-audit-skill-quality/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-skill-quality/`
 
 # Audit Skill Quality
 

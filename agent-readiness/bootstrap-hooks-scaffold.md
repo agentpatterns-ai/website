@@ -17,6 +17,9 @@ aliases:
 !!! info "Harness assumption"
     Stubs target Claude Code's `.claude/hooks/` and `settings.json` event registration. Cursor, Aider, and Copilot have parallel lifecycle hooks but different file layouts and registration formats — translate the per-event stubs to your harness's equivalents. See [Assumptions](index.md#assumptions).
 
+!!! warning "Safety: write before wire"
+    Generate every stub on disk, `chmod +x`, **and smoke-test the directory** before registering anything in `settings.json`. This runbook registers six hooks at once — a single missing or broken script means six event types each return exit 2 (the harness reads "block"), and every subsequent tool call is blocked. The step ordering below is load-bearing: Step 4 (smoke test) precedes Step 5 (register). See [Recovery](#recovery) if a session is already deadlocked.
+
 [`bootstrap-precompletion-hook`](bootstrap-precompletion-hook.md) and [`bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md) cover the two highest-leverage events. This runbook is the broader scaffold — it lays down stubs for the remaining lifecycle events so the harness has a place for every kind of enforcement to land. Paired remediation for [`audit-hooks-coverage`](audit-hooks-coverage.md). Source: [hooks lifecycle](../tools/claude/hooks-lifecycle.md).
 
 ## Step 1 — Detect Current State
@@ -163,9 +166,26 @@ Make every stub executable:
 chmod +x .claude/hooks/*.sh
 ```
 
-## Step 4 — Register in settings.json
+## Step 4 — Smoke Test (Before Registration)
 
-Splice each event into `.claude/settings.json` if not already present:
+Verify every stub returns exit 0 with a synthetic payload **before** registering them in `settings.json`. If any stub fails, fix it — do not register a stub that returns non-zero.
+
+```bash
+FAIL=0
+for hook in .claude/hooks/*.sh; do
+  test -x "$hook" || { echo "$hook: FAIL not executable"; FAIL=$((FAIL+1)); continue; }
+  echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/x"}}' | "$hook" >/dev/null \
+    && echo "$hook: OK" \
+    || { echo "$hook: FAIL exit=$?"; FAIL=$((FAIL+1)); }
+done
+[[ $FAIL -eq 0 ]] || { echo "Refusing to register hooks — $FAIL stub(s) failing"; exit 1; }
+```
+
+Every stub must return 0 by default; failures indicate a bash error or missing executable bit. Registering a broken stub blocks every matching event the moment Step 5 lands.
+
+## Step 5 — Register in settings.json
+
+Only after Step 4 passes. Splice each event into `.claude/settings.json` if not already present:
 
 ```bash
 add_hook() {
@@ -189,7 +209,7 @@ add_hook PostCompact "*"                        .claude/hooks/post-compact.sh
 
 The `Stop` event and the `PostToolUse` loop-detector matcher are handled by the dedicated runbooks — do not stub them here.
 
-## Step 5 — Run the Specialized Bootstraps
+## Step 6 — Run the Specialized Bootstraps
 
 After the scaffold is in place:
 
@@ -198,17 +218,14 @@ After the scaffold is in place:
 
 These runbooks add their hooks alongside the stubs from this scaffold; they do not conflict.
 
-## Step 6 — Smoke Test
+## Recovery
 
-```bash
-for hook in .claude/hooks/*.sh; do
-  echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/x"}}' | "$hook" >/dev/null \
-    && echo "$hook: OK" \
-    || echo "$hook: FAIL exit=$?"
-done
-```
+If any hook is registered but the script is missing, broken, or non-executable, the harness blocks every matching event and the agent cannot fix it from inside the session. Break the loop from outside:
 
-Every stub returns 0 by default; failures indicate a bash error in the file.
+1. Open `.claude/settings.json` in an editor that does not go through the agent (open the file directly in the IDE, `code .claude/settings.json`, or any external editor)
+2. Remove the broken hook entry from the relevant event array, or empty `.hooks` entirely if multiple are broken
+3. Save and resume the agent — it can now read and write files normally
+4. Restart from Step 4 (smoke test) before re-registering
 
 ## Step 7 — Document in AGENTS.md
 

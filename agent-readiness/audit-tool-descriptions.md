@@ -10,7 +10,7 @@ aliases:
   - tool prompt audit
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-tool-descriptions`](../../.claude/skills/agent-readiness-audit-tool-descriptions/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-tool-descriptions/`
 
 # Audit Tool Descriptions
 

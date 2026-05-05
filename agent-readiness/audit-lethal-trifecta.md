@@ -10,7 +10,7 @@ aliases:
   - prompt injection trifecta map
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-lethal-trifecta`](../../.claude/skills/agent-readiness-audit-lethal-trifecta/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-lethal-trifecta/`
 
 # Audit Lethal Trifecta
 

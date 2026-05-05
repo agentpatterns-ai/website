@@ -10,7 +10,7 @@ aliases:
   - review AGENTS.md for bloat
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-agents-md`](../../.claude/skills/agent-readiness-audit-agents-md/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-agents-md/`
 
 # Audit AGENTS.md
 

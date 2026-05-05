@@ -11,7 +11,7 @@ aliases:
   - brownfield agent assessment
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-assess-agent-readiness`](../../.claude/skills/agent-readiness-assess-agent-readiness/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-assess-agent-readiness/`
 
 # Assess Agent Readiness
 

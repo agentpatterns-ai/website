@@ -10,7 +10,7 @@ aliases:
   - least privilege audit
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-permissions-blast-radius`](../../.claude/skills/agent-readiness-audit-permissions-blast-radius/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-permissions-blast-radius/`
 
 # Audit Permissions and Blast Radius
 

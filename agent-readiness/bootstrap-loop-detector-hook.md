@@ -10,7 +10,7 @@ aliases:
   - agent loop detection scaffold
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-bootstrap-loop-detector-hook`](../../.claude/skills/agent-readiness-bootstrap-loop-detector-hook/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-bootstrap-loop-detector-hook/`
 
 # Bootstrap Loop Detector Hook
 
@@ -18,6 +18,9 @@ Packaged as: [`.claude/skills/agent-readiness-bootstrap-loop-detector-hook`](../
 
 !!! info "Harness assumption"
     The hook script targets Claude Code's `PostToolUse` event and `.claude/hooks/`/`.claude/state/` paths. Other harnesses with per-tool-call hooks use different formats — translate the input parsing and state path accordingly. See [Assumptions](index.md#assumptions).
+
+!!! warning "Safety: write before wire"
+    Create the hook script on disk, `chmod +x`, **and smoke-test it standalone** before adding the entry to `settings.json`. A registered-but-missing or broken `PostToolUse` hook fires on every Edit/Write — exit 2 reads as "block," and every subsequent edit (including the one that would write the missing script) is blocked. The step ordering below is load-bearing: Step 5 (smoke test) precedes Step 6 (wire). See [Recovery](#recovery) if a session is already deadlocked.
 
 A common failure mode in long-running agents is the edit loop: the same file rewritten N times against the same failing test, with each pass making the code worse. [Loop detection](../observability/loop-detection.md) puts a cheap counter at the harness level so the loop is visible and breakable before it consumes the session.
 
@@ -91,23 +94,9 @@ fi
 
 Make executable: `chmod +x .claude/hooks/loop-detector.sh`.
 
-## Step 4 — Wire into Harness Config
+## Step 4 — Add Doom-Loop Detection (Optional)
 
-For Claude Code, splice into `.claude/settings.json`:
-
-```bash
-jq '.hooks.PostToolUse = (.hooks.PostToolUse // []) + [{
-  matcher:"Edit|Write|MultiEdit",
-  hooks:[{type:"command", command:".claude/hooks/loop-detector.sh"}]
-}]' .claude/settings.json > .claude/settings.json.tmp \
-  && mv .claude/settings.json.tmp .claude/settings.json
-```
-
-Important: match `Edit|Write|MultiEdit` only. Do not fire on `Read`, `Grep`, `Bash`, or other non-mutating tools.
-
-## Step 5 — Add Doom-Loop Detection (Optional)
-
-If the project runs `Bash` heavily and produces stable error signatures, also detect identical-error doom loops:
+If the project runs `Bash` heavily and produces stable error signatures, also detect identical-error doom loops. Append to the script before wiring:
 
 ```bash
 # In a separate hook or appended to the same one:
@@ -131,21 +120,48 @@ if [[ "$TOOL" == "Bash" ]]; then
 fi
 ```
 
-## Step 6 — Smoke Test
+## Step 5 — Smoke Test (Before Wiring)
+
+Run the hook standalone with a synthetic event payload **before** registering it in `settings.json`. If this step fails, fix the script — do not proceed to Step 6 with a broken script.
 
 ```bash
-mkdir -p .claude/state/smoke
-CLAUDE_SESSION_ID=smoke
+# Verify the file exists and is executable
+test -x .claude/hooks/loop-detector.sh || { echo "FAIL: hook missing or not executable"; exit 1; }
 
+mkdir -p .claude/state/smoke
 # Simulate 4 edits to the same file
 for i in 1 2 3 4; do
   echo "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"/tmp/x.py\"}}" \
     | CLAUDE_SESSION_ID=smoke .claude/hooks/loop-detector.sh
 done
 # Expect: silent, silent, nudge action, nudge action
-
 rm -rf .claude/state/smoke
 ```
+
+If invocations don't return JSON, or the script exits with an unhandled error, the harness will read it as a block on every edit once wired — fix before proceeding.
+
+## Step 6 — Wire into Harness Config
+
+Only after Step 5 passes. For Claude Code, splice into `.claude/settings.json`:
+
+```bash
+jq '.hooks.PostToolUse = (.hooks.PostToolUse // []) + [{
+  matcher:"Edit|Write|MultiEdit",
+  hooks:[{type:"command", command:".claude/hooks/loop-detector.sh"}]
+}]' .claude/settings.json > .claude/settings.json.tmp \
+  && mv .claude/settings.json.tmp .claude/settings.json
+```
+
+Important: match `Edit|Write|MultiEdit` only. Do not fire on `Read`, `Grep`, `Bash`, or other non-mutating tools.
+
+## Recovery
+
+If a hook is wired into `settings.json` but the script is missing, broken, or non-executable, the harness blocks every Edit/Write/MultiEdit invocation and the agent cannot fix the script from inside the session. Break the loop from outside:
+
+1. Open `.claude/settings.json` in an editor that does not go through the agent (open the file directly in the IDE, `code .claude/settings.json`, or any external editor)
+2. Remove the broken `PostToolUse` entry from `.hooks.PostToolUse[]` (or temporarily empty the array)
+3. Save and resume the agent — it can now read and write files normally
+4. Restart from Step 5 (smoke test) before re-wiring
 
 ## Step 7 — Document Thresholds
 
