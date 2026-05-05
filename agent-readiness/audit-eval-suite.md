@@ -153,6 +153,34 @@ grep -lE "kind:\s*judge" evals/cases/*.yaml 2>/dev/null | while read case; do
 done
 ```
 
+## Step 8b — Grader Calibration Dataset
+
+Per [Evaluator Templates §Calibration Is Not Optional](../verification/evaluator-templates.md), an LLM judge that has not been calibrated against a paired human-graded set drifts silently across model rotations and prompt edits — the suite reports green while real quality regresses. The audit requires every judge prompt to ship with at least 20 paired (input, golden grade) examples and a calibration script that asserts judge agreement above a documented threshold.
+
+```bash
+# Locate calibration datasets paired with judge prompts
+find evals -path "*/calibration/*.yaml" -o -name "calibration.yaml" 2>/dev/null
+
+# Per judge prompt, count paired examples
+for judge in $(grep -lE "kind:\s*judge" evals/cases/*.yaml 2>/dev/null); do
+  PROMPT_ID=$(yq '.assertions[] | select(.kind == "judge") | .prompt_id // .judge_id // ""' "$judge" | head -1)
+  [[ -z "$PROMPT_ID" ]] && continue
+  CAL=$(find evals/calibration -name "${PROMPT_ID}*.yaml" 2>/dev/null | head -1)
+  if [[ -z "$CAL" ]]; then
+    echo "high|$judge|judge prompt $PROMPT_ID has no calibration dataset|create evals/calibration/${PROMPT_ID}.yaml with ≥20 human-graded examples"
+  else
+    N=$(yq '.examples // [] | length' "$CAL")
+    [[ "$N" -lt 20 ]] && echo "medium|$CAL|only $N calibration examples (≥20 required)|add more golden cases until ≥20"
+  fi
+done
+
+# Calibration runner exists and asserts agreement
+grep -qE "calibrate|agreement|kappa|cohen" evals/run.sh evals/calibrate.sh 2>/dev/null \
+  || echo "medium|evals|no calibration runner|add evals/calibrate.sh that runs each judge against its calibration set and exits non-zero if agreement < threshold"
+```
+
+A judge with no calibration dataset is a finding even when the case-side reviewer_model is pinned — the pin only stabilizes the model, not the prompt-to-rubric drift. Calibration runs belong on every release of the unit under test, not only on every model rotation.
+
 ## Step 9 — CI Gate Behavior
 
 Confirm the gate exits non-zero on any P0 failure and reports per-case status:

@@ -87,6 +87,29 @@ def score_tool(tool):
     return findings
 ```
 
+## Step 2b — Poka-Yoke Parameter Constraints
+
+Tool descriptions that under-specify parameters let the model produce calls that deterministic guards reject — wasted turns. Detect parameter docs that name a type (e.g., "string") but not the constraint that prevents whole failure classes (e.g., "absolute filepath only", "max 100 lines per page", "ISO-8601 timestamp"). Source: [`poka-yoke-agent-tools`](../tool-engineering/poka-yoke-agent-tools.md).
+
+```python
+# Heuristic: per-parameter description must name a constraint, not just a type
+for tool in tools:
+    schema = tool.get("input_schema", {}).get("properties", {})
+    for pname, pdef in schema.items():
+        pdesc = pdef.get("description", "")
+        # Constraint markers: format/regex/range/enum/file-path/path-prefix/length-cap
+        if not re.search(r"absolute|relative|max |min |regex|enum|^/|prefix|cap|page|chunk|line", pdesc, re.I):
+            findings.append(("low", tool["name"],
+                             f"parameter {pname} description names type but not constraint",
+                             "add a poka-yoke constraint (e.g., 'absolute filepath only', 'max 100 lines per page')"))
+```
+
+Examples of constraints that eliminate failure classes:
+
+- File reads: "absolute filepath only" (eliminates relative-path drift across `cwd` changes)
+- Long-output tools: "max 100 lines per page; use `offset` for next page" (eliminates context-bloat from a single call)
+- Timestamps: "ISO-8601 with TZ" (eliminates parse ambiguity at the receiver)
+
 ## Step 3 — Cluster Overlapping Tools
 
 Cluster tools by capability (same domain, similar action). For each cluster ≥2:
@@ -153,6 +176,43 @@ for tool in tools:
 ```
 
 A finding here means the tool itself should be rejected at install time, not just reworded. ToolLeak signatures pair with [`audit-secrets-in-context`](audit-secrets-in-context.md): if the tool runs in a session that holds private data, the description is enough to trigger leak.
+
+## Step 4c — Tool-Search Discoverability
+
+When the harness exposes a tool-search tool (Claude Code's `ToolSearch`, MCP-spec [advanced tool use §tool search](../tool-engineering/advanced-tool-use.md)), tool descriptions are also search documents. A tool whose description omits the trigger phrases its caller would query loses every dispatch where the model loads tools on demand instead of pre-loaded.
+
+```python
+# For each tool in a server that supports defer_loading or tool search
+TRIGGER_VOCAB = {
+    "github":  ["pull request", "issue", "commit", "branch", "review", "pr", "release"],
+    "git":     ["commit", "branch", "merge", "rebase", "diff", "checkout", "stash"],
+    "fs":      ["read", "write", "list directory", "search files", "glob"],
+    "linear":  ["issue", "ticket", "cycle", "project", "team"],
+    "slack":   ["message", "channel", "thread", "user", "react"],
+}
+
+def discoverability_findings(tool, server_supports_search):
+    if not server_supports_search:
+        return []
+    desc = tool["description"].lower()
+    name = tool["name"].lower()
+    domain = name.split(".")[0]
+    vocab = TRIGGER_VOCAB.get(domain, [])
+    misses = [w for w in vocab if w not in desc]
+    if vocab and len(misses) > len(vocab) // 2:
+        return [("medium", tool["name"],
+                 f"description omits {len(misses)} of {len(vocab)} domain trigger words ({', '.join(misses[:5])})",
+                 "weave the missing trigger phrases into the description so tool search matches user intent")]
+    return []
+```
+
+Also confirm that servers exposing more than ~30 tools opt into deferred loading per [Advanced Tool Use §Tool Search](../tool-engineering/advanced-tool-use.md):
+
+```bash
+test -f .mcp.json && jq -r '.mcpServers | to_entries[] |
+  "\(.key)\t\(.value.tools // [] | length)\t\(.value.defer_loading // false)"' .mcp.json | \
+  awk -F'\t' '$2 > 30 && $3 == "false" {print "medium|" $1 "|" $2 " tools without defer_loading|set defer_loading: true and rely on tool search"}'
+```
 
 ## Step 5 — Emit the Report
 

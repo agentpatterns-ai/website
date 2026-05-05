@@ -141,6 +141,28 @@ for cmd in $COMMANDS; do
 done
 ```
 
+## Step 7b — Topology Ceilings and Risk-Aware Routing
+
+Multi-agent fleets fail past stable ceilings, not gradually. Two ceilings recur often enough to surface as audit findings:
+
+- **CRDT-backed parallel workspaces**: skip when the parallelizable task share is small or the fleet exceeds the 5-agent verified ceiling ([`crdt-observation-driven-coordination`](../multi-agent/crdt-observation-driven-coordination.md)). Above 5 agents, observation cost outpaces CRDT merge benefit.
+- **Risk-aware routing on uncertain handoffs**: when a router selects between downstream agents on inferred capability, use a risk-aware score (`mean − λ·stddev`) rather than mean alone — low-evidence contexts have wide posteriors and a mean-only router forces premature switching ([`contextual-capability-calibration`](../multi-agent/contextual-capability-calibration.md)).
+
+```bash
+# Detect parallel-fan-out sites that already exceed the CRDT ceiling
+for cmd in $COMMANDS; do
+  N=$(grep -cE "Agent\(|subagent_type:" "$cmd")
+  [[ $N -gt 5 ]] && grep -qiE "crdt|workspace|merge" "$cmd" \
+    && echo "medium|$cmd|fan-out of $N agents exceeds the 5-agent CRDT ceiling|narrow scope or switch to non-CRDT coordination"
+done
+
+# Detect routers that select on `mean` only (no risk term)
+grep -rE "argmax|max_score|select.*confidence|highest_score" \
+  .claude/skills/ scripts/ 2>/dev/null \
+  | grep -vE "stddev|sigma|risk|lambda|posterior" \
+  | head | awk -F: '{print "low|"$1"|router selects on mean alone|add a risk term (mean − λ·stddev) for low-evidence contexts"}'
+```
+
 ## Step 8 — Per-Handoff Scorecard
 
 ```markdown

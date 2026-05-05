@@ -100,6 +100,75 @@ done
 
 Cross-link to [`audit-secrets-in-context`](audit-secrets-in-context.md) — a high finding here also escalates that audit's severity, since the secret was at one point agent-readable.
 
+## Step 3b — Backend-Side Redaction Rules
+
+When raw bodies route to Datadog, Loki, or an OTel collector, redaction is the backend's job — Claude Code does not strip secrets before export ([Claude Code monitoring](https://docs.claude.com/en/docs/claude-code/monitoring-usage)). The audit must verify a redaction processor is wired on the specific high-risk fields, not just a generic regex sweep.
+
+The fields that carry the highest exposure per [Agent Observability in Practice §Key events](../observability/agent-observability-otel.md):
+
+- `claude_code.tool_parameters` — verbatim Read tool results, Bash command output
+- `claude_code.api.request.body` — full prompt text including pasted secrets
+- `claude_code.api.response.body` — full assistant text including reflected credentials
+- `attributes.user.message` and `attributes.assistant.message` — same content, different schema per backend
+
+```bash
+# OTel collector config
+find . /etc/otel /etc/otelcol -maxdepth 3 -type f \( -name "*.yaml" -o -name "*.yml" \) 2>/dev/null \
+  | xargs grep -lE "processors:|attributes:" 2>/dev/null | while read cfg; do
+  for field in tool_parameters api.request.body api.response.body user.message assistant.message; do
+    grep -qE "$field" "$cfg" || \
+      echo "medium|$cfg|no redaction processor for $field|add a 'transform' or 'attributes' processor that masks the field before export"
+  done
+done
+
+# Datadog agent log_pipelines or processing_rules
+find . -name "datadog.yaml" -o -name "datadog-agent.yaml" 2>/dev/null | while read cfg; do
+  grep -qE "log_processing_rules|processors" "$cfg" || \
+    echo "medium|$cfg|no log_processing_rules block|add mask_sequences for AKIA, ghp_, sk-ant-, BEGIN PRIVATE KEY"
+done
+
+# Loki promtail / vector sinks
+find . -name "promtail*.yaml" -o -name "vector.toml" -o -name "vector.yaml" 2>/dev/null | while read cfg; do
+  grep -qE "replace|mask|redact" "$cfg" || \
+    echo "medium|$cfg|no replace/mask transform|add a stage that drops or masks high-risk fields"
+done
+```
+
+A reference OTel `attributes` processor that masks the four fields:
+
+```yaml
+processors:
+  attributes/redact:
+    actions:
+      - key: claude_code.tool_parameters
+        action: hash      # or 'delete' if the field has no diagnostic value
+      - key: claude_code.api.request.body
+        action: delete
+      - key: claude_code.api.response.body
+        action: delete
+      - pattern: "(AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|sk-ant-[A-Za-z0-9_-]{40,})"
+        action: hash
+```
+
+Wire the processor into the `traces` and `logs` pipelines that handle Claude Code exports. A processor defined but not referenced by a pipeline does nothing — the audit must check both.
+
+## Step 3c — PII Beyond Secrets
+
+Secret patterns catch credentials but miss PII pasted by users (email addresses, account IDs, customer names) and by tools (web fetches that include user records). The audit ships a PII pattern set the project can extend.
+
+```python
+PII_PATTERNS = {
+    'email':        r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}',
+    'phone_e164':   r'\+\d{7,15}',
+    'ssn_us':       r'\b\d{3}-\d{2}-\d{4}\b',
+    'credit_card':  r'\b(?:4\d{3}|5[1-5]\d{2}|3[47]\d{2})[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b',
+    'ip_address':   r'\b(?:\d{1,3}\.){3}\d{1,3}\b',
+    'uuid':         r'\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b',
+}
+```
+
+PII findings warn rather than block by default — projects in regulated domains (HIPAA, GDPR, PCI) escalate to high. Document the project's domain in `AGENTS.md` so the audit knows which severity to apply.
+
 ## Step 4 — Retention Bound
 
 Persisted logs grow with session length. A writer with no rotation, no max-size, and no max-age fills the disk and extends the secret-exposure window indefinitely.

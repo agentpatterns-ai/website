@@ -23,12 +23,21 @@ A skill's value lives almost entirely in its description: the field the model re
 
 ## Step 1 — Locate Skills
 
+Place skills in one of three canonical locations: project (`.claude/skills/` or `.github/skills/`), user (`~/.claude/skills/`), or plugin paths — agents look up skills in this priority order ([`agent-skills-standard`](../standards/agent-skills-standard.md)). Skills outside these locations are unreachable to the harness and a finding on their own.
+
 ```bash
-find . \( \
+# Project, user, and plugin skill paths
+find . ~/.claude/skills "${CLAUDE_PLUGIN_PATHS:-/dev/null}" 2>/dev/null \( \
   -path "*/.claude/skills/*/SKILL.md" \
+  -o -path "*/.github/skills/*/SKILL.md" \
   -o -path "*/.cursor/skills/*/SKILL.md" \
   -o -path "*/skills/*/SKILL.md" \
 \) ! -path "*/node_modules/*" ! -path "*/.claude/worktrees/*"
+
+# Skills in non-canonical locations are unreachable — flag low
+find . -name "SKILL.md" ! -path "*/.claude/skills/*" ! -path "*/.github/skills/*" \
+  ! -path "*/.cursor/skills/*" ! -path "*/skills/*" ! -path "*/node_modules/*" \
+  | awk '{print "low|"$0"|SKILL.md outside canonical paths|move under .claude/skills/<name>/SKILL.md"}'
 ```
 
 For each found, capture: skill directory, frontmatter, body.

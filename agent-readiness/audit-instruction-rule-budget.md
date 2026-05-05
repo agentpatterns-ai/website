@@ -135,6 +135,24 @@ Examples of common dead rules:
 
 Extract the first 10 rules across all surfaces (in load order — typically AGENTS.md → CLAUDE.md → loaded skills). Confirm the top 5–10 are the highest-stakes (safety/correctness with high consequence). Cosmetic rules in primacy positions are findings.
 
+## Step 5b — Compound-Constraint Sub-Ceiling
+
+Compliance starts to fragment well below the 150-rule total when several constraints stack on a single instruction. Expect partial compliance beyond ~4 simultaneous constraints applied to one task — keep the prompt-resident constraint count below the ceiling. The same body of work that finds the 150-rule aggregate ceiling also finds the compound sub-ceiling ([`constraint-encoding-compliance-gap`](../instructions/constraint-encoding-compliance-gap.md)).
+
+```bash
+# Detect single rules that pile up multiple constraints
+for f in $SURFACES; do
+  awk '
+    /^[ ]*([-*]|[0-9]+\.)[ ]+/ {
+      n = gsub(/(must|always|never|do not|prefer|require|verify|enforce|reject)/, "&")
+      if (n >= 4) printf "medium|%s|line %d compound constraint count = %d|split into separate rules or enforce mechanically\n", FILENAME, NR, n
+    }
+  ' "$f"
+done
+```
+
+Counter-intuitive constraints that fail are not fixed by reformatting — split, simplify, or enforce mechanically; encoding tweaks do not close a compliance gap rooted in instruction count ([`constraint-degradation-code-generation`](../instructions/constraint-degradation-code-generation.md)). Measure compliance with rule-based scoring, not model self-report — model self-assessment systematically overestimates adherence ([same source](../instructions/constraint-encoding-compliance-gap.md)).
+
 ## Step 6 — Emit the Report
 
 ```markdown
