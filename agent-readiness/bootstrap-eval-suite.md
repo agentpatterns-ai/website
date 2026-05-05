@@ -11,7 +11,7 @@ aliases:
   - skill eval suite scaffold
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-bootstrap-eval-suite`](../../.claude/skills/agent-readiness-bootstrap-eval-suite/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-bootstrap-eval-suite/`
 
 # Bootstrap Eval Suite
 

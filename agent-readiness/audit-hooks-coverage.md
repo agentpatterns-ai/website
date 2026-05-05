@@ -10,7 +10,7 @@ aliases:
   - agent hook coverage check
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-hooks-coverage`](../../.claude/skills/agent-readiness-audit-hooks-coverage/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-hooks-coverage/`
 
 # Audit Hooks Coverage
 
@@ -83,6 +83,29 @@ for event, matcher, level, sev in required:
 ## Step 3 — Audit Each Wired Hook
 
 For every hook that is registered, run quality checks:
+
+### Existence and Executability
+
+The single highest-severity failure mode: a hook is registered but the script does not exist or is not executable. The harness invokes the script for every matching event; missing or non-executable scripts exit non-zero, which Claude Code reads as `block` — every subsequent matching tool call is then blocked, including the one that would write the missing file.
+
+```bash
+jq -r '
+  .hooks // {} | to_entries[] |
+  .key as $event |
+  .value[]?.hooks[]? | select(.type == "command") |
+  "\($event)\t\(.command)"
+' .claude/settings.json 2>/dev/null | while IFS=$'\t' read -r event cmd; do
+  # Strip leading ./ and any trailing arguments
+  PATH_ONLY=$(echo "$cmd" | awk '{print $1}' | sed 's|^\./||')
+  if [[ ! -e "$PATH_ONLY" ]]; then
+    echo "high|settings.json|$event hook script does not exist on disk: $cmd|create the script and chmod +x, or remove the registration; risk: every $event call blocked"
+  elif [[ ! -x "$PATH_ONLY" ]]; then
+    echo "high|settings.json|$event hook not executable: $cmd|chmod +x $PATH_ONLY"
+  fi
+done
+```
+
+If any high finding fires here, treat it as a deadlock-in-waiting and fix before any other audit work.
 
 ### Severity gates
 

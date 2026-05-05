@@ -10,7 +10,7 @@ aliases:
   - LLM discoverability index
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-bootstrap-llms-txt`](../../.claude/skills/agent-readiness-bootstrap-llms-txt/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-bootstrap-llms-txt/`
 
 # Bootstrap llms.txt
 

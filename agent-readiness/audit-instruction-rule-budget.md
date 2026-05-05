@@ -10,7 +10,7 @@ aliases:
   - rule count audit
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-instruction-rule-budget`](../../.claude/skills/agent-readiness-audit-instruction-rule-budget/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-instruction-rule-budget/`
 
 # Audit Instruction Rule Budget
 

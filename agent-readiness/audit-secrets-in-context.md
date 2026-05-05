@@ -10,7 +10,7 @@ aliases:
   - instruction file secret scan
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-secrets-in-context`](../../.claude/skills/agent-readiness-audit-secrets-in-context/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-secrets-in-context/`
 
 # Audit Secrets in Context
 

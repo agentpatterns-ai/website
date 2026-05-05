@@ -10,7 +10,7 @@ aliases:
   - project instruction file audit
 ---
 
-Packaged as: [`.claude/skills/agent-readiness-audit-claude-md`](../../.claude/skills/agent-readiness-audit-claude-md/SKILL.md)
+Packaged as: `.claude/skills/agent-readiness-audit-claude-md/`
 
 # Audit CLAUDE.md
 
