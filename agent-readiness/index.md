@@ -86,8 +86,8 @@ If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the as
 | Type | Purpose | Pages |
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
-| **Bootstrap** | Generate or scaffold missing artifacts | 11 |
-| **Audit** | Check existing artifacts; report findings | 9 |
+| **Bootstrap** | Generate or scaffold missing artifacts | 15 |
+| **Audit** | Check existing artifacts; report findings | 16 |
 
 Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
 
@@ -109,19 +109,31 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 | [`bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md) — edit-count loop detector | [`audit-hooks-coverage`](audit-hooks-coverage.md) |
 | [`bootstrap-tool-descriptions`](bootstrap-tool-descriptions.md) — rewrite tool descriptions to spec | [`audit-tool-descriptions`](audit-tool-descriptions.md) |
 | [`bootstrap-skill-template`](bootstrap-skill-template.md) — opinionated `SKILL.md` skeleton | [`audit-skill-quality`](audit-skill-quality.md) |
-| [`bootstrap-eval-suite`](bootstrap-eval-suite.md) — `evals/` with paired baseline/with-skill runner | (no audit; greenfield) |
+| [`bootstrap-eval-suite`](bootstrap-eval-suite.md) — `evals/` with paired baseline/with-skill runner | [`audit-eval-suite`](audit-eval-suite.md) |
+| [`bootstrap-incident-to-eval`](bootstrap-incident-to-eval.md) — incident → regression eval pipeline with P0/P1/P2 CI gate | (extends `bootstrap-eval-suite`) |
+| [`bootstrap-subagent-template`](bootstrap-subagent-template.md) — opinionated sub-agent skeleton with scoped tools, isolation, injection guard | [`audit-subagent-definitions`](audit-subagent-definitions.md), [`audit-handoff-protocols`](audit-handoff-protocols.md) |
+| [`bootstrap-plan-mode`](bootstrap-plan-mode.md) — plan-mode default + plan-review checklist + CI flag wiring | (no audit; configuration) |
+| [`bootstrap-tool-test-harness`](bootstrap-tool-test-harness.md) — per-tool isolated selection / parameter / output tests with CI gate | (extends `bootstrap-eval-suite`) |
 
 ### Audit
 
 - [`audit-agents-md`](audit-agents-md.md) — `AGENTS.md` against pointer-map rules
 - [`audit-claude-md`](audit-claude-md.md) — `CLAUDE.md` and equivalents
 - [`audit-instruction-rule-budget`](audit-instruction-rule-budget.md) — Cross-file rule count vs ~150 ceiling
+- [`audit-instruction-placement`](audit-instruction-placement.md) — Critical rules in primacy/recency, mid-file flags, contradictory restatements
 - [`audit-skill-quality`](audit-skill-quality.md) — `SKILL.md` description craft, gotchas, CLI-first body
-- [`audit-tool-descriptions`](audit-tool-descriptions.md) — Tool / MCP description quality
+- [`audit-tool-descriptions`](audit-tool-descriptions.md) — Tool / MCP description quality (incl. ToolLeak signatures)
+- [`audit-tool-error-format`](audit-tool-error-format.md) — RFC 9457 problem+json compliance and token cost on tool error responses
+- [`audit-tool-idempotency`](audit-tool-idempotency.md) — MCP `idempotentHint` / `destructiveHint` / `readOnlyHint` annotation hygiene and retry-safety
 - [`audit-hooks-coverage`](audit-hooks-coverage.md) — Lifecycle event coverage
 - [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) — Allow/deny lists, sandboxing
 - [`audit-secrets-in-context`](audit-secrets-in-context.md) — Live credentials in agent-readable files
 - [`audit-lethal-trifecta`](audit-lethal-trifecta.md) — Per-agent map of private data + untrusted content + egress
+- [`audit-subagent-definitions`](audit-subagent-definitions.md) — Sub-agent frontmatter, tools tightness, local trifecta, isolation
+- [`audit-slash-command-catalog`](audit-slash-command-catalog.md) — Model-invocable command surface, side-effect gates, listing budget
+- [`audit-handoff-protocols`](audit-handoff-protocols.md) — Multi-agent output schema declarations, raw-transcript forwarding, uncertainty preservation
+- [`audit-eval-suite`](audit-eval-suite.md) — Eval scaffold completeness, case provenance, idle-state / build-parity / per-model ablation coverage
+- [`audit-debug-log-retention`](audit-debug-log-retention.md) — Persisted log surfaces, secret redaction, retention bounds, default-off posture
 
 ## Known limitations
 

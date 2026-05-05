@@ -13,9 +13,12 @@ tags:
 
 Threat models identify the structural conditions that make agent systems exploitable and prescribe architectural mitigations.
 
+- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — Name the four ways an agent action can diverge from its audit record (gate-bypass, audit-forgery, silent host failure, wrong-target) to convert "is this runtime hardened?" into a coverage checklist against existing controls
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — Group threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers to map controls and surface coverage gaps where attacks propagate across boundaries
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Risk emerges when an agent has private data access, untrusted input, and egress simultaneously; remove at least one leg from every execution path
+- [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md) — A single untrusted tool call plants a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics; tested defenses cut attack success to 0–5% but at steep utility cost
+- [Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics](trojan-hippo-memory-attack.md) — A single untrusted tool call plants a payload in agent memory that activates only when the user later discusses finance, health, or identity, then exfiltrates the data
 
 ## Prompt Injection
 
@@ -64,6 +67,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — Gate AI chat activation on directory-managed GitHub organization membership via VS Code's `ChatApprovedAccountOrganizations` device policy; fail-closed and structurally distinct from seat licences
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — Pre-approve the tools a Claude Code slash command may use via frontmatter, narrowing the expected surface for shared commands
 - [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
+- [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — Bind each tool call to the user's current task via short-lived signed credentials, with a semantic axis flagging in-scope-but-off-task calls; the deterministic axis carries the security guarantee
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist — narrower than bypass, tighter than manual curation
 
 ## Code Injection
@@ -71,6 +75,12 @@ Excess permissions expand the blast radius of any failure or attack.
 Code injection in multi-agent pipelines exploits agent trust in code it reads as input, distinct from prompt injection against a single agent.
 
 - [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md) — A coder-reviewer-tester architecture with a dedicated security analysis agent achieves the highest resilience while recovering efficiency losses
+
+## Multi-Agent Propagation
+
+Multi-agent systems with shared retrieval propagate adversarial content agent-to-agent. Defenses target the contagion channel and the per-agent detection signal.
+
+- [Foresight-Guided Defense Against Infectious Jailbreaks in Multi-Agent Systems](foresight-guided-multi-agent-jailbreak-defense.md) — Per-agent persona simulation detects diversity collapse from poisoned shared memory, then surgically rolls back or bisects the album to remove contamination without homogenizing healthy agents
 
 ## PR-Time and Scheduled Review
 
@@ -83,6 +93,7 @@ Operational patterns that apply security agents to incoming changes and to resid
 Tool invocation exposes attack surfaces distinct from prompt injection. Malicious tools exploit argument generation and return processing to leak context and execute arbitrary commands.
 
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — Compile verified benign tool-call telemetry into a parameterized DFA and enforce permitted sequences and parameter bounds at runtime; fits structured workflows with stable tool catalogs
+- [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — Combine five deterministic structural checks at the agent-tool boundary with a semantic task-to-tool matcher; the two attack classes are orthogonal so neither layer alone suffices
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md) — Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence more than safety alignment; select guard models accordingly
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — Malicious MCP tools exploit argument generation to leak system prompts and chain description-plus-return injection to achieve remote code execution

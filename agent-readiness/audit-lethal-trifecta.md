@@ -179,6 +179,10 @@ def recommend(row):
 
 For each high-severity row, propose the configuration change in `.claude/agents/<name>.md` or `.claude/settings.json`. Decompose principals before adding defenses — two two-legged agents are safer than one three-legged agent with hardening.
 
+## Step 9 — Per Sub-Agent Decomposition
+
+The matrix above treats each sub-agent file as a single principal. When a sub-agent's `tools:` list is missing or wildcarded, it inherits the parent's full toolset and acquires every leg the parent holds — silently. Run [`audit-subagent-definitions`](audit-subagent-definitions.md) Step 4 first; any sub-agent flagged as a "local trifecta" there appears as a (1,1,1) row here, regardless of whether the parent itself is safe. Do not consider this trifecta audit complete until the sub-agent definition audit has run and its findings have been merged into the matrix above. Sub-agent decomposition rules from [`subagent-schema-level-tool-filtering`](../multi-agent/subagent-schema-level-tool-filtering.md).
+
 ## Idempotency
 
 Read-only.
@@ -207,3 +211,5 @@ Status: <SAFE | TRIFECTA — N principals at risk>
 - [URL Exfiltration Guard](../security/url-exfiltration-guard.md)
 - [Defense in Depth for Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [Audit Permissions and Blast Radius](audit-permissions-blast-radius.md)
+- [Audit Sub-Agent Definitions](audit-subagent-definitions.md)
+- [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)

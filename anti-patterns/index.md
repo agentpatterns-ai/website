@@ -38,5 +38,6 @@ tags:
 - [The Test Homogenization Trap](test-homogenization-trap.md) — LLM-generated test suites share the generating model's blind spots, providing false confidence because tests miss the same edge cases the code misses
 - [The Yes-Man Agent](yes-man-agent.md) — Agents without verification instructions execute every request without flagging problems
 - [Shadow Tech Debt](shadow-tech-debt.md) — AI agents operating without structural codebase understanding accumulate invisible architectural drift that compounds at machine speed
+- [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — Stronger LLMs produce more bloated and coupled code; capability gains buy maintainability losses, and detailed prompting does not mitigate the decay
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
 - [Vibe Coding](../workflows/vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
