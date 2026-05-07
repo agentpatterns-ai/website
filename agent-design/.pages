@@ -49,10 +49,13 @@ nav:
       - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
+      - rag-over-thinking-traces.md
       - session-initialization-ritual.md
       - session-recap.md
       - subtask-level-memory.md
+      - tiered-memory-architecture.md
   - "Control & Orchestration":
+      - background-todo-agent.md
       - controlling-agent-output.md
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
@@ -96,6 +99,7 @@ nav:
       - reasoning-budget-allocation.md
       - rollback-first-design.md
       - specialized-slm-as-agent-tool.md
+      - syntax-aware-completion-routing.md
       - wink-agent-misbehavior-correction.md
   - "Harness & Tools":
       - agent-composition-patterns.md

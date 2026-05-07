@@ -12,6 +12,7 @@ tags:
 ## Pages
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — Agent-assisted code review routes the mechanical first pass to an agent, reserving human reviewers for design and architecture judgment
+- [Batched Suggestion Application](batched-suggestion-application.md) — Cluster mechanical agent suggestions and apply them as a single commit, with category-bounded batches and audit-trail discipline that prevent the workflow from becoming a rubber stamp
 - [AIRA: Inspection Framework for AI-Generated Code](aira-inspection-framework.md) — A deterministic 15-check inspection framework targeting the failure-truthfulness patterns where AI-generated code preserves the appearance of functionality while silently degrading guarantees
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — Autonomous coding agents dramatically increase PR volume but face lower merge rates than humans — speed and quantity alone do not equal engineering value
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - security
 ---
+
 # Dual-Boundary Sandboxing
 
 > Enforce both filesystem and network isolation simultaneously; neither boundary alone is sufficient to prevent security breaches or data exfiltration by an autonomous agent.
@@ -38,6 +39,7 @@ These boundaries are enforced at the OS level, not the prompt level. Prompt-leve
 - **Linux:** `bubblewrap` (used by Flatpak) applies filesystem namespaces and seccomp filters; network namespaces restrict outbound traffic
 - **macOS:** `Seatbelt` (sandbox profiles via `sandbox-exec`) applies filesystem and network policies — note that `sandbox-exec` is deprecated since macOS 10.13 and may be removed in a future release; prefer container-based approaches (Docker/Podman) for new tooling
 - **Container-based:** Docker/Podman with restricted mount points and network policies achieve similar effects with more tooling overhead
+- **Agent-purpose-built:** [`docker sbx`](https://docs.docker.com/reference/cli/sbx/) wraps container primitives in a CLI optimised for agent sandboxes — see [Adopting `docker sbx` for Agent Sandboxes](docker-sbx-adoption.md) and the [Sandbox Runtime Comparison](sandbox-runtime-comparison.md) for trade-offs against bubblewrap, Seatbelt, and raw Docker/Podman
 
 The agent runs inside the enforced environment. Permissions it needs (specific filesystem paths, specific domains) are granted explicitly; everything else is denied by default.
 
@@ -113,6 +115,8 @@ Both examples enforce the filesystem boundary (write access restricted to `$PROJ
 
 ## Related
 
+- [Sandbox Runtime Comparison](sandbox-runtime-comparison.md)
+- [Adopting `docker sbx` for Agent Sandboxes](docker-sbx-adoption.md)
 - [Subprocess PID Namespace Sandboxing](subprocess-pid-namespace-sandboxing.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Protecting Sensitive Files](protecting-sensitive-files.md)

@@ -57,16 +57,19 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — Three-layer architecture (observation stream, scored retrieval, reflection synthesis) for maintaining coherent behavior across long-running, high-observation-density agent sessions
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md) — A five-layer lens (pretraining, alignment, self-narrative, memory, weight-level adaptation) for deciding where governance attaches in persistent agents and when compositional drift will ratchet past a visible-layer rollback
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — Extract causal lessons from agent execution traces — what worked, what failed, which approaches were abandoned and why — so every run makes future runs more effective
+- [RAG over Thinking Traces](rag-over-thinking-traces.md) — For reasoning-intensive tasks, swap the document corpus for prior thinking trajectories — the same retrieve-then-generate pipeline beats both no-RAG and document-RAG with flat or lower inference cost
 - [Session Initialization Ritual: How Agents Orient Themselves](session-initialization-ritual.md) — A mandatory startup sequence that every agent session executes before touching code — verify state, orient to progress, confirm baseline health, then act
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md) — A structured, agent-authored artifact at compaction, resume, or fork boundaries that preserves goal-state rather than text-density — restoring why and what-next across discontinuities
 - [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md) — Assign and update utility scores to stored episodic memories so retrieval favors historically effective solutions, not just semantically similar ones
 - [Memory Transfer Learning: Cross-Domain Memory Reuse](memory-transfer-learning.md) — How coding agents transfer learned memories across different task domains, why abstraction level determines transferability, and when cross-domain memory causes negative transfer
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — Store and retrieve memory at individual reasoning stages, not whole sessions, to prevent misguided retrieval when tasks share surface similarity
+- [Tiered Memory Architecture: Episodic-to-Semantic Consolidation](tiered-memory-architecture.md) — Separate raw episode storage from a curated semantic tier and promote facts between them only on observed re-use — pays off for long operation windows, adds cost without benefit elsewhere
 
 ## Control & Orchestration
 
 Patterns for steering agent behavior, detecting convergence, and managing execution flow.
 
+- [Background Todo Agent](background-todo-agent.md) — Route the agent's todo-list maintenance loop to a small background model so the frontier model spends its attention budget on the active sub-task instead of bookkeeping
 - [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md) — Matching the agent's response format to what you actually need reduces noise and preserves context budget
 - [Convergence Detection in Iterative Refinement](convergence-detection.md) — Monitor three observable signals across refinement passes to replace intuition-based stopping with a mechanical criterion
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviews the primary agent's plan before execution begins, catching structural errors early when recovery is cheap
@@ -113,6 +116,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a small fine-tuned model behind a tool-call interface so a large orchestrator can offload high-volume narrow operations — search, exploration, terminal output filtering — without spending its own context budget
+- [Syntax-Aware Completion Routing for Local-First Code Models](syntax-aware-completion-routing.md) — Combine token confidence with a parse-time syntax check on the small model's output to decide per-request whether the local completion ships or escalates to a self-hosted larger model
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — An async trajectory-observer system that classifies misbehaviors into three categories and injects targeted course-corrections
 
 ## Harness & Tools

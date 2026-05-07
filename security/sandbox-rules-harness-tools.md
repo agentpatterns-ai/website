@@ -8,6 +8,7 @@ tags:
   - agent-design
   - human-factors
 ---
+
 # Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party
 
 > When composing tools from multiple sources, define sandbox and guardrail rules only for the tools your harness controls — and document explicitly that external tools must enforce their own guardrails.
@@ -20,7 +21,7 @@ Codex draws a clear boundary: the sandbox developer message describes restrictio
 
 ## Why the Separation Matters
 
-A harness can only enforce restrictions on tools it controls at the API level. When an MCP server receives a call, the harness has already handed off execution. The MCP server processes the request according to its own logic and returns a result — the harness cannot intercept or modify this behavior at the sandbox layer.
+A harness can only enforce restrictions on tools it controls at the API level. A harness-owned shell tool wrapping [`docker sbx`](docker-sbx-adoption.md), for example, sits inside the sandbox boundary the harness defines; an MCP server invoked from the same agent does not. When an MCP server receives a call, the harness has already handed off execution. The MCP server processes the request according to its own logic and returns a result — the harness cannot intercept or modify this behavior at the sandbox layer.
 
 If harness sandbox rules are written as if they apply to MCP tools, two problems follow:
 
@@ -85,6 +86,7 @@ Explicit scoping is not a cure-all. Specific failure conditions:
 
 ## Related
 
+- [Sandbox Runtime Comparison](sandbox-runtime-comparison.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)

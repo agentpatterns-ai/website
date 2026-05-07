@@ -99,6 +99,7 @@ The agent's Bash invocations run inside a PID namespace. Any background process 
 
 ## Related
 
+- [Sandbox Runtime Comparison](sandbox-runtime-comparison.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party](sandbox-rules-harness-tools.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
