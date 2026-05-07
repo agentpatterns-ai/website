@@ -86,7 +86,7 @@ If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the as
 | Type | Purpose | Pages |
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
-| **Bootstrap** | Generate or scaffold missing artifacts | 22 |
+| **Bootstrap** | Generate or scaffold missing artifacts | 23 |
 | **Audit** | Check existing artifacts; report findings | 26 |
 
 Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
@@ -121,6 +121,7 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 | [`bootstrap-human-review-gate-pr`](bootstrap-human-review-gate-pr.md) — CODEOWNERS + branch protection for tiered AI/human review on agent-authored PRs | (no audit; configuration) |
 | [`bootstrap-reasoning-execution-routing`](bootstrap-reasoning-execution-routing.md) — per-role model routing (frontier for reasoning, fast/cheap for execution) with pinned model IDs and OTel smoke-test | (no audit; configuration) |
 | [`bootstrap-agent-commit-attribution`](bootstrap-agent-commit-attribution.md) — dedicated signing key, structured trailers, branch-protection rule, and rotation playbook | [`audit-agent-built-code-health`](audit-agent-built-code-health.md), [`audit-agent-pr-quality-metrics`](audit-agent-pr-quality-metrics.md) |
+| [`bootstrap-pr-narrative-template`](bootstrap-pr-narrative-template.md) — issue spec, PR body, commit message templates and AGENTS.md pointer for the Why/What/Trade-offs visible-thinking discipline | [`audit-pr-narrative-quality`](audit-pr-narrative-quality.md) |
 
 ### Audit
 

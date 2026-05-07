@@ -23,7 +23,7 @@ Packaged as: `.claude/skills/agent-readiness-audit-pr-narrative-quality/`
 !!! info "Applicability"
     Run when ≥30 agent-authored PRs have merged in the audit window. Below that threshold the per-PR findings are useful but the rate baselines are not. Skip on solo or inner-source repos with no external reviewers and on squash-merge-only repos where per-commit narration collapses into the PR body — see [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §When This Backfires.
 
-PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). High reviewer discussion volume without structure is the failure mode, not engagement. This audit checks three artifacts the agent produces — the originating issue, the PR body, and the commit log — against the templates that move the merge-rate dial. Rules from [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md).
+PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). High reviewer discussion volume without structure is the failure mode, not engagement. This audit checks three artifacts the agent produces — the originating issue, the PR body, and the commit log — against the templates that move the merge-rate dial. Rules from [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md). Paired bootstrap: [`bootstrap-pr-narrative-template`](bootstrap-pr-narrative-template.md) installs the templates this audit checks for.
 
 ## Step 1 — Locate Agent PRs and Source Issues
 
@@ -193,8 +193,8 @@ Top fix: <one-liner — usually wire a PR template through CLAUDE.md/AGENTS.md o
 - [Visible Thinking in AI-Assisted Development](../observability/visible-thinking-ai-development.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md)
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md)
-- [Agent-Proposed Merge Resolution](../code-review/agent-proposed-merge-resolution.md)
 - [Agent Commit Attribution](../workflows/agent-commit-attribution.md)
 - [Audit Agent PR Quality Metrics](audit-agent-pr-quality-metrics.md)
 - [Bootstrap Human Review Gate (PR)](bootstrap-human-review-gate-pr.md)
 - [Bootstrap Agent Commit Attribution](bootstrap-agent-commit-attribution.md)
+- [Bootstrap PR Narrative Template](bootstrap-pr-narrative-template.md)

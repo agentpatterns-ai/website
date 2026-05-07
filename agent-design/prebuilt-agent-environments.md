@@ -31,7 +31,7 @@ This page covers lever (1). For lever (2), see [Session Harness Sandbox Separati
 
 GitHub reported that switching the Copilot cloud agent to GitHub Actions custom images cut startup time by over 20%, "thanks to optimized runner environments built with GitHub Actions custom images" — a layer on top of an earlier 50% improvement from March 2026 ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)). The mechanism: "by prebuilding that environment with a custom Actions image, startup overhead has been significantly reduced" (same source).
 
-Bake what is stable across sessions; keep dynamic what is per-session.
+Bake what is stable across sessions; keep dynamic what is per-session. Agent-purpose sandbox runtimes such as [`docker sbx`](../security/docker-sbx-adoption.md) compose with prebuilt images by mounting the baked image as the sandbox base — see the [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) for trade-offs against bubblewrap and raw Docker/Podman.
 
 | Bake into image | Keep dynamic |
 |-----------------|--------------|
@@ -121,6 +121,7 @@ The `npm ci` step is gone from the hot path; what remains is the working-tree cl
 
 ## Related
 
+- [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — selection rubric across bubblewrap, Seatbelt, raw Docker/Podman, and `docker sbx`
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md) — the runtime-side sibling: deterministic per-session setup via `copilot-setup-steps.yml`
 - [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the complementary lever: remove provisioning from the hot path entirely
 - [Cursor Self-Hosted Cloud Agents](../tools/cursor/self-hosted-cloud-agents.md) — when the runner runs on your infra, image governance is yours end-to-end

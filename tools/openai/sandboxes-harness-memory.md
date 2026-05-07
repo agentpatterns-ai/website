@@ -161,6 +161,7 @@ Swap `sandbox_client="docker"` for `"unix_local"` in dev or a hosted provider in
 
 ## Related
 
+- [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — selection rubric across the OpenAI sandbox clients, `docker sbx`, bubblewrap, and Seatbelt
 - [Subprocess and PID-namespace sandboxing](../../security/subprocess-pid-namespace-sandboxing.md)
 - [Sandbox rules and harness tools](../../security/sandbox-rules-harness-tools.md)
 - [Harness engineering](../../agent-design/harness-engineering.md)

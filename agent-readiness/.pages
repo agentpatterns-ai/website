@@ -27,6 +27,7 @@ nav:
     - bootstrap-human-review-gate-pr.md
     - bootstrap-reasoning-execution-routing.md
     - bootstrap-agent-commit-attribution.md
+    - bootstrap-pr-narrative-template.md
   - Audit:
     - audit-agents-md.md
     - audit-claude-md.md

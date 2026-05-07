@@ -104,6 +104,7 @@ The user sees a brief pause, not a restart. Time-to-first-token on resume is dom
 
 ## Related
 
+- [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — runtime selection rubric for the Sandbox primitive
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — which layer to run on, versus how the layer is structured internally
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase initializer/worker pattern that predates full virtualization
 - [Harness Engineering](harness-engineering.md) — the broader discipline of environment design for reliable agent output

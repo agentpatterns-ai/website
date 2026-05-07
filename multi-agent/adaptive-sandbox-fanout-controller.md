@@ -132,6 +132,7 @@ A code-generation pipeline produces SQL query implementations. The task is objec
 
 ## Related
 
+- [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — selection rubric for the per-task sandbox runtime when fanning out
 - [Fan-Out Synthesis](fan-out-synthesis.md) — Static best-of-N with post-hoc synthesis; simpler baseline without adaptive control
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md) — Best-of-N applied recursively at each delegation node
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Static batching for rate-limit safety; the fixed-N approach this pattern extends

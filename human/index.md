@@ -27,3 +27,4 @@ tags:
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — Empirical evidence from 150 data scientists shows strategy clarity predicts ML project success far more than AI coding speed
 - [Suggestion Gating: Why Fewer AI Completions Improve Developer Experience](suggestion-gating.md) — Lightweight classifiers gate suggestions before display, improving acceptance rates 33–48% while cutting wasted inference
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — Engineering orgs adopt AI in three segments — power users, chat-tool middle, refusers — and the shape determines where enablement and tooling investment pays back
+- [LLM Refactoring Adoption Patterns](llm-refactoring-adoption-patterns.md) — Five patterns for how developers modify ChatGPT refactoring suggestions — driven by prompt context completeness and refactor complexity
