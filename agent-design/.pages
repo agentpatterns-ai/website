@@ -19,6 +19,7 @@ nav:
       - delegation-decision.md
       - empowerment-over-automation.md
       - execution-first-delegation.md
+      - execution-lineage-dag.md
       - runtime-scaffold-evolution.md
       - scaffold-architecture-taxonomy.md
       - inversion-analysis.md
@@ -66,6 +67,7 @@ nav:
       - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
+      - goal-driven-autonomous-loop.md
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
@@ -87,6 +89,7 @@ nav:
       - behavioral-drivers-agent-success.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
+      - dual-budget-control-search-agents.md
       - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
       - feedback-capability-equalizer.md

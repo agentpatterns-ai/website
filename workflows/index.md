@@ -33,6 +33,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [Factory Over Assistant: Orchestrating Parallel Agent Fleets](factory-over-assistant.md) — Shift from watching one agent to orchestrating parallel agents with automated feedback loops — and the infrastructure required to make it viable
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md) — Running multiple simultaneous agent sessions transforms the engineer's role from contributor to tech lead
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — Multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues via codebase investigation
+- [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — A single skill encodes a state machine into issue labels and produces a durable agent brief as the executor hand-off contract
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](posttooluse-auto-formatting.md) — Configure a PostToolUse hook so that formatting and linting run automatically after every file Claude writes or edits
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) — Adding agent support to an existing repo
 - [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md) — Validate agent prompt changes by replaying a past task in isolation and diffing the result against what was actually merged
@@ -42,6 +43,7 @@ description: "End-to-end workflows for agent-assisted development — from proje
 - [The AI Development Maturity Model](ai-development-maturity-model.md) — Phases of AI coding tool adoption, from skeptic to agent-native workflows
 - [Plan Mode: Read-Only Exploration Before Implementation](plan-mode.md) — Restrict agents to read-only operations to surface understanding and correct approach before any code is written
 - [The Research-Plan-Implement Pattern](research-plan-implement.md) — Structure agent work in three explicit phases to avoid context-wasteful rework from premature coding
+- [Mise en Place for Agentic Coding](mise-en-place-agentic-coding.md) — Three-phase preparation methodology (contextual grounding, collaborative specification, task decomposition) that front-loads alignment work before parallel agent fan-out
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md) — Summarize, correct, plan, and approve before the agent writes a single line of implementation code
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — Empirical evidence shows AI coding tools produce transient velocity gains but persistent quality degradation — sustainable speed requires scaling QA as a first-class concern
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
