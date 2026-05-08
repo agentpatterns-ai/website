@@ -18,6 +18,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — Group threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers to map controls and surface coverage gaps where attacks propagate across boundaries
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Risk emerges when an agent has private data access, untrusted input, and egress simultaneously; remove at least one leg from every execution path
+- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) — Under controlled knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy; architecture choice is part of the threat model
 - [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md) — A single untrusted tool call plants a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics; tested defenses cut attack success to 0–5% but at steep utility cost
 - [Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics](trojan-hippo-memory-attack.md) — A single untrusted tool call plants a payload in agent memory that activates only when the user later discusses finance, health, or identity, then exfiltrates the data
 
@@ -58,6 +59,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — Keep broad credentials outside the sandbox; use an external proxy that attaches scoped tokens only to validated requests
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — Inject credentials as environment variables so secrets never appear in context or generated code
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md) — The URL itself is a data channel; agents that construct or follow URLs from untrusted content can leak context before a response is read
+- [Multitenant RAG: Closing the Relevance-Authorization Gap](multitenant-rag-authorization-gap.md) — Retrieval ranks by relevance, not authorization — in a shared corpus, the highest-scoring chunk for one tenant can belong to another; close the gap with policy-aware ingestion, two-tier retrieval gating, and server-side orchestration
 
 ## Permissions
 
@@ -104,6 +106,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
+- [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
 

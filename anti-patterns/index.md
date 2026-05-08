@@ -22,6 +22,7 @@ tags:
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — Copying agent configurations without understanding why they work produces agents that follow irrelevant conventions
 - [Comprehension Debt](comprehension-debt.md) — The growing gap between AI-generated code volume and developer understanding; it lives in people, not in the codebase
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — A hallucination treated as fact propagates through subsequent reasoning, producing confidently wrong output that is internally consistent
+- [Cross-Component Interference in Agent Scaffolds](cross-component-interference.md) — Stacking planning, memory, retrieval, and self-reflection on top of tool use is rarely the optimum; the maximally-equipped agent loses to smaller subsets in 30-50% of tasks, with planning and memory the worst offenders
 - [Demo-to-Production Gap](demo-to-production-gap.md) — Agent demos curate inputs and ignore edge cases; per-step accuracy compounds multiplicatively, making demo success rates poor predictors of production performance
 - [Distractor Interference: Relevance Is Not Enough](distractor-interference.md) — Semantically related but inapplicable instructions reduce compliance with applicable ones
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — Loading tool definitions dynamically per step destroys prompt cache continuity, erasing cost savings that exceed the token reduction

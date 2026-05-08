@@ -24,11 +24,13 @@ tags:
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Two-thirds of code completion failures are model errors, but one quarter are integration failures — fix both to improve acceptance rates
 - [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — 23 recurrent fix patterns from 930 real LLM-agent bugs; the tools component dominates and framework version churn drives most fixes
+- [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — Multi-file backend agents drop ~30 percentage points in assertion pass rate as architectural, ORM, and framework constraints accumulate — convention-heavy frameworks take the largest hit
 - [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Outcome-only grading misses 44% of safety violations — add structured trajectory auditing for safety and robustness assessment
 - [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — Skill-augmented agent benchmarks overstate production gains — performance degrades systematically with realistic retrieval, and query-specific refinement recovers the gap
 - [Variance-Based RL Sample Selection](variance-based-rl-sample-selection.md) — Profile training samples by score variance before RL fine-tuning to identify the productive subset where the model sometimes succeeds and sometimes fails
 - [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — Chain-of-thought is not a universal win for code generation; measure Pass@1 and Pass^k with and without CoT before enabling it as a default
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behaviour with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
+- [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes; useful complement to deterministic guardrails, but high AUPRC does not imply usable alerts
 
 ## Behavioral Testing
 

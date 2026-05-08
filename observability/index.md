@@ -21,5 +21,6 @@ tags:
 - [Loop Detection](loop-detection.md) — Track repeated file edits within a session and signal the agent to try a different approach when it enters an unproductive cycle
 - [Making Observability Legible to Agents](observability-legible-to-agents.md) — Wire browser automation, application metrics, and structured logs into agent context so agents can reason about system behavior from real signals
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, and a bootstrap script
+- [Traces Need Feedback to Power Learning](traces-need-feedback-to-power-learning.md) — A trace records what the agent did; only a verdict attached to it labels whether it was right — couple them at write time so the trace store doubles as an eval corpus
 - [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — When AI handles production speed, meaningful commits, signal-rich PRs, and clear branch naming become the primary quality differentiators

@@ -1,0 +1,93 @@
+---
+title: "Agent-Generated Code Maintenance Asymmetry"
+description: "AI-generated files receive about half the commit frequency of human-authored files, and the modification mix shifts toward feature additions instead of bug fixes — a maintenance footprint that requires its own ownership and review policy."
+tags:
+  - code-review
+  - human-factors
+  - arxiv
+aliases:
+  - Agent Code Maintenance Footprint
+  - Agent-Generated Code Lifecycle
+---
+
+# Agent-Generated Code Maintenance Asymmetry
+
+> AI-generated files receive about half the commit frequency of human-authored files, and the modification mix shifts toward feature additions instead of bug fixes — a maintenance footprint that requires its own ownership and review policy.
+
+## The Evidence
+
+An empirical study of 508 AI-generated files and 1,543 modifying commits across 100 popular GitHub repositories — drawn from the AIDev dataset — measured how AI-generated and human-authored files diverge after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). Three asymmetries appear in the first six months of a file's life.
+
+### Frequency
+
+AI-generated files receive roughly half the commit frequency of human-authored files in the first month, with activity declining further over the subsequent two months. The magnitude of each modification is also smaller — fewer lines touched per commit ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+
+A line-level replication on a separate AIDev sample finds the same direction with statistical significance: AI-authored lines have a 16% lower hazard of modification (HR = 0.842, p < 0.001) and a 15.8 percentage-point lower modification rate ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
+
+### Modification mix
+
+The composition of changes inverts between origins.
+
+| Modification type | AI-generated | Human-authored |
+|-------------------|-------------:|---------------:|
+| Feature addition | 21.78% | — |
+| Refactoring | 14.19% | — |
+| Bug fix | 11.73% | 16.76% |
+| Documentation | — | 16.22% |
+
+For AI-generated files, feature additions lead. For human-authored files, bug fixes lead ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+
+### Who maintains
+
+Humans perform 83.21% of maintenance commits on AI-generated files. On human-authored files the share is 92.98%. The agent that wrote the file rarely returns to maintain it ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+
+## Two Readings of the Same Data
+
+The authors flag the interpretive ambiguity directly: lower modification rates "might suggest superior code quality, yet developers may avoid modifying AI-generated code due to difficulty in comprehending it" ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+
+The second reading is consistent with separate evidence. A study of 302,600 AI-authored commits across 6,299 repositories found that 22.7% of AI-introduced issues survive to the latest version of their repository, with code smells accounting for 89.3% of issues ([arXiv:2603.28592](https://arxiv.org/abs/2603.28592)). Lower commit volume is not the same as fewer defects. See [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md) for the architectural-incoherence side and [Comprehension Debt](../anti-patterns/comprehension-debt.md) for the human side.
+
+## Why the Mix Shifts to Features
+
+The Sawada et al. paper offers one interpretation: "generated files may lack sufficient coverage of requirements" — agents under-deliver on initial scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This aligns with the broader pattern that agents skew toward simpler changes — Codex-assisted PRs introduce cyclomatic complexity changes 9.1% of the time versus 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+
+## Practical Implications
+
+**Treat AI-authored regions as a distinct maintenance category.** The 83/17 split means the team that ships an AI-authored file is the team that maintains it, typically without help from the agent that wrote it.
+
+**Do not read low commit frequency as a quality signal.** Two competing mechanisms produce the same observation. Pair the metric with defect-survival rate or comprehension-test scores before treating stability as cleanliness.
+
+**Audit AI-authored files for missing scope, not just bugs.** Feature additions dominate post-merge maintenance. Add an explicit follow-up review that asks "what did the agent leave out?" rather than "what did it get wrong?"
+
+**Modification timing is driven by organizational factors.** Predicting *when* AI-authored code gets touched scores Macro F1 = 0.285 on textual features alone, suggesting review depth, ownership, and comprehension drive timing more than code shape ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
+
+## Key Takeaways
+
+- AI-generated files see roughly half the commit frequency of human-authored files in the first month, with smaller per-commit change magnitude
+- The modification mix inverts: AI files are dominated by feature additions (21.78%) and refactoring (14.19%); human files are dominated by bug fixes (16.76%) and documentation (16.22%)
+- Humans perform 83.21% of maintenance on AI-generated files; agents return for only 16.79%
+- Lower modification rates have two competing explanations — better quality or comprehension-driven avoidance — and the data does not distinguish them
+- Feature-addition dominance suggests AI-generated files under-cover requirements at merge time
+
+## When This Pattern Doesn't Apply
+
+The 6-month observation window and the 100-repository AIDev sample bound generalizability. The asymmetries are unlikely to hold in three contexts:
+
+- **Throwaway scaffolding**: prototypes, spike branches, and generated boilerplate that no one was going to maintain regardless of authorship
+- **Highly specified ticket workflows**: narrow, fully specified tasks (e.g. "implement this DTO") where low post-merge modification reflects spec stability, not avoidance or quality
+- **Closed-loop AI authoring and maintenance**: pipelines where an agent both writes and maintains code (e.g. agentic refactor jobs on cron) collapse the human-vs-agent maintenance split and invalidate the 83/17 ratio
+
+## Related
+
+- [Shadow Tech Debt](../anti-patterns/shadow-tech-debt.md) — the architectural-incoherence mechanism that produces issues agents do not return to fix
+- [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the human-side mechanism for why developers avoid modifying code they did not author
+- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — pre-merge counterpart: agents author at high volume but lower acceptance, and skew structurally simpler
+- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — review-side mechanism by which AI-authored work makes it through merge despite missing scope
+- [Predicting Reviewable Code](predicting-reviewable-code.md) — predictive signals for AI-generated functions likely to be deleted, complementary to maintenance-survival data
+
+## Sources
+
+- [arXiv:2605.06464](https://arxiv.org/abs/2605.06464) — Sawada, Shirai, Kashiwa, Yamaguchi, Iwata, Iida: "To What Extent Does Agent-generated Code Require Maintenance? An Empirical Study"
+- [arXiv:2601.16809](https://arxiv.org/abs/2601.16809) — "Will It Survive? Deciphering the Fate of AI-Generated Code in Open Source" — line-level survival analysis on a separate AIDev sample
+- [arXiv:2603.28592](https://arxiv.org/abs/2603.28592) — "Debt Behind the AI Boom: A Large-Scale Empirical Study of AI-Generated Code in the Wild"
+- [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset paper
