@@ -1,6 +1,6 @@
 ---
 title: "AGENTS.md as a Table of Contents, Not an Encyclopedia"
-description: "Keep AGENTS.md to ~100 lines as a pointer map and put structured knowledge in a versioned docs/ directory treated as the system of record."
+description: "Keep AGENTS.md to ~100 lines as a pointer map, put structured knowledge in a versioned docs/ directory, and tag every terminal rule with source, applicability, and expiry so the file is self-pruning under periodic audit."
 tags:
   - context-engineering
   - instructions
@@ -11,7 +11,7 @@ aliases:
 
 # AGENTS.md as a Table of Contents, Not an Encyclopedia
 
-> Keep AGENTS.md to ~100 lines as a pointer map; put structured knowledge in a versioned docs/ directory treated as the system of record.
+> Keep AGENTS.md to ~100 lines as a pointer map, put structured knowledge in a versioned docs/ directory, and tag every terminal rule with source, applicability, and expiry so the file is self-pruning under periodic audit.
 
 !!! info "Also known as"
     Pointer Map, AGENTS.md Content Strategy. For the complementary pattern on **where** to place AGENTS.md files (distributed across directory levels), see [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md).
@@ -54,6 +54,49 @@ Practical approaches:
 - CI that breaks if AGENTS.md contains a broken link to docs/
 - Lint rules that flag docs/ files not referenced from AGENTS.md
 - Automated prompts to review docs/ files older than a set threshold
+
+## Rule Lifecycle Metadata
+
+The pointer map controls AGENTS.md size *structurally*. Lifecycle metadata controls it *temporally* — without it, the same one-way ratchet refills the file. The walkinglabs harness-engineering lecture names the failure mode directly: *"agent makes a mistake, you say 'add a rule to prevent this,' add it to AGENTS.md, it works temporarily, agent makes a different mistake, add another rule, repeat, file bloats out of control"* ([walkinglabs lecture 04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). Each addition is one-way because no one can tell what is safe to delete.
+
+The discipline that closes the loop is per-rule metadata. The same lecture prescribes three fields for every rule:
+
+- **Source** — *"why was this rule added?"* The failure mode, PR comment, or incident that produced it. Auditable provenance — `git blame` answers who and when, but not *why*.
+- **Applicability** — *"when is this rule needed?"* The condition under which it fires: file pattern, task type, branch. Rules that "always apply" are usually misformed; the failure mode being prevented has a scope.
+- **Expiry** — *"under what circumstances can this rule be removed?"* The observable that retires it: model capability rises, feature removed, never fires for N weeks.
+
+The framing the lecture uses: *"Manage your instructions like you manage code dependencies — unused dependencies should be deleted, otherwise they just slow the system down."* The metadata converts deletion from an open-ended judgement call into a closed-form predicate — has the expiry observable fired? With the predicate, the default flips from "keep when uncertain" to "delete when expired."
+
+Anthropic's own Claude Code best-practices teaches a compatible discipline without naming the triple: *"Treat CLAUDE.md like code: review it when things go wrong, prune it regularly, and test changes by observing whether Claude's behavior actually shifts."* and *"If Claude already does something correctly without the instruction, delete it or convert it to a hook."* ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). "Already does it correctly" is one expiry observable; "feature removed" and "never fired in N weeks" are others.
+
+### Compact Format
+
+The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; the linked doc carries its own.
+
+```markdown
+## Critical constraints
+
+<!-- source: incident 2025-03-14 (prod migration rolled back)
+     applicability: any edit under packages/api/migrations/
+     expiry: when migration tool gains pre-flight dry-run flag -->
+- Database migrations live in `packages/api/migrations/`; never edit them after they have run in production.
+
+<!-- source: PR #1842 review comment from @security-team
+     applicability: any new function in packages/shared/
+     expiry: when TypeDoc generation lands in CI (issue #2103) -->
+- All public functions in `packages/shared` must have JSDoc with `@param` and `@returns`.
+```
+
+The annotations are HTML comments so they render invisibly in GitHub previews but remain visible to agents reading the file. A quarterly audit script can grep for `expiry:` lines, evaluate the observable (was the migration flag added? did TypeDoc land?), and open a PR removing rules whose expiry has fired.
+
+### When To Skip the Metadata
+
+The discipline pays off when ownership rotates and the rule set is large enough that no one carries the full provenance in their head. Skip the annotation overhead when:
+
+- **The repo has fewer than ~10 terminal rules.** A quarterly visual scan catches stale rules without per-line annotation.
+- **A single author owns AGENTS.md.** They hold source, applicability, and expiry in working memory; written metadata adds maintenance without preventing rot.
+- **The expiry is already tracked elsewhere as the source of truth.** A rule like *"use Python 3.12 syntax"* has its expiry encoded in `pyproject.toml`; duplicating it into the rule creates two places to update.
+- **The line is a pointer, not a terminal rule.** Pointers route to docs/ — the linked doc carries its own provenance and review cadence.
 
 ## What Belongs in AGENTS.md
 
@@ -120,7 +163,8 @@ The pointer-map pattern assumes the agent will follow pointers on demand. An ETH
 ## Key Takeaways
 
 - Monolithic AGENTS.md crowds context, dilutes attention, and rots — structural fix: a ~100-line pointer map backed by a versioned `docs/` directory.
-- Enforce freshness mechanically — CI link validation is more reliable than human maintenance.
+- Pointer maps fix size structurally; per-rule source/applicability/expiry metadata fixes it temporally — together the file is self-pruning under periodic audit.
+- Enforce freshness mechanically — CI link validation and expiry-observable audits are more reliable than human maintenance.
 - The principle is tool-agnostic: applies equally to CLAUDE.md, Copilot instructions, and Cursor rules.
 
 ## Related
@@ -128,8 +172,8 @@ The pointer-map pattern assumes the agent will follow pointers on demand. An ETH
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — complementary technique covering *where* to place AGENTS.md files
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md) — structural patterns for organizing AGENTS.md content
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — research on when AGENTS.md files degrade agent performance
-- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — the broader principle of pulling context on demand
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the underlying AGENTS.md standard
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md) — layering instruction files across directory levels
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md) — why knowledge belongs in docs, not instructions
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why unbounded rule growth degrades agent behavior; the mechanism lifecycle metadata defends against
 - [Harness Engineering](../agent-design/harness-engineering.md) — the discipline of designing agent environments so agents succeed by default

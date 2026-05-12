@@ -4,6 +4,7 @@ nav:
   - harness-translation.md
   - Assess:
     - assess-agent-readiness.md
+    - five-subsystem-harness-assessment.md
   - Bootstrap:
     - bootstrap-agents-md.md
     - bootstrap-llms-txt.md

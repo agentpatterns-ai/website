@@ -2,6 +2,7 @@ title: Agent Design
 nav:
   - index.md
   - "Core Design":
+      - agent-development-lifecycle.md
       - agent-discoverable-slash-commands.md
       - agent-driven-codebase-fingerprint.md
       - agent-first-software-design.md
@@ -22,6 +23,7 @@ nav:
       - execution-lineage-dag.md
       - runtime-scaffold-evolution.md
       - scaffold-architecture-taxonomy.md
+      - layered-domain-architecture.md
       - inversion-analysis.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md
@@ -36,11 +38,13 @@ nav:
       - three-reasoning-spaces.md
   - "Memory & State":
       - abstention-aware-memory-retrieval.md
+      - acid-for-agent-repository-state.md
       - agent-memory-patterns.md
       - harness-memory-coupling.md
       - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
+      - clock-in-clock-out-protocol.md
       - cross-cycle-consensus-relay.md
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
@@ -61,6 +65,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
+      - deterministic-orchestration-structured-modernization.md
       - ast-grounded-doc-critic-loop.md
       - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md
@@ -93,6 +98,7 @@ nav:
       - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
       - feedback-capability-equalizer.md
+      - five-failure-layers-diagnostic.md
       - heuristic-effort-scaling.md
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
@@ -101,9 +107,11 @@ nav:
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
       - rollback-first-design.md
+      - rubric-refine-pre-execution-tool-use.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
       - wink-agent-misbehavior-correction.md
+      - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
       - agent-harness.md
@@ -117,12 +125,14 @@ nav:
       - harness-engineering.md
       - harness-hill-climbing.md
       - harness-impermanence.md
+      - isometric-harness-ablation.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
       - observability-driven-harness-evolution.md
       - per-model-harness-tuning.md
       - persistent-connection-agent-transport.md
       - prebuilt-agent-environments.md
+      - quality-score-rubric.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
