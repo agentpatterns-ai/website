@@ -15,9 +15,11 @@ Threat models identify the structural conditions that make agent systems exploit
 
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — Name the four ways an agent action can diverge from its audit record (gate-bypass, audit-forgery, silent host failure, wrong-target) to convert "is this runtime hardened?" into a coverage checklist against existing controls
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md) — Decomposing a malicious end-state into three innocuous engineering tickets bypasses refusal and hardening defenses at 53–86% ASR across nine production coding agents; pentester-framed reviewers close most of the gap
+- [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md) — Safety constraints encoded in prompts weaken across six trajectory surfaces — memory, delegation, communication, tool use, audit, optimization; the four-property invariant (fresh, inherited, enforceable, auditable) keeps them operative when delegation depth, memory persistence, and tool surface compose
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — Group threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers to map controls and surface coverage gaps where attacks propagate across boundaries
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Risk emerges when an agent has private data access, untrusted input, and egress simultaneously; remove at least one leg from every execution path
+- [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — Corrupting a knowledge graph an agent queries via tool-use produces 100% trust at moderate attacker sophistication across nine models; the attack is distinct from prompt injection because the data path, not the instruction path, carries the payload
 - [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) — Under controlled knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy; architecture choice is part of the threat model
 - [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md) — A single untrusted tool call plants a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics; tested defenses cut attack success to 0–5% but at steep utility cost
 - [Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics](trojan-hippo-memory-attack.md) — A single untrusted tool call plants a payload in agent memory that activates only when the user later discusses finance, health, or identity, then exfiltrates the data
@@ -45,6 +47,7 @@ Isolation limits what a compromised or misbehaving agent can affect.
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
+- [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md) — A sandbox mode that keeps filesystem isolation but lifts network restrictions; safe only when egress is enforced at a layer below the harness
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
 
@@ -91,6 +94,7 @@ Multi-agent systems with shared retrieval propagate adversarial content agent-to
 Operational patterns that apply security agents to incoming changes and to resident codebase risk on different cadences.
 
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — Pair a PR-time security reviewer with a scheduled whole-codebase scanner so new and resident risk both have continuous coverage; treat the reviewer agent itself as an injection target
+- [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings; qualified by five failure modes including agent-skips-scan and lethal-trifecta closure on the scanner principal
 
 ## Tool Invocation
 
@@ -120,6 +124,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
+- [Usability Pressure as a Silent Security-Regression Vector](usability-pressure-security-regression.md) — Explicit usability requirements (performance, simplicity, new features) in a single-shot prompt cause LLMs to drop implicit security constraints at up to 98.1% attack success rate; mitigated by making security explicit and gating every output through a scanner
 - [Verifying LLM-Generated Cryptographic Code](llm-cryptographic-code-verification.md) — Crypto generation fails with 23.3% compile rate and 57% vulnerabilities; pair every crypto code path with a rule-based crypto analyzer, prefer zero-shot over CoT, and constrain to vetted high-level APIs
 
 ## Economics

@@ -33,6 +33,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — Request structured errors from HTTP APIs using Accept headers to replace brittle HTML parsing with deterministic control flow
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — Expose the full product surface through API, MCP, and CLI so agents acting on behalf of users can complete any flow the GUI supports
+- [Tool Necessity Probing](tool-necessity-probing.md) — Read tool-call decisions from the pre-generation hidden state with a linear probe — AUROC 0.89–0.96, 48% fewer tool calls at 1.7% accuracy loss
 
 ## MCP (Model Context Protocol)
 
@@ -47,6 +48,8 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md) — Mark individual MCP tool outputs as durable through Claude Code's compaction pipeline with `_meta["anthropic/maxResultSizeChars"]`
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md) — When a proprietary extension system gets replaced by an open protocol, rebuild on the standard rather than port the old architecture
 - [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](scoped-mcp-server-discovery.md) — Resolve duplicate MCP server definitions across user, workspace, and project config files using a most-specific-wins precedence rule
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md) — Decide which MCP servers earn unconditional context residence and which stay deferred behind tool search, using token cost, hit rate, and selection accuracy as signals
+- [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — pair Jaccard and ssdeep before drawing ecosystem conclusions
 
 ## Skills
 
@@ -72,6 +75,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [PostToolUse BSD/GNU Detection](posttooluse-bsd-gnu-detection.md) — Catch BSD/GNU CLI incompatibilities at runtime with a PostToolUse hook, feed fixes back via additionalContext, and persist knowledge to CLAUDE.md
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md) — The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — Claude Code's PreCompact hook can now block compaction outright, deferring context compression until the agent reaches a safer checkpoint
+- [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
 
 ## Specialized Tools
 
@@ -89,3 +93,4 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes
 - [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — A single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives
 - [Web Search Agent Loop](web-search-agent-loop.md) — Instead of firing a single query, wrap retrieval in a cycle of search, evaluate, refine, and synthesize -- giving the agent autonomy to decide when evidence is sufficient
+- [Lexical-First Retrieval for Agentic Search](lexical-first-retrieval-for-agentic-search.md) — A tuned BM25 index paired with a frontier LLM and deep retrieval can match or beat dense retrieval on deep-research benchmarks -- when the agent loop is strong enough to filter the ranking noise

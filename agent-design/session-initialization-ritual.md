@@ -80,6 +80,64 @@ A progress file persists state across sessions in a form the agent can read. A m
 
 The agent reads this at startup, selects the highest-priority incomplete item, and updates the file when the session ends. Version-control the file so it survives across machines and context window resets.
 
+## The Bootstrap Contract
+
+The ritual describes *what* the agent does at startup. The Bootstrap Contract specifies *what must be true for that ritual to succeed*. [Walkinglabs' harness-engineering lecture on initialization](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-06-why-initialization-needs-its-own-phase/index.md) defines it as four conditions a fresh session must be able to satisfy from repo contents alone — no verbal context:
+
+- Can **start** the project
+- Can **test** it
+- Can **see progress** so far
+- Can **pick up next steps**
+
+The contract materialises as a markdown document that maps directly onto the ritual's read steps:
+
+```markdown
+# Bootstrap Contract
+
+## Start Commands
+- Install: `make setup`
+- Run dev server: `make dev`
+- Run tests: `make test`
+- Full verification: `make check`
+
+## Current State
+- Dependencies installed and locked
+- Test framework configured (Vitest + React Testing Library)
+- Example test passing (1/1)
+- Lint rules configured (ESLint + Prettier)
+
+## Project Structure
+- src/ — Source code
+- src/components/ — React components
+- src/api/ — API client
+- tests/ — Test files
+```
+
+A new agent session reads the contract and answers "how do I run, test, and see what's done" without inference. The walkinglabs lecture frames the inverse failure as **implicit assumption landmines** — decisions made during one session (which test framework, how directories are organised, how dependencies are managed) that subsequent sessions cannot recover and may contradict.
+
+Validate the contract before declaring initialization complete: open a fresh agent session with only repo contents and check whether it can answer those four questions. Each gap is a missing clause.
+
+## Measuring Init Quality with TTFV
+
+**Time-to-First-Verification (TTFV)** is the leading metric for initialization quality, defined by [the same lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-06-why-initialization-needs-its-own-phase/index.md) as the minutes between session start and the first green verification signal — a passing test, a successful build, a lint clean run. Rising TTFV across sessions is a regression in init quality: the agent is spending more time re-deriving context than verifying work.
+
+**Downstream Usability** is the lagging counterpart — the proportion of subsequent sessions that execute tasks without re-deriving context. Both measure the same property; TTFV catches problems sooner.
+
+The mechanism for why this matters is documented in [Anthropic's harness engineering guidance](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): initialization patterns "eliminated the need for an agent to have to guess at what had happened and spend its time trying to get the basic app working again." Every minute of guessing is a minute not spent on verification — TTFV makes that cost visible.
+
+### Cold Start vs Warm Start
+
+The lecture distinguishes two starting positions:
+
+- **Cold start** — an empty directory where the agent infers structure from scratch. High TTFV, no contract to read.
+- **Warm start** — a templated project with directory structure, test framework, and contract already preset. Low TTFV from session one.
+
+A warm-start strategy preloads init infrastructure (project templates, pre-baked configs, an empty Bootstrap Contract scaffolded into the template) so the first session writes the *project-specific* portion of the contract rather than authoring it from nothing.
+
+### When the Investment Pays Back
+
+[The walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-06-why-initialization-needs-its-own-phase/index.md) reports that upfront init investment is recovered within the next 3–4 sessions — the time spent writing start commands, current state, and project structure is amortised across every session that no longer has to re-infer them. Below that horizon (one-shot scripts, throwaway prototypes) the contract adds cost without recovery. Above it, TTFV converges to a low steady state and the ritual becomes routine rather than overhead.
+
 ## Example
 
 A system prompt encoding the five-step ritual for a Claude Code agent session:
@@ -130,6 +188,9 @@ The ritual adds overhead at session start — when that cost outweighs the benef
 - Run baseline tests before implementing — catch bugs from previous sessions early.
 - Select one feature per session and finish it — no multi-tasking within a session.
 - Enforce the ritual via system prompt instructions, not agent discretion.
+- Write a Bootstrap Contract — a fresh session must answer "can I start, test, see progress, pick up next steps" from repo contents alone.
+- Track TTFV across sessions — rising time-to-first-verification is the earliest signal that init quality is regressing.
+- Prefer warm start over cold start when the project will run beyond 3–4 sessions; contract maintenance pays back inside that window.
 
 ## Related
 

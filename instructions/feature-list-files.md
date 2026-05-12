@@ -51,6 +51,28 @@ The system prompt makes the feature list the system of record. This aligns with 
 
 The explicit instruction from [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) is blunt: "it is unacceptable to remove or edit tests because this could lead to missing or buggy functionality." This rule must appear verbatim in the agent's instructions.
 
+## Pass-Gate Policy
+
+"Agent did not self-promote" is not enough — the harness needs explicit commit semantics for the `failing → passing` transition. The [walkinglabs harness-engineering lecture on feature lists](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/code/pass-gate-policy.md) specifies four conditions, all required:
+
+1. The expected workflow has been exercised end-to-end
+2. The evidence of success is recorded
+3. No blocking error is present in the tested path
+4. The implementation does not leave the app in a broken or ambiguous state
+
+Treat the gate as a database trigger, not an application-level check: a separate verifier runs the conditions on each transition attempt and rejects the write if any fail. Conditions 1–2 defeat the tests-pass-but-feature-doesn't-work failure mode [Anthropic documents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); condition 4 forces the agent to consider half-applied migrations, partial config edits, and inconsistent background-job state.
+
+## Feature List as State Machine
+
+The feature list defines four states and one allowed transition path:
+
+- `not_started` — scheduler selects from here
+- `active` — work in progress; verifier re-runs the four conditions
+- `blocked` — a prerequisite is unmet; resolved by working a dependency first
+- `passing` — verifier accepted the transition
+
+Per the [walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-08-why-feature-lists-are-harness-primitives/index.md), `active → passing` is irreversible and only the verifier can write it. The list outranks conversation history: if the transcript says a feature works but the list says `failing`, the list wins. The agent re-reads it every turn — recorded state, not remembered state. Four harness roles operate on the same list: scheduler, verifier, handoff reporter, and progress tracker — none of them the agent itself.
+
 ## Validation Strategy
 
 Unit tests alone are insufficient for many feature validations. Per the [Anthropic harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents): "Claude tended to make code changes, and even do testing with unit tests or `curl` commands against a development server, but would fail to recognize that the feature didn't work end-to-end." [Browser automation](../tool-engineering/browser-automation-for-research.md) (Playwright, Puppeteer) validates user-facing features the way a human user would.

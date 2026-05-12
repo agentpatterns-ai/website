@@ -13,6 +13,7 @@ tags:
 - [Sub-Agents](sub-agents.md) — Ephemeral, isolated agents for focused task execution
 - [Agent Teams](agent-teams.md) — Coordinated multi-agent sessions with shared task lists
 - [Auto Mode](auto-mode.md) — Classifier-based permission gating for unattended execution
+- [Hard-Deny Classifier Rule](hard-deny-classifier-rule.md) — Unconditional block layer inside auto mode's classifier — user intent and allow exceptions do not apply
 - [Bare Mode](bare-mode.md) — Deterministic headless CI mode — skip all local config discovery with `--bare`
 - [Extension Points](extension-points.md) — Decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at 12+ lifecycle events

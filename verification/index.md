@@ -14,6 +14,7 @@ tags:
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Structured 16-domain failure taxonomy for systematic diagnosis of RAG and agent failures across retrieval, reasoning, state, and deployment layers
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated pipelines restore honest measurement
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite unsafe trajectories into deceptive variants while preserving risk labels to measure judgment robustness on out-of-distribution surface forms
+- [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — Split attack construction into strategy, execution, and refinement stages so monitor evaluations expose the conceive-execute gap; drops Opus 4.5 catch rate from 94.9% to 60.3%
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate agents by the final state they produce, not the sequence of steps they took to get there
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — pass@k measures capability ceiling; pass^k measures consistency — report both to distinguish agents that sometimes succeed from those that reliably do
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
@@ -31,12 +32,14 @@ tags:
 - [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — Chain-of-thought is not a universal win for code generation; measure Pass@1 and Pass^k with and without CoT before enabling it as a default
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behaviour with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes; useful complement to deterministic guardrails, but high AUPRC does not imply usable alerts
+- [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
 
 ## Behavioral Testing
 
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Test decision quality and end-state for non-deterministic agent systems using capability matrices, three grading methods, and acceptable variance thresholds
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Apply coverage-guided fuzzing to multi-agent systems using interaction path coverage as the exploration signal to surface coordination failures and emergent failure modes
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
+- [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
 
 ## Regression Testing
 
@@ -52,6 +55,7 @@ tags:
 
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Run the same critique prompt five times in sequence on a plan or spec; each pass normalises the issues it finds, forcing later passes deeper into structural and logical problems
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
+- [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
 
 ## Rubric Design
@@ -65,6 +69,7 @@ tags:
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
+- [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
 
 ## Tooling
 
