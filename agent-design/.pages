@@ -50,6 +50,7 @@ nav:
       - durable-interactive-artifacts.md
       - episodic-memory-retrieval.md
       - generative-agents-memory-stream.md
+      - handoff-skill-context-transfer.md
       - layered-mutability.md
       - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
@@ -119,6 +120,7 @@ nav:
       - agent-pushback-protocol.md
       - agent-turn-model.md
       - deep-agent-runtime.md
+      - delta-channels-checkpoint-storage.md
       - deferred-permission-pattern.md
       - tool-confirmation-carousel.md
       - harness-design-dimensions.md
