@@ -87,7 +87,7 @@ If the user pointed you at a single runbook ("audit our AGENTS.md"), skip the as
 |------|---------|-------|
 | **Assess** | Holistic L0–L5 scoring; produces the punch list | 1 |
 | **Bootstrap** | Generate or scaffold missing artifacts | 23 |
-| **Audit** | Check existing artifacts; report findings | 27 |
+| **Audit** | Check existing artifacts; report findings | 31 |
 
 Every audit has a paired bootstrap. Run the audit to find the gaps; run the bootstrap to close them.
 
