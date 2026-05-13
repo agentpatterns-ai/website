@@ -43,6 +43,7 @@ nav:
     - audit-permissions-blast-radius.md
     - audit-secrets-in-context.md
     - audit-lethal-trifecta.md
+    - audit-llm-pinned-versions.md
     - audit-rules-files-injection.md
     - audit-action-audit-divergence.md
     - audit-trojan-hippo-memory.md
@@ -55,6 +56,8 @@ nav:
     - audit-debug-log-retention.md
     - audit-confirmation-gate-logs.md
     - audit-mcp-control-plane-bypass.md
+    - audit-multitenant-rag-authorization.md
+    - audit-observability-calibration.md
     - audit-agent-built-code-health.md
     - audit-agent-pr-quality-metrics.md
     - audit-pr-narrative-quality.md
