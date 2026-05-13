@@ -1,6 +1,6 @@
 ---
 title: "Audit Eval Suite"
-description: "Locate the project's eval suite, validate scaffold completeness, score case provenance and discrimination, and check coverage of three structural detection gaps — idle-state, build parity, and per-model ablation."
+description: "Locate the project's eval suite, validate scaffold completeness, score case provenance and discrimination, and check coverage of four structural detection gaps — idle-state, build parity, per-model ablation, and isometric harness ablation."
 tags:
   - tool-agnostic
   - evals
@@ -15,7 +15,7 @@ Packaged as: `.claude/skills/agent-readiness-audit-eval-suite/`
 
 # Audit Eval Suite
 
-> Locate the eval suite, validate scaffold completeness and case provenance, score discrimination, and check coverage of idle-state, build-parity, and per-model ablation gaps.
+> Locate the eval suite, validate scaffold completeness and case provenance, score discrimination, and check coverage of idle-state, build-parity, per-model ablation, and isometric harness ablation gaps.
 
 !!! info "Harness assumption"
     Suite shape matches [`bootstrap-eval-suite`](bootstrap-eval-suite.md): cases under `evals/cases/*.yaml`, runner at `evals/run.sh`, grader at `evals/grader.py`, CI at `.github/workflows/evals.yml`. Translate paths if the project uses a different layout. See [Assumptions](index.md#assumptions).
@@ -142,7 +142,52 @@ grep -qE "per.model|per_model|matrix:.*model" evals/run.sh .github/workflows/eva
 
 A single-model suite cannot detect regressions that surface only on a model rotation. From [`bootstrap-eval-suite`](bootstrap-eval-suite.md) Step 8b.
 
-## Step 8 — Reviewer-Model Awareness
+## Step 8 — Isometric Harness Ablation Coverage
+
+Per-model ablation (Step 7) pins the harness and varies the model. The orthogonal axis — pin the model, vary the harness — is required to disentangle harness contribution from base-model contribution. Without it, an eval that improves on a model upgrade can mask a harness regression (or vice versa). Source: [`isometric-harness-ablation`](../agent-design/isometric-harness-ablation.md).
+
+Every case should be re-runnable under at least one of:
+
+- **Same harness, different model** — covered by Step 7 (per-model ablation).
+- **Same model, different harness** — NEW: requires a baseline-harness fixture (no skills, no hooks, vanilla tool surface) so the runner can re-execute the case with the unit-under-test removed.
+
+```bash
+# Detect a baseline-harness fixture: a stripped, vanilla-tool-surface configuration
+BASELINE_FIXTURE=$(find evals -maxdepth 3 \( -name "baseline-harness*" -o -name "harness-baseline*" -o -name "vanilla-harness*" \) 2>/dev/null | head -1)
+[[ -z "$BASELINE_FIXTURE" ]] \
+  && echo "high|evals|no baseline-harness fixture|add evals/baseline-harness.yaml (or equivalent) declaring a no-skills, no-hooks, vanilla-tool-surface fixture"
+
+# Detect paired with-skill / without-skill cases — the eval-level signal that the
+# axis is actually exercised, not just declared
+PAIRED=0
+for case in $CASES; do
+  WITH=$(yq '.expected.with_unit // ""' "$case")
+  WITHOUT=$(yq '.expected.without_unit // .expected.baseline_harness // ""' "$case")
+  [[ -n "$WITH" && -n "$WITHOUT" ]] && PAIRED=$((PAIRED+1))
+done
+[[ "$PAIRED" -eq 0 ]] \
+  && echo "high|evals|no paired with-skill/without-skill cases|add expected.without_unit (or expected.baseline_harness) alongside expected.with_unit on at least the P0 cases"
+
+# Validate the runner emits per-axis attribution rather than a single aggregate delta
+grep -qE "model.contribution|harness.contribution|per.axis|axis_attribution" evals/run.sh evals/grader.py 2>/dev/null \
+  || echo "medium|evals|no per-axis attribution|emit \"model contribution: +X pp, harness contribution: +Y pp\" rather than a single delta"
+
+# Cross-check: the matrix dimension counts must both be ≥2 for true 2D ablation
+HARNESS_VARIANTS=$(yq '.harnesses // [] | length' evals/run.sh evals/config.yaml 2>/dev/null | sort -u | tail -1)
+[[ -z "$HARNESS_VARIANTS" || "$HARNESS_VARIANTS" -lt 2 ]] \
+  && echo "medium|evals|fewer than 2 harness variants in matrix|add at least one baseline harness alongside the production harness"
+```
+
+A suite that bundles harness + skill changes into every case cannot answer the L3 → L4 verification question: *did our skill-template work actually help, or did the model upgrade carry it?* The matrix needs both axes populated.
+
+**Decision rule**:
+
+- **medium** — per-model ablation exists (Step 7 passes) but no harness ablation axis. The suite can attribute deltas to model rotation but not to harness investment.
+- **high** — neither ablation exists, and merge decisions are made on raw aggregate eval deltas. Findings from this step *and* Step 7 should both fire.
+
+If the project ships no agent-customizable harness layer (no skills, no hooks, no sub-agents), the gap collapses — declare in the report and skip.
+
+## Step 9 — Reviewer-Model Awareness
 
 When the suite uses an LLM-as-judge assertion, the reviewer model is itself a harness variable. The thinking-history bug was caught by Opus 4.7 review and missed by Opus 4.6 ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
@@ -153,7 +198,7 @@ grep -lE "kind:\s*judge" evals/cases/*.yaml 2>/dev/null | while read case; do
 done
 ```
 
-## Step 8b — Grader Calibration Dataset
+## Step 9b — Grader Calibration Dataset
 
 Per [Evaluator Templates §Calibration Is Not Optional](../verification/evaluator-templates.md), an LLM judge that has not been calibrated against a paired human-graded set drifts silently across model rotations and prompt edits — the suite reports green while real quality regresses. The audit requires every judge prompt to ship with at least 20 paired (input, golden grade) examples and a calibration script that asserts judge agreement above a documented threshold.
 
@@ -181,7 +226,7 @@ grep -qE "calibrate|agreement|kappa|cohen" evals/run.sh evals/calibrate.sh 2>/de
 
 A judge with no calibration dataset is a finding even when the case-side reviewer_model is pinned — the pin only stabilizes the model, not the prompt-to-rubric drift. Calibration runs belong on every release of the unit under test, not only on every model rotation.
 
-## Step 9 — CI Gate Behavior
+## Step 10 — CI Gate Behavior
 
 Confirm the gate exits non-zero on any P0 failure and reports per-case status:
 
@@ -194,7 +239,7 @@ grep -qE "name:\s*evals\b" .github/workflows/evals.yml >/dev/null 2>&1 \
   || echo "low|.github/workflows/evals.yml|gate may not be a required check|set as required on default branch"
 ```
 
-## Step 10 — Per-Case Scorecard
+## Step 11 — Per-Case Scorecard
 
 ```markdown
 # Audit Report — Eval Suite
@@ -209,6 +254,7 @@ grep -qE "name:\s*evals\b" .github/workflows/evals.yml >/dev/null 2>&1 \
 | Idle-state | ✅/⚠️/❌/n/a | <one-line> |
 | Build parity | ✅/⚠️/❌/n/a | <one-line> |
 | Per-model ablation | ✅/⚠️/❌ | <n> models in matrix |
+| Isometric harness ablation | ✅/⚠️/❌/n/a | <n> harness variants, paired cases present? |
 | CI P0 gate | ✅/⚠️/❌ | <one-line> |
 
 ## Findings
@@ -226,11 +272,11 @@ Read-only.
 ```markdown
 # Audit Eval Suite — <repo>
 
-| Cases | Pass | Warn | Fail | Models | Idle | Build | P0 gate |
-|------:|-----:|-----:|-----:|-------:|:----:|:-----:|:-------:|
-| <n> | <n> | <n> | <n> | <n> | ✅/❌ | ✅/❌ | ✅/❌ |
+| Cases | Pass | Warn | Fail | Models | Harnesses | Idle | Build | P0 gate |
+|------:|-----:|-----:|-----:|-------:|----------:|:----:|:-----:|:-------:|
+| <n> | <n> | <n> | <n> | <n> | <n> | ✅/❌ | ✅/❌ | ✅/❌ |
 
-Top fix: <one-liner — usually missing per-model ablation or discrimination>
+Top fix: <one-liner — usually missing per-model ablation, isometric harness ablation, or discrimination>
 ```
 
 ## Remediation
@@ -238,6 +284,7 @@ Top fix: <one-liner — usually missing per-model ablation or discrimination>
 - [Bootstrap Eval Suite](bootstrap-eval-suite.md) — scaffold the suite if missing; Step 8b adds per-model + provenance
 - [Bootstrap Incident-to-Eval Pipeline](bootstrap-incident-to-eval.md) — feed regressions back into the suite as P0/P1/P2 cases
 - For idle-state and build-parity, add cases mined from the project's own incident log
+- For isometric harness ablation, add a baseline-harness fixture and paired with-unit/without-unit cases following [`isometric-harness-ablation`](../agent-design/isometric-harness-ablation.md)
 
 ## Related
 
