@@ -17,13 +17,13 @@ tags:
 
 ## How They Work
 
-[Hooks](https://code.claude.com/docs/en/hooks) are configured in `settings.json` (user, project, or local scope) under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to extract tool input fields ([reference](https://code.claude.com/docs/en/hooks)).
+[Hooks](https://code.claude.com/docs/en/hooks) are configured in `settings.json` (user, project, or local scope) under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `mcp_tool`, `prompt`, or `agent` ([reference](https://code.claude.com/docs/en/hooks)). Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to extract tool input fields.
 
-Hooks are deterministic because the harness — not the model — runs them at fixed points in the request loop: the harness invokes `PreToolUse` before dispatching a tool call and `PostToolUse` after receiving the result, independent of any sampling. That guarantee is what makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking because the action has already run ([reference](https://code.claude.com/docs/en/hooks)).
+Hooks are deterministic because the harness — not the model — runs them at fixed points in the request loop: the harness invokes `PreToolUse` before dispatching a tool call and `PostToolUse` after receiving the result, independent of any sampling. That guarantee is what makes exit code 2 a reliable block on the events that gate an action — including `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `UserPromptExpansion`, `Stop`, `SubagentStop`, `PreCompact`, `PostToolBatch`, `TaskCreated`, `TaskCompleted`, `ConfigChange` (except `policy_settings`), `WorktreeCreate`, `Elicitation`, `ElicitationResult`, and `TeammateIdle`. For purely observational events (`PostToolUse`, `PostToolUseFailure`, `Notification`, `SessionStart`, `SessionEnd`, `PermissionDenied`, `SubagentStart`, `PostCompact`, `WorktreeRemove`, `CwdChanged`, `FileChanged`, `InstructionsLoaded`, `StopFailure`), exit code 2 feeds stderr back to Claude without blocking because the action has already run ([reference](https://code.claude.com/docs/en/hooks)).
 
 ## Lifecycle Events
 
-Claude Code fires 25+ hook events across session, prompt, tool, subagent, task, compaction, worktree, config, and file-change lifecycles. A representative subset:
+Claude Code fires 28 hook events across session, prompt, tool, subagent, task, compaction, worktree, config, and file-change lifecycles ([reference](https://code.claude.com/docs/en/hooks)). A representative subset:
 
 | Event | When |
 |-------|------|
@@ -134,7 +134,7 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 
 - Hooks fire deterministically at documented lifecycle events across session, tool, subagent, compaction, worktree, and file-change phases
 - Hook input arrives on stdin as JSON — scripts use `jq` to read `tool_input` fields
-- Exit code 2 blocks `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-hooks and notifications it only feeds stderr back to Claude
+- Exit code 2 blocks gating events (`PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, `PreCompact`, `ConfigChange`, and 9 others); for post-hooks and notifications it only feeds stderr back to Claude
 - Use hooks for non-negotiable rules; use CLAUDE.md for flexible guidance
 - Matchers are strings (exact, pipe-separated, or regex) whose meaning depends on the event
 

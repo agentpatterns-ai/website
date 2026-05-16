@@ -32,6 +32,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries
 - [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — Request structured errors from HTTP APIs using Accept headers to replace brittle HTML parsing with deterministic control flow
+- [OpenAPI Documentation Smells for Agent-Ready APIs](openapi-documentation-smells.md) — A nine-category taxonomy that surfaces the gap between structurally valid OpenAPI specs and agent-consumable API descriptions, plus scenario-first triage that keeps remediation tractable
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — Expose the full product surface through API, MCP, and CLI so agents acting on behalf of users can complete any flow the GUI supports
 - [Tool Necessity Probing](tool-necessity-probing.md) — Read tool-call decisions from the pre-generation hidden state with a linear probe — AUROC 0.89–0.96, 48% fewer tool calls at 1.7% accuracy loss
 
@@ -61,6 +62,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
 - [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
+- [Skill Library Technical Debt](skill-library-technical-debt.md) — Library-level defects accumulate even when every single skill passes its eval; diagnose typed debt signatures with six mechanical detectors and apply named maintenance actions at library time
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
 
@@ -76,7 +78,9 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md) — The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — Claude Code's PreCompact hook can now block compaction outright, deferring context compression until the agent reaches a safer checkpoint
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
+- [Hook Exec Form vs Shell Form](hook-exec-form-vs-shell.md) — Use the `args: string[]` field so the harness spawns hooks with execve instead of `sh -c`, neutralising shell metacharacters in substituted hook input
 - [Terminal Tool Output Compression](terminal-output-compression.md) — Harness-side post-processing collapses predictable shell-output noise (lockfile diffs, `ls -l`, `npm install` progress, unchanged diff hunks) before the model sees it, with a banner that lets the agent opt out per call
+- [Out-of-Band Hook Notifications via terminalSequence](terminal-sequence-hook-notifications.md) — Claude Code's `terminalSequence` hook output field emits allowlisted terminal escape sequences — window titles, bells, OSC 9/99/777 desktop notifications — through the harness's own write path, signaling the human without spending agent context
 
 ## Specialized Tools
 

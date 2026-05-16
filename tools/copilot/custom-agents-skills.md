@@ -62,7 +62,7 @@ description: Automates release tasks — changelog generation, version bumping, 
 tools:
   - shell
   - file_edit
-mcpServers:
+mcp-servers:
   - url: https://mcp.example.com/github
     name: github
 ---
@@ -73,6 +73,8 @@ You are a release engineer agent. When asked to cut a release, you:
 3. Bump the version in `package.json` and commit with `chore(release): vX.Y.Z`.
 4. Create and push a git tag.
 ```
+
+The `mcp-servers` frontmatter property uses kebab-case ([GitHub: About custom agents](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents)).
 
 **`.github/skills/changelog/SKILL.md`**
 
@@ -105,6 +107,5 @@ Copilot reads only the skill metadata until `/changelog` is invoked, keeping con
 - [Agent Skills Standard](../../standards/agent-skills-standard.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
 - [Copilot Extensions](copilot-extensions.md)
-- [Copilot SDK](copilot-sdk.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md)

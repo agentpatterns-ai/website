@@ -14,7 +14,7 @@ tags:
 
 ## What It Is
 
-[Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature available on Teams and Enterprise plans. Once an admin enables it, reviews run automatically whenever a pull request opens or is updated. You write no orchestration code; Anthropic's infrastructure handles it.
+[Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature in research preview, available on Team and Enterprise plans. It is not available for organizations with [Zero Data Retention](https://docs.claude.com/en/zero-data-retention) enabled. Once an admin enables it, reviews run automatically whenever a pull request opens or is updated. You write no orchestration code; Anthropic's infrastructure handles it.
 
 Contrast with [DIY subagent review](../../code-review/agent-assisted-code-review.md): hand-rolling a review subagent requires defining the agent, configuring tool access, wiring CI, and maintaining it. Code Review is a managed service — the GitHub App is the only setup step.
 
@@ -36,10 +36,11 @@ Reviews [average 20 minutes and cost $15–25](https://code.claude.com/docs/en/c
 
 ## Setup
 
-An admin installs the Claude GitHub App to the organization and selects which repositories to enable. Per repository, you choose a trigger:
+An admin installs the Claude GitHub App to the organization and selects which repositories to enable. Per repository, you choose a [Review Behavior](https://code.claude.com/docs/en/code-review#set-up-code-review):
 
-- **After PR creation only** — one review per PR open or ready-for-review event
-- **After every push to PR branch** — reviews on each commit; auto-resolves threads when the flagged code is fixed
+- **Once after PR creation** — one review per PR open or ready-for-review event
+- **After every push** — reviews on each commit; auto-resolves threads when the flagged code is fixed
+- **Manual** — reviews start only when someone comments `@claude review` or `@claude review once`; `@claude review` also subscribes the PR to reviews on subsequent pushes
 
 The on-push trigger multiplies cost by push count. `claude.ai/admin-settings/claude-code` shows average cost per review per repository to make the trade-off visible.
 
@@ -79,7 +80,7 @@ Parallel specialization reduces cognitive load per agent. A single reviewer scan
 
 ## When This Backfires
 
-- **Cost multiplies on push-heavy branches**: on-push trigger runs a full review per commit. A 15-push PR costs $225–375. Use `@claude review once` or "Once after PR creation" for high-churn branches.
+- **Cost multiplies on push-heavy branches**: on-push trigger runs a full review per commit. A 15-push PR costs $225–375. Use `@claude review once`, "Once after PR creation", or Manual mode for high-churn branches.
 - **False positives create noise**: verification filters many false positives but not all. Rate findings (👍/👎) to give Anthropic tuning signal; skipping ratings compounds noise over time.
 - **Teams/Enterprise-only**: unavailable on free and Pro plans — use the [DIY subagent approach](../../code-review/agent-assisted-code-review.md) instead.
 - **Advisory findings get dismissed**: non-binding, never blocking merges — teams under deadline pressure routinely ignore them.
@@ -94,7 +95,7 @@ Parallel specialization reduces cognitive load per agent. A single reviewer scan
 
 ## Example
 
-A team enables Code Review on a Python backend repository. The admin selects "After every push to PR branch" as the trigger. The repository contains:
+A team enables Code Review on a Python backend repository. The admin selects "After every push" as the Review Behavior. The repository contains:
 
 **`CLAUDE.md`** (project-wide):
 

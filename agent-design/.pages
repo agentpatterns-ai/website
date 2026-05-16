@@ -61,6 +61,7 @@ nav:
       - subtask-level-memory.md
       - tiered-memory-architecture.md
   - "Control & Orchestration":
+      - asynchronous-agent-io-and-speculative-tools.md
       - background-todo-agent.md
       - controlling-agent-output.md
       - interactive-clarification-underspecified-tasks.md

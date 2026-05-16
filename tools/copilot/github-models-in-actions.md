@@ -20,7 +20,7 @@ Three integration methods are available:
 
 | Method | Use Case |
 |--------|----------|
-| `actions/ai-inference@v1` | Inline or file-based prompts in workflow steps |
+| `actions/ai-inference@v2` | Inline or file-based prompts in workflow steps |
 | `gh models run` CLI | Piping content through models in shell steps |
 | `.prompt.yml` files | Versioned, templated prompts with variable substitution |
 
@@ -52,7 +52,7 @@ The core pattern: constrain model output to fixed return values, then branch det
 
 ```yaml
 - id: analyze-issue
-  uses: actions/ai-inference@v1
+  uses: actions/ai-inference@v2
   with:
     model: openai/gpt-4.1
     prompt-file: .github/prompts/bug-triage.prompt.yml
@@ -100,7 +100,7 @@ GitHub Models in Actions is a preview feature — model availability, API surfac
 - **Rate limits cause silent failures**: GitHub Models applies per-user and per-workflow quotas. Exceeding them causes steps to fail or return empty responses — if your workflow does not assert on response content, failures become invisible.
 - **Non-determinism persists at temperature:0**: Constrained single-word output reduces variance but does not eliminate it. Edge-case inputs (malformed issue bodies, unusually long content) can still produce unexpected output, causing deterministic branching to mis-route.
 - **Prompt injection cannot be fully mitigated**: User-controlled content passed directly into prompts can override instructions regardless of system-prompt framing. Workflows that take irreversible actions (closing issues, applying restrictive labels, modifying code) should require human confirmation for high-stakes outcomes.
-- **Endpoint vendor lock-in**: Workflows built on `actions/ai-inference@v1` and the `models: read` permission are GitHub-specific; porting to other CI platforms requires replacing the inference layer.
+- **Endpoint vendor lock-in**: Workflows built on `actions/ai-inference@v2` and the `models: read` permission are GitHub-specific; porting to other CI platforms requires replacing the inference layer.
 
 ## Key Takeaways
 
@@ -132,13 +132,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: classify
-        uses: actions/ai-inference@v1
+        uses: actions/ai-inference@v2
         with:
           model: openai/gpt-4.1
           prompt-file: .github/prompts/issue-classifier.prompt.yml
-          prompt-file-variables: |
-            issue_title=${{ github.event.issue.title }}
-            issue_body=${{ github.event.issue.body }}
+          input: |
+            issue_title: ${{ github.event.issue.title }}
+            issue_body: ${{ github.event.issue.body }}
 
       - if: steps.classify.outputs.response == 'bug'
         uses: actions/github-script@v7

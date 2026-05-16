@@ -67,6 +67,8 @@ The 17% overeager false-negative rate reflects consent-scope misjudgement — th
 
 Inputs: user messages, tool call commands, CLAUDE.md. Tool results are stripped — hostile file or web content cannot reach the classifier. A separate input-layer probe scans tool results for injection patterns before Claude reads them ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
+**Conversational boundaries block**: telling Claude "don't push" or "wait until I review" makes the classifier block matching actions until you lift the boundary — Claude's own judgment that the condition is met does not lift it. Boundaries are re-read from the transcript on each check, so context compaction can drop them; for a hard guarantee, add a [deny rule](https://code.claude.com/docs/en/permissions#permission-rule-syntax) ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode)).
+
 Entering auto mode drops broad allow rules ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
 - Blanket `Bash(*)`
@@ -122,7 +124,7 @@ Start from `claude auto-mode defaults`; remove only rules covering risks already
 Predictable failure modes:
 
 - **Consent-scope misjudgement**: the 17% overeager false-negative rate means roughly one in six unsanctioned destructive actions gets through. For production configs or shared branches, manual review is still safer.
-- **Plan and provider gating**: unavailable on Pro, Max, Bedrock, Vertex, Foundry — mixed environments must fall back to explicit allowlists.
+- **Plan and provider gating**: unavailable on Pro, Bedrock, Vertex, Foundry; Max plans are restricted to Opus 4.7 — mixed environments must fall back to explicit allowlists.
 - **Power-user flow disruption**: entering auto mode silently drops blanket `Bash(*)`, wildcarded interpreter, and `Agent` rules until exit.
 - **Classifier is an LLM**: a narrow allowlist is deterministic; the classifier is probabilistic and fails on novel injection patterns and unusual tool combinations.
 
@@ -130,18 +132,18 @@ Predictable failure modes:
 
 Auto mode requires ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
 
-- **Plan**: Team, Enterprise, or API (not Pro/Max)
-- **Model**: Sonnet 4.6 or Opus 4.6
+- **Plan**: Max, Team, Enterprise, or API (not Pro); Team/Enterprise admins must first enable it in [admin settings](https://claude.ai/admin-settings/claude-code)
+- **Model**: Sonnet 4.6, Opus 4.6, or Opus 4.7 (Max plans are limited to Opus 4.7)
 - **Provider**: Anthropic API (not Bedrock, Vertex, Foundry)
 - **Version**: Claude Code v2.1.83+
 
-Enable:
+When eligible, auto mode appears in the `Shift+Tab` cycle after `plan` with an opt-in prompt. Start directly in it via the permission-mode flag — the older `--enable-auto-mode` was removed in v2.1.111 ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
 
 ```bash
-claude --enable-auto-mode    # adds auto to the Shift+Tab cycle
+claude --permission-mode auto
 ```
 
-Set as default in `.claude/settings.json`:
+Set as a persistent default in `.claude/settings.json`:
 
 ```json
 {
@@ -165,8 +167,7 @@ claude -p "Update API docs from openapi.yaml" \
 **After** — classifier-gated automation:
 
 ```bash
-claude --enable-auto-mode \
-  -p "Update API docs from openapi.yaml" \
+claude -p "Update API docs from openapi.yaml" \
   --permission-mode auto
 ```
 

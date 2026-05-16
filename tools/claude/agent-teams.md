@@ -36,11 +36,11 @@ Use sub-agents when you need quick, focused workers. Use agent teams when your a
 
 ## Model Inheritance
 
-Team agents inherit the model configured on the leader. The [Claude Code v2.1.73 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) records two related fixes: "Fixed team agents to inherit the leader's model" and "Fixed subagents with `model: opus`/`sonnet`/`haiku` being silently downgraded to older model versions on Bedrock, Vertex, and Microsoft Foundry". Before that release, teammates could run on a different model than the lead even when nothing was set explicitly.
+Teammates do not inherit the lead's `/model` selection by default. The canonical [agent teams docs](https://code.claude.com/docs/en/agent-teams#specify-teammates-and-models) state: "Teammates don't inherit the lead's `/model` selection by default. To change the model used when the prompt doesn't specify one, set **Default teammate model** in `/config`. Pick **Default (leader's model)** to have teammates follow the lead's current model." You can also pin a model in the spawn prompt — for example, "Use Sonnet for each teammate" — which overrides the default for that team.
 
 ## Per-Agent Observability
 
-Hook events include `agent_id` and `agent_type` fields, added in [v2.1.69](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md), enabling hooks to distinguish between the team lead, teammates, and sub-agents. Use these to apply different enforcement rules per agent role or to tag audit logs with agent identity — for example, allowing the lead to push to remote while restricting teammates to local operations.
+Recent Claude Code versions propagate per-agent identity through hook payloads and outbound API headers — including `x-claude-code-agent-id` and `x-claude-code-parent-agent-id` (see the [Claude Code changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)) — so hooks and downstream observability can distinguish the team lead, teammates, and sub-agents. Use these to apply different enforcement rules per agent role or to tag audit logs with agent identity — for example, allowing the lead to push to remote while restricting teammates to local operations.
 
 ## Hooks for Teams
 
@@ -109,7 +109,7 @@ For sequential work, same-file edits, or anything with heavy dependencies, a sin
 
 - Teams enable multi-agent coordination with shared task lists and direct mailbox messaging
 - Unlike sub-agents, teammates share findings and can challenge each other
-- Team agents inherit the leader's model as of [v2.1.73](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- Teammates do not inherit the lead's `/model` by default — set **Default teammate model** in `/config` or specify the model in the spawn prompt
 - Experimental feature — enable explicitly in `settings.json`; requires v2.1.32 or later
 - Team-specific hooks (`TeammateIdle`, `TaskCreated`, `TaskCompleted`) gate idle and task transitions
 

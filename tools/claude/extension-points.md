@@ -66,7 +66,7 @@ Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed proced
 
 **Deterministic** — model cannot override:
 
-- **Hooks**: fire at [18 lifecycle events](hooks-lifecycle.md). The agent cannot skip or override them.
+- **Hooks**: fire at [25+ lifecycle events](hooks-lifecycle.md) (29 events documented as of Claude Code v2.1.x, per the [hooks reference](https://code.claude.com/docs/en/hooks)). The agent cannot skip or override them.
 - **CLAUDE.md loading**: loaded unconditionally at session start ([memory docs](https://code.claude.com/docs/en/memory)).
 
 **Probabilistic** — model decides when to invoke:

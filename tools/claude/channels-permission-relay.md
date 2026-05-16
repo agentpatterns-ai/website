@@ -47,7 +47,7 @@ Three channel plugins ship in the [claude-plugins-official research preview](htt
 
 Each plugin maintains a sender allowlist. Telegram and Discord bootstrap it via pairing: DM the bot, receive a pairing code, confirm it in Claude Code. iMessage auto-trusts messages from your own Apple ID; other contacts are added by handle with `/imessage:access allow`.
 
-Channels require Claude Code v2.1.80 or later and a claude.ai login. Console and API key authentication are not supported.
+[Permission relay needs Claude Code v2.1.81+](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts) (channels themselves work from v2.1.80). Auth must be claude.ai or a Console API key; Bedrock, Vertex, and Foundry are unsupported.
 
 ## Security gating
 

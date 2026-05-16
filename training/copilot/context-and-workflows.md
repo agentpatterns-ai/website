@@ -352,7 +352,7 @@ Copilot Code Review (automated)   → catches: patterns, common bugs, missed edg
 Human review                      → catches: design, architecture, business logic, completeness
 ```
 
-Configure Copilot Code Review to run automatically on all PRs (Repository Settings → Code review → Copilot). This catches issues between the agent's self-review and human review — a second automated pass from a fresh context.
+Configure Copilot Code Review to run automatically on all PRs via a branch ruleset (Repository Settings → Rules → Rulesets → New branch ruleset → enable "Automatically request Copilot code review"). This catches issues between the agent's self-review and human review — a second automated pass from a fresh context. See [Configuring automatic code review by Copilot](https://docs.github.com/en/copilot/how-tos/agents/copilot-code-review/configuring-automatic-code-review-by-copilot).
 
 ---
 

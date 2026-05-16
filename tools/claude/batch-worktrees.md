@@ -13,13 +13,13 @@ tags:
 
 ## /batch
 
-[`/batch` is a bundled skill](https://code.claude.com/docs/en/commands) that orchestrates large-scale changes across a codebase in parallel. It researches the codebase, decomposes the work into 5 to 30 independent units, presents a plan for approval, then spawns one background agent per unit — each in [an isolated git worktree](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees). Each agent implements its unit, runs tests, and opens a pull request.
+[`/batch` is a bundled skill](https://code.claude.com/docs/en/commands) that orchestrates large-scale changes across a codebase in parallel. It researches the codebase, decomposes the work into 5 to 30 independent units, presents a plan for approval, then spawns one background subagent per unit — each in [an isolated git worktree](https://code.claude.com/docs/en/worktrees). Each subagent implements its unit, runs tests, and opens a pull request.
 
 Each agent works independently without interfering with other agents or your main working directory.
 
 ## --worktree Flag
 
-The [`--worktree` (`-w`) flag](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) creates an isolated worktree under `<repo>/.claude/worktrees/<name>` on a new branch `worktree-<name>` (branching from `origin/HEAD`) and starts Claude in it. Use this for manual parallel sessions — run multiple Claude Code instances on the same repo without conflicts. Project configs and [auto memory are shared across worktrees](https://code.claude.com/docs/en/memory) of the same repository.
+The [`--worktree` (`-w`) flag](https://code.claude.com/docs/en/worktrees#start-claude-in-a-worktree) creates an isolated worktree under `<repo>/.claude/worktrees/<name>` on a new branch `worktree-<name>` (branching from `origin/HEAD` by default, falling back to local `HEAD` if no remote is configured; switch to `HEAD` permanently via the `worktree.baseRef` setting) and starts Claude in it. Use this for manual parallel sessions — run multiple Claude Code instances on the same repo without conflicts. Project configs and [auto memory are shared across worktrees](https://code.claude.com/docs/en/memory#storage-location) of the same repository.
 
 ### Why worktrees work
 
@@ -27,20 +27,20 @@ Git worktrees let multiple working directories share a single object database wh
 
 ## EnterWorktree / ExitWorktree
 
-The `EnterWorktree` and `ExitWorktree` tools let an agent manage worktree sessions mid-conversation:
+The [`EnterWorktree` and `ExitWorktree` tools](https://code.claude.com/docs/en/tools-reference) let an agent manage worktree sessions mid-conversation:
 
-- **`EnterWorktree`** — creates a new worktree under `.claude/worktrees/`, branches from `HEAD`, and switches the session's working directory into it.
-- **`ExitWorktree`** — leaves the worktree session and returns to the parent working directory. If no changes exist, the worktree and its branch are [cleaned up automatically](https://code.claude.com/docs/en/common-workflows#worktree-cleanup); if commits or uncommitted changes exist, Claude Code prompts to keep or remove.
+- **`EnterWorktree`** — creates an isolated git worktree under `.claude/worktrees/` (branching from `origin/HEAD` by default, the same base as `--worktree`) and switches into it. Pass a `path` to switch into an existing worktree instead of creating a new one. Not available to subagents.
+- **`ExitWorktree`** — exits the worktree session and returns to the original directory. With no uncommitted changes, untracked files, or new commits, the worktree and its branch are [cleaned up automatically](https://code.claude.com/docs/en/worktrees#clean-up-worktrees) (named sessions prompt instead so you can keep the worktree for later); if changes exist, Claude Code prompts to keep or remove. Not available to subagents.
 
 Typical lifecycle: enter the worktree, perform work, then exit to return to the parent context.
 
 ### Worktree Hooks
 
-Worktree events fire the [`WorktreeCreate` and `WorktreeRemove` hook events](https://code.claude.com/docs/en/hooks#worktreecreate), which also replace the default `git worktree` logic entirely when configured — useful for non-git version control (Perforce, Mercurial) or for branching off a non-default ref.
+Worktree events fire the [`WorktreeCreate` and `WorktreeRemove` hook events](https://code.claude.com/docs/en/hooks#worktreecreate). A configured `WorktreeCreate` hook replaces the default `git worktree` logic entirely (the command prints the worktree path on stdout and Claude Code uses that as the session's working directory) — useful for non-git version control like SVN, Perforce, or Mercurial, or for full control over how worktrees are created. When the hook replaces default behavior, [`.worktreeinclude`](https://code.claude.com/docs/en/worktrees#copy-gitignored-files-into-worktrees) is not processed; copy local configuration files inside the hook script instead.
 
 ## Background Agents
 
-`/batch` spawns [one background agent per unit](https://code.claude.com/docs/en/commands), so you can continue working in the foreground while units execute. To inspect or manage them, use [`/tasks` (also available as `/bashes`)](https://code.claude.com/docs/en/commands) to list and manage background tasks.
+`/batch` spawns [one background subagent per unit](https://code.claude.com/docs/en/sub-agents#run-subagents-in-foreground-or-background), so you can continue working in the foreground while units execute. To inspect or manage them, use [`/tasks` (also available as `/bashes`)](https://code.claude.com/docs/en/commands) to list and manage background tasks.
 
 ## Claude Code on the Web
 

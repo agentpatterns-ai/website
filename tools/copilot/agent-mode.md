@@ -19,9 +19,9 @@ Agent mode transforms Copilot from a suggestion engine into an autonomous execut
 
 Available in [VS Code](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode), and [generally available in JetBrains, Eclipse, and Xcode](https://github.blog/changelog/2025-07-16-agent-mode-for-jetbrains-eclipse-and-xcode-is-now-generally-available/).
 
-## Planning Mode
+## Plan Agent
 
-For complex tasks, Copilot generates a [transparent plan](https://code.visualstudio.com/docs/copilot/agents/planning) outlining all steps before making changes. The plan supports structured reasoning and [progress tracking](../../agent-design/goal-monitoring-progress-tracking.md).
+For complex tasks, switch to the [Plan agent](https://code.visualstudio.com/docs/copilot/agents/planning) — it generates a detailed implementation plan before any changes are made. The plan supports structured reasoning and [progress tracking](../../agent-design/goal-monitoring-progress-tracking.md).
 
 ## Multi-File Editing
 
@@ -63,19 +63,19 @@ Copilot responds by reading the affected files, proposing changes across the cod
 [agent] All tests passing
 ```
 
-For complex migrations, enable planning mode first — Copilot shows the full plan before touching any files. In VS Code, this is available via the `#plan` directive in the prompt:
+For complex migrations, switch to the Plan agent first — Copilot shows the full plan before touching any files. In VS Code, [type `/plan` followed by your task description](https://code.visualstudio.com/docs/copilot/agents/planning) in Chat to invoke the Plan agent:
 
 ```
-#plan Migrate express-session to JWT across the auth module
+/plan Migrate express-session to JWT across the auth module
 ```
 
-Review the plan, approve, and then Copilot executes all steps.
+Review the plan, approve, and then switch back to the Agent to execute the steps.
 
 ## Key Takeaways
 
 - Agent mode is the local, synchronous counterpart to the async coding agent
 - It iterates autonomously: edit, run, check, fix — without step-by-step approval
-- Planning mode adds transparency for complex multi-step tasks
+- The Plan agent (`/plan`) adds transparency for complex multi-step tasks
 - Generally available across VS Code, JetBrains, Eclipse, and Xcode
 
 ## Related
