@@ -24,25 +24,22 @@ The frontmatter declares:
 - **`tools`** — available integrations (e.g., `github`)
 - **`imports`** — shared fragments for reusable tool configs or formatting conventions
 
-## Seven Design Patterns
+## Named Design Patterns
 
-GitHub defines seven named patterns for common automation scenarios ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
+GitHub's canonical `gh-aw` documentation names four common automation patterns ([gh-aw docs](https://github.github.io/gh-aw/)):
 
 | Pattern | Use Case |
 |---------|----------|
 | **ChatOps** | Respond to issue/PR comments with agent actions |
 | **DailyOps** | Scheduled maintenance — stale issue cleanup, status reports |
-| **DataOps** | Data validation, reporting, dashboard generation |
 | **IssueOps** | [Issue triage](../../workflows/continuous-triage.md), labeling, routing, duplicate detection |
-| **ProjectOps** | Project board management, milestone tracking |
-| **MultiRepoOps** | Cross-repository coordination, dependency updates |
-| **Orchestration** | Multi-step workflows chaining multiple agent actions |
+| **BatchOps** | Batched repository operations across issues or PRs |
 
-Patterns are combinable — Orchestration can chain IssueOps triage with a ChatOps response.
+Patterns are combinable — DailyOps can drive IssueOps triage on a schedule.
 
 ## Configurable Engine
 
-Agentic Workflows support multiple execution engines — Copilot CLI, Claude Code, and OpenAI Codex — decoupling the pattern from the model provider ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+Agentic Workflows support multiple execution engines — GitHub Copilot, Claude (Anthropic), OpenAI Codex, and custom engines — decoupling the pattern from the model provider ([gh-aw docs](https://github.github.io/gh-aw/)).
 
 ## Safe Outputs: Constraining Agent Writes
 

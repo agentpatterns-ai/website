@@ -373,6 +373,8 @@ Create a GitHub Actions workflow that runs eslint on push
 
 ## GitHub Copilot Coding Agent
 
+> **Naming note (2026)**: GitHub's canonical docs now refer to this surface as the **Copilot cloud agent** (see [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)). The terms are used interchangeably across product surfaces; this site continues to use "coding agent" for now because the broader ecosystem (issue templates, settings UI breadcrumbs, third-party integrations) still mixes both names.
+
 **What it is**: An autonomous agent that runs in a GitHub Actions sandbox, not on your machine. You assign it a task — via an issue, a comment, or a security alert — and it works independently, then opens a draft PR for your review.
 
 **Used for**: Delegating well-defined tasks that don't require real-time decisions: bug fixes, adding tests, updating docs, applying standard refactors, addressing tech debt.

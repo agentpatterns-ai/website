@@ -81,7 +81,7 @@ graph TD
 | Auto-decomposition | Yes — Cursor splits a large task into chunks | No — caller dispatches each subagent explicitly | No |
 | Result surfacing | Final messages plus resumable agent IDs in the Agents Window | [Monitor tool streams events](../../multi-agent/async-non-blocking-subagent-dispatch.md) from background processes | Subagent torn down after each invocation |
 | Filesystem isolation | Compose with `/worktree` for git-level isolation | Per-tool; `Worktree` tool available separately | None built-in |
-| Recursion depth | 1 | 1 | 1 |
+| Recursion depth | N — nested child subagents since Cursor 2.5, gated by Task-tool access and hooks ([Cursor subagents docs](https://cursor.com/docs/subagents)) | 1 | 1 |
 
 Sources: [Cursor subagents docs](https://cursor.com/docs/subagents), [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Cross-tool subagent comparison](../../multi-agent/cross-tool-subagent-comparison.md).
 

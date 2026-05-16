@@ -1,6 +1,6 @@
 ---
 title: "Plugin Background Monitors: Declarative Supervision Auto-Armed at Session Start"
-description: "Plugins declare a top-level `monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session."
+description: "Plugins declare an `experimental.monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session."
 tags:
   - claude
   - tool-engineering
@@ -12,13 +12,13 @@ aliases:
 
 # Plugin Background Monitors: Declarative Supervision Auto-Armed at Session Start
 
-> Plugins declare a top-level `monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session.
+> Plugins declare an `experimental.monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session.
 
-Plugin-declared background monitors landed in Claude Code v2.1.105: "Added background monitor support for plugins via a top-level `monitors` manifest key that auto-arms at session start or on skill invoke" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The plugin author ships the watcher; the harness arms it. Consumers do not write boilerplate to register supervision.
+Plugin-declared background monitors landed in Claude Code v2.1.105: "Added background monitor support for plugins via a top-level `monitors` manifest key that auto-arms at session start or on skill invoke" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The plugin author ships the watcher; the harness arms it. As of v2.1.129, `monitors` is an [experimental component](https://code.claude.com/docs/en/plugins-reference#experimental-components) declared under `experimental.monitors`; the top-level form still validates with a warning.
 
 ## The Manifest Contract
 
-A plugin declares monitors at the top level of `plugin.json`, or in `monitors/monitors.json` at the plugin root. Each entry is one persistent background process whose stdout becomes notifications to Claude.
+A plugin declares monitors at `monitors/monitors.json` in the plugin root, or inline under `experimental.monitors` in `plugin.json`. Each entry is one persistent background process whose stdout becomes notifications to Claude.
 
 ```json
 [
@@ -44,7 +44,7 @@ The optional `when` field controls trigger:
 | `"always"` (default) | Session start and on plugin reload |
 | `"on-skill-invoke:<skill-name>"` | First time the named plugin skill is dispatched |
 
-`command` accepts `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}`, `${user_config.*}`, and any `${ENV_VAR}` from the environment ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
+`command` accepts `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}`, `${CLAUDE_PROJECT_DIR}`, `${user_config.*}`, and any `${ENV_VAR}` from the environment ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)). Prefix the command with `cd "${CLAUDE_PLUGIN_ROOT}" && ` if the script needs to run from the plugin's own directory.
 
 ## How It Differs From Hooks and the Monitor Tool
 
@@ -100,7 +100,9 @@ A plugin that ships a protected-path tripwire — file writes under `/etc/` or t
   "name": "tripwire",
   "version": "1.0.0",
   "description": "Surface writes to protected paths during a session",
-  "monitors": "./monitors/monitors.json"
+  "experimental": {
+    "monitors": "./monitors/monitors.json"
+  }
 }
 ```
 

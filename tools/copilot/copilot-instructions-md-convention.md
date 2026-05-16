@@ -65,7 +65,7 @@ applyTo: "**/*.py"
 Use type hints on all function signatures. Prefer `pathlib` over `os.path`.
 ```
 
-Path-specific files also support `excludeAgent` (`"code-review"` or `"coding-agent"`) to exclude a feature from receiving those instructions. Move language-specific rules here to keep the repository-wide file short.
+Path-specific files also support `excludeAgent` (`"code-review"` or `"cloud-agent"`) to exclude a feature from receiving those instructions ([docs](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions)). Move language-specific rules here to keep the repository-wide file short.
 
 ## Feature Support Matrix
 
@@ -73,10 +73,10 @@ Support varies by IDE ([docs](https://docs.github.com/en/copilot/reference/custo
 
 | Platform | Chat | Code Review | Coding Agent |
 |----------|------|-------------|--------------|
-| VS Code | Repo + Path + Agent | Repo + Path | Repo + Path + Agent |
+| VS Code | Repo + Path + Agent | Repo only | Repo + Path + Agent |
 | JetBrains | Repo + Path + Agent | Repo + Path | Repo + Path + Agent |
-| GitHub.com | Repo + Path + Personal | Repo + Path + Org | Repo + Path + Agent |
-| Visual Studio | Repo only | Repo only | -- |
+| GitHub.com | Repo + Personal | Repo + Path + Org | Repo + Path + Agent |
+| Visual Studio | Repo + Path | Repo only | -- |
 | Xcode | Repo + Path | Repo + Path | Repo + Path + Agent |
 
 ## copilot-instructions.md vs. AGENTS.md
@@ -95,7 +95,7 @@ Teams using multiple AI tools can maintain both files with a convergence strateg
 
 - **Over-stuffed files**: Loading the file with implementation details, full documentation, or task-specific context bloats the system prompt, consuming token budget that would otherwise hold conversation or code context. Keep it to broadly applicable project-wide rules ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)).
 - **Personal settings override**: Personal-scope instructions take highest priority and silently override repository instructions on conflict. Team members with conflicting personal Copilot settings will see different behavior than the repository instructions intend.
-- **IDE feature gaps**: Visual Studio only reads the repository-wide file — path-specific instructions and organization-level scope are unsupported. Workflows built around path-specific `applyTo` globs break silently on these IDEs.
+- **IDE feature gaps**: Code Review support is uneven — VS Code and Visual Studio only read the repository-wide file for review, ignoring path-specific `applyTo` globs ([docs](https://docs.github.com/en/copilot/reference/custom-instructions-support)). On GitHub.com, Copilot Chat does not honor path-specific instructions either — only Code Review and the cloud agent do. Workflows built around path-specific globs break silently on these surfaces.
 - **Instructions don't guarantee compliance**: GitHub explicitly notes that "providing instructions doesn't guarantee perfect code" — the same request can render different results across sessions ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/)). Treat instructions as a probabilistic nudge, not a deterministic contract.
 
 ## Example

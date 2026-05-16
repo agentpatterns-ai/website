@@ -1,0 +1,176 @@
+---
+title: "OpenAPI Documentation Smells for Agent-Ready APIs"
+description: "A nine-category taxonomy — four documentation smells, five REST smells — that surfaces the gap between structurally valid OpenAPI specs and agent-consumable API descriptions, plus the scenario-first triage that keeps remediation tractable."
+tags:
+  - tool-agnostic
+  - cost-performance
+aliases:
+  - OpenAPI smell taxonomy
+  - agent-readiness API audit
+  - REST documentation smells
+---
+
+# OpenAPI Documentation Smells for Agent-Ready APIs
+
+> A structurally valid OpenAPI spec is not an agent-ready API. The Hermes industrial study found 2,450 deficiencies across 600 endpoints — every endpoint had at least one — and enriching only the spec text moved task success from roughly 70% to 90%.
+
+## The Semantic-Readiness Gap
+
+An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312)". Their proof-of-concept moved identical task scenarios from [~70% to ~90% success after enriching the descriptions alone](https://arxiv.org/abs/2605.14312).
+
+Adjacent work confirms the gap. [AutoMCP saw 76.5% baseline tool-call success from raw OpenAPI specs, reaching 99.9% only after averaging 19 lines of spec edits per API](https://arxiv.org/html/2507.16044v3). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
+
+The deficiencies have shape. Hermes names nine categories.
+
+## The Smell Taxonomy
+
+Four [documentation smells](https://arxiv.org/abs/2605.14312) describe how the prose around an endpoint fails an agent:
+
+| Smell | What it looks like |
+|-------|--------------------|
+| **LAZY** | Short summaries, vague descriptions, undocumented parameters, generic response messages |
+| **BLOATED** | Verbose prose that adds tokens without adding decision-relevant information |
+| **TANGLED** | Business logic, security, and error handling mixed into the same description fragment |
+| **FRAGMENTED** | Essential information dispersed across disconnected sections with no linkage |
+
+Five [REST smells](https://arxiv.org/abs/2605.14312) describe how the endpoint design itself misleads an agent:
+
+| Smell | What it looks like |
+|-------|--------------------|
+| **PATH** | Action-oriented URIs (`/doTransfer`) that hide the underlying resource |
+| **METHOD** | `POST` used for reads, `GET` used for state changes, mismatched semantics |
+| **INPUT** | Weakly specified parameters, missing format constraints, no semantic clarification |
+| **RESPONSE** | Inconsistent schemas, undocumented status codes, missing error shapes |
+| **SECURITY** | Missing or unclear authentication and authorization definitions |
+
+Prevalence in the Hermes corpus skewed heavily: [100% of endpoints had RESPONSE smells, 90% LAZY, 88% INPUT, 68% SECURITY, 53% PATH or METHOD](https://arxiv.org/abs/2605.14312). This is the default state of human-targeted documentation when an agent is the reader.
+
+## Why Each Category Matters
+
+The taxonomy works because OpenAPI was written for developers with implicit context — the codebase, Slack, ticket history — that agents do not see. Each smell names a specific gap between human-implicit and machine-explicit information.
+
+- LAZY descriptions force the agent to pick endpoints by `operationId` alone — [the same failure mode practitioners cite when generating MCP tools from undocumented OpenAPI](https://blog.christianposta.com/semantics-matter-exposing-openapi-as-mcp-tools/).
+- INPUT and RESPONSE smells map to the [parameter and schema fields that translate directly into agent tool definitions](../standards/openapi-agent-tool-spec.md) — gaps there become hallucinated arguments and unhandled error states.
+- TANGLED descriptions break [the description-quality discipline](tool-description-quality.md) of one concern per documentation field.
+- PATH and METHOD smells survive automatic [MCP server generation](mcp-server-design.md) and propagate into the tool catalog the agent reads.
+
+## Scenario-First Triage
+
+Detecting smells on all 600 endpoints in a 16-API portfolio produces a 2,450-finding report. The Hermes study itself pivoted to selective adaptation rather than blanket remediation: [estimated effort dropped from 385 to 42 engineering hours — an 89% reduction — by fixing only endpoints needed for defined automation scenarios](https://arxiv.org/abs/2605.14312).
+
+The same logic appears in MCP practice. [GitHub Copilot and Block teams cut tool counts by 60-93% before agents became reliable](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc); fixing descriptions on tools that should never have been exposed is wasted work. [Speakeasy's guidance is the same: "autogenerate the groundwork from OpenAPI, then curate"](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi).
+
+```mermaid
+graph TD
+    A[Define agent scenarios] --> B[Identify required endpoints]
+    B --> C[Audit only those endpoints]
+    C --> D{Smells found?}
+    D -->|Yes| E[Remediate spec text]
+    D -->|No| F[Generate MCP tools]
+    E --> F
+```
+
+Run the audit on the endpoints your scenarios actually need. Decline to audit the rest until they earn the work.
+
+## Mechanizing the Audit
+
+Hermes dispatches nine specialized smell-detector agents from one orchestrator, each analyzing the same endpoint representation from a single category's perspective, then aggregates findings — a textbook [orchestrator-worker fan-out](../multi-agent/orchestrator-worker.md) over a fixed taxonomy.
+
+Model selection matters less than expected. [`gpt-oss:120b` reached 0.85 Jaccard similarity with expert annotations](https://arxiv.org/abs/2605.14312) — the audit does not require frontier pricing.
+
+Static linters ([Spectral](https://stoplight.io/open-source/spectral), [Redocly CLI](https://redocly.com/docs/cli)) catch PATH, METHOD, and structural INPUT or RESPONSE issues at design time without an LLM. Reach for LLM-based detection on the prose-shaped smells — LAZY, BLOATED, TANGLED, FRAGMENTED — where static rules cannot judge information density.
+
+## Example
+
+A `LAZY` and `INPUT` smell pair, taken from the kind of spec the Hermes study evaluated:
+
+**Before** — agent-hostile:
+
+```yaml
+/users/{id}/transfer:
+  post:
+    summary: Transfer
+    operationId: doTransfer
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              amount:
+                type: number
+              to:
+                type: string
+    responses:
+      '200':
+        description: OK
+```
+
+**After** — agent-ready:
+
+```yaml
+/accounts/{accountId}/transfers:
+  post:
+    summary: Create a transfer from one account to another
+    description: |
+      Use when the caller has the source account ID and wants to move funds to a
+      destination account in the same currency. Returns the created transfer
+      including its server-assigned ID and settlement timestamp. Returns 409 if
+      a transfer with the same Idempotency-Key already exists.
+    operationId: createTransfer
+    parameters:
+      - name: accountId
+        in: path
+        description: UUID v4 of the source account.
+        required: true
+        schema:
+          type: string
+          format: uuid
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [amount, destinationAccountId]
+            properties:
+              amount:
+                type: integer
+                description: Amount in minor units (e.g. cents). Must be > 0.
+                minimum: 1
+              destinationAccountId:
+                type: string
+                format: uuid
+                description: UUID v4 of the destination account.
+    responses:
+      '200':
+        description: Transfer created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      '409':
+        description: Duplicate Idempotency-Key.
+```
+
+The PATH smell (`/users/{id}/transfer` with `doTransfer`) collapsed into a resource-shaped URI with `createTransfer`. The LAZY summary expanded into a description that names when to call, what comes back, and what the failure case looks like. INPUT gained format constraints and required-field declarations. RESPONSE gained a documented 409.
+
+## Key Takeaways
+
+- An OpenAPI spec that validates structurally can still fail agents — every one of 600 audited endpoints had at least one smell.
+- The nine-category taxonomy (four documentation, five REST) gives a concrete checklist that maps to specific agent failure modes.
+- Audit only the endpoints your defined agent scenarios need. Blanket audits produce reports nobody acts on; selective audits cut remediation effort by an order of magnitude.
+- Use static linters for structural smells and LLM-based detection for prose-shaped smells. Open-weight models reach expert-level Jaccard on this task — frontier pricing is not required.
+
+## Related
+
+- [OpenAPI as the Source of Truth for Agent Tool Definitions](../standards/openapi-agent-tool-spec.md)
+- [MCP Server Design](mcp-server-design.md)
+- [Tool Description Quality](tool-description-quality.md)
+- [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
+- [Audit Tool Descriptions](../agent-readiness/audit-tool-descriptions.md)
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)

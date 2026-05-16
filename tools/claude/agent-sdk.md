@@ -14,13 +14,13 @@ tags:
 
 ## What It Is
 
-The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) is the infrastructure that powers Claude Code, available as a library.
+The [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) is the infrastructure that powers Claude Code, available as a library.
 
-Available as [`@anthropic-ai/claude-agent-sdk`](https://platform.claude.com/docs/en/agent-sdk/typescript) (TypeScript) and `claude_agent_sdk` (Python).
+Available as [`@anthropic-ai/claude-agent-sdk`](https://code.claude.com/docs/en/agent-sdk/typescript) (TypeScript) and `claude_agent_sdk` (Python).
 
 ## Core API
 
-The SDK's core is the `query()` function, which returns an async generator yielding typed messages. This is the [same agent loop that powers Claude Code](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) — tool calls, file operations, reasoning, and response generation.
+The SDK's core is the `query()` function, which returns an async generator yielding typed messages. This is the [same agent loop that powers Claude Code](https://code.claude.com/docs/en/agent-sdk/overview) — tool calls, file operations, reasoning, and response generation.
 
 ## What You Get
 
@@ -32,7 +32,7 @@ The SDK provides access to the same filesystem-based features as Claude Code. `s
 - **Permissions**: allow/ask/deny rules control tool access
 - **Sub-agents**: define inline via the `agents` option; Claude spawns them via the Task tool
 
-The default behavior of omitting `settingSources` has changed between releases. The v0.1.0 [migration guide](https://code.claude.com/docs/en/agent-sdk/migration-guide) originally introduced isolation-by-default, but a Warning on that same page now states that "current SDK releases have reverted this default for `query()`: omitting the option once again loads user, project, and local settings, matching the CLI," and the [claude-code-features reference](https://code.claude.com/docs/en/agent-sdk/claude-code-features) documents "omitting `settingSources` is equivalent to `[\"user\", \"project\", \"local\"]`". The TypeScript SDK [changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md) still describes isolation mode as the default, so the vendor's own sources disagree. Pin an SDK version, set `settingSources` explicitly, and verify load behavior in your own environment rather than relying on the default.
+The default behavior of omitting `settingSources` has churned between releases. The current [claude-code-features reference](https://code.claude.com/docs/en/agent-sdk/claude-code-features) documents that "omitting `settingSources` is equivalent to `[\"user\", \"project\", \"local\"]`" — `query()` reads the same filesystem settings as the CLI. The v0.1.0 [migration guide](https://code.claude.com/docs/en/agent-sdk/migration-guide) originally introduced isolation-by-default, and the TypeScript SDK [changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md) has not added an entry documenting a reversion, so the docs and the changelog disagree on the historical record. Pin an SDK version, set `settingSources` explicitly, and verify load behavior in your own environment rather than relying on the default.
 
 ## When to Use
 

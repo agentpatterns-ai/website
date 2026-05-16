@@ -39,7 +39,7 @@ Key frontmatter fields: `name`, `description`, `tools` (restrict which tools are
 
 The `Agent` tool accepts a `model` parameter for per-invocation model selection (e.g. `model: opus`, `model: sonnet`, `model: haiku`). This allows the parent to route individual sub-agent invocations to a specific model regardless of the default.
 
-The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-6`) are accepted.
+The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-7`) are accepted. See [Choose a model](https://code.claude.com/docs/en/sub-agents#choose-a-model) for the full resolution order.
 
 ## Properties
 
@@ -52,7 +52,7 @@ The `model` field in the sub-agent definition sets the default; the per-invocati
 
 ## SDK Sub-Agents
 
-The [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline via the `agents` option — no filesystem dependency needed. Claude spawns them via the `Agent` tool.
+The [Agent SDK](https://code.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline via the `agents` option — no filesystem dependency needed. Claude spawns them via the `Agent` tool.
 
 ## When to Use
 

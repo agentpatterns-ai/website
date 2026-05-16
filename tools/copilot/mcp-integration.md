@@ -24,31 +24,31 @@ Add custom MCP servers for any external tool or service. Configure them in VS Co
 
 ## Coding Agent + MCP
 
-The coding agent can use [MCP tools](https://docs.github.com/en/copilot/concepts/agents/coding-agent/mcp-and-coding-agent) from both local and remote servers. Currently supports tools only — not resources or prompts.
+The coding agent can use [MCP tools](https://docs.github.com/en/copilot/concepts/agents/coding-agent/mcp-and-coding-agent) from both local and remote servers. The GitHub MCP server and the Playwright MCP server are pre-configured by default. Tools only — resources and prompts are not supported, and remote servers that require OAuth for authentication are not currently supported.
 
 ## VS Code MCP Bridging (v1.113+)
 
-As of [VS Code 1.113](https://code.visualstudio.com/updates/v1_113), MCP servers registered in VS Code are automatically bridged to Copilot CLI and Claude agent sessions running within the editor. This means tools configured in your `settings.json` are available to CLI and Claude agents without separate configuration.
+As of [VS Code 1.113](https://code.visualstudio.com/updates/v1_113), MCP servers registered in VS Code are automatically bridged to Copilot CLI and Claude agent sessions running within the editor. This means servers configured in your workspace `.vscode/mcp.json` or user profile are available to CLI and Claude agents without separate configuration.
 
 ## CLI + MCP
 
-Copilot CLI ships with the [GitHub MCP server built in](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) and supports adding custom MCP servers via the interactive `/mcp add` command or the `~/.copilot/mcp-config.json` file.
+Copilot CLI ships with the [GitHub MCP server built in](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) and supports adding custom MCP servers via the interactive `/mcp add` command or by editing `~/.copilot/mcp-config.json` directly. Companion commands include `/mcp show`, `/mcp edit`, `/mcp delete`, and `/mcp disable`/`/mcp enable`.
 
 ## Example
 
-The following VS Code `settings.json` snippet configures two MCP servers for Copilot agent mode: the built-in GitHub MCP server with a restricted toolset, and a custom Postgres server for direct database queries.
+The following [`.vscode/mcp.json`](https://code.visualstudio.com/docs/copilot/customization/mcp-servers) snippet configures two MCP servers: the remote GitHub MCP server with a restricted toolset, and a custom Postgres server for direct database queries.
 
 ```json
 {
-  "github.copilot.chat.mcp.servers": [
-    {
-      "name": "github",
-      "type": "remote",
+  "servers": {
+    "github": {
+      "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "enabledToolsets": ["issues", "pull_requests", "code_search"]
+      "headers": {
+        "X-MCP-Toolsets": "issues,pull_requests,code_search"
+      }
     },
-    {
-      "name": "postgres",
+    "postgres": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-postgres"],
@@ -56,18 +56,18 @@ The following VS Code `settings.json` snippet configures two MCP servers for Cop
         "POSTGRES_CONNECTION_STRING": "${env:DATABASE_URL}"
       }
     }
-  ]
+  }
 }
 ```
 
-`enabledToolsets` on the GitHub server restricts which GitHub API capabilities are exposed — omitting `admin` and `repos` toolsets reduces the blast radius if the agent acts on an ambiguous instruction. The Postgres server runs as a local stdio process, so no network port is exposed; the connection string is read from the environment rather than hardcoded.
+The [`X-MCP-Toolsets` header](https://github.com/github/github-mcp-server/blob/main/docs/remote-server.md) restricts which GitHub API capabilities are exposed — omitting `admin` and `repos` toolsets reduces the blast radius if the agent acts on an ambiguous instruction. (An equivalent path-segment form, `https://api.githubcopilot.com/mcp/x/issues`, supports a single toolset; use the header for multiple.) The Postgres server runs as a local stdio process, so no network port is exposed; the connection string is read from the environment rather than hardcoded.
 
 ## Key Takeaways
 
 - MCP is the standard protocol connecting Copilot to external tools across all surfaces
-- GitHub's official MCP server provides GitHub API access out of the box
+- GitHub's official MCP server provides GitHub API access out of the box; the coding agent also enables Playwright by default
 - Custom MCP servers extend Copilot to any external service
-- The coding agent supports MCP tools (not resources or prompts)
+- The coding agent supports MCP tools only — not resources, prompts, or remote servers that require OAuth
 - VS Code 1.113+ bridges registered MCP servers to CLI and Claude agent sessions automatically
 
 ## When This Backfires

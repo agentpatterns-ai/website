@@ -80,15 +80,19 @@ Benchmark aggregation produces three metrics per configuration:
 
 ```json
 {
-  "with_skill": {
-    "pass_rate": { "mean": 0.83, "stddev": 0.06 },
-    "time_seconds": { "mean": 45.0, "stddev": 12.0 },
-    "tokens": { "mean": 3800, "stddev": 400 }
-  },
-  "without_skill": {
-    "pass_rate": { "mean": 0.33, "stddev": 0.10 }
-  },
-  "delta": { "pass_rate": 0.50, "time_seconds": 13.0, "tokens": 1700 }
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": { "mean": 0.83, "stddev": 0.06 },
+      "time_seconds": { "mean": 45.0, "stddev": 12.0 },
+      "tokens": { "mean": 3800, "stddev": 400 }
+    },
+    "without_skill": {
+      "pass_rate": { "mean": 0.33, "stddev": 0.10 },
+      "time_seconds": { "mean": 32.0, "stddev": 8.0 },
+      "tokens": { "mean": 2100, "stddev": 300 }
+    },
+    "delta": { "pass_rate": 0.50, "time_seconds": 13.0, "tokens": 1700 }
+  }
 }
 ```
 

@@ -15,7 +15,7 @@ tags:
 
 > Skip all local configuration discovery for deterministic, faster scripted calls.
 
-Added in [v2.1.81 (March 20, 2026)](https://code.claude.com/docs/en/changelog), `--bare` is the recommended mode for all scripted and SDK uses of Claude Code. Anthropic has stated it will become the default for `-p` in a future release ([headless docs](https://code.claude.com/docs/en/headless)).
+`--bare` is the [recommended mode for scripted and SDK calls](https://code.claude.com/docs/en/headless#start-faster-with-bare-mode), and Anthropic has stated it will become the default for `-p` in a future release.
 
 ## What `--bare` Skips
 
@@ -53,11 +53,11 @@ Because `--bare` skips everything, you load only what the task actually needs ([
 | Settings file | `--settings <file-or-json>` |
 | MCP servers | `--mcp-config <file-or-json>` |
 | Custom agents | `--agents <json>` |
-| Plugin directory | `--plugin-dir <path>` |
+| A plugin | `--plugin-dir <path>`, `--plugin-url <url>` |
 
 ## Performance
 
-`--bare -p` is approximately 14% faster to the first API request compared to standard `-p` ([changelog](https://code.claude.com/docs/en/changelog)). For CI pipelines that run Claude on every push or PR, this compounds across many invocations. `--bare` also sets the `CLAUDE_CODE_SIMPLE` environment variable ([CLI reference](https://code.claude.com/docs/en/cli-reference)), which downstream scripts can read to detect bare-mode context.
+By skipping auto-discovery of hooks, skills, plugins, MCP servers, auto memory, and CLAUDE.md, `--bare -p` reduces startup time compared to standard `-p` ([headless docs](https://code.claude.com/docs/en/headless#start-faster-with-bare-mode)). For CI pipelines that run Claude on every push or PR, this compounds across many invocations. `--bare` also sets the `CLAUDE_CODE_SIMPLE` environment variable ([CLI reference](https://code.claude.com/docs/en/cli-reference)), which downstream scripts can read to detect bare-mode context.
 
 ## When This Backfires
 
@@ -65,7 +65,7 @@ Because `--bare` skips everything, you load only what the task actually needs ([
 
 - **CI is meant to mirror the repo's configured environment.** If your team relies on a checked-in `.mcp.json`, project hooks in `.claude/`, or repo-scoped skills for the CI task itself, `--bare` will silently skip them. You must re-add each one with `--mcp-config`, `--settings`, and `--plugin-dir`, and keep those flags in sync with the project config.
 - **The task depends on CLAUDE.md context.** Project CLAUDE.md files often encode repo conventions (naming, test commands, style rules). A bare run has none of that and will happily violate them. If you need that context, re-inject it via `--append-system-prompt-file`.
-- **You already use `ANTHROPIC_API_KEY` and a locked-down `settings.json`.** If your non-bare `-p` runs are already deterministic — no local hooks, no auto-memory, explicit API key — `--bare` mostly adds flag noise for the ~14% startup saving. Measure before adopting it.
+- **You already use `ANTHROPIC_API_KEY` and a locked-down `settings.json`.** If your non-bare `-p` runs are already deterministic — no local hooks, no auto-memory, explicit API key — `--bare` mostly adds flag noise for a startup saving you may not need. Measure before adopting it.
 
 ## Example
 
@@ -101,7 +101,7 @@ jobs:
 
 - `--bare` skips hooks, MCP servers, skills, plugins, auto-memory, and CLAUDE.md — only flags you pass take effect
 - Authentication requires `ANTHROPIC_API_KEY` or equivalent; OAuth and keychain are disabled
-- `--bare -p` is ~14% faster to first API request than standard `-p`
+- `--bare -p` reduces startup time by skipping auto-discovery work
 - Use `--settings`, `--mcp-config`, and other flags to selectively add back what the task needs
 - `--bare` is the recommended mode for scripted calls and will become the default for `-p`
 

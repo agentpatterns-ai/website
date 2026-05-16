@@ -31,19 +31,19 @@ The pattern mirrors progressive-exposure feature flagging: new capabilities ship
 
 | Variable | Effect | Default |
 |----------|--------|---------|
-| `CLAUDE_CODE_EFFORT_LEVEL` | Adaptive reasoning level: `low`, `medium`, `high` | `auto` ([env-vars docs](https://code.claude.com/docs/en/env-vars)) |
-| `MAX_THINKING_TOKENS` | Extended-thinking budget (used when adaptive is off) | Model-dependent |
+| `CLAUDE_CODE_EFFORT_LEVEL` | Adaptive reasoning level: `low`, `medium`, `high`, `xhigh`, `max` (model-dependent) | `auto` ([model config docs](https://code.claude.com/docs/en/model-config)) |
+| `MAX_THINKING_TOKENS` | Fixed thinking budget on Opus 4.6 / Sonnet 4.6 with adaptive disabled; ignored by Opus 4.7 | Model-dependent ([model config docs](https://code.claude.com/docs/en/model-config)) |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | Cap on output tokens per response | Model default ([env-vars docs](https://code.claude.com/docs/en/env-vars)) |
-| `CLAUDE_CODE_SUBAGENT_MODEL` | Force a specific model for sub-agents | Latest ([env-vars docs](https://code.claude.com/docs/en/env-vars)) |
-| `ANTHROPIC_DEFAULT_SONNET_MODEL` | Pin the Sonnet version | Latest Sonnet ([model config docs](https://code.claude.com/docs/en/model-config)) |
-| `ANTHROPIC_DEFAULT_OPUS_MODEL` | Pin the Opus version | Latest Opus |
-| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | Pin the Haiku version | Latest Haiku |
+| `CLAUDE_CODE_SUBAGENT_MODEL` | Force a specific model for sub-agents | Inherits parent ([model config docs](https://code.claude.com/docs/en/model-config)) |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | Pin the Sonnet version (full model name) | Resolves `sonnet` alias per provider ([model config docs](https://code.claude.com/docs/en/model-config)) |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | Pin the Opus version (full model name) | Resolves `opus` alias per provider |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | Pin the Haiku version (full model name) | Resolves `haiku` alias per provider |
 
-Pin model versions on Bedrock, Vertex AI, or Foundry — alias resolution otherwise shifts when Anthropic releases new models ([model config docs](https://code.claude.com/docs/en/model-config)).
+Aliases resolve to different versions per provider — `opus` is Opus 4.7 on the Anthropic API but Opus 4.6 on Bedrock, Vertex, and Foundry — and shift when Anthropic ships new models, so pin full version IDs in third-party deployments ([model config docs](https://code.claude.com/docs/en/model-config)). Append `[1m]` to a pinned model ID (e.g. `claude-opus-4-7[1m]`) to enable 1M-token context on that alias.
 
 ### modelOverrides
 
-The `modelOverrides` setting (v2.1.73) maps picker entries to custom provider model IDs, decoupling the UI from routing ([settings docs](https://code.claude.com/docs/en/settings)). Combined with `ANTHROPIC_DEFAULT_*_MODEL`, it gives enterprise teams full control over which model serves each picker slot.
+The `modelOverrides` setting maps individual Anthropic model IDs (not aliases) to provider-specific strings — Bedrock inference profile ARNs, Vertex version names, or Foundry deployment names — so a single picker family can route each version to a distinct backend ([model config docs](https://code.claude.com/docs/en/model-config)). Keys must be full Anthropic model IDs such as `claude-opus-4-7`; alias keys like `"opus"` are ignored. Use it alongside `availableModels` to enforce an allowlist and `ANTHROPIC_DEFAULT_*_MODEL` to pin what each alias resolves to.
 
 ## Context and Memory
 
@@ -106,17 +106,24 @@ A `settings.json` for a cost-conscious team deploying through Bedrock, with tele
   "env": {
     "CLAUDE_CODE_EFFORT_LEVEL": "low",
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-20250514",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-5",
     "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
     "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4317"
   },
   "modelOverrides": {
-    "sonnet": "arn:aws:bedrock:us-east-1:123456789:inference-profile/sonnet-4"
+    "claude-sonnet-4-5": "arn:aws:bedrock:us-east-1:123456789012:inference-profile/sonnet-prod"
   }
 }
 ```
 
-`CLAUDE_CODE_EFFORT_LEVEL=low` reduces reasoning depth for routine tasks. `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=80` compacts earlier, keeping context from saturating. The model pin prevents silent upgrades when Anthropic ships a new Sonnet.
+`CLAUDE_CODE_EFFORT_LEVEL=low` reduces reasoning depth for routine tasks. `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=80` compacts earlier, keeping context from saturating. Pinning `ANTHROPIC_DEFAULT_SONNET_MODEL` to a specific version (here `claude-sonnet-4-5`) prevents silent upgrades when Anthropic ships a new Sonnet; the `modelOverrides` key matches that Anthropic model ID and routes it to a Bedrock inference profile ([model config docs](https://code.claude.com/docs/en/model-config)).
+
+## Key Takeaways
+
+- The `ENABLE_*` / `DISABLE_*` / `CLAUDE_CODE_*` prefix is a heuristic, not a stability contract — `MAX_THINKING_TOKENS`, `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE`, and the `OTEL_*` family are all stable but carry no tier prefix.
+- Pin `ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL` to full version IDs on Bedrock, Vertex, and Foundry — aliases resolve to different versions per provider and shift when Anthropic ships new models ([model config docs](https://code.claude.com/docs/en/model-config)).
+- `modelOverrides` keys must be Anthropic model IDs (e.g. `claude-opus-4-7`), not aliases like `"opus"`; combine with `availableModels` for an enforced allowlist.
+- Append `[1m]` to a pinned model ID (e.g. `claude-opus-4-7[1m]`) to enable the 1M-token context window on that alias.
 
 ## Related
 
