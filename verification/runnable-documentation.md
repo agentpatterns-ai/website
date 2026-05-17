@@ -31,7 +31,7 @@ Doctest-style tools cover single-expression examples and short REPL transcripts.
 
 ## Why This Matters for Agents
 
-Agents that retrieve docs over RAG pull whatever the retriever scores highest. A stale doc that semantically matches the query still scores near the top — relevance grading does not detect staleness ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)). The agent then generates code from the stale snippet.
+Agents that retrieve docs over RAG pull whatever the retriever scores highest. A stale doc that semantically matches the query still scores near the top — relevance grading does not detect staleness ([kapa.ai: RAG Gone Wrong](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them)). The agent then generates code from the stale snippet. [Controlled experiments on stale repository snippets](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) show this is not passive noise — stale-only retrieval increased references to obsolete API signatures by 76.5–88.2 percentage points compared to no retrieval.
 
 Runnable documentation is the upstream fix: the stale snippet never ships, because CI fails the build when its source file stops running. It complements [continuous documentation](../workflows/continuous-documentation.md) — agent-driven drift detection — by preventing drift from accumulating between audit runs.
 

@@ -35,6 +35,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [OpenAPI Documentation Smells for Agent-Ready APIs](openapi-documentation-smells.md) — A nine-category taxonomy that surfaces the gap between structurally valid OpenAPI specs and agent-consumable API descriptions, plus scenario-first triage that keeps remediation tractable
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — Expose the full product surface through API, MCP, and CLI so agents acting on behalf of users can complete any flow the GUI supports
 - [Tool Necessity Probing](tool-necessity-probing.md) — Read tool-call decisions from the pre-generation hidden state with a linear probe — AUROC 0.89–0.96, 48% fewer tool calls at 1.7% accuracy loss
+- [Future-Based Asynchronous Function Calling](future-based-async-function-calling.md) — Wrap function calls in a futures protocol so a stock LLM keeps decoding while tools execute in the background, pipelining model and execution latency without retraining or breaking the synchronous schema
 
 ## MCP (Model Context Protocol)
 
@@ -65,6 +66,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Skill Library Technical Debt](skill-library-technical-debt.md) — Library-level defects accumulate even when every single skill passes its eval; diagnose typed debt signatures with six mechanical detectors and apply named maintenance actions at library time
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
+- [One-Shot Record and Deterministic Replay for Periodic Agent Tasks](one-shot-record-deterministic-replay.md) — Record the LLM's tool-call sequence once, parameterize what varies, replay deterministically without the model — the cost-reduction pattern for cron-style agent workloads
 
 ## Hooks & Lifecycle
 

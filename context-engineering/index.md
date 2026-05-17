@@ -76,6 +76,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
 - [Chunking Strategy for RAG-Based Code Completion](chunking-strategy-rag-code-completion.md) — Function-based chunking is dominated by every other strategy on line-level code completion; Sliding Window and cAST sit on the Pareto frontier, and doubling cross-file context length matters more than chunking choice
+- [Stale Repository Retrieval Induces Incorrect Code](stale-repository-retrieval-induces-incorrect-code.md) — Stale retrieved snippets are not inert noise; they bias code completion toward obsolete signatures by 76.5–88.2 percentage points on a 17-sample diagnostic, and co-retrieving current declarations resolves most failures
 
 ## Error Handling & Drift Prevention
 

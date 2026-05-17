@@ -70,7 +70,7 @@ For agents that select from a fixed action set or never accumulate cross-turn co
 ## How It Relates to Other Patterns
 
 - [CaMeL](camel-control-data-flow-injection.md) enforces the instruction/data boundary at planning time via taint tracking. Provenance-aware auditing applies the same data-flow-control insight at execution time, accepting that the agent has already mixed trusted and untrusted context.
-- [Designing agents to resist prompt injection](prompt-injection-resistant-agent-design.md) catalogues six provable patterns; this defense is closest to Plan-Then-Execute extended with a runtime audit step.
+- [Designing agents to resist prompt injection](prompt-injection-resistant-agent-design.md) catalogues six provable patterns; this defense is closest to [Plan-Then-Execute](plan-then-execute-web-agents.md) extended with a runtime audit step.
 - [Behavioral firewall over tool-call trajectories](behavioral-firewall-tool-call-trajectories.md) is a stateless alternative — cheaper per call but blind to span-level provenance.
 - [Audit-record divergence as a runtime invariant](audit-record-divergence-invariant.md) names the post-hoc reconciliation contract; provenance auditing is the pre-execution dual.
 
