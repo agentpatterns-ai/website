@@ -93,6 +93,7 @@ nav:
       - advisor-strategy.md
       - agent-backpressure.md
       - agent-self-review-loop.md
+      - auto-model-selection.md
       - behavioral-drivers-agent-success.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md

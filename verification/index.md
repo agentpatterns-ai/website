@@ -59,6 +59,7 @@ tags:
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
+- [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — Apply factored verification only over the residual claims your test, type checker, and LSP cannot reach — naive intrinsic self-correction overturns correct code as often as it fixes wrong code
 
 ## Rubric Design
 
