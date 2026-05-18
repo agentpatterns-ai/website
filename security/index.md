@@ -52,6 +52,7 @@ Isolation limits what a compromised or misbehaving agent can affect.
 - [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md) — A sandbox mode that keeps filesystem isolation but lifts network restrictions; safe only when egress is enforced at a layer below the harness
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
+- [Windows Sandboxing for Coding Agents](windows-sandbox-primitives-coding-agents.md) — AppContainer, Windows Sandbox, and MIC each fail a specific coding-agent requirement; the working pattern composes synthetic SIDs and write-restricted tokens, with WSL2 as the strictly-stronger fallback
 
 ## Data Protection
 
@@ -116,6 +117,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
+- [Containment Playbook: npm-to-Signing-Channel Compromise](npm-signing-channel-containment-playbook.md) — A consumer-side `npm install` worm reaches developer machines, harvests credentials, pivots into internal repos, and reaches signing material; the playbook isolates, rotates, freezes, re-signs, revokes, and ships a forcing-function client update — modeled on OpenAI's May 2026 TanStack response
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — Signature scanning catches 90.7% of malicious skills but misses payload-less attacks where the agent synthesises the payload at runtime; multi-model intent-vs-behavior consensus drives the residual bypass rate from 11.6%–33.5% to 1.6%
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
@@ -128,6 +130,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — Wrap tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log for regulated environments
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — Move agents to production through three control gates — governance, observability, reproducibility — with MUST/SHOULD checklists for each
+- [Sandbox + Approvals + Auto-Review Governance Triad](sandbox-approvals-auto-review-triad.md) — Compose a sandbox boundary, tiered approval policy, auto-review reviewer for boundary crossings, and agent-native telemetry as one production governance posture; adopt only when action volume, admin-enforced config, OTel, and human-gated irreversible actions all hold
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
