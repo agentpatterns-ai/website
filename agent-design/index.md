@@ -135,6 +135,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 The runtime infrastructure that hosts and constrains agent execution.
 
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md) — Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor-coordinator — each suited to different task structures
+- [Cloud-Agent Session Bootstrap: Cached Install plus Per-Session Start](cloud-agent-session-bootstrap.md) — Split the cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — Structure long-running agent work as two distinct phases — an initializer that prepares the environment, and a coding agent that picks up reliably from wherever any prior session left off
 - [Agent Loop Middleware](agent-loop-middleware.md) — Treat the agent loop as a unit to wrap from the outside; middleware nodes guarantee critical steps happen regardless of agent behavior
 - [Agent Pushback Protocol](agent-pushback-protocol.md) — Agents evaluate requests at both implementation and requirements level, surface concerns, and wait for explicit confirmation before executing

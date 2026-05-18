@@ -117,6 +117,7 @@ nav:
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
+      - cloud-agent-session-bootstrap.md
       - agent-harness.md
       - agent-loop-middleware.md
       - agent-pushback-protocol.md
