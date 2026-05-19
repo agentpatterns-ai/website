@@ -40,6 +40,7 @@ nav:
       - abstention-aware-memory-retrieval.md
       - acid-for-agent-repository-state.md
       - agent-memory-patterns.md
+      - agent-project-state-purge.md
       - harness-memory-coupling.md
       - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
@@ -60,6 +61,7 @@ nav:
       - session-recap.md
       - subtask-level-memory.md
       - tiered-memory-architecture.md
+      - typed-memory-from-vcs-history.md
   - "Control & Orchestration":
       - asynchronous-agent-io-and-speculative-tools.md
       - background-todo-agent.md
@@ -74,6 +76,7 @@ nav:
       - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
+      - goal-contract-completion-evaluator.md
       - goal-driven-autonomous-loop.md
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
@@ -88,6 +91,7 @@ nav:
       - steering-running-agents.md
       - tool-preamble-status-update.md
   - "Reliability":
+      - adaptive-generate-rank-verify.md
       - agent-circuit-breaker.md
       - self-healing-production-agent.md
       - advisor-strategy.md
@@ -106,6 +110,7 @@ nav:
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
       - long-running-agents.md
+      - observation-contract-preservation.md
       - progressive-spend-threshold-alerting.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
