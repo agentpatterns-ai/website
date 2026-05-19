@@ -20,6 +20,7 @@ tags:
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
 - [Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric](markov-chain-agent-reliability.md) — pass@k, pass^k, and the reliability decay curve are projections of one first-passage distribution; fit an absorbing DTMC to traces and report a goodness-of-fit certificate to make any of those numbers defensible
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
+- [Cross-Framework Signal Semantics: Re-Measure Borrowed Trajectory Rules](cross-framework-signal-semantics.md) — The same trajectory-shape rule can predict opposite outcomes across frameworks — a 64,380-run study split 47-vs-48 on error rate direction; re-measure borrowed signals before adopting them
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — Frontier LLMs pass unit tests on debugging tasks by regenerating large chunks of code rather than making targeted edits — edit-level precision and bug-level recall expose the gap
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
@@ -60,6 +61,7 @@ tags:
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
 - [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — Apply factored verification only over the residual claims your test, type checker, and LSP cannot reach — naive intrinsic self-correction overturns correct code as often as it fixes wrong code
+- [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md) — A two-stage rule-miner-then-code-auditor LLM workflow checks code against a natural-language spec; the single-prompt variant systematically misclassifies correct code as non-conforming
 
 ## Rubric Design
 
