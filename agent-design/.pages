@@ -8,6 +8,7 @@ nav:
       - agent-first-software-design.md
       - agent-stack-bets.md
       - agentic-ai-architecture-evolution.md
+      - anthropic-effective-agents-framework.md
       - agentic-flywheel.md
       - agents-vs-commands.md
       - agentless-vs-autonomous.md
@@ -50,6 +51,7 @@ nav:
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
       - episodic-memory-retrieval.md
+      - experience-graphs-self-evolving-agents.md
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
@@ -59,6 +61,7 @@ nav:
       - rag-over-thinking-traces.md
       - session-initialization-ritual.md
       - session-recap.md
+      - shared-agent-context-store-api.md
       - subtask-level-memory.md
       - tiered-memory-architecture.md
       - typed-memory-from-vcs-history.md
@@ -86,6 +89,7 @@ nav:
       - progressive-disclosure-agents.md
       - remote-session-control.md
       - self-rewriting-meta-prompt-loop.md
+      - skill-program-functions.md
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
@@ -110,6 +114,7 @@ nav:
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
       - long-running-agents.md
+      - remote-agent-host-sessions.md
       - observation-contract-preservation.md
       - progressive-spend-threshold-alerting.md
       - ralph-wiggum-loop.md
@@ -118,6 +123,7 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
+      - utility-model-split.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
@@ -147,4 +153,7 @@ nav:
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md
+  - code-health-gated-tier-routing.md
+  - externalization-in-llm-agents.md
+  - issue-requirements-preprocessing.md
   - ...
