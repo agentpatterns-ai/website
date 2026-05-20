@@ -11,8 +11,6 @@ aliases:
   - permission-mode plan bootstrap
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-plan-mode/`
-
 # Bootstrap Plan Mode Default
 
 > Set plan mode as the project's default permission mode, scaffold a plan-review checklist, wire headless CI invocations to plan-mode by default. Read-only first; implementation only after plan acceptance.

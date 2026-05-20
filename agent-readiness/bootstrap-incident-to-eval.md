@@ -11,8 +11,6 @@ aliases:
   - incident eval synthesis
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-incident-to-eval/`
-
 # Bootstrap Incident-to-Eval Pipeline
 
 > Convert each production incident involving an LLM feature into a regression eval case. Scaffold the extraction template, the eval-case schema, and the tiered CI gate that blocks deploys on P0 regressions.

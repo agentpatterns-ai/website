@@ -11,8 +11,6 @@ aliases:
   - merge rate gap audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-agent-pr-quality-metrics/`
-
 # Audit Agent PR Quality Metrics
 
 > Measure merge rate, comment-volume signal, conflict rate, and post-merge defect signal on agent-authored PRs; route tasks by what each agent class actually does well.

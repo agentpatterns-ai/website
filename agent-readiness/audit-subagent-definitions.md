@@ -11,8 +11,6 @@ aliases:
   - sub-agent frontmatter quality check
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-subagent-definitions/`
-
 # Audit Sub-Agent Definitions
 
 > Locate every sub-agent file, validate frontmatter contracts, score tool allowlist tightness, detect missing isolation and model assignments, emit per-sub-agent findings.

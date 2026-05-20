@@ -14,8 +14,6 @@ aliases:
   - structured-source poisoning audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-trojan-hippo-memory/`
-
 # Audit Trojan Hippo Memory and Structured-Source Surfaces
 
 > Enumerate long-term memory and structured-source store write paths (KG, RAG index, schema registry, named-entity resolver), classify each by source-trust, validate the trifecta-leg removal that defeats dormant-payload and oracle-poisoning attacks, and flag any auto-ingest configuration that bridges untrusted input to cross-session retrieval.

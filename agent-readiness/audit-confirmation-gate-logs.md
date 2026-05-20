@@ -11,8 +11,6 @@ aliases:
   - approval gate log audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-confirmation-gate-logs/`
-
 # Audit Confirmation Gate Logs
 
 > Inventory consequential actions, validate each one is gated, audit the gate-decision log for fidelity and pattern signals, detect alert fatigue and Lies-in-the-Loop bypass.

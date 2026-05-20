@@ -10,8 +10,6 @@ aliases:
   - inflated resolution audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-premature-completion/`
-
 # Audit Premature Completion
 
 > Sample recent agent-authored PRs, run the test suite against pre-patch and post-patch trees, classify on the fixed-correct-code / failing-tests-remain matrix, and emit reproduction-first remediations.

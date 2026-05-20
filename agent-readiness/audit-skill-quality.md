@@ -10,8 +10,6 @@ aliases:
   - skill authoring audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-skill-quality/`
-
 # Audit Skill Quality
 
 > Locate every `SKILL.md`, validate frontmatter, score description craft and trigger phrases, detect missing gotchas and inline shell, emit per-skill findings.

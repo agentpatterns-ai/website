@@ -11,8 +11,6 @@ aliases:
   - LLM-specified library version scan
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-llm-pinned-versions/`
-
 # Audit LLM-Pinned Vulnerable Dependency Versions
 
 > Enumerate dependency manifests authored by agents, query each pinned version against OSV and GitHub Advisories, and flag pins that are both CVE-vulnerable and cleanly patch-upgradable — the canonical signature of training-prior dependency selection.

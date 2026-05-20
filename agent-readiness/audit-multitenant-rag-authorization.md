@@ -11,8 +11,6 @@ aliases:
   - relevance-authorization gap audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-multitenant-rag-authorization/`
-
 # Audit Multitenant RAG Authorization
 
 > Detect RAG retrieval surfaces, inventory tenant-scope enforcement points, validate that the agent's retrieval path passes through a non-forgeable gate, and flag the "ANN-first, ACL-never" failure mode.
