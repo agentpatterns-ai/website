@@ -11,8 +11,6 @@ aliases:
   - agent egress blind spot audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-mcp-control-plane-bypass/`
-
 # Audit MCP Control-Plane Bypass
 
 > Locate every off-protocol egress path the agent can take — shell, raw HTTP, DB driver, headless browser, in-thread side-channel — and confirm each one is observed or blocked.

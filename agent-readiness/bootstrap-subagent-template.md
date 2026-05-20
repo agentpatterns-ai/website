@@ -10,8 +10,6 @@ aliases:
   - sub-agent template generator
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-subagent-template/`
-
 # Bootstrap Sub-Agent Template
 
 > Generate a sub-agent file with tight frontmatter, scoped tools, isolation defaults, and prompt-injection guards. Paired remediation for [`audit-subagent-definitions`](audit-subagent-definitions.md) findings.

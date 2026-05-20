@@ -10,8 +10,6 @@ aliases:
   - agent observability scaffold
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-otel-init/`
-
 # Bootstrap OpenTelemetry Initialization
 
 > Detect telemetry support, generate a managed-settings template enabling the OTel exporter, route metrics and tool-decision events, and validate exporter reachability.

@@ -10,8 +10,6 @@ aliases:
   - project instruction file audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-claude-md/`
-
 # Audit CLAUDE.md
 
 > Locate `CLAUDE.md` and equivalents, run mechanical checks for size, polarity, embedded code, `@path` imports, primacy, cache stability.

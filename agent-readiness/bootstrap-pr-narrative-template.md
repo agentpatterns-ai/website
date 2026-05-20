@@ -12,8 +12,6 @@ aliases:
   - issue and PR template bootstrap
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-pr-narrative-template/`
-
 # Bootstrap PR Narrative Template
 
 > Scaffold the templates that drive the merge-rate gains the audit measures — issue spec format, Why/What/Trade-offs PR body, structured commit trailers — and wire them so agents emit them by default.

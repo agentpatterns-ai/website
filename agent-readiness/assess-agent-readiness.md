@@ -11,8 +11,6 @@ aliases:
   - brownfield agent assessment
 ---
 
-Packaged as: `.claude/skills/agent-readiness-assess-agent-readiness/`
-
 # Assess Agent Readiness
 
 > Inventory the codebase, run the audit suite, score L0–L5 across four dimensions, and emit a prioritized punch list.

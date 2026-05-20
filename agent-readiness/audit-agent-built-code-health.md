@@ -11,8 +11,6 @@ aliases:
   - bloat audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-agent-built-code-health/`
-
 # Audit Agent-Built Code Health
 
 > Locate agent-authored code, measure structural complexity and refactoring share, flag bloat patterns (single-impl factories, dead code, shadow utilities), emit a prioritized cleanup punch list.

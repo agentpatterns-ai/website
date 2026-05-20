@@ -11,8 +11,6 @@ aliases:
   - agent-discoverable command quality check
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-slash-command-catalog/`
-
 # Audit Slash Command Catalog
 
 > Enumerate every slash command and prompt file the planner can invoke, validate description craft and idempotency contract, flag side-effectful commands without `disable-model-invocation`, emit per-command findings.

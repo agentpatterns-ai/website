@@ -11,8 +11,6 @@ aliases:
   - per-role model pinning
 ---
 
-Packaged as: `.claude/skills/agent-readiness-bootstrap-reasoning-execution-routing/`
-
 # Bootstrap Reasoning–Execution Model Routing
 
 > Configure model routing across the agent harness — frontier model for reasoning/planning, fast/cheap model for execution — pin model IDs per role to prevent alias drift, and validate with a smoke-test before declaring done.

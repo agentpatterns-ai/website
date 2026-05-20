@@ -11,8 +11,6 @@ aliases:
   - eval coverage audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-eval-suite/`
-
 # Audit Eval Suite
 
 > Locate the eval suite, validate scaffold completeness and case provenance, score discrimination, and check coverage of idle-state, build-parity, per-model ablation, and isometric harness ablation gaps.

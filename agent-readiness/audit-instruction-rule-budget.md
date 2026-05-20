@@ -10,8 +10,6 @@ aliases:
   - rule count audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-instruction-rule-budget/`
-
 # Audit Instruction Rule Budget
 
 > Enumerate every instruction surface, tokenize rules by class, count against the ~150-rule [compliance ceiling](../instructions/instruction-compliance-ceiling.md), detect duplication and dead rules.

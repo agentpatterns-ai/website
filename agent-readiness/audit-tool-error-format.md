@@ -11,8 +11,6 @@ aliases:
   - problem+json audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-tool-error-format/`
-
 # Audit Tool Error Format
 
 > Probe every agent-facing tool and HTTP endpoint, validate error responses against RFC 9457 with operational extension fields, emit per-tool findings on token cost and recovery surface.

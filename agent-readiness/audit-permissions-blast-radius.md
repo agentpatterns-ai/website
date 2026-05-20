@@ -10,8 +10,6 @@ aliases:
   - least privilege audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-permissions-blast-radius/`
-
 # Audit Permissions and Blast Radius
 
 > Enumerate every principal that can act, build a capability matrix against least-privilege rules, detect missing deny rules and over-permissioned sub-agents.

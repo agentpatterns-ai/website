@@ -10,8 +10,6 @@ aliases:
   - review AGENTS.md for bloat
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-agents-md/`
-
 # Audit AGENTS.md
 
 > Locate every `AGENTS.md` and equivalent, run mechanical checks against pointer-map rules, validate links and commands, emit findings.

@@ -11,8 +11,6 @@ aliases:
   - audit-record divergence audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-action-audit-divergence/`
-
 # Audit Action-Audit Divergence
 
 > Walk the F1-F4 divergence taxonomy against the runtime — name the chokepoint, integrity mechanism, liveness probe, and target validator — and convert each unanswered question into a finding mapped to existing controls.

@@ -11,8 +11,6 @@ aliases:
   - sub-agent return-shape audit
 ---
 
-Packaged as: `.claude/skills/agent-readiness-audit-handoff-protocols/`
-
 # Audit Handoff Protocols
 
 > Locate handoff boundaries, validate output-schema declarations on upstream agents and schema references on downstream agents, detect raw-transcript forwarding, emit per-handoff findings.
