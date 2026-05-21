@@ -102,6 +102,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Specialized Agent Roles](specialized-agent-roles.md) — Assign distinct specializations to parallel agents so they complement rather than compete on the same problems
 - [Sprint Contracts](sprint-contracts.md) — A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
+- [Stochastic-Deterministic Boundary as First-Class Contract](stochastic-deterministic-boundary.md) — Treat the LLM-to-action transition as a typed four-part contract (proposer, verifier, commit, reject) once a system has multiple action sites or non-trivial commit side effects
 - [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour; apply at phase boundaries, not per call
 
 ## Reliability
@@ -115,6 +116,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Four observable failure clusters and three behavioral patterns that predict success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
 - [Agent Self-Review Loop](agent-self-review-loop.md) — Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review
 - [Auto Model Selection](auto-model-selection.md) — Vendor-side harness routing picks the per-request model from a managed pool by availability and policy — useful for executor-class work, costly for long sessions and eval-gated CI
+- [Cloud-Agent Tiered Model Routing](cloud-agent-tiered-model-routing.md) — Pick the cloud agent's cheap tier (Haiku 4.5, GPT-5.4 mini at 0.33x) only when scope is bounded, per-tier quality telemetry exists, and rework cost is capped — the picker is operator-dispatched and has no in-session escalation
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — Use pre-computed code health metrics as a routing signal to assign SE tasks to cheaper model tiers — reserving expensive models for tangled, high-complexity files
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — Match model capability to task complexity: fast models for exploration, capable models for implementation, powerful models for architecture
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — Assign competing vendor agents to the same task, collect independent results, and let a human or automated gate select the winner
