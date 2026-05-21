@@ -93,6 +93,7 @@ nav:
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
+      - stochastic-deterministic-boundary.md
       - tool-preamble-status-update.md
   - "Reliability":
       - adaptive-generate-rank-verify.md
@@ -103,6 +104,7 @@ nav:
       - agent-self-review-loop.md
       - auto-model-selection.md
       - behavioral-drivers-agent-success.md
+      - cloud-agent-tiered-model-routing.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
       - dual-budget-control-search-agents.md
