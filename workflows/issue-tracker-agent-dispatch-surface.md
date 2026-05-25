@@ -17,7 +17,7 @@ aliases:
 
 > Assigning a coding agent from Jira, Linear, or GitHub Issues turns the ticket into the prompt and the comment thread into the conversation — viable only when the team enforces WRAP-style ticket discipline, an explicit assignment-vs-mention convention, status-echo gating, and an opt-in filter that blocks auto-pickup of unscoped tickets.
 
-Issue-tracker dispatch is the fourth invocation surface after the IDE, the chat platform, and the [programmatic REST API](programmatic-cloud-agent-dispatch.md). As of May 2026 it ships on three trackers — GitHub Issues (Copilot coding agent), Jira (Cursor and Copilot, via Rovo), and Linear (first-party Linear Agent and the Copilot integration). The portable contract is identical across all three; what differs is the field model, the mention semantics, and the failure modes the field reports surface. The pattern reuses every team's existing async work queue as the agent control plane — when ticket discipline holds. Without it, the same machinery amplifies noise: GitHub saw agent-authored PRs jump from 4M in September 2025 to 17M in March 2026, with anecdotal reports that only 1 in 10 is legitimate. ([danilchenko.dev](https://www.danilchenko.dev/posts/2026-04-11-github-ai-agents-pull-requests/))
+Issue-tracker dispatch is the fourth invocation surface after the IDE, chat platform, and [programmatic REST API](programmatic-cloud-agent-dispatch.md). As of May 2026 it ships on three trackers — GitHub Issues (Copilot coding agent), Jira (Cursor and Copilot via Rovo), and Linear (Linear Agent and Copilot). The contract is identical across all three; what differs is the field model, the mention semantics, and the failure modes that surface in field reports. The pattern reuses every team's async work queue as the agent control plane — when ticket discipline holds. Without it, the machinery amplifies noise: agent-authored PRs on GitHub jumped from 4M in September 2025 to 17M in March 2026, with anecdotal reports that only 1 in 10 is legitimate. ([danilchenko.dev](https://www.danilchenko.dev/posts/2026-04-11-github-ai-agents-pull-requests/))
 
 ## Preconditions
 
@@ -38,7 +38,7 @@ The pattern has three contract elements that recur across all three trackers.
 
 The ticket body, comments, and linked attachments become the agent's prompt. GitHub publishes the WRAP framework — **W**rite effective issues (clear title, full context, examples), **R**efine instructions (repo / org / enterprise custom instructions), **A**tomic tasks (one issue = one concern), **P**air with the agent (human in review). ([GitHub Blog: WRAP up your backlog](https://github.blog/ai-and-ml/github-copilot/wrap-up-your-backlog-with-github-copilot-coding-agent/)) Best-practice guidance is consistent across vendors: include a problem description, complete acceptance criteria, file or function references, and formatting rules; avoid unrelated goals in the same ticket. ([GitHub Docs](https://docs.github.com/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks))
 
-The empirical correlate: the Bui et al. random-forest model on Copilot-assigned issues finds shorter, well-scoped, self-contained tickets merge; verbose descriptions decrease merge likelihood by 9%, and tickets referencing external configuration or APIs decrease by 4-9%. The ticket is not just an input — it is the dominant predictor of agent success. ([arxiv 2512.21426](https://arxiv.org/html/2512.21426v1))
+The empirical correlate: the Bui et al. random-forest model finds shorter, self-contained tickets merge; verbose descriptions decrease merge likelihood by 9%, external-API references by 4-9%. The ticket is the dominant predictor of agent success. ([arxiv 2512.21426](https://arxiv.org/html/2512.21426v1))
 
 ### 2. Mention semantics
 
@@ -52,7 +52,7 @@ The agent must echo progress back into the ticket without flooding the comment t
 
 - **GitHub Copilot**: posts an 👀 emoji reaction on assignment, then exposes a PR checklist with task breakdown and live session logs; commits push iteratively to the branch. ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/assigning-and-completing-issues-with-coding-agent-in-github-copilot/))
 - **Cursor in Jira**: notifies the requester in Jira when input is needed or work is ready for review; auto-links the PR back to the ticket on completion. ([Atlassian](https://www.atlassian.com/blog/company-news/cursor-in-jira))
-- **GitHub Agentic Workflows (gh-aw)**: exposes `hide-older-comments: true` as a safe-output option specifically because repeated status comments became unreadable noise. ([github.github.com gh-aw](https://github.github.com/gh-aw/reference/safe-outputs/))
+- **[GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) (gh-aw)**: exposes `hide-older-comments: true` as a safe-output option specifically because repeated status comments became unreadable noise. ([github.github.com gh-aw](https://github.github.com/gh-aw/reference/safe-outputs/))
 
 The status-echo contract is what makes the ticket usable as an asynchronous coordination artefact. When it fails — Atlassian community reports of Rovo "hallucinating success on write actions" without flagging completion failures — trust in the entire dispatch surface erodes.
 
@@ -84,7 +84,7 @@ graph TD
 
 ## Why It Works
 
-The mechanism is **infrastructure reuse**. Every software team already runs an asynchronous work queue: PMs write tickets, developers triage them, every state transition is auditable. Exposing the queue as an agent control plane reuses that established machinery — no new dashboard to monitor, no separate audit trail to reconcile, no parallel notification surface. The Bui et al. empirical study formalises why this works when it works: ticket-quality features alone predict Copilot merge success at 72% AUC, meaning **the ticket *is* the prompt** in a precise statistical sense. The dispatch surface inherits all the organisational rigor invested in ticket-writing. ([Bui et al., arxiv 2512.21426](https://arxiv.org/html/2512.21426v1))
+The mechanism is **infrastructure reuse**. Every software team already runs an asynchronous work queue with auditable state transitions. Exposing the queue as an agent control plane reuses that machinery — no new dashboard, no separate audit trail, no parallel notification surface. Bui et al. formalise why this works: ticket-quality features alone predict Copilot merge success at 72% AUC, meaning **the ticket *is* the prompt** in a precise statistical sense. ([Bui et al., arxiv 2512.21426](https://arxiv.org/html/2512.21426v1))
 
 The corollary is the failure mechanism: where ticket-writing rigor is absent, the dispatch surface amplifies the absence. The 17M-PR / ~10% legitimate ratio on GitHub is the same machinery operating without the WRAP-style discipline that made it work — the queue still dispatches, but every dispatch is a wasted run. ([danilchenko.dev](https://www.danilchenko.dev/posts/2026-04-11-github-ai-agents-pull-requests/))
 

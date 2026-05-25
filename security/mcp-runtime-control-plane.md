@@ -108,11 +108,11 @@ AgentCore's gateway evaluates this Cedar document on every `deploy_service` call
 
 ## Related
 
-- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
+- [Five-Stage Policy Layer Typology for Generalist Agents](policy-as-code-layer-typology.md)
+- [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
+- [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
-- [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Enterprise Agent Hardening: Governance and Observability](enterprise-agent-hardening.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
+- [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md)

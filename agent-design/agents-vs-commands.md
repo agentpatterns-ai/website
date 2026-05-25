@@ -82,7 +82,7 @@ The following shows the separation in a `.claude` directory. The command defines
 You write documentation pages for the Agent Patterns repo.
 
 - Keep prose under 25 words per sentence
-- Every claim must link to a source or be marked `[unverified]`
+- Every factual claim must be sourced; unsourceable claims are rewritten weaker or removed
 - Headings follow the established page schema: Problem → Technique → Example → Key Takeaways
 ```
 
@@ -107,16 +107,11 @@ The principle derives from [separation of concerns](https://en.wikipedia.org/wik
 
 ## Related
 
-- [Agent Definition Formats: How Tools Define Agent Behavior](../standards/agent-definition-formats.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
-- [Cognitive Reasoning Execution Separation](cognitive-reasoning-execution-separation.md)
 - [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
-- [Execution-First Delegation](execution-first-delegation.md)
-- [Classical SE Patterns as Agent Analogues](classical-se-patterns-agent-analogues.md)
 - [Persona-as-Code: Defining Agent Roles as Structured Docs](persona-as-code.md)
-- [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
-- [Agentic AI Architecture: From Prompt to Goal-Directed](agentic-ai-architecture-evolution.md)
+- [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
+- [Classical SE Patterns as Agent Analogues](classical-se-patterns-agent-analogues.md)

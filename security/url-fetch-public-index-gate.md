@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
 ---
+
 # Use a Public-Web Index to Gate Automatic URL Fetching
 
 > Rather than maintaining a domain allow-list, cross-reference URLs against an independent public-web crawl index before allowing automatic fetching — URLs not in the index may encode user-specific data.

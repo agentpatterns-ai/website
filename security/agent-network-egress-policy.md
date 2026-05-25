@@ -44,11 +44,16 @@ Combine both lists when the allowlist must be broad — allow `*.corp.example` w
 
 Domain policy narrows reachable destinations. It does not address every exfiltration vector:
 
-- **Query-string exfiltration to allowlisted domains.** A prompt-injected fetch of a legitimate target can still encode user data in the URL; the destination server logs the query string. Pair with a [public-web index gate](url-exfiltration-guard.md).
-- **Redirect chains.** A trusted domain that 3xx-redirects to an attacker bypasses a static allowlist unless the agent refuses redirects or re-checks the destination ([URL Exfiltration Guard](url-exfiltration-guard.md)).
-- **Authenticated misuse.** The allowlist decides *whether* a request reaches a destination; a [scoped-credentials proxy](scoped-credentials-proxy.md) decides *which* credentials attach. Both are needed when token blast radius exceeds raw network reach.
+- **Query-string exfiltration to allowlisted domains.** Prompt-injected fetch of a legitimate target still encodes user data in the URL; pair with a [public-web index gate](url-exfiltration-guard.md).
+- **Redirect chains.** A trusted domain that 3xx-redirects to an attacker bypasses a static allowlist unless the agent refuses redirects ([URL Exfiltration Guard](url-exfiltration-guard.md)).
+- **Authenticated misuse.** The allowlist decides *whether* a request reaches a destination; a [scoped-credentials proxy](scoped-credentials-proxy.md) decides *which* credentials attach.
 - **Non-harness subprocesses.** The policy only covers tools the harness mediates. A subprocess that opens a raw socket or bundles its own HTTP client bypasses the check unless the [sandbox sits below the harness](sandbox-rules-harness-tools.md) — OS-level network namespaces or a forward proxy at the container boundary.
 - **Non-URL channels.** DNS tunnelling, timing side channels, and covert channels in headers to allowlisted endpoints are unconstrained.
+- **Parser bugs in the allowlist check itself.** The policy is only as strong as the code that enforces it. Aonan Guan's May 2026 disclosure of a SOCKS5 hostname null-byte bypass in Claude Code (2.0.24–2.1.89) showed `endsWith()` accepting `attacker.com\x00.allowed.com` while `getaddrinfo()` resolved `attacker.com` ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662); [disclosure](https://oddguan.com/blog/second-time-same-sandbox-anthropic-claude-code-network-allowlist-bypass-data-exfiltration/)). Defence-in-depth requires a lower-layer enforcement point — OS netns, forward proxy, or cloud egress gateway — that does not trust the agent process's parser.
+
+## The Matcher Itself Is a Trust Boundary
+
+Moving the check into the harness moves the trust boundary onto the matcher — a bug there bypasses every policy. In May 2026, Aonan Guan disclosed a SOCKS5 hostname null-byte injection in Claude Code: a crafted `attacker.com\0.google.com` passed the JavaScript `endsWith()` allowlist while `getaddrinfo()` truncated at the null byte and dialed the attacker. Every release from v2.0.24 through v2.1.89 was vulnerable; Anthropic silently patched in v2.1.90 with no CVE or changelog note ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662); [Aonan Guan PoC](https://oddguan.com/blog/second-time-same-sandbox-anthropic-claude-code-network-allowlist-bypass-data-exfiltration/)). The earlier `allowedDomains: []` regression (CVE-2025-66479) had the same character. Pin to patched runtimes, watch disclosures for the harness you depend on, and assume the matcher will fail at least once over the deployment's lifetime.
 
 ## Delivery Through Managed Settings
 
@@ -94,6 +99,6 @@ Denies override the `*.internal.corp.example` wildcard for two known-bad subdoma
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
-- [Enterprise Agent Hardening: Governance and Observability](enterprise-agent-hardening.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Selective Network Sandbox Mode](selective-network-sandbox-mode.md)
+- [MCP Runtime Control Plane](mcp-runtime-control-plane.md)
+- [Docker Sandbox Adoption for Agent Workloads](docker-sbx-adoption.md)

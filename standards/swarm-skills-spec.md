@@ -17,15 +17,15 @@ aliases:
 
 ## What the Spec Adds to Agent Skills
 
-The base [Agent Skills standard](https://agentskills.io) packages single-agent task knowledge in a `SKILL.md` with YAML frontmatter and a markdown body. Swarm Skills layers on multi-agent semantics without replacing that contract ([Swarm Skills paper](https://arxiv.org/html/2605.10052v1)):
+The base [Agent Skills standard](https://agentskills.io) packages single-agent task knowledge in a `SKILL.md`. Swarm Skills layers on multi-agent semantics without replacing that contract ([Swarm Skills paper](https://arxiv.org/html/2605.10052v1)):
 
 | Field added | Purpose |
 |---|---|
 | `kind: swarm-skill` | Discriminator that lets a single-agent host gracefully ignore the skill via `additionalProperties: true` |
 | `teammate_mode` | Interaction paradigm — e.g., `build_mode` for autonomous execution, `plan_mode` for approval workflows |
-| `roles[]` | Array of participants; each entry carries a unique `id`, required skills and tools, and an optional target model |
+| `roles[]` | Participants; each entry carries an `id`, required skills and tools, and an optional target model |
 
-Backward compatibility is explicit: a host that does not know the `swarm-skill` kind keeps loading the file as a regular skill and skips the unknown fields.
+A host that does not know the `swarm-skill` kind keeps loading the file as a regular skill and skips the unknown fields.
 
 ## File Layout
 
@@ -44,7 +44,7 @@ my-swarm-skill/
   evolutions.json   # runtime artifact — appended by the host, not hand-edited
 ```
 
-The Host Agent loads only `SKILL.md` frontmatter to route a task. Role files, `workflow.md`, and `bind.md` are pulled on demand through the host's native `read_file` — no new DSL or runtime plugin is required. This is the same progressive-disclosure pattern Anthropic Skills already relies on, extended to multi-agent metadata.
+The Host Agent loads only `SKILL.md` frontmatter to route a task. Role files, `workflow.md`, and `bind.md` are pulled on demand via the host's native `read_file` — no new DSL or runtime plugin. This extends Anthropic Skills' progressive-disclosure pattern to multi-agent metadata.
 
 ## The CREATE / USE / PATCH Lifecycle
 
@@ -61,8 +61,8 @@ graph TD
     G --> D
 ```
 
-- **CREATE** — trajectory distillation. A trace with at least two distinct sub-agent roles and cross-agent dependencies is synthesized by an LLM into a candidate Swarm Skill.
-- **USE** — progressive disclosure routing. The Host Agent reads `description` from frontmatter into the Leader prompt; full role and workflow content is loaded only after the skill is selected. Existing Evolution Records are appended to the relevant instructions.
+- **CREATE** — trajectory distillation. A trace with ≥2 distinct sub-agent roles and cross-agent dependencies is synthesized by an LLM into a candidate Swarm Skill.
+- **USE** — progressive disclosure. The Host reads `description` from frontmatter into the Leader prompt; full role and workflow content is loaded only after selection. Existing Evolution Records are appended to the relevant instructions.
 - **PATCH** — friction-driven optimisation. Post-execution analysis scans traces for circular dependencies, redundant loops, and premature termination, then appends a new Evolution Record (Context, Change Directive, Scoring Metrics) to `evolutions.json`.
 
 ## Scoring Formula
@@ -79,22 +79,22 @@ S_i = w_E * E + w_U * U + w_F * F
 | **Utilization (U in [0,1])** | Adoption rate — if the Leader consistently ignores an appended instruction, U decays |
 | **Freshness (F in [0,1])** | Time-decay factor with an exponential half-life (e.g., 90 days) so stale optimisations gradually drop out |
 
-When 10 or more records accumulate, three governance actions become available: **SIMPLIFY** prunes via LLM-driven categorisation (delete, merge, refine, retain); **REBUILD** rewrites the core spec, archives the previous version, and clears `evolutions.json`; **ROLLBACK** reverts to any archived state.
+At ≥10 records, three governance actions unlock: **SIMPLIFY** prunes via LLM categorisation (delete, merge, refine, retain); **REBUILD** rewrites the spec, archives the prior version, and clears `evolutions.json`; **ROLLBACK** reverts to any archived state.
 
 ## Reference Implementation
 
-JiuwenSwarm is the reference Host Agent, built on [openJiuwen.com](https://www.openjiuwen.com/); community-contributed swarm skills are intended to live at [swarmskills.openjiuwen.com](https://swarmskills.openjiuwen.com/). The algorithm "strictly interacts with the schema defined by the Swarm Skills specification" — the authors claim this makes it portable to other multi-agent runtimes without framework-specific plugins ([Swarm Skills paper](https://arxiv.org/html/2605.10052v1)).
+JiuwenSwarm is the reference Host Agent on [openJiuwen.com](https://www.openjiuwen.com/); community swarm skills are intended to live at [swarmskills.openjiuwen.com](https://swarmskills.openjiuwen.com/). The algorithm "strictly interacts with the schema defined by the Swarm Skills specification" — the authors claim this makes it portable to other multi-agent runtimes without framework-specific plugins ([Swarm Skills paper](https://arxiv.org/html/2605.10052v1)).
 
 ## What Is Not Yet Proven
 
 The paper is a specification proposal with measurement support, not a benchmarked system. The authors call out the gaps explicitly ([Swarm Skills paper](https://arxiv.org/html/2605.10052v1)):
 
-- **No quantitative benchmarks of the self-evolution algorithm.** The empirical work is a measurement study of 33 search queries across 9 Anthropic Skills repositories crawled in April 2026 — it shows multi-role skills are being authored (e.g., `engineering-team` with 14 roles), but does not measure whether the scoring mechanism improves outcomes.
-- **No conformance testing across diverse Host Agents.** Effectiveness on hosts that lack native recursive `read_file` or dynamic sub-agent spawning "remains to be empirically evaluated."
-- **First-run lock-in.** A severely suboptimal initial workflow tends to accumulate patches rather than trigger a full REBUILD, entrenching bad decisions in an opaque chain of Evolution Records.
+- **No quantitative benchmarks of the self-evolution algorithm.** The empirical work is a measurement study of 33 queries across 9 Anthropic Skills repositories crawled in April 2026 — it shows multi-role skills are being authored (e.g., `engineering-team` with 14 roles), but does not measure whether the scoring mechanism improves outcomes.
+- **No conformance testing across diverse Host Agents.** Effectiveness on hosts lacking native recursive `read_file` or dynamic sub-agent spawning "remains to be empirically evaluated."
+- **First-run lock-in.** A severely suboptimal initial workflow tends to accumulate patches rather than trigger REBUILD, entrenching bad decisions in an opaque chain of Evolution Records.
 - **Adoption beyond the authors is unverified.** The community Swarm Skills hub is currently inaccessible to anonymous fetch.
 
-For projects already invested in framework-native multi-agent code, the portability benefit is theoretical until a second Host Agent ships conformant support. The related critique that some "LLM swarm" framings overstate genuine swarm behaviour applies here as well ([LLM-Powered Swarms: A New Frontier or a Conceptual Stretch?](https://arxiv.org/abs/2506.14496)).
+For projects already invested in framework-native multi-agent code, the portability benefit is theoretical until a second Host Agent ships conformant support. A related critique that some "LLM swarm" framings overstate genuine swarm behaviour applies ([LLM-Powered Swarms: A New Frontier or a Conceptual Stretch?](https://arxiv.org/abs/2506.14496)).
 
 ## Key Takeaways
 

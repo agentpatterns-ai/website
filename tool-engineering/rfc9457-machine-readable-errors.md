@@ -153,6 +153,14 @@ RFC 9457 adoption is uneven. Most third-party APIs do not support `application/p
 2. **Middleware that rewrites Accept headers** — some proxies, API gateways, or WAFs strip or replace `Accept` before the request reaches the origin. Verify that the `Accept` header survives the full request path.
 3. **First-party services that haven't adopted the format** — emitting RFC 9457 requires active implementation work. The pattern pays off once agents make enough API calls to justify the engineering cost; for low-volume integrations, generic error handling may be sufficient.
 
+## Key Takeaways
+
+- Request structured errors by setting `Accept: application/problem+json` or `Accept: text/markdown` on outbound API calls.
+- RFC 9457 defines five base fields — `type`, `status`, `title`, `detail`, `instance` — that any compliant server returns.
+- Cloudflare's extension fields (`retryable`, `retry_after`, `owner_action_required`, `error_code`, `error_category`) map errors directly to agent control-flow branches.
+- Emit RFC 9457 responses from first-party agent-facing services so agents can replace HTML-parsing heuristics with explicit field checks.
+- Parse defensively: many third-party APIs ignore the `Accept` header, and middleware can strip it before the request reaches the origin.
+
 ## Related
 
 - [Semantic Tool Output](semantic-tool-output.md)

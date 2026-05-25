@@ -178,6 +178,14 @@ If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARG
 
 **`model` overrides are skill-scoped**: The session model resumes after the skill completes.
 
+## Key Takeaways
+
+- Only `name`, `description`, `license`, `compatibility`, `metadata`, and `allowed-tools` are defined by the [Agent Skills standard](https://agentskills.io); all other SKILL.md fields are Claude Code extensions.
+- Use `disable-model-invocation: true` for side-effect workflows where timing matters, and `user-invocable: false` for background knowledge Claude should auto-load — setting both makes the skill unreachable.
+- `allowed-tools` grants pre-approval but does not block other tools; pair it with project permission deny rules when restriction is the goal.
+- `context: fork` only produces output when the skill body contains explicit step-by-step instructions — reference-only content silently no-ops.
+- Skills declaring `allowed-tools` or `hooks` are treated as elevated-permission requests and require user approval before first use.
+
 ## Related
 
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
@@ -185,8 +193,6 @@ If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARG
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
 - [Skill as Knowledge](skill-as-knowledge.md)
-- [Skill Library Evolution](skill-library-evolution.md)
 - [Permission-Gated Custom Commands](../security/permission-gated-commands.md)

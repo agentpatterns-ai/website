@@ -17,11 +17,11 @@ aliases:
 
 ## The Gap OAuth Leaves Open
 
-OAuth 2.0 assumes a single authenticated principal with pre-defined scopes. Agentic AI breaks that: agents adapt capabilities at runtime, spawn sub-agents through multi-hop delegation, act for users and organizations at once, and run as ephemeral instances at high token volume ([2505.19301](https://arxiv.org/abs/2505.19301)). A token granting `delete:repository` tells the server *what* the agent can do but not *which* of the user's tasks justifies the call right now.
+OAuth 2.0 assumes a single principal with pre-defined scopes. Agentic AI breaks that: agents adapt capabilities at runtime, spawn sub-agents through multi-hop delegation, act for users and organizations at once, and run as ephemeral instances ([2505.19301](https://arxiv.org/abs/2505.19301)). A token granting `delete:repository` tells the server *what* the agent can do but not *which* task justifies the call.
 
-A compromised agent — or one redirected by [prompt injection](prompt-injection-threat-model.md) — can therefore tamper with tool calls, falsify results, or escalate beyond the subject's intended task without the authorization server seeing anything wrong ([2509.13597](https://arxiv.org/abs/2509.13597)).
+A compromised agent — or one redirected by [prompt injection](prompt-injection-threat-model.md) — can tamper with tool calls, falsify results, or escalate beyond intended task scope without the authorization server seeing anything wrong ([2509.13597](https://arxiv.org/abs/2509.13597)).
 
-Task-based access control (TBAC) closes this gap by binding each authorization decision to the *current task*, not to a long-lived scope.
+Task-based access control (TBAC) closes the gap by binding each decision to the *current task*, not to a long-lived scope.
 
 ## Two Independent Axes
 
@@ -49,23 +49,23 @@ Every primitive on this axis is enforced outside the model:
 - **Just-in-time verifiable credentials**, signed and scoped to a specific task or job ID, with short windows referencing exact resource handles and operations ([2505.19301](https://arxiv.org/abs/2505.19301)).
 - **Allowlisted tool registry** — the agent's identity document declares which tools it may invoke; calls outside that set are refused at the policy decision point ([2505.19301](https://arxiv.org/abs/2505.19301)).
 - **Tool-call trajectory enforcement** — a [behavioural firewall](behavioral-firewall-tool-call-trajectories.md) compiled from verified-benign telemetry rejects sequences and parameter bounds outside the accepted shape, in O(1) at runtime ([2604.26274](https://arxiv.org/abs/2604.26274)).
-- **Intent-bound delegation tokens** — A-JWT binds each call to a verifiable user intent and (optionally) a workflow step, with per-agent proof-of-possession keys blocking replay ([2509.13597](https://arxiv.org/abs/2509.13597)).
+- **Intent-bound delegation tokens** — A-JWT binds each call to verifiable user intent and (optionally) a workflow step, with per-agent proof-of-possession keys blocking replay ([2509.13597](https://arxiv.org/abs/2509.13597)).
 
 Compromise on this axis requires breaking cryptography, the registry, or the PEP — not redirecting a model's natural-language interpretation.
 
 ### Semantic axis (detective)
 
-The semantic axis runs alongside the deterministic checks at the same interception point — typically an [MCP runtime control plane](mcp-runtime-control-plane.md) — and is structured in two stages: extract the subject's task from the multi-turn conversation, then score whether the requested tool call advances that task ([issue #3243 abstract](https://arxiv.org/abs/2605.02682)).
+The semantic axis runs alongside the deterministic checks at the same interception point — typically an [MCP runtime control plane](mcp-runtime-control-plane.md) — and runs in two stages: extract the subject's task from the multi-turn conversation, then score whether the requested tool call advances that task ([2605.02682](https://arxiv.org/abs/2605.02682)).
 
-Its job is to flag scope creep the deterministic axis cannot see: a tool call that is allowlisted and within trajectory bounds but unrelated to what the user asked for. Without it, an attacker who stays inside the deterministic envelope is invisible.
+Its job is to flag scope creep the deterministic axis cannot see: a tool call that is allowlisted and within trajectory bounds but unrelated to the user's request. Without it, an attacker who stays inside the deterministic envelope is invisible.
 
 ## Why The Asymmetry Matters
 
 Treating the semantic axis as load-bearing inherits the LLM's failure modes:
 
 - **Cascading misclassification.** Wrong task extraction in multi-domain conversations propagates to every downstream check.
-- **Same input channel as the attack.** A prompt injection that rewrites the agent's plan can also rewrite the "extracted task" the inspector reads. Semantic inspection over an attacker-controlled conversation is detective at best — the [lethal trifecta](lethal-trifecta-threat-model.md) is unaffected by adding another LLM evaluator on the same channel.
-- **False positives erode trust.** Unusual but legitimate workflows trigger alerts that get dismissed, causing alert fatigue on real attacks.
+- **Same input channel as the attack.** A prompt injection that rewrites the plan can also rewrite the "extracted task" the inspector reads. Semantic inspection over an attacker-controlled conversation is detective at best — the [lethal trifecta](lethal-trifecta-threat-model.md) is unaffected by another LLM evaluator on the same channel.
+- **False positives erode trust.** Legitimate but unusual workflows trigger alerts that get dismissed, causing fatigue on real attacks.
 
 Place the security guarantee on cryptography and registries. Use the semantic axis for audit and human review, not allow/deny in the hot path.
 
@@ -80,7 +80,7 @@ Add it when:
 Skip it when:
 
 - The deterministic envelope already matches the task tightly (one-shot agents, single-purpose subagents). The added inference cost buys nothing.
-- Conversations legitimately span unrelated tasks; extraction either over-restricts or fragments incorrectly.
+- Conversations legitimately span unrelated tasks; extraction either over-restricts or fragments.
 - Tool catalogs change faster than the semantic model's knowledge of "what each tool legitimately does" — staleness causes rolling false positives.
 - Latency budgets are tight: a [pDFA firewall](behavioral-firewall-tool-call-trajectories.md) runs at ~2.2 ms per call ([2604.26274](https://arxiv.org/abs/2604.26274)); a two-stage semantic evaluation does not.
 
@@ -114,6 +114,7 @@ The deterministic axis stops the attack. The semantic axis makes it visible when
 
 ## Related
 
+- [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — Five structural checks at the agent-tool boundary plus a semantic task-to-tool matcher; same two-axis decomposition framed around the interception layer.
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
@@ -121,4 +122,3 @@ The deterministic axis stops the attack. The semantic axis makes it visible when
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
-- [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)

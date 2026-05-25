@@ -14,7 +14,7 @@ tags:
 
 ## Where the Bugs Live
 
-Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (51 issues + 129 commits), and HuggingFace Forums (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699), EASE 2026). In the curated AgentDefect benchmark of 37 runtime-executable instances, **up to 19 bugs localize to the tools component** — more than any other part of the agent.
+Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), **up to 19 bugs localize to the tools component**.
 
 ```mermaid
 pie title AgentDefect component distribution (n=37)
@@ -23,8 +23,6 @@ pie title AgentDefect component distribution (n=37)
 ```
 
 ## The 23 Fix Patterns
-
-Inter-annotator agreement (Cohen's kappa) is 0.953–1.0 for fix patterns and 0.808–0.973 for components ([arxiv 2604.17699 §3](https://arxiv.org/abs/2604.17699)) — the labels reproduce across coders.
 
 | Pattern | Abbrev. |
 |---------|---------|
@@ -52,35 +50,23 @@ Inter-annotator agreement (Cohen's kappa) is 0.953–1.0 for fix patterns and 0.
 | Move Code to Different Scope | MCTDS |
 | Fix Data Access | FDA |
 
-### Top patterns vary by platform
+Top patterns by platform ([arxiv 2604.17699 §3](https://arxiv.org/abs/2604.17699)):
 
 | Platform | Dominant pattern | Share |
-|----------|-----------------|-------|
+|---|---|---|
 | Stack Overflow | Addition of Operations (AOO) | 13.1% |
-| Stack Overflow (second) | Add New Attribute (ANA) | 9.9% |
-| HuggingFace Forums | Change External Resources (CER) | 23.3% |
-| GitHub | Change Parameter Value (CPV) | top |
-| GitHub (versioning) | Change Version (CV) | 17.6% |
+| HuggingFace | Change External Resources (CER) | 23.3% |
+| GitHub | Change Version (CV) | 17.6% |
 
-HuggingFace Forums skew toward external-resource changes (model/endpoint swaps). GitHub skews toward parameter- and version-level corrections. Stack Overflow shows a mix dominated by structural additions ([arxiv 2604.17699 §3](https://arxiv.org/abs/2604.17699)).
+HuggingFace skews to external-resource changes; GitHub to parameter/version corrections; Stack Overflow to structural additions.
 
 ## Root Cause: Framework Version Churn
 
-Framework churn drives a large share of these fixes. Quantified directly ([arxiv 2604.17699 §2](https://arxiv.org/abs/2604.17699)):
-
-- **LangChain**: 55+ versions in 2024, 45+ in 2025
-- **LlamaIndex**: 140+ versions in 2024, 60+ in 2025
-
-Each version can introduce breaking changes in function signatures, module paths, or API contracts. Two consequences follow:
-
-1. `Change Version` (CV) and `Install Library` (IL) fixes appear prominently on GitHub because upstream releases break downstream code between deploys.
-2. LLM training data lags current framework APIs. Agents writing against documentation from 6+ months ago cannot repair bugs that require current API knowledge — a structural limit on autonomous repair.
-
-60.1% of Stack Overflow bugs in the corpus involve LangChain or LlamaIndex directly ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699)).
+Framework churn drives a large share of these fixes: LangChain shipped 55+ versions in 2024 and 45+ in 2025 ([releases](https://github.com/langchain-ai/langchain/releases)); LlamaIndex shipped 140+ then 60+ ([releases](https://github.com/run-llama/llama_index/releases)). Each version can break signatures, module paths, or API contracts. `Change Version` and `Install Library` fixes dominate GitHub because upstream releases break downstream code between deploys, and LLM training data lags current APIs — a structural limit on autonomous repair. 60.1% of Stack Overflow bugs in the corpus involve LangChain or LlamaIndex directly ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699)).
 
 ## SelfHeal: Retrieval-Augmented Repair
 
-The authors propose a two-agent ReAct system as one response to the taxonomy ([arxiv 2604.17699 §5](https://arxiv.org/abs/2604.17699)):
+The authors propose a two-agent [ReAct](https://arxiv.org/abs/2210.03629) system (Yao et al., 2022) as one response to the taxonomy ([arxiv 2604.17699 §5](https://arxiv.org/abs/2604.17699)):
 
 ```mermaid
 graph TD
@@ -92,44 +78,36 @@ graph TD
     B -.->|Tool: web search| F[External: docs / SO]
 ```
 
-Both agents use two tools: internal fix rules (the 23 patterns) and external web search. The fix agent proposes; the critic validates.
+Both agents use two tools: internal fix rules (the 23 patterns) and external web search.
 
 ### Evaluation on AgentDefect (n=37)
 
-| Backbone | Resolution | Component localization | Cost/fix | Time/fix |
-|----------|-----------|------------------------|----------|----------|
-| Gemini 3 Pro | 59.46% (22/37) | 91.89% | $0.4442 | 322.7 s |
-| Claude Sonnet 4 | 56.76% (21/37) | 89.19% | $0.0759 | 43.4 s |
-| GPT-5.2 | 54.05% (20/37) | 89.19% | $0.0492 | 41.8 s |
+| Backbone | Resolution | Localization | $/fix | s/fix |
+|---|---|---|---|---|
+| Gemini 3 Pro | 59.46% | 91.89% | $0.4442 | 322.7 |
+| Claude Sonnet 4 | 56.76% | 89.19% | $0.0759 | 43.4 |
+| GPT-5.2 | 54.05% | 89.19% | $0.0492 | 41.8 |
 
-Against baselines ([arxiv 2604.17699 §6](https://arxiv.org/abs/2604.17699)):
+Against baselines: SelfHeal/Gemini at 59.46% beats zero-shot Sonnet 4 (40.54%) by **+18.92 pp** and SWE-Agent/GPT-5.2 (37.84%) by **+21.62 pp** ([arxiv 2604.17699 §6](https://arxiv.org/abs/2604.17699)).
 
-- SelfHeal/Gemini 3 Pro at 59.46% vs zero-shot Claude Sonnet 4 at 40.54% — **+18.92 points** over zero-shot.
-- SelfHeal/Gemini 3 Pro at 59.46% vs SWE-Agent/GPT-5.2 at 37.84% — **+21.62 points** over the prior SoTA on this benchmark.
-
-### Ablations confirm both tools matter
-
-- Removing internal fix rules: **−18.92 points** resolution rate.
-- Removing web search: **−13.51 points** resolution rate.
-
-External knowledge is not optional in a fast-churning framework domain ([arxiv 2604.17699 §6.3](https://arxiv.org/abs/2604.17699)).
+Ablations: removing internal fix rules drops **−18.92 pp**; removing web search drops **−13.51 pp** — external knowledge is not optional in fast-churning framework domains ([arxiv 2604.17699 §6.3](https://arxiv.org/abs/2604.17699)).
 
 ## Practical Implications
 
-**Audit the tools layer first.** If up to half of benchmark bugs occur in the tools component, tool definitions, tool-call parsing, and tool output handling are higher-leverage targets than prompt tuning. Pair with [behavioral testing](behavioral-testing-agents.md) focused on tool I/O.
+**Audit the tools layer first.** Up to half of benchmark bugs sit in the tools component, so tool definitions, call parsing, and output handling are higher-leverage targets than prompt tuning. Pair with [behavioral testing](behavioral-testing-agents.md) on tool I/O.
 
-**Version pinning reduces fix surface.** `Change Version` (CV) and `Install Library` (IL) fixes disappear when framework versions are pinned. A slow-upgrade LTS-style policy beats chasing breaking changes with a repair agent.
+**Version pinning reduces fix surface.** `Change Version` and `Install Library` fixes disappear when framework versions are pinned. A slow-upgrade LTS policy beats chasing breaking changes with a repair agent.
 
-**Retrieval is structural, not optional.** The 13.51-point drop from removing web search shows retrieval-augmented repair is doing real work. Repair systems without live access to current framework docs are bounded by training cutoff. See [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md).
+**Retrieval is structural.** The 13.51-point drop from removing web search shows retrieval is doing real work. Repair systems without live framework docs are bounded by training cutoff. See [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md).
 
-**Cost-quality is steep at the top.** Gemini 3 Pro costs 9x GPT-5.2 per fix for 5.4 extra percentage points. For CI-scale bug repair, cheaper backbones at 54–57% are the rational choice; reserve top-tier models for manual triage.
+**Cost-quality is steep at the top.** Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For CI-scale repair, cheaper backbones at 54–57% are the rational choice; reserve top-tier models for manual triage.
 
 ## When This Taxonomy Backfires
 
-- **Non-Python or framework-free stacks**: the corpus is overwhelmingly Python + LangChain + LlamaIndex. For JavaScript agent frameworks, Semantic Kernel, or agents written directly against a provider SDK, the distribution shifts.
-- **Small benchmark, single-file fixes**: AgentDefect has 37 instances; SelfHeal operates on single files. Cross-file state, long-running memory, and multi-agent coordination bugs are out of scope.
-- **Data leakage via web search**: 36 of 37 AgentDefect bugs come from Stack Overflow, so web search can retrieve the exact post the fix came from. Authors restrict search to the source site to mitigate, but the 59.46% rate should be read as an upper bound for bugs already discussed publicly.
-- **Stable framework regimes**: teams pinning to long-lived versions cut the `Change Version` and `Install Library` rate, reducing the taxonomy's differential value over a generic repair agent.
+- **Non-Python stacks**: corpus is overwhelmingly Python + LangChain + LlamaIndex; distributions shift for JS frameworks, Semantic Kernel, or direct-SDK agents.
+- **Single-file scope**: AgentDefect has 37 instances; cross-file state, long memory, and multi-agent coordination are out of scope.
+- **Data leakage**: 36/37 bugs come from Stack Overflow; web search can retrieve the source post. The 59.46% rate is an upper bound for publicly-discussed bugs.
+- **Stable framework regimes**: pinned versions cut `Change Version`/`Install Library` fixes, reducing differential value.
 
 ## Key Takeaways
 

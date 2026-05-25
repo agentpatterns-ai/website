@@ -117,9 +117,11 @@ When the user-uploaded VirAE lands in agent A's album, A's next chat round trigg
 ## Related
 
 - [Code Injection Attacks on Multi-Agent Systems: Coder-Reviewer-Tester as Defence](code-injection-multi-agent-defence.md)
+- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)
+- [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
+- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)
+- [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)

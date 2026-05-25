@@ -23,7 +23,7 @@ Dual-trace encoding stores two traces per entry:
 - a **factual trace** — the extractable claim, as in a conventional memory system
 - a **scene trace** — a short narrative reconstruction of the moment the fact was learned: session, surrounding topic, prompting decision, temporal position
 
-The agent commits to the contextual detail *at encoding time*, not retrieval. Retrieval over both traces lets temporal and cross-session queries condition on the scene ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
+The agent commits to contextual detail at encoding time, not retrieval. Retrieval over both traces lets temporal and cross-session queries condition on the scene ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
 
 ## What the Benchmark Shows
 
@@ -36,13 +36,13 @@ On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding rea
 | Knowledge-update tracking | +25pp |
 | Single-session retrieval | No benefit |
 
-The null result on single-session retrieval confirms the mechanism: scene context helps only when retrieval needs to disambiguate *when* a fact was learned. When encoding and retrieval share a session, the extra trace adds no signal.
+The null result on single-session retrieval confirms the mechanism: scene context helps only when retrieval must disambiguate *when* a fact was learned. When encoding and retrieval share a session, the extra trace adds no signal.
 
-LongMemEval itself covers five long-term memory abilities: information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. Commercial assistants drop ~30% in accuracy on long histories on this benchmark ([Wu et al., 2024](https://arxiv.org/abs/2410.10813)) — the regime dual-trace targets.
+LongMemEval covers five long-term memory abilities: information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. Commercial assistants drop ~30% in accuracy on long histories on this benchmark ([Wu et al., 2024](https://arxiv.org/abs/2410.10813)) — the regime dual-trace targets.
 
 ## Where This Sits in the Memory Cluster
 
-Dual-trace is an *encoding-time* technique. It composes with retrieval-time and post-hoc strategies rather than replacing them:
+Dual-trace is an *encoding-time* technique. It composes with retrieval-time and post-hoc strategies:
 
 ```mermaid
 graph TD
@@ -66,11 +66,11 @@ graph TD
 | [Memory synthesis from execution logs](memory-synthesis-execution-logs.md) | Post-hoc | Structured lessons extracted from traces |
 | **Dual-trace encoding** | **Encoding-time** | **Fact + scene trace pair** |
 
-Episodic retrieval stores whole problem-solving episodes; dual-trace pairs individual facts with their learning moment. They are orthogonal — an episode record can itself be dual-trace encoded at the fact level.
+Episodic retrieval stores whole problem-solving episodes; dual-trace pairs individual facts with their learning moment. The two are orthogonal — an episode record can itself be dual-trace encoded at the fact level.
 
 ## When This Pays Off
 
-The pattern targets memory workloads where retrieval depends on *when* or *in what context* a fact was learned:
+The pattern targets workloads where retrieval depends on *when* or *in what context* a fact was learned:
 
 - **Cross-session aggregation.** "Summarize every decision the team made about auth across the last five planning sessions."
 - **Knowledge updates.** "Has the deployment target changed since the Q2 review?"
@@ -79,18 +79,18 @@ The pattern targets memory workloads where retrieval depends on *when* or *in wh
 
 The pattern does not pay off for:
 
-- **Single-session bounded tasks** — the benchmark null result is decisive; scene trace is wasted encoding overhead.
-- **Context-independent facts** — stable infrastructure (`build uses pnpm`, `rate limit is 100/min`) does not improve with scene context because retrieval never conditions on learning-moment.
-- **High-frequency observation streams** — scene-trace generation is an extra LLM call per fact write; at full tool-output density this compounds. Reserve it for facts the agent judges worth persisting.
-- **Fast-moving codebases** — scene traces embed contextual detail that decays as the codebase evolves; without invalidation on refactor, stale traces mislead retrieval the same way stale facts do.
+- **Single-session bounded tasks** — the benchmark null result is decisive; scene trace is wasted overhead.
+- **Context-independent facts** — stable infrastructure (`build uses pnpm`, `rate limit is 100/min`) gains nothing because retrieval never conditions on learning-moment.
+- **High-frequency observation streams** — scene-trace generation is an extra LLM call per write; at full tool-output density this compounds. Reserve it for facts worth persisting.
+- **Fast-moving codebases** — scene traces embed detail that decays as the codebase evolves; without invalidation on refactor, stale traces mislead retrieval like stale facts do.
 
 ## Caveats
 
-The published evidence is one paper on one benchmark with no independent replication yet. The headline +20pp number comes from a synthetic long-memory benchmark; transfer to production agent workloads is plausible but not proven. The paper sketches an architecture for coding agents with "preliminary pilot validation" — treat the coding-agent transfer as preliminary until further evidence lands ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
+The published evidence is one paper on one benchmark with no independent replication. The headline +20pp comes from a synthetic long-memory benchmark; transfer to production workloads is plausible but unproven. The paper sketches a coding-agent architecture with "preliminary pilot validation" — treat that transfer as preliminary until further evidence lands ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
 
-The abstract reports no token overhead at retrieval against the fact-only baseline. Write-time cost — the LLM call that generates the scene trace — is a real addition and should factor into the decision to encode.
+Retrieval token cost matches the fact-only baseline. Write-time cost — the LLM call that generates the scene trace — is a real addition and should factor into the decision to encode.
 
-A structural critique argues LongMemEval-style benchmarks "cannot distinguish a memory system from a long-context LLM" because all computation happens inside one context window ([Continuity Evaluation positioning, 2026](https://arxiv.org/abs/2604.10981)). The +20pp holds within that regime; carryover to deployments that cross real session boundaries — not synthetic concatenation — is unproven.
+A structural critique argues LongMemEval-style benchmarks "cannot distinguish a memory system from a long-context LLM" because all computation happens inside one context window ([Tanguturi, 2026](https://arxiv.org/abs/2604.10981)). The +20pp holds within that regime; carryover to deployments that cross real session boundaries — not synthetic concatenation — is unproven.
 
 ## Example
 
@@ -131,5 +131,4 @@ The scene trace answers the temporal query directly ("six months before Oct 14")
 - [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
 - [Memory Transfer Learning: Cross-Domain Memory Reuse in Coding Agents](memory-transfer-learning.md)
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
 - [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)

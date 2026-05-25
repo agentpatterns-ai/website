@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Cross-Cycle Consensus Relay"
 description: "A structured relay document that agents read at cycle start and write at cycle end, preserving decisions and forward momentum across multi-session autonomous loops."
@@ -10,6 +9,8 @@ aliases:
   - consensus relay document
   - cross-session relay pattern
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Cross-Cycle Consensus Relay
 
@@ -157,10 +158,5 @@ The agent is responsible for writing the relay at cycle end using the temp-file-
 - [Convergence Detection in Iterative Refinement](convergence-detection.md) — convergence signals for within-session refinement loops
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — progress file pattern that complements the relay
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh context across loops
-- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — failure recovery strategies for long-running agent loops
-- [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — tracking agent progress across the multi-session loops this pattern enables
-- [Idempotent Agent Operations](idempotent-agent-operations.md) — design operations for safe retry across relay cycles
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages
 - [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems that persist knowledge across sessions and complement the relay
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons that the relay's Key Decisions field preserves forward
-- [Memory Reinforcement Learning](memory-reinforcement-learning.md) — reinforcing agent behavior via cross-cycle memory updates
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages

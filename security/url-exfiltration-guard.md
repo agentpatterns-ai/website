@@ -111,9 +111,9 @@ The `follow_redirects=False` flag prevents redirect-chain bypasses. If the respo
 
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Designing Injection-Resistant Agents with Defense-in-Depth](prompt-injection-resistant-agent-design.md)
 - [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md)
-- [Design Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Narrow Task Scope as a Security Boundary](task-scope-security-boundary.md)
+- [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
+- [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md)
+- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
+- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)

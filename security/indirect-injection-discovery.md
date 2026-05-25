@@ -156,8 +156,6 @@ If the agent follows this instruction, the rules file vector is open. The fix is
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [RL-Trained Automated Red Teamers for Prompt Injection](rl-automated-red-teamers.md)

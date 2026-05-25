@@ -18,7 +18,7 @@ aliases:
 
 ## The Correlation Problem
 
-In a flame graph of 200 spans across 12 subagents, two questions arise that span nesting alone does not answer cheaply: which spans belong to a given subagent, and which call chain caused this 429. Span hierarchy answers the first via tree traversal — every subagent span is a child of the parent's tool span — but only inside a single Claude Code session. The moment work crosses a boundary the instrumentation does not cover (shell-out to `curl`, fire-and-forget webhook, enqueued work), span lineage is gone.
+Across 200 spans and 12 subagents, two questions span nesting alone does not answer cheaply: which spans belong to a given subagent, and which call chain caused this 429. Span hierarchy answers the first via tree traversal, but only inside a single Claude Code session. Once work crosses a boundary the instrumentation does not cover (shell-out, webhook, queue), lineage is gone.
 
 The fix is a flat, propagated identifier — one that survives where the trace context ends.
 
@@ -28,15 +28,12 @@ Claude Code 2.1.139 ([changelog, May 11, 2026](https://code.claude.com/docs/en/c
 
 | Surface | Mechanism | Carried value |
 |---------|-----------|---------------|
-| Outgoing HTTP | Request headers `x-claude-code-agent-id`, `x-claude-code-parent-agent-id` | Subagent identity + parent identity |
+| Outgoing HTTP | Request headers `x-claude-code-agent-id`, `x-claude-code-parent-agent-id` | Subagent + parent identity |
 | OTEL spans | `claude_code.llm_request` span attributes `agent_id`, `parent_agent_id` | Same pair, queryable from the trace store |
 
-From the [monitoring docs](https://code.claude.com/docs/en/monitoring-usage):
+From the [monitoring docs](https://code.claude.com/docs/en/monitoring-usage): `agent_id` identifies the subagent that issued the request (absent on the main session); `parent_agent_id` identifies the agent that spawned it (absent for the main session and for agents spawned directly from it).
 
-- `agent_id` — "Identifier of the subagent or teammate that issued the request. Absent on the main session"
-- `parent_agent_id` — "Identifier of the agent that spawned this one. Absent for the main session and for agents spawned directly from it"
-
-The pair is the load-bearing detail. `agent_id` alone supports "all work by this subagent". `parent_agent_id` adds the back-pointer needed to reconstruct the dispatch hierarchy from a flat query — answering "which subagent spawned this 429-emitting child" without walking the span tree.
+The pair is load-bearing. `agent_id` supports "all work by this subagent". `parent_agent_id` reconstructs the dispatch hierarchy from a flat query — answering "which subagent spawned this 429-emitting child" without walking the span tree.
 
 ```mermaid
 graph TD
@@ -49,7 +46,7 @@ graph TD
 
 ## Why Two Surfaces
 
-Span lineage answers "what is the call structure inside this turn" — it depends on the parent span being live when the child span starts. The propagated attribute answers "what work was caused by this agent identity, regardless of dispatch path" — it depends only on the identifier being copied onto every emission. When `curl` makes the next HTTP hop, the header is the only continuity left. OpenTelemetry separates trace context (`traceparent`) from cross-cutting context (span attributes, Baggage) for the same reason — neither alone is sufficient.
+Span lineage answers "what is the call structure inside this turn" — it requires the parent span to be live when the child starts. The propagated attribute answers "what work was caused by this agent identity, regardless of dispatch path" — it requires only that the identifier be copied onto every emission. OpenTelemetry separates trace context (`traceparent`) from cross-cutting context (span attributes, Baggage) for the same reason — neither alone is sufficient.
 
 ## Queries the Pattern Enables
 
@@ -60,40 +57,40 @@ With `agent_id` on every span and API event, the trace store becomes a per-agent
 | Token cost per subagent | `sum(input_tokens + output_tokens) group by agent_id` |
 | p99 latency per subagent | `quantile(0.99, duration_ms) group by agent_id` |
 | Error rate per subagent | `count(status='ERROR') / count(*) group by agent_id` |
-| Call chain leading to a 429 | follow `parent_agent_id` from the failing span upward |
-| Cost of an orchestrator's full tree | `sum(cost) where agent_id IN (recursive descendants of root)` |
+| Call chain to a 429 | follow `parent_agent_id` from the failing span upward |
+| Cost of an orchestrator's tree | `sum(cost) where agent_id IN (recursive descendants of root)` |
 
 Without the attribute, the same queries require walking parent links per-trace — feasible at one trace, expensive at scale.
 
 ## Complementary Attributes
 
-The contract sits inside a broader set of agent-attribution attributes Claude Code emits on `claude_code.llm_request` spans ([attribute table](https://code.claude.com/docs/en/monitoring-usage)):
+The contract sits inside a broader set of attributes Claude Code emits on `claude_code.llm_request` spans ([attribute table](https://code.claude.com/docs/en/monitoring-usage)):
 
 | Attribute | What it identifies |
 |-----------|--------------------|
 | `agent_id` / `parent_agent_id` | Per-instance identity (high cardinality — span attribute, not metric label) |
 | `agent.name` | Subagent **type** — bounded set; safe as a metric label. User-defined names replaced with `"custom"` |
-| `query_source` | `"main"`, `"subagent"`, or `"auxiliary"` — coarse-grained partitioning |
+| `query_source` | `"main"`, `"subagent"`, or `"auxiliary"` |
 | `skill.name`, `plugin.name` | Skill or plugin active for the request |
 
-`agent.name` is the metric-safe partner. Cost dashboards aggregate by `agent.name` to avoid label-cardinality explosions; trace queries drill into a specific incident via `agent_id`.
+`agent.name` is the metric-safe partner: dashboards aggregate by it to avoid cardinality explosions; trace queries drill into a specific incident via `agent_id`.
 
 ## Where the Propagation Breaks
 
-The contract holds only over surfaces Claude Code controls. Boundaries it cannot reach are the same off-protocol egress paths catalogued in [Audit MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md).
+The contract holds only over surfaces Claude Code controls. Boundaries it cannot reach are the off-protocol egress paths catalogued in [Audit MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md):
 
-- **Shell-out via Bash tool**: `curl -X POST https://api.example.com` produces a `claude_code.tool` span, but the outbound HTTP request carries no `x-claude-code-agent-id` header. The receiving service sees an anonymous request.
-- **Subprocess-spawned work**: `TRACEPARENT` is auto-set in Bash subprocesses for W3C trace context inheritance, but no analogous propagation copies `agent_id` into subprocess env. Subprocess spans inherit the trace, not the agent identity.
-- **Fire-and-forget queues**: enqueueing work for a separate worker discards the header. The work runs untagged.
+- **Shell-out via Bash tool**: `curl -X POST https://api.example.com` produces a `claude_code.tool` span, but the outbound request carries no `x-claude-code-agent-id` header — the receiving service sees an anonymous request.
+- **Subprocess work**: `TRACEPARENT` is auto-set for W3C context inheritance, but no analogous propagation copies `agent_id` into subprocess env. Subprocess spans inherit the trace, not the agent identity.
+- **Fire-and-forget queues**: enqueueing discards the header. The work runs untagged.
 
-Mitigation is the same as for any off-protocol egress: lift the call into an MCP tool the harness instruments, or wrap shell-outs with explicit `x-claude-code-agent-id` headers.
+Mitigation: lift the call into an MCP tool, or wrap shell-outs with an explicit `x-claude-code-agent-id` header.
 
 ## When This Backfires
 
-- **Treating `agent_id` as a metric label**: per-instance identifiers create unbounded time series in Prometheus-style stores. The existing [Agent Observability OTel](agent-observability-otel.md) page documents the same discipline for `prompt.id` — apply it here. Use `agent.name` for metric-level slicing.
-- **Reusing identifier values across sessions**: if `agent_id` collides across unrelated runs (`subagent-1` reused), per-agent queries silently mix sessions. Identifiers must be globally unique within the trace store's retention window.
-- **Single-agent harnesses**: every span has `agent_id` absent. The attribute pays for itself only when subagent fan-out exists and operators need per-instance queries.
-- **Privacy assumption mismatch**: `agent_id` is opaque, but `agent.name` carries the subagent **type** verbatim for built-in and official-marketplace agents. Custom agent names are redacted to `"custom"` — a per-user customization may still leak intent via skill or plugin names on the same span ([attribute redaction rules](https://code.claude.com/docs/en/monitoring-usage)).
+- **Treating `agent_id` as a metric label**: per-instance identifiers create unbounded time series. The [Agent Observability OTel](agent-observability-otel.md) page documents the same discipline for `prompt.id`. Use `agent.name` for metric slicing.
+- **Reusing identifier values across sessions**: if `agent_id` collides across unrelated runs, per-agent queries silently mix sessions. Identifiers must be globally unique within the trace store's retention window.
+- **Single-agent harnesses**: every span has `agent_id` absent. The attribute pays for itself only when fan-out exists.
+- **Privacy assumption mismatch**: `agent_id` is opaque, but `agent.name` carries the subagent **type** verbatim for built-in and official-marketplace agents. Custom names are redacted to `"custom"` — yet skill or plugin names on the same span may still leak intent ([attribute redaction rules](https://code.claude.com/docs/en/monitoring-usage)).
 
 ## Example
 

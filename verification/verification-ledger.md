@@ -143,8 +143,6 @@ If the agent skips a check, the missing `after` row makes the gap visible and th
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
-- [Diff-Based Review](../code-review/diff-based-review.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Grade Agent Outcomes](grade-agent-outcomes.md)

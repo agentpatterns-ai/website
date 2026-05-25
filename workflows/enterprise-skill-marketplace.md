@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
 ---
 
-# Enterprise Skill Marketplace: Distribution, Usage Reporting, and Quality Evals
+# Enterprise Skill Marketplace: Distribution and Quality
 
 > At 50+ engineers, a shared GitHub repo is no longer sufficient. Skills need managed distribution, usage instrumentation, and a quality maintenance process.
 

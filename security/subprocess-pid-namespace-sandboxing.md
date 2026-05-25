@@ -11,11 +11,10 @@ description: "Add PID namespace isolation and env var scrubbing to Bash subproce
 
 ## What This Adds
 
-[Dual-boundary sandboxing](dual-boundary-sandboxing.md) restricts what the agent can read, write, and reach over the network. It does not constrain the *process tree* a Bash invocation can produce. A subprocess can still:
+[Dual-boundary sandboxing](dual-boundary-sandboxing.md) restricts what the agent can read, write, and reach over the network — but not the *process tree* a Bash invocation produces. A subprocess can still:
 
 - Spawn background daemons that outlive the session
-- Persist processes after the agent exits
-- Inherit sensitive environment variables (API keys, tokens) from the parent environment
+- Inherit sensitive environment variables (API keys, tokens) from the parent
 
 Claude Code 2.1.98 (April 9, 2026) addressed this with [subprocess sandboxing using PID namespace isolation on Linux](https://code.claude.com/docs/en/changelog), controlled by two environment variables.
 
@@ -28,9 +27,9 @@ Setting this variable activates subprocess sandboxing. When set, Claude Code:
 1. Launches Bash subprocesses inside a Linux PID namespace
 2. Strips sensitive environment variables from the subprocess environment before execution
 
-PID namespace isolation confines the subprocess's view of the process tree: it cannot see or signal processes outside its namespace, and all processes inside the namespace receive `SIGKILL` when its init process (PID 1) exits — a standard Linux kernel guarantee documented in [`pid_namespaces(7)`](https://man7.org/linux/man-pages/man7/pid_namespaces.7.html). Background daemons spawned inside the namespace cannot persist after the session ends.
+PID namespace isolation confines the subprocess's view of the process tree: it cannot see or signal processes outside its namespace, and all processes inside the namespace receive `SIGKILL` when its init (PID 1) exits — a kernel guarantee documented in [`pid_namespaces(7)`](https://man7.org/linux/man-pages/man7/pid_namespaces.7.html). Background daemons spawned inside cannot persist after the session ends.
 
-Env var scrubbing prevents secrets in the parent environment from leaking into child process environments — a common vector when a subprocess calls out to a tool that logs its environment, dumps it on error, or passes it through to a further child.
+Env var scrubbing prevents parent-environment secrets from leaking into child processes — a common vector when a subprocess logs its environment, dumps it on error, or passes it through to a further child.
 
 ### `CLAUDE_CODE_SCRIPT_CAPS`
 
@@ -90,6 +89,8 @@ The agent's Bash invocations run inside a PID namespace. Any background process 
 
 **Namespace isolation is not a substitute for network sandboxing**: A process inside a PID namespace can still make outbound network calls. Process-level isolation must be combined with bubblewrap network namespacing to prevent exfiltration.
 
+**Silently forces bubblewrap, overriding `sandbox.enabled: false`**: Setting `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1` activates bubblewrap regardless of `sandbox.enabled: false` or `sandbox.failIfUnavailable: false` in `settings.json`, with no warning or log. On hosts where bubblewrap cannot create a user namespace — Docker containers without `--privileged` or user-namespace support, older kernels (e.g., 4.4), Synology NAS, some restricted CI runners — every Bash invocation fails with a misleading `bwrap: Creating new namespace failed, kernel doesn't support user namespaces` error that looks like a kernel issue rather than a config conflict ([anthropics/claude-code#50167](https://github.com/anthropics/claude-code/issues/50167)). Verify bubblewrap works on the target host before enabling this variable.
+
 ## Key Takeaways
 
 - PID namespace isolation prevents subprocess daemons from persisting beyond the session; it is Linux-only
@@ -106,4 +107,3 @@ The agent's Bash invocations run inside a PID namespace. Any background process 
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party](sandbox-rules-harness-tools.md)

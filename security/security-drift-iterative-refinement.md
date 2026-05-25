@@ -120,10 +120,10 @@ Three conditions make checkpointing worse than the alternative:
 ## Related
 
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
+- [Always-On Agentic PR Security Review](always-on-pr-security-review.md)
+- [Scanner-as-MCP-Server](scanner-as-mcp-server.md)
+- [Usability Pressure as a Silent Security-Regression Vector](usability-pressure-security-regression.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Incremental Verification](../verification/incremental-verification.md)
-- [Red-Green-Refactor with Agents](../verification/red-green-refactor-agents.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Prompt-Injection-Resistant Agent Design](prompt-injection-resistant-agent-design.md)

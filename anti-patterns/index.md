@@ -29,9 +29,7 @@ tags:
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — After [context compression](../context-engineering/context-compression-strategies.md) events, agents can continue working on a subtly different objective than the one they started with
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Coding agents stop after the first visible signal of progress and declare the task complete while failing tests remain; named by four independent research teams within a year
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents absorb existing codebase patterns and reproduce them at scale, including deprecated APIs and legacy workarounds
-- [Prior Dominance Over Feedback](prior-dominance-over-feedback.md) — LLMs in propose-evaluate-revise loops behave as greedy hill climbers anchored to pretrained priors; feedback amplifies the prior rather than replacing it
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to injection attacks that the single layer does not address
-- [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Telling an agent in the system prompt not to call a tool reduces unauthorized invocation by only 11–18 pp; architectural enforcement at the proxy drives it to zero
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust and systematic misuse
 - [The Copy-Paste Agent](copy-paste-agent.md) — Duplicating agent definitions causes drift; compose from shared skills instead
 - [Spec Complexity Displacement](spec-complexity-displacement.md) — Writing a spec does not eliminate engineering precision — it relocates it; specs tight enough to drive reliable generation converge toward code-like structure

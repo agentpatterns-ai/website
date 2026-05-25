@@ -34,7 +34,7 @@ Fetches all pages from a paginated REST API endpoint.
 
 Skills accumulate without pruning: redundant entries create nondeterministic selection, outdated entries cause silent failures, and poor descriptions make skills undiscoverable. Progressive disclosure manages runtime context loading — agents load only the definitions needed for the current task rather than all definitions upfront — but does not solve upstream bloat. [Source: [Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)]
 
-The mechanism: tool selection works by matching the agent's current intent against skill descriptions. When two descriptions are semantically similar, the model cannot reliably distinguish them and may pick arbitrarily — the same root cause as nondeterministic behavior in any softmax distribution over near-equal scores. Pruning and clear scoping prevent this by keeping descriptions orthogonal.
+The mechanism: tool selection matches the agent's intent against skill descriptions. When two descriptions are semantically similar, the model cannot reliably distinguish them and may pick arbitrarily — the same root cause as nondeterministic behavior in any softmax distribution over near-equal scores. Pruning and scoping keep descriptions orthogonal.
 
 ## The Maturation Path
 
@@ -82,9 +82,9 @@ Two registry approaches with distinct trade-offs:
 
 | Dimension | Audited registry | Curated-not-audited |
 |-----------|-----------------|---------------------|
-| Example | tech-leads-club/agent-skills | VoltAgent/awesome-agent-skills |
+| Example | [tech-leads-club/agent-skills](https://github.com/tech-leads-club/agent-skills) | [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) |
 | Quality assurance | mcp-scan in CI/CD, content hashing | Community nomination |
-| Security posture | 100% open-source, automated scanning | Validation left to consumers |
+| Security posture | Open-source, automated scanning | Validation left to consumers |
 | Velocity | Slower — must pass gates | Faster — lower barrier |
 | Trust model | Verify then trust | Trust then verify |
 

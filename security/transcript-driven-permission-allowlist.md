@@ -17,15 +17,15 @@ aliases:
 
 ## Permission Fatigue as a Permission Failure Mode
 
-Interactive agent loops prompt the first time the harness sees a new tool call. Day two, a fresh session re-prompts for the same commands. Operators respond in one of three ways:
+Interactive agents prompt on every new tool call. Day two, a fresh session re-prompts for the same commands. Operators respond in one of three ways:
 
 - Approve each prompt again (toil)
 - Blanket-approve with `bypassPermissions` mode (wide blast radius, session-only)
 - Hand-curate an allowlist in `.claude/settings.json` (durable, but costly)
 
-The third option is correct but skipped. Reading transcripts to extract the "safe and frequent" set is the kind of toil that reliably gets dropped, so operators default to (1) or (2) and the permission layer becomes either noise or a no-op.
+The third option is correct but skipped. Extracting the "safe and frequent" set from transcripts is toil that gets dropped, so operators default to (1) or (2) and the permission layer becomes noise or a no-op.
 
-Transcript-driven allowlisting automates the curation step: the session log already records every tool call the agent made on this codebase, and the mining loop reads that log, ranks read-only calls by frequency, and proposes a scoped allowlist for operator review.
+Transcript-driven allowlisting automates curation: the session log records every tool call the agent ran on this codebase. The mining loop reads that log, ranks read-only calls by frequency, and proposes a scoped allowlist for review.
 
 ## The Loop
 
@@ -39,15 +39,15 @@ graph TD
     E -->|Rejected| G[Log and skip]
 ```
 
-The four stages specialise the generic [introspective skill generation](../workflows/introspective-skill-generation.md) workflow — same collect-analyse-generate-validate shape, narrower output artifact (permission rules), narrower safety gate (read-only classification).
+The four stages specialise the generic [introspective skill generation](../workflows/introspective-skill-generation.md) workflow: same collect-analyse-generate-validate shape, narrower artifact (permission rules), narrower gate (read-only).
 
 ### 1. Classify
 
-Only read-only calls are candidates. Mutating calls — `git commit`, `git push`, file writes, destructive MCP tools — stay behind a prompt regardless of frequency. Claude Code hard-codes a built-in read-only set (`ls`, `cat`, `head`, `tail`, `grep`, `find`, `wc`, `diff`, `stat`, `du`, `cd`, read-only `git`) that never prompts ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)). The miner extends this to project-specific tool calls outside the built-in set: `npm list`, `pytest --collect-only`, `gh pr view`, MCP `read_file` tools.
+Only read-only calls are candidates. Mutating calls — `git commit`, `git push`, file writes, destructive MCP tools — stay behind a prompt regardless of frequency. Claude Code hard-codes a built-in read-only set (`ls`, `cat`, `head`, `tail`, `grep`, `find`, `wc`, `diff`, `stat`, `du`, `cd`, read-only `git`) that never prompts ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)). The miner extends this to project-specific calls outside that set: `npm list`, `pytest --collect-only`, `gh pr view`, MCP `read_file` tools.
 
 ### 2. Rank
 
-Frequency across sessions is the primary signal. A command executed 50 times across 10 sessions is a stronger candidate than one appearing once — the same principle behind the built-in read-only set.
+Frequency across sessions is the primary signal. A command run 50 times across 10 sessions is a stronger candidate than one appearing once.
 
 ### 3. Propose scoped rules
 
@@ -60,27 +60,27 @@ Claude Code's permission syntax supports several specificity levels ([permission
 | Tool-scope | `mcp__puppeteer__*` | All read tools from one MCP server are safe |
 | Domain-scope | `WebFetch(domain:github.com)` | Read-only fetches to trusted domains |
 
-The miner proposes the narrowest scope that covers the observed calls. Argument-level filtering (e.g. `Bash(curl https://api.example.com/*)`) is explicitly unreliable — Claude Code's own docs warn that patterns constraining command arguments can be bypassed via flag reordering, variables, redirects, or extra whitespace ([permissions docs](https://code.claude.com/docs/en/permissions)). Propose binary-prefix rules; defer argument-level enforcement to a [PreToolUse hook](../tool-engineering/hook-catalog.md).
+The miner proposes the narrowest scope covering the observed calls. Argument-level filtering (e.g. `Bash(curl https://api.example.com/*)`) is unreliable — Claude Code's docs warn that argument patterns can be bypassed via flag reordering, variables, redirects, or whitespace ([permissions docs](https://code.claude.com/docs/en/permissions)). Propose binary-prefix rules; defer argument-level enforcement to a [PreToolUse hook](../tool-engineering/hook-catalog.md).
 
 ### 4. Gate
 
-The output is a proposal, not a write. Claude Code's deny/ask/allow precedence ([permissions docs](https://code.claude.com/docs/en/permissions)) bounds the downside: a bad allowlist entry can only promote an ask-by-default call to auto-allowed — it cannot override a deny rule protecting sensitive paths.
+The output is a proposal, not a write. Claude Code's deny/ask/allow precedence ([permissions docs](https://code.claude.com/docs/en/permissions)) bounds the downside: a bad allowlist entry can only promote an ask-by-default call to auto-allowed — it cannot override a deny rule.
 
 ## Why It Generalises
 
 Any harness that logs its tool-call trajectory can run the same loop:
 
 - **Claude Code** ships `/less-permission-prompts` as of 2.1.111 (April 16, 2026): "scans transcripts for common read-only Bash and MCP tool calls and proposes a prioritized allowlist for `.claude/settings.json`" ([changelog](https://code.claude.com/docs/en/changelog)).
-- **Copilot CLI** exposes the same allowlist primitive via `--allow-tool 'shell(COMMAND)'` and supports per-MCP-tool scoping via `--deny-tool 'My-MCP-Server(tool_name)'`; deny takes precedence over allow ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)). A miner targeting Copilot session logs produces rules in the same shape.
+- **Copilot CLI** exposes the same primitive via `--allow-tool 'shell(COMMAND)'` and per-MCP-tool scoping via `--deny-tool 'My-MCP-Server(tool_name)'`; deny takes precedence over allow ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
-The generalisable pattern is transcript-as-corpus for permission refinement: the session log is the ground truth of which tool calls actually run on this codebase, which is a better input to the allowlist than operator memory.
+The generalisable pattern is transcript-as-corpus for permission refinement: the session log is the ground truth of which calls actually run on this codebase — a better input than operator memory.
 
 ## When the Loop Backfires
 
-- **High tool churn.** Projects that swap test runners, add new MCP servers, or rename scripts frequently generate stale proposals within days. If the allowlist is re-mined weekly anyway, the maintenance cost exceeds the prompt savings.
-- **Shared settings files across a team.** `.claude/settings.json` is typically checked in. A transcript mined from one operator's session may encode local quirks — personal aliases, machine-specific paths — that fail on teammates' machines. A team-level aggregation step is required before committing.
-- **Argument-filter over-reach.** Proposing `Bash(git log --oneline *)` instead of `Bash(git log *)` creates false security, since flag reordering trivially bypasses the pattern. Keep proposals at binary-prefix scope; use hooks for argument-level rules.
-- **Small, stable projects.** A 3-file repo with two test commands does not need transcript mining. A 5-line hand-curated allowlist covers the same surface without the mining apparatus.
+- **High tool churn.** Projects that swap test runners, add MCP servers, or rename scripts generate stale proposals within days. If re-mined weekly, maintenance cost exceeds prompt savings.
+- **Shared settings across a team.** `.claude/settings.json` is typically checked in. A transcript from one operator may encode local quirks — personal aliases, machine-specific paths — that fail on teammates' machines. Aggregate across operators before committing.
+- **Argument-filter over-reach.** Proposing `Bash(git log --oneline *)` instead of `Bash(git log *)` creates false security; flag reordering trivially bypasses it. Keep proposals at binary-prefix scope; use hooks for argument-level rules.
+- **Small, stable projects.** A 3-file repo with two test commands does not need transcript mining. A 5-line hand-curated allowlist covers the same surface.
 
 ## Example
 
@@ -125,10 +125,10 @@ The next session runs without prompts for these four commands, while any new or 
 ## Related
 
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
+- [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md)
+- [Sufficiency-Tightness Decomposition for Agent-Authored Permissions](sufficiency-tightness-policy-decomposition.md)
+- [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md)
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
-- [Hook Catalog](../tool-engineering/hook-catalog.md)
 - [Managed Settings Drop-In](../tools/claude/managed-settings-drop-in.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)

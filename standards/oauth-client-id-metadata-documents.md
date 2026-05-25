@@ -83,6 +83,8 @@ A real MCP server interop bug demonstrates CIMD's sharp edges in production: [an
 
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
 - [Agent Cards: Capability Discovery Standard](agent-cards.md)
+- [SUDP: Secret Use Delegation Protocol](sudp-secret-use-delegation-protocol.md)
+- [Production MCP Agent Stack](../tool-engineering/production-mcp-agent-stack.md)
 - [MCP Server Design: A Server Author's Checklist](../tool-engineering/mcp-server-design.md)
 - [MCP Client Design](../tool-engineering/mcp-client-design.md)
 - [MCP Client-Server Architecture](../tool-engineering/mcp-client-server-architecture.md)

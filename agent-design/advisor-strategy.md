@@ -17,9 +17,9 @@ aliases:
 
 ## The Pattern
 
-Most agent turns are mechanical — reading files, running commands, writing code. A few require strategic reasoning: choosing an architecture, recovering from a dead end, verifying completeness. Running a frontier model on every turn wastes compute; running only a cheap model misses the critical decisions.
+Most agent turns are mechanical — reading files, running commands, writing code. A few need strategic reasoning: choosing an architecture, recovering from a dead end, verifying completeness. A frontier model on every turn wastes compute; a cheap model alone misses the critical decisions.
 
-The advisor strategy separates these concerns at the API level. A cost-effective executor (Sonnet or Haiku) handles end-to-end tool use; when facing a hard decision, it consults a frontier advisor (Opus) that reads the full transcript and returns strategic guidance. Anthropic's [`advisor_20260301` tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) implements this server-side within a single `/v1/messages` request — no decomposition logic, no extra round-trips.
+The advisor strategy separates these at the API level. A cost-effective executor (Sonnet or Haiku) handles tool use; on hard decisions it consults a frontier advisor (Opus) that reads the full transcript and returns strategic guidance. Anthropic's [`advisor_20260301` tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) implements this server-side in a single `/v1/messages` request — no decomposition logic, no extra round-trips.
 
 ```mermaid
 sequenceDiagram
@@ -37,7 +37,7 @@ sequenceDiagram
 
 ## How It Works
 
-The executor decides when to call the advisor, like any other tool. The server runs a separate inference pass on the advisor with the executor's full transcript (system prompt, tool definitions, prior turns). The advisor returns strategic guidance as text — its thinking blocks are dropped, and it never calls tools or produces user-facing output. The executor resumes, informed by the advice.
+The executor decides when to call the advisor. The server runs a separate inference pass with the executor's full transcript. The advisor returns text guidance — thinking blocks are dropped, no tool calls, no user-facing output. The executor resumes, informed by the advice.
 
 ## API Integration
 
@@ -52,7 +52,7 @@ response = client.beta.messages.create(
         {
             "type": "advisor_20260301",
             "name": "advisor",
-            "model": "claude-opus-4-6",  # advisor
+            "model": "claude-opus-4-7",  # advisor
             "max_uses": 3,               # per-request cap
         },
         # ... your other tools
@@ -68,7 +68,7 @@ response = client.beta.messages.create(
 | `max_uses` | integer | unlimited | Per-request cap on advisor calls |
 | `caching`  | object  | off       | Advisor-side prompt caching; breaks even at ~3 calls per conversation |
 
-The advisor must be at least as capable as the executor; check [API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for the current supported pairs.
+The advisor must be at least as capable as the executor; check the [API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) for the current supported pairs.
 
 ## Benchmark Results
 
@@ -78,8 +78,6 @@ From [Anthropic's announcement](https://claude.com/blog/the-advisor-strategy):
 |--------------|-----------|--------|-------------|
 | Haiku + Opus advisor | BrowseComp | 41.2% vs 19.7% solo (+109%) | 85% cheaper than Sonnet alone |
 | Sonnet + Opus advisor | SWE-bench Multilingual | +2.7pp over Sonnet solo | -11.9% cost per agentic task |
-
-The Haiku configuration doubles standalone performance while costing 85% less than Sonnet — though scoring 29% lower than Sonnet solo. Near-Sonnet quality at Haiku prices.
 
 ## When to Consult the Advisor
 
@@ -91,22 +89,22 @@ The advisor pays off on decisions with high downstream cost if wrong. Anthropic'
 
 ## Cost Controls
 
-Advisor tokens bill at Opus rates; executor tokens at executor rates. Savings come from the advisor producing only short strategic guidance, not the full output ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)).
+Advisor tokens bill at Opus rates; executor tokens at executor rates. Savings come from the advisor producing only short guidance, not the full output ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)).
 
 - **Per-request cap**: set `max_uses` to limit advisor calls per request.
 - **Conversation-level cap**: track client-side. At the ceiling, remove the advisor from `tools` and strip `advisor_tool_result` blocks from history.
-- **Output compression**: a conciseness instruction ("respond in under 100 words, enumerated steps") cut advisor output 35-45% in Anthropic's internal testing.
+- **Output compression**: a per-message instruction (e.g., "keep guidance under 80 words") shortens output; Anthropic recommends asking for ~80% of your true ceiling since the advisor occasionally exceeds it.
 - **Effort pairing**: Sonnet at medium [effort](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) + Opus advisor matches Sonnet at default effort.
 
 ## When This Backfires
 
 Each consultation is a second inference pass at Opus rates. A single strong model is better when ([API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)):
 
-- **The executor consults often.** Frequent advisor calls shift the token mix toward Opus rates and can exceed Opus solo cost.
-- **Every turn needs frontier capability.** Uniformly hard tasks offer no mechanical turns to offload; the executor adds latency without covering cheap ground.
+- **The executor consults often.** Frequent calls shift the token mix toward Opus rates and can exceed Opus solo cost.
+- **Every turn needs frontier capability.** Uniformly hard tasks offer no mechanical turns to offload.
 - **Single-turn Q&A or pass-through routing.** No plan to form.
-- **Latency budgets are tight.** Each call pauses the executor stream while Opus runs — fine for background agents, painful for interactive chat.
-- **Priority Tier is only on the executor.** It does not cascade to the advisor, so advisor calls fall back to standard capacity and rate-limit independently.
+- **Latency budgets are tight.** Each call pauses the executor stream while Opus runs.
+- **Priority Tier is only on the executor.** It does not cascade to the advisor, which rate-limits independently.
 
 ## Relationship to General Patterns
 

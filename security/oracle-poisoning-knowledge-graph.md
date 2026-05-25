@@ -16,15 +16,15 @@ aliases:
 
 ## The Threat Model
 
-Oracle Poisoning corrupts a structured knowledge graph the agent queries at runtime through a tool-use protocol — an MCP server, an SDK tool call, or any other typed retrieval surface. The agent's instructions are untouched; the *data the agent reasons over* is the attack vector ([Kereopa-Yorke et al., 2025; arxiv:2605.09822](https://arxiv.org/abs/2605.09822)).
+Oracle Poisoning corrupts a structured knowledge graph the agent queries at runtime through a tool-use protocol — MCP, SDK tool calls, or any typed retrieval surface. Instructions are untouched; the *data the agent reasons over* is the attack vector ([Kereopa-Yorke et al., 2026; arxiv:2605.09822](https://arxiv.org/abs/2605.09822)).
 
-This is structurally distinct from prompt injection. Prompt injection bends the agent's behaviour by adding instructions to consumed content. Oracle Poisoning leaves reasoning correct and corrupts the *premises*. The agent does its job exactly as designed and arrives at a false conclusion ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+Unlike prompt injection — which adds instructions to consumed content — Oracle Poisoning leaves reasoning correct and corrupts the *premises*.
 
-The paper evaluates the attack against a production 42-million-node code knowledge graph queried via real SDK tool-use protocols, across nine models from three providers, with N=30 trials per model.
+The paper evaluates the attack against a production 42-million-node code knowledge graph queried via real SDK tool-use, across nine models from three providers, N=30 trials per model.
 
 ## The Sophistication Gradient
 
-Attacker capability forms a discrete L0-L4 ladder. L2 — the ability to maintain corruption undetected over time — is the break-even point: every tested model trusts L2-grade poison at 100%, with 269 of 270 valid trials accepting fabricated security claims ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+Attacker capability forms a discrete L0-L4 ladder. L2 — maintaining corruption undetected over time — is the break-even point: every tested model trusts L2-grade poison at 100%.
 
 | Level | Capability |
 |---|---|
@@ -34,22 +34,22 @@ Attacker capability forms a discrete L0-L4 ladder. L2 — the ability to maintai
 | L3 | Models the agent's decision process and exploits its priors |
 | L4 | Coordinated multi-vector campaigns |
 
-L2 sits well below "advanced persistent threat". A contractor with sustained write access to a shared code KG, or an ingestion pipeline that accepts third-party submissions, can reach L2.
+L2 sits well below "advanced persistent threat" — a contractor with sustained write access or an ingestion pipeline accepting third-party submissions can reach it.
 
 ## Six Attack Scenarios
 
-The paper demonstrates six distinct corruption shapes ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)):
+The paper demonstrates six distinct corruption shapes:
 
-- **Fact injection** — insert false nodes or properties the agent queries directly.
+- **Fact injection** — insert false nodes the agent queries directly.
 - **Relationship manipulation** — rewrite edges so the agent traverses to the wrong target.
-- **Authority spoofing** — plant high-credibility provenance markers on attacker-controlled facts.
-- **Cascading corruption** — poison foundational nodes that downstream queries depend on.
-- **Semantic drift** — shift definitions or attributes slightly enough to evade obvious inconsistency checks.
-- **Query hijacking** — target the specific queries the agent runs for a given workflow.
+- **Authority spoofing** — plant high-credibility provenance on attacker-controlled facts.
+- **Cascading corruption** — poison foundational nodes downstream queries depend on.
+- **Semantic drift** — shift definitions just enough to evade inconsistency checks.
+- **Query hijacking** — target the queries the agent runs for a given workflow.
 
 ## The Delivery-Mode Confound
 
-The most consequential finding is that *how* the poisoned fact reaches the model controls trust. GPT-5.1 shows 0% trust when poisoned facts are pasted inline in the prompt, and 100% trust when the same fact is delivered through simulated or real agentic tool-use ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+How the poisoned fact reaches the model controls trust. GPT-5.1 shows 0% trust on inline poison and 100% trust when the same fact arrives via simulated or real agentic tool-use.
 
 | Delivery Mode | GPT-5.1 Trust |
 |---|---|
@@ -57,11 +57,11 @@ The most consequential finding is that *how* the poisoned fact reaches the model
 | Simulated tool-use | 100% |
 | Real agentic tool-use | 100% |
 
-Inline-only red-team evaluations therefore mis-measure real risk. The mechanism is that models have learned to weight tool-delivered facts (database rows, API responses, file contents) as ground truth — the very property the attack exploits.
+Inline-only red-team evaluations mis-measure real risk: models weight tool-delivered facts (DB rows, API responses, file contents) as ground truth — the very property the attack exploits.
 
 ## Prompt Framing Also Moves Trust
 
-Trust is not constant across query shapes. Directed queries — "what does the KG say about X?" — hit maximum trust. Open-ended prompts that ask the agent to reason over multiple sources drop trust to 3-55% on the same poison ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+Directed queries — "what does the KG say about X?" — hit maximum trust. Open-ended prompts that ask the agent to reason over multiple sources drop trust to 3-55% on the same poison.
 
 ```mermaid
 graph TD
@@ -72,11 +72,11 @@ graph TD
     D -->|Open-ended| F[3-55% trust]
 ```
 
-Workflows that decompose a task into sub-queries before consulting the graph inherit a partial mitigation by accident; workflows that pass user questions straight through as directed queries take the full blast.
+Workflows that decompose tasks into sub-queries inherit a partial mitigation by accident; pass-through workflows take the full blast.
 
 ## What Actually Defends
 
-The paper evaluates five defenses. Only one is fully effective; the rest are partial and model-dependent ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+The paper evaluates five defenses. Only one is fully effective.
 
 | Defense | Effectiveness |
 |---|---|
@@ -84,17 +84,17 @@ The paper evaluates five defenses. Only one is fully effective; the rest are par
 | Independent multi-source corroboration | Partial, model-dependent |
 | Provenance signatures on graph entries | Partial, model-dependent |
 | Confidence thresholds and uncertainty quantification | Partial, model-dependent |
-| Canary facts to detect tampering | Partial, model-dependent — detection only |
+| Canary facts to detect tampering | Partial — detection only |
 
-Read-only access works because it removes the prerequisite — without a write path, the attack does not begin. Every other defense fights the attack mid-flight, where the same property that makes tool-use useful (the agent trusting structured tool outputs) makes the defense leaky.
+Read-only access removes the prerequisite. Every other defense fights mid-flight, where the property that makes tool-use useful — the agent trusting structured outputs — makes the defense leaky.
 
 ## When Your Architecture Is Exposed
 
-The attack lands when three conditions hold together:
+The attack lands when three conditions hold:
 
 - The agent consumes the knowledge graph via a tool-use protocol (not inline context).
-- The graph has a writable path — directly, via ingestion of third-party content, or via a shared write API.
-- Queries against the graph are sufficiently directed that the agent does not triangulate.
+- The graph has a writable path — directly, via third-party ingestion, or via a shared write API.
+- Queries are directed enough that the agent does not triangulate.
 
 ```mermaid
 graph TD
@@ -108,19 +108,17 @@ graph TD
     G -->|Open-ended| I[Partial exposure<br/>3-55% trust]
 ```
 
-A private code KG built at CI time from your own monorepo with no third-party ingestion has no Oracle Poisoning surface. A shared graph fed by user submissions, package metadata, or scraped documentation has it by construction.
+A private code KG built at CI time from your own monorepo has no surface. A shared graph fed by user submissions, package metadata, or scraped docs has it by construction.
 
 ## Relationship to Adjacent Attacks
 
-Oracle Poisoning is a sibling of, not a synonym for, retrieval-side poisoning. The retrieval-side analogue is covered in [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md), which finds 24.4%-81.9% attack success across four RAG architectures under [PoisonedRAG (Zou et al., USENIX Security 2025)](https://www.usenix.org/system/files/usenixsecurity25-zou-poisonedrag.pdf). Graph-theoretic attacker techniques that localize edits via centrality and ego-subgraphs are studied in [A Few Words Can Distort Graphs (2025; arxiv:2508.04276)](https://arxiv.org/html/2508.04276). Persistent compromise via poisoned experience retrieval is the memory-side counterpart in [MemoryGraft (2025; arxiv:2512.16962)](https://arxiv.org/abs/2512.16962) and [AgentPoison (2024; arxiv:2407.12784)](https://arxiv.org/abs/2407.12784).
-
-These attacks share a mechanism — the agent trusts tool-delivered or retrieval-delivered facts more than inline ones — and differ in the data structure that carries the payload.
+Retrieval-side poisoning is analogous: [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) finds 24.4%-81.9% attack success across four RAG architectures under [PoisonedRAG (Zou et al., USENIX Security 2025)](https://www.usenix.org/system/files/usenixsecurity25-zou-poisonedrag.pdf). Graph-theoretic edit localization via centrality is in [A Few Words Can Distort Graphs (arxiv:2508.04276)](https://arxiv.org/html/2508.04276). Memory-side counterparts: [MemoryGraft (arxiv:2512.16962)](https://arxiv.org/abs/2512.16962), [AgentPoison (arxiv:2407.12784)](https://arxiv.org/abs/2407.12784). All share the mechanism — the agent trusts tool-delivered facts more than inline ones — and differ only in the carrier data structure.
 
 ## Example
 
-A code knowledge graph stores a node for `requests==2.28.0` with a property `cve_status: clean`. An attacker with L2 write access flips it to `cve_status: clean, vendor_signed: true` while the actual CVE record remains in the security DB.
+A code knowledge graph stores a node for `requests==2.28.0` with `cve_status: clean`. An attacker with L2 write access flips it to `cve_status: clean, vendor_signed: true` while the actual CVE record remains in the security DB.
 
-A developer asks the agent: "Is `requests==2.28.0` safe to pin?" The agent calls the KG tool, retrieves the node, observes `vendor_signed: true`, and answers yes with confidence. Reasoning is correct; the premise is false ([Kereopa-Yorke et al., 2025](https://arxiv.org/abs/2605.09822)).
+A developer asks the agent: "Is `requests==2.28.0` safe to pin?" The agent calls the KG tool, retrieves the node, observes `vendor_signed: true`, and answers yes with confidence. Reasoning is correct; the premise is false.
 
 The same query through inline context — pasting the node text into the prompt — would have triggered some models to reject the claim outright. The tool-use delivery is what makes the poison persuasive.
 

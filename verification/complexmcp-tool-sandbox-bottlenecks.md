@@ -58,13 +58,13 @@ The three bottlenecks are conditional on deployment shape, not inherent to agent
 | 50-150 tools, multi-domain | Moderate | High on writes | Model-dependent |
 | 300+ tools, stateful, interdependent | High — full-context required | High — verification mandatory | High — needs explicit recovery prompts |
 
-Production teams running narrow MCP servers see different failure profiles than the benchmark predicts. The [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) and [Tool Minimalism](../tool-engineering/tool-minimalism.md) patterns address bottleneck 1 by design — fewer, higher-level tools never saturate retrieval. Scoped MCP discovery and partitioned servers achieve the same goal at the harness layer.
+Teams running narrow MCP servers see different failure profiles than the benchmark predicts. [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) and [Tool Minimalism](../tool-engineering/tool-minimalism.md) address bottleneck 1 by design — fewer, higher-level tools never saturate retrieval; scoped discovery and partitioned servers achieve the same at the harness layer.
 
 ## Design Responses
 
-**For bottleneck 1 (retrieval):** keep the active toolset small enough to fit in context. If the surface is genuinely large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight inflating the saturation cost.
+**For bottleneck 1 (retrieval):** keep the active toolset small enough to fit in context. If the surface is genuinely large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight.
 
-**For bottleneck 2 (over-confidence):** require state-reading tool calls before any mutating call, enforced at the harness layer. Schema-level checks on tool outputs catch agents that assume entities exist before verifying them. The [Deterministic Guardrails](deterministic-guardrails.md) pattern wraps this enforcement around probabilistic agent decisions.
+**For bottleneck 2 (over-confidence):** require state-reading tool calls before any mutating call, enforced at the harness layer. Schema-level checks on tool outputs catch agents that assume entities exist. The [Deterministic Guardrails](deterministic-guardrails.md) pattern wraps this around probabilistic agent decisions.
 
 **For bottleneck 3 (defeatism):** the harness, not the prompt, owns recovery. Pre-completion checklists that re-run failed tool calls with backoff prevent single-error abandonment. [RFC 9457 machine-readable errors](../tool-engineering/rfc9457-machine-readable-errors.md) give the agent a structured signal that an error is retryable versus terminal.
 
@@ -77,6 +77,8 @@ Reproducible but bounded:
 - **Full-context retrieval as upper bound** is not a viable production posture; the RAG vs full-context gap measures a regime no one ships.
 
 Treat the bottlenecks as design hypotheses to test against your own toolset, not universal agent claims.
+
+Adjacent benchmarks corroborate the shape: [τ-bench](https://arxiv.org/abs/2406.12045) reports SOTA function-calling agents under 50% and "quite inconsistent" on tool-agent-user tasks (over-confidence and defeatism without MCP); [MCP-Bench](https://arxiv.org/abs/2508.20453) wires 250 tools across 28 servers and finds retrieval breaks down on fuzzy instructions without explicit tool names (the same saturation dynamic).
 
 ## Example
 

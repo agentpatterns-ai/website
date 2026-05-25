@@ -28,7 +28,7 @@ The mechanism is simple: read-only constraints force the agent to ask questions 
 | Headless query | `claude --permission-mode plan -p "Analyze the auth system"` |
 | Default for project | Set `"defaultMode": "plan"` in `.claude/settings.json` |
 
-The status bar shows `⏸ plan mode on` when active.
+The status bar indicates plan mode is active while it is in effect.
 
 ## The Four-Phase Workflow
 

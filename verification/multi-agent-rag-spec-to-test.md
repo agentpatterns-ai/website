@@ -1,6 +1,6 @@
 ---
 title: "Multi-Agent RAG for Spec-to-Test Automation"
-description: "A retrieval-augmented multi-agent pipeline converts test specifications to executable scripts by grounding generation in your team's existing test corpus"
+description: "A retrieval-augmented multi-agent pipeline converts test specs to runnable scripts, grounded in your team's existing test corpus."
 tags:
   - agent-design
   - testing-verification
@@ -13,9 +13,9 @@ tags:
 
 ## The Spec-to-Test Bottleneck
 
-Multi-Agent RAG for spec-to-test automation uses a retrieval-augmented pipeline — typically planner, generator, and validator agents — to convert natural-language acceptance criteria into runnable test scripts grounded in a team's existing test corpus. It directly addresses the gap where agile teams produce specifications faster than they can manually implement them as executable tests.
+Multi-Agent RAG for spec-to-test automation uses a retrieval-augmented pipeline — typically planner, generator, and validator agents — to convert natural-language acceptance criteria into runnable test scripts grounded in a team's existing test corpus. It addresses the gap where agile teams produce specs faster than they can manually implement them as tests.
 
-[arXiv:2603.08190](https://arxiv.org/abs/2603.08190), developed with Hacon/Siemens, demonstrates that a RAG multi-agent approach significantly increases test script throughput while preserving human review gates. The pattern may generalize to other domains where formal specifications exist and spec production outpaces manual implementation.
+The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190) shows a RAG multi-agent approach raises test script throughput while preserving human review gates. The pattern may generalize to other domains where formal specs exist and spec production outpaces implementation.
 
 ## Architecture
 
@@ -33,15 +33,15 @@ graph TD
     H -->|Changes requested| G
 ```
 
-**Planner**: Decomposes the spec into implementable steps using retrieved scripts as structural reference — what setup, assertion, and teardown patterns your team uses. This role is an architectural inference from the RAG retrieval step; the [Hacon/Siemens implementation](https://arxiv.org/abs/2603.08190) uses a Generator/Evaluator split without a discrete planner.
+**Planner**: Decomposes the spec into implementable steps using retrieved scripts as structural reference — your team's setup, assertion, and teardown patterns. This role is an architectural inference; the [Hacon/Siemens implementation](https://arxiv.org/abs/2603.08190) uses a Generator/Evaluator split without a discrete planner.
 
-**Generator**: Produces candidate test scripts using retrieval-augmented generation over historical specification–script pairs ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). RAG grounds library choices in your existing corpus rather than the model's training data.
+**Generator**: Produces candidate test scripts via retrieval-augmented generation over historical specification–script pairs ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). RAG grounds library choices in your existing corpus rather than the model's training data.
 
 **Validator**: Checks syntactical correctness and executability before the script reaches a human reviewer ([arXiv:2603.08190](https://arxiv.org/abs/2603.08190)). Feeds failures back to the generator.
 
 ## RAG Grounding
 
-The retrieval step provides stylistic grounding. Without it, generators produce syntactically valid but stylistically inconsistent scripts that reviewers must normalize. RAG over code examples reduces hallucinated API calls by anchoring generation in real usage patterns ([Lewis et al., 2020](https://arxiv.org/abs/2005.11401)). With it:
+The retrieval step provides stylistic grounding. Without it, generators produce syntactically valid but stylistically inconsistent scripts reviewers must normalize. RAG over code examples reduces hallucinated API calls by anchoring generation in real usage patterns ([Lewis et al., 2020](https://arxiv.org/abs/2005.11401)). With it:
 
 - Library choices match your existing test framework
 - Assertion patterns match team conventions
@@ -60,7 +60,7 @@ Ambiguous specs produce ambiguous scripts. Before feeding specs to the pipeline:
 
 ## Human Review Gate
 
-Keep a mandatory human review gate on each generated script before merge. The pipeline provides throughput gains; the gate preserves quality. Reviewers focus on:
+Keep a mandatory human review gate on each generated script before merge. The pipeline gives throughput; the gate preserves quality. Reviewers focus on:
 
 - Test intent matches spec intent
 - Edge cases the generator may have missed

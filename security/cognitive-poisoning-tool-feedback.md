@@ -17,7 +17,7 @@ aliases:
 
 ## The Attack Class
 
-Cognitive poisoning is a tool-feedback attack where the malicious payload is **distributed across trajectory state**, not embedded in a single tool response. The tool's interface and metadata are indistinguishable from a benign version; its first responses pass content filters. Harm activates only when the agent's accumulated trajectory state aligns with a final executable action whose parameters satisfy required_all, required_any, and forbidden conditions — "the attack succeeds not because one message is obviously malicious, but because the trajectory has shaped the agent into treating a dangerous final action as ordinary" ([Yan et al., 2026](https://arxiv.org/abs/2605.17453)).
+Cognitive poisoning distributes the malicious payload **across trajectory state**, not in a single tool response. The tool's interface and metadata look benign; its first responses pass content filters. Harm activates only when the agent's accumulated trajectory state aligns with a final executable action whose parameters satisfy required_all, required_any, and forbidden conditions — "the attack succeeds not because one message is obviously malicious, but because the trajectory has shaped the agent into treating a dangerous final action as ordinary" ([Yan et al., 2026](https://arxiv.org/abs/2605.17453)).
 
 ```mermaid
 graph LR
@@ -44,15 +44,15 @@ Single-shot defenses degenerate to a constant policy on TRUST-Bench, the 1,970-e
 | TF-IDF + LogReg over the full trajectory | 55.2 |
 | VISTA-Guard (trajectory-aware fine-tune) | 84.2 ± 18.7 in-domain; 56.9 OOD |
 
-Per-message scorers collapse to blanket-execute or blanket-reject because maliciousness is a function f(trajectory_state, final_action) — defenses that evaluate messages in isolation have zero discriminative power by construction. The [history-anchor finding](history-anchor-consistency-injection.md) corroborates: trajectory shape steers final-action choice, invisibly to per-step checks.
+Per-message scorers collapse to blanket-execute or blanket-reject because maliciousness is a function f(trajectory_state, final_action) — isolated-message defenses have zero discriminative power by construction. The [history-anchor finding](history-anchor-consistency-injection.md) corroborates: trajectory shape steers final-action choice, invisibly to per-step checks.
 
 ## Why It Works
 
-The mechanism is implicit trust accumulation. Agents reduce their prior on tool maliciousness with each benign-looking response, even when no single response would pass safety screening if the final action were already visible. A malicious tool exploits this by producing a trajectory that looks like routine exploration — sandbox probes, object-consistency checks, baseline collection — before issuing the response whose joint configuration with the agent's planned final action triggers harm ([Yan et al., 2026](https://arxiv.org/html/2605.17453)). TraceSafe-Bench corroborates the mechanism independently: guardrail efficacy on multi-step trajectories correlates with structured-data competence (rho=0.79), not safety alignment — the discriminative signal lives in trajectory structure, not in individual message content ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+The mechanism is implicit trust accumulation: agents reduce their prior on tool maliciousness with each benign-looking response, even when no single response would pass screening if the final action were already visible. A malicious tool exploits this with a trajectory that looks like routine exploration — sandbox probes, object-consistency checks, baseline collection — before issuing the response whose joint configuration with the planned final action triggers harm ([Yan et al., 2026](https://arxiv.org/html/2605.17453)). TraceSafe-Bench corroborates independently: guardrail efficacy on multi-step trajectories correlates with structured-data competence (rho=0.79), not safety alignment — the discriminative signal lives in trajectory structure, not message content ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
 
 ## Detection Pattern: Trajectory-Aware Features
 
-VISTA-Guard converts each episode into a structured triplet (z_traj, z_param, y) where z_traj summarizes the trajectory and z_param compacts the final-action parameters. The five trajectory features are explicit, not learned end-to-end ([Yan et al., 2026](https://arxiv.org/html/2605.17453)):
+VISTA-Guard converts each episode into a triplet (z_traj, z_param, y) where z_traj summarizes the trajectory and z_param compacts the final-action parameters. The five trajectory features are explicit, not learned end-to-end ([Yan et al., 2026](https://arxiv.org/html/2605.17453)):
 
 | Feature | What it counts |
 |---|---|
@@ -68,13 +68,13 @@ Scoring is backbone-agnostic — label-suffix NLL with train-fold-only calibrati
 
 Trajectory scoring fits open tool ecosystems with multi-round agents and structured outputs. It misfits when:
 
-- **Tool catalogs are sealed and signed** — internally developed, signed, and pinned tools shift the attack surface to insider risk; pair [tool signing](tool-signing-verification.md) with audited inclusion lists instead of running a learned classifier at every checkpoint.
-- **Architectural separation already applies** — the [Action-Selector Pattern](action-selector-pattern.md) and [CaMeL](camel-control-data-flow-injection.md) make tool outputs non-influential on subsequent decisions structurally; a trajectory classifier duplicates the protection.
-- **Latency budget is tight** — VISTA-Guard runs a fine-tuned 7B-scale model at trajectory checkpoints; the paper does not benchmark inference latency but this will not fit a sub-200ms interactive budget.
-- **Agents are short-lived (2-3 calls)** — TraceSafe finds trajectory-checkpoint evaluation is weaker than per-call for trajectories that accumulate no cross-step signal ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
-- **Tool ecosystem shifts out-of-distribution** — the 84.2 to 56.9 in-domain-to-OOD gap means a classifier trained on one tool population does not generalize cleanly; plan for retraining or compose with architectural defenses.
+- **Tool catalogs are sealed and signed** — pair [tool signing](tool-signing-verification.md) with audited inclusion lists instead of running a learned classifier at every checkpoint.
+- **Architectural separation already applies** — the [Action-Selector Pattern](action-selector-pattern.md) and [CaMeL](camel-control-data-flow-injection.md) make tool outputs structurally non-influential; a trajectory classifier duplicates the protection.
+- **Latency budget is tight** — VISTA-Guard runs a fine-tuned 7B-scale model at checkpoints; the paper does not benchmark latency but this will not fit a sub-200ms interactive budget.
+- **Agents are short-lived (2-3 calls)** — TraceSafe finds trajectory-checkpoint evaluation is weaker than per-call when no cross-step signal accumulates ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)).
+- **Tool ecosystem shifts out-of-distribution** — the 84.2→56.9 in-domain-to-OOD gap means a classifier trained on one tool population does not generalize cleanly; plan for retraining or compose with architectural defenses.
 
-The originating work itself frames the result as "an initial benchmarked study," explicitly limited by a standardized three-step exploration budget and a binary execute/reject action space ([Yan et al., 2026](https://arxiv.org/html/2605.17453)).
+The originating work frames the result as "an initial benchmarked study," limited by a fixed three-step exploration budget and a binary execute/reject action space ([Yan et al., 2026](https://arxiv.org/html/2605.17453)).
 
 ## Composition with Existing Defenses
 

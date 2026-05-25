@@ -174,5 +174,5 @@ Key decisions: the guard model is chosen for structured-data competence, not saf
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — anti-pattern that mid-trajectory obfuscation exploits
 - [Trajectory-Opaque Evaluation Gap](../verification/trajectory-opaque-evaluation-gap.md) — why outcome-only grading misses safety violations in intermediate steps
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md) — foundational injection attack model that multi-step attacks build upon
-- [Indirect Injection Discovery](indirect-injection-discovery.md) — finding injection vulnerabilities before adversaries do
 - [RL-Automated Red Teamers](rl-automated-red-teamers.md) — RL-based discovery of multi-step attack sequences that mid-trajectory guardrails must catch
+- [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — deterministic pDFA enforcement that complements LLM guard models on the same trajectory surface

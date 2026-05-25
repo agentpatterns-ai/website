@@ -1,6 +1,6 @@
 ---
-title: "Agent Debugging: Diagnosing and Fixing Bad Agent Output"
-description: "A systematic process for tracing why an agent produced wrong, incomplete, or unexpected output. Code bugs have stack traces. Agent bugs have context windows"
+title: "Agent Debugging: Diagnosing Bad Agent Output"
+description: "A systematic process for tracing why an AI coding agent produced wrong, incomplete, or unexpected output by inspecting context, instructions, tools, and model tier."
 tags:
   - workflows
   - agent-design
@@ -16,11 +16,11 @@ aliases:
 
 ## Why Agent Debugging Is Different
 
-Code bugs have stack traces. Agent bugs have context windows. When an agent fails, the problem is usually not the model — it’s what the model was given to work with. The four failure modes are:
+Code bugs have stack traces. Agent bugs have context windows. When an agent fails, the problem is usually not the model — it’s what the model was given. The four modes:
 
 1. **Missing context** — the agent didn’t have information it needed
 2. **Conflicting instructions** — two directives contradicted each other
-3. **Missing or blocked tools** — the agent couldn’t take the action required
+3. **Missing or blocked tools** — the agent couldn’t act
 4. **Capability ceiling** — the task exceeded the model tier’s capability
 
 Debugging means determining which category applies before changing anything.
@@ -57,13 +57,13 @@ In Claude Code, [tool permissions are configured in `.claude/settings.json`](htt
 
 ### Step 4: Was the Model Right for the Task?
 
-Some failures are capability problems, not context problems. A smaller model produces confidently wrong output on complex reasoning tasks. If context, instructions, and tools look right but output is still wrong, test with a more capable model tier.
+Some failures are capability problems, not context problems. A smaller model produces confidently wrong output on complex reasoning. If context, instructions, and tools look right but output is still wrong, retest with a more capable model tier.
 
 ## Transcript Analysis
 
-Claude Code stores session history under `~/.claude/projects/` ([configuration file locations](https://code.claude.com/docs/en/troubleshooting#configuration-file-locations)). Use the session history to trace: what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether the agent flagged a missing resource.
+Claude Code stores session history under `~/.claude/projects/` ([configuration file locations](https://code.claude.com/docs/en/troubleshooting#configuration-file-locations)). Use it to trace what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether the agent flagged a missing resource.
 
-The [troubleshooting documentation](https://code.claude.com/docs/en/troubleshooting) recommends `/doctor` to surface environment issues (malformed config, MCP server errors, oversized instruction files) not visible during normal operation.
+The [troubleshooting documentation](https://code.claude.com/docs/en/troubleshooting) recommends `/doctor` to surface environment issues (malformed config, MCP errors, oversized instruction files) not visible during normal operation.
 
 ## Reproducing the Issue
 
@@ -103,17 +103,21 @@ The diagnostic sequence assumes the failure is structural. Three conditions wher
 2. **Novel capability gaps** — if the task genuinely exceeds any available model tier's capability, no amount of context or instruction tuning will fix it. Reaching Step 4 too late delays this conclusion.
 3. **Over-instrumented environments** — dense instruction files with many CLAUDE.md layers make conflict scanning slow. In these setups, reducing instruction surface area is a higher-leverage intervention than per-failure diagnosis.
 
+## Key Takeaways
+
+- The four agent-failure modes are missing context, conflicting instructions, missing or blocked tools, and capability ceiling — classify before you change anything.
+- Use `/memory` to inspect every CLAUDE.md and rules file that actually loaded; layered scopes (user vs. project vs. managed) cause silent contradictions.
+- Compaction drops path-scoped rules; rules that held early in a session may quietly fall out, so check session length before blaming the model.
+- Reproduce in a fresh session with identical inputs to separate structural bugs (instructions, skills, tools) from session-specific drift.
+- Skip the full diagnostic for transient errors, true capability gaps, or over-instrumented setups — retry, escalate the tier, or reduce instruction surface area instead.
+
 ## Related
 
 - [Trajectory Logging via Progress Files](trajectory-logging-progress-files.md)
 - [Loop Detection](loop-detection.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-- [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md)
-- [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
-- [Circuit Breakers](circuit-breakers.md)
-- [Event Sourcing for Agents](event-sourcing-for-agents.md)
 - [Visible Thinking in AI Development](visible-thinking-ai-development.md)
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)

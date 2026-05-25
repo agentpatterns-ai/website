@@ -1,5 +1,5 @@
 ---
-title: "Using Hooks for Enforcement and Prompts for Guidance"
+title: "Hooks for Enforcement vs Prompts for Guidance: When to Use Each"
 description: "Prompts request behavior; hooks require it. Use prompts for judgment calls and context-dependent guidance; use hooks for rules that must not vary."
 aliases:
   - Enforcement vs Advisory
@@ -143,6 +143,14 @@ Write a unit test for any change to business logic in `src/domain/`.
 ```
 
 These instructions require evaluating context a hook cannot inspect mechanically — they belong in the prompt.
+
+## Key Takeaways
+
+- Prompts are probabilistic — compliance degrades under task pressure; hooks are deterministic at the tool-call boundary and run outside the agent's context.
+- Reach for a hook only when the rule is **non-negotiable**, **binary**, and **opposed by a training prior**. Anything else stays in the prompt.
+- Hooks see parameters, not intent. Use prompts for architectural guidance, quality standards, and situational judgment.
+- Hooks are injection-resistant — injected instructions can influence what the agent *tries*, not what a hook *allows*.
+- Hooks fail at four boundaries: substitution, intent-blindness, execution-path gaps, and hook-source trust. Pair them with CI and git-level gates for rules that must hold everywhere.
 
 ## Related
 

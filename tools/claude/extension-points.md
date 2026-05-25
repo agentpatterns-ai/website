@@ -1,5 +1,5 @@
 ---
-title: "Claude Code Extension Points: Choosing the Right Hook"
+title: "Claude Code Extension Points: When to Use What"
 description: "Choose the right extension point — CLAUDE.md, rules, skills, hooks, subagents, MCP servers, or plugins — for enforcement, context cost, and portability."
 tags:
   - instructions
@@ -66,7 +66,7 @@ Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed proced
 
 **Deterministic** — model cannot override:
 
-- **Hooks**: fire at [25+ lifecycle events](hooks-lifecycle.md) (29 events documented as of Claude Code v2.1.x, per the [hooks reference](https://code.claude.com/docs/en/hooks)). The agent cannot skip or override them.
+- **Hooks**: fire at [18 lifecycle events](hooks-lifecycle.md). The agent cannot skip or override them.
 - **CLAUDE.md loading**: loaded unconditionally at session start ([memory docs](https://code.claude.com/docs/en/memory)).
 
 **Probabilistic** — model decides when to invoke:
@@ -136,16 +136,7 @@ The hook script (`hooks/check-down-migration.sh`) runs deterministically. The sk
 - [Sub-Agents](sub-agents.md)
 - [Agent Teams](agent-teams.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../../verification/hooks-vs-prompts.md)
-- [Hook Catalog](../../tool-engineering/hook-catalog.md)
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md)
 - [Progressive Disclosure for Agent Definitions](../../agent-design/progressive-disclosure-agents.md)
-- [Separation of Knowledge and Execution](../../agent-design/separation-of-knowledge-and-execution.md)
-- [Permission-Gated Commands](../../security/permission-gated-commands.md)
 - [Plugin Packaging](../../standards/plugin-packaging.md)
 - [Claude Agent SDK](agent-sdk.md)
-- [Feature Flags and Environment Variables](feature-flags.md)
-- [Session Scheduling](session-scheduling.md)
-- [Claude Code Auto Mode](auto-mode.md)
-- [Managed Settings Drop-In Directory](managed-settings-drop-in.md)
-- [Skill Eval Loop](skill-eval-loop.md)
-- [Channels Permission Relay](channels-permission-relay.md)

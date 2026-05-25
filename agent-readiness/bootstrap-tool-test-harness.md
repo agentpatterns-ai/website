@@ -11,6 +11,8 @@ aliases:
   - independent tool testing scaffold
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-tool-test-harness/`
+
 # Bootstrap Tool Test Harness
 
 > Detect agent-callable tools, scaffold per-tool isolated test cases for selection, parameters, and output handling, generate the runner and CI gate, ship a template for new tools.

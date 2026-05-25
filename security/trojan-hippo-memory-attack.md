@@ -91,6 +91,7 @@ Combined with default-deny egress, this removes the untrusted-input leg from any
 
 ## Related
 
+- [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md) — sibling page with the measured-ASR-per-backend table and per-defense utility cost
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
@@ -98,4 +99,3 @@ Combined with default-deny egress, this removes the untrusted-input leg from any
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Indirect Injection Discovery](indirect-injection-discovery.md)
-- [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md)

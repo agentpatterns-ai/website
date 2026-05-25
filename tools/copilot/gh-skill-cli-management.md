@@ -23,7 +23,6 @@ Released 2026-04-16 in GitHub CLI v2.90.0, `gh skill` is a new top-level command
 |---|---|
 | `gh skill search <query>` | Find skills across indexed GitHub repos |
 | `gh skill install <owner>/<repo> [<skill>]` | Install one skill or browse the repo interactively |
-| `gh skill preview <owner>/<repo> [<skill>]` | Render a skill's `SKILL.md` in the terminal without installing it ([gh CLI manual](https://cli.github.com/manual/gh_skill_preview)) |
 | `gh skill update [--all]` | Check or apply upstream changes for installed skills |
 | `gh skill publish [--fix]` | Validate a local skill against the [agentskills.io](https://agentskills.io) spec and publish |
 
@@ -113,7 +112,7 @@ The pinned tags make the install reproducible; `--scope repository` commits the 
 
 ## Key Takeaways
 
-- `gh skill` (GitHub CLI v2.90+) adds scriptable install, search, preview, update, and publish for agent skills.
+- `gh skill` (GitHub CLI v2.90+) adds scriptable install, search, update, and publish for agent skills.
 - `--scope repository` commits skills into the checkout; `--scope user` keeps them per-user.
 - `--pin <tag|sha>` locks a skill version; content-addressed updates via git tree SHA make `gh skill update` a no-op when upstream is unchanged.
 - `--agent` targets Claude Code, Cursor, Codex, Gemini, and Antigravity in addition to the default Copilot — one CLI for mixed agent fleets.

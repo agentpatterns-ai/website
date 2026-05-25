@@ -16,7 +16,7 @@ aliases:
 
 ## Overview
 
-Anthropic's December 2024 engineering post and the expanded *Building Effective AI Agents: Architecture Patterns and Implementation Frameworks* eBook define a taxonomy that is the most-cited primary source in agent-pattern literature ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); [eBook landing](https://resources.anthropic.com/building-effective-ai-agents)). This page maps that taxonomy to existing site pages and names the conditions under which each layer holds.
+Anthropic's December 2024 engineering post and the expanded *Building Effective AI Agents* eBook define the most-cited taxonomy in agent-pattern literature ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); [eBook landing](https://resources.anthropic.com/building-effective-ai-agents)). This page maps that taxonomy to site pages and names the conditions under which each layer holds.
 
 Anthropic distinguishes three layers:
 
@@ -24,7 +24,7 @@ Anthropic distinguishes three layers:
 - **Workflows** — five patterns with predefined control flow built on the augmented LLM
 - **Agents** — the autonomous loop, where the LLM directs its own control flow
 
-The central advice: start with simple prompts and add agentic systems only when simpler solutions fall short ([Anthropic blog](https://www.anthropic.com/engineering/building-effective-agents)).
+The central advice: start with simple prompts and add agentic systems only when simpler solutions fall short.
 
 ## The Augmented LLM
 
@@ -75,20 +75,20 @@ The expanded eBook covers material the December 2024 post does not ([eBook landi
 
 ## Why It Works
 
-The framework's value is taxonomic, not algorithmic. By naming five patterns with distinct cost-predictability-debuggability profiles, it converts an under-specified "build an agent" task into a discrete selection: which control-flow shape — sequence, branch, parallel, dispatch, refine — matches this problem? Those shapes are classical CS primitives in agent dress, and the contribution is in matching shape to task before writing code.
+The framework's value is taxonomic, not algorithmic. By naming five patterns with distinct cost-predictability-debuggability profiles, it converts "build an agent" into a discrete selection: which control-flow shape — sequence, branch, parallel, dispatch, refine — matches this problem? Those shapes are classical CS primitives, and the contribution is in matching shape to task before writing code.
 
-The accompanying mechanism for "start simple": every additional LLM call adds latency, cost, and a compounding error rate. The marginal-value threshold for adding a pattern is the marginal-cost threshold of one extra inference. Workflows beat agents whenever a task's structure is stable enough to encode in code, because they pay the inference cost only at decision points the developer chose ([Anthropic blog](https://www.anthropic.com/engineering/building-effective-agents)).
+Every additional LLM call adds latency, cost, and a compounding error rate. Workflows beat agents whenever a task's structure is stable enough to encode in code, because they pay the inference cost only at decision points the developer chose ([Anthropic blog](https://www.anthropic.com/engineering/building-effective-agents)).
 
 ## When This Backfires
 
-The patterns assume the task is well-specified, the output is verifiable, and the framework is applied once rather than continuously evolved. Production experience shows those assumptions fail in several settings ([Towards AI: Beyond Anthropic's Playbook](https://pub.towardsai.net/agent-workflow-patterns-beyond-anthropics-playbook-1bd76a48d63d)):
+The patterns assume the task is well-specified and the output is verifiable. Production experience shows those assumptions fail in several settings ([Towards AI: Beyond Anthropic's Playbook](https://pub.towardsai.net/agent-workflow-patterns-beyond-anthropics-playbook-1bd76a48d63d)):
 
-- **High-frequency, low-complexity tasks** — deterministic code beats both workflows and agents on cost and latency; the "start simple" advice under-specifies how simple ([aimultiple: Building AI Agents](https://aimultiple.com/building-ai-agents))
-- **No clear evaluation criterion** — evaluator-optimizer becomes circular when the evaluator cannot reliably distinguish good output from bad; the loop silently degrades into iterative noise
-- **High-stakes one-shot decisions** — one agent's answer is not safe for financial, legal, or medical decisions; the framework's autonomous-loop guidance under-specifies adversarial verification and external grounding requirements
+- **High-frequency, low-complexity tasks** — deterministic code beats both workflows and agents on cost and latency ([aimultiple: Building AI Agents](https://aimultiple.com/building-ai-agents))
+- **No clear evaluation criterion** — evaluator-optimizer becomes circular when the evaluator cannot reliably distinguish good output from bad
+- **High-stakes one-shot decisions** — the framework's autonomous-loop guidance under-specifies adversarial verification and external grounding
 - **Retrieval-bottlenecked tasks** — when RAG correctness dominates outcome quality, workflow-pattern selection is a second-order concern
-- **Teams with existing frameworks** — the post's caution against frameworks oversells DIY; for teams without infra, LangGraph, CrewAI, or similar encode these patterns at lower upfront cost than re-implementation
-- **Definitional drift** — independent reviewers note the post's definitions of "agentic", "workflows", and "agents" are not internally consistent, making the framework harder to apply at the boundary ([thoughtsfromthedatafront analysis](https://www.thoughtsfromthedatafront.com/p/anthropics-blueprint-for-building))
+- **Teams with existing frameworks** — for teams without infra, LangGraph or CrewAI encode these patterns at lower upfront cost than re-implementation
+- **Definitional drift** — independent reviewers note the post's definitions of "agentic", "workflows", and "agents" are not internally consistent ([thoughtsfromthedatafront analysis](https://www.thoughtsfromthedatafront.com/p/anthropics-blueprint-for-building))
 
 The site's [Anti-Patterns](../anti-patterns/index.md) section catalogues specific failure modes for several of these workflow shapes.
 

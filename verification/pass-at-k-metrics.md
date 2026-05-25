@@ -11,7 +11,7 @@ aliases:
   - "pass@1 pass@k metrics"
 ---
 
-# Use pass@k and pass^k to Separate Agent Capability from Consistency
+# pass@k and pass^k: Capability and Consistency Metrics
 
 > A single pass rate conflates two distinct properties of a non-deterministic agent: whether it *can* solve the problem and whether it *reliably* does. Use pass@k and pass^k together to measure both.
 
@@ -132,6 +132,7 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [Golden Query Pairs as Regression Tests](golden-query-pairs-regression.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design tests that account for agent non-determinism across multiple trials
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Extends pass@k by also varying interaction depth *T* for tool-use agents
+- [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — Treats pass@k and pass^k as projections of one underlying success first-passage distribution
 - [LLM-as-Judge Context Test Harness](llm-context-test-harness.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)

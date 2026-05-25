@@ -11,6 +11,8 @@ aliases:
   - retry-safety audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-tool-idempotency/`
+
 # Audit Tool Idempotency
 
 > Inventory tool definitions, validate idempotency / destructive / read-only annotations against MCP spec defaults, classify retry-safety, emit per-tool findings.

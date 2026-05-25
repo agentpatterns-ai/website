@@ -57,7 +57,6 @@ nav:
     - audit-confirmation-gate-logs.md
     - audit-mcp-control-plane-bypass.md
     - audit-multitenant-rag-authorization.md
-    - audit-observability-calibration.md
     - audit-agent-built-code-health.md
     - audit-agent-pr-quality-metrics.md
     - audit-pr-narrative-quality.md

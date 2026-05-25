@@ -13,7 +13,7 @@ tags:
 
 ## Custom Agents
 
-Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, MCP servers, and instructions. Agents become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents).
+Define [`CUSTOM-AGENT-NAME.md` files](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents) under `.github/agents/` to create specialized agents with their own tools, [MCP servers](mcp-integration.md), and instructions. Agents become available in the [coding agent on GitHub.com, coding agent in IDEs, and GitHub Copilot CLI](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents).
 
 ## Agent Skills
 
@@ -62,7 +62,7 @@ description: Automates release tasks — changelog generation, version bumping, 
 tools:
   - shell
   - file_edit
-mcp-servers:
+mcpServers:
   - url: https://mcp.example.com/github
     name: github
 ---
@@ -73,8 +73,6 @@ You are a release engineer agent. When asked to cut a release, you:
 3. Bump the version in `package.json` and commit with `chore(release): vX.Y.Z`.
 4. Create and push a git tag.
 ```
-
-The `mcp-servers` frontmatter property uses kebab-case ([GitHub: About custom agents](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-custom-agents)).
 
 **`.github/skills/changelog/SKILL.md`**
 
@@ -101,8 +99,8 @@ Copilot reads only the skill metadata until `/changelog` is invoked, keeping con
 
 ## Related
 
-- [Agent Mode](agent-mode.md)
-- [Coding Agent](coding-agent.md)
+- [Agent Mission Control](agent-mission-control.md)
+- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [AGENTS.md](../../standards/agents-md.md)
 - [Agent Skills Standard](../../standards/agent-skills-standard.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)

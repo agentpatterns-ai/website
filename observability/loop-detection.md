@@ -9,6 +9,7 @@ tags:
 aliases:
   - Loop Detection & Stopping
 ---
+
 # Loop Detection
 
 > **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
@@ -140,12 +141,8 @@ Measure whether a specific intervention reduces the signal it targets, and remov
 - [Circuit Breakers for Agent Loops](circuit-breakers.md)
 - [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
 - [Trajectory Logging and Progress Files](trajectory-logging-progress-files.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
-- [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
-- [Making Application Observability Legible to Agents](observability-legible-to-agents.md)
-- [Event Sourcing for Agents](event-sourcing-for-agents.md)
+- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

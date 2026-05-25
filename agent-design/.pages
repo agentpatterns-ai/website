@@ -8,7 +8,6 @@ nav:
       - agent-first-software-design.md
       - agent-stack-bets.md
       - agentic-ai-architecture-evolution.md
-      - anthropic-effective-agents-framework.md
       - agentic-flywheel.md
       - agents-vs-commands.md
       - agentless-vs-autonomous.md
@@ -41,7 +40,6 @@ nav:
       - abstention-aware-memory-retrieval.md
       - acid-for-agent-repository-state.md
       - agent-memory-patterns.md
-      - agent-project-state-purge.md
       - harness-memory-coupling.md
       - ast-guided-agent-memory.md
       - ax-ux-dx-triad.md
@@ -51,7 +49,6 @@ nav:
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
       - episodic-memory-retrieval.md
-      - experience-graphs-self-evolving-agents.md
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
@@ -61,12 +58,9 @@ nav:
       - rag-over-thinking-traces.md
       - session-initialization-ritual.md
       - session-recap.md
-      - shared-agent-context-store-api.md
       - subtask-level-memory.md
       - tiered-memory-architecture.md
-      - typed-memory-from-vcs-history.md
   - "Control & Orchestration":
-      - asynchronous-agent-io-and-speculative-tools.md
       - background-todo-agent.md
       - controlling-agent-output.md
       - interactive-clarification-underspecified-tasks.md
@@ -79,7 +73,6 @@ nav:
       - gepa-reflective-prompt-evolution.md
       - event-driven-agent-routing.md
       - evaluator-optimizer.md
-      - goal-contract-completion-evaluator.md
       - goal-driven-autonomous-loop.md
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
@@ -89,22 +82,17 @@ nav:
       - progressive-disclosure-agents.md
       - remote-session-control.md
       - self-rewriting-meta-prompt-loop.md
-      - skill-program-functions.md
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
-      - stochastic-deterministic-boundary.md
       - tool-preamble-status-update.md
   - "Reliability":
-      - adaptive-generate-rank-verify.md
       - agent-circuit-breaker.md
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
       - agent-self-review-loop.md
-      - auto-model-selection.md
       - behavioral-drivers-agent-success.md
-      - cloud-agent-tiered-model-routing.md
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
       - dual-budget-control-search-agents.md
@@ -116,8 +104,6 @@ nav:
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
       - long-running-agents.md
-      - remote-agent-host-sessions.md
-      - observation-contract-preservation.md
       - progressive-spend-threshold-alerting.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
@@ -125,14 +111,14 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
-      - utility-model-split.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
-      - cloud-agent-session-bootstrap.md
+      - cloud-agent-state-layer-decoupling.md
       - agent-harness.md
       - agent-loop-middleware.md
+      - agent-runtime-middleware.md
       - agent-pushback-protocol.md
       - agent-turn-model.md
       - deep-agent-runtime.md
@@ -155,7 +141,4 @@ nav:
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md
-  - code-health-gated-tier-routing.md
-  - externalization-in-llm-agents.md
-  - issue-requirements-preprocessing.md
   - ...

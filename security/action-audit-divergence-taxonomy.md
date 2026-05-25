@@ -83,10 +83,11 @@ The framing complements the [four-layer threat taxonomy](four-layer-agent-securi
 
 ## Related
 
+- [Audit-Record Divergence as an Agent Runtime Invariant](audit-record-divergence-invariant.md) — the invariant statement of the same F1-F4 model; pair this controls-mapping checklist with that invariant for the full picture
+- [Action-Audit Divergence Audit](../agent-readiness/audit-action-audit-divergence.md) — runbook that operationalises the F1-F4 taxonomy as an agent-readiness audit
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — companion threat-surface layering; pair with this divergence-mode model
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — F2 control: hash-chained tamper-evident logs with ML-DSA receipts
 - [Action-Selector Pattern](action-selector-pattern.md) — F1 control: deterministic execution from a fixed action catalog
 - [MCP Runtime Control Plane](mcp-runtime-control-plane.md) — F1 control: single chokepoint for tool-call policy evaluation
 - [Agent Network Egress Policy](agent-network-egress-policy.md) — F4 control: target validation at the network boundary
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — F3 control: module-level integrity for executing code
-- [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — competing lifecycle-phase decomposition; complements this failure-mode decomposition

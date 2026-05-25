@@ -25,7 +25,7 @@ Tool permissions, PreToolUse hooks, and the Bash allow/deny list all gate model-
 
 ## The Gate
 
-Claude Code 2.1.91 (April 2 2026) added the `disableSkillShellExecution` setting ([Claude Code changelog](https://code.claude.com/docs/en/changelog)):
+Claude Code's `disableSkillShellExecution` setting closes that surface ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)):
 
 ```json
 {
@@ -108,10 +108,10 @@ Execution is now visible to PreToolUse hooks and recorded as a tool call in the 
 ## Related
 
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Enterprise-Managed Plugin Governance for Agent CLIs](enterprise-managed-plugin-governance.md)
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Sandbox Rules for Harness-Owned Tools](sandbox-rules-harness-tools.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Skill as Knowledge Pattern](../tool-engineering/skill-as-knowledge.md)
 - [Hooks vs Prompts for Enforcement](../verification/hooks-vs-prompts.md)

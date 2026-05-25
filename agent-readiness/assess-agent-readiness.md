@@ -11,6 +11,8 @@ aliases:
   - brownfield agent assessment
 ---
 
+Packaged as: `.claude/skills/agent-readiness-assess-agent-readiness/`
+
 # Assess Agent Readiness
 
 > Inventory the codebase, run the audit suite, score L0–L5 across four dimensions, and emit a prioritized punch list.
@@ -131,7 +133,7 @@ Score each dimension 0–5 using the rubric. Use the strictest matching level (d
 | L0 | No permission allowlist; no deny rules; secrets readable |
 | L1 | Bash allowlist; no live secrets in instruction files |
 | L2 | Sensitive-path deny rules; no high-severity lethal trifecta principal |
-| L3 | Per-sub-agent tool restrictions; egress allowlisted; URL exfiltration guard |
+| L3 | Per-sub-agent tool restrictions; egress allowlisted; [URL exfiltration guard](../security/url-exfiltration-guard.md) |
 | L4 | Approval gates on destructive ops; safe-outputs declared on automations |
 | L5 | Default-deny posture; periodic [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) in CI |
 
@@ -175,7 +177,7 @@ The formula intentionally penalizes `bootstrap-eval-suite` despite its L0 weight
 Apply the gates:
 
 1. **Halt-on-secrets**: any `audit-secrets-in-context` high finding stops the assessment; the only emitted recommendation is rotation
-2. **Lethal trifecta close**: any `(1,1,1)` principal in `audit-lethal-trifecta` is high severity even if the dimension is mid-level
+2. **Lethal trifecta close**: any `(1,1,1)` principal in `audit-lethal-trifecta` is high severity even if the dimension is mid-level (see [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) for the underlying framework)
 3. **Default-deny check**: missing `permissions` block scores L0 security regardless of other dimensions
 
 For each gap, name the runbook to execute next and the expected level uplift.

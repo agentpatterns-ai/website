@@ -11,6 +11,8 @@ aliases:
   - lost-in-the-middle audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-instruction-placement/`
+
 # Audit Instruction Placement
 
 > Classify rules by criticality, check that critical rules occupy primacy (top) or recency (bottom) positions, flag mid-file criticals and contradictory restatements, emit per-file findings.

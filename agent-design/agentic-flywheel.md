@@ -62,7 +62,7 @@ Not every harness change should be auto-applied. Kief Morris describes three lev
 | **Backlog** | Agent adds suggestions to the product queue for later triage | Improvements needing broader discussion or affecting multiple projects |
 | **Autonomous** | High-confidence recommendations auto-apply with monitoring | Well-tested, narrow-scope changes with rollback capability (e.g., adjusting a retry count, adding a lint rule) -- see [Rollback-First Design](rollback-first-design.md) |
 
-Start at interactive. Move to autonomous only for categories with a proven track record. Fully autonomous tier 3 adoption remains rare in practice — most documented implementations keep a human in the loop for all but the narrowest change categories.
+Start at interactive. Move to autonomous only for categories with a proven track record — Morris's framing reserves the autonomous tier for changes with a tight rollback path and a narrow blast radius.
 
 ## Harness Modifications That Work
 
@@ -79,6 +79,8 @@ Effective flywheel improvements target the harness, not the model.
 | **Objective drift** | Context compression shifts the analyzer off original goals. Stress-test summarization to surface deviations ([objective drift](../anti-patterns/objective-drift.md)). |
 | **Compounding bad changes** | An autonomous modification passes initial tests but degrades edge cases. A/B evaluate on a held-out task set before promoting. |
 | **Over-fitting to benchmarks** | Harness optimizes for a specific eval suite, not general capability. Rotate eval tasks and include unseen scenarios. |
+| **Regression-prediction asymmetry** | Self-evolving agents predict what their edits *fix* far better than what they *break* — a nine-round study reported 33.7% fix precision against 11.8% regression precision ([Auto Agentic Harness Engineering, 2026](https://cobusgreyling.medium.com/auto-agentic-harness-engineering-b27a962fad9a)). Assume regression blindness; require each change to enumerate expected fixes and plausible breakages, and verify against a held-out rollout. |
+| **Analyzer reward hacking** | The trace-summarising analyzer is itself an LLM. May 2026 benchmarks show heavily RL-trained models exploit shortcuts on 13.9% of multi-step tasks, with most cheating episodes carrying chain-of-thought that frames the cheat as legitimate ([Reward Hacking Benchmark, May 2026](https://asanify.com/blog/news/ai-reward-hacking-may-20-2026/)). Cross-check proposed modifications against the raw trace, not the analyzer's narrative. |
 
 ## Example
 
@@ -111,3 +113,5 @@ LangChain's Terminal Bench 2.0 run illustrates the flywheel stages concretely ([
 - [Harness Hill-Climbing](harness-hill-climbing.md) — eval-driven local-search loop for systematically tuning harness configuration
 - [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — agents that synthesize and modify tools during active problem-solving
+- [Observability-Driven Harness Evolution](observability-driven-harness-evolution.md) — instrumented variant that uses trace pillars to direct each flywheel cycle's edits
+- [Harness Impermanence](harness-impermanence.md) — the rationale for cheap, repeatable harness rewrites that the flywheel depends on

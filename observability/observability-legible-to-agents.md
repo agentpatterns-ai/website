@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
 ---
 
-# Making Observability Legible to Agents
+# Making Application Observability Legible to Agents
 
 > Wire browser automation, application metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior from real signals.
 
@@ -137,6 +137,14 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 - **Context bloat from large payloads.** Log queries without tight time/count limits can return thousands of entries, consuming context window and reducing reasoning quality. JIT references (described above) mitigate this but require deliberate query discipline.
 - **Screenshot-heavy workflows are slow.** Vision-model verification via screenshots adds latency per check. On long test suites this compounds; prefer accessibility snapshots for functional checks and screenshots only for layout verification.
 
+## Key Takeaways
+
+- Agents that only read code and test output operate in "write and hope" mode; wiring visual, log, and metric signals into context lets them write, observe, and verify.
+- Accessibility snapshots beat screenshots for functional verification — structured text reasons cleanly without a vision model and consumes a fraction of the tokens.
+- Treat observability data as JIT references: store query strings and time ranges, then load payloads on demand so context windows stay lean.
+- Climb the verification ladder from cheapest signal up — `python -c` and `curl` before browser drivers, browser drivers before vision screenshots.
+- Plan for the failure modes: MCP outages turn agents blind, stale metrics mislead post-deploy verification, and untrimmed log queries shred the context window.
+
 ## Related
 
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) -- humans observing agent behavior (the inverse)
@@ -144,9 +152,6 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 - [Agent Debugging](agent-debugging.md) -- diagnosing agent failures using logs, traces, and tool call inspection
 - [Browser Automation for Research](../tool-engineering/browser-automation-for-research.md) -- using Playwright to fetch web content, distinct from debugging applications
 - [Semantic Tool Output](../tool-engineering/semantic-tool-output.md) -- designing tool outputs for agent readability
-- [Loop Detection](loop-detection.md) -- detecting when agents get stuck
 - [Trajectory Logging via Progress Files](trajectory-logging-progress-files.md) -- agent-written audit trails
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) -- immutable event logs as an observability substrate
-- [Circuit Breakers](circuit-breakers.md) -- stopping runaway agents based on observable signals
-- [Visible Thinking in AI Development](visible-thinking-ai-development.md) -- surfacing intermediate reasoning as an observability signal
-- [Context Engineering](../context-engineering/context-engineering.md) -- JIT loading and [observation masking](../context-engineering/observation-masking.md)
+- [Context Engineering](../context-engineering/context-engineering.md) -- JIT loading and observation masking patterns that keep observability payloads from saturating the window

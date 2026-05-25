@@ -57,7 +57,7 @@ The counter-pressure is agent sprawl. [OutSystems' State of AI survey](https://w
 
 The concern with task-specific design is duplication: each agent needs some of the same knowledge (git conventions, coding standards, project context). Shared skills address this — common knowledge lives in skills that any agent loads on demand. Each task-specific agent loads only the skills it needs; the agent definition stays small while the skill carries shared knowledge.
 
-See [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) for the three-layer model. Anthropic's [subagent documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents) describes the same pattern: each subagent receives a focused `description` so the orchestrator delegates to the right agent, with context isolation keeping verbose output out of the main conversation.
+See [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) for the three-layer model. Claude Code's [sub-agents](../tools/claude/sub-agents.md) implement the same pattern: each sub-agent receives a focused `description` so the orchestrator delegates to the right agent, with context isolation keeping verbose output out of the main conversation.
 
 ## Identifying the Right Task Boundary
 

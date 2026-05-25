@@ -1,6 +1,6 @@
 ---
 title: "Content & Skills Audit Workflow: Automated Staleness"
-description: "Periodically validate all URLs, site structure maps, and sourced claims across skills, agents, and content pages before silent drift becomes misinformation"
+description: "Periodically validate all URLs, site structure maps, and sourced claims across skills, agents, and content pages before silent drift becomes misinformation."
 tags:
   - workflows
   - agent-design
@@ -147,5 +147,7 @@ The alternative — fixing staleness only when readers report it — compounds t
 
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Continuous Documentation as an Agent-Driven Practice](continuous-documentation.md)
+- [Scheduled Instruction File Fact-Checker for Accuracy](instruction-file-fact-checker.md)
+- [Shared Link Registry for Docs Sites](link-registry.md)
 - [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md)

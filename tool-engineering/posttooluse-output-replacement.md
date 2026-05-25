@@ -1,6 +1,6 @@
 ---
 title: "PostToolUse Output Replacement: Hooks That Rewrite Tool Results"
-description: "A PostToolUse hook can replace what the model sees from any tool call via modifiedToolResponse — redacting secrets, compressing output, normalising platforms, or injecting structured annotations before the model reasons over the result."
+description: "A PostToolUse hook can replace what the model sees from any tool call via updatedToolOutput — redacting secrets, compressing output, normalising platforms, or injecting structured annotations before the model reasons over the result."
 tags:
   - tool-engineering
   - claude
@@ -12,7 +12,7 @@ tags:
 
 ## The Capability
 
-Claude Code v2.1.121 (April 28, 2026) extended `PostToolUse` hooks to replace tool output for **all** tools, generalising what was previously MCP-only ([changelog](https://code.claude.com/docs/en/changelog)). The hook returns `hookSpecificOutput.modifiedToolResponse`; the model receives that string instead of the tool's actual output. The original `tool_output` is still written to the session transcript ([PostToolUse decision control](https://code.claude.com/docs/en/hooks#posttooluse)).
+Claude Code v2.1.121 (April 28, 2026) extended `PostToolUse` hooks to replace tool output for **all** tools, generalising what was previously MCP-only ([changelog](https://code.claude.com/docs/en/changelog)). The hook returns `hookSpecificOutput.updatedToolOutput`; the model receives that string instead of the tool's actual output. The original `tool_output` is still written to the session transcript ([PostToolUse decision control](https://code.claude.com/docs/en/hooks#posttooluse)).
 
 This is distinct from the two pre-existing modes:
 
@@ -20,9 +20,9 @@ This is distinct from the two pre-existing modes:
 |------|----------------|---------------------|
 | Observe | (no JSON output) | Original `tool_output` |
 | Augment | `additionalContext` | Original `tool_output` + appended context |
-| Replace | `modifiedToolResponse` | Hook's string only — original lives in transcript |
+| Replace | `updatedToolOutput` | Hook's string only — original lives in transcript |
 
-`additionalContext` and `modifiedToolResponse` can be returned together. `decision: "block"` can also be combined with either to stop the loop with a `reason` ([hooks reference](https://code.claude.com/docs/en/hooks#posttooluse)).
+`additionalContext` and `updatedToolOutput` can be returned together. `decision: "block"` can also be combined with either to stop the loop with a `reason` ([hooks reference](https://code.claude.com/docs/en/hooks#posttooluse)).
 
 ## When To Replace
 
@@ -56,7 +56,7 @@ The hook returns:
 {
   "hookSpecificOutput": {
     "hookEventName": "PostToolUse",
-    "modifiedToolResponse": "apiVersion: v1\nkind: Secret\ndata:\n  token: <REDACTED>"
+    "updatedToolOutput": "apiVersion: v1\nkind: Secret\ndata:\n  token: <REDACTED>"
   }
 }
 ```
@@ -70,7 +70,7 @@ PostToolUse replacement is the harness-side counterpart to the [MCP `_meta` pers
 | Control point | Owner | Decides |
 |---------------|-------|---------|
 | `_meta["anthropic/maxResultSizeChars"]` | MCP server | Whether the result is durable through compaction |
-| `modifiedToolResponse` | Local hook | What the model sees in place of the actual result |
+| `updatedToolOutput` | Local hook | What the model sees in place of the actual result |
 | `additionalContext` | Local hook | Extra text appended alongside the result |
 | `decision: "block"` + `reason` | Local hook | Whether the agent loop stops |
 
@@ -93,10 +93,10 @@ REDACTED=$(echo "$OUTPUT" \
   | sed -E 's/AKIA[0-9A-Z]{16}/<AWS_ACCESS_KEY_REDACTED>/g' \
   | sed -E 's/(Bearer|bearer) [A-Za-z0-9._~+\/=-]+/\1 <TOKEN_REDACTED>/g')
 
-# Only emit modifiedToolResponse if redaction actually changed something
+# Only emit updatedToolOutput if redaction actually changed something
 if [ "$OUTPUT" != "$REDACTED" ]; then
   jq -n --arg out "$REDACTED" \
-    '{hookSpecificOutput: {hookEventName: "PostToolUse", modifiedToolResponse: $out}}'
+    '{hookSpecificOutput: {hookEventName: "PostToolUse", updatedToolOutput: $out}}'
 fi
 ```
 
@@ -124,16 +124,16 @@ The agent runs `kubectl get secrets`; the model sees the redacted form and canno
 Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Four conditions make it worse than the alternative:
 
 - **Lossy summarisation drops the field the model needs next.** Compressing 50KB of test output to "200 lines, 3 errors" works until the model needs the exact line number from line 47 — which is no longer in context. The transcript still has it, but the model cannot read the transcript. Prefer `additionalContext` for hints layered onto the full output unless context budget is the actual bottleneck.
-- **Concurrent hooks race on the same tool.** Multiple `PostToolUse` hooks registered on the same matcher each return their own `modifiedToolResponse`; the docs do not guarantee deterministic merge order. The same race is documented for `PreToolUse` `updatedInput` ([Hooks and Lifecycle Events](hooks-lifecycle-events.md)). Register at most one rewriting hook per matcher.
+- **Concurrent hooks race on the same tool.** Multiple `PostToolUse` hooks registered on the same matcher each return their own `updatedToolOutput`; the docs do not guarantee deterministic merge order. The same race is documented for `PreToolUse` `updatedInput` ([Hooks and Lifecycle Events](hooks-lifecycle-events.md)). Register at most one rewriting hook per matcher.
 - **Silent error masking.** A redactor that strips stderr-style fragments to make output cleaner can hide real failures from the model — the tool succeeded by exit code, the hook sanitised the output, and the model never sees the warning that would have triggered a fix. Test rewrite rules against actual failure transcripts before deploying.
 - **Audit-vs-context divergence complicates debugging.** The transcript shows one string, the model reasoned over another. When the model takes a confusing next step, the developer reading the transcript sees output the model never actually saw. Keep rewrites minimal and reversible (regex substitution, not summarisation) when audit clarity matters more than context savings.
 
 ## Key Takeaways
 
-- `hookSpecificOutput.modifiedToolResponse` overwrites the model's view of any tool's output as of Claude Code v2.1.121; previously MCP-only.
+- `hookSpecificOutput.updatedToolOutput` overwrites the model's view of any tool's output as of Claude Code v2.1.121; previously MCP-only.
 - The original `tool_output` is preserved in the transcript — only the model's view changes.
 - Replace is the right mode for secret redaction, compression, normalisation, and structured envelopes; observe-only or `additionalContext` covers everything else.
-- `modifiedToolResponse`, `additionalContext`, and `decision: "block"` can be combined in a single hook response.
+- `updatedToolOutput`, `additionalContext`, and `decision: "block"` can be combined in a single hook response.
 - Concurrent hooks on the same matcher race — register at most one rewriting hook per tool.
 
 ## Related

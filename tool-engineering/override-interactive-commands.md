@@ -1,6 +1,6 @@
 ---
-title: "Override Pattern: Interactive Commands in Pipelines"
-description: "Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and fully automated execution"
+title: "Override Pattern: Reusing Interactive Commands in Automated Pipelines"
+description: "Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and fully automated execution."
 tags:
   - agent-design
   - instructions
@@ -141,7 +141,6 @@ For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/c
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [MCP Elicitation](mcp-elicitation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Narrow Task Instructions](../security/task-scope-security-boundary.md)
 - [Instruction Polarity](../instructions/instruction-polarity.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)

@@ -14,7 +14,7 @@ aliases:
 
 > Treat each skill as an evaluable unit: a small labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs.
 
-Skills are edited far more often than the agent harness, yet most teams have no objective signal that a skill still works after an edit, a description tweak, or a model upgrade. Eval discipline applied to the skill itself closes that gap. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+Skills are edited far more often than the agent harness, yet most teams have no objective signal that a skill still works after an edit or a model upgrade. Eval discipline applied to the skill itself closes that gap. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 ## Two Failure Axes
 
@@ -27,7 +27,7 @@ Output-only evals leave trigger failures invisible; trigger-only evals leave sil
 
 ## Dataset Shape
 
-A skill eval dataset is small, hand-labelled, and version-controlled alongside `SKILL.md`. The agentskills.io spec stores test cases in `evals/evals.json` next to the skill. Each case has a **prompt** (realistic user message with concrete paths, columns, and context), an **expected output** description, optional **input files**, and **assertions** — verifiable statements about what the output must contain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+A skill eval dataset is small, hand-labelled, and version-controlled alongside `SKILL.md`. The agentskills.io spec stores cases in `evals/evals.json` next to the skill. Each case has a **prompt** (realistic message with concrete paths and context), an **expected output** description, optional **input files**, and **assertions** — verifiable statements about what the output must contain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 Start with 2-3 cases. Add assertions after the first run — defining "good" before seeing what the skill produces leads to weak checks. Assertions must be specific and observable: `"The output file is valid JSON"` and `"The chart has labeled axes"` discriminate; `"The output is good"` does not. Brittle exact-phrase checks fail on correct outputs that use different wording. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
@@ -73,7 +73,7 @@ Skills split into two categories that upgrade differently: [Source: [Improving s
 
 ## When Skill Evals Pay Off — and When They Do Not
 
-Skill eval setup (dataset authoring, workspace plumbing, grading harness) amortises only across repeated use. Three conditions where it does not pay off:
+Skill eval setup amortises only across repeated use. Three conditions where it does not pay off:
 
 - **Single-author, single-user skills** used a handful of times — harness cost exceeds runtime value; manual smoke checks suffice.
 - **Highly subjective output** (writing style, visual design, taste) — pass/fail assertions force-fit creative judgment; a green benchmark tells you nothing. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
@@ -97,6 +97,8 @@ A CSV-analysis skill gets an `evals/evals.json` with two cases — a "top 3 mont
 ## Related
 
 - [Skill Eval Loop](../tools/claude/skill-eval-loop.md) — Claude-specific implementation using skill-creator
+- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — why skill-augmented benchmark gains shrink under realistic retrieval
+- [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md) — semantic fuzzing for natural-language skill guardrails
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — description craft and authoring context
 - [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md) — general eval-first workflow
 - [Eval-Driven Development for Agent Tools](../workflows/eval-driven-tool-development.md) — tool-level parallel to the skill-level loop

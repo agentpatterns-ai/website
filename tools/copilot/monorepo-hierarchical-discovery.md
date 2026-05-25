@@ -27,7 +27,7 @@ Four artifact types participate in discovery:
 | Agents (`.github/agents/*.md`) | Specialized agents with their own tools and MCP servers (root-only — see note below) |
 | MCP servers (`.mcp.json`) | External tool connections |
 
-A fifth scope applies to personal skills: the Copilot CLI also loads skills from `~/.copilot/skills/` and `~/.agents/skills/` in the user's home directory, enabling developer-specific skills that are not checked into any repository ([GitHub Docs: Creating agent skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills)).
+A fifth scope applies to personal skills: the Copilot CLI also loads skills from `~/.copilot/skills/`, `~/.claude/skills/`, and `~/.agents/skills/` in the user's home directory, enabling developer-specific skills that are not checked into any repository ([GitHub Docs: Creating agent skills](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills)).
 
 Agents are the current exception. As of April 2026, only the git root's `.github/agents/` is scanned; agents defined in a subdirectory are invisible to `/agent` ([copilot-cli issue #1859](https://github.com/github/copilot-cli/issues/1859), open). Instructions, skills, and MCP servers traverse the full hierarchy; keep agent definitions at the repo root until this gap closes.
 
@@ -64,7 +64,7 @@ This mirrors the precedence model in [Layered Instruction Scopes](../../instruct
 
 ## Session Working Directory
 
-The `/cwd` command changes the working directory within an active session ([GitHub Copilot CLI slash commands](https://github.blog/ai-and-ml/github-copilot/a-cheat-sheet-to-slash-commands-in-github-copilot-cli/)), letting a single session move across packages instead of starting a new process per location. If reloaded configuration does not appear to take effect after `/cwd`, run `/clear` to reset session state.
+The `/cd` (or `/cwd`) command changes the working directory within an active session ([GitHub Copilot CLI slash commands](https://github.blog/ai-and-ml/github-copilot/a-cheat-sheet-to-slash-commands-in-github-copilot-cli/)), letting a single session move across packages instead of starting a new process per location. If reloaded configuration does not appear to take effect after `/cd`, run `/clear` to reset session state.
 
 ## When to Structure for Discovery
 

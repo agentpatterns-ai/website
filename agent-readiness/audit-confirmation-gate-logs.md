@@ -11,6 +11,8 @@ aliases:
   - approval gate log audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-confirmation-gate-logs/`
+
 # Audit Confirmation Gate Logs
 
 > Inventory consequential actions, validate each one is gated, audit the gate-decision log for fidelity and pattern signals, detect alert fatigue and Lies-in-the-Loop bypass.
@@ -231,4 +233,5 @@ Top fix: <one-liner — usually an ungated send/delete or a Markdown-rendered di
 - [Audit Permissions Blast Radius](audit-permissions-blast-radius.md)
 - [Audit Hooks Coverage](audit-hooks-coverage.md)
 - [Audit Lethal Trifecta](audit-lethal-trifecta.md)
+- [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
 - [Bootstrap Permissions Allowlist](bootstrap-permissions-allowlist.md)

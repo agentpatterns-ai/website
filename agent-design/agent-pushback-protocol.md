@@ -16,7 +16,7 @@ Most agent instructions focus on the happy path: receive task, execute task, ret
 
 **Implementation concerns** (code quality): the request introduces tech debt, duplication, or unnecessary complexity. A simpler approach exists. The scope is too large or vague for one pass.
 
-**Requirements concerns** (product correctness): the feature conflicts with existing behavior. The request solves symptom X but the real problem is Y. Edge cases produce surprising or dangerous behavior. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) calls these "the expensive kind" — requirements-level mistakes caught after shipping cost orders of magnitude more than implementation-level mistakes caught during development.
+**Requirements concerns** (product correctness): the feature conflicts with existing behavior. The request solves symptom X but the real problem is Y. Edge cases produce surprising or dangerous behavior. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) calls these "the expensive kind" — consistent with [Boehm and Basili's (2001)](https://dl.acm.org/doi/10.1109/2.962984) finding that requirements defects cost roughly 100× more to fix after delivery than during design.
 
 ## Structured Format
 

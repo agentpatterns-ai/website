@@ -131,5 +131,7 @@ The agent traces task-ID variables, locates the literal-vs-placeholder mismatch,
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — multi-stage batch pipeline for intake from a single artifact
 - [Issue Requirements Preprocessing](../agent-design/issue-requirements-preprocessing.md) — downstream complement: structured requirement reconstruction at executor invocation time
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — what runs on issues marked `ready-for-agent`
+- [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the downstream dispatch contract that the agent brief feeds into
+- [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — paraphrase-tolerant duplicate detection that complements `.out-of-scope/` concept matching
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) — `.out-of-scope/` is one instance of durable cross-session memory
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — analogous classification pipeline in a security context

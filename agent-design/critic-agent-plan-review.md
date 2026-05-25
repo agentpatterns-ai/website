@@ -69,6 +69,12 @@ The release does not describe how the complementary model is selected — whethe
 | Coverage | A complementary model surfaces errors the planner's reasoning style systematically misses |
 | Diminishing returns | For simple one-step tasks, critic overhead exceeds the value of catching errors |
 
+### When a Critic Backfires
+
+A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still induce a 26-percentage-point collapse on one model while leaving another near-unchanged, because interventions face a [disruption–recovery tradeoff](https://arxiv.org/abs/2602.03338) — recovering failing trajectories while also disrupting trajectories that would have succeeded. Validate the critic on a sample of representative tasks before deploying it on a high-success-rate workload; if the critic disrupts more than it recovers, gate or disable it.
+
+A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993) — language-based handoff between agents is a lossy channel. A critic adds value only when it brings information the planner lacked, not when it merely re-reads the same context with the same model family. Pair the critic with a different model and a structured rubric the planner did not see at plan time.
+
 ## Example
 
 A developer runs: `copilot -p "Migrate the users table to add a new required column with no default"`
@@ -93,7 +99,6 @@ The error is caught before a single query runs.
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Rollback-First Design](rollback-first-design.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)

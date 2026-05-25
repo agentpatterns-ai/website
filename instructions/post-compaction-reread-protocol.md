@@ -125,6 +125,7 @@ sequenceDiagram
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Claude Code Hooks](../tools/claude/hooks-lifecycle.md)
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](../tool-engineering/precompact-hook-compaction-veto.md) — the prevent-the-loss counterpart: block compaction at critical checkpoints rather than only restoring after
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — compaction degrades compliance; understanding the ceiling informs re-read protocol design
 - [Frozen Spec File](frozen-spec-file.md) — pairs with this protocol: the frozen spec survives compaction on disk; this protocol ensures the agent re-reads it
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — broader hook patterns for behavioral enforcement, including SessionStart hooks used here

@@ -64,26 +64,11 @@ When writing a CLI script for agent consumption:
 - **Bound the output.** Use `head` or query limits to prevent runaway responses from large data sets.
 - **Return a clear empty state.** `"No errors found"` is more useful than empty output that the agent may misinterpret.
 
-## Tight Feedback Loops: Agents Writing and Iterating on Scripts
+## Agents Writing and Iterating on Scripts
 
-A complementary pattern is agents authoring bash scripts and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal context the agent already occupies.
+A complementary pattern is agents authoring bash scripts and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal the agent already occupies — each iteration costs seconds.
 
-### The Write-Execute-Debug Cycle
-
-```mermaid
-graph TD
-    A[Agent writes bash script] --> B[Agent executes script]
-    B --> C{Success?}
-    C -->|Yes| D[Script ready]
-    C -->|No| E[Agent reads error output]
-    E --> A
-```
-
-Each iteration costs seconds rather than the build-step overhead of compiled languages.
-
-### Making the Cycle Effective
-
-**Specify input/output signatures.** Give the agent explicit contracts:
+Give the agent explicit input/output contracts so the first attempt is closer to correct:
 
 ```text
 Write a bash script that:
@@ -92,15 +77,9 @@ Write a bash script that:
 - Exit 1 with a message if the directory does not exist
 ```
 
-Clear signatures reduce iteration rounds because the first attempt is closer to correct.
+Keep scripts modular — monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent. Once it works, have the agent add comments on platform assumptions (GNU vs BSD tools) for future modifications.
 
-**Keep scripts modular.** Monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent.
-
-**Document edge cases after iteration.** Once the script works, have the agent add comments on platform assumptions (GNU vs BSD tools) for future modifications.
-
-### When This Pattern Applies
-
-Best for data processing pipelines, build and deployment automation, and exploratory prototyping. Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
+Best for data-processing pipelines, build automation, and exploratory prototyping. Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
 
 ## When This Backfires
 

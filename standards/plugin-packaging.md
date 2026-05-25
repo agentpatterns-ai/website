@@ -1,5 +1,5 @@
 ---
-title: "Plugin and Extension Packaging: Agent Capabilities"
+title: "Plugin and Extension Packaging: Distributing Agent Capabilities"
 description: "Package agents, skills, MCP servers, and hooks into installable bundles — plugins solve the distribution problem for agent capabilities."
 tags:
   - agent-design
@@ -12,17 +12,17 @@ tags:
 
 ## The Distribution Problem
 
-Useful agent configurations — a research agent, a set of writing skills, an MCP server for an internal API, hooks that enforce team conventions — otherwise live in one repo and require manual copying to every project that needs them. Plugin packaging bundles them into a versioned, installable unit.
+Useful agent configurations — research agents, writing skills, internal-API MCP servers, convention-enforcing hooks — otherwise live in one repo and require manual copying to every consumer. Plugin packaging bundles them into a versioned, installable unit.
 
 ## Why Git-Based Plugins
 
-Plugin packaging works by collapsing the distribution surface to a single git reference. Alternatives trade off on different axes:
+Plugin packaging collapses the distribution surface to a single git reference. Alternatives trade off:
 
-- **Git submodules** require consumers to initialize and update nested repos and do not bundle heterogeneous components behind one install verb.
+- **Git submodules** require consumers to initialize and update nested repos and don't bundle heterogeneous components behind one install verb.
 - **Package registries** (npm, PyPI) demand accounts, publish workflows, and language-specific runtimes — overkill for config files and shell scripts.
-- **Shared config repos** with custom sync scripts reinvent version pinning, partial updates, and rollback poorly compared to git tags.
+- **Shared config repos** with custom sync scripts reinvent version pinning, partial updates, and rollback worse than git tags.
 
-A git repository plus a manifest gives one source of truth per tag, atomic install from one reference, and tooling every developer already has. Updating a plugin is a git pull; pinning is a tag; auditing is a git log.
+A git repo plus a manifest gives one source of truth per tag, atomic install from one reference, and tooling every developer already has. Updating is `git pull`; pinning is a tag; auditing is `git log`.
 
 ## What a Plugin Contains
 
@@ -128,13 +128,11 @@ Pinning to a tag (`@v1.2.0`) means the project stays on a known-good version unt
 
 ## Related
 
-- [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
-- [Agent Definition Formats](agent-definition-formats.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
-- [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)
-- [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
-- [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-- [Tool Calling Schema Standards](tool-calling-schema-standards.md)
-- [A2A Protocol: Agent-to-Agent Communication Standard](a2a-protocol.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)
+- [Cross-IDE Plugin Discovery](cross-ide-plugin-discovery.md) — discovery model for plugins across IDEs
+- [Pre-Install Plugin Transparency](pre-install-plugin-transparency.md) — capability inventory before install
+- [Plugin Dependency Declaration](plugin-dependency-declaration.md) — manifest-level plugin dependency hints
+- [Pre-Install Context-Cost Projection](marketplace-cost-projection.md) — marketplace cost forecasting before install
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
+- [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)

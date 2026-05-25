@@ -26,7 +26,7 @@ MCP separates three participants. Each client handles one server connection with
 
 ## Connection Lifecycle
 
-Initialization is a strict three-step sequence ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle)):
+Initialization is three steps ([MCP spec](https://modelcontextprotocol.io/specification/2025-03-26/basic/lifecycle)):
 
 ```mermaid
 sequenceDiagram
@@ -38,7 +38,7 @@ sequenceDiagram
     Note over Client,Server: Session active — tool calls permitted
 ```
 
-Client rules: do not batch `initialize`; send no non-ping requests before the capability response; disconnect on unsupported protocol versions; use only negotiated features.
+Client rules: do not batch `initialize`; send no non-ping requests before the capability response; disconnect on unsupported versions; use only negotiated features.
 
 ### Shutdown
 
@@ -126,6 +126,14 @@ Local Streamable HTTP servers must validate `Origin`, bind to localhost, and req
 
 **OAuth 2.1 PKCE assumes a capable HTTP client.** CLI or embedded agents may lack the browser or system capabilities the flow expects.
 
+## Key Takeaways
+
+- One client per server connection — each owns its lifecycle, capabilities, and transport state.
+- Cache `tools/list` and refresh on `notifications/tools/list_changed` or TTL; treat every description as untrusted.
+- Namespace tool names by server ID; apply priority routing only when collisions are real.
+- Pin OAuth 2.1 with PKCE S256, Dynamic Client Registration, and Resource Indicators for remote servers.
+- Track init success, `tools/list` latency, per-tool error rates, and registry token count — these expose degradation before users do.
+
 ## Example
 
 A TypeScript host with namespace routing and cached tool lists:
@@ -169,9 +177,5 @@ One `ServerSession` per MCP server; tool calls route through the namespace map; 
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](mcp-elicitation.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](mcp-llm-sampling.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
-- [Token-Efficient Tool Design: Tools That Don't Eat Your Context](token-efficient-tool-design.md)
-- [Copilot Extensions to MCP Migration](copilot-extensions-to-mcp-migration.md)
-- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
-- [Tool Description Quality for Effective Agent Guidance](tool-description-quality.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)

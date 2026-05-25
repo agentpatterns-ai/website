@@ -10,6 +10,8 @@ aliases:
   - immutable spec setup
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-frozen-spec-file/`
+
 # Bootstrap Frozen Spec File
 
 > Generate a SPEC.json with goals, non-goals, hard constraints, deliverables, and done-when criteria; block writes via a PreToolUse hook; emit a system-prompt re-read directive that survives compaction.

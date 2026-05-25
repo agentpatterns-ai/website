@@ -44,7 +44,7 @@ graph TD
 
 **Phase 4 — Feedback Integration.** Route findings back to the phase they belong to. Phases 3 and 4 repeat until convergence.
 
-**Phase 5 — Formal Hardening.** Execute formal proofs, fuzzing, and mutation testing against the battle-tested implementation. The Purity Boundary Map identifies the formally verifiable subset. Cross-examination at phase boundaries is a documented robustness mechanism in LLM multi-agent SE systems ([ACM TOSEM, 2024](https://dl.acm.org/doi/10.1145/3712003)).
+**Phase 5 — Formal Hardening.** Execute formal proofs, fuzzing, and [mutation testing](../verification/mutation-testing-quality-gate.md) against the battle-tested implementation. The Purity Boundary Map identifies the formally verifiable subset. Cross-examination at phase boundaries is a documented robustness mechanism in LLM multi-agent SE systems ([ACM TOSEM, 2024](https://dl.acm.org/doi/10.1145/3712003)).
 
 **Phase 6 — Convergence.** Exit the loop. See convergence criterion below.
 

@@ -14,26 +14,22 @@ aliases:
 
 # FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems
 
-> FLARE applies coverage-guided fuzzing to multi-agent LLM systems, using agent interaction path coverage as the exploration signal to surface coordination failures that behavioral evals miss.
+> FLARE applies coverage-guided fuzzing to multi-agent LLM systems, using interaction path coverage as the exploration signal to surface coordination failures behavioral evals miss.
 
 ## The Testing Gap in Multi-Agent Systems
 
-Behavioral evals test agents against a fixed dataset of known scenarios — strong at catching regressions on known cases, weak at discovering failures from unexpected interaction sequences.
-
-Multi-agent systems introduce failure modes absent from single-agent systems:
+Behavioral evals catch regressions on known scenarios but miss failures from unexpected interaction sequences. Multi-agent systems introduce failure modes absent from single-agent systems:
 
 - **Stuck loops** — agents calling each other indefinitely without progress
 - **Silent abandonment** — an agent reports completion without performing the work
 - **Cross-agent prompt injection** — attacker-controlled input in one agent corrupts instructions reaching another
 - **Cascading hallucinations** — a hallucinated tool call produces invalid state downstream agents consume as real
 
-None require any single agent to behave incorrectly. They emerge from interaction sequences, and a fixed eval dataset cannot cover an interaction space that grows combinatorially with agent count and message types.
-
-FLARE ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)) addresses automated testing of LLM-based multi-agent systems as a fuzzing problem.
+None require any single agent to behave incorrectly. They emerge from interaction sequences, and a fixed eval dataset cannot cover an interaction space that grows combinatorially with agent count and message types. FLARE ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)) frames automated testing of LLM-based multi-agent systems as a fuzzing problem.
 
 ## Coverage-Guided Fuzzing, Adapted
 
-Traditional coverage-guided fuzzing (AFL, libFuzzer) uses branch coverage as a feedback signal: new branches keep the input in the corpus; exhausted branches discard it ([Google fuzzing docs](https://github.com/google/fuzzing/blob/master/docs/afl-based-fuzzers-overview.md)). FLARE adapts this loop by substituting *interaction path coverage* for branch coverage:
+Traditional coverage-guided fuzzing (AFL, libFuzzer) uses branch coverage as feedback: new branches keep the input in the corpus; exhausted branches discard it ([Google fuzzing docs](https://github.com/google/fuzzing/blob/master/docs/afl-based-fuzzers-overview.md)). FLARE adapts this loop by substituting *interaction path coverage* for branch coverage:
 
 ```mermaid
 graph TD
@@ -49,9 +45,9 @@ graph TD
     H -->|Yes| I[Record failure case]
 ```
 
-An **interaction path** is a sequence of agent-to-agent messages, tool calls, and handoffs observed during a run. When a fuzzed input triggers a sequence not seen before, that input enters the corpus as a seed for further mutation.
+An **interaction path** is a sequence of agent-to-agent messages, tool calls, and handoffs observed during a run. When a fuzzed input triggers a previously unseen sequence, it enters the corpus as a seed for further mutation.
 
-The fuzzer analyzes MAS source code to extract agent definitions and behavioral specifications, then generates test inputs that probe the extracted interaction space. LLM systems reject malformed inputs silently; coherent, specification-grounded mutations are required to reach deeper system states ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)).
+The fuzzer analyzes MAS source to extract agent definitions and behavioral specifications, then generates inputs that probe the resulting interaction space. LLM systems reject malformed inputs silently; coherent, specification-grounded mutations are required to reach deeper states ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)).
 
 ## What Interaction Path Coverage Measures
 
@@ -64,7 +60,7 @@ Each unique prefix of a message trace is a distinct coverage point:
 | Callback | Agent A → Agent B → Agent A |
 | Error routing | Agent A → [error] → Agent C |
 
-Coverage saturation — the point where fuzzing discovers no new paths — provides a measurable stopping criterion defined by the system's reachable interaction space, not by test authors. Interaction path coverage is coarser than code branch coverage; saturation does not guarantee absence of bugs, only of unexplored *discovered* paths.
+Coverage saturation — the point where no new paths appear — is a measurable stopping criterion defined by the reachable interaction space, not by test authors. Interaction path coverage is coarser than code branch coverage; saturation does not guarantee absence of bugs, only of unexplored *discovered* paths.
 
 ## Prerequisites for Applying FLARE
 
@@ -81,11 +77,11 @@ FLARE treats the multi-agent system as a black box, which requires:
 
 **Fuzzing complements evals.** Evals catch regressions on known scenarios; fuzzing discovers unknown failure modes. Run evals in CI; run fuzzing periodically or pre-release.
 
-**Prioritize cross-agent trust boundaries.** Data from one agent consumed as instructions by another is the highest-value fuzzing target — prompt injection and hallucination propagation concentrate there.
+**Prioritize cross-agent trust boundaries.** Data from one agent consumed as instructions by another is the highest-value target — prompt injection and hallucination propagation concentrate there.
 
-**Budget iteration time.** Fuzzing sessions run for hours; schedule them as dedicated activities, not blocking CI gates.
+**Budget iteration time.** Sessions run for hours; schedule them as dedicated activities, not blocking CI gates.
 
-**Treat discovered failures as eval seeds.** Every failure FLARE surfaces belongs in the behavioral eval suite as a regression test.
+**Treat discovered failures as eval seeds.** Every FLARE-discovered failure belongs in the behavioral eval suite as a regression test.
 
 ## Example
 
@@ -126,6 +122,8 @@ The failure case is added to the behavioral eval suite as a regression test with
 ## Related
 
 - [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md)
+- [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md)
+- [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)

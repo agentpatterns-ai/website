@@ -171,6 +171,8 @@ To verify the chain for a compliance audit, a verifier checks that each `chain_h
 
 ## Related
 
+- [Audit-Record Divergence as an Agent Runtime Invariant](audit-record-divergence-invariant.md) — companion framing of the same property as a multiset-equality invariant
+- [Action-Audit Divergence: A Four-Mode Taxonomy](action-audit-divergence-taxonomy.md) — the F2 audit-forgery mode is exactly what signed-receipt chains detect
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)

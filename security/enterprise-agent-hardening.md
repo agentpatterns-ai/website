@@ -1,5 +1,5 @@
 ---
-title: "Enterprise Agent Hardening: Governance and Observability"
+title: "Enterprise Agent Hardening: Three Production Gates"
 description: "Production readiness checklist for agentic systems organized around three gates: governance, observability, and reproducibility."
 aliases:
   - agent hardening
@@ -11,7 +11,7 @@ tags:
   - observability
 ---
 
-# Enterprise Agent Hardening: Governance, Observability, and Reproducibility
+# Enterprise Agent Hardening: Three Production Gates
 
 > Enterprise agent hardening secures agentic systems for production through three control layers — governance (what agents may do), observability (what they did), and reproducibility (that outcomes are auditable and resumable) — enforced as deployment gates.
 
@@ -134,38 +134,11 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 
 ## Related
 
-- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)
-- [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md)
-- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Managed Settings Drop-In for Claude Code](../tools/claude/managed-settings-drop-in.md)
+- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections](close-attack-to-fix-loop.md)
-- [Cryptographic Governance and Audit Trail](cryptographic-governance-audit-trail.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Event Sourcing for Agents: Separating Cognitive Intention from State Mutation](../observability/event-sourcing-for-agents.md)
-- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
-- [Plugin and Extension Packaging](../standards/plugin-packaging.md)
-- [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
-- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Lifecycle Security Architecture](lifecycle-security-architecture.md)
-- [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
-- [Safe Command Allowlisting: Reducing Approval Fatigue](../human/safe-command-allowlisting.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Code Injection and Multi-Agent Defence](code-injection-multi-agent-defence.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
-- [Sandbox Rules and Harness Tools](sandbox-rules-harness-tools.md)
-- [Secrets Management for Agents](secrets-management-for-agents.md)
-- [Task Scope Security Boundary](task-scope-security-boundary.md)
-- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
-- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
-- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Tool Signing and Signature Verification for Agents](tool-signing-verification.md)
-- [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
+- [Worktree Isolation](../workflows/worktree-isolation.md)
+- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
+- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)

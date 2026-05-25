@@ -1,6 +1,6 @@
 ---
 title: "Headless Claude in CI: Using -p and --max-turns for Safe Pipeline Integration"
-description: "Run Claude non-interactively in CI/CD pipelines using print mode (-p) and cap agentic steps with --max-turns to keep pipelines predictable and cost-bounded"
+description: "Run Claude non-interactively in CI/CD pipelines using print mode (-p) and cap agentic steps with --max-turns to keep pipelines predictable and cost-bounded."
 tags:
   - workflows
   - cost-performance
@@ -75,7 +75,12 @@ claude -p "run lint and fix errors" \
   --allowedTools "Bash(bun run lint *)" "Edit" "Read"
 ```
 
-`--dangerously-skip-permissions` disables all prompts ([CLI reference](https://code.claude.com/docs/en/cli-reference)). Use only in ephemeral, isolated runners where unintended writes have bounded [blast radius](../security/blast-radius-containment.md).
+Two purpose-built permission modes serve headless runs and should be preferred over `--dangerously-skip-permissions` for most CI work ([permission modes docs](https://code.claude.com/docs/en/permission-modes)):
+
+- `--permission-mode dontAsk` — explicitly labeled "Locked-down CI and scripts". Auto-denies any tool call that would otherwise prompt; only actions matching `permissions.allow` and read-only Bash commands execute. Use when you can enumerate every tool the run needs up front.
+- `--permission-mode auto` — requires v2.1.83+. A server-side classifier evaluates each tool call before execution, blocking destructive patterns automatically. Anthropic's official guidance is "For background safety checks without prompts, use auto mode instead" of `bypassPermissions`. See [Claude Code auto mode](../tools/claude/auto-mode.md) for the full classifier rules.
+
+`--dangerously-skip-permissions` disables all prompts and safety checks ([CLI reference](https://code.claude.com/docs/en/cli-reference)). Reserve it for ephemeral, isolated runners where unintended writes have bounded [blast radius](../security/blast-radius-containment.md) — not as a default for CI.
 
 ## Cost Control
 

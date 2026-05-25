@@ -112,21 +112,21 @@ def read_file(
 
 The redesign adds: absolute-path constraint (eliminates relative-path errors), windowed output (prevents context overload), and explicit error strings instead of exceptions (semantic feedback the agent can reason about).
 
+## Key Takeaways
+
+- ACI applies HCI discipline — affordances, constraints, feedback, error prevention — to the tools an agent uses.
+- Interface changes (tool descriptions, parameter constraints, output shape) have outperformed prompt and model changes on agent benchmarks.
+- Poka-yoke is the highest-leverage technique: one input constraint can eliminate an entire failure class.
+- Semantic outputs and natural-language identifiers match the next-token distribution LLMs are trained on, so each result needs fewer inferential steps before action.
+- ACI must be iterated against real agent transcripts — over-specialization, hidden failures, and brittle assumptions are the dominant regression modes.
+
 ## Related
 
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
+- [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
 - [Semantic Tool Output](semantic-tool-output.md)
-- [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
-- [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Advanced Tool Use](advanced-tool-use.md)
-- [Tool Engineering Principles](tool-engineering.md)
-- [MCP Server Design](mcp-server-design.md)
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
-- [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
-- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
-- [Self-Healing Tool Routing](self-healing-tool-routing.md)
+- [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Tool Engineering Principles](tool-engineering.md)
+- [Tool Minimalism and High-Level Prompting](tool-minimalism.md)

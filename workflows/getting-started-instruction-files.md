@@ -1,6 +1,11 @@
 ---
 title: "Getting Started: Setting Up Your Instruction File"
 description: "The instruction file is the single highest-leverage artifact for agent development. Set one up from zero in thirty minutes."
+aliases:
+  - Instruction File Setup
+  - CLAUDE.md Setup
+  - AGENTS.md Setup
+  - copilot-instructions.md Setup
 tags:
   - instructions
   - workflows
@@ -222,5 +227,5 @@ Instruction files create value when they are maintained. They create liability w
 - [Hierarchical CLAUDE.md](../instructions/hierarchical-claude-md.md)
 - [Cargo-Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Team Onboarding for Agent Workflows](team-onboarding.md)
+- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Instruction File Fact Checker](instruction-file-fact-checker.md)

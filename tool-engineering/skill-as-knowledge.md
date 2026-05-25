@@ -1,6 +1,6 @@
 ---
 title: "Skill as Knowledge Pattern for AI Agent Development"
-description: "Design skills as pure knowledge containers — domain rules, heuristics, and reference material — not executable behavior, so they remain portable across agents"
+description: "Design skills as pure knowledge containers — domain rules, heuristics, and reference material — not executable behavior, so they remain portable across agents, tools, and sessions without modification."
 tags:
   - agent-design
   - instructions
@@ -15,7 +15,7 @@ aliases:
 
 ## Knowledge, Not Behavior
 
-A skill's primary content should be what the agent needs to *know*, not what it needs to *do*. Domain rules, URL patterns, style guides, accuracy constraints, and quality checklists are knowledge. Tool calls, shell commands, and execution sequences are behavior.
+A skill's primary content is what the agent needs to *know*, not *do*. Domain rules, URL patterns, style guides, and quality checklists are knowledge; tool calls, shell commands, and execution sequences are behavior.
 
 The [Agent Skills open standard](https://agentskills.io/what-are-skills) defines a skill as a folder containing a `SKILL.md` file — the core content is markdown knowledge, with scripts as an optional secondary artifact in a separate `scripts/` subdirectory. The standard's [progressive disclosure model](https://agentskills.io/specification) layers knowledge loading (metadata, then instructions, then resources), not execution staging.
 
@@ -23,7 +23,7 @@ Claude Code's skill documentation draws an [explicit distinction between "refere
 
 ## Why Knowledge-Only Skills Are Portable
 
-Skills encoded as domain knowledge in markdown work across [30+ tools](https://agentskills.io) — Claude Code, Cursor, VS Code Copilot, Gemini CLI, OpenAI Codex, Roo Code, Goose, JetBrains Junie, and others. This portability exists because markdown knowledge has no tool-specific dependencies. A skill that encodes "these URLs are authoritative sources" works identically in any agent. A skill that embeds `claude_code_tool_call()` invocations works in exactly one.
+Skills encoded as markdown knowledge work across [30+ tools](https://agentskills.io) — Claude Code, Cursor, VS Code Copilot, Gemini CLI, Codex, and others — because markdown knowledge has no tool-specific dependencies. A skill that names authoritative URL patterns works identically in any agent; a skill that embeds `claude_code_tool_call()` works in exactly one.
 
 [Anthropic's best practices guide](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) reinforces this by framing skill content as the delta of domain-specific knowledge the model lacks. The "degrees of freedom" framework maps from high (heuristic knowledge with multiple valid approaches) to low (deterministic scripts) — knowledge skills sit at the high end where portability and flexibility are greatest.
 
@@ -38,7 +38,7 @@ Knowledge and execution change for different reasons:
 | New tool or environment | Skill unchanged | Agent adapts |
 | Source URLs rotate | Skill changes | Agent unchanged |
 
-When you embed knowledge in agents, a domain change forces agent changes. When you embed execution in skills, a tool change forces skill changes. Separating them means each changes only when its own concern changes — the same reason the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) applies to modules applies here to agent layers.
+Embedding knowledge in agents means a domain change forces agent changes; embedding execution in skills means a tool change forces skill changes. Separating the two so each evolves on its own cadence is the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single-responsibility_principle) applied to agent layers.
 
 This mirrors the [harness engineering](../agent-design/harness-engineering.md) pattern at the system level: Anthropic describes encoding feature requirements in `feature_list.json` and progress in `claude-progress.txt` — externalizing domain knowledge from the coding agent's execution logic ([Anthropic: Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
@@ -103,12 +103,9 @@ Knowledge-only skills fail when:
 
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
-- [CLI-First Skill Design](cli-first-skill-design.md)
 - [Skill Library Evolution](skill-library-evolution.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Skill Tool as Enforcement](skill-tool-runtime-enforcement.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
 - [On-Demand Skill Hooks](on-demand-skill-hooks.md)
-- [Feature List Files](../instructions/feature-list-files.md)

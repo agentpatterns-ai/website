@@ -16,11 +16,11 @@ aliases:
 
 ## Top-k Is the Wrong Default
 
-Coding-agent memory stores debugging episodes, repair traces, and repository-local operational knowledge so future failures can reuse prior work. The standard interface returns the top `k` most similar entries by embedding distance and injects them into context.
+Coding-agent memory stores debugging episodes and repair traces so future failures can reuse prior work. The standard interface returns the top `k` most similar entries by embedding distance and injects them into context.
 
-This treats memory as a search problem. It is not. Retrieved memory is useful only when the current failure is genuinely compatible with a previous one — superficial similarity in stack traces, terminal errors, paths, or configuration symptoms can lead to unsafe memory injection that biases the agent toward an inappropriate fix ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
+This treats memory as a search problem. It is not. Retrieved memory is useful only when the current failure is genuinely compatible with a previous one — superficial similarity in stack traces, paths, or configuration symptoms can bias the agent toward an inappropriate fix ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
 
-The asymmetry matters: a missed reuse costs one extra debugging round, but a confidently injected wrong episode can drag a multi-turn loop down the wrong path before the agent recovers. Abstention-aware retrieval reframes the question — not *which* memory is most similar, but *whether any* retrieved memory is safe enough to influence the trajectory ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
+The asymmetry matters: a missed reuse costs one extra debugging round, but a confidently injected wrong episode can drag a multi-turn loop down the wrong path before recovery. Abstention-aware retrieval reframes the question — not *which* memory is most similar, but *whether any* retrieved memory is safe enough to influence the trajectory ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
 
 ## Abstention as a First-Class Action
 
@@ -42,12 +42,12 @@ A controller cannot decide on similarity alone. RSCB-MC converts each retrieval 
 
 - **Relevance** — embedding distance and lexical overlap
 - **Uncertainty** — disagreement across candidates, score spread
-- **Structural compatibility** — does the stored fix apply to the current code shape, framework, or environment
-- **Feedback history** — how often this episode (or pattern) has been useful when injected before
+- **Structural compatibility** — whether the stored fix applies to the current code shape, framework, or environment
+- **Feedback history** — how often this episode has been useful when injected before
 - **False-positive risk** — historical rate at which similar matches misled the agent
-- **Latency and token cost** — overhead of injection relative to its expected benefit
+- **Latency and token cost** — overhead relative to expected benefit
 
-The full feature list is documented in the paper ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)). Two of these — feedback history and false-positive risk — require the controller to track outcomes over time, which means abstention-aware retrieval is not a static scoring layer but a learning system.
+Feedback history and false-positive risk require the controller to track outcomes over time, so abstention-aware retrieval is a learning system, not a static scoring layer ([Iscan, 2026 — arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
 
 ## Asymmetric Reward Design
 
@@ -79,6 +79,8 @@ Abstention-aware retrieval is not free — it adds a learned policy, an outcome-
 - **False positives are expensive** — multi-turn debugging loops, autonomous agents, or production-adjacent flows where a wrong injection compounds across turns
 
 It adds cost without value when the store is small and homogeneous, when feedback is sparse or noisy, during cold-start before the policy has trained, or in latency-sensitive paths where stacked controllers in multi-agent retrieval add visible overhead.
+
+A per-retrieval controller has a scope limit: it decides one injection at a time and does not defend against risks that emerge as memory accumulates. Al-Tawaha et al. describe *temporal memory contamination*, where unsafe behaviour grows with memory size even when each retrieval looks benign — memory safety is a longitudinal property, not a single-retrieval filter ([Al-Tawaha et al., 2026 — arXiv:2605.17830](https://arxiv.org/abs/2605.17830)). Pair abstention-aware retrieval with periodic memory audits when stores persist across sessions.
 
 ## Example
 

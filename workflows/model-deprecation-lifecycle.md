@@ -106,11 +106,11 @@ This timeline fits inside Anthropic's 60-day notice. For a Copilot same-day reti
 
 ## Related
 
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md) — tier selection within a single vendor; lifecycle management is the operational wrapper
+- [Model-ID-as-Dependency: Migration Protocol for Deprecation Churn](model-deprecation-migration-protocol.md) — the codebase-side complement: how to treat pinned model IDs as dependencies inside the repo
+- [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — the prompt-rewrite step required when behavioral drift is non-trivial
+- [Tokenizer Swap Tax](../context-engineering/tokenizer-swap-tax.md) — budgeting for migrations that change token counts, expanding the canary cost-normalisation concern
+- [Perceived Model Degradation](../anti-patterns/perceived-model-degradation.md) — distinguishes real regressions (this workflow's eval target) from perceived ones (vibes)
 - [Cross-Vendor Competitive Routing](../agent-design/cross-vendor-competitive-routing.md) — platform-level fallback when one vendor's successor fails eval
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — the traffic-split discipline reused in the migration step
 - [Golden Query Pairs Regression](../verification/golden-query-pairs-regression.md) — regression eval structure for per-model baselines
 - [Behavioral Testing for Agents](../verification/behavioral-testing-agents.md) — covers non-deterministic workloads where output-match regression is not viable
-- [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md) — scoring successor output against baseline
-- [Eval-Driven Development](eval-driven-development.md) — standing eval infrastructure that a deprecation workflow extends
-- [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) — effort-level tuning changes between generations

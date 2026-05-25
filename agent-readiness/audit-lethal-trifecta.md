@@ -10,6 +10,8 @@ aliases:
   - prompt injection trifecta map
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-lethal-trifecta/`
+
 # Audit Lethal Trifecta
 
 > Enumerate every principal, classify each tool, build the per-principal three-leg matrix, flag any complete trifecta, recommend the cheapest leg to remove.

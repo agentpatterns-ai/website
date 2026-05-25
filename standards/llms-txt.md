@@ -44,6 +44,14 @@ A minimal `llms.txt` for a documentation site:
 
 The H1 is the only required element per the [spec](https://llmstxt.org); sections and the `## Optional` block are conventions that help agents budget context. Publish `/llms-full.txt` alongside it to give agents the full concatenated content in one fetch.
 
+## Key Takeaways
+
+- `llms.txt` is a curated Markdown index at `/llms.txt` that tells agents where your content lives without forcing them to crawl HTML pages.
+- The spec requires only an H1; blockquote summaries, H2 sections, and an `## Optional` block are conventions that help agents budget context.
+- Publishing `/llms-full.txt` alongside it lets agents fetch all linked content in a single request, eliminating multi-step navigation.
+- Treat `llms.txt` as forward-compatible agent infrastructure — empirical 2026 data shows no measurable citation uplift, so do not invest in it as an SEO or ranking signal.
+- A stale or broken `llms.txt` is worse than none; only publish if you can keep the link list current.
+
 ## Related
 
 - [llms.txt: Full Specification, Adoption, and Limitations](../geo/llms-txt.md)

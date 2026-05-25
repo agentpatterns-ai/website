@@ -57,8 +57,6 @@ Poll the GitHub Actions run for this branch every 30 seconds and report when it 
 
 Claude writes the watch script internally and starts it. To stop, ask Claude to cancel the monitor, or end the session. All monitors are session-scoped: they stop when the session exits.
 
-Plugins can also declare monitors that start automatically when the plugin is active, removing the need to ask Claude to start them. [Source: [Claude Code Tools Reference — Monitor tool](https://code.claude.com/docs/en/tools-reference#monitor-tool)]
-
 ## Permissions and Availability
 
 Monitor uses the same [`allow` and `deny` permission rules as Bash](https://code.claude.com/docs/en/permissions#tool-specific-permission-rules). Any pattern you have set for Bash applies to Monitor automatically. No separate permission configuration is needed.
@@ -82,10 +80,10 @@ Use Monitor when the process already emits events and you want zero-latency reac
 
 Push beats poll when events are rare and meaningful. It loses when any of the following hold:
 
-- **Chatty processes flood context — and Monitor will kill them.** Every stdout line becomes a notification. Verbose test runners or webpack rebuilds pipe thousands of events into the conversation, and monitors producing too many events are automatically stopped. [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)] Pipe through `grep` first, or capture to a file and `Read` on demand.
-- **Pipe buffering silently delays events.** When piping to `grep` or similar filters, use `grep --line-buffered` — without it, block buffering holds output until a ~4 KB chunk fills, delaying events by minutes on low-traffic streams. [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)]
+- **Chatty processes flood context — and Monitor will kill them.** Every stdout line becomes a notification. Watching a verbose test runner, webpack rebuild, or `pytest -vv` pipes thousands of events into the conversation, and monitors that produce too many events are automatically stopped — restart with a tighter filter if that happens. [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)] Pipe through `grep` before monitoring, or capture to a file and `Read` on demand.
+- **Pipe buffering silently delays events.** When piping to `grep` or similar filters, use `grep --line-buffered` — without it, standard block buffering holds output until a ~4 KB chunk fills, which can delay events by minutes on low-traffic streams. [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)]
 - **Stderr and exit codes are invisible.** Monitor forwards stdout only. A script that logs errors to stderr, crashes silently, or communicates via non-zero exit status will look healthy to Monitor. Use `Bash` with captured output for anything where failure is silent.
-- **Outcome filters must match every terminal state.** Filters need to match both success *and* failure signals — otherwise a failed run produces silence, which Claude reads as "still running". [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)]
+- **Outcome filters must match every terminal state.** When watching a job for a result, the filter has to match both success *and* failure signals — otherwise a failed run produces silence, which Claude will read as "still running". [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)]
 - **Low-cadence checks don't need streaming.** If the thing you're watching changes every few minutes (a slow CI run, a nightly build), scheduled polling with `CronCreate` or `/loop` is just as responsive, does not hold a background process open, and survives across idle windows.
 - **Session-scoped lifetime.** Monitors die when the Claude session exits. For batch jobs that need to outlive a conversation, or monitoring across reboots, use an external supervisor (systemd, cron, CI) instead.
 - **Not available on Amazon Bedrock, Google Vertex AI, or Microsoft Foundry**, or when `DISABLE_TELEMETRY` / `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference)]
@@ -111,6 +109,7 @@ Claude starts `docker compose up --build`, monitors its stdout, and interjects o
 
 ## Related
 
+- [Plugin Background Monitors](plugin-background-monitors.md)
 - [Session Scheduling](session-scheduling.md)
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [/batch & Worktrees](batch-worktrees.md)

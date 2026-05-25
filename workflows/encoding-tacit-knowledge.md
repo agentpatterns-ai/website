@@ -97,4 +97,3 @@ Encoding tacit knowledge is expensive and carries its own failure modes:
 - [Closed-Loop Agent Training](closed-loop-agent-training.md) — full feedback loop from production to training
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — converting failures into eval cases
 - [AI Development Maturity Model](ai-development-maturity-model.md) — calibration and eval stages in the broader maturity arc
-- [Changelog-Driven Feature Parity](changelog-driven-feature-parity.md) — elicitation from changelogs as a knowledge capture technique

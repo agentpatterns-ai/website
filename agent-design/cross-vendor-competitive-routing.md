@@ -64,6 +64,14 @@ The selection criteria differ from within-harness model routing. Cost and latenc
 | Cross-vendor competitive | Surfaces capability differences; catches failure modes of primary agent | Doubles premium request consumption; requires human review of two outputs |
 | Single-vendor static routing | Predictable cost; no redundant work | Blind spots in primary agent's capability profile go undetected |
 
+## When This Backfires
+
+The pattern's hidden cost lives in coordination, not premium-request consumption.
+
+- **Merge conflicts when agents touch the same files.** Each agent works on its own branch, but if both vendors edit the same module the losing-branch close is not free — the winning PR may still need rebase or hand-merge work that erases the parallelism dividend.
+- **Coordination races on issue state.** Agents act on each other's side effects — one closes an issue another agent just opened, or files a duplicate PR while the first is still in review. GitHub's own multi-agent orchestration guidance flags both failure modes and recommends [mission-control patterns](../tools/copilot/agent-mission-control.md) to serialise touchpoints ([GitHub Blog: How to orchestrate agents using mission control](https://github.blog/ai-and-ml/github-copilot/how-to-orchestrate-agents-using-mission-control/)).
+- **Reviewer fatigue.** Doubling agent output doubles review surface. Cross-vendor routing only pays back when the reviewer can credibly compare both PRs; if the second gets skimmed, the loser's reasoning is wasted spend.
+
 ## Example
 
 On GitHub Agent HQ, assign an issue to both Claude and Codex from the issue sidebar:
@@ -89,15 +97,11 @@ This pattern operates at the **platform level** (which vendor agent handles the 
 
 ## Related
 
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
+- [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request multipliers vs token billing
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — pre-generation routing via file-level code health metrics
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Delegation Decision](delegation-decision.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — selecting between candidate outputs
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
-- [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
-- [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](inversion-analysis.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
+- [Agent Composition Patterns](agent-composition-patterns.md) — fan-out as a composition primitive
+- [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)

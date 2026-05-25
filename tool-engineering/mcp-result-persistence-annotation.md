@@ -120,5 +120,4 @@ The agent calls `dump_full_schema` once at the start of a migration task. The fu
 - [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
-- [MCP Elicitation](mcp-elicitation.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)

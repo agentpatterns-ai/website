@@ -20,13 +20,13 @@ aliases:
 
 Copilot CLI (GA February 2026) provides two operating modes for all paid Copilot subscribers ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)):
 
-**Interactive mode** (`copilot`) — conversational sessions in the terminal. The agent reads files, runs commands, and edits code with human approval at each step.
+**Interactive mode** (`copilot`) — conversational sessions where the agent reads files, runs commands, and edits code with human approval at each step.
 
-**Programmatic mode** (`copilot -p "<prompt>"`) — single-command headless execution. Runs non-interactively and exits, suitable for CI/CD automation and scripting pipelines ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
+**Programmatic mode** (`copilot -p "<prompt>"`) — single-command headless execution for CI/CD and scripting pipelines ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
 
 ## Authorization Model
 
-Copilot CLI implements a graduated permission model that controls what the agent can execute ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)):
+Copilot CLI uses a graduated permission model ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)):
 
 | Level | Flag | Behavior |
 |-------|------|----------|
@@ -35,7 +35,7 @@ Copilot CLI implements a graduated permission model that controls what the agent
 | Granular deny | `--deny-tool 'TOOL(command)'` | Block specific tools; deny takes precedence over allow |
 | Full auto-approval | `--allow-all-tools` | Skip all permission prompts |
 
-The graduated model works because deny rules are evaluated after allow rules, giving operators a reliable veto layer — `--deny-tool` takes precedence over any matching `--allow-tool` for the same command, preventing allow-list creep from accidentally permitting destructive operations.
+Deny rules are evaluated after allow rules, so `--deny-tool` overrides any matching `--allow-tool` and reduces allow-list creep. The veto is not absolute: PromptArmor disclosed a bypass in Feb 2026 where `env curl ... | env sh` evades the allowlist because `env` is auto-approved and the validator treats `curl` and `sh` as arguments, not commands; GitHub closed it as a "known issue" ([PromptArmor](https://www.promptarmor.com/resources/github-copilot-cli-downloads-and-executes-malware); [Microsoft Security, May 2026](https://www.microsoft.com/en-us/security/blog/2026/05/07/prompts-become-shells-rce-vulnerabilities-ai-agent-frameworks/)). Treat the allowlist as one layer of defense-in-depth, not a containment boundary.
 
 For headless scripting, combine programmatic mode with tool restrictions:
 
@@ -45,49 +45,45 @@ copilot -p "Run the test suite and fix failures" \
   --allow-tool 'shell(git commit *)'
 ```
 
-Use `--allow-all-tools` only in containerized environments where the [blast radius](../../security/blast-radius-containment.md) is contained ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
+Use `--allow-all-tools` only inside containers with bounded [blast radius](../../security/blast-radius-containment.md) ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
 
 ## Plan Mode
 
-Activated via `Shift+Tab`, [plan mode](../../workflows/plan-first-loop.md) restricts the agent to analysis without execution. Copilot reads the request, asks clarifying questions, and builds a structured plan before writing code ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli)).
+Activated via `Shift+Tab`, [plan mode](../../workflows/plan-first-loop.md) restricts the agent to analysis without execution: Copilot reads the request, asks clarifying questions, and builds a structured plan before writing code ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli)).
 
-- **Exploration** — understand a codebase or problem space before committing to an approach
-- **Review** — inspect proposed changes as diffs before approving execution
+- **Exploration** — understand a codebase before committing to an approach
+- **Review** — inspect proposed changes as diffs before approving
 
 ## Delegation to Cloud Agents
 
-The `/delegate` command dispatches work to the cloud-based coding agent for background execution. The agent works asynchronously via GitHub Actions, opens PRs for review while the developer continues locally ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)). `/resume` switches between local and remote sessions.
+`/delegate` dispatches work to the cloud coding agent for async execution via GitHub Actions, which opens PRs for review while the developer continues locally ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)); `/resume` switches between local and remote sessions.
 
 ## Slash Commands
 
-Copilot CLI organizes commands into five categories ([GitHub Blog: Cheat Sheet](https://github.blog/ai-and-ml/github-copilot/a-cheat-sheet-to-slash-commands-in-github-copilot-cli/)): session management (`/clear`, `/session`, `/exit`), directory access (`/add-dir`, `/list-dirs`, `/cwd`), configuration (`/model`, `/terminal-setup`, `/reset-allowed-tools`), external services (`/agent`, `/delegate`, `/mcp`, `/share`), and discovery (`/help`, `/feedback`).
+Commands are grouped into five categories ([GitHub Blog: Cheat Sheet](https://github.blog/ai-and-ml/github-copilot/a-cheat-sheet-to-slash-commands-in-github-copilot-cli/)): session management (`/clear`, `/session`, `/exit`), directory access (`/add-dir`, `/list-dirs`, `/cwd`), configuration (`/model`, `/terminal-setup`, `/reset-allowed-tools`), external services (`/agent`, `/delegate`, `/mcp`, `/share`), and discovery (`/help`, `/feedback`).
 
 ## Custom Agents in the CLI
 
-Custom agents are available across CLI, IDE, and github.com. The `/agent` command lists and selects available agents for the current session ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
-
-Agents can bundle specialized MCP tools for domain-specific tasks like security validation or team-specific code review.
+Custom agents work across CLI, IDE, and github.com; `/agent` lists and selects them for the current session and can bundle specialized MCP tools for domain-specific tasks ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
 
 ## MCP in the Terminal
 
-Copilot CLI ships with the GitHub MCP server built in, enabling repository queries, issue lookups, and PR management without leaving the terminal ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
-
-Custom MCP servers are managed via `/mcp [show|add|edit|delete|disable|enable]`. Tool-level permission control applies: `--deny-tool 'My-MCP-Server(tool_name)'` blocks specific MCP tools while keeping others accessible ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
+Copilot CLI ships with the GitHub MCP server built in for repo queries, issue lookups, and PR management. Custom servers are managed via `/mcp [show|add|edit|delete|disable|enable]`, and `--deny-tool 'My-MCP-Server(tool_name)'` scopes permissions per MCP tool ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)).
 
 ## Code Review from the CLI
 
-As of March 2026, Copilot code review can be requested directly from the `gh` CLI ([GitHub Changelog](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/)):
+Since March 2026, Copilot code review can be requested from the `gh` CLI ([GitHub Changelog](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/)):
 
 ```bash
 # Add Copilot as a reviewer on the current PR
 gh pr edit --add-reviewer @copilot
 ```
 
-Combined with the [agentic code review architecture](../../code-review/agentic-code-review-architecture.md), this triggers the Copilot code review pipeline without leaving the terminal.
+This triggers the [agentic code review architecture](../../code-review/agentic-code-review-architecture.md) without leaving the terminal.
 
 ## Session Management
 
-Auto-compaction compresses conversation history at 95% context window capacity, enabling extended sessions without manual intervention ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)). Repository memory persists conventions and patterns learned across sessions.
+Auto-compaction compresses conversation history at 95% context window capacity for extended sessions ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)), and repository memory persists conventions across sessions.
 
 ## Example
 
@@ -101,11 +97,12 @@ copilot -p "Run the test suite, identify failing tests, and fix them" \
   --deny-tool 'shell(git push)'
 ```
 
-The `--deny-tool` takes precedence over `--allow-tool`, so push is blocked even if a broader allow rule would otherwise permit it. For exploratory work, omit `-p` and use interactive mode with `Shift+Tab` plan mode first to validate the approach before granting any execution permissions.
+Push is blocked even if a broader allow rule would otherwise permit it. For exploratory work, omit `-p` and use interactive mode with `Shift+Tab` plan mode first to validate the approach.
 
 ## When This Backfires
 
 - **`--allow-all-tools` outside containers** — grants full shell access; a prompt injection or hallucinated command can modify files, install packages, or push commits without review. Restrict to containerized CI environments where blast radius is bounded.
+- **Validator bypass via shell indirection** — `env curl ... | env sh` evades the auto-approve allowlist and GitHub has declined to patch it; pair `--deny-tool` with sandboxing and egress controls (see Authorization Model above).
 - **Headless mode with underspecified prompts** — programmatic mode exits after the first attempt and cannot ask clarifying questions; ambiguous prompts produce partial or incorrect results with no opportunity for course correction.
 - **Context window exhaustion on large codebases** — auto-compaction at 95% capacity can lose earlier context that constrains later decisions; long refactoring sessions may contradict earlier choices made before compaction.
 - **`/delegate` latency mismatch** — cloud agent execution via GitHub Actions takes minutes to hours; delegating time-sensitive tasks introduces a latency gap that breaks flow if the developer expects synchronous completion.

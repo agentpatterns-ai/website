@@ -125,3 +125,4 @@ The contrast with ad-hoc construction: every compliance rule is a named artifact
 - [Eval-Driven Development](eval-driven-development.md)
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [7 Phases of AI Development](7-phases-ai-development.md)
+- [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)

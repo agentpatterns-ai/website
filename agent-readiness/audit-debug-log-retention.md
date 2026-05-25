@@ -11,6 +11,8 @@ aliases:
   - PII redaction audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-debug-log-retention/`
+
 # Audit Debug Log Retention
 
 > Inventory agent debug-log surfaces, validate persistence settings, secret-redaction policy, and disk-pressure guards, emit per-surface findings.

@@ -81,7 +81,7 @@ Batch scripts are token-efficient but not as fast as task/agent-based orchestrat
 
 Batch writes are harder to review than individual edits. Mitigations:
 
-- **Use `set -euo pipefail`** — stop on first error rather than silently continuing
+- **Use `set -euo pipefail`** — stop on first error rather than silently continuing. Aaron Maxwell's [Unofficial Bash Strict Mode](http://redsymbol.net/articles/unofficial-bash-strict-mode/) documents why this combination makes "many classes of subtle bugs impossible" and is the standard defensive-scripting baseline.
 - **Echo operations** — print each file path before writing for audit trail
 - **Dry-run mode** — generate the script first, review, then execute
 - **[Diff-based review](../code-review/diff-based-review.md)** — run `git diff` after execution to verify all changes

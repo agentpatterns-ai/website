@@ -1,5 +1,5 @@
 ---
-title: "LLM-as-Judge Evaluation with Human Spot-Check Review"
+title: "LLM-as-Judge Evaluation with Human Spot-Checking"
 description: "Combine automated LLM rubric scoring with targeted human review to evaluate multi-agent output at scale without sacrificing quality on edge cases."
 tags:
   - testing-verification

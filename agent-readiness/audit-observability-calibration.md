@@ -11,6 +11,8 @@ aliases:
   - signal calibration probe audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-observability-calibration/`
+
 # Audit Observability Calibration
 
 > Detect planted-bug fixtures, score coverage across the five canonical layers (parsing, persistence, IPC, async race, concurrency), validate the diagnosing harness reads signals only, and surface unreached layers as calibration gaps mapped to missing signals.

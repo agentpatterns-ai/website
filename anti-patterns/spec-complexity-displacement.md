@@ -15,7 +15,7 @@ tags:
 
 “Just write a spec” is framed as a shortcut — describing intent without bearing the cost of implementation. The fallacy is that the cost of precision can be skipped rather than moved.
 
-A spec precise enough to reliably generate correct code must encode type constraints, algorithm logic, schema definitions, and edge case coverage. The OpenAI Symphony “specification” analyzed by Gabriel Gonzalez contains database schemas, algorithm pseudocode, and configuration checklists: it reads as code, not prose ([Gonzalez, 2026](https://haskellforall.com/2026/03/a-sufficiently-detailed-spec-is-code)).
+A spec precise enough to reliably generate correct code must encode type constraints, algorithm logic, schema definitions, and edge case coverage. The [OpenAI Symphony specification](../standards/symphony-orchestration-spec.md) analyzed by Gabriel Gonzalez contains database schemas, algorithm pseudocode, and configuration checklists: it reads as code, not prose ([Gonzalez, 2026](https://haskellforall.com/2026/03/a-sufficiently-detailed-spec-is-code)).
 
 ## Two Failure Modes
 

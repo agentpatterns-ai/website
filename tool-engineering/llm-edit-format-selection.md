@@ -11,11 +11,11 @@ tags:
 
 # Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite
 
-> How to pick an output format for LLM code edits — line-based diffs, search-replace blocks, structure-aware diffs, or full rewrites — and when each one wins.
+> Edit format is how an LLM expresses code changes — full file, search-replace block, structure-aware diff, or line-numbered patch — and the choice swings accuracy and cost 2-3x in published benchmarks.
 
 ## Why Format Choice Matters
 
-Edit format is a leverage point on accuracy and token cost. Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59% with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper formalises why: *fragile offsets and fragmented hunks make generation highly unnatural for LLMs* ([Cao et al., 2025, arxiv:2604.27296](https://arxiv.org/abs/2604.27296)). The Diff-XYZ benchmark — which isolates diff representation from retrieval — finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487)). The lever is real but not universal.
+Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59% with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper formalises why: *fragile offsets and fragmented hunks make generation highly unnatural for LLMs* ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296)). The Diff-XYZ benchmark — which isolates diff representation from retrieval — finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487)). The lever is real but not universal.
 
 ## The Format Spectrum
 

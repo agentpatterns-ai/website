@@ -18,7 +18,7 @@ aliases:
 !!! info "Also known as"
     Content Pipeline, Idea-to-Research Pipeline, Idea Capture and Research Stages
 
-A structured content pipeline drives all content through tracked issues with label-based stages. Agents do the drafting and reviewing; humans set direction and approve merges.
+A structured content pipeline drives all content through tracked issues with label-based stages. Agents do the drafting and reviewing; humans set direction and approve merges. GitHub formalises this label-as-state pattern under the [IssueOps](https://github.blog/engineering/issueops-automate-ci-cd-and-more-with-github-issues-and-actions/) name — issue events and label transitions drive automated workflows, with each label representing a state in the issue's lifecycle.
 
 ## Pipeline Stages
 
@@ -184,7 +184,7 @@ The specific implementation (slash commands, GitHub issues, a task database) is 
 Three mechanisms do the heavy lifting:
 
 - **Labels as the state machine**: stage is persisted on the issue itself, so any agent or human can pick up work without a separate coordination doc. No handoff notes to go stale; no central scheduler to fail.
-- **Independent reviewers catch independent failure modes**: the content-quality reviewer and the structure-and-standards reviewer fire on different signals (claim density, tone, filler vs. file layout, frontmatter, link resolution). Running them in parallel means one blind spot does not compound the other.
+- **Independent reviewers catch independent failure modes**: the content-quality reviewer and the structure-and-standards reviewer fire on different signals (claim density, tone, filler vs. file layout, frontmatter, link resolution). Running them in parallel means one blind spot does not compound the other. Multi-agent content review research from [AWS Machine Learning](https://aws.amazon.com/blogs/machine-learning/scaling-content-review-operations-with-multi-agent-workflow/) shows that splitting review across specialised agents — each with a narrow job, clear inputs, and repeatable standards — outperforms single-agent end-to-end review on both consistency and governability.
 - **Structured issue bodies constrain agent input**: requiring Concept / Context / References / Key Points in the intake step forces the human to pre-commit to scope. Agents generate thinner, more focused drafts when the prompt is already narrowed, because the research step has fewer degrees of freedom.
 
 ## When This Backfires
@@ -221,9 +221,7 @@ The pipeline adds coordination overhead that only pays off when review is the bo
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Content and Skills Audit](content-skills-audit.md)
-- [Incremental Verification](../verification/incremental-verification.md)
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [Agent-Driven Greenfield](agent-driven-greenfield.md)
 - [Human in the Loop](human-in-the-loop.md)
 - [Continuous Documentation](continuous-documentation.md)
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)

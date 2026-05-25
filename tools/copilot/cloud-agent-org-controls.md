@@ -37,7 +37,7 @@ By default, cloud agent runs on `ubuntu-latest`. Org owners can [change the defa
 - **Standard GitHub runner**: `ubuntu-latest` (default)
 - **Labeled runner**: a runner matching a specified group name and/or label — use this for larger runners, GPU access, or self-hosted runners with internal network access
 
-A separate toggle controls whether individual repositories can override the org default using a `copilot-setup-steps.yml` workflow. Disable it to enforce a consistent runner type across the organization.
+A separate toggle controls whether individual repositories can override the org default using a [`copilot-setup-steps.yml` workflow](../../workflows/agent-environment-bootstrapping.md). Disable it to enforce a consistent runner type across the organization.
 
 ## Firewall Controls
 
@@ -104,6 +104,7 @@ Enterprise: Let organizations decide
 ## Related
 
 - [Coding Agent](coding-agent.md)
+- [Copilot Cloud Agent Three-Phase Execution Model](cloud-agent-research-plan-code.md)
 - [MCP Integration](mcp-integration.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md)

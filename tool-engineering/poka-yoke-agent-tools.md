@@ -9,6 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
 ---
+
 # Poka-Yoke for Agent Tools
 
 > Redesign tool interfaces so the wrong call cannot compile — prevention over documentation.
@@ -18,7 +19,7 @@ tags:
 
 ## From Manufacturing to Tool Design
 
-Poka-yoke (mistake-proofing) originated in Toyota's production system: redesign the process so the defective outcome is structurally impossible. Anthropic applies it directly to agent tools — "Change the arguments so that it is harder to make mistakes" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — and reports spending more time optimizing tools than the overall prompt ([SWE-bench Sonnet](https://www.anthropic.com/engineering/swe-bench-sonnet)).
+Poka-yoke (mistake-proofing) originated in Toyota's production system: redesign the process so the defective outcome is structurally impossible. Anthropic applies it to agent tools — "Change the arguments so that it is harder to make mistakes" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)) — and reports spending more time optimizing tools than the overall prompt ([SWE-bench Sonnet](https://www.anthropic.com/engineering/swe-bench-sonnet)).
 
 ## The Core Shift
 
@@ -30,7 +31,7 @@ Documentation tells the agent how to use a tool correctly. Poka-yoke makes incor
 | Validation | Rejects bad input at runtime | Agent wastes a turn, retries blindly |
 | Poka-yoke | Eliminates the bad input from the interface | Error cannot occur |
 
-Manufacturing taxonomy mapped:
+Manufacturing taxonomy:
 
 | Manufacturing function | Tool design equivalent | Example |
 |------------------------|------------------------|---------|
@@ -42,7 +43,7 @@ Manufacturing taxonomy mapped:
 
 ### Absolute Paths Over Relative
 
-Relative filepaths failed after directory changes. Making absolute paths mandatory eliminated the failure mode:
+Relative filepaths failed after directory changes. Mandatory absolute paths eliminated the failure mode:
 
 > "Sometimes models could mess up relative file paths after the agent had moved out of the root directory. To prevent this, we simply made the tool always require an absolute path."
 > — [SWE-bench Sonnet](https://www.anthropic.com/engineering/swe-bench-sonnet)
@@ -90,11 +91,11 @@ Concrete sample calls in tool definitions improved accuracy from 72% to 90% on c
 Over-constraining tool interfaces introduces its own failure modes:
 
 - **Enum exhaustion** — a fixed enum valid at design time excludes production edge cases; update or the agent cannot proceed.
-- **Prerequisite deadlock** — read-before-write gates block optimistic-write patterns and content-from-scratch pipelines.
-- **Designer blind spots** — constraints encode the designer's model of valid usage; legitimate emergent reasoning strategies get rejected.
+- **Prerequisite deadlock** — read-before-write gates block optimistic-write and content-from-scratch pipelines.
+- **Designer blind spots** — constraints encode the designer's model of valid usage; legitimate emergent strategies get rejected.
 - **Over-normalized toolsets** — too-narrow toolsets push agents toward multi-step workarounds with higher cumulative error probability.
 
-Apply poka-yoke where failure modes are well-understood and the constraint space is stable. Prefer validation over elimination when use cases are still evolving.
+Apply poka-yoke where failure modes are well-understood and the constraint space is stable. Prefer validation when use cases are still evolving.
 
 ## Designing Your Own Poka-Yoke
 
@@ -104,6 +105,13 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 4. **Does the format require precise mechanical reasoning?** Switch to a format with strong training priors.
 5. **Can the tool silently apply the wrong change?** Add a uniqueness or [idempotency](../agent-design/idempotent-agent-operations.md) constraint.
 6. **Test like a junior developer API** — pass many inputs and observe where the model fails. Fix the interface, not the prompt.
+
+## Key Takeaways
+
+- Poka-yoke makes the wrong tool call structurally impossible, not merely documented as wrong.
+- Three manufacturing mechanisms map to tool design: parameter types (contact), bounds and defaults (fixed-value), and prerequisite gates (motion-step).
+- Apply where failure modes are stable and well-understood; prefer runtime validation when the constraint space is still evolving.
+- Fix the interface, not the prompt — the prompt-fix loop has no terminating condition.
 
 ## Related
 
@@ -115,5 +123,3 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — enforcement through hooks rather than instructions
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
 - [Tool Minimalism](tool-minimalism.md) — fewer, non-overlapping tools reduce selection ambiguity
-- [Consolidate Agent Tools](consolidate-agent-tools.md) — higher-level tools that match agent reasoning over many narrow endpoints
-- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md) — signal density principles underlying tool output constraints

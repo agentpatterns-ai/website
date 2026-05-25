@@ -616,7 +616,7 @@ MCP servers configured here are available in Agent mode and to custom agents tha
 
 #### CLI
 
-The Copilot CLI reads MCP configuration from its config file. Use the [`/mcp` slash command](https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli) in an interactive session to view configured servers and select from the list.
+The Copilot CLI reads MCP configuration from its config file. Use the `/mcp` slash command in an interactive session to list configured servers [unverified].
 
 #### Coding Agent
 

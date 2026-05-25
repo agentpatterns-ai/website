@@ -8,7 +8,7 @@ tags:
   - code-review
 ---
 
-# The Velocity-Quality Asymmetry
+# Velocity-Quality Asymmetry: Why AI Speed Gains Fade
 
 > AI coding tools produce a burst of speed that fades within months, while the quality debt they introduce compounds indefinitely. Sustainable velocity requires treating QA investment as a prerequisite, not an afterthought.
 

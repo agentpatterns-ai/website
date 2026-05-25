@@ -1,5 +1,5 @@
 ---
-title: "Narrow Task Scope as a Security Boundary for AI Agents"
+title: "Treat Task Scope as a Security Boundary"
 description: "Narrow task scope limits attack surface and blast radius. Tight instructions force injections to contradict directives rather than plausibly extend vague ones."
 tags:
   - agent-design
@@ -106,35 +106,21 @@ The tight version specifies the input source (pytest output), the exact output f
 
 Tight instructions reduce flexibility — a narrow-scope agent cannot handle requests outside the specified scope. For agents consuming untrusted content, this is intentional: reduced flexibility is the price of reduced attack surface.
 
+## Key Takeaways
+
+- Scope is an attack surface — the breadth of an agent's task description bounds what an injected instruction can plausibly request.
+- Tight, enumerated instructions force injections to contradict a stated directive rather than extend a vague one.
+- Capability restrictions at the tool layer enforce scope independently of model behaviour — an agent without an action cannot be coerced into taking it.
+- Narrow scope reduces but does not eliminate injection risk; pair it with confirmation gates, least-privilege permissions, and defence in depth.
+- Avoid "use your judgment" framings for agents that consume any untrusted content — they authorise the redirection an attacker needs.
+
 ## Related
 
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Layered Accuracy Defense](../verification/layered-accuracy-defense.md)
-- [Negative Space Instructions](../instructions/negative-space-instructions.md)
-- [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md)
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md)
 - [The Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
-- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
-- [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [RL-Based Automated Red Teamers](rl-automated-red-teamers.md)
-- [Tool Signing and Verification](tool-signing-verification.md)
-- [URL Exfiltration Guard](url-exfiltration-guard.md)
-- [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)
-- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
-- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
-- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)

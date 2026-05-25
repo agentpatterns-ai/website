@@ -16,7 +16,7 @@ aliases:
 
 > Four complementary feedback mechanisms that together keep a team's shared skill library accurate and useful — no single loop catches every failure class.
 
-A skill library shared across a team degrades in a different way than a single skill degrades. Individual skills fail on output quality or trigger precision — problems the [skill eval loop](../tools/claude/skill-eval-loop.md) addresses. Shared libraries fail on a different axis: skills that worked well for the author become wrong, under-used, or invisible to the people who need them most. No eval run catches this.
+A skill library shared across a team degrades in a different way than a single skill degrades. Individual skills fail on output quality or trigger precision — problems [skill evals](../verification/skill-evals.md) and the Claude-specific [skill eval loop](../tools/claude/skill-eval-loop.md) address. Shared libraries fail on a different axis: skills that worked well for the author become wrong, under-used, or invisible to the people who need them most. No eval run catches this.
 
 Will Larson's [Iterative prompt and skill refinement](https://lethain.com/agents-iterative-refinement/) describes four feedback loops that together close the gap. Each catches a different failure class; running only one leaves blind spots.
 

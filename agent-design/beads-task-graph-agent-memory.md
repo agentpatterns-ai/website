@@ -157,5 +157,3 @@ Beads adds real costs. Skip it when the overhead is not justified.
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md) — how CLAUDE.md knowledge memory is scoped across project, user, and local levels
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
-- [Encode Project Conventions in Distributed AGENTS.md Files](../instructions/agents-md-distributed-conventions.md)
-- [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality

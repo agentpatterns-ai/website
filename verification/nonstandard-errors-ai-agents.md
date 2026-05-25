@@ -123,6 +123,14 @@ Multiverse analysis carries real costs that make it impractical in several condi
 - **Convergent tasks**: When agents consistently agree across runs regardless of model family (e.g., formatting, type errors, well-specified unit tests), multiverse overhead adds nothing. Sample first; escalate to multiverse only when dispersion is detected.
 - **Exemplar dependency risk as a mitigation**: If variance reduction is achieved via exemplar injection rather than full multiverse reporting, the exemplar quality becomes a single point of failure. A flawed exemplar produces tight, wrong answers — harder to detect than spread-out answers from multiverse reporting.
 
+## Key Takeaways
+
+- A single agent run is one sample from a distribution shaped by model-family methodological preferences, not a representative result
+- Sonnet and Opus exhibit stable empirical styles — they pick different statistical tests for the same hypothesis, so identical prompts can yield opposite conclusions
+- AI peer-review loops correct output quality but not methodological bias; agents do not revise their analytical choices based on written critiques
+- Exemplar injection reduces dispersion by 80–99% via imitation, not reasoning — the exemplar determines the answer, so a flawed exemplar produces tight, wrong results
+- For analytical tasks, run the multiverse across model families and configurations, report the distribution, and flag conclusions sensitive to analytical choice
+
 ## Related
 
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md)

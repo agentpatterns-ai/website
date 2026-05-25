@@ -100,4 +100,4 @@ The breakdown made the difference between *"prune skills"* (right answer) and *"
 - [Agent Debug Log Panel](agent-debug-log-panel.md) — the adjacent always-on surface for events rather than tokens
 - [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md) — drill-down when the breakdown points at MCP or tool outputs
 - [Audit Instruction Rule Budget](../agent-readiness/audit-instruction-rule-budget.md) — drill-down when the breakdown points at rules
-- [Observation Masking: Filter Tool Outputs from Context](../context-engineering/observation-masking.md) — remediation when tool outputs dominate
+- [Per-Plugin Token-Cost Attribution via `claude plugin details`](plugin-token-cost-attribution.md) — the same attribution axis at plugin granularity

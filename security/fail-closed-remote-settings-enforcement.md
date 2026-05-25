@@ -78,6 +78,10 @@ Before enabling this setting:
 
 The availability trade-off is explicit: a `forceRemoteSettingsRefresh: true` deployment accepts that network outages affecting `api.anthropic.com` will prevent agent startup. For security-critical environments, this is acceptable. For environments where uptime is the higher priority, the default fail-open model is the documented alternative.
 
+### Pin a recent CLI version
+
+Earlier Claude Code releases shipped a deadlock in which expired credentials plus `forceRemoteSettingsRefresh: true` blocked the `claude auth login`, `claude auth logout`, and `claude auth status` subcommands with no recovery path — users could not re-authenticate to fix the very failure that was blocking startup. Anthropic exempted the `claude auth` subcommands from the fail-closed check in [Claude Code v2.1.139](https://github.com/anthropics/claude-code/releases/tag/v2.1.139), and the [server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#enforce-fail-closed-startup) now document this carve-out. Enforce a minimum CLI version of v2.1.139 (or later) before enabling the setting, or include "update Claude Code, then re-authenticate" in the break-glass procedure.
+
 ## Layering with Endpoint-Managed Settings
 
 Server-managed settings are a client-side control. Users with admin or sudo access on unmanaged devices can modify the Claude Code binary or network configuration to circumvent them ([server-managed-settings docs](https://code.claude.com/docs/en/server-managed-settings#security-considerations)).

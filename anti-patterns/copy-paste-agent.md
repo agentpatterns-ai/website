@@ -70,3 +70,4 @@ The pattern is harmful specifically when agents are expected to receive updates 
 - [Pattern Replication Risk](pattern-replication-risk.md)
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [Plugin and Extension Packaging](../standards/plugin-packaging.md)
+- [Claude Code Sub-Agents](../tools/claude/sub-agents.md)

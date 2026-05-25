@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
 ---
 
-# Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals
+# Incident-to-Eval Synthesis: Production Failures as Evals
 
 > Every production incident involving an LLM feature is a candidate for a regression eval case. Extract the failure mode, define expected behavior, and add it to a growing suite that gates future deploys.
 

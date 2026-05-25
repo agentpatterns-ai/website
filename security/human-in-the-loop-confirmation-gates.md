@@ -8,6 +8,7 @@ tags:
   - agent-design
   - human-factors
 ---
+
 # Human-in-the-Loop Confirmation Gates for Consequential Agent Actions
 
 > Inject mandatory confirmation checkpoints before irreversible or high-stakes actions so humans can catch injection-driven misbehavior before it causes real harm.
@@ -129,14 +130,9 @@ Because the recipient is shown verbatim, `attacker@external.com` is immediately 
 
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Explicit, Narrow Task Instructions to Reduce Injection Susceptibility](task-scope-security-boundary.md)
-- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Action Selector Pattern](action-selector-pattern.md)
 - [Indirect Injection Discovery](indirect-injection-discovery.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
+- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)

@@ -1,5 +1,5 @@
 ---
-title: "Agent Observability: OTel, Cost Tracking, Trajectory Logs"
+title: "Agent Observability with OpenTelemetry and Trajectory Logging"
 description: "Wire up OpenTelemetry on Claude Code, add LangSmith trajectory tracing, and build audit trails that survive context resets — for cost visibility and compliance."
 tags:
   - agent-design
@@ -13,7 +13,7 @@ aliases:
   - Audit Trail for Agent Decisions
 ---
 
-# Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging
+# Agent Observability with OpenTelemetry and Trajectory Logging
 
 > Agent observability combines OpenTelemetry metrics and events, trajectory tracing, and structured audit trails to give you cost attribution, compliance evidence, and debugging data that survives context resets — all without custom instrumentation.
 
@@ -140,10 +140,7 @@ OTel's push-based model fits agent workloads: agents emit bursts of activity acr
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Debug Log Panel](agent-debug-log-panel.md)
-- [Circuit Breakers for Agent Loops](circuit-breakers.md)
 - [Loop Detection](loop-detection.md)
 - [Event Sourcing for Agents](event-sourcing-for-agents.md)
 - [Observability Legible to Agents](observability-legible-to-agents.md)
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
-- [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
-- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)

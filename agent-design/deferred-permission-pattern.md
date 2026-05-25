@@ -112,16 +112,16 @@ The caller surfaces this in its own UI, collects `"Yes"`, then resumes. On resum
 
 ## Why It Works
 
-`"defer"` works because Claude Code serializes the full session transcript — conversation history, tool call state, and the pending tool invocation — to disk under the session ID before exiting. The `--resume` flag rehydrates that transcript rather than starting a new session, so the model context is byte-identical to the moment before the exit. The `deferred_tool_use` payload in the exit JSON gives the caller exactly what it needs to surface the approval decision: tool name, tool ID, and the full input object. On resume, `PreToolUse` fires again for the same tool call, and returning `"allow"` with `updatedInput` injects the collected answer before the tool executes. The design separates the *approval moment* (owned by the caller's UI) from the *execution moment* (owned by Claude Code), without requiring the session to block, poll, or restart.
+Claude Code serializes the full session transcript — conversation history, tool state, and the pending invocation — to disk under the session ID before exiting. `--resume` rehydrates that transcript, so the model context is byte-identical to the moment before exit. The `deferred_tool_use` payload gives the caller the tool name, ID, and input it needs to surface the approval. On resume, `PreToolUse` fires again for the same call, and `"allow"` with `updatedInput` injects the answer before execution. The design separates the *approval moment* (owned by the caller's UI) from the *execution moment* (owned by Claude Code), without blocking, polling, or restarting.
 
 ## When This Backfires
 
 `"defer"` adds caller-side complexity. Consider the alternatives when:
 
-- **Task state is negligible.** For short, stateless tasks where a restart costs less than wiring up pause/resume logic, splitting into a pre-approval phase and post-approval invocation is simpler and avoids lifecycle management.
-- **Multi-tool turns are unavoidable.** If the agent reliably issues several tool calls per turn — common with complex reasoning steps — `"defer"` silently no-ops with a warning. Restructuring prompts to force single-tool turns can degrade agent quality more than it gains safety.
-- **Session storage is constrained.** Deferred sessions persist indefinitely. In high-volume CI environments with many concurrent agents, accumulated unresumed sessions consume disk and require explicit cleanup pipelines the caller must own.
-- **The caller has no UI surface.** `"defer"` assumes the calling process can route `deferred_tool_use` to a human. Fully automated pipelines with no approval channel will hang indefinitely unless the hook logic unconditionally falls back to `"allow"` or `"deny"` after a timeout — reintroducing the ambiguity `"defer"` was meant to resolve.
+- **Task state is negligible.** For short, stateless tasks where a restart costs less than wiring up pause/resume, splitting into pre- and post-approval phases is simpler.
+- **Multi-tool turns are unavoidable.** If the agent reliably issues several tool calls per turn, `"defer"` silently no-ops. Forcing single-tool turns can degrade agent quality more than it gains in safety.
+- **Session storage is constrained.** Deferred sessions persist indefinitely. High-volume CI with many concurrent agents accumulates unresumed sessions and requires explicit cleanup the caller must own.
+- **The caller has no UI surface.** `"defer"` assumes the process can route `deferred_tool_use` to a human. Fully automated pipelines with no approval channel hang unless the hook falls back to `"allow"` or `"deny"` after a timeout — reintroducing the ambiguity `"defer"` was meant to resolve.
 
 ## Comparison with PermissionDenied Hook
 

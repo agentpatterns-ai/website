@@ -11,12 +11,14 @@ aliases:
   - sub-agent frontmatter quality check
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-subagent-definitions/`
+
 # Audit Sub-Agent Definitions
 
 > Locate every sub-agent file, validate frontmatter contracts, score tool allowlist tightness, detect missing isolation and model assignments, emit per-sub-agent findings.
 
 !!! info "Harness assumption"
-    Sub-agents live under `.claude/agents/` (Claude Code) or equivalent (`.cursor/agents/`, custom). Each file declares scope and tool access via YAML frontmatter. Skip this runbook for harnesses without a sub-agent primitive — there is nothing to audit. See [Assumptions](index.md#assumptions).
+    [Sub-agents](../tools/claude/sub-agents.md) live under `.claude/agents/` (Claude Code) or equivalent (`.cursor/agents/`, custom). Each file declares scope and tool access via YAML frontmatter. Skip this runbook for harnesses without a sub-agent primitive — there is nothing to audit. See [Assumptions](index.md#assumptions).
 
 !!! info "Applicability"
     Run when the project defines one or more sub-agents — the [`bootstrap-subagent-template`](bootstrap-subagent-template.md) scaffold is the paired remediation for empty findings or wholesale rewrites.
@@ -187,4 +189,5 @@ Top fix: <one-liner>
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
+- [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
 - [Audit Permissions Blast Radius](audit-permissions-blast-radius.md)

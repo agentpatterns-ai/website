@@ -45,6 +45,8 @@ Skills scope to the agent that owns the `SkillToolset`. In an ADK multi-agent te
 
 Skills add overhead: L1 metadata injects into every turn, and `load_skill` costs an extra LLM round-trip before the agent acts. For a single-purpose agent that activates the same skill every turn, a plain `instruction=` block on the agent is strictly faster — skills are designed for agents with many capabilities that activate one or two per conversation ([MindStudio: progressive disclosure tradeoffs](https://www.mindstudio.ai/blog/progressive-disclosure-ai-agents-context-management)).
 
+Counter-evidence on activation reliability: Vercel's agent evals reported the skill was never invoked in 56% of test cases with default configuration, producing zero improvement over baseline; a compressed docs index placed in `AGENTS.md` instead reached a higher pass rate than the equivalent skill ([Vercel: AGENTS.md outperforms skills in our agent evals](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). Skills only earn their cost when activation triggers are reliable — pair `SkillToolset` with explicit trigger phrases in the agent's base instructions, and treat invocation rate as a metric to evaluate, not assume.
+
 Cross-language status: skill support is documented for **ADK Python**; parity with [ADK Go](https://developers.googleblog.com/adk-go-10-arrives/) and ADK Java is not confirmed in the skills documentation — verify against the target SDK's release notes before authoring skills for a non-Python runtime.
 
 ## Example

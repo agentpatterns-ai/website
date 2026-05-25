@@ -1,5 +1,5 @@
 ---
-title: "Visible Thinking Practices in AI-Assisted Development"
+title: "Visible Thinking in AI-Assisted Development"
 description: "When AI compresses development time, meaningful commits, signal-rich PRs, and structured prompts become the primary quality differentiators."
 tags:
   - human-factors
@@ -111,14 +111,11 @@ Visible thinking practices assume documentation overhead is recoverable — that
 
 ## Related
 
-- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md)
 - [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Trajectory Logging and Progress Files](trajectory-logging-progress-files.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
-- [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-- [Loop Detection](loop-detection.md)
-- [Event Sourcing for Agents: Separating Cognitive Intention from State Mutation](event-sourcing-for-agents.md)
-- [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md)
+- [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)

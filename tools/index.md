@@ -14,7 +14,7 @@ tags:
 
 ## [Claude Code](claude/index.md)
 
-Anthropic's CLI agent — hooks lifecycle, sub-agents, batch worktrees, session scheduling, agent SDK, and extension points.
+Anthropic's CLI agent — hooks lifecycle, sub-agents, batch worktrees, session scheduling, agent SDK, and [extension points](claude/extension-points.md).
 
 ## [Cursor](cursor/index.md)
 
@@ -22,7 +22,7 @@ Cursor's agentic interface — [Agents Window](cursor/agents-window.md) for para
 
 ## [GitHub Copilot](copilot/index.md)
 
-GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integration, [Copilot Spaces](copilot/copilot-spaces.md), and custom agents and skills.
+GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integration, [Copilot Spaces](copilot/copilot-spaces.md), and [custom agents and skills](copilot/custom-agents-skills.md).
 
 ## [OpenAI Agents SDK](openai/index.md)
 

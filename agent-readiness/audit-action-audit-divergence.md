@@ -11,6 +11,8 @@ aliases:
   - audit-record divergence audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-action-audit-divergence/`
+
 # Audit Action-Audit Divergence
 
 > Walk the F1-F4 divergence taxonomy against the runtime — name the chokepoint, integrity mechanism, liveness probe, and target validator — and convert each unanswered question into a finding mapped to existing controls.
@@ -192,4 +194,5 @@ Top fix: <one-liner — usually F4 for agents with egress, F1 for agents with wr
 - [Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md) — F2 control implementation
 - [Audit MCP Control Plane Bypass](audit-mcp-control-plane-bypass.md) — sibling audit covering off-protocol egress
 - [Audit Lethal Trifecta](audit-lethal-trifecta.md) — sibling audit; F4 concentrates on `(1,1,1)` principals
+- [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the underlying framework defining the three legs
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)

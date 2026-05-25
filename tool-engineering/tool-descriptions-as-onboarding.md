@@ -10,7 +10,7 @@ aliases:
   - Poka-Yoke
 ---
 
-# Write Tool Descriptions Like Onboarding Docs
+# Write Tool Descriptions as Agent Onboarding Documents
 
 > Write tool descriptions assuming the agent has never seen the underlying system — include implicit context, query formats, domain terminology, and resource relationships that an experienced user would take for granted.
 
@@ -136,11 +136,9 @@ Description maintenance is ongoing cost. As the underlying API evolves, descript
 
 ## Related
 
-- [Tool Description Quality](tool-description-quality.md)
-- [Tool Engineering](tool-engineering.md)
+- [Tool Description Quality](tool-description-quality.md) — scoring rubric for description completeness and clarity
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — mistake-proofing tools so agents cannot call them incorrectly
-- [Agent-Computer Interface](agent-computer-interface.md) — tool design as UX discipline for agents
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
+- [Consolidate Agent Tools](consolidate-agent-tools.md) — folding overlapping tools into single, well-described entry points
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — structured errors that guide agents to the correct next action
 - [Semantic Tool Output](semantic-tool-output.md) — designing tool output for agent readability
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — enforcing correct tool inputs through schema design

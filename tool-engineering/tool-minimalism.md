@@ -106,15 +106,11 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 
 ## Related
 
-- [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
+- [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Tool Selection Guidance](tool-description-quality.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Semantic Tool Output](semantic-tool-output.md)
-- [MCP Server Design](mcp-server-design.md)
-- [Unix CLI Native Tool Interface](unix-cli-native-tool-interface.md)
-- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
-- [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
+- [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
+- [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)

@@ -182,4 +182,3 @@ The audit-before-rewriting step is the safeguard: steps that cannot be made unam
 - [Incident Log Investigation Skill](incident-log-investigation-skill.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)
-- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)

@@ -43,6 +43,8 @@ The MCP servers policy controls access to [Model Context Protocol](../standards/
 
 This default-deny posture prevents unvetted MCP servers from accessing repository context without administrative approval.
 
+**Enforcement caveat**: Allowlist enforcement is name-based, not cryptographic — for local stdio servers the policy validates only the server name, so a developer editing `.vscode/mcp.json` or the user-profile `mcp.json` directly can sideload a server that matches an allowlisted name without going through the registry ([GitHub Docs: MCP allowlist enforcement](https://docs.github.com/en/copilot/reference/mcp-allowlist-enforcement)). The policy also scopes per-client — the same Copilot identity used in JetBrains, Neovim, or third-party hosts like Cursor and Claude is not covered by a VS Code allowlist. Treat the allowlist as an honesty layer for compliant developers, not as a hard boundary; pair it with auditable MCP gateways or disable MCP entirely for high-risk repos until strict path-and-argument matching ships.
+
 ### Third-Party Agent Access
 
 Policies govern whether third-party AI tools (beyond Copilot itself) can access repositories. This controls the blast radius of agent integrations and ensures that only approved tools interact with organizational code.

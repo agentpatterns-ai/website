@@ -38,11 +38,11 @@ The cognitive shift: instead of "is this 50-line function correct?" you answer "
 
 ### Why Tests, Not Code
 
-A test case is one input, one expected output, one assertion. `assert sort_users(input) == expected` either matches your intent or it doesn't. Code review requires reasoning about implementation logic, control flow, and edge cases at once; test validation is one input-output pair at a time. TiCoder measured a 38% reduction in cognitive load (NASA-TLX) with no increase in completion time. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
+A test case is one input, one expected output, one assertion. `assert sort_users(input) == expected` either matches your intent or it doesn't. Code review reasons about implementation logic, control flow, and edge cases at once; test validation handles one input-output pair at a time. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
 ## Discriminative Test Selection
 
-Not all tests are useful. A test every candidate passes carries zero information. The highest-value tests are *discriminative*: they split candidates into groups that disagree on expected output. Score each test by how evenly it splits candidates — a 50/50 split maximizes information gain. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100)) The AI targets *points of ambiguity* where reasonable interpretations diverge.
+A test every candidate passes carries zero information. The highest-value tests are *discriminative*: they split candidates into groups that disagree on expected output. Score each test by how evenly it splits candidates — a 50/50 split maximizes information gain at *points of ambiguity* where reasonable interpretations diverge. ([Fakhoury et al., IEEE TSE 2024](https://arxiv.org/abs/2404.10100))
 
 ## Quantitative Evidence
 
@@ -58,8 +58,6 @@ Not all tests are useful. A test every candidate passes carries zero information
 - **Shared blind spots.** When one model both drafts tests and interprets the prompt, tests inherit its misreading. An alternative is having the model ask a clarifying question rather than commit to tests. ([Wu et al., 2025](https://arxiv.org/abs/2504.16331))
 - **Unfamiliar domain.** If the developer doesn't yet know the right answer (new subsystem, unfamiliar library), the loop encodes guesses as ground truth.
 - **Out of scope.** Evidence covers single-function Python with an idealized oracle; multi-file refactors and stateful systems are untested.
-
-Prefer TDD or spec-first review when the spec is precise, or when you cannot verify expected outputs in isolation.
 
 ## How This Differs from TDD with Agents
 
@@ -130,6 +128,8 @@ The developer reviews each test in seconds. "Yes, extract from brackets. Yes, de
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
 - [Red-Green-Refactor with Agents: Letting Tests Drive Dev](red-green-refactor-agents.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
-- [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md)
+- [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md)
+- [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md)
+- [Test Evolution Blind Spot in Coding Agents](test-evolution-blind-spot.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)

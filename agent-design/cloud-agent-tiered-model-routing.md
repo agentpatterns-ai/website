@@ -92,3 +92,4 @@ The dispatch rule lives in the team's runbook, not in code — the cloud agent h
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — taxonomic framework for per-task tier routing across an entire harness.
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — research proposal using code health as the routing signal at task dispatch.
 - [Gateway Model Routing](gateway-model-routing.md) — the discovery layer beneath any tier-routing decision.
+- [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — the cloud-agent surface this routing pattern targets.

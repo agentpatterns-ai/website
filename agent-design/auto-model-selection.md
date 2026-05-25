@@ -92,3 +92,5 @@ To pin instead — when any of the failure conditions above apply — the cloud 
 - [Bootstrap Reasoning–Execution Routing](../agent-readiness/bootstrap-reasoning-execution-routing.md) — self-wired equivalent that declares the routing decision in harness config the team controls.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors at the agent level, complementary to within-vendor pool routing.
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — the parallel observability contract for self-hosted routes; both fail the same way when `model_id` is missing.
+- [Cloud Agent Tiered Model Routing](cloud-agent-tiered-model-routing.md) — structured tier assignments for cloud agent tasks; shares the model picker, multiplier discounts, and tiered routing concepts.
+- [Utility Model Split](utility-model-split.md) — background-vs-foreground model routing and vendor model fleet partitioning; complements Auto's within-pool selection.

@@ -23,7 +23,7 @@ Use elicitation when the valid values or required fields depend on server-side s
 
 ## Why It Works
 
-Tool schemas are registered before any call runs, so they can only describe inputs that are knowable at registration. When a required field depends on state the server discovers at runtime — the set of existing entities, the result of a lookup, the branch of a decision tree — encoding it as a static parameter forces the server either to accept a wider input than it actually supports or to reject calls after the fact with an error. Elicitation resolves the mismatch by deferring input collection to the moment the server knows what it needs: the server pauses the in-flight call, describes the missing fields as a form, and the client supplies values. The `Elicitation` and `ElicitationResult` hooks work because they sit at the two boundaries of that pause — before the user sees the form, and after the user responds — giving automation a point to substitute, validate, or suppress input without changing the server or the tool schema.
+When a required field depends on state the server discovers at runtime — the set of existing entities, the result of a lookup, the branch of a decision tree — encoding it as a static parameter forces the server to accept a wider input than it supports or to reject calls after the fact. Elicitation resolves the mismatch by pausing the in-flight call, describing the missing fields as a form, and letting the client supply values. The `Elicitation` and `ElicitationResult` hooks sit at the two boundaries of that pause — before the user sees the form, and after the user responds — giving automation a point to substitute, validate, or suppress input without changing the server or the tool schema.
 
 ## How Elicitation Works
 
@@ -132,9 +132,11 @@ jq -n --arg name "$CLEAN" \
 
 **Client support is not universal.** Elicitation was added to the MCP spec in June 2025. Not all clients implement it — clients that don't will either block silently, return a "Method not found" error, or crash during the capability handshake. Verify client support before designing a tool that depends on elicitation. [GitHub Copilot in VS Code supports it](https://github.blog/ai-and-ml/github-copilot/building-smarter-interactions-with-mcp-elicitation-from-clunky-tool-calls-to-seamless-user-experiences/); other hosts vary.
 
-**Headless pipelines stall without a hook.** Any elicitation request in a CI or non-interactive agent context blocks indefinitely unless an `Elicitation` hook is pre-configured to auto-accept or decline. The tool call hangs — it does not time out on its own. The fix is an explicit hook (see Headless Automation Pattern above), but that requires anticipating every server that might elicit and configuring coverage in advance.
+**Headless pipelines stall without a hook.** Any elicitation request in a CI or non-interactive context blocks indefinitely unless an `Elicitation` hook is pre-configured to auto-accept or decline. The call hangs — it does not time out. The fix is an explicit hook (see Headless Automation Pattern above), but that requires anticipating every server that might elicit.
 
-**Schema complexity is deliberately limited.** Elicitation only supports flat primitive fields (`text`, `number`, `boolean`, `select`). Conditional fields, nested objects, and array inputs are not expressible in the elicitation form schema. If the required input is structurally complex, elicitation is the wrong mechanism — model it as a tool parameter or use a multi-step tool sequence instead.
+**Schema complexity is deliberately limited.** Elicitation only supports flat primitive fields (`text`, `number`, `boolean`, `select`). Conditional fields, nested objects, and array inputs are not expressible in the elicitation form schema. If the required input is structurally complex, model it as a tool parameter or use a multi-step tool sequence instead.
+
+**Gateways and proxies silently break elicitation.** Many MCP gateways relay only client→server traffic, so server→client messages like `elicitation/create` have no path back and are dropped. A LiteLLM bug report in March 2026 documents this: servers that work standalone stop eliciting once fronted by a gateway for centralized auth ([BerriAI/litellm#23761](https://github.com/BerriAI/litellm/issues/23761)). Verify your gateway proxies bidirectional JSON-RPC and maintains stateful sessions before fronting an eliciting server.
 
 ## Key Takeaways
 

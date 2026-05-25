@@ -29,8 +29,8 @@ Instead, treat autonomy as a dial you turn up based on evidence.
 | **1. Suggest** | Inline completions and chat answers only | Developer writes all code, uses suggestions selectively | Week 1 — orientation, building familiarity |
 | **2. Propose** | Agent mode proposes edits, developer reviews before applying | Review each change, accept or reject | Weeks 2–3 — learning what the agent gets right and wrong |
 | **3. Execute with gates** | Agent mode runs autonomously but requires approval for tool use (file writes, terminal commands) | Approve/deny each action, steer when off course | Weeks 3–4 — supervised delegation |
-| **4. Sandbox execution** | Cloud agent runs in GitHub Actions sandbox, produces draft PRs | Review PRs, not individual actions | Weeks 4–6 — async delegation with PR-level review |
-| **5. Trusted contributor** | Cloud agent on well-defined tasks, auto-review enabled, human review for critical paths only | Monitor merge rates, audit samples, handle escalations | Ongoing — calibrated trust with tiered review |
+| **4. Sandbox execution** | Coding agent runs in GitHub Actions sandbox, produces draft PRs | Review PRs, not individual actions | Weeks 4–6 — async delegation with PR-level review |
+| **5. Trusted contributor** | Coding agent on well-defined tasks, auto-review enabled, human review for critical paths only | Monitor merge rates, audit samples, handle escalations | Ongoing — calibrated trust with tiered review |
 
 ### Evidence-based escalation
 
@@ -50,7 +50,7 @@ Define these before granting autonomy, not after an incident:
 
 - **Any production incident** traced to unreviewed agent code → roll back to Level 3 (gated execution)
 - **Defect escape rate increases** >20% over baseline → roll back one level
-- **Review queue grows** beyond team capacity → pause new cloud agent tasks until caught up
+- **Review queue grows** beyond team capacity → pause new coding agent tasks until caught up
 - **Audit disagreement** >5% (human reviewer disagrees with agent's merged changes) → increase review coverage
 
 Rollback is not failure — it's calibration. Autonomy is not monotonically increasing.
@@ -109,9 +109,9 @@ When reviewing PRs:
 
 Silence is a valid review outcome. A review tool that always produces output trains the team to ignore it.
 
-### The 40–60% reduction
+### Where the time savings come from
 
-Tiered review typically reduces human review burden by 40–60% without loss of confidence [unverified]. The savings come from Tier 1 (automated-only) — tests, docs, config, and formatting changes that previously required a human rubber-stamp now merge after automated checks pass.
+Tiered review's payoff comes from Tier 1 (automated-only) — tests, docs, config, and formatting changes that previously required a human rubber-stamp now merge after automated checks pass. The magnitude varies by codebase and team conventions; measure your own baseline before claiming a number.
 
 The critical-path tiers (2 and 3) still get full human attention. The difference is that human reviewers aren't fatigued from reviewing boilerplate changes before they reach the important PRs.
 
@@ -121,11 +121,11 @@ The critical-path tiers (2 and 3) still get full human attention. The difference
 
 ### The premium request model
 
-Copilot usage is metered via **premium requests**. Each interaction with Copilot (chat message, agent action, Copilot cloud agent task) consumes premium requests, with a multiplier based on the model used. GitHub has [announced a transition](https://docs.github.com/en/copilot/concepts/billing/copilot-requests) from request-based to usage-based billing starting June 1, 2026 — the structural advice below remains valid, but check the linked page for the current billing surface.
+Copilot usage is metered via **premium requests**. Each interaction with Copilot (chat message, agent action, coding agent task) consumes premium requests, with a multiplier based on the model used.
 
 | Model tier | Multiplier | Best for |
 |-----------|-----------|----------|
-| Base / Auto | 1x (with 10% discount when auto model selection is used in Copilot Chat, Copilot CLI, or Copilot cloud agent on paid plans) | Default for most tasks — let Copilot choose |
+| Base / [Auto](../../agent-design/auto-model-selection.md) | 1x (with 10% discount when auto model selection is used in Copilot Chat, Copilot CLI, or Copilot cloud agent on paid plans) | Default for most tasks — let Copilot choose |
 | Mid-tier models (Claude Sonnet 4.5/4.6, GPT-5.4) | 1x | Complex reasoning, multi-file refactors |
 | Flagship models (Claude Opus 4.5/4.6 at 3x, Claude Opus 4.7 at 15x, GPT-5.5 at 7.5x) | Higher multipliers | Architecture, novel problems, large codebase analysis |
 
@@ -135,12 +135,12 @@ The multiplier roster changes frequently — check the [supported models page](h
 
 | Strategy | Impact | How |
 |----------|--------|-----|
-| **Use Auto mode** | 10% multiplier discount on paid plans in Chat / CLI / cloud agent + smart routing | Don't override the model unless you have a reason |
+| **Use Auto mode** | 10% discount (VS Code) + smart routing | Don't override the model unless you have a reason |
 | **Short, focused sessions** | Fewer tokens consumed per task | Module C's one-task-per-session discipline |
 | **Good instructions files** | Fewer correction cycles | Module B's customization stack — the agent gets it right the first time |
 | **[Strong backpressure](../../agent-design/agent-backpressure.md)** | Agent self-corrects via tests, not extra LLM calls | Module D's type/test/linter investment |
 | **Decompose large tasks** | Cheaper models handle smaller chunks | Module C's task decomposition — don't send a flagship model to do a base model's job |
-| **Cloud agent for async work** | Frees your machine and attention | The Copilot cloud agent consumes premium requests, but your time is more expensive |
+| **Coding agent for async work** | Frees your machine and attention | The coding agent consumes premium requests, but your time is more expensive |
 
 ### The real cost equation
 
@@ -165,7 +165,7 @@ Content exclusions are **not respected by**:
 - Agent mode in VS Code
 - Agent mode in JetBrains
 - The Copilot CLI
-- The cloud agent
+- The coding agent
 
 This is the single most important security fact for teams adopting agent workflows. If you rely on content exclusions to protect sensitive code, agent-based workflows bypass them entirely.
 
@@ -173,7 +173,7 @@ This is the single most important security fact for teams adopting agent workflo
 
 | Sensitive content | Protection mechanism | Why |
 |-------------------|---------------------|-----|
-| Secrets, credentials | Secret scanning (enabled by default on cloud agent) + `.gitignore` + environment variables | Never in the repo — no exclusion needed |
+| Secrets, credentials | Secret scanning (enabled by default on coding agent) + `.gitignore` + environment variables | Never in the repo — no exclusion needed |
 | Proprietary algorithms | Separate repository with restricted access | Repo-level isolation — agents can't access repos they don't have permission to |
 | Compliance-sensitive code (PII handling, financial) | CODEOWNERS + branch protection requiring security team review | Human gate on all changes |
 | Internal documentation not for AI context | Separate from code repo, or filesystem permissions in CI | Structural separation |
@@ -185,7 +185,7 @@ Agents read external content — web pages via `#fetch`, issue comments, PR desc
 **What teams should know**:
 
 - **No tool solves this completely.** Defence is architectural, not a single feature.
-- **The cloud agent runs in a sandbox** with restricted network access and limited permissions. This is structural defence — even if injected, the agent's blast radius is constrained.
+- **The coding agent runs in a sandbox** with restricted network access and limited permissions. This is structural defence — even if injected, the agent's blast radius is constrained.
 - **Copilot hooks** (Module B) provide pre-tool-use enforcement. A `preToolUse` hook can block writes to sensitive paths regardless of what the agent was instructed to do.
 - **Instructions files are an attack surface.** If you clone a repo with a malicious `.github/copilot-instructions.md`, those instructions apply to your Copilot session. Review instruction files in unfamiliar repos the same way you'd review a `Makefile` or `postinstall` script.
 
@@ -215,7 +215,7 @@ For teams that need audit trails, use Copilot hooks to log agent activity:
 }
 ```
 
-This creates a local audit log of all agent actions. For the cloud agent, hooks run in the GitHub Actions sandbox — the log is available in the Actions run output.
+This creates a local audit log of all agent actions. For the coding agent, hooks run in the GitHub Actions sandbox — the log is available in the Actions run output.
 
 ---
 
@@ -228,7 +228,7 @@ This creates a local audit log of all agent actions. For the cloud agent, hooks 
 | **Organisation** | Organisation-level Copilot instructions (GitHub.com settings) | "All code must include error handling. Use English for all comments and documentation." |
 | **Team / shared** | [Copilot Spaces](../../tools/copilot/copilot-spaces.md) with team-specific reference material | A "Payments Team" Space with the payment schema, compliance docs, and relevant ADRs |
 | **Repository** | `.github/copilot-instructions.md` + path-specific instructions | Stack, conventions, build commands (Module B) |
-| **Repository** | Custom agents for recurring task types | `security-reviewer.agent.md`, `test-writer.agent.md` (Module B) |
+| **Repository** | [Custom agents](../../tools/copilot/custom-agents-skills.md) for recurring task types | `security-reviewer.agent.md`, `test-writer.agent.md` (Module B) |
 | **Repository** | Skills for repeatable procedures | `generate-changelog/`, `scaffold-component/` (Module B) |
 | **Repository** | Hooks for enforcement | Path restrictions, audit logging (Module B / Module D) |
 | **Individual** | Personal instructions (GitHub.com settings) | Response style, language preferences |
@@ -243,7 +243,7 @@ Recommended adoption sequence:
 |-------|------------|--------|--------|
 | **Week 1** | `.github/copilot-instructions.md` in every active repo | 30 min per repo | High — immediate quality improvement |
 | **Week 2** | Path-specific instructions for distinct codebase areas | 15 min per area | Medium — reduces instruction file bloat |
-| **Month 1** | 1–2 custom agents for recurring task types | 1 hour each | Medium — consistent quality for repeated tasks |
+| **Month 1** | 1–2 [custom agents](../../tools/copilot/custom-agents-skills.md) for recurring task types | 1 hour each | Medium — consistent quality for repeated tasks |
 | **Month 1** | Enable automatic Copilot Code Review on all repos | 5 min per repo | High — automated first-pass review |
 | **Month 2** | Skills for repeatable procedures | 2 hours each | Medium — encodes team knowledge |
 | **Month 2** | Hooks for enforcement (path restrictions, audit) | 1 hour per repo | High for compliance-sensitive teams |
@@ -280,7 +280,7 @@ Automate this with a monthly GitHub Action that validates URLs and flags files n
 
 - **Lines of code generated** — volume is not value. More lines can mean more review burden and more maintenance.
 - **Number of Copilot interactions** — usage without quality metrics is vanity.
-- **Time "saved" by self-report** — developers consistently overestimate AI speedup [unverified]. Self-reported productivity gains diverge significantly from measured outcomes — track cycle time and merge rates instead.
+- **Time "saved" by self-report** — developers consistently overestimate AI speedup. METR's 2025 randomised trial of experienced open-source developers found participants self-reported a 20% speedup while measurements showed a 19% slowdown — a 39-point gap between perception and reality ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Track cycle time and merge rates instead.
 
 ### Benchmarking merge rates
 
@@ -338,7 +338,7 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 - **Deliberate practice blocks**: Reserve time (quarterly or monthly) for coding without AI assistance in domains the team delegates heavily.
 - **Explain-then-code as default**: Make it a team norm, not an individual choice. "Ask why before asking how."
-- **Pair cloud agent work with learning**: When reviewing a cloud agent PR, trace the implementation to understand the approach — don't just verify it passes tests.
+- **Pair coding agent work with learning**: When reviewing a coding agent PR, trace the implementation to understand the approach — don't just verify it passes tests.
 
 ---
 
@@ -358,10 +358,10 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 ### Weeks 5–8: Delegate and measure
 
-- Start using the cloud agent for well-defined tasks (bug fixes, test additions, doc updates)
+- Start using the coding agent for well-defined tasks (bug fixes, test additions, doc updates)
 - Implement tiered code review (automated tier for low-risk changes)
 - Track merge rate, review burden, defect escape rate
-- **Autonomy level**: 4 (Sandbox execution) — cloud agent producing draft PRs
+- **Autonomy level**: 4 (Sandbox execution) — coding agent producing draft PRs
 
 ### Month 3+: Scale and govern
 
@@ -384,7 +384,7 @@ Early research on agent-authored PRs shows merge rates vary significantly by age
 
 - **Progressive autonomy, not binary adoption.** Start at Level 1 (suggestions) and escalate based on measured evidence — acceptance rate, merge rate, defect escapes. Define rollback triggers before granting autonomy.
 - **Tiered code review eliminates the review bottleneck.** Route by risk: automated-only for low-risk changes, AI + human for business logic, human-only for security-sensitive code. This reduces human review burden 40–60% while increasing coverage on critical paths.
-- **Content exclusions don't protect against agent workflows.** Agent mode, the CLI, and the cloud agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
+- **Content exclusions don't protect against agent workflows.** Agent mode, the CLI, and the coding agent bypass content exclusions entirely. Use repository isolation and filesystem permissions for truly sensitive code.
 - **Under-configuration is the norm.** Most teams stop at a basic instructions file. The full stack — path-specific instructions, custom agents, skills, hooks, Spaces — compounds. Adopt incrementally over 2–3 months.
 - **Measure outcomes, not activity.** PR cycle time, merge rate, defect escapes, and review burden tell you whether adoption is working. Lines generated and interaction count do not.
 - **Comprehension debt is the hidden cost.** Agent-generated code that ships faster than the team understands it creates fragility. Require explain-before-code, distribute review responsibility, and make review a learning exercise.

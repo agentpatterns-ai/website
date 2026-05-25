@@ -59,7 +59,7 @@ The benchmark gains are real but not unconditional. The page lives or dies on th
 - The target distribution differs sharply from the corpus distribution — a coding agent on a proprietary codebase or internal DSL receives plausible but wrong-domain traces, biasing the solver.
 - Traces lack provenance and outcome labels. A corpus that mixes successful and failed runs without distinguishing them propagates failure patterns; this is the trace-side of the [reasoning misalignment](https://arxiv.org/abs/2407.12216) failure mode that already plagues document-RAG.
 - The bottleneck is elsewhere. If the agent is failing on tool reliability, prompt drift, or eval gaps, swapping the corpus does not address the cause. [Retrieval is Not Enough](https://arxiv.org/html/2504.14858) argues that even reasoning-shaped retrieval needs test-time critique to be reliable.
-- Benchmark contamination risk is high. If the corpus contains traces for the exact items the system will be evaluated on, gains reflect leakage rather than transfer. Provenance metadata and held-out splits are non-negotiable for honest measurement.
+- [Benchmark contamination](../verification/benchmark-contamination-eval-risk.md) risk is high. If the corpus contains traces for the exact items the system will be evaluated on, gains reflect leakage rather than transfer. Provenance metadata and held-out splits are non-negotiable for honest measurement.
 
 The headline +56% on AIME attaches to a specific configuration: math benchmark, traces from a stronger reasoning model, and no contamination across the held-out split. Real production agents that look closer to engineering work than to AIME should expect smaller gains and harder corpus engineering.
 

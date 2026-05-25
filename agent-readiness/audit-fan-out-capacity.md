@@ -11,6 +11,8 @@ aliases:
   - agent rate-limit audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-fan-out-capacity/`
+
 # Audit Fan-Out Capacity
 
 > Locate parallel agent dispatch sites, extract batch size N, validate against rate-limit tier and cost budget, detect missing staggering and retry storms, emit per-site capacity findings.

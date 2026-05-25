@@ -22,7 +22,7 @@ aliases:
 | [Trajectory logging via progress files](trajectory-logging-progress-files.md) | Agent, next session | Cross-session, agent-shaped | "What was decided last time?" |
 | **History-as-artifact** | Practitioner, after the fact | Cross-session, practitioner-shaped | "What did I do this week?" |
 
-This page covers the third surface. The audience is the engineer who wants a standup summary, a coaching tip, or an audit answer — not the harness developer debugging an agent, and not the next-session agent reconstructing state.
+The third surface — history-as-artifact — serves the engineer who wants a standup summary, a coaching tip, or an audit answer; not the harness developer debugging an agent, and not the next-session agent reconstructing state.
 
 ## The Concrete Implementation
 

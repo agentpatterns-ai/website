@@ -34,7 +34,7 @@ Constraints encoded in the same medium as every other prompt token — natural l
 | **Audit** | Log lacks the constraint state at decision time | Post-hoc review cannot reconstruct why an action was permitted |
 | **Optimization** | Reward signal pulls behavior toward task completion at the cost of constraint adherence | Fine-tuned model trades a small safety margin for measurable utility gains |
 
-This taxonomy maps cleanly onto the four-mode [audit-record divergence invariant](audit-record-divergence-invariant.md) ([Metere, 2026](https://arxiv.org/abs/2605.01740)): F1 gate-bypass surfaces as tool-use and delegation drift, F2 audit-forgery as audit drift, F3 partial failure as memory drift, F4 wrong-target as delegation drift in inheritance chains.
+This taxonomy maps cleanly onto the four-mode [audit-record divergence invariant](audit-record-divergence-invariant.md) and its [controls-mapping view](action-audit-divergence-taxonomy.md) ([Metere, 2026](https://arxiv.org/abs/2605.01740)): F1 gate-bypass surfaces as tool-use and delegation drift, F2 audit-forgery as audit drift, F3 partial failure as memory drift, F4 wrong-target as delegation drift in inheritance chains.
 
 ## Four Invariant Properties
 

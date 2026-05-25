@@ -1,6 +1,6 @@
 ---
 title: "Risk-Based Task Sizing for Agent Verification Depth"
-description: "Scale verification effort to match task risk — trivial changes get quick checks, high-risk changes get multi-model adversarial review and human approval gates"
+description: "Scale verification effort to match task risk — trivial changes get quick checks, high-risk changes get multi-model adversarial review and human gates."
 aliases:
   - Risk-Based Verification
   - Verification Depth Scaling

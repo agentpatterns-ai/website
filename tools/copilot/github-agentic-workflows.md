@@ -24,22 +24,25 @@ The frontmatter declares:
 - **`tools`** — available integrations (e.g., `github`)
 - **`imports`** — shared fragments for reusable tool configs or formatting conventions
 
-## Named Design Patterns
+## Seven Design Patterns
 
-GitHub's canonical `gh-aw` documentation names four common automation patterns ([gh-aw docs](https://github.github.io/gh-aw/)):
+GitHub defines seven named patterns for common automation scenarios ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
 
 | Pattern | Use Case |
 |---------|----------|
 | **ChatOps** | Respond to issue/PR comments with agent actions |
 | **DailyOps** | Scheduled maintenance — stale issue cleanup, status reports |
+| **DataOps** | Data validation, reporting, dashboard generation |
 | **IssueOps** | [Issue triage](../../workflows/continuous-triage.md), labeling, routing, duplicate detection |
-| **BatchOps** | Batched repository operations across issues or PRs |
+| **ProjectOps** | Project board management, milestone tracking |
+| **MultiRepoOps** | Cross-repository coordination, dependency updates |
+| **Orchestration** | Multi-step workflows chaining multiple agent actions |
 
-Patterns are combinable — DailyOps can drive IssueOps triage on a schedule.
+Patterns are combinable — Orchestration can chain IssueOps triage with a ChatOps response.
 
 ## Configurable Engine
 
-Agentic Workflows support multiple execution engines — GitHub Copilot, Claude (Anthropic), OpenAI Codex, and custom engines — decoupling the pattern from the model provider ([gh-aw docs](https://github.github.io/gh-aw/)).
+Agentic Workflows support multiple execution engines — Copilot CLI, Claude Code, and OpenAI Codex — decoupling the pattern from the model provider ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
 
 ## Safe Outputs: Constraining Agent Writes
 
@@ -100,9 +103,10 @@ Copilot-engine workflows incur two premium requests per run ([GitHub Blog](https
 Not a replacement for standard GitHub Actions YAML workflows ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):
 
 - **Deterministic CI/CD** — build, test, deploy pipelines belong in standard Actions; agentic workflows are for subjective reasoning tasks
-- **High-volume automation** — two premium requests per run compounds fast at scale
+- **High-volume automation** — two premium requests per run compounds fast at scale, and workflows that fire on every PR can "quietly accumulate large API bills" ([GitHub Blog: Token Efficiency](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/))
 - **Broad credential access** — zero-secret-access is a security constraint; cross-repo credential workflows belong in standard Actions
 - **Latency-sensitive gates** — agent reasoning adds latency; pre-merge checks and deployments belong outside the agentic loop
+- **Misconfiguration cost blast radius** — a single bad tool wiring can drive runaway loops; GitHub documents one case where a misconfiguration produced a 64-turn fallback loop before being caught ([GitHub Blog: Token Efficiency](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cap turns, monitor token spend per workflow, and alert on per-run anomalies
 
 ## Key Takeaways
 

@@ -23,7 +23,7 @@ The question is not whether a coding agent *can* expand. It is whether the relia
 
 ## Why the Scaffold — Not the Model — Decides
 
-Harness-only changes, no model upgrade, moved Terminal Bench 2.0 from 52.8% to 66.5% ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Coding agents work because their scaffold carries strict loops, incremental verification (tests, compile, lint), tool-use discipline, and trajectory-level evals.
+Harness-only changes, no model upgrade, moved Terminal Bench 2.0 from 52.8% to 66.5% ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Coding agents work because their scaffold carries strict loops, [incremental verification](../verification/incremental-verification.md) (tests, compile, lint), tool-use discipline, and trajectory-level evals.
 
 When scope expands, the scaffold either transfers or does not:
 
@@ -46,7 +46,7 @@ Expansion pays off when all four hold:
 - **Per-domain evals exist before rollout.** Anthropic warns that "optimizing for one kind of input can hurt performance on other inputs" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). Coding pass rates do not measure browser automation quality, PR-comment review tone, or incident-triage correctness. Each new domain needs its own eval loop before production traffic.
 - **Verification signal exists in the new domain.** Compile and test are the coding agent's ground truth. Outside code, substitute signals must exist — a schema the browser output conforms to, a runbook step that succeeds, a ticket that transitions state. Without a signal, there is no self-correction loop.
 - **Credentials are isolated per task-type.** The [lethal trifecta](../security/lethal-trifecta-threat-model.md) — private data, untrusted input, external communication — appears on nearly every task once the agent reads Gmail, writes Jira tickets, and browses untrusted pages. Each task-type needs its own credential scope and egress policy; one agent with union-of-all credentials is a governance regression.
-- **Long-horizon work has progress checkpoints.** Self-scheduled work across days ([OpenAI](https://openai.com/index/codex-for-almost-everything/)) amplifies both reward hacking and objective drift without compile/test anchors. Force periodic progress artifacts (summaries, diffs, decision logs) a human or critic agent can verify.
+- **Long-horizon work has progress checkpoints.** Self-scheduled work across days ([OpenAI](https://openai.com/index/codex-for-almost-everything/)) amplifies both [reward hacking](../verification/anti-reward-hacking.md) and objective drift without compile/test anchors. Force periodic progress artifacts (summaries, diffs, decision logs) a human or critic agent can verify.
 
 ## When Expansion Backfires
 

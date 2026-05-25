@@ -76,6 +76,16 @@ Profiling costs 3–5× a single inference pass per sample. This is paid once be
 
 The approach extends Prioritized Experience Replay ([Schaul et al., ICLR 2016](https://arxiv.org/abs/1511.05952)) from value-based RL to LLM fine-tuning — replacing TD-error as the priority signal with empirical score variance across repeated rollouts.
 
+## When This Backfires
+
+Variance-based exclusion is not a universal win. Three conditions where it underperforms alternatives:
+
+- **Always-wrong samples can still carry signal.** [RL-ZVP (No Prompt Left Behind, ICLR 2026)](https://arxiv.org/abs/2509.21880) extracts learning from zero-variance prompts via entropy-guided advantage shaping, beating GRPO baselines that filter them out by up to 8.61 points on math benchmarks.
+- **Low rollout counts misclassify borderline samples.** With 3–5 runs, samples near the learnability boundary frequently get tagged zero-variance by chance — the same boundary that curriculum approaches like [VCRL](https://arxiv.org/abs/2509.19803) target deliberately. Raise the rollout count or pair filtering with a difficulty schedule.
+- **Paired sampling beats variance heuristics.** [Beyond Variance (Feb 2026)](https://arxiv.org/abs/2602.03452) shows that pairing a hard-but-solvable prompt with an easy-but-brittle one — without any variance filter — improves AIME 2025 Pass@8 from 16.8 to 22.2 over variance-selected GRPO.
+
+The case study still holds when rollout cost dominates GPU budget and the training stack cannot exploit zero-variance signal. Outside those conditions, treat variance filtering as one option, not the default.
+
 ## Example
 
 A team fine-tuning a coding agent on 2,000 task samples runs each sample 3 times with the baseline model. Results:

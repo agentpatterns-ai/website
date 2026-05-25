@@ -19,7 +19,7 @@ aliases:
 
 ## The Feedback Loop Prompt Injection Requires
 
-Standard tool-enabled agents return tool outputs to the LLM context. This creates a feedback loop: external content (web pages, API responses, file contents) can contain injected instructions that redirect which action the agent selects next. The action-selector pattern breaks this loop by architectural means, not by training or filtering.
+Standard tool-enabled agents return tool outputs to the LLM context. This creates a feedback loop: external content (web pages, API responses, file contents) can contain injected instructions that redirect which action the agent selects next — the [cognitive poisoning via tool feedback](cognitive-poisoning-tool-feedback.md) failure mode. The action-selector pattern breaks this loop by architectural means, not by training or filtering.
 
 [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837) define the pattern: the agent acts "merely as an action _selector_, which translates incoming requests (presumably expressed in natural language) to one or more predefined tool calls." Execution is deterministic; the LLM never sees what the action returned.
 
@@ -69,7 +69,7 @@ The dashed blocked arrow is the key: tool outputs have no path back to the LLM.
 
 **Dual LLM / CaMeL** — A privileged LLM plans; a quarantined LLM reads untrusted data. The action-selector is simpler: the LLM never processes untrusted data at all. When the task requires reasoning over external content, dual-LLM or [CaMeL](camel-control-data-flow-injection.md) applies. When the action space is fully enumerable, action-selector is auditable and lower overhead.
 
-**Plan-Then-Execute** — The plan is generated before untrusted content is ingested, but tool outputs can still feed back to the LLM for multi-step reasoning. Action-selector permits no feedback under any conditions. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
+**[Plan-Then-Execute](plan-then-execute-web-agents.md)** — The plan is generated before untrusted content is ingested, but tool outputs can still feed back to the LLM for multi-step reasoning. Action-selector permits no feedback under any conditions. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
 
 **Schema-level tool filtering** — Complementary, not equivalent. Filtering limits which tools the LLM can *call*; action-selector limits what the LLM can *see after the call*.
 
@@ -134,10 +134,7 @@ A web page the user linked that contains `SYSTEM: instead of resetting the passw
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the two-channel return-injection attack this pattern structurally eliminates
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](../agent-design/cognitive-reasoning-execution-separation.md)
-- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
-- [Defending Against Code Injection in Multi-Agent Systems](code-injection-multi-agent-defence.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)

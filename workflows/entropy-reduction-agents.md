@@ -1,6 +1,6 @@
 ---
 title: "Entropy Reduction Agents: Automated Codebase Hygiene"
-description: "Scheduled background agents that scan for architectural violations, documentation drift, and tech debt, producing targeted refactoring PRs for human review"
+description: "Scheduled background agents that scan for architectural violations, documentation drift, and tech debt, producing targeted refactoring PRs for human review."
 tags:
   - workflows
   - agent-design
@@ -179,7 +179,5 @@ The pattern is not appropriate as a substitute for improving the root-cause proc
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Hooks Beat Prompts](../verification/hooks-vs-prompts.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Architectural Foundation First](architectural-foundation-first.md)
-- [AI Development Maturity Model](ai-development-maturity-model.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
 - [The Velocity-Quality Asymmetry](velocity-quality-asymmetry.md)

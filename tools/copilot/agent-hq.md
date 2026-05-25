@@ -16,24 +16,24 @@ tags:
 
 ## What Agent HQ Provides
 
-Agent HQ shifts GitHub from a single-agent tool to a [multi-agent platform where teams select and deploy different coding agents](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/) depending on the task. Supported agents include GitHub Copilot, Anthropic Claude, and OpenAI Codex in public preview, with [agents from Google, Cognition, and xAI announced as forthcoming](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/).
+Agent HQ shifts GitHub from a single-agent tool to a [multi-agent platform where teams pick the coding agent that fits the task](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/). Supported agents include GitHub Copilot, Anthropic Claude, and OpenAI Codex in public preview, with [agents from Google, Cognition, and xAI announced as forthcoming](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/).
 
-The core design principle: agents operate as teammates that produce reviewable artifacts, not autonomous actors that ship code.
+The core design principle: agents are teammates producing reviewable artifacts, not autonomous actors shipping code.
 
 ## Invocation Model
 
-Agents are triggered through familiar GitHub interaction patterns:
+Agents are triggered through familiar GitHub patterns:
 
-- **@-mention in PR comments** — `@Copilot`, `@Claude`, or `@Codex` in any pull request comment triggers the named agent to perform follow-up work
-- **Issue and PR assignment** — assign an agent directly to an issue or PR; assign multiple agents to the same task for comparative output
-- **Repository Agents tab** — submit requests and select a preferred agent through the repository's dedicated agent interface
-- **VS Code Agent Sessions** — local, cloud-based, and background session types accessible via the [command palette](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/) (VS Code v1.109+). As of [v1.113](https://code.visualstudio.com/updates/v1_113), VS Code uses official [Claude Agent SDK](../claude/agent-sdk.md) APIs for session management and bridges registered MCP servers to CLI and Claude agent sessions automatically
+- **@-mention in PR comments** — `@Copilot`, `@Claude`, or `@Codex` in any pull request comment triggers follow-up work
+- **Issue and PR assignment** — assign one agent or multiple agents to a task for comparative output
+- **Repository Agents tab** — submit requests and pick an agent through the repository's dedicated interface
+- **VS Code Agent Sessions** — local, cloud-based, and background session types in the [command palette](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/) (VS Code v1.109+). As of [v1.113](https://code.visualstudio.com/updates/v1_113), VS Code uses official [Claude Agent SDK](../claude/agent-sdk.md) APIs and bridges registered MCP servers to CLI and Claude agent sessions automatically
 
 ## Parallel Agent Deployment
 
-The most distinctive capability is [running multiple agents on identical tasks simultaneously](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/). Assign Copilot, Claude, and Codex to the same issue and compare their draft PRs side by side. This enables teams to evaluate which agent produces better solutions for specific problem types without committing to a single provider.
+The distinctive capability is [running multiple agents on identical tasks simultaneously](https://github.blog/news-insights/company-news/pick-your-agent-use-claude-and-codex-on-agent-hq/). Assign Copilot, Claude, and Codex to the same issue and compare their draft PRs side by side — teams evaluate which agent solves which problem type best without committing to one provider.
 
-Agents operate asynchronously — users monitor progress in real time or review completed outputs later.
+Agents run asynchronously; monitor progress live or review completed outputs later.
 
 ## Output Artifacts
 
@@ -56,7 +56,7 @@ Agent HQ provides [centralized controls for enterprise environments](https://git
 
 ## Platform Availability
 
-Agent HQ functions across GitHub.com, GitHub Mobile, and Visual Studio Code. This cross-surface consistency means the same agent capabilities and governance policies apply regardless of where a developer invokes an agent.
+Agent HQ runs across GitHub.com, GitHub Mobile, and Visual Studio Code, so the same agent capabilities and governance policies apply wherever a developer invokes an agent.
 
 ## Example
 
@@ -107,10 +107,8 @@ Conditions where Agent HQ underperforms alternatives:
 - [Coding Agent](coding-agent.md)
 - [Agent Mode](agent-mode.md)
 - [Custom Agents and Skills](custom-agents-skills.md)
-- [Agent Governance Policies](../../workflows/agent-governance-policies.md)
 - [Agent Mission Control](agent-mission-control.md)
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
-- [Copilot SDK](copilot-sdk.md)
-- [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
-- [Dependabot Agent Assignment](dependabot-agent-assignment.md)
+- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
+- [GitHub Agentic Workflows](github-agentic-workflows.md)
+- [Agent Governance Policies](../../workflows/agent-governance-policies.md)

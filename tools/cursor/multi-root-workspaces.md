@@ -14,7 +14,7 @@ aliases:
 
 > One agent session, multiple repository folders — for edits whose intent crosses repo boundaries.
 
-Cursor 3.2 (2026-04-24) added multi-root workspaces to the Agents Window: one agent session targets a reusable workspace of multiple folders "without retargeting the agent every time it moves between repos" ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)). The same release shipped `/multitask` async subagents and revised worktrees — the three compose.
+Cursor 3.2 (2026-04-24) added multi-root workspaces to the Agents Window: one agent session targets a reusable workspace of multiple folders "without retargeting the agent every time it moves between repos" ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)). The same release shipped `/multitask` async subagents and revised worktrees, though worktrees and cloud agents are currently disabled inside multi-root sessions (see below).
 
 The mechanism is inherited from VS Code: a `.code-workspace` file lists folder roots and the editor treats them as one window with folder-scoped settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)). Cursor 3.2 lifts that surface to the agent.
 
@@ -53,9 +53,11 @@ Per-folder paths in tasks and launch configs require explicit qualification with
 
 ## Composition With Worktrees and Multitask
 
-The 3.2 release ships three composable features: multi-root (one session, N folders), worktrees (per-task git isolation inside a folder, [Cursor docs — Worktrees](https://cursor.com/docs/configuration/worktrees)), and `/multitask` (async subagents that decompose and parallelize the request, [Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)).
+The 3.2 release ships three nominally composable features: multi-root (one session, N folders), worktrees ([Cursor docs](https://cursor.com/docs/configuration/worktrees)), and `/multitask` async subagents ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)).
 
-A cross-repo refactor can run as a multi-root workspace covering the repos, with `/multitask` fanning steps out and each subagent operating in its own worktree to avoid stepping on the foreground branch. For per-task isolation, see [Cursor 3 Agents Window](agents-window.md).
+**Current limitation**: worktree and cloud-agent surfaces are disabled inside multi-root workspaces. Cursor shows a "Disabled in multi-root workspaces" tooltip on Cloud Agents and there is an open request to allow sub-workspace selection so they can target one root inside a multi-root session ([Cursor forum](https://forum.cursor.com/t/support-worktree-and-cloud-features-in-multi-root-workspaces-with-sub-workspace-selection/154911)); a separate report covers SIGSEGV crashes on source-control actions in multi-root worktree windows ([Cursor forum](https://forum.cursor.com/t/sigsegv-crash-on-source-control-actions-broken-git-ui-state-when-cursor-worktree-window-is-open-multi-root-workspace-3-machines/161315)).
+
+So composition is partial: `/multitask` fans steps across the roots in one session, but worktree isolation per subagent has to be arranged outside the multi-root session (open a single-root window for the worktree). See [Cursor /multitask](multitask-subagents.md) and [Cursor 3 Agents Window](agents-window.md).
 
 ## When Multi-Root Backfires
 
@@ -108,6 +110,7 @@ Folder roots are explicit (`frontend`, `backend`, `schema`), so the agent can ad
 ## Related
 
 - [Cursor 3 Agents Window](agents-window.md)
+- [Cursor /multitask](multitask-subagents.md)
 - [Cursor Self-Hosted Cloud Agents](self-hosted-cloud-agents.md)
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../../workflows/sparse-paths-monorepo-isolation.md)
 - [Architecting a Central Repo for Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)

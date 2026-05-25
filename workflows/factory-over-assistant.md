@@ -72,6 +72,8 @@ The factory model assumes automatable feedback. It breaks down when:
 - **Verification is unreliable.** If CI is flaky or tests are insufficient, agents optimize for passing the gate rather than solving the actual problem.
 - **Safety-critical decisions are required.** Architecture choices, security boundaries, and product trade-offs that require human judgment should not be automated away.
 
+The structural failure rates are not hypothetical. The MAST taxonomy, derived from 1,600+ annotated traces across seven multi-agent frameworks, found per-framework failure rates of 41–87%, with 41.77% of failures attributable to specification ambiguity, 36.94% to coordination breakdowns, and 21.30% to verification gaps. [Source: [Why Do Multi-Agent LLM Systems Fail? (Cemri et al., NeurIPS 2025)](https://arxiv.org/abs/2503.13657)] Treat the infrastructure prerequisites above as the floor for keeping a factory deployment out of the high end of that range — unambiguous specs, deterministic verification, and explicit coordination protocols are what separate a working fleet from a 17x error multiplier.
+
 ## Example
 
 A team running a large-scale API migration sets up the factory model before spawning agents:
@@ -107,7 +109,6 @@ The human's constraint is now PR review throughput, not agent execution speed.
 - [Worktree Isolation](worktree-isolation.md)
 - [Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)
-- [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Fan-Out and Synthesis](../multi-agent/fan-out-synthesis.md)
 - [Swarm Migration Pattern](../multi-agent/swarm-migration-pattern.md)

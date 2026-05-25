@@ -11,6 +11,8 @@ aliases:
   - signed commits for agents
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-agent-commit-attribution/`
+
 # Bootstrap Agent Commit Attribution
 
 > Wire agents to sign commits with a dedicated key plus structured metadata trailers, configure branch protection to require signing, and ship a rotation playbook before granting push access.

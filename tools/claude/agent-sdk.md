@@ -1,6 +1,6 @@
 ---
 title: "Claude Agent SDK: Building Custom Agentic Workflows"
-description: "The Claude Code runtime exposed as a library for building custom agentic workflows. The Claude Agent SDK is the infrastructure that powers Claude Code"
+description: "The Claude Agent SDK exposes the Claude Code runtime as a library for building custom agentic workflows in CI, internal tools, and products."
 aliases:
   - Claude Code SDK
 tags:
@@ -14,13 +14,13 @@ tags:
 
 ## What It Is
 
-The [Claude Agent SDK](https://code.claude.com/docs/en/agent-sdk/overview) is the infrastructure that powers Claude Code, available as a library.
+The [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) is the infrastructure that powers Claude Code, available as a library.
 
-Available as [`@anthropic-ai/claude-agent-sdk`](https://code.claude.com/docs/en/agent-sdk/typescript) (TypeScript) and `claude_agent_sdk` (Python).
+Available as [`@anthropic-ai/claude-agent-sdk`](https://platform.claude.com/docs/en/agent-sdk/typescript) (TypeScript) and `claude_agent_sdk` (Python).
 
 ## Core API
 
-The SDK's core is the `query()` function, which returns an async generator yielding typed messages. This is the [same agent loop that powers Claude Code](https://code.claude.com/docs/en/agent-sdk/overview) — tool calls, file operations, reasoning, and response generation.
+The SDK's core is the `query()` function, which returns an async generator yielding typed messages. This is the [same agent loop that powers Claude Code](https://platform.claude.com/docs/en/agent-sdk/claude-code-features) — tool calls, file operations, reasoning, and response generation.
 
 ## What You Get
 
@@ -32,7 +32,7 @@ The SDK provides access to the same filesystem-based features as Claude Code. `s
 - **Permissions**: allow/ask/deny rules control tool access
 - **Sub-agents**: define inline via the `agents` option; Claude spawns them via the Task tool
 
-The default behavior of omitting `settingSources` has churned between releases. The current [claude-code-features reference](https://code.claude.com/docs/en/agent-sdk/claude-code-features) documents that "omitting `settingSources` is equivalent to `[\"user\", \"project\", \"local\"]`" — `query()` reads the same filesystem settings as the CLI. The v0.1.0 [migration guide](https://code.claude.com/docs/en/agent-sdk/migration-guide) originally introduced isolation-by-default, and the TypeScript SDK [changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md) has not added an entry documenting a reversion, so the docs and the changelog disagree on the historical record. Pin an SDK version, set `settingSources` explicitly, and verify load behavior in your own environment rather than relying on the default.
+The default behavior of omitting `settingSources` has changed between releases. The v0.1.0 [migration guide](https://code.claude.com/docs/en/agent-sdk/migration-guide) originally introduced isolation-by-default, but a Warning on that same page now states that "current SDK releases have reverted this default for `query()`: omitting the option once again loads user, project, and local settings, matching the CLI," and the [claude-code-features reference](https://code.claude.com/docs/en/agent-sdk/claude-code-features) documents "omitting `settingSources` is equivalent to `[\"user\", \"project\", \"local\"]`". The TypeScript SDK [changelog](https://github.com/anthropics/claude-agent-sdk-typescript/blob/main/CHANGELOG.md) still describes isolation mode as the default, so the vendor's own sources disagree. Pin an SDK version, set `settingSources` explicitly, and verify load behavior in your own environment rather than relying on the default.
 
 ## When to Use
 
@@ -75,7 +75,9 @@ The loop continues until the task is complete or `maxTurns` is reached. The scri
 - **Simpler workflows**: If you only need Claude to run a single agentic task, `claude -p "..."` from the CLI avoids adding an SDK dependency and its release cadence to your application.
 - **Async generator complexity**: Consuming `query()` correctly requires handling multiple message types; teams unfamiliar with async generators often misread the result stream, missing tool-call messages or consuming the final result before the loop ends.
 - **Feature isolation ambiguity**: The SDK's default for `settingSources` has flipped between releases (see caveat in "What You Get"), so teams that don't set it explicitly can silently inherit or lose CLAUDE.md, skills, and hooks on an upgrade. Always pass `settingSources` explicitly — `[]` for isolation, `["user", "project", "local"]` for CLI parity.
+- **No default safety limits**: `maxTurns` defaults to unlimited and `max_budget_usd` is optional, so a production agent that omits both can run for many turns and accumulate cost without a circuit breaker ([stop-reasons reference](https://platform.claude.com/docs/en/agent-sdk/stop-reasons), [`max_budget_usd` example](https://github.com/anthropics/claude-agent-sdk-python/blob/main/examples/max_budget_usd.py)). Set both explicitly, and check `message.subtype` against `error_max_turns` / `error_max_budget_usd` rather than relying on `is_error` alone.
 - **Bundle size in browser contexts**: The SDK is designed for server-side and CI use; browser deployments should use the Anthropic Messages API directly instead.
+- **Subscription billing split**: From [June 15, 2026](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan), Agent SDK and `claude -p` usage on Claude Plan subscriptions meters against a separate, non-rollover monthly credit billed at API rates — exhausting it forces a top-up purchase rather than drawing from general subscription limits. Plan for Agent SDK cost as API spend, not subscription spend, for any production workload.
 
 ## Key Takeaways
 
@@ -91,9 +93,6 @@ The loop continues until the task is complete or `maxTurns` is reached. The scri
 - [Agent Teams](agent-teams.md)
 - [Extension Points](extension-points.md)
 - [Feature Flags](feature-flags.md)
-- [Claude Code /batch and Worktrees](batch-worktrees.md)
 - [Claude Code Review](code-review.md)
 - [Claude Code --bare Flag](bare-mode.md)
-- [Claude Code Auto Mode](auto-mode.md)
-- [Session Scheduling](session-scheduling.md)
 - [Headless Claude in CI](../../workflows/headless-claude-ci.md)

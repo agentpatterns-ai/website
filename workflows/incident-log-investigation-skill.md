@@ -7,9 +7,12 @@ tags:
   - technique
   - tool-agnostic
 ---
+
 # Incident Log Investigation Skill
 
 > A log investigation skill that returns *any* logs during an incident is worse than no skill — a false signal under time pressure actively misleads. Precision is non-negotiable, and precision without evals is unmeasurable.
+
+An incident log investigation skill is a specialist agent that dispatches parallel queries to multiple observability backends (logs, traces, metrics), correlates results on shared time windows and service identifiers, and returns only the cross-system signals that survive corroboration — never the raw query output.
 
 ## The Framing
 
@@ -214,6 +217,14 @@ The generalist incident agent receives only this summary — not the raw query r
 ## Provenance Note
 
 The specific Intercom implementation (Snowflake + Honeycomb + Datadog combination, high-quality evals, progressive disclosure routing) that inspired this page is sourced from a Twitter/X post that requires authentication and could not be independently verified. All architectural claims on this page are sourced independently from Anthropic's engineering guidance and the Claude API docs.
+
+## Key Takeaways
+
+- Dispatch queries to observability backends in parallel and surface only correlated, cross-system signals — the model should never see raw query results.
+- Load tool definitions on-demand: Anthropic's Tool Search Tool reduces a five-backend definition payload by over 85%, freeing the context budget for actual investigation work.
+- Use `context: fork` so the parent agent receives only the ranked signal summary, not the intermediate query state from each backend.
+- Build the eval suite against held-out incidents with verified root causes and known red herrings — graders that accept "any correlated log" pass skills that return noise.
+- Tune the corroboration threshold to the incident class; a hard 2-of-3 minimum filters out rare single-system root causes like application-layer panics not yet visible in traces or metrics.
 
 ## Related
 

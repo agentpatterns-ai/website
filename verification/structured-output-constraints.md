@@ -69,14 +69,14 @@ Research notes benefit from structure as much as output pages:
 - Finding 1 [source URL]
 - Finding 2 [source URL]
 
-## Unverified
-- Claim without a source [unverified]
+## Unsourced
+- Claim without a source — needs verification or removal
 
 ## Angle
 One-sentence summary of what this research supports
 ```
 
-Each field has a clear purpose. The "Unverified" section forces the researcher to separate sourced from unsourced before handing off.
+Each field has a clear purpose. The "Unsourced" section forces the researcher to separate sourced from unsourced claims before handing off, so downstream readers can either verify, rewrite weaker, or drop them.
 
 ## Trade-offs
 
@@ -140,6 +140,5 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Diff-Based Review Over Output Review](../code-review/diff-based-review.md)
 - [Incremental Verification](incremental-verification.md)
 - [Verification Ledger](verification-ledger.md)
-- [Risk-Based Task Sizing](risk-based-task-sizing.md)
 - [Grading Agent Outcomes](grade-agent-outcomes.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)

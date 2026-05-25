@@ -17,9 +17,9 @@ aliases:
 
 ## The Gap a Single Pass Rate Hides
 
-Unit-test pass rate treats "debugged" and "rewrote half the file" as the same outcome. For debugging tasks — where the job is to localise a fault and apply a targeted edit — that conflation hides a systematic failure mode: frontier models often produce correct but over-edited solutions.
+Unit-test pass rate treats "debugged" and "rewrote half the file" as the same outcome. For debugging tasks — where the job is to localise a fault and apply a targeted edit — that conflation hides a systematic failure mode: frontier models often produce correct but over-edited solutions. Prior debugging benchmarks like [DebugBench](https://arxiv.org/abs/2401.04621) score only pass rate across thousands of LeetCode-derived bugs, leaving this regeneration pattern invisible.
 
-On the Precise Debugging Benchmark (PDB), GPT-5.1-Codex and DeepSeek-V3.2-Thinking achieve unit-test pass rates above 76% but edit-level precision below 45% — even when instructed explicitly to perform minimal debugging ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338)). Pass rate alone says both models are strong debuggers. Precision says more than half their edits were unnecessary.
+On the Precise Debugging Benchmark (PDB), GPT-5.1-Codex and DeepSeek-V3.2-Thinking achieve unit-test pass rates above 76% but edit-level precision below 45% — even when instructed explicitly to perform minimal debugging ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338); [code release](https://github.com/Bill1235813/PDB)). Pass rate alone says both models are strong debuggers. Precision says more than half their edits were unnecessary.
 
 ## Two Metrics Instead of One
 

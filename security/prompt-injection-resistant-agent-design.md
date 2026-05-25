@@ -29,7 +29,7 @@ Six patterns offer formally verifiable resistance. [Source: [Beurer-Kellner et a
 | Pattern | Mechanism | When to use |
 |---------|-----------|-------------|
 | **[Action-Selector](action-selector-pattern.md)** | LLM picks from a fixed set of actions | Routing, triage agents |
-| **Plan-Then-Execute** | Plan generated before untrusted content is seen | Multi-step workflows |
+| **[Plan-Then-Execute](plan-then-execute-web-agents.md)** | Plan generated before untrusted content is seen | Multi-step workflows |
 | **[LLM Map-Reduce](../multi-agent/llm-map-reduce.md)** | Each LLM sees only a data partition | Batch document processing |
 | **Dual LLM** | Privileged LLM decides; quarantined LLM reads untrusted content | Reasoning over untrusted input |
 | **Code-Then-Execute** | LLM generates code; sandbox executes without re-evaluation | Data transformation |
@@ -147,10 +147,5 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
-- [Indirect Injection Discovery](indirect-injection-discovery.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
-- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
-- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)

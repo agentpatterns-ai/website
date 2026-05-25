@@ -34,7 +34,7 @@ The root cause is error clustering. [LLM-induced errors are highly clustered aro
 
 **Use differential analysis.** Compare failed submissions against corrected ones to identify specific error patterns, then generate tests targeting those patterns. This is [SAGA's dual strategy: multidimensional analysis of correct solutions combined with differential analysis of failures](https://arxiv.org/abs/2507.06920).
 
-**Apply mutation-guided test generation.** [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests.
+**Apply mutation-guided test generation.** [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
 
 **Combine testing methodologies.** [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297). Different methods expose different blind spots.
 

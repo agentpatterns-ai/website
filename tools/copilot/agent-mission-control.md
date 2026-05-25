@@ -68,15 +68,15 @@ When drift is detected, redirect via chat with a specific correction. For a syst
 
 ## Enterprise Session Filters
 
-[Added March 2026](https://github.blog/changelog/2026-03-05-discover-and-manage-agent-activity-with-new-session-filters/), Enterprise AI Controls adds session filtering across the enterprise:
+[Added March 2026](https://github.blog/changelog/2026-03-05-discover-and-manage-agent-activity-with-new-session-filters/), Enterprise AI Controls adds session filtering across the organization:
 
 | Filter | Values |
 |--------|--------|
-| Status | queued, in progress, completed, failed, idle waiting for user, timed out, cancelled |
-| Repository | any repo where an agent session occurred |
-| User | the user who initiated the session |
+| Status | queued, in progress, completed, failed, idle (waiting for user), timed out, cancelled |
+| Repository | any repo in the org |
+| User | any member who triggered a session |
 
-These complement existing search by agent and organization, letting admins discover and manage agent activity across the enterprise — useful for tracking agent utilization, identifying blocked sessions, and reviewing usage patterns.
+These complement search by agent and organization, letting admins filter sessions across the org — useful for tracking agent utilization, identifying blocked sessions, and reviewing usage patterns.
 
 ## Custom Agents + Mission Control
 
@@ -130,8 +130,8 @@ A team uses Mission Control to parallelize a feature rollout across three concer
 - [GitHub Copilot Agent Mode](agent-mode.md)
 - [Agent HQ (Multi-Agent Platform)](agent-hq.md)
 - [Coding Agent](coding-agent.md)
+- [Copilot Cloud Agent Three-Phase Execution Model](cloud-agent-research-plan-code.md)
+- [Copilot Cloud Agent Organization Controls](cloud-agent-org-controls.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
 - [Steering Running Agents](../../agent-design/steering-running-agents.md)
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)
-- [Task List Divergence Diagnostic](../../verification/task-list-divergence-diagnostic.md)
-- [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)

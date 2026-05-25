@@ -142,11 +142,9 @@ The agent now has exactly what it needs — a human-readable name, the contact a
 
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — semantic output is one of four ACI design principles; affordances, constraints, and error prevention are the other three
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [Graceful Tool-Output Truncation: The PARTIAL Signal](graceful-tool-output-truncation.md) — what to return when filtered output still overflows
+- [Terminal Tool Output Compression](terminal-output-compression.md) — harness-side filtering when the tool itself cannot be redesigned
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
-- [Controlling Agent Output: Concise Answers, Not Essays](../agent-design/controlling-agent-output.md)
 - [Machine-Readable Error Responses for AI Agents (RFC 9457)](rfc9457-machine-readable-errors.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Tool Description Quality](tool-description-quality.md)
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md)

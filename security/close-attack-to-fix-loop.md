@@ -52,9 +52,7 @@ Iterate on the full defense stack, not just the model checkpoint. Adversarial tr
 
 ## The Compounding Defense
 
-As base models improve, automated attackers naturally become more capable (see [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)). The same compounding applies to the defense: each new hardened checkpoint becomes the baseline from which the next round of red teaming begins.
-
-This means each training cycle must produce a model that is harder to attack than the last — the automated attacker, now more capable than when the defender was trained, must find new attack vectors to succeed.
+As base models improve, automated attackers grow more capable (see [RL-Trained Automated Red Teamers](rl-automated-red-teamers.md)). The same compounding applies to the defense: each hardened checkpoint becomes the baseline for the next red-teaming round, so each cycle must produce a model harder to attack than the last.
 
 ## Why It Works
 
@@ -67,6 +65,7 @@ Preference optimization constructs pairs of prompt-injected inputs with secure o
 - **Limited generalization**: Architecture-aware adaptive attacks achieve 85–95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
 - **Operational overhead**: Requires fine-tuning infrastructure and a rapid deployment pipeline — investment that may not be justified for low-autonomy agents.
 - **Arms race ceiling**: Prompt injection "is unlikely to ever be fully solved" — the rapid cycle reduces risk materially but does not eliminate it; model-level hardening complements, not replaces, architectural controls. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
+- **Impossibility under contextual integrity**: A formal argument holds that any defender broad enough to block injected flows will also block genuinely legitimate flows, so training-based defenses — including the rapid attack-to-fix loop — address only "a shrinking fraction of future attack surfaces" and should be paired with contextual-integrity-aware alignment rather than treated as a terminal fix. [Source: [Abdelnabi et al., 2026 — AI Agents May Always Fall for Prompt Injections](https://arxiv.org/abs/2605.17634)]
 
 ## Scope and Prerequisites
 

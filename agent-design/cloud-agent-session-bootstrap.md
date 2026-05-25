@@ -115,3 +115,4 @@ The hook config is on the default branch (Copilot only reads default-branch hook
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the architectural split that makes per-session start phases cheap to retry
 - [Session Initialization Ritual](session-initialization-ritual.md) — the in-session orient-before-act ritual that runs after bootstrap completes
 - [Long-Running Agents](long-running-agents.md) — the operational shape that makes bootstrap latency matter at fleet scale
+- [LLM-Pinned Library Versions Carry Systemic CVE Exposure](../security/llm-pinned-vulnerable-versions.md) — why "pinned versions" is the right discipline: agent-written pins routinely point at CVE-bearing releases

@@ -12,11 +12,11 @@ aliases:
 
 > A project-scoped writing skill bundles audience, tone, banned phrases, and structural rules into a model-invocable [SKILL.md](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) loaded only when the agent generates prose — not on every turn the way `AGENTS.md`/`CLAUDE.md` rules are.
 
-A project writing skill is a [model-invocable skill](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) whose `description` triggers on prose tasks (docs, release notes, PR descriptions, ADRs, commit messages) and whose body carries the project's writing conventions. The contrast is with the same rules in `AGENTS.md`/`CLAUDE.md`, which enter every conversation regardless of task. Matt Pocock's [AI Hero changelog](https://www.aihero.dev/skills/skills-changelog-handoff-prototype-review-and-writing) previews an in-progress `writing` skill (fragments/beats/shape passes) and a `review` skill that spawns parallel sub-agents checking diff against coding standards and against the original spec. This is the specific application of [Skill as Knowledge](skill-as-knowledge.md) to prose rules.
+A project writing skill is a [model-invocable skill](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) whose `description` triggers on prose tasks (docs, release notes, PR descriptions, ADRs, commit messages) and whose body carries the project's writing conventions. The contrast is with the same rules in `AGENTS.md`/`CLAUDE.md`, which enter every conversation regardless of task. Matt Pocock's [AI Hero changelog](https://www.aihero.dev/skills/skills-changelog-handoff-prototype-review-and-writing) previews a `writing` skill (fragments/beats/shape passes) — the specific application of [Skill as Knowledge](skill-as-knowledge.md) to prose rules.
 
 ## Decision Conditions
 
-The skill alternative is justified under specific conditions. When none hold, the rules belong in `AGENTS.md`/`CLAUDE.md` or a deterministic linter.
+The skill is justified under specific conditions. When none hold, the rules belong in `AGENTS.md`/`CLAUDE.md` or a deterministic linter.
 
 | Condition for the skill | Condition for AGENTS.md |
 |-------------------------|-------------------------|
@@ -25,11 +25,11 @@ The skill alternative is justified under specific conditions. When none hold, th
 | Audience-conditional rules (ADR vs release note vs PR) | One universal rule set every task respects |
 | Project lives in Claude Code only | Project ships cross-tool under the [agents.md open standard](https://agents.md); Custom Skills don't sync between claude.ai, the API, or other vendors ([Anthropic Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)) |
 
-Instruction-following quality decays uniformly as rule count grows; smaller models exponentially ([Liu et al. 2025](https://arxiv.org/pdf/2507.11538)). Off-loading 30 rules from `AGENTS.md` recovers attention for the rules that remain. Universally-applicable rules pass HumanLayer's "tell a senior engineer on day one" test for `CLAUDE.md` content ([HumanLayer: Writing a good CLAUDE.md](https://www.humanlayer.dev/blog/writing-a-good-claude-md)) and stay there.
+Instruction-following decays as rule count grows; smaller models exponentially ([Liu et al. 2025](https://arxiv.org/pdf/2507.11538)). Off-loading 30 rules from `AGENTS.md` leaves only rules that pass HumanLayer's "tell a senior engineer on day one" test ([HumanLayer: Writing a good CLAUDE.md](https://www.humanlayer.dev/blog/writing-a-good-claude-md)).
 
 ## Composition with Linters
 
-The skill defines intent; the linter enforces letter. "Never send an LLM to do a linter's job — it's slower, less reliable, and burns context budget on rules that could be enforced automatically" ([HumanLayer](https://www.humanlayer.dev/blog/writing-a-good-claude-md)). Banned phrases, length caps, required headings — these belong in a pre-commit hook or CI check, running deterministically on every commit. The writing skill carries the rules a linter cannot encode: which tone fits which audience, what mental model the document should leave the reader with.
+The skill defines intent; the linter enforces letter — "never send an LLM to do a linter's job" ([HumanLayer](https://www.humanlayer.dev/blog/writing-a-good-claude-md)). Banned phrases, length caps, required headings belong in a pre-commit hook. The skill carries what a linter cannot encode: tone-per-audience and the mental model the document should leave.
 
 | Layer | Carries | Triggers on |
 |-------|---------|-------------|
@@ -39,19 +39,19 @@ The skill defines intent; the linter enforces letter. "Never send an LLM to do a
 
 ## Why It Works
 
-A writing skill works because **discoverability cost is paid only when relevant**. The Skills architecture pre-loads ~100 tokens of `name`+`description` per installed skill in the system prompt ([Anthropic Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)) — the SKILL.md body (under 5k tokens) loads only when the description matches the current task. `AGENTS.md`/`CLAUDE.md`, by contrast, enters every turn regardless of whether the task involves prose ([HumanLayer post](https://www.humanlayer.dev/blog/writing-a-good-claude-md)). Because instruction-following decays uniformly as rule count grows and frontier thinking models follow ~150–200 rules reliably ([Liu et al. 2025](https://arxiv.org/pdf/2507.11538)), every writing rule in `AGENTS.md` degrades compliance on every non-writing rule in the same file.
+A writing skill works because **discoverability cost is paid only when relevant**. The Skills architecture pre-loads ~100 tokens of `name`+`description` per installed skill ([Anthropic Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)); the SKILL.md body (under 5k tokens) loads only when the description matches the task. `AGENTS.md`/`CLAUDE.md` enters every turn regardless ([HumanLayer post](https://www.humanlayer.dev/blog/writing-a-good-claude-md)). Since frontier thinking models follow ~150–200 rules reliably ([Liu et al. 2025](https://arxiv.org/pdf/2507.11538)), every writing rule in `AGENTS.md` degrades compliance on every non-writing rule.
 
-The second mechanism is **audience-conditional branching**. The SKILL.md body can carry rule subsets for ADRs, release notes, and PR descriptions via one-level reference files; `AGENTS.md` encodes the union of all audiences without context. Progressive disclosure lets the agent navigate to just the audience's rules at write time.
+The second mechanism is **audience-conditional branching**. SKILL.md can carry rule subsets for ADRs, release notes, and PR descriptions via reference files; `AGENTS.md` encodes the union of all audiences. Progressive disclosure lets the agent navigate to just the audience's rules at write time.
 
 ## When This Backfires
 
-The pattern is not a free win. Each failure mode below has a tractable diagnosis, but the project should expect to hit at least one.
+Each failure mode below has a tractable diagnosis, but expect to hit at least one.
 
 - **Silent skill non-invocation.** The agent generates prose without invoking the skill — Anthropic calls this the "under-triggering bias" of skill descriptions ([best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)). The same rules in `AGENTS.md` would have been loaded unconditionally. Diagnosis: ask the agent "when would you use the writing skill?" — it quotes the description, exposing missing trigger phrases ([Skill Authoring Patterns](skill-authoring-patterns.md)).
-- **SKILL.md bloat.** The skill grows past Anthropic's 500-line guidance ([best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)), dilutes the rules that matter, and competes with conversation history once loaded. Same failure mode as bloated `AGENTS.md`, just deferred.
-- **Contradiction with `AGENTS.md`.** Both files claim authority over tone or banned phrases. The agent has no precedence rule and behaves inconsistently — analogous to [Multi-Layer Specification Redundancy](../instructions/multi-layer-specification-redundancy.md).
+- **SKILL.md bloat.** The skill grows past Anthropic's 500-line guidance ([best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)), dilutes the rules that matter, and competes with conversation history once loaded.
+- **Contradiction with `AGENTS.md`.** Both files claim authority over tone or banned phrases; the agent has no precedence rule and behaves inconsistently — analogous to [Multi-Layer Specification Redundancy](../instructions/multi-layer-specification-redundancy.md).
 - **Cross-surface penalty.** Multi-tool projects pay 4× maintenance — Claude Code skill, claude.ai upload, Cursor rule, Copilot instructions — for one writing skill. Skills do not sync between claude.ai and the API ([Anthropic Skills overview](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview)).
-- **Rules are deterministically enforceable.** If a regex catches every violation (banned phrases, length caps, missing headings), the pre-commit hook or CI check is the right home. The skill checks only when invoked; the linter checks every commit.
+- **Rules are deterministically enforceable.** If a regex catches every violation, the pre-commit hook is the right home — the skill checks only when invoked; the linter checks every commit.
 
 ## Cross-Tool Variants
 

@@ -16,22 +16,22 @@ tags:
 
 ## The Problem with Constant Approval Requests
 
-When an agent requests permission for every action — reading a file, echoing a variable, running `git status` — developers face a losing tradeoff: review each prompt carefully and accept the slowdown, or approve reflexively and lose meaningful oversight.
+When an agent requests permission for every action — file reads, variable echoes, `git status` — developers face a losing tradeoff: review each prompt carefully and accept the slowdown, or approve reflexively and lose oversight.
 
-[Anthropic's engineering team](https://www.anthropic.com/engineering/claude-code-sandboxing) identifies the consequence directly: "Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe."
+[Anthropic](https://www.anthropic.com/engineering/claude-code-sandboxing) names the consequence: "Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe."
 
-Approval fatigue converts a safety control into a ritual. Real risk prompts receive the same cursory treatment as innocuous ones.
+Approval fatigue converts a safety control into a ritual; real-risk prompts get the same cursory treatment as innocuous ones.
 
 ## The Fix: Allowlist Low-Risk Operations
 
-The resolution is to remove low-signal prompts entirely by pre-authorizing operations that cannot cause harm. Anthropic reports an **84% reduction in permission prompts** through this approach in their Claude Code sandboxing implementation, while keeping human review focused on genuinely risky actions.
+Remove low-signal prompts by pre-authorizing operations that cannot cause harm. Anthropic reports an **84% reduction in permission prompts** through this approach, while keeping human review focused on risky actions.
 
-Operations appropriate for auto-approval share a profile:
+Operations safe to auto-approve share four properties:
 
-- **Read-only** — they observe state without changing it
-- **Non-networked** — they do not exfiltrate data or contact external services
-- **Reversible** — if they do change anything, the change is trivially undone
-- **Locally scoped** — they operate within a known, bounded filesystem path
+- **Read-only** — observe state without changing it
+- **Non-networked** — no exfiltration or external calls
+- **Reversible** — any change is trivially undone
+- **Locally scoped** — bounded to a known filesystem path
 
 ## Configuring Allowlists in Claude Code
 
@@ -68,12 +68,14 @@ Commands that write files sit in Elevated by default. Commands that mutate git h
 
 Allowlisting reduces prompt volume; sandbox boundaries determine what allowlisted commands can actually reach.
 
-- **Filesystem isolation** constrains which paths the agent can read or write, independent of permission prompts
-- **Network isolation** blocks exfiltration regardless of whether a command was auto-approved
+- **Filesystem isolation** constrains read/write paths regardless of prompts
+- **Network isolation** blocks exfiltration regardless of approval
 
-Anthropic's sandboxing covers "not just Claude Code's direct interactions, but also any scripts, programs, or subprocesses that are spawned by the command" — a locally benign command can spawn a child process that makes an outbound call.
+Anthropic's sandboxing covers "not just Claude Code's direct interactions, but also any scripts, programs, or subprocesses" — a benign command can spawn a child that makes an outbound call.
 
 An allowlist without sandbox boundaries relies entirely on the accuracy of your classification. A sandbox without an allowlist retains the fatigue problem. Together they achieve high-signal oversight and a contained [blast radius](../security/blast-radius-containment.md) if a classification is wrong.
+
+The sandbox layer is itself fallible. A SOCKS5 hostname null-byte bypass in Claude Code's network sandbox (Claude Code v2.0.24 through v2.1.89, patched in v2.1.88 on 2026-03-31 and re-bumped in v2.1.90, publicly disclosed May 2026) let an allowlisted shell command escape the network policy via a crafted hostname ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662), [SecurityWeek](https://www.securityweek.com/anthropic-silently-patches-claude-code-sandbox-bypass/)). Defense-in-depth assumes both layers are current and patched — pin to a known-good harness version and treat sandbox CVEs as the same severity tier as classification errors.
 
 ## When This Backfires
 

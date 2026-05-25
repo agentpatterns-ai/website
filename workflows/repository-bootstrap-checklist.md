@@ -7,7 +7,7 @@ tags:
   - instructions
 ---
 
-# Repository Bootstrap Checklist: Adding Agent Support to an Existing Repo
+# Repository Bootstrap Checklist: Wiring Agent Support
 
 > Repository bootstrapping wires agents into an existing codebase in dependency order — project instructions first, then skills, then agent definitions, commands, hooks, and CI gates.
 
@@ -31,9 +31,9 @@ The `AGENTS.md` convention uses standard Markdown with any headings you need. In
 - Commit message format
 - What agents should and should not modify
 
-For Claude Code, the equivalent is `CLAUDE.md` at the repo root or `.claude/CLAUDE.md`. [Claude Code loads CLAUDE.md files hierarchically](https://code.claude.com/docs/en/memory#claudemd-files) — the project file is shared with the team via version control and applies to every session.
+For Claude Code, the equivalent is `CLAUDE.md` at the repo root or `.claude/CLAUDE.md`. [Claude Code loads CLAUDE.md files hierarchically](https://code.claude.com/docs/en/memory#claude-md-files) — the project file is shared with the team via version control and applies to every session.
 
-Keep the file under 200 lines. Longer files consume more context window and reduce adherence — Claude Code's own documentation states that files over this threshold produce lower instruction-following rates ([source](https://code.claude.com/docs/en/memory#claudemd-files)).
+Keep the file under 200 lines. Longer files consume more context window and reduce adherence — Claude Code's own documentation states that files over this threshold produce lower instruction-following rates ([source](https://code.claude.com/docs/en/memory#claude-md-files)).
 
 ### Step 2: Standards File
 
@@ -109,6 +109,16 @@ The checklist assumes a greenfield setup — starting from a repo with no agent 
 - **Existing CI already in place**: Most repos already have CI before agents are introduced. Do not remove or delay CI to match the checklist sequence; instead, add instructions (Step 1) and point agents at the existing CI workflow rather than treating Step 7 as future work.
 - **Small teams or solo projects**: The full seven-step sequence is overkill for a one-person project. Steps 2, 4, and 5 (standards file, agent definitions, commands) are optional until the project grows enough to need them. Jumping straight from instructions to hooks is defensible.
 - **Tool-specific adoption**: If only one tool (e.g., Claude Code) is being onboarded, skip `.github/`-convention steps entirely. The Copilot-specific paths for skills and agent definitions are not relevant until Copilot is also in scope.
+
+## When This Backfires
+
+The instructions-first sequence has a strong steelman against it: instructions are advisory and hooks are deterministic, so for teams whose primary failure mode is non-compliance with written rules, inverting the order — hooks and CI gates first, instructions last — may be more effective. The sequence above can backfire under three specific conditions:
+
+- **Compliance is the bottleneck, not context**. If your agents already produce structurally sound output but fail review for repeatable, mechanically detectable reasons (formatting, secrets, broken links), spending the first sprint writing `AGENTS.md` adds latency without addressing the failure. Add the relevant hooks first; the documentation can follow. Claude Code's own documentation makes this contrast explicit: instruction files are "context, not enforced configuration," whereas hooks "execute as shell commands at fixed lifecycle events and apply regardless of what Claude decides to do" ([source](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)).
+- **The instruction file grows beyond its useful window**. The instructions-first sequence creates an incentive to put every standard into `AGENTS.md` because that's the layer being built. ETH Zurich's evaluation across 138 real-world repositories found that LLM-generated context files reduced task success rates and added 20% to inference cost — and even hand-written context files helped only when kept minimal and precise ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A `AGENTS.md` that grows past the size the model can actually attend to becomes net-negative.
+- **CI already exists and works**. Teams adopting agents into a mature repo already have linters, type checks, and test gates. Treating Step 7 as future work is wasted motion; in that environment the right sequence is "point agents at the existing CI" first, then add domain context where the agent demonstrably needs it.
+
+The order above assumes a greenfield repository where context is genuinely missing. In environments where enforcement is the missing piece, walk the sequence backwards.
 
 ## Mermaid: Bootstrap Sequence
 
@@ -187,16 +197,11 @@ This is the Minimum Viable Agent Infrastructure described above. Add agent defin
 
 ## Related
 
-- [Context Priming](../context-engineering/context-priming.md)
-- [Agent Design Patterns](../tools/copilot/index.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
-- [Headless Claude in CI](headless-claude-ci.md)
 - [Codebase Readiness for Agents](codebase-readiness.md)
-- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
-- [The AI Development Maturity Model](ai-development-maturity-model.md)
+- [Headless Claude in CI](headless-claude-ci.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
-- [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md)
-- [Team Onboarding for AI Agent Workflows](team-onboarding.md)
 - [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
+- [Team Onboarding for AI Agent Workflows](team-onboarding.md)

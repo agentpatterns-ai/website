@@ -1,6 +1,6 @@
 ---
 title: "GitHub Copilot Extensions for AI Agent Development"
-description: "Deprecated. GitHub App-based Copilot Extensions were sunset on November 10, 2025. Build MCP servers instead. This page is retained as historical reference"
+description: "Deprecated. GitHub App-based Copilot Extensions were sunset on November 10, 2025. Build MCP servers instead. Retained as historical reference."
 tags:
   - agent-design
   - copilot

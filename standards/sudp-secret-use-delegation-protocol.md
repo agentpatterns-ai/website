@@ -16,13 +16,13 @@ aliases:
 
 ## The Authorization-by-Exposure Problem
 
-Bearer-secret interfaces — API keys, OAuth bearer tokens, refresh tokens — implement authorization by exposure: enabling action means placing a reusable secret, or a reusable artifact derived from it, inside the model-steerable boundary. A transient prompt-injection or tool-side compromise becomes durable account compromise because the exfiltrated artifact remains valid for arbitrary future operations ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Bearer-secret interfaces — API keys, OAuth bearer tokens, refresh tokens — authorize by exposure: enabling action means placing a reusable secret, or an artifact derived from it, inside the model-steerable boundary. A transient prompt-injection becomes durable account compromise because the exfiltrated artifact remains valid for arbitrary future operations ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
 
-Existing controls cover adjacent pieces — secret storage (HashiCorp Vault, AWS Secrets Manager), scoped delegation (OAuth scopes), sender-constrained tokens ([DPoP / RFC 9449](https://datatracker.ietf.org/doc/html/rfc9449)), and runtime monitoring — but no single specification addresses the combined agentic obligation: an untrusted autonomous requester causing a user-authorized secret-backed operation without exposing reusable authority to the requester ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Existing controls cover adjacent pieces — secret storage (Vault, AWS Secrets Manager), scoped delegation (OAuth scopes), sender-constrained tokens ([DPoP / RFC 9449](https://datatracker.ietf.org/doc/html/rfc9449)), runtime monitoring — but none address the combined agentic obligation: an untrusted requester causing a user-authorized secret-backed operation without exposing reusable authority ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
 
 ## Agent Secret Use (ASU)
 
-The paper formalizes the problem as Agent Secret Use and derives a property taxonomy that separates *structural* obligations (what any solution must do) from *realization-level* robustness conditions (what a concrete construction must establish). The structural properties:
+The paper formalizes the problem as Agent Secret Use and derives a property taxonomy separating *structural* obligations (what any solution must do) from *realization-level* robustness conditions (what a concrete construction must establish):
 
 | Property | What it means |
 |----------|---------------|
@@ -32,7 +32,7 @@ The paper formalizes the problem as Agent Secret Use and derives a property taxo
 | **Storage confidentiality** | Secrets at rest are protected against custodian-storage compromise |
 | **Wrapping-epoch key isolation** | Compromise of one epoch's wrapping key does not unwrap other epochs' secrets |
 
-Plaintext-level forward secrecy of the underlying secret is *not* a structural property of the protocol — it requires the environment to rotate and revoke the secret independently ([SUDP abstract](https://arxiv.org/abs/2604.24920)).
+Plaintext forward secrecy of the underlying secret is *not* structural — it requires the environment to rotate and revoke the secret independently ([SUDP abstract](https://arxiv.org/abs/2604.24920)).
 
 ## The Three Roles
 
@@ -49,10 +49,10 @@ sequenceDiagram
 ```
 
 - **Requester** — the agent. Proposes a canonical operation. **Does not retrieve secrets.**
-- **User** — the principal. Authorizes the proposed operation by issuing a fresh authenticator-backed grant.
+- **User** — the principal. Authorizes the proposed operation with a fresh authenticator-backed grant.
 - **Custodian** — the secret holder. Redeems the grant **once** to perform the bounded operation.
 
-Reusable authority never crosses the requester boundary. A compromise of the requester yields at most one operation, not durable account access ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Reusable authority never crosses the requester boundary. Compromise of the requester yields at most one operation, not durable account access ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
 
 ## How SUDP Differs from Adjacent Mechanisms
 
@@ -64,7 +64,7 @@ Reusable authority never crosses the requester boundary. A compromise of the req
 | Macaroons | Decentralized attenuation | Capability is still bearer-style and reusable until expiry |
 | [Secrets management for agents](../security/secrets-management-for-agents.md) | Keeps secrets out of context | Process boundary, not protocol boundary; once a tool runs, it can call the secret repeatedly |
 
-SUDP composes with these — it does not replace process isolation, scope minimization, or sender-binding. It adds a protocol-level guarantee that a stolen requester-side artifact authorizes at most one operation ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+SUDP composes with these — it does not replace process isolation, scope minimization, or sender-binding. It adds a protocol-level guarantee that a stolen requester-side artifact authorizes at most one operation.
 
 ## Status and Limits
 

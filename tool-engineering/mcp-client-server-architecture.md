@@ -146,20 +146,21 @@ A deployment-tool MCP server applying the principles above — focused tools, po
 
 **Lazy loading doesn't fix selection accuracy.** An agent searching 200 tools still chooses worse than one with 10 focused tools — deferral mitigates but does not substitute for curation.
 
+## Key Takeaways
+
+- Transport choice is a deployment-topology decision: stdio for single-client local tools, Streamable HTTP for shared or remote servers with auth and `Origin` validation.
+- Tool surface drives agent accuracy — keep tools focused, defer schemas with tool search for large surfaces, and apply poka-yoke to parameters.
+- Implement both error mechanisms: JSON-RPC errors for protocol failures, `isError: true` results for execution failures the agent can reason about.
+- Capability negotiation is mandatory and silent on gaps — build explicit fallbacks for optional capabilities like sampling and elicitation.
+- Annotations (`destructiveHint`, `readOnlyHint`, `idempotentHint`, `openWorldHint`) are advisory hints to clients, not access controls — enforce security on the server.
+
 ## Related
 
 - [MCP Server Design](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
 - [Tool Description Quality](tool-description-quality.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Blast Radius Containment](../security/blast-radius-containment.md)
-- [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md)
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
-- [RFC 9457 Machine-Readable Errors](rfc9457-machine-readable-errors.md)
+- [MCP alwaysLoad: Eager vs Just-in-Time Server Classification](mcp-eager-vs-jit-loading.md)
 - [MCP LLM Sampling](mcp-llm-sampling.md)
 - [MCP Elicitation](mcp-elicitation.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
-- [Advanced Tool Use](advanced-tool-use.md)
-- [Browser Automation for Research](browser-automation-for-research.md)

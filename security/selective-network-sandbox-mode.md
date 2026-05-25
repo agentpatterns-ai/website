@@ -41,7 +41,7 @@ graph TD
 
 ## Why It Exists
 
-Maintaining an accurate outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, schema fetches, MCP-fronted services — are numerous, project-specific, and shift between branches. A static allowlist either lags real use (the inner loop stalls on approval prompts) or sprawls until it loses meaning.
+Maintaining an outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, schema fetches, MCP services — are numerous and shift between branches. A static allowlist either lags real use (the inner loop stalls on approval prompts) or sprawls until it loses meaning.
 
 `allowNetwork` resolves that pressure by **keeping the boundary that costs least to enforce against agent error** — write confinement to the workspace — and shifting network risk to a layer below the harness: the host firewall, the container's egress policy, or an org-level outbound proxy. Filesystem write-confinement still prevents the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
 

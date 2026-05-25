@@ -18,9 +18,9 @@ aliases:
 
 Slash commands were a human surface — typed in the prompt bar, invisible to the planner. Treating them as model-discoverable turns `/review`, `/refresh-context`, or `/commit` into callable nodes in the planner's tool graph.
 
-Claude Code 2.1.108 (April 14, 2026) shipped the shift: the model can now discover and invoke built-in slash commands like `/init`, `/review`, and `/security-review` via the Skill tool ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). Cursor 2.4 (January 2026) added the same — Agent Skills are detected automatically after a name-and-description pre-scan ([Cursor 2.4 changelog](https://cursor.com/changelog/2-4)).
+Claude Code 2.1.108 shipped the shift: the model can now invoke built-in commands like `/init`, `/review`, and `/security-review` via the Skill tool ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). Cursor 2.4 (January 2026) added Agent Skills defined in `SKILL.md` files that agents discover when relevant ([Cursor 2.4 changelog](https://cursor.com/changelog/2-4)).
 
-When the planner invokes a command directly, user-authored workflows become reusable tool-graph nodes — `/research-topic` becomes a planning step a supervisor agent selects. This extends the split in [Agents vs Commands](agents-vs-commands.md): commands gain the "who" dimension previously owned by agents, without erasing what-vs-how.
+User-authored workflows now become tool-graph nodes — `/research-topic` becomes a planning step a supervisor agent selects. This extends [Agents vs Commands](agents-vs-commands.md): commands gain the "who" dimension previously owned by agents, without erasing what-vs-how.
 
 ## The Control Matrix
 
@@ -38,16 +38,16 @@ Side-effectful commands (`/deploy`, `/commit`, `/send-slack-message`) should set
 
 The `description` sits in the system prompt at all times ([Skills reference](https://code.claude.com/docs/en/skills#skill-content-lifecycle)) and drives agent invocation. Four rules from tool-description craft ([Anthropic best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices#writing-effective-descriptions)):
 
-1. **Third person** — "Processes Excel files", not "I can help you…" — point-of-view shift causes discovery misses.
-2. **Both what and when** — "Extract text from PDFs. Use when the user mentions PDFs, forms, or document extraction." Trigger phrases anchor selection.
-3. **Specific over vague** — "Fills PDF forms and merges documents" selects when those verbs appear; "Helps with documents" selects nothing reliably.
-4. **Front-load the use case** — combined `description` and `when_to_use` is truncated at 1,536 characters in the skill listing ([Skills reference](https://code.claude.com/docs/en/skills)).
+1. **Third person** — "Processes Excel files", not "I can help you…"; point-of-view shift causes discovery misses.
+2. **What and when** — "Extract text from PDFs. Use when the user mentions PDFs, forms, or document extraction." Trigger phrases anchor selection.
+3. **Specific over vague** — "Fills PDF forms and merges documents" selects on those verbs; "Helps with documents" selects nothing.
+4. **Front-load the use case** — combined `description` and `when_to_use` is capped at 1,536 characters per skill ([Skills reference](https://code.claude.com/docs/en/skills)).
 
 Negative triggers constrain over-firing: `Do NOT use for Jira or GitHub Issues workflows`.
 
 ## The Idempotency Contract
 
-User invocation is an explicit authorisation signal; agent invocation is not. Commands written for humans assume the user read the conversation and will catch mistakes — the planner gives neither guarantee. Model-invokable commands need:
+User invocation is an explicit authorisation signal; agent invocation is not. The planner does not read the conversation the way a human does. Model-invokable commands need:
 
 - **Up-front input validation** — reject obviously wrong arguments rather than acting on them
 - **Read-only first** — a `/review` that only reads is safer to promote than a `/commit` that writes
@@ -65,18 +65,18 @@ Skill(review-pr *)   # allow with any args
 Skill(deploy *)      # deny
 ```
 
-The `allowed-tools` frontmatter pre-approves tools while the skill runs — a `/commit` skill can include `Bash(git add *) Bash(git commit *)` without per-use approval. That pre-approval surface expands with every model-invocable command.
+The `allowed-tools` frontmatter pre-approves tools while the skill runs — `/commit` can include `Bash(git add *) Bash(git commit *)` without per-use approval. That pre-approval surface expands with every model-invocable command.
 
 ## When This Backfires
 
-1. **Destructive side effects without `disable-model-invocation`** — the agent infers authorisation from context that looked "ready" and runs a command the user would have reviewed. The failure is silent.
-2. **Large skill libraries** — descriptions are shortened to fit a character budget (default 8,000 characters, scaling at 1% of the context window), stripping trigger keywords ([Skills reference](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short)). 40+ skills degrades triggering across the board.
-3. **Prompt injection surface** — a tool output or README naming a skill can cause the planner to invoke it with attacker-controlled arguments. Every model-invocable command wrapping a side-effectful tool expands this surface.
-4. **Commands authored pre-shift** — existing commands often reference "the user's last message" or emit prose confirmations instead of structured results. Agent invocation breaks those assumptions.
+1. **Destructive side effects without `disable-model-invocation`** — the agent infers authorisation from context that looked "ready" and runs a command the user would have reviewed.
+2. **Large skill libraries** — descriptions are shortened to fit a character budget that defaults to 1% of the model's context window (`skillListingBudgetFraction`), stripping trigger keywords when the listing overflows ([Skills reference](https://code.claude.com/docs/en/skills#skill-descriptions-are-cut-short)).
+3. **Prompt injection surface** — a tool output or README naming a skill can cause the planner to invoke it with attacker-controlled arguments.
+4. **Commands authored pre-shift** — existing commands often reference "the user's last message" or emit prose confirmations. Agent invocation breaks those assumptions.
 
 ## Counterpoint: MCP Keeps the Boundary
 
-The [Model Context Protocol](../standards/mcp-protocol.md) takes the opposite stance: MCP `prompts` are user-controlled — exposed as slash commands or menu options — while `tools` are model-controlled ([MCP Prompts spec](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts)). Erasing that boundary is a choice, not inevitable convergence: typing `/deploy` is itself the authorisation. Claude Code and Cursor accept that trade-off for planner composability; MCP does not.
+The [Model Context Protocol](../standards/mcp-protocol.md) takes the opposite stance: `prompts` are user-controlled — surfaced as slash commands — while `tools` are model-controlled ([MCP Prompts spec](https://modelcontextprotocol.io/specification/2025-06-18/server/prompts)). Erasing that boundary is a choice: typing `/deploy` is itself the authorisation. Claude Code and Cursor trade that for planner composability; MCP does not.
 
 ## Example
 
@@ -117,7 +117,7 @@ Deploy $ARGUMENTS to production:
 4. Verify the deployment succeeded
 ```
 
-The matrix pattern scales: every new command is a three-state decision — default (both), `disable-model-invocation` (user-only), or `user-invocable: false` (agent-only).
+The matrix scales: every new command is a three-state decision — default (both), `disable-model-invocation` (user-only), or `user-invocable: false` (agent-only).
 
 ## Key Takeaways
 
@@ -130,10 +130,10 @@ The matrix pattern scales: every new command is a three-state decision — defau
 ## Related
 
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
+- [Skill Tool Enforcement: Loading Command Prompts at Runtime](../tool-engineering/skill-tool-runtime-enforcement.md)
 - [Skill Authoring Patterns: Description to Deployment](../tool-engineering/skill-authoring-patterns.md)
 - [SKILL.md Frontmatter Reference](../tool-engineering/skill-frontmatter-reference.md)
 - [Prompt File Libraries for Reusable Agent Instructions](../instructions/prompt-file-libraries.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Permission-Gated Commands](../security/permission-gated-commands.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
-- [Controlling Agent Output](controlling-agent-output.md)

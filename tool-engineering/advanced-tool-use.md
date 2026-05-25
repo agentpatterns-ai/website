@@ -1,6 +1,6 @@
 ---
-title: "Advanced Tool Use: Scaling and Managing Agent Libraries"
-description: "When good tool design isn't enough — three API-level features for managing hundreds of tools without drowning in context or losing selection accuracy"
+title: "Advanced Tool Use: Scaling Agent Tool Libraries"
+description: "When good tool design isn't enough — three Anthropic API features for managing hundreds of tools without drowning in context or losing selection accuracy."
 tags:
   - cost-performance
   - agent-design
@@ -205,8 +205,6 @@ These features add complexity that is only justified by specific bottlenecks.
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) — client-side DIY alternative using file-based tool definitions
 - [Token-Efficient Tool Design](token-efficient-tool-design.md) — reducing per-tool output tokens
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md) — the general principle behind programmatic calling
-- [Consolidate Agent Tools](consolidate-agent-tools.md) — reducing tool count as a complementary strategy
-- [Tool Descriptions as Onboarding](tool-descriptions-as-onboarding.md) — using tool descriptions to teach agents capability and conventions
 - [MCP Server Design](mcp-server-design.md) — designing MCP servers that work well with deferred loading and tool search
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — reducing tool count to keep the model focused
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — mistake-proofing tool interfaces to reduce invocation errors

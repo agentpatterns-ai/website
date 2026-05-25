@@ -31,7 +31,7 @@ The transcript is audit trail. The artifact is the thing you came back for. Curs
 
 Four properties separate the primitive from a transcript message, a static file, or a one-off chart:
 
-1. **Persistent outside the chat** — survives compaction and process restart. Cursor Canvases live in the Agents Window side panel alongside terminal, browser, and source control ([Cursor changelog, 2026-04-15](https://cursor.com/changelog/04-15-26)).
+1. **Persistent outside the chat** — survives compaction and process restart. Cursor Canvases live in the [Agents Window](../tools/cursor/agents-window.md) side panel alongside terminal, browser, and source control ([Cursor changelog, 2026-04-15](https://cursor.com/changelog/04-15-26)).
 2. **Re-openable as workspace state** — the user returns directly, not by scrolling the transcript.
 3. **Re-runnable against fresh data** — the artifact captures a *definition* (layout, query, data source), not only a render.
 4. **Addressable as context** — a named object a human or another agent can point to in a follow-up prompt.
@@ -59,11 +59,11 @@ The transcript grows linearly; the artifact converges toward current state.
 
 ## Packaging as a Skill
 
-A canvas shape a team regenerates against fresh data is a reusable pattern. Cursor canvases can be packaged as skills containing trigger description, layout spec, data sources, and formatting rules, so teammates regenerate the same shape with new data ([Cursor Canvas docs](https://cursor.com/docs/agent/tools/canvas)). The artifact — not the prompt — becomes the unit the team reasons about.
+Cursor canvases can be packaged as skills — trigger description, layout spec, data sources, formatting rules — so teammates regenerate the same shape against new data ([Cursor Canvas docs](https://cursor.com/docs/agent/tools/canvas)). The artifact, not the prompt, becomes the unit the team reasons about.
 
 ## When to Use an Artifact Over a File
 
-Plain-text artifacts in git — PRs, markdown, tests, specs — are already durable, diff-able, and portable. Reach for a durable interactive artifact only when the data is multi-dimensional and benefits from exploration, the output will be re-run against new data rather than produced once, the human interacts with the output directly instead of re-prompting, or the artifact outlives a single session. Otherwise prefer a plain-text artifact — markdown, JSON, and SQL cross tool boundaries that canvas objects do not.
+Plain-text artifacts in git — PRs, markdown, tests, specs — are already durable, diff-able, and portable. Reach for a durable interactive artifact only when the data is multi-dimensional, the output will be re-run against new data, the human interacts with the output directly instead of re-prompting, or the artifact outlives a single session. Otherwise prefer plain text — markdown, JSON, and SQL cross tool boundaries that canvas objects do not.
 
 ## Failure Modes
 
@@ -78,7 +78,7 @@ Plain-text artifacts in git — PRs, markdown, tests, specs — are already dura
 |------|-----------|---------------|------------|
 | Cursor Canvases (3.1, 2026-04-15) | React UI library — tables, boxes, diagrams, charts; skill-packaged | Saved in workspace, reopen and rerun | Conversational refinement |
 
-Source: [Cursor Canvas docs](https://cursor.com/docs/agent/tools/canvas) and [Cursor changelog 2026-04-15](https://cursor.com/changelog/04-15-26). Multi-agent concurrent editing of a shared canvas is not documented; third-party products advertise shared canvases on different render layers, so do not assume the pattern generalises from single-agent canvas features.
+Source: [Cursor Canvas docs](https://cursor.com/docs/agent/tools/canvas) and [Cursor changelog 2026-04-15](https://cursor.com/changelog/04-15-26). Multi-agent concurrent editing of a shared canvas is not documented; third-party products advertise shared canvases on different render layers, so do not assume the pattern generalises.
 
 ## Key Takeaways
 

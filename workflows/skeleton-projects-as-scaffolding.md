@@ -1,6 +1,6 @@
 ---
 title: "Skeleton Projects as Agent Scaffolding"
-description: "Source battle-tested repository templates from GitHub as architectural starting points for agent-driven development, rather than building project structure"
+description: "Use community repository templates as architectural scaffolding for agent-driven development instead of having agents build project structure from scratch."
 tags:
   - workflows
   - agent-design
@@ -23,7 +23,7 @@ Agents working in unfamiliar languages or domains lack the architectural instinc
 
 The distinction matters. Hand-built foundations encode your team's specific patterns. Skeleton projects encode community consensus for a language or framework. Use skeleton projects when entering unfamiliar territory; use hand-built foundations when your team's conventions diverge from community defaults.
 
-**Why it works**: Agents generate code by predicting likely continuations given the context in their window. When the context already contains a coherent project layout, dependency declarations, and test patterns, the agent's predictions continue those patterns — the structural prior constrains the output space. Without that prior, the agent must make independent decisions about every structural question (where to put models, how to organize tests, what CI tooling to use), and each decision is an independent sampling event with no grounding in established practice. Skeleton projects collapse those decisions by providing the ground truth upfront.
+**Why it works**: Agents generate code by predicting likely continuations given the context in their window. When the context already contains a coherent project layout, dependency declarations, and test patterns, the agent's predictions continue those patterns — the structural prior constrains the output space. Without that prior, the agent must make independent decisions about every structural question (where to put models, how to organize tests, what CI tooling to use), and each decision is an independent sampling event with no grounding in established practice. Research on guided project generation finds that supplying LLMs with a structured solution plan and code template materially improves the coherence of generated multi-file projects compared with unguided open-domain generation ([Xie et al., 2025 — Empowering AI to Generate Better AI Code](https://arxiv.org/abs/2504.15080)). Skeleton projects collapse those decisions by providing the ground truth upfront.
 
 ## The Workflow
 
@@ -148,4 +148,6 @@ Use a hand-built foundation instead when your team's conventions are well-establ
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
+- [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
+- [Codebase Readiness for Agents](codebase-readiness.md)
 - [Sub-Agents for Fan-Out Research](../multi-agent/sub-agents-fan-out.md)

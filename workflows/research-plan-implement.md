@@ -125,6 +125,8 @@ The pattern assumes research compounds — more reading yields a better plan. Th
 
 The pattern pays off when wrong assumptions are expensive: unfamiliar code, irreversible actions, long implementation phases where backtracking burns a large context window. Trivial, well-understood, or cheaply-reversible work is better served by implement-first.
 
+Dexter Horthy — who originally popularised Research-Plan-Implement — publicly reversed that recommendation in early 2026 and rebuilt the workflow as [QRSPI](https://alexlavaee.me/blog/from-rpi-to-qrspi/) (Questioning, Research, Structure, Plan, Implement) after three failure modes surfaced at scale: a broad research prompt skipped the alignment moments where the agent should surface design decisions as explicit options, the Structure phase between Plan and Implement was the most-skipped step in practice, and plans drifted silently once research summaries lost fidelity ([talk: *Everything We Got Wrong About Research-Plan-Implement*](https://www.youtube.com/watch?v=YwZR6tc7qYg)). Treat the three phases here as the minimum decomposition; for high-stakes work, add an explicit Questioning step before Research and a Structure step before Implement.
+
 ## When to Skip Phases
 
 Not every task needs all three phases. Claude Code's own documentation notes that planning should be skipped when "you could describe the diff in one sentence."
@@ -214,3 +216,5 @@ Without the research phase, the agent would have missed the WebSocket constraint
 - [The 80% Problem in Agentic Coding (Addy Osmani)](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
 - [OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)
 - [The Agentic AI Handbook: Production-Ready Patterns (nibzard)](https://www.nibzard.com/agentic-handbook)
+- [From RPI to QRSPI: Rebuilding the First Structured Workflow for Coding Agents (Alex Lavaee)](https://alexlavaee.me/blog/from-rpi-to-qrspi/)
+- [Everything We Got Wrong About Research-Plan-Implement — Dexter Horthy (YouTube)](https://www.youtube.com/watch?v=YwZR6tc7qYg)

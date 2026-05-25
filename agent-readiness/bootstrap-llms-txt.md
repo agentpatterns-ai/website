@@ -10,6 +10,8 @@ aliases:
   - LLM discoverability index
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-llms-txt/`
+
 # Bootstrap llms.txt
 
 > Detect the documentation surface, extract a structured index per the [llms.txt spec](https://llmstxt.org), generate both files, validate.

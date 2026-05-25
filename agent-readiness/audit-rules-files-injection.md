@@ -10,6 +10,8 @@ aliases:
   - CLAUDE.md injection surface check
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-rules-files-injection/`
+
 # Audit Rules-File Injection Surface
 
 > Enumerate the rules and instruction files an agent reads at session start, scan for injection markers, classify by trust tier, and emit deny-rule remediations.

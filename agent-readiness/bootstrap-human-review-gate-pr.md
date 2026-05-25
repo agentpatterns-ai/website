@@ -11,6 +11,8 @@ aliases:
   - codeowners review gate scaffold
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-human-review-gate-pr/`
+
 # Bootstrap Human Review Gate for Agent-Authored PRs
 
 > Wire CODEOWNERS + branch protection so agent-authored PRs route through tiered review — non-critical merges after AI-only review, core and security-sensitive paths require human approval — and emit the merge-rate metric that proves the gate works.

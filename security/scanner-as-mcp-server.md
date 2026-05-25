@@ -15,11 +15,11 @@ tags:
 
 > Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings — useful in the IDE loop, useless if the agent decides not to call it.
 
-GitHub generalised this delivery shape on 2026-05-05: secret scanning via the GitHub MCP Server is generally available, and dependency scanning entered public preview the same day ([Secret scanning GA changelog](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/), [Dependency scanning preview changelog](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). The scanners themselves existed in CI for years; what is new is the delivery shape — the scanner ships as an MCP server, and the agent calls `list_secret_scanning_alerts` or the dependency-scan equivalent as a typed tool, parsing the JSON response in-loop.
+On 2026-05-05 GitHub MCP Server secret scanning went GA and dependency scanning entered preview ([Secret scanning GA](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/), [Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). The scanners are not new; the delivery shape is — the agent calls `list_secret_scanning_alerts` or the dependency equivalent as a typed tool and parses JSON in-loop.
 
 ## Three Delivery Shapes
 
-A scanner reaches developer code through one of three shapes; the choice changes who decides when to scan, when findings surface, and how findings are consumed.
+A scanner reaches developer code through three shapes; the choice changes who scans when and who consumes findings.
 
 | Shape | When the scan runs | Who decides | Output consumer | Bypass surface |
 |---|---|---|---|---|
@@ -31,44 +31,43 @@ The first two are covered by [Always-On Agentic PR Security Review](always-on-pr
 
 ## What "Scanner-as-MCP-Server" Means Concretely
 
-The GitHub MCP Server exposes the security scanners as named toolsets, each containing typed tools the agent invokes by name ([github/github-mcp-server README](https://github.com/github/github-mcp-server/blob/main/README.md)):
+The GitHub MCP Server exposes scanners as named toolsets, each containing typed tools the agent invokes by name ([github-mcp-server README](https://github.com/github/github-mcp-server/blob/main/README.md)):
 
 - `secret_protection` — `get_secret_scanning_alert`, `list_secret_scanning_alerts`
 - `dependabot` — `get_dependabot_alert`, `list_dependabot_alerts`
 - `code_security` — `get_code_scanning_alert`, `list_code_scanning_alerts`
 - `security_advisories` — `list_global_security_advisories`, `list_repository_security_advisories`
 
-Toolsets are loaded per session, not eagerly. In Copilot CLI: `copilot --add-github-mcp-toolset dependabot`. In VS Code: header `"X-MCP-Toolsets": "dependabot"` or the selector in Copilot Chat ([Dependency scanning preview changelog](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). This makes the scanner a JIT-loaded surface — see [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../tool-engineering/mcp-eager-vs-jit-loading.md) for the cost rubric.
+Toolsets load per session — in Copilot CLI via `copilot --add-github-mcp-toolset dependabot`, in VS Code via header `"X-MCP-Toolsets": "dependabot"` or the Copilot Chat selector ([Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). That makes the scanner a JIT-loaded surface — see [MCP alwaysLoad](../tool-engineering/mcp-eager-vs-jit-loading.md) for the cost rubric.
 
 ## Why Structured Output Is the Pivot
 
-Agents that scrape stderr or parse CLI logs spend tokens on parsing; agents that receive typed JSON spend tokens on reasoning. The GitHub MCP Server returns "structured results with affected packages, severity, and recommended fixed versions" ([Dependency scanning preview changelog](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)) and "structured results with the locations of and details on any secrets found" ([Original preview changelog](https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/)). The agent can group findings by severity, summarise to the user, or auto-fix a Dependabot advisory by editing `package.json` to the recommended version — none of which require log parsing.
-
-This mechanism is the same one behind [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md): machine-readable output keeps the model in the reasoning step and out of the parsing step.
+Agents that parse CLI logs spend tokens on parsing; agents that receive typed JSON spend them on reasoning. The MCP Server returns "structured results with affected packages, severity, and recommended fixed versions" ([Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)) and "the locations of and details on any secrets found" ([Original preview](https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/)). The agent can group by severity, summarise, or auto-fix a Dependabot advisory by editing `package.json` — no log parsing required. Same mechanism as [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md).
 
 ## What MCP-Mediated Scanning Inherits
 
-The GA announcement notes that "secret scanning tools in the MCP server now honor your existing push protection customization" ([Secret scanning GA changelog](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/)). The scanner's existing rule corpus, custom patterns, and bypass workflows apply unchanged; the MCP surface is a new front door, not a re-implementation of the engine.
+The MCP server "honor[s] your existing push protection customization" ([GA changelog](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/)) — rule corpus, custom patterns, and bypass workflows apply unchanged. The MCP surface is a new front door, not a new engine.
 
 ## Failure Modes
 
-Five conditions invert the pattern's value:
+Six conditions invert the pattern's value:
 
-1. **Agent skips the scan.** Tools the agent decides to call do not enforce anything. Without a system-prompt directive or user prompt naming the scan, no scan runs. CI gates remove this agency by design.
-2. **Repo lacks the upstream signal.** Secret scanning requires GitHub Secret Protection enabled; dependency scanning requires Dependabot alerts ([Secret scanning GA changelog](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/), [Dependency scanning preview changelog](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). On repos without these, the toolset is callable but returns empty, and the agent reports a clean result.
-3. **Scanner principal closes the lethal trifecta.** A scanner MCP server with repo read, a write-egress tool (ticket system, Slack, external triage), and exposure to untrusted content (PR descriptions, issue bodies, fetched log snippets) holds all three legs of the trifecta on the scanner principal itself. Run the [Lethal Trifecta Audit](../agent-readiness/audit-lethal-trifecta.md) before merge.
-4. **Schema mutability.** MCP tool schemas can change between sessions, and most clients do not warn. An agent that parsed `severity` yesterday can receive `note` today and either fail silently or invent a severity ([DZone: Why Security Scanning Isn't Enough for MCP Servers](https://dzone.com/articles/why-security-scanning-isnt-enough-for-mcp-servers)).
-5. **Latency on the developer path.** Each in-loop scan adds MCP round-trip seconds. Scheduled jobs cover the whole repo without per-call cost; agent-invoked scans cover only what the agent thought to scan.
+1. **Agent skips the scan.** Tools the agent decides to call do not enforce. Without a system-prompt directive or user prompt naming the scan, no scan runs. CI gates remove that agency by design.
+2. **Repo lacks the upstream signal.** Secret scanning requires Secret Protection enabled; dependency scanning requires Dependabot alerts. Without them the toolset returns empty and the agent reports a clean result.
+3. **Scanner principal closes the lethal trifecta.** A scanner MCP server with repo read, a write-egress tool, and exposure to untrusted content (PR bodies, log snippets) holds all three legs on the scanner principal. Run the [Lethal Trifecta Audit](../agent-readiness/audit-lethal-trifecta.md) before merge.
+4. **Schema mutability.** MCP tool schemas can change between sessions and most clients do not warn. An agent that parsed `severity` yesterday can receive `note` today, then fail silently or invent a value ([DZone](https://dzone.com/articles/why-security-scanning-isnt-enough-for-mcp-servers)).
+5. **Latency on the developer path.** Each in-loop scan adds round-trip seconds; scheduled jobs cover the whole repo without per-call cost, while agent-invoked scans cover only what the agent thought to scan.
+6. **Findings are ephemeral, not a system of record.** MCP scan results live in the agent's chat for the session only — they do not persist as alerts and do not appear in the Security tab or the REST/GraphQL alert APIs ([GitHub Docs](https://docs.github.com/en/code-security/how-tos/use-ghas-with-ai-coding-agents/scan-for-secrets-with-github-mcp-server)). Treat the MCP shape as a pre-commit safety check, not the audit trail; SIEM ingestion, triage queues, and compliance evidence still rely on the alert-based scanners.
 
 ## Compose, Don't Replace
 
-The MCP-mediated scanner does not replace the CI step. Use the three shapes for what each does well:
+The MCP scanner does not replace the CI step. Use each shape for what it does well:
 
-- **CI step** — pre-merge gate, breadth, cannot be skipped by an agent that chose not to scan.
+- **CI step** — pre-merge gate; cannot be skipped by an agent that chose not to scan.
 - **Scheduled job** — resident-risk coverage for files no PR touches.
-- **MCP server** — IDE-time signal, pre-commit fix loop, structured output the agent acts on directly.
+- **MCP server** — IDE-time signal and pre-commit fix loop on structured output.
 
-The MCP shape shortens the feedback loop *before* code reaches the CI gate; it does not remove the gate.
+The MCP shape shortens the feedback loop before code reaches the CI gate — it does not replace it.
 
 ## Example
 
@@ -90,7 +89,7 @@ The agent calls `list_dependabot_alerts` against the current repository, receive
 - Scanner-as-MCP-server is a delivery shape, not a new scanner: the engine, rules, and bypass policy are unchanged; the agent gets a typed tool surface in-loop.
 - The GitHub MCP Server names this concretely with the `secret_protection`, `dependabot`, `code_security`, and `security_advisories` toolsets, each loaded per session.
 - The structured-output mechanism keeps the agent in the reasoning step and out of log-parsing — the page's primary value over CLI-wrapped scanners.
-- The pattern is qualified by five failure modes: agent skips the scan, upstream signal disabled, scanner principal closes the trifecta, schema drift, and added developer-path latency.
+- The pattern is qualified by six failure modes: agent skips the scan, upstream signal disabled, scanner principal closes the trifecta, schema drift, developer-path latency, and ephemeral findings that do not persist as alerts.
 - Compose with CI-step and scheduled-job delivery; the MCP shape shortens the feedback loop before the merge gate, it does not replace the gate.
 
 ## Related

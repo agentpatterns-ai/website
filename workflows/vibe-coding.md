@@ -1,6 +1,6 @@
 ---
 title: "Vibe Coding: Outcome-Oriented Agent-Assisted Development"
-description: "Delegate implementation entirely to the agent and focus on evaluating outcomes — appropriate for low-risk work where the cost of wrong output is low"
+description: "Delegate implementation entirely to the agent and focus on evaluating outcomes — appropriate for low-risk work where the cost of wrong output is low."
 tags:
   - workflows
   - human-factors
@@ -157,8 +157,5 @@ The entire session takes 10 minutes. The developer never read a diff. The tool w
 - [Escape Hatches: Unsticking Stuck Agents](escape-hatches.md)
 - [Incremental Verification](../verification/incremental-verification.md)
 - [Permutation Frameworks](permutation-frameworks.md)
-- [Failure-Driven Iteration](failure-driven-iteration.md)
 - [Human-in-the-Loop](human-in-the-loop.md)
 - [Verification-Centric Development](verification-centric-development.md)
-- [Eval-Driven Development](eval-driven-development.md)
-- [The AI Development Maturity Model](ai-development-maturity-model.md)

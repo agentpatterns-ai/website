@@ -15,21 +15,21 @@ aliases:
 
 > Skill libraries accumulate defects that no single-skill eval catches — redundant clones, stale dependencies, missing validators, type mismatches. Diagnose and repair them at library time, not at task time, with typed signals and named actions.
 
-Per-skill evals catch defects that break one skill. They miss the failure mode that emerges when defects interact across the library: an agent retrieves the wrong skill because two descriptions overlap, composes skills whose artifact types do not match, or repeatedly invokes a stale skill that silently produces broken output. The SkillOps paper names this **skill technical debt** — library-level defects that may not break a single skill locally but degrade retrieval, composition, and execution at scale. [Source: [SkillOps: Managing LLM Agent Skill Libraries as Self-Maintaining Software Ecosystems](https://arxiv.org/abs/2605.13716)]
+Per-skill evals catch defects that break one skill. They miss interaction defects: overlapping descriptions cause wrong-skill retrieval, mismatched artifact types break composition, stale skills silently produce broken output. The SkillOps paper names this **skill technical debt** — library-level defects that degrade retrieval, composition, and execution at scale even when each skill passes its own eval. [Source: [SkillOps: Managing LLM Agent Skill Libraries as Self-Maintaining Software Ecosystems](https://arxiv.org/abs/2605.13716)]
 
 ## Why Task-Time Repair Is Not Enough
 
-Most skill-based agent frameworks repair at task time: when a skill fails, the next session reads the trace and picks another skill or rewrites the failing one. This works locally and leaves the library untouched. Defects that do not surface as task failures — two skills selectable for the same intent, an obsolete skill never invoked, a stale validator that always passes — persist across sessions until they cause a confidently wrong output. The signal is structural, not behavioural; only library-time inspection sees it. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+Most frameworks repair at task time: when a skill fails, the next session reads the trace and picks another skill or rewrites the failing one. The library stays untouched. Defects that never surface as task failures — two skills selectable for the same intent, an obsolete skill never invoked, a stale validator that always passes — persist across sessions until they produce a confidently wrong output. The signal is structural, not behavioural; only library-time inspection sees it. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 ## Typed Skill Contracts as the Inspection Surface
 
-Mechanical detection requires typed signals. The SkillOps framework models each skill as a tuple `(P, O, A, V, F)`: a precondition for invocation, the executable operation, the typed artifact produced, a validator over that artifact, and the set of known failure modes. The library is organized as a hierarchical graph so cross-skill relationships — type compatibility, supersession, redundancy — are inspectable without running the agent. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+Mechanical detection requires typed signals. SkillOps models each skill as a tuple `(P, O, A, V, F)`: precondition, operation, typed artifact, validator, known failure modes. Skills are organized as a hierarchical graph so cross-skill relationships — type compatibility, supersession, redundancy — are inspectable without running the agent. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 Without typed contracts, the inspection surface collapses to body-hash deduplication and string-similarity over descriptions. Both signals catch only the most obvious defects.
 
 ## Six Debt Patterns and Their Signals
 
-The SkillOps authors enumerate six concrete debt patterns and the observable signal each produces. The patterns generalize beyond their benchmark — each names a defect class that a real skill library can accrue. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+SkillOps enumerates six debt patterns and the observable signal each produces. The patterns generalize beyond the benchmark — each names a defect class real libraries accrue. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 | Debt pattern | Signal | Named action |
 |---|---|---|
@@ -40,7 +40,7 @@ The SkillOps authors enumerate six concrete debt patterns and the observable sig
 | Wrong interface types (artifact ↛ precondition) | type mismatch | `add_adapter(s_i, s_j)` |
 | Over-specialized skills with restrictive tags | unbindable arguments | `instantiate(s, arg)` |
 
-Each row is a closed loop: a detector reads a signal from logs or the skill graph and emits a typed action that the library can apply without changing the agent harness.
+Each row is a closed loop: a detector reads a signal from logs or the skill graph and emits a typed action the library applies without changing the agent harness.
 
 ## Four Diagnostic Dimensions
 
@@ -69,22 +69,22 @@ graph LR
     H --> A
 ```
 
-The rule-based variant of SkillOps runs the detectors with "nearly zero library-time LLM calls" — body-hash diffs, type-graph walks, log queries. The repair action is the only one that may invoke an LLM, and only on the failing skill, not the whole library. This decouples maintenance cost from task volume. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+The rule-based variant runs detectors with "nearly zero library-time LLM calls" — body-hash diffs, type-graph walks, log queries. Only `repair` may invoke an LLM, and only on the failing skill. Maintenance cost decouples from task volume. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 ## Reported Results
 
-On ALFWorld with 185 task instances across three seeds, SkillOps achieves 79.5% standalone task success, +8.8 percentage points over the strongest baseline. As a plug-in over retrieval baselines, it adds +0.68 to +2.90 percentage points. At a 2000-skill library it held 80.5% success rate while baselines degraded — the scaling claim the framework was built to support. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+On ALFWorld (185 instances, three seeds), SkillOps reaches 79.5% standalone task success, +8.8 points over the strongest baseline. As a plug-in over retrieval baselines it adds +0.68 to +2.90 points. At a 2000-skill library it held 80.5% while baselines degraded. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 ## When This Backfires
 
-The framework adds machinery; the machinery is not free.
+The machinery is not free.
 
-- **Small libraries (< ~20 skills)** — the lifecycle ceiling cited in [Skill Library Evolution](skill-library-evolution.md) applies here: rule-based debt detection costs more engineering than the defects it catches.
-- **Prose-only skill files** — Anthropic-style `SKILL.md` skills carry semantic descriptions, not typed `(P, O, A, V, F)` contracts. Without typed signals, mechanical detection collapses to body-hash dedup — useful but partial. [Source: [Anthropic SKILL.md format](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)]
-- **Highly dynamic dependency surface** — if upstream APIs and libraries churn faster than re-validation, every skill is "stale" and `retire` fires constantly without improving outcomes.
-- **Single-user libraries** — without aggregate utility logs, the "low utility" signal is noise. The dashboard loop in [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) faces the same constraint.
+- **Small libraries (< ~20 skills)** — the lifecycle ceiling in [Skill Library Evolution](skill-library-evolution.md) applies: rule-based detection costs more than the defects it catches.
+- **Prose-only skill files** — Anthropic-style `SKILL.md` skills carry semantic descriptions, not typed `(P, O, A, V, F)` contracts. Without typed signals, detection collapses to body-hash dedup. [Source: [Anthropic SKILL.md format](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)]
+- **Highly dynamic dependencies** — if upstream APIs churn faster than re-validation, every skill is "stale" and `retire` fires constantly without improving outcomes.
+- **Single-user libraries** — without aggregate utility logs, "low utility" is noise. The dashboard loop in [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) faces the same constraint.
 
-The authors themselves note that their evaluation library is half-synthetic and based mainly on ALFWorld, and that rule-based detection misses semantic redundancy or complex conflicts that require deeper reasoning. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+The authors note the evaluation library is half-synthetic and based mainly on ALFWorld, and that rule-based detection misses semantic redundancy or complex conflicts requiring deeper reasoning. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 
 ## Example
 

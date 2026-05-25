@@ -109,6 +109,7 @@ Cloud-local handoff depends on session state being transferable, which breaks do
 - [Coding Agent](../tools/copilot/coding-agent.md)
 - [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
+- [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](../workflows/programmatic-cloud-agent-dispatch.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [CLI-IDE-GitHub Context Ladder](../workflows/cli-ide-github-context-ladder.md)
 - [Changelog-Driven Feature Parity](../workflows/changelog-driven-feature-parity.md)
