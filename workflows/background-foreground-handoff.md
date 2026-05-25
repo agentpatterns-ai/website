@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Seamless Background-to-Foreground Handoff"
 description: "Transfer work from a background agent to a human at the ~90% completion mark using distilled context summaries and artifact-based handoff points."
@@ -11,6 +10,8 @@ aliases:
   - "async to sync agent transition"
   - "90 percent handoff pattern"
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Seamless Background-to-Foreground Handoff
 

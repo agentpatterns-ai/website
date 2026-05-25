@@ -1,5 +1,5 @@
 ---
-title: "RL-Trained Automated Red Teamers for Prompt Injection"
+title: "RL-Trained Automated Red Teamers for Prompt Injection Discovery"
 description: "Train an LLM-based attacker using reinforcement learning to discover novel prompt injection attack vectors end-to-end — before human red teamers or external adversaries do."
 aliases:
   - "automated red teaming"
@@ -9,6 +9,7 @@ tags:
   - testing-verification
   - security
 ---
+
 # RL-Trained Automated Red Teamers for Prompt Injection Discovery
 
 > Train an LLM-based attacker using reinforcement learning to discover novel prompt injection attack vectors end-to-end — before human red teamers or external adversaries do.
@@ -141,10 +142,10 @@ The attacker receives the full `defender trace` — not just a pass/fail — ena
 ## Related
 
 - [Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections](close-attack-to-fix-loop.md)
+- [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Designing Injection-Resistant Agents with Defense-in-Depth](prompt-injection-resistant-agent-design.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)

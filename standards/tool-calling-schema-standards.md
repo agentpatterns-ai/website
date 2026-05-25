@@ -179,7 +179,5 @@ The logic is identical across all four; only the wrapper structure and the param
 - [Agent Skills Standard](agent-skills-standard.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
-- [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md)
 - [Tool Descriptions as Onboarding](../tool-engineering/tool-descriptions-as-onboarding.md) — writing tool descriptions with implicit context agents need
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md)
-- [Plugin and Extension Packaging](plugin-packaging.md)

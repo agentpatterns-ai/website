@@ -81,6 +81,16 @@ Use vendor-hosted execution (the default) when you have no residency constraints
 
 The same agent capabilities are available in both modes: parallel execution, long-horizon tasks, multi-model harnesses, plugin support. Self-hosted does not add agent capability — it relocates execution.
 
+### What Self-Hosted Does Not Solve
+
+Relocating execution closes the data-residency gap, but it does not by itself satisfy enterprise governance. Independent analyses ([Qovery — "Cursor Cloud Agents Are Incredible — Until You Need Production Governance"](https://www.qovery.com/blog/cursor-cloud-agents-enterprise-limitations), [Oasis/Cursor governance partnership](https://www.oasis.security/blog/cursor-oasis-governing-agentic-access)) flag three residual gaps that self-hosted workers do not address:
+
+- **Audit-trail completeness for change review** — workers log tool calls locally, but enterprise change-management evidence (who approved which agent action, against which policy) still requires an external control plane.
+- **Identity delegation per subagent** — workers run with the host environment's credentials, so multi-agent fan-out cannot prove which subagent invoked which privileged action without additional identity wrapping.
+- **Post-PR pipeline ownership** — Cursor agents stop at the PR boundary. Deployment, staging, rollback, and production governance remain entirely the platform team's problem; self-hosting workers does not change this scope.
+
+Plan for these with an external policy-as-code layer or governance partner if you are deploying agents into a regulated SDLC, not just a regulated network.
+
 ## Example
 
 A team with an airgapped internal npm registry needs agents to install dependencies and run tests. Vendor-hosted agents cannot reach `npm.internal.corp`. Self-hosted workers run inside the corporate network with access to the registry:

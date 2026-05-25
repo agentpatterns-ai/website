@@ -10,6 +10,8 @@ aliases:
   - instruction file secret scan
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-secrets-in-context/`
+
 # Audit Secrets in Context
 
 > Enumerate every agent-readable surface, run pattern and entropy scans for live credentials, cross-check git history for rotation status, emit findings with rotate-and-purge instructions.

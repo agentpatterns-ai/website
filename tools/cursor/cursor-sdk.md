@@ -13,20 +13,20 @@ aliases:
 
 > Embed Cursor's agent harness in TypeScript applications, with local, Cursor-hosted, or self-hosted runtimes behind one interface.
 
-The [Cursor SDK](https://cursor.com/blog/typescript-sdk) entered public beta on April 29, 2026 as `@cursor/sdk`, exposing the agent runtime that powers Cursor's desktop, CLI, and web apps as a programmable TypeScript library ([Cursor changelog](https://cursor.com/changelog)). It joins the [GitHub Copilot SDK](../copilot/copilot-sdk.md) and [Claude Agent SDK](../claude/agent-sdk.md) as a vendor-runtime SDK: applications inherit a production-tested harness — context indexing, planner, tool orchestration, MCP routing — without reimplementing agent infrastructure.
+The [Cursor SDK](https://cursor.com/blog/typescript-sdk) entered public beta on April 29, 2026 as `@cursor/sdk`, exposing the agent runtime that powers Cursor's desktop, CLI, and web apps as a programmable TypeScript library ([Cursor changelog](https://cursor.com/changelog)). Like the [GitHub Copilot SDK](../copilot/copilot-sdk.md) and [Claude Agent SDK](../claude/agent-sdk.md), it lets applications inherit a production harness — indexing, planner, tool orchestration, MCP routing — instead of reimplementing one.
 
 ## What the SDK Exposes
 
 The full Cursor harness is available through the SDK ([Cursor docs](https://cursor.com/docs/sdk/typescript)):
 
-- **Codebase indexing and semantic search** — the same context system the IDE uses.
+- **Codebase indexing and semantic search** — the IDE's context system.
 - **MCP servers** — stdio and HTTP, defined inline or loaded from `.cursor/mcp.json`.
 - **Skills** — auto-loaded from `.cursor/skills/`.
-- **Hooks** — file-based observers loaded from `.cursor/hooks.json` (no programmatic callbacks).
+- **Hooks** — file-based observers from `.cursor/hooks.json` (no programmatic callbacks).
 - **Subagents** — named delegates with independent prompts and models.
 - **Multi-model selection** — every model in Cursor, including Composer 2 (coding-specialised, frontier-level performance at lower cost).
 
-`Agent.create()` returns a long-lived agent; `agent.send(prompt)` returns a `Run` whose events stream via async iteration or callbacks:
+`Agent.create()` returns a long-lived agent; `agent.send(prompt)` returns a `Run` whose events stream via async iteration or callbacks.
 
 ```typescript
 import { Agent } from "@cursor/sdk";
@@ -43,11 +43,11 @@ for await (const event of run.stream()) {
 }
 ```
 
-`Agent.prompt()` is a one-shot convenience that creates, runs, and disposes in one call.
+`Agent.prompt()` is a one-shot convenience: create, run, dispose.
 
 ## Three Runtimes, One Interface
 
-The same SDK shape targets three execution modes ([Cursor blog](https://cursor.com/blog/typescript-sdk); [Cursor docs](https://cursor.com/docs/sdk/typescript)):
+One SDK shape, three execution modes ([Cursor blog](https://cursor.com/blog/typescript-sdk); [Cursor docs](https://cursor.com/docs/sdk/typescript)):
 
 | Runtime | Where the agent runs | Use case |
 |---------|----------------------|----------|
@@ -55,7 +55,7 @@ The same SDK shape targets three execution modes ([Cursor blog](https://cursor.c
 | **Cloud (Cursor-hosted)** | Dedicated VM with cloned repo, sandboxing, persistent sessions | Parallel runs, disconnection-resilient long jobs, auto PR creation |
 | **Cloud (self-hosted)** | Cursor cloud handles inference; your worker handles tool execution | Data residency, internal resource access — see [Self-Hosted Cloud Agents](self-hosted-cloud-agents.md) |
 
-Cloud agents accept a `repos` list and `autoCreatePR` flag, so the agent clones a repo, works on a branch, and opens a PR on finish:
+With a `repos` list and `autoCreatePR` flag, the agent clones the repo, works on a branch, and opens a PR on finish.
 
 ```typescript
 const agent = await Agent.create({
@@ -81,11 +81,11 @@ Two consumption patterns ([Cursor docs](https://cursor.com/docs/sdk/typescript))
 
 ## Pricing and Auth
 
-SDK runs follow [standard token-based consumption pricing](https://cursor.com/blog/typescript-sdk), share request pools and Privacy Mode rules with IDE and Cloud Agent runs, and appear in usage dashboards under an SDK tag ([Cursor docs](https://cursor.com/docs/sdk/typescript)). Auth is via `CURSOR_API_KEY` (user or service-account keys); Team Admin keys are not yet supported.
+SDK runs follow [standard token-based consumption pricing](https://cursor.com/blog/typescript-sdk), share request pools and Privacy Mode rules with IDE and Cloud Agent runs, and appear under an SDK tag in dashboards ([Cursor docs](https://cursor.com/docs/sdk/typescript)). Auth is via `CURSOR_API_KEY` (user or service-account keys); Team Admin keys are not yet supported.
 
 ## Comparison with Other Vendor SDKs
 
-The three programmable agent SDKs share the same primitive — embed the vendor's harness in your application — but trade off differently:
+The three programmable agent SDKs share one primitive — embed the vendor's harness — but trade off differently:
 
 | | Cursor SDK | [Copilot SDK](../copilot/copilot-sdk.md) | [Claude Agent SDK](../claude/agent-sdk.md) |
 |---|---|---|---|
@@ -96,16 +96,17 @@ The three programmable agent SDKs share the same primitive — embed the vendor'
 | MCP support | Yes | Yes | Yes |
 | Pricing | Token consumption (Cursor pool) | Counts against Copilot premium request quotas | Anthropic API tokens |
 
-Cursor is the only one of the three that ships a vendor-managed cloud runtime as part of the SDK, with explicit support for long-running, disconnection-resilient jobs that produce PRs.
+Cursor alone ships a vendor-managed cloud runtime in the SDK, with explicit support for long-running, disconnection-resilient jobs that produce PRs.
 
 ## When This Backfires
 
-Vendor-runtime SDKs concentrate operational risk in the vendor's roadmap:
+Vendor-runtime SDKs concentrate risk in the vendor's roadmap:
 
 - **Users without Cursor billing.** All SDK runs count against Cursor consumption pricing ([Cursor blog](https://cursor.com/blog/typescript-sdk)); applications serving end users without a Cursor relationship cannot use the SDK as the runtime.
 - **Strict data residency.** Cursor-hosted cloud agents clone repos into Cursor's VMs. Teams banning vendor-hosted execution need the [self-hosted worker mode](self-hosted-cloud-agents.md).
 - **Stable long-horizon contract.** The SDK docs note the tool-call schema is unstable and inline `mcpServers` don't survive `Agent.resume()` ([Cursor docs](https://cursor.com/docs/sdk/typescript)); applications needing deterministic harness contracts absorb upstream churn or pin a vendored copy.
-- **Multi-vendor orchestration.** Spanning Cursor, Copilot, and Claude harnesses simultaneously is easier on a thinner foundation (direct LLM API + custom orchestration).
+- **OAuth-authenticated HTTP MCP servers from local agents.** Local-runtime agents loading MCPs from `settingSources: ["user"]` do not pick up HTTP MCP servers that authenticate via OAuth (e.g., Notion, Linear), even after completing the auth flow in the Cursor app — stdio servers from the same config load fine ([Cursor forum bug report](https://forum.cursor.com/t/sdk-local-agents-cannot-access-http-mcps-with-oauth-from-settingsources/159797)). Cloud-runtime agents are the documented workaround.
+- **Multi-vendor orchestration.** Spanning Cursor, Copilot, and Claude harnesses at once is easier on a thinner foundation (direct LLM API plus custom orchestration).
 
 ## Example
 

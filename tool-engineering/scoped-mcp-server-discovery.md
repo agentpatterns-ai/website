@@ -79,5 +79,6 @@ Claude Code stores the local entry under the developer's home `.claude.json` and
 
 - [MCP Client Design: Building Robust Host-Side Logic](mcp-client-design.md)
 - [MCP Server Design: A Server Author's Checklist](mcp-server-design.md)
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md)
 - [Monorepo Hierarchical Discovery](../tools/copilot/monorepo-hierarchical-discovery.md)
 - [Extension Points: Discovery Surfaces in Claude Code](../tools/claude/extension-points.md)

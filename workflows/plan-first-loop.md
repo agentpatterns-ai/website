@@ -1,6 +1,6 @@
 ---
 title: "The Plan-First Loop: Always Design Before Writing Code"
-description: "For non-trivial tasks, ask the agent to summarize how the system works, correct its understanding, co-create a written plan, then implement — never the reverse."
+description: "For non-trivial tasks, have the agent describe how the system works, correct its understanding, co-create a written plan, then implement — never the reverse."
 tags:
   - context-engineering
   - agent-design
@@ -8,9 +8,9 @@ tags:
   - cost-performance
 ---
 
-# The Plan-First Loop: Design Before Code
+# The Plan-First Loop: Always Design Before Writing Code
 
-> For non-trivial tasks, ask the agent to summarize how the system works, correct its understanding, co-create a written plan, then implement — never the reverse.
+> For non-trivial tasks, have the agent describe how the system works, correct its understanding, co-create a written plan, then implement — never the reverse.
 
 ## Why Implementation-First Fails
 
@@ -22,7 +22,7 @@ Jumping straight to "Here is the feature. Here are some files. Please build it."
 
 ```mermaid
 graph TD
-    A[Ask agent to summarize the relevant subsystem] --> B[Review and correct misunderstandings]
+    A[Ask agent to describe the relevant subsystem] --> B[Review and correct misunderstandings]
     B --> C[Co-create a written plan]
     C --> D[Review and approve the plan]
     D --> E[Agent implements]
@@ -216,7 +216,7 @@ In these cases, use direct prompting or Plan Mode selectively on the specific st
 
 ## Key Takeaways
 
-- Ask the agent to summarize before it plans; plan before it implements.
+- Have the agent describe the subsystem before it plans; plan before it implements.
 - Correct misunderstandings at the summary stage — one correction there prevents multiple corrections after implementation.
 - Add self-critique rounds for complex tasks: critique for edge cases, redundancies, and ordering, then consolidate into a final plan.
 - Self-critique stacks with extended thinking and plan mode to compound planning quality.

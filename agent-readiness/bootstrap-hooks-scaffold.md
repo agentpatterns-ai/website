@@ -268,3 +268,4 @@ Next: bootstrap-precompletion-hook, bootstrap-loop-detector-hook
 - [Bootstrap Pre-Completion Hook](bootstrap-precompletion-hook.md)
 - [Bootstrap Loop Detector Hook](bootstrap-loop-detector-hook.md)
 - [Audit Hooks Coverage](audit-hooks-coverage.md)
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](../tool-engineering/precompact-hook-compaction-veto.md) — once the `PreCompact` scaffold is in place, the veto pattern adds task-checkpoint control

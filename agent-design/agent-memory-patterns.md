@@ -1,6 +1,6 @@
 ---
 title: "Agent Memory Patterns: Learning Across Conversations"
-description: "Persist knowledge across conversations using scoped memory systems so agents accumulate institutional knowledge rather than starting fresh every session"
+description: "Persist knowledge across conversations using scoped memory systems so agents accumulate institutional knowledge rather than starting fresh every session."
 aliases:
   - Layered Context Architecture
   - Multi-Layer Context Grounding
@@ -111,26 +111,21 @@ A project `CLAUDE.md` for a data pipeline codebase with scoped memory entries:
 
 The first two sections belong in the project `CLAUDE.md` (version-controlled, shared). The third belongs in `~/.claude/CLAUDE.md` (personal, not committed).
 
+## Key Takeaways
+
+- Memory has two axes: *scope* (managed / project / user) decides who sees it, and *time* (episodic vs. working) decides whether it survives the session.
+- The highest-value entries are non-obvious corrections — domain-specific deviations the model would otherwise get wrong — not facts already in the model's general knowledge.
+- Persistent memory and seeded codebase context (AGENTS.md, comments) are complementary: memory captures what the agent learns, seeded context captures what humans want the agent to know.
+- The dominant failure mode is rot: stale, contradictory, or low-signal entries silently degrade output, so a curation cadence is mandatory.
+- Prompt the user to save corrections at the moment they happen; otherwise the lesson evaporates at session end.
+
 ## Related
 
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
+- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
+- [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
+- [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
+- [Memory Reinforcement Learning](memory-reinforcement-learning.md)
+- [Generative Agents Memory Stream](generative-agents-memory-stream.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../instructions/hierarchical-claude-md.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
-- [Context Priming](../context-engineering/context-priming.md)
-- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Layered Context Architecture](../context-engineering/layered-context-architecture.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
-- [Agent Harness: Initializer and Coding Agent](agent-harness.md)
-- [Model a Single Agent Turn](agent-turn-model.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
-- [Context Engineering](../context-engineering/context-engineering.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
-- [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
-- [Memory Reinforcement Learning](memory-reinforcement-learning.md)
-- [Generative Agents Memory Stream](generative-agents-memory-stream.md)

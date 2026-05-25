@@ -54,7 +54,7 @@ The Agents Window consolidates task assignment, status monitoring, and result re
 Parallel-agent workflows degrade under specific conditions:
 
 - **Sequential dependencies dominate.** When Agent B depends on Agent A's output, you cannot parallelize. For short tasks, orchestration overhead can exceed any speedup from fan-out.
-- **Error cascades compound across chained agents.** Minor per-agent inaccuracies propagate and can solidify into system-level false consensus. The recent "From Spark to Fire" study models this as cascade amplification, topological sensitivity, and consensus inertia, and reports a baseline defense success rate of only 0.32 in unmitigated LLM multi-agent systems ([Zhang et al., 2026, arxiv:2603.04474](https://arxiv.org/abs/2603.04474)).
+- **Error cascades compound across chained agents.** Minor per-agent inaccuracies propagate and can solidify into system-level false consensus. The "From Spark to Fire" study identifies three vulnerability classes in LLM multi-agent systems — cascade amplification, topological sensitivity, and consensus inertia — and demonstrates that injecting a single atomic error seed can lead to widespread failure ([Xie et al., 2026, arxiv:2603.04474](https://arxiv.org/abs/2603.04474)).
 - **Tightly coupled refactors.** If two agents must touch overlapping code semantics (not just overlapping files), a single agent with one worktree usually beats fan-out — decomposition overhead outweighs isolation gains.
 - **Large legacy monorepos.** Parallel agents in separate worktrees still share the context-window ceiling per agent. If each worktree's relevant surface area does not fit in context, any gains are offset by missed dependencies.
 - **Cloud runtime costs.** Cloud agents consume metered VM time while running; long-lived parallel sessions can accumulate cost quickly. Budget and rate-limit cloud agents before fanning out.
@@ -91,6 +91,9 @@ Cursor runs the prompt across multiple models in parallel worktrees, then surfac
 ## Related
 
 - [Cursor Self-Hosted Cloud Agents](self-hosted-cloud-agents.md)
+- [Cursor Multitask Subagents](multitask-subagents.md)
+- [Cursor Multi-Root Workspaces](multi-root-workspaces.md)
+- [Cursor SDK](cursor-sdk.md)
 - [/batch & Worktrees](../claude/batch-worktrees.md)
 - [Sub-Agents](../claude/sub-agents.md)
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)

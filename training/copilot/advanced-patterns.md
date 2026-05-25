@@ -140,9 +140,9 @@ copilot -p "Run the test suite and report failures" \
 
 ### Copilot Code Review in CI
 
-The simplest CI integration: enable automatic Copilot code review on all PRs. It runs as part of the PR checks and produces inline comments before any human review.
+The simplest CI integration: enable automatic Copilot Code Review on all PRs. It runs as part of the PR checks, produces inline comments, and completes in under 30 seconds. [unverified]
 
-Configure via Repository Settings → Rules → Rulesets → New branch ruleset → under "Branch rules", select **Automatically request Copilot code review**. Optionally enable "Review new pushes" and "Review draft pull requests". See [Configuring automatic code review by Copilot](https://docs.github.com/en/copilot/how-tos/agents/copilot-code-review/configuring-automatic-code-review-by-copilot).
+Configure via Repository Settings → Code review → Copilot → enable automatic review.
 
 This is the lowest-effort, highest-value CI integration. Every PR gets an automated first-pass review before any human sees it.
 

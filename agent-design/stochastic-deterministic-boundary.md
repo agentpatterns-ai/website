@@ -25,7 +25,7 @@ Apply the contract only when at least one condition holds:
 - **Non-trivial commit side effects.** The commit writes to external state — database, billing API, deployment — where partial writes are expensive to reverse.
 - **Replay or audit requirements.** Compliance or eval pipelines need to re-run verifier and commit against new model versions without re-rolling the proposer.
 
-Single-call assistants and read-only flows do not need the contract. Anthropic warns frameworks "create extra layers of abstraction that can obscure the underlying prompts and responses" — start simple and add layers only when performance demands it ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
+Single-call assistants and read-only flows do not need the contract. Anthropic warns frameworks "create extra layers of abstraction that can obscure the underlying prompts and responses" — start simple and add layers only when performance demands it ([Anthropic, Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for pattern selection guidance).
 
 ## The Four Parts
 

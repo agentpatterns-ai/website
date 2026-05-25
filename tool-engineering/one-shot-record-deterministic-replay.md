@@ -18,11 +18,11 @@ aliases:
 
 ## The Problem with Reasoning on Every Cron Tick
 
-Periodic agent workloads — hourly monitoring sweeps, daily reports, scheduled triage — run the same task against shifting inputs. The token bill scales linearly with the schedule, and stochastic reasoning re-introduces failures the prior run already solved. Wang et al. reported a 99% token reduction by replacing repeated reasoning with deterministic replay of a single recorded plan ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)). The general record / summarize / replay paradigm was framed as a check-function-guarded framework ([AgentRR, Feng et al., 2025](https://arxiv.org/abs/2505.17716)); the periodic-task specialization swaps the check function for parameterized templates.
+Periodic agent workloads — hourly monitoring, daily reports, scheduled triage — run the same task against shifting inputs. The token bill scales with the schedule, and stochastic reasoning re-introduces failures the prior run already solved. Wang et al. reported a 99% token reduction by replacing repeated reasoning with deterministic replay of a single recorded plan ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)). The general record / summarize / replay paradigm was framed as a check-function-guarded framework ([AgentRR, 2025](https://arxiv.org/abs/2505.17716)); the periodic-task specialization swaps the check function for parameterized templates.
 
 ## The Mechanism
 
-The first invocation runs as a normal agent loop. The engine intercepts each tool call. On success, a template extraction pass converts the trace into a *Loop Skill* — a deterministic execution plan that captures the tool DAG and parameterizes time-dependent and result-dependent variables. Wang et al. use a greedy length-descending extraction algorithm and prove the extracted step sequence is invariant across validated replays ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)). Subsequent invocations bypass the LLM entirely: resolve variables against real-time values, execute the recorded tool sequence.
+The first invocation runs as a normal agent loop while the engine intercepts each tool call. On success, a template extraction pass converts the trace into a *Loop Skill* — a deterministic plan that captures the tool DAG and parameterizes time-dependent and result-dependent variables. Wang et al. use a greedy length-descending extraction algorithm and prove the step sequence is invariant across validated replays ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)). Subsequent invocations bypass the LLM: resolve variables against real-time values, execute the recorded sequence.
 
 ```mermaid
 graph TD
@@ -40,9 +40,9 @@ Reported results: 93.3%-99.98% monthly token reduction and 8.7x lower execution 
 
 ## Why It Works on Periodic Tasks Specifically
 
-The mechanism is memoization with parameter extraction at the tool-call level. It applies when *the tool DAG is invariant across runs and only specific arguments vary* — the shape periodic tasks have, where the schedule fixes structure and variability lives in timestamps, result fields, and identifiers. The LLM discovers the DAG on the first run; once discovered, it adds no information. Removing it cuts cost and eliminates the entropy source that produced output non-determinism.
+The mechanism is memoization with parameter extraction at the tool-call level. It applies when *the tool DAG is invariant across runs and only specific arguments vary* — the shape periodic tasks have, where the schedule fixes structure and variability lives in timestamps, result fields, and identifiers. The LLM discovers the DAG on the first run; once discovered, it adds no information. Removing it cuts cost and eliminates the entropy source behind non-determinism.
 
-The falsifier: when invocations face materially different inputs — open-ended research, novel debugging — the recorded template does not generalize. The paper's tested envelope (5-min to 24-hour periodic intervals) is the operating range, not a general claim.
+The falsifier: when invocations face materially different inputs — open-ended research, novel debugging — the template does not generalize. The tested envelope (5-min to 24-hour intervals) is the operating range, not a general claim.
 
 ## Preconditions
 
@@ -54,7 +54,7 @@ Three properties of the workload must hold. One violation produces silent, expen
 | **Idempotent or transactional tools** | Replays may execute against partial state from a prior failed run. Non-idempotent writes (POST without idempotency key, file append, message send) corrupt state on retry. See [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md). |
 | **Stable upstream APIs and schemas** | A deterministic replay executes a now-invalid sequence when an upstream API, target HTML, or schema changes. The engine has no oracle to detect drift before failure compounds. |
 
-The LOOP write-safety theorem covers concurrent access to persistent configuration via reentrant locks and atomic file replacement; it does not cover retry semantics on partially-applied tool effects ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)).
+The LOOP write-safety theorem covers concurrent access to persistent configuration via reentrant locks and atomic file replacement, not retry semantics on partially-applied tool effects ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)).
 
 ## Distinction from Adjacent Patterns
 
@@ -64,14 +64,14 @@ The LOOP write-safety theorem covers concurrent access to persistent configurati
 | **AgentRR with check function** ([2505.17716](https://arxiv.org/abs/2505.17716)) | Guarded replay; LLM resumes on check failure | Higher cost; check function is the hot-path bottleneck |
 | **Simulation replay for testing** ([page](../workflows/simulation-replay-testing.md)) | New agent run vs. golden diff | Tests past conditions only; novel task types unrepresented |
 
-LOOP accepts the periodic-task envelope and drops the AgentRR check-function overhead — trading replay safety for speed, at the cost of brittleness when the upstream environment drifts.
+LOOP accepts the periodic-task envelope and drops the AgentRR check-function overhead — trading replay safety for speed, at the cost of brittleness when upstream drifts.
 
 ## When the Pattern Backfires
 
-- **Stochastic branch points.** The extracted template freezes whichever branch the first LLM run took. Inputs needing the other branch fail silently. Stress-test recordings with adversarial input distributions before promoting.
-- **Drifting external dependencies.** Without a trust-anchor check, replay has no oracle for upstream schema changes. Couple replay with a lightweight sentinel API call to fail fast on drift.
+- **Stochastic branch points.** The template freezes whichever branch the first run took. Inputs needing the other branch fail silently. Stress-test with adversarial input distributions before promoting.
+- **Drifting external dependencies.** Without a trust anchor, replay has no oracle for upstream schema changes. Pair replay with a sentinel API call to fail fast on drift.
 - **Non-idempotent writes mid-sequence.** A partially-failed replay re-executes completed writes. Require idempotency keys on every write tool, or wrap replay in a transaction with rollback.
-- **Short or one-shot tasks.** Amortization requires enough future invocations to recoup recording and extraction cost. For a handful of runs, hand-scripting is cheaper.
+- **Short or one-shot tasks.** Amortization requires enough invocations to recoup recording and extraction cost. For a handful of runs, hand-scripting is cheaper.
 
 ## Example
 

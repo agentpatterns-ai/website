@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
 ---
+
 # Channels Permission Relay
 
 > Forward tool-use approval prompts from a running Claude Code session to your phone via Telegram, Discord, or iMessage — so agents can run overnight without requiring you at the terminal for every permission decision.
@@ -14,19 +15,17 @@ Unattended agent runs face a binary choice: `--dangerously-skip-permissions` rem
 
 ## How it works
 
-A [channel](https://code.claude.com/docs/en/channels) is a local MCP server that bridges your Claude Code session to an external platform. Enable one per session with `--channels`:
+A [channel](https://code.claude.com/docs/en/channels) is a local MCP server, spawned over stdio, that bridges your Claude Code session to an external platform. Enable one per session with `--channels`:
 
 ```bash
 claude --channels plugin:telegram@claude-plugins-official
 ```
 
-Claude Code spawns the channel as a subprocess over stdio; the channel carries messages in both directions while the session runs.
-
-When Claude requests a tool-use approval and the channel server has declared the [`claude/channel/permission` capability](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts), Claude Code fires a `notifications/claude/channel/permission_request` notification to the channel. That notification carries four fields:
+When Claude requests a tool-use approval and the channel has declared the [`claude/channel/permission` capability](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts), Claude Code fires a `notifications/claude/channel/permission_request` notification carrying four fields:
 
 | Field | Content |
 |---|---|
-| `request_id` | Five-letter ID unique to this prompt |
+| `request_id` | Five lowercase letters from `a`–`z` excluding `l`, unique to this prompt |
 | `tool_name` | Tool Claude wants to use (`Bash`, `Write`, etc.) |
 | `description` | Human-readable summary of the specific call |
 | `input_preview` | Tool arguments as JSON, truncated to 200 characters |
@@ -47,7 +46,7 @@ Three channel plugins ship in the [claude-plugins-official research preview](htt
 
 Each plugin maintains a sender allowlist. Telegram and Discord bootstrap it via pairing: DM the bot, receive a pairing code, confirm it in Claude Code. iMessage auto-trusts messages from your own Apple ID; other contacts are added by handle with `/imessage:access allow`.
 
-[Permission relay needs Claude Code v2.1.81+](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts) (channels themselves work from v2.1.80). Auth must be claude.ai or a Console API key; Bedrock, Vertex, and Foundry are unsupported.
+Channels require [Claude Code v2.1.80 or later](https://code.claude.com/docs/en/channels) and Anthropic authentication via claude.ai or a Console API key; Amazon Bedrock, Google Vertex AI, and Microsoft Foundry are not supported. Permission relay specifically [requires v2.1.81 or later](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts) — earlier versions ignore the `claude/channel/permission` capability.
 
 ## Security gating
 
@@ -70,17 +69,15 @@ Pro and Max users without an org skip these checks.
 
 ## Relation to auto-mode
 
-[Auto-mode](auto-mode.md) classifies tool-use requests as routine or non-routine based on a configurable policy, approving routine ones without prompting. Permission relay handles what auto-mode cannot classify or intentionally escalates — it is the notification path for actions that genuinely warrant a human decision.
-
-Used together: auto-mode reduces the volume of prompts that reach the relay; the relay ensures escalations reach you wherever you are rather than stalling the session.
+[Auto-mode](auto-mode.md) approves routine tool use without prompting; relay handles what auto-mode cannot classify or intentionally escalates. Together they cut prompt volume and ensure escalations still find you.
 
 ## When this backfires
 
-Relay widens the approval surface and narrows the information the approver acts on:
+Relay widens the approval surface and narrows the information the approver sees:
 
-- **Weaker credential than the terminal.** A stolen phone, SIM-swap, or shared iMessage device becomes a tool-approval path — a locked workstation requires defeating the terminal first.
-- **Narrow remote view.** The relay forwards only `tool_name`, a short `description`, and the first 200 characters of arguments. Blast radius that depends on working directory, loaded files, or session state cannot be assessed from a phone.
-- **Approval fatigue.** Prompts glanced at on a phone get approved by reflex — the failure mode [safe command allowlisting](../../human/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid. At scale, a tighter allowlist plus a supervised session beats remote approvals.
+- **Weaker credential than the terminal.** A stolen phone, SIM-swap, or shared iMessage device becomes a tool-approval path — defeating a locked workstation requires more.
+- **Narrow remote view.** The relay forwards only `tool_name`, a short `description`, and the first 200 characters of arguments — blast radius that depends on working directory or session state cannot be assessed from a phone.
+- **Approval fatigue.** Prompts glanced at on a phone get approved by reflex — the failure mode [safe command allowlisting](../../human/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid.
 - **Sandboxable risk.** For throwaway worktrees or ephemeral containers with no credentials in scope, `--dangerously-skip-permissions` inside a sandbox removes prompts entirely — relay adds latency without adding safety.
 
 ## Example

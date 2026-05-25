@@ -10,6 +10,8 @@ aliases:
   - create initial AGENTS.md
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-agents-md/`
+
 # Bootstrap AGENTS.md
 
 > Detect existing instruction surfaces, probe for non-discoverable knowledge, generate root and subdirectory `AGENTS.md` per pointer-map rules, then validate.

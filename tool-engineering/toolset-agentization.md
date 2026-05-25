@@ -60,13 +60,13 @@ Agentization reduces the **effective action space** visible to the top-level pla
 
 ## When This Backfires
 
-Agentization is a commitment to a static partition. Specific conditions invert its benefits:
+Agentization commits to a static partition. Specific conditions invert its benefits:
 
 - **Usage patterns drift** — "frequently co-used" today need not hold in six months. A stale partition forces the planner to route around wrappers or invoke multiple agent tools where one flat call would have sufficed.
-- **Sub-agent opacity on failure** — the planner sees an aggregate error, not which leaf failed. Debugging and error recovery regress versus a flat catalog, mirroring the opacity trap flagged in [Consolidate Agent Tools](consolidate-agent-tools.md).
-- **Training dependency** — Asymmetric Planner Adaptation requires fine-tuning access. Teams using frontier proprietary models (Claude, GPT-4) cannot apply the training half and inherit only the structural change.
-- **Cross-agent coordination** — when two agent tools both need a shared leaf (calendar, auth), the hierarchy forces either leaf duplication or inter-agent coupling the planner must now resolve. [Research on multi-agent system failures](https://arxiv.org/html/2503.13657v1) shows agents frequently disobey role specifications; sub-agent tools inherit this risk.
-- **Small-to-moderate libraries** — HTAA targets "hundreds of tools." Below ~30–50 tools, the overhead of defining sub-agents and their interfaces exceeds the gains [Tool Search](advanced-tool-use.md) or [Consolidate Agent Tools](consolidate-agent-tools.md) deliver with less infrastructure.
+- **Sub-agent opacity on failure** — the planner sees an aggregate error, not which leaf failed. Debugging regresses versus a flat catalog, mirroring the opacity trap flagged in [Consolidate Agent Tools](consolidate-agent-tools.md).
+- **Training dependency** — Asymmetric Planner Adaptation requires fine-tuning access. Teams on frontier proprietary models (Claude, GPT-4) inherit only the structural change.
+- **Cross-agent coordination** — when two agent tools share a leaf (calendar, auth), the hierarchy forces either leaf duplication or inter-agent coupling the planner must resolve. [Multi-agent system failures research](https://arxiv.org/html/2503.13657v1) shows agents frequently disobey role specifications; sub-agent tools inherit this risk.
+- **Small-to-moderate libraries** — HTAA targets "hundreds of tools." Below ~30–50 tools, sub-agent overhead exceeds the gains [Tool Search](advanced-tool-use.md) or [Consolidate Agent Tools](consolidate-agent-tools.md) deliver with less infrastructure.
 
 ## Example
 

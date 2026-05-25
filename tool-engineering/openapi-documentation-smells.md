@@ -16,11 +16,9 @@ aliases:
 
 ## The Semantic-Readiness Gap
 
-An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312)". Their proof-of-concept moved identical task scenarios from [~70% to ~90% success after enriching the descriptions alone](https://arxiv.org/abs/2605.14312).
+An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312)"; enriching descriptions alone moved [task success from ~70% to ~90%](https://arxiv.org/abs/2605.14312).
 
-Adjacent work confirms the gap. [AutoMCP saw 76.5% baseline tool-call success from raw OpenAPI specs, reaching 99.9% only after averaging 19 lines of spec edits per API](https://arxiv.org/html/2507.16044v3). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
-
-The deficiencies have shape. Hermes names nine categories.
+Adjacent work agrees. [AutoMCP reached 99.9% tool-call success only after averaging 19 lines of spec edits per API, up from a 76.5% baseline](https://arxiv.org/html/2507.16044v3). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
 
 ## The Smell Taxonomy
 
@@ -47,18 +45,18 @@ Prevalence in the Hermes corpus skewed heavily: [100% of endpoints had RESPONSE 
 
 ## Why Each Category Matters
 
-The taxonomy works because OpenAPI was written for developers with implicit context — the codebase, Slack, ticket history — that agents do not see. Each smell names a specific gap between human-implicit and machine-explicit information.
+OpenAPI was written for developers with implicit context — codebase, Slack, ticket history — that agents do not see. Each smell names a specific gap between human-implicit and machine-explicit information.
 
 - LAZY descriptions force the agent to pick endpoints by `operationId` alone — [the same failure mode practitioners cite when generating MCP tools from undocumented OpenAPI](https://blog.christianposta.com/semantics-matter-exposing-openapi-as-mcp-tools/).
-- INPUT and RESPONSE smells map to the [parameter and schema fields that translate directly into agent tool definitions](../standards/openapi-agent-tool-spec.md) — gaps there become hallucinated arguments and unhandled error states.
-- TANGLED descriptions break [the description-quality discipline](tool-description-quality.md) of one concern per documentation field.
-- PATH and METHOD smells survive automatic [MCP server generation](mcp-server-design.md) and propagate into the tool catalog the agent reads.
+- INPUT and RESPONSE smells map to the [parameter and schema fields that translate into agent tool definitions](../standards/openapi-agent-tool-spec.md) — gaps become hallucinated arguments and unhandled error states.
+- TANGLED descriptions break [the description-quality discipline](tool-description-quality.md) of one concern per field.
+- PATH and METHOD smells survive automatic [MCP server generation](mcp-server-design.md) and propagate into the tool catalog.
 
 ## Scenario-First Triage
 
-Detecting smells on all 600 endpoints in a 16-API portfolio produces a 2,450-finding report. The Hermes study itself pivoted to selective adaptation rather than blanket remediation: [estimated effort dropped from 385 to 42 engineering hours — an 89% reduction — by fixing only endpoints needed for defined automation scenarios](https://arxiv.org/abs/2605.14312).
+A 2,450-finding report is unactionable. The Hermes study itself pivoted to selective adaptation: [estimated effort dropped from 385 to 42 engineering hours — an 89% reduction — by fixing only endpoints needed for defined automation scenarios](https://arxiv.org/abs/2605.14312).
 
-The same logic appears in MCP practice. [GitHub Copilot and Block teams cut tool counts by 60-93% before agents became reliable](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc); fixing descriptions on tools that should never have been exposed is wasted work. [Speakeasy's guidance is the same: "autogenerate the groundwork from OpenAPI, then curate"](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi).
+MCP practice agrees. [GitHub Copilot and Block cut tool counts by 60-93% before agents became reliable](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc); [Speakeasy's guidance is to "autogenerate the groundwork from OpenAPI, then curate"](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi).
 
 ```mermaid
 graph TD
@@ -70,15 +68,23 @@ graph TD
     E --> F
 ```
 
-Run the audit on the endpoints your scenarios actually need. Decline to audit the rest until they earn the work.
+Audit only the endpoints your scenarios need; the rest can wait.
 
 ## Mechanizing the Audit
 
-Hermes dispatches nine specialized smell-detector agents from one orchestrator, each analyzing the same endpoint representation from a single category's perspective, then aggregates findings — a textbook [orchestrator-worker fan-out](../multi-agent/orchestrator-worker.md) over a fixed taxonomy.
+Hermes dispatches nine specialized smell-detector agents from one orchestrator, each analyzing the same endpoint from one category's perspective — a textbook [orchestrator-worker fan-out](../multi-agent/orchestrator-worker.md). Model selection matters less than expected: [`gpt-oss:120b` reached 0.85 Jaccard similarity with expert annotations](https://arxiv.org/abs/2605.14312). Frontier pricing is not required.
 
-Model selection matters less than expected. [`gpt-oss:120b` reached 0.85 Jaccard similarity with expert annotations](https://arxiv.org/abs/2605.14312) — the audit does not require frontier pricing.
+Static linters ([Spectral](https://stoplight.io/open-source/spectral), [Redocly CLI](https://redocly.com/docs/cli)) catch PATH, METHOD, and structural INPUT/RESPONSE issues at design time. Reach for LLM-based detection on the prose-shaped smells — LAZY, BLOATED, TANGLED, FRAGMENTED — where static rules cannot judge information density.
 
-Static linters ([Spectral](https://stoplight.io/open-source/spectral), [Redocly CLI](https://redocly.com/docs/cli)) catch PATH, METHOD, and structural INPUT or RESPONSE issues at design time without an LLM. Reach for LLM-based detection on the prose-shaped smells — LAZY, BLOATED, TANGLED, FRAGMENTED — where static rules cannot judge information density.
+## When This Backfires
+
+Description enrichment is not always the leverage point. The taxonomy under-delivers when:
+
+- **The surface is too large to expose verbatim.** [Block's Linear integration collapsed 30+ tools down to 2 by moving orchestration server-side](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc). Polishing endpoints that should never have been exposed is wasted work.
+- **Auto-wrapping leaks backend shape.** Tool names like `get_customer_by_internal_id` [reflect implementation, not user intent](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc) — no description fixes a catalog whose verbs are wrong.
+- **JSON Schema dialects disagree.** [Schemas are interpreted differently across models and MCP clients](https://arxiv.org/html/2507.16044v4), so even a clean spec can produce inconsistent tool behaviour.
+
+Audit the prose when the endpoint set is already scoped and the resource model is sound. When the API design itself is the problem, fix the design first.
 
 ## Example
 

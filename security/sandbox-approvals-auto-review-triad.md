@@ -15,15 +15,15 @@ aliases:
 
 > Compose a sandbox boundary, a tiered approval policy, an auto-review reviewer for boundary crossings, and agent-native telemetry as one production governance posture — and only adopt the triad when the conditions that make the trade pay off actually hold.
 
-The sandbox + approvals + auto-review triad wires four controls — execution boundary, when-to-ask policy, reviewer for boundary-crossing requests, and per-action audit logs — into one governance posture for coding agents. OpenAI describes the composition for its internal Codex deployment: "Approvals and sandboxing work together. The sandbox defines the technical execution boundary, including where Codex can write, whether it can reach the network, and which paths remain protected. Approval policy determines when Codex must ask to perform an action." ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/))
+The triad wires four controls — execution boundary, when-to-ask policy, reviewer for boundary-crossing requests, and per-action audit logs — into one governance posture for coding agents. OpenAI's published Codex posture states it directly: "Approvals and sandboxing work together. The sandbox defines the technical execution boundary... Approval policy determines when Codex must ask to perform an action." ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/))
 
 ## When the Triad Pays Off
 
 The triad adds cost — reviewer tokens, latency, an LLM-as-judge attack surface — and pays back only when all four conditions hold:
 
-- **Action volume produces approval fatigue.** OpenAI's internal numbers show roughly 720 out-of-sandbox actions per 10,000-action snapshot, well past the rubber-stamp threshold ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
-- **The configuration surface is admin-enforced.** If a user can flip `--dangerously-bypass-approvals-and-sandbox` or rewrite the policy file inside the workspace, the triad collapses to whichever layer the attacker reaches first.
-- **Agent-native telemetry exists.** Without per-action OTel events, the reviewer's decisions are unauditable.
+- **Action volume produces approval fatigue.** OpenAI's internal numbers show ~720 out-of-sandbox actions per 10,000-action snapshot, past the rubber-stamp threshold ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
+- **Configuration is admin-enforced.** If a user can flip `--dangerously-bypass-approvals-and-sandbox` or rewrite the policy file inside the workspace, the triad collapses to whichever layer the attacker reaches first.
+- **Agent-native telemetry exists.** Without per-action OTel events, reviewer decisions are unauditable.
 - **Irreversible actions are not routed through auto-review.** Production deploys, money movement, and credential rotation belong on a human or cryptographic gate — not behind a 99% auto-approval rate.
 
 If any condition fails, simpler postures dominate: sandbox + on-request + human reviewer for low-volume work, or an isolated runner (microVM, ephemeral container) where the sandbox alone bounds harm.
@@ -37,7 +37,7 @@ If any condition fails, simpler postures dominate: sandbox + on-request + human 
 | **Auto-review** | A separate reviewer agent grades boundary-crossing requests instead of interrupting the user, set via `approvals_reviewer = "auto_review"` ([Codex Agent Approvals](https://developers.openai.com/codex/agent-approvals-security)) | LLM-as-judge can be prompt-injected to approve attacker actions ([Stop Letting Models Grade Their Own Homework — Lakera](https://www.lakera.ai/blog/stop-letting-models-grade-their-own-homework-why-llm-as-a-judge-fails-at-prompt-injection-defense)) |
 | **Agent-native telemetry** | OTel log export of user prompts, tool approval decisions, tool execution results, MCP usage, and network proxy decisions — the audit substrate for the other three ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)) | Missing or unaggregated; logs without query infrastructure are not an audit |
 
-Each layer is documented separately on this site — [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md), [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md), [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md), [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md). The triad framing decides when to wire all four together and where each layer cannot cover the others' failure modes.
+Each layer is documented separately: [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md), [Pre-Execution Risk Classification](pre-execution-command-risk-classification.md), [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md), [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md). The triad framing decides when to wire all four together.
 
 ```mermaid
 graph LR
@@ -56,9 +56,9 @@ graph LR
 
 ## Why It Works
 
-Each layer enforces a different invariant, and the layer that catches a failure is generally not the layer that produced it. The sandbox enforces what is technically possible at the OS level — prompt content cannot override `bubblewrap` or Seatbelt. The approval policy converts "should I run this?" into a small auditable enum shipped via managed configuration. Auto-review addresses the human-factors failure of the approval policy: when a human reviewer's volume exceeds attention budget, the reviewer rubber-stamps and the policy degrades to `never` in practice. OpenAI states the mechanism: "The main agent is optimized to complete the user's task. This creates pressure to treat an approval boundary as just another obstacle to overcome. Auto-review has a narrower job: decide whether a proposed boundary-crossing action should run. Keeping that decision in a separate model call makes the approval policy easier to evaluate, monitor, and improve." ([Auto-review of agent actions](https://alignment.openai.com/auto-review/))
+Each layer enforces a different invariant, and the layer that catches a failure is rarely the one that produced it. The sandbox enforces what is technically possible at the OS level — prompt content cannot override `bubblewrap` or Seatbelt. The approval policy converts "should I run this?" into a small auditable enum shipped via managed configuration. Auto-review addresses the human-factors failure of the approval policy: when reviewer volume exceeds attention budget, humans rubber-stamp and the policy degrades to `never` in practice. OpenAI states the mechanism: "The main agent is optimized to complete the user's task. This creates pressure to treat an approval boundary as just another obstacle to overcome. Auto-review has a narrower job: decide whether a proposed boundary-crossing action should run." ([Auto-review of agent actions](https://alignment.openai.com/auto-review/))
 
-The empirical effect: Codex sessions stop for human approval roughly **200x less often** in auto-review mode than in manual mode while still catching the actions that should stop. In a 10,000-action snapshot, 9,280 actions ran inside the sandbox without review; 720 escalated to auto-review; the reviewer approved 713, denied 7, and the main agent recovered via a safer path in 4 of those 7 denials ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)). Agent-native telemetry makes the first three legs auditable — without per-action OTel events, layers can be bypassed without forensic trace.
+The empirical effect: Codex sessions stop for human approval **~200x less often** in auto-review mode than in manual mode while still catching the actions that should stop. In a 10,000-action snapshot, 9,280 actions ran inside the sandbox without review; 720 escalated to auto-review; the reviewer approved 713, denied 7, and the main agent recovered via a safer path in 4 of those 7 denials ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)). Telemetry makes the first three legs auditable — without per-action OTel events, layers can be bypassed without forensic trace.
 
 ## When This Backfires
 
@@ -112,8 +112,10 @@ The verbatim snippets come from [Running Codex safely at OpenAI](https://openai.
 ## Related
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — the sandbox layer in isolation; filesystem and network boundaries enforced at the OS level
+- [Selective Network Sandbox Mode](selective-network-sandbox-mode.md) — finer-grained control of the network half of the sandbox boundary referenced by the first leg of the triad
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — an attention-allocation lever for the approval layer, complementary to auto-review
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — the human-reviewer baseline that auto-review replaces for routine boundary crossings
+- [Policy-as-Code Layer Typology](policy-as-code-layer-typology.md) — sibling typology for composing governance layers when sandbox isolation is unavailable
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — the telemetry leg hardened for regulated environments where OTel alone is insufficient
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — the broader production-readiness frame the triad fits into
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — the layer model that locates each leg of the triad against attack surfaces

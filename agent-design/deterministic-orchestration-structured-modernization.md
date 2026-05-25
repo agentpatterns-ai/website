@@ -50,7 +50,7 @@ graph TD
 
 Two mechanisms explain the cost and robustness gap.
 
-**Token amplification.** An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the next step is mechanical. A deterministic orchestrator invokes the model only on the steps that need a model. Across a multi-step workflow, the deterministic path replaces N full-context turns with K << N targeted prompts, each carrying only the minimum needed for that specific translation. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
+**Token amplification.** An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the next step is mechanical. A deterministic orchestrator invokes the model only on the steps that need a model, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
 
 **Variance reduction.** LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
 
@@ -119,3 +119,4 @@ Compare to the LLM-controlled equivalent, where the model decides whether to par
 - [Agents vs Commands](agents-vs-commands.md) — When command-style fixed execution beats full agent autonomy
 - [Harness Engineering](harness-engineering.md) — The broader discipline of constraining agent environments to reliably produce correct outputs
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — Matching model capability and orchestration strategy to task complexity
+- [Stochastic vs Deterministic Boundary](stochastic-deterministic-boundary.md) — Where the LLM call hands off to deterministic code, and how to design that interface

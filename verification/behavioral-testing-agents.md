@@ -13,13 +13,13 @@ tags:
 
 ## Why Traditional Testing Breaks Down
 
-Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs -- different tool call sequences, different phrasings, different solution paths. Equality checks generate false negatives on correct behavior and false positives on lucky runs.
+Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs — different tool call sequences, phrasings, and solution paths. Equality checks generate false negatives on correct behavior and false positives on lucky runs.
 
 Behavioral testing replaces "did the agent produce output X?" with "did the agent make good decisions and reach a valid end-state?" [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Why It Works
 
-Agents solve problems through search — iteratively selecting tools, observing results, and updating plans. The same task admits multiple valid paths because the solution space is under-constrained. Equality checks penalize valid alternative paths as false negatives and reward lucky runs as false positives. End-state evaluation removes the path constraint: if the final state satisfies acceptance criteria, the agent succeeded regardless of route. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Agents solve problems through search — iteratively selecting tools, observing results, and updating plans. The same task admits multiple valid paths because the solution space is under-constrained. End-state evaluation removes the path constraint: if the final state satisfies acceptance criteria, the agent succeeded regardless of route. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Separate Deterministic from Agentic Components
 
@@ -30,7 +30,7 @@ Not every part of an agent system needs behavioral testing. A capability matrix 
 | Deterministic | Traditional unit/integration tests | Tool input parsing, output formatting, API call construction |
 | Agentic | Behavioral evaluation | Decision-making, tool selection, multi-step reasoning |
 
-Mock tools to test agent reasoning without external dependencies. Evaluation must also cover tool output quality — concise, filtered, well-formatted — because tool responses shape the context the agent reasons over in subsequent steps.
+Mock tools to test agent reasoning without external dependencies. Tool output quality — concise, filtered, well-formatted — also needs evaluation, because tool responses shape the context the agent reasons over downstream.
 
 ## Three Grading Methods
 
@@ -40,7 +40,7 @@ Use the lightest method that covers each case:
 |---|---|---|
 | **Code-based** | Exact match, regex, test suite pass/fail | Fastest and most reliable, but limited to verifiable outputs |
 | **LLM-as-judge** | Open-ended outputs, style, completeness | Scalable and consistent with human judgment, but requires calibration |
-| **Human grading** | Ambiguous edge cases, novel failure modes | Most flexible, but slowest -- avoid when possible |
+| **Human grading** | Ambiguous edge cases, novel failure modes | Most flexible, but slowest — avoid when possible |
 
 ### LLM-as-Judge
 
@@ -55,7 +55,7 @@ RUBRIC = """Score the agent's response on each dimension (0.0-1.0):
 Respond with JSON: {"scores": {...}, "pass": true/false, "explanation": "..."}"""
 ```
 
-Track precision and recall of LLM graders against human assessments separately — raw agreement metrics mislead when pass/fail classes are imbalanced.
+Track precision and recall of LLM graders against human assessments separately, and avoid class-imbalanced eval sets where lopsided positive/negative ratios distort headline accuracy. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Three-Part Eval Foundation
 
@@ -76,7 +76,7 @@ graph LR
 
 ## Define Acceptable Variance
 
-Pass rate thresholds are not fixed at 100% — they depend on the failures you are willing to tolerate. This is a product decision.
+Pass rate thresholds are not fixed at 100% — they depend on the failures you tolerate. This is a product decision.
 
 - **File editing agent**: 95% acceptable (formatting differences tolerable)
 - **Security scanning agent**: 99.5% minimum (missed vulnerabilities are not tolerable)
@@ -86,9 +86,7 @@ When pass rates drop below thresholds, the eval suite blocks deployment. Review 
 
 ## Evaluate End-State, Not Process
 
-For agents that modify persistent state across multiple turns, focus evaluation on final outcomes. A longer path that reaches the correct state beats a shorter path that does not.
-
-See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for detailed implementation.
+For agents that modify persistent state across multiple turns, evaluate final outcomes. A longer path that reaches the correct state beats a shorter path that does not. See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for implementation.
 
 ## Example
 
@@ -140,16 +138,16 @@ Small prompt changes in one agent unpredictably alter subagent behavior. [Source
 
 Behavioral testing pays off only when outputs are genuinely non-deterministic:
 
-- **Constrained function-calling agents**: Structured JSON with a fixed schema needs equality checks, not LLM grading. Behavioral evaluation adds cost without signal.
-- **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve behavioral evaluation for the agentic layer; use code-based checks for structured outputs at scale.
-- **Uncalibrated thresholds**: Thresholds set without real failure data either block valid outputs or pass defective ones. Threshold selection requires actual failure history.
-- **Uncalibrated LLM judge**: An LLM grader not calibrated against human expert assessments introduces systematic bias that invalidates the entire eval pipeline.
+- **Constrained function-calling agents**: Structured JSON with a fixed schema needs equality checks. LLM grading adds cost without signal.
+- **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve it for the agentic layer; code-check structured outputs at scale.
+- **Uncalibrated thresholds**: Thresholds set without real failure data either block valid outputs or pass defective ones.
+- **Uncalibrated LLM judge**: An LLM grader not calibrated against human experts introduces systematic bias that invalidates the eval pipeline.
 
 ## Key Takeaways
 
 - Separate deterministic from agentic components using a capability matrix
 - Use code-based grading first, LLM-as-judge for open-ended outputs, human grading as a last resort
-- Start with ~20 representative queries -- small samples catch large effect sizes
+- Start with ~20 representative queries — small samples catch large effect sizes
 - Define pass rate thresholds as a product decision, not an engineering target
 - Evaluate end-state and decision quality, not execution paths
 - In multi-agent systems, monitor cross-agent interaction patterns
@@ -163,5 +161,4 @@ Behavioral testing pays off only when outputs are genuinely non-deterministic:
 - [pass@k Metrics](pass-at-k-metrics.md)
 - [CoT Robustness in Code Generation](cot-robustness-code-generation.md) — A/B measurement of chain-of-thought as a concrete behavioral-test application
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
-- [Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals](incident-to-eval-synthesis.md)
-- [Test-Driven Agent Development](tdd-agent-development.md)
+- [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)

@@ -58,6 +58,8 @@ Embedding the Copilot SDK couples your application to GitHub's subscription mode
 
 The rate-limit risk is not theoretical: in April 2026 GitHub [paused new Copilot sign-ups](https://thenewstack.io/github-copilot-signups-paused/) after agentic usage broke flat-rate economics, [fixed a token-counting bug](https://www.theregister.com/2026/04/15/github_copilot_rate_limiting_bug/) that had been under-counting newer models, and [announced a shift to token-based billing with tighter rate limits for individual plans](https://github.blog/changelog/2026-04-20-changes-to-github-copilot-plans-for-individuals/). Applications embedding the SDK inherit whatever quota regime GitHub sets for their users' plans.
 
+Runtime lock-in is similarly concrete. In May 2026 a cross-binding bug ([github/copilot-sdk#251](https://github.com/github/copilot-sdk/issues/251)) prevented custom agents initialised through the SDK from being exposed to the assistant in either Node or .NET — a defect in the shared `copilot-agent-runtime` that no embedding application could patch. A practitioner ship report covering six SDK upgrades documents runtime changes breaking the embedding harness mid-iteration ([SDK upgrade-path regression](https://dev.to/moonrunnerkc/i-shipped-6-upgrades-to-my-copilot-cli-orchestrator-the-sdk-had-other-plans-2jpa)). The SDK gives you GitHub's execution loop — and GitHub's bugs.
+
 ## Example
 
 The following Node.js snippet illustrates the agent-in-app pattern: starting the client, creating a session, subscribing to streaming events, and sending a task prompt ([nodejs README](https://github.com/github/copilot-sdk/tree/main/nodejs)).

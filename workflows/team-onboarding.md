@@ -6,7 +6,7 @@ tags:
   - human-factors
 ---
 
-# Team Onboarding for Agent Workflows
+# Team Onboarding for AI Agent Workflows and Adoption
 
 > Team onboarding for agent workflows aligns a team on shared infrastructure, trust calibration, and vocabulary before individual adoption diverges.
 
@@ -130,13 +130,9 @@ This three-week sequence surfaces agent failure modes in a controlled way before
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
+- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
 - [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md)
-- [Agent Debugging](../observability/agent-debugging.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
-- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](../agent-design/steering-running-agents.md)
-- [Agent-Driven Greenfield Projects](agent-driven-greenfield.md)
 - [Agent Governance Policies](agent-governance-policies.md)
 - [Central Repo and Shared Agent Standards](central-repo-shared-agent-standards.md)
-- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)

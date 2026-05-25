@@ -134,11 +134,11 @@ No single layer is sufficient; the layered composition closes the cross-session 
 
 ## Related
 
+- [Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics](trojan-hippo-memory-attack.md) — architectural-defense angle on the same attack class
+- [Oracle Poisoning of Knowledge Graphs](oracle-poisoning-knowledge-graph.md) — structurally identical pivot via persistent KG/RAG store instead of agent memory
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
-- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md)

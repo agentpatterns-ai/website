@@ -1,6 +1,6 @@
 ---
-title: "Automating Issue Triage with AI in GitHub Workflows"
-description: "Replacing manual issue triage with AI agents that classify, label, and route issues on every event or schedule — running continuously with read-only defaults"
+title: "Continuous Triage: Automating Issue Classification with AI Workflows"
+description: "Replacing manual issue triage with AI agents that classify, label, and route issues on every event or schedule — running continuously with read-only defaults and constrained safe outputs."
 tags:
   - workflows
   - agent-design
@@ -163,11 +163,9 @@ Classify this issue into exactly one category:
 
 - [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md)
 - [GitHub Models in Actions](../tools/copilot/github-models-in-actions.md)
-- [Safe Command Allowlisting](../human/safe-command-allowlisting.md)
-- [Continuous Agent Improvement](continuous-agent-improvement.md)
-- [Continuous Documentation](continuous-documentation.md)
-- [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
+- [Safe Outputs Pattern](../security/safe-outputs-pattern.md)
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md)
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
-- [Safe Outputs Pattern](../security/safe-outputs-pattern.md)
+- [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)
+- [Continuous Documentation](continuous-documentation.md)

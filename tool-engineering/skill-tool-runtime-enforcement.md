@@ -1,6 +1,6 @@
 ---
-title: "Skill Tool Enforcement: Loading Command Prompts at Runtime"
-description: "Use the Skill tool to load command prompts at invocation time rather than telling agents to 'read the file' -- this eliminates stale instructions, truncation"
+title: "Skill Tool as Enforcement: Loading Command Prompts at Runtime"
+description: "Use the Skill tool to load command prompts at invocation time rather than telling agents to 'read the file' — this eliminates stale instructions, truncation, and path drift."
 aliases:
   - runtime skill loading
   - canonical invocation path
@@ -18,25 +18,25 @@ tags:
 
 ## The Problem: Three Failure Modes of "Read the File"
 
-When you instruct an agent to "read `commands/deploy.md` for instructions," three things can go wrong:
+Telling an agent to "read `commands/deploy.md` for instructions" can fail three ways:
 
 | Failure mode | What happens | Why it happens |
 |-------------|-------------|---------------|
-| **Stale content** | Agent acts on an outdated version of the instructions | File read earlier in session; agent reuses cached content |
-| **Truncation / paraphrase** | Agent follows a partial or reworded version | Long files get summarized; critical details dropped |
+| **Stale content** | Agent acts on an outdated version | File read earlier; cached content reused |
+| **Truncation / paraphrase** | Agent follows a partial or reworded version | Long files get summarized; details dropped |
 | **Path drift** | Agent reads the wrong file or fails to find it | Working directory changed, file moved, or wrong path constructed |
 
-These failures are silent: output looks reasonable but diverges from canonical instructions, and in scaled pipelines drift compounds undetected.
+These failures are silent: output looks reasonable but diverges from canonical instructions, and drift compounds at scale.
 
 ## How the Skill Tool Eliminates All Three
 
-When an agent calls the Skill tool with a skill name, the runtime:
+When an agent calls the Skill tool, the runtime:
 
 1. **Resolves the canonical SKILL.md** from the registered skill path -- no path construction by the agent
-2. **Injects the full instruction body into context** via a controlled two-message pattern sent directly to the API ([Chung, 2025](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/))
+2. **Injects the full body into context** via a controlled two-message pattern sent directly to the API ([Chung, 2025](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/))
 3. **Modifies the execution context** -- updates tool permissions and may switch the model
 
-A Read tool call does none of these.
+A Read call does none of these.
 
 ```mermaid
 flowchart LR
@@ -58,11 +58,11 @@ flowchart LR
 
 ## Why This Works: The Canonical Invocation Path
 
-The Skill tool uses the same mechanism as human `/command` invocation: change a command's definition and every agent picks up the new version on the next call. No propagation step, no cache invalidation. This is [JIT context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) applied to agent instructions.
+The Skill tool uses the same mechanism as human `/command` invocation: change a command's definition and every agent picks up the new version on the next call — no propagation, no cache invalidation. This is [JIT context loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) applied to agent instructions.
 
 ## Progressive Disclosure Budget
 
-Skill descriptions are capped at approximately 15,000 characters / 2% of the context window ([Chung, 2025](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)), creating a three-layer progressive disclosure stack:
+Skill descriptions are capped at ~15,000 characters / 2% of the context window ([Chung, 2025](https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/)), creating a three-layer progressive disclosure stack:
 
 | Layer | When loaded | Token cost |
 |-------|------------|------------|
@@ -70,7 +70,7 @@ Skill descriptions are capped at approximately 15,000 characters / 2% of the con
 | Full SKILL.md body | On Skill tool invocation | <5000 tokens recommended |
 | Referenced files | On demand within skill execution | Variable |
 
-This layering prevents the [Mega-Prompt anti-pattern](../instructions/instruction-compliance-ceiling.md) -- instructions stay out of the system prompt until needed, not loaded immediately at session start.
+This layering prevents the [Mega-Prompt anti-pattern](../instructions/instruction-compliance-ceiling.md): instructions stay out of the system prompt until invoked.
 
 ## Dynamic Context with Shell Interpolation
 
@@ -84,7 +84,7 @@ Skills support `` !`command` `` syntax: output replaces the placeholder before c
 !`cat config/flags.json | jq '.enabled[]'`
 ```
 
-Shell interpolation extends enforcement beyond static instructions: the agent receives *live system state* at invocation time rather than file contents at read time.
+Shell interpolation extends enforcement beyond static instructions: the agent receives *live system state* at invocation, not stale file contents from an earlier read.
 
 ## When Read-Based Loading Is Appropriate
 
@@ -100,12 +100,12 @@ Use Read to *inform*; use Skill tool to *direct*.
 
 Skill invocation eliminates path drift and per-call caching, but four failure modes take over as the skill count grows:
 
-- **Description-match failures under load.** Skill descriptions sit in context so the model can decide what to invoke; each is capped at 1,536 characters and the listing budget is roughly 1% of the context window. Over budget, descriptions are truncated, stripping "the keywords Claude needs to match your request" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). A 650-trial experiment found Anthropic's recommended passive phrasing (`Use when...`) activates ~77% of the time in clean conditions, versus 100% for a directive `ALWAYS invoke...` ([Seleznov, 2026](https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1)).
+- **Description-match failures under load.** Descriptions sit in context so the model can decide what to invoke; each is capped at 1,536 characters and the listing budget is roughly 1% of the context window. Over budget, descriptions are truncated, stripping "the keywords Claude needs to match your request" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)). A 650-trial experiment found the recommended passive phrasing (`Use when...`) activates ~77% of the time, versus 100% for a directive `ALWAYS invoke...` ([Seleznov, 2026](https://medium.com/@ivan.seleznov1/why-claude-code-skills-dont-activate-and-how-to-fix-it-86f679409af1)).
 - **Post-compaction drop-out.** Invoked skills share a 25k-token re-attach budget after auto-compaction, filled most-recent-first; "older skills can be dropped entirely after compaction if you have invoked many in one session" ([Claude Code Skills docs](https://code.claude.com/docs/en/skills)).
-- **Opaque injection.** The runtime splices the body in without surfacing it in the transcript the way a Read call does, so "did the agent see the new version?" is harder to debug.
-- **Harness dependency.** Skill invocation only works in environments that expose the tool. Plain Read-based instructions run anywhere.
+- **Opaque injection.** The runtime splices the body in without surfacing it in the transcript the way a Read call does, so debugging "did the agent see the new version?" is harder.
+- **Harness dependency.** Skill invocation only works where the tool is exposed; Read-based instructions run anywhere.
 
-When a playbook must never drop mid-session and silent activation failure is unacceptable, prefer Read or a hook over description-based Skill invocation.
+When a playbook must never drop mid-session, prefer Read or a hook over description-based invocation.
 
 ## Example
 
@@ -140,11 +140,9 @@ The Skill tool resolves the canonical path, injects the current version into con
 
 - [Skill as Knowledge Pattern](skill-as-knowledge.md)
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
+- [Skill Context Isolation](skill-context-isolation.md)
+- [Skill Library Technical Debt](skill-library-technical-debt.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
-- [On-Demand Skill Hooks](on-demand-skill-hooks.md)
-- [Skill Library Evolution](skill-library-evolution.md)
-- [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md) — token economics and lazy loading principles behind JIT context loading

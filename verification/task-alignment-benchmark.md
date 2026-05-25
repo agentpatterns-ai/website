@@ -27,7 +27,7 @@ Neither is task-aligned. Selectivity — connecting an environmental instruction
 
 ## What TAB Measures
 
-TAB is an 89-task suite derived from Terminal-Bench 2.1. Each task is intentionally underspecified: the user prompt alone is insufficient. The missing information is planted as a *cue* inside a natural environmental artifact, alongside a *plausible but irrelevant distractor* on the same surface. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
+TAB is an 89-task suite derived from Terminal-Bench 2.1 ([Merrill et al., 2026](https://arxiv.org/abs/2601.11868)), the parent benchmark scoring command-line completion. Each task is underspecified: the user prompt alone is insufficient. The missing information is planted as a *cue* inside an environmental artifact, alongside a *plausible but irrelevant distractor*. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
 
 The scoring decomposes capability into two axes standard benchmarks combine:
 

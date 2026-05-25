@@ -1,6 +1,6 @@
 ---
 title: "Scoped Credentials via Proxy Outside the Agent Sandbox"
-description: "Keep broad credentials entirely outside the agent's sandbox and use an external proxy that attaches scoped tokens only to validated, allowlisted requests"
+description: "Keep broad credentials entirely outside the agent's sandbox and use an external proxy that attaches scoped tokens only to validated, allowlisted requests."
 tags:
   - agent-design
   - instructions
@@ -9,6 +9,7 @@ aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials
 ---
+
 # Scoped Credentials via Proxy Outside the Agent Sandbox
 
 > Keep broad credentials entirely outside the agent's sandbox and use an external proxy that attaches scoped tokens only to validated, allowlisted requests.
@@ -145,15 +146,4 @@ The security guarantee comes from OS-level process isolation. Agent and proxy ru
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
-- [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Tool Signing and Signature Verification](tool-signing-verification.md)
-- [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
-- [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)

@@ -11,7 +11,7 @@ tags:
   - security
 ---
 
-# Secrets Management for Agent Workflows
+# Secrets Management for AI Agents: Credential Injection
 
 > Inject credentials as environment variables or wrapper scripts so agents can do authenticated work without secrets appearing in context, prompts, or generated code.
 
@@ -20,7 +20,7 @@ tags:
 
 ## The Anti-Pattern
 
-Pasting an API key into the prompt sends it to the model API, writes it into session logs, and risks the agent echoing it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
+Pasting an API key into a prompt sends it to the model API, writes it into session logs, and risks the agent echoing it back in comments or generated files. Once a secret enters the context window, you lose control of where it goes.
 
 ## Environment Variable Injection
 
@@ -47,7 +47,7 @@ RESULT=$(psql "$DATABASE_URL" -t -c "$1")
 echo "$RESULT"
 ```
 
-The agent invokes `scripts/query-db.sh "SELECT count(*) FROM users"` — `DATABASE_URL` never appears in the tool call or context. Design wrappers to accept intent and return results; keep credential consumption inside the script.
+The agent invokes `scripts/query-db.sh "SELECT count(*) FROM users"` — `DATABASE_URL` never appears in the tool call or context. Design wrappers to accept intent and return results.
 
 ## Never Store Secrets in Agent-Readable Files
 
@@ -63,7 +63,7 @@ Do not store secrets in:
 - AGENTS.md, system prompts, or instruction files
 - Comments in code files
 
-Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets at process start and inject them as environment variables. Fetch secrets in a parent shell before launching the agent — the retrieval command stays in the parent context; the session inherits only the exported value.
+Use a secrets manager (AWS Secrets Manager, HashiCorp Vault, 1Password CLI) to retrieve secrets in a parent shell before launching the agent — the retrieval command stays in the parent context; the session inherits only the exported value.
 
 ## Auditing Agent Environment Access
 
@@ -147,15 +147,9 @@ The agent calls `scripts/stripe-balance.sh` and `scripts/query-db.sh` as tools. 
 
 - [Credential Hygiene for Agent Skills](credential-hygiene-agent-skills.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
-- [Reactive Environment Hooks: CwdChanged and FileChanged](../tool-engineering/reactive-environment-hooks.md)
-- [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Blast Radius Containment](blast-radius-containment.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
+- [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
+- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Sandbox-Enforced PII Tokenization in Agent Workflows](pii-tokenization-in-agent-context.md)

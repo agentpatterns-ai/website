@@ -10,6 +10,8 @@ aliases:
   - semantic tool output check
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-tool-output-token-cost/`
+
 # Audit Tool Output Token Cost
 
 > Capture representative tool invocations, measure actual output token cost, classify each against decision-relevant sizing rules, and emit consolidation and pagination remediations.

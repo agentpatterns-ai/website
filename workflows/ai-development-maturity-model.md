@@ -1,6 +1,6 @@
 ---
 title: "The AI Development Maturity Model: From Skeptic to Agentic"
-description: "You move through recognizable phases when adopting AI coding tools — understanding your current phase clarifies what to learn next and what traps to avoid"
+description: "You move through recognizable phases when adopting AI coding tools — understanding your current phase clarifies what to learn next and what traps to avoid."
 aliases:
   - "AI adoption phases"
   - "developer AI maturity levels"
@@ -131,10 +131,8 @@ The phase model is an observational heuristic, not a universal law. It breaks do
 - [The 7 Phases of AI-Assisted Feature Development](7-phases-ai-development.md) — feature-lifecycle phase model (distinct from this career-adoption arc)
 - [Team Onboarding for Agent Workflows](team-onboarding.md)
 - [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md)
-- [Agent Debugging](../observability/agent-debugging.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
 - [Context Priming](../context-engineering/context-priming.md)
-- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](../agent-design/steering-running-agents.md)
 - [CLI-IDE-GitHub Context Ladder for AI Agent Development](cli-ide-github-context-ladder.md)
 - [Human-in-the-Loop Placement](human-in-the-loop.md)
 - [Compound Engineering: Learning Loops That Make Each Feature](compound-engineering.md)

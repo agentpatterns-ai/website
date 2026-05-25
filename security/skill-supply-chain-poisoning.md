@@ -17,11 +17,11 @@ aliases:
 
 ## The Mechanism
 
-Coding agents extend behavior by retrieving skills at runtime. A skill is a Markdown document — a `SKILL.md` or equivalent — that encodes workflows, API patterns, and code conventions. Agents treat skill documentation as authoritative reference when synthesising code.
+Coding agents extend behavior by retrieving skills at runtime. A skill is a Markdown document (a `SKILL.md` or equivalent) encoding workflows, API patterns, and conventions; agents treat it as authoritative reference when synthesising code.
 
-Document-Driven Implicit Payload Execution (DDIPE) weaponizes that trust. Instead of issuing commands like "exfiltrate credentials" (which alignment blocks at 0% success under strong defenses), DDIPE embeds malicious logic inside the code examples and configuration templates within legitimate-looking skill documentation. The agent reproduces those examples as patterns during normal task execution — the payload runs without an explicit instruction ever being issued.
+Document-Driven Implicit Payload Execution (DDIPE) weaponizes that trust. Instead of explicit commands like "exfiltrate credentials" (which alignment blocks at 0% under strong defenses), DDIPE embeds malicious logic inside code examples and configuration templates in otherwise legitimate-looking skills. The agent reproduces those examples during normal task execution — the payload runs without an explicit instruction.
 
-Research testing four agent frameworks (Claude Code, OpenHands, Codex, Gemini CLI) across five models found DDIPE achieves 11.6%–33.5% bypass rates where explicit instruction injection achieves 0% under the same defenses. Of 1,070 adversarial skills generated across 15 MITRE ATT&CK categories, 2.5% evaded both static detection and model alignment entirely ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)).
+Research across four agent frameworks (Claude Code, OpenHands, Codex, Gemini CLI) and five models found DDIPE achieves 11.6%–33.5% bypass rates where explicit injection achieves 0%. Of 1,070 adversarial skills across 15 MITRE ATT&CK categories, 2.5% evaded both static detection and model alignment ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)).
 
 ## Why Skills Are a Distinct Attack Surface
 
@@ -34,7 +34,7 @@ Skill supply-chain poisoning differs structurally from [MCP tool signing](tool-s
 | **Blocked by** | Framework guardrails | Bypasses alignment (treats payloads as code, not instructions) |
 | **Detection** | Tool schema inspection | Requires semantic code analysis |
 
-The dual-purpose nature of `SKILL.md` files amplifies risk: they serve as both semantic documentation for the AI agent and installation instructions for the human operator. Threat actors weaponize "Prerequisites" sections that instruct human operators to install additional components, delivering malware through a social engineering layer on top of the model-level attack ([Snyk ToxicSkills study](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)).
+`SKILL.md` files are dual-purpose: semantic documentation for the agent and installation instructions for the human operator. Threat actors weaponize "Prerequisites" sections to coax operators into installing malicious components, stacking a social-engineering layer onto the model-level attack ([Snyk ToxicSkills study](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/)).
 
 ## Real-World Scale
 
@@ -67,26 +67,26 @@ graph TD
 
 ### 1. Never Pull Directly from Public Registries
 
-Block runtime fetches from open marketplaces. Agents load only from an internal mirror of vetted skills — the public registry is never an execution-time dependency.
+Block runtime fetches from open marketplaces. Agents load only from an internal mirror of vetted skills — public registries are never an execution-time dependency.
 
 ### 2. Intake Gates Before Registration
 
-Before a skill enters the internal mirror, run layered intake checks:
+Before a skill enters the mirror, run layered intake checks:
 
 - **Static analysis** — pattern matching for shell escapes, credential access, exfiltration calls
-- **Semantic scanning** — LLM-based analysis of code examples for disguised payloads; [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines static, behavioral dataflow, and LLM semantic analysis (`--use-behavioral --use-llm`)
-- **Sandbox execution** — render the skill in a sandboxed environment and observe tool calls
-- **Human review** — for skills that will have broad internal use
+- **Semantic scanning** — LLM analysis of code examples for disguised payloads; [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines static, behavioral dataflow, and LLM checks (`--use-behavioral --use-llm`)
+- **Sandbox execution** — render the skill in a sandbox and observe tool calls
+- **Human review** — for skills with broad internal use
 
 ### 3. Version Pinning and Content Hashing
 
-Lock skills to specific, audited versions with immutable content hashes — never version ranges. Skills can be updated post-adoption ("rug pull"), mutating from safe to malicious after initial vetting. Pin at the hash level, not the version tag.
+Lock skills to specific, audited versions with immutable content hashes — never version ranges. Skills can mutate from safe to malicious after vetting ("rug pull"). Pin at the hash, not the tag.
 
-[SchemaPin](https://schemapin.org/) provides ECDSA P-256 signatures with DNS-anchored trust and TOFU key pinning for skill schemas — the open-source equivalent of package signing for skill ecosystems.
+[SchemaPin](https://schemapin.org/) provides ECDSA P-256 signatures with DNS-anchored trust and TOFU key pinning for skill schemas — the open-source equivalent of package signing.
 
 ### 4. Multi-Model Verification at Runtime
 
-Only 1.6% of adversarial payloads bypass all tested models simultaneously. Running skill execution through two independent models and requiring consensus on tool call patterns provides a high-confidence runtime check. Defense layers interact asymmetrically — removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged — test the specific combination before relying on it.
+Only 1.6% of adversarial payloads bypass all tested models simultaneously, and removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). Run skill execution through two independent models and require consensus on tool call patterns; defense layers interact asymmetrically, so test the specific combination before relying on it.
 
 ### 5. Least-Privilege Execution
 
@@ -130,14 +130,14 @@ The agent config blocks runtime pulls from public registries. `skill-scanner` ca
 
 ## When This Backfires
 
-The full stack carries real operational costs, and partial adoption is common — but partial adoption leaves residual exposure:
+The full stack carries operational cost, and partial adoption is common — but leaves residual exposure:
 
-- **Scanner false positives**: LLM-based semantic scanners misclassify legitimate security tooling, pen-test utilities, and obfuscated-but-valid configuration as malicious. Teams that fail-on-high without review capacity block productive skills and erode trust in the gate; teams that lower the threshold lose detection of real payloads.
-- **Pinning vs. patch velocity**: Hash pinning prevents rug-pull mutations but blocks legitimate security patches. Without a re-vetting workflow, pinning creates a backlog that delays patching even when an upstream skill is confirmed malicious.
-- **Multi-model latency**: Consensus across two models roughly doubles per-invocation inference time. Latency-sensitive workflows disable the check to meet SLAs, removing the strongest runtime control. Restrict it to first-use or high-privilege calls rather than every invocation.
-- **Mirror governance drift**: Without a clear owner, the internal mirror becomes a rubber stamp and new skills bypass the intake gate informally.
+- **Scanner false positives**: LLM-based semantic scanners misclassify legitimate security tooling, pen-test utilities, and obfuscated-but-valid config as malicious. Fail-on-high without review capacity blocks productive skills; lowering the threshold loses detection of real payloads.
+- **Pinning vs. patch velocity**: Hash pinning prevents rug-pull mutations but also blocks legitimate security patches. Without a re-vetting workflow, pinning creates a patching backlog.
+- **Multi-model latency**: Consensus roughly doubles per-invocation inference time. Latency-sensitive workflows disable the check to meet SLAs. Restrict it to first-use or high-privilege calls rather than every invocation.
+- **Mirror governance drift**: Without a clear owner, the internal mirror becomes a rubber stamp and skills bypass the intake gate informally.
 
-The full stack is most justified when agents load third-party skills at runtime with broad filesystem or network access. For fully internal skill sets authored by the same team, or read-only agents over a small trusted set, hash pinning plus code review may be sufficient.
+The full stack is most justified when agents load third-party skills at runtime with broad filesystem or network access. For internal skill sets authored by the same team, hash pinning plus code review may suffice.
 
 ## Key Takeaways
 
@@ -154,8 +154,6 @@ The full stack is most justified when agents load third-party skills at runtime 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md)
-- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
 - [Defending Against Code Injection in Multi-Agent Systems](code-injection-multi-agent-defence.md)

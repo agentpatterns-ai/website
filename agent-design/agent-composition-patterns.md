@@ -122,7 +122,7 @@ Use tool discovery (Glob, Grep) instead of hardcoded paths so agents adapt to an
 
 ## Weak-Model Specialization
 
-Route narrow tasks to cost-efficient models (Haiku), reserving capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
+Route narrow tasks to cost-efficient models (Haiku), reserving capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for a full pattern map). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
 
 ```yaml
 ---
@@ -186,6 +186,13 @@ If the audit later needs a gate — pages with critical findings block deploymen
 **One mega-agent:** Context fills before work completes. Decompose when one prompt cannot hold all concerns.
 
 **Over-decomposition:** Coordination costs tokens — decompose only when context limits or parallelism require it.
+
+## Production Failure Modes
+
+Composition does not eliminate context exhaustion — it relocates it. Two failure modes recur across the four patterns and warrant explicit mitigation:
+
+- **Silent drift in chains and supervisors:** Each downstream agent treats the previous agent's output as ground truth without validating it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before any human notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that validates each handoff against the original brief.
+- **Orchestrator context overflow in fan-out:** When N workers each return multi-thousand-token findings, the orchestrator's synthesis context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesises.
 
 ## Related
 

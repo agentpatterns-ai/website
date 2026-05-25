@@ -18,7 +18,7 @@ aliases:
 
 ## What the Loop Is
 
-When runtime observability is the source of truth, agents debug from execution evidence, not code inspection alone. The [walkinglabs harness-engineering SOP](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/sops/observability-feedback-loop.md) names the procedure as seven explicit steps:
+When runtime observability is the source of truth, agents debug from execution evidence, not code inspection alone. The [walkinglabs harness-engineering SOP](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/sops/observability-feedback-loop.md) names seven explicit steps:
 
 ```mermaid
 graph TD
@@ -31,17 +31,17 @@ graph TD
     G -->|signal still present| A
 ```
 
-The seven steps are scaffolding. The load-bearing piece is the verification predicate at step 7 — the originating signal is absent, not "no errors now." This is the fix for the [trust-then-verify gap](https://code.claude.com/docs/en/best-practices) Claude Code's best-practices guide names as a top agent failure mode.
+The steps are scaffolding. The load-bearing piece is the verification predicate at step 7 — *the originating signal is absent*, not "no errors now." This is the fix for the [trust-then-verify gap](https://code.claude.com/docs/en/best-practices).
 
 ## Prerequisites: The Minimum Stack
 
-The loop assumes runtime signals exist and are queryable from the agent's environment. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency or failure counts, traces for multi-step flows, query interfaces in the local dev environment, and one repeatable workload the agent can rerun. Without this stack, there is nothing to query and nothing to verify against. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for the wiring patterns.
+The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there's nothing to query against. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns.
 
 ## The Seven Steps
 
 ### 1. Query
 
-Pull the specific signal that failed — a log line, a metric value, a trace span. Not "tail the logs." Claude Code's best-practices guide contrasts the vague `"the build is failing"` with the precise `"the build fails with this error: [paste error]"` ([best practices](https://code.claude.com/docs/en/best-practices)). The signal queried in step 1 is the same signal verified absent in step 7 — pick it deliberately.
+Pull the specific signal that failed — a log line, a metric value, a trace span. Not "tail the logs." Claude Code contrasts the vague `"the build is failing"` with `"the build fails with this error: [paste error]"` ([best practices](https://code.claude.com/docs/en/best-practices)). The signal queried in step 1 is the same signal verified absent in step 7 — pick it deliberately.
 
 ### 2. Correlate
 
@@ -49,7 +49,7 @@ Connect the signal to the layer responsible. A front-end exception triggered by 
 
 ### 3. Reason
 
-Name a hypothesis with falsifiable predictions *before* editing. This is the entry point to [hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. Skipping this step is the classic agent failure mode: hypothesis-implement-repeat cycles with no discrimination between competing causes.
+Name a hypothesis with falsifiable predictions *before* editing. This is the entry point to [hypothesis-driven debugging](../agent-design/hypothesis-driven-debugging.md) — enumerate competing explanations, then identify which one the evidence supports. The hypothetico-deductive method Google SRE codifies in its [Effective Troubleshooting chapter](https://sre.google/sre-book/effective-troubleshooting/) names the same discipline. Skipping this step is the classic agent failure mode: hypothesis-implement-repeat cycles with no discrimination between competing causes.
 
 ### 4. Implement
 

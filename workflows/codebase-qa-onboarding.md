@@ -122,6 +122,14 @@ Mitigations:
 
 The goal is faster ramp-up to productive understanding, not permanent dependence on an intermediary.
 
+## Key Takeaways
+
+- Bootstrap a project-level instruction file (CLAUDE.md or AGENTS.md) as the entry point for every future agent session and every new team member.
+- Use read-only Plan Mode for initial exploration so the agent can search and explain without risk of unintended changes.
+- Move from architecture-level questions to implementation-level ones progressively, and verify cited files rather than trusting summaries blindly.
+- Feed accurate findings back into instruction files so each onboarding session compounds into faster future ramp-ups.
+- Treat agents as a way to *accelerate* understanding, not *replace* it — over-reliance creates comprehension debt and skill atrophy.
+
 ## Example
 
 A developer joins a team maintaining a payments service they have never seen before.
@@ -151,20 +159,11 @@ The agent produces a step-by-step trace with 12 file references. The developer o
 
 ## Related
 
-- [Team Onboarding for Agent Workflows](team-onboarding.md)
-- [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md)
-- [Codebase Readiness for Agents](codebase-readiness.md)
-- [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
-- [Getting Started with Instruction Files](getting-started-instruction-files.md)
-- [Continuous Documentation](continuous-documentation.md)
-- [The Plan-First Loop: Design Before Code](plan-first-loop.md)
-- [Layered Context Architecture](../context-engineering/layered-context-architecture.md)
-- [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md)
-- [CLAUDE.md Convention](../instructions/claude-md-convention.md)
-- [Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md)
+- [Team Onboarding for Agent Workflows](team-onboarding.md) — extending Q&A onboarding to a whole team
+- [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — agent exploration as a first step before any change
+- [Codebase Readiness for Agents](codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
+- [Getting Started with Instruction Files](getting-started-instruction-files.md) — bootstrapping the CLAUDE.md / AGENTS.md that anchors onboarding
+- [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — hot/warm/cold tiers for the knowledge surfaced during Q&A
+- [Continuous Documentation](continuous-documentation.md) — keeping the docs produced by onboarding in sync with the code
+- [The Plan-First Loop: Design Before Code](plan-first-loop.md) — using Plan Mode beyond initial exploration
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how agents persist and accumulate knowledge across sessions
-- [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md) — bootstrapping new projects with agent assistance
-- [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — setting up CLAUDE.md and AGENTS.md for new environments
-- [Agent Governance Policies](agent-governance-policies.md) — onboarding governance and plan mode policies
-- [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md) — establishing codebase structure before agent delegation
-- [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md) — centralizing instruction files and documentation standards

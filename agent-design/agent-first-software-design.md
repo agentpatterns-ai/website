@@ -1,6 +1,10 @@
 ---
 title: "Agent-First Software Design for AI Agent Development"
 description: "Architect systems where AI agents are the primary consumers, using machine-readable APIs and structured outputs instead of visual UIs."
+aliases:
+  - Agent-First Development
+  - Agent-First Design
+  - Agent-First API Design
 tags:
   - agent-design
   - human-factors
@@ -144,18 +148,11 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 
 ## Related
 
-- [Codebase Readiness for Agents](../workflows/codebase-readiness.md)
-- [Harness Engineering](harness-engineering.md)
-- [Empowerment Over Automation](empowerment-over-automation.md)
-- [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md)
-- [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md)
-- [The Specification as Prompt](../instructions/specification-as-prompt.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
-- [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
-- [Schema Markup for AI Citation](../geo/schema-and-structured-data.md)
-- [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that underlies agent execution
-- [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — separating the agent layer that decides from the layer that acts, with typed tool interfaces enforcing the boundary
-- [Execution-First Delegation](execution-first-delegation.md) — specifying goals, constraints, and success conditions so agents handle the how
-- [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality
 - [AX/UX/DX Triad](ax-ux-dx-triad.md) — treats agent experience, user experience, and developer experience as separate design surfaces in agent systems
-- [Agent Pushback Protocol](agent-pushback-protocol.md) — how agents communicate resistance through the agent-computer interface when instructions conflict with constraints
+- [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — separating the agent layer that decides from the layer that acts, with typed tool interfaces enforcing the boundary
+- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — shaping tool surfaces for agent consumption
+- [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) — an early agent-first standard for site metadata
+- [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md) — protocol that exposes capabilities in agent-consumable form
+- [Codebase Readiness for Agents](../workflows/codebase-readiness.md) — preparing a repository as an agent-first system
+- [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that underlies agent execution
+- [Harness Engineering](harness-engineering.md) — the runtime layer agents call into

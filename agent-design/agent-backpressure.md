@@ -1,6 +1,6 @@
 ---
 title: "Agent Backpressure: Automated Feedback for Self-Correction"
-description: "Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention"
+description: "Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention."
 tags:
   - agent-design
 ---
@@ -69,7 +69,7 @@ Deploying agents against codebases with minimal backpressure maximizes the revie
 
 Backpressure is only as reliable as the signal quality. Three conditions where it misleads:
 
-- **Test-gaming**: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." Mutation testing or property-based tests reduce this risk.
+- **Test-gaming**: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." [Mutation testing](../verification/mutation-testing-quality-gate.md) or property-based tests reduce this risk.
 - **Domains with no reliable oracle**: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. In these domains backpressure either doesn't exist or is so coarse-grained (linter, formatter) that it can't catch the meaningful errors. Agents here require human review that backpressure was meant to replace.
 - **Upfront investment cost**: comprehensive types, test coverage, and enforced linting take time to establish. For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
 
@@ -88,22 +88,11 @@ The full loop completes without human involvement. Each tool in the chain catche
 
 ## Related
 
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Evaluator-Optimizer](evaluator-optimizer.md)
-- [Agent Pushback Protocol](agent-pushback-protocol.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — the iteration shell that backpressure terminates
+- [Agent Self-Review Loop](agent-self-review-loop.md) — review loop that pairs with automated signals
+- [Evaluator-Optimizer](evaluator-optimizer.md) — feedback-driven refinement pattern
+- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant
 - [Harness Engineering](harness-engineering.md) — making codebases agent-ready by building backpressure coverage into the repo
 - [L1 → L2: Adding Feedback Loops](../frameworks/brownfield-to-agent-first/level-1-to-2.md) — step-by-step guide to enabling types, test coverage, and linter rules on a brownfield repo
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
-- [The Yes-Man Agent](../anti-patterns/yes-man-agent.md)
-- [Agent Turn Model](agent-turn-model.md) — how the inference-tool-call loop operates within a single turn
-- [Empowerment Over Automation](empowerment-over-automation.md)
-- [Agent Harness](agent-harness.md) — initializer and coding agent pattern for structured long-running agent work
-- [Agent Loop Middleware](agent-loop-middleware.md) — wrapping the agent loop with deterministic safety nets
-- [Delegation Decision](delegation-decision.md) — matching task characteristics to agent strengths, including backpressure availability as a factor
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — when to use tight automated loops vs. human-in-the-loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — compensating for model limitations through feedback loops and linter-based enforcement
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md) — structural patterns for control and safety including feedback-driven iteration
-- [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant

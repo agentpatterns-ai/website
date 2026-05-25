@@ -16,7 +16,7 @@ aliases:
 > Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, feature-state JSON, and a bootstrap script — no observability backend required.
 
 !!! info "Also known as"
-    Agent Observability: OTel, Cost Tracking, Progress File Pattern, Audit Trail for Agent Decisions
+    Progress File Pattern, Audit Trail for Agent Decisions
 
 ## The Problem
 
@@ -152,14 +152,10 @@ Each session runs `bash init.sh`, reads `claude-progress.txt` to recover prior d
 ## Related
 
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — machine-readable OTel signals that complement this filesystem pattern
-- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md)
-- [Loop Detection](loop-detection.md)
-- [Circuit Breakers for Agent Loops](circuit-breakers.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
-- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
-- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md)
-- [Event Sourcing for Agents](event-sourcing-for-agents.md)
-- [Agent Debugging](agent-debugging.md)
-- [Observability Legible to Agents](observability-legible-to-agents.md)
-- [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md)
+- [Agent Harness: Initializer and Coding Agent](../agent-design/agent-harness.md) — the four-component harness this page extends
+- [Session Initialization Ritual](../agent-design/session-initialization-ritual.md) — `init.sh` and start-of-session checks
+- [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — the verification middleware referenced above
+- [Loop Detection](loop-detection.md) — the active-monitoring counterpart
+- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — filesystem write-on-summarisation
+- [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — cross-session memory beyond the progress file
+- [Event Sourcing for Agents](event-sourcing-for-agents.md) — an alternative audit-trail substrate

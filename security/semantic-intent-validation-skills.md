@@ -21,7 +21,7 @@ Static analysis of skills detects 90.7% of adversarial samples using YARA-style 
 
 Signatures cannot match what is not in the file. The malicious behavior exists only after the agent synthesises it. Closing this gap requires a check on intent, not syntax.
 
-For the threat model and registry-level controls (mirroring, hash pinning, blast-radius containment), see [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md). This page covers the detection-paradigm shift itself.
+[Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) covers the threat model and registry-level controls (mirroring, hash pinning, blast-radius containment). What follows is the detection-paradigm shift itself.
 
 ## What Intent Validation Actually Means
 

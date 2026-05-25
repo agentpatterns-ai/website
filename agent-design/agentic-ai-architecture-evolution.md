@@ -10,7 +10,7 @@ tags:
   - observability
 ---
 
-# Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems
+# Agentic AI Architecture: From Prompt to Goal-Directed
 
 > The transition from stateless prompt-response models to goal-directed agentic systems requires a reference architecture separating cognitive reasoning from execution, a topology taxonomy for multi-agent coordination, and an enterprise hardening checklist.
 
@@ -119,25 +119,21 @@ A code review agent built on this architecture:
 
 This maps each component directly onto the reference architecture above: the LLM stays in the cognitive layer, the GitHub client lives in the execution layer, and the typed tool interface enforces the boundary.
 
+## Key Takeaways
+
+- Goal-directed agents require structural separation of cognitive reasoning from execution — not a prompt-engineering refinement of the request-response model.
+- Typed tool interfaces at the cognitive/execution boundary are the primary mechanism that makes agent behavior predictable and auditable.
+- Three multi-agent topologies — centralised, decentralised peer-to-peer, and hybrid — each carry distinct failure modes that must be matched to task shape.
+- Enterprise deployment adds three orthogonal concerns to functional correctness: governance, observability, and reproducibility.
+- The full harness is overhead until volume justifies it; simple single-turn tasks, prototypes, and human-supervised workflows are cheaper without it.
+
 ## Related
 
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
-- [PII Tokenization in Agent Context](../security/pii-tokenization-in-agent-context.md)
-- [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
 - [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)
-- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Agents vs Commands](agents-vs-commands.md)
-- [Heuristic Effort Scaling](heuristic-effort-scaling.md)
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agent Harness: Initializer and Coding Agent](agent-harness.md)
-- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md)
-- [Convergence Detection in Iterative Refinement](convergence-detection.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Structured Agentic Software Engineering](structured-agentic-software-engineering.md)
-- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
+- [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md)
+- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)

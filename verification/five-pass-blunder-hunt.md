@@ -119,6 +119,7 @@ Models stop after finding a satisfying number of issues. A higher target prevent
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Incremental Verification](incremental-verification.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
+- [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — sibling self-review technique: generate verification questions, answer them independently, revise; complements same-prompt five-pass with question-based diversification
 - [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md) — broader pattern: one LLM generates, another evaluates; five-pass is a single-model instance
 - [Convergence Detection in Iterative Refinement](../agent-design/convergence-detection.md) — three-signal model (change velocity, output size, content similarity) underlying the stopping criterion
 

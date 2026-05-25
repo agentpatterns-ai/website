@@ -52,7 +52,7 @@ def open_pr_if_needed(state: AgentState) -> AgentState:
     return state
 ```
 
-The [Open SWE README](https://github.com/langchain-ai/open-swe) describes this as "a lightweight version of Stripe's deterministic nodes — ensuring critical steps happen regardless of LLM behavior."
+The [Open SWE README](https://github.com/langchain-ai/open-swe) frames the project as the open-source version of this pattern — deterministic graph nodes wrapped around an agentic core to make critical steps happen regardless of LLM behavior.
 
 Common safety-net targets:
 
@@ -182,6 +182,14 @@ Post-loop safety nets rely on idempotency — if a net fires when the agent alre
 - **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate; a rate above ~5% signals an upstream issue worth addressing.
 - **Message queue injection in high-latency channels.** Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds per-iteration overhead. Rate-limit the poll or use a local buffer when the queue source is unreliable.
 
+## Key Takeaways
+
+- Treat the agent loop as a unit to wrap from the outside — middleware nodes guarantee critical steps regardless of model compliance.
+- Post-loop safety nets perform skipped critical steps deterministically; pre-call injection nodes drain external message queues before each model invocation.
+- Safety nets require idempotent operations and verifiable state — if a flag can be wrong, the net can fire twice.
+- Monitor net fire-rate; a high rate (around 5% or more) hides an upstream prompt or tooling problem that should be fixed at the source.
+- Claude Code's `Stop` and `UserPromptSubmit` hooks provide host-side equivalents of the same two patterns.
+
 ## Related
 
 - [Harness Engineering](harness-engineering.md) — environment-level design that constrains what agents can do
@@ -191,9 +199,4 @@ Post-loop safety nets rely on idempotency — if a net fires when the agent alre
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification gates before task completion
 - [Steering Running Agents](steering-running-agents.md) — human intervention patterns during agent execution
 - [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that middleware intercepts at each iteration
-- [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems for persisting state across sessions, complementing loop-level state management
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing between accumulated-context and fresh-context loop strategies
-- [Rollback-First Design](rollback-first-design.md) — designing every agent action to be reversible, complementing safety-net guarantees
-- [Classical SE Patterns as Agent Design Vocabulary](classical-se-patterns-agent-analogues.md) — GoF and SOLID patterns including middleware and observer analogues for agent systems
 - [Idempotent Agent Operations](idempotent-agent-operations.md) — designing operations for safe retry, relevant when safety nets re-run critical steps
-- [Lane-Based Execution Queueing](lane-based-execution-queueing.md) — named isolated queues with per-lane concurrency limits; the scheduling complement to loop-level middleware

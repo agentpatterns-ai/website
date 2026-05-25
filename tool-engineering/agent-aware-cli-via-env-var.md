@@ -15,17 +15,17 @@ tags:
 
 The env-var contract is not a drop-in replacement for system-prompt flag instructions. It pays off when:
 
-- **You control the CLI**, or its maintainers have adopted a name your harness sets. CLIs that have never heard of `VSCODE_AGENT` keep doing whatever they did before.
+- **You control the CLI**, or its maintainers honour a name your harness sets. CLIs that have never heard of `VSCODE_AGENT` ignore it.
 - **The subprocess environment is preserved.** `sudo`, `docker run`, `ssh`, and CI runners strip env vars by default; inheritance breaks at any boundary that does not pass `-E` or `--env VSCODE_AGENT`.
-- **Variable naming converges, or you check several.** Every harness picks its own name today; a CLI that wants to support "any agent" maintains an allow-list.
+- **Variable naming converges, or you check several.** Every harness picks its own name today; a CLI supporting "any agent" maintains an allow-list.
 
-When those conditions hold, the agent stops carrying tool-specific flag knowledge. When they do not, you still need the [agent-side override](override-interactive-commands.md) as a fallback.
+When those conditions hold, the agent sheds tool-specific flag knowledge. Otherwise, fall back to the [agent-side override](override-interactive-commands.md).
 
 ## The Contract
 
 VS Code 1.121 (May 2026) ships the first widely-deployed implementation. The release notes state verbatim: "VS Code now sets a `VSCODE_AGENT` environment variable for agent-initiated terminal commands." CLIs can "switch to machine-readable output, suppress progress animations, or skip prompts that would otherwise block the session" ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)).
 
-Claude Code implements the same shape independently: every subprocess inherits `CLAUDECODE=1` and `AI_AGENT=claude-code_<version>_agent`, set by the runtime rather than configured by the user ([Claude Code settings reference](https://code.claude.com/docs/en/settings)).
+Claude Code implements the same shape: every spawned subprocess inherits `CLAUDECODE=1`, "Set to `1` in subprocesses Claude Code spawns (Bash and PowerShell tools, tmux sessions, hook commands, status line commands)" ([Claude Code environment variables](https://code.claude.com/docs/en/env-vars)). An undocumented `AI_AGENT=claude-code_<version>_agent` is also observable in subprocess `env`.
 
 ```mermaid
 graph LR
@@ -75,7 +75,7 @@ CI runs are non-interactive with no user present. Agent runs are non-interactive
 
 ## Why It Works
 
-The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt says "always pass `--no-pager` to git, `CI=true` for npm/yarn, `-y` for apt" — N flags per CLI stored on the side that changes most often, aimed at a moving target whose flag surface evolves with each CLI release. The env-var contract moves the locus of knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt, when a pager launches, and which animations draw. The harness declares execution context once; the CLI decides the behaviour; the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the same mechanism that made `CI=true` succeed — `ci-info` catalogues 50+ vendors that set it and a comparable set of CLIs (`npm`, `yarn`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
+The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt says "always pass `--no-pager` to git, `CI=true` for npm/yarn, `-y` for apt" — N flags per CLI stored on the side that changes most often, aimed at a moving target. The env-var contract moves the locus of knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt and where pagers launch. The harness declares execution context once; the CLI decides the behaviour; the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the same mechanism that made `CI=true` succeed — `ci-info` catalogues 50+ vendors that set it and a comparable set of CLIs (`npm`, `yarn`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
 
 ## Example
 

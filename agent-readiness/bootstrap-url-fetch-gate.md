@@ -11,6 +11,8 @@ aliases:
   - public-index fetch gate
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-url-fetch-gate/`
+
 # Bootstrap URL Fetch Gate
 
 > Wrap URL-fetching tools with a public-web index check; let crawler-observed URLs through automatically; surface unknown URLs for explicit confirmation.

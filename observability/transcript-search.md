@@ -18,7 +18,7 @@ Long agent sessions make linear scrollback hostile. A one-hour Claude Code sessi
 
 ## What the Surface Provides
 
-`Ctrl+O` toggles transcript mode — the view that shows verbose tool calls and output instead of the collapsed default. Inside transcript mode, navigation is `less`-style ([fullscreen reference](https://code.claude.com/docs/en/fullscreen#search-and-review-the-conversation)):
+`Ctrl+O` toggles transcript mode — the view that shows verbose tool calls and output instead of the collapsed default. Inside transcript mode, navigation is `less`-style ([fullscreen reference](https://code.claude.com/docs/en/fullscreen#search-and-review-the-conversation)) — the same `/`-then-`n`/`N` pattern documented in the [GNU `less` manual](https://www.gnu.org/software/less/) and inherited by `git log`, `man`, and other pagers:
 
 | Key | Action |
 |-----|--------|
@@ -42,7 +42,7 @@ Search is cheapest when you know what string to type. Useful anchors in a Claude
 - **Plan revision boundaries** — `/plan`, the title of the plan file, or the phrase you used to request a new plan
 - **File-first-touched** — the filename; the first hit is where the agent first read or edited it
 - **Prompt boundaries** — a phrase from your own input; jump backward from the current turn to find where a topic started
-- **Scheduled-task timestamps** — v2.1.84 added timestamp markers whenever `/loop` or `CronCreate` fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
+- **Scheduled-task timestamps** — v2.1.84 added timestamp markers whenever [`/loop` or `CronCreate`](../tools/claude/session-scheduling.md) fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
 
 ## When Search Is the Wrong Tool
 
@@ -83,5 +83,6 @@ The same pattern applies to finding the first occurrence of a test failure (`/FA
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
 - [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](agent-debug-log-panel.md)
 - [Agent Debugging](agent-debugging.md)
+- [Agent Chat History as a First-Class Artifact](agent-history-as-artifact.md)
 - [Monitor Tool: Event Streaming from Background Scripts](../tools/claude/monitor-tool.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)

@@ -87,7 +87,7 @@ The `--allowedTools` flag scopes each worker's permissions — critical for unat
 
 ## Staged Rollout
 
-Always validate before full fan-out:
+Validate before full fan-out:
 
 1. Run on 2–3 representative files; correct the worker prompt on any errors
 2. Run on a 10–20 file subset; review failures and adjust swarm size

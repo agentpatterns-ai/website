@@ -10,6 +10,8 @@ aliases:
   - agent hook coverage check
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-hooks-coverage/`
+
 # Audit Hooks Coverage
 
 > Inventory wired hook events, build a coverage matrix against required-by-level events, audit each hook for severity, idempotency, performance, and matcher correctness.

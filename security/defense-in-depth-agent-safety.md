@@ -10,13 +10,14 @@ aliases:
   - layered security
   - multi-layer safety
 ---
+
 # Defense-in-Depth Agent Safety
 
 > Layer multiple independent safety mechanisms so no single failure point can compromise an autonomous agent's behavior.
 
 ## Why Layers Matter
 
-Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail, and designs so that each layer catches failures the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies." ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
+Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail and ensures each catches what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
 
 The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
 
@@ -32,7 +33,7 @@ Each layer is independent. Failure of one does not compromise the others ([Bui, 
 
 The strongest form of tool restriction prevents the model from even knowing a tool exists. When a subagent's schema excludes write operations, the model cannot hallucinate calls to tools it has never seen ([Bui, 2026 §3.3](https://arxiv.org/abs/2603.05344)).
 
-This is stronger than runtime rejection. A runtime check says "you called a forbidden tool, denied." Schema filtering means the model never forms the intent to call it. The attack surface shrinks at the schema level, before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
+This is stronger than runtime rejection. A runtime check denies a forbidden call after the fact; schema filtering prevents the model from ever forming the intent. The attack surface shrinks before inference. See [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) for implementation details.
 
 ## Three-Level Approval System
 
@@ -106,13 +107,13 @@ Even if the prompt guardrail is bypassed by injection, the hook still blocks pro
 
 ## When This Backfires
 
-Defense-in-depth adds real costs. Each layer requires configuration, testing, and maintenance — misconfigured layers can block legitimate operations or, worse, create a false sense of coverage while remaining ineffective.
+Each layer adds configuration, testing, and maintenance cost — and misconfigured layers can block legitimate work or create false confidence while remaining ineffective.
 
-- **Approval fatigue compounds across layers.** Adding more gates does not always reduce risk. If each layer generates its own approval prompts, users optimize for throughput by approving everything, converting safety layers into security theater. The three-level system mitigates this only when safe patterns are correctly classified upfront.
-- **Schema filtering limits legitimate capability.** Subagents with narrow schemas cannot adapt to tasks outside their defined scope. In exploratory or general-purpose contexts where tool needs are unpredictable, strict schema restrictions may require constant operator intervention or multiple specialized agents where one broader agent would suffice.
-- **Hooks and validation add latency.** In latency-sensitive pipelines — streaming responses, high-frequency tool calls, real-time integrations — per-call lifecycle hooks compound response time. A single well-tuned runtime approval gate may be more appropriate than five independent layers with inspection overhead at each level.
+- **Approval fatigue compounds across layers.** If every layer raises its own prompts, users approve everything to keep moving — converting the stack into security theater. The three-level system mitigates this only when safe patterns are classified correctly upfront.
+- **Schema filtering limits legitimate capability.** Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose contexts, strict schema restrictions force constant operator intervention or fan-out into specialized agents where one broader agent would do.
+- **Hooks and validation add latency.** In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks compound response time. A single well-tuned approval gate may beat five independent layers with inspection overhead at each level.
 
-Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks, for example) may deliver sufficient protection with lower operational cost.
+Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often deliver sufficient protection at lower cost.
 
 ## Key Takeaways
 
@@ -124,30 +125,11 @@ Apply the full five-layer stack to production agents with write access, external
 
 ## Related
 
-- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md)
-- [Permission-Gated Commands](permission-gated-commands.md)
-- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Human-in-the-Loop Placement: Where and How to Supervise](../workflows/human-in-the-loop.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
-- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md)
-- [Prompt Injection Threat Model](prompt-injection-threat-model.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Task-Scope Security Boundary](task-scope-security-boundary.md)
-- [Protecting Sensitive Files](protecting-sensitive-files.md)
-- [Secrets Management for Agents](secrets-management-for-agents.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Scoped Credentials via Proxy](scoped-credentials-proxy.md)
-- [Tool Signing and Signature Verification](tool-signing-verification.md)
-- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
-- [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
-- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
-- [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md)
+- [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
+- [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) — schema layer in depth
+- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — approval layer in depth
+- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — lifecycle-hook layer vs prompt layer
+- [Deterministic Guardrails](../verification/deterministic-guardrails.md) — runtime validation layer
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — scopes what any single layer failure can damage
+- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model layers are defending against
+- [Enterprise Agent Hardening](enterprise-agent-hardening.md) — applying these layers at organizational scale

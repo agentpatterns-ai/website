@@ -146,7 +146,7 @@ The agent-first greenfield approach is worse than conventional development in se
 
 - **Domain uncertainty outweighs delivery speed.** Agent topology commits early to a division of responsibilities. If the product's domain model is still being discovered, those role boundaries will likely be wrong and force rework of AGENTS.md, standards, and agent definitions rather than code alone.
 - **Comprehensive AGENTS.md files hurt more than help.** Recent research evaluating repository-level context files found that LLM-generated AGENTS.md files reduced task success compared with no context at all, while increasing inference cost by over 20% and adding 2–4 extra steps per task; developer-written files gave only a ~4% gain ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Write only non-inferable tooling, commands, and constraints — not architectural overviews the agent can reconstruct.
-- **The team is still learning the codebase patterns.** Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the exploratory coding that builds intuition ([Baytech, 2026](https://www.baytechconsulting.com/blog/google-antigravity-ai-ide-2026)).
+- **The team is still learning the codebase patterns.** Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
 - **Decomposition cost exceeds implementation cost.** For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the leverage. A solo developer writing the code directly often ships faster.
 - **Acceptance criteria cannot be mechanically verified.** Agent loops depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
 
@@ -187,19 +187,11 @@ Each session reads `AGENTS.md`, picks up its assigned issue, and produces a PR. 
 
 ## Related
 
-- [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
-- [The Plan-First Loop: Design Before Code](plan-first-loop.md)
-- [Parallel Agent Sessions](parallel-agent-sessions.md)
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
-- [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
-- [AI Development Maturity Model](ai-development-maturity-model.md)
-- [Central Repo and Shared Agent Standards](central-repo-shared-agent-standards.md)
-- [Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)
-- [Escape Hatches: Unsticking Stuck Agents](escape-hatches.md)
-- [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
+- [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
-- [Codebase Readiness for Agents](codebase-readiness.md)
-- [Compound Engineering: Systematic Agent Learning Loop](compound-engineering.md)
+- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
+- [Parallel Agent Sessions](parallel-agent-sessions.md)
+- [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
+- [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)

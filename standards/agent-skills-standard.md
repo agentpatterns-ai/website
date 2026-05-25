@@ -9,7 +9,7 @@ aliases:
   - agent skills spec
 ---
 
-# Agent Skills: Cross-Tool Task Knowledge Standard
+# Agent Skills: A Cross-Tool Task Knowledge Standard
 
 > The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand.
 
@@ -105,7 +105,7 @@ Write for practitioners who deploy and configure agents. Skip introductory defin
 Every page opens with a `>` blockquote that defines the concept, not describes the page.
 
 ## Tone
-Active voice. Present tense. No filler phrases ("it's worth noting", "in this guide").
+Active voice. Present tense. No hedging or meta-framing phrases.
 ```
 
 When a contributor runs `/draft-content`, the agent definition for `content-writer` references `writing-rules`. The tool discovers `.github/skills/writing-rules/SKILL.md`, loads it into context, and the agent applies the style rules without the contributor needing to specify them. The same skill file works unchanged in Claude Code, GitHub Copilot, and Cursor.
@@ -138,8 +138,6 @@ The standard adds value only when skills need to cross tool or team boundaries. 
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
 - [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)
-- [Tool Calling Schema Standards](tool-calling-schema-standards.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](mcp-protocol.md)
 - [OpenAPI as the Source of Truth for Agent Tool Definitions](openapi-agent-tool-spec.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)
-- [Agent-to-Agent (A2A) Protocol for AI Agent Development](a2a-protocol.md)

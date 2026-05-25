@@ -10,6 +10,8 @@ aliases:
   - generate auto-discovery hooks
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-evidence-based-allowlist/`
+
 # Bootstrap Evidence-Based Allowlist Auto-Discovery
 
 > Generate a PermissionRequest + PostToolUse hook pair that promotes a Bash command to the allow list after N successful manual approvals, gated by a never-auto-allow deny list and a sidecar approval log.

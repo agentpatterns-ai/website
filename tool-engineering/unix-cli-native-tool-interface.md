@@ -118,6 +118,14 @@ run("gh pr diff 999")
 
 No custom schema was needed. `--help` provided discovery; stderr provided error routing; pipes handled transformation.
 
+## Key Takeaways
+
+- One `run(command)` tool exploits the model's dense pretraining on shell usage — high-alignment action space without bespoke schemas.
+- Unix supplies discovery (`--help`), error routing (stderr + exit codes), and composition (pipes, `&&`, `||`) for free.
+- Separate execution from presentation: a binary guard, overflow truncation, and stderr attachment prevent raw output from poisoning the context window.
+- Typed tools still win for strong parameter constraints, high-security surfaces, and multimodal payloads — five well-designed tools plus shell access captures most of the upside.
+- Design CLIs for agents with `--json`, distinct exit codes, `--dry-run`, `--yes`/`--force`, batch operations, and `--schema` introspection.
+
 ## Sources
 
 - Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
@@ -130,16 +138,8 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents](toolset-agentization.md)
-- [Batch File Operations via Bash Scripts for AI Agents](batch-file-operations.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Agent-Computer Interface](agent-computer-interface.md)
-- [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
+- [Agent-Computer Interface](agent-computer-interface.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
-- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
-- [Tool Description Quality](tool-description-quality.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
+- [Token-Efficient Tool Design](token-efficient-tool-design.md)

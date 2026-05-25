@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Agent Circuit Breaker"
 description: "Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops."
@@ -9,6 +8,8 @@ aliases:
   - tool-level circuit breaker
   - circuit breaker pattern agents
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Agent Circuit Breaker
 
@@ -79,6 +80,7 @@ Circuit breakers add overhead that outweighs the benefit in several common scena
 - **No fallback exists** — without graceful degradation logic the circuit opens and the agent stalls anyway. The state machine stops the waste but does not preserve progress, and fallback routing adds its own failure modes.
 - **Agent updates system prompt dynamically** — injecting tool-status context when a circuit opens can cause prompt injection risks or context pollution in security-sensitive deployments.
 - **Failures are semantic, not transport-level** — LLM-backed tools routinely return HTTP 200 while producing hallucinated or malformed output. A counter keyed on transport errors never trips, so the circuit stays Closed while the agent burns tokens on bad responses ([Hannecke, 2025](https://medium.com/@michael.hannecke/resilience-circuit-breakers-for-agentic-ai-cc7075101486); [Pan, 2026](https://tianpan.co/blog/2026-04-14-treating-your-llm-provider-as-an-unreliable-upstream)). Detecting these requires inline quality evaluation in addition to a state machine.
+- **Multiple agents share the failing tool** — per-session state cannot prevent retry storms when parallel agents call the same endpoint; ten workers retrying three times each will send thirty coordinated requests to a dead service. Multi-agent deployments need a shared breaker store (a `failed_services` reducer in graph state or a Redis-backed registry) and per-node retries disabled on shared tools ([LifeTidesHub, 2026](https://www.lifetideshub.com/retry-storms-multi-agent-systems/)).
 
 ## Key Takeaways
 

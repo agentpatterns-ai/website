@@ -42,3 +42,6 @@ If any of these hold, the [Repository Bootstrap Checklist](repository-bootstrap-
 - [Architectural Foundation First](architectural-foundation-first.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Getting Started with Instruction Files](getting-started-instruction-files.md)
+- [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
+- [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
+- [Codebase Readiness for Agents](codebase-readiness.md)

@@ -20,15 +20,15 @@ GitHub Copilot exposes models from multiple providers across every surface: VS C
 
 GitHub Copilot supports models from multiple providers. The roster changes frequently — models are added, retired, and re-priced. Check the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for the current list.
 
-As of May 2026, the general shape (see the [vendor's supported models](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for the authoritative current list):
+As of March 2026, the general shape:
 
 | Tier | Models (examples) | Premium multiplier | Character |
 |------|------------------|-------------------|-----------|
-| **Included** | GPT-5 mini, GPT-4o (GPT-4.1 closing down 2026-06-01) | 0x | Unlimited routine completions and chat |
-| **Budget** | Claude Haiku 4.5, GPT-5.4 nano, Gemini 3 Flash | 0.25–0.33x | Fast, cheap, good for exploration and simple tasks |
-| **Balanced** | Claude Sonnet 4.5/4.6, GPT-5.4, Gemini 3.1 Pro | 1x | Default workhorse — most tasks |
-| **Powerful** | Claude Opus 4.5/4.6, GPT-5.5 | 3–7.5x | Complex reasoning, architecture, large codebase analysis |
-| **Ultra** (our label) | Claude Opus 4.7 (15x), Claude Opus 4.6 fast mode (30x, preview) | 15–30x | Maximum capability, maximum cost |
+| **Free** | GPT-4o, GPT-4.1 | 0x | Unlimited routine completions and chat |
+| **Budget** | Claude Haiku 4.5 | 0.33x | Fast, cheap, good for exploration and simple tasks |
+| **Balanced** | Claude Sonnet 4/4.5, GPT-4.1 | 1x | Default workhorse — most tasks |
+| **Powerful** | Claude Opus 4.5/4.6, Gemini 2.5 Pro | 3x+ | Complex reasoning, architecture, large codebase analysis |
+| **Ultra** (our label) | Claude Opus 4.6 fast (preview, Pro+/Enterprise) | 30x | Maximum capability, maximum cost |
 
 **Auto mode** provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
 
@@ -64,7 +64,7 @@ Auto mode handles most tasks well. Override it when:
 ```markdown
 ---
 description: Reviews code for security vulnerabilities
-model: claude-opus-4-6
+model: claude-opus-4-5
 tools:
   - read_file
   - search_code
@@ -138,7 +138,7 @@ Concentrating reasoning at decision points outperforms both maximum reasoning th
 ```markdown
 ---
 description: Plans architecture changes before implementation
-model: claude-opus-4-6
+model: claude-opus-4-5
 tools:
   - read_file
   - search_code

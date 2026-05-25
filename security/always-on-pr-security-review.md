@@ -131,9 +131,10 @@ Both draw from a shared usage pool and a shared suppression-rule store. [Source:
 
 ## Related
 
-- [Code Injection Attacks on Multi-Agent Systems](code-injection-multi-agent-defence.md)
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
+- [Prompt Injection Threat Model](prompt-injection-threat-model.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Scanner-as-MCP-Server](scanner-as-mcp-server.md)
 - [Self-Improving Code Review Agents — Learned Rules](../code-review/learned-review-rules.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Action-Selector Pattern](action-selector-pattern.md)

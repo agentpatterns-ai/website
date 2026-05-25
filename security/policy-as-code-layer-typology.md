@@ -15,18 +15,18 @@ aliases:
 
 # Five-Stage Policy Layer Typology for Generalist Agents
 
-> A modular policy-as-code layer that wraps a generalist agent at five distinct loop stages — intent, planning, tool selection, execution, output — closes governance gaps that no single layer covers, but the typology only pays off when all five stages exist and several deterministic controls are missing.
+> A policy-as-code layer wrapping a generalist agent at five loop stages — intent, planning, tool selection, execution, output — closes governance gaps no single layer covers, but only pays off when all five stages exist and several deterministic controls are missing.
 
-A five-stage policy layer typology decomposes agent governance into five intervention points that compose with one unmodified generalist LLM agent: **Intent Guard** (blocks or rewrites incoming requests), **Playbook** (injects procedural guidance into reasoning), **Tool Guide** (augments tool descriptions at selection), **Tool Approval** (gates execution behind deterministic checks or human consent), and **Output Formatter** (filters the final response). The taxonomy comes from IBM Research's open-source [CUGA](https://github.com/cuga-project/cuga-agent), where each type is exposed as a separate SDK method (`agent.policies.add_intent_guard(...)`, `agent.policies.add_playbook(...)`) and tested as an independent integration in `src/cuga/backend/cuga_graph/policy/tests/` ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent/blob/main/README.md)).
+A five-stage policy layer typology decomposes agent governance into five intervention points around one unmodified generalist LLM agent: **Intent Guard** (blocks or rewrites incoming requests), **Playbook** (injects procedural guidance), **Tool Guide** (augments tool descriptions at selection), **Tool Approval** (gates execution behind deterministic checks or human consent), and **Output Formatter** (filters the final response). The taxonomy comes from IBM Research's open-source [CUGA](https://github.com/cuga-project/cuga-agent), where each type is a separate SDK method (`agent.policies.add_intent_guard(...)`, `agent.policies.add_playbook(...)`) tested as an independent integration ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent/blob/main/README.md)).
 
 ## When This Applies
 
-The typology earns its complexity only under specific conditions. Outside them, simpler patterns dominate:
+The typology earns its complexity only under specific conditions:
 
-- **The agent loop has all five stages active.** A tool-only agent with no planning step has no use for Playbook; a read-only agent has no use for Tool Approval. Adopting the full typology over a partial loop creates ceremonial slots that confuse policy authors.
-- **The action surface spans multiple tools and multiple sensitivity tiers.** Single-tool agents with one deterministic gate get equivalent guarantees from [action-selector-pattern](action-selector-pattern.md) plus a confirmation prompt.
-- **Audit and compliance require typed intervention records.** When auditors must show "we have a control at every stage of the loop," the taxonomy gives the boundary labels. Without that requirement, ad-hoc gates suffice.
-- **You cannot fine-tune the underlying model.** The pitch is "compose governance with a generalist LLM agent... without model fine-tuning" ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent/blob/main/README.md)). Teams with fine-tuning available may get equivalent guarantees from a refusal-tuned model plus a thin deny list.
+- **The agent loop has all five stages active.** A tool-only agent has no use for Playbook; a read-only agent has no use for Tool Approval. Adopting the full typology over a partial loop creates ceremonial slots that confuse policy authors.
+- **The action surface spans multiple tools and sensitivity tiers.** Single-tool agents get equivalent guarantees from [action-selector-pattern](action-selector-pattern.md) plus a confirmation prompt.
+- **Audit and compliance require typed intervention records.** Auditors who must show "a control at every stage of the loop" get the boundary labels from the taxonomy. Without that requirement, ad-hoc gates suffice.
+- **You cannot fine-tune the underlying model.** The CUGA framing is policy composition over a generalist agent rather than weight-level changes ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent/blob/main/README.md)). Teams with fine-tuning available may get equivalent guarantees from a refusal-tuned model plus a thin deny list.
 
 ## The Five Stages
 
@@ -40,7 +40,7 @@ Each stage maps to a distinct point in the agent loop with different control cha
 | Tool Approval | At execution, between proposal and side effect | Unauthorised or high-blast-radius calls | Deterministic gate (often human) |
 | Output Formatter | After generation, on the final response | Data leakage and format violations | Deterministic or model-mediated post-processor |
 
-CUGA's policy SDK includes an explicit priority system because multiple policies can match a single call ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent)) — the typology imports an ordering concern when several types fire on the same request.
+CUGA's SDK includes an explicit priority system because multiple policies can match one call ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent)) — the typology imports an ordering concern when several types fire on the same request.
 
 ## Diagram
 
@@ -62,16 +62,16 @@ graph LR
 
 ## Why It Works
 
-The mechanism is **defense in depth at agent-loop boundaries**. Each stage targets a different failure class — intent misclassification, plan drift, tool misuse, unsafe execution, data leakage — and a single layer cannot cover all five because the failures appear at different loop points with different signals available. [Sigdel & Baral 2026](https://arxiv.org/pdf/2603.18059) argue that prompt-only strategies "lack robust enforcement mechanisms — models can be confused, jailbroken, or simply fail to maintain consistency with complex behavioral requirements across multi-step workflows," so explicit policy layers are required when safety boundaries must hold regardless of prompt variations.
+The mechanism is **defense in depth at agent-loop boundaries**. Each stage targets a different failure class — intent misclassification, plan drift, tool misuse, unsafe execution, data leakage — and a single layer cannot cover all five because the failures appear at different loop points with different signals available. [Sigdel & Baral 2026](https://arxiv.org/abs/2603.18059) argue that model-centric, prompt-dependent mitigations are brittle and do not generalize to non-LLM callers, so explicit policy layers are required when safety boundaries must hold regardless of prompt variations.
 
-The typology adds value by naming the boundaries where each control class belongs. The Tool Approval stage is where deterministic enforcement lives, which is why [permission-framework-over-model](permission-framework-over-model.md) shows ask-to-continue harnesses swing overeager rates from 27.7% down to 1.1% on identical weights — that is one stage of this typology measured in isolation.
+The typology adds value by naming the boundaries where each control class belongs. Tool Approval is where deterministic enforcement lives, which is why [permission-framework-over-model](permission-framework-over-model.md) shows ask-to-continue harnesses swing overeager rates from 27.7% to 1.1% on identical weights — that is one stage of this typology in isolation.
 
 ## When This Backfires
 
-- **Three of the five layers inherit LLM-classifier brittleness.** Intent Guard, Playbook, and Output Formatter are model-mediated. Bypass attacks on classifier-style guardrails using character distribution and tokenization edge cases are documented ([Mindgard](https://mindgard.ai/resources/bypassing-llm-guardrails-character-and-aml-attacks-in-practice)). Anthropic's classifier-based Auto Mode using Sonnet-4.6 with chain-of-thought still misses 17% of real overeager actions ([Anthropic Engineering 2026-03-25](https://www.anthropic.com/engineering/claude-code-auto-mode)). These three stages reduce rates; they do not eliminate them.
-- **Small action surfaces don't recoup the operational cost.** A workflow with three to five tools and a single operator gets equivalent guarantees from a deny list plus a confirmation prompt. The five-type SDK adds policy versioning, conflict resolution, and upgrade overhead that a small surface cannot pay back.
-- **Headless automation collapses the typology to its deterministic subset.** Tool Approval that requires human confirmation has no signal in CI or scheduled agents — the taxonomy degrades to two layers, not five.
-- **Multi-policy compositions introduce ordering bugs.** A single-policy deployment has no priority bug; the explicit priority system in the CUGA SDK only exists because multiple types can match the same call. Adopting the full typology imports a failure class smaller deployments avoid.
+- **Three of the five layers inherit LLM-classifier brittleness.** Intent Guard, Playbook, and Output Formatter are model-mediated. Bypass attacks on classifier-style guardrails via character distribution and tokenization edge cases are documented ([Mindgard](https://mindgard.ai/resources/bypassing-llm-guardrails-character-and-aml-attacks-in-practice)). Anthropic's classifier-based Auto Mode using Sonnet-4.6 with chain-of-thought still misses 17% of real overeager actions ([Anthropic Engineering 2026-03-25](https://www.anthropic.com/engineering/claude-code-auto-mode)). These stages reduce rates; they do not eliminate them.
+- **Small action surfaces don't recoup the operational cost.** Three to five tools with a single operator get equivalent guarantees from a deny list plus a confirmation prompt. The five-type SDK adds policy versioning, conflict resolution, and upgrade overhead a small surface cannot pay back.
+- **Headless automation collapses the typology to its deterministic subset.** Tool Approval that requires human confirmation has no signal in CI or scheduled agents — the taxonomy degrades to two layers.
+- **Multi-policy compositions introduce ordering bugs.** The CUGA priority system exists because multiple types can match one call; smaller deployments avoid that failure class entirely.
 
 ## Example
 

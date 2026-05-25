@@ -140,5 +140,3 @@ Mitigations: rotate reviewers to prevent complacency, include negative-sample in
 - [Humans and Agents in Software Engineering Loops](humans-agents-development-loops.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
 - [Agent Governance Policies for AI Agent Development](agent-governance-policies.md)
-- [Continuous Agent Improvement](continuous-agent-improvement.md)
-- [Team Onboarding](team-onboarding.md)

@@ -10,6 +10,7 @@ tags:
   - workflows
   - multi-agent
 ---
+
 # Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions
 
 > When multiple agent sessions run simultaneously, the human engineer's role transforms from individual contributor to tech lead — the bottleneck shifts from writing code to making architectural decisions, giving feedback, and integrating changes.
@@ -58,14 +59,14 @@ This has practical implications:
 
 ## Session Lifecycle and Interruption
 
-When running parallel sessions, `/clear` cancels only the foreground task — background agent and bash tasks continue running. This means `/clear` is safe to use mid-session without losing background agent work that is still in flight. [Source: [Claude Code changelog, v2.1.72](https://docs.anthropic.com/en/docs/claude-code)]
+When parallel work runs across multiple sessions, the distinction between foreground and background tasks shapes how the human can reset context without disrupting in-flight work.
 
-The distinction matters for parallel workflows:
+- **Foreground tasks** — the current interactive prompt or command in a session; resetting the session context (for example with a clear-context command) ends them
+- **Background tasks** — agents and bash processes launched in the background (e.g., via scheduled or loop commands in tools that support them); these continue independently of the foreground prompt
 
-- **Foreground tasks** — the current interactive prompt or command; cancelled by `/clear`
-- **Background tasks** — agents and bash processes launched in the background (e.g., via `/loop` or Cron tools); survive `/clear`
+Check the release notes for the specific tool in use to confirm exactly how its clear-context command interacts with background work — behavior varies across tools and versions, and Claude Code's `/clear` semantics, in particular, have evolved across releases. [Source: [Claude Code release notes](https://docs.claude.com/en/release-notes/claude-code)]
 
-This pairs with scheduled and background work patterns: long-running background agents now survive session clears, so an engineer can reset context without aborting in-progress background work.
+The practical point: design parallel workflows so that resetting the foreground does not abort the work you most want to preserve.
 
 ## Review Concentration and Quality
 
@@ -107,7 +108,7 @@ With this structure, the engineer reviews progress updates from each session in 
 - Brooks's Law applies: coordination overhead grows with parallelism, and linear speedup is not guaranteed
 - The human's capacity for high-quality review, not the number of agent sessions, is the actual throughput constraint
 - Design tasks so sessions batch their questions and can make extended progress independently
-- `/clear` cancels only the foreground task — background agents and bash tasks survive, making it safe to reset context mid-session
+- Separate foreground tasks (the current prompt) from background tasks (scheduled or backgrounded agents and bash) so that resetting session context preserves the work you want to keep — confirm exact behavior in your tool's release notes
 
 ## Related
 
@@ -116,7 +117,6 @@ With this structure, the engineer reviews progress updates from each session in 
 - [Background-to-Foreground Handoff](background-foreground-handoff.md)
 - [The Delegation Decision](../agent-design/delegation-decision.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)
 - [Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
 - [Compound Engineering](compound-engineering.md)

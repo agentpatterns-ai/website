@@ -36,7 +36,7 @@ graph LR
 
 A three-sentence skill that directs the agent to interview you relentlessly about a plan or design until every branch of the decision tree is resolved. One question at a time, with a recommended answer for each. The agent explores the codebase rather than asking questions the codebase can answer. See the [Grill Me technique](../agent-design/grill-me-technique.md) for the pattern in depth.
 
-The design-tree framing — walking every branch before implementation — prevents the most expensive failure mode: building the wrong thing because a key assumption went unexamined. Pocock's [grill-me SKILL.md](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md) is only three sentences long.
+The design-tree framing — walking every branch before implementation — prevents the most expensive failure mode: building the wrong thing because a key assumption went unexamined. Pocock's [grill-me SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is only three sentences long.
 
 ### /write-a-prd — Convert Understanding to Specification
 
@@ -111,6 +111,5 @@ Audit whether each skill is firing when expected before adding the next one. A t
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [Test-Driven Agent Development](../verification/tdd-agent-development.md)
 - [Red-Green-Refactor with Agents](../verification/red-green-refactor-agents.md)
-- [The Research-Plan-Implement Pattern](research-plan-implement.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [SDLC Skill Taxonomy](sdlc-skill-taxonomy.md)

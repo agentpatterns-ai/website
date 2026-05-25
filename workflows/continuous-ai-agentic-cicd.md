@@ -121,4 +121,3 @@ Recent empirical work tempers the optimistic framing: an [MSR 2026 Mining Challe
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Continuous Triage](continuous-triage.md)
 - [Entropy Reduction Agents](entropy-reduction-agents.md)
-- [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)

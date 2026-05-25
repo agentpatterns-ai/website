@@ -11,6 +11,7 @@ tags:
   - workflows
   - multi-agent
 ---
+
 # Voting / Ensemble Pattern
 
 > Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence.
@@ -140,7 +141,6 @@ The three models have independent failure modes: a vulnerability one model misse
 ## Related
 
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
-- [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
 - [LLM Map-Reduce](llm-map-reduce.md)
@@ -148,4 +148,3 @@ The three models have independent failure modes: a vulnerability one model misse
 - [Orchestrator-Worker](orchestrator-worker.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)

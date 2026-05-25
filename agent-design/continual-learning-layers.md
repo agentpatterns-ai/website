@@ -30,17 +30,17 @@ Model-layer learning updates the weights themselves — supervised fine-tuning (
 
 The central challenge is **catastrophic forgetting**: new training degrades performance on previously-handled tasks. This is an open research problem.
 
-Model updates target the agent level — one model trained for a specific agentic system. Per-user weight updates (e.g., LoRA per user) remain a research direction; production deployments are rare.
+Model updates target the agent level — one model per agentic system. Per-user weight updates (e.g., LoRA per user) remain a research direction; production deployments are rare.
 
-Model updates are expensive, slow, and hardest to reverse. Use them when the capability gap cannot be closed by better instructions or retrieved context.
+Model updates are expensive, slow, and hardest to reverse. Use them when the capability gap cannot be closed by better instructions or context.
 
 ## Harness Layer
 
 The harness is the scaffold code that drives the agent, plus instructions and tools always present for every instance. Harness-layer learning rewrites the scaffold.
 
-The Meta-Harness approach formalizes this: run the agent over a batch of tasks, store traces, then run a coding agent over those traces to propose scaffold changes. [LangChain applied this to Deep Agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/) and improved Terminal Bench 2.0 from 52.8% to 66.5% through harness changes alone.
+The Meta-Harness approach formalizes this: run the agent over a batch of tasks, store traces, then have a coding agent propose scaffold changes from those traces. [LangChain applied this to Deep Agents](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/), improving Terminal Bench 2.0 from 52.8% to 66.5% through harness changes alone.
 
-Harness updates affect every instance. A fix generalizes across all users and sessions. The tradeoff: changes require code review and deployment, and a bad harness change degrades everyone at once.
+Harness updates affect every instance, so a fix generalizes across users and sessions. The tradeoff: changes require code review and deployment, and a bad harness change degrades everyone at once.
 
 ## Context Layer
 
@@ -120,4 +120,6 @@ A project-specific convention (e.g., always use `assert_raises` instead of `pyte
 - [Agent Memory Patterns](agent-memory-patterns.md)
 - [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
 - [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md)
+- [Layered Mutability](layered-mutability.md)
+- [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)

@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Canary Rollout for Agent Policy Changes"
 description: "Progressively expose agent policy updates to a small traffic slice, monitor key metrics, and roll back automatically before full cutover — the same discipline software deployments use, applied to the LLM policy layer."
@@ -9,6 +8,8 @@ aliases:
   - canary deployment for agent policies
   - progressive policy rollout
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Canary Rollout for Agent Policy Changes
 
@@ -131,3 +132,5 @@ Canary rollout is not a default — it is a control that assumes enough traffic 
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Long-running loops where policy drift compounds over cycles
 - [Staggered Agent Launch](../multi-agent/staggered-agent-launch.md) — Complementary technique for blast-radius control at launch time
 - [Agent Governance Policies](agent-governance-policies.md) — Enterprise-level policy controls for agent mode, MCP, and model availability
+- [Model Deprecation Lifecycle](model-deprecation-lifecycle.md) — Migration cadence for the upstream model swaps a canary protects against
+- [Model Deprecation Migration Protocol](model-deprecation-migration-protocol.md) — Step-by-step migration that uses canary rollout to validate a replacement model

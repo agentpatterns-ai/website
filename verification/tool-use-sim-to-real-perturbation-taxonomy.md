@@ -18,9 +18,9 @@ aliases:
 
 ## The Sim-to-Real Gap for Tool-Use Agents
 
-A tool-use agent benchmarked on clean inputs ranks high. Deployed against real user input, a registry of dozens of MCP tools, and flaky third-party APIs it degrades sharply — and unevenly across failure types. [Zhou et al. (2026), *When Simulation Lies*](https://arxiv.org/abs/2605.11928) frames this as a sim-to-real gap in the tool-use partially observable Markov decision process (POMDP) and partitions deployment noise by which POMDP component it perturbs.
+Agents benchmarked on clean inputs rank high; deployed against real queries, dozens of MCP tools, and flaky APIs they degrade sharply and unevenly. [Zhou et al. (2026), *When Simulation Lies*](https://arxiv.org/abs/2605.11928) frames this as a sim-to-real gap in the tool-use POMDP and partitions deployment noise by which component it perturbs.
 
-Across 21 models from 1.5B to 32B (including o4-mini), the headline drops on their RobustBench-TC suite:
+Across 21 models from 1.5B to 32B (including o4-mini), headline drops on their RobustBench-TC suite:
 
 | POMDP component | Accuracy drop | What it perturbs |
 |---|---|---|
@@ -33,51 +33,49 @@ Scale alone does not close these gaps — a 32B model has the same profile shape
 
 ## The Four POMDP Components
 
-Each axis maps to a class of real-world failure documented in framework GitHub issues — not an academic invention.
+Each axis maps to a class of real-world failure documented in framework GitHub issues.
 
 ### Observation — noisy inputs the agent must read
 
-Perturbations to user query, tool descriptions, and parameter descriptions: keyboard-noise typos, semantic rephrasing, paraphrased tool/parameter descriptions. Agents are robust here — the language prior absorbs surface noise.
+Perturbations to user query, tool descriptions, and parameter descriptions: typos, semantic rephrasing, paraphrased descriptions. The language prior absorbs surface noise.
 
-The failure mode bites when noise propagates into a generated tool call. A user query `what's an occrra account?` provoked a LlamaIndex agent to emit a call to `occcra_information` — a hallucinated typo. The dispatcher crashed with `Tool with name occcra_information not found` ([run-llama/llama_index #7170](https://github.com/run-llama/llama_index/issues/7170)).
+The failure bites when noise propagates into a generated tool call. A query `what's an occrra account?` provoked a LlamaIndex agent to emit `occcra_information` — a hallucinated typo. The dispatcher crashed with `Tool with name occcra_information not found` ([run-llama/llama_index #7170](https://github.com/run-llama/llama_index/issues/7170)).
 
 ### Action — ambiguous tool spaces
 
-Perturbations to the tool registry: duplicate tool names across sources (same name, different descriptions, parameters, or both) and functionally similar redundant tools. The agent must disambiguate.
+Perturbations to the tool registry: duplicate tool names across sources, and functionally similar redundant tools.
 
-Two MCP servers registering tools with the same name freeze the OpenAI Agents SDK — it raises `Duplicate tool names found across MCP servers` and refuses to proceed ([openai-agents-python #464](https://github.com/openai/openai-agents-python/issues/464), April 2025). In the variant where listing hangs rather than erroring, the agent loop never returns ([#1167](https://github.com/openai/openai-agents-python/issues/1167), July 2025). The SDK's remediation is to prefix tool names with their server, but until opted-in the failure is silent.
+Two MCP servers with the same tool name freeze the OpenAI Agents SDK — it raises `Duplicate tool names found across MCP servers` ([openai-agents-python #464](https://github.com/openai/openai-agents-python/issues/464), April 2025). In the variant where listing hangs rather than erroring, the agent loop never returns ([#1167](https://github.com/openai/openai-agents-python/issues/1167), July 2025). The SDK's remediation is per-server prefixing, but until opted-in the failure is silent.
 
 ### Reward — misleading metadata
 
-Perturbations to the metadata the agent uses to pick a tool: misleading descriptions on the ground-truth tool, response-time annotations nudging selection toward worse options, adversarial suffixes or abbreviated names. The selection signal is compromised without the underlying tool surface changing.
+Perturbations to the metadata that drives tool selection: misleading descriptions, response-time annotations nudging toward worse options, adversarial suffixes or abbreviated names.
 
-This produces the largest drop (~40%) [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)]. The mechanism is direct: tool descriptions are part of the prompt, so a misleading description is an injected instruction steering selection.
+This is the largest drop (~40%) [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)]. Tool descriptions are part of the prompt, so a misleading description is an injected instruction steering selection.
 
 ### Transition — runtime failures after the call
 
-Perturbations to what happens after the agent decides: HTTP timeout, 429 rate-limit, 401/403 auth error, 5xx server error, malformed JSON, schema validation failure. The choice was correct; the environment broke.
+Perturbations after the agent decides: HTTP timeout, 429, 401/403, 5xx, malformed JSON, schema validation failure. The choice was correct; the environment broke.
 
-LangChain's `BaseChatOpenAI.request_timeout` defaults to `None` ([langchain_openai source](https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/langchain_openai/chat_models/base.py)), which the underlying OpenAI SDK interprets as "disable all HTTP timeouts". An autonomous agent on a hung tool call blocks forever — no retry, no escalation, no human to notice.
+LangChain's `BaseChatOpenAI.request_timeout` defaults to `None` ([source](https://github.com/langchain-ai/langchain/blob/master/libs/partners/openai/langchain_openai/chat_models/base.py)) — the OpenAI SDK reads this as "disable all HTTP timeouts". An autonomous agent on a hung call blocks forever.
 
 ## Why the Partition Predicts Where You'll Fail
 
-Two implications follow from the uneven profile:
+**Observation robustness is mostly free.** Language modelling makes agents tolerant to typos and rephrasing — eval budget here yields a low-information signal.
 
-**Observation robustness is mostly free.** Language modelling makes agents tolerant to typos and rephrasing. Spending eval budget here yields a low-information signal.
-
-**Reward and transition robustness must be explicitly designed.** A 40% drop on reward-relevant perturbations means tool-description hygiene is load-bearing — descriptions are not documentation, they are part of the selection prompt. A 30% drop on transition perturbations means runtime failure policy (timeouts, retries, fallbacks) determines tail behaviour more than model choice does.
+**Reward and transition robustness must be designed.** A 40% drop on reward-relevant perturbations means tool descriptions are not documentation, they are part of the selection prompt. A 30% drop on transition perturbations means runtime failure policy determines tail behaviour more than model choice does.
 
 ## What Domain Randomization Buys You
 
-Domain randomization — training on a wide distribution of perturbed inputs so the real distribution falls inside the trained envelope — is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories drawn uniformly across the 16 statically-augmentable perturbation types. Transition perturbations are excluded by construction — they can only happen at runtime.
+Domain randomization — training on perturbed inputs so the real distribution falls inside the trained envelope — is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded — they only happen at runtime.
 
-ToolRL-DR-Full retains ~75% of clean accuracy under perturbation and closes ~27% of the transition gap despite never training on transition perturbations. The proposed mechanism: RL on adversarial static inputs induces a persistent retry policy that transfers to unseen runtime failures.
+ToolRL-DR-Full retains ~75% of clean accuracy under perturbation and closes ~27% of the transition gap without training on transition perturbations — RL on adversarial static inputs induces a persistent retry policy that transfers.
 
-Two caveats: one backbone and one recipe is not a settled result, and the ~25% clean-accuracy regression is the price. Workloads with well-controlled input distributions gain little. For teams without RL infrastructure, the taxonomy alone is the load-bearing contribution — SDK-layer fixes (pinning timeouts, namespacing tools across MCP servers, validating model-emitted tool names) address most documented failures without retraining.
+Caveats: one backbone, one recipe; the ~25% clean-accuracy regression is the price. For teams without RL infrastructure, the taxonomy alone is the load-bearing contribution — SDK-layer fixes (pinning timeouts, namespacing MCP tools, validating model-emitted tool names) address most documented failures without retraining.
 
 ## When the Taxonomy Changes a Decision
 
-Use it before designing an eval suite for any tool-using agent:
+Use it before designing an eval suite for a tool-using agent:
 
 ```mermaid
 graph TD

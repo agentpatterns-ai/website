@@ -20,8 +20,6 @@ tags:
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
 - [Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric](markov-chain-agent-reliability.md) — pass@k, pass^k, and the reliability decay curve are projections of one first-passage distribution; fit an absorbing DTMC to traces and report a goodness-of-fit certificate to make any of those numbers defensible
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
-- [Corpus-Level Trace Diagnostics for LLM Agents](corpus-level-trace-diagnostics.md) — Survey hundreds of traces with a scout-investigator multi-agent pipeline to surface recurring failure modes that single-trace inspection misses — applies only at corpus scale with human review
-- [Cross-Framework Signal Semantics: Re-Measure Borrowed Trajectory Rules](cross-framework-signal-semantics.md) — The same trajectory-shape rule can predict opposite outcomes across frameworks — a 64,380-run study split 47-vs-48 on error rate direction; re-measure borrowed signals before adopting them
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — Frontier LLMs pass unit tests on debugging tasks by regenerating large chunks of code rather than making targeted edits — edit-level precision and bug-level recall expose the gap
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
@@ -35,13 +33,11 @@ tags:
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — Quantify how much two models share non-mandatory tool-use behaviour with Response Pattern Similarity and Action Graph Similarity to surface correlated failure modes before routing or ensembling treats them as independent
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes; useful complement to deterministic guardrails, but high AUPRC does not imply usable alerts
 - [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
-- [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — Partition tool-use perturbations by POMDP component (observation, action, reward, transition) — the partition predicts where robustness collapses and which production hardening to fund
 
 ## Behavioral Testing
 
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — Test decision quality and end-state for non-deterministic agent systems using capability matrices, three grading methods, and acceptable variance thresholds
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — Apply coverage-guided fuzzing to multi-agent systems using interaction path coverage as the exploration signal to surface coordination failures and emergent failure modes
-- [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md) — Compile each natural-language skill guardrail to a reachability goal over an annotated execution trace and fuzz with LLM-driven mutations; ~30% of deployed marketplace skills violate their own declared rules under benign inputs
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
 
@@ -61,8 +57,6 @@ tags:
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
-- [Chain-of-Verification for Coding Agents](chain-of-verification-coding-agents.md) — Apply factored verification only over the residual claims your test, type checker, and LSP cannot reach — naive intrinsic self-correction overturns correct code as often as it fixes wrong code
-- [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md) — A two-stage rule-miner-then-code-auditor LLM workflow checks code against a natural-language spec; the single-prompt variant systematically misclassifies correct code as non-conforming
 
 ## Rubric Design
 

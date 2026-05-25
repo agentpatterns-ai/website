@@ -23,46 +23,45 @@ aliases:
 
 The study identifies 16 design patterns across five categories:
 
-**Cooperation patterns** (how agents divide and coordinate work):
+**Cooperation** — how agents divide work:
 
-- **Role-Based Cooperation** — agents with distinct functional roles (coder, reviewer, tester) collaborate on a shared task. Most common pattern in the corpus.
-- **Hierarchical Coordination** — orchestrator agents direct worker agents; workers report back structured results.
-- **Peer-to-Peer Collaboration** — agents communicate directly without a designated coordinator.
+- **Role-Based Cooperation** — distinct functional roles (coder, reviewer, tester); most common in the corpus.
+- **Hierarchical Coordination** — orchestrator directs workers; workers report structured results.
+- **Peer-to-Peer Collaboration** — direct agent-to-agent communication, no coordinator.
 
-**Memory patterns** (how agents retain and share state — see [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)):
+**Memory** — how state is retained and shared (see [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)):
 
-- **Shared Memory** — agents read and write to a common knowledge store.
-- **Individual Memory** — each agent maintains private state; sharing is explicit and structured.
-- **External Memory** — agents offload long-term state to databases or files outside the context window.
+- **Shared Memory** — common knowledge store.
+- **Individual Memory** — private per-agent state; sharing is explicit.
+- **External Memory** — long-term state offloaded to databases or files.
 
-**Execution patterns** (how agents sequence and coordinate action):
+**Execution** — how action is sequenced:
 
-- **Sequential Execution** — agents execute one after another in a fixed order.
-- **Parallel Execution** — independent agents execute simultaneously.
-- **Conditional Execution** — downstream agents activate based on upstream results.
+- **Sequential** — fixed order, one after another.
+- **Parallel** — independent agents run simultaneously.
+- **Conditional** — downstream agents activate based on upstream results.
 
-**Verification patterns** (how agents validate outputs):
+**Verification** — how outputs are validated:
 
-- **Peer Review** — a separate agent validates another agent's output.
-- **Consensus Voting** — multiple agents independently produce outputs; the majority or synthesized answer is accepted. See [Voting / Ensemble Pattern](voting-ensemble-pattern.md).
-- **Iterative Refinement** — an agent repeatedly improves its output until a quality criterion is met.
+- **Peer Review** — separate agent validates another's output.
+- **Consensus Voting** — multiple agents produce outputs independently; majority or synthesis wins. See [Voting / Ensemble](voting-ensemble-pattern.md).
+- **Iterative Refinement** — agent improves output until a quality criterion is met.
 
-**Communication patterns** (how agents exchange information):
+**Communication** — how information flows:
 
-- **Structured Message Passing** — agents exchange typed, schema-validated payloads.
-- **Shared Workspace** — agents communicate through shared artifacts (files, tickets, code).
-- **Broadcast** — one agent publishes state changes that all others observe.
-- **Request-Response** — point-to-point query/reply between agents.
+- **Structured Message Passing** — typed, schema-validated payloads.
+- **Shared Workspace** — communication through shared artifacts (files, tickets, code).
+- **Broadcast** — one publishes, all observe.
+- **Request-Response** — point-to-point query/reply.
 
 ## Dominant Design Choices
 
-**Role-Based Cooperation is the most frequently used pattern** — the coder/reviewer/tester split appears across code generation, bug repair, and refactoring ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)).
+From the same corpus ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)):
 
-**Functional Suitability is the primary quality attribute** — designers optimize for output correctness; MAS-level performance, maintainability, and security receive far less attention ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)).
-
-**Code Generation dominates SE tasks** — test generation, bug repair, and refactoring follow as secondary tasks ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)).
-
-**The primary rationale for multi-agent over single-agent** is output quality — parallelism, specialization, and cross-agent verification deliver gains a single generalist agent cannot achieve ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)).
+- **Role-Based Cooperation is most frequent** — the coder/reviewer/tester split spans code generation, bug repair, and refactoring.
+- **Functional Suitability dominates as the optimised quality attribute** — MAS-level performance, maintainability, and security receive far less attention.
+- **Code Generation is the dominant task** — test generation, bug repair, and refactoring follow.
+- **Quality is the rationale for multi-agent over single-agent** — parallelism, specialization, and cross-agent verification deliver gains a generalist cannot.
 
 ## Research Gaps to Watch
 
@@ -125,23 +124,11 @@ During the design review, the team notes they are optimizing for Functional Suit
 
 ## Related
 
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../agent-design/agent-composition-patterns.md)
-- [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
-- [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
-- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [LLM Map-Reduce](llm-map-reduce.md)
-- [CRDT Observation-Driven Coordination](crdt-observation-driven-coordination.md)
-- [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md)
-- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
-- [Sub-Agents Fan-Out](sub-agents-fan-out.md)
-- [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
-- [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md)
-- [Agent Handoff Protocols](agent-handoff-protocols.md)
-- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
-- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
-- [File-Based Agent Coordination](file-based-agent-coordination.md)
-- [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
-- [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
-- [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md)
+- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — direct sibling: topology vocabulary for the same multi-agent design space
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../agent-design/agent-composition-patterns.md) — engineering-level composition patterns these design patterns instantiate
+- [Orchestrator-Worker Pattern](orchestrator-worker.md) — concrete instantiation of Hierarchical Coordination
+- [Fan-Out Synthesis Pattern](fan-out-synthesis.md) — concrete instantiation of Parallel Execution + Consensus Voting
+- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md) — the role design discipline behind Role-Based Cooperation
+- [Agent Handoff Protocols](agent-handoff-protocols.md) — schema/contract layer that makes Structured Message Passing work in practice
+- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Iterative Refinement instantiation across roles
+- [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md) — config-driven expression of the cooperation + execution patterns

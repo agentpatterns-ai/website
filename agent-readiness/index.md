@@ -138,7 +138,7 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 - [`audit-permissions-blast-radius`](audit-permissions-blast-radius.md) — Allow/deny lists, sandboxing
 - [`audit-secrets-in-context`](audit-secrets-in-context.md) — Live credentials in agent-readable files
 - [`audit-lethal-trifecta`](audit-lethal-trifecta.md) — Per-agent map of private data + untrusted content + egress
-- [`audit-llm-pinned-versions`](audit-llm-pinned-versions.md) — Agent-authored dependency manifests scanned for CVE-vulnerable pinned versions; flag pins both CVE-vulnerable and cleanly patch-upgradable, cross-referenced with model knowledge-cutoff dates
+- [`audit-llm-pinned-versions`](audit-llm-pinned-versions.md) — Agent-authored dependency manifests scanned for CVE-vulnerable pinned versions; flag pins both CVE-vulnerable and cleanly patch-upgradable, cross-referenced with model knowledge-cutoff dates ([source finding](../security/llm-pinned-vulnerable-versions.md))
 - [`audit-rules-files-injection`](audit-rules-files-injection.md) — Rules and instruction files scanned for injection markers, classified by trust tier
 - [`audit-subagent-definitions`](audit-subagent-definitions.md) — Sub-agent frontmatter, tools tightness, local trifecta, isolation
 - [`audit-slash-command-catalog`](audit-slash-command-catalog.md) — Model-invocable command surface, side-effect gates, listing budget
@@ -150,7 +150,6 @@ Every audit has a paired bootstrap. Run the audit to find the gaps; run the boot
 - [`audit-confirmation-gate-logs`](audit-confirmation-gate-logs.md) — Consequential-action coverage, gate-decision log fidelity, alert-fatigue indicators, Lies-in-the-Loop dialog rendering, headless-pipeline posture
 - [`audit-mcp-control-plane-bypass`](audit-mcp-control-plane-bypass.md) — Off-protocol egress paths (shell, raw HTTP, DB drivers, headless browser, in-thread side-channels), skipped-plane clients, argument-blind policies
 - [`audit-multitenant-rag-authorization`](audit-multitenant-rag-authorization.md) — RAG retrieval surfaces; tenant-scope at query, post-retrieval, or index level; tenant identifier provenance; ANN-first, ACL-never failure mode; canary-doc red-team probe
-- [`audit-observability-calibration`](audit-observability-calibration.md) — Planted-bug fixture catalogue scored across the five canonical layers (parsing, persistence, IPC, async race, concurrency); diagnosing harness validated as signals-only; calibration gaps mapped to missing instrumentation signals
 - [`audit-action-audit-divergence`](audit-action-audit-divergence.md) — F1-F4 divergence taxonomy walked against the runtime; chokepoint, integrity mechanism, liveness probe, and target validator named or flagged
 - [`audit-trojan-hippo-memory`](audit-trojan-hippo-memory.md) — Long-term memory write surfaces classified by source-trust; trifecta-leg removal validated; cross-session `(1,1,1)` pivot flagged that per-session trifecta audits miss
 - [`audit-agent-built-code-health`](audit-agent-built-code-health.md) — Inventory of agent-authored files, structural-complexity ratio vs repo baseline, single-impl factories, refactoring share, shadow utilities, ADR compliance
@@ -163,7 +162,7 @@ These pages are **specifications and runbooks** — written so an agent can exec
 
 One known limitation:
 
-- **Templates are Claude-Code-shaped.** The bash, paths, and config schemas in the deeper checks and bootstrap templates assume Claude Code conventions. The inventory step detects Cursor, Aider, Copilot, and Gemini, but the runbooks themselves use Claude Code paths. The [Harness Translation Reference](harness-translation.md) maps the main concepts (instruction files, MCP config, lifecycle events, skills, sub-agents) to their equivalents per harness, with primary-source citations and explicit gaps where parallel features don't yet exist.
+- **Templates are Claude-Code-shaped.** The runbooks ship as packaged Claude Code skills under `.claude/skills/agent-readiness-*` so the harness can description-match them at session start. The inventory step detects Cursor, Aider, Copilot, and Gemini, but the deeper checks and bootstrap templates use Claude Code paths and config schemas. The [Harness Translation Reference](harness-translation.md) maps the main concepts (instruction files, MCP config, lifecycle events, skills, sub-agents) to their equivalents per harness, with primary-source citations and explicit gaps where parallel features don't yet exist.
 
 ## Related
 

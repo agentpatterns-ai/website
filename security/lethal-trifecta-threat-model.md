@@ -33,7 +33,7 @@ graph TD
 | **Untrusted input** | Content the agent did not author and cannot fully trust | PR comments, GitHub issues, fetched pages, dependencies |
 | **External communication** | Ability to send data outside the sandbox | HTTP tools, MCP servers with outbound calls |
 
-LLMs cannot reliably distinguish trusted from injected instructions — once untrusted input enters context, it influences subsequent tool calls. The trifecta model shifts defense from prompt-level mitigations to architecture.
+LLMs cannot reliably distinguish trusted from injected instructions — once untrusted input enters context, it influences tool calls. The trifecta shifts defense from prompt-level mitigations to architecture.
 
 ## Remove a Leg
 
@@ -41,7 +41,7 @@ LLMs cannot reliably distinguish trusted from injected instructions — once unt
 
 ### Remove egress (most common for coding agents)
 
-Default-deny outbound network. Most coding tasks — read, analyze, edit, commit — need no network.
+Default-deny outbound network. Most coding tasks need no network.
 
 ```yaml
 # Docker-based sandbox — no network
@@ -68,7 +68,7 @@ Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) m
 |---------|-------------|-----------|
 | **Dual LLM** | Untrusted input | Privileged LLM decides; quarantined LLM handles untrusted content |
 | **[Action-Selector](action-selector-pattern.md)** | Untrusted input | LLM picks from a fixed action set; injected instructions can't add new actions |
-| **Plan-Then-Execute** | Untrusted input | Plan formed before untrusted content is seen; execution is deterministic |
+| **[Plan-Then-Execute](plan-then-execute-web-agents.md)** | Untrusted input | Plan formed before untrusted content is seen; execution is deterministic |
 | **Context-Minimization** | Untrusted input | Only minimum necessary untrusted content enters context |
 | **Code-Then-Execute** | Untrusted input | LLM generates code; sandboxed runtime executes without LLM re-evaluation |
 | **[LLM Map-Reduce](../multi-agent/llm-map-reduce.md)** | Private data | Each instance sees only a partition; no single instance has full data access |
@@ -100,20 +100,20 @@ Three "Yes" values requires architectural mitigation.
 
 Controls ([Harang, 2025](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/)):
 
-- **Network egress restriction** — default-deny with explicit allowlists
-- **File system isolation** — block writes outside the workspace
-- **Config file protection** — prevent modification of `.cursorrules`, `CLAUDE.md`, MCP configs
-- **Secret injection** — short-lived, minimal-permission tokens; never in agent-accessible paths
+- **Network egress** — default-deny with explicit allowlists
+- **File system** — block writes outside the workspace
+- **Config protection** — prevent modification of `.cursorrules`, `CLAUDE.md`, MCP configs
+- **Secret injection** — short-lived, minimal-permission tokens
 
 ## When This Backfires
 
-The trifecta model is a structural heuristic, not a guarantee. Three specific failure conditions:
+The trifecta model is a structural heuristic, not a guarantee:
 
-1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and posting to external endpoints has all three legs by design. Removing one breaks the agent. For unavoidable trifectas, teams need compensating controls — output scanning, rate-limiting, egress-volume anomaly detection.
+1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and posting to external endpoints has all three legs by design. For unavoidable trifectas, add compensating controls — output scanning, rate-limiting, egress anomaly detection.
 
-2. **Partial-leg states are underspecified.** "Read-only egress" (fetch but not post) and "tokenized private data" (real values never in context) sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
+2. **Partial-leg states are underspecified.** "Read-only egress" and "tokenized private data" sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
 
-3. **Leg removal migrates risk.** Tokenizing PII shifts the attack to the token resolver. Sandboxing egress shifts the attack to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
+3. **Leg removal migrates risk.** Tokenizing PII shifts the attack to the token resolver; sandboxing egress shifts it to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
 
 ## Related
 

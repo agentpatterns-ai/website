@@ -24,32 +24,34 @@ Agents running terminal commands face two gaps:
 
 ## Two New Primitives
 
-[VS Code 1.115](https://code.visualstudio.com/updates/v1_115) (April 8, 2026) introduces two capabilities that address these gaps directly.
+[VS Code 1.115](https://code.visualstudio.com/updates/v1_115) (April 8, 2026) introduces two capabilities that address these gaps directly, and [VS Code 1.116](https://code.visualstudio.com/updates/v1_116) (April 15, 2026) generalised both to any visible terminal and flipped the notification setting on by default.
 
 ### `send_to_terminal`
 
-The new `send_to_terminal` tool lets an agent write input to any background terminal — not just foreground ones. This restores interactivity to sessions that have timed out and moved to the background.
+The `send_to_terminal` tool lets an agent write input to any terminal visible in the panel — background terminals that timed out, and as of [VS Code 1.116](https://code.visualstudio.com/updates/v1_116) foreground terminals a human started too. Interactive sessions stop being one-way black boxes.
 
 Concrete use cases:
 
-- **SSH with password prompt** — the foreground terminal times out; the agent uses `send_to_terminal` to deliver the password without restarting the session
+- **SSH with password prompt** — the foreground terminal times out; the agent uses `send_to_terminal` to deliver the password without restarting the session (see [sensitive terminal prompt interception](../security/sensitive-terminal-prompt-interception.md) for keeping the secret out of the model's context when this path is in use)
 - **REPL interaction** — keep a long-running Python or Node REPL alive and issue commands as needed
 - **Dev server with runtime prompts** — some servers prompt for confirmation on file changes; the agent can respond without manual intervention
 - **Test watcher commands** — send filter commands or rerun triggers to a watching test runner
 
-### `backgroundNotifications` (Experimental)
+### `backgroundNotifications`
 
-The `chat.tools.terminal.backgroundNotifications` setting eliminates polling. When enabled, the agent receives an automatic notification when a background terminal command finishes or requires input — including terminals that were foreground and timed out.
+The `chat.tools.terminal.backgroundNotifications` setting eliminates polling. The agent receives an automatic notification when a background terminal command finishes or requires input — including terminals that were foreground and timed out. The setting shipped as experimental in VS Code 1.115 and is [enabled by default in VS Code 1.116+](https://code.visualstudio.com/updates/v1_116), so most users get this behavior without configuration.
 
 The agent can then act immediately: call `get_terminal_output` to review the result, or call `send_to_terminal` to provide the needed input.
 
-**Enable in VS Code settings:**
+**Override the default in VS Code settings:**
 
 ```json
 {
-  "chat.tools.terminal.backgroundNotifications": true
+  "chat.tools.terminal.backgroundNotifications": false
 }
 ```
+
+Set to `true` explicitly only on VS Code 1.115; on 1.116+ it is already on.
 
 ## How the Primitives Compose
 
@@ -109,15 +111,15 @@ The agent recovers those polling turns and receives the signal with lower latenc
 ## Key Takeaways
 
 - `send_to_terminal` gives agents write access to background terminals, enabling recovery from interactive stalls like SSH password prompts and REPL input waits
-- `backgroundNotifications` (experimental, `chat.tools.terminal.backgroundNotifications`) pushes completion and input-needed events to the agent, eliminating `get_terminal_output` polling loops
+- `backgroundNotifications` (`chat.tools.terminal.backgroundNotifications`, default-on as of VS Code 1.116) pushes completion and input-needed events to the agent, eliminating `get_terminal_output` polling loops
 - `get_terminal_output` (read) + `send_to_terminal` (write) + `backgroundNotifications` (event) form a complete async I/O model for background terminal process management
 - Claude Code's `Monitor` tool fills the equivalent role in Claude-based agent workflows by streaming background process stdout as notifications
 
 ## When This Backfires
 
-**Experimental flag instability.** `chat.tools.terminal.backgroundNotifications` is marked experimental in VS Code 1.115. Settings that ship under this flag can be renamed, behaviorally changed, or removed before reaching stable — any workflow built on it needs retesting across minor VS Code updates.
+**Behavior change between minor releases.** The setting shipped experimental in 1.115 and became on-by-default in 1.116 a week later. Workflows that branched on its presence — or that assumed the agent would poll because the setting was off — silently changed shape on upgrade. Treat the notification surface as a moving target across minor VS Code updates and retest the agent loop after each.
 
-**Version lock-in.** `send_to_terminal` and `backgroundNotifications` are VS Code 1.115+ features. Teams pinned to an older VS Code version, or using a different IDE entirely, cannot adopt this pattern. Falling back to `get_terminal_output` polling is still required in those environments.
+**Version lock-in.** `send_to_terminal` and `backgroundNotifications` are VS Code 1.115+ features, and the foreground-terminal extension to `send_to_terminal` requires 1.116+. Teams pinned to an older VS Code version, or using a different IDE entirely, cannot adopt this pattern. Falling back to `get_terminal_output` polling is still required in those environments.
 
 **Notification reliability.** The `backgroundNotifications` event fires when the shell reports process exit or input-wait status. Processes that stall without exiting (hung network calls, deadlocked threads) produce no notification — the agent waits indefinitely unless a separate timeout is enforced. The polling loop the setting replaces can at least detect output staleness.
 
@@ -128,3 +130,6 @@ The agent recovers those polling turns and receives the signal with lower latenc
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
 - [Hooks and Lifecycle Events](hooks-lifecycle-events.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)
+- [Terminal Tool Output Compression](terminal-output-compression.md) — sibling pattern for managing terminal output volume once `get_terminal_output` is wired up
+- [Out-of-Band Hook Notifications via terminalSequence](terminal-sequence-hook-notifications.md) — alternative notification path when an agent needs to signal completion without relying on the chat surface
+- [Future-Based Asynchronous Function Calling](future-based-async-function-calling.md) — broader async-tool-call pattern that `backgroundNotifications` implements for terminals

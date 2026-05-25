@@ -16,23 +16,23 @@ aliases:
 
 ## The Finding
 
-Wang et al. (May 2026) evaluated 10 LLMs on PinTrace, a 1,000-task Python benchmark drawn from Stack Overflow programming questions, and instrumented every generated `requirements.txt`, `pyproject.toml`, and inline `pip install` against the National Vulnerability Database ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)). Two findings frame the risk:
+Wang et al. (May 2026) evaluated 10 LLMs on PinTrace, a 1,000-task Python benchmark drawn from Stack Overflow, checking every generated `requirements.txt`, `pyproject.toml`, and inline `pip install` against the National Vulnerability Database ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
 
-- **36.70%-55.70%** of generated tasks include at least one library at a version with a known CVE.
+- **36.70%-55.70%** of tasks include at least one library at a version with a known CVE.
 - **All ten models converge on the same small set of risky releases** — the failure is systemic, not per-model.
 
-The convergence rules out the "use a better model" remediation. The risk lives in the training distribution, not in the weights.
+Convergence rules out the "use a better model" remediation. The risk lives in the training distribution, not the weights.
 
 ## How Often Models Specify Versions
 
-The specification rate depends on what the model is asked to produce ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
+Specification rate depends on what the model is asked to produce ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
 
 | Surface | Version-specified rate |
 |---|:---:|
 | Direct prompt ("install X to do Y") | 26.83%-95.18% |
 | Manifest file (`requirements.txt`, `pyproject.toml`) | 6.45%-59.19% |
 
-Manifest files — the surface that actually controls reproducible installs — get versions least often. A corroborating study of Developer-ChatGPT conversations found version constraints in only 9% of exchanges and almost always at the user's prompting, not the model's volition ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340)).
+Manifest files — the surface that actually controls reproducible installs — get versions least often. A study of Developer-ChatGPT conversations found version constraints in only 9% of exchanges, almost always at the user's prompting ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340)).
 
 ## Severity and Disclosure Cutoff
 
@@ -43,18 +43,18 @@ When the model does pin a version, the CVE distribution is heavy on the dangerou
 | CVEs rated Critical or High | 62.75%-74.51% |
 | CVEs disclosed before the model's training cutoff | 72.27%-91.37% |
 
-The cutoff result is load-bearing: most vulnerable versions were public knowledge in CVE databases before training. The model selected them anyway because its prior reflects historical co-occurrence in the corpus, not current vulnerability state.
+The cutoff result is load-bearing: most vulnerable versions were public in CVE databases before training. The model picked them anyway because its prior reflects historical co-occurrence in the corpus, not current vulnerability state.
 
 ## The Versions Often Don't Even Install
 
-Functional compatibility tracks vulnerability incidence — the same prior that picks vulnerable versions also picks broken ones ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
+Functional compatibility tracks vulnerability incidence — the same prior that picks vulnerable versions picks broken ones ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
 
 | Check | Pass rate range |
 |---|:---:|
 | Static install (`pip install` succeeds) | 19.70%-63.20% |
 | Dynamic functional test (code runs and matches expected behaviour) | 6.49%-48.62% |
 
-A version string that fails to install is loud and self-correcting. A version string that installs but carries CVE-2023-XXXXX is silent.
+A version string that fails to install is loud and self-correcting. One that installs but carries CVE-2023-XXXXX is silent.
 
 ## Why Models Converge on Risky Versions
 
@@ -68,16 +68,16 @@ graph LR
     style Output fill:#ffd,stroke:#cc6
 ```
 
-The model learns a co-occurrence prior over `(library, version-string)` pairs. Stack Overflow answers and blog posts overrepresent the version that was current when the popular answer was written. The CVE feed has no signal path into this prior, so every model trained on the same corpus inherits the same bias — no amount of prompt engineering reshapes the underlying co-occurrence statistics. The fix has to come from outside the model.
+The model learns a co-occurrence prior over `(library, version-string)` pairs. Stack Overflow answers and blogs overrepresent the version current when the popular answer was written. The CVE feed has no signal path into this prior, so every model trained on the same corpus inherits the same bias — no prompt engineering reshapes the underlying statistics. The fix must come from outside the model.
 
 ## What to Change
 
-The authors find that **externally anchored version constraints** substantially reduce both vulnerability exposure and compatibility failure ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)). Every effective anchor routes around the model's prior — none require the model to know more about CVEs:
+**Externally anchored version constraints** reduce both vulnerability exposure and compatibility failure ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)). Every effective anchor routes around the model's prior:
 
-- **CVE-aware lookup at install time.** Run `pip-audit`, `npm audit`, or [Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-security-updates) as a blocking CI gate. The agent's manifest becomes a hint validated against current CVE state.
+- **CVE-aware lookup at install time.** Run `pip-audit`, `npm audit`, or [Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-security-updates) as a blocking CI gate; the agent's manifest becomes a hint validated against current CVE state.
 - **Curated allowlist or internal mirror.** Artifactory or Nexus filters block known-vulnerable versions at install time, so the agent's pin is dead-on-arrival if it points at a blocked release.
-- **Auto-bump after merge.** Pair with [Renovate](https://docs.renovatebot.com/dependency-pinning/) or Dependabot version updates so safe-at-merge versions get bumped as new CVEs land — the model's prior is permanently outdated and automation fills the gap.
-- **Lock-then-resolve workflow.** Pipe the agent's `requirements.txt` through `pip-compile`, `uv lock`, or `poetry lock` in a clean environment. The same workflow that closes the missing-dependency gap ([Dependency Gap Validation](../verification/dependency-gap-validation.md)) surfaces vulnerable transitive pulls.
+- **Auto-bump after merge.** Pair with [Renovate](https://docs.renovatebot.com/dependency-pinning/) or Dependabot so safe-at-merge versions get bumped as new CVEs land.
+- **Lock-then-resolve workflow.** Pipe the agent's `requirements.txt` through `pip-compile`, `uv lock`, or `poetry lock` in a clean environment — the same workflow that closes the missing-dependency gap ([Dependency Gap Validation](../verification/dependency-gap-validation.md)) surfaces vulnerable transitive pulls.
 
 ## Example
 
@@ -108,7 +108,7 @@ The model picked the version of each library that dominates Stack Overflow tutor
 ## When This Backfires
 
 - **Throwaway prototypes.** A CVE-database step adds latency for code that will never leave a laptop.
-- **Already-locked monorepos.** When `pip-compile` / `uv lock` / `poetry lock` already runs in CI, the agent's pin is a hint that gets resolved against existing lockfile policy; a second LLM-side check duplicates work.
+- **Already-locked monorepos.** When `pip-compile` / `uv lock` / `poetry lock` already runs in CI, the agent's pin is a hint resolved against existing lockfile policy; a second LLM-side check duplicates work.
 - **Air-gapped or curated mirrors.** When Artifactory or Nexus already blocks vulnerable versions at install time, an agent-side step is redundant.
 - **Mature canonical libraries.** For `requests`, `numpy`, `pandas`, the bias toward popular versions often selects safe-enough releases; CVE exposure concentrates in the long tail.
 
@@ -133,7 +133,7 @@ The model picked the version of each library that dominates Stack Overflow tutor
 
 - [arXiv:2605.06279](https://arxiv.org/abs/2605.06279) — Wang et al. (May 2026): "Correct Code, Vulnerable Dependencies: A Large Scale Measurement Study of LLM-Specified Library Versions"
 - [arXiv:2401.16340](https://arxiv.org/abs/2401.16340) — Versions appear in only 9% of Developer-ChatGPT conversations
-- [arXiv:2503.17181](https://arxiv.org/abs/2503.17181) — Library-preference bias, NumPy overuse in 48% of cases
+- [arXiv:2503.17181](https://arxiv.org/abs/2503.17181) — Library-preference bias, NumPy overuse in up to 45% of cases
 - [GitHub Docs — Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-security-updates)
 - [Renovate — Dependency Pinning](https://docs.renovatebot.com/dependency-pinning/)
 - [pip-audit](https://pypi.org/project/pip-audit/)

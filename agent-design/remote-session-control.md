@@ -20,7 +20,7 @@ Two tools shipped this capability within 48 hours in April 2026: Copilot CLI's [
 
 | Pattern | Agent runs | Control surface |
 |---------|-----------|-----------------|
-| **Cloud agent dispatch** ([Mission Control](../tools/copilot/agent-mission-control.md), Agent HQ, Claude Code on the web) | Vendor cloud | Dashboard-native |
+| **Cloud agent dispatch** ([Mission Control](../tools/copilot/agent-mission-control.md), [Agent HQ](../tools/copilot/agent-hq.md), Claude Code on the web) | Vendor cloud | Dashboard-native |
 | **Permission relay** ([channels](../tools/claude/channels-permission-relay.md)) | Local workstation | Approve/deny tool calls only |
 | **Remote session control** (this pattern) | Local workstation | Messages, modes, plans, prompts, permissions |
 

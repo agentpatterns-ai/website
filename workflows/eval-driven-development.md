@@ -9,6 +9,7 @@ tags:
   - testing-verification
   - workflows
 ---
+
 # Eval-Driven Development: Write Evals Before Building Agent Features
 
 > Define evaluation tasks and success criteria before implementing an agent feature so that "done" has an objective definition before any code is written.
@@ -144,6 +145,4 @@ Running this suite against a baseline before any feature code is written produce
 - [LLM-as-Judge Evaluation with Human Spot-Check Review](llm-as-judge-evaluation.md)
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md)
 - [Failure-Driven Iteration for Improving Agent Workflows](failure-driven-iteration.md)
-- [Spec-Driven Development: Build with a Persistent Spec](spec-driven-development.md)
-- [Verification-Centric Development for AI-Generated Code](verification-centric-development.md)
 - [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md) — training module with step-by-step loop walkthrough

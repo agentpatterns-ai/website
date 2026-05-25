@@ -117,6 +117,7 @@ Spaces work well for stable reference material — they underperform in several 
 
 - [Copilot Memory](copilot-memory.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
+- [Shared Agent Context Store API](../../agent-design/shared-agent-context-store-api.md)
 - [Layered Context Architecture](../../context-engineering/layered-context-architecture.md)
 - [Context Budget Allocation](../../context-engineering/context-budget-allocation.md)
 - [Discoverable vs. Non-Discoverable Context](../../context-engineering/discoverable-vs-nondiscoverable-context.md)

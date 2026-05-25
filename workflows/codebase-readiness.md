@@ -8,7 +8,7 @@ aliases:
   - codebase readiness
 ---
 
-# Codebase Readiness for Agents: What Makes Code Agent-Friendly
+# Codebase Readiness for Agents: Agent-Friendly Code
 
 > Agents produce better output in codebases with strong types, comprehensive tests, consistent patterns, and documented decisions — the same qualities that improve code for humans.
 

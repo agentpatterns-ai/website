@@ -1,6 +1,6 @@
 ---
 title: "Agent Environment Bootstrapping for AI Agent Development"
-description: "Deterministically configure an agent's ephemeral environment before it starts working, pre-installing dependencies instead of letting the agent discover them"
+description: "Deterministically configure an agent's ephemeral environment before it starts working, pre-installing dependencies instead of letting the agent discover them."
 tags:
   - agent-design
   - copilot
@@ -94,6 +94,6 @@ Deterministic bootstrapping works because it moves environment reasoning out of 
 - [Repository Bootstrap Checklist](../workflows/repository-bootstrap-checklist.md)
 - [Skeleton Projects as Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Bootstrapping an Agent-Driven Project](bootstrapping-agent-driven-project.md)
-- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)
-- [Headless Claude in CI](headless-claude-ci.md)
+- [Agent-Led Dev-Environment Iteration](agent-led-dev-environment.md)
+- [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
 - [Dependency Gap Validation](../verification/dependency-gap-validation.md)

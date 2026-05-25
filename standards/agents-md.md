@@ -1,6 +1,6 @@
 ---
 title: "AGENTS.md: Project-Level README for AI Coding Agents"
-description: "AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase"
+description: "AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase."
 tags:
   - instructions
   - tool-agnostic
@@ -9,7 +9,7 @@ aliases:
   - AI agent README
 ---
 
-# AGENTS.md: A README for AI Coding Agents
+# AGENTS.md: Project-Level README for AI Coding Agents
 
 > AGENTS.md is an open standard for a project-level instruction file that gives AI coding agents the context they need to work effectively in a codebase.
 
@@ -127,16 +127,11 @@ AGENTS.md degrades in three conditions:
 
 ## Related
 
-- [AGENTS.md as Table of Contents, Not Encyclopedia](../instructions/agents-md-as-table-of-contents.md)
-- [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](../instructions/instruction-file-ecosystem.md)
+- [AGENTS.md as Table of Contents, Not Encyclopedia](../instructions/agents-md-as-table-of-contents.md)
 - [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [llms.txt: Making Your Project Discoverable to AI Agents](llms-txt.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
-- [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [Agent Cards: Capability Discovery Standard](agent-cards.md)
-- [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
-- [Agent-to-Agent (A2A) Protocol](a2a-protocol.md)
-- [Tool Calling Schema Standards](tool-calling-schema-standards.md)
-- [Portable Agent Definitions](portable-agent-definitions.md)
+- [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)

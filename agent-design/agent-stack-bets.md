@@ -36,7 +36,7 @@ This bet is the most aspirational. MCP is the current attempt; no platform deliv
 
 A session that survives a dropped WebSocket is the current bar. The enterprise bar is a mission that survives a quarter — procurement, compliance audits, incident investigations. Anthropic confirms the failure mode: long-running agents without structured durability run out of context mid-implementation and leave the next session guessing ([Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-The bet is durable, cloud-native execution with four guarantees: checkpointing that survives restarts and model-version changes; long-horizon memory with handoff between instances; missions that persist across credential rotations; and first-class HITL pause-and-ask primitives ([Osmani](https://addyo.substack.com/p/the-agent-stack-bet)). See [Agent Harness](agent-harness.md) and [Durable Interactive Artifacts](durable-interactive-artifacts.md).
+The bet is durable, cloud-native execution with four guarantees: checkpointing across restarts and model-version changes; long-horizon memory with handoff between instances; missions that persist across credential rotations; and first-class HITL pause-and-ask primitives ([Osmani](https://addyo.substack.com/p/the-agent-stack-bet)). See [Agent Harness](agent-harness.md) and [Durable Interactive Artifacts](durable-interactive-artifacts.md).
 
 ## Bet 4: Platform, Not Plumbing
 
@@ -46,11 +46,11 @@ Custom memory, bespoke evals, handwritten retries, and homegrown observability a
 
 The four bets are direction for enterprise-scale, long-horizon work. They are premature in three conditions:
 
-- **Small teams with bounded scope.** Two people running one internal agent against one API get a smaller, more portable system from a scoped service credential and a session timeout.
+- **Small teams with bounded scope.** Two people running one internal agent against one API stay smaller and more portable with a scoped service credential and a session timeout.
 - **Short-horizon interactive agents.** When the full lifecycle fits in one HITL session, checkpoint/resume adds latency with no reliability gain.
 - **Pre-product-market-fit.** Iteration speed beats governance before PMF; early platform adoption locks in patterns the product outgrows.
 
-Bet 1 is also incomplete without containment. Industry surveys report 58–59% of organisations have continuous monitoring but only 37–40% have purpose binding or kill-switches ([CSA AI Agent Governance Framework Gap, April 2026](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-governance-framework-gap-20260403/)). Observability pays off only when paired with enforceable containment.
+Bet 1 is incomplete without containment. Industry surveys report 58–59% of organisations have continuous monitoring but only 37–40% have purpose binding or kill-switches ([CSA AI Agent Governance Framework Gap, April 2026](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-agent-governance-framework-gap-20260403/)). Observability pays off only when paired with enforceable containment.
 
 ## Key Takeaways
 

@@ -40,7 +40,7 @@ The diagnostic loop:
 5. **Revise** instructions to address the specific weakness each pattern reveals.
 6. **Re-test** with the same or similar task to verify the fix.
 
-Targeted fixes: explicit dependency markers for sequencing errors; surface implicit knowledge for omissions; tighten scope for additions; recalibrate abstraction level for granularity mismatches; replace ambiguous terms with precise ones for misinterpretations.
+Targeted fixes: add dependency markers for sequencing; surface implicit knowledge for omissions; tighten scope for additions; recalibrate abstraction for granularity; replace ambiguous terms for misinterpretations.
 
 ## Extreme Granularity as a Transparency Strategy
 
@@ -97,6 +97,14 @@ After all code changes, run `pytest tests/auth/` and confirm all tests pass befo
 ```
 
 Re-running the prompt after adding these two sentences produces a plan that matches the intended sequence — catching both errors before any code was written.
+
+## Key Takeaways
+
+- Treat the agent's generated task list as a diagnostic artifact, not just an execution plan — the divergence from your intended steps reveals exactly where instructions failed.
+- Classify divergences by pattern (sequencing, omission, addition, granularity, misinterpretation); each pattern maps to a different fix in your prompt.
+- Request the plan before execution begins via plan mode or an explicit "list every step you plan to take" prompt — silent execution exposes no signal.
+- The technique only pays off when you have a known intended sequence; skip it for exploratory work or single-action tasks where comparison has no baseline.
+- Extreme granularity is a transparency strategy: force the agent to expose design decisions in the plan when the cost of wrong execution is high.
 
 ## Related
 

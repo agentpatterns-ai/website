@@ -19,7 +19,7 @@ aliases:
 
 An agent that can read a codebase can answer onboarding questions interactively — see [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md). The artefact variant is the complement: instead of a live Q&A session that evaporates when the newcomer closes the terminal, the agent emits a single structured document that is reviewed, committed, and reused.
 
-Claude Code released `/team-onboarding` in version 2.1.101 (2026-04-10) to "generate a teammate ramp-up guide from your local Claude Code usage" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The command is one implementation of the artefact pattern. The durable shape is tool-agnostic: any agent that can read the repository and a curated set of usage traces can produce the same output.
+Claude Code shipped `/team-onboarding` in the week of 2026-04-06 to 2026-04-10 "for packaging your setup" ([Claude Code documentation index](https://code.claude.com/docs/llms.txt)). The command is one implementation of the artefact pattern. The durable shape is tool-agnostic: any agent that can read the repository and a curated set of usage traces can produce the same output.
 
 | Dimension | Interactive Q&A | Generated artefact |
 |---|---|---|

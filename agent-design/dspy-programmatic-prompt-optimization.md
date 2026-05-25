@@ -98,6 +98,7 @@ class ReviewPipeline(dspy.Module):
 
 ## Related
 
+- [GEPA: Reflective Prompt Evolution with Pareto Selection](gepa-reflective-prompt-evolution.md) — sibling DSPy optimizer that uses natural-language reflection on traces instead of Bayesian search over instructions
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — iterative refinement loop where an evaluator critiques generator output
 - [Harness Hill-Climbing](harness-hill-climbing.md) — systematic improvement of agent harnesses through metric-driven iteration
 - [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — agents that autonomously improve their own system prompts without external optimization

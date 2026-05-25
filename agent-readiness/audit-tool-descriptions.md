@@ -10,6 +10,8 @@ aliases:
   - tool prompt audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-tool-descriptions/`
+
 # Audit Tool Descriptions
 
 > Enumerate tool and MCP server descriptions, score on trigger phrases, return shape, self-containment, preference signals, and token cost.

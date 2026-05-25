@@ -18,7 +18,7 @@ aliases:
 
 ## What the Protocol Is
 
-Long-running agentic work crosses session boundaries — context resets, compaction events, paused-and-resumed shifts, parallel forks. Without a deterministic protocol on each side of the boundary, the next session pays a *rebuild cost*: the time a new session needs to reach an executable state. The [walkinglabs lecture on continuity loss](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-05-why-long-running-tasks-lose-continuity/index.md) frames the rebuild cost as the load-bearing metric: real-world harnesses can compress it from roughly 15 minutes to roughly 3 minutes by enforcing entry and exit steps that read and write a small set of continuity artefacts.
+Long-running agentic work crosses session boundaries — context resets, compaction events, paused-and-resumed shifts, parallel forks. Without a deterministic protocol on each side of the boundary, the next session pays a *rebuild cost*. The [walkinglabs lecture on continuity loss](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-05-why-long-running-tasks-lose-continuity/index.md) treats the rebuild cost as the load-bearing metric: real-world harnesses compress it from roughly 15 minutes to roughly 3 minutes by enforcing entry and exit steps over a small artefact set.
 
 The protocol has two halves, encoded in `AGENTS.md` so the harness enforces sequence rather than agent discretion:
 
@@ -39,7 +39,7 @@ Source: [walkinglabs lecture 05, AGENTS.md template](https://github.com/walkingl
 
 ## The Three-Artefact Mixed Strategy
 
-The protocol reads and writes three overlapping persistence layers. Each defends against a different failure mode — together they cover what a single artefact cannot.
+The protocol reads and writes three overlapping persistence layers, each defending against a different failure mode.
 
 | Artefact | Captures | Failure mode if missing |
 |----------|----------|--------------------------|
@@ -47,7 +47,7 @@ The protocol reads and writes three overlapping persistence layers. Each defends
 | `DECISIONS.md` | Date, choice, reasoning, **rejected alternatives**, constraints | Silent re-decision — the next session reverses prior choices because the analysis was discarded |
 | Atomic git commits | "Free, automatically versioned state snapshots" — what changed, in what order | Implementation drift — direction silently shifts across sessions |
 
-The lecture's framing: PROGRESS.md is the execution-state file; DECISIONS.md is the rationale file; atomic commits are the verifiable history. The three are non-redundant. PROGRESS.md tells the next session *where* work stopped; DECISIONS.md tells it *why* this path was chosen over the others; the commit history tells it *what* actually changed.
+The three are non-redundant: PROGRESS.md tells the next session *where* work stopped; DECISIONS.md tells it *why* this path was chosen; the commit history tells it *what* actually changed.
 
 ```mermaid
 graph TD
@@ -64,36 +64,36 @@ graph TD
 
 ## Compaction vs Reset: Different Boundaries, Different Mitigations
 
-Two boundary types degrade continuity in different ways, and the protocol applies to both:
+Two boundary types degrade continuity in different ways:
 
-- **Compaction** is in-session summarisation when context fills. The "what" survives in the prose summary; the "why" — single-instance decisions, rejected alternatives — often does not. See [context compression strategies](../context-engineering/context-compression-strategies.md) for the mechanics, and [objective drift](../anti-patterns/objective-drift.md) for the failure mode this enables.
-- **Reset** is full state loss between sessions. The next session opens with a clean context and rebuilds entirely from artefacts. The lecture notes this has an upside: a fresh session has "a clean mental state — no 'I'm running out of time' anxiety" that capable models can develop late in a run.
+- **Compaction** is in-session summarisation when context fills. The "what" survives in the prose summary; the "why" — single-instance decisions, rejected alternatives — often does not. See [context compression strategies](../context-engineering/context-compression-strategies.md) and [objective drift](../anti-patterns/objective-drift.md).
+- **Reset** is full state loss between sessions. The lecture notes an upside: a fresh session has "a clean mental state — no 'I'm running out of time' anxiety" that capable models can develop late in a run.
 
-Model behaviour shifts the calculus. Per the [walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-05-why-long-running-tasks-lose-continuity/index.md), Sonnet 4.5 exhibits "severe context anxiety" that pushes toward reset strategies; Opus 4.5 "greatly diminished" this behaviour, making compaction-focused approaches viable. The protocol is the same in both cases — the artefacts cover both boundary types — but the value-per-clock-cycle is higher on models with worse late-context behaviour.
+Per the [walkinglabs lecture](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-05-why-long-running-tasks-lose-continuity/index.md), Sonnet 4.5 exhibits "severe context anxiety" that pushes toward reset strategies; Opus 4.5 "greatly diminished" this behaviour, making compaction-focused approaches viable. The artefact set covers both boundary types, but delivers more value on models with worse late-context behaviour.
 
-For a complementary primitive that targets the compaction boundary specifically — a goal-shaped artefact written before summarisation fires — see [session recap](session-recap.md). The recap is *what* the agent writes at one specific boundary; the clock-in/clock-out protocol is *when and how* a session reads and writes the broader artefact set.
+For a complementary primitive targeting the compaction boundary — see [session recap](session-recap.md). The recap is *what* the agent writes at one specific boundary; this protocol governs *when and how* a session reads and writes the broader artefact set.
 
 ## The 4-Question Sufficiency Check
 
-Writing artefacts is not the same as writing *useful* artefacts. The protocol fails silently if the clock-out step produces files the next session cannot act on. Four questions grade whether the leave-behind is sufficient. Each maps to a failure mode the lecture documents:
+Writing artefacts is not the same as writing *useful* artefacts. Four questions grade whether the leave-behind is sufficient, each mapping to a lecture failure mode:
 
-1. **Can a fresh agent identify recent work in under 5 minutes?** Targets the rebuild-cost metric directly. If PROGRESS.md, DECISIONS.md, and `git log` together do not surface the last unit of work and its state, the artefact is too thin or too verbose to act as a fast on-ramp.
-2. **Are blockers explicit?** Targets the duplicate-work and verification-gap failure modes. "test_pagination_edge_case returns 500 on empty result sets" is actionable; "tests mostly pass" is not.
-3. **Is the next-step pointer concrete?** Targets implementation drift. A numbered Next Steps list with specific actions ("Fix pagination edge case bug") prevents the next session from re-selecting a goal at random. The lecture flags drift as "like a game of telephone — after ten people pass the message, 'pick me up a coffee' might become 'buy me a coffee machine.'"
-4. **Are decisions and their rejected alternatives preserved?** Targets silent re-decision. The lecture's example: "The previous session spent significant context budget analyzing three approaches and choosing option B. This session's agent doesn't know about that analysis and might re-decide based on incomplete information — potentially choosing option A." DECISIONS.md exists to keep the analysis available.
+1. **Can a fresh agent identify recent work in under 5 minutes?** If PROGRESS.md, DECISIONS.md, and `git log` together do not surface the last unit of work and its state, the artefact is too thin or too verbose to serve as an on-ramp.
+2. **Are blockers explicit?** "test_pagination_edge_case returns 500 on empty result sets" is actionable; "tests mostly pass" is not.
+3. **Is the next-step pointer concrete?** A numbered Next Steps list prevents the next session from re-selecting a goal. The lecture flags drift as "like a game of telephone — after ten people pass the message, 'pick me up a coffee' might become 'buy me a coffee machine.'"
+4. **Are decisions and their rejected alternatives preserved?** The lecture's example: a prior session chose option B after analysing three approaches; the next session, unaware of that analysis, chooses option A. DECISIONS.md keeps the analysis available.
 
-These four are this project's distillation of the lecture's failure-mode analysis, not a verbatim quote. Run them at clock-out time — if any answer is "no," the clock-out is incomplete.
+Run these at clock-out time — if any answer is "no," the clock-out is incomplete.
 
 ## When the Protocol Earns Its Cost
 
-The protocol is overhead. It pays off only under specific conditions:
+The protocol is overhead. It pays off only when:
 
-- **Multi-session work** — there is a next session whose rebuild cost matters
-- **Agents run unsupervised** — no human is in the loop to remember "we picked option B because option A had constraint X"
-- **No continuous progress file already owns the state** — the protocol's clock-out duplicates `todo.md` updates if the agent already maintains one per step ([goal recitation](../context-engineering/goal-recitation.md), [trajectory logging](../observability/trajectory-logging-progress-files.md))
-- **Sessions cross compaction or reset boundaries** — short tasks that complete within a single context window get nothing back from clock-in overhead
+- **Work spans multiple sessions** — there is a next session whose rebuild cost matters
+- **Agents run unsupervised** — no human carries the "we picked option B because option A had constraint X" memory across the boundary
+- **No continuous progress file already owns the state** — clock-out duplicates `todo.md` writes if the agent already updates one per step ([goal recitation](../context-engineering/goal-recitation.md), [trajectory logging](../observability/trajectory-logging-progress-files.md))
+- **Sessions cross compaction or reset boundaries** — short tasks inside a single context window gain nothing from clock-in overhead
 
-Outside these conditions the protocol is pure cost. A solo developer pausing for an hour reads `git log -5` and the file they were editing in 30 seconds — two markdown files plus a `make check` plus a commit cycle adds minutes for marginal benefit.
+Outside these conditions it is pure cost. A developer pausing for an hour reads `git log -5` in 30 seconds; two markdown files plus a `make check` plus a commit cycle adds minutes for marginal benefit.
 
 ## When This Backfires
 

@@ -56,6 +56,48 @@ Splitting verification into rule extraction and per-rule judgment is the same me
 
 LLM static verification covers the gap between a written spec and the implementation when no executable oracle exists for the rules. Once an executable oracle does exist — a test, a type, a lint — prefer it.
 
+## Example
+
+A requirements document for an authentication service contains the paragraph:
+
+> *"The password reset flow must invalidate all existing session tokens for the user. After a successful reset, the user is signed out of all devices and must re-authenticate. Reset tokens expire after 15 minutes and may only be used once."*
+
+**Stage 1 output (rule miner).** The miner emits four discrete rules and one ambiguity:
+
+```yaml
+rules:
+  - id: R1
+    statement: "Successful password reset invalidates all existing session tokens for the user"
+    locator_hints: ["password reset handler", "session store"]
+  - id: R2
+    statement: "After successful reset, user is signed out of all devices"
+    locator_hints: ["device session table", "logout broadcast"]
+  - id: R3
+    statement: "Reset tokens expire 15 minutes after issuance"
+    locator_hints: ["reset token TTL"]
+  - id: R4
+    statement: "Reset tokens may only be redeemed once"
+    locator_hints: ["reset token redemption", "single-use flag"]
+ambiguities:
+  - "'Signed out of all devices' overlaps with R1 — verify whether device sessions are a separate table or derived from session tokens before judging R2 independently"
+```
+
+The ambiguity goes to a human reviewer before Stage 2 runs.
+
+**Stage 2 output (code auditor).** For rule `R4`, the auditor receives only `R4`, the reset-token redemption handler, and the relevant schema — not the rest of the spec or the rest of the code base. It returns:
+
+```yaml
+rule_id: R4
+verdict: FAIL
+evidence:
+  file: auth/reset.py
+  lines: 42-58
+  finding: "redeem_reset_token() marks the token used after the password update succeeds, but the marking is not wrapped in the same transaction — a crash between writes leaves a used token that still appears unredeemed"
+confidence: medium
+```
+
+The verdict goes to a reviewer, who decides whether the race window is acceptable or whether to open a fix ticket. The auditor never sees `R1`–`R3` while judging `R4`, so its recall on token-redemption logic is not anchored on session-invalidation reasoning.
+
 ## Key Takeaways
 
 - The two-stage structure (rule miner, then per-rule code auditor) is what earns the pattern its place. Single-prompt verification of code against a spec misclassifies correct code as non-conforming and degrades further with elaborate prompts.

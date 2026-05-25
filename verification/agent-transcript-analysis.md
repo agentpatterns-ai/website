@@ -7,6 +7,7 @@ tags:
   - workflows
   - observability
 ---
+
 # Using the Agent to Analyze Its Own Evaluation Transcripts
 
 > Agent transcript analysis uses the agent itself to review its own evaluation transcripts — identifying tool selection errors, description ambiguities, and cross-transcript failure patterns that manual review misses at scale.
@@ -133,10 +134,7 @@ Do not rely on agent analysis as the sole quality gate. Use it to narrow the sea
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
-- [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
-- [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md)
-- [Incident-to-Eval Synthesis: Converting Production Failures into Regression Evals](incident-to-eval-synthesis.md)
-- [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)
+- [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
 - [Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations](trajectory-opaque-evaluation-gap.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)

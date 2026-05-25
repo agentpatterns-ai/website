@@ -17,11 +17,11 @@ aliases:
 
 ## Why Single-Pass Elicitation Under-Reports
 
-One frontier model planning and executing an attack in one trajectory produces a narrow distribution. 81% of Opus 4.6-elicited attacks fall into 2 of 5 technical tiers, and 64% share identical structural templates ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Mode collapse hides the long tail the same models can construct when the task is split.
+One frontier model planning and executing an attack in one trajectory produces a narrow distribution. 81% of Opus 4.6-elicited attacks fall into 2 of 5 technical tiers, and 64% share identical structural templates ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). The broader red-teaming literature reports the same shape: attacker LMs mode-collapse even with explicit diversity rewards, so single-pass elicitation under-samples the attack space ([Lee et al., 2024](https://arxiv.org/abs/2405.18540)). Splitting the task surfaces the long tail.
 
-An Opus-4.5 monitor catches 94.9% of single-pass elicited attacks but only 60.3% of attacks produced by the full decomposed pipeline against the same 2,644-trajectory benchmark ([MonitoringBench](https://arxiv.org/abs/2605.09684)). The gap is the under-reporting.
+An Opus-4.5 monitor catches 94.9% of single-pass attacks but only 60.3% of full-pipeline attacks against the same 2,644-trajectory benchmark ([MonitoringBench](https://arxiv.org/abs/2605.09684)) — that gap is the under-reporting.
 
-This is distinct from [controlled benchmark rewriting](controlled-benchmark-rewriting-safety-judgment.md), which rewrites existing trajectories, and from [RL-trained automated red teamers](../security/rl-automated-red-teamers.md), which train one end-to-end attacker. Decomposition addresses a third gap: the conceive-execute trade-off within one model in one prompt.
+This is distinct from [controlled benchmark rewriting](controlled-benchmark-rewriting-safety-judgment.md) (rewriting existing trajectories) and [RL-trained automated red teamers](../security/rl-automated-red-teamers.md) (training one end-to-end attacker). Decomposition addresses a third gap: the conceive-execute trade-off within one prompt.
 
 ## The Conceive-Execute Gap
 
@@ -60,11 +60,9 @@ Attacks refined against three development monitors (GPT-5 Nano, GPT-5, Claude Op
 | Reconnaissance-agent strategy, no refinement | 73.5-82.7% |
 | Full pipeline (strategy + execution + refinement) | 60.3% |
 
-The 34.6-point spread is the conceive-execute gap. A monitor evaluation using only single-pass elicitation reports 94.9%; the same monitor against the same threat model catches only 60.3% of attacks the same models could construct under decomposition.
+The 34.6-point spread is the conceive-execute gap — same monitor, same threat model, same models, different elicitation methodology. Weaker monitors (GPT-5-tier and below) show steeper cliffs; the 60.3% Opus 4.5 figure is the upper bound of detection in this setting, not a floor ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)).
 
-Weaker monitors (GPT-5-tier and below) show steeper cliffs — refined attacks break them at low effort. The 60.3% Opus 4.5 figure is the upper bound of detection in this setting, not a floor ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)).
-
-Stepwise monitors expose a separate problem: per-action FPR calibrated at 1% compounds to 6.7-17.4% trajectory-level FPR ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Reporting only per-action FPR understates production noise.
+Stepwise monitors expose a separate problem: per-action FPR calibrated at 1% compounds to 6.7-17.4% trajectory-level FPR ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Independent work on weak-to-strong monitoring sees the same pattern — TPR is hard to hold at low FPR, and monitor scaffolding matters more than the model itself ([Bhatt et al., 2025](https://arxiv.org/abs/2508.19461)). Reporting only per-action FPR understates production noise.
 
 ## When This Applies
 
@@ -82,10 +80,10 @@ Skip when:
 
 ## Failure Modes
 
-- **BashArena-specific transfer** — the 94.9% → 60.3% drop is measured against bash tool-use monitors. Replicate in the target environment before quoting externally.
-- **Refinement budget** — each run consumes reconnaissance, execution, and refinement calls. Scope which attack tiers get the full pipeline and which run cheaper single-pass.
-- **Monitor-feedback grounding leaks** — strategy generation with monitor feedback uses signal from the monitor being scored. Use a held-out monitor for final scoring.
-- **Persuasion is the long tail** — frontier monitors detect suspicious actions but mis-calibrate when the trajectory contains plausible justification ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Lexical-cue refinement misses this category; run explicit persuasion-evasion variants.
+- **BashArena-specific transfer** — the drop is measured against bash tool-use monitors. Replicate in the target environment before quoting externally.
+- **Refinement budget** — each run consumes reconnaissance, execution, and refinement calls. Scope which attack tiers get the full pipeline.
+- **Monitor-feedback grounding leaks** — strategy generation using the monitor being scored leaks signal. Use a held-out monitor for final scoring.
+- **Persuasion is the long tail** — frontier monitors mis-calibrate when the trajectory contains plausible justification ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Lexical-cue refinement misses this category; run explicit persuasion-evasion variants.
 
 ## Example
 

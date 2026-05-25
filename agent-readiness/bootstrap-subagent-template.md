@@ -10,12 +10,14 @@ aliases:
   - sub-agent template generator
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-subagent-template/`
+
 # Bootstrap Sub-Agent Template
 
 > Generate a sub-agent file with tight frontmatter, scoped tools, isolation defaults, and prompt-injection guards. Paired remediation for [`audit-subagent-definitions`](audit-subagent-definitions.md) findings.
 
 !!! info "Harness assumption"
-    Targets `.claude/agents/<name>.md` (Claude Code) or `.cursor/agents/<name>.md` (Cursor). Adapt path and frontmatter schema for other harnesses.
+    Targets `.claude/agents/<name>.md` (Claude Code [sub-agents](../tools/claude/sub-agents.md)) or `.cursor/agents/<name>.md` (Cursor). Adapt path and frontmatter schema for other harnesses.
 
 The template is shaped by [`sub-agents-fan-out`](../multi-agent/sub-agents-fan-out.md) and [`subagent-schema-level-tool-filtering`](../multi-agent/subagent-schema-level-tool-filtering.md). It produces a sub-agent that passes [`audit-subagent-definitions`](audit-subagent-definitions.md) by construction — minimum-viable tools, explicit isolation, trigger and negative trigger in description.
 

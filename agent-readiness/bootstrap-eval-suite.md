@@ -11,6 +11,8 @@ aliases:
   - skill eval suite scaffold
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-eval-suite/`
+
 # Bootstrap Eval Suite
 
 > Detect units to test, mine real signals, scaffold paired cases, generate runner and CI gate, ship the incident-to-eval template.

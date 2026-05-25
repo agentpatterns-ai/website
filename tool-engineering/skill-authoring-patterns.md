@@ -1,6 +1,6 @@
 ---
 title: "Skill Authoring Patterns: Description to Deployment"
-description: "Practical patterns for building, testing, and troubleshooting agent skills — the categories they fall into, how to write descriptions that trigger reliably"
+description: "Practical patterns for building, testing, and troubleshooting agent skills — categories, description craft, implementation shapes, and gotchas."
 tags:
   - instructions
   - agent-design
@@ -223,22 +223,22 @@ Below is the core of a Sequential Workflow Orchestration skill (Pattern 1) for t
 
 Asking the agent "When would you use the linear-issue-manager skill?" after saving the file confirms the description is being read correctly — the agent quotes the trigger phrases back verbatim, revealing any gaps.
 
+## Key Takeaways
+
+- The `description` field is the load gate — write it as `[what] + [when] + [capabilities]` with trigger phrases users would actually say, and add negative triggers to prevent over-firing.
+- Write instructions as a delta from baseline model behaviour: only team conventions, domain rules, and edge cases the model would otherwise get wrong.
+- Default new skills to CLI-first — script-backed with the `SKILL.md` as a thin wrapper — so logic is testable, debuggable, and composable; reserve inline-shell for trivial one-liners and pure-reference for templates and taxonomies.
+- A `## Gotchas` section is the highest-signal content: build it incrementally from real failures, naming both the mistake and the correct alternative.
+- Test along three axes — triggering, functional correctness, and performance (tool calls, messages, tokens with vs. without the skill) — and use a `PreToolUse` hook to log invocation frequency for under- or over-triggering signal.
+- Skill patterns over-engineer when applied to one-off tasks, fast-changing APIs, or large libraries where descriptions get truncated; review third-party skills for prompt-injection risk before installing.
+
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
-- [Skill as Knowledge](skill-as-knowledge.md)
 - [Skill Library Evolution](skill-library-evolution.md)
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md)
-- [On-Demand Skill Hooks](on-demand-skill-hooks.md)
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)
-- [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md)
-- [Plugin and Extension Packaging](../standards/plugin-packaging.md)
-- [Credential Hygiene for Agent Skill Authorship](../security/credential-hygiene-agent-skills.md)
-- [Narrow Task Instructions](../security/task-scope-security-boundary.md)
-- [Loop Detection](../observability/loop-detection.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
-- [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
-- [Runbooks as Agent Instructions](../workflows/runbooks-as-agent-instructions.md)
-- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
+- [Credential Hygiene for Agent Skill Authorship](../security/credential-hygiene-agent-skills.md)

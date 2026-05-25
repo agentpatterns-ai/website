@@ -1,6 +1,6 @@
 ---
 title: "Tool Engineering Principles for AI Agent Development"
-description: "Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions"
+description: "Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions."
 aliases:
   - Tool Descriptions as Onboarding
   - Mistake-Proofing for Agent Tools
@@ -11,6 +11,7 @@ tags:
   - cost-performance
   - source:opendev-paper
 ---
+
 # Tool Engineering
 
 > Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
@@ -20,7 +21,7 @@ tags:
 
 ## Tools as the Agent's Interface to the World
 
-Agent quality is bounded by tool quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong tool selection, incorrect parameters, misinterpreted output — are a recurring failure mode in agent loops.
+Agent quality is bounded by tool quality. No prompt compensates for a tool interface the model cannot use reliably. Tool interface defects — wrong selection, incorrect parameters, misinterpreted output — recur as a failure mode in agent loops.
 
 Per [Anthropic's effective agents post](https://www.anthropic.com/engineering/building-effective-agents), tool design deserves the same investment as prompt engineering.
 
@@ -149,14 +150,8 @@ Apply the full pattern to stable, shared tools that are called repeatedly across
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — deep dive on structural constraint patterns
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
-- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
-- [Unix CLI as the Native Tool Interface](unix-cli-native-tool-interface.md)
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline
-- [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — structured errors for agent tool calls
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — naming, schema design, and error handling for MCP-exposed tools
-- [Self-Healing Tool Routing](self-healing-tool-routing.md) — cost-weighted routing and failure recovery for agent tool calls

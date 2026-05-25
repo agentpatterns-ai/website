@@ -59,17 +59,17 @@ The main model never re-receives the todo list per turn. The background model wr
 
 Three failure modes recur, and the [release notes](https://code.visualstudio.com/updates/v1_119) hint at all three by shipping opt-in with an explicit override:
 
-- **Plan drift from misclassification.** The small model sees a forwarded transcript, not the main model's reasoning. A pivot, an invalidated step, or a branched sub-task can be misread as completion. The main model then reads a desynced list and trusts it — and every downstream decision compounds the error.
-- **Short sessions.** When the todo list is small and infrequently updated, coordination overhead exceeds token savings; the simpler single-model architecture is cheaper, more correct, and easier to debug.
+- **Plan drift from misclassification.** The small model sees a forwarded transcript, not the main model's reasoning. A pivot or branched sub-task can be misread as completion; every downstream decision then compounds the error.
+- **Short sessions.** When the todo list is small and infrequently updated, coordination overhead exceeds token savings; the simpler single-model architecture is cheaper and easier to debug.
 - **High-correctness work.** Security review, refactors, migrations — any context where a desynced plan is worse than a slightly more expensive prompt — should keep plan ownership on the main model. The `#todo` bypass exists for exactly this case.
 
-[Cursor's Codex harness post-mortem](https://cursor.com/blog/codex-model-harness) documents the broader risk: reasoning-trace handoffs between models can lose information one of the models depended on. The small model's view of "what's done" is mediated by whatever the harness chose to forward.
+[Cursor's Codex harness post-mortem](https://cursor.com/blog/codex-model-harness) documents the broader risk: reasoning-trace handoffs between models can lose information one model depended on. The small model's view of "what's done" is mediated by whatever the harness forwarded.
 
 ## Composition
 
 The pattern presupposes — and pairs with — patterns already in the catalogue: [cognitive reasoning vs execution](cognitive-reasoning-execution-separation.md) (the broader brain/hands split), [bootstrap reasoning–execution model routing](../agent-readiness/bootstrap-reasoning-execution-routing.md) (the per-role model pinning it depends on), [goal monitoring and progress tracking](goal-monitoring-progress-tracking.md) (durable progress files solve the *across-session* version of the same problem; this pattern solves the *within-session* version), and [cost-aware agent design](cost-aware-agent-design.md) (the broader route-by-complexity rule).
 
-For sessions long enough that both apply, the background todo agent maintains the in-flight list while a session-end progress file durably records what was done — the two are not alternatives.
+For sessions long enough that both apply, the background todo agent maintains the in-flight list while a session-end progress file durably records what was done — the two are not alternatives. Where the coordination boundary is a tool call rather than an out-of-band loop, see [Specialized SLM as Agent Tool](specialized-slm-as-agent-tool.md) for the nested-tool variant of small-model offload.
 
 ## Example
 
@@ -104,3 +104,4 @@ That invocation reverts to the standard behaviour for the request — the main m
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)
+- [Specialized SLM as Agent Tool](specialized-slm-as-agent-tool.md)

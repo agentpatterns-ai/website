@@ -142,16 +142,11 @@ If the derived state diverges from the filesystem, `esaa verify` reports which e
 
 ## Related
 
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
-- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
-- [Rollback-First Design](../agent-design/rollback-first-design.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
 - [Verification Ledger](../verification/verification-ledger.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
+- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
+- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
+- [Rollback-First Design](../agent-design/rollback-first-design.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-- [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md)
-- [Circuit Breakers for Agent Loops](circuit-breakers.md)
-- [Making Application Observability Legible to Agents](observability-legible-to-agents.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
-- [Agent Debugging: Diagnosing and Fixing Bad Agent Output](agent-debugging.md)
-- [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](agent-debug-log-panel.md)

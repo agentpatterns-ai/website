@@ -1,5 +1,5 @@
 ---
-title: "Evaluation-Driven Development for Building Agent Tools"
+title: "Evaluation-Driven Development for Agent Tools"
 description: "Build agent tools through a prototype-evaluate-analyze-iterate loop using real-world tasks, metrics, and transcript analysis to drive targeted improvements."
 aliases:
   - Eval-Driven Tool Development
@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - workflows
 ---
+
 # Evaluation-Driven Development for Agent Tools
 
 > Build agent tools in a prototype-evaluate-analyze-iterate loop rather than optimizing in the dark.
@@ -170,7 +171,5 @@ Re-running the same tasks after v2 shows accuracy rising to 80% and average tool
 - [Golden Query Pairs as Continuous Regression Tests](../verification/golden-query-pairs-regression.md)
 - [Grade Agent Outcomes, Not Execution Paths](../verification/grade-agent-outcomes.md)
 - [Use the Agent Itself to Analyze Evaluation Transcripts](../verification/agent-transcript-analysis.md)
-- [Test-Driven Agent Development](../verification/tdd-agent-development.md)
 - [Verification-Centric Development](verification-centric-development.md)
-- [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md)
 - [Prototype Before Optimizing](prototype-before-optimizing.md)

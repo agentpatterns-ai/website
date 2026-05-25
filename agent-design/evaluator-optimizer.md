@@ -39,7 +39,7 @@ The evaluator role can be:
 - **Same model, different system prompt** — lower cost, but the evaluator may inherit some of the generator's blind spots
 - **Different model** — higher cost, but fully independent perspective; useful when the generator and evaluator require different strengths
 
-Evaluation criteria should be explicit and ideally machine-checkable: tests pass, lint is clean, the specification is satisfied. The evaluator returns structured output — a JSON verdict with specific issues — so the generator can act on precise feedback rather than parsing prose.
+Evaluation criteria must be explicit and machine-checkable: tests pass, lint is clean, the specification is satisfied. The evaluator returns structured output — a JSON verdict with specific issues — so the generator can act on precise feedback, not parsed prose.
 
 ## Termination Condition
 
@@ -48,7 +48,7 @@ Every loop needs a clear termination condition to prevent runaway iteration and 
 - **Primary:** evaluator returns PASS
 - **Fallback:** maximum round limit reached; escalate or return best-effort output. Anthropic's [reference implementation](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/evaluator_optimizer.ipynb) ships an unbounded `while True:` loop that only exits on PASS, so production callers must impose their own cap. A starting limit of 3 is common, but the right cap depends on task complexity and cost budget.
 
-Without a round limit, a loop where the evaluator and generator have conflicting assumptions will run until budget exhaustion. The fallback is not a failure; it is a signal that the criteria or the generator need adjustment.
+Without a round limit, conflicting assumptions between roles run the loop to budget exhaustion. The fallback is not a failure — it signals that the criteria or generator need adjustment.
 
 ## When to Apply
 
@@ -58,7 +58,7 @@ The pattern produces measurable improvement when:
 - Iterative refinement genuinely improves quality (the generator can act on the evaluator's feedback)
 - The task does not have a single correct answer that would make iteration redundant
 
-For coding tasks, the pattern maps naturally: generator produces code → evaluator runs tests → failures feed back to generator → repeat. Tests provide a machine-checkable termination condition, making the loop predictable and auditable.
+For coding tasks, the pattern maps naturally: generator produces code → evaluator runs tests → failures feed back → repeat. Tests give a machine-checkable termination condition, making the loop predictable and auditable.
 
 ## When This Backfires
 
@@ -115,5 +115,4 @@ Each iteration incurs generator + evaluator costs, so N rounds cost roughly 2N×
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Controlling Agent Output](controlling-agent-output.md)
-- [Agent Harness](agent-harness.md)
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)

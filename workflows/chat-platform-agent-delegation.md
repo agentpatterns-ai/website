@@ -115,7 +115,11 @@ Skip it when the agent's IDE or PR-comment entry point already covers the workfl
 ## Related
 
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — the issue-assignment surface that chat delegation parallels
+- [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — parallel dispatch surface where the ticket, not the channel, is the principal
+- [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md) — the same cloud-agent surface invoked via REST/webhook instead of `@mention`
+- [Public-Channel Agent Work](public-channel-agent-work.md) — the visibility policy layered on top of chat delegation to force conversations to channels everyone can read
 - [In-Thread Side-Channel](in-thread-side-channel.md) — adjacent same-session bounded sub-conversation, orthogonal mechanism
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model this pattern concentrates
 - [Audit Lethal Trifecta](../agent-readiness/audit-lethal-trifecta.md) — the onboarding-gate procedure that should run before merging chat integrations
 - [Agent Governance Policies](agent-governance-policies.md) — enterprise-level controls for chat-platform agent surfaces
+- [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — the GitHub-native cloud agent surface chat delegation often targets

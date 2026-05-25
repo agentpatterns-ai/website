@@ -155,15 +155,11 @@ Prefer manual or semi-automated updates when the documentation surface is small,
 
 ## Related
 
-- [Continuous Agent Improvement](continuous-agent-improvement.md)
-- [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md)
-- [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md)
-- [Copilot Coding Agent](../tools/copilot/coding-agent.md)
-- [Content Pipeline](content-pipeline.md)
-- [Continuous Triage](continuous-triage.md)
-- [Safe Outputs Pattern](../security/safe-outputs-pattern.md)
-- [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — tiered compression that long-running documentation agents rely on to stay within context limits
+- [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md) — parent paradigm; continuous documentation is one of its six workflow categories
+- [Continuous Agent Improvement](continuous-agent-improvement.md) — sibling continuous pattern applied to agent capability rather than docs
+- [Entropy Reduction Agents](entropy-reduction-agents.md) — scheduled background agents that also surface documentation drift alongside architectural debt
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md) — applies the same drift-detection pattern to agent instruction files
 - [Content & Skills Audit Workflow](content-skills-audit.md) — automated staleness detection across documentation and skill libraries
+- [Safe Outputs Pattern](../security/safe-outputs-pattern.md) — the constraint mechanism that keeps documentation agents to reviewable PRs rather than autonomous commits
+- [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) — orchestration layer referenced throughout this page
 - [Headless Claude in CI](headless-claude-ci.md) — running Claude in CI pipelines with safe, non-interactive execution
-- [Shared Link Registry for Docs Sites](link-registry.md) — single-source external URL management so drift-prone links update in one place

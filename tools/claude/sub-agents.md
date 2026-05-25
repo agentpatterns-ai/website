@@ -39,7 +39,7 @@ Key frontmatter fields: `name`, `description`, `tools` (restrict which tools are
 
 The `Agent` tool accepts a `model` parameter for per-invocation model selection (e.g. `model: opus`, `model: sonnet`, `model: haiku`). This allows the parent to route individual sub-agent invocations to a specific model regardless of the default.
 
-The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-7`) are accepted. See [Choose a model](https://code.claude.com/docs/en/sub-agents#choose-a-model) for the full resolution order.
+The `model` field in the sub-agent definition sets the default; the per-invocation parameter overrides it. Both `model` aliases (`sonnet`, `opus`, `haiku`) and full model IDs (e.g., `claude-opus-4-6`) are accepted.
 
 ## Properties
 
@@ -52,7 +52,7 @@ The `model` field in the sub-agent definition sets the default; the per-invocati
 
 ## SDK Sub-Agents
 
-The [Agent SDK](https://code.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline via the `agents` option — no filesystem dependency needed. Claude spawns them via the `Agent` tool.
+The [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/subagents) supports programmatic sub-agents defined inline via the `agents` option — no filesystem dependency needed. Claude spawns them via the `Agent` tool.
 
 ## When to Use
 
@@ -94,7 +94,7 @@ Sub-agents achieve isolation because each runs in its own fresh context window w
 
 ## When This Backfires
 
-Sub-agents add overhead that outweighs the benefit for small tasks. When the work takes fewer tokens to complete than it takes to describe and delegate, spawning a sub-agent is slower and more expensive than doing the work inline.
+Sub-agents add overhead that outweighs the benefit for small tasks. When the work takes fewer tokens to complete than it takes to describe and delegate, spawning a sub-agent is slower and more expensive than doing the work inline. Anthropic's own research-system retrospective reports that [multi-agent systems use roughly 15× more tokens than a single-thread chat](https://www.anthropic.com/engineering/built-multi-agent-research-system), so the value of the delegated task has to justify that markup.
 
 Debugging is harder because the parent only sees the final result. If a sub-agent silently misunderstands the task or produces a wrong output, the parent has no visibility into the intermediate steps that led there — the isolation that prevents context pollution also prevents inspection.
 
@@ -112,5 +112,8 @@ Sub-agents cannot communicate with each other. If the task requires agents to ex
 - [Agent Teams](agent-teams.md)
 - [Agent SDK](agent-sdk.md)
 - [Batch and Worktrees](batch-worktrees.md)
+- [Extension Points](extension-points.md) — where sub-agents sit among Claude Code's extension surfaces
+- [Code Review](code-review.md) — common sub-agent use case for scoped review tasks
+- [Hooks Lifecycle](hooks-lifecycle.md) — how sub-agent invocations interact with PreToolUse / PostToolUse / SessionStart events
 - [Agent Composition Patterns](../../agent-design/agent-composition-patterns.md)
 - [Orchestrator-Worker](../../multi-agent/orchestrator-worker.md)

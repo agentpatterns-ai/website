@@ -10,6 +10,8 @@ aliases:
   - agent loop detection scaffold
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-loop-detector-hook/`
+
 # Bootstrap Loop Detector Hook
 
 > Detect the harness, generate a PostToolUse hook that tracks per-file edit counts in a session, escalate from nudge to pause to block on threshold, persist counts safely.

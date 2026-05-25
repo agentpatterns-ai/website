@@ -13,7 +13,7 @@ tags:
 
 ## The File-System Contract
 
-Cross-IDE plugin discovery is a one-way file-system contract between an install surface and its consumers. The install surface (a CLI, a package manager, an MDM channel) writes plugin manifests and assets to a well-known per-user path. Every consuming surface (IDE, headless agent, second IDE) reads that path on startup and on filesystem-change events. No coordination protocol runs between the surfaces — the path is the protocol.
+Cross-IDE plugin discovery is a one-way file-system contract. The install surface (a CLI, a package manager, an MDM channel) writes plugin manifests to a well-known per-user path. Every consumer (IDE, headless agent, second IDE) reads that path on startup and on filesystem-change events. No coordination protocol runs between them — the path is the protocol.
 
 ```mermaid
 graph LR

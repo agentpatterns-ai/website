@@ -16,9 +16,9 @@ aliases:
 
 ## The Problem
 
-AI coding agents optimize for functional correctness. Without explicit security constraints, they produce code that works but contains vulnerabilities — SQL injection, hardcoded secrets, missing input validation. Veracode's [2025 GenAI Code Security Report](https://www.veracode.com/wp-content/uploads/2025_GenAI_Code_Security_Report_Final.pdf) found 45% of AI-generated samples introduced a known security flaw. Post-hoc review catches these at high cost: rework cycles, delayed builds, and compounding security debt.
+AI coding agents optimize for functional correctness. Without explicit security constraints, they produce code that works but contains vulnerabilities — SQL injection, hardcoded secrets, missing input validation. Veracode's [2025 GenAI Code Security Report](https://www.veracode.com/wp-content/uploads/2025_GenAI_Code_Security_Report_Final.pdf) found 45% of AI-generated samples introduced a known security flaw. Post-hoc review catches these at high cost: rework, delays, and compounding security debt.
 
-The alternative: embed security rules in the specification layer so agents never generate the vulnerable pattern in the first place.
+The alternative: embed security rules in the specification layer so agents never generate the vulnerable pattern.
 
 ## Constitution Structure
 
@@ -53,7 +53,7 @@ Each principle contains:
 | `pattern` | How to implement it — the positive pattern, not just the prohibition |
 | `rationale` | Why — agents follow constraints better when they understand the reasoning ([Marri, 2026](https://arxiv.org/abs/2602.02584)) |
 
-The two principles above target real weakness classes with independent evidence of prevalence. CWE-89 (SQL injection) sits at rank 3 on the [2024 CWE Top 25](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html). Hardcoded credentials are disproportionately common in AI-assisted code: GitGuardian's [State of Secrets Sprawl 2026](https://www.helpnetsecurity.com/2026/03/27/gitguardian-exposed-credentials-risk-report/) reports that repositories with active Copilot usage leak secrets at roughly 40% above the public-repo baseline.
+The two principles above target real weakness classes. CWE-89 (SQL injection) sits at rank 3 on the [2024 CWE Top 25](https://cwe.mitre.org/top25/archive/2024/2024_cwe_top25.html). Hardcoded credentials are disproportionately common in AI-assisted code: GitGuardian's [State of Secrets Sprawl 2026](https://www.helpnetsecurity.com/2026/03/27/gitguardian-exposed-credentials-risk-report/) reports Copilot-active repositories leak secrets at roughly 40% above the public-repo baseline.
 
 ## Progressive Disclosure: Select Relevant Principles
 

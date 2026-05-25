@@ -1,6 +1,6 @@
 ---
 title: "Permission-Gated Custom Commands for AI Agent Development"
-description: "Pre-approve which tools a Claude Code slash command may use without prompting by declaring an allowed-tools list in its frontmatter — reducing interruptions while narrowing the expected surface"
+description: "Declare an allowed-tools list in a Claude Code command's frontmatter to pre-approve specific tools, cutting prompts and signaling the expected surface."
 aliases:
   - allowed-tools restriction
   - tool allowlisting for commands
@@ -15,9 +15,9 @@ tags:
 
 ## The Default Exposure Problem
 
-Custom commands in Claude Code execute with the same tool permissions as the current session. A `/review-pr` command that only needs to read files and run `git diff` has implicit access to write files, delete, and run arbitrary shell commands. This is fine when you authored the command. It becomes a problem when sharing commands with a team or running one in an unfamiliar context.
+Custom commands in Claude Code inherit the session's full tool permissions. A `/review-pr` command that only reads files and runs `git diff` still has implicit access to `Write`, delete, and arbitrary shell. Fine when you authored it; a problem when sharing with a team or running it in an unfamiliar context.
 
-[Claude Code skills documentation](https://code.claude.com/docs/en/skills) describes the `allowed-tools` frontmatter field as the mechanism for pre-approving specific tools and signaling the expected surface — reducing silent invocations of unintended tools.
+[Claude Code skills documentation](https://code.claude.com/docs/en/skills) describes the `allowed-tools` frontmatter field as the mechanism for pre-approving specific tools — reducing silent invocations of unintended ones.
 
 ## Declaring Allowed Tools
 
@@ -67,7 +67,7 @@ This removes the command from Claude's automatic context. It only runs when you 
 
 ## Sharing Commands with a Team
 
-Commands checked into `.claude/commands/` (or `.claude/skills/<name>/SKILL.md`) are available to everyone who clones the repository. The `allowed-tools` declaration travels with the command file, so the team gets safe defaults without per-invocation review. The command author's intent is machine-readable, not just a comment in the Markdown.
+Commands checked into `.claude/commands/` (or `.claude/skills/<name>/SKILL.md`) ship to everyone who clones the repo. The `allowed-tools` declaration travels with the file, so the team gets safe defaults without per-invocation review — author intent is machine-readable, not just a comment.
 
 ## Layering with Session-Level Permissions
 
@@ -97,15 +97,6 @@ Command-level `allowed-tools` operates on top of session-level permissions, not 
 - [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Protecting Sensitive Files](./protecting-sensitive-files.md)
-- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
+- [Sandbox Rules for Harness-Owned Tools](./sandbox-rules-harness-tools.md)
 - [SKILL.md Frontmatter Reference](../tool-engineering/skill-frontmatter-reference.md)
 - [Defense-in-Depth Agent Safety](./defense-in-depth-agent-safety.md)
-- [Task Scope as a Security Boundary](./task-scope-security-boundary.md)
-- [Dual-Boundary Sandboxing](./dual-boundary-sandboxing.md)
-- [Scoped Credentials via Proxy](./scoped-credentials-proxy.md)
-- [Sandbox Rules for Harness-Owned Tools](./sandbox-rules-harness-tools.md)
-- [Human-in-the-Loop Confirmation Gates](./human-in-the-loop-confirmation-gates.md)
-- [Safe Outputs Pattern](./safe-outputs-pattern.md)
-- [Tool Signing and Signature Verification](./tool-signing-verification.md)
-- [Secrets Management for Agent Workflows](./secrets-management-for-agents.md)
-- [Enterprise Agent Hardening](./enterprise-agent-hardening.md)

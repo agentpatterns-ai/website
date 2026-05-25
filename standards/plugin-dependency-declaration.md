@@ -11,11 +11,11 @@ tags:
 
 > Plugins declare dependencies on other plugins in their manifest; the host harness validates them at install, refuses to disable a plugin that another enabled plugin depends on, and prunes orphaned auto-installs — the agent-capability analogue of `apt` over `dpkg`.
 
-A flat plugin set duplicates shared skills, MCP servers, and hooks. Plugin dependency declaration is the next layer on top of [plugin packaging](plugin-packaging.md) — a `dependencies` array in `plugin.json` plus host semantics for install, enable, disable, and prune. Claude Code v2.1.143 (2026-05-15) is the reference implementation: deps are validated, transitive deps auto-install, `disable` refuses with a chain hint, and `prune` removes orphans ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+A flat plugin set duplicates shared skills, MCP servers, and hooks. Plugin dependency declaration is the next layer on top of [plugin packaging](plugin-packaging.md) — a `dependencies` array in `plugin.json` plus host semantics for install, enable, disable, and prune. Claude Code v2.1.143 (2026-05-15) is the reference implementation: deps are validated, transitive deps auto-install, `disable` refuses with a hint, and `prune` removes orphans ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
 ## When the Dependency Graph Earns Its Complexity
 
-A dependency edge adds error surface — `range-conflict`, `dependency-version-unsatisfied`, `no-matching-tag`, `cross-marketplace` ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). It pays back when the plugin set is large enough that duplication is real cost (roughly five and up), upstream follows semver, and marketplaces are reachable. Otherwise a flat set is cheaper.
+A dependency edge adds error surface — `range-conflict`, `dependency-version-unsatisfied`, `no-matching-tag`, `cross-marketplace` ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). It pays back when the set is large enough that duplication is real cost (roughly five plugins and up), upstream follows semver, and marketplaces are reachable. Otherwise a flat set is cheaper.
 
 ## Declaring a Dependency
 
@@ -50,7 +50,7 @@ Refusal forces acknowledgement: the operator disables the dependent plugin first
 
 ## Pruning Orphaned Auto-Installs
 
-`claude plugin prune` (v2.1.121, aliased `autoremove`) removes auto-installed dependencies that no installed plugin requires; user-installed plugins are never pruned ([Plugins reference — plugin prune](https://code.claude.com/docs/en/plugins-reference)). Pass `--prune` to `plugin uninstall` to cascade in one step. The auto-installed-versus-user-installed provenance bit recorded at install time is what lets prune distinguish the two.
+`claude plugin prune` (v2.1.121, aliased `autoremove`) removes auto-installed dependencies that no installed plugin requires; user-installed plugins are never pruned ([Plugins reference — plugin prune](https://code.claude.com/docs/en/plugins-reference)). Pass `--prune` to `plugin uninstall` to cascade. The provenance bit recorded at install time lets prune distinguish the two.
 
 | Error code | Meaning | Fix |
 |-----------|---------|-----|
@@ -63,7 +63,7 @@ Errors surface in `claude plugin list`, `/plugin`, and `/doctor`; programmatic c
 
 ## Why It Works
 
-The host harness owns the registry of every component a plugin contributes — a skill is a record the harness consults on every prompt, not a file the user sources. Registry ownership lets the same lookup that resolves a skill on invocation walk the dependency graph at disable time. Install-time provenance lets `prune` distinguish safe-to-remove from off-limits ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). This is what `apt autoremove` does against dpkg's database ([Linux Journal: Debian package dependency management](https://www.linuxjournal.com/content/debian-package-dependency-management-handling-dependencies)), applied to agent capabilities.
+The host harness owns the registry of every component a plugin contributes — a skill is a record the harness consults on every prompt, not a file the user sources. Registry ownership lets the same lookup that resolves a skill on invocation walk the dependency graph at disable time. Install-time provenance lets `prune` distinguish safe-to-remove from off-limits ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). This is `apt autoremove` against dpkg's database ([Linux Journal: Debian package dependency management](https://www.linuxjournal.com/content/debian-package-dependency-management-handling-dependencies)), applied to agent capabilities.
 
 ## When This Backfires
 
@@ -121,6 +121,7 @@ When `deploy-kit` is later uninstalled, `claude plugin uninstall deploy-kit --pr
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [Per-Plugin Token-Cost Attribution via `claude plugin details`](../observability/plugin-token-cost-attribution.md)
 - [Pre-Install Context-Cost Projection in Plugin Marketplaces](marketplace-cost-projection.md)
+- [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](pre-install-plugin-transparency.md)
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](cross-ide-plugin-discovery.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)

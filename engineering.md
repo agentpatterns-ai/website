@@ -26,7 +26,7 @@ Patterns for reviewing agent-generated code — tiered review strategies, diff-b
 
 ## [Verification](verification/index.md)
 
-Testing and validation strategies for agent output — TDD workflows, pass@k metrics, deterministic guardrails, behavioral testing, and trajectory analysis.
+Testing and validation strategies for agent output — TDD workflows, [pass@k metrics](verification/pass-at-k-metrics.md), deterministic guardrails, behavioral testing, and trajectory analysis.
 
 ## [Security](security/index.md)
 

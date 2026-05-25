@@ -125,6 +125,9 @@ The fixed prompt and explicit `event_id` close two failure modes at once: no pay
 
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — The chat invocation principal — `@mention` in Slack or Teams with a human in the thread.
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — The issue invocation principal — assigning a GitHub issue to an agent and receiving a draft PR.
+- [Issue-Tracker Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — The fourth invocation surface — GitHub Issues, Jira, and Linear as the agent control plane.
+- [Multi-Repo and No-Repo Automation Templates](multi-repo-no-repo-automation-templates.md) — Caller-side fan-out built on this single-repo dispatch primitive; reuses the dedupe and sanitisation discipline across attached-repo sets.
 - [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md) — Moving work between a cloud sandbox and a local clone after the agent finishes.
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Self-directed agent loop that selects, executes, and iterates without external dispatch.
 - [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — How to keep the principal trail visible in git history after the agent commits.
+- [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — The cloud-agent surface this dispatch pattern targets when delegating to Copilot.

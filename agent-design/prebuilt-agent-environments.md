@@ -127,3 +127,4 @@ The `npm ci` step is gone from the hot path; what remains is the working-tree cl
 - [Cursor Self-Hosted Cloud Agents](../tools/cursor/self-hosted-cloud-agents.md) — when the runner runs on your infra, image governance is yours end-to-end
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the permissions surface that bounds what a baked image can reach
 - [Long-Running Agents: Durability, Checkpoints, and Resumability](long-running-agents.md) — the operational shape that makes cold-start amortisation matter
+- [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — the GitHub Actions runner that benefits most from prebuilt images

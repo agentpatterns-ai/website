@@ -20,7 +20,7 @@ aliases:
 
 Cross-vendor routing and ensembling assume vendor diversity buys behavioural diversity. Distillation breaks that assumption: a student trained on a teacher's trajectories inherits the teacher's *non-mandatory* preferences (when to verify after writing, which optional tools to invoke) alongside task capability. Benchmark scores measure success rate, not behavioural overlap, so the inheritance is invisible at the leaderboard layer.
 
-Yang et al. propose two metrics that isolate non-mandatory behaviour, evaluated across 18 models from 8 providers on τ-Bench and τ²-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)).
+Yang et al. propose two metrics that isolate non-mandatory behaviour, evaluated across 18 models from 8 providers on τ-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)) — τ-Bench is the substrate (Yao et al., [arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)).
 
 ## Response Pattern Similarity (RPS)
 

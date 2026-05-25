@@ -146,6 +146,5 @@ The `operationId` becomes the tool name, the parameter schema transfers directly
 - [Plugin Packaging](plugin-packaging.md)
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
-- [A2A Protocol](a2a-protocol.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)

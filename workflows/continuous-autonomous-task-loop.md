@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Continuous Autonomous Task Loop"
 description: "Run a self-directed agent loop that reads a task backlog, executes each item via a ReAct inner loop, commits results, and repeats with fresh context per task."
@@ -10,6 +9,8 @@ aliases:
   - continuous task loop
   - autonomous task loop
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Continuous Autonomous Task Loop
 
@@ -71,9 +72,17 @@ This pattern trades oversight for momentum. It is not appropriate for explorator
 ## Required Guardrails
 
 - **Iteration cap** — set `MAX_ITERATIONS` before starting. Without it, a backlog that never empties (due to tasks that keep failing and resetting) will run indefinitely.
+- **Token-budget cap** — set an unattended spend ceiling per run. A 50-iteration loop on a medium codebase routinely consumes \$50–\$100+ in API credits, and stuck loops burn that budget on failed attempts; one 2026 incident saw an unattended scaling agent generate a \$60k/month cluster bill. [Source: [Autonomous Coding Agents: The Real 2026 Guide](https://www.agentik-os.com/blog/autonomous-coding-agents-complete-guide)]
 - **Version control per task** — one commit per completed task provides rollback points. Without this, a bad task leaves the repository in an unknown state.
 - **Validate with a small batch first** — run 3–5 tasks manually before enabling unattended mode. Catch backlog design failures before they replicate across 50 iterations.
 - **Execution monitoring** — stream JSON output or log iteration counts so you can detect unexpected behavior without watching every step.
+
+### Structural-Coherence and Sycophancy Risks
+
+Two failure modes do not surface in the per-task commit log and only appear after many iterations:
+
+- **Architectural drift from fresh context** — each iteration starts blind to prior structural decisions. GitClear's 2025 analysis of 211 million lines of AI-assisted code found copy-pasted code rose from 8.3% to 12.3% of changes while refactoring dropped from 25% to under 10% — a pattern that compounds in fresh-context loops, where every iteration sees only the local task and not the architecture it implies. Mitigate with an explicit architecture-anchor file (e.g., `ARCHITECTURE.md`) read on every iteration, and periodic human review for structural coherence. [Source: [The Ralph Wiggum Loop: Autonomous Code Generation with a Fresh Context (codecentric, 2026)](https://www.codecentric.de/en/knowledge-hub/blog/the-ralph-wiggum-loop-autonomous-code-generation-with-a-fresh-context)]
+- **Sycophancy / "overbaking" loops** — autonomous loops can enter a please-the-user spiral in which the agent rewrites working code to chase a vague success signal, degrading the codebase rather than improving it. The backlog-design rules above (atomic, unambiguous tasks) are the primary defence; a verifying test suite or explicit acceptance criterion per task closes the loop. [Source: [Agentic Design Patterns Catalog 2026 — Augment Code](https://www.augmentcode.com/guides/agentic-design-patterns)]
 
 ## Permissions Consideration
 
@@ -137,6 +146,6 @@ The `--no-cache` flag ensures a genuinely clean context each cycle. Non-zero exi
 - [Agent Loop Middleware](../agent-design/agent-loop-middleware.md) — post-loop safety nets and pre-call injection patterns
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — human-triggered per-task delegation; the supervised alternative
 - [Parallel Agent Sessions](parallel-agent-sessions.md) — horizontal scaling via simultaneous sessions; complements this pattern's sequential execution
-- [Agent Turn Model](../agent-design/agent-turn-model.md) — the ReAct inner loop mechanics
-- [Worktree Isolation](worktree-isolation.md) — filesystem isolation for each iteration
-- [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md) — designing tasks for safe retry across loop iterations
+- [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that produces the atomic, unambiguous tasks this loop requires
+- [Headless Claude in CI](headless-claude-ci.md) — non-interactive flags (`-p`, `--max-turns`) that complement `--dangerously-skip-permissions` for fully unattended runs
+- [The Plan-First Loop](plan-first-loop.md) — the design-before-code variant for non-trivial tasks where this pattern's mechanical execution is unsafe

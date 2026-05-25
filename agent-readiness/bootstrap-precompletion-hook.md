@@ -10,6 +10,8 @@ aliases:
   - completion gate scaffold
 ---
 
+Packaged as: `.claude/skills/agent-readiness-bootstrap-precompletion-hook/`
+
 # Bootstrap Pre-Completion Hook
 
 > Detect existing CI checks, generate a Stop-event hook that runs them, ship a checklist with severity and remediation hints, wire into the harness.

@@ -11,6 +11,8 @@ aliases:
   - agent commit narration audit
 ---
 
+Packaged as: `.claude/skills/agent-readiness-audit-pr-narrative-quality/`
+
 # Audit PR Narrative Quality
 
 > Audit the reasoning trail on agent-authored PRs — issue specs, PR descriptions, commit messages — for the structured-narrative discipline that empirically lifts merge rates and review throughput.

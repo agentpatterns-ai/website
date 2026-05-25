@@ -192,6 +192,18 @@ To upgrade, a team bumps the submodule tag and re-runs the copy step. The CI dif
 
 **Ignoring the local layer.** Distributing central standards without allowing local overrides. Teams work around the system instead of with it. Use [layered instruction scopes](../instructions/layered-instruction-scopes.md) so local files can extend or override central defaults.
 
+## When This Backfires
+
+Centralisation is not free. The pattern earns its cost in mid-sized and larger organizations where drift across teams is a real problem. In other settings it can hurt more than it helps:
+
+- **Single-team or single-repo organizations.** A team running one product does not have a drift problem to solve. Standing up a separate canonical repo, generators, and CI sync infrastructure adds operational weight to a workflow that could live in one AGENTS.md edited in place.
+- **Fast-moving experimental work.** When conventions change weekly — early greenfield, research code, prototype-heavy teams — the coordination overhead of a central PR, review, and downstream sync cycle outpaces the local-edit-and-go loop. Standards should stabilise before they centralise.
+- **Teams that resist abstraction to canonical form.** Some conventions are tacit, contextual, or contested. Forcing them into a single canonical document tends to either flatten the nuance or generate a "consensus version" no team actually follows. The [ETH Zurich AGENTS.md evaluation](https://arxiv.org/abs/2602.11988) found that LLM-generated or over-prescriptive context files reduced task success by roughly 3% and increased inference cost by over 20% — more rules, applied uniformly, is not the same as better rules.
+- **Catalogues that outgrow their selection mechanism.** Mega-repositories of shared skills accumulate quality, ownership, and discovery problems at scale — an [ecosystem analysis of 673 skills across 41 repositories](https://dacharycarey.com/2026/03/13/agent-skill-mega-repo-woes/) reported 22% failing structural validation and majority-token waste on non-standard files. Central distribution without a curation and trust mechanism shifts the drift problem from "many copies" to "one bloated source".
+- **CI and governance capacity is missing.** The pattern depends on automated validation downstream. Without a working CI pipeline that diffs local files against the pinned canonical source, the central repo becomes advisory — and an advisory standard drifts the same way no standard does.
+
+If the steelman fits the org, leave the standards local until at least one of these conditions changes.
+
 ## Key Takeaways
 
 - Maintain a single canonical repository for organization-wide agent standards; distribute to downstream repos through automated mechanisms.
@@ -205,7 +217,6 @@ To upgrade, a team bumps the submodule tag and re-runs the copy step. The CI dif
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the open standard for project-level agent instruction files
 - [Encode Project Conventions in Distributed AGENTS.md Files](../instructions/agents-md-distributed-conventions.md) — what to encode in distributed instruction files
 - [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md) — global-to-project-to-directory instruction layering
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md) — skills, agents, and commands as independent layers
 - [Plugin and Extension Packaging](../standards/plugin-packaging.md) — packaging agent capabilities for distribution
 - [Agent Skills Standard](../standards/agent-skills-standard.md) — portable SKILL.md format for shared skills
 - [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)

@@ -185,8 +185,6 @@ The agent opens a single PR with two surgical edits to CLAUDE.md. A human review
 - [Entropy Reduction Agents](entropy-reduction-agents.md)
 - [Getting Started: Instruction Files](getting-started-instruction-files.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
-- [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
-- [CLI, IDE, GitHub Context Ladder](cli-ide-github-context-ladder.md)
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Continuous AI-Agentic CI/CD](continuous-ai-agentic-cicd.md)
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)

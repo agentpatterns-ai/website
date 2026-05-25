@@ -11,6 +11,7 @@ aliases:
   - initializer-coding agent pattern
   - two-phase agent harness
 ---
+
 # Agent Harness: Initializer and Coding Agent
 
 > Structure long-running agent work as an initializer that prepares the environment and a coding agent that resumes reliably from any prior session — with eager construction, a structured execution cycle, and git-based handoff artifacts keeping every session on track.
@@ -130,27 +131,11 @@ Only after this orientation does the agent select the highest-priority incomplet
 
 ## Related
 
-- [Feature List Files](../instructions/feature-list-files.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Agent Memory Patterns](agent-memory-patterns.md)
-- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
-- [Harness Engineering](harness-engineering.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Persona as Code](persona-as-code.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Subtask-Level Memory](subtask-level-memory.md)
-- [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
-- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Harness Engineering](harness-engineering.md) — broader engineering discipline that frames this pattern
+- [Session Initialization Ritual](session-initialization-ritual.md) — the initializer's per-task setup procedure
+- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — how `claude-progress.txt` and commits become an audit trail
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — formalises the cross-session handoff mechanism
+- [Feature List Files](../instructions/feature-list-files.md) — the priority-ordered task list the coding agent reads
+- [Worktree Isolation](../workflows/worktree-isolation.md) — companion workflow for parallel session safety
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — consensus structure that extends the initializer/worker pattern across autonomous cycles
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — full three-primitive virtualization that generalizes the initializer/worker split

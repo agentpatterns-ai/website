@@ -119,6 +119,7 @@ Total tokens loaded: ~400 (2 tool definitions). Upfront registration of all 120 
 ## Related
 
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md)
 - [MCP Client-Server Architecture](mcp-client-server-architecture.md)
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md)
 - [Progressive Disclosure Agents](../agent-design/progressive-disclosure-agents.md)

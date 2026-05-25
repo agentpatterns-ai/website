@@ -1,5 +1,5 @@
 ---
-title: "Defending Against Code Injection in Multi-Agent Systems"
+title: "Code Injection Defence in Multi-Agent Pipelines"
 description: "Multi-agent pipelines are vulnerable to code injection. A coder-reviewer-tester plus security agent architecture achieves the highest resilience."
 tags:
   - agent-design
@@ -58,7 +58,7 @@ Human review at the merge gate remains the reliable final safeguard. The securit
 
 ## Why It Works
 
-Three structural properties drive effectiveness. Narrow-scope specialization: a generalist reviewer competes across quality, style, and security objectives, raising the false positive rate on legitimate code; a single-purpose security agent tuned only for injection detection avoids this trade-off. Early-gate rejection: code blocked before the reviewer and tester never reaches downstream agents, eliminating cross-agent propagation rather than reducing it. Context isolation: passing a structured AST instead of raw source removes the mechanism behind the 0%→71.95% attack success jump — comment-embedded few-shot examples can't reach the security agent's context window.
+Three structural properties drive effectiveness. Narrow-scope specialization: a generalist reviewer competes across quality, style, and security objectives, raising false positives; a single-purpose security agent avoids this trade-off. Early-gate rejection: code blocked before the reviewer and tester never reaches downstream agents, eliminating cross-agent propagation. Context isolation: passing a structured AST instead of raw source removes the mechanism behind the 0%→71.95% jump — comment-embedded few-shot examples can't reach the security agent's context.
 
 ## When This Backfires
 
@@ -156,26 +156,11 @@ Key decisions in this config:
 
 ## Related
 
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Prompt Injection Resistant Agent Design](prompt-injection-resistant-agent-design.md)
-- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
-- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
-- [Blast Radius Containment](blast-radius-containment.md)
-- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md)
-- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
-- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
-- [Tool Signing and Signature Verification](tool-signing-verification.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
-- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
-- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md)
-- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
-- [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)
-- [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
+- [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
+- [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
+- [Committee Review Pattern](../code-review/committee-review-pattern.md)
+- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

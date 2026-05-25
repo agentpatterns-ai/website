@@ -18,17 +18,17 @@ aliases:
 
 ## The Three Evolution Types
 
-A code-changing commit produces three kinds of test work, formalised by TEBench, the first project-level test evolution benchmark. [Source: [TEBench (arxiv:2605.06125)](https://arxiv.org/abs/2605.06125)]
+A code-changing commit produces three kinds of test work, formalised by TEBench, the first project-level test evolution benchmark, extending prior co-evolution research on obsolete-test maintenance burden. [Source: [TEBench (arxiv:2605.06125)](https://arxiv.org/abs/2605.06125)] [Source: [Revisiting Co-evolution, ACM TOSEM](https://dl.acm.org/doi/10.1145/3607183)]
 
-- **Test-Breaking** — an existing test fails to compile or execute after the change; the developer modifies it to restore correctness
-- **Test-Stale** — an existing test still passes after the change but no longer meaningfully validates the updated behavior; the developer revises it to reflect the new semantics
-- **Test-Missing** — newly introduced behavior has no corresponding test; the developer adds one
+- **Test-Breaking** — fails to compile or execute after the change; the developer fixes it
+- **Test-Stale** — still passes but no longer validates the updated behavior; the developer revises it
+- **Test-Missing** — new behavior has no corresponding test; the developer adds one
 
-In TEBench's 314 Java tasks drawn from 10 Defects4J projects, 69.7% carry multiple labels and 14.3% exhibit all three simultaneously. Real-world test evolution is predominantly multi-faceted, not a single flavour. [Source: [TEBench §2.3](https://arxiv.org/abs/2605.06125)]
+In TEBench's 314 tasks across 10 Defects4J projects, 69.7% carry multiple labels and 14.3% exhibit all three. [Source: [TEBench §2.3](https://arxiv.org/abs/2605.06125)]
 
 ## The Shared Performance Ceiling
 
-TEBench evaluated seven configurations spanning Claude Code, Codex CLI, and OpenCode across six base models (Claude Sonnet 4.6, ChatGPT 5.3 Codex, Qwen3.5, GLM-5, Kimi-K2.5, DeepSeek-V3.2). All seven converge on identification F1 between 45.7% and 49.4% — less than four points apart. Five OpenCode backbones span 3.6 F1 points; the same Claude Sonnet 4.6 backbone across Claude Code and OpenCode differs by 1.2 points. The convergence is the load-bearing finding: the bottleneck is the task formulation, not the framework or the model. [Source: [TEBench §4.1, Table 5](https://arxiv.org/abs/2605.06125)]
+TEBench evaluated seven configurations across Claude Code, Codex CLI, and OpenCode (six base models including Sonnet 4.6, ChatGPT 5.3 Codex, GLM-5, DeepSeek-V3.2). All converge on identification F1 of 45.7%–49.4%. The same Sonnet 4.6 differs by only 1.2 points across Claude Code and OpenCode — the bottleneck is the task formulation, not the model. [Source: [TEBench §4.1, Table 5](https://arxiv.org/abs/2605.06125)]
 
 | Configuration | Overall F1 | Test-Stale F1 |
 |---------------|-----------:|--------------:|
@@ -42,10 +42,10 @@ TEBench evaluated seven configurations spanning Claude Code, Codex CLI, and Open
 
 ## Why the Loop Fails on Stale and Missing
 
-The three industrial agent frameworks all run a reactive **execute-fail-fix loop**: discover affected tests by running the suite, patch what fails, terminate when "all tests pass and coverage is adequate." This loop succeeds on Test-Breaking by construction — the failure signal locates the test. It structurally cannot address the other two types: [Source: [TEBench §4.4](https://arxiv.org/abs/2605.06125)]
+The three frameworks all run a reactive **execute-fail-fix loop**: run the suite, patch failures, terminate when "all tests pass and coverage is adequate." This succeeds on Test-Breaking by construction — the failure signal locates the test. It structurally cannot address the other two types: [Source: [TEBench §4.4](https://arxiv.org/abs/2605.06125)]
 
-- **Stale tests pass.** No execution signal flags a test that still compiles and asserts but whose comparison logic now masks the change. The agent has no internal mechanism that triggers on "technically passing but semantically obsolete."
-- **Missing tests do not exist.** There is nothing to compile or run, so the loop offers no entry point. Coverage gaps would surface them, but only if the agent reasons proactively about behavioral contracts.
+- **Stale tests pass.** No execution signal flags a test whose comparison logic now masks the change.
+- **Missing tests do not exist.** Nothing to run, so the loop has no entry point. Coverage gaps surface them only if the agent reasons proactively about behavioural contracts.
 
 ```mermaid
 graph TD
@@ -57,11 +57,11 @@ graph TD
     F[Missing: does not exist] -.->|Never triggers| C
 ```
 
-In a TEBench case study on jsoup, Codex CLI fixed all three Test-Breaking failures across packages but never updated the stale `unwrap()` test — `TextUtil.stripNewlines()` masked the formatting change, the test passed, the loop terminated. [Source: [TEBench §4.4](https://arxiv.org/abs/2605.06125)]
+Independent co-evolution research reaches the same diagnosis: execution signals miss obsolete tests, motivating purpose-built detectors like CEPROT, derived from a study of 1,500 Java projects. [Source: [Hu et al., "Identify and Update Test Cases When Production Code Changes," ASE 2023](https://ieeexplore.ieee.org/document/10298577/)]
 
 ## The Stale-as-Poison-Factor Effect
 
-Test-Stale's average F1 is approximately 36%, more than 20 points below Test-Breaking. The drop also propagates into mixed-type tasks. Identification F1 by type composition, averaged across the seven LLM configurations: [Source: [TEBench §4.3, Table 7](https://arxiv.org/abs/2605.06125)]
+Test-Stale averages ~36% F1, over 20 points below Test-Breaking — and the drop propagates into mixed tasks. F1 by type composition, averaged across the seven configurations: [Source: [TEBench §4.3, Table 7](https://arxiv.org/abs/2605.06125)]
 
 | Type Composition | N | Identification F1 |
 |---|---:|---:|
@@ -72,31 +72,31 @@ Test-Stale's average F1 is approximately 36%, more than 20 points below Test-Bre
 | Stale + Missing | 105 | 34.8% |
 | Stale-only | 33 | 33.1% |
 
-When Stale enters the combination, identification F1 collapses — except when Missing enters too. The authors interpret this as Missing's explicit "behaviour was added" signal partially compensating for Stale's signal absence.
+When Stale enters the combination, F1 collapses — except when Missing enters too. Missing's explicit "behaviour was added" signal partially compensates for Stale's signal absence.
 
 ## Executability Is Not Update Quality
 
-Even when agents identify the right tests, the patches diverge from how developers actually update tests. Across the seven configurations: [Source: [TEBench §4.2, Table 6](https://arxiv.org/abs/2605.06125)]
+Even when agents identify the right tests, patches diverge from developer updates. Across the seven configurations: [Source: [TEBench §4.2, Table 6](https://arxiv.org/abs/2605.06125)]
 
-- Executability: 87.7% to 99.2%
-- Token-Jaccard modification similarity to ground truth: 36.4% to 70.9%
-- Within-configuration gap: 33.7 to 48.9 percentage points
+- Executability: 87.7%–99.2%
+- Token-Jaccard similarity to ground truth: 36.4%–70.9%
+- Within-configuration gap: 33.7–48.9 percentage points
 
-The pattern argues against treating "tests pass" as a proxy for "tests are right." A 99% executable patch can still embed assertion shapes, scope decisions, and behavioural framings that diverge substantially from developer intent.
+A 99% executable patch can still embed assertion shapes and behavioural framings that diverge from developer intent.
 
 ## Counterweights
 
-- **Heuristic dependency tracing caps at 66% Recall.** Even exhaustive one-hop AST analysis misses about a third of affected tests, because dependencies operate through multi-hop chains, shared state, or implicit semantic coupling. Static analysis alone is not the answer. [Source: [TEBench §4.1](https://arxiv.org/abs/2605.06125)]
-- **Scope is Java + Defects4J + Maven + JaCoCo.** Results may not transfer to dynamic languages or I/O-heavy code where coverage itself is unreliable. Configurations also ran with default settings and a single run per task; the 47% ceiling is the natural-run number, not a tuned upper bound. [Source: [TEBench §3.1, §6](https://arxiv.org/abs/2605.06125)]
-- **Recall-over-Precision imbalance is universal.** Every configuration over-predicts; on single-method tasks agents predict ~3.6 methods on average, collapsing Precision to 13.6%. Agents apply a roughly constant effort budget regardless of true scope. [Source: [TEBench §4.1, §4.3](https://arxiv.org/abs/2605.06125)]
+- **Heuristic dependency tracing caps at 66% Recall.** One-hop AST misses a third of affected tests via multi-hop chains and shared state. [Source: [TEBench §4.1](https://arxiv.org/abs/2605.06125)]
+- **Scope is Java + Defects4J + Maven + JaCoCo.** Results may not transfer to dynamic languages or I/O-heavy code. The 47% ceiling is the natural-run number, not a tuned upper bound. [Source: [TEBench §3.1, §6](https://arxiv.org/abs/2605.06125)]
+- **Recall-over-Precision is universal.** On single-method tasks agents predict ~3.6 methods on average, collapsing Precision to 13.6%. [Source: [TEBench §4.1, §4.3](https://arxiv.org/abs/2605.06125)]
 
 ## What This Implies for Practice
 
-The execute-fail-fix loop catches breaking tests and misses roughly two-thirds of stale ones. Closing the gap is a harness problem, not a model upgrade:
+The loop catches breaking tests and misses two-thirds of stale ones — a harness problem, not a model upgrade:
 
-- **Prompt for proactive semantic review** — make the agent enumerate behaviour changes from the diff and challenge each passing test against the new behaviour before running anything
-- **Add coverage-delta gates** — compare line and branch coverage of changed production methods before and after; unchanged coverage on changed code is a Stale or Missing signal
-- **Decouple termination from "all tests pass"** — the TEBench prompt's stop condition was the structural cause of the failure mode; replace it with explicit per-type completion checks
+- **Prompt for proactive semantic review** — enumerate behaviour changes from the diff and challenge each passing test against the new behaviour
+- **Add coverage-delta gates** — unchanged coverage on changed code is a Stale or Missing signal
+- **Decouple termination from "all tests pass"** — replace it with explicit per-type completion checks
 
 ## Example
 

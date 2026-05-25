@@ -13,36 +13,36 @@ aliases:
 
 # Programmatic Agent Session Export via `claude agents --json`
 
-> `claude agents --json` prints every live background Claude Code session as a JSON array, turning the agent view's TUI inventory into a scriptable substrate for status bars, dashboards, and fleet-level checks.
+> `claude agents --json` prints every live background Claude Code session as a JSON array, turning the agent view's TUI inventory into a scriptable substrate for status bars, dashboards, and fleet checks.
 
-`claude agents --json` is the read-only inventory surface for background Claude Code sessions — the fields that answer "what is running, where, and in what state" without scraping the TUI or reading per-session state files directly.
+`claude agents --json` is the read-only inventory surface for background sessions — it answers "what is running, where, in what state" without scraping the TUI or reading state files.
 
 ## When the Inventory Primitive Earns Its Complexity
 
-Use `claude agents --json` only when at least one of these holds — otherwise the agent view TUI already groups sessions by state, surfaces pull request status, and filters by `a:<name>`, `s:<state>`, or `#<pr>` ([agent view docs](https://code.claude.com/docs/en/agent-view#monitor-sessions-with-agent-view)):
+Use `claude agents --json` only when one of these holds — otherwise the agent view TUI already groups sessions by state, surfaces PR status, and filters by `a:<name>`, `s:<state>`, or `#<pr>` ([agent view docs](https://code.claude.com/docs/en/agent-view#monitor-sessions-with-agent-view)):
 
 - Two or more background sessions per machine, where a status bar beats opening `claude agents`
-- A scripted check that gates new dispatches on whether a named session is still working
+- A scripted check that gates dispatches on whether a named session is still working
 - A tmux-resurrect or shell-restart integration that reattaches to surviving sessions
-- A local webhook that fires when a specific session transitions out of `working`
+- A local webhook that fires when a session transitions out of `working`
 
-For one session on one project, the JSON output does not pay back the integration cost.
+For one session on one project, the JSON does not pay back the integration cost.
 
 ## The JSON Schema
 
-Added in Claude Code v2.1.145 ([CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)): "Print[s] live sessions as a JSON array and exit. Each entry has `pid`, `cwd`, `kind`, and `startedAt`, plus `sessionId`, `name`, and `status` when set. Combine with `--cwd <path>` to filter" ([agent view docs](https://code.claude.com/docs/en/agent-view#manage-sessions-from-the-shell)).
+Added in v2.1.145 ([CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)): "Print[s] live sessions as a JSON array and exit. Each entry has `pid`, `cwd`, `kind`, and `startedAt`, plus `sessionId`, `name`, and `status` when set. Combine with `--cwd <path>` to filter" ([agent view docs](https://code.claude.com/docs/en/agent-view#manage-sessions-from-the-shell)).
 
 | Field | Always present | Operator question it answers |
 |-------|---------------|------------------------------|
 | `pid` | yes | Is the process alive? |
-| `cwd` | yes | Which project owns this session? Survives moves into `.claude/worktrees/`. |
+| `cwd` | yes | Which project owns it? Survives moves into `.claude/worktrees/`. |
 | `kind` | yes | How was it launched — `claude --bg`, agent view, `/bg`? |
 | `startedAt` | yes | How long has it been running? |
 | `sessionId` | when set | Handle for `claude attach`, `logs`, `stop`, `respawn`, `rm`. |
 | `name` | when set | Display name from `claude --bg --name` or `Ctrl+R`. |
-| `status` | when set | Lifecycle state — drives "needs input", "completed", "failed" rollups. |
+| `status` | when set | Lifecycle state — drives "needs input"/"completed"/"failed" rollups. |
 
-The "when set" fields are absent rather than `null` for parts of the lifecycle. Consumers must treat missing keys as missing data.
+The "when set" fields are absent rather than `null` during parts of the lifecycle. Treat missing keys as missing data.
 
 ## Filtering by Project
 
@@ -50,7 +50,7 @@ The "when set" fields are absent rather than `null` for parts of the lifecycle. 
 
 ## Where the Data Comes From
 
-The supervisor process holds the source of truth. Session state lives at `~/.claude/jobs/<id>/state.json`; the live-session roster at `~/.claude/daemon/roster.json` ([agent view docs](https://code.claude.com/docs/en/agent-view#where-state-is-stored)). `claude agents --json` is a thin reader over the same IPC `claude daemon status` and `/doctor` use. The CLI is the supported surface — read the files directly only at your own risk.
+The supervisor process holds the source of truth. Session state lives at `~/.claude/jobs/<id>/state.json`; the live-session roster at `~/.claude/daemon/roster.json` ([agent view docs](https://code.claude.com/docs/en/agent-view#where-state-is-stored)). `claude agents --json` is a thin reader over the same IPC `claude daemon status` and `/doctor` use. Treat the CLI as the supported surface; read the files at your own risk.
 
 ```mermaid
 graph LR
@@ -65,18 +65,18 @@ graph LR
 
 `claude agents --json` lists top-level background sessions only. "Subagents and teammates a session spawns aren't listed as separate rows" ([agent view docs](https://code.claude.com/docs/en/agent-view#monitor-sessions-with-agent-view)). Per-subagent attribution lives one layer down in OTEL spans.
 
-The same v2.1.145 release added `agent_id` and `parent_agent_id` to `claude_code.tool` OTEL spans, "and fixed trace parenting so background subagent spans nest under the dispatching Agent tool span" ([CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)). The JSON output answers "what is running"; the span attributes answer "what did each sub-step do". See [Subagent OTel Trace Correlation via `agent_id` Attribute](subagent-otel-trace-correlation.md) for the per-span detail.
+The same v2.1.145 release added `agent_id` and `parent_agent_id` to `claude_code.tool` OTEL spans, "and fixed trace parenting so background subagent spans nest under the dispatching Agent tool span" ([CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)). JSON answers "what is running"; spans answer "what did each sub-step do". See [Subagent OTel Trace Correlation via `agent_id` Attribute](subagent-otel-trace-correlation.md).
 
 ## When This Backfires
 
 - **`sessionId` as a metric label**: per-instance identifiers create unbounded time series in Prometheus-style stores. Apply the same discipline as `prompt.id` in [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — aggregate by `cwd`, `kind`, or `agent.name`.
-- **Page-on-`failed`**: shutting down stops every background session; all surface as failed when next listed ([agent view docs](https://code.claude.com/docs/en/agent-view#sessions-show-as-failed-after-shutdown)). A paging rule on `status: "failed"` fires after every reboot. Correlate with `claude daemon status` before alerting.
-- **Multi-machine fleet assumptions**: `~/.claude/jobs/` is per-user, per-machine. The primitive cannot represent sessions on other machines; fleet-of-machines aggregation needs a separate transport.
+- **Page-on-`failed`**: shutdown marks every session failed ([agent view docs](https://code.claude.com/docs/en/agent-view#sessions-show-as-failed-after-shutdown)). A paging rule on `status: "failed"` fires after every reboot — correlate with `claude daemon status` first.
+- **Multi-machine fleet assumptions**: `~/.claude/jobs/` is per-user, per-machine. Fleet aggregation across machines needs a separate transport.
 - **Schema drift**: agent view is in research preview and "the interface and keyboard shortcuts may change as the feature evolves" ([agent view docs](https://code.claude.com/docs/en/agent-view)). Pin to documented fields and degrade gracefully on missing or new keys.
 
 ## Why It Works
 
-**Enumeration** (what sessions exist, where, in what state) and **execution detail** (what each call cost, why it failed) are distinct data shapes with distinct query patterns. A status bar polling once a second pays the cost of one IPC read — the same path `claude daemon status` already exercises. A trace store answering "p99 latency by subagent" pays the OTEL pipeline cost. Conflating them forces every consumer to pay the higher cost. Anthropic shipping `agent_id` on `claude_code.tool` spans **in the same release** as `--json` is the explicit acknowledgement that fleet observability needs both surfaces simultaneously ([CHANGELOG, v2.1.145](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)).
+**Enumeration** (what sessions exist, where, in what state) and **execution detail** (what each call cost, why it failed) are distinct data shapes with distinct query patterns. A status bar polling once a second pays one IPC read — the path `claude daemon status` already exercises. A trace store answering "p99 latency by subagent" pays the OTEL pipeline cost. Conflating them forces every consumer to pay the higher cost. Anthropic shipping `agent_id` on `claude_code.tool` spans **in the same release** as `--json` acknowledges that fleet observability needs both ([CHANGELOG, v2.1.145](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)).
 
 ## Example
 

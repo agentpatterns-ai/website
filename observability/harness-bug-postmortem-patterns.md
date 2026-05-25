@@ -21,44 +21,38 @@ Anthropic's [April 23 2026 postmortem](https://www.anthropic.com/engineering/apr
 
 | Bug | Duration | Eval gap it exposed |
 |-----|----------|---------------------|
-| Reasoning-effort default silently changed from `high` to `medium` | Mar 4 – Apr 7 (34 days) | Evals measured task intelligence vs. latency; did not measure user preference for either |
-| Idle-session thinking-history cache clear fired every turn after idle instead of once | Mar 26 – Apr 10 (15 days) | Evals ran on fresh sessions; idle-then-resume path was untested |
-| Verbosity-reduction system prompt capped inter-tool text at 25 words, final responses at 100 | Apr 16 – Apr 20 (4 days) | Narrow eval set showed no regression; per-model ablation later showed 3% drop for Opus 4.6 and 4.7 |
+| Reasoning-effort default silently changed from `high` to `medium` | Mar 4 – Apr 7 (34 days) | Evals measured intelligence vs. latency; not user preference |
+| Idle-session thinking-history cache clear fired every turn after idle instead of once | Mar 26 – Apr 10 (15 days) | Evals ran on fresh sessions; idle-then-resume was untested |
+| Verbosity-reduction system prompt capped inter-tool text at 25 words, final responses at 100 | Apr 16 – Apr 20 (4 days) | Narrow eval set passed; per-model ablation later showed 3% drop for Opus 4.6 and 4.7 |
 
-Source: [Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem). The bugs are specific; the detection gaps generalise.
+The bugs are specific; the detection gaps generalise.
 
 ## Pattern 1: Idle-State Evals
 
-The thinking-history bug triggered only after a session was idle for one hour, then compounded across every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+The thinking-history bug only triggered after a session was idle for one hour, then compounded across every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Standard evals sweep input space. Idle-state evals sweep *temporal* state space — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Sessions that resume after a wait are a different input distribution than sessions that never paused.
+Standard evals sweep input space. Idle-state evals sweep *temporal* state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
 
 Add eval cases that:
 
 - Issue N turns, sleep past the longest TTL in the harness, resume, issue N more turns, and score the post-resume turns.
 - Repeat on every TTL the harness declares (1 minute, 1 hour, 1 day) to cover boundary behaviour.
 
-Structurally similar to [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md): a failure class no dev imagined becomes a concrete eval case.
-
 ## Pattern 2: Internal-vs-Public Build Parity
 
-The thinking-history bug was active in the shipped public build but masked internally by "an internal-only server-side experiment related to message queuing" and by a CLI thinking-display suppression, so staff dogfooding did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+The thinking-history bug was active in the public build but masked internally by "an internal-only server-side experiment related to message queuing" and a CLI thinking-display suppression, so staff dogfooding did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Dogfooding only catches regressions the dogfood build shares with the public build. When the internal build carries unshipped experiments, different feature flags, or different display layers, the public-only failure mode is invisible to the team running the same commands every day.
+When the internal build carries unshipped experiments, different flags, or different display layers, public-only failures stay invisible to staff running the same commands daily. The postmortem's remedy — "increase staff usage of exact public builds" — translates to:
 
-The postmortem's remedy is "increase staff usage of exact public builds". Practically:
-
-- List every flag, experiment, and feature gate that differs between internal and public. Each difference is a potential masking path.
+- List every flag, experiment, and feature gate that differs between internal and public.
 - Run a canary lane on the exact public artefact against the same eval suite and dogfood workflows.
-- Track the diff as a first-class release artefact, not a deploy detail.
-
-Complements [rainbow deployments for agents](../multi-agent/rainbow-deployments-agents.md): rainbow stages rollouts across versions; build parity ensures the version staff test *is* the one users run.
+- Track the diff as a first-class release artefact.
 
 ## Pattern 3: Per-Model Ablation
 
-The verbosity-reduction prompt dropped quality 3% for both Opus 4.6 and Opus 4.7. The original evaluation set "showed no regressions"; the 3% drop only appeared when broader ablation ran per-model comparisons ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+The verbosity-reduction prompt dropped quality 3% for both Opus 4.6 and Opus 4.7. The original evaluation "showed no regressions"; the drop only appeared when broader ablation ran per-model comparisons ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Aggregate evals average. A system prompt change that regresses one model and improves another — or regresses all models by a uniform small amount — disappears in the aggregate signal. Per-model ablation runs the same eval with the change on, then off, for each supported model and reports the delta separately.
+Aggregate evals average. A change that regresses one model and improves another — or regresses all models by a uniform small amount — vanishes in the aggregate. Per-model ablation runs the same eval with the change on, then off, for each model and reports deltas separately.
 
 Structure the ablation as:
 
@@ -66,11 +60,11 @@ Structure the ablation as:
 - Report per-model deltas with a significance test. [McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144) distinguishes real regressions from noise down to ~0.3%.
 - Gate on non-regression for every supported model, not on aggregate improvement.
 
-The signal extends to the reviewer layer: the thinking-history bug was caught by a code-review eval run with Opus 4.7 and missed by the same eval with Opus 4.6 ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)). Reviewer-model choice is itself a harness variable subject to ablation.
+The signal extends to the reviewer layer: the thinking-history bug was caught by a code-review eval with Opus 4.7 and missed with Opus 4.6 ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)). Reviewer-model choice is itself a harness variable.
 
-Inverse case covered in [perceived model degradation](../anti-patterns/perceived-model-degradation.md): users report degradation, evals show none, and the harness is ruled out without per-model testing.
+## When To Apply
 
-## When These Patterns Apply
+Apply when a change touches harness state (caches, TTLs, system prompts, reasoning defaults, tool-choice logic) and is visible to users:
 
 ```mermaid
 graph TD
@@ -87,7 +81,14 @@ graph TD
     H -->|No| J[Skip Pattern 3]
 ```
 
-Apply when a change touches harness state (caches, TTLs, system prompts, reasoning defaults, tool-choice logic) and is visible to users. Skip for single-turn apps, throwaway sessions, or pre-production prototypes without real users.
+## When This Backfires
+
+The patterns are detection insurance, not free coverage:
+
+- **Per-model ablation inflates CI cost.** Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
+- **Idle-state evals introduce wall-clock flakiness.** Sleeping past a one-hour TTL is either expensive (real wait) or unfaithful (mocked clock that diverges from production). Scope to the specific TTLs the harness declares, not every temporal boundary.
+- **Build-parity gates block legitimate experimentation.** A rigid gate treats every internal flag as a defect; track the diff as a release artefact and route only high-risk divergences through a canary lane.
+- **Skip all three for prototypes and single-turn apps** — they presume multi-turn harnesses with caches, model fan-out, and an internal/public split.
 
 ## Example
 

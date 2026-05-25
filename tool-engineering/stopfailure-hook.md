@@ -17,9 +17,9 @@ aliases:
 
 Added in [Claude Code v2.1.78](https://code.claude.com/docs/en/changelog), `StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block, retry, or resume the session; it fires after the turn has already failed.
 
-The hook's role is notification: log the error, push a metric, trigger an alert. Retry or re-launch logic must live in an external process — a CI supervisor, cron job, or shell wrapper — that reads the hook's output and decides what to do next.
+The hook's role is notification: log, push a metric, trigger an alert. Retry or re-launch logic must live in an external process — a CI supervisor, cron job, or shell wrapper — that reads the hook's output and decides what to do next.
 
-Contrast with `Stop`, which fires on successful turn completion. Both are non-blocking; `StopFailure` is the error branch.
+Contrast with `Stop`, which fires on successful completion. Both are non-blocking; `StopFailure` is the error branch.
 
 ## Input Schema
 
@@ -30,20 +30,24 @@ Claude Code passes JSON on stdin when `StopFailure` fires:
   "session_id": "abc123",
   "transcript_path": "/Users/.../.claude/projects/.../transcript.jsonl",
   "cwd": "/Users/...",
+  "permission_mode": "default",
   "hook_event_name": "StopFailure",
   "error_type": "rate_limit",
+  "error": "429",
   "error_message": "Rate limit exceeded: 100 requests per minute"
 }
 ```
 
-`error_type` carries one of seven values:
+`StopFailure` adds `error_type` (matcher key), `error` (short error code), and `error_message` to the [common input fields](https://code.claude.com/docs/en/hooks). `error_type` carries one of nine values:
 
 | Value | Cause |
 |-------|-------|
 | `rate_limit` | Request rate or quota exceeded |
 | `authentication_failed` | Invalid or expired API credentials |
+| `oauth_org_not_allowed` | OAuth identity not permitted for the organization |
 | `billing_error` | Account billing issue |
 | `invalid_request` | Malformed API request |
+| `model_not_found` | Requested model unavailable |
 | `server_error` | Provider-side error |
 | `max_output_tokens` | Response exceeded token limit |
 | `unknown` | Error type not classified |
@@ -83,10 +87,10 @@ A hook without a matcher fires for all `StopFailure` events regardless of error 
 
 ## Use Cases
 
-- **Structured failure logging** — write `error_type`, `session_id`, and timestamp to a file external recovery scripts can poll
-- **Operator alerting** — push to Slack, PagerDuty, or a webhook when `authentication_failed` or `billing_error` fires, since these require human action
-- **Metrics collection** — increment failure counters by error type for dashboards and SLO tracking
-- **Audit trails** — append to a session audit log alongside the `transcript_path` for post-mortem analysis
+- **Structured failure logging** — write `error_type`, `session_id`, and timestamp to a file recovery scripts can poll
+- **Operator alerting** — push to Slack or PagerDuty when `authentication_failed` or `billing_error` fires, since these need human action
+- **Metrics** — increment failure counters by error type for dashboards and SLOs
+- **Audit trails** — append to a session log alongside `transcript_path` for post-mortems
 
 ## Wiring into an External Recovery Loop
 
@@ -161,7 +165,7 @@ An external cron job polls `~/agent-failures.jsonl`. When it finds a `rate_limit
 
 ## Why It Works
 
-`StopFailure` is non-blocking by design because it fires after an unrecoverable error — the turn has already ended. Claude Code splits pre-action hooks that can block (`PreToolUse`, `UserPromptSubmit`, `PermissionRequest`) from post-action hooks that cannot (`PostToolUse`, `StopFailure`). Once `StopFailure` fires, the API call has already failed and no hook exit code can alter that outcome. The runtime executes the notification command, ignores its return, and terminates. See the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) for the full lifecycle and exit-code behavior table.
+`StopFailure` is non-blocking by design because it fires after an unrecoverable error — the turn has already ended. Claude Code splits pre-action hooks that can block (`PreToolUse`, `UserPromptSubmit`, `PermissionRequest`) from post-action hooks that cannot (`PostToolUse`, `StopFailure`). Once `StopFailure` fires, the API call has already failed; no hook exit code can alter that. The runtime runs the notification command, ignores its return, and terminates. See the [Claude Code hooks reference](https://code.claude.com/docs/en/hooks) for the full lifecycle and exit-code behavior table.
 
 ## When This Backfires
 

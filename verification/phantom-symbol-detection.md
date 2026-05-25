@@ -19,7 +19,7 @@ Phantom symbols survive standard evaluation because they preserve surface cohere
 
 - **CodeBLEU** rewards lexical similarity to a reference solution. A fabricated method name close to a real one scores well ([Hallucination Inspector](https://arxiv.org/abs/2604.20202)).
 - **LLM-as-judge** evaluates surface qualities — fluency, structural plausibility, stylistic fit — and phantom-symbol code satisfies all three, so the judge cannot distinguish fabricated calls from real ones without an independent check on symbol existence.
-- **pass@k** measures the probability that at least one of k sampled solutions passes the unit tests ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)); by construction it only catches phantoms that reach runtime, so failures at import or link time never enter the test loop.
+- **[pass@k](pass-at-k-metrics.md)** measures the probability that at least one of k sampled solutions passes the unit tests ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)); by construction it only catches phantoms that reach runtime, so failures at import or link time never enter the test loop.
 
 ## The Check
 

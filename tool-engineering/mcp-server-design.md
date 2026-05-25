@@ -146,6 +146,7 @@ The checklist assumes a stable, internally-owned API. Conditions that invert tha
 
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Client Design](mcp-client-design.md)
+- [Production MCP Agent Stack](production-mcp-agent-stack.md)
 - [MCP Elicitation](mcp-elicitation.md)
 - [MCP LLM Sampling](mcp-llm-sampling.md)
 - [Copilot Extensions to MCP Migration](copilot-extensions-to-mcp-migration.md)

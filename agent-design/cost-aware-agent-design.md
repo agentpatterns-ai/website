@@ -153,27 +153,11 @@ The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediat
 
 ## Related
 
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
-- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Tool Description Quality](../tool-engineering/tool-description-quality.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
-- [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
-- [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
+- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — budget reasoning effort the same way you budget tier choice
+- [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md) — heuristics that scale model effort by task signals
+- [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — extend tier routing across providers
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health metrics rather than task type
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Event-Driven Agent Routing](event-driven-agent-routing.md)
-- [The Delegation Decision](delegation-decision.md)
-- [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md)
-- [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
-- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
-- [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
-- [Feedback as Capability Equalizer](feedback-capability-equalizer.md)
-- [The Advisor Strategy](advisor-strategy.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — role split that complements tier routing
+- [Copilot vs Claude Billing Semantics](../human/copilot-vs-claude-billing-semantics.md) — premium request economics across vendors
+- [Claude Code Sub-Agents](../tools/claude/sub-agents.md) — per-agent model selection mechanic
+- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — pair tier routing with lean tool surfaces

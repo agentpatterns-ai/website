@@ -110,7 +110,6 @@ The separation enables workload-appropriate model routing. Research and planning
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md)
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md)
-- [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

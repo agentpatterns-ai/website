@@ -16,17 +16,17 @@ aliases:
 
 ## Why Skills Are a Different Surface
 
-Runtime secrets management — environment variable injection, wrapper scripts, proxy-based credential isolation — addresses how credentials enter a running agent session. It does not address credentials baked into the skill files themselves.
+Runtime secrets management — env var injection, wrapper scripts, proxy isolation — addresses how credentials enter a running agent session. It does not address credentials baked into the skill files themselves.
 
-Skills are reusable Markdown artifacts that encode API usage patterns, tool invocations, and workflow steps. A skill that demonstrates an authenticated API call often includes a working example from the author's environment. That example may contain a live token, an API key, or a hardcoded endpoint with embedded credentials.
+Skills are reusable Markdown artifacts encoding API usage and workflow steps. A skill demonstrating an authenticated API call often includes a working example from the author's environment — and that example may contain a live token, API key, or endpoint with embedded credentials.
 
 Three propagation paths expose embedded credentials:
 
-1. **Sharing and publication** — Skills intended for one environment are published to community corpora ([awesome-copilot](https://github.com/github/awesome-copilot), agent registries) or committed to repositories. The credential travels with the file.
-2. **Version control history** — A credential removed from a skill in a later commit remains in git history. Shallow mitigation (`git filter-repo`) is rarely applied to skill directories.
-3. **Verbatim LLM reproduction** — Agents instructed to follow a skill may echo credential-containing examples into generated code, CI configs, or conversation history. The model treats the skill text as authoritative and reproduces it.
+1. **Sharing and publication** — Skills are published to community corpora ([awesome-copilot](https://github.com/github/awesome-copilot), agent registries) or committed to repos. The credential travels with the file.
+2. **Version control history** — A credential removed in a later commit remains in git history. Shallow mitigation (`git filter-repo`) is rarely applied to skill directories.
+3. **Verbatim LLM reproduction** — Agents may echo credential-containing examples into generated code, CI configs, or conversation history. The model treats the skill text as authoritative and reproduces it.
 
-Empirical research on real-world agent skill corpora documents credential leakage in publicly available skills at scale. ([Source: arxiv:2604.03070](https://arxiv.org/abs/2604.03070))
+Empirical research documents credential leakage in publicly available skills at scale. ([Source: arxiv:2604.03070](https://arxiv.org/abs/2604.03070))
 
 ## Leakage Forms
 
@@ -49,13 +49,13 @@ curl -H "Authorization: Bearer $MY_SERVICE_API_KEY" \
   https://api.example.com/v1/endpoint
 ```
 
-Use shell variable syntax (`$VAR_NAME`) or angle-bracket placeholders (`<token>`) — both signal to readers that substitution is required and prevent the model from reproducing a working credential.
+Use shell variable syntax (`$VAR_NAME`) or angle-bracket placeholders (`<token>`) — both signal that substitution is required and prevent the model from reproducing a working credential.
 
 Never use a real credential as an example even temporarily. Pre-commit hooks do not catch credentials that existed only in a draft; git history does.
 
 ### Scan Skill Files at Pre-commit Time
 
-Extend secret-scanning to cover skill directories. Standard tools (`gitleaks`, `trufflehog`, `detect-secrets`) support custom path patterns:
+Extend secret-scanning to cover skill directories. `gitleaks`, `trufflehog`, and `detect-secrets` support custom path patterns:
 
 ```yaml
 # .gitleaks.toml — extend scanning to skill directories
@@ -69,7 +69,7 @@ Run the same scanner in CI to catch leaks from contributors who bypass local hoo
 
 ### Decouple Skill Invocation from Credential Holding
 
-Structure skills so they invoke wrapper scripts or environment-provided commands rather than calling authenticated endpoints directly. The skill encodes *what* to call; the credential remains outside the skill file:
+Structure skills to invoke wrapper scripts rather than calling authenticated endpoints directly. The skill encodes *what* to call; the credential stays outside the skill file:
 
 ```markdown
 <!-- skill: query-analytics -->
@@ -79,13 +79,13 @@ To fetch the latest report, run:
 The script handles authentication internally. Do not pass credentials as arguments.
 ```
 
-The `scripts/analytics-fetch.sh` wrapper reads `$ANALYTICS_API_KEY` from the environment. The skill text contains no credential. Even if the skill file is published, the credential is not exposed.
+The wrapper reads `$ANALYTICS_API_KEY` from the environment. The skill text contains no credential, so publication does not expose it.
 
-This pattern is the authoring-time complement to [Secrets Management for Agent Workflows](secrets-management-for-agents.md), which covers runtime injection, and [Scoped Credentials via Proxy](scoped-credentials-proxy.md), which covers runtime isolation.
+This is the authoring-time complement to [Secrets Management for Agent Workflows](secrets-management-for-agents.md) (runtime injection) and [Scoped Credentials via Proxy](scoped-credentials-proxy.md) (runtime isolation).
 
 ### Audit Before Publishing
 
-Before publishing or sharing a skill file, run a credential audit against the file:
+Before publishing or sharing a skill, run a credential audit:
 
 ```bash
 # Quick scan before publishing a skill
@@ -93,7 +93,13 @@ trufflehog filesystem .claude/skills/ --only-verified
 detect-secrets scan .claude/skills/ --all-files
 ```
 
-Community skill corpora rely on contributor inspection because automated scanning at the registry level is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) security notice — "inspect any agent and its documentation before installing" — places this burden on consumers; scanning before publishing shifts it to the safer authoring stage.
+Community corpora rely on contributor inspection — registry-level scanning is not universal. The [awesome-copilot](https://github.com/github/awesome-copilot) notice — "inspect any agent and its documentation before installing" — puts this burden on consumers; scanning before publishing shifts it to the safer authoring stage.
+
+### Structural Successors: Treat Hygiene as a Holding Pattern
+
+Placeholder syntax and wrapper-script indirection reduce *embedded* leakage but do not address the deeper problem: any reusable bearer secret inside the model-steerable boundary is exposed by definition. The [Secret-Use Delegation Protocol (SUDP)](../standards/sudp-secret-use-delegation-protocol.md) frames this as the *Agent Secret Use* problem and argues an untrusted requester causing an authorized operation must never hold reusable authority ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)). On the runtime side, [workload identity federation for agent runtimes](workload-identity-federation-for-agents.md) replaces long-lived API keys with short-lived OIDC tokens minted on demand — removing the bearer secret rather than hiding it.
+
+Apply authoring-time hygiene today, but treat it as the holding pattern: long-term, the credentials skill examples are protecting should not exist in their current form.
 
 ## Example
 
@@ -128,25 +134,26 @@ The skill now encodes the intent and the interface; no credential is present.
 - Extend pre-commit secret scanning to skill directories explicitly — scanners do not cover them by default
 - Structure skill invocations to call wrapper scripts rather than authenticated endpoints directly
 - Audit skill files before publishing to any shared corpus or registry
+- Treat authoring-time hygiene as a holding pattern; SUDP and workload identity federation remove the reusable secret entirely
 
 ## When This Backfires
 
 Placeholder syntax and wrapper scripts reduce leakage at authoring time but do not eliminate all vectors:
 
-- **Private corpora without scanning** — Teams that never publish skills externally may skip scanner setup. Leaked credentials remain exploitable if the repository is later open-sourced, the skill is copied to a shared workspace, or an insider threat extracts the history.
-- **Agents that resolve placeholders** — An agent given both a skill file and access to environment secrets may substitute real values into placeholder slots during a generation step, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
-- **Coverage gaps in CI** — Adding gitleaks path rules for `.claude/skills/` is only effective if the CI job runs on all branches and pull requests. Skills committed to feature branches before the rule was added remain unscanned in history.
-- **Registry-level credential reuse** — Credentials rotated after a skill was published remain exposed in any consumer who cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials.
+- **Private corpora without scanning** — Teams that never publish externally may skip scanner setup. Leaked credentials remain exploitable if the repo is later open-sourced or an insider extracts the history.
+- **Agents that resolve placeholders** — An agent with both the skill file and environment secrets may substitute real values into placeholder slots, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
+- **Coverage gaps in CI** — Gitleaks path rules for `.claude/skills/` only work if CI runs on all branches and PRs. Skills committed before the rule was added remain unscanned.
+- **Registry-level credential reuse** — Credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials.
 
 Apply wrapper-script isolation and pre-commit scanning together; neither alone closes all paths.
 
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md) — the standard format that defines skill structure, discovery paths, and frontmatter
+- [SUDP: Secret-Use Delegation Protocol](../standards/sudp-secret-use-delegation-protocol.md) — the structural alternative: a three-role protocol so the agent never holds reusable authority
+- [Workload Identity Federation for Agent Runtimes](workload-identity-federation-for-agents.md) — runtime alternative: short-lived OIDC tokens that remove long-lived API keys entirely
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — runtime injection: keeping credentials out of agent context during execution
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — runtime isolation: proxy-held credentials that the agent never touches
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — permission rules to block agent reads of credential files
-- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — how malicious tools exploit credential-containing arguments
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — limiting the impact when a credential is exposed
-- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layered controls that catch leaks at multiple stages
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious credentials and payloads embedded in published community skills

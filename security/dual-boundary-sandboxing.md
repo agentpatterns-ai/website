@@ -12,11 +12,11 @@ tags:
 
 ## Why One Boundary Is Not Enough
 
-A common assumption is that restricting an agent to its working directory is sufficient to contain it. It is not. An agent with filesystem access but unrestricted network access can exfiltrate any file it can read — SSH keys, environment variables, secrets — via outbound connections.
+Restricting an agent to its working directory does not contain it. With filesystem access but unrestricted network, the agent can exfiltrate any file it can read — SSH keys, environment variables, secrets — via outbound connections.
 
-The inverse is equally incomplete: restricting network access while leaving filesystem paths unrestricted allows the agent to write to sensitive locations (startup scripts, crontabs, shell configuration files) that execute with elevated permissions on the next trigger.
+The inverse fails too: restricting network while leaving filesystem paths open lets the agent write to startup scripts, crontabs, or shell configs that execute with elevated permissions on the next trigger.
 
-Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineering/claude-code-sandboxing) and the [Claude Code sandboxing documentation](https://code.claude.com/docs/en/sandboxing), effective sandboxing requires both boundaries enforced simultaneously at the OS level.
+Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineering/claude-code-sandboxing) and the [Claude Code sandboxing documentation](https://code.claude.com/docs/en/sandboxing), effective sandboxing enforces both boundaries simultaneously at the OS level.
 
 ## The Two Boundaries
 
@@ -32,29 +32,29 @@ Per [Anthropic's Claude Code sandboxing post](https://www.anthropic.com/engineer
 - Route all other traffic through a validating proxy or block it
 - Block inbound connections to the agent's environment
 
-These boundaries are enforced at the OS level, not the prompt level. Prompt-level restrictions can be bypassed by a sufficiently determined or confused agent; OS-level restrictions cannot be overridden by prompt content alone — though they can still leak via kernel CVEs, configuration gaps, or agents reasoning around denylisted paths (see *When This Backfires*).
+Enforce at the OS level, not the prompt level. Prompt-level restrictions can be bypassed by a confused agent; OS-level restrictions cannot be overridden by prompt content alone — though they still leak via kernel CVEs, configuration gaps, or agents reasoning around denylisted paths (see *When This Backfires*).
 
 ## OS Enforcement Mechanisms
 
 - **Linux:** `bubblewrap` (used by Flatpak) applies filesystem namespaces and seccomp filters; network namespaces restrict outbound traffic
-- **macOS:** `Seatbelt` (sandbox profiles via `sandbox-exec`) applies filesystem and network policies — note that `sandbox-exec` is deprecated since macOS 10.13 and may be removed in a future release; prefer container-based approaches (Docker/Podman) for new tooling
-- **Container-based:** Docker/Podman with restricted mount points and network policies achieve similar effects with more tooling overhead
-- **Agent-purpose-built:** [`docker sbx`](https://docs.docker.com/reference/cli/sbx/) wraps container primitives in a CLI optimised for agent sandboxes — see [Adopting `docker sbx` for Agent Sandboxes](docker-sbx-adoption.md) and the [Sandbox Runtime Comparison](sandbox-runtime-comparison.md) for trade-offs against bubblewrap, Seatbelt, and raw Docker/Podman
+- **macOS:** `Seatbelt` profiles via `sandbox-exec` — deprecated since macOS 10.13; prefer container-based approaches for new tooling
+- **Container-based:** Docker/Podman with restricted mount points and network policies
+- **Agent-purpose-built:** [`docker sbx`](https://docs.docker.com/reference/cli/sbx/) wraps container primitives for agent sandboxes — see [Adopting `docker sbx`](docker-sbx-adoption.md) and the [Sandbox Runtime Comparison](sandbox-runtime-comparison.md) for trade-offs
 
-The agent runs inside the enforced environment. Permissions it needs (specific filesystem paths, specific domains) are granted explicitly; everything else is denied by default.
+The agent runs inside the enforced environment. Permissions it needs (paths, domains) are granted explicitly; everything else is denied by default.
 
 ## The Approval Fatigue Problem
 
-Granular permission prompts for every action produce [approval fatigue](../human/safe-command-allowlisting.md): users click through without reading, giving the illusion of oversight with none of the substance. Dual-boundary sandboxing defines a safe zone where the agent acts freely and hard limits where it cannot act at all, reserving prompts for boundary-crossing requests.
+Granular per-action prompts produce [approval fatigue](../human/safe-command-allowlisting.md): users click through without reading — the illusion of oversight with none of the substance. Dual-boundary sandboxing defines a safe zone where the agent acts freely and hard limits where it cannot, reserving prompts for boundary-crossing requests.
 
 ## Threat Model
 
-The sandbox addresses two distinct threat vectors:
+The sandbox addresses two threat vectors:
 
-1. **Prompt injection** — malicious content in files or web pages the agent processes instructs it to exfiltrate data or modify system files. Network and filesystem restrictions limit the damage scope.
-2. **Agent error** — the agent makes a mistake (deletes a file outside the working directory, makes an unintended API call). OS-level restrictions prevent the error from having consequences outside the defined boundary.
+1. **Prompt injection** — malicious content in files or web pages instructs the agent to exfiltrate data or modify system files. Network and filesystem restrictions limit the damage scope.
+2. **Agent error** — the agent deletes a file outside the working directory or makes an unintended API call. OS-level restrictions contain the consequences.
 
-The sandbox does not address all threats. It does not prevent the agent from producing incorrect output, spending budget on unauthorized API calls within the allowlist, or leaking data through allowed channels.
+It does not prevent incorrect output, budget spent on allowed API calls, or leaks through allowed channels.
 
 ## When This Backfires
 
@@ -118,26 +118,8 @@ Both examples enforce the filesystem boundary (write access restricted to `$PROJ
 - [Sandbox Runtime Comparison](sandbox-runtime-comparison.md)
 - [Adopting `docker sbx` for Agent Sandboxes](docker-sbx-adoption.md)
 - [Subprocess PID Namespace Sandboxing](subprocess-pid-namespace-sandboxing.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Protecting Sensitive Files](protecting-sensitive-files.md)
-- [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Secrets Management for Agents](secrets-management-for-agents.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
-- [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
-- [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
-- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
-- [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md)
-- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md)
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
-- [Safe Outputs Pattern](safe-outputs-pattern.md)
-- [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md)
-- [Tool Signing and Signature Verification](tool-signing-verification.md)
-- [Permission-Gated Custom Commands](permission-gated-commands.md)
-- [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
-- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
+- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Protecting Sensitive Files](protecting-sensitive-files.md)

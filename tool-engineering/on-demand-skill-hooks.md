@@ -1,5 +1,5 @@
 ---
-title: "On-Demand Skill Hooks: Session-Scoped Hook Guardrails"
+title: "On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation"
 description: "Register PreToolUse hooks through a skill invocation to arm strict guardrails for a single session without imposing friction on every workflow."
 tags:
   - security
@@ -158,4 +158,3 @@ When the skill finishes, the hook is removed. No cleanup required.
 - [Skill Tool as Enforcement: Loading Command Prompts at Runtime](skill-tool-runtime-enforcement.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Protecting Sensitive Files from Agent Context](../security/protecting-sensitive-files.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)

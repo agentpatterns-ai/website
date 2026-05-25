@@ -1,5 +1,5 @@
 ---
-title: "Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement"
+title: "Hook Catalog for Claude Code Enforcement"
 description: "A reference catalog of high-value Claude Code hooks grouped by purpose — CLI enforcement, destructive operation guardrails, sandboxing, and workflow automation."
 tags:
   - agent-design
@@ -13,39 +13,39 @@ aliases:
   - Hook Enforcement Patterns
 ---
 
-# Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement
+# Hook Catalog for Claude Code Enforcement
 
 > Claude Code hooks are shell commands that intercept agent lifecycle events — blocking forbidden tool calls, enforcing CLI standards, and automating side effects — without relying on the model to follow instructions.
 
 !!! note "Also known as"
-    Hook Examples & Recipes, Common Enforcement Patterns, Hook Catalog, Enforcing with Hooks, Hook Enforcement Patterns.
+    Hook Examples & Recipes, Common Enforcement Patterns, Enforcing with Hooks, Hook Enforcement Patterns.
 
 ## Why Hooks
 
-Models carry strong training priors: they reach for `npm`, `git add -A`, or `curl` by default. Instructions can suggest alternatives, but models revert under pressure. Hooks move enforcement out of the context window and into the shell.
+Models carry strong priors (`npm`, `git add -A`, `curl`) and revert under pressure. Hooks move enforcement out of the context window and into the shell.
 
 | Approach | Reliability | Override risk |
 |----------|------------|---------------|
-| AGENTS.md instruction | Low — model interprets freely | High — model may ignore under task pressure |
-| System prompt rule | Medium — higher attention weight | Medium — multi-step tasks cause drift |
-| `PreToolUse` hook | High — executes in shell | None — model cannot bypass |
+| AGENTS.md instruction | Low | High — model may ignore under pressure |
+| System prompt rule | Medium | Medium — multi-step tasks cause drift |
+| `PreToolUse` hook | High | Low — bypass via tool-switching (see *When This Backfires*) |
 
 ## How Hooks Work
 
-[Claude Code hooks](https://code.claude.com/docs/en/hooks) are shell commands that run in response to agent lifecycle events. Claude Code passes JSON context about the event to the hook on stdin. Use `jq` to extract fields.
+[Claude Code hooks](https://code.claude.com/docs/en/hooks) run on agent lifecycle events. Claude Code passes JSON on stdin; use `jq` to extract fields.
 
 | Event | Fires when |
 |-------|-----------|
-| `PreToolUse` | Before any tool call executes — can block it |
+| `PreToolUse` | Before any tool call — can block it |
 | `PostToolUse` | After a tool call succeeds |
 | `UserPromptSubmit` | When the user sends a message |
 | `Stop` | When the agent finishes a turn |
 
-A hook that returns a `permissionDecision` of `"deny"` **blocks the tool call**. The `permissionDecisionReason` is fed back into the agent's context, so the agent must adapt — it cannot proceed without complying.
+Returning a `permissionDecision` of `"deny"` blocks the tool call; the `permissionDecisionReason` is fed back into the agent's context.
 
 ## CLI Tool Enforcement
 
-Force the model to use project-mandated tools instead of training defaults.
+Force project-mandated tools over training defaults.
 
 **Block npm, require bun:**
 
@@ -83,7 +83,7 @@ fi
 
 ## Destructive Operation Guardrails
 
-Block or flag commands that are difficult or impossible to reverse.
+Block hard-to-reverse commands.
 
 **Block `rm -rf`:**
 
@@ -126,7 +126,7 @@ fi
 
 ## Workflow Automation
 
-Run side effects automatically as the agent works.
+Run side effects automatically.
 
 **Auto-lint after file writes:**
 
@@ -172,11 +172,9 @@ osascript -e 'display notification "Claude Code finished" with title "Done"'
 }
 ```
 
-Note: `UserPromptSubmit`, `Stop`, and other session-level events do not support matchers — they fire on every occurrence ([docs](https://code.claude.com/docs/en/hooks)).
-
 ## Sandboxing
 
-Restrict what the agent can read or execute during sensitive operations.
+Restrict reads or execs during sensitive operations.
 
 **Restrict Bash to a command allowlist:**
 
@@ -207,7 +205,7 @@ fi
 
 ## Instruction Auditing
 
-Track which instruction files are loaded to verify configuration consistency across team members.
+Track which instruction files load — useful for config drift across teammates.
 
 **Log loaded instructions:**
 
@@ -226,11 +224,11 @@ echo "$(date -u +%Y-%m-%dT%H:%M:%SZ) Instructions loaded: $INSTRUCTIONS" >> ~/.c
 }
 ```
 
-`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` files are loaded. The event payload includes `file_path`, `memory_type`, `load_reason`, and `trigger_file_path` — enough to audit which instruction files each agent session loads ([docs](https://code.claude.com/docs/en/hooks)).
+`InstructionsLoaded` fires when CLAUDE.md or `.claude/rules/*.md` load. The payload — `file_path`, `memory_type`, `load_reason`, `trigger_file_path` — is enough to audit per-session instruction loads ([docs](https://code.claude.com/docs/en/hooks)).
 
 ## Hook Configuration and Combining
 
-Multiple handlers can fire for the same event and matcher. Hooks scope at different levels ([docs](https://code.claude.com/docs/en/hooks); [settings reference](https://code.claude.com/docs/en/settings)):
+Multiple handlers can fire per event/matcher. Hooks scope at three levels ([docs](https://code.claude.com/docs/en/hooks); [settings](https://code.claude.com/docs/en/settings)):
 
 | Location | Scope | Shareable |
 |----------|-------|-----------|
@@ -238,29 +236,22 @@ Multiple handlers can fire for the same event and matcher. Hooks scope at differ
 | `.claude/settings.json` | Single project | Yes — commit to repo |
 | `.claude/settings.local.json` | Single project | No — gitignored |
 
-Project-level hooks in `.claude/settings.json` travel with the repo and enforce team conventions for all contributors.
-
 ## When This Backfires
 
-- **False positive blocking**: Over-broad regex matchers (e.g., matching `rm` instead of `rm -rf`) block legitimate commands. The model then exhausts retry attempts or hallucinates workarounds. Validate patterns against real command logs before deploying.
-- **Silent failures hide problems**: A hook that exits non-zero without emitting a `permissionDecisionReason` gives the model no signal to adapt — the tool call silently fails. Always emit a reason string.
-- **Maintenance burden from fragile patterns**: Hooks that match on exact command strings break when the model changes invocation style (e.g., `git push origin main` vs `git push --set-upstream origin main`). Pattern maintenance can outpace instruction updates.
-- **No bypass path for emergency changes**: A hook enforcing team standards can block a legitimate time-sensitive operation. Without a documented override mechanism (e.g., `settings.local.json` entry), contributors are stuck.
+- **False positive blocking**: Over-broad regex matchers (matching `rm` instead of `rm -rf`) block legitimate commands; the model then exhausts retries or hallucinates workarounds. Validate patterns against real command logs.
+- **Silent failures**: A hook that exits non-zero without a `permissionDecisionReason` gives the model no signal to adapt. Always emit a reason string.
+- **Exit code 1 fails open**: For most hook events Claude Code only treats exit code `2` as a block; `1` is logged as a non-blocking error and the call proceeds — developers reaching for the conventional Unix failure code ship guards that silently fail open ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- **Tool-switching circumvention**: Hooks fire per tool match. Block `Edit`/`Write` and the model reaches for `Bash` + `sed`/`python -c`/heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses ([issue #43189](https://github.com/anthropics/claude-code/issues/43189)).
+- **Exit-code-2 stop-instead-of-retry**: A `PreToolUse` block with exit `2` is meant to feed `stderr` back so the agent adapts, but in practice Claude often stops mid-turn and waits for user input — turning a fixable guardrail into a hard halt ([issue #24327](https://github.com/anthropics/claude-code/issues/24327)).
+- **Long sub-command chains bypass deny rules**: Claude Code has been shown to skip permission checks when a tool call carries a long chain of sub-commands, falling back to asking the user instead of enforcing the deny ([The Register, Apr 2026](https://www.theregister.com/software/2026/04/01/claude-code-bypasses-safety-rule-if-given-too-many-commands/)). Scope hook matchers to atomic commands.
+- **Fragile string matchers**: Exact-command matchers break when the model varies invocation style (`git push origin main` vs `git push --set-upstream origin main`).
+- **No emergency override**: A hook can block a legitimate time-sensitive operation; document an override (e.g., `settings.local.json` entry) so contributors are not stuck.
 
 ## When to Use Hooks vs. Instructions
 
-Use hooks when:
+Hooks: rules that must hold without exception, strong opposing model priors (package managers, test runners), behavior that must survive multi-step sessions.
 
-- The rule must be enforced without exception (security, compliance, team standards)
-- The model has a strong opposing prior (package managers, test runners, git workflows)
-- The behavior must persist across long multi-step sessions
-
-Use instructions when:
-
-- The guidance is contextual — "prefer X when Y" — and benefits from model judgment
-- The rule is a suggestion, not a requirement
-
-Instructions drift in long sessions; hooks do not.
+Instructions: contextual "prefer X when Y" guidance, or suggestions rather than requirements.
 
 ## Key Takeaways
 
@@ -272,18 +263,11 @@ Instructions drift in long sessions; hooks do not.
 
 ## Related
 
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
-- [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
-- [Protecting Sensitive Files from Agent Context](../security/protecting-sensitive-files.md)
-- [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
-- [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
-- [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
-- [Reactive Environment Hooks: CwdChanged and FileChanged](reactive-environment-hooks.md)
+- [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
-- [Skill-Tool Runtime Enforcement](skill-tool-runtime-enforcement.md)
-- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)

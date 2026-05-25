@@ -22,7 +22,7 @@ macOS ships with BSD versions of core utilities. GNU and BSD implementations div
 | `date` | `-d` not supported | `-d` parses date strings |
 | `xargs` | No `-r` (no-run-if-empty) | `-r` supported |
 
-The agent doesn't know which variant is present. Instructions in CLAUDE.md can help but must be written before the problem is observed. A runtime hook catches the failure and corrects it in the same session, without requiring pre-configuration.
+The agent doesn't know which variant is present. CLAUDE.md instructions help but must be written before the problem is observed. A runtime hook catches the failure and corrects it in the same session.
 
 ## Hook Events
 
@@ -147,7 +147,7 @@ if ! grep -qF "BSD grep" "$CLAUDE_PROJECT_DIR/CLAUDE.md" 2>/dev/null; then
 fi
 ```
 
-**Important constraint:** CLAUDE.md is loaded at session start, not on every turn. Writing to it mid-session does not affect the current session. The `additionalContext` response is the mechanism for immediate in-session feedback; CLAUDE.md is the mechanism for cross-session persistence. Both serve different purposes and should both be used.
+**Important constraint:** CLAUDE.md is loaded at session start, not on every turn. Writes mid-session take effect next session — use `additionalContext` for immediate in-session feedback and CLAUDE.md for cross-session persistence.
 
 ## Flow
 
@@ -182,7 +182,7 @@ if echo "$ERROR" | grep -q "command not found"; then
 fi
 ```
 
-This is technically viable — hooks run in the same shell context as Claude Code and can spawn subprocesses. Use it only if you explicitly want hooks to install system packages. It is a non-trivial side-effect that bypasses normal package management review.
+This is viable — hooks can spawn subprocesses — but only opt in if you accept hooks installing system packages without normal review.
 
 ## Relationship to PreToolUse Prevention
 
@@ -202,6 +202,15 @@ Runtime hook detection adds overhead to every failing Bash call. Three condition
 - **Overly broad pattern matching produces false positives.** If the regex matches "invalid option" in output unrelated to BSD/GNU divergence, the agent receives misleading advice and may spend turns chasing the wrong fix. Test detection patterns against real failure output before deploying.
 - **Sentinel files break in ephemeral environments.** Containerised CI runners, sandboxed shells, or environments where `$HOME` is not persistent will fail to find or create the sentinel file, causing the hook to emit the context message on every invocation rather than once per session. Use an in-process variable or skip once-per-session gating when `$HOME` is not guaranteed.
 - **The hook can mask the original error.** When `additionalContext` fires alongside a non-zero exit, the agent sees both the error and the advisory message. If the advisory message is confident ("use grep -E instead"), the agent may act on it even when the actual error has a different root cause, bypassing diagnostic steps. Keep advisory text conditional and hedged.
+
+### `additionalContext` delivery regressions
+
+The entire mechanism assumes `additionalContext` from the hook reaches the model. That channel has regressed in recent Claude Code versions. Two open issues are worth checking before relying on the pattern:
+
+- [anthropics/claude-code#24788](https://github.com/anthropics/claude-code/issues/24788) (Feb 2026) — `PostToolUse` hooks emitting `additionalContext` produce no visible output when triggered by MCP tool calls.
+- [anthropics/claude-code#55889](https://github.com/anthropics/claude-code/issues/55889) (May 2026) — in v2.1.123, all three context-injection channels (`additionalContext`, `systemMessage`, plain stdout) are dropped for hooks matching `Bash` — the same matcher this pattern uses.
+
+Verify in your target version that a trivial hook (e.g. `jq -n '{additionalContext: "ping"}'` on a failing `Bash` call) actually surfaces to the model before assuming the mechanism is wired end-to-end. If it doesn't, fall back to writing the advisory to a file the next turn can read, or use the `PreToolUse` rewrite approach described earlier.
 
 ## Key Takeaways
 

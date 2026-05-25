@@ -1,5 +1,5 @@
 ---
-title: "System-Level Optimization: Multi-Agent Performance"
+title: "System-Level Optimization Pipeline"
 description: "A four-stage multi-agent pipeline — summarize, analyze, optimize, verify — that reasons about performance across component boundaries instead of optimizing functions in isolation."
 tags:
   - multi-agent

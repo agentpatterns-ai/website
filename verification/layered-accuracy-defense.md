@@ -21,20 +21,20 @@ This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) fr
 
 ## Layer Responsibilities
 
-Each agent receives explicit instructions to reject unverified information, not just "be accurate."
+Each agent receives explicit instructions to reject unsourced information, not just "be accurate."
 
-**Researcher** — output only findings that have a retrievable source URL. If a claim cannot be linked, it is excluded or marked `[unverified]`. The researcher does not summarize from memory.
+**Researcher** — output only findings that have a retrievable source URL. If a claim cannot be linked, exclude it. Do not summarize from memory and do not emit hedge tags — they push the verification burden onto downstream layers with less context.
 
-**Writer** — use only material present in the research notes. Any knowledge added beyond those notes must be marked `[unverified]` inline and collected in an "Unverified Claims" section. The writer does not silently include recalled facts.
+**Writer** — use only material present in the research notes. If a load-bearing claim has no supporting note, omit it and append an outstanding-research item naming the missing source.
 
-**Reviewer** — flag any unsourced claim the writer included without marking. This is the catch layer for anything that slipped through. The reviewer treats an unmarked, unsourced assertion as a critical defect.
+**Reviewer** — flag any assertion in the draft that has no inline citation. This is the catch layer for anything that slipped through, and treats an unsourced claim as a critical defect to be removed or sourced before merge.
 
 ```mermaid
 graph TD
     A[Researcher] -->|Cited findings only| B{Verify: all claims linked?}
     B -->|No| A
     B -->|Yes| C[Writer]
-    C -->|Sourced + marked unverified| D{Verify: no silent facts?}
+    C -->|Notes-only output| D{Verify: no silent facts?}
     D -->|No| C
     D -->|Yes| E[Reviewer]
     E -->|Flag unsourced claims| F{All claims pass?}
@@ -50,25 +50,28 @@ A single "fact-checker" agent at the end of the pipeline has to re-examine the e
 - The writer layer prevents recalled knowledge from entering as fact
 - The reviewer layer catches anything the writer missed
 
-Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and markup completeness — an error must evade three different detection criteria to reach the reader. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
+Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and citation completeness — an error must evade three different detection criteria to reach the reader. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
 
 ## What Each Layer Checks
 
 | Layer | Input | Check | Reject Condition |
 |-------|-------|-------|-----------------|
-| Researcher | Raw sources | Can this claim be linked? | No URL → exclude or mark |
-| Writer | Research notes | Is this from my notes? | Unknown source → mark `[unverified]` |
-| Reviewer | Draft page | Is every claim sourced or marked? | Unmarked, unsourced claim → flag |
+| Researcher | Raw sources | Can this claim be linked? | No URL → exclude |
+| Writer | Research notes | Is this from my notes? | Unknown source → omit, open research item |
+| Reviewer | Draft page | Is every claim sourced inline? | Unsourced claim → flag for removal or sourcing |
 
 ## Anti-Pattern
 
 Relying on a single review agent at the end of the pipeline. That agent will see confident, well-written prose with plausible citations. It has no way to distinguish fabricated confidence from real sourcing unless it re-verifies every claim independently — which is expensive and still fallible.
+
+A second anti-pattern is allowing intermediate layers to emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer that has less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
 
 ## Key Takeaways
 
 - No single agent is the accuracy gatekeeper — every agent in the chain validates within its scope
 - Explicit reject instructions per layer outperform generic "be accurate" prompts
 - Each layer checks a distinct property, so errors must evade different detection criteria rather than the same check repeated
+- Hedge tags are not a defense layer — they shift work downstream without resolving it
 - This is defense in depth applied to content accuracy, not security
 - Anti-pattern: a single fact-checker at the end of the pipeline
 
@@ -80,7 +83,7 @@ Layered verification adds latency and cost proportional to the number of agents.
 - **Rapid iteration contexts** where speed matters more than accuracy — a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
 - **Correlated knowledge gaps** — if the writer and reviewer share the same training data blind spots, both layers will miss the same class of errors. Independent layers require genuinely different perspectives or constraints, not just role labels.
 
-The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks markup. If two layers are doing the same check, one is redundant.
+The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks every assertion against a citation. If two layers are doing the same check, one is redundant.
 
 ## Example
 
@@ -99,21 +102,22 @@ only output findings backed by a URL you retrieved in this session.
 
 ```text
 You are a writer agent. Use ONLY the research notes provided below.
-If you add any knowledge not present in the notes, mark it inline
-with [unverified]. Collect all [unverified] items in a final
-"Unverified Claims" section. Do not silently include recalled facts.
+Do not insert any knowledge that is not present in the notes. If a
+load-bearing claim has no supporting note, omit the claim and append
+an "Outstanding Research" item naming the missing source instead of
+writing the claim into the draft. Do not emit hedge tags.
 ```
 
 **Reviewer prompt excerpt:**
 
 ```text
 You are a reviewer agent. Read the draft and check every factual claim.
-If a claim has no source URL and is not marked [unverified], flag it
-as a CRITICAL defect. Return a list of flagged claims with line numbers.
-Any unmarked, unsourced assertion is a rejection-worthy finding.
+If a factual assertion has no inline source URL, flag it as a CRITICAL
+defect. Return a list of flagged claims with line numbers. Hedge tags
+are not an acceptable substitute for a citation — flag those too.
 ```
 
-The researcher rejects claims without URLs. The writer marks anything beyond the notes. The reviewer catches anything the writer missed. Each layer's failure mode is independent, so a fabricated claim must survive all three to reach the reader.
+The researcher rejects claims without URLs. The writer omits anything beyond the notes and opens an outstanding-research item. The reviewer catches anything the writer let through. Each layer's failure mode is independent, so a fabricated claim must survive all three to reach the reader.
 
 ## Related
 

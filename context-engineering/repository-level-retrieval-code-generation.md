@@ -73,7 +73,7 @@ This differs from [on-demand agent retrieval](retrieval-augmented-agent-workflow
 
 - **Domain shift**: models trained on public repositories perform poorly on proprietary codebases with custom frameworks
 - **Noise in retrieval**: large repositories surface irrelevant context that misleads generation
-- **Staleness**: indexed representations go stale as code changes; incremental re-indexing adds overhead. Stale snippets are not passive noise — see [Stale Repository Retrieval Induces Incorrect Code](stale-repository-retrieval-induces-incorrect-code.md) for the measured impact on code completion accuracy.
+- **Staleness**: indexed representations go stale as code changes; incremental re-indexing adds overhead
 - **Cross-language gaps**: retrieval across language boundaries (e.g., Python calling a Go microservice) remains weak
 - **Privacy**: sending repository context to cloud-hosted models creates data exposure risk
 

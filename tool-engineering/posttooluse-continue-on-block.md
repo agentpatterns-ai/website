@@ -17,9 +17,9 @@ aliases:
 
 ## What Changed
 
-Claude Code v2.1.139 (2026-05-11) added a `continueOnBlock` config option for `PostToolUse` hooks. When `true`, a hook returning `decision: "block"` with a `reason` no longer halts the turn — the reason arrives as a tool-result-style entry and the agent keeps working ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+Claude Code v2.1.139 (2026-05-11) added a `continueOnBlock` config for `PostToolUse` hooks: when `true`, a hook returning `decision: "block"` with a `reason` no longer halts the turn — the reason arrives as a tool-result-style entry and the agent keeps working ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-Before the option, a blocking `PostToolUse` hook ended the turn, training operators to read hook blocks as user denials rather than automated quality gates ([anthropics/claude-code#24327](https://github.com/anthropics/claude-code/issues/24327)). `continueOnBlock` makes the block a corrective signal indistinguishable in shape from an environment-driven tool error.
+Before the option, a blocking `PostToolUse` hook ended the turn, training operators to read hook blocks as user denials rather than quality gates ([anthropics/claude-code#24327](https://github.com/anthropics/claude-code/issues/24327)). `continueOnBlock` makes the block indistinguishable in shape from a tool error.
 
 ## Decision Modes
 
@@ -40,19 +40,19 @@ The first three are covered in [PostToolUse Output Replacement](posttooluse-outp
 Use it when the agent could plausibly succeed by understanding the rule:
 
 - **Path scope** — writes outside an allowed prefix; the refusal names the prefix and the agent reroutes
-- **File size or output volume** — a generated artefact exceeds a soft cap; the agent splits or trims
-- **Command shape** — a Bash invocation matches a discouraged pattern (`rm -rf`, `git push --force`) with a safer alternative
-- **Schema violations** — a write produced malformed JSON or YAML; the refusal cites the validator error
-- **Style/lint blocks** — a `PostToolUse` ruff/eslint runner returns failures and the reason lists fixes
+- **Size or volume** — generated artefact exceeds a cap; agent splits or trims
+- **Command shape** — Bash matches a discouraged pattern (`rm -rf`, `git push --force`); refusal names a safer alternative
+- **Schema violations** — malformed JSON or YAML; refusal cites the validator error
+- **Style/lint blocks** — `PostToolUse` ruff/eslint runner returns failures; reason lists fixes
 
-The rejection text is the corrective payload. Agents trained with tool-use RLHF route on tool-result text — a refusal-with-reason is structurally identical to an environment error, and the model updates the same way.
+The rejection text is the corrective payload. Agents trained with tool-use RLHF route on tool-result text — refusal-with-reason is structurally identical to an environment error.
 
 ## When NOT To Use It
 
-Two categories warrant a silent block instead — `decision: "block"` without `continueOnBlock`, or a `PreToolUse` hook that exits 2:
+Two categories warrant a silent block — `decision: "block"` without `continueOnBlock`, or a `PreToolUse` hook that exits 2:
 
-- **Hard security boundaries.** Egress to unverified hosts, reads from credentials paths, destructive ops on shared state. Every rejection reason is leverage a prompt-injection turn can iterate against. Forcing attacker iteration to be blind is the point.
-- **High-volume matchers.** A `continueOnBlock` hook on every Bash call spams refusal feedback into the turn budget. Tighten the matcher or move to `PreToolUse`.
+- **Hard security boundaries.** Egress to unverified hosts, credential reads, destructive ops on shared state. Every rejection reason is leverage a prompt-injection turn can iterate against — forcing blind iteration is the point.
+- **High-volume matchers.** A `continueOnBlock` hook on every Bash call spams refusal text into the turn budget. Tighten the matcher or move to `PreToolUse`.
 
 ## Hook Shape
 
@@ -66,7 +66,7 @@ Two categories warrant a silent block instead — `decision: "block"` without `c
 }
 ```
 
-`decision` triggers the block path, `reason` carries the corrective text, `continueOnBlock` flips the halt-vs-continue switch. Omit it (or set `false`) and the turn ends with the reason shown to the user.
+`decision` triggers the block, `reason` carries the corrective text, `continueOnBlock` flips halt-vs-continue. Omit it (or set `false`) and the turn ends with the reason shown to the user.
 
 ## Refusal-Text Discipline
 

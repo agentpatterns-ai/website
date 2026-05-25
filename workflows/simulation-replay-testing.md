@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
 ---
 
-# Simulation and Replay Testing for Agent Workflows
+# Simulation and Replay Testing for Agent Verification
 
 > Validate agent prompt changes by replaying a past task in isolation and diffing the result against what was actually merged.
 

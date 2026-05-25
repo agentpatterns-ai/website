@@ -127,10 +127,10 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three harness configurations (ReA
 ## Related
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md)
+- [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Harness Engineering](../agent-design/harness-engineering.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
-- [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)

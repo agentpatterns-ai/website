@@ -41,7 +41,7 @@ Within every aligned model family the flagship is the most-affected sibling — 
 
 ## Mechanism
 
-The consistency cue promotes the implicit in-context task from "make the next decision" to "execute the policy implied by the history." Same class of in-context learning that drives [many-shot jailbreaking](https://www.anthropic.com/research/many-shot-jailbreaking), where attack success scales as a power law in demonstration count ([Anil et al., Anthropic, 2024](https://www.anthropic.com/research/many-shot-jailbreaking)). A geometric account independently corroborates the persistence: conversational history confines model trajectories in latent space, with refusal exhibiting the strongest carryover ([Sun et al., 2026](https://arxiv.org/html/2603.03308)).
+The consistency cue promotes the implicit in-context task from "make the next decision" to "execute the policy implied by the history." Same class of in-context learning that drives [many-shot jailbreaking](https://www.anthropic.com/research/many-shot-jailbreaking), where attack success scales as a power law in demonstration count ([Anil et al., Anthropic, 2024](https://www.anthropic.com/research/many-shot-jailbreaking)). A geometric account independently corroborates the persistence: conversational history confines model trajectories in latent space, with refusal exhibiting the strongest carryover ([Simhi et al., 2026](https://arxiv.org/html/2603.03308)).
 
 ```mermaid
 graph TD
@@ -123,9 +123,11 @@ The deterministic action gate downstream of the model must still enforce this; t
 
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md)
+- [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](cognitive-poisoning-tool-feedback.md)
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)
 - [Indirect Injection Discovery](indirect-injection-discovery.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Oracle Poisoning: Knowledge Graph Corruption](oracle-poisoning-knowledge-graph.md)
 - [Trojan Hippo: Dormant Memory Payloads](trojan-hippo-memory-attack.md)
+- [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md)
 - [Prompt Injection: A First-Class Threat](prompt-injection-threat-model.md)

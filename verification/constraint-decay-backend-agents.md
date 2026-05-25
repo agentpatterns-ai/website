@@ -17,7 +17,7 @@ tags:
 
 ## What Was Measured
 
-Dente, Satriani, and Papotti construct a benchmark of greenfield backend tasks under a fixed API contract, then layer structural requirements — architectural patterns, database backends, ORM mappings — on top. Each task is scored by assertion pass rate. As structural requirements accumulate, capable configurations lose roughly 30 percentage points moving from baseline to fully specified tasks ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)).
+Dente, Satriani, and Papotti construct a benchmark of greenfield backend tasks under a fixed API contract, then layer structural requirements — architectural patterns, database backends, ORM mappings — on top. As structural requirements accumulate, capable configurations lose roughly 30 percentage points in assertion pass rate moving from baseline to fully specified tasks ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)).
 
 ```mermaid
 graph LR
@@ -27,11 +27,11 @@ graph LR
     A -.->|"~30 pp drop"| D
 ```
 
-The drop is not a knowledge gap — agents recognise the conventions individually. It is a budget gap: jointly satisfying the API contract and the framework's implicit invariants pushes total constraint count past reliable simultaneous compliance.
+The drop is not a knowledge gap — agents recognise the conventions individually. It is a budget gap: satisfying the API contract jointly with the framework's implicit invariants pushes constraint count past reliable simultaneous compliance.
 
 ## Framework Sensitivity Is the Dominant Axis
 
-Agents perform well on minimal, explicit frameworks (Flask) and substantially worse on convention-heavy environments (FastAPI, Django) ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)). The more the framework relies on implicit conventions — model classes implying migrations, DI containers implying lifetimes, blueprint registration implying URL prefixes — the more invariants the agent must hold and the steeper the decay curve.
+Agents perform well on minimal, explicit frameworks (Flask) and substantially worse on convention-heavy environments (FastAPI, Django) ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)). The more the framework relies on implicit conventions — model classes implying migrations, DI containers implying lifetimes, blueprint registration implying URL prefixes — the more invariants the agent must hold, and the steeper the decay.
 
 This matches the prompt-level mechanism in [constraint degradation in code generation](../instructions/constraint-degradation-code-generation.md): when constraint count rises, models silently drop the lowest-prominence constraints. Framework conventions are less prominent than the explicit contract, so they go first.
 
@@ -42,17 +42,17 @@ Data-layer defects dominate — incorrect query composition and ORM runtime viol
 - **Contract assertions under-detect ORM bugs.** A response can be JSON-shape-correct while the underlying query is N+1, missing a join, or violating a relationship constraint. Contract tests are necessary but not sufficient.
 - **Framework-aware checks belong in the loop.** ORM violations surface only when the data layer executes — static type checks miss them. Pair contract assertions with integration tests against a real database.
 
-BaxBench, an independent backend benchmark covering correctness and security, finds an analogous gap between snippet-level and complete-system performance, including OpenAPI conformance and CWE-class defects ([Vero et al., 2025](https://arxiv.org/abs/2502.11844)). Both studies converge: passing a functional contract does not imply structural correctness.
+BaxBench, an independent backend benchmark covering correctness and security, finds an analogous gap between snippet-level and complete-system performance ([Vero et al., 2025](https://arxiv.org/abs/2502.11844)). Both studies converge: passing a functional contract does not imply structural correctness.
 
 ## Practical Implications
 
-**Treat framework choice as an evaluation variable.** When benchmarking agents for backend work in your stack, run the same contract across at least two frameworks of different convention density. A model that wins on Flask may lose on Django or FastAPI on the same logical task ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)). Cross-reference [benchmark-driven tool selection](benchmark-driven-tool-selection.md) for telemetry-derived eval design.
+**Treat framework choice as an evaluation variable.** Run the same contract across at least two frameworks of different convention density. A model that wins on Flask may lose on Django or FastAPI on the same logical task ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)). See [benchmark-driven tool selection](benchmark-driven-tool-selection.md) for telemetry-derived eval design.
 
-**Move structural constraints out of the prompt.** Schema-first models, generated migrations, scaffolded routers, and framework-native code generators offload structural rules to deterministic tooling — reducing the constraint count the agent must hold during generation. This is the same lever as in [constraint degradation in code generation](../instructions/constraint-degradation-code-generation.md), applied at the framework layer.
+**Move structural constraints out of the prompt.** Schema-first models, generated migrations, scaffolded routers, and framework-native code generators offload structural rules to deterministic tooling — reducing the constraint count the agent must hold. Same lever as [constraint degradation in code generation](../instructions/constraint-degradation-code-generation.md), applied at the framework layer.
 
-**Add ORM-layer assertions to the eval suite.** Because data-layer defects dominate, the eval suite needs query-shape and relationship-integrity assertions, not just response-shape assertions on the API. A `pytest` fixture that snapshots the executed SQL or counts queries per request catches the failure mode the contract test misses.
+**Add ORM-layer assertions to the eval suite.** Because data-layer defects dominate, the suite needs query-shape and relationship-integrity assertions, not just response-shape assertions. A `pytest` fixture that snapshots executed SQL or counts queries per request catches the failure mode contract tests miss.
 
-**Decompose multi-file generation across turns when possible.** A single one-shot prompt asking for routes, models, schemas, services, and migrations stacks the constraint load. Sequential turns — model first, then migration, then router, then service — let the agent verify prior constraints against existing code before adding the next layer.
+**Decompose multi-file generation across turns.** A one-shot prompt for routes, models, schemas, services, and migrations stacks the constraint load. Sequential turns — model, then migration, then router, then service — let the agent verify prior constraints before adding the next layer.
 
 ## When This Result Does Not Apply
 

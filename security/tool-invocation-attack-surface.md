@@ -125,14 +125,10 @@ Layered defenses reduce attack surface but do not eliminate it:
 ## Related
 
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md) — the general injection threat that tool-invocation attacks build upon
-- [Tool Signing and Signature Verification](tool-signing-verification.md) — prevents loading tampered tools, complementary to runtime defenses
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layering principle that tool-invocation defense requires
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — tool invocation provides both the untrusted input and egress legs
-- [Sandbox Rules for Harness-Owned Tools](sandbox-rules-harness-tools.md) — scope rules to tools you control; MCP tools enforce their own
-- [Code Injection Defence in Multi-Agent Pipelines](code-injection-multi-agent-defence.md) — multi-agent architectures that detect injected code before execution
-- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns that limit blast radius when injection succeeds
-- [Guarding Against URL-Based Data Exfiltration](url-exfiltration-guard.md) — URL channels as an exfiltration vector complementary to ToolLeak
 - [Action-Selector Pattern](action-selector-pattern.md) — tool outputs never re-enter the model, eliminating the return-channel injection vector this page describes
 - [CaMeL: Separating Control and Data Flow](camel-control-data-flow-injection.md) — architectural defense that makes instruction-data confusion structurally impossible
+- [Tool Signing and Signature Verification](tool-signing-verification.md) — prevents loading tampered tools, complementary to runtime defenses
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious tool registration via poisoned public registries, an upstream variant of the MCP attack vector
-- [Mid-Trajectory Guardrail Selection](mid-trajectory-guardrail-selection.md) — choosing guardrails that catch injection attempts mid-execution
+- [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns that limit blast radius when injection succeeds

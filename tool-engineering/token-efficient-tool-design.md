@@ -33,7 +33,7 @@ Structured output (JSON with named fields, or concise text) is easier for the ag
 
 ### Eliminate Functional Overlap
 
-When two tools do similar things, the agent must reason about which to use before it can act. That reasoning consumes tokens and introduces error. Each tool should have a clear, non-overlapping scope. If two tools overlap, merge them or differentiate their purpose explicitly in their descriptions.
+When two tools do similar things, the agent must reason about which to use before acting. That reasoning consumes tokens and introduces error. Give each tool a clear, non-overlapping scope; if two overlap, merge them or differentiate their descriptions explicitly.
 
 ### Write Precise Descriptions
 
@@ -41,7 +41,7 @@ Tool names and descriptions are themselves context. An ambiguous description for
 
 ### Cap Toolset Size
 
-A large toolset is a reasoning tax. Before each call, the agent evaluates available tools and selects one. More tools means more evaluation tokens spent per decision. Keep the toolset to what the agent actually needs for its defined tasks. Remove tools that are rarely called or whose functionality is covered by another tool.
+A large toolset is a reasoning tax. Before each call, the agent evaluates available tools and selects one — more tools means more evaluation tokens per decision. Keep the toolset to what the agent needs for its defined tasks; remove tools that are rarely called or whose functionality is covered elsewhere.
 
 ## Anti-Patterns
 
@@ -53,7 +53,7 @@ A large toolset is a reasoning tax. Before each call, the agent evaluates availa
 
 ## Sizing Tool Output
 
-A useful heuristic: the output of a tool call should fit in a paragraph. If it doesn't, consider whether:
+A useful heuristic: tool output should fit in a paragraph. If it doesn't, consider whether:
 
 1. The tool is returning too much (add filtering or summarisation)
 2. The task genuinely requires that much information (in which case, load it once and structure it carefully)
@@ -130,5 +130,3 @@ The agent receives `"3 checks passed, 1 failed: lint"` and can immediately decid
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — applies the same token-efficiency principles at the MCP server boundary
-- [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
-- [Context Priming](../context-engineering/context-priming.md)

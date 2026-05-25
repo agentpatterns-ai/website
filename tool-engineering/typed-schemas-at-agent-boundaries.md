@@ -125,11 +125,9 @@ The orchestrator never inspects free-text output. If the triage agent returns an
 ## Related
 
 - [Structured Output Constraints](../verification/structured-output-constraints.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Distributed Computing Parallels](../human/distributed-computing-parallels.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [MCP Server Design](mcp-server-design.md)
-- [MCP Client Design](mcp-client-design.md)
 - [MCP Client-Server Architecture](mcp-client-server-architecture.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)

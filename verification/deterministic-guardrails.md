@@ -1,6 +1,6 @@
 ---
 title: "Deterministic Guardrails Around Probabilistic Agents"
-description: "Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces"
+description: "Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces."
 tags:
   - testing-verification
   - tool-agnostic
@@ -12,11 +12,9 @@ tags:
 
 ## The Core Distinction
 
-Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored, sometimes misunderstood. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.
+Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.
 
-Agents are probabilistic. They will sometimes produce bad output. Guardrails are deterministic. They either pass or fail, every time, for every output.
-
-Use both. Prompts guide agent behavior. Guardrails enforce properties of the output.
+Agents are probabilistic and will sometimes produce bad output. Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
 
 ## Guardrail Categories
 
@@ -81,18 +79,18 @@ Each layer catches what the previous missed:
 
 ## What Guardrails Cannot Do
 
-Guardrails check properties, not intent. A URL validator confirms a link resolves — it cannot confirm the link points to the claimed content. A linter confirms syntax — it cannot confirm logic. A schema validator confirms structure — it cannot confirm the data is correct.
+Guardrails check properties, not intent. A URL validator confirms a link resolves — not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness.
 
-The guardrail catches what it is programmed to catch. Design guardrails to be specific. A guardrail that checks "file is valid YAML" is weaker than one that checks "file matches the required schema with all required fields present."
+Design guardrails to be specific. "File is valid YAML" is weaker than "file matches the required schema with all required fields present."
 
 ## When This Backfires
 
 Guardrails impose fixed costs that do not scale linearly with value. The pattern is worse than the alternative when:
 
-- **Coverage is thin but visible.** A handful of cheap checks create the impression of verification without covering the classes of errors that actually ship. Teams stop scrutinising output because "the checks passed" — the false-confidence failure mode identified in [Layered Accuracy Defense](layered-accuracy-defense.md).
-- **CI latency dominates the agent loop.** When every iteration waits on a multi-minute test matrix, agents batch fixes into larger, less reviewable diffs. Short feedback cycles matter more than thoroughness during exploration; move heavy checks to merge gates and keep pre-commit hooks fast.
-- **Hook noise trains bypass behaviour.** Aggressive pre-commit checks that fire on legitimate exploratory work push operators toward `--no-verify` habitually. Once bypass is normalised, the deterministic guarantee is gone.
-- **The guardrail drifts from the property.** A linter rule or schema written years ago can encode a stale invariant. When production behaviour moves on, the check keeps passing while the thing it was meant to protect has changed. Guardrails need the same maintenance as the code they guard.
+- **Coverage is thin but visible.** Cheap checks create the impression of verification without covering the errors that actually ship — the false-confidence failure mode in [Layered Accuracy Defense](layered-accuracy-defense.md).
+- **CI latency dominates the agent loop.** When every iteration waits on a multi-minute test matrix, agents batch fixes into larger, less reviewable diffs. Move heavy checks to merge gates and keep pre-commit hooks fast.
+- **Hook noise trains bypass behaviour.** Aggressive checks that fire on legitimate exploratory work push operators toward `--no-verify`. Once bypass is normalised, the deterministic guarantee is gone.
+- **The guardrail drifts from the property.** A rule written years ago can encode a stale invariant — the check passes while the thing it protected has changed. Guardrails need the same maintenance as the code they guard.
 
 ## Anti-Pattern
 
@@ -152,14 +150,8 @@ Each layer is independent: the PostToolUse hook catches issues file-by-file as t
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
 - [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md)
-- [Diff-Based Review Over Output Review](../code-review/diff-based-review.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
-- [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Structured Output Constraints](structured-output-constraints.md)
-- [Risk-Based Shipping: Review by Risk Matrix, Not by Default](risk-based-shipping.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
 - [Verification Ledger](verification-ledger.md)
-- [Red-Green-Refactor with Agents: Tests as the Spec](red-green-refactor-agents.md)
-- [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md)
-- [Demand-Driven Repo Auditing](demand-driven-repo-auditing.md)

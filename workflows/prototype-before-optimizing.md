@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints"
 description: "Deferring token cost constraints until after establishing quality baselines avoids locking in suboptimal architectures and ensures optimization targets something measurable."
@@ -11,6 +10,8 @@ aliases:
   - no-token-limit magic
   - baseline-first optimization
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Prototype Before Optimizing
 

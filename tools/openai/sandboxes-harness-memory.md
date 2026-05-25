@@ -13,13 +13,13 @@ tags:
 
 ## What Shipped
 
-OpenAI released the Agents SDK update on [2026-04-15](https://openai.com/index/the-next-evolution-of-the-agents-sdk/), consolidating three primitives teams previously assembled themselves:
+OpenAI [released](https://openai.com/index/the-next-evolution-of-the-agents-sdk/) the Agents SDK update on 2026-04-15, consolidating three primitives teams previously assembled themselves:
 
 1. A **model-native harness** — the control plane around the model
 2. **Native sandbox execution** — a compute plane for model-directed work
-3. **Configurable memory** — two distinct systems (session and sandbox)
+3. **Configurable memory** — two systems (session and sandbox)
 
-Python-first; TypeScript is [planned for later](https://openai.com/index/the-next-evolution-of-the-agents-sdk/).
+Python-first; TypeScript is planned.
 
 ## Harness / Compute Separation
 
@@ -42,34 +42,34 @@ graph LR
 
 ## Sandbox Primitives
 
-Sandbox execution is authored through [`SandboxAgent`, `Runner.run`, and `SandboxRunConfig`](https://openai.github.io/openai-agents-python/sandbox/guide/). `SandboxAgent` keeps the standard agent surface (instructions, tools, handoffs, `mcp_servers`, guardrails, hooks) and adds a `Manifest` whose `entries` dictionary declares the workspace file-access surface via `LocalDir`, `Dir`, `File`, `GitRepo`, and remote `Mount` types.
+Sandbox execution is authored through [`SandboxAgent`, `Runner.run`, and `RunConfig`](https://developers.openai.com/api/docs/guides/agents/sandboxes). `SandboxAgent` keeps the standard agent surface (instructions, tools, handoffs, `mcp_servers`, guardrails, hooks) and adds a `Manifest` plus `LocalDir` mounts declaring workspace file access.
 
-Sandbox clients are pluggable class instances ([reference](https://openai.github.io/openai-agents-python/sandbox/clients/)):
+Sandbox clients are pluggable ([reference](https://openai.github.io/openai-agents-python/sandbox/clients/)):
 
 - `UnixLocalSandboxClient` — local filesystem, dev-only
-- `DockerSandboxClient` — stronger isolation, production parity
+- Docker — stronger isolation, production parity
 - Hosted providers — OpenAI [partners with Cloudflare, Vercel, E2B, and Modal](https://devops.com/openai-upgrades-its-agents-sdk-with-sandboxing-and-a-new-model-harness/) for container-based execution
 
-The client is supplied through `SandboxRunConfig(client=...)` nested in `RunConfig(sandbox=...)`, not on the agent — keep `SandboxAgent`, manifest, and capabilities stable and [swap the client per environment](https://openai.github.io/openai-agents-python/sandbox/guide/).
+The provider lives in `RunConfig`, not the agent — [swap clients per environment](https://developers.openai.com/api/docs/guides/agents/sandboxes) while the agent, manifest, and capabilities stay stable.
 
 **Isolation caveat**: partners ship containers (Modal uses gVisor). For cross-tenant threat models, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents) — see [Subprocess and PID-namespace sandboxing](../../security/subprocess-pid-namespace-sandboxing.md).
 
 ## Harness Primitives
 
-The harness standardises primitives that were previously bespoke per-agent ([Help Net Security](https://www.helpnetsecurity.com/2026/04/16/openai-agents-sdk-harness-and-sandbox-update/)):
+The harness standardises primitives previously bespoke per-agent ([Help Net Security](https://www.helpnetsecurity.com/2026/04/16/openai-agents-sdk-harness-and-sandbox-update/)):
 
 - Tool use via [MCP](../../standards/mcp-protocol.md)
 - Progressive disclosure via [skills](../../standards/agent-skills-standard.md)
 - Custom instructions via [`AGENTS.md`](../../standards/agents-md.md)
-- Code execution via the `exec_command` tool (added by the `Shell` capability)
-- File edits via the `apply_patch` tool (added by the `Filesystem` capability)
+- Code execution via a `shell` tool
+- File edits via an `apply_patch` tool
 - Compaction for long-running runs
 
 Loop customisation is coarse. `Runner` manages turns, tools, guardrails, handoffs, and sessions — teams that [want full loop control](https://ai-sdk.dev/docs/agents/loop-control) call the Responses API directly.
 
 ## Memory: Two Systems
 
-The SDK exposes **two memory systems**, each with a distinct lifecycle. Confusing them is the most common mistake.
+The SDK exposes **two memory systems** with distinct lifecycles. Confusing them is the most common mistake.
 
 ### Session Memory
 
@@ -80,7 +80,7 @@ Conversation history with an explicit API ([sessions guide](https://openai.githu
 - `pop_item()` — remove most recent
 - `clear_session()` — wipe
 
-After a non-streaming run, `add_items()` persists the user input plus model outputs from the latest turn. Backends ship as first-class extras:
+After a non-streaming run, `add_items()` persists user input plus model outputs from the latest turn. Backends ship as first-class extras:
 
 | Backend | Purpose |
 |---------|---------|
@@ -121,19 +121,11 @@ Skip the SDK when:
 
 ## Example
 
-A `SandboxAgent` run with a `SQLAlchemySession` for conversation history and a Docker sandbox for execution. The harness routes the tool call; the sandbox runs `exec_command` and `apply_patch` against a manifested workspace ([guide](https://openai.github.io/openai-agents-python/sandbox/guide/)).
+A `SandboxAgent` run with a `SQLAlchemySession` for conversation history and a Docker sandbox for execution. The harness routes the tool call; the sandbox runs `shell` and `apply_patch` against a manifested workspace.
 
 ```python
-from docker import from_env as docker_from_env
-
-from agents import Runner
-from agents.run import RunConfig
-from agents.sandbox import SandboxAgent, Manifest, LocalDir, SandboxRunConfig
-from agents.sandbox.config import DEFAULT_PYTHON_SANDBOX_IMAGE
-from agents.sandbox.sandboxes.docker import (
-    DockerSandboxClient,
-    DockerSandboxClientOptions,
-)
+from agents import Runner, RunConfig
+from agents.sandbox import SandboxAgent, Manifest, LocalDir
 from agents.extensions.memory import SQLAlchemySession
 
 session = SQLAlchemySession.from_url(
@@ -145,37 +137,31 @@ session = SQLAlchemySession.from_url(
 agent = SandboxAgent(
     name="refactor-bot",
     instructions="Refactor the target module. Run tests after each change.",
-    default_manifest=Manifest(entries={"target": LocalDir(src="./target")}),
-    # tools: exec_command + apply_patch are wired by the Shell and Filesystem capabilities
+    manifest=Manifest(mounts=[LocalDir("./target", read_write=True)]),
+    # tools: shell + apply_patch are wired by the harness
 )
 
 result = await Runner.run(
     agent,
-    "Extract the auth middleware into its own module.",
+    input="Extract the auth middleware into its own module.",
     session=session,
-    run_config=RunConfig(
-        sandbox=SandboxRunConfig(
-            client=DockerSandboxClient(docker_from_env()),
-            options=DockerSandboxClientOptions(image=DEFAULT_PYTHON_SANDBOX_IMAGE),
-        ),
-    ),
+    run_config=RunConfig(sandbox_client="docker"),
 )
 ```
 
-Swap `DockerSandboxClient` for `UnixLocalSandboxClient` in dev or a hosted-provider client (e.g. `ModalSandboxClient`) in production. The agent definition, manifest, and session stay stable.
+Swap `sandbox_client="docker"` for `"unix_local"` in dev or a hosted provider in production. The agent, manifest, and session stay stable.
 
 ## Key Takeaways
 
 - Three primitives in one Python SDK: model-native harness, native sandbox execution, configurable memory — shipped 2026-04-15
 - Harness owns the trusted loop; sandbox owns untrusted execution — snapshot/rehydrate recovers from sandbox failure
 - Two memory systems: `Session` for conversation history (SQLAlchemy, SQLite, Redis, encrypted), sandbox memory for filesystem-distilled lessons across runs
-- Harness primitives are opinionated (`exec_command`, `apply_patch`, `AGENTS.md`, MCP, skills, compaction) — bypass `Runner` for custom loops
+- Harness primitives are opinionated (`shell`, `apply_patch`, `AGENTS.md`, MCP, skills, compaction) — bypass `Runner` for custom loops
 - Container-level isolation via partner providers (Cloudflare, Vercel, E2B, Modal) — insufficient for threat models requiring microVMs
 
 ## Related
 
 - [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — selection rubric across the OpenAI sandbox clients, `docker sbx`, bubblewrap, and Seatbelt
-- [Subprocess and PID-namespace sandboxing](../../security/subprocess-pid-namespace-sandboxing.md)
 - [Sandbox rules and harness tools](../../security/sandbox-rules-harness-tools.md)
 - [Harness engineering](../../agent-design/harness-engineering.md)
 - [Managed vs self-hosted harness](../../agent-design/managed-vs-self-hosted-harness.md)

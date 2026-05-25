@@ -32,11 +32,8 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries
 - [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — Request structured errors from HTTP APIs using Accept headers to replace brittle HTML parsing with deterministic control flow
-- [Graceful Tool-Output Truncation](graceful-tool-output-truncation.md) — When output would exceed the token budget, return a useful prefix plus a structurally distinct PARTIAL marker and a continuation handle — not a hard error the agent has to recover from blind
-- [OpenAPI Documentation Smells for Agent-Ready APIs](openapi-documentation-smells.md) — A nine-category taxonomy that surfaces the gap between structurally valid OpenAPI specs and agent-consumable API descriptions, plus scenario-first triage that keeps remediation tractable
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — Expose the full product surface through API, MCP, and CLI so agents acting on behalf of users can complete any flow the GUI supports
 - [Tool Necessity Probing](tool-necessity-probing.md) — Read tool-call decisions from the pre-generation hidden state with a linear probe — AUROC 0.89–0.96, 48% fewer tool calls at 1.7% accuracy loss
-- [Future-Based Asynchronous Function Calling](future-based-async-function-calling.md) — Wrap function calls in a futures protocol so a stock LLM keeps decoding while tools execute in the background, pipelining model and execution latency without retraining or breaking the synchronous schema
 
 ## MCP (Model Context Protocol)
 
@@ -59,16 +56,13 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 Packaging domain knowledge and reusable capabilities as agent skills with reliable invocation and lifecycle governance.
 
 - [Skill as Knowledge Pattern](skill-as-knowledge.md) — Design skills as pure knowledge containers -- domain rules, heuristics, and reference material -- not executable behavior, so they remain portable across agents
-- [Project Writing Skill](project-writing-skill.md) — Package project writing conventions as a model-invocable skill loaded only when the agent generates prose, instead of bloating AGENTS.md or CLAUDE.md with rules that enter every turn
 - [CLI-First Skill Design](cli-first-skill-design.md) — Design agent skills as CLI tools so the same interface serves both humans debugging locally and agents automating through shell tool calls
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — Practical patterns for building, testing, and troubleshooting agent skills -- categories, description craft, implementation patterns, and debugging
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
 - [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
-- [Skill Library Technical Debt](skill-library-technical-debt.md) — Library-level defects accumulate even when every single skill passes its eval; diagnose typed debt signatures with six mechanical detectors and apply named maintenance actions at library time
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
-- [One-Shot Record and Deterministic Replay for Periodic Agent Tasks](one-shot-record-deterministic-replay.md) — Record the LLM's tool-call sequence once, parameterize what varies, replay deterministically without the model — the cost-reduction pattern for cron-style agent workloads
 
 ## Hooks & Lifecycle
 
@@ -82,9 +76,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md) — The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — Claude Code's PreCompact hook can now block compaction outright, deferring context compression until the agent reaches a safer checkpoint
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
-- [Hook Exec Form vs Shell Form](hook-exec-form-vs-shell.md) — Use the `args: string[]` field so the harness spawns hooks with execve instead of `sh -c`, neutralising shell metacharacters in substituted hook input
 - [Terminal Tool Output Compression](terminal-output-compression.md) — Harness-side post-processing collapses predictable shell-output noise (lockfile diffs, `ls -l`, `npm install` progress, unchanged diff hunks) before the model sees it, with a banner that lets the agent opt out per call
-- [Out-of-Band Hook Notifications via terminalSequence](terminal-sequence-hook-notifications.md) — Claude Code's `terminalSequence` hook output field emits allowlisted terminal escape sequences — window titles, bells, OSC 9/99/777 desktop notifications — through the harness's own write path, signaling the human without spending agent context
 
 ## Specialized Tools
 
@@ -98,7 +90,6 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md) — Back an agent's regex search with a trigram or suffix-array index so query latency stays bounded on large repositories, at the cost of freshness machinery
 - [Next Edit Suggestions](next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode
 - [Override Interactive Commands](override-interactive-commands.md) — Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and automated execution
-- [Agent-Aware CLI Behaviour via Environment Variable](agent-aware-cli-via-env-var.md) — Harness-set env vars (`VSCODE_AGENT`, `CLAUDECODE`) let CLIs detect agent execution and switch to machine-readable output without per-CLI flag knowledge in the system prompt
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists
 - [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes
 - [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — A single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives

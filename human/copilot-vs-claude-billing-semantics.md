@@ -58,7 +58,7 @@ flowchart LR
 
 **Zero-cost base models are Copilot's key advantage.** GPT-4o and GPT-4.1 consume no premium requests on paid plans; Claude has no equivalent zero-cost tier.
 
-Auto model selection gives a 10% discount ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Overages cost $0.04 per request; unused requests reset monthly and do not roll over ([GitHub Docs: Premium requests](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests)).
+[Auto model selection](../agent-design/auto-model-selection.md) gives a 10% discount ([GitHub Docs: Copilot requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests)). Overages cost $0.04 per request; unused requests reset monthly and do not roll over ([GitHub Docs: Premium requests](https://docs.github.com/en/billing/concepts/product-billing/github-copilot-premium-requests)).
 
 ## Claude API Token Pricing
 

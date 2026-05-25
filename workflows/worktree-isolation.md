@@ -1,6 +1,6 @@
 ---
-title: "Worktree Isolation: Git Sandboxes for Parallel Agents"
-description: "Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with each other or with the main branch"
+title: "Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes"
+description: "Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with each other or with the main branch."
 tags:
   - agent-design
 aliases:

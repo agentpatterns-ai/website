@@ -26,13 +26,13 @@ The [Symphony spec](https://github.com/openai/symphony/blob/main/SPEC.md) define
 | Agent session | Subprocess launch contract, multi-turn streaming, stall detection, retry with exponential backoff |
 | Reconciliation | Re-fetching tracker state between turns, terminal-state cleanup, restart recovery without a database |
 
-Out of scope: ticket comments, PR linking, tracker mutations, a workflow engine, or a mandated approval policy. Those live in the agent's tool layer or implementation policy.
+Out of scope: ticket comments, PR linking, tracker mutations, workflow graphs, and approval policy — those live in the agent's tool layer or implementation policy.
 
 ## Configuration as a Single File
 
-Symphony is configured by a repo-owned `WORKFLOW.md` with YAML front matter and a Markdown prompt body ([SPEC.md](https://github.com/openai/symphony/blob/main/SPEC.md)). The front matter declares tracker, polling, workspace, hooks, agent concurrency, and codex settings. The body is the prompt template, with `{{ issue.* }}` and `{{ attempt }}` variables.
+Symphony is configured by a repo-owned `WORKFLOW.md`: YAML front matter declaring tracker, polling, workspace, hooks, agent concurrency, and codex settings, plus a Markdown prompt body with `{{ issue.* }}` and `{{ attempt }}` variables ([SPEC.md](https://github.com/openai/symphony/blob/main/SPEC.md)).
 
-Dynamic reload is mandatory: implementations must re-read `WORKFLOW.md` on change without restart. Invalid reloads keep the last good config and surface an operator error.
+Implementations must re-read `WORKFLOW.md` on change without restart. Invalid reloads keep the last good config and surface an operator error.
 
 ## Lifecycle and State Machine
 
@@ -77,18 +77,18 @@ Symphony covers a different layer from MCP, A2A, and AGENTS.md.
 | [AGENTS.md](agents-md.md) | Project context | Repository ↔ any AI coding tool |
 | Symphony | Orchestration | Issue tracker ↔ per-issue agent run |
 
-A Symphony deployment can use MCP for the agent's tool layer and AGENTS.md for project context inside each workspace. Symphony sits above those specs, defining how runs are scheduled and bounded.
+A Symphony deployment can use MCP for the agent's tool layer and AGENTS.md for project context inside each workspace — Symphony sits above those specs, defining how runs are scheduled and bounded.
 
 ## Vendor Coupling Reality
 
 The spec is open, but adoption today is narrow ([openai/symphony](https://github.com/openai/symphony) and [SPEC.md](https://github.com/openai/symphony/blob/main/SPEC.md)):
 
-- **Tracker adapter v1**: Linear only. The spec's tracker interface is generalisable, but no other adapter ships in the reference implementation.
-- **Agent runtime v1**: Codex App Server only. The launch contract hardcodes `codex app-server` and assumes the Codex protocol's session/turn events.
-- **Reference implementation**: Elixir. OpenAI invites reimplementation in any language but does not commit to maintaining Symphony as a standalone product.
+- **Tracker adapter v1**: Linear only. The tracker interface is generalisable, but no other adapter ships.
+- **Agent runtime v1**: Codex App Server only. The launch contract hardcodes `codex app-server` and assumes the Codex session/turn protocol.
+- **Reference implementation**: Elixir. OpenAI invites reimplementation but does not commit to maintaining Symphony as a standalone product.
 - **Status**: Described by OpenAI as a "low-key engineering preview for testing in trusted environments" — not production-ready.
 
-Symphony is a published reference architecture for issue-tracker-driven orchestration, not a settled cross-vendor protocol. Non-OpenAI agents or non-Linear trackers require rebuilding both adapter layers before adoption.
+Symphony is a reference architecture, not a settled cross-vendor protocol. Non-OpenAI agents or non-Linear trackers require rebuilding both adapter layers before adoption.
 
 ## Example
 

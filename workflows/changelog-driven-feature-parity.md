@@ -65,7 +65,7 @@ As of 2026-03. Sources: [Claude Code changelog](https://code.claude.com/docs/en/
 | [Agent SDK](../tools/claude/agent-sdk.md) (TypeScript + Python) | pre-2026 | — | Claude Code only |
 | `/research` command (exportable reports) | — | v0.0.417 (2026-02-25) | Copilot CLI only |
 | `/review` command (built-in code review agent) | — | v0.0.388 (2026-01-20) | Copilot CLI only |
-| `/chronicle` (standup / session history) | — | v0.0.419 (2026-02-27) | Copilot CLI only |
+| [`/chronicle`](../observability/agent-history-as-artifact.md) (standup / session history) | — | v0.0.419 (2026-02-27) | Copilot CLI only |
 | [MCP Elicitations (structured form input)](../tool-engineering/mcp-elicitation.md) | — | v0.0.421 (experimental) | Copilot CLI only |
 | Extensions via `@github/copilot-sdk` | — | v1.0.3 (experimental, 2026-03-09) | Copilot CLI only |
 | Session usage metrics (`events.jsonl`) | — | v0.0.422 | Copilot CLI only |
