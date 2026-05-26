@@ -5,8 +5,10 @@ tags:
   - agent-design
   - instructions
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot Custom Agents and Skills Extensibility Guide
 
 > Custom agents, skills, and plugins are GitHub Copilot's three extensibility layers — agents codify team workflows, skills teach Copilot specialized tasks via progressive disclosure, and plugins bundle everything into shareable packages.

@@ -9,8 +9,10 @@ tags:
   - agent-design
   - cost-performance
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Feature Flags and Environment Variables
 
 > Claude Code exposes environment variables that control model selection, context handling, tool concurrency, and observability — each prefixed with a naming convention (`ENABLE_*`, `DISABLE_*`, `CLAUDE_CODE_*`) that signals its stability and risk profile.

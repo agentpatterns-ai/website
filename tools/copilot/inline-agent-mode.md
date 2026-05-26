@@ -4,8 +4,10 @@ description: "Public-preview surface that runs Copilot agent capabilities inside
 tags:
   - agent-design
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Inline Agent Mode in JetBrains
 
 > Public-preview surface that runs Copilot agent capabilities inside the JetBrains inline chat popover instead of the dedicated chat panel.

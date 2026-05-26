@@ -5,8 +5,10 @@ tags:
   - agent-design
   - workflows
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code /batch and Worktrees
 
 > Parallel execution at scale — decompose large changes into independent units, each in an isolated worktree.

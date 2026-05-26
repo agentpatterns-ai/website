@@ -6,8 +6,10 @@ tags:
   - agent-design
   - copilot
   - github-actions
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Models in Actions
 
 > Insert AI judgment into GitHub Actions workflows using GitHub Models — no external API keys, version-controlled prompts, and deterministic branching on probabilistic outputs.

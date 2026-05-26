@@ -4,8 +4,10 @@ description: "Connect Copilot to external tools and data sources via the Model C
 tags:
   - agent-design
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot MCP Integration
 
 > Connect Copilot to external tools and data sources via the Model Context Protocol.

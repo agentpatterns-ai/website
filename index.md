@@ -12,6 +12,13 @@ tags:
 
 This is a reference site, not a tutorial. Every page covers a single concept — what it is, how it works, when to use it, and what to watch out for. Tool-agnostic principles with practical examples from GitHub Copilot and Claude Code.
 
+## Browse by topic
+
+Most readers find what they need through tags or the concept map, not the section tree.
+
+- **[Tags](tags.md)** — Topic-first entry points (context engineering, agent design, security, verification, evals, workflows, and more) with curated anchor pages per tag
+- **[Concept Map](concepts.md)** — All content grouped by theme, cutting across sections
+
 ## Sections
 
 - **Foundations** — [Context Engineering](context-engineering/context-engineering.md) and [Instructions](instructions/system-prompt-altitude.md)
@@ -21,5 +28,3 @@ This is a reference site, not a tutorial. Every page covers a single concept —
 - **[Workflows](workflows/index.md)** — End-to-end workflows for agent-assisted development
 - **Reference** — [Standards](standards/index.md), [Human Factors](human/index.md), [Emerging](emerging/index.md), [Fallacies](fallacies/index.md)
 - **Tools** — [Claude Code](tools/claude/index.md), [GitHub Copilot](tools/copilot/index.md)
-- **[Concept Map](concepts.md)** — All content grouped by theme
-- **[Tags](tags.md)** — Browse all content by topic

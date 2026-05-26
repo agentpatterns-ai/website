@@ -5,8 +5,10 @@ tags:
   - agent-design
   - security
   - memory
+applies_to: "openai-agents-sdk@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # OpenAI Agents SDK Sandboxes Harness and Memory
 
 > The April 2026 OpenAI Agents SDK update ships three primitives — controlled sandboxes, an inspectable harness, and configurable memory — in one Python library.

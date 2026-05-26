@@ -8,8 +8,10 @@ tags:
 aliases:
   - plugin monitors manifest key
   - declarative session supervision
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Plugin Background Monitors: Declarative Supervision Auto-Armed at Session Start
 
 > Plugins declare a top-level `monitors` manifest key; Claude Code arms each monitor automatically at session start or on skill invoke for the lifetime of the session.

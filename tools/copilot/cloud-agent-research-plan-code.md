@@ -5,8 +5,10 @@ tags:
   - agent-design
   - copilot
   - workflows
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Cloud Agent Three-Phase Execution Model
 
 > Copilot cloud agent exposes a three-phase execution model — Research, Plan, and Code — where each phase produces a reviewable artifact before the next phase begins.

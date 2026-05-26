@@ -6,8 +6,10 @@ tags:
   - agent-design
   - copilot
   - github-actions
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Agentic Workflows
 
 > Event-driven repository automation defined in Markdown and compiled to GitHub Actions, with defense-in-depth security and zero-secret-access agent containers.

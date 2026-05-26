@@ -8,8 +8,10 @@ tags:
   - agent-design
   - multi-agent
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Agent Teams
 
 > Coordinated multi-agent sessions with shared task lists, direct messaging, and team lead orchestration.

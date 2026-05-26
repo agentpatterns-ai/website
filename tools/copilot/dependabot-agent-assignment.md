@@ -5,8 +5,10 @@ tags:
   - copilot
   - workflows
   - security
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Dependabot Agent Assignment
 
 > Route Dependabot alerts to GitHub Copilot for autonomous fix generation, with human review at the merge gate.

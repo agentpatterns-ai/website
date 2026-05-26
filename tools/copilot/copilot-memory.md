@@ -9,8 +9,10 @@ tags:
 aliases:
   - Agentic Memory
   - Copilot Agentic Memory
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Memory and Cross-Agent Persistence
 
 > Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI, with citation-based verification and 28-day auto-expiry. Enabled by default for Pro and Pro+ users since March 2026.

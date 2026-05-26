@@ -8,8 +8,10 @@ tags:
 aliases:
   - managed-settings.d
   - managed settings drop-in
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Managed Settings Drop-In Directory
 
 > Deploy independent policy fragments per team using `managed-settings.d/`, eliminating merge conflicts and centralizing ownership without a single shared file.

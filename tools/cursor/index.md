@@ -4,6 +4,9 @@ description: "Tool-specific reference for Cursor's agentic features — Agents W
 tags:
   - cursor
   - agent-design
+applies_to: "cursor@3.x"
+last_reviewed: 2026-05-27
+status: current
 ---
 # Cursor
 

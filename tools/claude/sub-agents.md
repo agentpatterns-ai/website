@@ -7,8 +7,10 @@ aliases:
 tags:
   - agent-design
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Sub-Agents
 
 > Ephemeral, isolated agents that execute focused tasks and return results to the parent.

@@ -9,8 +9,10 @@ aliases:
   - gh skill command
   - GitHub CLI agent skills
   - Copilot skill CLI management
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Managing Agent Skills from the GitHub CLI
 
 > `gh skill` turns skill install, search, update, and publish into scriptable GitHub CLI operations — usable in repo bootstrap scripts, CI, and enterprise provisioning.

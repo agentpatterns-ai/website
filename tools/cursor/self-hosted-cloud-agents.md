@@ -8,8 +8,10 @@ tags:
 aliases:
   - cursor self-hosted agents
   - cursor bring your own runner
+applies_to: "cursor@3.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Cursor Self-Hosted Cloud Agents
 
 > Run Cursor cloud agents in your own infrastructure — inference stays in Cursor's cloud, tool execution runs locally.

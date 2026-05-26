@@ -9,8 +9,10 @@ aliases:
   - Monitor tool
   - background script monitoring
   - agent event streaming
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Monitor Tool: Event Streaming from Background Scripts
 
 > Stream stdout from a background process directly to Claude — each output line arrives as a notification, no polling required.

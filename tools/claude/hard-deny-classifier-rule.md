@@ -9,8 +9,10 @@ aliases:
   - hard_deny rule
   - autoMode hard_deny
   - unconditional classifier deny
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Hard-Deny Classifier Rule
 
 > The `autoMode.hard_deny` field blocks tool calls unconditionally inside the auto-mode classifier — user intent and allow exceptions do not apply.

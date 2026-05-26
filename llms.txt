@@ -244,7 +244,7 @@
 - [The Context Ceiling](https://agentpatterns.ai/human/context-ceiling/): AI agents hit a hard capability boundary on expert-level architecture work: the context required — regulations, organ...
 
 ## Claude Code
-<!-- lastmod: 2026-05-12 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Claude Code](https://agentpatterns.ai/tools/claude/): Tool-specific reference for Claude Code's agentic features.
 - [Channels Permission Relay](https://agentpatterns.ai/tools/claude/channels-permission-relay/): Forward tool-use approval prompts from a running Claude Code session to your phone via Telegram, Discord, or iMessage...
@@ -267,7 +267,7 @@
 - [Skill Eval Loop](https://agentpatterns.ai/tools/claude/skill-eval-loop/): Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing [ev...
 
 ## GitHub Copilot
-<!-- lastmod: 2026-05-26 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [GitHub Copilot](https://agentpatterns.ai/tools/copilot/): Tool-specific reference for GitHub Copilot's agentic features.
 - [Agent HQ (Multi-Agent Platform)](https://agentpatterns.ai/tools/copilot/agent-hq/): GitHub's platform for running multiple coding agents — Copilot, Claude, and Codex — within a single interface, with c...

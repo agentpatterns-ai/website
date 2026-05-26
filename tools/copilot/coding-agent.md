@@ -7,8 +7,10 @@ aliases:
 tags:
   - agent-design
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot Coding Agent
 
 > Asynchronous agent that works via GitHub Actions to plan, implement, test, and open pull requests.

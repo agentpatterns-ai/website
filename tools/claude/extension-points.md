@@ -5,8 +5,10 @@ tags:
   - instructions
   - agent-design
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Extension Points: When to Use What
 
 > Choose the right extension point — CLAUDE.md, rules, skills, hooks, subagents, MCP servers, or plugins — based on enforcement needs, context cost, and portability.

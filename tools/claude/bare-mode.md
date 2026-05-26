@@ -9,8 +9,10 @@ tags:
   - claude
   - workflows
   - github-actions
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code `--bare` Flag
 
 > Skip all local configuration discovery for deterministic, faster scripted calls.

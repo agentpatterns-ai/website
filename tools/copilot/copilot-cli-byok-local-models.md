@@ -9,8 +9,10 @@ aliases:
   - Copilot CLI bring your own key
   - Copilot CLI local models
   - Copilot CLI offline mode
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot CLI BYOK and Local Model Support
 
 > Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control, data residency compliance, and fully air-gapped workflows.

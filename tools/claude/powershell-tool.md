@@ -7,8 +7,10 @@ tags:
 aliases:
   - PowerShell tool
   - Windows native shell Claude Code
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # PowerShell Tool: Native Windows Shell for Claude Code
 
 > Run PowerShell commands natively from Claude Code — no Git Bash path translation, no POSIX shim, direct access to cmdlets and .NET APIs. Rolling out on Windows; opt-in preview on Linux, macOS, and WSL.
