@@ -13,7 +13,7 @@ aliases:
   - monolith-to-pipeline agent migration
 ---
 
-# Monolith-to-Sub-Agents Refactor
+# Monolith-to-Sub-Agents Refactor: Five Lessons from a Brittle Prototype
 
 > A five-step migration checklist for taking a brittle monolithic agent prototype to a production-grade orchestrated pipeline — ordered so each step surfaces the failure modes the next step fixes.
 

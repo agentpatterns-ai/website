@@ -1,5 +1,5 @@
 ---
-title: "Eval Engineering for Agents — Measuring Quality Over Time"
+title: "Eval Engineering (Training Module)"
 description: "Pass@k metrics, LLM-as-judge grading, golden query pairs, incident-to-eval synthesis, eval-driven development, and anti-gaming defenses."
 tags:
   - training
@@ -10,7 +10,7 @@ aliases:
   - agent evals
   - evaluation engineering
 ---
-# Eval Engineering
+# Eval Engineering (Training Module)
 
 > Eval engineering is the discipline of measuring agent quality across sessions and over time — distinct from the harness engineering that catches mistakes during a single execution.
 

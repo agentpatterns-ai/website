@@ -10,7 +10,7 @@ aliases:
   - code bloat
 ---
 
-# Abstraction Bloat
+# Abstraction Bloat in AI Agent-Generated Code Output
 
 > Agents optimize for comprehensive-looking output, not minimal viable implementation. The result is structurally over-engineered code that passes tests but creates maintenance burden through unnecessary class hierarchies, dead code, and unrequested features.
 

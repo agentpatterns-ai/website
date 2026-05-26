@@ -11,7 +11,7 @@ tags:
   - observability
 ---
 
-# Verification Ledger
+# Verification Ledger for Tracking Agent Output Quality
 
 > Replace self-reported agent claims ("Build passed") with structured records — every verification step is an INSERT, every evidence bundle is a SELECT.
 

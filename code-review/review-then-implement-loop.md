@@ -11,7 +11,7 @@ aliases:
   - "Agent Review Loops"
 ---
 
-# Review-Then-Implement Loop
+# Review-Then-Implement Loop for AI Agent Development
 
 > Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result.
 

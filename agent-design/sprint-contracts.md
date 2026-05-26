@@ -10,7 +10,7 @@ aliases:
   - generator-evaluator agreement
 ---
 
-# Sprint Contracts
+# Sprint Contracts: Pre-Coding Success Agreements for Multi-Agent Tasks
 
 > A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization and enabling consistent feedback loops.
 

@@ -6,7 +6,7 @@ tags:
   - testing-verification
 ---
 
-# Failure-Driven Iteration
+# Failure-Driven Iteration for Improving Agent Workflows
 
 > A development technique where you deliberately run code to generate error output, then feed that output to the agent as the primary context for the next fix — grounding solutions in real signals rather than speculative descriptions.
 

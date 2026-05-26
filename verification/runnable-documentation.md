@@ -6,7 +6,7 @@ tags:
   - workflows
 ---
 
-# Runnable Documentation
+# Runnable Documentation as Agent Verification
 
 > Convert inline code examples into standalone files that CI executes on every build — catching doc rot with the same signals that catch broken code, and cutting stale-context failures in agents that retrieve docs via RAG.
 

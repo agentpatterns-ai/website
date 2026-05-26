@@ -12,7 +12,7 @@ aliases:
   - refactoring-aware refinement
 ---
 
-# Refactoring Runaway
+# Refactoring Runaway: Tangled Refactorings in Agent Patches
 
 > Coding agents inherit human developers' habit of bundling unsolicited refactors into bug-fix patches; the tangled changes break compilability without improving functional correctness, and stripping or repairing them recovers about half the lost build success.
 

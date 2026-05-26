@@ -1,5 +1,5 @@
 ---
-title: "Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics"
+title: "Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)"
 description: "A single untrusted tool call plants a payload in agent long-term memory that activates only when the user later discusses sensitive topics — turning memory into a temporal channel between injection and exfiltration."
 tags:
   - security
@@ -10,7 +10,7 @@ aliases:
   - sensitive-topic-triggered memory exfiltration
 ---
 
-# Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics
+# Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)
 
 > A single untrusted tool call plants a payload in agent long-term memory that activates only when the user later discusses sensitive topics — turning memory into a temporal channel between injection and exfiltration.
 

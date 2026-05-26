@@ -9,7 +9,7 @@ aliases:
   - cron scheduling
 ---
 
-# Session Scheduling
+# Session Scheduling with Loop and Cron in Claude Code
 
 > Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no external infrastructure required.
 

@@ -7,7 +7,7 @@ tags:
   - human-factors
 ---
 
-# Verification-Centric Development
+# Verification-Centric Development for AI-Generated Code
 
 > Software 1.0 is software you specify. Software 2.0 is software you verify.
 

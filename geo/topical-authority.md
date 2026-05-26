@@ -10,7 +10,7 @@ tags:
   - workflows
 ---
 
-# Topical Authority
+# Topical Authority — Entity Coverage for AI Citation
 
 > Comprehensive coverage of a topic domain drives persistent AI citation presence. A site with many interconnected pages on one subject consistently outperforms a site with one excellent page on a subtopic.
 

@@ -1,5 +1,5 @@
 ---
-title: "Audit AGENTS.md"
+title: "Audit AGENTS.md Instruction Files"
 description: "Locate every AGENTS.md and equivalent in a repository, run mechanical checks against the pointer-map rules, validate links and commands, and emit a structured findings report with suggested rewrites."
 tags:
   - tool-agnostic
@@ -12,7 +12,7 @@ aliases:
 
 Packaged as: `.claude/skills/agent-readiness-audit-agents-md/`
 
-# Audit AGENTS.md
+# Audit AGENTS.md Instruction Files
 
 > Locate every `AGENTS.md` and equivalent, run mechanical checks against pointer-map rules, validate links and commands, emit findings.
 

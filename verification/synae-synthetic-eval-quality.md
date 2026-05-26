@@ -1,5 +1,5 @@
 ---
-title: "SynAE: Measuring Synthetic Eval Data Quality Before You Trust It as a Regression Gate"
+title: "Measuring Synthetic Eval Data Quality (SynAE)"
 description: "Score synthetic tool-calling agent eval datasets on three axes — validity, fidelity, diversity — across four trace components, before letting a synthetic suite gate deploys against a production distribution it may have drifted from."
 tags:
   - testing-verification
@@ -10,7 +10,7 @@ aliases:
   - SynAE framework
 ---
 
-# SynAE: Measuring Synthetic Eval Data Quality Before You Trust It as a Regression Gate
+# Measuring Synthetic Eval Data Quality (SynAE)
 
 > Score synthetic tool-calling agent eval datasets on validity, fidelity, and diversity across task instructions, tool calls, final outputs, and downstream eval results — before letting a synthetic suite gate deploys against a production distribution it may have drifted from.
 

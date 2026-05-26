@@ -11,7 +11,7 @@ aliases:
   - agent-tool wrappers
 ---
 
-# Toolset Agentization
+# Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents
 
 > Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step.
 

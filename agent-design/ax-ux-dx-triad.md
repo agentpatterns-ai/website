@@ -11,7 +11,7 @@ tags:
   - source:arxiv
 ---
 
-# AX/UX/DX Triad
+# AX/UX/DX Triad: Three Experience Layers in Agent Systems
 
 > Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces. Optimizing for one often degrades the others -- treat each as a first-class concern with its own interface contract.
 

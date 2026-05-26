@@ -11,7 +11,7 @@ aliases:
   - control models
 ---
 
-# Suggestion Gating
+# Suggestion Gating: Fewer Completions, Better DX
 
 > ~90% of AI code completion inference is wasted — suggestions generated but never shown, or shown and immediately dismissed. Gating fixes this by deciding *whether* to suggest before deciding *what* to suggest.
 

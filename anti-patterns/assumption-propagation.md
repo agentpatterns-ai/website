@@ -7,7 +7,7 @@ tags:
   - source:osmani-80-percent
 ---
 
-# Assumption Propagation
+# Assumption Propagation: Compounding Agent Misunderstandings
 
 > The agent misunderstands a requirement early and builds on the faulty premise — each step reinforcing the wrong assumption until the error is too expensive to unwind.
 

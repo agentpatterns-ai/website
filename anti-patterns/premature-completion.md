@@ -11,7 +11,7 @@ aliases:
   - incomplete-fix inflation
 ---
 
-# Premature Completion
+# Premature Completion: Agents That Declare Success Too Early
 
 > Coding agents stop after the first visible signal of progress and declare done while failing tests, unmet objectives, or unverified artifacts persist. Distinct from continuing past completion — same surface symptom, different cause, different fix.
 

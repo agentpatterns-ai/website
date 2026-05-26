@@ -11,7 +11,7 @@ aliases:
   - multitask slash command
 ---
 
-# Cursor /multitask
+# Cursor /multitask: Async Subagent Dispatch in the Editor
 
 > Dispatch async subagents from the editor session — parallelise queued prompts and let Cursor break a large task across a background subagent fleet.
 

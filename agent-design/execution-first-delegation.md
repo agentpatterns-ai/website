@@ -9,7 +9,7 @@ aliases:
   - delegation contract pattern
 ---
 
-# Execution-First Delegation
+# Execution-First Delegation: The AI-as-Executor Pattern
 
 > Instead of scripting steps, specify the outcome and the boundaries. The agent determines how.
 

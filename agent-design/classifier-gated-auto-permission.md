@@ -12,7 +12,7 @@ aliases:
   - permission classifier pattern
 ---
 
-# Classifier-Gated Auto-Permission
+# Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents
 
 > A separate classifier model inspects each tool call in the auto-permission path and re-introduces a prompt only when the action looks like an escalation — a probabilistic safety floor distinct from per-call quality review and from static allowlists.
 

@@ -12,7 +12,7 @@ tags:
   - source:opendev-paper
 ---
 
-# Tool Engineering
+# Tool Engineering Principles for AI Agent Development
 
 > Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions.
 

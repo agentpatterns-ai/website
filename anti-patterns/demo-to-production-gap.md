@@ -6,7 +6,7 @@ tags:
   - testing-verification
 ---
 
-# Demo-to-Production Gap
+# Demo-to-Production Gap: When Demos Hide Real Costs
 
 > Agent demos curate inputs and ignore edge cases. Production requires scale, security constraints, partial context, and failing tools. The gap is systematically underestimated.
 

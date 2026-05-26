@@ -1,5 +1,5 @@
 ---
-title: "FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems"
+title: "Coverage-Guided Fuzzing for Multi-Agent LLM Systems (FLARE)"
 description: "FLARE adapts coverage-guided fuzzing to multi-agent LLM systems, using agent interaction path coverage as the exploration signal to uncover coordination failures and emergent failure modes."
 tags:
   - testing-verification
@@ -12,7 +12,7 @@ aliases:
   - "agentic fuzzing"
 ---
 
-# FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems
+# Coverage-Guided Fuzzing for Multi-Agent LLM Systems (FLARE)
 
 > FLARE applies coverage-guided fuzzing to multi-agent LLM systems, using interaction path coverage as the exploration signal to surface coordination failures behavioral evals miss.
 

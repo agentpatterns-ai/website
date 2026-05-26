@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
 ---
 
-# Process Amplification
+# Process Amplification: Scaling Human Work with Agents
 
 > Agents magnify existing engineering practices. Strong processes improve dramatically; weak processes degrade at scale. Invest in your environment before investing in your prompts.
 

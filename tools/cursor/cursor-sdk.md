@@ -9,7 +9,7 @@ aliases:
   - "@cursor/sdk"
 ---
 
-# Cursor SDK
+# Cursor SDK: Programmable TypeScript Agent Runtime
 
 > Embed Cursor's agent harness in TypeScript applications, with local, Cursor-hosted, or self-hosted runtimes behind one interface.
 

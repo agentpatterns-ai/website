@@ -1,12 +1,12 @@
 ---
-title: "Harness Engineering: Environments Where Agents Succeed"
+title: "Harness Engineering (Training Module)"
 description: "Designing development environments where agents succeed by default through legibility, mechanical enforcement, and constrained solution spaces."
 tags:
   - training
   - agent-design
   - tool-agnostic
 ---
-# Harness Engineering
+# Harness Engineering (Training Module)
 
 > The discipline of designing development environments where agents succeed by default -- through legibility, mechanical enforcement, and constrained solution spaces.
 

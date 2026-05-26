@@ -8,7 +8,7 @@ aliases:
   - Project Instruction Files
 ---
 
-# CLAUDE.md Convention
+# CLAUDE.md Convention for Structuring Agent Instructions
 
 > CLAUDE.md is Claude Code's project-level instruction file -- a Markdown file that Claude Code reads at session start to understand project conventions, tooling, and behavioral rules.
 

@@ -10,7 +10,7 @@ aliases:
   - delegation frontier
 ---
 
-# Ambition Scaling
+# Ambition Scaling: Moving the Target as Model Capability Increases
 
 > When a new model clears a previously-uneconomic task, the right response is usually not "do the same work faster" but "expand what you attempt" — provided the harness, review capacity, and feedback loops scale with the target.
 

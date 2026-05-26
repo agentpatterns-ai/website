@@ -1,5 +1,5 @@
 ---
-title: "Petri Net of Thoughts: Formal Process Models as Prompting Scaffolds"
+title: "Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)"
 description: "Use Petri net formalism to structure LLM reasoning — places define states, transitions define decisions, and token replay drives each prompt with accumulated context."
 tags:
   - agent-design
@@ -9,7 +9,7 @@ aliases:
   - PNoT prompting
 ---
 
-# Petri Net of Thoughts: Formal Process Models as Prompting Scaffolds
+# Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)
 
 > Derive reasoning structure from process evidence — Petri net places define states, transitions define decisions, and token replay drives each prompt step with accumulated context.
 

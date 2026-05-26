@@ -7,7 +7,7 @@ tags:
   - workflows
 ---
 
-# Golden Journeys
+# Golden Journeys: Restartability as a First-Class Verification Primitive
 
 > Name a small set of end-to-end paths through the running system, each with an explicit failure signal per step, and gate completion on the system restarting cleanly afterward.
 

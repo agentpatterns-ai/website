@@ -8,7 +8,7 @@ tags:
   - patterns
 ---
 
-# Patterns
+# Patterns: Agent Design, Multi-Agent, and Anti-Patterns
 
 > Recurring architectural patterns for building, coordinating, and debugging AI coding agents — plus the anti-patterns that derail them.
 

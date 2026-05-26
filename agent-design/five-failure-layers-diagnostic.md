@@ -12,7 +12,7 @@ aliases:
   - five-layer agent diagnostic
 ---
 
-# Five-Failure-Layers Diagnostic
+# Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model
 
 > Before swapping models, force every observed failure through a fixed harness-layer attribution. "The model is dumb" almost always resolves to a specific layer once the discipline is applied.
 

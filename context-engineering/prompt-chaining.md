@@ -9,7 +9,7 @@ tags:
   - agent-design
   - workflows
 ---
-# Prompt Chaining
+# Prompt Chaining: Sequential LLM Calls for Agent Workflows
 
 > Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage.
 
