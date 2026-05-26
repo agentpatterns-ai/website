@@ -117,7 +117,7 @@ for surface in $RETRIEVE_CALLS; do
 done
 ```
 
-The decision rule is strict: `high` only when **any RAG retrieval surface AND no tenant filter detectable AND any multi-tenant deployment surface** all hold (per [issue #3475 decision rule](https://github.com/agentpatterns-ai/content/issues/3475)). Single-tenant projects with unfiltered retrieval get `low` advisory only.
+The decision rule is strict: `high` only when **any RAG retrieval surface AND no tenant filter detectable AND any multi-tenant deployment surface** all hold. Single-tenant projects with unfiltered retrieval get `low` advisory only.
 
 ## Step 5 — Red-Team Probe with Canary Documents
 
@@ -157,7 +157,7 @@ Reference: the empirical evaluation in [`multitenant-rag-authorization-gap`](../
 |----------|---------|------|---------|---------------|
 ```
 
-Severity rule (per the [issue #3475](https://github.com/agentpatterns-ai/content/issues/3475) decision rule):
+Severity rule:
 
 - `high` — both legs fire: any RAG retrieval tool AND no tenant filter detectable at query, post-retrieval, or index level AND any multi-tenant deployment surface. Also: tenant_id sourced from agent-supplied tool arguments; canary returned on cross-tenant probe.
 - `medium` — single filter layer only (pre-filter without post-ACL, or vice versa); tenant_id provenance unclear; ANN-bypass risk on approximate-nearest-neighbour backend without defence-in-depth.
