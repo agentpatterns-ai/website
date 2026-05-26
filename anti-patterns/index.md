@@ -42,3 +42,4 @@ tags:
 - [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — Stronger LLMs produce more bloated and coupled code; capability gains buy maintainability losses, and detailed prompting does not mitigate the decay
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
 - [Vibe Coding](../workflows/vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
+- [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with confident speculation that misleads downstream triage

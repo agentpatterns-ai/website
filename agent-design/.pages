@@ -104,6 +104,10 @@ nav:
       - idempotent-agent-operations.md
       - interactive-effort-sliders.md
       - long-running-agents.md
+      - remote-agent-host-sessions.md
+      - observation-contract-preservation.md
+      - per-call-budget-hints-tool-calls.md
+      - per-tool-extended-reasoning-opt-in.md
       - progressive-spend-threshold-alerting.md
       - ralph-wiggum-loop.md
       - reasoning-budget-allocation.md
@@ -132,6 +136,7 @@ nav:
       - isometric-harness-ablation.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
+      - multi-shape-byok-provider.md
       - observability-driven-harness-evolution.md
       - per-model-harness-tuning.md
       - persistent-connection-agent-transport.md
