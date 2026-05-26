@@ -11,7 +11,7 @@ aliases:
   - "bounded mid-task question"
 ---
 
-# In-Thread Side-Channel
+# In-Thread Side-Channel: Bounded Side Questions Without Losing the Main Task
 
 > Ask a mid-task clarifying question inside the current session using a bounded, tagged sub-conversation that returns the agent to the prior goal — applies only when the question is short, the session is long, and the agent is not mid-transaction.
 

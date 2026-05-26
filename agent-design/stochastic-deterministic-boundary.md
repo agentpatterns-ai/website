@@ -11,7 +11,7 @@ aliases:
   - proposer verifier commit reject contract
 ---
 
-# Stochastic-Deterministic Boundary
+# Stochastic-Deterministic Boundary as First-Class Contract
 
 > Treat the boundary between an LLM proposal and a deterministic system action as a typed four-part contract — proposer, verifier, commit, reject — once a system has multiple action sites or non-trivial commit side effects.
 

@@ -12,7 +12,7 @@ aliases:
   - ADAP algorithm
 ---
 
-# Adaptive Generate-Rank-Verify
+# Adaptive Generate-Rank-Verify Under Costly Verification
 
 > Generate candidates cheaply, rank with a cheap signal, spend expensive verifier cycles only on the top of the ranking — apply when verification dominates the per-sample cost.
 

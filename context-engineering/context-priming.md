@@ -10,7 +10,7 @@ aliases:
   - Breadcrumbs in Code
 ---
 
-# Context Priming
+# Context Priming: Pre-Loading Files for AI Agent Tasks
 
 > Load relevant context before asking an agent to act — the order information enters the context window shapes the quality of everything that follows.
 

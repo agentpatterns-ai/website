@@ -1,5 +1,5 @@
 ---
-title: "Audit CLAUDE.md"
+title: "Audit CLAUDE.md Instruction Files"
 description: "Locate CLAUDE.md and equivalent project instruction files, run mechanical checks for size, polarity, embedded code, @path imports, primacy, and cache stability, and emit findings."
 tags:
   - tool-agnostic
@@ -12,7 +12,7 @@ aliases:
 
 Packaged as: `.claude/skills/agent-readiness-audit-claude-md/`
 
-# Audit CLAUDE.md
+# Audit CLAUDE.md Instruction Files
 
 > Locate `CLAUDE.md` and equivalents, run mechanical checks for size, polarity, embedded code, `@path` imports, primacy, cache stability.
 

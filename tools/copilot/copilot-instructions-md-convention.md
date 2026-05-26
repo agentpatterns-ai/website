@@ -1,5 +1,5 @@
 ---
-title: "copilot-instructions.md Convention"
+title: "copilot-instructions.md as a Repo-Level Instruction Convention"
 description: ".github/copilot-instructions.md is GitHub Copilot's repository-level instruction file that injects project context into every Copilot interaction automatically."
 aliases:
   - Copilot Instruction File
@@ -9,7 +9,7 @@ tags:
   - copilot
 ---
 
-# copilot-instructions.md Convention
+# copilot-instructions.md as a Repo-Level Instruction Convention
 
 > `.github/copilot-instructions.md` is GitHub Copilot's repository-level instruction file -- a single Markdown file that injects project context into every Copilot interaction without repeating it per prompt.
 

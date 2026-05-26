@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
 ---
 
-# Harness Hill-Climbing
+# Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses
 
 > Use eval scores as the optimization signal to systematically improve agent harness configuration, replacing ad-hoc prompt tweaking with a structured feedback loop.
 

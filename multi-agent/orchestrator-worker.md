@@ -10,7 +10,7 @@ aliases:
   - Scatter-Gather
 ---
 
-# Orchestrator-Worker Pattern
+# Orchestrator-Worker Pattern for AI Agent Development
 
 > A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel, reducing resolution time compared to sequential single-agent approaches.
 

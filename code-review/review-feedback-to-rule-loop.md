@@ -12,7 +12,7 @@ aliases:
   - promote review feedback to harness checks
 ---
 
-# Review-Feedback-to-Rule Loop
+# Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules
 
 > When the same review comment fires across 3+ PRs in a window, the rule belongs in the harness, not in the reviewer's head — promote it to a mechanical check with remediation text, and retire it when the hit count trends to zero.
 

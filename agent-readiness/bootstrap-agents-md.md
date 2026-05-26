@@ -1,5 +1,5 @@
 ---
-title: "Bootstrap AGENTS.md"
+title: "Bootstrap an AGENTS.md Pointer Map"
 description: "Detect existing instruction surfaces, probe for non-discoverable knowledge, generate root and subdirectory AGENTS.md files following pointer-map rules, and validate against the audit runbook."
 tags:
   - tool-agnostic
@@ -12,7 +12,7 @@ aliases:
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-agents-md/`
 
-# Bootstrap AGENTS.md
+# Bootstrap an AGENTS.md Pointer Map
 
 > Detect existing instruction surfaces, probe for non-discoverable knowledge, generate root and subdirectory `AGENTS.md` per pointer-map rules, then validate.
 

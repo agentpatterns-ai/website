@@ -6,7 +6,7 @@ tags:
   - agent-design
 ---
 
-# Continuous Documentation
+# Continuous Documentation as an Agent-Driven Practice
 
 > A workflow where AI agents detect documentation-code drift on schedule or push, then open reviewable PRs to realign — treating documentation maintenance as a continuous pipeline rather than a periodic chore.
 

@@ -1,5 +1,5 @@
 ---
-title: "Bootstrap llms.txt"
+title: "Bootstrap an llms.txt Index for LLM Discoverability"
 description: "Detect a project's documentation surface, extract a structured index per the open spec, generate /llms.txt and /llms-full.txt, and validate spec compliance."
 tags:
   - tool-agnostic
@@ -12,7 +12,7 @@ aliases:
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-llms-txt/`
 
-# Bootstrap llms.txt
+# Bootstrap an llms.txt Index for LLM Discoverability
 
 > Detect the documentation surface, extract a structured index per the [llms.txt spec](https://llmstxt.org), generate both files, validate.
 

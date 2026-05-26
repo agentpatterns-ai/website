@@ -1,12 +1,12 @@
 ---
-title: "Context Engineering: Designing for Reliable Agent Output"
+title: "Context Engineering (Training Module)"
 description: "Context engineering is the discipline of designing what enters a model context window, how it is structured, and what is excluded to maximise reliability."
 tags:
   - training
   - context-engineering
   - tool-agnostic
 ---
-# Context Engineering
+# Context Engineering (Training Module)
 
 > The discipline of designing what enters a model's context window, how it is structured, and what is excluded — to maximise output quality and reliability.
 

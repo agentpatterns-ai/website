@@ -10,7 +10,7 @@ aliases:
   - skill quality evaluation
 ---
 
-# Skill Evals
+# Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit
 
 > Treat each skill as an evaluable unit: a small labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs.
 

@@ -1,5 +1,5 @@
 ---
-title: "Grading Strategies for Agent Evaluation Suite Design"
+title: "Grading Strategies for Eval-Driven Development"
 description: "Code-based grading, LLM-as-judge evaluation, and human review — when to use each method and how to calibrate them for reliable agent quality measurement."
 tags:
   - training
@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
 ---
 
-# Grading Strategies
+# Grading Strategies for Eval-Driven Development
 
 > The grader determines what "correct" means — choose the wrong grading strategy and your eval suite measures the wrong thing.
 

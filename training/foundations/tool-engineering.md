@@ -1,12 +1,12 @@
 ---
-title: "Tool Engineering for Agents: Design, Schemas, and MCP"
+title: "Tool Engineering (Training Module)"
 description: "Tool engineering shapes what agents can do and how much context each action costs — output design, minimalism, descriptions, poka-yoke, schemas, and MCP."
 tags:
   - training
   - cost-performance
   - tool-agnostic
 ---
-# Tool Engineering
+# Tool Engineering (Training Module)
 
 > The quality of an agent's tools bounds the quality of its output -- no prompt compensates for a tool interface the model cannot use reliably.
 

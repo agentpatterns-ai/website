@@ -10,7 +10,7 @@ aliases:
   - Loop Detection & Stopping
 ---
 
-# Loop Detection
+# Loop Detection for AI Agents: Stopping Micro-Loops
 
 > **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
 

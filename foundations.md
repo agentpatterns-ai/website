@@ -7,7 +7,7 @@ tags:
   - foundations
 ---
 
-# Foundations
+# Foundations: Context Engineering and Instructions
 
 > The two disciplines that underpin every effective agent interaction: what information enters the context window, and how instructions shape agent behavior.
 

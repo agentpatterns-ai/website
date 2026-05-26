@@ -1,5 +1,5 @@
 ---
-title: "Migrating from Proprietary Extensions to Open Standards"
+title: "Proprietary-to-Open-Standard Tool Migration (Copilot Extensions to MCP)"
 description: "How to migrate from deprecated Copilot Extensions to MCP servers, and the broader pattern of proprietary extension systems converging on open protocols."
 tags:
   - agent-design
@@ -9,7 +9,7 @@ aliases:
   - Copilot Extensions to MCP Migration
 ---
 
-# Proprietary-to-Open-Standard Migration
+# Proprietary-to-Open-Standard Tool Migration (Copilot Extensions to MCP)
 
 > When a proprietary extension system gets replaced by an open protocol, the right response is to rebuild on the standard — not port the old architecture. The Copilot Extensions deprecation exemplifies this pattern.
 

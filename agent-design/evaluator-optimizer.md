@@ -10,7 +10,7 @@ aliases:
   - refinement loop
 ---
 
-# Evaluator-Optimizer Pattern
+# Evaluator-Optimizer Pattern for AI Agent Development
 
 > Two distinct LLM roles in a loop: a generator produces output and an evaluator critiques it, feeding structured feedback back to the generator until a quality threshold is met.
 

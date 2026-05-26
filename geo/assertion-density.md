@@ -7,7 +7,7 @@ tags:
   - workflows
 ---
 
-# Assertion Density
+# Assertion Density — Stats and Quotes Over Vague Claims
 
 > Replace vague qualifiers with specific numbers, dates, sample sizes, and attributed quotes. The Princeton GEO study found this is the highest-impact single rewrite technique for AI citation rates — up to 40–41% improvement in source visibility.
 

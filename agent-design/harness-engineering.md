@@ -11,7 +11,7 @@ aliases:
   - environment design for agents
 ---
 
-# Harness Engineering
+# Harness Engineering for Building Reliable AI Agents
 
 > The discipline of designing agent environments -- layered architecture, mechanical enforcement, legibility -- so agents reliably produce correct results. Environment design matters more than prompting.
 

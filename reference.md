@@ -10,7 +10,7 @@ tags:
   - articles
 ---
 
-# Reference
+# Reference: Standards, Human Factors, Emerging, Fallacies, and Articles
 
 > Standards, human factors, emerging trends, reasoning fallacies, and long-form articles that provide broader context for AI-assisted development.
 

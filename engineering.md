@@ -10,7 +10,7 @@ tags:
   - code-review
 ---
 
-# Engineering
+# Engineering: Tools, Review, Verification, Security, and Observability
 
 > The engineering disciplines that turn agent prototypes into production systems — tool design, code review, verification, security hardening, and observability.
 

@@ -10,7 +10,7 @@ tags:
   - harness-engineering
 ---
 
-# Rigor Relocation
+# Rigor Relocation: Engineering Discipline with AI Agents
 
 > Engineering discipline does not disappear when agents write the code -- it relocates from code style and abstractions to scaffolding, feedback loops, and constraint enforcement.
 
