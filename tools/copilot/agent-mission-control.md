@@ -8,8 +8,10 @@ tags:
 aliases:
   - Mission Control
   - Copilot Mission Control
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Agent Mission Control
 
 > GitHub's centralized dashboard for assigning, steering, and tracking Copilot coding agent tasks across repositories.

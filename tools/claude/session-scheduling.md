@@ -7,8 +7,10 @@ tags:
 aliases:
   - scheduled tasks
   - cron scheduling
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Session Scheduling with Loop and Cron in Claude Code
 
 > Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no external infrastructure required.

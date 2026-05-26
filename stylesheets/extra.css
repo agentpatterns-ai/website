@@ -142,6 +142,72 @@
   }
 }
 
+/* ── Currency badges (last_reviewed / applies_to / status) ── */
+
+.currency-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.currency-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 0.25rem;
+  background: var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.currency-badge code {
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+.currency-badge--aging {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.currency-badge--archived {
+  background: #e5e7eb;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+
+[data-md-color-scheme="slate"] .currency-badge {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-md-color-scheme="slate"] .currency-badge--aging {
+  background: rgba(252, 211, 77, 0.16);
+  color: #fcd34d;
+  border-color: rgba(252, 211, 77, 0.32);
+}
+
+[data-md-color-scheme="slate"] .currency-badge--archived {
+  background: rgba(156, 163, 175, 0.16);
+  color: #d1d5db;
+  border-color: rgba(156, 163, 175, 0.32);
+}
+
+@media (max-width: 600px) {
+  .currency-badges {
+    font-size: 0.68rem;
+  }
+}
+
 /* ── Feedback FAB ── */
 
 .wwa-fab {

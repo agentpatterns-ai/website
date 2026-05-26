@@ -9,8 +9,10 @@ tags:
   - agent-design
   - instructions
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Hooks
 
 > Deterministic automation at lifecycle points — shell commands, HTTP calls, or LLM prompts that fire on specific events.

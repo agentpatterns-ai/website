@@ -6,8 +6,10 @@ tags:
   - workflows
   - code-review
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Review
 
 > A managed multi-agent review service that posts inline findings on every GitHub PR — no subagent configuration required.

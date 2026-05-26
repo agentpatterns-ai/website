@@ -9,6 +9,8 @@ tags:
 
 > All site content grouped by theme, cutting across sections. Find related concepts regardless of where they live in the navigation.
 
+This map cuts across the directory tree to reflect the practitioner-resource spine — patterns, anti-patterns, paper summaries, and tool features sit together when they're about the same problem. See the [Tags index](tags.md) for topic-tag entry points or [STANDARDS.md](https://github.com/agentpatterns-ai/content/blob/main/STANDARDS.md#what-this-site-is) for what makes the cut.
+
 <div class="grid cards" markdown>
 
 -   **Context Engineering**

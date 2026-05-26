@@ -9,8 +9,10 @@ aliases:
   - skill eval loop
   - skill-creator evals
   - skill benchmarking
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Skill Eval Loop
 
 > Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing [eval-driven development](../../workflows/eval-driven-development.md) to skill authoring without writing code.

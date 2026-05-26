@@ -7,8 +7,10 @@ tags:
 aliases:
   - cursor typescript sdk
   - "@cursor/sdk"
+applies_to: "cursor@3.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Cursor SDK: Programmable TypeScript Agent Runtime
 
 > Embed Cursor's agent harness in TypeScript applications, with local, Cursor-hosted, or self-hosted runtimes behind one interface.

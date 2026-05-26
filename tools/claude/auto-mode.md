@@ -9,8 +9,10 @@ tags:
 aliases:
   - "auto mode classifier"
   - "classifier-based permission gating"
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Code Auto Mode
 
 > A two-stage classifier evaluates each tool call before execution, automatically approving safe operations and blocking destructive patterns.

@@ -5,8 +5,10 @@ tags:
   - claude
   - agent-design
   - workflows
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Channels Permission Relay
 
 > Forward tool-use approval prompts from a running Claude Code session to your phone via Telegram, Discord, or iMessage — so agents can run overnight without requiring you at the terminal for every permission decision.

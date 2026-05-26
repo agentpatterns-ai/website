@@ -7,8 +7,10 @@ aliases:
 tags:
   - agent-design
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot Agent Mode
 
 > Local, synchronous agentic execution that reads files, runs code, checks output, and iterates to fix errors.

@@ -8,8 +8,10 @@ tags:
 aliases:
   - monorepo agent discovery
   - hierarchical skill discovery
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Monorepo Skill and Agent Discovery: Hierarchical Configuration
 
 > Copilot CLI v1.0.11 discovers custom instructions, MCP servers, skills, and agents at every directory level from the working directory up to the git root, enabling per-package configuration in monorepos.

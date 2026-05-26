@@ -10,8 +10,10 @@ aliases:
   - Copilot CLI
   - GitHub Copilot CLI
   - copilot terminal agent
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot CLI Agentic Workflows
 
 > Terminal-native agentic coding with GitHub Copilot CLI — interactive and headless modes, graduated authorization, delegation to cloud agents, and MCP integration in the terminal.

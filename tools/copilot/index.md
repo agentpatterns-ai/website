@@ -4,6 +4,9 @@ description: "Tool-specific reference for GitHub Copilot's agentic features. - A
 tags:
   - copilot
   - agent-design
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
 # GitHub Copilot
 

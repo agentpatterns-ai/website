@@ -8,8 +8,10 @@ tags:
   - agent-design
   - multi-agent
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Agent HQ (Multi-Agent Platform)
 
 > GitHub's platform for running multiple coding agents — Copilot, Claude, and Codex — within a single interface, with centralized governance and parallel agent deployment.

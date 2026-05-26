@@ -9,8 +9,10 @@ aliases:
   - Copilot app
   - GitHub Copilot desktop app
   - dedicated agent surface
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot Dedicated App
 
 > A desktop client that promotes the agent session to the primary tenant of its UI — the editor stays elsewhere, the inbox and session list are the home view, and cross-surface continuity comes from backend-held state, not from the app itself.

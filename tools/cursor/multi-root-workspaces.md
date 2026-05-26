@@ -8,8 +8,10 @@ tags:
 aliases:
   - cursor multi-root workspaces
   - cursor cross-repo agent edits
+applies_to: "cursor@3.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Cursor Multi-Root Workspaces
 
 > One agent session, multiple repository folders — for edits whose intent crosses repo boundaries.

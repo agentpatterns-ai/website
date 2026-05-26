@@ -7,8 +7,10 @@ tags:
 aliases:
   - cursor parallel agents
   - cursor worktree isolation
+applies_to: "cursor@3.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Cursor 3 Agents Window
 
 > Run multiple agents simultaneously across isolated environments from a single control surface.

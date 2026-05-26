@@ -4,8 +4,10 @@ description: "Named context collections that aggregate repos, files, PRs, issues
 tags:
   - context-engineering
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Spaces: Curated Context Collections for Grounding
 
 > Named context collections that aggregate repositories, code files, PRs, issues, notes, images, and uploads into a curated container that grounds Copilot responses.

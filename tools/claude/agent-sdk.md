@@ -6,8 +6,10 @@ aliases:
 tags:
   - agent-design
   - claude
+applies_to: "claude-code@2.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Claude Agent SDK
 
 > The Claude Code runtime exposed as a library for building custom agentic workflows.

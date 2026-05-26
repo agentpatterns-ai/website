@@ -5,8 +5,10 @@ tags:
   - agent-design
   - copilot
   - security
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Cloud Agent Organization Controls
 
 > Three-tier governance model for managing Copilot cloud agent at enterprise, organization, and repository scope.

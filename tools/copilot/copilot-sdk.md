@@ -4,8 +4,10 @@ description: "A programmable layer that embeds Copilot agent capabilities — pl
 tags:
   - agent-design
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # GitHub Copilot SDK
 
 > A programmable layer that embeds Copilot agent capabilities — planning, tool invocation, file editing, and command execution — into any application.

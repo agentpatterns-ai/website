@@ -9,8 +9,10 @@ aliases:
   - copilot unified sessions
   - jetbrains sessions view
   - copilot cli agent in ide
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # Copilot Unified Sessions View and CLI Agent in JetBrains
 
 > A chat-window session registry that aggregates CLI agent, agent mode, custom agent, and sub-agent runs into one filterable list — the value scales with concurrency and the isolation primitive behind it, not with how often the developer uses Copilot.

@@ -7,8 +7,10 @@ aliases:
 tags:
   - instructions
   - copilot
+applies_to: "copilot@1.x"
+last_reviewed: 2026-05-27
+status: current
 ---
-
 # copilot-instructions.md as a Repo-Level Instruction Convention
 
 > `.github/copilot-instructions.md` is GitHub Copilot's repository-level instruction file -- a single Markdown file that injects project context into every Copilot interaction without repeating it per prompt.
