@@ -21,7 +21,3 @@ This is a reference site, not a tutorial. Every page covers a single concept —
 - **Tools** — [Claude Code](tools/claude/index.md), [GitHub Copilot](tools/copilot/index.md)
 - **[Concept Map](concepts.md)** — All content grouped by theme
 - **[Tags](tags.md)** — Browse all content by topic
-
----
-
-Read everything as a single page: [Print version](print_page/) — useful for offline or print.
