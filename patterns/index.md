@@ -14,14 +14,18 @@ tags:
 
 Architecture, coordination, and failure-mode patterns organized into three areas: single-agent design, multi-agent collaboration, and common anti-patterns to recognize early.
 
-## [Agent Design](agent-design/index.md)
+## [Agent Design](../agent-design/index.md)
 
 Architecture, delegation, memory, control, reliability, and harness patterns for building effective agents. Organized into core design, memory and state, control and orchestration, reliability, and harness engineering.
 
-## [Multi-Agent](multi-agent/index.md)
+## [Multi-Agent](../multi-agent/index.md)
 
 Coordination patterns for systems where multiple agents collaborate — handoff protocols, fan-out synthesis, orchestrator-worker topologies, and ensemble approaches.
 
-## [Anti-Patterns](anti-patterns/index.md)
+## [Anti-Patterns](../anti-patterns/index.md)
 
 Common failure modes in AI-assisted development — from abstraction bloat and context poisoning to the yes-man agent and prompt tinkering. Recognizing these early prevents costly rework.
+
+## [Pattern Selection Map](selection-map.md)
+
+A trade-off matrix comparing 14 patterns from this site across token cost, latency, frontier-model dependency, blast radius, verification cost, and task class — to help you pick the cheapest pattern that solves your problem.

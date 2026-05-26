@@ -6,7 +6,9 @@ tags:
 ---
 # Agent Patterns
 
-> Patterns and techniques for experienced developers leveling up with AI coding assistants.
+> A practitioner's resource of patterns, anti-patterns, and primitives for engineers building with AI coding assistants. Fast reads, no ceremony.
+
+[About this site](about.md)
 
 This is a reference site, not a tutorial. Every page covers a single concept — what it is, how it works, when to use it, and what to watch out for. Tool-agnostic principles with practical examples from GitHub Copilot and Claude Code.
 

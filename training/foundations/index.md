@@ -28,3 +28,4 @@ These modules teach the conceptual frameworks behind effective AI-assisted devel
 |--------|-------|----------|
 | [Eval Engineering](eval-engineering.md) | [Pass@k metrics](../../verification/pass-at-k-metrics.md), LLM-as-judge, golden query pairs, [incident-to-eval synthesis](../../verification/incident-to-eval-synthesis.md), [behavioral testing](../../verification/behavioral-testing-agents.md), [anti-reward hacking](../../verification/anti-reward-hacking.md) | 30–45 min |
 | [Autonomous Research Loops](autonomous-research-loops.md) | Experimentation vs information research loops, termination design, doom loop prevention, context management, grounding strategies, control surfaces | 30–45 min |
+| [Earned-Complexity Agent Maturity Ladder](agent-maturity-ladder.md) | Nine diagnostic layers from single-shot tool calling to multi-agent delegation — each rung exposes the failure modes the next pretends to solve, with anchor pages for every layer | 30–45 min |
