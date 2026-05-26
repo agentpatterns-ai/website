@@ -43,3 +43,4 @@ tags:
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
 - [Vibe Coding](../workflows/vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
 - [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with confident speculation that misleads downstream triage
+- [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — Personality biases stored in long-term memory act as implicit steering vectors on tool-call parameters in unrelated contexts; prompt-based defenses reduce but do not eliminate the drift
