@@ -6,6 +6,7 @@ aliases:
 tags:
   - agent-design
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Boring Technology Bias

@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Permission-Gated Custom Commands

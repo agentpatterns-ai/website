@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Configuration File Structure Does Not Drive Compliance

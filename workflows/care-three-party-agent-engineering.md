@@ -9,6 +9,7 @@ tags:
 aliases:
   - Collaborative Agent Reasoning Engineering
   - CARE methodology
+last_reviewed: 2026-05-27
 ---
 
 # CARE: Three-Party Stage-Gated Agent Engineering

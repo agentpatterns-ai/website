@@ -7,6 +7,7 @@ tags:
 aliases:
   - Guardrails Over Guidance
   - Negative Rules for Coding Agents
+last_reviewed: 2026-05-27
 ---
 
 # Guardrails Beat Guidance: Rule Design for Coding Agents

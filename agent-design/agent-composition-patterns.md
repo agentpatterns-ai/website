@@ -11,6 +11,7 @@ aliases:
   - Scatter-Gather
   - Orchestrator-Worker
   - Sub-Agents Fan-Out
+last_reviewed: 2026-05-27
 ---
 
 # Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors

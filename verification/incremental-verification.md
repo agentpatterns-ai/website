@@ -3,6 +3,7 @@ title: "Incremental Verification: Check at Each Step, Not at the End"
 description: "Verify agent output at each logical step to catch errors close to the source before they cascade downstream."
 tags:
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Incremental Verification: Check at Each Step, Not at the End

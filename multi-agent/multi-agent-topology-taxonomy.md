@@ -6,6 +6,7 @@ aliases:
   - Multi-Agent SE Design Patterns
 tags:
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid

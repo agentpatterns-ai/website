@@ -10,6 +10,7 @@ aliases:
   - BM25 for agentic search
   - lexical retrieval for deep research
   - sparse retrieval for search agents
+last_reviewed: 2026-05-27
 ---
 
 # Lexical-First Retrieval for Agentic Search

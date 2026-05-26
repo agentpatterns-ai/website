@@ -7,6 +7,7 @@ tags:
 aliases:
   - SKILL.md standard
   - agent skills spec
+last_reviewed: 2026-05-27
 ---
 
 # Agent Skills: A Cross-Tool Task Knowledge Standard

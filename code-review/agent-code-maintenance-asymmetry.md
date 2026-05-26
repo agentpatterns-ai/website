@@ -8,6 +8,7 @@ tags:
 aliases:
   - Agent Code Maintenance Footprint
   - Agent-Generated Code Lifecycle
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Generated Code Maintenance Asymmetry

@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Golden Journeys: Restartability as a First-Class Verification Primitive

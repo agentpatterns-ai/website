@@ -8,6 +8,7 @@ aliases:
   - scaffold AGENTS.md file
   - AGENTS.md generation runbook
   - create initial AGENTS.md
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-agents-md/`

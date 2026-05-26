@@ -8,6 +8,7 @@ tags:
 aliases:
   - cross-vendor routing
   - competitive model routing
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Vendor Competitive Routing

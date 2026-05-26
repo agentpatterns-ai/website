@@ -9,6 +9,7 @@ aliases:
   - continueOnBlock hook
   - refusal-with-reason hook
   - guided refusal pattern
+last_reviewed: 2026-05-27
 ---
 
 # PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason

@@ -9,6 +9,7 @@ tags:
   - agent-design
   - testing-verification
   - observability
+last_reviewed: 2026-05-27
 ---
 
 # Verification Ledger for Tracking Agent Output Quality

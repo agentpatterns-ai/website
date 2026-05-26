@@ -9,6 +9,7 @@ tags:
   - security
   - human-factors
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Org-Membership-Gated Agent Entitlement

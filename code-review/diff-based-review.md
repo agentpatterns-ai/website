@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - code-review
+last_reviewed: 2026-05-27
 ---
 
 # Diff-Based Review Over Output Review

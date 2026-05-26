@@ -9,6 +9,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool

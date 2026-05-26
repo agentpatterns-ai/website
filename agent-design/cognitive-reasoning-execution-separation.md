@@ -9,6 +9,7 @@ aliases:
   - reasoning-execution separation
   - two-layer agent architecture
   - cognitive-execution split
+last_reviewed: 2026-05-27
 ---
 
 # Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture

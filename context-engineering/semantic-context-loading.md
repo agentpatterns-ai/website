@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - cost-performance
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Semantic Context Loading: Language Server Plugins for Agents

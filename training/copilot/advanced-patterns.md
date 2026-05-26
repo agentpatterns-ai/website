@@ -5,6 +5,7 @@ tags:
   - github-copilot
   - multi-agent
   - automation
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Advanced Patterns

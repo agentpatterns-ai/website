@@ -3,6 +3,7 @@ title: "Human Impact of AI Agents on Developer Teams and Workflows"
 description: "The human side of working with AI agents -- cognitive load, sustainable use, skill preservation, identity threat, and team dynamics."
 tags:
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Human Impact

@@ -7,6 +7,7 @@ tags:
 aliases:
   - "reasoning overuse"
   - "think tool overuse"
+last_reviewed: 2026-05-27
 ---
 # Indiscriminate Structured Reasoning
 

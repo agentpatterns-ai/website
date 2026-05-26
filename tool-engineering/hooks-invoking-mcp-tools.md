@@ -8,6 +8,7 @@ tags:
   - tool-engineering
   - security
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Hooks Invoking MCP Tools: Closing the Loop Between Policy and Tool Execution

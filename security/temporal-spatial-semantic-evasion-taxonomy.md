@@ -9,6 +9,7 @@ aliases:
   - temporal spatial semantic evasion
   - three-vector evasion taxonomy
   - A3S-Bench
+last_reviewed: 2026-05-27
 ---
 
 # Three-Vector Evasion Taxonomy for Agent Security Tests

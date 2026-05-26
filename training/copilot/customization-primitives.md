@@ -4,6 +4,7 @@ description: "How to extend Copilot with instructions, prompt files, agents, ski
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Customization Primitives

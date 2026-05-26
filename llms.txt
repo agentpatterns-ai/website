@@ -3,7 +3,7 @@
 > Patterns and techniques for experienced developers leveling up with AI coding assistants.
 
 ## Workflows
-<!-- lastmod: 2026-05-26 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Workflows](https://agentpatterns.ai/workflows/): End-to-end workflows for agent-assisted development — from bootstrapping to team onboarding.
 - [Agent Commit Attribution: Signed Commits and Agent Identity](https://agentpatterns.ai/workflows/agent-commit-attribution/): Agents that commit to shared repositories should carry verifiable identity so audit trails distinguish agent-generate...
@@ -106,7 +106,7 @@
 - [Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes](https://agentpatterns.ai/workflows/worktree-isolation/): Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with ...
 
 ## Security
-<!-- lastmod: 2026-05-24 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Security](https://agentpatterns.ai/security/): Patterns and techniques for building agents that resist manipulation, protect sensitive data, and fail safely.
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](https://agentpatterns.ai/security/action-audit-divergence-taxonomy/): Name the four ways an agent action can diverge from its audit record — gate-bypass, audit-forgery, silent host failur...
@@ -198,7 +198,7 @@
 - [Workload Identity Federation for Agent Runtimes](https://agentpatterns.ai/security/workload-identity-federation-for-agents/): Replace long-lived AI provider API keys with short-lived tokens minted from the runtime's existing workload identity ...
 
 ## Fallacies
-<!-- lastmod: 2026-04-22 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Fallacies](https://agentpatterns.ai/fallacies/): Incorrect beliefs about AI tools that reliably produce poor outcomes.
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](https://agentpatterns.ai/fallacies/chain-of-thought-reasoning-fallacy/): Visible step-by-step output resembles reasoning but does not constitute it — the explanation is generated after the a...
@@ -210,7 +210,7 @@
 - [The Task Framing Irrelevance Fallacy](https://agentpatterns.ai/fallacies/task-framing-irrelevance-fallacy/): The belief that how you frame a task doesn't matter — only the underlying problem does — is demonstrably wrong and re...
 
 ## Human Factors
-<!-- lastmod: 2026-05-24 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Human Impact](https://agentpatterns.ai/human/): The human side of working with AI agents — cognitive load, sustainable use, and team dynamics.
 - [Agentic Education: Persona Progression for Teaching AI Coding Tools](https://agentpatterns.ai/human/agentic-education-persona-progression/): A four-persona scaffold — Guide, Collaborator, Peer, Launcher — operationalises gradual release of responsibility for...
@@ -297,7 +297,7 @@
 ## Optional
 
 ### Emerging
-<!-- lastmod: 2026-04-19 -->
+<!-- lastmod: 2026-05-27 -->
 
 - [Emerging Concepts](https://agentpatterns.ai/emerging/): Early-stage ideas worth tracking — not yet established patterns, but too important to ignore.
 - [Bootstrapping Coding Agents](https://agentpatterns.ai/emerging/bootstrapping-coding-agents/): A coding agent can re-implement itself from a natural language specification, reproducing the classical compiler boot...

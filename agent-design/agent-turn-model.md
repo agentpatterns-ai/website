@@ -9,6 +9,7 @@ tags:
   - agent-design
   - workflows
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 
 # Model a Single Agent Turn as Many Inference and Tool-Call Iterations

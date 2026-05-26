@@ -3,6 +3,7 @@ title: "Agentic Code Review Patterns and Review Architectures"
 description: "Patterns for integrating AI agents into code review — from architecture and review loops to signal quality and PR integration."
 tags:
   - code-review
+last_reviewed: 2026-05-27
 ---
 
 # Code Review

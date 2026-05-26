@@ -8,6 +8,7 @@ tags:
   - agent-design
   - testing-verification
   - security
+last_reviewed: 2026-05-27
 ---
 
 # RL-Trained Automated Red Teamers for Prompt Injection Discovery

@@ -7,6 +7,7 @@ tags:
   - security
 aliases:
   - indirect prompt injection
+last_reviewed: 2026-05-27
 ---
 
 # Prompt Injection: A First-Class Threat to Agentic Systems

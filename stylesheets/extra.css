@@ -153,6 +153,15 @@
   line-height: 1.4;
 }
 
+/* Footer-placement variant: discreet meta strip below article content
+   rather than badge row above the title. Set in overrides/main.html. */
+.currency-badges--footer {
+  margin: 2.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  opacity: 0.75;
+}
+
 .currency-badge {
   display: inline-flex;
   align-items: center;

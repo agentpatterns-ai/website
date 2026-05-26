@@ -9,6 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern

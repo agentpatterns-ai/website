@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Conditional Hook Execution: Filter Hooks by Tool Pattern

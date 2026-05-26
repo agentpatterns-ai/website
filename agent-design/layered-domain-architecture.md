@@ -7,6 +7,7 @@ tags:
 aliases:
   - forward-only layer stack
   - prescriptive layer ontology
+last_reviewed: 2026-05-27
 ---
 
 # Layered Domain Architecture

@@ -8,6 +8,7 @@ tags:
   - agent-design
   - human-factors
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Human-in-the-Loop Placement: Where and How to Supervise Agent Pipelines

@@ -9,6 +9,7 @@ tags:
 aliases:
   - reflective prompt evolution
   - genetic pareto prompt optimizer
+last_reviewed: 2026-05-27
 ---
 
 # Reflective Prompt Evolution with Pareto Selection (GEPA)

@@ -11,6 +11,7 @@ aliases:
   - Common Enforcement Patterns
   - Enforcing with Hooks
   - Hook Enforcement Patterns
+last_reviewed: 2026-05-27
 ---
 
 # Hook Catalog for Claude Code Enforcement

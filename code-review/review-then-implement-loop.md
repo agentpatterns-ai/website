@@ -9,6 +9,7 @@ tags:
 aliases:
   - "Agent Self-Review Loop"
   - "Agent Review Loops"
+last_reviewed: 2026-05-27
 ---
 
 # Review-Then-Implement Loop for AI Agent Development

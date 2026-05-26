@@ -10,6 +10,7 @@ aliases:
   - documentation-driven C to Rust migration
   - blueprint-driven legacy migration
   - architecture-documentation migration
+last_reviewed: 2026-05-27
 ---
 
 # Documentation-Guided Legacy Migration

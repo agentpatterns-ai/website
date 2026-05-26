@@ -10,6 +10,7 @@ aliases:
   - "trajectory decomposition"
   - "TRAJEVAL"
   - "stage decomposition"
+last_reviewed: 2026-05-27
 ---
 
 # Trajectory Decomposition: Diagnose Where Coding Agents Fail

@@ -8,6 +8,7 @@ aliases:
   - secrets in agent context
   - agent credential leak scan
   - instruction file secret scan
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-secrets-in-context/`

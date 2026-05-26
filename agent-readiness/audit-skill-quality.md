@@ -8,6 +8,7 @@ aliases:
   - SKILL.md quality audit
   - skill description quality check
   - skill authoring audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-skill-quality/`

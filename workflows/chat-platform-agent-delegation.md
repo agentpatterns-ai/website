@@ -11,6 +11,7 @@ aliases:
   - chat as agent control surface
   - chat-platform delegation
   - mentioning agents in chat channels
+last_reviewed: 2026-05-27
 ---
 
 # Chat-Platform Agent Delegation

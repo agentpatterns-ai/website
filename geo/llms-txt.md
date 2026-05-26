@@ -6,6 +6,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # llms.txt: Spec, Adoption, and Honest Limitations

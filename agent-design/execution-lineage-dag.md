@@ -10,6 +10,7 @@ aliases:
   - execution lineage
   - DAG of artifacts
   - artifact-lineage agents
+last_reviewed: 2026-05-27
 ---
 
 # Execution Lineage: DAG of Artifacts vs Agent Loops

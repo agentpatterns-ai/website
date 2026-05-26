@@ -5,6 +5,7 @@ tags:
   - instructions
   - workflows
   - anti-patterns
+last_reviewed: 2026-05-27
 ---
 
 # Spec Complexity Displacement

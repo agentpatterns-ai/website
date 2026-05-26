@@ -8,6 +8,7 @@ aliases:
   - lethal trifecta audit
   - trifecta exfiltration check
   - prompt injection trifecta map
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-lethal-trifecta/`

@@ -8,6 +8,7 @@ tags:
 aliases:
   - developer adoption of LLM refactoring
   - ChatGPT refactoring suggestion modification
+last_reviewed: 2026-05-27
 ---
 
 # LLM Refactoring Adoption Patterns

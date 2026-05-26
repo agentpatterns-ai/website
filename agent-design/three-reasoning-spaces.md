@@ -9,6 +9,7 @@ tags:
 aliases:
   - three-space framework
   - plan-bead-code
+last_reviewed: 2026-05-27
 ---
 
 # Three Reasoning Spaces: Plan, Bead, and Code

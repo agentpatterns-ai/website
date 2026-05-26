@@ -8,6 +8,7 @@ aliases:
   - Providing Context to Agents
   - Context Priming
   - Breadcrumbs in Code
+last_reviewed: 2026-05-27
 ---
 
 # Seeding Agent Context: Breadcrumbs in Code

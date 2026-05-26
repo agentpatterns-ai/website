@@ -7,6 +7,7 @@ tags:
 aliases:
   - batch tool approval UI
   - tool approval carousel
+last_reviewed: 2026-05-27
 ---
 
 # Tool Confirmation Carousel

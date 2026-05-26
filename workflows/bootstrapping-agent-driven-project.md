@@ -7,6 +7,7 @@ tags:
   - instructions
 aliases:
   - Greenfield Agent Bootstrap
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrapping an Agent-Driven Project from Scratch

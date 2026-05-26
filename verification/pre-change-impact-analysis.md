@@ -9,6 +9,7 @@ aliases:
   - TDAD
   - dependency maps
   - test impact analysis
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions

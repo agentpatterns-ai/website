@@ -4,6 +4,7 @@ description: "Enforce both filesystem and network isolation; neither boundary al
 tags:
   - agent-design
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Dual-Boundary Sandboxing

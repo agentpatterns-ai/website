@@ -9,6 +9,7 @@ aliases:
   - GEO Metrics
   - GEO Monitoring
   - AI Search Measurement
+last_reviewed: 2026-05-27
 ---
 
 # Measuring GEO Performance

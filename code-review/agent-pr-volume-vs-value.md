@@ -5,6 +5,7 @@ tags:
   - code-review
   - human-factors
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Agent PR Volume vs. Value: The Productivity Paradox

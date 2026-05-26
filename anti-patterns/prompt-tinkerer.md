@@ -7,6 +7,7 @@ tags:
 aliases:
   - prompt bloat
   - instruction bloat
+last_reviewed: 2026-05-27
 ---
 
 # The Prompt Tinkerer

@@ -8,6 +8,7 @@ tags:
 aliases:
   - agent-centric debugging interface
   - function-level debugging interface
+last_reviewed: 2026-05-27
 ---
 
 # Function-Level Debugger Interfaces for Coding Agents

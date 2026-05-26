@@ -9,6 +9,7 @@ aliases:
   - hybrid agent authorization
   - task-based access control for agents
   - CASA pattern
+last_reviewed: 2026-05-27
 ---
 
 # Hybrid Deterministic + Semantic Authorization for Agent Tool Calls

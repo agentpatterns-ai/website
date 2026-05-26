@@ -8,6 +8,7 @@ tags:
   - anti-pattern
   - workflows
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Laundered Bug Reports

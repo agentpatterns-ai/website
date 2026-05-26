@@ -8,6 +8,7 @@ aliases:
   - generate egress allowlist
   - close lethal trifecta
   - network egress policy scaffold
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap Egress Policy

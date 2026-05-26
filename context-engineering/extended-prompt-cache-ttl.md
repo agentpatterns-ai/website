@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - cost-performance
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Extended Prompt Cache TTL for Long Agent Sessions

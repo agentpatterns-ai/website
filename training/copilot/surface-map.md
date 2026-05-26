@@ -4,6 +4,7 @@ description: "Complete capability map across VS Code, GitHub.com, CLI, coding ag
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Platform Surface Map

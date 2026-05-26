@@ -5,6 +5,7 @@ tags:
   - human-factors
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Self-Explanation Loop for Code-Review Comments

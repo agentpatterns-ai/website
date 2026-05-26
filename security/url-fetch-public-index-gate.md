@@ -4,6 +4,7 @@ description: "Cross-reference URLs against a public-web crawl index before fetch
 tags:
   - agent-design
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Use a Public-Web Index to Gate Automatic URL Fetching

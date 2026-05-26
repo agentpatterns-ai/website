@@ -9,6 +9,7 @@ aliases:
   - "pass at k"
   - "pass power k"
   - "pass@1 pass@k metrics"
+last_reviewed: 2026-05-27
 ---
 
 # pass@k and pass^k: Capability and Consistency Metrics

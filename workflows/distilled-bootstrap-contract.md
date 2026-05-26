@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Distilled Bootstrap Contract: Agent-Authored Repo Setup

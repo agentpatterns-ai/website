@@ -11,6 +11,7 @@ aliases:
   - ADLC
   - agent product lifecycle
   - agent shipping lifecycle
+last_reviewed: 2026-05-27
 ---
 
 # Agent Development Lifecycle for Agent Products
@@ -47,6 +48,8 @@ Score the agent against an eval suite **before** it touches production. [Eval-Dr
 ### Deploy
 
 Ship the agent in a controlled way. Canary rollouts, traffic shadowing, and rollback paths apply directly — [Canary Rollout for Agent Policy](../workflows/canary-rollout-agent-policy.md) covers the mechanics. Produces: a running deployment plus the observability hooks the monitor phase consumes.
+
+Deploy-time permission scoping is the other half of the controlled rollout — see [Permission Framework Over Model Trust](../security/permission-framework-over-model.md) for the runtime contract the canary inherits.
 
 ### Monitor
 

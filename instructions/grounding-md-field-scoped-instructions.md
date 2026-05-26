@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # GROUNDING.md: Field-Scoped Hard Constraints and Convention Parameters

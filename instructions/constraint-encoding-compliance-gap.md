@@ -8,6 +8,7 @@ tags:
   - instructions
   - code-generation
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Constraint Encoding Does Not Fix Constraint Compliance

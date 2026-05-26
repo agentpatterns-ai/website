@@ -7,6 +7,7 @@ tags:
 aliases:
   - repository templates
   - project scaffolding
+last_reviewed: 2026-05-27
 ---
 
 # Skeleton Projects as Agent Scaffolding

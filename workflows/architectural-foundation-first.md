@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Lay the Architectural Foundation by Hand Before Delegating to Agents

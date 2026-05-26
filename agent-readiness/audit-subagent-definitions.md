@@ -9,6 +9,7 @@ aliases:
   - sub-agent definition audit
   - .claude/agents audit
   - sub-agent frontmatter quality check
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-subagent-definitions/`

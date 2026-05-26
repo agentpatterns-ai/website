@@ -7,6 +7,7 @@ tags:
 aliases:
   - ACI
   - tool UX design
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Computer Interface (ACI): Tool Design as UX Discipline

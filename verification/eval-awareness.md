@@ -9,6 +9,7 @@ aliases:
   - evaluation awareness
   - eval-shaped prompts
   - situational awareness in evals
+last_reviewed: 2026-05-27
 ---
 
 # Eval Awareness: Designing Evals Agents Cannot Recognise

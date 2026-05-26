@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Single-Layer Prompt Injection Defence

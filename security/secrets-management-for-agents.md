@@ -9,6 +9,7 @@ tags:
   - workflows
   - tool-agnostic
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Secrets Management for AI Agents: Credential Injection

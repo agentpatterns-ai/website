@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Safe Outputs Pattern

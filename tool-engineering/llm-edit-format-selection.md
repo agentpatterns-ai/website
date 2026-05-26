@@ -7,6 +7,7 @@ aliases:
 tags:
   - tool-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite

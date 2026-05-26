@@ -9,6 +9,7 @@ tags:
 aliases:
   - specification redundancy robustness
   - structural redundancy code generation prompts
+last_reviewed: 2026-05-27
 ---
 
 # Multi-Layer Specification Redundancy as a Robustness Budget

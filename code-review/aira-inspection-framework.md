@@ -9,6 +9,7 @@ tags:
   - code-review
   - testing-verification
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # AIRA: Inspection Framework for AI-Generated Code

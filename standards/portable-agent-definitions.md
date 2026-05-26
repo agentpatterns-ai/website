@@ -9,6 +9,7 @@ tags:
 aliases:
   - gitagent
   - agent identity as code
+last_reviewed: 2026-05-27
 ---
 
 # Portable Agent Definitions: Full-Stack Identity as Code

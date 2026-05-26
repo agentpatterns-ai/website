@@ -8,6 +8,7 @@ aliases:
   - permissions audit
   - blast radius assessment
   - least privilege audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-permissions-blast-radius/`

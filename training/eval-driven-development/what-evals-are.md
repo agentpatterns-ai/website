@@ -10,6 +10,7 @@ aliases:
   - agent evals
   - LLM evaluations
   - agent evaluation
+last_reviewed: 2026-05-27
 ---
 
 # What Evals Are and Why Agents Need Them

@@ -3,6 +3,7 @@ title: "Agent Design Patterns and Architectures for AI Agents"
 description: "Architecture, delegation, memory, control, reliability, and harness patterns for building effective AI coding agents and assistants."
 tags:
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Agent Design

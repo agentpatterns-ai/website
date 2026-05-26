@@ -8,6 +8,7 @@ tags:
 aliases:
   - knowledge graph poisoning
   - oracle poisoning attack
+last_reviewed: 2026-05-27
 ---
 
 # Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents

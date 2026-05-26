@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - cost-performance
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Structure Prompts with Static Content First to Maximize Cache Hits

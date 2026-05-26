@@ -4,6 +4,7 @@ description: "Practitioner training modules covering foundational AI disciplines
 tags:
   - training
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Training

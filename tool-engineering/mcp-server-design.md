@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # MCP Server Design: A Server Author's Checklist

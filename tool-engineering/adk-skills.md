@@ -8,6 +8,7 @@ tags:
 aliases:
   - ADK SkillToolset
   - Google ADK agent skills
+last_reviewed: 2026-05-27
 ---
 
 # Google ADK Skills

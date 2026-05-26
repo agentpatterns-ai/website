@@ -9,6 +9,7 @@ aliases:
   - Blind Test Generation
   - Code-Test Separation Pattern
   - AgentCoder Pattern
+last_reviewed: 2026-05-27
 ---
 
 # Independent Test Generation in Multi-Agent Code Systems

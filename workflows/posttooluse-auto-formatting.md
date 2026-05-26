@@ -4,6 +4,7 @@ description: "Configure a PostToolUse hook to run formatters automatically after
 tags:
   - workflows
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit

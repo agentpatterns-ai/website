@@ -10,6 +10,7 @@ aliases:
   - risk badge for terminal commands
   - terminal command risk tiers
   - pre-execution command classification
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Execution Risk Classification for Terminal Commands

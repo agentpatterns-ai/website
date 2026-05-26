@@ -9,6 +9,7 @@ aliases:
   - tech debt tracker
   - deferred work ledger
   - next-trigger debt log
+last_reviewed: 2026-05-27
 ---
 
 # Acknowledged-Debt Ledger with Next-Trigger Conditions

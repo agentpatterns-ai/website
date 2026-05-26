@@ -10,6 +10,7 @@ aliases:
   - adaptive generate rank verify
   - cost-sensitive inference search
   - ADAP algorithm
+last_reviewed: 2026-05-27
 ---
 
 # Adaptive Generate-Rank-Verify Under Costly Verification

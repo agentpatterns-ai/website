@@ -9,6 +9,7 @@ tags:
 aliases:
   - AX stack
   - agent prompt to compile stack
+last_reviewed: 2026-05-27
 ---
 
 # The AX Stack

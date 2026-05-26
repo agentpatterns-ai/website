@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Component-Wise RAG Prioritization for Software Engineering Tasks

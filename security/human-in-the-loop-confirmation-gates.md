@@ -7,6 +7,7 @@ aliases:
 tags:
   - agent-design
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Human-in-the-Loop Confirmation Gates for Consequential Agent Actions

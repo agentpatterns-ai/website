@@ -10,6 +10,7 @@ aliases:
   - clock-in clock-out
   - bracketed session protocol
   - session continuity protocol
+last_reviewed: 2026-05-27
 ---
 
 # Clock-In / Clock-Out Protocol: Bracketed Session Continuity

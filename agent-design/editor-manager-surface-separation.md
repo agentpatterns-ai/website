@@ -9,6 +9,7 @@ aliases:
   - editor manager surface
   - two-surface agent UX
   - agent dashboard vs editor
+last_reviewed: 2026-05-27
 ---
 
 # Editor and Manager Surface Separation in Agent IDEs

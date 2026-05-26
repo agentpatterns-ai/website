@@ -8,6 +8,7 @@ aliases:
   - OpenAPI smell taxonomy
   - agent-readiness API audit
   - REST documentation smells
+last_reviewed: 2026-05-27
 ---
 
 # OpenAPI Documentation Smells for Agent-Ready APIs

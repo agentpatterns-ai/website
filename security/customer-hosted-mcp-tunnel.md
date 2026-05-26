@@ -9,6 +9,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers

@@ -4,6 +4,7 @@ description: "Use a risk matrix to decide which changes auto-ship and which requ
 tags:
   - agent-design
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Risk-Based Shipping: Review by Risk Matrix, Not by Default

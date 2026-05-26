@@ -9,6 +9,7 @@ aliases:
   - agent-generated code audit
   - agent codebase health audit
   - bloat audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-agent-built-code-health/`

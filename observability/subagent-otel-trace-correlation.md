@@ -10,6 +10,7 @@ aliases:
   - subagent trace correlation
   - agent_id propagation
   - per-subagent OTel attribution
+last_reviewed: 2026-05-27
 ---
 
 # Subagent OTel Trace Correlation via `agent_id` Attribute

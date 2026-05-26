@@ -8,6 +8,7 @@ aliases:
 tags:
   - security
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Restricted-Access Defensive AI: Project Glasswing as a Deployment Model

@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - instructions
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes

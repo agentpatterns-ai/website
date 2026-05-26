@@ -4,6 +4,7 @@ description: "How context engineering determines agent output quality. Covers co
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Context Engineering & Agent Workflows

@@ -4,6 +4,7 @@ description: "Understand the Copilot model roster, premium multipliers, when to 
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Model Selection & Routing

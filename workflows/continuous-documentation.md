@@ -4,6 +4,7 @@ description: "A workflow where AI agents detect documentation-code drift on sche
 tags:
   - workflows
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Continuous Documentation as an Agent-Driven Practice

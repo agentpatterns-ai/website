@@ -7,6 +7,7 @@ tags:
 aliases:
   - self-review code modernization
   - articulate but wrong self review
+last_reviewed: 2026-05-27
 ---
 
 # LLM Self-Review Failure in Code Modernization Tasks

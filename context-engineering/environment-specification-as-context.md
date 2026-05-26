@@ -8,6 +8,7 @@ aliases:
   - Environment-Aware Code Generation
   - Version-Aware Prompting
   - Dependency Context Engineering
+last_reviewed: 2026-05-27
 ---
 
 # Environment Specification as Context

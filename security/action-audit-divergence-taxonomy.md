@@ -10,6 +10,7 @@ aliases:
   - action-audit divergence
   - runtime divergence taxonomy
   - F1 F2 F3 F4 agent runtime
+last_reviewed: 2026-05-27
 ---
 
 # Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening

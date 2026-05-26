@@ -9,6 +9,7 @@ tags:
   - security
   - memory
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Session Memory Poisoning for Data Exfiltration (Trojan Hippo)

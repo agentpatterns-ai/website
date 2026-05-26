@@ -8,6 +8,7 @@ tags:
 aliases:
   - "Reusable Evaluators"
   - "Evaluator Template Library"
+last_reviewed: 2026-05-27
 ---
 
 # Evaluator Templates: Portable Primitives

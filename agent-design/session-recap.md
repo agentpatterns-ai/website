@@ -9,6 +9,7 @@ tags:
 aliases:
   - session handoff artifact
   - structured context recap
+last_reviewed: 2026-05-27
 ---
 
 # Session Recap: Goal-Shaped Handoff at Context Boundaries

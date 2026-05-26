@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - testing-verification
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Stale Repository Retrieval Induces Incorrect Code

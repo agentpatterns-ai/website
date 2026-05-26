@@ -8,6 +8,7 @@ aliases:
   - fixing correct code audit
   - premature termination audit
   - inflated resolution audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-premature-completion/`

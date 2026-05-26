@@ -8,6 +8,7 @@ tags:
   - human-factors
   - workflows
   - code-review
+last_reviewed: 2026-05-27
 ---
 
 # PR Scope Creep as a Human Review Bottleneck

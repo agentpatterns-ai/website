@@ -8,6 +8,7 @@ aliases:
   - critic agent
   - dual-model plan review
   - pre-execution plan review
+last_reviewed: 2026-05-27
 ---
 
 # Critic Agent Pattern

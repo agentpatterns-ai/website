@@ -9,6 +9,7 @@ aliases:
   - model id as dependency
   - model deprecation migration protocol
   - versioned model dependency
+last_reviewed: 2026-05-27
 ---
 
 # Model-ID-as-Dependency: Migration Protocol for Deprecation Churn

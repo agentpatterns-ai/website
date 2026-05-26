@@ -4,6 +4,7 @@ description: "Agent effectiveness varies by domain. Each domain imposes distinct
 tags:
   - human-factors
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Domain-Specific Agent Challenges

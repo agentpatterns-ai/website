@@ -3,6 +3,7 @@ title: "Task List Divergence as Instruction Quality Diagnostic"
 description: "Use the gap between an agent's generated task list and your intended steps as a systematic signal for instruction weaknesses in your prompts."
 tags:
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Task List Divergence as Instruction Quality Diagnostic

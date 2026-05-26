@@ -8,6 +8,7 @@ tags:
   - observability
   - verification
   - code-review
+last_reviewed: 2026-05-27
 ---
 
 # Engineering: Tools, Review, Verification, Security, and Observability

@@ -7,6 +7,7 @@ aliases:
 tags:
   - agent-design
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Structured Agentic Software Engineering

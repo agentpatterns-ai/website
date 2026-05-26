@@ -8,6 +8,7 @@ tags:
 aliases:
   - model retirement migration
   - llm deprecation workflow
+last_reviewed: 2026-05-27
 ---
 
 # Model Deprecation Lifecycle for Agent Workloads

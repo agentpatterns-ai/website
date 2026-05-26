@@ -9,6 +9,7 @@ aliases:
   - SDB pattern
   - stochastic deterministic boundary
   - proposer verifier commit reject contract
+last_reviewed: 2026-05-27
 ---
 
 # Stochastic-Deterministic Boundary as First-Class Contract

@@ -7,6 +7,7 @@ tags:
 aliases:
   - demos over docs
   - side quests product management
+last_reviewed: 2026-05-27
 ---
 
 # PM on the AI Exponential

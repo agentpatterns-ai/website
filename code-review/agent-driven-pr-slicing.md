@@ -8,6 +8,7 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Driven PR Slicing

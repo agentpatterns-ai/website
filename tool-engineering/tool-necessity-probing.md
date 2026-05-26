@@ -10,6 +10,7 @@ aliases:
   - probe and prefill
   - tool necessity classifier
   - hidden-state tool-call control
+last_reviewed: 2026-05-27
 ---
 
 # Tool Necessity Probing

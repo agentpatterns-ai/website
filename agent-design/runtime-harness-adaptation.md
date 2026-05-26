@@ -9,6 +9,7 @@ tags:
 aliases:
   - life-harness
   - runtime interface adaptation
+last_reviewed: 2026-05-27
 ---
 
 # Runtime Harness Adaptation

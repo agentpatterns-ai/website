@@ -6,6 +6,7 @@ aliases:
 tags:
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Discoverable vs Non-Discoverable Context

@@ -4,6 +4,7 @@ description: "Write goals, non-goals, constraints, and completion criteria into 
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Frozen Spec File

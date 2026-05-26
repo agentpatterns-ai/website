@@ -4,6 +4,7 @@ description: "When an agent has private data access, untrusted input, and extern
 tags:
   - agent-design
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Lethal Trifecta Threat Model

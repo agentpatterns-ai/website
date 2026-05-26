@@ -7,6 +7,7 @@ tags:
 aliases:
   - AI Code Review
   - Automated PR Review
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Assisted Code Review: Agents as PR First Pass

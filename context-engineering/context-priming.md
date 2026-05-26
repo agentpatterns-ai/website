@@ -8,6 +8,7 @@ aliases:
   - Providing Context to Agents
   - Seeding Agent Context
   - Breadcrumbs in Code
+last_reviewed: 2026-05-27
 ---
 
 # Context Priming: Pre-Loading Files for AI Agent Tasks

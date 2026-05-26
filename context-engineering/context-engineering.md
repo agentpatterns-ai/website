@@ -7,6 +7,7 @@ aliases:
   - context management
   - context design
   - context window management
+last_reviewed: 2026-05-27
 ---
 
 # Context Engineering: The Discipline of Designing Agent Context

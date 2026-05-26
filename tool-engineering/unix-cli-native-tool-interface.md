@@ -7,6 +7,7 @@ tags:
 aliases:
   - "single-tool hypothesis"
   - "run command tool"
+last_reviewed: 2026-05-27
 ---
 
 # Unix CLI as the Native Tool Interface for AI Agents

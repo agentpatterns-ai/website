@@ -9,6 +9,7 @@ aliases:
   - "GSC monitoring"
   - "Search Console monitoring"
   - "GSC weekly report workflow"
+last_reviewed: 2026-05-27
 ---
 
 # Google Search Console Monitoring Workflow

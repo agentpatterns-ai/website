@@ -9,6 +9,7 @@ aliases:
   - cognitive poisoning attack
   - untrusted tool feedback
   - tool feedback trajectory attack
+last_reviewed: 2026-05-27
 ---
 
 # Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - technique
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Inversion Analysis: Surface Capabilities Competitors Cannot Replicate

@@ -9,6 +9,7 @@ aliases:
   - debug log audit
   - agent log retention audit
   - PII redaction audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-debug-log-retention/`

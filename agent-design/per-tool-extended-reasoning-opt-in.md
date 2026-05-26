@@ -9,6 +9,7 @@ aliases:
   - per-tool reasoning budget
   - tool-call-scoped reasoning
   - return_token_budget
+last_reviewed: 2026-05-27
 ---
 
 # Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets

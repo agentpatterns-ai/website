@@ -8,6 +8,7 @@ tags:
 aliases:
   - chat history as audit trail
   - queryable agent session log
+last_reviewed: 2026-05-27
 ---
 
 # Agent Chat History as a First-Class Artifact

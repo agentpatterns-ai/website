@@ -8,6 +8,7 @@ aliases:
   - kitchen sink session
   - session partitioning
   - context pollution
+last_reviewed: 2026-05-27
 ---
 
 # The Kitchen Sink Session

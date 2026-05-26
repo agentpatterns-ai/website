@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - workflows
   - observability
+last_reviewed: 2026-05-27
 ---
 
 # Using the Agent to Analyze Its Own Evaluation Transcripts

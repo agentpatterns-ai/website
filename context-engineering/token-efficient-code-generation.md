@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - cost-performance
   - source:arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Token-Efficient Code Generation: Structural Beats Prompting

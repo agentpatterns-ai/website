@@ -8,6 +8,7 @@ aliases:
   - over-engineering
   - gold-plating
   - code bloat
+last_reviewed: 2026-05-27
 ---
 
 # Abstraction Bloat in AI Agent-Generated Code Output

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - evals
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Framework Signal Semantics

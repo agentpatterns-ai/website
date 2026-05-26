@@ -8,6 +8,7 @@ tags:
 aliases:
   - feedback over model scale
   - feedback loop quality
+last_reviewed: 2026-05-27
 ---
 
 # Feedback as Capability Equalizer

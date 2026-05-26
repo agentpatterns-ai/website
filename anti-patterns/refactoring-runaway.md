@@ -10,6 +10,7 @@ aliases:
   - tangled refactoring
   - tangled agent patches
   - refactoring-aware refinement
+last_reviewed: 2026-05-27
 ---
 
 # Refactoring Runaway: Tangled Refactorings in Agent Patches

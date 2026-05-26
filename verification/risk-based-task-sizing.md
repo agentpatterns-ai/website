@@ -7,6 +7,7 @@ aliases:
 tags:
   - testing-verification
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Risk-Based Task Sizing for Agent Verification Depth

@@ -7,6 +7,7 @@ aliases:
 tags:
   - workflows
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Escape Hatches: Unsticking Stuck Agents

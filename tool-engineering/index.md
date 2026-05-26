@@ -4,6 +4,7 @@ description: "Design, expose, and manage the tools agents use — description qu
 tags:
   - agent-design
   - tool-engineering
+last_reviewed: 2026-05-27
 ---
 # Tool Engineering
 

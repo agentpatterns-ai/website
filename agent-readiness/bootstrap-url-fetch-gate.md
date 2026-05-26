@@ -9,6 +9,7 @@ aliases:
   - url fetch gate scaffold
   - common crawl url gate
   - public-index fetch gate
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-url-fetch-gate/`

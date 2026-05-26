@@ -5,6 +5,7 @@ tags:
   - workflows
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Plan Mode: Read-Only Exploration Before Implementation

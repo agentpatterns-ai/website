@@ -10,6 +10,7 @@ tags:
 aliases:
   - typed memory layer for repositories
   - commit-history knowledge distillation
+last_reviewed: 2026-05-27
 ---
 
 # Typed Memory from VCS History

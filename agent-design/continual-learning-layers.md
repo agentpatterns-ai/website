@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
   - memory
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Continual Learning for AI Agents: Three Layers of Knowledge Accumulation

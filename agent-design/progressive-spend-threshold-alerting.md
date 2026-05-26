@@ -9,6 +9,7 @@ aliases:
   - graduated cost circuit breaker
   - soft spend limit alerts
   - staged budget alerting
+last_reviewed: 2026-05-27
 ---
 
 # Progressive Spend Threshold Alerting for Agent Cost Governance

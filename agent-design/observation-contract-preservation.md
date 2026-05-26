@@ -8,6 +8,7 @@ tags:
 aliases:
   - observation contracts
   - contract-bound tool outputs
+last_reviewed: 2026-05-27
 ---
 
 # Observation Contract Preservation in Tool-Augmented Agents

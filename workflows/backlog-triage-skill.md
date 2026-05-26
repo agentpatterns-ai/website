@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Backlog Triage as a Named Agent Skill

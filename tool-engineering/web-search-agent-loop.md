@@ -8,6 +8,7 @@ tags:
 aliases:
   - agent research loop
   - iterative search loop
+last_reviewed: 2026-05-27
 ---
 
 # Web Search Agent Loop

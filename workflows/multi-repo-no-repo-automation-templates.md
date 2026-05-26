@@ -10,6 +10,7 @@ aliases:
   - multi-repo automation template
   - no-repo automation template
   - signal-driven coding agent
+last_reviewed: 2026-05-27
 ---
 
 # Multi-Repo and No-Repo Coding Agent Automation Templates

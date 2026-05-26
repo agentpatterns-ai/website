@@ -8,6 +8,7 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Contractual Skill Files

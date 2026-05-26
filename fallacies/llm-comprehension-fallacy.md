@@ -7,6 +7,7 @@ tags:
 aliases:
   - comprehension fallacy
   - LLM understanding fallacy
+last_reviewed: 2026-05-27
 ---
 
 # LLM Comprehension Fallacy

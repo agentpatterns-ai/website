@@ -9,6 +9,7 @@ tags:
 aliases:
   - agent-authored dev environment
   - agent-iterated Dockerfile
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Led Dev-Environment Iteration with Validation and Rollback

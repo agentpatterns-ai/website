@@ -5,6 +5,7 @@ tags:
   - agent-design
   - observability
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Making Application Observability Legible to Agents

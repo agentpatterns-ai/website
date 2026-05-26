@@ -9,6 +9,7 @@ aliases:
   - tool unit-test scaffold
   - per-tool test harness
   - independent tool testing scaffold
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-tool-test-harness/`

@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - code-generation
+last_reviewed: 2026-05-27
 ---
 
 # Constraint Degradation in AI Code Generation

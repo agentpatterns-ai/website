@@ -7,6 +7,7 @@ tags:
 aliases:
   - Web Model Context Protocol
   - navigator.modelContext
+last_reviewed: 2026-05-27
 ---
 
 # WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents

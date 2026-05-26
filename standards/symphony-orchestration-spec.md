@@ -8,6 +8,7 @@ aliases:
   - Symphony spec
   - OpenAI Symphony
   - Codex orchestration spec
+last_reviewed: 2026-05-27
 ---
 
 # Symphony: Open Spec for Issue-Tracker-Driven Coding Agent Orchestration

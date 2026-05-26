@@ -9,6 +9,7 @@ tags:
 aliases:
   - adversarial fine-tuning loop
   - rapid attack-to-checkpoint cycle
+last_reviewed: 2026-05-27
 ---
 
 # Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections

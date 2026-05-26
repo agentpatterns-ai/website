@@ -8,6 +8,7 @@ tags:
 aliases:
   - Parallel Dispatch
   - Scatter-Gather
+last_reviewed: 2026-05-27
 ---
 
 # Orchestrator-Worker Pattern for AI Agent Development

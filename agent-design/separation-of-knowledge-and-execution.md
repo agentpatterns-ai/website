@@ -6,6 +6,7 @@ tags:
 aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern
+last_reviewed: 2026-05-27
 ---
 
 # Separation of Knowledge and Execution

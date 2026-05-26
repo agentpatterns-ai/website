@@ -8,6 +8,7 @@ aliases:
   - Tool Engineering
   - Mistake-Proofing
   - Poka-Yoke
+last_reviewed: 2026-05-27
 ---
 
 # Write Tool Descriptions as Agent Onboarding Documents

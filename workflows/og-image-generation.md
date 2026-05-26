@@ -8,6 +8,7 @@ aliases:
   - "social preview images"
   - "social card generation"
   - "Open Graph image automation"
+last_reviewed: 2026-05-27
 ---
 
 # Per-Page OG Image Generation at MkDocs Build Time

@@ -3,6 +3,7 @@ title: "Distractor Interference: Why Relevance Is Not Enough"
 description: "Semantically related but inapplicable instructions reduce compliance with applicable ones — proximity creates interference, not safety."
 tags:
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Distractor Interference: Relevance Is Not Enough

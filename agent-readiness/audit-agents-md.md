@@ -8,6 +8,7 @@ aliases:
   - AGENTS.md health check
   - AGENTS.md audit pass
   - review AGENTS.md for bloat
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-agents-md/`

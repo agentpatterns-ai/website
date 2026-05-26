@@ -8,6 +8,7 @@ aliases:
   - Critical Instruction Repetition
   - Attention Bias
   - Instruction Placement
+last_reviewed: 2026-05-27
 ---
 
 # Lost in the Middle: The U-Shaped Attention Curve

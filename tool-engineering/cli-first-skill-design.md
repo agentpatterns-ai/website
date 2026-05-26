@@ -8,6 +8,7 @@ tags:
 aliases:
   - dual-use skill design
   - CLI-first skills
+last_reviewed: 2026-05-27
 ---
 
 # CLI-First Skill Design

@@ -8,6 +8,7 @@ tags:
 aliases:
   - work-in-progress limit for agents
   - one-feature-at-a-time harness rule
+last_reviewed: 2026-05-27
 ---
 
 # WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design

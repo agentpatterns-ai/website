@@ -4,6 +4,7 @@ description: "Agent demos curate inputs and ignore edge cases. Production realit
 tags:
   - agent-design
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Demo-to-Production Gap: When Demos Hide Real Costs

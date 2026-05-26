@@ -9,6 +9,7 @@ tags:
   - instructions
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Mermaid as Agent Output Format: When to Ask for a Diagram Instead of Prose

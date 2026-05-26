@@ -9,6 +9,7 @@ aliases:
   - refactor discovery skill
   - improve-codebase-architecture skill
   - deepening opportunity discovery
+last_reviewed: 2026-05-27
 ---
 
 # Discovery-Only Refactor Pass: Surface Candidates Before Touching Code

@@ -8,6 +8,7 @@ tags:
 aliases:
   - agent-followable runbooks
   - agent-executable runbooks
+last_reviewed: 2026-05-27
 ---
 
 # Runbooks as Agent Instructions

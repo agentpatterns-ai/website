@@ -10,6 +10,7 @@ aliases:
   - prebuilt cloud agent images
   - custom Actions images for agents
   - agent runtime prebuild
+last_reviewed: 2026-05-27
 ---
 
 # Prebuilt Agent Environments

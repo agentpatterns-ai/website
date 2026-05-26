@@ -10,6 +10,7 @@ aliases:
   - test evolution
   - stale test detection
   - test co-evolution gap
+last_reviewed: 2026-05-27
 ---
 
 # Test Evolution Blind Spot in Coding Agents

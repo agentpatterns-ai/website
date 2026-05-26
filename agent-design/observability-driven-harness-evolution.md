@@ -9,6 +9,7 @@ tags:
 aliases:
   - predict-then-verify harness edits
   - falsifiable harness edits
+last_reviewed: 2026-05-27
 ---
 
 # Observability-Driven Harness Evolution

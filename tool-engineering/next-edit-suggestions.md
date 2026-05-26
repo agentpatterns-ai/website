@@ -6,6 +6,7 @@ aliases:
   - next-edit completions
 tags:
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Next Edit Suggestions Paradigm

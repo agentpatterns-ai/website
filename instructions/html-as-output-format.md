@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # HTML as Agent Output Format: When to Ask for HTML Instead of Markdown

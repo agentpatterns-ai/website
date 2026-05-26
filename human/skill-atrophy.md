@@ -8,6 +8,7 @@ tags:
   - human-factors
   - anti-pattern
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Skill Atrophy: When AI Reliance Erodes Developer Capability

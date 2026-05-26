@@ -8,6 +8,7 @@ tags:
 aliases:
   - feature spec file
   - feature contract
+last_reviewed: 2026-05-27
 ---
 
 # Feature List Files

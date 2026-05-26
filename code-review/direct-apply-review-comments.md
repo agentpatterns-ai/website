@@ -6,6 +6,7 @@ tags:
   - workflows
   - copilot
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Direct-Apply Review Comments via Cloud Agent

@@ -9,6 +9,7 @@ tags:
   - human-factors
   - workflows
   - multi-agent
+last_reviewed: 2026-05-27
 ---
 
 # Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions

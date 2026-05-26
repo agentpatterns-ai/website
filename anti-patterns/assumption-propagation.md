@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - source:osmani-80-percent
+last_reviewed: 2026-05-27
 ---
 
 # Assumption Propagation: Compounding Agent Misunderstandings

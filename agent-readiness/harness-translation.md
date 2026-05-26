@@ -8,6 +8,7 @@ aliases:
   - harness translation table
   - cursor copilot aider equivalents
   - cross-harness paths
+last_reviewed: 2026-05-27
 ---
 
 # Harness Translation Reference

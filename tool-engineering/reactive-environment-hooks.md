@@ -8,6 +8,7 @@ aliases:
   - reactive hooks
   - CwdChanged hook
   - FileChanged hook
+last_reviewed: 2026-05-27
 ---
 
 # Reactive Environment Hooks: CwdChanged and FileChanged

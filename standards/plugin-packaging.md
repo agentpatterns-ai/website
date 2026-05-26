@@ -4,6 +4,7 @@ description: "Package agents, skills, MCP servers, and hooks into installable bu
 tags:
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Plugin and Extension Packaging: Distributing Agent Capabilities

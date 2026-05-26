@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - human-factors
   - code-review
+last_reviewed: 2026-05-27
 ---
 
 # Velocity-Quality Asymmetry: Why AI Speed Gains Fade

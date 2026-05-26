@@ -9,6 +9,7 @@ aliases:
   - on-demand hooks
   - session-scoped guardrails
   - opt-in hooks
+last_reviewed: 2026-05-27
 ---
 
 # On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation

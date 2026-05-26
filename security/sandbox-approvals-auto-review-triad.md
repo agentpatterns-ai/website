@@ -9,6 +9,7 @@ aliases:
   - coding agent governance triad
   - sandbox approval auto-review
   - production coding agent controls
+last_reviewed: 2026-05-27
 ---
 
 # Sandbox + Approvals + Auto-Review Governance Triad

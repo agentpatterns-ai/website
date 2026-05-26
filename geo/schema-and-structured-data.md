@@ -8,6 +8,7 @@ aliases:
   - Schema Markup
   - Structured Data for GEO
   - JSON-LD for AI
+last_reviewed: 2026-05-27
 ---
 
 # Schema Markup for AI Citation

@@ -9,6 +9,7 @@ aliases:
   - workload identity federation for AI agents
   - keyless authentication for agent runtimes
   - OIDC federation for Claude API
+last_reviewed: 2026-05-27
 ---
 
 # Workload Identity Federation for Agent Runtimes

@@ -6,6 +6,7 @@ tags:
 aliases:
   - Multi-Agent Topology Taxonomy
   - Multi-Agent Architecture Patterns
+last_reviewed: 2026-05-27
 ---
 
 # Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers

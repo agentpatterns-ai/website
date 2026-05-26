@@ -9,6 +9,7 @@ aliases:
   - F1 F2 F3 F4 audit
   - action-audit divergence audit
   - audit-record divergence audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-action-audit-divergence/`

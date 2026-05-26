@@ -7,6 +7,7 @@ tags:
 aliases:
   - skill as knowledge container
   - knowledge-only skills
+last_reviewed: 2026-05-27
 ---
 
 # Skill as Knowledge Pattern

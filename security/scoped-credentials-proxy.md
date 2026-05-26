@@ -8,6 +8,7 @@ tags:
 aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials
+last_reviewed: 2026-05-27
 ---
 
 # Scoped Credentials via Proxy Outside the Agent Sandbox

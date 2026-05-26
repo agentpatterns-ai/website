@@ -8,6 +8,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Deliberate AI-Assisted Learning: Accelerating Skill Acquisition

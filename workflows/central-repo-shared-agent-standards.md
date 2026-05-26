@@ -5,6 +5,7 @@ tags:
   - instructions
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Architecting a Central Repo for Shared Agent Standards

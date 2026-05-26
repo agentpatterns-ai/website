@@ -4,6 +4,7 @@ description: "A three-surface workflow matching the right AI environment to each
 tags:
   - workflows
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # CLI-IDE-GitHub Context Ladder

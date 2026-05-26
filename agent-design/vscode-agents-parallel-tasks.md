@@ -7,6 +7,7 @@ tags:
 aliases:
   - VS Code Agents App
   - Agent-Native Parallel Execution
+last_reviewed: 2026-05-27
 ---
 
 # VS Code Agents App: Agent-Native Parallel Task Execution

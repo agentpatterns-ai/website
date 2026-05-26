@@ -8,6 +8,7 @@ aliases:
   - scaffold lifecycle hooks
   - hooks directory bootstrap
   - PreToolUse PostToolUse SessionStart scaffold
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap Hooks Scaffold

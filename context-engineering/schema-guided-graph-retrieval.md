@@ -8,6 +8,7 @@ tags:
 aliases:
   - schema-guided GraphRAG
   - typed graph retrieval
+last_reviewed: 2026-05-27
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

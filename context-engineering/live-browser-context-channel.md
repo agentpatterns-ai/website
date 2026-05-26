@@ -10,6 +10,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Live Browser as Agent Context Channel

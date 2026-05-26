@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - observability
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools

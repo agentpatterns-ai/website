@@ -7,6 +7,7 @@ aliases:
   - Lost in the Middle
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement
+last_reviewed: 2026-05-27
 ---
 
 # Attention Sinks: Why First Tokens Always Win

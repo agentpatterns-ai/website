@@ -9,6 +9,7 @@ aliases:
   - JIT-Planner
   - JIT-Scheduler
   - just-in-time agent compilation
+last_reviewed: 2026-05-27
 ---
 
 # Agent JIT Compilation

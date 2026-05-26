@@ -10,6 +10,7 @@ aliases:
   - handoff skill
   - cross-session handoff skill
   - slash-command handoff
+last_reviewed: 2026-05-27
 ---
 
 # Handoff Skill: Structured Context Transfer Between Agent Sessions

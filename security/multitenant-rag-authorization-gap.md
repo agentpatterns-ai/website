@@ -9,6 +9,7 @@ aliases:
   - relevance-authorization gap
   - multi-tenant RAG isolation
   - ABAC-gated retrieval
+last_reviewed: 2026-05-27
 ---
 
 # Multitenant RAG: Closing the Relevance-Authorization Gap

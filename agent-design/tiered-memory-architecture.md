@@ -9,6 +9,7 @@ tags:
 aliases:
   - episodic-to-semantic memory promotion
   - memory consolidation pipeline
+last_reviewed: 2026-05-27
 ---
 
 # Tiered Memory Architecture

@@ -9,6 +9,7 @@ tags:
   - memory
   - multi-agent
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Agentic Framework Landscape: When Each Framework Fits

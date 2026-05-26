@@ -4,6 +4,7 @@ description: "Patterns and techniques for building AI agents that resist prompt 
 tags:
   - security
   - agent-design
+last_reviewed: 2026-05-27
 ---
 # Security
 

@@ -9,6 +9,7 @@ aliases:
   - agent readiness library
   - agent readiness framework
   - bootstrap and audit runbooks
+last_reviewed: 2026-05-27
 ---
 
 # Agent Readiness

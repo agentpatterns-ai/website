@@ -9,6 +9,7 @@ aliases:
   - five subsystem rubric
   - harness bottleneck diagnostic
   - per-subsystem harness scoring
+last_reviewed: 2026-05-27
 ---
 
 # Five-Subsystem Harness Assessment

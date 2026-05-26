@@ -9,6 +9,7 @@ aliases:
   - "in-thread side channel"
   - "btw command pattern"
   - "bounded mid-task question"
+last_reviewed: 2026-05-27
 ---
 
 # In-Thread Side-Channel: Bounded Side Questions Without Losing the Main Task

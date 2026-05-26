@@ -8,6 +8,7 @@ tags:
 aliases:
   - pDFA firewall
   - trajectory firewall
+last_reviewed: 2026-05-27
 ---
 
 # Behavioral Firewall for Tool-Call Trajectories

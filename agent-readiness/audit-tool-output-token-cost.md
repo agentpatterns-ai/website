@@ -8,6 +8,7 @@ aliases:
   - tool output token audit
   - tool output sizing audit
   - semantic tool output check
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-tool-output-token-cost/`

@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - long-form
+last_reviewed: 2026-05-27
 ---
 
 # Open Agent School Pattern Mapping

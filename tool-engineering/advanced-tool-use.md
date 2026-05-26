@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - claude
   - long-form
+last_reviewed: 2026-05-27
 ---
 
 # Advanced Tool Use: Scaling Agent Tool Libraries

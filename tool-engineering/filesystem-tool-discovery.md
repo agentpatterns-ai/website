@@ -10,6 +10,7 @@ tags:
 aliases:
   - "lazy tool loading"
   - "on-demand tool loading"
+last_reviewed: 2026-05-27
 ---
 
 # Filesystem-Based Tool Discovery

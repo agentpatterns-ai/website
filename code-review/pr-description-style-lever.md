@@ -4,6 +4,7 @@ description: "PR description structure is a configurable agent parameter that me
 tags:
   - workflows
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # PR Description Style as a Lever for Agent PR Merge Rates

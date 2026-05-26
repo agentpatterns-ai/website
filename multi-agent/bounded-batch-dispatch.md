@@ -8,6 +8,7 @@ aliases:
   - sequential batch dispatch
   - bounded agent pool
   - batch agent dispatch
+last_reviewed: 2026-05-27
 ---
 
 # Bounded Batch Dispatch

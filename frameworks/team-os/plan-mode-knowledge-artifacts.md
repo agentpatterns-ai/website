@@ -6,6 +6,7 @@ tags:
   - workflows
   - human-factors
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Plan Mode for Knowledge Artifacts

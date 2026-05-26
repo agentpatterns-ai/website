@@ -8,6 +8,7 @@ aliases:
   - history anchor attack
   - consistency injection
   - prior-behavior steering
+last_reviewed: 2026-05-27
 ---
 
 # History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions

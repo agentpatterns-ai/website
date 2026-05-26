@@ -4,6 +4,7 @@ description: "Invest in problem statement quality before launching an agent — 
 tags:
   - context-engineering
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Execution Codebase Exploration

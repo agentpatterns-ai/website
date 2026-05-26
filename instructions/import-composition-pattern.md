@@ -6,6 +6,7 @@ tags:
   - instructions
   - technique
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # @import Composition Pattern for Instruction Files

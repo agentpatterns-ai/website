@@ -4,6 +4,7 @@ description: "Open standards and conventions shaping the AI agent ecosystem. - A
 tags:
   - standards
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 # Standards
 

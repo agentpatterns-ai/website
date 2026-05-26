@@ -1,6 +1,7 @@
 ---
 title: "Workflows for AI Agent Development"
 description: "End-to-end workflows for agent-assisted development — from project bootstrapping and team onboarding to parallel sessions, evals, and continuous improvement."
+last_reviewed: 2026-05-27
 ---
 
 # Workflows

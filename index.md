@@ -3,6 +3,7 @@ title: "Agent Patterns for AI Agent Development"
 description: "Patterns and techniques for experienced developers leveling up with AI coding assistants. A reference site covering single concepts with tool-agnostic principles."
 tags:
   - index
+last_reviewed: 2026-05-27
 ---
 # Agent Patterns
 

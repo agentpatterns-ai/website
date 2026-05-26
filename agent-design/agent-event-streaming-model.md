@@ -9,6 +9,7 @@ aliases:
   - agent stream
   - agent-step events
   - agent event stream
+last_reviewed: 2026-05-27
 ---
 
 # Agent Event Streaming: Consumer Contract Above the Tokens

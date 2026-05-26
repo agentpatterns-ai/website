@@ -9,6 +9,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # AI Adoption Footprint: The Segmented Shape of Engineering Orgs

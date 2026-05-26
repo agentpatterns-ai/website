@@ -8,6 +8,7 @@ tags:
   - emerging
   - fallacies
   - articles
+last_reviewed: 2026-05-27
 ---
 
 # Reference: Standards, Human Factors, Emerging, Fallacies, and Articles

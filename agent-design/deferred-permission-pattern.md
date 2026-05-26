@@ -7,6 +7,7 @@ tags:
 aliases:
   - deferred hook permission
   - headless session pause-resume
+last_reviewed: 2026-05-27
 ---
 
 # Deferred Permission Pattern

@@ -9,6 +9,7 @@ aliases:
   - RFC 9457 audit
   - machine-readable error audit
   - problem+json audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-tool-error-format/`

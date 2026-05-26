@@ -9,6 +9,7 @@ tags:
   - agent-design
   - instructions
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrapping Coding Agents

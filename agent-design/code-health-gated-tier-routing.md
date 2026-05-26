@@ -8,6 +8,7 @@ tags:
 aliases:
   - code quality routing signal
   - code health tier routing
+last_reviewed: 2026-05-27
 ---
 
 # Code-Health-Gated LLM Tier Routing

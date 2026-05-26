@@ -10,6 +10,7 @@ aliases:
   - MCP workflow optimisation
   - parameter-aware cache key
   - dependency-aware step parallelism
+last_reviewed: 2026-05-27
 ---
 
 # Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines

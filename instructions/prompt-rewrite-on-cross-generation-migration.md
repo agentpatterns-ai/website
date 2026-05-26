@@ -8,6 +8,7 @@ tags:
 aliases:
   - cross-generation prompt rewrite
   - fresh-baseline prompt migration
+last_reviewed: 2026-05-27
 ---
 
 # Prompt-Rewrite Discipline on Cross-Generation Model Migration

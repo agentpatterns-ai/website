@@ -8,6 +8,7 @@ tags:
 aliases:
   - SDLC skill library
   - lifecycle-indexed skill taxonomy
+last_reviewed: 2026-05-27
 ---
 
 # SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries

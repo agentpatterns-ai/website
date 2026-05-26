@@ -9,6 +9,7 @@ aliases:
   - bulk apply agent suggestions
   - batched remediation on pull requests
   - fix all batch action
+last_reviewed: 2026-05-27
 ---
 
 # Batched Suggestion Application

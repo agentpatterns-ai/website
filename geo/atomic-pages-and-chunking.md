@@ -9,6 +9,7 @@ aliases:
   - content atomization
   - RAG chunking strategy
   - one-topic-per-page design
+last_reviewed: 2026-05-27
 ---
 
 # Atomic Pages and Chunking — One Concept Per Page for RAG

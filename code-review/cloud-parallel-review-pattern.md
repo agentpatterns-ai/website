@@ -10,6 +10,7 @@ aliases:
   - cloud code review
   - ultrareview pattern
   - parallel multi-agent code review
+last_reviewed: 2026-05-27
 ---
 
 # Cloud Parallel Review Pattern

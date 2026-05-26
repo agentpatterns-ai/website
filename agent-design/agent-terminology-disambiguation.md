@@ -8,6 +8,7 @@ tags:
 aliases:
   - workflow vs agent
   - what is an AI agent
+last_reviewed: 2026-05-27
 ---
 
 # Agent Terminology Disambiguation for AI Coding Systems

@@ -10,6 +10,7 @@ tags:
   - memory
   - context-engineering
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # AST-Guided Agent Memory for Repository-Level Code Generation

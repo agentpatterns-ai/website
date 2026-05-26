@@ -9,6 +9,7 @@ aliases:
   - PR narrative audit
   - visible thinking audit
   - agent commit narration audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-pr-narrative-quality/`

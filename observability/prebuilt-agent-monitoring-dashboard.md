@@ -10,6 +10,7 @@ aliases:
   - shipped agent dashboard
   - default agent monitoring view
   - templated OTel dashboard
+last_reviewed: 2026-05-27
 ---
 
 # Prebuilt Agent Monitoring Dashboard

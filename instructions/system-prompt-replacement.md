@@ -6,6 +6,7 @@ aliases:
   - Domain-Specific Personas
 tags:
   - instructions
+last_reviewed: 2026-05-27
 ---
 # System Prompt Replacement for Domain-Specific Agent Personas
 

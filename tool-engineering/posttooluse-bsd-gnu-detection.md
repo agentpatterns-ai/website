@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - workflows
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # PostToolUse Hook for BSD/GNU Tool Miss Detection

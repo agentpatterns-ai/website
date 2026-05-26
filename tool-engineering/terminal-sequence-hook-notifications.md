@@ -9,6 +9,7 @@ aliases:
   - terminalSequence hook field
   - out-of-band agent notifications
   - hook desktop notifications
+last_reviewed: 2026-05-27
 ---
 
 # Out-of-Band Hook Notifications via terminalSequence

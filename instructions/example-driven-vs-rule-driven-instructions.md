@@ -8,6 +8,7 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Example-Driven vs Rule-Driven Instructions

@@ -5,6 +5,7 @@ tags:
   - human-factors
   - workflow
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Initiatives and Community: Tracking the Agentic Engineering Landscape

@@ -9,6 +9,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Machine-Readable Error Responses for AI Agents (RFC 9457)

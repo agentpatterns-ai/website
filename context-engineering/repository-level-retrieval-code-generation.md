@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - agent-design
   - code-generation
+last_reviewed: 2026-05-27
 ---
 
 # Repository-Level Retrieval for Code Generation

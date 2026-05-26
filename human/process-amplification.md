@@ -4,6 +4,7 @@ description: "Agents amplify your engineering practices. Strong processes scale;
 tags:
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Process Amplification: Scaling Human Work with Agents

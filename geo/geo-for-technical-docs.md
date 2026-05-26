@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - workflows
   - long-form
+last_reviewed: 2026-05-27
 ---
 
 # GEO for Technical Docs

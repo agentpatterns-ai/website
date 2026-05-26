@@ -9,6 +9,7 @@ aliases:
   - cloud agent state decoupling
   - agent loop machine state conversation state
   - three-layer cloud agent state
+last_reviewed: 2026-05-27
 ---
 
 # Cloud-Agent Three-Layer State Decoupling

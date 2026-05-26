@@ -11,6 +11,7 @@ aliases:
   - CUGA policy system
   - policy-as-code layer
   - governance by construction
+last_reviewed: 2026-05-27
 ---
 
 # Five-Stage Policy Layer Typology for Generalist Agents

@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 # Prompt Chaining: Sequential LLM Calls for Agent Workflows
 

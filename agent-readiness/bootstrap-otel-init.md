@@ -8,6 +8,7 @@ aliases:
   - OTel bootstrap
   - Claude Code telemetry init
   - agent observability scaffold
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-otel-init/`

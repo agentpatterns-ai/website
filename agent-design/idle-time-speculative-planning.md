@@ -9,6 +9,7 @@ aliases:
   - idle-time speculative planning
   - IdleSpec
   - speculative planning idle window
+last_reviewed: 2026-05-27
 ---
 
 # Idle-Time Speculative Planning for ReAct Agents

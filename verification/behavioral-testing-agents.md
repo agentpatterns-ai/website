@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - evals
+last_reviewed: 2026-05-27
 ---
 
 # Behavioral Testing for Non-Deterministic AI Agents

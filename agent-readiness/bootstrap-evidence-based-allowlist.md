@@ -8,6 +8,7 @@ aliases:
   - bootstrap usage-based allowlist
   - bootstrap dynamic allowlist
   - generate auto-discovery hooks
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-evidence-based-allowlist/`

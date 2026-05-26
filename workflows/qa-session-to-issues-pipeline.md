@@ -5,6 +5,7 @@ tags:
   - workflows
   - testing-verification
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # QA Session to Issues Pipeline

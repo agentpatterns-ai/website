@@ -8,6 +8,7 @@ tags:
 aliases:
   - consistent capability fallacy
   - capability generalization fallacy
+last_reviewed: 2026-05-27
 ---
 
 # The Consistent Capability Fallacy

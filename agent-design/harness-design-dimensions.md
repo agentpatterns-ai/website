@@ -9,6 +9,7 @@ aliases:
   - agent harness design dimensions
   - agent-system archetypes
   - harness archetype taxonomy
+last_reviewed: 2026-05-27
 ---
 
 # Harness Design Dimensions and Archetypes
@@ -37,7 +38,7 @@ Each dimension is a position choice, not a binary ([arXiv:2604.18071](https://ar
 - **Subagent architecture** — flat, hierarchical, or peer coordination between specialised agents.
 - **Context management** — file-persistent, hybrid, and hierarchical strategies dominate the corpus; ephemeral in-memory is rarer in production systems.
 - **Tool systems** — registry-oriented systems are dominant; [MCP](../tool-engineering/mcp-result-persistence-annotation.md)- and plugin-oriented extensions are emerging.
-- **Safety mechanisms** — intermediate isolation (sandboxes, permission prompts) is common; high-assurance audit is rare.
+- **Safety mechanisms** — intermediate isolation ([sandboxes](../security/sandbox-runtime-comparison.md), [permission prompts](../security/permission-gated-commands.md)) is common; high-assurance audit ([provenance-aware decision auditing](../security/provenance-aware-decision-auditing.md)) is rare.
 - **Orchestration** — the control flow and scheduling layer around agent loops.
 
 The paper complements the 12-dimension / 13-system [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)): finer-grained analysis of individual scaffolds, lower population coverage. Pick the five-dimension view for cross-ecosystem reading; pick the 12-dimension view when characterising a single scaffold in depth.

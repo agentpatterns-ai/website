@@ -8,6 +8,7 @@ tags:
 aliases:
   - executable specification inference for APR
   - specification-first program repair
+last_reviewed: 2026-05-27
 ---
 
 # Reverse-Engineered Executable Specifications for Agentic Program Repair

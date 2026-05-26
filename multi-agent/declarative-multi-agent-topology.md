@@ -7,6 +7,7 @@ tags:
 aliases:
   - topology-as-code
   - agent graph definition
+last_reviewed: 2026-05-27
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

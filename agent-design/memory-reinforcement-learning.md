@@ -8,6 +8,7 @@ tags:
 aliases:
   - utility-scored episodic memory
   - runtime reinforcement learning on episodic memory
+last_reviewed: 2026-05-27
 ---
 
 # Memory Reinforcement Learning (MemRL)

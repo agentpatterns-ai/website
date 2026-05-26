@@ -9,6 +9,7 @@ tags:
 aliases:
   - chain of thought code generation robustness
   - CoT fragility code LLM
+last_reviewed: 2026-05-27
 ---
 
 # CoT Robustness in Code Generation

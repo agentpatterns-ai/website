@@ -4,6 +4,7 @@ description: "The running application becomes its own IDE, letting operators mod
 tags:
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Product-as-IDE: When the Application Becomes the Development Environment

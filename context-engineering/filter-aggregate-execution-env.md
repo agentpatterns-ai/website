@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Filter and Aggregate in the Execution Environment

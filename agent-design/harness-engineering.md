@@ -9,6 +9,7 @@ tags:
 aliases:
   - agent environment design
   - environment design for agents
+last_reviewed: 2026-05-27
 ---
 
 # Harness Engineering for Building Reliable AI Agents
@@ -112,6 +113,19 @@ flowchart LR
 ```
 
 Each iteration improves the harness for all future agent sessions. This is the same [agentic flywheel](agentic-flywheel.md) applied specifically to environment design: every failure that gets addressed as a harness improvement compounds across all agents and all sessions ([Fowler/Bockeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+
+Mid-run, the same diagnostic stance drives runtime recovery — see [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) and [Rollback-First Design](rollback-first-design.md) for the recovery counterparts to this evolutionary loop.
+
+## Operational Concerns
+
+The three pillars above describe the design discipline. Production harnesses also own four runtime concerns that compound across sessions — each has dedicated coverage on this site:
+
+- **Permission boundaries** — runtime gates that enforce what CI cannot reach. See [Permission Framework Over Model Trust](../security/permission-framework-over-model.md) and [Permission-Gated Custom Commands](../security/permission-gated-commands.md).
+- **Sandboxing** — mechanical isolation at the runtime layer pairs with mechanical enforcement at the CI layer. See [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) and [Sandbox Rules at the Harness/Tools Boundary](../security/sandbox-rules-harness-tools.md).
+- **Cost controls** — the harness owns token and tool-call budgets, not just correctness. See [Cost-Aware Agent Design](cost-aware-agent-design.md) and [Dual-Budget Control](dual-budget-control-search-agents.md).
+- **Failure recovery** — runtime recovery is distinct from the harness-evolution feedback loop above. See [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) and [Rollback-First Design](rollback-first-design.md).
+
+These four axes track reviewer 3's operational checklist for production harnesses — coverage on this page is intentionally a cross-reference, not a duplicate of the canonical pages.
 
 ## Entropy Management
 

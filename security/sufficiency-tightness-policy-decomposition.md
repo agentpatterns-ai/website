@@ -9,6 +9,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Sufficiency-Tightness Decomposition for Agent-Authored Permissions

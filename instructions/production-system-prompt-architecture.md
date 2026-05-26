@@ -5,6 +5,7 @@ tags:
   - instructions
   - context-engineering
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Production System Prompt Architecture

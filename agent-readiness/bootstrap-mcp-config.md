@@ -8,6 +8,7 @@ aliases:
   - generate mcp.json
   - scaffold MCP server config
   - MCP per-server scope
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap MCP Config

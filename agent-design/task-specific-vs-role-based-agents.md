@@ -7,6 +7,7 @@ tags:
 aliases:
   - Narrow Agent Scope Over Broad Role
   - Specialized Agent Roles (sequential context)
+last_reviewed: 2026-05-27
 ---
 
 # Task-Specific Agents vs Role-Based Agents

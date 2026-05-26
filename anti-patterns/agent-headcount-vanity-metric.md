@@ -10,6 +10,7 @@ tags:
 aliases:
   - agent count vanity metric
   - number of agents in production
+last_reviewed: 2026-05-27
 ---
 
 # Agent Headcount as a Vanity Metric

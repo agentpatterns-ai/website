@@ -9,6 +9,7 @@ tags:
 aliases:
   - "CLAUDE.md standards split"
   - "review-time standards enforcement"
+last_reviewed: 2026-05-27
 ---
 
 # Deferred Standards Enforcement via Review Agents

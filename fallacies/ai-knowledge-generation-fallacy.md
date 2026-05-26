@@ -8,6 +8,7 @@ aliases:
   - AI generates new knowledge
   - LLM knowledge generation fallacy
   - AI novelty fallacy
+last_reviewed: 2026-05-27
 ---
 
 # The AI Knowledge Generation Fallacy

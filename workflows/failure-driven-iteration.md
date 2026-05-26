@@ -4,6 +4,7 @@ description: "A development technique where you deliberately run code to generat
 tags:
   - workflows
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Failure-Driven Iteration for Improving Agent Workflows

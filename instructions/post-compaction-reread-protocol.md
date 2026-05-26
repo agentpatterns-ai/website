@@ -6,6 +6,7 @@ tags:
   - instructions
   - technique
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Post-Compaction Re-read Protocol

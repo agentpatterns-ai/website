@@ -10,6 +10,7 @@ aliases:
   - output review fatigue
   - verification anxiety
   - decision fatigue from oversight
+last_reviewed: 2026-05-27
 ---
 
 # Cognitive Load, AI Fatigue, and Sustainable Agent Use

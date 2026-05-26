@@ -5,6 +5,7 @@ tags:
   - agent-design
   - memory
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Shared Agent Context Store API: When to Expose Curated Context as an Endpoint

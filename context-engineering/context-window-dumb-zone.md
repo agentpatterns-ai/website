@@ -7,6 +7,7 @@ tags:
 aliases:
   - Context Rot
   - Context Window Dumb Zone
+last_reviewed: 2026-05-27
 ---
 
 # Context Window Management: The Dumb Zone

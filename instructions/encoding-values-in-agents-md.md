@@ -8,6 +8,7 @@ tags:
 aliases:
   - operationalizing ethics in AGENTS.md
   - values in agent context files
+last_reviewed: 2026-05-27
 ---
 
 # Encoding Values in AGENTS.md: Why Prose Without Verification Fails

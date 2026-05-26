@@ -9,6 +9,7 @@ aliases:
   - deterministic agent orchestration
   - workflow-controlled modernization
   - fixed-policy orchestration
+last_reviewed: 2026-05-27
 ---
 
 # Deterministic Orchestration for Structured Modernization

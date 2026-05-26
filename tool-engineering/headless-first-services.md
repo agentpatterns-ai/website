@@ -7,6 +7,7 @@ tags:
 aliases:
   - "headless service design"
   - "agent-accessible services"
+last_reviewed: 2026-05-27
 ---
 
 # Headless-First Services: APIs for Agent Consumers

@@ -7,6 +7,7 @@ aliases:
 tags:
   - agent-design
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party

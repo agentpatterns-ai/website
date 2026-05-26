@@ -4,6 +4,7 @@ description: "Compare prompt caching costs across Anthropic, OpenAI, and Gemini.
 tags:
   - cost-performance
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Prompt Cache Economics: Comparing Costs by Provider

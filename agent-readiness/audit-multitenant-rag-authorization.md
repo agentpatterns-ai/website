@@ -9,6 +9,7 @@ aliases:
   - multitenant RAG authorization audit
   - tenant scope retrieval audit
   - relevance-authorization gap audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-multitenant-rag-authorization/`

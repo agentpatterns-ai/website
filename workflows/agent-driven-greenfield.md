@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Driven Greenfield Product Development

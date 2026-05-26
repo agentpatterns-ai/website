@@ -9,6 +9,7 @@ aliases:
   - safety nets
   - deterministic nodes
   - post-loop hooks
+last_reviewed: 2026-05-27
 ---
 
 # Agent Loop Middleware
@@ -62,6 +63,7 @@ Common safety-net targets:
 | Commit changes | Agent ran out of steps before cleanup |
 | Write to a log / update a ticket | Side effect, not rewarded by task completion |
 | Persist session state | Only matters for the next session |
+| Apply cost cap / abort over-budget | Token and tool-call budgets are easy to ignore mid-loop; the safety net halts deterministically. See [Per-Call Budget Hints for Tool Calls](per-call-budget-hints-tool-calls.md) and [Dual-Budget Control](dual-budget-control-search-agents.md). |
 
 ### Pre-Call Message Injection
 

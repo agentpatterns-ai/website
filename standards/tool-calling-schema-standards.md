@@ -8,6 +8,7 @@ aliases:
   - Tool Schema Design
   - Subagent Schema-Level Tool Filtering
   - Tool Minimalism
+last_reviewed: 2026-05-27
 ---
 
 # Tool Calling Schema Standards

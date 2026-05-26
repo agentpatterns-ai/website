@@ -7,6 +7,7 @@ tags:
 aliases:
   - goal-bound autonomous loop
   - objective-driven agent loop
+last_reviewed: 2026-05-27
 ---
 
 # Goal-Driven Autonomous Loop with Budget Cap

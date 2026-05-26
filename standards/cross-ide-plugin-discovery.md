@@ -5,6 +5,7 @@ tags:
   - standards
   - tool-engineering
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Cross-IDE Plugin Discovery

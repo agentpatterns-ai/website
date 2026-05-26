@@ -9,6 +9,7 @@ aliases:
   - confirmation gate audit
   - human-in-the-loop gate audit
   - approval gate log audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-confirmation-gate-logs/`

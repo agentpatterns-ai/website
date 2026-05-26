@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Elastic Context Orchestration

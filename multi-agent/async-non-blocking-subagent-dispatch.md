@@ -9,6 +9,7 @@ aliases:
   - non-blocking dispatch
   - async subagent dispatch
   - fire-and-continue delegation
+last_reviewed: 2026-05-27
 ---
 
 # Async Non-Blocking Subagent Dispatch

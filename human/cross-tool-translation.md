@@ -8,6 +8,7 @@ tags:
 aliases:
   - cross-tool learning
   - multi-tool portability
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Tool Translation: Learning from Multiple AI Assistants

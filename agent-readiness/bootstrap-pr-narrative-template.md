@@ -10,6 +10,7 @@ aliases:
   - PR template scaffold
   - visible thinking scaffold
   - issue and PR template bootstrap
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-pr-narrative-template/`

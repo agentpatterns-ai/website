@@ -7,6 +7,7 @@ aliases:
 tags:
   - context-engineering
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Encode Project Conventions in Distributed AGENTS.md Files

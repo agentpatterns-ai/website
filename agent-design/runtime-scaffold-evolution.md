@@ -9,6 +9,7 @@ aliases:
   - "live self-evolving agents"
   - "on-the-fly tool synthesis"
   - "runtime tool creation"
+last_reviewed: 2026-05-27
 ---
 
 # Runtime Scaffold Evolution

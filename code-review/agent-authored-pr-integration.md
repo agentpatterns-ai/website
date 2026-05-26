@@ -5,6 +5,7 @@ tags:
   - human-factors
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success

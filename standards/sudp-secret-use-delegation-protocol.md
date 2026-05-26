@@ -8,6 +8,7 @@ tags:
 aliases:
   - Secret-Use Delegation Protocol
   - Agent Secret Use
+last_reviewed: 2026-05-27
 ---
 
 # SUDP: Secret-Use Delegation Protocol for Agentic Systems

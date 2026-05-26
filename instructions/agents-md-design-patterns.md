@@ -8,6 +8,7 @@ tags:
 aliases:
   - "AGENTS.md best practices"
   - "AGENTS.md writing patterns"
+last_reviewed: 2026-05-27
 ---
 
 # AGENTS.md Design Patterns: Commands, Boundaries, and Personas

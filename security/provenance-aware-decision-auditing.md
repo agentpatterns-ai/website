@@ -9,6 +9,7 @@ aliases:
   - influence provenance graph
   - ARGUS provenance auditing
   - context-aware prompt injection defense
+last_reviewed: 2026-05-27
 ---
 
 # Provenance-Aware Decision Auditing for LLM Agents

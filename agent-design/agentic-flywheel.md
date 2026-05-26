@@ -4,6 +4,7 @@ description: "A closed loop where agents analyze their own traces and metrics to
 tags:
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Agentic Flywheel: Self-Improving Agent Systems
