@@ -7,6 +7,7 @@ tags:
 aliases:
   - agent-to-UI protocol
   - generative UI standard
+last_reviewed: 2026-05-27
 ---
 
 # A2UI: Framework-Agnostic Generative UI Standard

@@ -10,6 +10,7 @@ tags:
 aliases:
   - "review panel pattern"
   - "multi-agent review committee"
+last_reviewed: 2026-05-27
 ---
 # Committee Review Pattern
 

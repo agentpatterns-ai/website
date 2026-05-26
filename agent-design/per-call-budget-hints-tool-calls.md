@@ -9,6 +9,7 @@ aliases:
   - token budget hint
   - per-call reasoning budget
   - opt-in extended tool reasoning
+last_reviewed: 2026-05-27
 ---
 
 # Per-Call Budget Hints on Tool Invocations

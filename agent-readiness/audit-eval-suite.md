@@ -9,6 +9,7 @@ aliases:
   - eval suite audit
   - evals quality check
   - eval coverage audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-eval-suite/`

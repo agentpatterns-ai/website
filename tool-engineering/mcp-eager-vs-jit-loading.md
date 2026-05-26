@@ -9,6 +9,7 @@ tags:
   - tool-engineering
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time

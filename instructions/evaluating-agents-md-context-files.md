@@ -8,6 +8,7 @@ tags:
 aliases:
   - AGENTS.md evaluation
   - context file benchmarks
+last_reviewed: 2026-05-27
 ---
 
 # Evaluating AGENTS.md: When Context Files Hurt More Than Help

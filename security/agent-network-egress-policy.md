@@ -9,6 +9,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny

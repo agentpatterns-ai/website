@@ -7,6 +7,7 @@ tags:
 aliases:
   - Petri Net of Thoughts
   - PNoT prompting
+last_reviewed: 2026-05-27
 ---
 
 # Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)

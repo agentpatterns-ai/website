@@ -9,6 +9,7 @@ aliases:
   - skill technical debt
   - library-time skill maintenance
   - skill library debt
+last_reviewed: 2026-05-27
 ---
 
 # Skill Library Technical Debt

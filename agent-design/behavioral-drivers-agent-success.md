@@ -10,6 +10,7 @@ aliases:
   - behavioral trajectory analysis
   - agent failure clusters
   - resolve rate limitations
+last_reviewed: 2026-05-27
 ---
 
 # Behavioral Drivers of Coding Agent Success and Failure

@@ -4,6 +4,7 @@ description: "Project standards precise enough for human reviewers work as agent
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Standards as Agent Instructions

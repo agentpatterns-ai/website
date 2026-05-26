@@ -5,6 +5,7 @@ aliases: ["Agentic CI/CD", "Agentic CI"]
 tags:
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Continuous AI (Agentic CI/CD)

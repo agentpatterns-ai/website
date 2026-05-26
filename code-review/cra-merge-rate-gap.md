@@ -7,6 +7,7 @@ tags:
 aliases:
   - Code Review Agent Merge Rate
   - CRA Signal Ratio
+last_reviewed: 2026-05-27
 ---
 
 # CRA-Only Review and the Merge Rate Gap

@@ -6,6 +6,7 @@ tags:
 aliases:
   - sycophantic agent
   - sycophancy
+last_reviewed: 2026-05-27
 ---
 
 # The Yes-Man Agent

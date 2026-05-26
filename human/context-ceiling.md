@@ -10,6 +10,7 @@ tags:
 aliases:
   - "capability boundary"
   - "AI context limit"
+last_reviewed: 2026-05-27
 ---
 
 # The Context Ceiling

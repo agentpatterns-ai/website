@@ -5,6 +5,7 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Hints Over Code Samples in Agent Prompts

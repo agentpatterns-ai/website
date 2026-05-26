@@ -7,6 +7,7 @@ aliases:
 tags:
   - testing-verification
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts

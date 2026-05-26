@@ -5,6 +5,7 @@ tags:
   - training
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Air-Gapped RAG: Architecture Fundamentals

@@ -8,6 +8,7 @@ tags:
 aliases:
   - Skill design patterns
   - SKILL.md authoring
+last_reviewed: 2026-05-27
 ---
 
 # Skill Authoring Patterns: Description to Deployment

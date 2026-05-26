@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
 aliases:
   - "Compensatory Scaffolding"
+last_reviewed: 2026-05-27
 ---
 
 # Temporary Compensatory Mechanisms

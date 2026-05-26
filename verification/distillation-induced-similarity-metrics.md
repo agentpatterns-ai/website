@@ -10,6 +10,7 @@ aliases:
   - response pattern similarity
   - action graph similarity
   - RPS and AGS metrics
+last_reviewed: 2026-05-27
 ---
 
 # Distillation-Induced Similarity Metrics for Tool-Use Agents

@@ -11,6 +11,7 @@ aliases:
   - per-agent private memory
   - decentralized agent memory
   - DecentMem
+last_reviewed: 2026-05-27
 ---
 
 # Decentralized Memory for Self-Evolving Multi-Agent Systems

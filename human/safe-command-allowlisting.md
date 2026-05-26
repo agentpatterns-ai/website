@@ -8,6 +8,7 @@ tags:
   - human-factors
   - agent-design
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Safe Command Allowlisting: Reducing Approval Fatigue

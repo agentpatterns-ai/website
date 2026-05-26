@@ -4,6 +4,7 @@ description: "Team onboarding for agent workflows aligns a team on shared infras
 tags:
   - workflows
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Team Onboarding for AI Agent Workflows and Adoption

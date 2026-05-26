@@ -1,6 +1,7 @@
 ---
 title: "Frameworks"
 description: "Multi-page sections that synthesize atomic patterns into named, coherent ways of operating with AI coding assistants."
+last_reviewed: 2026-05-27
 ---
 
 # Frameworks

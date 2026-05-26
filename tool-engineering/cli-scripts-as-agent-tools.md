@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - cost-performance
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # CLI Scripts as Agent Tools: Return Only What Matters

@@ -9,6 +9,7 @@ aliases:
   - session harness sandbox
   - virtualized agent primitives
   - three-primitive agent architecture
+last_reviewed: 2026-05-27
 ---
 
 # Session Harness Sandbox Separation for Long-Running Agents

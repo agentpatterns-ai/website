@@ -7,6 +7,7 @@ aliases:
 tags:
   - workflows
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Steering Running Agents: Mid-Run Redirection and Follow-Ups

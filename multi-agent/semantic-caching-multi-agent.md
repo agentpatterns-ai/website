@@ -4,6 +4,7 @@ description: "Semantic caching with LLM-based equivalence detection achieves 67%
 tags:
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Semantic Caching for Multi-Agent Code Systems

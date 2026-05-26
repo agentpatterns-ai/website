@@ -4,6 +4,7 @@ description: "A two-stage LLM pipeline that labels diff hunks against a 12-type 
 tags:
   - code-review
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Structure-Aware Diff Labeling with Two-Stage LLM Pipelines

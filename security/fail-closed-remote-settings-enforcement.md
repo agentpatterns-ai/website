@@ -9,6 +9,7 @@ aliases:
   - forceRemoteSettingsRefresh
   - fail-closed settings validation
   - remote policy enforcement for agents
+last_reviewed: 2026-05-27
 ---
 
 # Fail-Closed Remote Settings Enforcement

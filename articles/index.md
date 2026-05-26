@@ -3,6 +3,7 @@ title: "Articles: Long-Form Analysis of AI-Driven Development"
 description: "Opinion and analysis pieces examining how AI coding assistants reshape software engineering practice, professional identity, and industry dynamics."
 tags:
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # Articles

@@ -9,6 +9,7 @@ aliases:
   - pre-execution rubric refinement
   - rubric-guided tool-use refinement
   - code-mode contract checking
+last_reviewed: 2026-05-27
 ---
 
 # RubricRefine: Pre-Execution Rubric Refinement

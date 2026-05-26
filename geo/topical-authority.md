@@ -8,6 +8,7 @@ tags:
   - geo
   - technique
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Topical Authority — Entity Coverage for AI Citation

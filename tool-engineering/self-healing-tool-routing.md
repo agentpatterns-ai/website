@@ -7,6 +7,7 @@ tags:
 aliases:
   - Self-Healing Router
   - deterministic adaptive routing
+last_reviewed: 2026-05-27
 ---
 
 # Self-Healing Tool Routing

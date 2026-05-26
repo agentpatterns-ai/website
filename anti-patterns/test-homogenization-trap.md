@@ -7,6 +7,7 @@ tags:
 aliases:
   - test homogenization trap
   - homogenization trap
+last_reviewed: 2026-05-27
 ---
 
 # The Test Homogenization Trap

@@ -9,6 +9,7 @@ aliases:
   - tamper-evident agent logs
   - agent audit chain
   - cryptographic agent receipts
+last_reviewed: 2026-05-27
 ---
 
 # Cryptographic Governance Audit Trail

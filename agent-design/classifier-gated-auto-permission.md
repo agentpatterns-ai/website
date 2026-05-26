@@ -10,6 +10,7 @@ aliases:
   - classifier-gated auto-permission
   - classifier-mediated auto-mode
   - permission classifier pattern
+last_reviewed: 2026-05-27
 ---
 
 # Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents

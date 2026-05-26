@@ -4,6 +4,7 @@ description: "Track which CLI tool shipped a capability first and when the other
 tags:
   - workflows
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity

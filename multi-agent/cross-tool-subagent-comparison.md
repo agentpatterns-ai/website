@@ -8,6 +8,7 @@ tags:
 aliases:
   - terminal agent subagent comparison
   - gemini cli subagents vs claude code
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Tool Subagent Comparison

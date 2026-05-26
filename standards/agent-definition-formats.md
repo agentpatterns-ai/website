@@ -7,6 +7,7 @@ tags:
 aliases:
   - agent config format
   - agent manifest format
+last_reviewed: 2026-05-27
 ---
 
 # Agent Definition Formats: How Tools Define Agent Behavior

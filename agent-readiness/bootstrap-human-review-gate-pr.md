@@ -9,6 +9,7 @@ aliases:
   - agent pr human approval gate
   - tiered review bootstrap
   - codeowners review gate scaffold
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-human-review-gate-pr/`

@@ -4,6 +4,7 @@ description: "AI agents systematically neglect error handling, edge cases, and t
 tags:
   - agent-design
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Happy Path Bias

@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Indexed Regex Search for Agent Tools

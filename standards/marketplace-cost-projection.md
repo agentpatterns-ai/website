@@ -8,6 +8,7 @@ tags:
 aliases:
   - Pre-Install Token Cost Projection
   - Plugin Marketplace Cost Projection
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Install Context-Cost Projection in Plugin Marketplaces

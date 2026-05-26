@@ -6,6 +6,7 @@ tags:
   - onboarding
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Powered Codebase Q&A and Onboarding

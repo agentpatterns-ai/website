@@ -4,6 +4,7 @@ description: "Natural-language issue search resolves chat-described symptoms to 
 tags:
   - workflows
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Semantic Issue Search from Chat vs Query Syntax

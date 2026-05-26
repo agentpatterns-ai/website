@@ -9,6 +9,7 @@ aliases:
   - agent readiness scorecard
   - L0 to L5 maturity audit
   - brownfield agent assessment
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-assess-agent-readiness/`

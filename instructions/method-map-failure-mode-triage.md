@@ -9,6 +9,7 @@ aliases:
   - failure-mode triage table
   - smallest-artifact discipline
   - harness method map
+last_reviewed: 2026-05-27
 ---
 
 # Method Map: Failure-Mode to Smallest-Artifact Triage

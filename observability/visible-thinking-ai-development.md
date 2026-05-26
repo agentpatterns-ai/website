@@ -5,6 +5,7 @@ tags:
   - human-factors
   - workflows
   - observability
+last_reviewed: 2026-05-27
 ---
 
 # Visible Thinking in AI-Assisted Development

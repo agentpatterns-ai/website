@@ -9,6 +9,7 @@ aliases:
   - tier-aware hooks
   - reasoning-effort hooks
   - effort level hook input
+last_reviewed: 2026-05-27
 ---
 
 # Effort-Aware Hooks: Reading the Reasoning Tier from PreToolUse and PostToolUse

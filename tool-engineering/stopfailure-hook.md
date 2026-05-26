@@ -7,6 +7,7 @@ tags:
 aliases:
   - StopFailure event
   - API error hook
+last_reviewed: 2026-05-27
 ---
 
 # StopFailure Hook: Observability for API Error Termination

@@ -9,6 +9,7 @@ aliases:
   - docs-grounded grill
   - q&a grounded in living docs
   - grill-with-docs pattern
+last_reviewed: 2026-05-27
 ---
 
 # Living-Docs-Grounded Agent Design Conversations

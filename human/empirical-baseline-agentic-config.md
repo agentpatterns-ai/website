@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Empirical Baseline: How Developers Configure Agentic AI Coding Tools

@@ -7,6 +7,7 @@ aliases:
 tags:
   - tool-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Scoped MCP Server Discovery: Most-Specific-Wins Resolution

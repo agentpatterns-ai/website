@@ -12,6 +12,7 @@ aliases:
   - oracle poisoning audit
   - KG poisoning audit
   - structured-source poisoning audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-trojan-hippo-memory/`

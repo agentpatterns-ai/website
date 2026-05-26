@@ -7,6 +7,7 @@ aliases:
   - "TDD with Agents"
   - "Tests as the Spec"
   - "Red-Green-Refactor for Agents"
+last_reviewed: 2026-05-27
 ---
 
 # Test-Driven Agent Development: Tests as Spec and Guardrail

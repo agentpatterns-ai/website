@@ -8,6 +8,7 @@ aliases:
   - rules file injection audit
   - instruction file injection scan
   - CLAUDE.md injection surface check
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-rules-files-injection/`

@@ -4,6 +4,7 @@ description: "Intercept password and verification-code prompts inside the termin
 tags:
   - security
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Sensitive Terminal Prompt Interception

@@ -5,6 +5,7 @@ tags:
   - training
   - tool-agnostic
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Air-Gapped RAG: Local Embeddings and Vector Stores

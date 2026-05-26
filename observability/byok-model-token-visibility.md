@@ -8,6 +8,7 @@ tags:
 aliases:
   - BYOK token usage visibility
   - Bring Your Own Key token observability
+last_reviewed: 2026-05-27
 ---
 
 # BYOK Model Token Visibility

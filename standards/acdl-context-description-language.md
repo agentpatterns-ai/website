@@ -8,6 +8,7 @@ tags:
 aliases:
   - Agentic Context Description Language
   - context description language
+last_reviewed: 2026-05-27
 ---
 
 # ACDL: A Language for Describing Agentic LLM Contexts

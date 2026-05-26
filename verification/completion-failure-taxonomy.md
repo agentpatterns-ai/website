@@ -6,6 +6,7 @@ tags:
   - evals
   - code-completion
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Completion Failure Taxonomy

@@ -8,6 +8,7 @@ tags:
 aliases:
   - task boundary audit
   - delegation frontier
+last_reviewed: 2026-05-27
 ---
 
 # Ambition Scaling: Moving the Target as Model Capability Increases

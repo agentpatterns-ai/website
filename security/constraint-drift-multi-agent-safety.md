@@ -9,6 +9,7 @@ aliases:
   - constraint state governance
   - safety constraint drift
   - multi-agent safety drift
+last_reviewed: 2026-05-27
 ---
 
 # Constraint Drift: Why Safety Must Be Maintained, Not Asserted

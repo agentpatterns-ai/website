@@ -8,6 +8,7 @@ tags:
 aliases:
   - "pattern propagation"
   - "codebase pattern amplification"
+last_reviewed: 2026-05-27
 ---
 
 # Pattern Replication Risk

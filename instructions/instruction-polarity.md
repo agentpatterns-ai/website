@@ -6,6 +6,7 @@ tags:
 aliases:
   - Negative Space Instructions
   - Instruction Framing
+last_reviewed: 2026-05-27
 ---
 
 # Instruction Polarity: Positive Rules Over Negative

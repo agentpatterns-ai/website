@@ -4,6 +4,7 @@ description: "Block agent completion signals with a mandatory verification seque
 tags:
   - agent-design
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Completion Checklists for AI Agent Development

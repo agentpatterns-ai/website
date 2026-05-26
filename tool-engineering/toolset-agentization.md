@@ -9,6 +9,7 @@ tags:
 aliases:
   - hierarchical tool agentization
   - agent-tool wrappers
+last_reviewed: 2026-05-27
 ---
 
 # Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents

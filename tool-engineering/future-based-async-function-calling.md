@@ -9,6 +9,7 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Future-Based Asynchronous Function Calling

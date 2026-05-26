@@ -10,6 +10,7 @@ aliases:
   - hidden tech debt
   - invisible technical debt
   - agentic tech debt
+last_reviewed: 2026-05-27
 ---
 
 # Shadow Tech Debt

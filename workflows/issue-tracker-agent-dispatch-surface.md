@@ -11,6 +11,7 @@ aliases:
   - Jira agent dispatch
   - Linear agent dispatch
   - ticket-as-prompt
+last_reviewed: 2026-05-27
 ---
 
 # Issue-Tracker as Agent Dispatch Surface

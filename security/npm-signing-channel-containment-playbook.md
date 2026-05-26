@@ -8,6 +8,7 @@ tags:
 aliases:
   - dev-machine supply chain incident response
   - npm install signing certificate rotation playbook
+last_reviewed: 2026-05-27
 ---
 
 # Containment Playbook: npm-to-Signing-Channel Compromise

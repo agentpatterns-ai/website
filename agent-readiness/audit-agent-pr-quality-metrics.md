@@ -9,6 +9,7 @@ aliases:
   - agent PR audit
   - agent productivity audit
   - merge rate gap audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-agent-pr-quality-metrics/`

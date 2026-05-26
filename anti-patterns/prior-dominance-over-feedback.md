@@ -9,6 +9,7 @@ aliases:
   - greedy optimizer prior
   - propose-evaluate-revise anti-pattern
   - prior over feedback
+last_reviewed: 2026-05-27
 ---
 
 # Prior Dominance Over Feedback

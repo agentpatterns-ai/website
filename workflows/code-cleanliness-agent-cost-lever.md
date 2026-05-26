@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - code-review
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Code Cleanliness as an Agent Cost Lever

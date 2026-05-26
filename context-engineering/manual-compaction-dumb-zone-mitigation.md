@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - technique
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Manual Compaction as Dumb Zone Mitigation

@@ -9,6 +9,7 @@ aliases:
   - hook args field
   - hook exec form
   - shell-safe hook handler
+last_reviewed: 2026-05-27
 ---
 
 # Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands

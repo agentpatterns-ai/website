@@ -4,6 +4,7 @@ description: "Roll out Copilot across a team with progressive autonomy, tiered c
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot: Team Adoption & Governance

@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses

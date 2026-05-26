@@ -10,6 +10,7 @@ aliases:
   - per-node trajectory replay
   - offline multi-agent debugging
   - backward node evaluation
+last_reviewed: 2026-05-27
 ---
 
 # Offline Trajectory Replay for Multi-Agent Workflow Debugging

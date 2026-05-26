@@ -5,6 +5,7 @@ tags:
   - standards
   - agent-design
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # Plugin Dependency Declaration and Disable-Chain Hints

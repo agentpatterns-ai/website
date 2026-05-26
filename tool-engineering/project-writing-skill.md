@@ -6,6 +6,7 @@ tags:
   - agent-design
 aliases:
   - writing skill for agents
+last_reviewed: 2026-05-27
 ---
 
 # Project Writing Skill

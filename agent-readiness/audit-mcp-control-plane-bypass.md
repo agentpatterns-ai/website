@@ -9,6 +9,7 @@ aliases:
   - off-protocol egress audit
   - mcp gateway bypass audit
   - agent egress blind spot audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-mcp-control-plane-bypass/`

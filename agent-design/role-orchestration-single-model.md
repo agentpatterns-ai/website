@@ -10,6 +10,7 @@ aliases:
   - three-roles-one-model
   - single-model multi-role scaffolding
   - inference-time role scaffolding
+last_reviewed: 2026-05-27
 ---
 
 # Role Orchestration on a Single Model

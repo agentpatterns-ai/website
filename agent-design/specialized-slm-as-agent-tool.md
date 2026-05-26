@@ -9,6 +9,7 @@ aliases:
   - SLM as agent tool
   - nested model tool
   - small model sub-tool
+last_reviewed: 2026-05-27
 ---
 
 # Specialized Small Language Models as Agent Sub-Tools

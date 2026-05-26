@@ -7,6 +7,7 @@ tags:
 aliases:
   - "Graduated Autonomy"
   - "Trust Escalation"
+last_reviewed: 2026-05-27
 ---
 
 # Progressive Autonomy with Model Evolution

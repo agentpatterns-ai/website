@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - agent-design
   - memory
+last_reviewed: 2026-05-27
 ---
 
 # Subtask-Level Memory for Software Engineering Agents

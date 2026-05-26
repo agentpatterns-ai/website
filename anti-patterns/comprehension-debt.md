@@ -5,6 +5,7 @@ tags:
   - anti-pattern
   - human-factors
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Comprehension Debt: When Developers Understand Less of Their Own Codebase

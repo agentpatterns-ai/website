@@ -10,6 +10,7 @@ tags:
 aliases:
   - TraceCard distillation
   - Cost-aware skill distillation
+last_reviewed: 2026-05-27
 ---
 
 # Cost-Aware Tracing for Skill Distillation

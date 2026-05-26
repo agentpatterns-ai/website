@@ -8,6 +8,7 @@ tags:
 aliases:
   - tokenizer migration cost
   - tokenizer inflation tax
+last_reviewed: 2026-05-27
 ---
 
 # Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts

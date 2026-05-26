@@ -4,6 +4,7 @@ description: "Patterns for designing, coordinating, and operating systems where 
 tags:
   - agent-design
   - multi-agent
+last_reviewed: 2026-05-27
 ---
 # Multi-Agent Systems
 

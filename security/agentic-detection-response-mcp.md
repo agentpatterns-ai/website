@@ -10,6 +10,7 @@ aliases:
   - ADR for agents
   - MCP runtime detection
   - agentic detection and response
+last_reviewed: 2026-05-27
 ---
 
 # Agentic Detection and Response at the MCP Boundary

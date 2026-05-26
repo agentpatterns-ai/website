@@ -7,6 +7,7 @@ tags:
 aliases:
   - AutoContext pattern
   - five-role improvement loop
+last_reviewed: 2026-05-27
 ---
 
 # Closed-Loop Role-Based Refinement

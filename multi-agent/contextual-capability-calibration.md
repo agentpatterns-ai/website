@@ -10,6 +10,7 @@ aliases:
   - contextual capability profile
   - context-aware agent routing
   - CADMAS-CTX
+last_reviewed: 2026-05-27
 ---
 
 # Contextual Capability Calibration for Multi-Agent Delegation

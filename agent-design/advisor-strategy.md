@@ -9,6 +9,7 @@ aliases:
   - advisor strategy
   - frontier model advisor
   - opus advisor pattern
+last_reviewed: 2026-05-27
 ---
 
 # The Advisor Strategy: Frontier Model as Strategic Advisor

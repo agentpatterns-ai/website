@@ -9,6 +9,7 @@ aliases:
   - "visible vs held-out test gap"
   - "specification compliance gap"
   - "validation versus holdout gap"
+last_reviewed: 2026-05-27
 ---
 
 # Held-Out Test Gap: A Long-Horizon Reward-Hacking Signal

@@ -9,6 +9,7 @@ aliases:
   - claude agents json output
   - programmatic agent session listing
   - agent session inventory
+last_reviewed: 2026-05-27
 ---
 
 # Programmatic Agent Session Export via `claude agents --json`

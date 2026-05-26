@@ -9,6 +9,7 @@ tags:
 aliases:
   - harness regression detection
   - agent harness eval gaps
+last_reviewed: 2026-05-27
 ---
 
 # Harness Bug Detection Patterns

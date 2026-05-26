@@ -8,6 +8,7 @@ aliases:
   - generate permissions allowlist
   - scaffold settings.json permissions
   - default-deny permission block
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap Permissions Allowlist

@@ -9,6 +9,7 @@ tags:
 aliases:
   - trajectory-opaque evaluation
   - output-only safety grading
+last_reviewed: 2026-05-27
 ---
 
 # Trajectory-Opaque Evaluation Gap

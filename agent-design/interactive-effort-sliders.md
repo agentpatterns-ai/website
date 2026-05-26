@@ -7,6 +7,7 @@ tags:
 aliases:
   - interactive effort slider
   - per-turn reasoning budget control
+last_reviewed: 2026-05-27
 ---
 
 # Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls

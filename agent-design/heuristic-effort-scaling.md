@@ -8,6 +8,7 @@ tags:
 aliases:
   - effort scaling
   - effort-based resource allocation
+last_reviewed: 2026-05-27
 ---
 
 # Heuristic-Based Effort Scaling in Agent Prompts

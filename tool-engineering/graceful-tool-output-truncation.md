@@ -6,6 +6,7 @@ tags:
   - agent-design
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Graceful Tool-Output Truncation: The PARTIAL Signal

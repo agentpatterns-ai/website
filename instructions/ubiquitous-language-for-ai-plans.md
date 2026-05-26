@@ -8,6 +8,7 @@ tags:
 aliases:
   - domain glossary for agents
   - CONTEXT.md ubiquitous language
+last_reviewed: 2026-05-27
 ---
 
 # Ubiquitous Language for AI Plans

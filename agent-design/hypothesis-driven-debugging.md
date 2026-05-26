@@ -8,6 +8,7 @@ tags:
 aliases:
   - debug mode
   - hypothesis then instrumentation loop
+last_reviewed: 2026-05-27
 ---
 
 # Hypothesis-Driven Debugging: Instrument Before You Patch

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - github-actions
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Continuous Triage: Automating Issue Classification with AI Workflows

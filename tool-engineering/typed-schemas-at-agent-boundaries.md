@@ -6,6 +6,7 @@ aliases:
   - "typed agent interfaces"
 tags:
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Typed Schemas at Agent Boundaries for Multi-Agent Systems

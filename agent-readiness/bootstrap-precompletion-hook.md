@@ -8,6 +8,7 @@ aliases:
   - pre-completion checklist hook
   - Stop event hook scaffold
   - completion gate scaffold
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-precompletion-hook/`

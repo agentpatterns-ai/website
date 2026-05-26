@@ -9,6 +9,7 @@ aliases:
   - long-horizon agent operations
   - long-running agent pattern
   - day-scale agent work
+last_reviewed: 2026-05-27
 ---
 
 # Long-Running Agents: Durability and Resumability Across Sessions

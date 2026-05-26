@@ -4,6 +4,7 @@ description: "Fewer, higher-level tools reduce selection ambiguity and context c
 tags:
   - agent-design
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Consolidate Agent Tools

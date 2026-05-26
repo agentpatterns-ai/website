@@ -9,6 +9,7 @@ aliases:
   - syntax-confidence routing
   - SynConfRoute pattern
   - confidence plus syntax routing
+last_reviewed: 2026-05-27
 ---
 
 # Syntax-Aware Completion Routing

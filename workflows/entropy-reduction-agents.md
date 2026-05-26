@@ -7,6 +7,7 @@ tags:
 aliases:
   - garbage collection of technical debt
   - codebase hygiene agents
+last_reviewed: 2026-05-27
 ---
 
 # Entropy Reduction Agents: Automated Codebase Hygiene

@@ -4,6 +4,7 @@ description: "Suppress interactive prompts with a one-line instruction override 
 tags:
   - agent-design
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Override Pattern: Reusing Interactive Commands in Automated Pipelines

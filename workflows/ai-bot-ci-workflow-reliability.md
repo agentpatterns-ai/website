@@ -8,6 +8,7 @@ tags:
 aliases:
   - Agent CI Success Rate
   - AI Bot Workflow Reliability
+last_reviewed: 2026-05-27
 ---
 
 # AI Bot CI/CD Workflow Reliability by Agent

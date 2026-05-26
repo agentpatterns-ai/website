@@ -8,6 +8,7 @@ tags:
   - agent-design
   - testing-verification
   - evals
+last_reviewed: 2026-05-27
 ---
 
 # Golden Query Pairs as Continuous Regression Tests for Agents

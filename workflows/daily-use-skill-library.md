@@ -6,6 +6,7 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Daily-Use Skill Library: Encoding Your Process as Agent Skills

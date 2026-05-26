@@ -8,6 +8,7 @@ tags:
   - agent-design
   - workflows
   - harness-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Rigor Relocation: Engineering Discipline with AI Agents

@@ -5,6 +5,7 @@ aliases: [idempotency, safe-retry-design]
 tags:
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Idempotent Agent Operations: Safe to Retry

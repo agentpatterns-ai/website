@@ -9,6 +9,7 @@ tags:
   - workflows
   - claude
   - tool-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Video Transcript Skill: Meeting Recording to Markdown with Inline Screenshots

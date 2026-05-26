@@ -4,6 +4,7 @@ description: "Instead of integrating third-party SaaS products and stitching the
 tags:
   - agent-design
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # First-Party Agent Composition: Replace SaaS Stitching with Agent-Built Features

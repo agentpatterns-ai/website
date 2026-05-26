@@ -7,6 +7,7 @@ tags:
 aliases:
   - seven phases of AI development
   - AI feature development phases
+last_reviewed: 2026-05-27
 ---
 
 # The 7 Phases of AI-Assisted Feature Development

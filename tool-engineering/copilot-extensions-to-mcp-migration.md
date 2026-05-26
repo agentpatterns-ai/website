@@ -7,6 +7,7 @@ tags:
   - copilot
 aliases:
   - Copilot Extensions to MCP Migration
+last_reviewed: 2026-05-27
 ---
 
 # Proprietary-to-Open-Standard Tool Migration (Copilot Extensions to MCP)

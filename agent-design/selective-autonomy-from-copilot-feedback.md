@@ -9,6 +9,7 @@ tags:
 aliases:
   - calibrated abstention from copilot feedback
   - learned-critic deferral
+last_reviewed: 2026-05-27
 ---
 
 # Selective Autonomy from Copilot Feedback

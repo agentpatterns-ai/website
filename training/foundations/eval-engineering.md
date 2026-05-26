@@ -9,6 +9,7 @@ tags:
 aliases:
   - agent evals
   - evaluation engineering
+last_reviewed: 2026-05-27
 ---
 # Eval Engineering (Training Module)
 

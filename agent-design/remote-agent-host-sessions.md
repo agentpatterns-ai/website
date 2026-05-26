@@ -9,6 +9,7 @@ aliases:
   - remote agent host
   - remote agent execution
   - agent host over SSH
+last_reviewed: 2026-05-27
 ---
 
 # Remote Agent Host Sessions over SSH and Dev Tunnels

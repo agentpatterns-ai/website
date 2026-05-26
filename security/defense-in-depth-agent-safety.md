@@ -9,6 +9,7 @@ aliases:
   - defense in depth
   - layered security
   - multi-layer safety
+last_reviewed: 2026-05-27
 ---
 
 # Defense-in-Depth Agent Safety

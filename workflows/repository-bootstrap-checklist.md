@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Repository Bootstrap Checklist: Wiring Agent Support

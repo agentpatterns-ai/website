@@ -10,6 +10,7 @@ aliases:
   - agentic context engineering
   - context collapse
   - brevity bias in context
+last_reviewed: 2026-05-27
 ---
 
 # Evolving Playbooks: Incremental Context That Preserves Knowledge

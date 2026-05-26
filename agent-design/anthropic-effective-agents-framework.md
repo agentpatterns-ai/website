@@ -8,6 +8,7 @@ tags:
 aliases:
   - Building Effective Agents
   - Anthropic Agent Patterns
+last_reviewed: 2026-05-27
 ---
 
 # Anthropic's Effective Agents Framework: A Pattern Map

@@ -7,6 +7,7 @@ tags:
 aliases:
   - "skill configuration"
   - "SKILL.md headers"
+last_reviewed: 2026-05-27
 ---
 
 # SKILL.md Frontmatter Reference

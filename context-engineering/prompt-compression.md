@@ -4,6 +4,7 @@ description: "Write instructions that convey the same guidance in fewer words â€
 tags:
   - cost-performance
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Prompt Compression: Maximizing Signal Per Token

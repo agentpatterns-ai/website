@@ -8,6 +8,7 @@ aliases:
   - generate llms.txt file
   - scaffold llms-full.txt
   - LLM discoverability index
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-llms-txt/`

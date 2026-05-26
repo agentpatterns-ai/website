@@ -10,6 +10,7 @@ aliases:
   - offline RAG deployment
   - on-premises RAG
   - air-gapped retrieval augmented generation
+last_reviewed: 2026-05-27
 ---
 
 # Air-Gapped RAG: Overview and When to Use It

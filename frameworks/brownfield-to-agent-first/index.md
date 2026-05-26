@@ -9,6 +9,7 @@ tags:
 aliases:
   - brownfield to agent-first
   - repo maturity framework
+last_reviewed: 2026-05-27
 ---
 
 # Brownfield to Agent-First

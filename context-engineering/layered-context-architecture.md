@@ -7,6 +7,7 @@ aliases:
 tags:
   - context-engineering
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Layered Context Architecture

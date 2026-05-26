@@ -9,6 +9,7 @@ aliases:
   - critical instruction placement audit
   - primacy recency audit
   - lost-in-the-middle audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-instruction-placement/`

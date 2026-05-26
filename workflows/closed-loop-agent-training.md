@@ -9,6 +9,7 @@ tags:
   - agent-design
   - tool-engineering
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Closed-Loop Agent Training from Tool Schemas

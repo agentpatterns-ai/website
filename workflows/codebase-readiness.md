@@ -6,6 +6,7 @@ tags:
 aliases:
   - agent-friendly code
   - codebase readiness
+last_reviewed: 2026-05-27
 ---
 
 # Codebase Readiness for Agents: Agent-Friendly Code

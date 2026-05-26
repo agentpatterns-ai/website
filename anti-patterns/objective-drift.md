@@ -8,6 +8,7 @@ tags:
 aliases:
   - goal drift
   - task drift
+last_reviewed: 2026-05-27
 ---
 
 # Objective Drift: When Agents Lose the Thread

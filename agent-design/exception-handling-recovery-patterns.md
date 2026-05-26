@@ -5,6 +5,7 @@ tags:
   - agent-design
   - reliability
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Exception Handling and Recovery Patterns

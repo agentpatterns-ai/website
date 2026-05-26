@@ -8,6 +8,7 @@ tags:
 aliases:
   - "security audit harness composition"
   - "steering scaling stacking"
+last_reviewed: 2026-05-27
 ---
 
 # Harness Composition for Scaled Security Audits

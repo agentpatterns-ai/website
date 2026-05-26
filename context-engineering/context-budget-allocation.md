@@ -8,6 +8,7 @@ tags:
 aliases:
   - The 50% Rule
   - Context Budget
+last_reviewed: 2026-05-27
 ---
 
 # Context Budget Allocation: Every Token Has a Cost

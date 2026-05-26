@@ -10,6 +10,7 @@ aliases:
   - inference-time tool-call review
   - pre-execution tool-call reviewer
   - reinforced agent reviewer
+last_reviewed: 2026-05-27
 ---
 
 # Inference-Time Tool-Call Reviewer

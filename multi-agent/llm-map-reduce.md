@@ -10,6 +10,7 @@ tags:
   - multi-agent
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # LLM Map-Reduce Pattern

@@ -9,6 +9,7 @@ tags:
   - code-review
   - cost-performance
   - cursor
+last_reviewed: 2026-05-27
 ---
 
 # Tunable Effort Levels for Code Review Agents

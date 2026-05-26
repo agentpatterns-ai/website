@@ -5,6 +5,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Layered Mutability: Governing Persistent Self-Modifying Agents

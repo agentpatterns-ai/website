@@ -6,6 +6,7 @@ tags:
   - workflow
   - tool-agnostic
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Persona-as-Code: Defining Agent Roles as Structured Documents

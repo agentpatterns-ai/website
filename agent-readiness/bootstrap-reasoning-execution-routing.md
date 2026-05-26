@@ -9,6 +9,7 @@ aliases:
   - model routing bootstrap
   - reasoning execution split
   - per-role model pinning
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-reasoning-execution-routing/`

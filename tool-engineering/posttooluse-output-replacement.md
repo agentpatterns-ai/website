@@ -4,6 +4,7 @@ description: "A PostToolUse hook can replace what the model sees from any tool c
 tags:
   - tool-engineering
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # PostToolUse Output Replacement: Hooks That Rewrite Tool Results

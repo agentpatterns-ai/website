@@ -8,6 +8,7 @@ tags:
   - agent-design
   - multi-agent
   - observability
+last_reviewed: 2026-05-27
 ---
 
 # Agentic AI Architecture: From Prompt to Goal-Directed

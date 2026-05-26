@@ -8,6 +8,7 @@ aliases:
 tags:
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Token-Efficient Tool Design: Tools That Don't Eat Your Context

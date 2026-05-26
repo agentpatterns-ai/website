@@ -9,6 +9,7 @@ aliases:
   - cloud agent install start lifecycle
   - session start hook bootstrap
   - environment.json install lifecycle
+last_reviewed: 2026-05-27
 ---
 
 # Cloud-Agent Session Bootstrap

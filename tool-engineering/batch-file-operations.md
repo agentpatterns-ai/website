@@ -7,6 +7,7 @@ aliases:
 tags:
   - cost-performance
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Batch File Operations via Bash Scripts

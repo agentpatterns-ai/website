@@ -10,6 +10,7 @@ aliases:
   - oracle-based decomposition
   - differential testing oracle
   - reference oracle pattern
+last_reviewed: 2026-05-27
 ---
 # Oracle-Based Task Decomposition
 

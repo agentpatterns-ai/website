@@ -9,6 +9,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape

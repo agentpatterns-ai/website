@@ -5,6 +5,7 @@ tags:
   - training
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 # Context Engineering (Training Module)
 

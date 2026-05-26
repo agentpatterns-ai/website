@@ -4,6 +4,7 @@ description: "How MCP servers use sampling/createMessage to request host LLM inf
 tags:
   - tool-engineering
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool

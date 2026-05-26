@@ -7,6 +7,7 @@ tags:
 aliases:
   - Tool Selection Guidance
   - Selection Signals
+last_reviewed: 2026-05-27
 ---
 
 # Tool Description Quality

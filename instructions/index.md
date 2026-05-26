@@ -3,6 +3,7 @@ title: "Instructions: System Prompts, Rules, and Agent Configuration"
 description: "Patterns for writing, structuring, and governing instruction files and system prompts that shape agent behavior across environments."
 tags:
   - instructions
+last_reviewed: 2026-05-27
 ---
 
 # Instructions

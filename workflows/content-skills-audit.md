@@ -4,6 +4,7 @@ description: "Periodically validate all URLs, site structure maps, and sourced c
 tags:
   - workflows
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Content & Skills Audit Workflow: Automated Staleness Detection

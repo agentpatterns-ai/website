@@ -8,6 +8,7 @@ tags:
   - agent-design
   - context-engineering
   - memory
+last_reviewed: 2026-05-27
 ---
 
 # Structured Task Graphs as External Agent Memory (Beads)

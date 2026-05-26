@@ -8,6 +8,7 @@ tags:
 aliases:
   - ESAA
   - Event Sourcing for Autonomous Agents
+last_reviewed: 2026-05-27
 ---
 
 # Event Sourcing for Agents: Separating Cognitive Intention from State Mutation

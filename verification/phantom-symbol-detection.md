@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - code-review
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Phantom Symbol Detection for LLM API Migration

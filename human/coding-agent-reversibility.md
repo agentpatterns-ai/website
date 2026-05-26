@@ -9,6 +9,7 @@ aliases:
   - reversible platform decisions
   - platform lock-in calculus
   - agent-driven migration economics
+last_reviewed: 2026-05-27
 ---
 
 # Coding-Agent Reversibility: Platform Choice as a Two-Way Door

@@ -8,6 +8,7 @@ aliases:
 tags:
   - human-factors
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Hyper-Personalized Software: The Return of Rapid Application Development

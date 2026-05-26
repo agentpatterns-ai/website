@@ -9,6 +9,7 @@ aliases:
   - Content Pipeline
   - Idea-to-Research Pipeline
   - Idea Capture and Research Stages
+last_reviewed: 2026-05-27
 ---
 
 # Content Pipeline: From Idea to Published Documentation

@@ -10,6 +10,7 @@ aliases:
   - mise en place methodology
   - MEP for agentic coding
   - deliberate preparation methodology
+last_reviewed: 2026-05-27
 ---
 
 # Mise en Place for Agentic Coding

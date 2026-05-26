@@ -10,6 +10,7 @@ aliases:
   - cross-trace failure analysis
   - trace corpus analysis
   - scout-investigator diagnostics
+last_reviewed: 2026-05-27
 ---
 
 # Corpus-Level Trace Diagnostics for LLM Agents

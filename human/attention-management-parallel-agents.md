@@ -9,6 +9,7 @@ aliases:
   - "attention management"
   - "CPU scheduler metaphor"
   - "developer as scheduler"
+last_reviewed: 2026-05-27
 ---
 # Developer as CPU Scheduler: Attention Management with Parallel Agents
 

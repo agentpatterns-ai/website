@@ -9,6 +9,7 @@ tags:
   - technique
   - code-completion
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Chunking Strategy for RAG-Based Code Completion

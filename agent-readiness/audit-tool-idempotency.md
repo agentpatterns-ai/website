@@ -9,6 +9,7 @@ aliases:
   - tool annotation audit
   - MCP idempotentHint audit
   - retry-safety audit
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-tool-idempotency/`

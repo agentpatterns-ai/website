@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Goal Recitation: Countering Drift in Long Sessions

@@ -9,6 +9,7 @@ aliases:
   - transcript-mined allowlist
   - permission allowlist from session logs
   - session-log permission refinement
+last_reviewed: 2026-05-27
 ---
 
 # Transcript-Driven Permission Allowlist

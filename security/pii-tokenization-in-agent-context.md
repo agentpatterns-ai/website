@@ -10,6 +10,7 @@ aliases:
   - PII redaction
   - data de-identification
   - Sandbox-Enforced PII Tokenization in Agent Workflows
+last_reviewed: 2026-05-27
 ---
 
 # Sandbox-Enforced PII Tokenization in Agent Workflows

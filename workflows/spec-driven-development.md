@@ -6,6 +6,7 @@ aliases:
 tags:
   - instructions
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Spec-Driven Development with Spec Kit

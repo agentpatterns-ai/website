@@ -10,6 +10,7 @@ aliases:
   - "AI citation behavior"
   - "how LLMs cite sources"
   - "AI engine citation mechanics"
+last_reviewed: 2026-05-27
 ---
 
 # How AI Engines Cite

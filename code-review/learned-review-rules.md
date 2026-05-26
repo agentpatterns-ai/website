@@ -8,6 +8,7 @@ aliases:
   - Bugbot learned rules
   - self-improving code review
   - adaptive code review agent
+last_reviewed: 2026-05-27
 ---
 
 # Self-Improving Code Review Agents — Learned Rules

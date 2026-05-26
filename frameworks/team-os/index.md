@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
 aliases:
   - team operating system
+last_reviewed: 2026-05-27
 ---
 
 # Team OS

@@ -9,6 +9,7 @@ aliases:
   - dual budget control
   - inference-time budget control for search agents
   - VOI-based action selection
+last_reviewed: 2026-05-27
 ---
 
 # Dual-Budget Control for Search Agents

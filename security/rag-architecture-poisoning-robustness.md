@@ -8,6 +8,7 @@ tags:
 aliases:
   - knowledge base poisoning
   - RAG poisoning robustness
+last_reviewed: 2026-05-27
 ---
 
 # RAG Architecture as a Poisoning Robustness Decision

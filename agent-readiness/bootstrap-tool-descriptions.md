@@ -8,6 +8,7 @@ aliases:
   - generate tool descriptions
   - rewrite MCP descriptions
   - tool description scaffold
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap Tool Descriptions

@@ -8,6 +8,7 @@ aliases:
   - rainbow deployment
   - gradual version migration
   - multi-version deployment
+last_reviewed: 2026-05-27
 ---
 
 # Rainbow Deployments for Agents: Gradual Version Migration

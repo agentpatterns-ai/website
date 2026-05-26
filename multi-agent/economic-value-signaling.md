@@ -4,6 +4,7 @@ description: "Attach token values to inter-agent messages to enable decentralize
 tags:
   - multi-agent
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Economic Value Signaling in Multi-Agent Networks

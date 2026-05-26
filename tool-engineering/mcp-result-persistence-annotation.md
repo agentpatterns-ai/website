@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - context-engineering
   - claude
+last_reviewed: 2026-05-27
 ---
 
 # MCP Tool Result Persistence via _meta Annotation

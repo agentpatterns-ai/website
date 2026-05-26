@@ -9,6 +9,7 @@ tags:
 aliases:
   - Progress File Pattern
   - Audit Trail for Agent Decisions
+last_reviewed: 2026-05-27
 ---
 
 # Trajectory Logging via Progress Files and Git History

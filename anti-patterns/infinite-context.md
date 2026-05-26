@@ -4,6 +4,7 @@ description: "Preloading irrelevant context into an agent prompt dilutes attenti
 tags:
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # The Infinite Context

@@ -8,6 +8,7 @@ tags:
 aliases:
   - background-vs-foreground model routing
   - utility model configuration
+last_reviewed: 2026-05-27
 ---
 
 # Utility-Model Split

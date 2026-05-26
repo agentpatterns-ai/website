@@ -8,6 +8,7 @@ tags:
 aliases:
   - LLM crypto code review
   - crypto API hallucination defence
+last_reviewed: 2026-05-27
 ---
 
 # Verifying LLM-Generated Cryptographic Code

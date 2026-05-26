@@ -12,6 +12,7 @@ tags:
   - agent-design
   - source:opendev-paper
   - memory
+last_reviewed: 2026-05-27
 ---
 
 # Agent Memory Patterns: Learning Across Conversations

@@ -8,6 +8,7 @@ tags:
 aliases:
   - synthetic eval quality measurement
   - SynAE framework
+last_reviewed: 2026-05-27
 ---
 
 # Measuring Synthetic Eval Data Quality (SynAE)

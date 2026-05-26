@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - evals
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth

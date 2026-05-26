@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
 aliases:
   - agent-readable codebase
+last_reviewed: 2026-05-27
 ---
 
 # Semantic Density Optimization for Agent Codebases

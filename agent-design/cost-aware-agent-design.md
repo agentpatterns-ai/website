@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - source:opendev-paper
   - long-form
+last_reviewed: 2026-05-27
 ---
 
 # Cost-Aware Agent Design: Route by Complexity, Not Habit

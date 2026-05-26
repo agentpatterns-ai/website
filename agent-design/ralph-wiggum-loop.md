@@ -5,6 +5,7 @@ aliases:
   - Fresh-Context Iteration Pattern
 tags:
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # The Ralph Wiggum Loop: Fresh-Context Iteration Pattern

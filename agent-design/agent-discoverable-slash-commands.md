@@ -8,6 +8,7 @@ tags:
 aliases:
   - Model-invocable slash commands
   - Agent-invokable commands
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Discoverable Slash Commands

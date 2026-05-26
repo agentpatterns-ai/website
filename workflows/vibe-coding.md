@@ -8,6 +8,7 @@ tags:
 aliases:
   - "Outcome-Oriented Agent-Assisted Development"
   - "Anti-Pattern: Vibe Coding"
+last_reviewed: 2026-05-27
 ---
 
 # Vibe Coding: Outcome-Oriented Agent-Assisted Development

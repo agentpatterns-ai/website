@@ -7,6 +7,7 @@ tags:
 aliases:
   - tool-level circuit breaker
   - circuit breaker pattern agents
+last_reviewed: 2026-05-27
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -61,6 +62,7 @@ Circuit breakers are only useful if agents respond to `CircuitOpenError` by atte
 1. **System prompt awareness** — the agent must know which tools are currently unavailable. Update the system prompt or provide a tool-status context block when a circuit opens.
 2. **Fallback routing** — the agent attempts alternative tools for the same operation (e.g., a secondary search API when the primary opens).
 3. **Explicit acknowledgment** — if no alternative exists, the agent reports the degradation to the user rather than silently looping.
+4. **Human escalation** — for high-stakes operations with no alternative tool, route the circuit-open state to a [confirmation gate](../security/human-in-the-loop-confirmation-gates.md) or surface a [deferred permission request](deferred-permission-pattern.md) rather than silently stopping. The breaker stops the waste; the gate keeps progress reachable.
 
 Without graceful degradation logic, a circuit breaker stops token waste but also stops progress. The pattern requires both components.
 
@@ -96,3 +98,5 @@ Circuit breakers add overhead that outweighs the benefit in several common scena
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md) — loop-level stopping mechanisms (iteration limits, cost thresholds)
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — designing operations to be undoable when failures occur
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — using automated signals to steer agents away from failure states
+- [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) — the escalation target when a circuit opens on a high-stakes operation with no fallback
+- [Deferred Permission Pattern](deferred-permission-pattern.md) — request approval at first attempt; circuit-open is a natural trigger for the deferral

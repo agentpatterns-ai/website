@@ -10,6 +10,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - multi-agent
+last_reviewed: 2026-05-27
 ---
 
 # Sub-Agents for Fan-Out Research and Context Isolation

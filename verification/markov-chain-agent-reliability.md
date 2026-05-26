@@ -9,6 +9,7 @@ aliases:
   - "TraceToChain"
   - "absorbing DTMC reliability"
   - "agent reliability certificate"
+last_reviewed: 2026-05-27
 ---
 
 # Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric

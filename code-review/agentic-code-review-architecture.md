@@ -8,6 +8,7 @@ tags:
 aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
+last_reviewed: 2026-05-27
 ---
 
 # Agentic Code Review Architecture

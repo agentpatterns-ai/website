@@ -8,6 +8,7 @@ aliases:
   - sprint contract
   - pre-coding success agreement
   - generator-evaluator agreement
+last_reviewed: 2026-05-27
 ---
 
 # Sprint Contracts: Pre-Coding Success Agreements for Multi-Agent Tasks

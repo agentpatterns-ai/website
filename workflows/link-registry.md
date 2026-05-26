@@ -3,6 +3,7 @@ title: "Shared Link Registry for Docs Sites"
 description: "Define external URLs once in a central registry file and reference them by key across all documentation pages — one edit propagates everywhere."
 tags:
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Shared Link Registry

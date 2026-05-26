@@ -9,6 +9,7 @@ aliases:
   - always-on security review
   - PR security agent pattern
   - scheduled vulnerability scanner
+last_reviewed: 2026-05-27
 ---
 
 # Always-On Agentic PR Security Review

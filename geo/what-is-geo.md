@@ -7,6 +7,7 @@ tags:
 aliases:
   - Answer Engine Optimization
   - AEO
+last_reviewed: 2026-05-27
 ---
 
 # What is GEO

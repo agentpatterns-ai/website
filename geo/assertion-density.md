@@ -5,6 +5,7 @@ tags:
   - geo
   - technique
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Assertion Density — Stats and Quotes Over Vague Claims

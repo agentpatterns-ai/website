@@ -9,6 +9,7 @@ aliases:
   - context bundle registry
   - versioned context hub
   - shared context library
+last_reviewed: 2026-05-27
 ---
 
 # Shared Context Bundle Registry for Agent Teams

@@ -4,6 +4,7 @@ description: "Agent instructions stack in layers — system prompt, project inst
 tags:
   - instructions
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Prompt Layering: How Instructions Stack and Override

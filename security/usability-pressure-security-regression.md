@@ -9,6 +9,7 @@ aliases:
   - usability pressure attack
   - UPAttack
   - explicit-implicit requirement asymmetry
+last_reviewed: 2026-05-27
 ---
 
 # Usability Pressure as a Silent Security-Regression Vector

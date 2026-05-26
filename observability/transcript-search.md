@@ -8,6 +8,7 @@ tags:
 aliases:
   - transcript mode search
   - Ctrl+O search
+last_reviewed: 2026-05-27
 ---
 
 # In-Session Transcript Search

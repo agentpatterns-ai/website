@@ -10,6 +10,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Autonomous Research Loops: Loops That Know When to Stop

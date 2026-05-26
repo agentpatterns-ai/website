@@ -3,6 +3,7 @@ title: "Agent Backpressure: Automated Feedback for Self-Correction"
 description: "Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention."
 tags:
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Agent Backpressure: Automated Feedback for Self-Correction

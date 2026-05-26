@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - workflows
   - multi-agent
+last_reviewed: 2026-05-27
 ---
 
 # Fan-Out Synthesis Pattern

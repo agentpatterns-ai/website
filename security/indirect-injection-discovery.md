@@ -7,6 +7,7 @@ tags:
 aliases:
   - indirect injection testing
   - indirect prompt injection discovery
+last_reviewed: 2026-05-27
 ---
 
 # Discovering Indirect Injection Vulnerabilities in Your Agent

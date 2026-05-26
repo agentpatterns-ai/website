@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # The Plan-First Loop: Always Design Before Writing Code

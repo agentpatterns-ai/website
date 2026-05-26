@@ -9,6 +9,7 @@ aliases:
   - "public-channel agent work"
   - "Lehrwerkstatt agent pattern"
   - "agent in public Slack channels"
+last_reviewed: 2026-05-27
 ---
 
 # Public-Channel Agent Work as Lehrwerkstatt

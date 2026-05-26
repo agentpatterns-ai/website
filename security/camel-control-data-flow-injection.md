@@ -9,6 +9,7 @@ aliases:
   - CaMeL prompt injection
   - control data flow separation
   - capability-based agent security
+last_reviewed: 2026-05-27
 ---
 
 # Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)

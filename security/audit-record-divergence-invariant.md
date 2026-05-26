@@ -9,6 +9,7 @@ aliases:
   - audit-record divergence invariant
   - F1 F2 F3 F4 agent invariant
   - agent runtime safety invariant
+last_reviewed: 2026-05-27
 ---
 
 # Audit-Record Divergence as an Agent Runtime Invariant

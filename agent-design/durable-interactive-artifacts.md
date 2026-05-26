@@ -10,6 +10,7 @@ aliases:
   - agent canvases
   - persistent agent artifacts
   - cross-session interactive artifacts
+last_reviewed: 2026-05-27
 ---
 
 # Durable Interactive Artifacts: Agent Output Outside the Transcript

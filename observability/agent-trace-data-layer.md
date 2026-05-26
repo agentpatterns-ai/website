@@ -8,6 +8,7 @@ tags:
 aliases:
   - agent observability storage layer
   - agent trace store
+last_reviewed: 2026-05-27
 ---
 
 # Agent-Trace Data Layer: Storage for Hours-Long Traces

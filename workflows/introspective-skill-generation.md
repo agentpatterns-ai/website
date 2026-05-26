@@ -8,6 +8,7 @@ aliases:
   - automated pattern mining
   - self-improving agents
   - meta-skill generation
+last_reviewed: 2026-05-27
 ---
 
 # Introspective Skill Generation: Mining Agent Patterns to Create New Skills and Agents

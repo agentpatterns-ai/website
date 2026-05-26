@@ -5,6 +5,7 @@ tags:
   - training
   - cost-performance
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 # Tool Engineering (Training Module)
 

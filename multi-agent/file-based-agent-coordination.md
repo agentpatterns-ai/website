@@ -7,6 +7,7 @@ aliases:
 tags:
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # File-Based Agent Coordination

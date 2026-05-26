@@ -9,6 +9,7 @@ aliases:
   - suggestion filtering
   - completion gating
   - control models
+last_reviewed: 2026-05-27
 ---
 
 # Suggestion Gating: Fewer Completions, Better DX

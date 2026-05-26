@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - instructions
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 
 # Event-Driven System Reminders

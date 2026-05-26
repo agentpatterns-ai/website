@@ -8,6 +8,7 @@ aliases:
   - SafeHarness
   - lifecycle security
   - harness security architecture
+last_reviewed: 2026-05-27
 ---
 
 # Lifecycle-Integrated Security Architecture for Agent Harnesses

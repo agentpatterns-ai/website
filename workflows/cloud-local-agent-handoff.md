@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # Cloud-Local Agent Handoff

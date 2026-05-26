@@ -4,6 +4,7 @@ description: "Tool-specific training modules covering GitHub Copilot surfaces, c
 tags:
   - training
   - copilot
+last_reviewed: 2026-05-27
 ---
 
 # GitHub Copilot

@@ -7,6 +7,7 @@ aliases:
 tags:
   - context-engineering
   - cost-performance
+last_reviewed: 2026-05-27
 ---
 
 # Observation Masking: Filter Tool Outputs from Context

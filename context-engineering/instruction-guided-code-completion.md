@@ -6,6 +6,7 @@ tags:
   - technique
   - code-completion
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Instruction-Guided Code Completion

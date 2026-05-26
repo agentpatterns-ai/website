@@ -8,6 +8,7 @@ tags:
 aliases:
   - CLAUDE.md fact-checker
   - instruction drift detection
+last_reviewed: 2026-05-27
 ---
 
 # Scheduled Instruction File Fact-Checker

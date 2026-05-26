@@ -9,6 +9,7 @@ aliases:
   - "Reward Hacking"
   - "Specification Gaming"
   - "Anti-Gaming Checklist"
+last_reviewed: 2026-05-27
 ---
 
 # Anti-Reward-Hacking: Rubrics That Resist Gaming

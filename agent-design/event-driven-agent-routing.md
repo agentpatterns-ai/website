@@ -7,6 +7,7 @@ tags:
 aliases:
   - "event-driven routing"
   - "status-driven agent pipelines"
+last_reviewed: 2026-05-27
 ---
 
 # Event-Driven Agent Routing

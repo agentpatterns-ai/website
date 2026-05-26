@@ -9,6 +9,7 @@ aliases:
   - LLM pinned vulnerable versions audit
   - agent dependency CVE audit
   - LLM-specified library version scan
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-llm-pinned-versions/`

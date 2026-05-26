@@ -8,6 +8,7 @@ aliases:
   - scaffold SKILL.md
   - skill template generator
   - SKILL.md skeleton
+last_reviewed: 2026-05-27
 ---
 
 # Bootstrap Skill Template

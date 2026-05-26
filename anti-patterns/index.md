@@ -3,6 +3,7 @@ title: "AI Agent Development Anti-Patterns and Failure Modes"
 description: "What not to do when working with AI agents, and why. - Assumption Propagation — An early misunderstanding cascades through all subsequent work, producing"
 tags:
   - anti-patterns
+last_reviewed: 2026-05-27
 ---
 # Anti-Patterns
 

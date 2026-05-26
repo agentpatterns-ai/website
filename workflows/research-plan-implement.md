@@ -5,6 +5,7 @@ tags:
   - workflows
   - context-engineering
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # The Research-Plan-Implement Pattern

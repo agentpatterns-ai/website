@@ -8,6 +8,7 @@ aliases:
 tags:
   - human-factors
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # AI Abundance Reshapes Software Engineering Identity

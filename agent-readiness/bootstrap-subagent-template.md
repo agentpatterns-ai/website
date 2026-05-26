@@ -8,6 +8,7 @@ aliases:
   - sub-agent skeleton scaffold
   - .claude/agents bootstrap
   - sub-agent template generator
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-subagent-template/`

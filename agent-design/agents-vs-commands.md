@@ -4,6 +4,7 @@ description: "Commands define what to do; agents define who does it — separati
 tags:
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Agents vs Commands: Separation of Role and Workflow

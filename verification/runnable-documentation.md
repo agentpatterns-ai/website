@@ -4,6 +4,7 @@ description: "Convert inline code examples into standalone files that CI execute
 tags:
   - testing-verification
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Runnable Documentation as Agent Verification

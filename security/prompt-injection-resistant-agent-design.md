@@ -8,6 +8,7 @@ tags:
 aliases:
   - prompt injection defense
   - injection-resistant agents
+last_reviewed: 2026-05-27
 ---
 
 # Designing Agents to Resist Prompt Injection

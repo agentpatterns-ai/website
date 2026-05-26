@@ -9,6 +9,7 @@ aliases:
   - "background foreground agent handoff"
   - "async to sync agent transition"
   - "90 percent handoff pattern"
+last_reviewed: 2026-05-27
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

@@ -9,6 +9,7 @@ aliases:
   - agent skill supply chain attack
   - skill ecosystem poisoning
   - DDIPE attack
+last_reviewed: 2026-05-27
 ---
 
 # Skill Supply-Chain Poisoning

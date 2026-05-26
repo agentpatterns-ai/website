@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - anti-patterns
   - patterns
+last_reviewed: 2026-05-27
 ---
 
 # Patterns: Agent Design, Multi-Agent, and Anti-Patterns

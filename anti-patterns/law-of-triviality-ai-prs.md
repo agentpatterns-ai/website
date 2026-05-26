@@ -8,6 +8,7 @@ tags:
   - human-factors
   - code-review
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Law of Triviality in AI PRs

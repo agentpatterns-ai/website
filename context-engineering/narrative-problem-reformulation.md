@@ -8,6 +8,7 @@ tags:
 aliases:
   - narrative reformulation prompting
   - storycoder narrative prompting
+last_reviewed: 2026-05-27
 ---
 
 # Narrative Problem Reformulation for Code Generation

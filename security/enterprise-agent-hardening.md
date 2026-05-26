@@ -9,6 +9,7 @@ tags:
   - agent-design
   - security
   - observability
+last_reviewed: 2026-05-27
 ---
 
 # Enterprise Agent Hardening: Three Production Gates

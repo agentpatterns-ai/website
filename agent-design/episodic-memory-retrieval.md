@@ -10,6 +10,7 @@ tags:
 aliases:
   - experience replay for agents
   - episode-based recall
+last_reviewed: 2026-05-27
 ---
 
 # Episodic Memory Retrieval

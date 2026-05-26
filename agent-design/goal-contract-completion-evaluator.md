@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Goal Contract: Separating the Doer from the Done-Checker

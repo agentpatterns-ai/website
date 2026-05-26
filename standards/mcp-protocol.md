@@ -7,6 +7,7 @@ tags:
 aliases:
   - MCP
   - Model Context Protocol
+last_reviewed: 2026-05-27
 ---
 
 # MCP: The Open Protocol Connecting Agents to External Tools

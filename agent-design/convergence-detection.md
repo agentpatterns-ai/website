@@ -10,6 +10,7 @@ aliases:
   - stopping criteria for iterative refinement
   - iteration stopping criteria
   - refinement termination detection
+last_reviewed: 2026-05-27
 ---
 
 # Convergence Detection in Iterative Agent Refinement

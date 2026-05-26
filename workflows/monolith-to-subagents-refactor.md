@@ -11,6 +11,7 @@ tags:
 aliases:
   - prototype-to-production agent refactor
   - monolith-to-pipeline agent migration
+last_reviewed: 2026-05-27
 ---
 
 # Monolith-to-Sub-Agents Refactor: Five Lessons from a Brittle Prototype

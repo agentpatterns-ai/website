@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - harness-engineering
   - source:arxiv
+last_reviewed: 2026-05-27
 ---
 
 # AX/UX/DX Triad: Three Experience Layers in Agent Systems

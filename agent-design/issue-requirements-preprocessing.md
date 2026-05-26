@@ -9,6 +9,7 @@ tags:
 aliases:
   - requirement-driven issue resolution
   - issue requirements engineering
+last_reviewed: 2026-05-27
 ---
 
 # Issue Requirements Preprocessing

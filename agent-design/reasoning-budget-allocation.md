@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 # Reasoning Budget Allocation: The Reasoning Sandwich
 

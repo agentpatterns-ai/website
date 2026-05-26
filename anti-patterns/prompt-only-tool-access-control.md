@@ -10,6 +10,7 @@ aliases:
   - instructional tool restriction
   - prompt-based tool whitelisting
   - "do not call this tool"
+last_reviewed: 2026-05-27
 ---
 
 # Prompt-Only Tool Access Control

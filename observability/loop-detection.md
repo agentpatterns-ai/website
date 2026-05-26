@@ -8,6 +8,7 @@ tags:
   - observability
 aliases:
   - Loop Detection & Stopping
+last_reviewed: 2026-05-27
 ---
 
 # Loop Detection for AI Agents: Stopping Micro-Loops

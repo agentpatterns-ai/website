@@ -9,6 +9,7 @@ aliases:
   - cloud agent auto model selection
   - harness-side model routing
   - vendor-side model broker
+last_reviewed: 2026-05-27
 ---
 
 # Auto Model Selection

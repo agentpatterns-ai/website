@@ -7,6 +7,7 @@ tags:
 aliases:
   - tool preamble
   - pre-tool-call status update
+last_reviewed: 2026-05-27
 ---
 
 # Tool Preamble

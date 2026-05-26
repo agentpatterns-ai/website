@@ -10,6 +10,7 @@ aliases:
   - automatic allowlisting
   - usage-based allowlisting
   - dynamic allowlist discovery
+last_reviewed: 2026-05-27
 ---
 
 # Evidence-Based Allowlist Auto-Discovery

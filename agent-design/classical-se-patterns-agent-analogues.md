@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - human-factors
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Classical SE Patterns as Agent Design Analogues

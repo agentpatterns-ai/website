@@ -8,6 +8,7 @@ aliases:
   - edit-count loop detector
   - doom loop detection hook
   - agent loop detection scaffold
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-loop-detector-hook/`

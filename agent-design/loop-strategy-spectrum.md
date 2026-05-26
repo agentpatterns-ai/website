@@ -9,6 +9,7 @@ aliases:
   - Ralph loops
   - fresh-context loops
   - context loop strategy
+last_reviewed: 2026-05-27
 ---
 
 # Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context

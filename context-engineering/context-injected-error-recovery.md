@@ -8,6 +8,7 @@ tags:
   - agent-design
   - workflows
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 
 # Context-Injected Error Recovery

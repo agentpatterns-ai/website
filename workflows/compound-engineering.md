@@ -6,6 +6,7 @@ tags:
   - agent-design
   - context-engineering
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Compound Engineering: Learning Loops That Make Each Feature Easier

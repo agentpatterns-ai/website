@@ -7,6 +7,7 @@ tags:
 aliases:
   - ComplexMCP benchmark
   - interdependent tool benchmark
+last_reviewed: 2026-05-27
 ---
 
 # ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes

@@ -10,6 +10,7 @@ aliases:
   - prototype skill
   - build-then-discard spike
   - throwaway spike skill
+last_reviewed: 2026-05-27
 ---
 
 # Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer

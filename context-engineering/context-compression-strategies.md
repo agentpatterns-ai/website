@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - cost-performance
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 
 # Context Compression Strategies: Offloading and Summarisation

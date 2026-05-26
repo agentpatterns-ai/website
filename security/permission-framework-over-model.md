@@ -10,6 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
   - anti-pattern
+last_reviewed: 2026-05-27
 ---
 
 # Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions

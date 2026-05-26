@@ -8,6 +8,7 @@ tags:
   - security
   - cost-performance
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Security Budget as Token Economics

@@ -9,6 +9,7 @@ aliases:
   - "Red-Green-Refactor for Agents"
   - "TDD with Agents"
   - "Tests as the Spec"
+last_reviewed: 2026-05-27
 ---
 
 # Red-Green-Refactor with Agents: Tests as the Spec

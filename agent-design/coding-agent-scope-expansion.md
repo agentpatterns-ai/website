@@ -9,6 +9,7 @@ tags:
 aliases:
   - general-purpose coding agent
   - coding agent generalization
+last_reviewed: 2026-05-27
 ---
 
 # Coding Agent Scope Expansion: When to Extend Beyond the Codebase

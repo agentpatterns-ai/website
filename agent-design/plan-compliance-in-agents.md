@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
   - evals
+last_reviewed: 2026-05-27
 ---
 
 # Plan Compliance in Agents: Measure What They Execute, Not What You Wrote

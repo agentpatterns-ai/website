@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Phase-Specific Context Assembly

@@ -7,6 +7,7 @@ tags:
 aliases:
   - clarify-then-act injection
   - ask-user injection amplification
+last_reviewed: 2026-05-27
 ---
 
 # Clarification Mode Amplifies Prompt Injection

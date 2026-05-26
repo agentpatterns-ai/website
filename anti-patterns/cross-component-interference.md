@@ -10,6 +10,7 @@ aliases:
   - cross-component interference
   - maximally-equipped agent fallacy
   - scaffold over-stacking
+last_reviewed: 2026-05-27
 ---
 
 # Cross-Component Interference in Agent Scaffolds

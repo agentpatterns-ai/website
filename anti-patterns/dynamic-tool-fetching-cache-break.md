@@ -4,6 +4,7 @@ description: "Loading tool definitions dynamically per step seems like good cont
 tags:
   - cost-performance
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # Dynamic Tool Fetching Breaks KV Cache

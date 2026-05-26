@@ -4,6 +4,7 @@ description: "Publish a standardized /llms.txt file so AI agents can navigate yo
 tags:
   - workflows
   - context-engineering
+last_reviewed: 2026-05-27
 ---
 
 # llms.txt: Making Your Project Discoverable to AI Agents

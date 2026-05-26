@@ -8,6 +8,7 @@ tags:
 aliases:
   - dormant memory payload attack
   - sensitive-topic-triggered memory exfiltration
+last_reviewed: 2026-05-27
 ---
 
 # Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)

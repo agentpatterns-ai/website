@@ -10,6 +10,7 @@ tags:
   - instructions
   - cost-performance
   - source:opendev-paper
+last_reviewed: 2026-05-27
 ---
 
 # Tool Engineering Principles for AI Agent Development

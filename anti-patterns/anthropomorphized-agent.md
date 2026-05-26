@@ -6,6 +6,7 @@ aliases:
   - humanizing AI agents
 tags:
   - human-factors
+last_reviewed: 2026-05-27
 ---
 
 # The Anthropomorphized Agent

@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - workflows
   - arxiv
+last_reviewed: 2026-05-27
 ---
 
 # Interaction-Pattern Evaluation for Agentic PRs

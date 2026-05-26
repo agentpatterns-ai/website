@@ -6,6 +6,7 @@ tags:
   - instructions
   - copilot
   - security
+last_reviewed: 2026-05-27
 ---
 
 # Content Exclusion Gap in Agent Systems

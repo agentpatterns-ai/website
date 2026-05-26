@@ -5,6 +5,7 @@ tags:
   - multi-agent
   - testing-verification
   - agent-design
+last_reviewed: 2026-05-27
 ---
 
 # Verify-Gated Completion as Admission Control

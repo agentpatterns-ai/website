@@ -8,6 +8,7 @@ tags:
   - agent-design
   - context-engineering
   - multi-agent
+last_reviewed: 2026-05-27
 ---
 
 # Distributed Computing Parallels in Agent Architecture

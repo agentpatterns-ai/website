@@ -9,6 +9,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
+last_reviewed: 2026-05-27
 ---
 
 # Answer-First Writing: Structure Content for AI Retrieval

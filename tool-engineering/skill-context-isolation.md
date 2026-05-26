@@ -9,6 +9,7 @@ aliases:
   - skill subagent context
   - dedicated context for skills
   - skill fork context
+last_reviewed: 2026-05-27
 ---
 
 # Skill Context Isolation: Forking the Skill into a Subagent Window

@@ -10,6 +10,7 @@ aliases:
   - enterprise-managed plugin standards
   - managed plugin contract
   - plugin marketplace allowlist
+last_reviewed: 2026-05-27
 ---
 
 # Enterprise-Managed Plugin Governance for Agent CLIs

@@ -10,6 +10,7 @@ aliases:
   - Rigor Relocation
   - Deterministic Behavioral Enforcement
   - Hook-Based Agent Governance
+last_reviewed: 2026-05-27
 ---
 
 # Enforcing Agent Behavior with Hooks

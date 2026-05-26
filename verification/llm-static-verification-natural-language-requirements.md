@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - workflows
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # LLM Static Verification Against Natural-Language Requirements

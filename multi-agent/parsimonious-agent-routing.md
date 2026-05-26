@@ -10,6 +10,7 @@ aliases:
   - parsimonious agent routing
   - joint routing and decomposition
   - selective delegation routing
+last_reviewed: 2026-05-27
 ---
 
 # Parsimonious Agent Routing for Multi-Agent Dispatch

@@ -9,6 +9,7 @@ tags:
 aliases:
   - Pre-Install Plugin Disclosure
   - Plugin Capability Inventory
+last_reviewed: 2026-05-27
 ---
 
 # Pre-Install Plugin Transparency: Capability Inventory and Cost Projection

@@ -10,6 +10,7 @@ aliases:
   - isometric model control
   - five-subsystem ablation
   - harness subsystem ablation
+last_reviewed: 2026-05-27
 ---
 
 # Isometric Harness Ablation

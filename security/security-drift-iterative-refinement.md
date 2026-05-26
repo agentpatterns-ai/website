@@ -4,6 +4,7 @@ description: "Iterative LLM fix-test loops optimize for functional correctness w
 tags:
   - agent-design
   - testing-verification
+last_reviewed: 2026-05-27
 ---
 
 # Security Drift in Iterative LLM Code Refinement

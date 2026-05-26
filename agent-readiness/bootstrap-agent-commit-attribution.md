@@ -9,6 +9,7 @@ aliases:
   - agent commit signing bootstrap
   - agent identity bootstrap
   - signed commits for agents
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-bootstrap-agent-commit-attribution/`

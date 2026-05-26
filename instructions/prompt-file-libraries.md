@@ -6,6 +6,7 @@ tags:
 aliases:
   - "prompt templates"
   - "reusable prompts"
+last_reviewed: 2026-05-27
 ---
 
 # Prompt File Libraries

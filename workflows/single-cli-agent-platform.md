@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+last_reviewed: 2026-05-27
 ---
 
 # Single-CLI Agent Platform: Create to Production in One CLI

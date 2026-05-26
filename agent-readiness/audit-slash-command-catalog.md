@@ -9,6 +9,7 @@ aliases:
   - slash command surface audit
   - prompt file catalog audit
   - agent-discoverable command quality check
+last_reviewed: 2026-05-27
 ---
 
 Packaged as: `.claude/skills/agent-readiness-audit-slash-command-catalog/`

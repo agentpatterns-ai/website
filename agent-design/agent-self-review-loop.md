@@ -10,6 +10,7 @@ tags:
 aliases:
   - "Review-Then-Implement Loop"
   - "Agent Review Loops"
+last_reviewed: 2026-05-27
 ---
 
 # Agent Self-Review Loop

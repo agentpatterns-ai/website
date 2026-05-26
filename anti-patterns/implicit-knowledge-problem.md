@@ -7,6 +7,7 @@ tags:
 aliases:
   - tribal knowledge problem
   - knowledge externalization
+last_reviewed: 2026-05-27
 ---
 
 # The Implicit Knowledge Problem
