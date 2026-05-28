@@ -20,6 +20,7 @@ nav:
       - continual-learning-layers.md
       - delegation-decision.md
       - empowerment-over-automation.md
+      - eval-strategy-by-agent-generation.md
       - execution-first-delegation.md
       - execution-lineage-dag.md
       - runtime-scaffold-evolution.md
@@ -46,6 +47,7 @@ nav:
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
       - clock-in-clock-out-protocol.md
+      - component-isolated-memory-stress-testing.md
       - cross-cycle-consensus-relay.md
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
@@ -80,6 +82,7 @@ nav:
       - inference-time-tool-call-reviewer.md
       - loop-strategy-spectrum.md
       - plan-compliance-in-agents.md
+      - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
       - remote-session-control.md
       - self-rewriting-meta-prompt-loop.md
@@ -116,6 +119,7 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
+      - tenant-model-policy.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
@@ -147,4 +151,32 @@ nav:
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md
+  - adaptive-generate-rank-verify.md
+  - agent-event-streaming-model.md
+  - agent-jit-compilation.md
+  - agent-project-state-purge.md
+  - agentic-framework-landscape.md
+  - anthropic-effective-agents-framework.md
+  - asynchronous-agent-io-and-speculative-tools.md
+  - auto-model-selection.md
+  - ax-stack-layered-model.md
+  - classifier-gated-auto-permission.md
+  - cloud-agent-session-bootstrap.md
+  - cloud-agent-tiered-model-routing.md
+  - code-health-gated-tier-routing.md
+  - decentralized-memory-multi-agent.md
+  - editor-manager-surface-separation.md
+  - experience-graphs-self-evolving-agents.md
+  - externalization-in-llm-agents.md
+  - goal-contract-completion-evaluator.md
+  - idle-time-speculative-planning.md
+  - issue-requirements-preprocessing.md
+  - meta-engineering-harness.md
+  - parameter-keyed-caching-plan-execute.md
+  - runtime-harness-adaptation.md
+  - shared-agent-context-store-api.md
+  - skill-program-functions.md
+  - stochastic-deterministic-boundary.md
+  - typed-memory-from-vcs-history.md
+  - utility-model-split.md
   - ...

@@ -1,0 +1,98 @@
+---
+title: "Iterative Binary Feedback for Pattern Adherence"
+description: "Looping yes/no judgments through capable models beats verbose critique for getting LLMs to follow named design patterns — under specific conditions."
+tags:
+  - instructions
+  - tool-agnostic
+last_reviewed: 2026-05-27
+---
+
+# Iterative Binary Feedback for Pattern Adherence
+
+> Looping a capable model with yes/no pattern judgments from a deterministic checker beats verbose critique when the predicate space is small.
+
+Iterative binary feedback is a prompting strategy where a generator LLM produces code, a deterministic checker returns a single pass/fail bit on pattern conformance, and the loop repeats with a fixed retry message until conformance or a step cap. The signal carries no diagnostic detail. The strategy beat three richer alternatives (instructions, extensive feedback, extensive feedback + few-shot) for Singleton adherence across 13 LLMs on 164 Java HumanEval-X tasks ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)).
+
+## When This Applies
+
+The Singleton result is narrow. The technique is the right default only when all three conditions hold:
+
+| Condition | Why it matters |
+|-----------|----------------|
+| **Capable instruction-following base model** | Code Llama (70B) plateaued at 29.5% Singleton compliance after 10 binary-feedback iterations; weaker code-specialised models cannot recover the missing predicate from a bare retry ([arxiv:2605.26898](https://arxiv.org/abs/2605.26898)) |
+| **Small predicate space (~3 boolean checks)** | The Singleton checker validates three predicates — Private Constructor, Instance Method, Global Access Point. As predicate count or interaction grows, blind retries cannot localise the failure |
+| **Deterministic judge available** | The paper's judge is a regex matcher. Substituting an LLM judge inherits its own brittleness — manipulated reasoning traces inflate LLM-judge false positives to 90% on related tasks ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691)) |
+
+For general code repair, the comparison reverses: detailed feedback wins by ~10 pp over minimal feedback (mixed 63.6%, LLM-Expert 62.9%, minimal 53.1%) across five SOTA models on FeedbackEval ([Song et al., 2025](https://arxiv.org/abs/2504.06939)).
+
+## The Loop
+
+The protocol in the Singleton paper is intentionally minimal ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)):
+
+1. Generator produces code from the task description with no pattern instruction
+2. Deterministic checker (regex on the predicate set) returns pass or fail
+3. On fail, send a fixed retry: *"The following code does not include a correctly formatted &lt;Pattern&gt; class: {response}. Please correct the code and return the complete code."*
+4. Loop up to 10 iterations; on pass or cap, exit
+
+The retry contains the full prior response and no other state — no list of failed predicates, no diff, no hint. The generator re-derives the missing structure on each iteration.
+
+```mermaid
+graph LR
+    A[Task] --> B[Generator]
+    B --> C{Checker}
+    C -->|pass| D[Accept]
+    C -->|fail<br/>iter < 10| B
+    C -->|fail<br/>iter = 10| E[Reject]
+```
+
+## Reported Numbers
+
+Singleton Score with iterative binary feedback (Experiment 2) ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)):
+
+| Model | Singleton Score | Functional pass-rate change |
+|-------|-----------------|------------------------------|
+| Llama 3.3 | 0% → 100% | +28.7 pp |
+| GPT-4o mini | 0% → 100% | +61.0 pp |
+| Qwen3 (8B) | 0% → 99.2% | +17.7 pp |
+| Code Llama (70B) | 0% → 29.5% | (plateaued) |
+| DeepSeek Coder (16B) | improved | −9.8 pp |
+| Gemma3 (4B) | improved | −21.3 pp |
+
+Llama 3.3 also hit 100% Singleton compliance on the instruction-only strategy — binary feedback added no value in that condition.
+
+## Why It Works
+
+Binary feedback preserves the model's full self-correction pathway while collapsing the supervision signal to its minimum. Detailed feedback ("private constructor missing") biases weaker models to patch only that predicate, often at the cost of functional correctness — the paper documents models that "lost context implementing Singleton correctly but for wrong functionality" under richer feedback ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). The bare retry forces a holistic regeneration on each iteration, exercising the same code-generation circuit that produced functional code initially. Self-Refine reports the same mechanism: iterative same-model feedback improved CODEX code generation by up to 13 pp absolute, with the *iteration* — not the signal richness — as the active ingredient ([Madaan et al., 2023](https://arxiv.org/pdf/2303.17651)). Capable models can probe a small predicate space by trial and error within the 10-iteration budget; richer specifications break this scaling.
+
+## When This Backfires
+
+- **Functionality-critical output** — Pattern adherence and functional correctness can diverge. DeepSeek Coder lost 9.8 pp on functional tests while improving Singleton compliance; Gemma3 (4B) lost 21.3 pp ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). For production code, gate the loop on test pass *and* pattern match
+- **Multi-predicate or interacting patterns** — Three predicates fit in a 10-iteration probe budget; ten do not. For richer patterns, FeedbackEval evidence points to structured feedback as the safer default ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+- **Weak code-specialised base models** — Models trained narrowly on completion lack the instruction-following capacity to recover from a bare retry. Code Llama 70B is the counter-example: 29.5% after 10 iterations ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898))
+- **No deterministic judge** — When the pattern check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface. Reasoning-trace manipulation drives LLM-judge false positives above 80% on related tasks ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691))
+- **Already-converged instructions** — Llama 3.3 hit 100% Singleton compliance on instructions alone. The 10-call feedback loop in that condition spends tokens and latency for no lift
+- **General code repair** — The result does not generalise to debugging or test-failure repair. FeedbackEval shows detailed feedback wins for repair by ~10 pp ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+
+## Threats to Validity
+
+The authors flag three explicitly ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)):
+
+- **Internal** — HumanEval-X test cases are not optimal for evaluating functional correctness
+- **External** — 164 tasks, Java only, one pattern (Singleton); does not generalise to other languages or richer patterns
+- **Construct** — One prompt was used across all 13 models, but LLMs are prompt-sensitive
+
+## Key Takeaways
+
+- Binary "yes/no, try again" feedback outperforms verbose critique for design-pattern adherence with capable models, small predicate sets, and a deterministic judge
+- Iteration is the active ingredient — richer signals can degrade functional correctness in weaker models without improving structural conformance
+- Cap iterations (the paper uses 10) and gate exits on both pattern match and functional tests
+- The result inverts for code repair: structured feedback wins by ~10 pp on FeedbackEval — pick by task, not by general principle
+- If instructions already land the pattern, the feedback loop is dead weight
+
+## Related
+
+- [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md) — generalisation: two-role generator/evaluator loop where the evaluator returns structured feedback. Binary feedback is the minimal-signal variant
+- [Critic Agent Plan Review](../agent-design/critic-agent-plan-review.md) — adjacent pattern using a critic role; useful when the critic must give richer feedback than yes/no
+- [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — failure mode the binary loop sidesteps: detailed multi-constraint prompts degrade as constraint count grows
+- [Prior Dominance over Feedback](../anti-patterns/prior-dominance-over-feedback.md) — anti-pattern where the model ignores feedback in favour of its prior; relevant when binary loops fail to converge
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — choosing the right signal type when designing the retry prompt

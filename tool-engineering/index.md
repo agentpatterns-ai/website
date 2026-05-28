@@ -51,6 +51,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](scoped-mcp-server-discovery.md) — Resolve duplicate MCP server definitions across user, workspace, and project config files using a most-specific-wins precedence rule
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md) — Decide which MCP servers earn unconditional context residence and which stay deferred behind tool search, using token cost, hit rate, and selection accuracy as signals
 - [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — pair Jaccard and ssdeep before drawing ecosystem conclusions
+- [Hint-Driven Concurrency for Read-Only MCP Tools](read-only-hint-concurrency.md) — The MCP `readOnlyHint` annotation became a concurrency dispatcher input once Codex CLI 0.134.0 shipped parallel execution for read-only tool calls — a wall-clock win that only holds when annotations are audited and trusted
 
 ## Skills
 
@@ -78,6 +79,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — Claude Code's PreCompact hook can now block compaction outright, deferring context compression until the agent reaches a safer checkpoint
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
 - [Terminal Tool Output Compression](terminal-output-compression.md) — Harness-side post-processing collapses predictable shell-output noise (lockfile diffs, `ls -l`, `npm install` progress, unchanged diff hunks) before the model sees it, with a banner that lets the agent opt out per call
+- [MessageDisplay Hook: Transforming Assistant Text at the Display Boundary](messagedisplay-hook-assistant-text-transform.md) — A Claude Code 2.1.152 hook event fires on every outbound assistant message and lets a hook rewrite or hide the text before the user sees it — the display-side analogue of PostToolUse output replacement
 
 ## Specialized Tools
 
