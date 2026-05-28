@@ -25,8 +25,10 @@ status: current
 - [Feature Flags & Environment Variables](feature-flags.md) — Curated reference for the most impactful configuration knobs
 - [Session Scheduling](session-scheduling.md) — /loop and cron tools for recurring prompts within a session
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework
+- [Reloading Skills Mid-Session](reload-skills-mid-session.md) — Re-scan skill directories with /reload-skills or a SessionStart hook, picking up edits without losing context
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops
 - [Plugin Background Monitors](plugin-background-monitors.md) — Declarative supervision auto-armed at session start via the `monitors` manifest key
 - [Channels Permission Relay](channels-permission-relay.md) — Forward tool-use approval prompts to your phone for unattended agent runs
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploy independent policy fragments per team without merge conflicts
 - [PowerShell Tool](powershell-tool.md) — Native Windows shell for Claude Code via PowerShell instead of Git Bash
+- [Skill disallowed-tools Frontmatter](skill-disallowed-tools.md) — Skill-layer tool denial: remove tools from the model while a skill is active, the deny-side complement to allowed-tools
