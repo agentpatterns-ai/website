@@ -49,6 +49,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Decompose the self-improving agent loop into discrete, specialized roles with persistent knowledge layers, staged validation, and gated persistence
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md) — Separate code and test generation into independent agents so the test writer never sees the code, preventing bias that cuts test accuracy by 30%
+- [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — Route repository lookups through one persistent searcher so a region is explored once, cutting the redundant output tokens that dominate multi-agent cost
 
 ## Multi-Model
 

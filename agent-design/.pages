@@ -119,6 +119,7 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
+      - task-feasibility-awareness.md
       - tenant-model-policy.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md

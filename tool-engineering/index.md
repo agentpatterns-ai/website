@@ -25,6 +25,7 @@ Core principles for designing agent tools that are discoverable, unambiguous, an
 
 Structural patterns for tool interfaces, schemas, error handling, and output formatting.
 
+- [Designing for Agent Consumers (Agent Experience)](designing-for-agent-consumers.md) — Treat the agent as a first-class consumer of your public SDK, CLI, API, and docs; the AX discipline that routes the surface-design tactics, distinct from harness engineering
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
 - [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
