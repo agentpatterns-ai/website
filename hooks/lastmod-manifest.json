@@ -314,6 +314,7 @@
   "context-engineering/aoci-symbolic-semantic-indexing.md": "2026-05-27",
   "context-engineering/attention-sinks.md": "2026-05-27",
   "context-engineering/chunking-strategy-rag-code-completion.md": "2026-05-27",
+  "context-engineering/codebase-pattern-library-context.md": "2026-05-29",
   "context-engineering/context-budget-allocation.md": "2026-05-27",
   "context-engineering/context-compression-strategies.md": "2026-05-27",
   "context-engineering/context-engineering.md": "2026-05-27",
