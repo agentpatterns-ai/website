@@ -756,6 +756,7 @@
   "tools/claude/batch-worktrees.md": "2026-05-27",
   "tools/claude/channels-permission-relay.md": "2026-05-27",
   "tools/claude/code-review.md": "2026-05-27",
+  "tools/claude/dynamic-workflows.md": "2026-05-29",
   "tools/claude/extension-points.md": "2026-05-27",
   "tools/claude/feature-flags.md": "2026-05-27",
   "tools/claude/hard-deny-classifier-rule.md": "2026-05-27",
