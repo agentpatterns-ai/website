@@ -1,0 +1,102 @@
+---
+title: "Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)"
+description: "Apply semantics-preserving perturbations to a repository before handing it to a code agent — the resulting accuracy drop isolates context reasoning from end-to-end issue-resolution scores."
+tags:
+  - testing-verification
+  - evals
+  - context-engineering
+  - agent-design
+  - tool-agnostic
+aliases:
+  - RepoMirage
+  - repository-level perturbation diagnostic
+  - context-reasoning diagnosis
+last_reviewed: 2026-05-27
+---
+
+# Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)
+
+> Perturb the repository in semantics-preserving ways before the agent sees it — the accuracy drop measures shortcut share in an issue-resolution score.
+
+Repository perturbation is a diagnostic that wraps an issue-resolution benchmark (typically SWE-Bench Verified) with semantics-preserving transformations of the repository before the agent runs, then attributes the accuracy drop to multi-file context reasoning ([Li et al., 2026](https://arxiv.org/abs/2605.26177)). The task and ground-truth patch are unchanged; only the surface form differs, so the drop is the share of the original score reachable without genuine context reasoning.
+
+## Why End-to-End Scores Conflate Two Capabilities
+
+Issue resolution on SWE-Bench-style benchmarks collapses two capabilities into one number: identifying which files and relations matter, and producing a correct patch. A high score can be reached by shortcutting the first capability — through training-set memorisation, leakage from the issue description, or pattern-matching on repository-specific surface tokens. A manual review of the original SWE-Bench found 32.67% of model-marked "successful" cases had the answer in the issue description or comments ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)).
+
+Perturbation invalidates these shortcuts while keeping the reference patch correct. The residual score reflects context reasoning alone.
+
+## The Two-Stage Diagnostic
+
+RepoMirage-Perturb applies three classes of semantics-preserving repository-level perturbation to the source benchmark; RepoMirage-Extend converts the perturbation-targeted bottlenecks into explicit context-reasoning tasks beyond issue resolution ([Li et al., 2026](https://arxiv.org/abs/2605.26177)).
+
+```mermaid
+graph LR
+    A[SWE-Bench Verified<br/>source task] --> B[RepoMirage-Perturb<br/>semantics-preserving]
+    A --> C[RepoMirage-Extend<br/>bottleneck as task]
+    B --> D[Accuracy drop<br/>= shortcut share]
+    C --> E[66.8% → 25.3%<br/>average agent score]
+```
+
+Average agent performance falls from 66.8% on the source task to 25.3% on RepoMirage-Extend's explicit-task formulation — a 41.5-point gap that the paper attributes to "exploration drift," where agents access broader repository context but fail to convert it into effective structural information ([Li et al., 2026](https://arxiv.org/abs/2605.26177)).
+
+## Why It Works
+
+The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorisation cannot reach the same score against a repository whose surface tokens have been renamed or restructured while the underlying call graph is unchanged. The reference patch still applies; only the lookup pattern has been broken. The accuracy delta is therefore a lower bound on the shortcut share of the original number.
+
+Independent corroboration arrives from work that probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631)). ContextBench augments existing benchmarks with 1,136 issue-resolution tasks paired with human-annotated gold contexts, exposing the same intermediate-step gap perturbation reveals indirectly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)). SWE-EVO independently shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
+
+## When This Backfires
+
+Perturbation diagnostics over-predict failure or measure the wrong thing under several specific conditions:
+
+- **Shallow-multi-file repositories.** When most issues resolve within one file, the diagnostic measures something the deployed agent never encounters at scale. The pay-off does not justify the pipeline cost.
+- **Proprietary or custom tool surfaces unlikely to be in training corpora.** Contamination is already low, so perturbation overhead buys little additional signal beyond a static custom benchmark.
+- **No oracle to confirm semantics preservation.** A perturbation that subtly changes behaviour produces a measurement artifact, not a context-reasoning signal. Without a passing reference test suite on both original and perturbed repo, the diagnostic is unreliable.
+- **Production agents pinned to a known repository set.** When the agent only ever sees one or two well-mapped codebases, structural exploration training is amortised across runs; perturbation over-predicts failure relative to deployment reality.
+- **Intermediate gold-context labels already exist.** ContextBench-style human-annotated contexts answer the same question more directly without the perturbation indirection ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).
+
+The diagnostic is also confounded by other sources of inflated benchmark scores. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — that gap remains even after perturbation removes shortcut leakage.
+
+## Composing with the Sibling Family
+
+Repository perturbation is one of three approaches to the same diagnostic question:
+
+| Approach | Probe shape | Independence from training | Cost |
+|---|---|---|---|
+| Repository perturbation (RepoMirage) | Transform the input, measure score drop | High — invalidates surface shortcuts | High — perturbation pipeline + oracle |
+| Trajectory decomposition (TRAJEVAL) | Instrument the agent's stages with precision/recall | Medium — relies on reference annotations | Medium — per-stage IR metrics |
+| Intermediate gold contexts (ContextBench) | Compare agent's retrieved context to human-annotated gold | Medium — requires gold context labels | High — human annotation upfront |
+
+A team picking between them should match the probe to where they suspect the failure lives. If issue-resolution scores look implausibly high and the agent's training likely overlaps with the benchmark repositories, perturbation is the right tool. If the agent fails inconsistently and the team needs to know which stage is responsible, decomposition is the right tool. If the team owns a private benchmark and wants direct measurement of context retrieval, gold contexts are the right tool.
+
+## Example
+
+A team evaluating a code agent on SWE-Bench Verified reports a 60% resolve rate and is considering shipping. Before shipping, they run a perturbation diagnostic across three semantics-preserving transformations of the same benchmark instances:
+
+```
+Source SWE-Bench Verified:           60.0%
++ Identifier-rename perturbation:    42.1%   (-17.9)
++ File-restructure perturbation:     33.6%   (-26.4)
++ Combined (Extend-style):           24.2%   (-35.8)
+```
+
+The 35.8-point drop tells the team that more than half their headline score was reachable without genuine multi-file reasoning. They route shipping decisions through the lower number, fund a structural-scaffolding mitigation (the paper proposes RepoAnchor, which separates repository exploration from problem-solving ([Li et al., 2026](https://arxiv.org/abs/2605.26177))), and add the perturbation suite to their regression eval so future model updates are scored against shortcut-resistant numbers, not the headline.
+
+The example numbers are illustrative; the methodology is the load-bearing contribution.
+
+## Key Takeaways
+
+- Repository perturbation isolates context reasoning from issue-resolution scores by invalidating surface-token shortcuts while preserving the reference solution path.
+- The published average drop is 41.5 points (66.8% → 25.3%) on RepoMirage-Extend — a lower bound on the shortcut share of agents' headline numbers ([Li et al., 2026](https://arxiv.org/abs/2605.26177)).
+- The diagnostic is most informative when training-set overlap with the benchmark is plausible and the production environment exposes the agent to unfamiliar repositories.
+- It is the wrong tool for shallow-multi-file codebases, proprietary surfaces with no contamination risk, or teams without an oracle to verify semantics preservation.
+- Compose it with trajectory decomposition and intermediate-context metrics rather than treating it as a replacement — each probes the same gap with different cost and sensitivity.
+
+## Related
+
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — same diagnostic goal via per-stage precision/recall instead of input perturbation
+- [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbation diagnostic for tool-use agents, partitioned by POMDP component
+- [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — the leakage problem perturbation is one mitigation for
+- [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — same perturbation logic applied to safety judgment instead of code-agent context reasoning
+- [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — independent evidence of multi-file reasoning degradation as constraints accumulate
