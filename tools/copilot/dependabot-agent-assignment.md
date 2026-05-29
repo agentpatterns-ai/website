@@ -1,6 +1,6 @@
 ---
 title: "Dependabot Agent Assignment for AI-Driven Vulnerability Remediation"
-description: "Route Dependabot alerts to GitHub Copilot for autonomous fix generation, with human review at the merge gate."
+description: "Assign Dependabot alerts to GitHub Copilot's coding agent so it opens a draft fix PR automatically, keeping human review at the merge gate."
 tags:
   - copilot
   - workflows
@@ -9,6 +9,7 @@ applies_to: "copilot@1.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # Dependabot Agent Assignment
 
 > Route Dependabot alerts to GitHub Copilot for autonomous fix generation, with human review at the merge gate.
