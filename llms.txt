@@ -109,7 +109,7 @@
 - [Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes](https://agentpatterns.ai/workflows/worktree-isolation/): Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with ...
 
 ## Security
-<!-- lastmod: 2026-05-28 -->
+<!-- lastmod: 2026-05-29 -->
 
 - [Security](https://agentpatterns.ai/security/): Patterns and techniques for building agents that resist manipulation, protect sensitive data, and fail safely.
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](https://agentpatterns.ai/security/action-audit-divergence-taxonomy/): Name the four ways an agent action can diverge from its audit record — gate-bypass, audit-forgery, silent host failur...
@@ -206,7 +206,7 @@
 - [Workload Identity Federation for Agent Runtimes](https://agentpatterns.ai/security/workload-identity-federation-for-agents/): Replace long-lived AI provider API keys with short-lived tokens minted from the runtime's existing workload identity ...
 
 ## Fallacies
-<!-- lastmod: 2026-05-27 -->
+<!-- lastmod: 2026-05-29 -->
 
 - [Fallacies](https://agentpatterns.ai/fallacies/): Incorrect beliefs about AI tools that reliably produce poor outcomes.
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](https://agentpatterns.ai/fallacies/chain-of-thought-reasoning-fallacy/): Visible step-by-step output resembles reasoning but does not constitute it — the explanation is generated after the a...
@@ -250,6 +250,7 @@
 - [The Addictive Flow State of Agent-Assisted Development](https://agentpatterns.ai/human/addictive-flow-agent-development/): Agent-assisted development triggers compulsive engagement through three converging mechanisms — flow state conditions...
 - [The Bottleneck Migration](https://agentpatterns.ai/human/bottleneck-migration/): Code generation is now cheap. Review, verification, and judgment are the new expensive bottleneck. High output volume...
 - [The Context Ceiling](https://agentpatterns.ai/human/context-ceiling/): AI agents hit a hard capability boundary on expert-level architecture work: the context required — regulations, organ...
+- [The Productivity-Experience Paradox in AI-Assisted Development](https://agentpatterns.ai/human/productivity-experience-paradox/): A measured paradox: AI assistants raise developers' productivity while their experience declines, as work shifts from...
 
 ## Claude Code
 <!-- lastmod: 2026-05-29 -->
@@ -278,7 +279,7 @@
 - [Skill Eval Loop](https://agentpatterns.ai/tools/claude/skill-eval-loop/): Define test cases, benchmark pass rates, A/B-compare skill versions, and optimize trigger descriptions — bringing [ev...
 
 ## GitHub Copilot
-<!-- lastmod: 2026-05-27 -->
+<!-- lastmod: 2026-05-29 -->
 
 - [GitHub Copilot](https://agentpatterns.ai/tools/copilot/): Tool-specific reference for GitHub Copilot's agentic features.
 - [Agent HQ (Multi-Agent Platform)](https://agentpatterns.ai/tools/copilot/agent-hq/): GitHub's platform for running multiple coding agents — Copilot, Claude, and Codex — within a single interface, with c...
@@ -308,7 +309,7 @@
 ## Optional
 
 ### Emerging
-<!-- lastmod: 2026-05-27 -->
+<!-- lastmod: 2026-05-29 -->
 
 - [Emerging Concepts](https://agentpatterns.ai/emerging/): Early-stage ideas worth tracking — not yet established patterns, but too important to ignore.
 - [Bootstrapping Coding Agents](https://agentpatterns.ai/emerging/bootstrapping-coding-agents/): A coding agent can re-implement itself from a natural language specification, reproducing the classical compiler boot...

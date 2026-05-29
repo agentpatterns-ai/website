@@ -1,6 +1,6 @@
 ---
 title: "Economic Value Signaling in Multi-Agent Networks"
-description: "Attach token values to inter-agent messages to enable decentralized task prioritization without a central scheduler."
+description: "Attach token values to inter-agent messages so agents self-sort by priority and avoid priority inversion — decentralized scheduling, no central coordinator."
 tags:
   - multi-agent
   - tool-agnostic
