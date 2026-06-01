@@ -4,6 +4,8 @@ description: "Asking an LLM to verify behaviour preservation of its own migratio
 tags:
   - testing-verification
   - anti-pattern
+  - tool-agnostic
+  - arxiv
 aliases:
   - self-review code modernization
   - articulate but wrong self review

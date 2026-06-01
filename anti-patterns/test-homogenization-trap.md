@@ -4,6 +4,9 @@ description: "LLM-generated test suites systematically share the generating mode
 tags:
   - testing-verification
   - evals
+  - tool-agnostic
+  - anti-pattern
+  - arxiv
 aliases:
   - test homogenization trap
   - homogenization trap

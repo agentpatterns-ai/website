@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - mid-trajectory safety
   - trajectory guardrail

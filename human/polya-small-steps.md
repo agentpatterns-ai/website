@@ -76,7 +76,7 @@ The discipline has a cost: it is slower than pure delegation for tasks where com
 
 - **Boilerplate and scaffolding** — repeated structural patterns where the approach is known and the cost of error is low.
 - **Permutation work** — generating variants of a proven pattern across multiple files.
-- **Throwaway scripts** — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../workflows/vibe-coding.md) is appropriate here).
+- **Throwaway scripts** — one-off tooling where you discard and rewrite rather than maintain ([vibe coding](../anti-patterns/vibe-coding.md) is appropriate here).
 
 The distinction: **does comprehension of this specific code matter for your ability to debug, extend, or supervise it later?** If yes, small steps. If no, delegate freely.
 
@@ -128,7 +128,7 @@ At commit time, the developer can explain every line. When burst behavior appear
 - [Skill Atrophy](skill-atrophy.md) — cumulative capability loss when delegation mode becomes the default
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — structural gap between agent-produced code and developer understanding
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence that experienced developers plan and validate rather than delegate
-- [Vibe Coding](../workflows/vibe-coding.md) — the opposite workflow: appropriate for low-risk, throwaway contexts
+- [Vibe Coding](../anti-patterns/vibe-coding.md) — the opposite workflow: appropriate for low-risk, throwaway contexts
 - [Process Amplification](process-amplification.md) — strong engineering practices scale with agents; this discipline is one such practice
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — prioritizing understanding of the problem over speed of output
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — structured approach to accelerating skill acquisition without comprehension loss

@@ -5,6 +5,8 @@ tags:
   - agent-design
   - context-engineering
   - source:opendev-paper
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - goal drift
   - task drift

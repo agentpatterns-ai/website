@@ -5,6 +5,7 @@ tags:
   - agent-design
   - multi-agent
   - observability
+  - tool-agnostic
 aliases:
   - "define-and-compose"
   - "declarative agent orchestration"

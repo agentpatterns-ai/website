@@ -4,6 +4,7 @@ description: "CwdChanged and FileChanged hook events reload environment managers
 tags:
   - agent-design
   - claude
+  - tool-engineering
 aliases:
   - reactive hooks
   - CwdChanged hook

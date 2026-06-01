@@ -5,6 +5,7 @@ tags:
   - code-review
   - security
   - arxiv
+  - tool-agnostic
 aliases:
   - AI PR security review gap
   - agentic PR security weaknesses

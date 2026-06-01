@@ -66,7 +66,7 @@ Each surface runs in a different environment with different trade-offs. Choosing
 
 ---
 
-### [Next Edit Suggestions (NES)](../../tool-engineering/next-edit-suggestions.md)
+### [Next Edit Suggestions (NES)](../../tools/copilot/next-edit-suggestions.md)
 
 **What it is**: Predictive suggestions that appear at edit locations across the file — not just at your cursor. After you make a change, Copilot predicts where the next related edit should be and what it should contain. Accept with `Tab`, jump to the next suggestion with `Tab`.
 

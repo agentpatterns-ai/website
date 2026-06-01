@@ -10,6 +10,8 @@ aliases:
   - action-audit divergence
   - runtime divergence taxonomy
   - F1 F2 F3 F4 agent runtime
+  - audit-record divergence invariant
+  - agent runtime safety invariant
 last_reviewed: 2026-05-27
 ---
 
@@ -28,7 +30,9 @@ An agentic runtime issues tool calls, sends messages, and actuates devices on be
 | **F3** | Silent host failure | Log says action ran; host did nothing |
 | **F4** | Wrong-target | Log names target X; action hit target Y |
 
-The taxonomy is a navigation aid, not a defense. It converts "is this runtime hardened?" into four closed questions — which control covers F1? F2? F3? F4? — mapped to controls already documented on this site.
+The taxonomy is a navigation aid, not a defense — it converts "is this runtime hardened?" into four closed questions mapped to controls already documented on this site.
+
+Formally the property is a *multiset equality*: the intended (capability, target) pairs must equal those executed after every action ([Metere, arXiv:2605.01740](https://arxiv.org/abs/2605.01740)). A *biconditional checker* — logging denials, not just allows — fails closed on any diff; it is the one reconciliation primitive with no standalone pattern here, *detecting* divergence the per-mode controls below fail to *prevent*. (Model refusal is not such a primitive — cross-model cooperation on identical F1 prompts spans 0–100%.)
 
 ## Mapping Each Mode to Existing Controls
 
@@ -84,7 +88,6 @@ The framing complements the [four-layer threat taxonomy](four-layer-agent-securi
 
 ## Related
 
-- [Audit-Record Divergence as an Agent Runtime Invariant](audit-record-divergence-invariant.md) — the invariant statement of the same F1-F4 model; pair this controls-mapping checklist with that invariant for the full picture
 - [Action-Audit Divergence Audit](../agent-readiness/audit-action-audit-divergence.md) — runbook that operationalises the F1-F4 taxonomy as an agent-readiness audit
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — companion threat-surface layering; pair with this divergence-mode model
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — F2 control: hash-chained tamper-evident logs with ML-DSA receipts

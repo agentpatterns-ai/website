@@ -4,6 +4,7 @@ description: "Give agents a dedicated mid-stream reasoning step after receiving 
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - reasoning checkpoint
   - mid-stream reasoning
@@ -131,5 +132,5 @@ Without this prompt guidance, the model may invoke `think` too rarely on novel o
 - [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
 - [Three Reasoning Spaces](three-reasoning-spaces.md)
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md)
-- [Controlling Agent Output](controlling-agent-output.md)
+- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Rollback-First Design](rollback-first-design.md)

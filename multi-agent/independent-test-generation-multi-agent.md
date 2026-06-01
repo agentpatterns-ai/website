@@ -5,6 +5,7 @@ tags:
   - multi-agent
   - testing-verification
   - agent-design
+  - tool-agnostic
 aliases:
   - Blind Test Generation
   - Code-Test Separation Pattern

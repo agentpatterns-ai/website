@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - infeasible task detection
   - feasibility-aware agents

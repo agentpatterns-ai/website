@@ -53,7 +53,7 @@ Anything not in the repository does not exist for agents. Repository legibility 
 - **Decision visibility** -- architectural choices and rationale documented where agents encounter them (inline comments, directory-level READMEs)
 - **[Progressive disclosure](progressive-disclosure-agents.md)** -- layered docs so agents load context proportional to the task
 
-Legibility is distinct from [codebase readiness](../workflows/codebase-readiness.md), which focuses on code-level qualities (types, tests, patterns); legibility focuses on knowledge organization.
+Legibility is distinct from [codebase readiness](codebase-readiness.md), which focuses on code-level qualities (types, tests, patterns); legibility focuses on knowledge organization.
 
 ### Mechanical Enforcement
 
@@ -183,15 +183,15 @@ Three specific conditions where the investment pays off less:
 - [Harness Hill-Climbing](harness-hill-climbing.md) -- eval-driven iterative improvement of the agent harness using benchmark scores as the optimization signal
 - [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs
 - [Agent-First Software Design](agent-first-software-design.md) -- designing systems where agents are the primary consumers
-- [Codebase Readiness](../workflows/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
 - [Process Amplification](../human/process-amplification.md) -- agents amplify existing practices, good or bad
 - [Convention over Configuration](../instructions/convention-over-configuration.md) -- conventions as constraint mechanisms
 - [Specification as Prompt](../instructions/specification-as-prompt.md) -- formal specs as agent instructions
 - [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md) -- error messages as agent context
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- bootstrap the instruction file that feeds the harness
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap the instruction file that feeds the harness
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion
 - [Agent Self-Review Loop](agent-self-review-loop.md) -- agents reviewing their own output using linters and tests
-- [Empowerment Over Automation](empowerment-over-automation.md) -- enforcement and linter-based constraints as agent empowerment
+- [Empowerment Over Automation](../human/empowerment-over-automation.md) -- enforcement and linter-based constraints as agent empowerment
 - [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md) -- guardrail-based correction of agent behavior
 - [Agent Loop Middleware](agent-loop-middleware.md) -- wrapping the agent loop to guarantee critical enforcement steps happen regardless of agent behavior
 - [L2 → L3: Building Mechanical Enforcement](../frameworks/brownfield-to-agent-first/level-2-to-3.md) -- step-by-step implementation of PreToolUse hooks, structured task definitions, and session scaffolding

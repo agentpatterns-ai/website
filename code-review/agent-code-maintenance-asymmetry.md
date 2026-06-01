@@ -5,6 +5,7 @@ tags:
   - code-review
   - human-factors
   - arxiv
+  - tool-agnostic
 aliases:
   - Agent Code Maintenance Footprint
   - Agent-Generated Code Lifecycle

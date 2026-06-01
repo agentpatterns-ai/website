@@ -5,6 +5,8 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - rag
+  - arxiv
 aliases:
   - relevance-authorization gap
   - multi-tenant RAG isolation

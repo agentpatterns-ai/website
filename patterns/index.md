@@ -4,8 +4,8 @@ description: "Design patterns for single agents, multi-agent coordination, and c
 tags:
   - agent-design
   - multi-agent
-  - anti-patterns
-  - patterns
+  - anti-pattern
+  - pattern
 last_reviewed: 2026-05-27
 ---
 

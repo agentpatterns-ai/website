@@ -109,6 +109,6 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification
 - [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — gradually increasing agent autonomy while managing oversight overhead
-- [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
+- [Safe Command Allowlisting: Reducing Approval Fatigue](../security/safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
 - [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — gating AI suggestions before display to reduce alert fatigue
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — the plan-supervise-validate loop that manages cognitive overhead of delegation

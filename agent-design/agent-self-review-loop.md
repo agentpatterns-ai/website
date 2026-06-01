@@ -5,7 +5,6 @@ tags:
   - testing-verification
   - agent-design
   - code-review
-  - copilot
   - tool-agnostic
 aliases:
   - "Review-Then-Implement Loop"

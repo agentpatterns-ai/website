@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - tool-engineering
   - mcp
+  - instructions
+  - agent-readiness
 aliases:
   - tool annotation audit
   - MCP idempotentHint audit

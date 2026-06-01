@@ -5,6 +5,7 @@ tags:
   - instructions
   - context-engineering
   - cost-performance
+  - tool-agnostic
 aliases:
   - AGENTS.md evaluation
   - context file benchmarks

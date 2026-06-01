@@ -4,6 +4,7 @@ description: "Enumerate every instruction surface in a repository, tokenize rule
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - instruction rule budget
   - compliance ceiling audit

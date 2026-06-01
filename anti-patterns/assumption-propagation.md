@@ -5,6 +5,8 @@ tags:
   - agent-design
   - testing-verification
   - source:osmani-80-percent
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

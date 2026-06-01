@@ -49,7 +49,7 @@ Middleware is one of four places a cross-cutting concern can live. Picking the r
 | PII redaction across messages | Middleware | Needs conversation state and per-call wrap; redact before logging |
 | Retry / fallback on transient model errors | Middleware | Genkit's `retry` and `fallback` middleware are the canonical examples ([Genkit blog](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)) |
 | Cost cap per turn or per session | Middleware | Needs running totals across multiple model calls |
-| Filesystem write deny / network egress block | Host-side hook | OS-enforced is stronger than runtime-enforced; see [Hooks vs Prompts](../verification/hooks-vs-prompts.md) |
+| Filesystem write deny / network egress block | Host-side hook | OS-enforced is stronger than runtime-enforced; see [Hooks vs Prompts](../instructions/hooks-vs-prompts.md) |
 | Per-tool input validation | Tool wrapper | Schema lives with the tool definition, not the runtime |
 | Style or persona guidance | System prompt | Probabilistic by nature; no enforcement value in wrapping |
 
@@ -113,7 +113,7 @@ agent = create_agent(
 ## Related
 
 - [Agent Loop Middleware](agent-loop-middleware.md) — sibling pattern that wraps the *loop* boundary with deterministic nodes; this page wraps the *per-call* boundary inside the loop.
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — host-side enforcement when OS-level guarantees matter more than runtime composition.
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — host-side enforcement when OS-level guarantees matter more than runtime composition.
 - [Hooks Invoking MCP Tools](../tool-engineering/hooks-invoking-mcp-tools.md) — when hook handlers need to call into the same MCP surface middleware governs.
 - [Audit: Confirmation-Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md) — the compliance-theatre failure mode when approval middleware always returns true.
 - [Audit: MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md) — the off-protocol egress paths that middleware cannot see.

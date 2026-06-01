@@ -4,6 +4,7 @@ description: "A workflow where AI agents detect documentation-code drift on sche
 tags:
   - workflows
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

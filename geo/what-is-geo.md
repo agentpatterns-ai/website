@@ -4,6 +4,8 @@ description: "Defines GEO and AEO, explains the shift from keyword ranking to a 
 tags:
   - geo
   - workflows
+  - tool-agnostic
+  - arxiv
 aliases:
   - Answer Engine Optimization
   - AEO

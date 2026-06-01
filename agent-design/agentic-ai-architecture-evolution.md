@@ -8,6 +8,8 @@ tags:
   - agent-design
   - multi-agent
   - observability
+  - tool-agnostic
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 
@@ -132,7 +134,7 @@ This maps each component directly onto the reference architecture above: the LLM
 
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)

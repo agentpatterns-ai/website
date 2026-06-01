@@ -186,5 +186,5 @@ The profession is not dying. It is differentiating. And the practitioners who na
 - [Rigor Relocation](../human/rigor-relocation.md) — the pattern of discipline migrating from implementation to constraint design
 - [Bottleneck Migration](../human/bottleneck-migration.md) — how AI shifts constraints rather than removing them
 - [Harness Engineering](../agent-design/harness-engineering.md) — building the verification layer around AI agents
-- [Vibe Coding](../workflows/vibe-coding.md) — the workflow pattern where identity risks are highest
+- [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where identity risks are highest
 - [Addictive Flow State of Agent-Assisted Development](../human/addictive-flow-agent-development.md) — the psychological mechanisms driving compulsive engagement with AI tools

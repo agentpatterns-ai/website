@@ -4,6 +4,7 @@ description: "A short visible message before tool execution in multi-step agent 
 tags:
   - agent-design
   - human-factors
+  - tool-agnostic
 aliases:
   - tool preamble
   - pre-tool-call status update
@@ -48,7 +49,7 @@ The most common failure is interpreting the rule as "narrate every tool call". O
 
 [OpenAI: GPT-5.2 prompting guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)
 
-Per-call narration collapses into the [three-act response anti-pattern](controlling-agent-output.md) — explain, do, explain again — at the cost of every tool call.
+Per-call narration collapses into the [three-act response anti-pattern](../instructions/controlling-agent-output.md) — explain, do, explain again — at the cost of every tool call.
 
 ## Newer Models Calibrate by Default
 
@@ -98,7 +99,7 @@ The first sentence is OpenAI's recommended preamble instruction. The remainder a
 
 ## Related
 
-- [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
+- [Controlling Agent Output: Concise Answers, Not Essays](../instructions/controlling-agent-output.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Agent Loop Middleware](agent-loop-middleware.md)
 - [Observability Legible to Agents](../observability/observability-legible-to-agents.md)

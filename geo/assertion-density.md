@@ -5,6 +5,7 @@ tags:
   - geo
   - technique
   - workflows
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

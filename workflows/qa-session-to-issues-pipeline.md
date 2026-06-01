@@ -5,6 +5,7 @@ tags:
   - workflows
   - testing-verification
   - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 
@@ -181,6 +182,7 @@ Human review covers 6 issues instead of 18 raw notes. Each issue includes the fi
 ## Related
 
 - [Continuous Triage](continuous-triage.md) — automates processing of already-filed issues; this pipeline generates those issues from raw QA artifacts
+- [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — the find-before-create dedup step that keeps this pipeline from filing duplicate issues
 - [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — analogous 3-stage pipeline for security analysis; the fresh-context-per-stage and separate-audit principles apply directly
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — what happens after issues are created
 - [Oracle Task Decomposition](../multi-agent/oracle-task-decomposition.md)

@@ -5,6 +5,7 @@ tags:
   - security
   - code-review
   - agent-design
+  - tool-agnostic
 aliases:
   - always-on security review
   - PR security agent pattern

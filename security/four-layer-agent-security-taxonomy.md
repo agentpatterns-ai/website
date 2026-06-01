@@ -4,6 +4,7 @@ description: "Organise autonomous agent threats into context/instruction, tool/a
 tags:
   - security
   - agent-design
+  - tool-agnostic
 aliases:
   - layered agent security
   - agent security layers

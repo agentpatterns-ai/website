@@ -4,6 +4,8 @@ description: "Generate a PermissionRequest + PostToolUse hook pair that promotes
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - bootstrap usage-based allowlist
   - bootstrap dynamic allowlist
@@ -23,7 +25,7 @@ Packaged as: `.claude/skills/agent-readiness-bootstrap-evidence-based-allowlist/
 !!! warning "Safety: write before wire"
     Create the two hook scripts on disk, `chmod +x`, **and smoke-test each standalone** before adding the entries to `settings.json`. A registered-but-broken `PermissionRequest` hook collapses the permission UX every time the agent asks — and a broken `PostToolUse` hook reads exit 2 as "block" on every Bash success. The step ordering below is load-bearing: Step 5 (smoke test) precedes Step 6 (wire). See [Recovery in `bootstrap-loop-detector-hook`](bootstrap-loop-detector-hook.md#recovery) for the un-wedge procedure if you skip it.
 
-This runbook complements [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md) — that one ships a default-deny **static** allowlist; this one adds an **evidence-based** path so commands the user manually approves enough times become permanent allow rules without manual editing. The pair: ship default-deny upfront, let real usage extend it. Source: [evidence-based allowlist auto-discovery](../human/evidence-based-allowlist-auto-discovery.md), [safe command allowlisting](../human/safe-command-allowlisting.md), [permission-gated commands](../security/permission-gated-commands.md).
+This runbook complements [`bootstrap-permissions-allowlist`](bootstrap-permissions-allowlist.md) — that one ships a default-deny **static** allowlist; this one adds an **evidence-based** path so commands the user manually approves enough times become permanent allow rules without manual editing. The pair: ship default-deny upfront, let real usage extend it. Source: [evidence-based allowlist auto-discovery](../security/evidence-based-allowlist-auto-discovery.md), [safe command allowlisting](../security/safe-command-allowlisting.md), [permission-gated commands](../security/permission-gated-commands.md).
 
 ## Step 1 — Detect Current State
 
@@ -250,8 +252,8 @@ Hard-deny test: rm at count 999 → no updatedPermissions (pass/fail)
 
 ## Related
 
-- [Evidence-Based Allowlist Auto-Discovery](../human/evidence-based-allowlist-auto-discovery.md)
-- [Safe Command Allowlisting](../human/safe-command-allowlisting.md)
+- [Evidence-Based Allowlist Auto-Discovery](../security/evidence-based-allowlist-auto-discovery.md)
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md)
 - [Bootstrap Permissions Allowlist](bootstrap-permissions-allowlist.md)
 - [Audit Permissions Blast Radius](audit-permissions-blast-radius.md)
 - [Bootstrap Loop Detector Hook](bootstrap-loop-detector-hook.md) — same write-before-wire safety pattern

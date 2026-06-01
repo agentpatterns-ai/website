@@ -4,8 +4,9 @@ description: "Two-thirds of code completion failures are model errors, but one q
 tags:
   - testing-verification
   - evals
-  - code-completion
+  - code-generation
   - arxiv
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - temporal semantic caching
   - MCP workflow optimisation

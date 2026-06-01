@@ -4,6 +4,8 @@ description: "Generate a network egress allowlist, decompose lethal-trifecta pri
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - generate egress allowlist
   - close lethal trifecta

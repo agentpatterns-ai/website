@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - workflows
   - agent-design
+  - instructions
+  - agent-readiness
 aliases:
   - agent-generated code audit
   - agent codebase health audit

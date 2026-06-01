@@ -2,7 +2,7 @@
 title: "AI Agent Development Anti-Patterns and Failure Modes"
 description: "What not to do when working with AI agents, and why. - Assumption Propagation — An early misunderstanding cascades through all subsequent work, producing"
 tags:
-  - anti-patterns
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 # Anti-Patterns
@@ -28,10 +28,16 @@ last_reviewed: 2026-05-27
 - [Distractor Interference: Relevance Is Not Enough](distractor-interference.md) — Semantically related but inapplicable instructions reduce compliance with applicable ones
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — Every external artifact crossing an agent's read boundary is a remote command-execution channel; treating READMEs, packages, and fetched pages as benign data is the developer mental-model failure
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — Loading tool definitions dynamically per step destroys prompt cache continuity, erasing cost savings that exceed the token reduction
+- [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — Switching model, effort, or MCP servers mid-session silently invalidates the prompt cache and re-bills the entire prefix at ~10x the cached rate
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — After [context compression](../context-engineering/context-compression-strategies.md) events, agents can continue working on a subtly different objective than the one they started with
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — Coding agents stop after the first visible signal of progress and declare the task complete while failing tests remain; named by four independent research teams within a year
+- [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — A green status on a scheduled or cloud-triggered agent means the harness exited cleanly, not that the task succeeded; single-axis dashboards hide every silent agent failure as default success
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents absorb existing codebase patterns and reproduce them at scale, including deprecated APIs and legacy workarounds
 - [Single-Layer Prompt Injection Defence](single-layer-injection-defence.md) — Relying on one safeguard leaves agents vulnerable to injection attacks that the single layer does not address
+- [MCP Allowlist by Label, Not by Identity (serverName Trap)](mcp-allowlist-label-vs-identity.md) — A `serverName`-only MCP allowlist filters the user-chosen label, not the underlying server — any binary or URL the user calls `github` passes the check
+- [Prompt as Security Knob](prompt-as-security-knob.md) — Semantic-preserving prompt perturbations collapse the secure-and-functional rate of hardened code generators to 3–17%, so a "good" prompt is never sufficient evidence that generated code is secure
+- [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](bypass-permissions-overrides-allowlist.md) — Pairing allowedTools with bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts
+- [Direct Prompt Injection via Collaboration (User as Attack Vector)](direct-prompt-injection-collaboration.md) — When the user pastes an attacker-crafted prompt themselves, model-layer classifiers anchored on user intent have nothing anomalous to flag; only egress controls and filesystem boundaries hold
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust and systematic misuse
 - [The Copy-Paste Agent](copy-paste-agent.md) — Duplicating agent definitions causes drift; compose from shared skills instead
 - [Spec Complexity Displacement](spec-complexity-displacement.md) — Writing a spec does not eliminate engineering precision — it relocates it; specs tight enough to drive reliable generation converge toward code-like structure
@@ -43,7 +49,8 @@ last_reviewed: 2026-05-27
 - [Shadow Tech Debt](shadow-tech-debt.md) — AI agents operating without structural codebase understanding accumulate invisible architectural drift that compounds at machine speed
 - [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — Stronger LLMs produce more bloated and coupled code; capability gains buy maintainability losses, and detailed prompting does not mitigate the decay
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
-- [Vibe Coding](../workflows/vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
+- [Vibe Coding](vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
 - [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with confident speculation that misleads downstream triage
 - [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — Personality biases stored in long-term memory act as implicit steering vectors on tool-call parameters in unrelated contexts; prompt-based defenses reduce but do not eliminate the drift
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](large-codebase-agent-failure-patterns.md) — Five named failure shapes — lost in the codebase, wrong symbol, partial completion, tool thrashing, context overflow — that surface in 400K+ LOC repos, sourced from 1,281 agent runs across 40+ codebases
+- [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — Seven session-level forms (S1–S7) of developer-agent misalignment named in a 20,574-session field study; constraint violations and inaccurate self-reporting grow in share while capability gains close the other forms

@@ -3,9 +3,10 @@ title: "Multi-Agent Topology Taxonomy: Centralised, Decentralised"
 description: "Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes."
 aliases:
   - Multi-Agent Architecture Patterns
-  - Multi-Agent SE Design Patterns
 tags:
   - agent-design
+  - tool-agnostic
+  - multi-agent
 last_reviewed: 2026-05-27
 ---
 

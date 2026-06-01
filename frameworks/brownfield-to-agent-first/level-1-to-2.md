@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 
@@ -229,7 +230,7 @@ The L1→L2 transition is high-leverage but not free. Three conditions make it a
 ## Related
 
 - [Agent Backpressure](../../agent-design/agent-backpressure.md) — the automated feedback loop pattern and the autonomy spectrum
-- [Codebase Readiness for Agents](../../workflows/codebase-readiness.md) — the agent-hostile vs agent-friendly signal table
+- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — the agent-hostile vs agent-friendly signal table
 - [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline these steps build toward
 - [L0 → L1: Making the Repo Readable](level-0-to-1.md) — previous module
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — next module

@@ -4,6 +4,8 @@ description: "Capture representative tool invocations, measure actual output tok
 tags:
   - tool-agnostic
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - tool output token audit
   - tool output sizing audit

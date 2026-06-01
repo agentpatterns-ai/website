@@ -4,6 +4,7 @@ description: "The belief that correct output implies understanding. Leads to ove
 tags:
   - human-factors
   - tool-agnostic
+  - fallacies
 aliases:
   - comprehension fallacy
   - LLM understanding fallacy

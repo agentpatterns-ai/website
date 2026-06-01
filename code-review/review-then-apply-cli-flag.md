@@ -4,7 +4,6 @@ description: "The same code-review command that scores findings also writes the 
 tags:
   - code-review
   - workflows
-  - claude
   - tool-agnostic
 aliases:
   - review-then-apply CLI flag

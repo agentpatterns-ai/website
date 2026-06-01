@@ -4,6 +4,8 @@ description: "Indiscriminate use of structured mid-stream reasoning on every tas
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - "reasoning overuse"
   - "think tool overuse"

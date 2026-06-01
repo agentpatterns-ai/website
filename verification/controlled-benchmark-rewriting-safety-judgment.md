@@ -6,6 +6,8 @@ tags:
   - evals
   - security
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - deceptive trajectory rewriting
   - safety judgment OOD evaluation

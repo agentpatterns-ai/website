@@ -2,9 +2,10 @@
 title: "GitHub Copilot Advanced Patterns: Multi-Agent and Automation"
 description: "Advanced GitHub Copilot patterns covering multi-agent orchestration, parallel sessions, CI/CD integration, and event-driven automation workflows."
 tags:
-  - github-copilot
+  - copilot
   - multi-agent
   - automation
+  - training
 last_reviewed: 2026-05-27
 ---
 

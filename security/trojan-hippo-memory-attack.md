@@ -5,6 +5,8 @@ tags:
   - security
   - memory
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - dormant memory payload attack
   - sensitive-topic-triggered memory exfiltration

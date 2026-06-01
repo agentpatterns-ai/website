@@ -4,6 +4,7 @@ description: "Enable the model to compose a task-specific reasoning structure fr
 tags:
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - SELF-DISCOVER framework
   - self-composed reasoning structures

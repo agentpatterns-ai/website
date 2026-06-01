@@ -7,6 +7,7 @@ tags:
   - workflows
   - multi-agent
   - code-review
+  - tool-agnostic
 aliases:
   - "review panel pattern"
   - "multi-agent review committee"

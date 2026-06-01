@@ -153,4 +153,4 @@ Hierarchical scoping adds value only when each file stays concise and consistent
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Post-Compaction Re-Read Protocol](post-compaction-reread-protocol.md)
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)

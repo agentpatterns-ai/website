@@ -4,6 +4,8 @@ description: "Enumerate every agent-readable surface, run pattern and entropy sc
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - secrets in agent context
   - agent credential leak scan

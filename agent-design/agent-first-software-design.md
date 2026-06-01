@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - human-factors
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -154,6 +155,6 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md) — shaping tool surfaces for agent consumption
 - [llms.txt: Spec, Adoption, and Honest Limitations](../geo/llms-txt.md) — an early agent-first standard for site metadata
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md) — protocol that exposes capabilities in agent-consumable form
-- [Codebase Readiness for Agents](../workflows/codebase-readiness.md) — preparing a repository as an agent-first system
+- [Codebase Readiness for Agents](codebase-readiness.md) — preparing a repository as an agent-first system
 - [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that underlies agent execution
 - [Harness Engineering](harness-engineering.md) — the runtime layer agents call into

@@ -5,6 +5,8 @@ tags:
   - tool-engineering
   - cost-performance
   - testing-verification
+  - tool-agnostic
+  - arxiv
 aliases:
   - agent-centric debugging interface
   - function-level debugging interface

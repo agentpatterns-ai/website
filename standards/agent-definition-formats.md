@@ -4,6 +4,7 @@ description: "Agent definitions control system prompt, tool access, model select
 tags:
   - agent-design
   - tool-agnostic
+  - standards
 aliases:
   - agent config format
   - agent manifest format

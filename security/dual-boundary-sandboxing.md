@@ -4,6 +4,7 @@ description: "Enforce both filesystem and network isolation; neither boundary al
 tags:
   - agent-design
   - security
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -46,7 +47,7 @@ The agent runs inside the enforced environment. Permissions it needs (paths, dom
 
 ## The Approval Fatigue Problem
 
-Granular per-action prompts produce [approval fatigue](../human/safe-command-allowlisting.md): users click through without reading — the illusion of oversight with none of the substance. Dual-boundary sandboxing defines a safe zone where the agent acts freely and hard limits where it cannot, reserving prompts for boundary-crossing requests.
+Granular per-action prompts produce [approval fatigue](safe-command-allowlisting.md): users click through without reading — the illusion of oversight with none of the substance. Dual-boundary sandboxing defines a safe zone where the agent acts freely and hard limits where it cannot, reserving prompts for boundary-crossing requests.
 
 ## Threat Model
 

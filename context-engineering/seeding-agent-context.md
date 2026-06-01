@@ -4,6 +4,7 @@ description: "Embed context in codebases using AGENTS.md files, decision comment
 tags:
   - context-engineering
   - instructions
+  - tool-agnostic
 aliases:
   - Providing Context to Agents
   - Context Priming

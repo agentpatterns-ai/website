@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - instructions
+  - tool-agnostic
 aliases:
   - Greenfield Agent Bootstrap
 last_reviewed: 2026-05-27
@@ -42,7 +43,7 @@ If any of these hold, the [Repository Bootstrap Checklist](repository-bootstrap-
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
 - [Architectural Foundation First](architectural-foundation-first.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Getting Started with Instruction Files](getting-started-instruction-files.md)
+- [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md)
 - [Distilled Bootstrap Contract](distilled-bootstrap-contract.md)
 - [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
-- [Codebase Readiness for Agents](codebase-readiness.md)
+- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)

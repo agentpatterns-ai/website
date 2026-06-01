@@ -4,6 +4,7 @@ description: "A feature-level workflow model — Research, Prototype, PRD, Issue
 tags:
   - workflows
   - tool-agnostic
+  - agent-design
 aliases:
   - seven phases of AI development
   - AI feature development phases
@@ -41,7 +42,7 @@ Phases alternate between human-led (judgment, decisions, commitments) and agent-
 
 Exit criterion: you can describe the problem clearly, identify the relevant codebase areas, and name the open questions that the prototype will resolve.
 
-Tools and patterns: Claude's [Plan Mode](plan-mode.md) (read-only exploration), the [Research-Plan-Implement pattern](research-plan-implement.md), structured [Grill Me sessions](../agent-design/grill-me-technique.md) where the agent interviews you to surface assumptions.
+Tools and patterns: Claude's [Plan Mode](../tools/claude/plan-mode.md) (read-only exploration), the [Research-Plan-Implement pattern](research-plan-implement.md), structured [Grill Me sessions](../agent-design/grill-me-technique.md) where the agent interviews you to surface assumptions.
 
 ### 2. Prototype
 
@@ -160,7 +161,7 @@ The 7-phase model was designed for feature-scale work by one or more developers 
 ## Related
 
 - [The Research-Plan-Implement Pattern](research-plan-implement.md) — the inner per-task loop that runs within the Implement phase
-- [Plan Mode](plan-mode.md) — read-only exploration used in the Research phase
+- [Plan Mode](../tools/claude/plan-mode.md) — read-only exploration used in the Research phase
 - [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — detailed coverage of the Implement phase mechanics
 - [The AI Development Maturity Model](ai-development-maturity-model.md) — career-phase adoption arc; distinct from this feature-lifecycle model
 - [Spec-Driven Development](spec-driven-development.md) — alternative approach to PRD formalization using a persistent spec file

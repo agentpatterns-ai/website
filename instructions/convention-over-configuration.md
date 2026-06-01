@@ -4,6 +4,8 @@ description: "Reduce agent errors by encoding decisions into naming conventions,
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
+  - instructions
 last_reviewed: 2026-05-27
 ---
 

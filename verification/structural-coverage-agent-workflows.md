@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - multi-agent
   - tool-agnostic
+  - arxiv
 aliases:
   - "agent workflow coverage"
   - "typed coordination graph testing"

@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - trajectory noise filtering
   - investigator pre-filter pattern

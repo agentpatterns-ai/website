@@ -66,7 +66,7 @@ Signs to look for in session logs and the Files Changed view:
 | Reasoning doesn't match the task intent | Session logs tab |
 | Circular behavior (repeating failed approach) | Session logs tab |
 
-When drift is detected, redirect via chat with a specific correction. For a systematic diagnostic framework, see [Task List Divergence Diagnostic](../../verification/task-list-divergence-diagnostic.md).
+When drift is detected, redirect via chat with a specific correction. For a systematic diagnostic framework, see [Task List Divergence Diagnostic](../../instructions/task-list-divergence-diagnostic.md).
 
 ## Enterprise Session Filters
 

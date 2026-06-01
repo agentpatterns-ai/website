@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - claude
   - github-actions
+  - agent-design
 aliases:
   - "claude print mode"
   - "non-interactive Claude"
@@ -147,7 +148,7 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 ## Related
 
 - [Claude Code `--bare` Flag](../tools/claude/bare-mode.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Worktree Isolation for Parallel Agent Sessions](worktree-isolation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)

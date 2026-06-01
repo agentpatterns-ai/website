@@ -4,6 +4,8 @@ description: "A nine-category taxonomy — four documentation smells, five REST 
 tags:
   - tool-agnostic
   - cost-performance
+  - tool-engineering
+  - arxiv
 aliases:
   - OpenAPI smell taxonomy
   - agent-readiness API audit

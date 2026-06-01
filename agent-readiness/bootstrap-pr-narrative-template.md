@@ -6,6 +6,7 @@ tags:
   - workflows
   - code-review
   - instructions
+  - agent-readiness
 aliases:
   - PR template scaffold
   - visible thinking scaffold
@@ -25,7 +26,7 @@ Packaged as: `.claude/skills/agent-readiness-bootstrap-pr-narrative-template/`
 !!! info "Applicability"
     Run when the project receives agent-authored PRs at any cadence. Skip on solo or inner-source repos with no external reviewers, on squash-merge-only repos where per-commit narration collapses (template still helps the PR body, but the commit-trailer step is no-op), and on trivial-PR-dominated repos (dependency bumps, formatting) where templates add friction without proportional value — see [`pr-description-style-lever`](../code-review/pr-description-style-lever.md) §When This Backfires.
 
-PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). [`audit-pr-narrative-quality`](audit-pr-narrative-quality.md) detects when the discipline is missing; this runbook installs the scaffolds that produce it. Rules from [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md).
+PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). [`audit-pr-narrative-quality`](audit-pr-narrative-quality.md) detects when the discipline is missing; this runbook installs the scaffolds that produce it. Rules from [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md).
 
 ## Step 1 — Detect Existing Templates
 
@@ -85,7 +86,7 @@ body:
       description: What could break? Data migrations, breaking-change surface, areas the agent should escalate rather than guess.
 ```
 
-A bug-report template (`.github/ISSUE_TEMPLATE/bug.yml`) follows the same shape with `Reproduction` and `Expected vs actual` substituted for `Success criteria` and `Constraints`. Both templates make the issue itself the reviewable record of intent ([`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Issues as Specifications).
+A bug-report template (`.github/ISSUE_TEMPLATE/bug.yml`) follows the same shape with `Reproduction` and `Expected vs actual` substituted for `Success criteria` and `Constraints`. Both templates make the issue itself the reviewable record of intent ([`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Issues as Specifications).
 
 ## Step 3 — Generate the PR Description Template
 
@@ -137,7 +138,7 @@ Wire it as the default for the project:
 git config commit.template .gitmessage
 ```
 
-Document the trailers in `AGENTS.md` so they survive across machines and agents. Skip this step on squash-merge-only repos — per-commit narration collapses into the PR body on merge, making the template noise ([`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §When This Backfires).
+Document the trailers in `AGENTS.md` so they survive across machines and agents. Skip this step on squash-merge-only repos — per-commit narration collapses into the PR body on merge, making the template noise ([`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §When This Backfires).
 
 ## Step 5 — Wire Pointer into Agent Instructions
 
@@ -149,7 +150,7 @@ Add a `## PR Conventions` section to `AGENTS.md` (and re-export through `CLAUDE.
 - Issue spec: open from `.github/ISSUE_TEMPLATE/feature.yml`. The four fields (Problem, Success criteria, Constraints, Risks) are the reviewable record of intent — fill them before delegating implementation.
 - PR body: follow `.github/PULL_REQUEST_TEMPLATE.md` — Why, What changed, Trade-offs, Verification, Breaking changes are required. Do not delete a section; mark "None" if not applicable.
 - Commit messages: follow `.gitmessage`. Narrate the decision, not the diff. Add `Agent-Session`, `Model`, and `Task-Reference` trailers on every commit you author.
-- Branch names: `<type>/<scope>-<short-slug>` — never generic names like `agent-fix-1` (loses signal per [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Branch Naming).
+- Branch names: `<type>/<scope>-<short-slug>` — never generic names like `agent-fix-1` (loses signal per [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Branch Naming).
 ```
 
 This is the load-bearing wire-up: forge templates without an agent-instruction pointer let the agent default to model-baked PR style, which varies sharply across agents ([`pr-description-style-lever`](../code-review/pr-description-style-lever.md) §Structural Differences).
@@ -199,7 +200,7 @@ Squash-merge-only repo: <yes/no — Step 4 skipped if yes>
 ## Related
 
 - Paired audit: [Audit PR Narrative Quality](audit-pr-narrative-quality.md)
-- [Visible Thinking in AI-Assisted Development](../observability/visible-thinking-ai-development.md)
+- [Visible Thinking in AI-Assisted Development](../human/visible-thinking-ai-development.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md)
 - [Agent Commit Attribution](../workflows/agent-commit-attribution.md)
 - [Bootstrap Agent Commit Attribution](bootstrap-agent-commit-attribution.md)

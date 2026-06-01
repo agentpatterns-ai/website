@@ -9,6 +9,8 @@ tags:
   - tool-engineering
   - context-engineering
   - cost-performance
+  - tool-agnostic
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

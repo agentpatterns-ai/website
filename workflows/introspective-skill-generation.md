@@ -4,6 +4,7 @@ description: "A dedicated agent analyzes recurring corrections and repeated task
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - automated pattern mining
   - self-improving agents
@@ -184,6 +185,6 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
 - [Eval-Driven Tool Development](eval-driven-tool-development.md)
-- [Video Transcript Skill: Meeting Recording to Markdown](video-transcript-skill.md) — worked example of a multi-tool skill orchestrating Whisper, ffmpeg, and the Files API
+- [Video Transcript Skill: Meeting Recording to Markdown](../tools/claude/video-transcript-skill.md) — worked example of a multi-tool skill orchestrating Whisper, ffmpeg, and the Files API
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — complementary feedback mechanisms that keep generated skills accurate once deployed
 - [Daily-Use Skill Library](daily-use-skill-library.md) — the target library where approved generated skills accumulate

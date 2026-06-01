@@ -4,6 +4,7 @@ tags:
   - geo
   - technique
   - workflows
+  - tool-agnostic
 description: "GEO-native metrics, monitoring tools, and the hard measurement constraints teams must understand for AI search visibility."
 aliases:
   - GEO Metrics
@@ -137,7 +138,7 @@ Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to det
 
 ## Related
 
-- [Google Search Console Monitoring](../workflows/gsc-search-console-monitoring.md) — deterministic organic search baseline
+- [Google Search Console Monitoring](gsc-search-console-monitoring.md) — deterministic organic search baseline
 - [What Is GEO](what-is-geo.md) — foundational GEO overview
 - [SEO vs GEO](seo-vs-geo.md) — how GEO measurement differs from SEO ranking
 - [How AI Engines Cite](how-ai-engines-cite.md) — citation mechanics behind what gets measured

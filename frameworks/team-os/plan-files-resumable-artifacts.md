@@ -6,6 +6,7 @@ tags:
   - workflows
   - human-factors
   - tool-agnostic
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 
@@ -96,7 +97,7 @@ The self-contained invariant holds: a fresh session can resume from this file al
 ## Related
 
 - [Plan mode as a knowledge artifact](plan-mode-knowledge-artifacts.md) — the posture half of the pair; this page is the persisted artifact
-- [Plan mode](../../workflows/plan-mode.md) — the in-session thinking posture
+- [Plan mode](../../tools/claude/plan-mode.md) — the in-session thinking posture
 - [Plan-first loop](../../workflows/plan-first-loop.md) — the general workflow the artifact is written into
 - [Frozen spec file](../../instructions/frozen-spec-file.md) — the immutable sibling that fixes goals and done-when
 - [Trajectory logging and progress files](../../observability/trajectory-logging-progress-files.md) — the status companion read on resumption

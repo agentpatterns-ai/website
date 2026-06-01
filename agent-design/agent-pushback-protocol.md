@@ -4,6 +4,7 @@ description: "Agents evaluate requests at both implementation and requirements l
 tags:
   - agent-design
   - instructions
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

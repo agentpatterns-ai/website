@@ -4,6 +4,7 @@ description: "Spawn each MCP server with its own minimal environment scope so on
 tags:
   - security
   - tool-agnostic
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

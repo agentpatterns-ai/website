@@ -9,6 +9,7 @@ tags:
   - security
   - tool-engineering
   - tool-agnostic
+  - mcp
 last_reviewed: 2026-05-27
 ---
 
@@ -43,7 +44,7 @@ Toolsets load per session — in Copilot CLI via `copilot --add-github-mcp-tools
 
 ## Why Structured Output Is the Pivot
 
-Agents that parse CLI logs spend tokens on parsing; agents that receive typed JSON spend them on reasoning. The MCP Server returns "structured results with affected packages, severity, and recommended fixed versions" ([Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)) and "the locations of and details on any secrets found" ([Original preview](https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/)). The agent can group by severity, summarise, or auto-fix a Dependabot advisory by editing `package.json` — no log parsing required. Same mechanism as [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md).
+Agents that parse CLI logs spend tokens on parsing; agents that receive typed JSON spend them on reasoning. The MCP Server returns "structured results with affected packages, severity, and recommended fixed versions" ([Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)) and "the locations of and details on any secrets found" ([Original preview](https://github.blog/changelog/2026-03-17-secret-scanning-in-ai-coding-agents-via-the-github-mcp-server/)). The agent can group by severity, summarise, or auto-fix a Dependabot advisory by editing `package.json` — no log parsing required. Same mechanism as [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md).
 
 ## What MCP-Mediated Scanning Inherits
 
@@ -99,5 +100,5 @@ The agent calls `list_dependabot_alerts` against the current repository, receive
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
 - [Lethal Trifecta Audit](../agent-readiness/audit-lethal-trifecta.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../tool-engineering/mcp-eager-vs-jit-loading.md)
-- [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)

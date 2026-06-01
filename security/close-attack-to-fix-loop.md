@@ -6,6 +6,7 @@ tags:
   - instructions
   - testing-verification
   - security
+  - tool-agnostic
 aliases:
   - adversarial fine-tuning loop
   - rapid attack-to-checkpoint cycle

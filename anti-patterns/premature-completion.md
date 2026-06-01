@@ -5,6 +5,8 @@ tags:
   - agent-design
   - testing-verification
   - workflows
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - fixing correct code
   - premature termination

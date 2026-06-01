@@ -6,6 +6,7 @@ tags:
   - evals
   - observability
   - agent-design
+  - tool-agnostic
 aliases:
   - per-turn vs trajectory scoring
   - conversation-level evaluation

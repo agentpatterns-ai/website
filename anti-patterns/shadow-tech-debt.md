@@ -135,4 +135,4 @@ Same bug fix. No architectural drift.
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [Demo to Production Gap](demo-to-production-gap.md)
 - [Happy Path Bias](happy-path-bias.md)
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)

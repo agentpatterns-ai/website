@@ -4,6 +4,7 @@ description: "Detect a project's documentation surface, extract a structured ind
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - generate llms.txt file
   - scaffold llms-full.txt

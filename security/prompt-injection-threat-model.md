@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - security
+  - tool-agnostic
 aliases:
   - indirect prompt injection
 last_reviewed: 2026-05-27

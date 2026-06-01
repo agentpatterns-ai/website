@@ -4,6 +4,8 @@ description: "Detect harness, generate a full .claude/hooks/ directory with no-o
 tags:
   - tool-agnostic
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - scaffold lifecycle hooks
   - hooks directory bootstrap
@@ -265,7 +267,7 @@ Next: bootstrap-precompletion-hook, bootstrap-loop-detector-hook
 ## Related
 
 - [Hooks Lifecycle](../tools/claude/hooks-lifecycle.md)
-- [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
+- [Hooks vs Prompts](../instructions/hooks-vs-prompts.md)
 - [Bootstrap Pre-Completion Hook](bootstrap-precompletion-hook.md)
 - [Bootstrap Loop Detector Hook](bootstrap-loop-detector-hook.md)
 - [Audit Hooks Coverage](audit-hooks-coverage.md)

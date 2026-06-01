@@ -8,6 +8,7 @@ tags:
   - human-factors
   - code-review
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -147,12 +148,12 @@ After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and 
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- identity shift from bottleneck migration
 - [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md) -- AI-friendly patterns reduce review load
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) -- flow state reduces scrutiny
-- [Safe Command Allowlisting](safe-command-allowlisting.md) -- reducing approval fatigue
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- reducing approval fatigue
 - [The Context Ceiling](context-ceiling.md) -- context limits interact with bottleneck migration
-- [Distributed Computing Parallels](distributed-computing-parallels.md) -- distributed systems bottleneck analogies
-- [Empirical Baseline](empirical-baseline-agentic-config.md) -- managing writing-to-review balance
+- [Distributed Computing Parallels](../multi-agent/distributed-computing-parallels.md) -- distributed systems bottleneck analogies
+- [Empirical Baseline](../instructions/empirical-baseline-agentic-config.md) -- managing writing-to-review balance
 - [Strategy Over Code Generation](strategy-over-code-generation.md) -- focus shifts from output to strategy
 - [Developer Control Strategies](developer-control-strategies-ai-agents.md) -- maintaining oversight as agent output grows
 - [Progressive Autonomy](progressive-autonomy-model-evolution.md) -- graduated trust gates review burden
-- [Domain-Specific Agent Challenges](domain-specific-agent-challenges.md) -- domain complexity amplifies review load
+- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) -- domain complexity amplifies review load
 - [Suggestion Gating](suggestion-gating.md) -- filtering suggestions to reduce review volume

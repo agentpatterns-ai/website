@@ -3,8 +3,8 @@ title: "Instruction Polarity: Positive Rules Over Negative"
 description: "Positive directives outperform negative instructions in agent compliance. Reframe prohibitions as explicit requirements; reserve negatives for absolute bans."
 tags:
   - instructions
+  - tool-agnostic
 aliases:
-  - Negative Space Instructions
   - Instruction Framing
 last_reviewed: 2026-05-27
 ---

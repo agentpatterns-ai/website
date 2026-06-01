@@ -5,6 +5,8 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - tool-engineering
+  - mcp
 aliases:
   - production MCP reference architecture
   - end-to-end MCP deployment stack

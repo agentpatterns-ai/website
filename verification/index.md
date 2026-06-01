@@ -14,8 +14,10 @@ last_reviewed: 2026-05-27
 
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Structured 16-domain failure taxonomy for systematic diagnosis of RAG and agent failures across retrieval, reasoning, state, and deployment layers
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated pipelines restore honest measurement
+- [Control Lexical Leakage in Agent-Memory Retrieval Evals (Entity-Collision)](lexical-leakage-agent-memory-retrieval-evals.md) — A single hit@k confounds semantic retrieval with lexical overlap; pin BM25 with shared-entity distractors and stratify queries by tag so embedder lift is attributable rather than averaged
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite unsafe trajectories into deceptive variants while preserving risk labels to measure judgment robustness on out-of-distribution surface forms
 - [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — Split attack construction into strategy, execution, and refinement stages so monitor evaluations expose the conceive-execute gap; drops Opus 4.5 catch rate from 94.9% to 60.3%
+- [Overeager-Behavior Elicitation: Scope + Trap Fragments](overeager-behavior-elicitation-scope-trap-fragments.md) — Compose benign scenarios from reusable scope and trap fragments, score with a judge-free filesystem-delta oracle, and use Thompson sampling to elicit overeager tool calls task-completion and jailbreak benchmarks both miss
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate agents by the final state they produce, not the sequence of steps they took to get there
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — pass@k measures capability ceiling; pass^k measures consistency — report both to distinguish agents that sometimes succeed from those that reliably do
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
@@ -64,10 +66,13 @@ last_reviewed: 2026-05-27
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Block agent completion signals with a mandatory verification sequence
 - [Golden Journeys: Restartability as a First-Class Verification Primitive](golden-journeys.md) — Name a small set of end-to-end paths with explicit failure signals per step and gate completion on the system restarting cleanly afterward
 - [Test-Driven Intent Clarification](test-driven-intent-clarification.md) — Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost
+- [Source-Grounded Test Plan with Pre-Action Assertion Annotation](pre-test-grounded-plan-assertion-annotation.md) — Before a UI-driving agent verifies its change, have it write a source-read test plan and annotate each step's expected behavior upfront so it cannot rationalize an unexpected result as a pass
+- [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — Judge candidate code against a natural-language spec by deriving inputs from the spec, executing them, and grading the I/O pairs — ground the LLM judge in real execution traces instead of asking it to reason over the code
 
 ## Rubric Design
 
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Design eval rubrics with orthogonal signals so no single metric is gameable by agents
+- [Symptom-Reduction-as-Root-Cause: Why Oracle Tests Alone Miss Architectural Drift](symptom-reduction-as-root-cause.md) — Agents iterating against fiducial-point oracle tests will adjust coefficients inside an architecture that cannot represent the target — diverse-parameter tests, cross-session changelogs, and an anti-fudge-factor rule catch what oracles miss
 - [Eval Awareness: Designing Evals Agents Cannot Recognise](eval-awareness.md) — Frontier models detect eval-shaped prompts and shift behaviour between evaluation and production — remove the signals that cue recognition
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — Reusable judge templates cover the portable subset of eval questions — security, PII, format, trajectory — while domain quality still needs custom evaluators
 

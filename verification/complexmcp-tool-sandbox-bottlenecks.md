@@ -4,6 +4,9 @@ description: "When agents face 300+ interdependent MCP tools across stateful san
 tags:
   - evals
   - tool-agnostic
+  - testing-verification
+  - mcp
+  - arxiv
 aliases:
   - ComplexMCP benchmark
   - interdependent tool benchmark

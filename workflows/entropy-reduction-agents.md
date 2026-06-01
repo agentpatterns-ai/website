@@ -4,6 +4,7 @@ description: "Scheduled background agents that scan for architectural violations
 tags:
   - workflows
   - agent-design
+  - tool-agnostic
 aliases:
   - garbage collection of technical debt
   - codebase hygiene agents
@@ -178,7 +179,7 @@ The pattern is not appropriate as a substitute for improving the root-cause proc
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Continuous Documentation](continuous-documentation.md)
 - [Agent Harness](../agent-design/agent-harness.md)
-- [Hooks Beat Prompts](../verification/hooks-vs-prompts.md)
+- [Hooks Beat Prompts](../instructions/hooks-vs-prompts.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md)
 - [The Velocity-Quality Asymmetry](velocity-quality-asymmetry.md)

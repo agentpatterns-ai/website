@@ -4,6 +4,7 @@ description: "Use agents to handle mechanical review checks before human review,
 tags:
   - testing-verification
   - code-review
+  - tool-agnostic
 aliases:
   - AI Code Review
   - Automated PR Review

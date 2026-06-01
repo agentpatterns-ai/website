@@ -4,7 +4,8 @@ description: "Specs tight enough for reliable generation accumulate schemas, pse
 tags:
   - instructions
   - workflows
-  - anti-patterns
+  - anti-pattern
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

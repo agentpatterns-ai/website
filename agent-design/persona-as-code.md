@@ -3,7 +3,7 @@ title: "Persona-as-Code: Defining Agent Roles as Structured Docs"
 description: "Encode each agent's domain, responsibilities, constraints, output artifacts, and scope exclusions in a Markdown file — explicit, auditable, and composable."
 tags:
   - agent-design
-  - workflow
+  - workflows
   - tool-agnostic
   - instructions
 last_reviewed: 2026-05-27

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - observability
+  - tool-agnostic
 aliases:
   - websocket agent transport
   - persistent socket agent loop

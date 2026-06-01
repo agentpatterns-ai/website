@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - multi-agent
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - sub-agent definition audit
   - .claude/agents audit

@@ -4,6 +4,7 @@ description: "Agents optimize for comprehensive output, not minimal implementati
 tags:
   - agent-design
   - tool-agnostic
+  - anti-pattern
 aliases:
   - over-engineering
   - gold-plating
@@ -150,7 +151,7 @@ Fifteen lines. One function. No dead abstractions waiting to be maintained.
 - [Shadow Tech Debt](shadow-tech-debt.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Comprehension Debt](comprehension-debt.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)

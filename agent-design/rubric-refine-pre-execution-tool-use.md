@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - pre-execution rubric refinement
   - rubric-guided tool-use refinement

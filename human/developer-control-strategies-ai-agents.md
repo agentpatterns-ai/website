@@ -18,7 +18,7 @@ last_reviewed: 2026-05-27
 
 ## The Evidence
 
-[Huang et al. (2025)](https://arxiv.org/abs/2512.14012) observed 13 professional developers and surveyed 99 more (3–25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../workflows/vibe-coding.md).
+[Huang et al. (2025)](https://arxiv.org/abs/2512.14012) observed 13 professional developers and surveyed 99 more (3–25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../anti-patterns/vibe-coding.md).
 
 | Study | Design | Key Finding |
 |-------|--------|-------------|
@@ -70,7 +70,7 @@ Agents proved effective for **well-described, straightforward tasks** and ineffe
 | Boilerplate and repetitive patterns | Tasks requiring implicit domain knowledge |
 | Well-scoped refactoring | Novel problem exploration |
 
-This mirrors the [vibe coding](../workflows/vibe-coding.md) boundary: vibe coding works for low-risk, well-scoped work; control strategies cover everything else.
+This mirrors the [vibe coding](../anti-patterns/vibe-coding.md) boundary: vibe coding works for low-risk, well-scoped work; control strategies cover everything else.
 
 ## Why Control Works
 
@@ -84,7 +84,7 @@ The control loop works because it:
 
 Control overhead is not free. The loop costs more than it saves when:
 
-- **Work is trivial or throwaway** — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../workflows/vibe-coding.md) is the better default.
+- **Work is trivial or throwaway** — one-line fixes or prototypes rarely repay the planning step. For low-risk, reversible work, [vibe coding](../anti-patterns/vibe-coding.md) is the better default.
 - **Supervision is theatre** — rubber-stamping diffs without real review is nominal control only, and recreates [comprehension debt](../anti-patterns/comprehension-debt.md) under a veneer of diligence.
 - **Plans ossify against changing requirements** — over-specifying exploratory work locks the agent out of useful pivots.
 - **Agent count exceeds attention budget** — too many parallel agents degrades validation across all of them; see [attention management](attention-management-parallel-agents.md).
@@ -125,7 +125,7 @@ The planning step took two minutes but prevented a scope creep that would have r
 
 ## Related
 
-- [Vibe Coding](../workflows/vibe-coding.md) — the approach these developers explicitly reject for production work
+- [Vibe Coding](../anti-patterns/vibe-coding.md) — the approach these developers explicitly reject for production work
 - [Skill Atrophy](skill-atrophy.md) — comprehension loss from skipping the validate step
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md) — where to place supervision gates
 - [Execution-First Delegation](../agent-design/execution-first-delegation.md) — contract-based delegation that aligns with how experienced developers plan

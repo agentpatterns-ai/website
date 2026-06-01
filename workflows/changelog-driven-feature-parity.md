@@ -4,6 +4,7 @@ description: "Track which CLI tool shipped a capability first and when the other
 tags:
   - workflows
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -95,7 +96,7 @@ The implementation differs: Claude Code uses declarative YAML/markdown; Copilot 
 
 Both tools separate planning from execution:
 
-- Claude Code: Shift+Tab enters [Plan Mode](plan-mode.md), a read-only analysis mode before code changes
+- Claude Code: Shift+Tab enters [Plan Mode](../tools/claude/plan-mode.md), a read-only analysis mode before code changes
 - Copilot CLI v0.0.387: `/plan` with a dedicated panel; v0.0.415 adds plan approval menu with autopilot and fleet options
 
 Copilot CLI's plan mode (v0.0.387, January 2026) shipped after Claude Code's Shift+Tab plan mode, which predates the public changelog window (pre-2026), with a more structured approval UI.
@@ -158,6 +159,6 @@ gh api repos/github/copilot-cli/releases/latest --jq '.body' | head -40
 - [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md)
 - [Worktree Isolation](worktree-isolation.md)
 - [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)
-- [PostToolUse Hooks: Auto-Formatting on Every File Edit](posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Copilot CLI: Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)

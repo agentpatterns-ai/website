@@ -7,6 +7,7 @@ tags:
   - evals
   - observability
   - tool-agnostic
+  - agent-design
 aliases:
   - agentic agile
   - agile for agent development

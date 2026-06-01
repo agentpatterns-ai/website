@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - security
+  - tool-agnostic
 aliases:
   - PII masking
   - PII redaction

@@ -4,6 +4,8 @@ description: "Map the agent-readiness library's Claude Code paths, config schema
 tags:
   - tool-agnostic
   - instructions
+  - harness-engineering
+  - agent-readiness
 aliases:
   - harness translation table
   - cursor copilot aider equivalents

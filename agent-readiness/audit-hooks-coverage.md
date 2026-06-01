@@ -4,6 +4,8 @@ description: "Inventory wired hook events, build a coverage matrix against requi
 tags:
   - tool-agnostic
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - lifecycle hook coverage
   - hook inventory audit
@@ -20,7 +22,7 @@ Packaged as: `.claude/skills/agent-readiness-audit-hooks-coverage/`
 !!! info "Harness assumption"
     The event names (`PreToolUse`, `PostToolUse`, `Stop`, `SessionStart`) come from Claude Code's lifecycle. Cursor and other harnesses expose parallel events with different names — map your harness's event taxonomy onto the coverage matrix. See [Assumptions](index.md#assumptions).
 
-A repository can have hooks without having coverage. The default failure mode is a `PostToolUse` formatter on every edit alongside zero `Stop`-event verification — high-noise, low-protection. This runbook maps the hook inventory against the events that move the readiness needle. Rules from [hooks vs prompts](../verification/hooks-vs-prompts.md) and [hooks lifecycle](../tools/claude/hooks-lifecycle.md).
+A repository can have hooks without having coverage. The default failure mode is a `PostToolUse` formatter on every edit alongside zero `Stop`-event verification — high-noise, low-protection. This runbook maps the hook inventory against the events that move the readiness needle. Rules from [hooks vs prompts](../instructions/hooks-vs-prompts.md) and [hooks lifecycle](../tools/claude/hooks-lifecycle.md).
 
 ## Step 1 — Locate Hook Configuration
 
@@ -222,6 +224,6 @@ Next: <bootstrap-precompletion-hook | bootstrap-loop-detector-hook | targeted fi
 ## Related
 
 - [Hooks Lifecycle](../tools/claude/hooks-lifecycle.md)
-- [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
+- [Hooks vs Prompts](../instructions/hooks-vs-prompts.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Loop Detection](../observability/loop-detection.md)

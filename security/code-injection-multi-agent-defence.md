@@ -4,6 +4,7 @@ description: "Multi-agent pipelines are vulnerable to code injection. A coder-re
 tags:
   - agent-design
   - security
+  - tool-agnostic
 aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"

@@ -4,6 +4,7 @@ description: "Write instructions that convey the same guidance in fewer words â€
 tags:
   - cost-performance
   - context-engineering
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

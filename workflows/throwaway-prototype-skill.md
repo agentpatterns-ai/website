@@ -5,7 +5,8 @@ tags:
   - workflows
   - instructions
   - tool-agnostic
-  - claude
+  - agent-design
+  - skills
 aliases:
   - prototype skill
   - build-then-discard spike
@@ -124,4 +125,4 @@ The Specification-Driven Development critique applies in those conditions: a `/p
 - [Grill Me: Developer-Initiated Plan Interrogation](../agent-design/grill-me-technique.md) — surfaces the design questions that this skill resolves.
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](daily-use-skill-library.md) — the pipeline this skill slots into.
 - [Prototype Before Optimizing](prototype-before-optimizing.md) — temporal-budget pattern; complementary, addresses a different question.
-- [Plan Mode: Read-Only Exploration Before Implementation](plan-mode.md) — alternative for questions resolvable without writing code.
+- [Plan Mode: Read-Only Exploration Before Implementation](../tools/claude/plan-mode.md) — alternative for questions resolvable without writing code.

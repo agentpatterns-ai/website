@@ -6,6 +6,8 @@ tags:
   - testing-verification
   - human-factors
   - code-review
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

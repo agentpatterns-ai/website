@@ -9,6 +9,7 @@ tags:
   - human-factors
   - workflows
   - multi-agent
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

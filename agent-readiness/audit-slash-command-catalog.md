@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - tool-engineering
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - slash command surface audit
   - prompt file catalog audit

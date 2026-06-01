@@ -5,7 +5,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - episodic-to-semantic memory promotion
   - memory consolidation pipeline

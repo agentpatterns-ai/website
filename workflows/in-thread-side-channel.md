@@ -5,6 +5,7 @@ tags:
   - workflows
   - context-engineering
   - tool-agnostic
+  - agent-design
 aliases:
   - "in-thread side channel"
   - "btw command pattern"

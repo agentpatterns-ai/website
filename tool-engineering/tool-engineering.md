@@ -10,6 +10,8 @@ tags:
   - instructions
   - cost-performance
   - source:opendev-paper
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 
@@ -153,6 +155,6 @@ Apply the full pattern to stable, shared tools that are called repeatedly across
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — tool design as a UX discipline
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md) — naming, schema design, and error handling for MCP-exposed tools

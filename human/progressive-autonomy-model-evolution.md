@@ -4,6 +4,7 @@ description: "Gradually increase agent autonomy based on demonstrated reliabilit
 tags:
   - human-factors
   - agent-design
+  - tool-agnostic
 aliases:
   - "Graduated Autonomy"
   - "Trust Escalation"
@@ -130,15 +131,15 @@ This trajectory is not guaranteed — a production incident in week 5 would have
 - [Delegation Decision](../agent-design/delegation-decision.md)
 - [Risk-Based Task Sizing](../verification/risk-based-task-sizing.md)
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md)
-- [Safe Command Allowlisting](../human/safe-command-allowlisting.md)
-- [Empirical Baseline for Agentic Config](../human/empirical-baseline-agentic-config.md)
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md)
+- [Empirical Baseline for Agentic Config](../instructions/empirical-baseline-agentic-config.md)
 - [Rigor Relocation](../human/rigor-relocation.md)
 - [Process Amplification](../human/process-amplification.md)
 - [Cognitive Load and AI Fatigue](../human/cognitive-load-ai-fatigue.md)
-- [Evidence-Based Allowlist Auto-Discovery](../human/evidence-based-allowlist-auto-discovery.md)
+- [Evidence-Based Allowlist Auto-Discovery](../security/evidence-based-allowlist-auto-discovery.md)
 - [Skill Atrophy](../human/skill-atrophy.md)
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)
-- [Domain-Specific Agent Challenges](../human/domain-specific-agent-challenges.md)
+- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md)
 - [Suggestion Gating](../human/suggestion-gating.md)

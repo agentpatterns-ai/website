@@ -5,6 +5,8 @@ tags:
   - workflows
   - github-actions
   - arxiv
+  - tool-agnostic
+  - agent-design
 aliases:
   - Agent CI Success Rate
   - AI Bot Workflow Reliability

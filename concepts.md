@@ -4,6 +4,7 @@ description: "All site content grouped by theme, cutting across sections. Find r
 tags:
   - navigation
   - reference
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 # Concept Map
@@ -164,7 +165,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Session Initialization Ritual](agent-design/session-initialization-ritual.md)
 - [The Specification as Prompt](instructions/specification-as-prompt.md)
 - [Standards as Agent Instructions](instructions/standards-as-agent-instructions.md)
-- [Controlling Agent Output](agent-design/controlling-agent-output.md)
+- [Controlling Agent Output](instructions/controlling-agent-output.md)
 - [Critical Instruction Repetition](instructions/critical-instruction-repetition.md)
 - [Domain-Specific System Prompts](instructions/domain-specific-system-prompts.md)
 - [Example-Driven vs Rule-Driven Instructions](instructions/example-driven-vs-rule-driven-instructions.md)
@@ -190,10 +191,10 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Agent Turn Model](agent-design/agent-turn-model.md)
 - [Agents vs Commands](agent-design/agents-vs-commands.md)
 - [Lay the Architectural Foundation by Hand](workflows/architectural-foundation-first.md)
-- [Codebase Readiness for Agents](workflows/codebase-readiness.md)
+- [Codebase Readiness for Agents](agent-design/codebase-readiness.md)
 - [Committee Review Pattern](code-review/committee-review-pattern.md)
 - [The Delegation Decision](agent-design/delegation-decision.md)
-- [Domain-Specific Agent Challenges](human/domain-specific-agent-challenges.md)
+- [Domain-Specific Agent Challenges](agent-design/domain-specific-agent-challenges.md)
 - [Evaluator-Optimizer Pattern](agent-design/evaluator-optimizer.md)
 - [Fan-Out Synthesis Pattern](multi-agent/fan-out-synthesis.md)
 - [File-Based Agent Coordination](multi-agent/file-based-agent-coordination.md)
@@ -264,7 +265,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [pass@k and pass^k Metrics](verification/pass-at-k-metrics.md)
 - [Red-Green-Refactor with Agents](verification/red-green-refactor-agents.md)
 - [Risk-Based Task Sizing for Verification Depth](verification/risk-based-task-sizing.md)
-- [Task List Divergence as Instruction Diagnostic](verification/task-list-divergence-diagnostic.md)
+- [Task List Divergence as Instruction Diagnostic](instructions/task-list-divergence-diagnostic.md)
 - [Test-Driven Agent Development](verification/tdd-agent-development.md)
 - [Eval-Driven Development](workflows/eval-driven-development.md)
 - [Evaluation-Driven Development for Agent Tools](workflows/eval-driven-tool-development.md)
@@ -276,13 +277,13 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 > Deterministic enforcement — lifecycle hooks, permissions, and structured constraints.
 
 - [Deterministic Guardrails Around Probabilistic Agents](verification/deterministic-guardrails.md)
-- [Hooks for Enforcement vs Prompts for Guidance](verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](instructions/hooks-vs-prompts.md)
 - [Structured Output Constraints](verification/structured-output-constraints.md)
 - [Event-Driven System Reminders](instructions/event-driven-system-reminders.md)
 - [Hook Catalog: Enforcing Agent Behavior with Hooks](tool-engineering/hook-catalog.md)
 - [Hooks and Lifecycle Events](tool-engineering/hooks-lifecycle-events.md)
 - [Permission-Gated Custom Commands](security/permission-gated-commands.md)
-- [PostToolUse Auto-Formatting and Linting](workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Auto-Formatting and Linting](tools/claude/posttooluse-auto-formatting.md)
 
 ## Reliability & Recovery
 
@@ -333,7 +334,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Plan-First Loop: Design Before Code](workflows/plan-first-loop.md)
 - [Repository Bootstrap Checklist](workflows/repository-bootstrap-checklist.md)
 - [Team Onboarding for Agent Workflows](workflows/team-onboarding.md)
-- [Vibe Coding: Outcome-Oriented Development](workflows/vibe-coding.md)
+- [Vibe Coding: Outcome-Oriented Development](anti-patterns/vibe-coding.md)
 - [Browser Automation as a Research Tool](tool-engineering/browser-automation-for-research.md)
 - [Headless Claude in CI](workflows/headless-claude-ci.md)
 
@@ -347,7 +348,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](human/cognitive-load-ai-fatigue.md)
 - [Cross-Tool Translation](human/cross-tool-translation.md)
 - [Initiatives and Community](human/initiatives-community.md)
-- [Safe Command Allowlisting](human/safe-command-allowlisting.md)
+- [Safe Command Allowlisting](security/safe-command-allowlisting.md)
 
 ## Anti-Patterns
 
@@ -366,7 +367,7 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 - [The Kitchen Sink Session](anti-patterns/session-partitioning.md)
 - [Single-Layer Prompt Injection Defence](anti-patterns/single-layer-injection-defence.md)
 - [Trust Without Verify](anti-patterns/trust-without-verify.md)
-- [Vibe Coding](workflows/vibe-coding.md)
+- [Vibe Coding](anti-patterns/vibe-coding.md)
 - [The Yes-Man Agent](anti-patterns/yes-man-agent.md)
 
 ## Emerging Concepts

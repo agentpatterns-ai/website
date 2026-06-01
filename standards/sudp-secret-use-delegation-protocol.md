@@ -5,6 +5,7 @@ tags:
   - security
   - standards
   - tool-agnostic
+  - arxiv
 aliases:
   - Secret-Use Delegation Protocol
   - Agent Secret Use

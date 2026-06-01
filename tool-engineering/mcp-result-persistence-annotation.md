@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - context-engineering
   - claude
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

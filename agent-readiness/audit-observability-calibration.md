@@ -3,8 +3,10 @@ title: "Audit Observability Calibration"
 description: "Detect planted-bug fixtures, score coverage across the five canonical layers, validate the diagnosing harness consumes signals only, and surface unreached layers as calibration gaps mapped to missing instrumentation signals."
 tags:
   - tool-agnostic
-  - verification
+  - testing-verification
   - observability
+  - instructions
+  - agent-readiness
 aliases:
   - planted-bug calibration audit
   - observability diagnostic legibility audit

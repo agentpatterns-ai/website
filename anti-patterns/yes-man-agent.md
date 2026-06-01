@@ -3,6 +3,8 @@ title: "The Yes-Man Agent: Compliance Without Verification"
 description: "Agents without explicit verification and pushback instructions execute every request without flagging problems — shipping errors at machine speed."
 tags:
   - agent-design
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - sycophantic agent
   - sycophancy

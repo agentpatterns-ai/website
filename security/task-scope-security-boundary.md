@@ -5,6 +5,7 @@ tags:
   - agent-design
   - security
   - instructions
+  - tool-agnostic
 aliases:
   - narrow scope security
   - scope as security boundary

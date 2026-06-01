@@ -29,7 +29,7 @@ The [Claude Code changelog](https://code.claude.com/docs/en/changelog) for v2.1.
 
 ## The Failure Mode Exec Form Closes
 
-Hook handlers commonly substitute JSON payload fields — `${tool_input.file_path}`, `${tool_input.command}`, `${tool_response.output}` — into `command`. The [PostToolUse auto-formatting page](../workflows/posttooluse-auto-formatting.md) shows the canonical pattern:
+Hook handlers commonly substitute JSON payload fields — `${tool_input.file_path}`, `${tool_input.command}`, `${tool_response.output}` — into `command`. The [PostToolUse auto-formatting page](../tools/claude/posttooluse-auto-formatting.md) shows the canonical pattern:
 
 ```json
 {
@@ -148,7 +148,7 @@ Prettier receives the entire string as one filename argument and fails with `ENO
 - [Hooks Invoking MCP Tools](hooks-invoking-mcp-tools.md)
 - [Effort-Aware Hooks](effort-aware-hooks.md)
 - [Hook Catalog](hook-catalog.md)
-- [PostToolUse Auto-Formatting](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Auto-Formatting](../tools/claude/posttooluse-auto-formatting.md)
 - [Sandbox Rules for Harness Tools](../security/sandbox-rules-harness-tools.md)
 - [Prompt Injection Threat Model](../security/prompt-injection-threat-model.md)
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)

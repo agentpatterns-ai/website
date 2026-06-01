@@ -21,6 +21,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Risk emerges when an agent has private data access, untrusted input, and egress simultaneously; remove at least one leg from every execution path
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — Corrupting a knowledge graph an agent queries via tool-use produces 100% trust at moderate attacker sophistication across nine models; the attack is distinct from prompt injection because the data path, not the instruction path, carries the payload
+- [Pre-Trust Execution Surface in Coding Agent Harnesses](pre-trust-execution-surface.md) — Project-local config (settings files, hooks, MCP manifests, env vars, localhost listeners) executes before the trust prompt fires; defer parsing and execution until after the trust boundary is established
 - [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) — Under controlled knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy; architecture choice is part of the threat model
 - [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md) — A single untrusted tool call plants a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics; tested defenses cut attack success to 0–5% but at steep utility cost
 - [Trojan Hippo: Dormant Memory Payloads That Wait for Sensitive Topics](trojan-hippo-memory-attack.md) — A single untrusted tool call plants a payload in agent memory that activates only when the user later discusses finance, health, or identity, then exfiltrates the data
@@ -49,10 +50,13 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 Isolation limits what a compromised or misbehaving agent can affect.
 
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
+- [Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes](network-less-container-unix-socket-egress.md) — `--network none` plus a mounted Unix socket makes the egress proxy the only path off the container, turning policy into topology
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
 - [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md) — A sandbox mode that keeps filesystem isolation but lifts network restrictions; safe only when egress is enforced at a layer below the harness
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
+
+**Anti-pattern:** [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname-allowlist-tls-blind-spot.md) — A hostname-allowlist proxy without TLS termination enforces the client-supplied destination, not the actual destination; broad shared-CDN entries open domain-fronting and similar exfil paths
 
 ## Data Protection
 
@@ -68,12 +72,14 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](agent-authored-message-rendered-image-exfiltration.md) — An auto-fetching renderer downstream of an agent's message-authoring tool acts as deferred egress, closing the lethal trifecta without any direct network grant
 - [Multitenant RAG: Closing the Relevance-Authorization Gap](multitenant-rag-authorization-gap.md) — Retrieval ranks by relevance, not authorization — in a shared corpus, the highest-scoring chunk for one tenant can belong to another; close the gap with policy-aware ingestion, two-tier retrieval gating, and server-side orchestration
 - [Per-Server MCP Environment Scoping for Credential Isolation](mcp-server-credential-isolation.md) — Each MCP server gets its own env-variable scope, not the agent process's full env, so one server's credentials never leak to every other server the agent talks to; the configuration-layer complement to credential proxies and federated identity
+- [Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting](multi-tenant-isolation-knobs-agent-sdk.md) — Four Claude Agent SDK options plus a per-tenant proxy-egress rule that sever each default settings-and-state input (filesystem settings, `~/.claude.json`, auto memory, inherited `cwd`) when one container serves multiple tenants
 
 ## Permissions
 
 Excess permissions expand the blast radius of any failure or attack.
 
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — Gate AI chat activation on directory-managed GitHub organization membership via VS Code's `ChatApprovedAccountOrganizations` device policy; fail-closed and structurally distinct from seat licences
@@ -116,6 +122,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 
 Agents dynamically load tools from MCP servers, plugins, and registries at runtime. A tampered tool inherits the agent's full permissions.
 
+- [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — Agents default to caret and tilde ranges because `npm install` does; for an application with a bump-bot, replace the range with an exact pin plus a lockfile-enforced install — the floating range is the leg that admits a future-compromised release
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
@@ -132,6 +139,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Lock-State Safeguards for Desktop-Controlling Agents](locked-desktop-agent-safeguards.md) — Bound an agent driving a logged-in desktop along four axes (time, visibility, presence, recovery) with short-lived authorization, covered displays, relock on local input, and manual-unlock fallback so a failure on any single axis is contained by the others
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
+- [Three-Depth In-Session Security Review](three-depth-in-session-security-review.md) — Stack a per-edit pattern match, an end-of-turn diff review, and a commit-time agentic review so each layer's cost and false-positive profile match its frequency
 - [Usability Pressure as a Silent Security-Regression Vector](usability-pressure-security-regression.md) — Explicit usability requirements (performance, simplicity, new features) in a single-shot prompt cause LLMs to drop implicit security constraints at up to 98.1% attack success rate; mitigated by making security explicit and gating every output through a scanner
 - [Verifying LLM-Generated Cryptographic Code](llm-cryptographic-code-verification.md) — Crypto generation fails with 23.3% compile rate and 57% vulnerabilities; pair every crypto code path with a rule-based crypto analyzer, prefer zero-shot over CoT, and constrain to vetted high-level APIs
 

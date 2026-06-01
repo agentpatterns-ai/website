@@ -4,6 +4,8 @@ description: "Enumerate every principal that can act, build a capability matrix 
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - permissions audit
   - blast radius assessment

@@ -8,6 +8,8 @@ tags:
   - agent-design
   - workflows
   - source:opendev-paper
+  - tool-agnostic
+  - context-engineering
 last_reviewed: 2026-05-27
 ---
 

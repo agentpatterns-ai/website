@@ -4,6 +4,8 @@ description: "Enumerate every rules and instruction file an agent reads at sessi
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - rules file injection audit
   - instruction file injection scan

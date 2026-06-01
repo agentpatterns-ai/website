@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - evals
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - eval suite audit
   - evals quality check

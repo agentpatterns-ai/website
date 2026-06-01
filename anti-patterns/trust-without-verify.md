@@ -3,6 +3,8 @@ title: "Trust Without Verify: Skipping Agent Output Checks"
 description: "Accepting agent output as correct because it looks polished, without independent verification. Polished output does not correlate with accuracy."
 tags:
   - testing-verification
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

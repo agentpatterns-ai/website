@@ -9,6 +9,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - claude
   - source:opendev-paper
+  - tool-engineering
 aliases:
   - "lazy tool loading"
   - "on-demand tool loading"

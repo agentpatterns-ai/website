@@ -4,6 +4,8 @@ description: "Detect declared MCP servers, generate or refactor .mcp.json with p
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - generate mcp.json
   - scaffold MCP server config

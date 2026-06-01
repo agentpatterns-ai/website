@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - agent-design
+  - instructions
+  - agent-readiness
 aliases:
   - url fetch gate scaffold
   - common crawl url gate

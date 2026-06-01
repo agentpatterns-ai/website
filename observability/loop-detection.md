@@ -6,6 +6,7 @@ tags:
   - workflows
   - source:opendev-paper
   - observability
+  - tool-agnostic
 aliases:
   - Loop Detection & Stopping
 last_reviewed: 2026-05-27
@@ -146,4 +147,4 @@ Measure whether a specific intervention reduces the signal it targets, and remov
 - [Agent Debugging](agent-debugging.md)
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)

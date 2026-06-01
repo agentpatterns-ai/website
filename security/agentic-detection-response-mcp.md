@@ -6,6 +6,8 @@ tags:
   - observability
   - agent-design
   - tool-agnostic
+  - mcp
+  - arxiv
 aliases:
   - ADR for agents
   - MCP runtime detection

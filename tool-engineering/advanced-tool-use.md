@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - claude
   - long-form
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

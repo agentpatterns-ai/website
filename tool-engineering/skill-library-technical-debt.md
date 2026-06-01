@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - skill technical debt
   - library-time skill maintenance

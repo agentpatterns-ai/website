@@ -5,6 +5,8 @@ tags:
   - agent-design
   - testing-verification
   - observability
+  - tool-agnostic
+  - standards
 aliases:
   - OTel for agents
   - OpenTelemetry GenAI conventions

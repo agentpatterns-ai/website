@@ -4,6 +4,8 @@ description: "Team onboarding for agent workflows aligns a team on shared infras
 tags:
   - workflows
   - human-factors
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 
@@ -131,7 +133,7 @@ This three-week sequence surfaces agent failure modes in a controlled way before
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)
 - [Agent-Powered Codebase Q&A and Onboarding](codebase-qa-onboarding.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
 - [Agent Governance Policies](agent-governance-policies.md)

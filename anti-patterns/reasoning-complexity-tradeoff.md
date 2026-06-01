@@ -5,6 +5,7 @@ tags:
   - anti-pattern
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - volume-quality inverse law
   - capability-maintainability tradeoff
@@ -54,7 +55,7 @@ Workflow gates that operate above the prompt layer:
 - **Architectural foresight before generation.** [Design-first collaboration](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) gates implementation behind explicit approval — no code until the approach is agreed.
 - **Volume as a quality signal.** Treat output size as a leading indicator; if line count is high relative to the requirement, structural degradation is the prior.
 - **Post-generation cleanup.** [Entropy-reduction agents](../workflows/entropy-reduction-agents.md) and scheduled garbage-collection runs ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)) target bloat that prompt-time controls miss.
-- **Deterministic enforcement.** Cyclomatic complexity, function-length, and duplication thresholds catch what prompts cannot — see [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md).
+- **Deterministic enforcement.** Cyclomatic complexity, function-length, and duplication thresholds catch what prompts cannot — see [hooks for enforcement vs prompts for guidance](../instructions/hooks-vs-prompts.md).
 
 ## When This Doesn't Apply
 
@@ -117,5 +118,5 @@ Six classes, an abstract base, an unrequested audit log. Tests pass. The result 
 - [Pattern Replication Risk](pattern-replication-risk.md) — agents amplify whatever is in the repository, including bloat
 - [Spec Complexity Displacement](spec-complexity-displacement.md) — why tighter prompts converge toward code rather than fixing structural quality
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — CI thresholds that catch bloat mechanically
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — when to move quality controls out of the prompt
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — when to move quality controls out of the prompt
 - [Entropy Reduction Agents](../workflows/entropy-reduction-agents.md) — scheduled cleanup passes for accumulated bloat

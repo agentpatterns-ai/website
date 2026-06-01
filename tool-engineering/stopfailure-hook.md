@@ -4,6 +4,7 @@ description: "The StopFailure hook fires when a Claude Code turn ends due to an 
 tags:
   - agent-design
   - claude
+  - tool-engineering
 aliases:
   - StopFailure event
   - API error hook

@@ -142,7 +142,7 @@ Models revert to training defaults under pressure — attention-based architectu
 | Completion criteria | Deterministic (Stop hook) | "Tests must pass before done" |
 | Security policy | Organizational (managed) | "No secrets in source" |
 
-Judgment rules belong in instructions; binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](../verification/hooks-vs-prompts.md).
+Judgment rules belong in instructions; binary, non-negotiable rules belong in hooks. See [hooks for enforcement vs prompts for guidance](hooks-vs-prompts.md).
 
 ## When This Backfires
 
@@ -162,7 +162,7 @@ Judgment rules belong in instructions; binary, non-negotiable rules belong in ho
 ## Related
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)

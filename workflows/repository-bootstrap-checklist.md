@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - instructions
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -199,9 +200,9 @@ This is the Minimum Viable Agent Infrastructure described above. Add agent defin
 ## Related
 
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
-- [Codebase Readiness for Agents](codebase-readiness.md)
+- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
 - [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)

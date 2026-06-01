@@ -2,9 +2,9 @@
 title: "Tools: Claude Code, Cursor, and GitHub Copilot"
 description: "Tool-specific patterns and workflows for Claude Code, Cursor, and GitHub Copilot — leading AI coding assistants."
 tags:
-  - claude-code
-  - github-copilot
-  - tools
+  - claude
+  - copilot
+  - tool-engineering
   - ai-coding-assistants
 last_reviewed: 2026-05-27
 ---

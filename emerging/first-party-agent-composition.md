@@ -4,6 +4,7 @@ description: "Instead of integrating third-party SaaS products and stitching the
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

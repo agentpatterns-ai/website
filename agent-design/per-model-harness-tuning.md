@@ -4,6 +4,7 @@ description: "Tune prompt structure, tool descriptions, planner/executor split, 
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - per-model harness profile
   - model-specific harness deltas

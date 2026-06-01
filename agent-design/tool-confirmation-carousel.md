@@ -4,6 +4,7 @@ description: "A carousel control reviews multiple pending tool calls in one navi
 tags:
   - agent-design
   - human-factors
+  - tool-agnostic
 aliases:
   - batch tool approval UI
   - tool approval carousel
@@ -16,7 +17,7 @@ last_reviewed: 2026-05-27
 
 ## The Residual-Prompt Problem
 
-Allowlists and sandboxes remove most permission prompts. Anthropic reports an [84% reduction](https://www.anthropic.com/engineering/claude-code-sandboxing) in Claude Code through pre-authorising read-only and locally scoped operations (see [Safe Command Allowlisting](../human/safe-command-allowlisting.md)). The residue — destructive writes, unknown commands, network calls — must stay per-call because each decision depends on context the allowlist cannot encode.
+Allowlists and sandboxes remove most permission prompts. Anthropic reports an [84% reduction](https://www.anthropic.com/engineering/claude-code-sandboxing) in Claude Code through pre-authorising read-only and locally scoped operations (see [Safe Command Allowlisting](../security/safe-command-allowlisting.md)). The residue — destructive writes, unknown commands, network calls — must stay per-call because each decision depends on context the allowlist cannot encode.
 
 When a 50-step task produces ten of those residual prompts, the harness UI determines whether the operator reviews each one or dispatches the queue reflexively. Scattered modals interleaved with agent output train the reflex: scroll, click, scroll, click. The same Anthropic post names the failure mode directly: "Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe" ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)).
 
@@ -49,7 +50,7 @@ Three properties distinguish the pattern from a stack of modals:
 
 The carousel is a UX addition to the residual approval surface. It earns its place when:
 
-- Allowlists and sandboxes have already absorbed the routine prompts (see [Safe Command Allowlisting](../human/safe-command-allowlisting.md) and [Blast Radius Containment](../security/blast-radius-containment.md))
+- Allowlists and sandboxes have already absorbed the routine prompts (see [Safe Command Allowlisting](../security/safe-command-allowlisting.md) and [Blast Radius Containment](../security/blast-radius-containment.md))
 - The remaining prompts still cluster — the agent emits several non-routine calls per turn rather than one at a time
 - The operator is at the terminal, not relaying approvals off-device
 
@@ -73,7 +74,7 @@ The carousel belongs at the end of a layered permission stack, not the top:
 | Layer | Effect on prompts |
 |---|---|
 | Sandbox ([blast radius](../security/blast-radius-containment.md)) | Limits what any prompt can reach |
-| Allowlist ([safe-command allowlisting](../human/safe-command-allowlisting.md)) | Removes routine prompts entirely |
+| Allowlist ([safe-command allowlisting](../security/safe-command-allowlisting.md)) | Removes routine prompts entirely |
 | Auto-mode ([auto-mode](../tools/claude/auto-mode.md)) | Removes classifier-confident prompts |
 | Deferred or relay ([deferred permission](deferred-permission-pattern.md), [channels relay](../tools/claude/channels-permission-relay.md)) | Moves remaining prompts off-terminal |
 | **Carousel** | Organises whatever survives the earlier layers |
@@ -102,7 +103,7 @@ A chat turn that emits multiple pending tool calls renders a carousel card. The 
 
 ## Related
 
-- [Safe Command Allowlisting](../human/safe-command-allowlisting.md)
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md)
 - [Deferred Permission Pattern](deferred-permission-pattern.md)
 - [Channels Permission Relay](../tools/claude/channels-permission-relay.md)
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md)

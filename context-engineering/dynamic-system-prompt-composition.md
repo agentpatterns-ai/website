@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - instructions
   - source:opendev-paper
+  - tool-agnostic
 aliases:
   - modular prompt assembly
   - composable system prompts

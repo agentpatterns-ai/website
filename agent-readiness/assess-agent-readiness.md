@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - workflows
   - agent-design
+  - instructions
+  - agent-readiness
 aliases:
   - agent readiness scorecard
   - L0 to L5 maturity audit

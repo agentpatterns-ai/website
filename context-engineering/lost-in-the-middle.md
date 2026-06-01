@@ -3,8 +3,8 @@ title: "Lost in the Middle: Understanding U-Shaped Attention"
 description: "Model attention is strongest at the start and end of a context window; content in the middle receives significantly less focus regardless of its importance"
 tags:
   - context-engineering
+  - tool-agnostic
 aliases:
-  - Attention Sinks
   - Critical Instruction Repetition
   - Attention Bias
   - Instruction Placement

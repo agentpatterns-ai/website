@@ -4,6 +4,8 @@ description: "AI agents systematically neglect error handling, edge cases, and t
 tags:
   - agent-design
   - testing-verification
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 
@@ -113,7 +115,7 @@ The first version works when the file exists and contains valid JSON. The second
 - [Demo to Production Gap](demo-to-production-gap.md) — Code passes demos but fails on real-world edge cases
 - [Copy-Paste Agent](copy-paste-agent.md) — Type-safety violations from cloning code without adapting types
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — Hard checks around agent output
-- [Hooks vs Prompts](../verification/hooks-vs-prompts.md) — Lifecycle hooks enforce safety deterministically
+- [Hooks vs Prompts](../instructions/hooks-vs-prompts.md) — Lifecycle hooks enforce safety deterministically
 - [TDD Agent Development](../verification/tdd-agent-development.md) — Tests first; agents implement against them
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents reproduce codebase patterns at scale, including bad error handling
 - [The Yes-Man Agent](yes-man-agent.md) — Executes requests without flagging missing error handling

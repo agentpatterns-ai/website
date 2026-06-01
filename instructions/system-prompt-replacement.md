@@ -6,6 +6,7 @@ aliases:
   - Domain-Specific Personas
 tags:
   - instructions
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 # System Prompt Replacement for Domain-Specific Agent Personas
@@ -104,5 +105,5 @@ The technique generalizes beyond Claude Code. Any agent platform with a configur
 
 - [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
-- [Controlling Agent Output: Concise Answers, Not Essays](../agent-design/controlling-agent-output.md)
+- [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)

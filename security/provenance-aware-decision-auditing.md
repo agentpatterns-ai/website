@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - influence provenance graph
   - ARGUS provenance auditing
@@ -82,5 +83,5 @@ For fixed-action agents or workflows that never accumulate cross-turn context, t
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — six provable patterns this audit composes with
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — parent threat model
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — stateless runtime alternative
-- [Audit-Record Divergence as an Agent Runtime Invariant](audit-record-divergence-invariant.md) — post-hoc reconciliation dual
+- [Audit-Record Divergence as an Agent Runtime Invariant](action-audit-divergence-taxonomy.md) — post-hoc reconciliation dual
 - [Indirect Injection Discovery](indirect-injection-discovery.md) — finding the injection vectors this audit then constrains

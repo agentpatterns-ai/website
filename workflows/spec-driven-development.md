@@ -6,6 +6,8 @@ aliases:
 tags:
   - instructions
   - workflows
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

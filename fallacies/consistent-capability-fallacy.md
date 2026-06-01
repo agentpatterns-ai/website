@@ -5,6 +5,7 @@ tags:
   - human-factors
   - tool-agnostic
   - evals
+  - fallacies
 aliases:
   - consistent capability fallacy
   - capability generalization fallacy

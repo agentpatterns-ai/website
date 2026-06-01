@@ -4,7 +4,9 @@ description: "Combine hierarchical knowledge graphs with coverage-driven case se
 tags:
   - context-engineering
   - agent-design
-  - source:arxiv
+  - arxiv
+  - tool-agnostic
+  - rag
 aliases:
   - "domain-specific RAG"
   - "KG-augmented retrieval"
@@ -163,7 +165,7 @@ Structured domain retrieval adds significant upfront cost and ongoing maintenanc
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-based structured code navigation
 - [Context Hub](context-hub.md) — on-demand API docs without hierarchical structure
 - [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md) — domain adaptation via prompting
-- [Domain-Specific Agent Challenges](../human/domain-specific-agent-challenges.md) — human factors of domain-specific agents
+- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) — human factors of domain-specific agents
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) — persistent knowledge vs per-task retrieval
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — cross-file dependency and AST retrieval for code generation
 - [Observation Masking](observation-masking.md) — refinement gate for intermediate tool results

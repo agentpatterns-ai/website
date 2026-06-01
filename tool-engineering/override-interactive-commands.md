@@ -4,6 +4,8 @@ description: "Suppress interactive prompts with a one-line instruction override 
 tags:
   - agent-design
   - instructions
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

@@ -3,6 +3,8 @@ title: "Per-Page OG Image Generation at MkDocs Build Time"
 tags:
   - workflows
   - cost-performance
+  - tool-agnostic
+  - agent-design
 description: "Auto-generate branded 1200×630 Open Graph images from page metadata at MkDocs build time so every social share shows a unique, on-brand preview card."
 aliases:
   - "social preview images"
@@ -256,6 +258,6 @@ Build-time image generation with Pillow is pragmatic but has specific failure mo
 ## Related
 
 - [Content Pipeline: Idea to Published Page](content-pipeline.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)
 - [Context Priming for AI Agent Development](../context-engineering/context-priming.md)

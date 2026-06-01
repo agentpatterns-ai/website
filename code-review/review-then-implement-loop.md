@@ -128,7 +128,7 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Empowerment Over Automation](../agent-design/empowerment-over-automation.md)
+- [Empowerment Over Automation](../human/empowerment-over-automation.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
 - [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)

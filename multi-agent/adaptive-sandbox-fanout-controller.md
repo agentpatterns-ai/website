@@ -5,6 +5,7 @@ tags:
   - multi-agent
   - agent-design
   - cost-performance
+  - tool-agnostic
 aliases:
   - adaptive fan-out controller
   - dynamic sandbox parallelism

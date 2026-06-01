@@ -5,6 +5,7 @@ tags:
   - instructions
   - tool-engineering
   - workflows
+  - tool-agnostic
 aliases:
   - natural-language agent scaffolding
   - agent customization bootstrap

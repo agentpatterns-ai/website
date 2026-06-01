@@ -4,7 +4,7 @@ description: "Telling an agent in the system prompt not to call a tool reduces u
 tags:
   - security
   - instructions
-  - anti-patterns
+  - anti-pattern
   - tool-agnostic
 aliases:
   - instructional tool restriction

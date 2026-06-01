@@ -5,6 +5,9 @@ tags:
   - security
   - agent-design
   - context-engineering
+  - tool-agnostic
+  - rag
+  - arxiv
 aliases:
   - knowledge base poisoning
   - RAG poisoning robustness

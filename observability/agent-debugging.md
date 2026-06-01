@@ -5,6 +5,8 @@ tags:
   - workflows
   - agent-design
   - instructions
+  - tool-agnostic
+  - observability
 aliases:
   - agent troubleshooting
   - LLM debugging
@@ -120,5 +122,5 @@ The diagnostic sequence assumes the failure is structural. Three conditions wher
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
-- [Visible Thinking in AI Development](visible-thinking-ai-development.md)
+- [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)

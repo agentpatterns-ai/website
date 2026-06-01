@@ -3,6 +3,7 @@ title: "Prompt File Libraries for Reusable Agent Instructions"
 description: "Version-controlled prompt templates invoked on demand via slash commands, reducing variation and embedding real project file context into repeatable agent workflows."
 tags:
   - instructions
+  - tool-agnostic
 aliases:
   - "prompt templates"
   - "reusable prompts"

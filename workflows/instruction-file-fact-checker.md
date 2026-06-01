@@ -5,6 +5,7 @@ tags:
   - workflows
   - instructions
   - tool-agnostic
+  - agent-design
 aliases:
   - CLAUDE.md fact-checker
   - instruction drift detection
@@ -184,7 +185,7 @@ The agent opens a single PR with two surgical edits to CLAUDE.md. A human review
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Continuous Documentation](continuous-documentation.md)
 - [Entropy Reduction Agents](entropy-reduction-agents.md)
-- [Getting Started: Instruction Files](getting-started-instruction-files.md)
+- [Getting Started: Instruction Files](../instructions/getting-started-instruction-files.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Continuous AI-Agentic CI/CD](continuous-ai-agentic-cicd.md)

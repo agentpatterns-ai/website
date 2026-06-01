@@ -4,6 +4,7 @@ description: "Locate every AGENTS.md and equivalent in a repository, run mechani
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - AGENTS.md health check
   - AGENTS.md audit pass

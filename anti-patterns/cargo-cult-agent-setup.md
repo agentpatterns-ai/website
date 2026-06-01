@@ -4,6 +4,8 @@ description: "Copying agent configurations without understanding why they work p
 tags:
   - human-factors
   - instructions
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - cargo cult configuration
   - copy-paste configuration

@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - instructions
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

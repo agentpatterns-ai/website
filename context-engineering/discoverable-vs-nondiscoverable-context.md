@@ -130,7 +130,7 @@ The "after" version is shorter and will never go stale: the project structure, A
 - [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- bootstrap an instruction file with only non-discoverable content
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap an instruction file with only non-discoverable content
 - [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Context Compression Strategies](context-compression-strategies.md)

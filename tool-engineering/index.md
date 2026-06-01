@@ -29,7 +29,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
 - [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — Redesign tool interfaces so the wrong call cannot compile -- prevention over documentation
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — Prefer fewer, higher-level tools that match how agents reason about tasks over many narrow tools that mirror API endpoint boundaries
 - [Toolset Agentization](toolset-agentization.md) — Group frequently co-used tools into specialized sub-agents so the top-level planner chooses among fewer, coarser actions at each routing step
@@ -51,8 +51,10 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Proprietary-to-Open-Standard Migration](copilot-extensions-to-mcp-migration.md) — When a proprietary extension system gets replaced by an open protocol, rebuild on the standard rather than port the old architecture
 - [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](scoped-mcp-server-discovery.md) — Resolve duplicate MCP server definitions across user, workspace, and project config files using a most-specific-wins precedence rule
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md) — Decide which MCP servers earn unconditional context residence and which stay deferred behind tool search, using token cost, hit rate, and selection accuracy as signals
+- [Documentation-Grounding MCP Servers for Vendor SDKs](documentation-grounding-mcp-servers.md) — Wire a vendor's docs-MCP endpoint to ground code generation in current API surfaces, only when SDK churn, token budget, and trifecta posture all permit it
 - [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — pair Jaccard and ssdeep before drawing ecosystem conclusions
 - [Hint-Driven Concurrency for Read-Only MCP Tools](read-only-hint-concurrency.md) — The MCP `readOnlyHint` annotation became a concurrency dispatcher input once Codex CLI 0.134.0 shipped parallel execution for read-only tool calls — a wall-clock win that only holds when annotations are audited and trusted
+- [Push-Event MCP Channels: Inverting the Pull-Tool Polarity](push-event-mcp-channels.md) — An MCP server that declares `claude/channel` flips the polarity from pull-on-demand to push-when-it-happens, gated by sender allowlist and an always-open session — useful when warm context is worth keeping
 
 ## Skills
 
@@ -66,6 +68,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
+- [Interpreter Skills](interpreter-skills.md) — Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter
 
 ## Hooks & Lifecycle
 
@@ -81,6 +84,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
 - [Terminal Tool Output Compression](terminal-output-compression.md) — Harness-side post-processing collapses predictable shell-output noise (lockfile diffs, `ls -l`, `npm install` progress, unchanged diff hunks) before the model sees it, with a banner that lets the agent opt out per call
 - [MessageDisplay Hook: Transforming Assistant Text at the Display Boundary](messagedisplay-hook-assistant-text-transform.md) — A Claude Code 2.1.152 hook event fires on every outbound assistant message and lets a hook rewrite or hide the text before the user sees it — the display-side analogue of PostToolUse output replacement
+- [PostToolBatch Hook: Once-Per-Decision-Cycle Injection at the Batch Boundary](posttoolbatch-hook-batch-boundary.md) — `PostToolBatch` fires exactly once per parallel tool batch, before the next model call — the cardinality-matched injection point for conventions and validations that would otherwise duplicate N times across `PostToolUse`
 
 ## Specialized Tools
 
@@ -92,7 +96,7 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Cross-Repo Agent Search](cross-repo-agent-search.md) — Expose a GitHub-API-backed text-search tool to reach code outside the workspace, and compose it with local indexed search under remote-index trade-offs
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md) — Structure MCP tools as files in a directory tree and let the agent load only the definitions it needs, reducing token overhead by up to 98%
 - [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md) — Back an agent's regex search with a trigram or suffix-array index so query latency stays bounded on large repositories, at the cost of freshness machinery
-- [Next Edit Suggestions](next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode
+- [Next Edit Suggestions](../tools/copilot/next-edit-suggestions.md) — A proactive editing paradigm where the AI predicts both where and what to edit next, between reactive autocomplete and autonomous agent mode
 - [Override Interactive Commands](override-interactive-commands.md) — Suppress interactive prompts with a one-line instruction override so the same command definition serves both human-in-the-loop and automated execution
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists
 - [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes

@@ -4,6 +4,8 @@ description: "A single sentence asking the model to stay consistent with prior h
 tags:
   - security
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - history anchor attack
   - consistency injection

@@ -3,6 +3,8 @@ title: "Agent Cards: Capability Discovery Standard for AI Agents"
 description: "Machine-readable JSON file at a well-known URL that advertises agent capabilities, supported protocols, and skills for programmatic multi-agent discovery."
 tags:
   - agent-design
+  - tool-agnostic
+  - standards
 last_reviewed: 2026-05-27
 ---
 

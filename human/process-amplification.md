@@ -4,6 +4,7 @@ description: "Agents amplify your engineering practices. Strong processes scale;
 tags:
   - agent-design
   - tool-agnostic
+  - human-factors
 last_reviewed: 2026-05-27
 ---
 
@@ -98,7 +99,7 @@ The agent did not become smarter. The environment gave it something to push agai
 
 ## Related
 
-- [Codebase Readiness](../workflows/codebase-readiness.md)
+- [Codebase Readiness](../agent-design/codebase-readiness.md)
 - [Agent Backpressure](../agent-design/agent-backpressure.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
 - [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)

@@ -4,6 +4,8 @@ description: "Detect the harness, generate a PostToolUse hook that tracks per-fi
 tags:
   - tool-agnostic
   - observability
+  - instructions
+  - agent-readiness
 aliases:
   - edit-count loop detector
   - doom loop detection hook

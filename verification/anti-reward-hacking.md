@@ -5,6 +5,7 @@ tags:
   - evals
   - agent-design
   - testing-verification
+  - tool-agnostic
 aliases:
   - "Reward Hacking"
   - "Specification Gaming"

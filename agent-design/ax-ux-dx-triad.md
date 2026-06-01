@@ -8,7 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - harness-engineering
-  - source:arxiv
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 
@@ -141,7 +141,7 @@ The model receives compact JSON it can parse. The user sees a one-line summary. 
 ## Related
 
 - [Harness Engineering](harness-engineering.md) -- AX/UX/DX separation is an architectural principle within harness design
-- [Controlling Agent Output](controlling-agent-output.md) -- matching response format to consumer needs, a direct AX-aware application
+- [Controlling Agent Output](../instructions/controlling-agent-output.md) -- matching response format to consumer needs, a direct AX-aware application
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) -- hindsight failure notes implement log synthesis
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) -- structured compression near context capacity
 - [Agent Backpressure](agent-backpressure.md) -- feedback signals are AX-layer concerns that must not leak into UX

@@ -160,5 +160,5 @@ The context-ceiling argument is weakest in three conditions:
 - [Lost in the Middle](../context-engineering/lost-in-the-middle.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) -- designing tasks at context-window-safe granularity
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) -- the cognitive overhead experts bear when verifying AI output
-- [Distributed Computing Parallels in Agent Architecture](distributed-computing-parallels.md) -- how context window constraints map to distributed systems memory limits
+- [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md) -- how context window constraints map to distributed systems memory limits
 - [Rigor Relocation](rigor-relocation.md) -- how engineering discipline adapts when agents operate above the ceiling

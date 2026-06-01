@@ -4,6 +4,7 @@ description: "Progressively expose agent policy updates to a small traffic slice
 tags:
   - workflows
   - tool-agnostic
+  - agent-design
 aliases:
   - canary deployment for agent policies
   - progressive policy rollout

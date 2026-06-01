@@ -4,6 +4,8 @@ description: "Agent demos curate inputs and ignore edge cases. Production realit
 tags:
   - agent-design
   - testing-verification
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

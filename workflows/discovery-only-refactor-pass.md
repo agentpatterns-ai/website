@@ -5,6 +5,8 @@ tags:
   - workflows
   - testing-verification
   - tool-agnostic
+  - agent-design
+  - arxiv
 aliases:
   - refactor discovery skill
   - improve-codebase-architecture skill

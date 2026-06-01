@@ -79,7 +79,7 @@ Relay widens the approval surface and narrows the information the approver sees:
 
 - **Weaker credential than the terminal.** A stolen phone, SIM-swap, or shared iMessage device becomes a tool-approval path — defeating a locked workstation requires more.
 - **Narrow remote view.** The relay forwards only `tool_name`, a short `description`, and the first 200 characters of arguments — blast radius that depends on working directory or session state cannot be assessed from a phone.
-- **Approval fatigue.** Prompts glanced at on a phone get approved by reflex — the failure mode [safe command allowlisting](../../human/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid.
+- **Approval fatigue.** Prompts glanced at on a phone get approved by reflex — the failure mode [safe command allowlisting](../../security/safe-command-allowlisting.md) and [auto-mode](auto-mode.md) exist to avoid.
 - **Sandboxable risk.** For throwaway worktrees or ephemeral containers with no credentials in scope, `--dangerously-skip-permissions` inside a sandbox removes prompts entirely — relay adds latency without adding safety.
 
 ## Example

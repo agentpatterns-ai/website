@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
+  - harness-engineering
 aliases:
   - isometric model control
   - five-subsystem ablation

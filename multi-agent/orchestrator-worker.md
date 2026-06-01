@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - multi-agent
+  - tool-agnostic
 aliases:
   - Parallel Dispatch
   - Scatter-Gather

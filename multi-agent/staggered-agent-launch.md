@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - multi-agent
 aliases:
   - thundering herd prevention
   - staggered launch pattern

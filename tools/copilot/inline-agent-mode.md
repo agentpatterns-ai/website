@@ -46,7 +46,7 @@ The April 24, 2026 release also shipped two settings under `Settings > GitHub Co
 
 GitHub's own guidance is to enable these only if you understand and accept the security risks ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). The combination of inline invocation (low friction) and global auto-approve (no confirmation) collapses the [confirmation gate](../../security/human-in-the-loop-confirmation-gates.md) for agent-initiated changes — keep them off unless the workspace is sandboxed.
 
-The same release also adds inline edit previews for [Next Edit Suggestions](../../tool-engineering/next-edit-suggestions.md) and a gutter direction indicator for far-away edits, so reviewing proposed changes can stay inside the editor as well ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
+The same release also adds inline edit previews for [Next Edit Suggestions](next-edit-suggestions.md) and a gutter direction indicator for far-away edits, so reviewing proposed changes can stay inside the editor as well ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)).
 
 ## When to Use Inline Over Chat Panel
 
@@ -86,7 +86,7 @@ The agent runs the four-phase loop in place: it gathers context from the selecti
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [MCP Integration](mcp-integration.md)
-- [Next Edit Suggestions](../../tool-engineering/next-edit-suggestions.md)
+- [Next Edit Suggestions](next-edit-suggestions.md)
 - [Human-in-the-Loop Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment](../../security/blast-radius-containment.md)
 - [Plan-First Loop](../../workflows/plan-first-loop.md)

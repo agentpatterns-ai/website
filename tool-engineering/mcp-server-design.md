@@ -5,6 +5,8 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - tool-engineering
+  - mcp
 last_reviewed: 2026-05-27
 ---
 
@@ -161,7 +163,7 @@ The checklist assumes a stable, internally-owned API. Conditions that invert tha
 - [Tool Engineering](tool-engineering.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Self-Healing Tool Routing](self-healing-tool-routing.md)

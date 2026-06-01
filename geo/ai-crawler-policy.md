@@ -134,7 +134,7 @@ Blocking all AI crawlers has a compounding cost:
 
 - [How AI Engines Cite](how-ai-engines-cite.md)
 - [llms.txt: Spec, Adoption, and Honest Limitations](llms-txt.md)
-- [GSC Search Console Monitoring](../workflows/gsc-search-console-monitoring.md)
+- [GSC Search Console Monitoring](gsc-search-console-monitoring.md)
 - [URL Fetch Public Index Gate](../security/url-fetch-public-index-gate.md)
 - [SEO vs GEO](seo-vs-geo.md)
 - [What Is GEO?](what-is-geo.md)

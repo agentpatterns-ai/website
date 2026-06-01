@@ -20,7 +20,7 @@ last_reviewed: 2026-05-27
 
 Agents are probabilistic. A critical step — committing changes, opening a PR, logging state — may be skipped depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate; they do not eliminate it.
 
-Middleware removes the dependence on agent compliance. The agent either does the critical step or the middleware does — the outcome is the same. This is distinct from per-tool-call enforcement ([hooks-vs-prompts](../verification/hooks-vs-prompts.md)) and CI guardrails ([deterministic-guardrails](../verification/deterministic-guardrails.md)), which operate within the loop or after it. Middleware acts at loop boundaries.
+Middleware removes the dependence on agent compliance. The agent either does the critical step or the middleware does — the outcome is the same. This is distinct from per-tool-call enforcement ([hooks-vs-prompts](../instructions/hooks-vs-prompts.md)) and CI guardrails ([deterministic-guardrails](../verification/deterministic-guardrails.md)), which operate within the loop or after it. Middleware acts at loop boundaries.
 
 ## Two Middleware Patterns
 
@@ -195,8 +195,8 @@ Post-loop safety nets rely on idempotency — if a net fires when the agent alre
 ## Related
 
 - [Harness Engineering](harness-engineering.md) — environment-level design that constrains what agents can do
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — per-tool-call enforcement inside Claude Code
-- [PostToolUse Hooks: Auto-Formatting on Every File Edit](../workflows/posttooluse-auto-formatting.md) — automatic formatting via PostToolUse hooks
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — per-tool-call enforcement inside Claude Code
+- [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — automatic formatting via PostToolUse hooks
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — CI and commit-level output checks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification gates before task completion
 - [Steering Running Agents](steering-running-agents.md) — human intervention patterns during agent execution

@@ -4,6 +4,8 @@ description: "The Model Context Protocol standardizes how AI agents connect to e
 tags:
   - agent-design
   - tool-agnostic
+  - standards
+  - mcp
 aliases:
   - MCP
   - Model Context Protocol

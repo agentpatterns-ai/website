@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - workflows
   - tool-agnostic
+  - harness-engineering
 aliases:
   - recurring review comments to rules
   - promote review feedback to harness checks

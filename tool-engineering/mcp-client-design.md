@@ -8,6 +8,8 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - tool-engineering
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

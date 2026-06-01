@@ -4,6 +4,7 @@ description: "Write a delegation contract instead of scripting steps: specify th
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - AI-as-executor pattern
   - delegation contract pattern
@@ -129,7 +130,7 @@ Compare this to an under-specified version: "Update the docs for the release." T
 ## Related
 
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md)
-- [Controlling Agent Output](controlling-agent-output.md)
+- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Rollback-First Design](rollback-first-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
 - [Agent-First Software Design](agent-first-software-design.md)

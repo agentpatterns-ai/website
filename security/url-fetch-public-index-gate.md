@@ -4,6 +4,8 @@ description: "Cross-reference URLs against a public-web crawl index before fetch
 tags:
   - agent-design
   - instructions
+  - tool-agnostic
+  - security
 last_reviewed: 2026-05-27
 ---
 

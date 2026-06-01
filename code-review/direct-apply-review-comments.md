@@ -4,8 +4,8 @@ description: "An interaction contract where a maintainer dispatches selected rev
 tags:
   - code-review
   - workflows
-  - copilot
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 

@@ -4,7 +4,9 @@ description: "Personality biases in agent memory act as implicit steering vector
 tags:
   - agent-design
   - memory
-  - anti-patterns
+  - anti-pattern
+  - tool-agnostic
+  - arxiv
 aliases:
   - memory induced tool drift
   - personality bias tool drift

@@ -55,7 +55,7 @@ Each node above is a page in this framework. The context-routing mechanism — n
 | 6 | [Plan files as resumable artifacts](plan-files-resumable-artifacts.md) | Committed plan files — qualified pattern: survive context compaction and enable ~80% reuse on recurring workflows, require supersession discipline to avoid retrieval hazards |
 | 7 | [Self-explanation loop](self-explanation-loop.md) | "Why is this structured this way?" as an active learning prompt |
 
-**Atomic patterns Team OS composes (cross-links):** [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../workflows/plan-mode.md).
+**Atomic patterns Team OS composes (cross-links):** [hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md), [CLAUDE.md convention](../../instructions/claude-md-convention.md), [AGENTS.md as table of contents](../../instructions/agents-md-as-table-of-contents.md), [progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md), [strategy over code generation](../../human/strategy-over-code-generation.md), [plan mode](../../tools/claude/plan-mode.md).
 
 ## Adoption Gradient
 
@@ -106,7 +106,7 @@ The workflow above is a single-practitioner case study (N=1). The underlying mec
 - [AGENTS.md standard](../../standards/agents-md.md) — the underlying open standard for project-level agent instructions
 - [Progressive disclosure for agents](../../agent-design/progressive-disclosure-agents.md) — why functional folder depth saves tokens
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why PM-as-router stops scaling
-- [Plan mode](../../workflows/plan-mode.md) — the gate Team OS uses for high-stakes artifacts
+- [Plan mode](../../tools/claude/plan-mode.md) — the gate Team OS uses for high-stakes artifacts
 - [Brownfield to Agent-First](../brownfield-to-agent-first/index.md) — the companion framework for *codebase* readiness
 
 ## Source

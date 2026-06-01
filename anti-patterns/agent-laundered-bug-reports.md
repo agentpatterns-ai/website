@@ -8,6 +8,7 @@ tags:
   - anti-pattern
   - workflows
   - human-factors
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

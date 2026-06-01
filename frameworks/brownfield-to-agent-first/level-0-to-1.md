@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 
@@ -196,7 +197,7 @@ If the agent invents architecture or mislocates new code, your project instructi
 
 - [Instruction File Ecosystem](../../instructions/instruction-file-ecosystem.md) — CLAUDE.md, AGENTS.md, `.github/copilot-instructions.md` and how they interact
 - [AGENTS.md Standard](../../standards/agents-md.md) — open standard for cross-tool agent project instructions
-- [Codebase Readiness for Agents](../../workflows/codebase-readiness.md) — agent-hostile vs agent-friendly code qualities
+- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — agent-hostile vs agent-friendly code qualities
 - [Harness Engineering](../../agent-design/harness-engineering.md) — the full discipline this transition begins
 - [Brownfield to Agent-First: Repo Maturity Framework](index.md) — full L0–L5 framework overview
 - [L1 → L2: Adding Feedback Loops](level-1-to-2.md) — next module

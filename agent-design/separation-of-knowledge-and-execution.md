@@ -3,6 +3,7 @@ title: "Separation of Knowledge and Execution in Agent Systems"
 description: "Structure agent systems in three layers — skills (knowledge), agents (execution), and commands (orchestration) — so each layer changes independently."
 tags:
   - agent-design
+  - tool-agnostic
 aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern

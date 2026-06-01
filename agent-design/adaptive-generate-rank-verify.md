@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - adaptive generate rank verify
   - cost-sensitive inference search

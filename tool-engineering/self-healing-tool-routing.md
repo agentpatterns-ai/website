@@ -4,6 +4,8 @@ description: "Route agent tool calls through a cost-weighted graph; recompute pa
 tags:
   - cost-performance
   - agent-design
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - Self-Healing Router
   - deterministic adaptive routing

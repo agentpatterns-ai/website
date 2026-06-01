@@ -4,7 +4,9 @@ description: "Locate every multi-agent handoff boundary, validate that upstream 
 tags:
   - tool-agnostic
   - multi-agent
-  - verification
+  - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - handoff schema audit
   - agent handoff audit

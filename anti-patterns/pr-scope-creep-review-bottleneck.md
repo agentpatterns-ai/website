@@ -8,6 +8,8 @@ tags:
   - human-factors
   - workflows
   - code-review
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 
@@ -78,7 +80,7 @@ The structural fix: Agent B opens PR #102 targeting PR #101's branch using stack
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — reviewer psychology behind rubber-stamping large diffs
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md) — how AI reviewers misclassify correct code at scale
 - [Shadow Tech Debt](shadow-tech-debt.md) — how AI-accelerated delivery creates invisible debt accumulation
-- [Vibe Coding](../workflows/vibe-coding.md)
+- [Vibe Coding](vibe-coding.md)
 - [Diff-Based Review Over Output Review](../code-review/diff-based-review.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md)

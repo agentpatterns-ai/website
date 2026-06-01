@@ -5,6 +5,7 @@ tags:
   - workflows
   - context-engineering
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -199,7 +200,7 @@ Without the research phase, the agent would have missed the WebSocket constraint
 
 ## Related
 
-- [Plan Mode](plan-mode.md) — Claude Code's built-in read-only mode that enforces the research/plan phase
+- [Plan Mode](../tools/claude/plan-mode.md) — Claude Code's built-in read-only mode that enforces the research/plan phase
 - [The Plan-First Loop](plan-first-loop.md) — The general pattern of designing before coding
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — Structured exploration before making changes
 - [Context Priming](../context-engineering/context-priming.md) — Loading relevant context before implementation

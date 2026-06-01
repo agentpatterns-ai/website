@@ -3,6 +3,8 @@ title: "The Copy-Paste Agent Anti-Pattern in AI Development"
 description: "Duplicating agent definitions across projects instead of composing from shared skills causes drift and prevents improvements from propagating to all copies."
 tags:
   - agent-design
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - clone and own
   - fork and forget

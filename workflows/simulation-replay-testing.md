@@ -4,6 +4,8 @@ description: "Validate agent prompt changes by replaying past merged tasks in an
 tags:
   - testing-verification
   - tool-agnostic
+  - workflows
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,7 @@ tags:
   - copilot
   - harness-engineering
   - agent-design
+  - training
 last_reviewed: 2026-05-27
 ---
 

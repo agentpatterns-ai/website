@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - memory
+  - instructions
+  - agent-readiness
 aliases:
   - dormant memory payload audit
   - cross-session memory poisoning audit

@@ -6,6 +6,8 @@ tags:
   - observability
   - evals
   - arxiv
+  - tool-agnostic
+  - harness-engineering
 aliases:
   - predict-then-verify harness edits
   - falsifiable harness edits

@@ -155,6 +155,6 @@ The classifier allows file reads, code generation, and writes within the project
 - [Channels Permission Relay](channels-permission-relay.md) — remote approval when the classifier pauses for user input
 - [Managed Settings Drop-in](managed-settings-drop-in.md) — enterprise rollout of `autoMode.environment`
 - [Sub-Agents](sub-agents.md) — classifier coverage of spawned worker agents
-- [Plan Mode](../../workflows/plan-mode.md) — read-only exploration before implementation
+- [Plan Mode](plan-mode.md) — read-only exploration before implementation
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md) — layered safety mechanisms
 - [Blast Radius Containment](../../security/blast-radius-containment.md) — scoping agent permissions and file access

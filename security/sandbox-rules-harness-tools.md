@@ -7,6 +7,8 @@ aliases:
 tags:
   - agent-design
   - human-factors
+  - tool-agnostic
+  - security
 last_reviewed: 2026-05-27
 ---
 

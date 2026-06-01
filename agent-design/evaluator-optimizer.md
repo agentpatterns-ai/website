@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - evals
+  - tool-agnostic
 aliases:
   - generator-critic loop
   - refinement loop
@@ -115,5 +116,5 @@ Each iteration incurs generator + evaluator costs, so N rounds cost roughly 2N×
 - [Agent Self-Review Loop](agent-self-review-loop.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
-- [Controlling Agent Output](controlling-agent-output.md)
+- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)

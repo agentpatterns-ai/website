@@ -9,6 +9,8 @@ tags:
   - context-engineering
   - agent-design
   - code-generation
+  - tool-agnostic
+  - rag
 last_reviewed: 2026-05-27
 ---
 

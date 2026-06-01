@@ -6,6 +6,7 @@ tags:
   - human-factors
   - multi-agent
   - tool-agnostic
+  - agent-design
 aliases:
   - factory model
   - assistant model

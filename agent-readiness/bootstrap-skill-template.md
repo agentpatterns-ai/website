@@ -4,6 +4,8 @@ description: "Generate an opinionated SKILL.md skeleton with frontmatter, descri
 tags:
   - tool-agnostic
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - scaffold SKILL.md
   - skill template generator

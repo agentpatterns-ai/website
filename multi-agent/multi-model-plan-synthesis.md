@@ -8,7 +8,8 @@ tags:
   - agent-design
   - multi-agent
   - cost-performance
-  - workflow
+  - workflows
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
   - technique
   - human-factors
+  - harness-engineering
 aliases:
   - AX stack
   - agent prompt to compile stack

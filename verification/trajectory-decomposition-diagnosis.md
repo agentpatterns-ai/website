@@ -6,6 +6,7 @@ tags:
   - evals
   - observability
   - agent-design
+  - tool-agnostic
 aliases:
   - "trajectory decomposition"
   - "TRAJEVAL"

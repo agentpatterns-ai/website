@@ -4,6 +4,8 @@ description: "Publish a standardized /llms.txt file so AI agents can navigate yo
 tags:
   - workflows
   - context-engineering
+  - tool-agnostic
+  - standards
 last_reviewed: 2026-05-27
 ---
 

@@ -4,6 +4,7 @@ description: "Block agent completion signals with a mandatory verification seque
 tags:
   - agent-design
   - testing-verification
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -141,7 +142,7 @@ Pre-completion checklists introduce risk in several conditions:
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Incremental Verification](incremental-verification.md)
-- [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [TDD for Agent Development](tdd-agent-development.md)
 - [Verification Ledger](verification-ledger.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)

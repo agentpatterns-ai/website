@@ -4,6 +4,8 @@ description: "GitHub Copilot governance controls — agent mode access, model av
 tags:
   - human-factors
   - agent-design
+  - tool-agnostic
+  - workflows
 last_reviewed: 2026-05-27
 ---
 

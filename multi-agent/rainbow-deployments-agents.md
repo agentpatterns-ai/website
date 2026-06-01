@@ -4,6 +4,7 @@ description: "Run multiple agent versions concurrently so old sessions drain nat
 tags:
   - agent-design
   - tool-agnostic
+  - multi-agent
 aliases:
   - rainbow deployment
   - gradual version migration

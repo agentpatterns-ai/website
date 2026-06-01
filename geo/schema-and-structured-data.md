@@ -4,6 +4,7 @@ description: "FAQPage JSON-LD yields measurable citation lifts in AI responses (
 tags:
   - geo
   - workflows
+  - tool-agnostic
 aliases:
   - Schema Markup
   - Structured Data for GEO
@@ -157,7 +158,7 @@ Schema lifts citation rates in aggregate, but fails under specific conditions:
 |------|---------|-----|
 | Google Rich Results Test | Validates Google-supported rich results (Article, BreadcrumbList) | https://search.google.com/test/rich-results |
 | Schema Markup Validator | Validates all schema.org types without Google restrictions | https://validator.schema.org/ |
-| [Google Search Console](../workflows/gsc-search-console-monitoring.md) | Monitors rich result impressions and errors post-deployment | https://search.google.com/search-console |
+| [Google Search Console](gsc-search-console-monitoring.md) | Monitors rich result impressions and errors post-deployment | https://search.google.com/search-console |
 
 Run locally:
 

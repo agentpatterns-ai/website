@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - harness regression detection
   - agent harness eval gaps

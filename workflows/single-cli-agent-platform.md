@@ -101,7 +101,7 @@ A different team — twelve engineers, multi-cloud (AWS Bedrock for one product,
 ## Related
 
 - [Agent Development Lifecycle for Agent Products](../agent-design/agent-development-lifecycle.md) — the four-phase loop the single-CLI surfaces in subcommands
-- [Agentic Framework Landscape: When Each Framework Fits](../agent-design/agentic-framework-landscape.md) — framework primitives the CLI wraps, including ADK and LangGraph
+- [Agentic Framework Landscape: When Each Framework Fits](../frameworks/agentic-framework-landscape.md) — framework primitives the CLI wraps, including ADK and LangGraph
 - [CLI-IDE-GitHub Context Ladder](cli-ide-github-context-ladder.md) — the three-surface model that frames where a lifecycle CLI sits relative to IDE and forge
 - [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md) — the deploy-pipeline shape that consolidated `infra` and `deploy` subcommands automate
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — the self-driving agent loop that benefits most from a stable lifecycle CLI surface

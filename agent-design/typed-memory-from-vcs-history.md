@@ -6,7 +6,7 @@ tags:
   - memory
   - context-engineering
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - typed memory layer for repositories
   - commit-history knowledge distillation

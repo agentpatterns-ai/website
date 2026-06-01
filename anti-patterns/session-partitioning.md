@@ -4,6 +4,8 @@ description: "Mixing unrelated tasks in a single Claude Code session fills the c
 tags:
   - cost-performance
   - context-engineering
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - kitchen sink session
   - session partitioning

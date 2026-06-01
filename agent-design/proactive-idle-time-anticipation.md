@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - memory
+  - arxiv
 aliases:
   - proactive agent prefetching
   - inter-turn idle-time anticipation

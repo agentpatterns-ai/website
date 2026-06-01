@@ -10,6 +10,7 @@ tags:
   - memory
   - context-engineering
   - arxiv
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -4,6 +4,7 @@ description: "Detect existing instruction surfaces, probe for non-discoverable k
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - scaffold AGENTS.md file
   - AGENTS.md generation runbook

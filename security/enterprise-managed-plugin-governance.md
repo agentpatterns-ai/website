@@ -6,6 +6,8 @@ tags:
   - workflows
   - copilot
   - claude
+  - cursor
+tool_scope_exempt: true
 aliases:
   - enterprise-managed plugin standards
   - managed plugin contract

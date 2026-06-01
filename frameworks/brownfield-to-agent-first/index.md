@@ -93,6 +93,6 @@ Score your current codebase to identify your starting level.
 ## Related
 
 - [AI Development Maturity Model](../../workflows/ai-development-maturity-model.md) — the companion model for *developer* maturity (skeptic → agentic); this course covers *codebase* maturity
-- [Codebase Readiness for Agents](../../workflows/codebase-readiness.md) — reference page on what makes code agent-friendly
+- [Codebase Readiness for Agents](../../agent-design/codebase-readiness.md) — reference page on what makes code agent-friendly
 - [Harness Engineering](../../agent-design/harness-engineering.md) — the technical discipline this course applies to brownfield contexts
 - [Structured Agentic Software Engineering](../../agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model this course draws from ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))

@@ -4,6 +4,7 @@ description: "Agents are more susceptible to indirect injection than developers 
 tags:
   - security
   - agent-design
+  - tool-agnostic
 aliases:
   - indirect injection testing
   - indirect prompt injection discovery

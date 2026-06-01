@@ -4,6 +4,7 @@ description: "Run the same critique prompt five times on a plan or spec to force
 tags:
   - testing-verification
   - workflows
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

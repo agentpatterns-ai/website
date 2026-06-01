@@ -3,6 +3,7 @@ title: "About Agent Patterns"
 description: "Editorial stance and inclusion criteria for the Agent Patterns site — what earns a page, what doesn't, and how to suggest one."
 tags:
   - meta
+  - tool-agnostic
 last_reviewed: 2026-05-27
 status: current
 ---

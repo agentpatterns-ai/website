@@ -4,6 +4,8 @@ description: "Embed defense mechanisms into each phase of the agent execution li
 tags:
   - security
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - SafeHarness
   - lifecycle security

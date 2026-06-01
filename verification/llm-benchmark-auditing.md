@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
+  - arxiv
 aliases:
   - benchmark auditing
   - automated benchmark review

@@ -4,6 +4,7 @@ description: "Symphony is OpenAI's open specification for orchestrating coding a
 tags:
   - multi-agent
   - tool-agnostic
+  - standards
 aliases:
   - Symphony spec
   - OpenAI Symphony
