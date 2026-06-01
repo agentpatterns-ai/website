@@ -4,6 +4,8 @@ description: "Restrict subagent capabilities by filtering their tool schemas —
 tags:
   - agent-design
   - source:opendev-paper
+  - tool-agnostic
+  - multi-agent
 aliases:
   - Tool Calling Schema Standards
   - Tool Minimalism
@@ -130,4 +132,4 @@ Schema filtering adds structural rigidity — when it fails to match the actual 
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
-- [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)

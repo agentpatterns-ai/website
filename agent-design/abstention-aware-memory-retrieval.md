@@ -5,6 +5,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
+  - arxiv
 aliases:
   - selective memory injection
   - risk-sensitive memory controller

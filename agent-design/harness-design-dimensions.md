@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - harness-engineering
+  - arxiv
 aliases:
   - agent harness design dimensions
   - agent-system archetypes

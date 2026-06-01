@@ -70,5 +70,5 @@ The grey literature review found 11% of practitioners abandoned projects when AI
 - [Developer Attention Management with Parallel Agents](attention-management-parallel-agents.md) — managing attention across concurrent agent sessions
 - [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — how friction shifts from coding to supervision
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — deliberate control patterns that counter compulsive loops
-- [Vibe Coding](../workflows/vibe-coding.md)
+- [Vibe Coding](../anti-patterns/vibe-coding.md)
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — addictive flow accelerating the builder/coder identity fracture

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - observability
   - arxiv
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

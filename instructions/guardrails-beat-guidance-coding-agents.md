@@ -4,6 +4,7 @@ description: "On SWE-bench, negative constraints are the only individually benef
 tags:
   - instructions
   - context-engineering
+  - tool-agnostic
 aliases:
   - Guardrails Over Guidance
   - Negative Rules for Coding Agents

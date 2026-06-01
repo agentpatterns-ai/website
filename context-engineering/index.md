@@ -39,15 +39,18 @@ Strategies for fitting more useful content into less space, and for making repea
 
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly
 - [Context Compression Strategies](context-compression-strategies.md) — Long-running agents accumulate context that eventually fills the window; tiered compression — offloading large payloads and summarising history — lets agents continue working without losing task continuity
+- [Selective Rewind Summarization](selective-rewind-summarization.md) — A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Prompt Cache Economics](prompt-cache-economics.md) — Prompt caching discounts range from 50% to 90% depending on the provider, but each has different activation rules, TTLs, and hidden costs
 - [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint that shapes how you compose, extend, and compact agent context, not as an optimization you toggle on after the fact
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
+- [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — Move per-machine context (cwd, OS, shell, memory paths) out of the Claude Code system prompt so identical fleet configurations share one prompt-cache entry across users and machines
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
 - [Token-Efficient Code Generation](token-efficient-code-generation.md) — Reduce token cost of AI-generated code through idiomatic syntax patterns and structural optimization rather than prompt-level efficiency instructions
 - [Semantic Density Optimization](semantic-density-optimization.md) — Maximize task-relevant tokens in a codebase by eliminating zero-information ceremony while preserving naming, documentation, and commit context that agents cannot reconstruct without inference cost
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — When a model upgrade ships a new tokenizer, the same prompt maps to more tokens; effective cost, context window headroom, and rate limits all shift before you change a line of code
+- [Validating Token-Optimized Formats Inside Agentic Loops](validate-token-optimized-formats-in-agentic-loops.md) — Switching tool schemas from JSON to TOON or TRON saves up to 27% tokens but regresses accuracy by 9-14 percentage points in end-to-end agentic loops; input-side and output-side compression carry different risk
 
 ## Assembly & Composition
 
@@ -68,6 +71,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Context Hub](context-hub.md) — Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data snapshots
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — Pull context into the agent at the moment it is needed rather than preloading it at session start
 - [Live Browser as Agent Context Channel](live-browser-context-channel.md) — Subscribe an agent to the developer's running browser tabs as live context — lower friction than copy-paste, but the developer's logged-in session enters the indirect-injection blast radius
+- [Frontmost-Window Snapshot as Agent Context](frontmost-window-snapshot-context.md) — Bind one hotkey to send the active app window — rendered screenshot plus accessibility-tree text — as a single context unit; the richer payload changes which cross-app handoffs are plausible to delegate
 - [Repository Map Pattern](repository-map-pattern.md) — Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget
 - [Semantic Context Loading](semantic-context-loading.md) — Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files
 - [Seeding Agent Context](seeding-agent-context.md) — Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour

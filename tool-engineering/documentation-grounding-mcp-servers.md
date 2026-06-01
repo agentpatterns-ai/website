@@ -1,0 +1,109 @@
+---
+title: "Documentation-Grounding MCP Servers for Vendor SDKs"
+description: "Wire a vendor-operated MCP server with a search_documentation tool to ground agent code generation in current docs — the deprecated-API and hallucinated-API failure mode the pattern addresses, the conditions under which it beats the cheaper llms.txt alternative, and where it backfires."
+aliases:
+  - vendor documentation MCP servers
+  - docs-grounding MCP pattern
+tags:
+  - tool-engineering
+  - context-engineering
+  - tool-agnostic
+last_reviewed: 2026-05-31
+---
+
+# Documentation-Grounding MCP Servers for Vendor SDKs
+
+> Vendor-operated MCP servers expose live documentation to coding agents — preventing deprecated-API generation when SDK churn outruns model retraining.
+
+## When This Pattern Applies
+
+A documentation-grounding MCP server is the right choice when **four conditions hold simultaneously**:
+
+1. **The SDK moves faster than the model's retraining cadence.** Fast-moving cloud SDKs and recent framework majors are the target. Stable APIs do not need it.
+2. **The vendor publishes a live MCP endpoint over its documentation corpus.** Microsoft Learn exposes `https://learn.microsoft.com/api/mcp`; Google Pay & Wallet exposes `https://paydeveloper.googleapis.com/mcp`; Kestra exposes `https://api.kestra.io/v1/mcp` ([Microsoft Developer blog](https://developer.microsoft.com/blog/improve-your-agentic-developer-tools-by-grounding-in-microsoft-learn), [Kestra blog](https://kestra.io/blogs/kestra-mcp-docs)).
+3. **The agent's token budget has headroom for one more eager-loaded or JIT-deferred server.** Eager-loading a docs MCP that goes unused on most turns burns prefix tokens every turn; the [`alwaysLoad` decision rubric](mcp-eager-vs-jit-loading.md) applies directly.
+4. **The principal is not already trifecta-exposed.** Adding a doc-grounding MCP can supply the "untrusted content" leg of the lethal trifecta — vendor docs are technically untrusted content under indirect-prompt-injection threat models. Validate against the existing trifecta posture before wiring.
+
+When any of the four fails, a curated `llms.txt` pointer plus `WebFetch` of the canonical URL is the cheaper, lower-attack-surface alternative.
+
+## The Failure Mode the Pattern Addresses
+
+Training-cutoff lag produces code targeting **deprecated APIs or hallucinated APIs that never existed**. Microsoft's writeup demonstrates the failure with a concrete trace: without grounding, an agent chose deprecated `az ml`, hit dependency crashes, required 15+ debugging steps, and produced code for a retired API surface; with Learn MCP it found current docs and used `az cognitiveservices` on the first attempt ([Microsoft Developer blog](https://developer.microsoft.com/blog/improve-your-agentic-developer-tools-by-grounding-in-microsoft-learn)).
+
+This is distinct from the [internal-repo stale-RAG failure mode](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) — same shape (retrieval surfaces obsolete signatures), different source layer (vendor docs versus the user's repo).
+
+## Why It Works
+
+The pattern shifts the agent from **parametric recall** (what the model memorised at training) to **retrieval-augmented generation against a vendor-maintained index rebuilt faster than model retraining**. With a current index supplying in-context exemplars, standard in-context-learning behaviour follows the fresher examples instead of obsolete signatures encoded in parametric weights — and when grounding is absent, the model "either asks for help or guesses based on similar technologies" ([Microsoft Developer blog](https://developer.microsoft.com/blog/how-ai-coding-agents-actually-use-your-technology)).
+
+This is the same mechanism observed in the *opposite* direction for stale RAG over code: when current evidence is present alongside stale evidence, the model preferentially follows the current exemplar ([Weng et al., 2026](https://arxiv.org/abs/2605.14478)). The doc-grounding MCP pattern deliberately engineers the "current evidence present" condition for the vendor-docs layer.
+
+## The Convergent Shape
+
+Three vendors shipped the same shape within weeks of each other in mid-2026, signalling a sectoral pattern rather than a single-tool feature:
+
+| Vendor | Endpoint | Doc-grounding tool | Auth |
+|--------|----------|--------------------|------|
+| Microsoft Learn | `https://learn.microsoft.com/api/mcp` | `microsoftdocs/mcp` plugin search | None |
+| Google Pay & Wallet | `https://paydeveloper.googleapis.com/mcp` | `search_documentation` (RAG) | None for docs; OAuth for account context |
+| Kestra | `https://api.kestra.io/v1/mcp` | `search_docs`, `get_doc`, `list_doc_children` | None |
+
+The shape is consistent: **remote HTTP MCP, no install, no auth for the read-only docs corpus, account-context tools layered behind auth when present**. Account-context tools (status, integration management, performance metrics in Google Pay's case) are deliberately separated from the read-only doc surface so a token-budget-conscious team can wire only the docs leg.
+
+## When This Backfires
+
+- **Slow-moving APIs with stable URLs.** For libraries whose docs change once a quarter — Postgres, stdlib, well-aged frameworks — `WebFetch` of the canonical URL is cheaper than running a docs MCP and the freshness benefit is negligible. A `llms.txt` pointer covers this case without the operational cost.
+- **Token-budget-constrained agents.** Eagerly loading a docs MCP with even a small tool surface adds prefix tokens every turn whether the tool is invoked or not. A modest five-server MCP setup with 58 tools consumed ~55K tokens before any conversation started ([Anthropic tool search docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)); a sixth doc-grounding server used on 15% of turns rarely earns that tax. JIT-loading via [`alwaysLoad: false`](mcp-eager-vs-jit-loading.md) mitigates but requires search descriptions that match the agent's natural-language phrasing.
+- **The doc MCP is itself stale.** Upstash Context7 — the most-cited third-party doc-grounding MCP — has shipped failures detecting the latest Spring Boot release, reporting an outdated version as the "latest" ([Context7 issue #664](https://github.com/upstash/context7/issues/664)). A doc-grounding MCP is only as fresh as its index rebuild cadence; if the vendor rebuilds nightly against a fast-moving SDK, the MCP can still serve last-week's API surface.
+- **Retrieval is the dominant failure mode in MCP agents.** LiveMCPBench finds retrieval errors account for **nearly half of all failures** in MCP agent tasks across diverse tool sets ([Mo et al., 2026](https://arxiv.org/abs/2508.01780)). A doc-grounding MCP server is itself subject to retrieval failure if its tool descriptions don't match the agent's queries.
+- **Lethal-trifecta-sensitive principals.** Adding a doc-grounding MCP gives a sub-agent the "untrusted content" leg of the trifecta — Retrieval-Agent Deception (RADE) is a documented attack class where adversaries plant malicious instructions in external sources knowing the agent will read them ([Snyk Labs: Prompt Injection meets MCP](https://labs.snyk.io/resources/prompt-injection-mcp/)). Combined with private-data Read and egress write, this can close the trifecta on principals that today look benign. Run [`agent-readiness-audit-lethal-trifecta`](../agent-readiness/audit-lethal-trifecta.md) before wiring on any principal that holds the other two legs.
+- **Air-gapped or compliance-restricted environments.** The pattern depends on outbound HTTP to a vendor endpoint. Regulated environments without egress to `learn.microsoft.com` or `paydeveloper.googleapis.com` need a self-hosted mirror of the docs corpus, not the vendor's MCP.
+
+## Distinguishing Doc-Grounding MCP from Adjacent Patterns
+
+| Pattern | Source | Failure mode addressed |
+|---------|--------|-----------------------|
+| **Doc-grounding MCP** (this page) | Vendor's live docs corpus | Deprecated/hallucinated API calls from training-cutoff lag |
+| [Stale Repository Retrieval](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) | The user's own codebase index | Internal helpers refactored faster than index rebuild |
+| [Repository-Level Retrieval](../context-engineering/repository-level-retrieval-code-generation.md) | The user's own codebase | Generating code without project conventions |
+| [Context Hub](../context-engineering/context-hub.md) | Versioned internal API docs | Calling internal APIs at the wrong major version |
+
+Doc-grounding MCP is the *vendor-docs* analogue of co-retrieving current declarations — the remedy Weng et al. validated for internal-repo stale RAG ([Weng et al., 2026](https://arxiv.org/abs/2605.14478)).
+
+## Example
+
+A team writing Azure deployment scripts wires Microsoft Learn MCP into Claude Code as an eager-loaded server because Azure SDK churn is high and the team hits it on most sessions, then wires Kestra's docs MCP behind tool-search deferral because they use Kestra workflows on only ~15% of sessions.
+
+```json
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "alwaysLoad": true
+    },
+    "kestra": {
+      "type": "http",
+      "url": "https://api.kestra.io/v1/mcp"
+    }
+  }
+}
+```
+
+Microsoft Learn sits in the prefix every turn so Azure-related prompts can retrieve current API guidance without a discovery round-trip. Kestra loads only when the model issues a tool search for "kestra flow" or "trigger schema" — paying the round-trip on the rare turns those capabilities are needed instead of the eager token tax on every turn. The `alwaysLoad` flag is the server-level switch documented in the [eager-vs-JIT classification rubric](mcp-eager-vs-jit-loading.md).
+
+## Key Takeaways
+
+- Documentation-grounding MCP servers address a specific failure mode — deprecated or hallucinated APIs from training-cutoff lag — not a generic retrieval gap.
+- Three vendors (Microsoft Learn, Google Pay & Wallet, Kestra) shipped the same shape — remote HTTP MCP, no auth for read-only docs, optional account-context tools behind OAuth — in mid-2026, marking the pattern as sectoral rather than vendor-specific.
+- The pattern is **Qualified**: choose it only when the SDK moves faster than retraining, the vendor publishes the endpoint, the token budget has headroom, and the principal is not already trifecta-exposed. Otherwise, `llms.txt` plus `WebFetch` is cheaper and lower-attack-surface.
+- Retrieval is the dominant MCP failure mode (~50% of LiveMCPBench failures) and doc-grounding MCPs are not exempt — Context7's Spring Boot staleness shows that the vendor's index rebuild cadence is the real freshness ceiling.
+- Adding a doc-grounding MCP can supply the "untrusted content" leg of the lethal trifecta — audit before wiring on a principal that already holds private-data Read and egress.
+
+## Related
+
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md) — the per-server load decision once you have a doc-grounding MCP wired
+- [Production MCP Agent Stack](production-mcp-agent-stack.md) — sequencing six MCP decisions into a coherent deployment
+- [Stale Repository Retrieval Induces Incorrect Code](../context-engineering/stale-repository-retrieval-induces-incorrect-code.md) — the internal-repo analogue of the failure mode this pattern addresses
+- [Context Hub](../context-engineering/context-hub.md) — versioned API documentation retrieval; the internal-docs analogue of doc-grounding MCP
+- [MCP Server Design](mcp-server-design.md) — the server author's checklist if you are building rather than consuming a doc-grounding MCP

@@ -5,6 +5,7 @@ tags:
   - human-factors
   - agent-design
   - multi-agent
+  - tool-agnostic
 aliases:
   - "attention management"
   - "CPU scheduler metaphor"
@@ -101,7 +102,7 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md)
 - [The Delegation Decision](../agent-design/delegation-decision.md)
 - [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Distributed Computing Parallels in Agent Architecture](distributed-computing-parallels.md)
+- [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md)

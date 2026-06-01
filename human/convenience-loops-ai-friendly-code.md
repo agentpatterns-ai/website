@@ -7,6 +7,8 @@ aliases:
   - positive feedback loop
 tags:
   - context-engineering
+  - tool-agnostic
+  - human-factors
 last_reviewed: 2026-05-27
 ---
 
@@ -105,11 +107,11 @@ The convenience loop does not apply uniformly:
 
 ## Related
 
-- [Codebase Readiness for Agents](../workflows/codebase-readiness.md)
+- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md)
 - [Agent Backpressure](../agent-design/agent-backpressure.md)
 - [Specification as Prompt](../instructions/specification-as-prompt.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
 - [Process Amplification](process-amplification.md)
 - [Rigor Relocation](rigor-relocation.md)
 - [Cross-Tool Translation](cross-tool-translation.md)
-- [Domain-Specific Agent Challenges](domain-specific-agent-challenges.md)
+- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md)

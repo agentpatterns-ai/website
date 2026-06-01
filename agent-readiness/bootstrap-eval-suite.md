@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - evals
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - scaffold eval suite
   - evaluation harness bootstrap

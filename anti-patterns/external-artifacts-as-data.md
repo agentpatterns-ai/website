@@ -3,7 +3,7 @@ title: "External Artifacts Treated as Data, Not Adversarial Input"
 description: "Every external artifact crossing an agent's read boundary is a remote command-execution channel; treating READMEs, packages, and fetched pages as benign data is the developer mental-model failure."
 tags:
   - security
-  - anti-patterns
+  - anti-pattern
   - agent-design
   - tool-agnostic
 aliases:

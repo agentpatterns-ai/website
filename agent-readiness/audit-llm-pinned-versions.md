@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - dependencies
+  - instructions
+  - agent-readiness
 aliases:
   - LLM pinned vulnerable versions audit
   - agent dependency CVE audit

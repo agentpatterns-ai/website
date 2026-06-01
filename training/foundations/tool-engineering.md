@@ -77,7 +77,7 @@ When agents exchange data -- with other agents, with tool servers, with downstre
 
 The fix is the same discipline applied to microservice APIs: typed interfaces for data contracts, discriminated unions for action contracts, and runtime validation that rejects invalid payloads before they propagate.
 
-MCP adds a runtime enforcement layer by defining input and output schemas on tool definitions. Agents cannot invent fields, omit required inputs, or drift across interfaces when the schema is validated before execution. Treat schema violations like contract failures: retry, repair, or escalate. See [Typed Schemas at Agent Boundaries](../../tool-engineering/typed-schemas-at-agent-boundaries.md).
+MCP adds a runtime enforcement layer by defining input and output schemas on tool definitions. Agents cannot invent fields, omit required inputs, or drift across interfaces when the schema is validated before execution. Treat schema violations like contract failures: retry, repair, or escalate. See [Typed Schemas at Agent Boundaries](../../multi-agent/typed-schemas-at-agent-boundaries.md).
 
 ---
 
@@ -125,7 +125,7 @@ The highest-signal content in any skill is the Gotchas section: cases where the 
 - [Poka-Yoke for Agent Tools](../../tool-engineering/poka-yoke-agent-tools.md) -- structural mistake-proofing
 - [Consolidate Agent Tools](../../tool-engineering/consolidate-agent-tools.md) -- reducing surface area
 - [Semantic Tool Output](../../tool-engineering/semantic-tool-output.md) -- agent-readable output design
-- [Typed Schemas at Agent Boundaries](../../tool-engineering/typed-schemas-at-agent-boundaries.md) -- contracts for multi-agent handoffs
+- [Typed Schemas at Agent Boundaries](../../multi-agent/typed-schemas-at-agent-boundaries.md) -- contracts for multi-agent handoffs
 - [MCP Client/Server Architecture](../../tool-engineering/mcp-client-server-architecture.md) -- transport, errors, security
 - [Skill Authoring Patterns](../../tool-engineering/skill-authoring-patterns.md) -- building reusable agent skills
 

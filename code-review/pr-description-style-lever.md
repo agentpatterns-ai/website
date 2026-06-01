@@ -4,6 +4,9 @@ description: "PR description structure is a configurable agent parameter that me
 tags:
   - workflows
   - human-factors
+  - tool-agnostic
+  - code-review
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 

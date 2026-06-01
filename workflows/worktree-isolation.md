@@ -3,6 +3,8 @@ title: "Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes"
 description: "Run each agent in its own git worktree — an isolated repo copy on a separate branch — so agents can't interfere with each other or with the main branch."
 tags:
   - agent-design
+  - tool-agnostic
+  - workflows
 aliases:
   - "Parallel Agent Infrastructure"
   - "Multi-Agent Parallelism"
@@ -122,4 +124,4 @@ Each agent operates in its own directory. If `add-audit-log` fails, its worktree
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Single-Branch Git for Agent Swarms](single-branch-git-agent-swarms.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Sparse Paths Monorepo Isolation](sparse-paths-monorepo-isolation.md)
+- [Sparse Paths Monorepo Isolation](../tools/claude/sparse-paths-monorepo-isolation.md)

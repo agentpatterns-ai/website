@@ -6,6 +6,7 @@ tags:
   - anti-pattern
   - tool-agnostic
   - cost-performance
+  - arxiv
 aliases:
   - cross-component interference
   - maximally-equipped agent fallacy

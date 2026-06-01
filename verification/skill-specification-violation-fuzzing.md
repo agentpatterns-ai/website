@@ -6,6 +6,7 @@ tags:
   - evals
   - security
   - tool-agnostic
+  - arxiv
 aliases:
   - semantic fuzzing for agent skills
   - skill guardrail violation discovery

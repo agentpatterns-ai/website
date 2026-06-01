@@ -4,6 +4,8 @@ description: "Skill-augmented agents lose most of their performance advantage as
 tags:
   - evals
   - tool-agnostic
+  - testing-verification
+  - arxiv
 aliases:
   - skill retrieval degradation
   - agentic skill benchmarking

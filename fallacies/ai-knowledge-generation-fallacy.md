@@ -4,6 +4,7 @@ description: "The belief that AI generates genuinely new information leads teams
 tags:
   - human-factors
   - tool-agnostic
+  - fallacies
 aliases:
   - AI generates new knowledge
   - LLM knowledge generation fallacy

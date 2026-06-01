@@ -51,7 +51,7 @@ Agent autonomy scales directly with backpressure quality in the codebase -- not 
 
 A codebase with strict types, comprehensive tests, and enforced linting enables agents to iterate autonomously through a write-check-fix loop. A codebase with no types, no tests, and no linting means every agent output requires manual review -- you become the feedback loop.
 
-These investments compound: they benefit both agents and human developers. Adding types, writing tests, and documenting decisions are not agent-specific investments ([Codebase Readiness](../../workflows/codebase-readiness.md)).
+These investments compound: they benefit both agents and human developers. Adding types, writing tests, and documenting decisions are not agent-specific investments ([Codebase Readiness](../../agent-design/codebase-readiness.md)).
 
 ---
 
@@ -61,7 +61,7 @@ Prompt instructions are probabilistic. Under task pressure -- context window fil
 
 Hooks and linters are deterministic. A pre-commit hook runs outside the agent's context window; the model cannot overrule it.
 
-The decision rule from [Hooks for Enforcement vs Prompts for Guidance](../../verification/hooks-vs-prompts.md):
+The decision rule from [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md):
 
 - **Use hooks** when compliance is non-negotiable, the rule is binary, and the behavior has a strong opposing prior in training data.
 - **Use prompts** when the guidance is contextual, requires model judgment, or depends on factors a hook cannot inspect.
@@ -217,8 +217,8 @@ The threshold: invest in harness once the cost of manual review across repeated 
 - [Agent Backpressure](../../agent-design/agent-backpressure.md) -- automated feedback loops and the autonomy spectrum
 - [Convergence Detection](../../agent-design/convergence-detection.md) -- three-signal model for knowing when to stop
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) -- verification gates before task completion
-- [Hooks for Enforcement vs Prompts for Guidance](../../verification/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
-- [Codebase Readiness](../../workflows/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
+- [Codebase Readiness](../../agent-design/codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
 - [Entropy Reduction Agents](../../workflows/entropy-reduction-agents.md) -- scheduled background agents for codebase hygiene
 - [Rigor Relocation](../../human/rigor-relocation.md) -- engineering discipline relocates from code to scaffolding
 - [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md) -- progress files and git commits as a filesystem-based audit trail

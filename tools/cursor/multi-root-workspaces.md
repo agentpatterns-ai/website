@@ -30,7 +30,7 @@ Use multi-root when one semantic intent fragments across repos — for example, 
 | Repos share schemas/types/contracts being edited together | Repos are coupled only by deployment |
 | Review wants one coherent diff narrative | Reviewers prefer narrow per-repo PRs |
 
-For narrow work inside one service of a monorepo, the opposite isolation usually wins — see [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../../workflows/sparse-paths-monorepo-isolation.md).
+For narrow work inside one service of a monorepo, the opposite isolation usually wins — see [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md).
 
 ## Instruction-File Scoping Across Roots
 
@@ -65,7 +65,7 @@ So composition is partial: `/multitask` fans steps across the roots in one sessi
 
 - **Filename and symbol collisions.** Two repos with `auth.py`, `User`, or `package.json` force per-retrieval disambiguation. Multi-root inflates the collision surface.
 - **Asymmetric build/test commands.** Cursor's published rule precedence does not specify how Project Rules from each root combine inside one session ([Cursor docs — Rules](https://cursor.com/docs/context/rules)) — drift between root tooling lands on the agent.
-- **Single-repo work inside a monorepo.** Per [sparse-paths monorepo isolation](../../workflows/sparse-paths-monorepo-isolation.md), narrow service refactors benefit from *less* surface, not more.
+- **Single-repo work inside a monorepo.** Per [sparse-paths monorepo isolation](../claude/sparse-paths-monorepo-isolation.md), narrow service refactors benefit from *less* surface, not more.
 - **Sensitive credential boundaries.** A session reading both a credential-bearing repo and an open-source repo widens blast radius. VS Code's per-folder settings cover only resource settings ([VS Code multi-root workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)); credential isolation per folder is not a built-in guarantee.
 - **Mixed VCS or read-only mounts.** Multi-root assumes each folder is a usable checkout — mixed Git/Hg or read-only mounts break the symmetry the workspace presents.
 
@@ -76,7 +76,7 @@ If most apply, prefer per-repo agent sessions coordinated via PRs, or a single r
 | Approach | When it fits |
 |---|---|
 | Multi-root workspace | Cross-repo edits sharing one semantic intent |
-| [Sparse-paths worktree](../../workflows/sparse-paths-monorepo-isolation.md) | One service inside a monorepo — restrict, don't expand |
+| [Sparse-paths worktree](../claude/sparse-paths-monorepo-isolation.md) | One service inside a monorepo — restrict, don't expand |
 | [Orchestrator-worker](../../multi-agent/orchestrator-worker.md) | Per-repo agents with a coordinator; narrow per-PR diffs |
 | Monorepo migration | Repos are constantly co-edited and deployment absorbs the merge |
 | [Central repo for shared standards](../../workflows/central-repo-shared-agent-standards.md) | Cross-repo concern is *standards drift*, not co-editing |
@@ -114,7 +114,7 @@ Folder roots are explicit (`frontend`, `backend`, `schema`), so the agent can ad
 - [Cursor 3 Agents Window](agents-window.md)
 - [Cursor /multitask](multitask-subagents.md)
 - [Cursor Self-Hosted Cloud Agents](self-hosted-cloud-agents.md)
-- [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../../workflows/sparse-paths-monorepo-isolation.md)
+- [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md)
 - [Architecting a Central Repo for Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
 - [Encode Project Conventions in Distributed AGENTS.md Files](../../instructions/agents-md-distributed-conventions.md)
 - [Orchestrator-Worker](../../multi-agent/orchestrator-worker.md)

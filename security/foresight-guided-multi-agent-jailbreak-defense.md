@@ -5,6 +5,8 @@ tags:
   - security
   - multi-agent
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - infectious jailbreak defence
   - foresight-guided local purification

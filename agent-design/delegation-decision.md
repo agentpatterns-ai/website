@@ -3,6 +3,7 @@ title: "The Delegation Decision: When to Use an Agent vs Do It Yourself"
 description: "Agent delegation has overhead. Match task characteristics to agent strengths rather than delegating everything or nothing, and factor the review tax into every delegation decision."
 tags:
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

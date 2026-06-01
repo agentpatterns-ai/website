@@ -5,6 +5,7 @@ tags:
   - multi-agent
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - Multi-Agent Performance Optimization
   - System-Wide Optimization Pipeline

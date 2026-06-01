@@ -64,7 +64,7 @@ Opus 4.6 and Sonnet 4.6 support 1M context via the `context-1m-2025-08-07` beta 
 | Variable | Effect | Default |
 |----------|--------|---------|
 | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` | Enable agent teams | Disabled ([settings docs](https://code.claude.com/docs/en/settings)) |
-| `CLAUDE_CODE_PLAN_MODE_REQUIRED` | Auto-set when spawning teammates; flags [Plan Mode](../../workflows/plan-mode.md) read-only | Auto-set |
+| `CLAUDE_CODE_PLAN_MODE_REQUIRED` | Auto-set when spawning teammates; flags [Plan Mode](plan-mode.md) read-only | Auto-set |
 | `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR` | Reset to project dir after each bash command | Not set ([env-vars docs](https://code.claude.com/docs/en/env-vars)) |
 | `ENABLE_LSP_TOOL` | LSP integration: goToDefinition, findReferences, hover, documentSymbol, getDiagnostics | Disabled ([issue #15619](https://github.com/anthropics/claude-code/issues/15619), [ClaudeLog](https://claudelog.com/faqs/what-is-lsp-tool-in-claude-code/)) |
 

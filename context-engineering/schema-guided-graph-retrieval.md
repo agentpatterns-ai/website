@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - tool-agnostic
+  - rag
 aliases:
   - schema-guided GraphRAG
   - typed graph retrieval

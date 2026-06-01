@@ -5,6 +5,7 @@ tags:
   - tool-agnostic
   - instructions
   - context-engineering
+  - agent-readiness
 aliases:
   - critical instruction placement audit
   - primacy recency audit

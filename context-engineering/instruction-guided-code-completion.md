@@ -4,8 +4,9 @@ description: "Code completion models that score well on benchmarks often ignore 
 tags:
   - context-engineering
   - technique
-  - code-completion
+  - code-generation
   - arxiv
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

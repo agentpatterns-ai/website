@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - tool-engineering
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - RFC 9457 audit
   - machine-readable error audit

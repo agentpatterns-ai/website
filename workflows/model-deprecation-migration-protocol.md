@@ -5,6 +5,7 @@ tags:
   - workflows
   - cost-performance
   - tool-agnostic
+  - agent-design
 aliases:
   - model id as dependency
   - model deprecation migration protocol

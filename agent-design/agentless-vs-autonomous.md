@@ -6,6 +6,7 @@ tags:
   - agentless
   - autonomous-agents
   - complexity
+  - tool-agnostic
 aliases:
   - agentless approach
   - simple-first AI

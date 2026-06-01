@@ -4,6 +4,7 @@ description: "Keep AGENTS.md to ~100 lines as a pointer map, put structured know
 tags:
   - context-engineering
   - instructions
+  - tool-agnostic
 aliases:
   - Pointer Map
   - AGENTS.md Content Strategy

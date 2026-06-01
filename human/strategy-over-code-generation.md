@@ -53,7 +53,7 @@ This maps directly to what teams experience with AI agents: adopting rigorous re
 
 The study measures ML projects broadly, not AI coding agents specifically. But the structural relationships apply:
 
-**Strategy failure looks like**: Using an agent to generate code before defining what the code should accomplish. [Vibe coding](../workflows/vibe-coding.md) an entire feature without requirements. Automating the wrong workflow.
+**Strategy failure looks like**: Using an agent to generate code before defining what the code should accomplish. [Vibe coding](../anti-patterns/vibe-coding.md) an entire feature without requirements. Automating the wrong workflow.
 
 **Process without ecosystem looks like**: Requiring code review for every agent PR but having no automated linting, no test suite, and no CI pipeline. The review burden scales with agent output volume.
 
@@ -106,7 +106,7 @@ The second team ships in six weeks. The agent writes the same volume of code, bu
 
 - [Process Amplification](process-amplification.md) — Agents amplify existing practices; this page adds the upstream cause (strategy clarity) that determines what gets amplified
 - [The Bottleneck Migration](bottleneck-migration.md) — Code generation becomes cheap but review becomes expensive; strategy failure is the earlier bottleneck this page addresses
-- [Empowerment Over Automation](../agent-design/empowerment-over-automation.md) — AI should preserve human judgment; this page provides empirical evidence for why that judgment (strategy) matters most
+- [Empowerment Over Automation](empowerment-over-automation.md) — AI should preserve human judgment; this page provides empirical evidence for why that judgment (strategy) matters most
 - [Effortless AI Fallacy](../anti-patterns/effortless-ai-fallacy.md) — Expecting AI tools to work without effort; the ML Canvas shows effort must be directed at strategy, not just prompting
 - [Rigor Relocation](rigor-relocation.md) — Effort shifts from writing to verification; the cascade model shows where that relocated effort should be directed
 - [PM on the AI Exponential](pm-on-the-ai-exponential.md) — How product managers adapt to AI-driven development velocity; the cascade model shows which strategic decisions remain human-owned

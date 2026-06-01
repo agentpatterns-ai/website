@@ -48,7 +48,7 @@ For each model release, re-sort the task inventory across three buckets. Items s
 |---|---|---|
 | **Never delegate** | A comparable open benchmark moves, or a credible case study reports success on adjacent work | Observation, not trial |
 | **Trial delegate** | Internal pilot on a single task shows end-to-end completion with review-worthy output | One or more scoped runs |
-| **Routine delegate** | Pilot metrics (defect rate, intervention rate) match or beat existing routine work | Instrumented baseline from [Empirical Baseline](empirical-baseline-agentic-config.md) |
+| **Routine delegate** | Pilot metrics (defect rate, intervention rate) match or beat existing routine work | Instrumented baseline from [Empirical Baseline](../instructions/empirical-baseline-agentic-config.md) |
 
 The practice, from Anthropic's PM playbook: "deliberately ask [the model] to do things you think are too hard. When they succeed, that's a signal the product needs to catch up" ([Wu, 2026](https://claude.com/blog/product-management-on-the-ai-exponential)). Side quests and short-cycle pilots cost an afternoon; holding a multi-quarter plan on stale assumptions costs more.
 
@@ -98,7 +98,7 @@ The captured gain is not a 30% speedup on old work — it is a new category of t
 - [PM on the AI Exponential](pm-on-the-ai-exponential.md) — Product-level response to capability step changes; side quests and release-triggered feature revisits
 - [The Bottleneck Migration](bottleneck-migration.md) — The review-side counterpart to ambition scaling on the supply side
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — Ambition without upstream strategy amplifies the wrong goal
-- [Empirical Baseline for Agentic Config](empirical-baseline-agentic-config.md) — Instrumented baseline needed to justify moving tasks between buckets
+- [Empirical Baseline for Agentic Config](../instructions/empirical-baseline-agentic-config.md) — Instrumented baseline needed to justify moving tasks between buckets
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — What accumulates when ambition outruns review
 - [Rigor Relocation](rigor-relocation.md) — Harness and verification effort must scale with ambition
 - [Process Amplification](process-amplification.md) — Agents amplify whatever process they land in, including ambition decisions

@@ -4,6 +4,8 @@ description: "Enumerate tool and MCP server descriptions, score each on trigger 
 tags:
   - tool-agnostic
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - tool description audit
   - MCP description quality check

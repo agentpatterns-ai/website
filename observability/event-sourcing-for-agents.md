@@ -5,6 +5,8 @@ tags:
   - agent-design
   - testing-verification
   - multi-agent
+  - tool-agnostic
+  - observability
 aliases:
   - ESAA
   - Event Sourcing for Autonomous Agents

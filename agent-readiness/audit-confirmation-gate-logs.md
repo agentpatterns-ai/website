@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - human-factors
+  - instructions
+  - agent-readiness
 aliases:
   - confirmation gate audit
   - human-in-the-loop gate audit

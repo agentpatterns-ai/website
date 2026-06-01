@@ -6,6 +6,7 @@ tags:
   - human-factors
   - multi-agent
   - cursor
+  - agent-design
 aliases:
   - tiled agent panes
   - agent pane layout

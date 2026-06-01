@@ -6,6 +6,8 @@ tags:
   - evals
   - security
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - decomposed red-teaming
   - semi-automated monitor red-teaming

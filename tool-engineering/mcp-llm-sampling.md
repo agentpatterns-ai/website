@@ -4,6 +4,7 @@ description: "How MCP servers use sampling/createMessage to request host LLM inf
 tags:
   - tool-engineering
   - copilot
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

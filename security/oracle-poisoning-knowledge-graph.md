@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-engineering
+  - tool-agnostic
 aliases:
   - knowledge graph poisoning
   - oracle poisoning attack

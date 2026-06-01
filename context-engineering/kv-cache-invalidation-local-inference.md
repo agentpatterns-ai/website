@@ -3,6 +3,8 @@ title: "Disable Attribution Headers to Preserve KV Cache in Local Inference"
 description: "When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference"
 tags:
   - cost-performance
+  - tool-agnostic
+  - context-engineering
 aliases:
   - KV cache invalidation
   - attribution header cache break

@@ -7,6 +7,8 @@ aliases:
 tags:
   - workflows
   - human-factors
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

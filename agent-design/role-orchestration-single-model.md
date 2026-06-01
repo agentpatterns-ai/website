@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - cost-performance
   - arxiv
+  - tool-agnostic
 aliases:
   - three-roles-one-model
   - single-model multi-role scaffolding

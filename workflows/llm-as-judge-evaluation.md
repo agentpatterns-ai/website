@@ -4,6 +4,8 @@ description: "Combine automated LLM rubric scoring with targeted human review to
 tags:
   - testing-verification
   - tool-agnostic
+  - workflows
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

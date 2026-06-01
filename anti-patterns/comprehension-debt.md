@@ -108,7 +108,7 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 
 - [Skill Atrophy](../human/skill-atrophy.md) -- cumulative capability loss from reduced practice, the individual-skill pole of this problem
 - [Cognitive Load & AI Fatigue](../human/cognitive-load-ai-fatigue.md) -- temporary exhaustion during AI use, distinct from cumulative understanding gaps
-- [Vibe Coding](../workflows/vibe-coding.md) -- the workflow pattern where comprehension debt accumulates fastest
+- [Vibe Coding](vibe-coding.md) -- the workflow pattern where comprehension debt accumulates fastest
 - [Trust Without Verify](trust-without-verify.md) -- accepting agent output as correct because it looks polished
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) -- the belief that AI should require less engagement, which accelerates debt accumulation
 - [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt

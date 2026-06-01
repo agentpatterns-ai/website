@@ -140,4 +140,4 @@ For fail-closed denial when policy is unreachable, use an out-of-process gateway
 - [MCP Client Design: Building Robust Host-Side Logic](mcp-client-design.md)
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](../security/mcp-runtime-control-plane.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)

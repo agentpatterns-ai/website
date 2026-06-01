@@ -5,6 +5,8 @@ tags:
   - agent-design
   - security
   - instructions
+  - tool-agnostic
+  - arxiv
 aliases:
   - prompt injection defense
   - injection-resistant agents

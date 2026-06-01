@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - narrative reformulation prompting
   - storycoder narrative prompting

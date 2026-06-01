@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - dual budget control
   - inference-time budget control for search agents

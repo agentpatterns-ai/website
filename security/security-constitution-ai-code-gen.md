@@ -5,6 +5,7 @@ tags:
   - security
   - instructions
   - source:marri-constitutional-spec
+  - tool-agnostic
 aliases:
   - security constitution
   - constitutional spec-driven development

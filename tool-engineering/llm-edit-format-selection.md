@@ -7,6 +7,7 @@ aliases:
 tags:
   - tool-engineering
   - cost-performance
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -99,7 +100,7 @@ Search-replace is the practical choice for a frontier API model on this file. Be
 
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md)
-- [Next Edit Suggestions](next-edit-suggestions.md)
+- [Next Edit Suggestions](../tools/copilot/next-edit-suggestions.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)

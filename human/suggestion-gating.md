@@ -5,6 +5,7 @@ tags:
   - human-factors
   - pattern
   - tool-agnostic
+  - arxiv
 aliases:
   - suggestion filtering
   - completion gating
@@ -64,7 +65,7 @@ As of 2022, Copilot used a logistic regression with 11 features to decide when t
 
 ### GitHub NES: custom model suppression
 
-NES independently converged on the same principle: [24.5% fewer suggestions, 26.5% higher acceptance](../tool-engineering/next-edit-suggestions.md).
+NES independently converged on the same principle: [24.5% fewer suggestions, 26.5% higher acceptance](../tools/copilot/next-edit-suggestions.md).
 
 ## What the Classifiers See
 
@@ -112,9 +113,9 @@ When gating degrades DX, the fix is exposure controls: loosen the filter, accumu
 ## Related
 
 - [Signal Over Volume in AI Review](../code-review/signal-over-volume-in-ai-review.md) — the same principle applied to code review: silence when confidence is low
-- [Next Edit Suggestions Paradigm](../tool-engineering/next-edit-suggestions.md) — GitHub's NES model independently validates the "fewer but better" approach
+- [Next Edit Suggestions Paradigm](../tools/copilot/next-edit-suggestions.md) — GitHub's NES model independently validates the "fewer but better" approach
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — every dismissed suggestion adds to judgment fatigue
-- [Safe Command Allowlisting](safe-command-allowlisting.md) — a parallel gating pattern for agent permissions rather than completions
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) — a parallel gating pattern for agent permissions rather than completions
 - [Agent Backpressure](../agent-design/agent-backpressure.md) — rate-limiting agent output to match developer processing capacity
 - [Attention Management with Parallel Agents](attention-management-parallel-agents.md) — managing completion fatigue when multiple agents compete for developer focus
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — acceptance rate as a signal for shifting autonomy levels

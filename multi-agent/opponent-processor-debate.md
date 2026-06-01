@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Opponent Processor / Multi-Agent Debate Pattern"
 description: "Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision."
@@ -6,11 +5,14 @@ tags:
   - multi-agent
   - agent-design
   - cost-performance
+  - tool-agnostic
 aliases:
   - multi-agent debate
   - opponent processor
   - adversarial debate pattern
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 # Opponent Processor / Multi-Agent Debate
 
 > Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize the result.

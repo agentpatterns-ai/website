@@ -4,6 +4,8 @@ description: "CRDT-based shared state lets parallel coding agents converge witho
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - multi-agent
 aliases:
   - CRDT-based agent coordination
   - observation-driven coordination

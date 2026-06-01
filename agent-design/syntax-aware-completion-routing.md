@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - syntax-confidence routing
   - SynConfRoute pattern

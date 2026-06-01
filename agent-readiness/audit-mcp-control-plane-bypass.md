@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - observability
+  - instructions
+  - agent-readiness
 aliases:
   - off-protocol egress audit
   - mcp gateway bypass audit

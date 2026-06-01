@@ -5,6 +5,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 
@@ -60,7 +61,7 @@ The exit: provide the relevant file, describe what the current structure is, sta
 
 ## Related
 
-- [Vibe Coding](../workflows/vibe-coding.md) — Accepting AI-generated code without structural review
+- [Vibe Coding](vibe-coding.md) — Accepting AI-generated code without structural review
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — Misattributing AI intent or memory
 - [Perceived Model Degradation](perceived-model-degradation.md) — Subjective perception diverging from measured outcomes

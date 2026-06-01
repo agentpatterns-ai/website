@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+  - rag
 last_reviewed: 2026-05-27
 ---
 

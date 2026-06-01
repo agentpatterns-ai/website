@@ -6,7 +6,7 @@ tags:
   - memory
   - multi-agent
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - per-agent private memory
   - decentralized agent memory

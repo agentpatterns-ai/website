@@ -4,6 +4,8 @@ description: "Why teams report LLM quality declining over time, five competing e
 tags:
   - cost-performance
   - testing-verification
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - "vibes vs evals"
   - "LLM drift perception"

@@ -4,6 +4,7 @@ description: "How MCP servers collect structured user input mid-task via elicita
 tags:
   - tool-engineering
   - claude
+  - mcp
 last_reviewed: 2026-05-27
 ---
 

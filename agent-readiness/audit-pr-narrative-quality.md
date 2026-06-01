@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - code-review
   - workflows
+  - instructions
+  - agent-readiness
 aliases:
   - PR narrative audit
   - visible thinking audit
@@ -22,9 +24,9 @@ Packaged as: `.claude/skills/agent-readiness-audit-pr-narrative-quality/`
     PRs are reachable via the GitHub API (`gh pr list`, `gh pr view`). Agent PRs are identifiable by author (bot account), branch prefix (`copilot/`, `claude/`, `cursor/`), or PR body signature. Translate the queries for non-GitHub forges — the narrative checks are forge-independent. See [Assumptions](index.md#assumptions).
 
 !!! info "Applicability"
-    Run when ≥30 agent-authored PRs have merged in the audit window. Below that threshold the per-PR findings are useful but the rate baselines are not. Skip on solo or inner-source repos with no external reviewers and on squash-merge-only repos where per-commit narration collapses into the PR body — see [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §When This Backfires.
+    Run when ≥30 agent-authored PRs have merged in the audit window. Below that threshold the per-PR findings are useful but the rate baselines are not. Skip on solo or inner-source repos with no external reviewers and on squash-merge-only repos where per-commit narration collapses into the PR body — see [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §When This Backfires.
 
-PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). High reviewer discussion volume without structure is the failure mode, not engagement. This audit checks three artifacts the agent produces — the originating issue, the PR body, and the commit log — against the templates that move the merge-rate dial. Rules from [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md). Paired bootstrap: [`bootstrap-pr-narrative-template`](bootstrap-pr-narrative-template.md) installs the templates this audit checks for.
+PR description structure varies systematically by agent and correlates with merge rate at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), via [`pr-description-style-lever`](../code-review/pr-description-style-lever.md)). High reviewer discussion volume without structure is the failure mode, not engagement. This audit checks three artifacts the agent produces — the originating issue, the PR body, and the commit log — against the templates that move the merge-rate dial. Rules from [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md), [`pr-description-style-lever`](../code-review/pr-description-style-lever.md), and [`agent-commit-attribution`](../workflows/agent-commit-attribution.md). Paired bootstrap: [`bootstrap-pr-narrative-template`](bootstrap-pr-narrative-template.md) installs the templates this audit checks for.
 
 ## Step 1 — Locate Agent PRs and Source Issues
 
@@ -43,7 +45,7 @@ If the count is < 30, continue but mark the rate-aggregate findings as "low-conf
 
 ## Step 2 — Issue-as-Specification Check
 
-A well-structured issue captures problem, success criteria, constraints, and risks before the agent engages — it is the reviewable record of intent ([`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Issues as Specifications).
+A well-structured issue captures problem, success criteria, constraints, and risks before the agent engages — it is the reviewable record of intent ([`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Issues as Specifications).
 
 ```bash
 # For each PR with a closing-issue reference, fetch the issue body
@@ -63,7 +65,7 @@ Severity rules:
 
 - PRs with no linked issue → **medium** finding (no reviewable record of intent; agent ran from chat-ephemeral context)
 - Linked issue missing two or more of {problem, criteria, constraints} → **low** finding per PR; if the share exceeds 30% of agent PRs, escalate to **medium** at the aggregate
-- Linked issue auto-generated from a chat session with no human edit → **medium** (treat as opaque agent session per [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Anti-Patterns)
+- Linked issue auto-generated from a chat session with no human edit → **medium** (treat as opaque agent session per [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Anti-Patterns)
 
 ## Step 3 — PR Description Section Coverage
 
@@ -101,7 +103,7 @@ gh pr list --state all --limit 200 --json number,reviews,comments \
   > /tmp/comment-counts.json
 ```
 
-For PRs with full section coverage but comment count > 1.5× the team median, flag **low** per PR — these are the cases where the template is filled but the content is opaque (e.g., AI-generated PR text accepted uncritically per [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Anti-Patterns).
+For PRs with full section coverage but comment count > 1.5× the team median, flag **low** per PR — these are the cases where the template is filled but the content is opaque (e.g., AI-generated PR text accepted uncritically per [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Anti-Patterns).
 
 ## Step 5 — Commit Message Reasoning Narration
 
@@ -119,7 +121,7 @@ jq -r '.[] | "\(.number)\t\(.commits[0].messageHeadline // "")"' /tmp/agent-prs.
 
 Severity rules:
 
-- Headline ≤ 40 chars AND matches generic verb pattern → **low** per commit; if > 50% of agent commits match, escalate to **medium** at the aggregate (no narration discipline; commit log is unsearchable per [`visible-thinking-ai-development`](../observability/visible-thinking-ai-development.md) §Misaligned Tooling)
+- Headline ≤ 40 chars AND matches generic verb pattern → **low** per commit; if > 50% of agent commits match, escalate to **medium** at the aggregate (no narration discipline; commit log is unsearchable per [`visible-thinking-ai-development`](../human/visible-thinking-ai-development.md) §Misaligned Tooling)
 - No commit body on multi-file commits → **low**
 - Body present but contains only the auto-generated `Co-authored-by:` trailer → **low** (signed but not narrated)
 
@@ -191,7 +193,7 @@ Top fix: <one-liner — usually wire a PR template through CLAUDE.md/AGENTS.md o
 
 ## Related
 
-- [Visible Thinking in AI-Assisted Development](../observability/visible-thinking-ai-development.md)
+- [Visible Thinking in AI-Assisted Development](../human/visible-thinking-ai-development.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](../code-review/pr-description-style-lever.md)
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md)
 - [Agent Commit Attribution](../workflows/agent-commit-attribution.md)

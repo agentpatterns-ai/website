@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
+  - arxiv
 aliases:
   - synthetic eval quality measurement
   - SynAE framework

@@ -4,6 +4,8 @@ description: "Fetch current, versioned API documentation into agent context at g
 tags:
   - context-engineering
   - cost-performance
+  - tool-agnostic
+  - rag
 aliases:
   - Retrieval-Augmented Agent Workflows
   - Semantic Context Loading

@@ -4,6 +4,8 @@ description: "Design skills as pure knowledge containers — domain rules, heuri
 tags:
   - agent-design
   - instructions
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - skill as knowledge container
   - knowledge-only skills

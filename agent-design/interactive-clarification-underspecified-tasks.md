@@ -4,7 +4,8 @@ description: "Agents that explore the codebase first and ask targeted clarificat
 tags:
   - agent-design
   - instructions
-  - source:arxiv
+  - arxiv
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

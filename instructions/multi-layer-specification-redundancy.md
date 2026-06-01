@@ -5,7 +5,7 @@ tags:
   - instructions
   - testing-verification
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - specification redundancy robustness
   - structural redundancy code generation prompts

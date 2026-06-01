@@ -7,7 +7,7 @@ aliases:
   - "classical patterns agent analogues"
 tags:
   - agent-design
-  - patterns
+  - pattern
   - tool-agnostic
   - human-factors
   - workflows
@@ -102,7 +102,7 @@ routing:
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md) — Facade with four scopes
 - [Hierarchical CLAUDE.md](../instructions/hierarchical-claude-md.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- set up the Facade instruction file from scratch
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- set up the Facade instruction file from scratch
 - [Agent Backpressure](agent-backpressure.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)

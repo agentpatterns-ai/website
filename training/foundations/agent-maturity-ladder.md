@@ -37,7 +37,7 @@ Constrained generation — JSON schema, grammar, or function-call format — tha
 
 **Cargo-cult symptom**: building an evaluator-optimizer loop (rung 3-adjacent) to "fix bad model outputs" when the actual fix is constraining the output shape so the failure is impossible.
 
-**Anchor**: [Controlling Agent Output](../../agent-design/controlling-agent-output.md) and [Structured Output Constraints](../../verification/structured-output-constraints.md).
+**Anchor**: [Controlling Agent Output](../../instructions/controlling-agent-output.md) and [Structured Output Constraints](../../verification/structured-output-constraints.md).
 
 ## Rung 3 — Retry and Validation Loops
 

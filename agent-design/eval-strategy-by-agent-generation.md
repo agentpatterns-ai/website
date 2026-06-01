@@ -5,6 +5,7 @@ tags:
   - agent-design
   - evals
   - testing-verification
+  - tool-agnostic
 aliases:
   - six generations of AI agents
   - per-generation eval strategy

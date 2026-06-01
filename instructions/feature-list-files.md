@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - instructions
+  - tool-agnostic
 aliases:
   - feature spec file
   - feature contract

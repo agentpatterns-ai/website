@@ -4,6 +4,8 @@ description: "Process large agent workloads without hitting API rate limits by d
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - multi-agent
 aliases:
   - sequential batch dispatch
   - bounded agent pool

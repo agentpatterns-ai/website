@@ -117,5 +117,5 @@ The same prompt sent to an agent posting to a plain Slack channel produces a fen
 - [HTML as Agent Output Format: When to Ask for HTML Instead of Markdown](html-as-output-format.md)
 - [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
-- [Controlling Agent Output: Concise Answers, Not Essays](../agent-design/controlling-agent-output.md)
+- [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
 - [Event-Driven System Reminders](event-driven-system-reminders.md)

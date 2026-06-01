@@ -3,6 +3,7 @@ title: "Agent Backpressure: Automated Feedback for Self-Correction"
 description: "Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention."
 tags:
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -54,7 +55,7 @@ graph TD
 
 ## Codebase Readiness
 
-The value of backpressure is determined by the codebase, not the agent. Improving agent output quality in a given codebase means improving the codebase's backpressure coverage (see [Codebase Readiness for Agents](../workflows/codebase-readiness.md)):
+The value of backpressure is determined by the codebase, not the agent. Improving agent output quality in a given codebase means improving the codebase's backpressure coverage (see [Codebase Readiness for Agents](codebase-readiness.md)):
 
 - Add types where untyped code exists
 - Add tests for logic the agent is likely to modify

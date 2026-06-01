@@ -4,6 +4,7 @@ description: "A2UI is an open standard for agents to emit declarative UI bluepri
 tags:
   - agent-design
   - tool-agnostic
+  - standards
 aliases:
   - agent-to-UI protocol
   - generative UI standard

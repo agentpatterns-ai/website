@@ -5,6 +5,7 @@ tags:
   - agent-design
   - multi-agent
   - cost-performance
+  - tool-agnostic
 aliases:
   - reasoning-execution separation
   - two-layer agent architecture

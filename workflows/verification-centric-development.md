@@ -5,6 +5,8 @@ tags:
   - workflows
   - testing-verification
   - human-factors
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 
@@ -14,7 +16,7 @@ last_reviewed: 2026-05-27
 
 LLMs can generate implementation code faster than developers can write it. The bottleneck is no longer authorship — it is verification. Production-grade AI-assisted development invests in planning, architecture, and layered automated checks rather than manual code creation.
 
-This is the production-scale counterpart to [vibe coding](vibe-coding.md). Where vibe coding skips understanding entirely for throwaway work, verification-centric development builds systematic proof that generated code is correct, secure, and maintainable.
+This is the production-scale counterpart to [vibe coding](../anti-patterns/vibe-coding.md). Where vibe coding skips understanding entirely for throwaway work, verification-centric development builds systematic proof that generated code is correct, secure, and maintainable.
 
 ## The Proof Point
 
@@ -79,7 +81,7 @@ This relocation is not free. Structural linting and architectural constraints pr
 
 A reasonable practitioner could defend the opposite recommendation in specific contexts. Verification-centric development is worse than lighter-weight alternatives when:
 
-- **The risk budget is smaller than the verification investment.** Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](vibe-coding.md) is the correct mode for that end of the spectrum.
+- **The risk budget is smaller than the verification investment.** Throwaway scripts, one-off migrations, and exploratory prototypes do not justify snapshot suites, SAST pipelines, and architectural decision records. [Vibe coding](../anti-patterns/vibe-coding.md) is the correct mode for that end of the spectrum.
 - **Verifiers themselves are unreliable.** LLM-based verifiers miss defects at a rate much higher than deterministic tooling, and even benchmark-grade test suites can overestimate solution quality — 20–40% of LeetCode problems that passed LiveCodeBench's private tests still failed on the online judge ([Ma et al., "Rethinking Verification for LLM Code Generation"](https://arxiv.org/abs/2507.06920)). Treat any verifier as a fallible signal, not a proof of correctness.
 - **Snapshot tests encode the wrong baseline.** Verify-style approval tests lock in whatever structure the first reviewer approved. If that initial approval was sloppy, every later diff is compared against a flawed reference and scope-creep checks become noise.
 - **Process load crowds out thinking.** Teams that add ceremony (plans, specs, approval steps) without pruning existing review steps slow down without catching proportionally more bugs. The pipeline should replace manual checks, not stack on top of them.
@@ -130,7 +132,7 @@ dotnet test --filter "Category=Snapshot"
 
 ## Related
 
-- [Vibe Coding: Outcome-Oriented Development](vibe-coding.md) — the casual, low-risk end of the same spectrum
+- [Vibe Coding: Outcome-Oriented Development](../anti-patterns/vibe-coding.md) — the casual, low-risk end of the same spectrum
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
 - [Incremental Verification](../verification/incremental-verification.md)
 - [Rigor Relocation](../human/rigor-relocation.md)

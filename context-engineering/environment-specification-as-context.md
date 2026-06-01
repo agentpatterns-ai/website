@@ -4,6 +4,8 @@ description: "Feed dependency versions, lock files, and runtime constraints into
 tags:
   - context-engineering
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - Environment-Aware Code Generation
   - Version-Aware Prompting

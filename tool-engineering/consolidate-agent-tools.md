@@ -4,6 +4,8 @@ description: "Fewer, higher-level tools reduce selection ambiguity and context c
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

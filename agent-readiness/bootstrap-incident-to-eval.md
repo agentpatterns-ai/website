@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - testing-verification
   - evals
+  - instructions
+  - agent-readiness
 aliases:
   - failure to eval pipeline
   - production regression evals scaffold

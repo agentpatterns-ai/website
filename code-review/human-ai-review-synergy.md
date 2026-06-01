@@ -4,6 +4,7 @@ description: "278,790 code reviews show AI and human reviewers have complementar
 tags:
   - code-review
   - arxiv
+  - tool-agnostic
 aliases:
   - "Human-AI Code Review Collaboration"
   - "AI-Human Review Complementarity"

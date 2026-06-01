@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - multi-agent
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - bounded batch dispatch audit
   - fan-out concurrency audit

@@ -4,6 +4,8 @@ description: "Iterative LLM fix-test loops optimize for functional correctness w
 tags:
   - agent-design
   - testing-verification
+  - tool-agnostic
+  - security
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - arxiv
+  - tool-agnostic
 aliases:
   - critic-guided documentation refinement
   - AST-grounded doc maintenance

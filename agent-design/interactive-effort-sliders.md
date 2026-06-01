@@ -4,6 +4,7 @@ description: "Expose reasoning budget as an interactive, per-turn operator contr
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
 aliases:
   - interactive effort slider
   - per-turn reasoning budget control

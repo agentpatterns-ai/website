@@ -76,11 +76,11 @@ Keep CLAUDE.md lean: path-specific rules go in `.claude/rules/`, detailed proced
 - **Skills**: Claude invokes based on description relevance ([skills docs](https://code.claude.com/docs/en/skills)). Set `disable-model-invocation: true` for explicit-only.
 - **Subagent delegation**: the parent decides when to spawn.
 
-For non-negotiable rules, prefer hooks. See [Hooks vs Prompts](../../verification/hooks-vs-prompts.md).
+For non-negotiable rules, prefer hooks. See [Hooks vs Prompts](../../instructions/hooks-vs-prompts.md).
 
 ## When Extension Points Combine
 
-- **CLAUDE.md + hooks**: CLAUDE.md states the rule; a `PreToolUse` hook enforces it. See [Hooks for Enforcement vs Prompts for Guidance](../../verification/hooks-vs-prompts.md).
+- **CLAUDE.md + hooks**: CLAUDE.md states the rule; a `PreToolUse` hook enforces it. See [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md).
 - **Skills + subagents**: a skill defines the procedure; a [subagent](sub-agents.md) executes it in isolation.
 - **MCP + skills**: MCP exposes external tools; a skill provides the workflow using them.
 - **Plugins**: [bundle](../../standards/plugin-packaging.md) agents, skills, hooks, and MCP configs for distribution. Plugins solve distribution, not logic.
@@ -137,7 +137,7 @@ The hook script (`hooks/check-down-migration.sh`) runs deterministically. The sk
 - [Claude Code Hooks](hooks-lifecycle.md)
 - [Sub-Agents](sub-agents.md)
 - [Agent Teams](agent-teams.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
 - [Hierarchical CLAUDE.md](../../instructions/hierarchical-claude-md.md)
 - [Progressive Disclosure for Agent Definitions](../../agent-design/progressive-disclosure-agents.md)
 - [Plugin Packaging](../../standards/plugin-packaging.md)

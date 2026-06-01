@@ -5,6 +5,7 @@ tags:
   - agent-design
   - security
   - memory
+  - tool-agnostic
 applies_to: "openai-agents-sdk@1.x"
 last_reviewed: 2026-05-27
 status: current

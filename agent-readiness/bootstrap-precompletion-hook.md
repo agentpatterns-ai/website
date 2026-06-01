@@ -4,6 +4,8 @@ description: "Detect existing CI checks, generate a Stop-event hook that runs th
 tags:
   - tool-agnostic
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - pre-completion checklist hook
   - Stop event hook scaffold
@@ -238,7 +240,7 @@ Smoke test: <pass/fail>
 ## Related
 
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Hooks vs Prompts](../verification/hooks-vs-prompts.md)
+- [Hooks vs Prompts](../instructions/hooks-vs-prompts.md)
 - [Hooks Lifecycle](../tools/claude/hooks-lifecycle.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [Audit Hooks Coverage](audit-hooks-coverage.md)

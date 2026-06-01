@@ -47,6 +47,7 @@ Structuring instructions across scopes, layers, and files so the right context r
 
 - [Layered Instruction Scopes](layered-instruction-scopes.md) — Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific rule always wins
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location
+- [claudeMdExcludes: Selective Ancestor Instruction-File Exclusion](claude-md-excludes.md) — Skip irrelevant ancestor CLAUDE.md files in a monorepo with a glob list, so the agent's context is not burned on conventions for packages you never touch
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md) — Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring; other tools rely on hierarchical discovery instead
 - [Prompt File Libraries](prompt-file-libraries.md) — Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading

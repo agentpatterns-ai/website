@@ -5,6 +5,7 @@ tags:
   - agent-design
   - context-engineering
   - arxiv
+  - tool-agnostic
 aliases:
   - attention stability boundary
   - information over-squashing in agents

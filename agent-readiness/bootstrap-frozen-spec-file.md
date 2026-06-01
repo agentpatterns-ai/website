@@ -4,6 +4,7 @@ description: "Generate a SPEC.json with goals, non-goals, hard constraints, deli
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - frozen spec scaffold
   - SPEC.json bootstrap

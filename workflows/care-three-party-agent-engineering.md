@@ -6,6 +6,7 @@ tags:
   - agent-design
   - evals
   - tool-agnostic
+  - arxiv
 aliases:
   - Collaborative Agent Reasoning Engineering
   - CARE methodology

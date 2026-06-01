@@ -3,6 +3,8 @@ title: "Agent Handoff Protocols: Passing Work Between Agents"
 description: "Explicit contracts defining what each pipeline stage produces and expects — preventing context and information loss at agent handoff boundaries."
 tags:
   - agent-design
+  - tool-agnostic
+  - multi-agent
 last_reviewed: 2026-05-27
 ---
 

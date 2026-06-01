@@ -5,6 +5,7 @@ tags:
   - instructions
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - failure-mode triage table
   - smallest-artifact discipline

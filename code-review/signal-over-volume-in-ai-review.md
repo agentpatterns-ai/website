@@ -4,6 +4,7 @@ description: "Design AI code review to stay silent when it has nothing useful to
 tags:
   - testing-verification
   - code-review
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

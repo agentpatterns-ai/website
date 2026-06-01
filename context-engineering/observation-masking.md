@@ -7,6 +7,7 @@ aliases:
 tags:
   - context-engineering
   - cost-performance
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,8 @@ tags:
   - security
   - multi-agent
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - constraint state governance
   - safety constraint drift
@@ -35,7 +37,7 @@ Constraints encoded in the same medium as every other prompt token — natural l
 | **Audit** | Log lacks the constraint state at decision time | Post-hoc review cannot reconstruct why an action was permitted |
 | **Optimization** | Reward signal pulls behavior toward task completion at the cost of constraint adherence | Fine-tuned model trades a small safety margin for measurable utility gains |
 
-This taxonomy maps cleanly onto the four-mode [audit-record divergence invariant](audit-record-divergence-invariant.md) and its [controls-mapping view](action-audit-divergence-taxonomy.md) ([Metere, 2026](https://arxiv.org/abs/2605.01740)): F1 gate-bypass surfaces as tool-use and delegation drift, F2 audit-forgery as audit drift, F3 partial failure as memory drift, F4 wrong-target as delegation drift in inheritance chains.
+This taxonomy maps cleanly onto the four-mode [audit-record divergence invariant](action-audit-divergence-taxonomy.md) and its [controls-mapping view](action-audit-divergence-taxonomy.md) ([Metere, 2026](https://arxiv.org/abs/2605.01740)): F1 gate-bypass surfaces as tool-use and delegation drift, F2 audit-forgery as audit drift, F3 partial failure as memory drift, F4 wrong-target as delegation drift in inheritance chains.
 
 ## Four Invariant Properties
 
@@ -80,7 +82,7 @@ Each invariant property maps to controls already established on the site:
 | Fresh | [Fail-closed remote settings enforcement](fail-closed-remote-settings-enforcement.md), [provenance-aware decision auditing](provenance-aware-decision-auditing.md) |
 | Inherited | [Task scope as security boundary](task-scope-security-boundary.md), [scoped credentials via proxy](scoped-credentials-proxy.md), [permission-gated commands](permission-gated-commands.md) |
 | Enforceable | [Action-selector pattern](action-selector-pattern.md), [CaMeL control/data flow](camel-control-data-flow-injection.md), [MCP runtime control plane](mcp-runtime-control-plane.md) |
-| Auditable | [Cryptographic governance audit trail](cryptographic-governance-audit-trail.md), [audit-record divergence invariant](audit-record-divergence-invariant.md) |
+| Auditable | [Cryptographic governance audit trail](cryptographic-governance-audit-trail.md), [audit-record divergence invariant](action-audit-divergence-taxonomy.md) |
 
 The contribution of the constraint-drift framing is not new mechanisms but a coverage check: a system that lacks any one row has a drift surface a determined attacker — or a long-running trajectory — will reach.
 
@@ -93,7 +95,7 @@ The contribution of the constraint-drift framing is not new mechanisms but a cov
 
 ## Related
 
-- [Audit-Record Divergence as an Agent Runtime Invariant](audit-record-divergence-invariant.md)
+- [Audit-Record Divergence as an Agent Runtime Invariant](action-audit-divergence-taxonomy.md)
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)

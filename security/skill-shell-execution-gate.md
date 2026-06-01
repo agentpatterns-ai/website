@@ -61,7 +61,7 @@ With the gate on, the only path to shell side-effects is the model emitting a Ba
 
 The pattern is a *uniform-execution-path* control: any agent runtime that exposes non-tool primitives capable of side effects (skills, snippets, custom commands, plugins, prompt templates) needs a kill switch that funnels execution back through the audited tool layer. Inline interpolation is the most direct example, but the same logic applies to any pre-render hook, template macro, or expansion that runs outside tool dispatch.
 
-The mechanism mirrors the [hooks-vs-prompts](../verification/hooks-vs-prompts.md) distinction at a different layer: prompts are guidance the model can ignore; hooks fire deterministically. Inline shell from a skill is *deterministic execution outside the audit boundary* — the worst combination, because uniform policy enforcement assumes a single execution path.
+The mechanism mirrors the [hooks-vs-prompts](../instructions/hooks-vs-prompts.md) distinction at a different layer: prompts are guidance the model can ignore; hooks fire deterministically. Inline shell from a skill is *deterministic execution outside the audit boundary* — the worst combination, because uniform policy enforcement assumes a single execution path.
 
 ## Trade-offs
 
@@ -115,4 +115,4 @@ Execution is now visible to PreToolUse hooks and recorded as a tool call in the 
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Skill as Knowledge Pattern](../tool-engineering/skill-as-knowledge.md)
-- [Hooks vs Prompts for Enforcement](../verification/hooks-vs-prompts.md)
+- [Hooks vs Prompts for Enforcement](../instructions/hooks-vs-prompts.md)

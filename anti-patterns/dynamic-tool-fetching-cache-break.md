@@ -4,6 +4,8 @@ description: "Loading tool definitions dynamically per step seems like good cont
 tags:
   - cost-performance
   - context-engineering
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

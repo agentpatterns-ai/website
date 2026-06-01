@@ -6,7 +6,7 @@ tags:
   - memory
   - testing-verification
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - MemFail-style memory testing
   - three-operation memory benchmark

@@ -4,6 +4,8 @@ description: "Detect telemetry support, generate a managed-settings template tha
 tags:
   - tool-agnostic
   - observability
+  - instructions
+  - agent-readiness
 aliases:
   - OTel bootstrap
   - Claude Code telemetry init

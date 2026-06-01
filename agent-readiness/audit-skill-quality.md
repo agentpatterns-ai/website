@@ -4,6 +4,8 @@ description: "Locate every SKILL.md, validate frontmatter, score description cra
 tags:
   - tool-agnostic
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - SKILL.md quality audit
   - skill description quality check

@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - "session initialization"
   - "cold start prevention"

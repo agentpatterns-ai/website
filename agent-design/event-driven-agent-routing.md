@@ -4,6 +4,7 @@ description: "Route work between agents and human teams via status-change trigge
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
 aliases:
   - "event-driven routing"
   - "status-driven agent pipelines"

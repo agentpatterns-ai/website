@@ -4,6 +4,8 @@ description: "Decompose self-improving agent loops into five specialized roles w
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
+  - multi-agent
 aliases:
   - AutoContext pattern
   - five-role improvement loop

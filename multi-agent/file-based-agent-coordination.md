@@ -7,6 +7,8 @@ aliases:
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
+  - multi-agent
 last_reviewed: 2026-05-27
 ---
 

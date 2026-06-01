@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - rag
 aliases:
   - BM25 for agentic search
   - lexical retrieval for deep research

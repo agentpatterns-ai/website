@@ -5,6 +5,7 @@ tags:
   - geo
   - technique
   - workflows
+  - tool-agnostic
 aliases:
   - content atomization
   - RAG chunking strategy

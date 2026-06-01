@@ -5,6 +5,7 @@ tags:
   - security
   - testing-verification
   - tool-agnostic
+  - harness-engineering
 aliases:
   - "security audit harness composition"
   - "steering scaling stacking"

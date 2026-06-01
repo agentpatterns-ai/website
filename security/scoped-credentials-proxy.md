@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
   - security
+  - tool-agnostic
 aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials

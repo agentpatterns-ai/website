@@ -5,6 +5,7 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
+  - mcp
 aliases:
   - readOnlyHint parallel execution
   - parallel MCP tool dispatch

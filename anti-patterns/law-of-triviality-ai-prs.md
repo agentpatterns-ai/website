@@ -8,6 +8,8 @@ tags:
   - human-factors
   - code-review
   - workflows
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

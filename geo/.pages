@@ -17,4 +17,5 @@ nav:
       - geo-for-technical-docs.md
       - measuring-geo-performance.md
       - topical-authority.md
+  - gsc-search-console-monitoring.md
   - ...

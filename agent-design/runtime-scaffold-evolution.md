@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-engineering
   - arxiv
+  - tool-agnostic
 aliases:
   - "live self-evolving agents"
   - "on-the-fly tool synthesis"

@@ -7,6 +7,8 @@ tags:
   - source:opendev-paper
   - evals
   - observability
+  - tool-agnostic
+  - harness-engineering
 aliases:
   - initializer-coding agent pattern
   - two-phase agent harness

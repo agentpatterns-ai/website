@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - workflows
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - agent commit signing bootstrap
   - agent identity bootstrap

@@ -5,6 +5,7 @@ tags:
   - instructions
   - agent-design
   - context-engineering
+  - tool-agnostic
 aliases:
   - context bundle registry
   - versioned context hub

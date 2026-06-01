@@ -5,7 +5,6 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-  - cursor
 aliases:
   - issue-tracker as agent control plane
   - Jira agent dispatch

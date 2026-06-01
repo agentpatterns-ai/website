@@ -3,6 +3,7 @@ title: "Incremental Verification: Check at Each Step, Not at the End"
 description: "Insert verification checkpoints between agent steps to catch errors near their source — far cheaper than unwinding a cascade built on an early mistake."
 tags:
   - testing-verification
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

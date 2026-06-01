@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - instructions
   - foundations
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -4,6 +4,7 @@ description: "AGENTS.md is an open standard for a project-level instruction file
 tags:
   - instructions
   - tool-agnostic
+  - standards
 aliases:
   - project instruction file
   - AI agent README

@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - testing-verification
+  - arxiv
 aliases:
   - observation contracts
   - contract-bound tool outputs
@@ -109,7 +110,7 @@ The second form gives the model three signals: a contract label (`opaque`), a fr
 ## Related
 
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
-- [Typed Schemas at Agent Boundaries](../tool-engineering/typed-schemas-at-agent-boundaries.md)
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [RubricRefine: Pre-Execution Rubric Refinement](rubric-refine-pre-execution-tool-use.md)
 - [MCP Tool Result Persistence via _meta Annotation](../tool-engineering/mcp-result-persistence-annotation.md)
 - [Rollback-First Design](rollback-first-design.md)

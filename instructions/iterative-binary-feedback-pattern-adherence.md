@@ -4,6 +4,7 @@ description: "Looping yes/no judgments through capable models beats verbose crit
 tags:
   - instructions
   - tool-agnostic
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 

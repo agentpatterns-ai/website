@@ -1,6 +1,9 @@
 ---
 title: "Frameworks"
 description: "Multi-page sections that synthesize atomic patterns into named, coherent ways of operating with AI coding assistants."
+tags:
+  - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -35,3 +38,4 @@ Frameworks are captured as epics via `/save-epic` (≥4 angles required) and exp
 
 - [Brownfield to Agent-First](brownfield-to-agent-first/index.md) — staged transformation of an existing codebase from human-only to agent-first
 - [Team OS](team-os/index.md) — coding-agent repo as the shared cognitive substrate for a cross-functional team
+- [Cognitive Architectures for Language Agents (CoALA)](coala-cognitive-architecture-language-agents.md) — descriptive taxonomy along three axes (memory, action space, decision loop) for naming the harness artifacts coding-agent teams already maintain

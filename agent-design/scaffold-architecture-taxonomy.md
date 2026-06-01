@@ -4,6 +4,8 @@ description: "A three-layer framework for characterizing coding agent scaffolds 
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
+  - arxiv
 aliases:
   - coding agent scaffold taxonomy
   - scaffold taxonomy

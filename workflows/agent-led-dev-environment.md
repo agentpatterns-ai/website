@@ -4,7 +4,6 @@ description: "An agent authors and iterates on its own Dockerfile, gated by a sm
 tags:
   - workflows
   - agent-design
-  - cursor
   - tool-agnostic
 aliases:
   - agent-authored dev environment

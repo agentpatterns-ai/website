@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - multi-agent
   - cost-performance
+  - tool-agnostic
 aliases:
   - hierarchical tool agentization
   - agent-tool wrappers

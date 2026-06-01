@@ -7,8 +7,10 @@ aliases:
 tags:
   - context-engineering
   - technique
-  - code-completion
+  - code-generation
   - arxiv
+  - tool-agnostic
+  - rag
 last_reviewed: 2026-05-27
 ---
 

@@ -4,6 +4,7 @@ description: "Design services so the full product surface is reachable by agents
 tags:
   - tool-engineering
   - agent-design
+  - tool-agnostic
 aliases:
   - "headless service design"
   - "agent-accessible services"

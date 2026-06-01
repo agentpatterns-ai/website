@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - rag
+  - instructions
+  - agent-readiness
 aliases:
   - multitenant RAG authorization audit
   - tenant scope retrieval audit

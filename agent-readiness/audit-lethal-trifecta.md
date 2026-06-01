@@ -4,6 +4,8 @@ description: "Enumerate every principal, classify each tool as private-data, unt
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - lethal trifecta audit
   - trifecta exfiltration check

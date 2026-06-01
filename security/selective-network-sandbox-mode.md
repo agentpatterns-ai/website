@@ -8,7 +8,6 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-  - copilot
 last_reviewed: 2026-05-27
 ---
 

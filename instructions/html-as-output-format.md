@@ -117,7 +117,7 @@ The HTML version is heavier in tokens. It is worth those tokens because the revi
 
 ## Related
 
-- [Controlling Agent Output: Concise Answers, Not Essays](../agent-design/controlling-agent-output.md)
+- [Controlling Agent Output: Concise Answers, Not Essays](controlling-agent-output.md)
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
 - [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)

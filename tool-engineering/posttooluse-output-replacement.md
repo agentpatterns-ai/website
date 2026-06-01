@@ -34,7 +34,7 @@ Replacement is the right mode when the original output is unsafe or unhelpful fo
 - **Platform normalisation.** BSD vs GNU output shape divergence is rewritten to a canonical form so the model's parsing logic works on both.
 - **Structured annotation injection.** Wrap raw tool output in a small envelope (`{"summary": "...", "raw": "..."}`) the model is trained to parse.
 
-For formatting, advisories, or logging — observe-only `PostToolUse` is the right tool. See [Auto-Formatting](../workflows/posttooluse-auto-formatting.md) and [BSD/GNU Detection](posttooluse-bsd-gnu-detection.md).
+For formatting, advisories, or logging — observe-only `PostToolUse` is the right tool. See [Auto-Formatting](../tools/claude/posttooluse-auto-formatting.md) and [BSD/GNU Detection](posttooluse-bsd-gnu-detection.md).
 
 ## Hook Shape
 
@@ -141,8 +141,8 @@ Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Fou
 
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
-- [PostToolUse Hooks: Auto-Formatting on Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Auto-Formatting on Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [PostToolUse Hook for BSD/GNU CLI Incompatibilities](posttooluse-bsd-gnu-detection.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)

@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - evals
   - agent-design
+  - tool-agnostic
 aliases:
   - "visible vs held-out test gap"
   - "specification compliance gap"

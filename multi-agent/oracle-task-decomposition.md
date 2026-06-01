@@ -5,6 +5,8 @@ tags:
   - agent-design
   - testing-verification
   - workflows
+  - tool-agnostic
+  - multi-agent
 aliases:
   - oracle pattern
   - oracle-based decomposition

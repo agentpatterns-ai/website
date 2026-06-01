@@ -126,7 +126,7 @@ The team uses this scan to prioritize: the retry-logic inconsistency affects 14 
 - [Pattern Replication Risk](../anti-patterns/pattern-replication-risk.md) — detailed treatment of pattern amplification: mechanism, evidence, mitigation
 - [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — over-engineering from output-completeness bias; measurable impact and mitigations
 - [Boring Technology Bias](../anti-patterns/boring-technology-bias.md) — training-frequency priors on tool selection
-- [Codebase Readiness for Agents](../workflows/codebase-readiness.md) — preparing a codebase before scaling agent usage
+- [Codebase Readiness for Agents](codebase-readiness.md) — preparing a codebase before scaling agent usage
 - [Harness Engineering](harness-engineering.md) — structural constraints on agent behavior
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — linters and CI as the primary enforcement layer
 - [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md)

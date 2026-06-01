@@ -5,6 +5,8 @@ tags:
   - agent-design
   - instructions
   - evals
+  - tool-agnostic
+  - arxiv
 last_reviewed: 2026-05-27
 ---
 
@@ -79,6 +81,6 @@ Looking at resolution rate alone, both succeed. Looking at trajectory-to-plan di
 - [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) — author-placed repetition for hard constraints
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — harness mechanism for injecting reminders on detected conditions
 - [The Instruction Compliance Ceiling](../instructions/instruction-compliance-ceiling.md) — compliance decay driven by rule count
-- [Task List Divergence as Instruction Quality Diagnostic](../verification/task-list-divergence-diagnostic.md) — divergence in generated plans as an instruction-quality signal
+- [Task List Divergence as Instruction Quality Diagnostic](../instructions/task-list-divergence-diagnostic.md) — divergence in generated plans as an instruction-quality signal
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — observing whether the agent executed what was planned
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode plan reminders mitigate

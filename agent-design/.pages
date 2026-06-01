@@ -16,10 +16,11 @@ nav:
       - classical-se-patterns-agent-analogues.md
       - coding-agent-scope-expansion.md
       - cognitive-reasoning-execution-separation.md
+      - coala-decision-making-loop.md
+      - coala-structured-action-space.md
       - discrete-phase-separation.md
       - continual-learning-layers.md
       - delegation-decision.md
-      - empowerment-over-automation.md
       - eval-strategy-by-agent-generation.md
       - execution-first-delegation.md
       - execution-lineage-dag.md
@@ -35,6 +36,7 @@ nav:
       - petri-net-of-thoughts.md
       - self-discover-reasoning.md
       - separation-of-knowledge-and-execution.md
+      - solver-externalized-constraint-reasoning.md
       - structured-agentic-software-engineering.md
       - task-specific-vs-role-based-agents.md
       - three-reasoning-spaces.md
@@ -47,6 +49,7 @@ nav:
       - ax-ux-dx-triad.md
       - beads-task-graph-agent-memory.md
       - clock-in-clock-out-protocol.md
+      - coala-memory-taxonomy-classifier.md
       - component-isolated-memory-stress-testing.md
       - cross-cycle-consensus-relay.md
       - dual-trace-memory-encoding.md
@@ -65,7 +68,6 @@ nav:
       - tiered-memory-architecture.md
   - "Control & Orchestration":
       - background-todo-agent.md
-      - controlling-agent-output.md
       - interactive-clarification-underspecified-tasks.md
       - convergence-detection.md
       - critic-agent-plan-review.md
@@ -100,6 +102,7 @@ nav:
       - cost-aware-agent-design.md
       - cross-vendor-competitive-routing.md
       - dual-budget-control-search-agents.md
+      - effective-feedback-compute.md
       - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
       - feedback-capability-equalizer.md
@@ -109,6 +112,7 @@ nav:
       - interactive-effort-sliders.md
       - long-running-agents.md
       - remote-agent-host-sessions.md
+      - per-user-supervisor-process.md
       - observation-contract-preservation.md
       - per-call-budget-hints-tool-calls.md
       - per-tool-extended-reasoning-opt-in.md
@@ -117,6 +121,7 @@ nav:
       - reasoning-budget-allocation.md
       - rollback-first-design.md
       - rubric-refine-pre-execution-tool-use.md
+      - selective-checkpoint-restore.md
       - specialized-slm-as-agent-tool.md
       - syntax-aware-completion-routing.md
       - task-feasibility-awareness.md
@@ -125,6 +130,7 @@ nav:
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
+      - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
       - agent-harness.md
       - agent-loop-middleware.md
@@ -133,8 +139,11 @@ nav:
       - agent-turn-model.md
       - deep-agent-runtime.md
       - delta-channels-checkpoint-storage.md
+      - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
+      - most-restrictive-wins-fusion.md
       - tool-confirmation-carousel.md
+      - approval-response-taxonomy.md
       - harness-design-dimensions.md
       - harness-engineering.md
       - harness-hill-climbing.md
@@ -149,6 +158,7 @@ nav:
       - prebuilt-agent-environments.md
       - quality-score-rubric.md
       - session-harness-sandbox-separation.md
+      - subprocess-per-session-hosting-model.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
       - vscode-agents-parallel-tasks.md
@@ -156,12 +166,12 @@ nav:
   - agent-event-streaming-model.md
   - agent-jit-compilation.md
   - agent-project-state-purge.md
-  - agentic-framework-landscape.md
   - anthropic-effective-agents-framework.md
   - asynchronous-agent-io-and-speculative-tools.md
   - auto-model-selection.md
   - ax-stack-layered-model.md
   - classifier-gated-auto-permission.md
+  - classifier-subagent-run-mode.md
   - cloud-agent-session-bootstrap.md
   - cloud-agent-tiered-model-routing.md
   - code-health-gated-tier-routing.md
@@ -180,4 +190,6 @@ nav:
   - stochastic-deterministic-boundary.md
   - typed-memory-from-vcs-history.md
   - utility-model-split.md
+  - codebase-readiness.md
+  - domain-specific-agent-challenges.md
   - ...

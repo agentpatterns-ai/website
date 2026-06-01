@@ -4,6 +4,8 @@ description: "All SKILL.md frontmatter fields: invocation control, subagent dele
 tags:
   - instructions
   - agent-design
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - "skill configuration"
   - "SKILL.md headers"

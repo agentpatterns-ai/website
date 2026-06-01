@@ -4,6 +4,8 @@ description: "How a single run(command) tool backed by Unix CLI can replace larg
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - "single-tool hypothesis"
   - "run command tool"

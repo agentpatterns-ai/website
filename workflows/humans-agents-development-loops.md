@@ -5,6 +5,7 @@ tags:
   - workflows
   - human-factors
   - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 
@@ -127,6 +128,6 @@ The signal to watch: if harness maintenance is consuming more human attention th
 - [Agentic Flywheel: Building Self-Improving Agent Systems](../agent-design/agentic-flywheel.md)
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)
 - [Spec-Driven Development](spec-driven-development.md)
-- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](vibe-coding.md)
+- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Plan-First Loop](plan-first-loop.md)

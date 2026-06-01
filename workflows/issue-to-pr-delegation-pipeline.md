@@ -4,6 +4,7 @@ description: "Assign issues to AI coding agents and receive draft pull requests 
 tags:
   - workflows
   - agent-design
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - mise en place methodology
   - MEP for agentic coding
@@ -101,5 +102,5 @@ Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)
 - [Beads Task Graph for Agent Memory](../agent-design/beads-task-graph-agent-memory.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
-- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](vibe-coding.md)
+- [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)

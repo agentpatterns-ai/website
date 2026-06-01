@@ -4,6 +4,7 @@ description: "Agents increasingly return interactive canvases — tables, charts
 tags:
   - agent-design
   - code-review
+  - tool-agnostic
 aliases:
   - agent canvas output
   - interactive artifact output
@@ -97,7 +98,7 @@ The source-traceability requirement still applies. A "Show query" affordance on 
 
 ## Related
 
-- [Controlling Agent Output](../agent-design/controlling-agent-output.md)
+- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Diff-Based Review](../code-review/diff-based-review.md)
-- [Visible Thinking in AI Development](../observability/visible-thinking-ai-development.md)
+- [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
 - [Product-as-IDE](product-as-ide.md)

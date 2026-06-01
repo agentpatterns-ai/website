@@ -5,6 +5,9 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - instructions
+  - harness-engineering
+  - agent-readiness
 aliases:
   - five subsystem rubric
   - harness bottleneck diagnostic

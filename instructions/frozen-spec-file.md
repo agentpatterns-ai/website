@@ -162,7 +162,7 @@ A frozen spec adds overhead that only pays off under specific conditions. Skip i
 - [Objective Drift](../anti-patterns/objective-drift.md) — the failure mode a frozen spec prevents
 - [Trajectory Logging via Progress Files](../observability/trajectory-logging-progress-files.md) — mutable companion artifacts
 - [Feature List Files](feature-list-files.md) — structured feature tracking alongside specs
-- [Hooks Beat Prompts](../verification/hooks-vs-prompts.md) — why structural enforcement outperforms prompt instructions
+- [Hooks Beat Prompts](hooks-vs-prompts.md) — why structural enforcement outperforms prompt instructions
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — the mechanism that makes re-reading the frozen spec reliable after context compaction
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — tiered offloading and summarisation techniques that determine what context survives compaction
 - [The Specification as Prompt](specification-as-prompt.md) — using formal artifacts (types, schemas, tests) as agent instructions

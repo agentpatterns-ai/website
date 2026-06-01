@@ -142,10 +142,10 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 
 ## Related
 
-- [Hooks vs Prompts](../../verification/hooks-vs-prompts.md)
+- [Hooks vs Prompts](../../instructions/hooks-vs-prompts.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../../tool-engineering/hook-catalog.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](../../tool-engineering/precompact-hook-compaction-veto.md) — using `PreCompact` exit 2 or `decision: block` to defer compaction past mid-task work
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](posttooluse-auto-formatting.md)
 - [Extension Points: When to Use What](extension-points.md)
 - [Sub-Agents](sub-agents.md)
 - [Claude Agent SDK](agent-sdk.md)

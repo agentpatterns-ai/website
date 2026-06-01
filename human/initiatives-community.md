@@ -3,7 +3,7 @@ title: "Initiatives and Community: Tracking the Agentic Engineering Landscape"
 description: "A curated map of active initiatives, communities, and learning resources for practitioners tracking the rapidly evolving agentic engineering field."
 tags:
   - human-factors
-  - workflow
+  - workflows
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---

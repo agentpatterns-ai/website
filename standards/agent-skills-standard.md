@@ -4,6 +4,7 @@ description: "The Agent Skills open standard packages task-specific knowledge in
 tags:
   - agent-design
   - tool-agnostic
+  - standards
 aliases:
   - SKILL.md standard
   - agent skills spec

@@ -4,6 +4,7 @@ description: "Knowledge that exists only in Slack threads, meetings, or team mem
 tags:
   - instructions
   - tool-agnostic
+  - anti-pattern
 aliases:
   - tribal knowledge problem
   - knowledge externalization
@@ -97,17 +98,17 @@ The agent reads the convention from `AGENTS.md`, and even if it guesses wrong, t
 ## Related
 
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) -- instruction files vs. what agents find themselves
-- [Codebase Readiness](../workflows/codebase-readiness.md)
+- [Codebase Readiness](../agent-design/codebase-readiness.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) -- externalizing implicit knowledge
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) -- mechanical enforcement over prompting
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- mechanical enforcement over prompting
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [Shadow Tech Debt](shadow-tech-debt.md) -- undocumented tribal knowledge agents cannot see
 - [Assumption Propagation](assumption-propagation.md) -- misunderstandings compounding without implicit conventions
 - [Comprehension Debt](comprehension-debt.md) -- gap between agent-produced code and developer understanding
 - [Spec Complexity Displacement](spec-complexity-displacement.md) -- implicit knowledge relocated into overly detailed specs
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md) -- bootstrap an instruction file from zero
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap an instruction file from zero
 - [L0 → L1: Making the Repo Readable](../frameworks/brownfield-to-agent-first/level-0-to-1.md) -- step-by-step process for externalizing implicit knowledge in a brownfield codebase
 - [The Copy-Paste Agent](copy-paste-agent.md) -- embedding tribal conventions in duplicated definitions instead of shared rules
 - [The Prompt Tinkerer](prompt-tinkerer.md) -- refining prompts instead of externalizing conventions into structural enforcement

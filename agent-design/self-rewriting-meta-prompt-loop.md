@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Self-Rewriting Meta-Prompt Loop"
 description: "Agents that improve their own system prompts through a reflect-draft-validate-persist cycle, without weight updates or human intervention between runs."
@@ -9,6 +8,8 @@ aliases:
   - autonomous prompt improvement
   - self-improving prompt loop
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Self-Rewriting Meta-Prompt Loop
 

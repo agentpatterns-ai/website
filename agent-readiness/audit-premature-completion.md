@@ -4,6 +4,8 @@ description: "Sample recent agent-authored PRs, run the test suite against pre-p
 tags:
   - tool-agnostic
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - fixing correct code audit
   - premature termination audit

@@ -6,6 +6,7 @@ tags:
   - instructions
   - workflows
   - claude
+  - tool-engineering
 aliases:
   - Hook Examples & Recipes
   - Common Enforcement Patterns
@@ -265,9 +266,9 @@ Instructions: contextual "prefer X when Y" guidance, or suggestions rather than 
 ## Related
 
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
 - [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)

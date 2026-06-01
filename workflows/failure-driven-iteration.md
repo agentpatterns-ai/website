@@ -4,6 +4,8 @@ description: "A development technique where you deliberately run code to generat
 tags:
   - workflows
   - testing-verification
+  - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 

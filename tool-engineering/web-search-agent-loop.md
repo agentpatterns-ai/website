@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - tool-engineering
 aliases:
   - agent research loop
   - iterative search loop

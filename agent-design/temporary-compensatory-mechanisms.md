@@ -4,6 +4,7 @@ description: "Design scaffolding that compensates for current model limitations 
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - "Compensatory Scaffolding"
 last_reviewed: 2026-05-27

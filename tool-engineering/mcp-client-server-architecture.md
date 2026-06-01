@@ -7,6 +7,9 @@ aliases:
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
+  - mcp
 last_reviewed: 2026-05-27
 ---
 
@@ -78,7 +81,7 @@ Servers MUST implement both. A generic JSON-RPC error for a database timeout hid
 
 ### Output schemas
 
-Tools can declare an `outputSchema` for [structured results](typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
+Tools can declare an `outputSchema` for [structured results](../multi-agent/typed-schemas-at-agent-boundaries.md) — servers MUST conform, clients SHOULD validate.
 
 ## Capability Negotiation
 

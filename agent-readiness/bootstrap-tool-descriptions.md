@@ -4,6 +4,8 @@ description: "Enumerate undocumented or under-specified tools, generate descript
 tags:
   - tool-agnostic
   - cost-performance
+  - instructions
+  - agent-readiness
 aliases:
   - generate tool descriptions
   - rewrite MCP descriptions

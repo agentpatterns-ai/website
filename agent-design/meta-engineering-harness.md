@@ -6,6 +6,8 @@ tags:
   - multi-agent
   - workflows
   - tool-agnostic
+  - harness-engineering
+  - arxiv
 aliases:
   - meta-engineering harness
   - contract-driven adversarial verification harness

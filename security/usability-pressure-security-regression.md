@@ -5,6 +5,7 @@ tags:
   - security
   - instructions
   - testing-verification
+  - tool-agnostic
 aliases:
   - usability pressure attack
   - UPAttack

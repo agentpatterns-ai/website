@@ -8,6 +8,8 @@ aliases:
 tags:
   - agent-design
   - workflows
+  - tool-agnostic
+  - context-engineering
 last_reviewed: 2026-05-27
 ---
 # Prompt Chaining: Sequential LLM Calls for Agent Workflows

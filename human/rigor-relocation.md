@@ -8,6 +8,8 @@ tags:
   - agent-design
   - workflows
   - harness-engineering
+  - tool-agnostic
+  - human-factors
 last_reviewed: 2026-05-27
 ---
 
@@ -109,20 +111,20 @@ Rigor relocation has real costs. The scaffolding-first bet fails or yields poor 
 
 - [Harness Engineering](../agent-design/harness-engineering.md) -- the discipline of designing agent environments for reliable results
 - [Agent Harness](../agent-design/agent-harness.md) -- the specific initializer/coding-agent two-phase architecture
-- [Codebase Readiness](../workflows/codebase-readiness.md) -- making code agent-friendly
+- [Codebase Readiness](../agent-design/codebase-readiness.md) -- making code agent-friendly
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion
 - [Progressive Disclosure for Agents](../agent-design/progressive-disclosure-agents.md) -- layered context loading
 - [Convention over Configuration](../instructions/convention-over-configuration.md) -- structural enforcement of decisions
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
 - [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
 - [Context Ceiling](context-ceiling.md) -- limits on what context an agent can hold and how environment design compensates
 - [Process Amplification](process-amplification.md) -- how agents amplify existing processes, including rigor and verification
-- [Domain-Specific Agent Challenges](domain-specific-agent-challenges.md) -- constraints and verification demands by domain
+- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) -- constraints and verification demands by domain
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) -- how rigor requirements evolve with increasing agent autonomy
 - [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how rigor relocation intersects with the broader shift in engineering identity
 - [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
-- [Safe Command Allowlisting](safe-command-allowlisting.md) -- enforcement guardrails for agent autonomy
+- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- enforcement guardrails for agent autonomy
 - [Strategy Over Code Generation](strategy-over-code-generation.md) -- prioritizing design rigor over raw output
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- verification burden as agents scale

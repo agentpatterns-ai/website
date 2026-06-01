@@ -4,6 +4,8 @@ description: "Use OpenAPI 3.x specs as the single source of truth for agent tool
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - standards
 aliases:
   - OpenAPI tool definitions
   - API-first tool design

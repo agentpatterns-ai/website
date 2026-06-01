@@ -6,6 +6,8 @@ tags:
   - evals
   - agent-design
   - security
+  - tool-agnostic
+  - arxiv
 aliases:
   - trajectory-opaque evaluation
   - output-only safety grading

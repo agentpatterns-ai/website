@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 
@@ -121,6 +122,6 @@ Apply poka-yoke where failure modes are well-understood and the constraint space
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md) — complementary: documentation quality alongside structural constraints
 - [Tool Description Quality](tool-description-quality.md) — selection signals and description iteration
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — defense-layer perspective on structural constraints
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — enforcement through hooks rather than instructions
-- [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — enforcement through hooks rather than instructions
+- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md) — formal schemas as structural contracts preventing invalid agent-to-agent calls
 - [Tool Minimalism](tool-minimalism.md) — fewer, non-overlapping tools reduce selection ambiguity

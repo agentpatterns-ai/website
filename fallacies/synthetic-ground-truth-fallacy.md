@@ -6,6 +6,7 @@ tags:
   - evals
   - human-factors
   - tool-agnostic
+  - fallacies
 aliases:
   - "model collapse from synthetic data"
   - "synthetic data feedback loop"

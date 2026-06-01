@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - security
   - observability
+  - instructions
+  - agent-readiness
 aliases:
   - F1 F2 F3 F4 audit
   - action-audit divergence audit
@@ -24,7 +26,7 @@ Packaged as: `.claude/skills/agent-readiness-audit-action-audit-divergence/`
 !!! info "Applicability"
     Skip pure-text agents (no tool actions to diverge from a record) and reversible-state systems where every action is rolled back on detection. Run when the agent has any write tool, sends messages, or is subject to compliance-driven audit retention. See [`action-audit-divergence-taxonomy`](../security/action-audit-divergence-taxonomy.md) §Where the Framing Backfires.
 
-The runtime's load-bearing safety property is that the audit record matches what actually happened. [Metere (2026)](https://arxiv.org/abs/2605.01740) decomposes the failure space into four exhaustive divergence modes — gate-bypass (F1), audit-forgery (F2), silent host failure (F3), wrong-target (F4). The audit converts each mode into a closed question against the project's existing controls; an unanswered question is a finding ([`action-audit-divergence-taxonomy`](../security/action-audit-divergence-taxonomy.md), [`audit-record-divergence-invariant`](../security/audit-record-divergence-invariant.md)).
+The runtime's load-bearing safety property is that the audit record matches what actually happened. [Metere (2026)](https://arxiv.org/abs/2605.01740) decomposes the failure space into four exhaustive divergence modes — gate-bypass (F1), audit-forgery (F2), silent host failure (F3), wrong-target (F4). The audit converts each mode into a closed question against the project's existing controls; an unanswered question is a finding ([`action-audit-divergence-taxonomy`](../security/action-audit-divergence-taxonomy.md), [`audit-record-divergence-invariant`](../security/action-audit-divergence-taxonomy.md)).
 
 ## Step 1 — Inventory the Action Surface
 
@@ -156,7 +158,7 @@ A control may cover multiple modes (a hash-chained log with policy receipts cove
 |----------|------|---------|---------|---------------|
 ```
 
-Severity rule of thumb (from [`audit-record-divergence-invariant`](../security/audit-record-divergence-invariant.md) §Conditions of Applicability):
+Severity rule of thumb (from [`audit-record-divergence-invariant`](../security/action-audit-divergence-taxonomy.md) §Conditions of Applicability):
 
 - `high` — long-running multi-user runtime, regulated environment, or `(1,1,1)` principal with the cell empty
 - `medium` — vendor-managed coding agent with the cell partially answered (e.g., transcript exists but retention contract is undocumented)
@@ -191,7 +193,7 @@ Top fix: <one-liner — usually F4 for agents with egress, F1 for agents with wr
 ## Related
 
 - [Action-Audit Divergence Taxonomy](../security/action-audit-divergence-taxonomy.md) — the F1-F4 framing this runbook walks
-- [Audit-Record Divergence as an Agent Runtime Invariant](../security/audit-record-divergence-invariant.md) — the seven detection primitives and applicability conditions
+- [Audit-Record Divergence as an Agent Runtime Invariant](../security/action-audit-divergence-taxonomy.md) — the seven detection primitives and applicability conditions
 - [Cryptographic Governance Audit Trail](../security/cryptographic-governance-audit-trail.md) — F2 control implementation
 - [Audit MCP Control Plane Bypass](audit-mcp-control-plane-bypass.md) — sibling audit covering off-protocol egress
 - [Audit Lethal Trifecta](audit-lethal-trifecta.md) — sibling audit; F4 concentrates on `(1,1,1)` principals

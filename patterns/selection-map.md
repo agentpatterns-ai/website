@@ -5,6 +5,7 @@ tags:
   - agent-design
   - cost-performance
   - workflows
+  - tool-agnostic
 aliases:
   - pattern trade-off matrix
   - pattern decision matrix

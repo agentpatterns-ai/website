@@ -4,6 +4,7 @@ description: "Locate CLAUDE.md and equivalent project instruction files, run mec
 tags:
   - tool-agnostic
   - instructions
+  - agent-readiness
 aliases:
   - CLAUDE.md health check
   - CLAUDE.md audit pass

@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - AuthGraph defense
   - dual-graph injection defense

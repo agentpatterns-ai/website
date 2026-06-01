@@ -5,6 +5,7 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - harness-engineering
 aliases:
   - harness quality score
   - harness simplification log

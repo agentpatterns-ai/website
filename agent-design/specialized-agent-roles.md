@@ -6,6 +6,7 @@ tags:
   - instructions
   - multi-agent
   - long-form
+  - tool-agnostic
 aliases:
   - Narrow Agent Scope Over Broad Role
   - Task-Specific Agents vs Role-Based Agents (parallel context)

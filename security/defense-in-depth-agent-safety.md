@@ -5,6 +5,7 @@ tags:
   - agent-design
   - security
   - source:opendev-paper
+  - tool-agnostic
 aliases:
   - defense in depth
   - layered security
@@ -129,7 +130,7 @@ Apply the full five-layer stack to production agents with write access, external
 - [Single-Layer Prompt Injection Defence](../anti-patterns/single-layer-injection-defence.md) — the anti-pattern this addresses
 - [Subagent Schema-Level Tool Filtering](../multi-agent/subagent-schema-level-tool-filtering.md) — schema layer in depth
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — approval layer in depth
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) — lifecycle-hook layer vs prompt layer
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — lifecycle-hook layer vs prompt layer
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — runtime validation layer
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — scopes what any single layer failure can damage
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model layers are defending against

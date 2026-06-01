@@ -6,6 +6,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
+  - arxiv
 aliases:
   - agentic context engineering
   - context collapse

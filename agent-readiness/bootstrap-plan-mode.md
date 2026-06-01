@@ -4,7 +4,9 @@ description: "Detect harness, set plan mode as the default permission mode for n
 tags:
   - tool-agnostic
   - workflows
-  - safety
+  - security
+  - instructions
+  - agent-readiness
 aliases:
   - default plan mode
   - read-only first
@@ -19,12 +21,12 @@ Packaged as: `.claude/skills/agent-readiness-bootstrap-plan-mode/`
 > Set plan mode as the project's default permission mode, scaffold a plan-review checklist, wire headless CI invocations to plan-mode by default. Read-only first; implementation only after plan acceptance.
 
 !!! info "Harness assumption"
-    Plan mode is a Claude Code permission mode toggled via `Shift+Tab`, `--permission-mode plan`, or `defaultMode` in `.claude/settings.json` ([docs](https://code.claude.com/docs/en/iam#permission-modes)). Other harnesses with read-only modes (e.g., Cursor's "ask" mode) need analogous configuration. See [`plan-mode`](../workflows/plan-mode.md).
+    Plan mode is a Claude Code permission mode toggled via `Shift+Tab`, `--permission-mode plan`, or `defaultMode` in `.claude/settings.json` ([docs](https://code.claude.com/docs/en/iam#permission-modes)). Other harnesses with read-only modes (e.g., Cursor's "ask" mode) need analogous configuration. See [`plan-mode`](../tools/claude/plan-mode.md).
 
 !!! info "Applicability"
     Apply to projects where multi-file changes are common, the codebase is unfamiliar to most contributors, or agents have been observed picking the wrong files to modify. Skip for trivial single-file utility repos where plan-mode overhead exceeds the cost of a bad attempt.
 
-Plan mode forces an agent to explore and propose before modifying — so wrong approaches surface before broken diffs. Setting it as the default makes the read-only-first discipline the path of least resistance instead of an opt-in. Rules from [`plan-mode`](../workflows/plan-mode.md) and [`plan-first-loop`](../workflows/plan-first-loop.md).
+Plan mode forces an agent to explore and propose before modifying — so wrong approaches surface before broken diffs. Setting it as the default makes the read-only-first discipline the path of least resistance instead of an opt-in. Rules from [`plan-mode`](../tools/claude/plan-mode.md) and [`plan-first-loop`](../workflows/plan-first-loop.md).
 
 ## Step 1 — Detect Current Default Mode
 
@@ -103,7 +105,7 @@ Reject the plan if any item is unchecked.
 If two or more items are unchecked, request a revised plan rather than approving with caveats.
 ```
 
-Reference: [`plan-mode` §Plan Review Checklist](../workflows/plan-mode.md#plan-review-checklist).
+Reference: [`plan-mode` §Plan Review Checklist](../tools/claude/plan-mode.md#plan-review-checklist).
 
 ## Step 5 — Document in AGENTS.md
 
@@ -167,7 +169,7 @@ Document why in AGENTS.md so the next contributor understands the deviation.
 
 ## Related
 
-- [Plan Mode](../workflows/plan-mode.md)
+- [Plan Mode](../tools/claude/plan-mode.md)
 - [The Plan-First Loop](../workflows/plan-first-loop.md)
 - [Pre-Execution Codebase Exploration](../workflows/pre-execution-codebase-exploration.md)
 - [Bootstrap Permissions Allowlist](bootstrap-permissions-allowlist.md)

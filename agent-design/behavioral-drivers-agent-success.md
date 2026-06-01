@@ -6,6 +6,7 @@ tags:
   - observability
   - evals
   - tool-agnostic
+  - arxiv
 aliases:
   - behavioral trajectory analysis
   - agent failure clusters

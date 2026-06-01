@@ -5,6 +5,7 @@ tags:
   - instructions
   - agent-design
   - workflows
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -220,6 +221,6 @@ If the steelman fits the org, leave the standards local until at least one of th
 - [Layered Instruction Scopes](../instructions/layered-instruction-scopes.md) — global-to-project-to-directory instruction layering
 - [Plugin and Extension Packaging](../standards/plugin-packaging.md) — packaging agent capabilities for distribution
 - [Agent Skills Standard](../standards/agent-skills-standard.md) — portable SKILL.md format for shared skills
-- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)
 - [Agent Governance Policies](agent-governance-policies.md) — enterprise-level policy controls for agent mode, MCP, and model availability
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) — scaling a shared skill library with MDM distribution, usage telemetry, and quality evals

@@ -6,6 +6,7 @@ tags:
   - workflows
   - human-factors
   - claude
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 
@@ -71,7 +72,7 @@ Stulberg's PRD workflow: Shift+Tab twice to enter plan mode, then have the agent
 - [Cross-functional knowledge artifacts](cross-functional-artifacts.md) — the PRD/strategy-memo framing this pattern feeds into
 - [Plan files as resumable artifacts](plan-files-resumable-artifacts.md) — the persisted artifact plan mode produces
 - [Self-explanation loop](self-explanation-loop.md) — the reflection mechanism plan mode also engages
-- [Plan mode](../../workflows/plan-mode.md) — the atomic workflow page
+- [Plan mode](../../tools/claude/plan-mode.md) — the atomic workflow page
 - [Plan-first loop](../../workflows/plan-first-loop.md) — the iteration shape and its backfire conditions
 - [Strategy over code generation](../../human/strategy-over-code-generation.md) — why the author's leverage has shifted to the plan
 - [Critic agent plan review](../../agent-design/critic-agent-plan-review.md) — a different mechanism (dual-model review) for the same goal

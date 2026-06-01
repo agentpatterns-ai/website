@@ -4,6 +4,7 @@ description: "Classify agent knowledge into three tiers — sourced, unverified,
 tags:
   - context-engineering
   - tool-agnostic
+  - instructions
 last_reviewed: 2026-05-27
 ---
 

@@ -17,3 +17,4 @@ Articles differ from the rest of this site. Patterns, techniques, and workflows 
 ## Articles
 
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — what happens to professional identity when code production is commoditized
+- [Evaluating Agent Patterns Catalog as a Source](evaluating-agent-patterns-catalog-as-a-source.md) — source assessment of agentpatternscatalog.org with citation guard-rails and an explicit no-MCP-wiring boundary

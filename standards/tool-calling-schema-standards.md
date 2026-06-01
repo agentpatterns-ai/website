@@ -4,6 +4,8 @@ description: "Tool definitions across providers converge on JSON Schema, but fie
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - standards
 aliases:
   - Tool Schema Design
   - Subagent Schema-Level Tool Filtering

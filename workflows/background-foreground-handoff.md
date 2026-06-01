@@ -5,6 +5,7 @@ tags:
   - workflows
   - tool-agnostic
   - human-factors
+  - agent-design
 aliases:
   - "background foreground agent handoff"
   - "async to sync agent transition"

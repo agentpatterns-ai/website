@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - code-review
   - workflows
+  - instructions
+  - agent-readiness
 aliases:
   - agent PR audit
   - agent productivity audit

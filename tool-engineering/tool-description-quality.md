@@ -4,6 +4,8 @@ description: "Tool descriptions determine whether agents select the right tool. 
 tags:
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - Tool Selection Guidance
   - Selection Signals

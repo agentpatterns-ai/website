@@ -5,6 +5,7 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
+  - arxiv
 aliases:
   - Skill Programs
   - Program Functions for Agents

@@ -225,7 +225,7 @@ Verify in your target version that a trivial hook (e.g. `jq -n '{additionalConte
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [On-Demand Skill Hooks: Session-Scoped Hook Guardrails](on-demand-skill-hooks.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [CLI Scripts as Agent Tools: Return Only What Matters](cli-scripts-as-agent-tools.md)

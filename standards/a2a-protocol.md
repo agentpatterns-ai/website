@@ -3,6 +3,8 @@ title: "Agent-to-Agent (A2A) Protocol for AI Agent Development"
 description: "An open standard enabling agents across different frameworks to discover capabilities, delegate tasks, and exchange structured results over HTTP."
 tags:
   - agent-design
+  - tool-agnostic
+  - standards
 last_reviewed: 2026-05-27
 ---
 

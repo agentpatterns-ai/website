@@ -5,6 +5,7 @@ tags:
   - instructions
   - agent-design
   - cost-performance
+  - tool-agnostic
 aliases:
   - effort scaling
   - effort-based resource allocation

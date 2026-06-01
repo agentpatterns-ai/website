@@ -5,6 +5,8 @@ tags:
   - instructions
   - agent-design
   - long-form
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - Skill design patterns
   - SKILL.md authoring

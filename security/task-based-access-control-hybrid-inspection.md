@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - task-based access control for agents
   - hybrid inspection authorization

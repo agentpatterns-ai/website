@@ -3,6 +3,7 @@ title: "CLAUDE.md Convention for Structuring Agent Instructions"
 description: "CLAUDE.md is Claude Code's project-level instruction file — read at session start to convey conventions, tooling, and behavioral rules."
 tags:
   - instructions
+  - tool-agnostic
 aliases:
   - Instruction File Convention
   - Project Instruction Files
@@ -168,7 +169,7 @@ paths:
 
 ## Related
 
-- [Getting Started: Setting Up Your Instruction File](../workflows/getting-started-instruction-files.md)
+- [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
 - [@import Composition Pattern](import-composition-pattern.md)

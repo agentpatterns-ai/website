@@ -12,6 +12,7 @@ tags:
   - agent-design
   - source:opendev-paper
   - memory
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - testing-verification
+  - tool-agnostic
 aliases:
   - Content Pipeline
   - Idea-to-Research Pipeline

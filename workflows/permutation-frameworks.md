@@ -3,6 +3,9 @@ title: "Permutation Frameworks for Batch Code Generation"
 description: "Define constrained code templates with shared signatures, then use agents to generate reliable variations at scale — shifting the developer to reviewer."
 tags:
   - instructions
+  - tool-agnostic
+  - agent-design
+  - workflows
 last_reviewed: 2026-05-27
 ---
 

@@ -5,6 +5,7 @@ tags:
   - context-engineering
   - human-factors
   - tool-agnostic
+  - fallacies
 last_reviewed: 2026-05-27
 ---
 

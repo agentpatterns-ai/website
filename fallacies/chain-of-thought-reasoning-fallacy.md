@@ -4,6 +4,7 @@ description: "Visible reasoning steps are generated text, not a window into the 
 tags:
   - human-factors
   - tool-agnostic
+  - fallacies
 aliases:
   - chain-of-thought proves reasoning
   - CoT reasoning fallacy

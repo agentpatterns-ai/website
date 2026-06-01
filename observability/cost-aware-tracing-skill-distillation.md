@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - memory
   - tool-agnostic
+  - arxiv
 aliases:
   - TraceCard distillation
   - Cost-aware skill distillation

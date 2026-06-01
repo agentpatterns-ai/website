@@ -6,6 +6,7 @@ tags:
   - evals
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - tool-use robustness benchmark
   - RobustBench-TC

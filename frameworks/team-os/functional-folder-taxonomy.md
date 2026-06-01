@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - instructions
   - tool-agnostic
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 

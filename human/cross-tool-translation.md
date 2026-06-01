@@ -153,6 +153,6 @@ Copilot finds the skill in `.claude/skills/` (or `.github/skills/`), maps `Bash`
 - [Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md)
 - [Agent Skills Standard](../standards/agent-skills-standard.md)
 - [AGENTS.md Standard](../standards/agents-md.md)
-- [Empirical Baseline: Agentic AI Coding Tool Configuration](empirical-baseline-agentic-config.md)
+- [Empirical Baseline: Agentic AI Coding Tool Configuration](../instructions/empirical-baseline-agentic-config.md)
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md)
 - [Context Ceiling](context-ceiling.md)

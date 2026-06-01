@@ -3,8 +3,8 @@ title: "Attention Sinks: Why First Tokens Always Win"
 description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance."
 tags:
   - context-engineering
+  - tool-agnostic
 aliases:
-  - Lost in the Middle
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement
 last_reviewed: 2026-05-27

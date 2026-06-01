@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - cost-performance
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
@@ -134,7 +135,7 @@ The plan file is version-controlled alongside the code. It serves as both a coor
 
 ## Activating Plan Mode in Claude Code
 
-Claude Code provides [Plan Mode](plan-mode.md) as a built-in permission constraint: the agent may only read files and ask questions until you approve a plan. No write operations are possible until approval.
+Claude Code provides [Plan Mode](../tools/claude/plan-mode.md) as a built-in permission constraint: the agent may only read files and ask questions until you approve a plan. No write operations are possible until approval.
 
 **During a session**: press `Shift+Tab` twice. The first press activates Auto-Accept mode; the second activates Plan Mode, shown as `⏸ plan mode on` at the bottom of the terminal.
 

@@ -4,6 +4,8 @@ description: "Asking the agent to clarify ambiguity before acting raises prompt-
 tags:
   - security
   - agent-design
+  - tool-agnostic
+  - arxiv
 aliases:
   - clarify-then-act injection
   - ask-user injection amplification

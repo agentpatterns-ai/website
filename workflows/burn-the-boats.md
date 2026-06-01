@@ -1,14 +1,16 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Burn the Boats — Commitment-Forcing Deprecation"
 description: "Remove a working feature entirely — with a hard deadline and migration path — to force full commitment to a new paradigm and prevent the team from anchoring to the old approach."
 tags:
   - workflows
   - tool-agnostic
+  - agent-design
 aliases:
   - commitment-forcing deprecation
   - credible commitment product strategy
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Burn the Boats — Commitment-Forcing Deprecation
 

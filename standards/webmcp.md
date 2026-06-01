@@ -4,6 +4,8 @@ description: "WebMCP is a W3C Community Group draft that lets web pages register
 tags:
   - agent-design
   - tool-agnostic
+  - standards
+  - mcp
 aliases:
   - Web Model Context Protocol
   - navigator.modelContext

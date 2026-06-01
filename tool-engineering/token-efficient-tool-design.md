@@ -3,11 +3,12 @@ title: "Token-Efficient Tool Design: Tools That Don't Eat Your Context"
 description: "Design tools so that each call injects the minimum tokens needed for the next agent decision — keeping context windows filled with signal, not noise."
 aliases:
   - Tool Output Design
-  - Semantic Tool Output
   - Agent-Friendly Output
 tags:
   - context-engineering
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

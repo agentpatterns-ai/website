@@ -6,6 +6,8 @@ aliases:
   - humanizing AI agents
 tags:
   - human-factors
+  - tool-agnostic
+  - anti-pattern
 last_reviewed: 2026-05-27
 ---
 

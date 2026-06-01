@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - observability
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - debug log audit
   - agent log retention audit

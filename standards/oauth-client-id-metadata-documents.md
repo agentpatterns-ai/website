@@ -5,6 +5,8 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+  - standards
+  - mcp
 aliases:
   - Client ID Metadata Documents
   - OAuth CIMD

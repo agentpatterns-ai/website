@@ -8,6 +8,7 @@ tags:
   - emerging
   - fallacies
   - articles
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

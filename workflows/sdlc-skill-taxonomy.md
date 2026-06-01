@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - SDLC skill library
   - lifecycle-indexed skill taxonomy

@@ -4,6 +4,8 @@ description: "Package project writing conventions — audience, tone, banned phr
 tags:
   - instructions
   - agent-design
+  - tool-agnostic
+  - tool-engineering
 aliases:
   - writing skill for agents
 last_reviewed: 2026-05-27

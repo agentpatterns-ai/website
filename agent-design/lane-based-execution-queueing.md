@@ -1,4 +1,3 @@
-<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 ---
 title: "Lane-Based Execution Queueing"
 description: "Isolate concurrent agent tasks into named queues with per-lane concurrency limits to prevent output interleaving, race conditions, and deadlocks."
@@ -10,6 +9,8 @@ aliases:
   - named queue concurrency
   - per-lane concurrency limits
 ---
+
+<!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Lane-Based Execution Queueing
 

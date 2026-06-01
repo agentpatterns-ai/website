@@ -4,6 +4,8 @@ description: "Endlessly refining prompts to prevent errors that structural contr
 tags:
   - human-factors
   - instructions
+  - tool-agnostic
+  - anti-pattern
 aliases:
   - prompt bloat
   - instruction bloat

@@ -4,6 +4,8 @@ description: "Generate an opinionated sub-agent skeleton with tight frontmatter,
 tags:
   - tool-agnostic
   - multi-agent
+  - instructions
+  - agent-readiness
 aliases:
   - sub-agent skeleton scaffold
   - .claude/agents bootstrap

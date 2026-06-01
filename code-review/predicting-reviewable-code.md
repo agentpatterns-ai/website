@@ -4,6 +4,8 @@ description: "Identify AI-generated functions likely to be deleted before PR rev
 tags:
   - testing-verification
   - human-factors
+  - tool-agnostic
+  - code-review
 aliases:
   - "Pre-Flagging Functions for Review"
   - "Code Deletion Prediction"

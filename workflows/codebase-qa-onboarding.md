@@ -6,6 +6,7 @@ tags:
   - onboarding
   - context-engineering
   - tool-agnostic
+  - agent-design
 last_reviewed: 2026-05-27
 ---
 
@@ -43,7 +44,7 @@ The [AGENTS.md standard](https://agents.md) provides an equivalent for tool-agno
 
 ### Step 2: Safe Exploration with Plan Mode
 
-Use [Plan Mode](plan-mode.md) (or equivalent read-only mode) for initial exploration. The agent searches, reads, and explains code without making changes -- zero risk of unintended modifications.
+Use [Plan Mode](../tools/claude/plan-mode.md) (or equivalent read-only mode) for initial exploration. The agent searches, reads, and explains code without making changes -- zero risk of unintended modifications.
 
 Start broad, then narrow:
 
@@ -162,8 +163,8 @@ The agent produces a step-by-step trace with 12 file references. The developer o
 
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — extending Q&A onboarding to a whole team
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — agent exploration as a first step before any change
-- [Codebase Readiness for Agents](codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
-- [Getting Started with Instruction Files](getting-started-instruction-files.md) — bootstrapping the CLAUDE.md / AGENTS.md that anchors onboarding
+- [Codebase Readiness for Agents](../agent-design/codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
+- [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md) — bootstrapping the CLAUDE.md / AGENTS.md that anchors onboarding
 - [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — hot/warm/cold tiers for the knowledge surfaced during Q&A
 - [Continuous Documentation](continuous-documentation.md) — keeping the docs produced by onboarding in sync with the code
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md) — using Plan Mode beyond initial exploration

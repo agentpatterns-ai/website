@@ -4,6 +4,8 @@ description: "Detect existing tool usage from transcripts and CI, generate a def
 tags:
   - tool-agnostic
   - security
+  - instructions
+  - agent-readiness
 aliases:
   - generate permissions allowlist
   - scaffold settings.json permissions

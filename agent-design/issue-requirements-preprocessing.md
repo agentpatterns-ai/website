@@ -5,7 +5,7 @@ tags:
   - agent-design
   - technique
   - tool-agnostic
-  - source:arxiv
+  - arxiv
 aliases:
   - requirement-driven issue resolution
   - issue requirements engineering

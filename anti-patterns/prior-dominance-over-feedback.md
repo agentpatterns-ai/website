@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - anti-pattern
+  - tool-agnostic
 aliases:
   - greedy optimizer prior
   - propose-evaluate-revise anti-pattern

@@ -45,6 +45,8 @@ How agents hand off work, share state, and refine each other's output without a 
 
 - [Economic Value Signaling in Multi-Agent Networks](economic-value-signaling.md) — Attach token values to inter-agent messages so agents self-sort by task priority without a central scheduler
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — Define explicit contracts between pipeline stages to prevent information loss at handoff points
+- [Lead-to-Teammate Plan-Approval Handshake](lead-teammate-plan-approval-handshake.md) — A teammate runs in read-only plan mode until the lead approves its plan, gating writes on peer review at the cheapest point in the cycle
+- [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](forked-vs-fresh-subagents.md) — Fork when the parent's mental model is an asset the brief cannot reconstruct; start fresh when bias, trifecta exposure, or token budget make inherited context a liability
 - [File-Based Agent Coordination](file-based-agent-coordination.md) — Coordinate parallel agents using lightweight file locks in a shared repository; git merge mechanics enforce task exclusivity without a central orchestrator
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — Decompose the self-improving agent loop into discrete, specialized roles with persistent knowledge layers, staged validation, and gated persistence

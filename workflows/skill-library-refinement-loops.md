@@ -6,6 +6,7 @@ tags:
   - human-factors
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - skill library maintenance
   - skill refinement loops

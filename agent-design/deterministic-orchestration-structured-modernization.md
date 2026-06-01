@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - cost-performance
+  - tool-agnostic
 aliases:
   - deterministic agent orchestration
   - workflow-controlled modernization

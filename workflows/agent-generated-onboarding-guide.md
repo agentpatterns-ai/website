@@ -128,7 +128,7 @@ claude /team-onboarding --out docs/onboarding/ramp-up.md
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — team-coordination onboarding, distinct from the artefact
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md) — captures judgments the generated guide will miss
 - [Continuous Documentation](continuous-documentation.md) — the broader drift-detection pipeline the ramp-up guide can plug into
-- [Getting Started with Instruction Files](getting-started-instruction-files.md) — CLAUDE.md and AGENTS.md are sibling artefacts to the ramp-up guide
+- [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md) — CLAUDE.md and AGENTS.md are sibling artefacts to the ramp-up guide
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — the reader-side skill the guide accelerates
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the primary failure mode when newcomers substitute the guide for code reading
 - [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — how the ramp-up guide fits alongside hot, warm, and cold knowledge

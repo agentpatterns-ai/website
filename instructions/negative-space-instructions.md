@@ -3,8 +3,8 @@ title: "Negative Space Instructions: What NOT to Do in Agent Prompts"
 description: "Use negative constraints — banned phrases, scope exclusions, tool restrictions — to eliminate known failure modes in agent prompts with binary, greppable rules."
 tags:
   - instructions
+  - tool-agnostic
 aliases:
-  - Instruction Polarity
   - Positive Rules Over Negative
   - Instruction Framing
 last_reviewed: 2026-05-27

@@ -5,6 +5,7 @@ tags:
   - workflows
   - human-factors
   - tool-agnostic
+  - agent-design
 aliases:
   - "public-channel agent work"
   - "Lehrwerkstatt agent pattern"
@@ -76,7 +77,7 @@ The order matters. The pattern fails open if the agent does not refuse DMs at th
 
 ## Relation to Visible Thinking
 
-This is the social-layer analogue of [Visible Thinking in AI-Assisted Development](../observability/visible-thinking-ai-development.md). That page is about making the *artifact* — commit, PR, branch name — carry the reasoning trail. Public-channel agent work makes the *in-progress conversation* carry the reasoning trail. Both reduce the cost of catching up on someone else's work without asking them; the conversation version adds the bandwidth of watching live.
+This is the social-layer analogue of [Visible Thinking in AI-Assisted Development](../human/visible-thinking-ai-development.md). That page is about making the *artifact* — commit, PR, branch name — carry the reasoning trail. Public-channel agent work makes the *in-progress conversation* carry the reasoning trail. Both reduce the cost of catching up on someone else's work without asking them; the conversation version adds the bandwidth of watching live.
 
 This is distinct from [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md). That page covers the delegation *surface* — invoking an agent by `@mention` from a chat platform instead of from the IDE. The Lehrwerkstatt pattern is the *visibility policy* layered on top: once the agent runs in chat, force the conversation to a channel everyone can read.
 
@@ -98,7 +99,7 @@ The minimum viable form for a smaller team: one named channel per agent-using pr
 
 ## Related
 
-- [Visible Thinking in AI-Assisted Development](../observability/visible-thinking-ai-development.md) — making artifacts carry the reasoning trail; public-channel work makes the live conversation do the same
+- [Visible Thinking in AI-Assisted Development](../human/visible-thinking-ai-development.md) — making artifacts carry the reasoning trail; public-channel work makes the live conversation do the same
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — the delegation surface this pattern layers a visibility policy on top of
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md) — public observation as a diffusion mechanism for prompting expertise
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — onboarding context for adopting the pattern at team scale

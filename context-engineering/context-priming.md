@@ -4,6 +4,7 @@ description: "Context priming loads relevant files into an agent context window 
 tags:
   - context-engineering
   - instructions
+  - tool-agnostic
 aliases:
   - Providing Context to Agents
   - Seeding Agent Context
@@ -42,7 +43,7 @@ Dumping everything at once is less effective than building understanding increme
 
 ### Explore Before Implement
 
-Use a read-only exploration phase before switching to implementation mode. Some tools support this explicitly — Claude Code's [plan mode](../workflows/plan-mode.md) separates reasoning from execution, letting the agent map out its approach before writing any code.
+Use a read-only exploration phase before switching to implementation mode. Some tools support this explicitly — Claude Code's [plan mode](../tools/claude/plan-mode.md) separates reasoning from execution, letting the agent map out its approach before writing any code.
 
 ### Use Plan Mode
 
@@ -99,7 +100,7 @@ Transformer models generate each token conditioned on all tokens currently in co
 - Agents work with what's in context — they don't automatically know your codebase
 - Read relevant files first; implement second
 - Build context progressively: broad architecture → specific files
-- Use [plan mode](../workflows/plan-mode.md) to verify the agent's understanding before it acts
+- Use [plan mode](../tools/claude/plan-mode.md) to verify the agent's understanding before it acts
 - Position critical context at the start of the prompt, not buried in the middle
 
 ## Related

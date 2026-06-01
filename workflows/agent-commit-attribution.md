@@ -5,6 +5,7 @@ tags:
   - workflows
   - security
   - tool-agnostic
+  - agent-design
 aliases:
   - "agent commit signing"
   - "agent identity in version control"

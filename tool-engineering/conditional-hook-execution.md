@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - claude
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

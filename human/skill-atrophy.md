@@ -115,7 +115,7 @@ Fatigue makes you tired *during* work; atrophy makes you less capable *between* 
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — the inverse pattern: interaction styles that build skill rather than erode it, grounded in the same Anthropic study
 - [Cognitive Load & AI Fatigue](cognitive-load-ai-fatigue.md) — temporary exhaustion, distinct from cumulative capability loss
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — compulsion mechanism that accelerates atrophy by increasing delegation frequency
-- [Vibe Coding](../workflows/vibe-coding.md) — the workflow pattern where atrophy risk is highest
+- [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where atrophy risk is highest
 - [Rigor Relocation](rigor-relocation.md) — engineering discipline shifts rather than disappears when agents write code
 - [Process Amplification](process-amplification.md) — strong engineering practices matter more, not less, when delegating to agents
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — expanding delegation scope safely without losing underlying skill

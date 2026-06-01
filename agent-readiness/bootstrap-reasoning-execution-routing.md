@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - cost-performance
   - agent-design
+  - instructions
+  - agent-readiness
 aliases:
   - model routing bootstrap
   - reasoning execution split

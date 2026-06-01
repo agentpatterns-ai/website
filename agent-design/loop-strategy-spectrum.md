@@ -5,6 +5,7 @@ tags:
   - agent-design
   - workflows
   - long-form
+  - tool-agnostic
 aliases:
   - Ralph loops
   - fresh-context loops

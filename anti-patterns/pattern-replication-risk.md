@@ -106,9 +106,9 @@ After two sprints of agent-assisted work, the codebase has 23 usages of `fetchWi
 ## Related
 
 - [Copy-Paste Agent](copy-paste-agent.md) -- Agent config duplication across projects
-- [Codebase Readiness](../workflows/codebase-readiness.md) -- Preparing a codebase for agent-assisted development
+- [Codebase Readiness](../agent-design/codebase-readiness.md) -- Preparing a codebase for agent-assisted development
 - [Agent-First Software Design](../agent-design/agent-first-software-design.md) -- designing systems where agents are the primary consumers
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md) -- Mechanical enforcement over prose instructions
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- Mechanical enforcement over prose instructions
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) -- Linters and CI as agent boundaries
 - [Abstraction Bloat](abstraction-bloat.md) -- Over-engineering and unnecessary hierarchies from agent output
 - [Comprehension Debt](comprehension-debt.md) -- The growing gap between agent-produced code and developer understanding

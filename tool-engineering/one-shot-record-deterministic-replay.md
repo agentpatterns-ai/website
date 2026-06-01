@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - arxiv
 aliases:
   - one-shot recording deterministic replay
   - loop skill engine pattern

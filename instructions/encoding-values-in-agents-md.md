@@ -5,6 +5,7 @@ tags:
   - instructions
   - human-factors
   - tool-agnostic
+  - arxiv
 aliases:
   - operationalizing ethics in AGENTS.md
   - values in agent context files

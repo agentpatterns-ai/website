@@ -5,7 +5,6 @@ tags:
   - workflows
   - agent-design
   - security
-  - cursor
   - tool-agnostic
 aliases:
   - chat as agent control surface

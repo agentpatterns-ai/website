@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 
@@ -192,5 +193,5 @@ Hooks are subprocesses — each matched call pays the startup cost, so a slow `P
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](on-demand-skill-hooks.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)

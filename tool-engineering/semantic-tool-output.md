@@ -3,12 +3,13 @@ title: "Semantic Tool Output: Designing for Agent Readability"
 description: "Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy."
 aliases:
   - Tool Output Design
-  - Token-Efficient Tool Design
   - Agent-Friendly Output
 tags:
   - context-engineering
   - agent-design
   - cost-performance
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 

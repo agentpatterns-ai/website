@@ -7,6 +7,8 @@ aliases:
 tags:
   - instructions
   - agent-design
+  - tool-agnostic
+  - tool-engineering
 last_reviewed: 2026-05-27
 ---
 
@@ -145,5 +147,5 @@ The Skill tool resolves the canonical path, injects the current version into con
 - [Skill Library Technical Debt](skill-library-technical-debt.md)
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../verification/hooks-vs-prompts.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md) — token economics and lazy loading principles behind JIT context loading

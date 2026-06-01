@@ -5,6 +5,7 @@ tags:
   - security
   - agent-design
   - claude
+  - tool-engineering
 aliases:
   - on-demand hooks
   - session-scoped guardrails

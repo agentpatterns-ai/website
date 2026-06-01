@@ -6,6 +6,7 @@ tags:
   - cost-performance
   - agent-design
   - tool-agnostic
+  - arxiv
 aliases:
   - persistent search sub-agent
   - shared librarian sub-agent

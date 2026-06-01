@@ -5,6 +5,8 @@ tags:
   - tool-agnostic
   - tool-engineering
   - testing-verification
+  - instructions
+  - agent-readiness
 aliases:
   - tool unit-test scaffold
   - per-tool test harness

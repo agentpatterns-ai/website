@@ -3,7 +3,6 @@ title: "Workload Identity Federation for Agent Runtimes"
 description: "Replace long-lived AI provider API keys with short-lived OIDC tokens minted from the runtime's existing workload identity; scope the trust rule narrowly or federation widens access."
 tags:
   - security
-  - tool-agnostic
   - claude
 aliases:
   - workload identity federation for AI agents

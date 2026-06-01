@@ -4,6 +4,7 @@ description: "Repeating a critical instruction at prompt start and end exploits 
 tags:
   - context-engineering
   - instructions
+  - tool-agnostic
 aliases:
   - Attention Sinks
   - Lost in the Middle

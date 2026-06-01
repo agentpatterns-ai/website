@@ -7,6 +7,7 @@ aliases:
 tags:
   - instructions
   - code-generation
+  - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 

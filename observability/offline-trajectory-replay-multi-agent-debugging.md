@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - testing-verification
   - tool-agnostic
+  - arxiv
 aliases:
   - per-node trajectory replay
   - offline multi-agent debugging

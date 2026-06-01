@@ -150,8 +150,8 @@ Each layer is independent: the PostToolUse hook catches issues file-by-file as t
 
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
-- [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md)
-- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../workflows/posttooluse-auto-formatting.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)

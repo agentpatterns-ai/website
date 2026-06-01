@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - cost-performance
   - tool-agnostic
+  - agent-design
 aliases:
   - no-token-limit magic
   - baseline-first optimization
