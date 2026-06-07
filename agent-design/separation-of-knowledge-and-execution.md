@@ -32,7 +32,7 @@ The [Agent Skills Standard](../standards/agent-skills-standard.md) defines skill
 
 **Agents carry execution, not knowledge.** An agent that knows "how to research a topic" should not also encode "what URLs are authoritative for this domain." Separating these allows the same agent logic to work across different domains by swapping skills.
 
-**Commands carry orchestration, not logic.** A command that runs the [content pipeline](../workflows/content-pipeline.md) triggers agents in sequence but doesn't implement the steps itself. You can change the workflow — add a review step, reorder stages — without touching the agents.
+**Commands carry orchestration, not logic.** A command that runs the content pipeline triggers agents in sequence but doesn't implement the steps itself. You can change the workflow — add a review step, reorder stages — without touching the agents.
 
 ## Reuse and Composability
 

@@ -6,12 +6,12 @@ tags:
   - github-actions
   - copilot
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions
 
-> A failing CI run becomes a one-click handoff to a cloud agent that investigates the workflow log, pushes a fix to the existing branch, and tags the operator for review — useful only when each of the three remaining confirmation gates (click-to-trigger, approve-workflows, PR-review) is exercised rather than rubber-stamped.
+> One-click CI auto-fix hands a failing GitHub Actions run to a cloud agent that pushes a fix, bounded by three human confirmation gates.
 
 ## When It Applies
 

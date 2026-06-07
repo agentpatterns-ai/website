@@ -7,42 +7,42 @@ tags:
   - workflows
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Interaction-Pattern Evaluation for Agentic PRs
 
-> Merge and rejection outcomes alone misrepresent agent quality: only 35.7% of rejected agentic PRs reflect clear agent failures, and 5.5% of merged ones show no visible interaction trace at all. Evaluate agents by what happened during review, not by the final label.
+> Merge and reject labels misclassify agentic PR quality — most rejections aren't failures, some merges hide no review. Evaluate by interaction pattern, not outcome.
 
-Outcome labels conflate three signals: whether the agent's output was viable, whether reviewers chose to engage, and whether the interaction was observable. An analysis of 11,048 closed agentic PRs — 9,799 human-reviewed, 717 manually inspected — found 31.2% of rejections driven by workflow constraints (duplicates, abandonment, policy mismatches) and 33.1% with no observable decision rationale ([MSR 2026 mining challenge entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)). Among merged PRs, 15.4% required explicit reviewer involvement through feedback or direct commits, and 5.5% closed without visible interaction. Interaction-pattern evaluation replaces the binary outcome with a structured signal set drawn from the review trace itself.
+Outcome labels conflate three signals: whether the agent's output was viable, whether reviewers chose to engage, and whether the interaction was observable. An analysis of 11,048 closed agentic PRs (717 manually inspected) found 31.2% of rejections driven by workflow constraints — duplicates, abandonment, policy mismatches — and 33.1% with no observable decision rationale; among merges, 15.4% needed explicit reviewer involvement and 5.5% closed without visible interaction ([MSR 2026 mining challenge entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)). Interaction-pattern evaluation replaces the binary outcome with a structured signal set drawn from the review trace itself.
 
 ## What to Measure
 
 Five signals separate agent capability from workflow noise:
 
-- **Review-loop completion** — did the PR receive at least one substantive review and converge in a bounded number of rounds? Reviewer engagement is the strongest single predictor of merge in a regression on 33,596 agent-authored PRs ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)).
-- **Reviewer-commit involvement** — did a human push commits onto the PR branch? 15.4% of merged agentic PRs were rescued this way; counting them as "agent successes" overstates capability ([MSR 2026 entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)).
+- **Review-loop completion** — did the PR get at least one substantive review and converge in bounded rounds? Reviewer engagement is the strongest single merge predictor in a regression on 33,596 agent-authored PRs ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)).
+- **Reviewer-commit involvement** — did a human push commits onto the branch? 15.4% of merged agentic PRs were rescued this way; counting them as agent successes overstates capability ([MSR 2026 entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)).
 - **Force-push count during review** — force pushes are the strongest negative merge predictor; they invalidate prior review context and signal instability ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)).
-- **Time-to-first-review and abandonment** — workflow-driven closures dominate the 33.1% "no observable rationale" bucket. Track whether PRs reach a reviewer at all before reading the close event as a capability signal ([MSR 2026 entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)).
+- **Time-to-first-review and abandonment** — workflow-driven closures dominate the 33.1% "no observable rationale" bucket. Check whether a PR reached a reviewer at all before reading its close as a capability signal.
 - **Reviewer-mediation mode per agent** — Copilot and Devin sit more often inside reviewer-mediated workflows; Codex and Cursor PRs typically merge with minimal interaction ([MSR 2026 entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)). Compare agents in the same mode, not on aggregate rate.
 
-Task type confounds aggregate merge rate independently: documentation tasks accept at 82.1% versus 66.1% for new features — a 16-point gap that exceeds inter-agent variance on most categories ([arXiv:2602.08915](https://arxiv.org/abs/2602.08915)). Stratify every metric above by task type before comparing agents.
+Task type confounds aggregate merge rate independently: documentation accepts at 82.1% versus 66.1% for new features — a 16-point gap exceeding inter-agent variance on most categories ([arXiv:2602.08915](https://arxiv.org/abs/2602.08915)). Stratify every metric above by task type before comparing agents.
 
 ## Why It Works
 
-The mechanism is causal pathway separation. An outcome label collapses three independent processes — agent output viability, reviewer engagement choice, and trace observability — into one binary, so any agent comparison built on that signal is contaminated by the latter two. The MSR 2026 manual inspection of 717 cases shows roughly two-thirds of rejection labels and one-fifth of merge labels carry information unrelated to agent capability ([MSR 2026 entry](https://2026.msrconf.org/details/msr-2026-mining-challenge/15/Why-Are-Agentic-Pull-Requests-Merged-or-Rejected-An-Empirical-Study)). Interaction signals — review-loop count, reviewer-commit count, force-push count, abandonment timestamp — are emitted by the three processes separately, so a metric set built on them recovers a less contaminated capability estimate. The same mechanism appears in Alam et al.'s analysis of 8,106 fix-related agentic PRs, where test failures and prior resolution of the same issue dominated non-integration — not capability defects ([arXiv:2602.00164](https://arxiv.org/abs/2602.00164)).
+The mechanism is causal pathway separation. An outcome label collapses three independent processes — output viability, reviewer engagement, and trace observability — into one binary, so any comparison built on it is contaminated by the latter two; the MSR 2026 inspection shows roughly two-thirds of rejection labels and one-fifth of merge labels carry information unrelated to capability. Interaction signals — review-loop count, reviewer-commit count, force-push count, abandonment timestamp — are emitted by those processes separately, so a metric set built on them recovers a less contaminated capability estimate. The same pattern appears in Alam et al.'s 8,106 fix-related PRs, where test failures and prior resolution of the same issue dominated non-integration — not capability defects ([arXiv:2602.00164](https://arxiv.org/abs/2602.00164)).
 
 ## When This Backfires
 
 Interaction-pattern evaluation adds instrumentation cost and assumes enough PR volume to estimate the new metrics reliably. Five conditions favour falling back to outcome rates:
 
-- **Homogeneous task mix and stable reviewers** — if an agent only ships documentation PRs to one team, the rationale-loss bucket collapses and merge rate becomes an acceptable proxy. The 82.1% documentation acceptance baseline is high enough that workflow noise dominates less ([arXiv:2602.08915](https://arxiv.org/abs/2602.08915)).
-- **Curated, high-engagement populations** — Watanabe et al. examined 567 Claude Code PRs across 157 maintained OSS projects and found 83.8% merge with 54.9% un-modified ([arXiv:2509.14745](https://arxiv.org/abs/2509.14745)). When reviewer abandonment and missing rationale are rare by selection, outcome rates carry more signal.
-- **Internal deployments with SLA-bounded review** — if every agentic PR is triaged within a fixed window and never closes as stale, the 33.1% "no observable rationale" bucket shrinks. Public-OSS pathologies do not transfer to closed teams that enforce review SLAs.
-- **Low PR volume** — stable interaction-pattern statistics need enough PRs per agent and per task type to overcome variance. Small teams may not have the data to make the richer metric set more accurate than aggregate rate.
-- **Agents optimised against the evaluation metric** — any metric used to gate procurement creates an optimisation target. Agents tuned to maximise reviewer engagement (chatty comments, artificial review loops) can game interaction signals the same way agents tuned to maximise merge rate can game outcomes. Audit the metric definition against gaming pressure before scaling its use.
+- **Homogeneous task mix and stable reviewers** — if an agent only ships documentation PRs to one team, the rationale-loss bucket collapses and merge rate becomes an acceptable proxy. The 82.1% documentation baseline is high enough that workflow noise dominates less ([arXiv:2602.08915](https://arxiv.org/abs/2602.08915)).
+- **Curated, high-engagement populations** — Watanabe et al. found 567 Claude Code PRs across 157 maintained OSS projects merged at 83.8%, 54.9% un-modified ([arXiv:2509.14745](https://arxiv.org/abs/2509.14745)). When abandonment and missing rationale are rare by selection, outcome rates carry more signal.
+- **Internal deployments with SLA-bounded review** — if every PR is triaged within a fixed window and never closes as stale, the 33.1% rationale-loss bucket shrinks. Public-OSS pathologies do not transfer to closed teams that enforce review SLAs.
+- **Low PR volume** — stable interaction statistics need enough PRs per agent and task type to overcome variance. Small teams may lack the data to make the richer metric set more accurate than aggregate rate.
+- **Agents optimised against the metric** — any procurement gate creates an optimisation target. Agents tuned to maximise engagement (chatty comments, artificial review loops) can game interaction signals just as merge-rate tuning games outcomes. Audit the metric against gaming pressure before scaling it.
 
-A practitioner steelman: aggregate merge rate is the cheapest KPI for procurement and rank-orders agents directionally correctly when sample sizes are large and task mix is similar. Adopt interaction-pattern evaluation when those assumptions break, not as a blanket replacement.
+A practitioner steelman: aggregate merge rate is the cheapest procurement KPI and rank-orders agents directionally when sample sizes are large and task mix is similar. Adopt interaction-pattern evaluation when those assumptions break, not as a blanket replacement.
 
 ## Example
 

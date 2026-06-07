@@ -71,7 +71,7 @@ Skills are the reusable knowledge layer; agents and commands are not.
 
 ## In Practice
 
-A documentation project might maintain skills covering [content pipeline](../workflows/content-pipeline.md) management, writing standards, accuracy frameworks, and site navigation. Each agent definition references the skills it needs; each skill is self-contained. A typical project keeps 5--15 skills, each focused on one domain concern.
+A documentation project might maintain skills covering content pipeline management, writing standards, accuracy frameworks, and site navigation. Each agent definition references the skills it needs; each skill is self-contained. A typical project keeps 5--15 skills, each focused on one domain concern.
 
 Claude Code implementation: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills).
 

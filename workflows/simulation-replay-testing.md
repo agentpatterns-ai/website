@@ -110,7 +110,7 @@ Each stage has an independently testable input/output boundary.
 
 You update a researcher agent's instructions to add a "related pages" step. Before shipping, you want to verify the change doesn't break existing behavior.
 
-1. Find a past merged task — say, the PR that added `docs/workflows/content-pipeline.md` (merge commit `abc1234`, pre-merge commit `def5678`).
+1. Find a past merged task — say, the PR that added `docs/workflows/continuous-documentation.md` (merge commit `abc1234`, pre-merge commit `def5678`).
 
 2. Create an isolated worktree at the pre-merge state:
 
@@ -122,13 +122,13 @@ You update a researcher agent's instructions to add a "related pages" step. Befo
 
     ```bash
     cd ../sim-test
-    claude --prompt "Research and draft docs/workflows/content-pipeline.md using the updated researcher instructions in .claude/agents/researcher.md"
+    claude --prompt "Research and draft docs/workflows/continuous-documentation.md using the updated researcher instructions in .claude/agents/researcher.md"
     ```
 
 4. Diff the agent's output against the merged solution:
 
     ```bash
-    git diff def5678 abc1234 -- docs/workflows/content-pipeline.md
+    git diff def5678 abc1234 -- docs/workflows/continuous-documentation.md
     ```
 
 5. Review the diff: if the updated agent produces equivalent content plus the new "related pages" additions, the prompt change is validated. If it drops sections the original got right, reject and iterate.

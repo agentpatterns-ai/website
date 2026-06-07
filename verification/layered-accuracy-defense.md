@@ -88,7 +88,7 @@ The pattern works when each layer has a structurally different task: the researc
 
 ## Example
 
-A three-agent [content pipeline](../workflows/content-pipeline.md) where each agent's system prompt encodes its verification responsibility.
+A three-agent content pipeline where each agent's system prompt encodes its verification responsibility.
 
 **Researcher prompt excerpt:**
 

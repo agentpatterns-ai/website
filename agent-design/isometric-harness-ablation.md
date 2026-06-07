@@ -11,16 +11,16 @@ aliases:
   - isometric model control
   - five-subsystem ablation
   - harness subsystem ablation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Isometric Harness Ablation
 
-> Pin the model, remove one harness subsystem at a time, rerun the benchmark, record the score drop. The resulting per-subsystem table tells you which subsystem to invest in next and which is scaffolding ripe for retirement.
+> Pin the model, remove one harness subsystem at a time, rerun the benchmark, record the drop. The per-subsystem drop table ranks where to invest next.
 
 ## The Methodology
 
-[Harness engineering](harness-engineering.md) treats the agent environment as the dominant lever on output quality. Isometric ablation quantifies *which part* of that environment is doing the work. The walkinglabs harness engineering course names the technique "isometric model control": keep the model fixed, remove subsystems one at a time, measure which removal causes the biggest performance drop ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)).
+[Harness engineering](harness-engineering.md) treats the agent environment as the dominant lever on output quality. Isometric ablation quantifies *which part* of that environment is doing the work. The walkinglabs harness engineering course describes the technique — it calls it the "controlled variable exclusion test": keep the model fixed, remove subsystems one at a time, measure which removal causes the biggest performance drop ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)). *Isometric ablation* is this page's name for the same procedure, by analogy with isometric exercise: hold one variable fixed while loading another.
 
 ```mermaid
 graph TD
@@ -34,7 +34,7 @@ graph TD
     H --> I[Invest in highest-drop subsystem]
 ```
 
-The five subsystems to ablate, following the kitchen analogy from the same source ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)):
+The five subsystems to ablate, following the five-subsystem harness model from the same source ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)):
 
 | Subsystem | Concrete artifact | What removing it tests |
 |---|---|---|
@@ -70,7 +70,7 @@ Anthropic's 2D retro game maker comparison shows the scale: same prompt, same mo
 The methodology slots between two adjacent practices:
 
 - [Harness hill-climbing](harness-hill-climbing.md) optimizes a *single dimension* — one change per iteration, accept if the score improves. The climb assumes you have already picked the right dimension. Isometric ablation tells you which dimension. The ablation table maps the terrain; the climber traverses it.
-- [Harness impermanence](harness-impermanence.md) flags scaffolding for deletion when native model capability subsumes it. Subsystems with near-zero ablation drop are the leading indicator: if removing the subsystem barely changes the score, the model is already doing the work the scaffold was added to provide. Add them to the simplification log.
+- [Harness impermanence](harness-impermanence.md) flags scaffolding for deletion when native model capability subsumes it. Subsystems with near-zero ablation drop are the leading indicator: if removing the subsystem barely changes the score, the model is already doing the work the scaffold was added to provide. Add them to the [simplification log](quality-score-rubric.md).
 
 The full cycle: ablate to rank, hill-climb the top-ranked subsystem, re-ablate to confirm the rank changed, retire low-drop subsystems.
 
@@ -90,7 +90,7 @@ A team using GPT-4o on a TypeScript + React frontend codebase (~20,000 LOC) ran 
 
 | Stage | Subsystems present | Success rate |
 |---|---|---|
-| 1 — empty kitchen | README only | 20% |
+| 1 — bare baseline | README only | 20% |
 | 2 — add instructions | `AGENTS.md` with stack, conventions | 60% |
 | 3 — add feedback | Verification commands listed | 80% |
 | 4 — add state | `PROGRESS.md` between sessions | 80–100% |

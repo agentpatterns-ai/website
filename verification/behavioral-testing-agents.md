@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Behavioral Testing for Non-Deterministic AI Agents
@@ -89,6 +89,8 @@ When pass rates drop below thresholds, the eval suite blocks deployment. Review 
 ## Evaluate End-State, Not Process
 
 For agents that modify persistent state across multiple turns, evaluate final outcomes. A longer path that reaches the correct state beats a shorter path that does not. See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for implementation.
+
+Cognition operationalizes this at scale in Devin's test mode: rather than asserting on the execution path, the agent spins up the app in its own VM, clicks through it, and confirms the change actually works "the same way an engineer would," with each run scaling out in parallel on its own dev server. [Source: [Cognition: Verifying Agentic Development at Scale](https://cognition.ai/blog/testing-development)]
 
 ## Example
 

@@ -8,12 +8,12 @@ tags:
   - tool-engineering
   - tool-agnostic
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Scoped MCP Server Discovery: Most-Specific-Wins Resolution
 
-> Layered MCP configs across user, workspace, and project files share the namespace of git config and npm config: the most-specific scope defining a server name wins, and duplicates are suppressed before the agent ever sees them.
+> Across user, workspace, and project MCP configs, the most-specific scope defining a server name wins, and duplicate definitions are suppressed before the agent sees them.
 
 ## The Three Scopes
 
@@ -44,6 +44,16 @@ Three habits keep layered configs debuggable:
 - **Inspect the effective config**, not the source files. In Claude Code, `/mcp` lists what is loaded after dedup; in VS Code, search `@mcp @installed` in the extensions view ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118)).
 - **Approve project-scope servers explicitly.** Claude Code prompts before activating servers from a project `.mcp.json`; reset choices with `claude mcp reset-project-choices` ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp)).
 - **Rename when intent differs.** If a developer's `github` server points at a private fork and the team's `github` server points at the public registry, the dedup rule silently disables one. Rename one of them — layering is for overrides, not for parallel intents.
+
+## When This Backfires
+
+Most-specific-wins is the right default, but the same silent determinism that prevents duplicates can hide problems. Treat these as failure conditions, not edge cases:
+
+- **Different intents collide under one name.** When a developer's `github` server points at a private fork and the team's `github` points at the public registry, the dedup rule disables one with no error — the agent silently routes to whichever scope won. Shadowing is for overrides of the *same* intent; parallel intents need distinct names.
+- **The winning scope is invisible at the call site.** Because resolution happens before the tool list reaches the model, a tool that misbehaves gives no hint that a different-scope definition shadowed the one you were reading. Debugging starts from the wrong file unless you inspect the effective config first.
+- **Local scope outlives its usefulness.** A local-scope override added for a one-off experiment persists in `~/.claude.json` and keeps shadowing the team default indefinitely. Nothing prompts you to retire it, so a stale personal entry can mask an updated project server for weeks.
+
+In each case the alternative — explicit per-scope naming, or surfacing every loaded server without dedup — trades token cost and a longer tool list for transparency. Prefer most-specific-wins when scopes genuinely override the same server, and reach for distinct names the moment two definitions mean different things.
 
 ## Example
 

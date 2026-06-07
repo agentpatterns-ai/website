@@ -10,12 +10,12 @@ aliases:
   - syntax-confidence routing
   - SynConfRoute pattern
   - confidence plus syntax routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Syntax-Aware Completion Routing
 
-> Route per-request between a local small CodeLLM and a self-hosted large model using two stacked signals — token confidence on the small model's output, then a parse-time check that the completion is valid code — and only escalate when both signals say the local result is unsafe.
+> Escalate a local code completion to a larger model only when two stacked signals agree it is unsafe: low token confidence, then a parse check that the output is valid code.
 
 ## The Routing Signal
 
@@ -42,7 +42,7 @@ Both gates must pass for the local completion to ship. Confidence is free during
 
 ## What "Training-Free" Buys
 
-The pipeline uses off-the-shelf models with no router fine-tuning. Thresholds for the two gates are hand-tuned, not learned ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894)). The router drops onto an existing local-plus-self-hosted stack without training, but thresholds couple to the specific small model and language coverage — swapping models or adding a language requires re-tuning.
+The pipeline uses off-the-shelf models with no router fine-tuning. Thresholds for the two gates are hand-tuned, not learned ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894)). The router drops onto an existing local-plus-self-hosted stack without training, but thresholds couple to the specific small model and language — swapping either requires re-tuning. Independent work confirms the coupling: perplexity, the basis of the confidence gate, varies systematically by language ([Cao et al., 2026](https://arxiv.org/abs/2508.16131)), so one cutoff rarely transfers across a polyglot codebase.
 
 The paper reports routine pass@1 of 78.9% — 7.4 points higher than always invoking the 480B model — and 58% lower accelerator usage ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894)).
 
@@ -66,7 +66,7 @@ The pattern is reported on Python, Java, and C++ fill-in-the-middle benchmarks (
 - **Sub-100ms completion budgets** — IDE inline completion competes on tens-of-milliseconds latency. A parse pass is cheap but non-zero; an escalation round-trip is not.
 - **Single-developer or offline setups** — without a reachable large model, escalation silently fails and quality drops to small-model-alone.
 
-The headline numbers come from a single 2026 preprint with abstract-level methodological detail. The paper does not specify which 3B and 480B models were used, the exact thresholds, or whether the syntax validator is a parser, AST checker, or compiler invocation. Treat the +6.4 / +31 / 58% figures as *the paper reports* until the full PDF and any released code can be checked.
+The headline numbers come from a single 2026 preprint with abstract-level detail — it does not name the 3B and 480B models, the thresholds, or whether the validator is a parser, AST checker, or compiler. Treat the +6.4 / +31 / 58% figures as *the paper reports* until the full PDF and any code can be checked.
 
 ## When the Pattern Fits
 
@@ -76,7 +76,7 @@ Three conditions favour syntax-aware routing:
 2. **Fill-in-the-middle or single-language completion** — self-contained span in a language with mature parser support.
 3. **A measurable share of small-model errors is syntactic** — verify on your own traffic. If most errors are semantically wrong but syntactically clean, the syntax gate adds latency without filtering.
 
-Outside those conditions, simpler alternatives — a single right-sized 7B-13B local model, or confidence-only routing — do most of the same work without the parser-coverage tax.
+Outside those conditions, a single right-sized 7B-13B local model or confidence-only routing does most of the same work without the parser-coverage tax.
 
 ## Example
 

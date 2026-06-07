@@ -8,12 +8,12 @@ tags:
 aliases:
   - gateway model discovery
   - anthropic-compatible gateway routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Gateway Model Routing
 
-> Point the harness at an Anthropic-compatible gateway and let the gateway's `/v1/models` endpoint populate the model picker — a single config knob controls both inference target and visible catalogue.
+> An Anthropic-compatible gateway serves inference and publishes the model catalogue, so one config knob drives both the inference target and the model picker.
 
 ## The Pattern
 
@@ -35,8 +35,8 @@ graph LR
     Cached -.->|empty| Built[Built-in list]
 ```
 
-1. **Trigger** — runs only when `ANTHROPIC_BASE_URL` points at a non-Anthropic host exposing the Anthropic Messages format. It does not run for Bedrock or Vertex pass-through endpoints, nor when the variable is unset or points at `api.anthropic.com`.
-2. **Auth** — the discovery request reuses inference credentials: `ANTHROPIC_AUTH_TOKEN` as bearer, or `ANTHROPIC_API_KEY` as `x-api-key`, plus headers from `ANTHROPIC_CUSTOM_HEADERS`. No second auth surface.
+1. **Trigger** — opt-in by flag *and* URL. Discovery runs only when `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` is set and `ANTHROPIC_BASE_URL` points at a non-Anthropic host exposing the Anthropic Messages format ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config)). It does not run with the flag unset, for Bedrock or Vertex pass-through endpoints, nor when the base URL is unset or points at `api.anthropic.com`.
+2. **Auth** — the discovery request reuses inference credentials: `ANTHROPIC_AUTH_TOKEN` as bearer, or `ANTHROPIC_API_KEY` as `x-api-key`, plus headers from `ANTHROPIC_CUSTOM_HEADERS`. One known gap: when credentials come only from an `apiKeyHelper` script rather than an env var, discovery races the async helper and fires unauthenticated, so gateway models silently never appear ([anthropics/claude-code#56675](https://github.com/anthropics/claude-code/issues/56675)). Set `ANTHROPIC_AUTH_TOKEN`/`ANTHROPIC_API_KEY` directly to avoid it.
 3. **Filter** — only IDs starting with `claude` or `anthropic` are added to the picker. Each entry is labelled "From gateway" using the response's `display_name` field.
 4. **Failure mode** — on request failure or missing endpoint, the picker falls back to the previously cached list, then to the built-in list. The harness keeps working.
 
@@ -71,7 +71,9 @@ export ANTHROPIC_BASE_URL=https://litellm-server:4000
 export ANTHROPIC_AUTH_TOKEN=sk-litellm-static-key
 ```
 
-LiteLLM's unified Anthropic-format endpoint serves `/v1/messages` for inference and `/v1/models` for discovery. On startup, Claude Code 2.1.126 queries the gateway, filters returned IDs to those beginning with `claude` or `anthropic`, and adds them to `/model` labelled "From gateway." If the gateway exposes a custom Bedrock-routed Opus deployment with an ID like `claude-opus-4-7-bedrock-prod`, it appears in the picker without rebuilding the harness.
+LiteLLM's unified Anthropic-format endpoint serves `/v1/messages` for inference and `/v1/models` for discovery. With `CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1` set, Claude Code 2.1.126 queries the gateway on startup, filters returned IDs to those beginning with `claude` or `anthropic`, and adds them to `/model` labelled "From gateway." If the gateway exposes a custom Bedrock-routed Opus deployment with an ID like `claude-opus-4-7-bedrock-prod`, it appears in the picker without rebuilding the harness.
+
+One caveat with LiteLLM specifically: discovery parses only the Anthropic-native `/v1/models` shape (`type: "model"`, `display_name`, top-level `has_more`/`first_id`). LiteLLM currently returns the OpenAI shape (`object: "model"`, Unix `created`), which Claude Code does not parse, so its models are filtered out until LiteLLM ships an Anthropic-format response ([BerriAI/litellm#27180](https://github.com/BerriAI/litellm/issues/27180)). Until then, the fallback is a manual `ANTHROPIC_CUSTOM_MODEL_OPTION` entry.
 
 For deployments that need effort levels enabled on the gateway-served model:
 

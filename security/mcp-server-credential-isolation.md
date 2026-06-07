@@ -5,20 +5,20 @@ tags:
   - security
   - tool-agnostic
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Per-Server MCP Environment Scoping for Credential Isolation
 
 > Spawn each MCP server with its own minimal environment scope so one server's credentials never leak to every other server.
 
-Per-server MCP environment scoping is the configuration posture where every MCP server is spawned with an explicit, minimal environment block rather than inheriting the agent host's full environment. A GitHub MCP server sees `GITHUB_TOKEN`. A Postgres MCP server sees `DATABASE_URL`. A Stripe MCP server sees `STRIPE_KEY`. None sees the others. The credential blast radius for any single compromised, buggy, or tricked server is bounded by what the operator deliberately granted.
+Per-server MCP environment scoping is the configuration posture where every MCP server is spawned with an explicit, minimal environment block rather than inheriting the agent host's full environment. A GitHub MCP server sees `GITHUB_TOKEN`; a Postgres server sees `DATABASE_URL`; a Stripe server sees `STRIPE_KEY`. None sees the others. The credential blast radius for any single compromised, buggy, or tricked server is bounded by what the operator deliberately granted.
 
 ## The Default That Leaks
 
-Without per-server scoping, the host spawns each MCP server with `os.environ` as the env block, so every secret the operator exported into the agent's shell is visible to every server the agent connects. A community-published or backdoored MCP server with no business seeing a Stripe key can `getenv("STRIPE_KEY")` and exfiltrate it through its own egress channel. This is the Unix-default behavior — `execve(2)` passes the calling process's `environ` unless the caller builds a fresh block.
+Without per-server scoping, the host spawns each MCP server with `os.environ` as the env block, so every secret the operator exported into the agent's shell is visible to every server. A backdoored MCP server with no business seeing a Stripe key can `getenv("STRIPE_KEY")` and exfiltrate it through its own egress channel. This is the Unix default — `execve(2)` passes the calling process's `environ` unless the caller builds a fresh block.
 
-The MCP specification does not mandate env scoping; each host implementation decides. The reference [MCP Python SDK's `stdio_client`](https://github.com/modelcontextprotocol/python-sdk) constructs the spawned server's env from `StdioServerParameters.env` merged with a hard-coded allowlist — POSIX: `HOME`, `LOGNAME`, `PATH`, `SHELL`, `TERM`, `USER`; Windows adds `APPDATA`, `HOMEDRIVE`, `HOMEPATH`, `LOCALAPPDATA`, `PATHEXT`, `PROCESSOR_ARCHITECTURE`, `SYSTEMDRIVE`, `SYSTEMROOT`, `TEMP`, `USERNAME`, `USERPROFILE`. Application secrets are on neither list. The SDK ships default-deny; whether a host preserves it is a host choice.
+The MCP specification does not mandate env scoping; each host decides. The reference [MCP Python SDK's `stdio_client`](https://github.com/modelcontextprotocol/python-sdk) constructs the spawned server's env from `StdioServerParameters.env` merged with a hard-coded allowlist (`HOME`, `PATH`, `SHELL`, `USER`, and a handful of platform variables); application secrets are not on it. The SDK ships default-deny; whether a host preserves it is a host choice.
 
 ## How Each Host Exposes the Knob
 
@@ -34,7 +34,7 @@ In all three, the operator opts into which variables cross the boundary. The def
 
 ## OAuth for Streamable HTTP Servers
 
-For remote MCP servers over HTTP, the env field is not the right surface — tokens belong in a per-server credential store, not exported variables. Claude Code stores OAuth client secrets in the OS keychain (macOS) or a credentials file, not in `.mcp.json`, and a server's tokens are scoped to that server's identifier ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). The `oauth.scopes` field pins the requested scope set so an MCP server cannot widen its authority beyond what the operator approved. Codex CLI 0.134.0 adds the same posture for streamable HTTP servers ([Codex changelog](https://developers.openai.com/codex/changelog)). The credential never exists in env at all; it lives in a per-server keychain entry the agent process retrieves on demand.
+For remote MCP servers over HTTP, the env field is not the right surface — tokens belong in a per-server credential store, not exported variables. Claude Code stores OAuth client secrets in the OS keychain or a credentials file, not in `.mcp.json`, and scopes a server's tokens to that server's identifier; the `oauth.scopes` field pins the requested scope set so a server cannot widen its authority beyond what the operator approved ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). Codex CLI 0.134.0 adds the same posture for streamable HTTP servers ([Codex changelog](https://developers.openai.com/codex/changelog)). The credential never exists in env at all; it lives in a per-server keychain entry the agent retrieves on demand.
 
 ## Diagnostic Signal vs Silent Inheritance
 

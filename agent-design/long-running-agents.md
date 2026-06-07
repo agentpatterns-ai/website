@@ -9,36 +9,36 @@ aliases:
   - long-horizon agent operations
   - long-running agent pattern
   - day-scale agent work
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Long-Running Agents: Durability and Resumability Across Sessions
 
-> A long-running agent keeps making forward progress on a goal across many sessions and many sandboxes — possibly days or weeks — by moving state out of the context window and into durable artifacts the next session can resume from.
+> A long-running agent makes progress across many sessions and sandboxes by moving state out of the context window into durable artifacts that resume it.
 
 ## What "Long-Running" Means
 
 Three problems share an operational surface ([Osmani: Long-running Agents, 2026-04-30](https://addyo.substack.com/p/long-running-agents)):
 
-- **Long-horizon reasoning** — planning over many dependent steps. A model story; METR's [task-completion time horizon](https://metr.org/time-horizons/) doubles roughly every seven months.
-- **Long-running execution** — a process running for hours or days; the model invoked thousands of times. A harness story.
-- **Persistent agency** — identity that outlives any task. A memory story.
+- **Long-horizon reasoning** — planning over many dependent steps; a model story. METR's [task-completion time horizon](https://metr.org/time-horizons/) doubles roughly every seven months.
+- **Long-running execution** — a process running for hours or days, the model invoked thousands of times; a harness story.
+- **Persistent agency** — identity that outlives any task; a memory story.
 
-This page covers execution — agents that survive session boundaries, sandbox crashes, and HITL pauses.
+This page covers execution: agents that survive session boundaries, sandbox crashes, and HITL pauses.
 
 ## Three Walls
 
-Three failure modes show up in every published write-up ([Osmani](https://addyo.substack.com/p/long-running-agents)):
+Three failure modes recur across published write-ups ([Osmani](https://addyo.substack.com/p/long-running-agents)):
 
-**Finite context.** Even a 1M-token window fills, and [context rot](../context-engineering/context-window-dumb-zone.md) sets in well before the hard cap. A 24-hour run fits no context window on the roadmap.
+**Finite context.** Even a 1M-token window fills, and [context rot](../context-engineering/context-window-dumb-zone.md) sets in well before the hard cap. No context window on the roadmap holds a 24-hour run.
 
-**No persistent state.** A new session starts blank. Anthropic: *"a software project staffed by engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift"* ([long-running Claude](https://www.anthropic.com/research/long-running-Claude)).
+**No persistent state.** A new session starts blank — Anthropic likens it to *"engineers working in shifts, where each new engineer arrives with no memory of what happened on the previous shift"* ([long-running Claude](https://www.anthropic.com/research/long-running-Claude)).
 
-**Unreliable self-verification.** Models skew positive on their own work. Without a separate evaluator the agent ships at 30% complete with full confidence.
+**Unreliable self-verification.** Models skew positive on their own work; without a separate evaluator the agent ships half-done with full confidence.
 
 ## The Convergent Design
 
-Anthropic, Cursor, Google, and open-source practitioners have converged on the same shape. Five primitives recur:
+Anthropic, Cursor, Google, and open-source practitioners converge on the same shape. Five primitives recur:
 
 ```mermaid
 graph TD
@@ -57,19 +57,19 @@ Write completion criteria before the agent starts. Anthropic calls it the [featu
 
 ### 2. Durable Session Log
 
-Session state lives outside the harness process — an append-only log of every thought, tool call, and observation. Anthropic exposes `getEvents()` and `wake(sessionId)`: "any Harness instance can pick up any Session and continue from where it left off" ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md).
+Session state lives outside the harness process — an append-only log of every thought, tool call, and observation. Anthropic exposes `getEvents()` and `wake(sessionId)` so any harness instance can reboot a failed run and continue from the event stream ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md).
 
 ### 3. Stateless Harness, Disposable Sandbox
 
-The harness holds no run state; the sandbox is provisioned per session and destroyed after. Crash recovery becomes architectural. Anthropic reports p50 time-to-first-token dropped ~60% and p95 over 90% by starting inference against the session log before the sandbox finishes provisioning ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Deep Agent Runtime](deep-agent-runtime.md).
+The harness holds no run state; the sandbox is provisioned per session and destroyed after, so crash recovery becomes architectural. Anthropic reports p50 time-to-first-token dropped ~60% and p95 over 90% by starting inference against the session log before the sandbox finishes provisioning ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)). See [Deep Agent Runtime](deep-agent-runtime.md).
 
 ### 4. Separate Evaluator
 
-Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner / worker / judge after flat coordination and locks both failed; a coding-tuned model proved worse than a general model for *extended autonomous work* because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)).
+Generation and evaluation run as different roles, sometimes different models. Cursor's production design splits planner / worker / judge after flat coordination failed; a coding-tuned model proved worse for *extended autonomous work* because it "tended to stop early and take shortcuts" ([Cursor: Scaling Long-Running Coding](https://cursor.com/blog/scaling-agents)).
 
 ### 5. Checkpoint Cadence
 
-Write intermediate state every N units of work — not every step (waste), not only at the end (catastrophic on failure). [Trajectory logging via progress files](../observability/trajectory-logging-progress-files.md) is the filesystem-only form; managed runtimes ship the same as `thread_id`-keyed checkpoints with run-level cancel/resume.
+Write intermediate state every N units of work — not every step (waste), not only at the end (catastrophic on failure). [Trajectory logging via progress files](../observability/trajectory-logging-progress-files.md) is the filesystem form; managed runtimes ship `thread_id`-keyed checkpoints with run-level cancel/resume.
 
 ## Beyond Summarisation: Full Context Resets
 
@@ -77,11 +77,11 @@ Compaction-as-summarisation is not enough at day-plus durations. Anthropic resor
 
 ## When the Pattern Is Overhead
 
-The primitives pay when work exceeds a single session. Four conditions where they do not:
+The primitives pay only when work exceeds a single session. Four conditions where they do not:
 
 - **Short-horizon interactive work.** When the task fits one HITL session, checkpoint/resume adds latency without reliability gain.
-- **Pre-PMF or small-scope agents.** A scoped service credential and session timeout are smaller and more portable before scale or compliance forces the trade-off ([Agent Stack Bets](agent-stack-bets.md)).
-- **Underspecified done-conditions.** Without external completion criteria a long run amplifies self-grading harm.
+- **Pre-PMF or small-scope agents.** A scoped credential and session timeout are smaller and more portable before scale or compliance forces the trade-off ([Agent Stack Bets](agent-stack-bets.md)).
+- **Underspecified done-conditions.** Without external completion criteria a long run only amplifies self-grading harm.
 - **Unbounded session log.** Append-only logs grow linearly; long sessions force compaction with irreversible discards ([Managed Agents](https://www.anthropic.com/engineering/managed-agents)).
 
 ## Open Problems
@@ -89,11 +89,11 @@ The primitives pay when work exceeds a single session. Four conditions where the
 Four areas remain unsolved ([Osmani](https://addyo.substack.com/p/long-running-agents)):
 
 - **Cost.** Without budgets and [circuit breakers](../observability/circuit-breakers.md), an agent can burn a week's API spend in an afternoon.
-- **Security.** Credentials and shell access yield a much larger attack surface than a chat session; brain/hands separation is part of the answer.
-- **Alignment drift.** Goals get summarised and re-summarised and lose fidelity. Hooks and judges defend; nothing eliminates.
+- **Security.** Credentials and shell access yield a far larger attack surface than a chat session; brain/hands separation is part of the answer.
+- **Alignment drift.** Goals summarised and re-summarised lose fidelity. Hooks and judges defend; nothing eliminates.
 - **Verification.** Auditing 24 hours of autonomous activity is a human-time problem; structured artifacts (PRs, commits, test runs) make it tractable.
 
-Anthropic's [Project Vend](https://www.anthropic.com/research/project-vend-1) — a Claude instance running a vending business for a month — "failed in informative ways," the early catalogue for week-plus coherence failures.
+Anthropic's [Project Vend](https://www.anthropic.com/research/project-vend-1) — a Claude instance running a vending business for a month — "failed in informative ways," an early catalogue of week-plus coherence failures.
 
 ## Example
 

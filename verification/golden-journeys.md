@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - harness-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Golden Journeys: Restartability as a First-Class Verification Primitive
 
-> Name a small set of end-to-end paths through the running system, each with an explicit failure signal per step, and gate completion on the system restarting cleanly afterward.
+> Golden Journeys are named end-to-end paths through the running system, each with a per-step failure signal, gating completion on a clean restart.
 
 ## The Pattern
 

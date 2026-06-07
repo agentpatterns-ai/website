@@ -11,12 +11,12 @@ aliases:
   - ADLC
   - agent product lifecycle
   - agent shipping lifecycle
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Agent Development Lifecycle for Agent Products
 
-> A four-phase loop — build, test, deploy, monitor — for teams whose unit of work is the agent itself, with verdict-labelled traces from production feeding the next evaluation cycle.
+> A four-phase loop — build, test, deploy, monitor — for teams whose unit of work is the agent, with verdict-labelled traces feeding the next cycle.
 
 ## A Lifecycle for the Agent, Not the Feature
 
@@ -61,7 +61,6 @@ The verdict step is load-bearing. [Traces Need Feedback to Power Learning](../ob
 
 Two project pages operationalise the back-edges:
 
-- [Bootstrap Incident-to-Eval](../agent-readiness/bootstrap-incident-to-eval.md) — Monitor → Test: convert each production incident into a regression eval case with a severity tier and CI gate.
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — Monitor → Build: observation-to-update loop for agent configurations.
 
 The underlying mechanism: **agents fail on distributions, not on cases**. Bug-fix-and-redeploy optimises one failing trace; a four-phase lifecycle with verdict-labelled traces optimises the failure-rate trend across a population. The phases are the minimum cut points where verdict-carrying signal can flow back.
@@ -91,6 +90,19 @@ LangChain names its own stack: LangGraph for build, LangSmith for test and monit
 
 The pattern is the four phases and the back-edges between them; the vendor stack is one instantiation. Any team can wire the same lifecycle from OTel traces, an eval runner, and a deploy pipeline.
 
+One caveat on scope: several 2026 framings treat security and governance as a first-class lifecycle concern, not a deploy-time control. Prompt-injection red-teaming, governed agent catalogs, and mandatory release gates appear as intrinsic phases there ([Cycode](https://cycode.com/blog/securing-adlc/), [Codebridge](https://www.codebridge.tech/articles/agentic-ai-software-development-lifecycle-the-production-ready-playbook), [IBM](https://www.ibm.com/think/topics/agent-development-lifecycle-adlc)). The loop here folds that into deploy via [Permission Framework Over Model Trust](../security/permission-framework-over-model.md); regulated or multi-tenant teams should treat governance as a cross-cutting gate on every phase, not one checkpoint.
+
+## Example
+
+A two-person team ships a support-triage agent and wants the loop without a vendor platform:
+
+- **Build**: define scope (classify and route inbound tickets, never auto-reply), pick a single-agent harness, wire OTel tracing. Artifact: a runnable agent plus a one-page scope doc.
+- **Test**: 40 labelled tickets become the eval suite. CI runs the agent against them and gates merge on ≥ 90% routing accuracy — written *before* the agent exists, so live bugs cannot redefine "correct." Artifact: a pass/fail verdict.
+- **Deploy**: a canary routes 5% of live tickets through the new policy with a one-command rollback; permission scoping blocks any write path beyond the ticketing API. Artifact: a running deployment emitting traces.
+- **Monitor**: every run is traced and labelled — deterministic rule (did routing match the human's later reassignment?), plus a direct thumbs-up/down from the agent on duty. A weekly job converts each mis-route into a regression case (Monitor → Test) and surfaces recurring failure clusters for the next scope revision (Monitor → Build).
+
+No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature-flagged deploy reproduce the same back-edges.
+
 ## Key Takeaways
 
 - ADLC is a meta-lifecycle for the agent product itself — distinct from a feature-level SDLC or a skill-library SDLC; same loop shape, different unit of work.
@@ -105,7 +117,5 @@ The pattern is the four phases and the back-edges between them; the vendor stack
 - [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) — lifecycle for an agent acting on a codebase; contrast point.
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — the test phase, in depth.
 - [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) — how the monitor phase produces verdict-labelled traces.
-- [Bootstrap Incident-to-Eval](../agent-readiness/bootstrap-incident-to-eval.md) — the Monitor → Test back-edge.
-- [Bootstrap Eval Suite](../agent-readiness/bootstrap-eval-suite.md) — the test-phase scaffolding.
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — the Monitor → Build back-edge.
 - [Canary Rollout for Agent Policy](../workflows/canary-rollout-agent-policy.md) — the deploy phase, in depth.

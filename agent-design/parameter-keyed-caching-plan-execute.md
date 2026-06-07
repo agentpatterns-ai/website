@@ -11,12 +11,12 @@ aliases:
   - MCP workflow optimisation
   - parameter-aware cache key
   - dependency-aware step parallelism
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines
 
-> For parameter-rich agent workloads that orchestrate multiple MCP servers, three orthogonal optimisations stack: augment the semantic cache key with parsed parameters, disk-back the tool-discovery step, and fan out plan steps that have no data dependency on prior steps.
+> Three orthogonal caching and parallelism optimisations for parameter-rich plan-execute pipelines: partition the cache key on parsed parameters, disk-back tool discovery, and parallelise independent steps.
 
 ## When This Pattern Earns Its Complexity
 
@@ -28,13 +28,13 @@ These optimisations target a narrow workload profile. Apply each only when its c
 | Plans coordinate across multiple MCP servers per query | Tool-discovery and selection dominate end-to-end latency in plan-execute pipelines ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)) |
 | Generated plans contain genuinely independent steps | Dependency-aware parallelism degenerates to sequential-with-overhead when every step depends on the prior one |
 
-The original evaluation is on AssetOpsBench — industrial asset operations with sensor data, work orders, and forecasting tools per query. Coding agents and generic chat assistants rarely meet the first condition.
+The original evaluation is on AssetOpsBench — industrial asset operations with sensor data, work orders, and forecasting tools. Coding agents and chat assistants rarely meet the first condition.
 
 ## The Three Mechanisms
 
 ### 1. Parameter-Augmented Semantic Cache Key
 
-Plain semantic caches hash the query embedding and serve any similar prior response. They fail on parameter-distinguished queries: "asset 7 failures *yesterday*" and "asset 7 failures *last month*" embed nearly identically — vocabulary dominates the vector; the temporal qualifier changes the correct answer.
+Plain semantic caches hash the query embedding and serve any similar prior response. They fail on parameter-distinguished queries: "asset 7 failures *yesterday*" and "asset 7 failures *last month*" embed nearly identically — vocabulary dominates the vector while the temporal qualifier changes the answer.
 
 Extract parameters before lookup and partition the cache key on them:
 
@@ -42,32 +42,30 @@ Extract parameters before lookup and partition the cache key on them:
 cache_key = embedding(query) + parsed(temporal) + parsed(asset_id) + parsed(sensor)
 ```
 
-Lookup matches similarity *within* a parameter bucket, never across buckets. The temporal-cache benchmark reports 30.6x median speedup on hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)), but the real win is eliminating a false-positive class. Plain caches can reach 99% false-positive rates when poorly tuned; well-tuned production systems still report ~0.8% ([Maxim AI](https://www.getmaxim.ai/articles/semantic-caching-for-llms-how-to-cut-token-spend-with-ai-gateways/)). This complements the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md) — the dual threshold tunes precision-recall on the embedding axis; parameter keying partitions the lookup space.
+Lookup then matches similarity *within* a parameter bucket, never across buckets. The benchmark reports 30.6x median speedup on hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)), but the real win is eliminating a false-positive class plain caches cannot avoid at any threshold. This complements the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md): the dual threshold tunes precision-recall on the embedding axis; parameter keying partitions the lookup space.
 
 ### 2. Disk-Backed Tool-Discovery Cache
 
-Each new session pays for `mcp/listTools` across every connected server plus a planner-side relevance scoring step. The output is deterministic on a given server set — repeated discovery is pure read overhead.
+Each new session pays for `mcp/listTools` across every connected server plus planner-side relevance scoring. That output is deterministic on a given server set, so repeated discovery is pure overhead.
 
-Persist the discovery output on disk, keyed by server-set hash and planner version; invalidate when either changes. Combined with mechanism 3, this reduces median end-to-end latency by ~40% (1.67x speedup) on AssetOpsBench ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). The host-level alternative is Claude Code's `alwaysLoad`, which pins selected servers into the system-prompt prefix at zero per-session discovery cost ([MCP alwaysLoad](../tool-engineering/mcp-eager-vs-jit-loading.md)). Disk-backed discovery is the right move when the server set is too large for unconditional residence — Anthropic reports tool selection degrades past 30-50 visible tools ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)) — but discovery cost is still measurable.
+Persist it on disk, keyed by server-set hash and planner version; invalidate when either changes. Combined with mechanism 3, this cuts median end-to-end latency ~40% (1.67x) on AssetOpsBench ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). The host-level alternative is Claude Code's `alwaysLoad`, which pins servers into the system-prompt prefix at zero per-session cost ([MCP alwaysLoad](../tool-engineering/mcp-eager-vs-jit-loading.md)). Disk-backing wins when the server set is too large for unconditional residence — tool selection degrades past 30-50 visible tools ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
 
 ### 3. Dependency-Aware Parallel Step Execution
 
-LLM-generated plans frequently contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially.
-
-The mechanism mirrors broader work on parallel function calling in agent planners. GAP trains the planner to emit the dependency graph directly, enabling adaptive parallel-and-serial tool execution ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320)); M1-Parallel reports 2.2x speedup with preserved accuracy via parallel-plan execution with early termination ([arxiv:2507.08944](https://arxiv.org/pdf/2507.08944)). This is distinct from [Agent Composition Patterns](agent-composition-patterns.md) fan-out — composition parallelises across *agents*; this parallelises *steps within one plan*.
+LLM-generated plans often contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially. GAP trains the planner to emit the dependency graph directly for adaptive parallel-and-serial execution ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320)); M1-Parallel reports 2.2x speedup with preserved accuracy via early-termination parallel plans ([arxiv:2507.08944](https://arxiv.org/pdf/2507.08944)). This is distinct from [Agent Composition Patterns](agent-composition-patterns.md) fan-out: composition parallelises across *agents*; this parallelises *steps within one plan*.
 
 ## Why It Works
 
-Parameter-keyed caching works because embeddings are dominated by surface vocabulary, not by parameter values that determine answer validity — partitioning the lookup on parameters eliminates a false-positive class plain semantic caching cannot avoid at any threshold ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). Disk-backed discovery works because `mcp/listTools` plus planner scoring is deterministic on the server set; per-session re-computation is pure waste. Dependency-aware parallelism works because once the planner emits explicit data-flow edges, a topological scheduler executes independent leaves concurrently — GAP and M1-Parallel both report measured speedups from this transformation ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320), [arxiv:2507.08944](https://arxiv.org/pdf/2507.08944)).
+Each mechanism removes provably redundant work. Parameter-keyed caching works because embeddings are dominated by surface vocabulary, not by the parameter values that determine answer validity, so partitioning the lookup eliminates a false-positive class no threshold can fix ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). Disk-backed discovery works because `mcp/listTools` plus planner scoring is deterministic on the server set, making per-session re-computation waste. Dependency-aware parallelism works because explicit data-flow edges let a topological scheduler run independent leaves concurrently — GAP and M1-Parallel both report measured speedups from this transformation ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320), [arxiv:2507.08944](https://arxiv.org/pdf/2507.08944)).
 
 ## When This Backfires
 
-- **Workloads without parameter-rich queries.** Code-review, doc-generation, and chat agents rarely vary queries only on temporal or asset parameters. Parameter extraction adds latency; the hit rate never compensates. A short-TTL plain cache is simpler ([PyImageSearch](https://pyimagesearch.com/2026/05/04/semantic-caching-for-llms-ttls-confidence-and-cache-safety/)).
-- **Tool-discovery already amortised at the host.** If the host pins servers via `alwaysLoad` or static config, per-session discovery cost is zero ([MCP alwaysLoad](../tool-engineering/mcp-eager-vs-jit-loading.md)).
-- **Tightly sequential plans.** "Read file, edit file, run tests" has hard data dependencies — the dependency analyser finds no parallelism and adds latency.
-- **Weak parameter extractor.** A mis-classifying extractor turns a "30x speedup hit" into a confidently wrong answer — worse than a miss. Without extractor evals, the cache becomes a correctness regression vector.
-- **Small fleets where engineering cost dominates.** Three new subsystems each carry calibration, observability, and failure modes. Below some QPS threshold, engineering cost outweighs the latency win.
-- **Heterogeneous workload mix.** Fixed parameter schemas don't generalise; category-aware approaches ([arxiv:2510.26835](https://arxiv.org/pdf/2510.26835)) may be a better starting point.
+- **Non-parameter-rich workloads.** Code-review, doc-generation, and chat agents rarely vary queries on temporal or asset parameters; extraction adds latency the hit rate never repays. A short-TTL plain cache is simpler ([PyImageSearch](https://pyimagesearch.com/2026/05/04/semantic-caching-for-llms-ttls-confidence-and-cache-safety/)).
+- **Discovery already amortised at the host.** If the host pins servers via `alwaysLoad` or static config, per-session discovery cost is already zero ([MCP alwaysLoad](../tool-engineering/mcp-eager-vs-jit-loading.md)).
+- **Tightly sequential plans.** "Read file, edit file, run tests" has hard data dependencies — the analyser finds no parallelism and only adds latency.
+- **Weak parameter extractor.** A mis-classifying extractor turns a 30x hit into a confidently wrong answer — worse than a miss, and a correctness regression vector without extractor evals.
+- **Small fleets.** Three subsystems each carry calibration, observability, and failure modes; below some QPS threshold the engineering cost outweighs the win.
+- **Heterogeneous workload mix.** Fixed parameter schemas don't generalise; category-aware approaches ([arxiv:2510.26835](https://arxiv.org/pdf/2510.26835)) may fit better.
 
 ## Trade-offs
 

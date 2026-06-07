@@ -10,18 +10,18 @@ aliases:
   - risk badge for terminal commands
   - terminal command risk tiers
   - pre-execution command classification
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Pre-Execution Risk Classification for Terminal Commands
 
-> Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command — an attention-allocation lever that tunes which confirmations get read, paired with deterministic allowlists that carry the policy load.
+> A tiered risk badge before a terminal command is an attention lever, not a gate; it tunes which confirmations get read, while allowlists enforce policy.
 
 ## The Problem Risk Badges Address
 
-[Confirmation gates](human-in-the-loop-confirmation-gates.md) fail when every prompt looks identical — reviewers pattern-match and approve without reading. [Audit Confirmation Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md) targets that rubber-stamp dynamic.
+[Confirmation gates](human-in-the-loop-confirmation-gates.md) fail when every prompt looks identical — reviewers pattern-match and approve without reading.
 
-A tiered badge changes the cost calculus. A green "Safe" chip on `ls -la` and a red "Review carefully" chip on `git push --force origin main` are visibly different at a glance, so attention concentrates where it should. The badge does not gate the action — the allowlist, deny rule, or confirmation gate still does. It tunes which gates a human actually reads.
+A tiered badge changes the cost calculus. A green "Safe" chip on `ls -la` and a red "Review carefully" chip on `git push --force origin main` are visibly different, so attention concentrates where it should. The badge does not gate the action — the allowlist, deny rule, or confirmation gate still does. It only tunes which gates a human reads.
 
 ## The VS Code 1.120 Reference Implementation
 
@@ -33,7 +33,7 @@ VS Code 1.120 (May 2026) ships this behind `chat.tools.riskAssessment.enabled`. 
 | **Caution** | orange | "modifies the workspace, installs packages, or sends data over the network" |
 | **Review carefully** | red | "performs an action that may be difficult or impossible to undo, such as force-pushing to a remote or deleting files outside the workspace" |
 
-Each badge ships with "a one-sentence summary tailored to the specific command" — that command-specific text is what makes the badge an attention lever rather than decoration.
+Each badge ships with "a one-sentence summary tailored to the specific command" — that command-specific text is what makes the badge an attention lever.
 
 ```mermaid
 graph TD
@@ -66,11 +66,11 @@ graph TD
 | Risk badge | Model-generated classification | If it asks, how hard should you read? |
 | Confirmation gate | Human decision | Approve or reject? |
 
-[Evidence-Based Allowlist Auto-Discovery](../agent-readiness/bootstrap-evidence-based-allowlist.md) promotes safe commands off the prompt path; badges concentrate attention on the residual set. A badge on every command means the allowlist is under-tuned.
+Evidence-based allowlist auto-discovery promotes safe commands off the prompt path; badges concentrate attention on the residual set. A badge on every command means the allowlist is under-tuned.
 
 ## Calibrating the Classifier Against Decisions
 
-Per [Audit Confirmation Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md), joining decisions to badge tier surfaces miscalibration:
+Joining gate decisions to badge tier surfaces miscalibration:
 
 - **Safe with non-trivial rejection rate** → classifier under-rates; the green chip masks commands humans read as dangerous.
 - **Review-carefully approved in under N seconds** → highest-risk tier is being rubber-stamped.
@@ -97,8 +97,6 @@ Per [Audit Confirmation Gate Logs](../agent-readiness/audit-confirmation-gate-lo
 ## Related
 
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
-- [Audit Confirmation Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md)
-- [Evidence-Based Allowlist Auto-Discovery](../agent-readiness/bootstrap-evidence-based-allowlist.md)
 - [Tool Confirmation Carousel](../agent-design/tool-confirmation-carousel.md)
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)

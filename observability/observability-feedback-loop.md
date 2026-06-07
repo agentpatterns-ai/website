@@ -10,12 +10,12 @@ aliases:
   - observability feedback loop
   - 7-step debug runbook
   - query correlate reason implement restart rerun verify
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Observability Feedback Loop: A 7-Step Debug Runbook
 
-> A named runbook — query, correlate, reason, implement, restart, rerun, verify — that closes the loop on agent debugging by tying the verification predicate to the originating signal.
+> A seven-step debug runbook — query, correlate, reason, implement, restart, rerun, verify — that ties the agent's verification predicate back to the originating signal.
 
 ## What the Loop Is
 
@@ -38,6 +38,8 @@ The steps are scaffolding. The load-bearing piece is the verification predicate 
 
 The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there's nothing to query against. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns.
 
+This loop is reactive — it starts once a specific signal has surfaced. A complementary posture, "active observability," moves the tooling from passively recording traces to continuously analysing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone thinks to query for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
+
 ## The Seven Steps
 
 ### 1. Query
@@ -46,7 +48,7 @@ Pull the specific signal that failed — a log line, a metric value, a trace spa
 
 ### 2. Correlate
 
-Connect the signal to the layer responsible. A front-end exception triggered by a back-end data shape lives in the back-end. If a [layered domain architecture](../agent-design/layered-mutability.md) is in use, name the layer explicitly — the layer assignment determines what gets edited in step 4.
+Connect the signal to the layer responsible. A front-end exception triggered by a back-end data shape lives in the back-end. If a [layered domain architecture](../agent-design/layered-domain-architecture.md) is in use, name the layer explicitly — the layer assignment determines what gets edited in step 4.
 
 ### 3. Reason
 

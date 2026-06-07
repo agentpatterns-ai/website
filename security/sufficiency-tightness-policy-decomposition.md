@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Sufficiency-Tightness Decomposition for Agent-Authored Permissions
 
-> When a model authors a file-level read/write/execute policy from a task description, it drifts toward a model-specific failure mode that extra reasoning makes worse, not better. Decomposing policy generation into a coverage pass and a separate audit pass closes most of the gap.
+> Sufficiency-tightness decomposition splits agent permission authoring into a coverage pass and a separate tightness audit, escaping the single-pass attractor that more reasoning only entrenches.
 
 ## The Permission-Boundary Inference Gap
 
@@ -111,4 +111,3 @@ When a transcript-driven allowlist, default-deny sandbox, or static analyzer is 
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — mechanical deny rules for the cases an audit pass may miss.
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — the alternative path: promote permissions from observed runtime traces instead of asking the model to author them.
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — why least-privilege matters in the first place.
-- [Bootstrap Permissions Allowlist runbook](../agent-readiness/bootstrap-permissions-allowlist.md) — the operational pairing: default-deny first, then grow the allowlist from evidence.

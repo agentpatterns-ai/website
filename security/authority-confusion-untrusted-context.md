@@ -11,7 +11,7 @@ aliases:
   - authority confusion in agents
   - step-level authority enforcement
   - action-time authorization for agents
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-02
 status: current
 ---
 

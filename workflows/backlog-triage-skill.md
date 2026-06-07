@@ -5,12 +5,12 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Backlog Triage as a Named Agent Skill
 
-> A single skill encodes a state machine into issue labels — every triaged item carries one category and one state, and the hand-off to an executor is a durable agent brief comment, not the raw issue body.
+> A skill encodes a state machine into issue labels — each item carries one category and one state, then hands off a durable agent brief.
 
 A named triage skill sits between human intent and AFK agent execution. It takes whatever lands on the issue tracker — half-written bug reports, customer notes, idea fragments, design-doc snippets — and decides whether the item is ready for an agent, a human, more information, or rejection. Matt Pocock's open-source [`/triage` skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md) is the worked example below. The pattern is portable.
 

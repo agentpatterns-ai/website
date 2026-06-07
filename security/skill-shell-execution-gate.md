@@ -9,12 +9,12 @@ aliases:
   - disableSkillShellExecution
   - inline shell gate for skills
   - skill shell interpolation gate
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Skill Shell Execution Gate: Disabling Inline Shell from Skills
 
-> Inline shell interpolation in skills runs as preprocessing — outside the tool permission model. A managed-settings gate forces every shell side-effect through the audited Bash tool path.
+> Inline shell interpolation in skills runs as preprocessing, outside the tool permission model. A managed-settings gate routes shell side-effects through the audited Bash tool path.
 
 ## The Side-Channel Execution Path
 

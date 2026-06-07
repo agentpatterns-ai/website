@@ -6,12 +6,12 @@ tags:
   - agent-design
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Graceful Tool-Output Truncation: The PARTIAL Signal
 
-> When a tool's output would exceed the model's token budget, return a useful prefix, a structurally distinct truncation signal, and a continuation handle — instead of failing hard and forcing the agent to recover blind.
+> When tool output exceeds the token budget, return a useful prefix, a structurally distinct truncation signal, and a continuation handle, not a hard error.
 
 Graceful tool-output truncation is a contract: a tool that can produce variable-sized output returns *the most useful state it can fit*, plus an explicit signal the result is incomplete and a continuation handle. Claude Code v2.1.145 (2026-05-19) shipped this for the Read tool — a whole-file read past the token limit now returns a truncated first page with a `PARTIAL view` notice instead of a hard error ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The same shape generalises to log readers, search results, directory listings, and MCP responses.
 

@@ -9,12 +9,12 @@ aliases:
   - claude agents json output
   - programmatic agent session listing
   - agent session inventory
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Programmatic Agent Session Export via `claude agents --json`
 
-> `claude agents --json` prints every live background Claude Code session as a JSON array, turning the agent view's TUI inventory into a scriptable substrate for status bars, dashboards, and fleet checks.
+> `claude agents --json` prints live background Claude Code sessions as a JSON array — a scriptable inventory substrate for status bars, dashboards, and fleet checks.
 
 `claude agents --json` is the read-only inventory surface for background sessions — it answers "what is running, where, in what state" without scraping the TUI or reading state files.
 

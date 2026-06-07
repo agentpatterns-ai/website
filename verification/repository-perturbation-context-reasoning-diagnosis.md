@@ -12,7 +12,7 @@ aliases:
   - RepoMirage
   - repository-level perturbation diagnostic
   - context-reasoning diagnosis
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)
@@ -43,21 +43,23 @@ Average agent performance falls from 66.8% on the source task to 25.3% on RepoMi
 
 ## Why It Works
 
-The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorisation cannot reach the same score against a repository whose surface tokens have been renamed or restructured while the underlying call graph is unchanged. The reference patch still applies; only the lookup pattern has been broken. The accuracy delta is therefore a lower bound on the shortcut share of the original number.
+The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorisation cannot repeat it against a repository whose surface tokens are renamed or restructured while the call graph is unchanged. The reference patch still applies; only the lookup pattern breaks. The accuracy delta is therefore a lower bound on the original score's shortcut share.
 
-Independent corroboration arrives from work that probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631)). ContextBench augments existing benchmarks with 1,136 issue-resolution tasks paired with human-annotated gold contexts, exposing the same intermediate-step gap perturbation reveals indirectly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)). SWE-EVO independently shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
+Independent work probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631)). SWE-EVO shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
 
 ## When This Backfires
 
 Perturbation diagnostics over-predict failure or measure the wrong thing under several specific conditions:
 
-- **Shallow-multi-file repositories.** When most issues resolve within one file, the diagnostic measures something the deployed agent never encounters at scale. The pay-off does not justify the pipeline cost.
-- **Proprietary or custom tool surfaces unlikely to be in training corpora.** Contamination is already low, so perturbation overhead buys little additional signal beyond a static custom benchmark.
-- **No oracle to confirm semantics preservation.** A perturbation that subtly changes behaviour produces a measurement artifact, not a context-reasoning signal. Without a passing reference test suite on both original and perturbed repo, the diagnostic is unreliable.
-- **Production agents pinned to a known repository set.** When the agent only ever sees one or two well-mapped codebases, structural exploration training is amortised across runs; perturbation over-predicts failure relative to deployment reality.
-- **Intermediate gold-context labels already exist.** ContextBench-style human-annotated contexts answer the same question more directly without the perturbation indirection ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).
+- **Shallow-multi-file repositories.** When most issues resolve within one file, the diagnostic measures what the deployed agent never hits at scale, and the pipeline cost is not repaid.
+- **Proprietary surfaces unlikely to be in training corpora.** Contamination is already low, so perturbation buys little signal beyond a static custom benchmark.
+- **No oracle to confirm semantics preservation.** A perturbation that subtly changes behaviour produces an artifact, not a signal. Without a passing reference test suite on both original and perturbed repo, the diagnostic is unreliable.
+- **Production agents pinned to a known repository set.** When the agent only sees one or two well-mapped codebases, structural exploration amortises across runs and perturbation over-predicts failure.
+- **Intermediate gold-context labels already exist.** ContextBench-style annotated contexts answer the same question more directly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).
 
 The diagnostic is also confounded by other sources of inflated benchmark scores. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — that gap remains even after perturbation removes shortcut leakage.
+
+A second confound cuts the other way. Meaning-preserving surface perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated context-reasoning shortcuts, which inflates the attributed shortcut share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
 
 ## Composing with the Sibling Family
 
@@ -69,7 +71,7 @@ Repository perturbation is one of three approaches to the same diagnostic questi
 | Trajectory decomposition (TRAJEVAL) | Instrument the agent's stages with precision/recall | Medium — relies on reference annotations | Medium — per-stage IR metrics |
 | Intermediate gold contexts (ContextBench) | Compare agent's retrieved context to human-annotated gold | Medium — requires gold context labels | High — human annotation upfront |
 
-A team picking between them should match the probe to where they suspect the failure lives. If issue-resolution scores look implausibly high and the agent's training likely overlaps with the benchmark repositories, perturbation is the right tool. If the agent fails inconsistently and the team needs to know which stage is responsible, decomposition is the right tool. If the team owns a private benchmark and wants direct measurement of context retrieval, gold contexts are the right tool.
+Match the probe to where the failure likely lives: perturbation when scores look implausibly high and training overlaps the benchmark repos; decomposition when failures are inconsistent and you need the responsible stage; gold contexts when you own a private benchmark and want direct context-retrieval measurement.
 
 ## Example
 

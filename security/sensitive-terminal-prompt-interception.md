@@ -4,12 +4,12 @@ description: "Intercept password and verification-code prompts inside the termin
 tags:
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Sensitive Terminal Prompt Interception
 
-> Detect password, passphrase, PIN, and verification-code prompts inside an agent-driven terminal, route input to a human-controlled TTY in default mode, and cancel the command in auto-approve mode — keeping the secret out of the model's context.
+> Detect credential prompts in an agent-driven terminal and route input to a human's TTY (or cancel the command), keeping secrets out of the model's context.
 
 Sensitive-prompt interception applies on the interactive TTY path: when an agent runs a shell command (`sudo`, `ssh`, `gh auth login`, `npm publish` with OTP) and the command writes a credential prompt, the harness recognises the prompt string, substitutes a synthetic "user is typing in terminal" message, and routes keystrokes only to the human-controlled TTY. The model's transcript never contains the secret. The pattern covers only real TTY prompts — not credentials read from files, returned by MCP tools, or pasted into chat.
 

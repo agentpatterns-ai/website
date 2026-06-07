@@ -9,22 +9,22 @@ tags:
   - workflows
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Agent-Laundered Bug Reports
 
-> Running a human's first-hand bug observation through an LLM before filing strips the load-bearing fact and replaces it with confident speculation that misleads both maintainers and their downstream investigation agents.
+> An agent-laundered bug report runs a first-hand observation through an LLM before filing, swapping the load-bearing fact for confident speculation that misleads maintainers.
 
 ## The Pattern
 
-A contributor hits a problem, pastes the symptom into an LLM, and asks it to "write this up as a bug report". The LLM expands the observation into a full-shape report — speculative root cause, fake-minimal repro, suggested fix, analogies to "similar" code, broad lists of error classes that "might" be involved. The four pieces of information the maintainer actually needs — command run, expected outcome, actual outcome, exact error — are buried in agent-generated scaffolding or absent entirely.
+A contributor hits a problem, pastes the symptom into an LLM, and asks it to "write this up as a bug report". The LLM expands the observation into a full report — speculative root cause, fake-minimal repro, suggested fix, lists of error classes that "might" be involved. The four pieces the maintainer needs — command run, expected outcome, actual outcome, exact error — are buried or absent.
 
-Armin Ronacher, working on Pi, named the failure mode in May 2026: "issues that are 5% human and 95% clanker-generated ... typically prompted so badly that the conclusions produced are more often than not inaccurate but always full of confidence" ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)). The issue looks more polished. It is harder to triage.
+Armin Ronacher, working on Pi, named the failure mode in May 2026: "issues that are 5% human and 95% clanker-generated ... typically prompted so badly that the conclusions produced are more often than not inaccurate but always full of confidence" ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)). The issue looks more polished and is harder to triage.
 
 ## Why It Works
 
-LLMs produce confident, structured, plausible prose at the shape the prompt asks for. Given a short observation and asked for a bug report, the model fills the expected sections — root cause, repro steps, suggested fix — by generating tokens that look like each one. Each section is a hallucination relative to the user's actual evidence, framed in the model's confident voice ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)).
+LLMs produce confident, plausible prose at the shape the prompt asks for. Asked for a bug report, the model fills the expected sections — root cause, repro steps, suggested fix — by generating tokens that look like each one. Each section is a hallucination relative to the user's actual evidence ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)).
 
 The harm compounds when the maintainer hands the issue to their own coding agent: "Pi sees the wrong diagnosis too. It does not treat the issue body as a rumor. It treats it as evidence. It will happily go down the path that the issue already prepared for it" ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)). The hallucination in step one becomes a trusted premise in step two — a [context poisoning](context-poisoning.md) cascade originating in the issue body.
 
@@ -37,7 +37,7 @@ Ronacher's prescribed mitigation pins the human voice in place ([Ronacher, 2026]
 3. This happened instead.
 4. Here is the exact error or log.
 
-Everything else — root cause guess, suggested fix, related-code analogies — goes in a follow-up comment, not the issue body. If the reporter does not know the root cause, they say so. If the only hard fact is one stack trace, the issue contains the stack trace and nothing else. The format leaves the LLM nothing to embellish: no "root cause" field for the model to fill with speculation.
+Everything else — root cause guess, suggested fix, related-code analogies — goes in a follow-up comment, not the issue body. If the reporter does not know the root cause, they say so. The format leaves the LLM no "root cause" field to fill with speculation.
 
 ## Example
 
@@ -77,13 +77,13 @@ The "before" form invents three speculative error classes, asserts a similarity 
 
 ## When This Backfires
 
-Stripping LLM assistance from the report is not always net-positive:
+Stripping LLM assistance is not always net-positive:
 
-- **Non-native speakers and accessibility**: an LLM rewrite that improves clarity without inventing root causes is legitimate — if the submitter reads the output before filing. Treat the LLM as a typesetter, not a co-author.
-- **AI bug-finding tooling that has matured**: Greg Kroah-Hartman reported in March 2026 that Linux kernel AI bug reports "went from junk to legit overnight"; one experiment yielded 60 problems with two-thirds correct patches ([The Register, 2026](https://www.theregister.com/2026/03/26/greg_kroahhartman_ai_kernel/)). That applies to AI-authored reports vetted by a skilled researcher — not to human reports laundered through an LLM unsupervised.
-- **Issue templates that constrain the rewrite**: required fields ("Command run", "Expected", "Actual", "Error") leave the LLM no room for speculation.
+- **Accessibility and non-native speakers**: an LLM rewrite that improves clarity without inventing root causes is legitimate — if the submitter reads the output before filing. Treat the LLM as a typesetter, not a co-author.
+- **Matured AI bug-finding tooling**: Greg Kroah-Hartman reported in March 2026 that Linux kernel AI bug reports "went from junk to legit overnight"; one experiment yielded 60 problems with two-thirds correct patches ([The Register, 2026](https://www.theregister.com/2026/03/26/greg_kroahhartman_ai_kernel/)). That applies to AI-authored reports vetted by a skilled researcher — not to human reports laundered unsupervised.
+- **Constraining issue templates**: required fields ("Command run", "Expected", "Actual", "Error") leave the LLM no room for speculation.
 
-The maintainer-side defence — telling the investigation agent to "not trust analysis written in the issue" — does not fully hold. Ronacher reports the agent still anchors on the issue's confident framing even with that guard in Pi's `/is` command ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)). The fix has to happen upstream of the maintainer. Independent corroboration of the cost: Daniel Stenberg shut down curl's bug bounty in January 2026 after AI-laundered reports drove confirmed-vulnerability rates from ~1-in-6 down to 1-in-20 ([The Register, 2026](https://www.theregister.com/2026/01/21/curl_ends_bug_bounty/)); Linus Torvalds reported the Linux kernel security list became "almost entirely unmanageable" under similar pressure in May 2026 ([Tom's Hardware, 2026](https://www.tomshardware.com/software/linux/linus-torvalds-says-ai-bug-reports-have-made-the-linux-security-mailing-list-almost-entirely-unmanageable)).
+The maintainer-side defence — telling the investigation agent to "not trust analysis written in the issue" — does not fully hold; Ronacher reports the agent still anchors on the issue's confident framing even with that guard in Pi's `/is` command ([Ronacher, 2026](https://lucumr.pocoo.org/2026/5/24/pi-oss/)). The cost is corroborated: Daniel Stenberg shut down curl's bug bounty in January 2026 after AI-laundered reports drove confirmed-vulnerability rates from ~1-in-6 to 1-in-20 ([The Register, 2026](https://www.theregister.com/2026/01/21/curl_ends_bug_bounty/)), and Linus Torvalds called the kernel security list "almost entirely unmanageable" in May 2026 ([Tom's Hardware, 2026](https://www.tomshardware.com/software/linux/linus-torvalds-says-ai-bug-reports-have-made-the-linux-security-mailing-list-almost-entirely-unmanageable)).
 
 ## Key Takeaways
 

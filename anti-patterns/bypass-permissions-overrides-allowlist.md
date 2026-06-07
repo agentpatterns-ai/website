@@ -9,18 +9,18 @@ aliases:
   - restricted bypass trap
   - bypassPermissions plus allowedTools
   - allowedTools does not constrain bypass
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)
 
 > Pairing `allowedTools` with `permissionMode: "bypassPermissions"` does not restrict the agent — the allow list is a no-op below the bypass step.
 
-The intuitive composition — *allowlist plus bypass-prompts equals locked-down-no-prompts* — produces the most-permissive runtime instead. `allowedTools` adds *allow rules* that pre-approve listed tools; it is not a closed set. Unlisted tools fall through to the permission mode, and `bypassPermissions` approves them. Anthropic ships an explicit Warning on this exact composition in the agent SDK permissions docs: *"Setting `allowed_tools=['Read']` alongside `permission_mode='bypassPermissions'` still approves every tool, including `Bash`, `Write`, and `Edit`."* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)).
+The intuitive composition — *allowlist plus bypass-prompts equals locked-down-no-prompts* — produces the most-permissive runtime instead. `allowedTools` adds *allow rules* that pre-approve listed tools; it is not a closed set. Unlisted tools fall through to the permission mode, and `bypassPermissions` approves them. Anthropic ships an explicit Warning: *"Setting `allowed_tools=['Read']` alongside `permission_mode='bypassPermissions'` still approves every tool."* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)).
 
 ## The Anti-Pattern
 
-A team wants the agent to read a repo and report findings, with no approval prompts in CI. They write:
+A team wants read-only repo audits with no prompts in CI, so they write:
 
 ```typescript
 const options = {
@@ -29,9 +29,7 @@ const options = {
 };
 ```
 
-Their mental model: *"Read, Grep, Glob are pre-approved; bypassPermissions means no prompts; therefore the agent can only run those three tools."* The runtime behaviour: every tool — `Bash`, `Write`, `Edit`, `WebFetch`, every MCP server tool — runs without prompts. The allow list is decorative.
-
-The same shape appears in `claude` CLI flags: `claude -p "..." --allowedTools Read --permission-mode bypassPermissions` executes `Bash` without prompting. Repro filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — the composition is intended behaviour, not a bug.
+Their model: *"those three are pre-approved; bypass means no prompts; therefore the agent can only run those three."* The reality: every tool — `Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool — runs without prompts; the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behaviour, not a bug.
 
 ## Why It Works (the documented evaluation order)
 
@@ -43,30 +41,29 @@ The permission pipeline is a 5-step ordered flow ([Configure permissions](https:
 4. **Allow rules** — `allowedTools` and `settings.json` allow entries; matches approve
 5. **`canUseTool` callback** — interactive approval (skipped under `dontAsk`)
 
-`bypassPermissions` resolves the call at step 3; the allow check at step 4 never runs. `disallowedTools` works under bypass because deny rules sit at step 2, *above* the permission mode. The trap is in the intuition that allow lists are exhaustive — they are not.
+`bypassPermissions` resolves the call at step 3; the allow check at step 4 never runs. `disallowedTools` works under bypass because deny rules sit at step 2, *above* the mode. The trap is the intuition that allow lists are exhaustive — they are not.
 
 ## When This Backfires (the conditions that make it dangerous)
 
 The misconfiguration is silently permissive in exactly the contexts where operators reach for it:
 
-- **Headless CI under bypass** — a workflow that wants "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches the agent ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool is available with no consent event.
-- **Sub-agent dispatch under inherited bypass** — *"When the parent uses `bypassPermissions`, `acceptEdits`, or `auto`, all subagents inherit that mode and it cannot be overridden per subagent"* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)). Sub-agents with looser system prompts (third-party agents, plugins, skills) gain full system access; the request to add a `subagentPermissionMode` override was [closed as not planned](https://github.com/anthropics/claude-code/issues/20264).
-- **MCP server addition under bypass+allowlist** — a newly wired MCP server's tools fall through to bypass automatically. The operator who believed the allow list restricted to `Read` does not realise the new write tools are auto-approved.
-- **Security review of `allowedTools` alone** — a reviewer reads the allow list, certifies the configuration as restrictive, and misses the `permissionMode` interaction. The composition passes review and ships permissive.
-- **Cross-tool intuition transfer** — Codex CLI, Cursor, and other harnesses expose analogous allow/deny/mode tri-axes with different default precedences. An operator who internalises one tool's rule order misreads another's.
+- **Headless CI under bypass** — "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches it ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool runs with no consent event.
+- **Sub-agent dispatch under inherited bypass** — *"When the parent uses `bypassPermissions`, `acceptEdits`, or `auto`, all subagents inherit that mode and it cannot be overridden per subagent"* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)). A `subagentPermissionMode` override was [closed as not planned](https://github.com/anthropics/claude-code/issues/20264).
+- **MCP server addition** — a newly wired server's tools fall through to bypass automatically, so write tools the operator never reviewed are auto-approved.
+- **Security review of `allowedTools` alone** — a reviewer certifies the allow list as restrictive and misses the `permissionMode` interaction; the composition ships permissive.
 
-The composition is *correct* only when the environment itself is the boundary — a hermetic sandbox, ephemeral VM, or throwaway container where every tool running is acceptable by construction. In that case, the allow list is redundant rather than misleading. See [Permission Framework Choice Outweighs Model Choice](../security/permission-framework-over-model.md) for the broader framework-vs-model trade-off and [Blast Radius Containment](../security/blast-radius-containment.md) for the deterministic-allowlist alternative.
+The composition is *correct* only when the environment itself is the boundary — a hermetic sandbox, ephemeral VM, or throwaway container where every tool running is acceptable by construction. There the allow list is redundant rather than misleading. See [Permission Framework Choice Outweighs Model Choice](../security/permission-framework-over-model.md) and [Blast Radius Containment](../security/blast-radius-containment.md) for the deterministic-allowlist alternative.
 
 ## The Two Correct Shapes
 
-The docs name them explicitly:
+The docs name both explicitly:
 
 | Goal | Shape | Why |
 |------|-------|-----|
-| Restrict to a small set, never prompt | `permissionMode: "dontAsk"` + `allowedTools: [...]` | Deny-by-default: listed tools approve at step 4; unlisted tools fall through to step 5 where `dontAsk` denies. *"For a locked-down agent, pair `allowedTools` with `permissionMode: 'dontAsk'`. Listed tools are approved; anything else is denied outright."* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)) |
-| Trust broadly, block a few | `permissionMode: "bypassPermissions"` + `disallowedTools: [...]` | Allow-by-default with named denies. Bare `disallowedTools: ["Bash"]` removes `Bash` from the tool catalogue entirely; `disallowedTools: ["Bash(rm *)"]` blocks scoped patterns at step 2, above the bypass step |
+| Restrict to a small set, never prompt | `permissionMode: "dontAsk"` + `allowedTools: [...]` | Deny-by-default: listed tools approve at step 4; unlisted tools fall to step 5 where `dontAsk` denies. *"For a locked-down agent, pair `allowedTools` with `permissionMode: 'dontAsk'`. Listed tools are approved; anything else is denied outright."* ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)) |
+| Trust broadly, block a few | `permissionMode: "bypassPermissions"` + `disallowedTools: [...]` | Allow-by-default with named denies. Bare `disallowedTools: ["Bash"]` removes `Bash` from the catalogue entirely; `disallowedTools: ["Bash(rm *)"]` blocks scoped patterns at step 2, above the bypass step |
 
-Anthropic's own preference for "background safety checks without prompts" is neither of these — it is `permissionMode: "auto"`, a classifier-gated mode that approves or denies each call ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). See [Classifier-Gated Auto Permission](../agent-design/classifier-gated-auto-permission.md).
+Anthropic's own preference for "background safety checks without prompts" is neither — it is `permissionMode: "auto"`, a classifier-gated mode that approves or denies each call ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). See [Classifier-Gated Auto Permission](../agent-design/classifier-gated-auto-permission.md).
 
 ## Example
 

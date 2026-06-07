@@ -8,7 +8,7 @@ tags:
 aliases:
   - "evidence-driven guardrails for APR"
   - "cost-ascending verification gates"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Staged Evidence Gates for Agentic Program Repair
@@ -27,7 +27,7 @@ If any one of these fails, the gates either become noise sources (flaky-test fai
 
 ## The Pattern
 
-An agentic automated-program-repair loop generates and validates candidate patches. The naive design runs the full regression suite on every candidate — accurate but slow, and most candidates fail on cheaper signals long before the suite finishes. Staged evidence gates re-order the checks by cost:
+An agentic automated-program-repair loop generates and validates candidate patches. The naive design runs the full regression suite on every candidate — accurate but slow, and most candidates fail on cheaper signals first. Staged evidence gates re-order the checks by cost:
 
 ```mermaid
 graph TD
@@ -42,17 +42,15 @@ graph TD
     F -->|Pass| A[Accept]
 ```
 
-Each gate is one evidence channel. The retrieval scaffold reduces invalid-candidate rates upstream by grounding generation in repository context. The compile gate filters edits that don't type-check or parse — the dominant class of invalid edits at near-zero cost. The target-test gate confirms the originally failing test recovers before paying for a full regression pass.
+Each gate is one evidence channel. The retrieval scaffold grounds generation in repository context to cut invalid candidates upstream. The compile gate filters edits that don't type-check or parse — the dominant class of invalid edits at near-zero cost. The target-test gate confirms the originally failing test recovers before paying for a full regression pass.
 
 The [EviACT framework](https://arxiv.org/abs/2605.27238) instantiates exactly this staging and reports a 1.6–6.0 percentage-point resolve-rate gain over comparable baselines and 70.1–88.6% lower API cost where cost data exists ([Meng et al., 2026](https://arxiv.org/abs/2605.27238)).
 
 ## Why It Works
 
-Verification cost is heterogeneous and APR failures concentrate in cheaply detectable categories. Compilation rejects type-incoherent patches at a fraction of test-execution cost; the target test confirms symptom relief before the full suite runs. Staging in cost-ascending order converts the latency-dominant "run full regression" step from an unconditional cost into a conditional cost paid only by candidates that already cleared cheaper signals. The retrieval scaffold front-loads gating by reducing the rate at which invalid candidates are generated at all.
+Verification cost is heterogeneous and APR failures concentrate in cheaply detectable categories. Compilation rejects type-incoherent patches at a fraction of test-execution cost; the target test confirms symptom relief before the full suite runs. Staging in cost-ascending order converts the latency-dominant "run full regression" step from an unconditional cost into a conditional one paid only by candidates that already cleared cheaper signals. The retrieval scaffold front-loads this by reducing how often invalid candidates arise at all.
 
-The mechanism generalizes beyond EviACT. The broader neuro-symbolic-APR literature reports the same compounding: a base ReAct agent solves 28.5% of agentic repair tasks; adding static analysis and test-execution feedback lifts it to 42.3%, with multiple trials reaching 61.0% ([Agentic Program Repair from Test Failures at Scale, 2025](https://arxiv.org/pdf/2507.18755)). Each evidence channel addresses a known failure of feedback-only loops, which without grounded execution context struggle with silent failures ([RepairAgent, Bouzenia et al., 2024](https://arxiv.org/abs/2403.17134)).
-
-The causal claim is not "more checks always help" — it is "cheap checks that filter dominant failure classes shift the cost curve of the loop downward."
+The mechanism generalizes beyond EviACT. The broader neuro-symbolic-APR literature reports the same compounding: a base ReAct agent solves 28.5% of agentic repair tasks; static analysis and test-execution feedback lift it to 42.3%, with multiple trials reaching 61.0% ([Agentic Program Repair from Test Failures at Scale, 2025](https://arxiv.org/pdf/2507.18755)). Each channel addresses a known failure of feedback-only loops, which without grounded execution context struggle with silent failures ([RepairAgent, Bouzenia et al., 2024](https://arxiv.org/abs/2403.17134)). The causal claim is narrow: cheap checks that filter dominant failure classes shift the loop's cost curve downward.
 
 ## When This Backfires
 

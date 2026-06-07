@@ -9,18 +9,18 @@ tags:
   - instructions
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Mermaid as Agent Output Format: When to Ask for a Diagram Instead of Prose
 
-> Asking the agent for a Mermaid block instead of a prose list scans faster for graph-shaped information — but only on surfaces that render Mermaid inline. The decision is a property of the consumer surface, not the model.
+> Ask for a Mermaid block over prose for graph-shaped information, but only on surfaces that render it inline. The decision is surface-gated, not model-gated.
 
 Output format value is a property of the consumer surface, not the agent. A fenced ` ```mermaid ` block renders as a diagram on GitHub, mkdocs-material, Notion, Obsidian, and — as of [VS Code 1.121](https://code.visualstudio.com/updates/v1_121) — the built-in Markdown preview, notebook cells, and chat panes. On Slack, plain email, or a terminal without ASCII fallback, the same block prints as raw markup. Make the request conditional on what the host renders.
 
 ## The Surface Shift Already Happened
 
-Agents default to prose lists for architecture, sequence, or dependency information because Mermaid was inert noise on most surfaces in the GPT-4 era. That has flipped on the surfaces coding agents actually run on:
+Agents default to prose lists for architecture, sequence, or dependency information because Mermaid was inert noise on most surfaces in the GPT-4 era. That has flipped on the surfaces coding agents run on:
 
 | Surface | Renders inline Mermaid | Evidence |
 |---------|------------------------|----------|
@@ -35,7 +35,7 @@ The 1.121 release "merged Matt Bierner's Markdown Preview Mermaid Support extens
 
 ## When Mermaid Wins
 
-The pattern works when both conditions hold: the consumer surface renders Mermaid, and the information is graph-shaped — edges carry meaning. Match diagram type to shape:
+The pattern works when both conditions hold: the surface renders Mermaid, and the information is graph-shaped. Match diagram type to shape:
 
 | Diagram type | Shape that benefits |
 |--------------|---------------------|
@@ -71,11 +71,11 @@ fenced block using the diagram type that matches the shape
 information, stay with Markdown.
 ```
 
-The mirror instruction matters as much: on a non-rendering surface (Slack, raw terminal, email digest), tell the agent the surface does not render Mermaid and prose is preferred. Codifying the technique as a reusable skill is viable — the [GenAIScript `system.diagrams`](https://microsoft.github.io/genaiscript/reference/scripts/diagrams/) prompt registers a parse-and-repair loop so silent-failure diagrams are caught before they reach the user.
+The mirror instruction matters as much: on a non-rendering surface (Slack, raw terminal, email digest), tell the agent prose is preferred. Codifying the technique as a reusable skill is viable — the [GenAIScript `system.diagrams`](https://microsoft.github.io/genaiscript/reference/scripts/diagrams/) prompt registers a parse-and-repair loop so silent-failure diagrams are caught before they reach the user.
 
 ## Why It Works
 
-The mechanism is consumer-surface capability, not model capability. A diagram only "wins over prose" when (a) the rendering surface displays it as a diagram and (b) the information is graph-shaped enough that edges carry meaning. Both conditions are properties of the deployment environment. When VS Code 1.121 added a built-in renderer, the value of asking the agent for Mermaid changed for the agent's most common surface without any change in the model. Output format is a deployment-time choice keyed on surface capability, not a model-default. The companion pattern for [HTML as Agent Output Format](html-as-output-format.md) makes the same point at a different altitude — Mermaid is the inline version of the surface-conditional decision, sized for graph-shaped information rather than full interactive artifacts.
+The mechanism is consumer-surface capability, not model capability. A diagram beats prose only when the surface displays it as a diagram and the information is graph-shaped enough that edges carry meaning — both properties of the deployment environment, not the model. When VS Code 1.121 added a built-in renderer, the value of asking for Mermaid changed without any model change. The companion pattern for [HTML as Agent Output Format](html-as-output-format.md) makes the same point at a different altitude — Mermaid is the inline version of the surface-conditional decision.
 
 ## Example
 

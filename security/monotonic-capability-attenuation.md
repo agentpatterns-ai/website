@@ -10,7 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Monotonic Capability Attenuation for Composition-Safe Tool Use
@@ -21,24 +21,24 @@ last_reviewed: 2026-05-27
 
 The pattern produces a real security delta only inside these conditions ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)):
 
-- **Expert-crafted manifests are feasible.** Capability budgets per sink are authored by someone who understands the threat model. With naive manifests, blocking rate drops to 27.3% — close to no defense.
-- **Attacks are explicit-flow.** The adversary exfiltrates data the proxy can see: tool arguments, return values, chained call inputs. Implicit flows (timing, denial signals, side channels) are out of scope.
-- **All tool traffic traverses one observation point.** Off-protocol egress — `curl` shellouts, raw HTTP libraries, headless browser sessions — bypasses the proxy and silently breaks the guarantee.
-- **A token-budget margin exists.** Capability metadata on every value compounds the [35× MCP proxy overhead](https://www.mindstudio.ai/blog/mcp-vs-cli-agentic-workflows-token-overhead-reliability) over equivalent CLI tools.
+- **Expert-crafted manifests are feasible** — budgets authored by someone who understands the threat model.
+- **Attacks are explicit-flow** — the adversary exfiltrates data the proxy can see (arguments, return values, chained inputs), not via timing or side channels.
+- **All tool traffic traverses one observation point** — off-protocol egress (`curl` shellouts, raw HTTP, headless browsers) bypasses the proxy.
+- **A token-budget margin exists** — capability metadata on every value compounds proxy overhead.
 
 Outside these conditions, the mechanism degrades or fails silently. See [When This Backfires](#when-this-backfires).
 
 ## What Permission Laundering Is
 
-An agent reads a confidential document, summarises it, sends the summary externally. Each per-tool check passes — read is allowed for that file, summarise is content-agnostic, send-email is permitted to that recipient — yet the chained effect is exfiltration. The vulnerability is not at any single hop; it is the composition itself, which synthesises authority no single value ever held ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
+An agent reads a confidential document, summarises it, sends the summary externally. Each per-tool check passes — read is allowed, summarise is content-agnostic, send-email is permitted to that recipient — yet the chained effect is exfiltration. The vulnerability is the composition itself, which synthesises authority no single value ever held ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
 
-This is structurally distinct from prompt injection (which corrupts the instruction channel) and from [overreaching tool calls](permission-framework-over-model.md) (which exceed authorised scope at one call). Permission laundering chains legal calls into an illegal outcome.
+This is distinct from prompt injection (which corrupts the instruction channel) and from [overreaching tool calls](permission-framework-over-model.md) (which exceed scope at one call): permission laundering chains legal calls into an illegal outcome.
 
 ## How Monotonic Attenuation Works
 
-Every value entering the agent's context carries a **sink-specific capability budget** — a set of sinks the value is permitted to reach (`{file-read, summarise}` for a confidential document; `{external-email, log}` for a user-typed recipient). The runtime tracks budgets per value, not per tool ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
+Every value carries a **sink-specific capability budget** — the set of sinks it may reach (`{file-read, summarise}` for a confidential document; `{external-email, log}` for a user-typed recipient). The runtime tracks budgets per value, not per tool ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
 
-Tool composition propagates budgets by **intersection**: when a tool call consumes inputs `A` and `B`, its output carries `budget(A) ∩ budget(B)`. The result: the output can reach a sink only if *every* input was allowed to reach that sink. Authority strictly attenuates — a value can lose sinks through composition, never gain them.
+Composition propagates budgets by **intersection**: when a tool consumes inputs `A` and `B`, its output carries `budget(A) ∩ budget(B)` — reachable by a sink only if *every* input was. Authority strictly attenuates: a value loses sinks through composition, never gains them.
 
 ```mermaid
 graph TD
@@ -54,37 +54,35 @@ graph TD
     style B fill:#b60205,color:#fff
 ```
 
-The check at `send-email` reduces to set membership: is `external-email` in `budget(summary)`? Because the summary inherits the document's budget through intersection, it is not — and the call is denied.
-
-Implemented as a transparent MCP proxy, the mechanism requires no changes to the agent or to tool servers; the proxy sees every call, attaches and intersects budgets, and gates each sink ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
+The check at `send-email` reduces to set membership: is `external-email` in `budget(summary)`? The summary inherited the document's budget by intersection, so it is not, and the call is denied. As a transparent MCP proxy the mechanism needs no change to agent or tool servers — it sees every call, intersects budgets, and gates each sink ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
 
 ## Why It Works
 
-Composition is the lever permission laundering exploits — per-tool checks each pass while the chained effect is unsafe. Monotonic intersection denies the attacker any composition that synthesises new authority. Because intersection is monotonic and local, the proxy needs no global plan: each interception is a set-membership check against the value's accumulated budget ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)). The enforcement boundary shifts from "per-tool" to "per-value lifetime," which is the layer at which laundering occurs. This matches the architectural reasoning in [CaMeL](camel-control-data-flow-injection.md), which encodes the same logic via a Python interpreter rather than a proxy. Across 82 tasks on five frontier models, the mechanism reduces attack success from 25–68% to 0–4.8% while preserving 96–100% benign completion ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
+Composition is the lever permission laundering exploits — per-tool checks each pass while the chained effect is unsafe. Monotonic intersection denies any composition that synthesises new authority, and because intersection is local the proxy needs no global plan: each interception is a set-membership check against the value's accumulated budget. The enforcement boundary shifts from "per-tool" to "per-value lifetime," the layer at which laundering occurs. This mirrors [CaMeL](camel-control-data-flow-injection.md), which encodes the same logic via a Python interpreter. Across 82 tasks on five frontier models, attack success drops from 25–68% to 0–4.8% with 96–100% benign completion preserved ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)).
 
 ## When This Backfires
 
 The mechanism degrades or fails outside its operating envelope.
 
-- **Naive manifests collapse the defense.** Blocking rate falls to 27.3% when capability budgets are authored without security expertise — close to no defense ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)). The paper names manifest quality "the dominant deployment bottleneck." Teams without a dedicated security engineering function inherit the naive number by default.
-- **Implicit flows escape.** The scope is explicitly bounded to "explicit-flow composition safety under trusted manifests and proxy-visible data movement" ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)). Causality laundering — exfiltrating data through denial signals — is invisible because no value carrying a capability budget changes hands ([Causality Laundering, 2026](https://arxiv.org/abs/2604.04035)).
-- **Conjunctive emergent capability is structurally missed.** Per-value monotonic intersection cannot detect cases where two individually-safe values combine into an unsafe end-state. A formal result demonstrates this gap and reports 42.6% of 900 real multi-tool trajectories contain at least one conjunctive dependency ([Safety is Non-Compositional, 2026](https://arxiv.org/abs/2603.15973)).
-- **Off-protocol egress bypasses the proxy.** Any side channel that does not traverse the [MCP runtime control plane](mcp-runtime-control-plane.md) — direct shell `curl`, embedded SDK calls, cached state — sits outside the mechanism's reach. Projects with skipped-plane clients lose the guarantee without realising it.
-- **Token budgets compound.** Capability metadata on every value compounds the [35× MCP proxy overhead](https://www.mindstudio.ai/blog/mcp-vs-cli-agentic-workflows-token-overhead-reliability) over equivalent CLI tools. Agents already near context-budget ceilings cannot absorb the overhead without truncating reasoning context.
+- **Naive manifests collapse the defense.** Blocking rate falls to 27.3% when budgets are authored without security expertise — close to no defense ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542)). The paper names manifest quality "the dominant deployment bottleneck"; teams without a dedicated security function inherit the naive number by default.
+- **Implicit flows escape.** The scope is bounded to "explicit-flow composition safety under trusted manifests and proxy-visible data movement." Causality laundering — exfiltrating data through denial signals — is invisible because no budgeted value changes hands ([Causality Laundering, 2026](https://arxiv.org/abs/2604.04035)).
+- **Conjunctive emergent capability is missed.** Per-value intersection cannot detect two individually-safe values combining into an unsafe end-state. A formal result reports 42.6% of 900 real multi-tool trajectories contain at least one conjunctive dependency ([Safety is Non-Compositional, 2026](https://arxiv.org/abs/2603.15973)).
+- **Off-protocol egress bypasses the proxy.** Any side channel that skips the [MCP runtime control plane](mcp-runtime-control-plane.md) — direct shell `curl`, embedded SDK calls, cached state — sits outside the mechanism's reach.
+- **Token budgets compound.** Capability metadata on every value compounds the [35× MCP proxy overhead](https://www.mindstudio.ai/blog/mcp-vs-cli-agentic-workflows-token-overhead-reliability) over equivalent CLI tools; agents near context ceilings cannot absorb it without truncating reasoning.
 
-A pragmatic alternative when these conditions fail is to remove a leg of the [lethal trifecta](lethal-trifecta-threat-model.md) — disable egress, narrow private-data scope, or sandbox untrusted input — which achieves closure deterministically and carries no manifest authoring debt.
+When these conditions fail, a pragmatic alternative is to remove a leg of the [lethal trifecta](lethal-trifecta-threat-model.md) — disable egress, narrow private-data scope, or sandbox untrusted input — which closes the gap deterministically with no manifest authoring debt.
 
 ## Relation to CaMeL and the MCP Control Plane
 
-Monotonic capability attenuation, [CaMeL](camel-control-data-flow-injection.md), and the [MCP Runtime Control Plane](mcp-runtime-control-plane.md) sit at three different layers of the same overall architecture:
+Monotonic capability attenuation, [CaMeL](camel-control-data-flow-injection.md), and the [MCP Runtime Control Plane](mcp-runtime-control-plane.md) sit at three layers of one architecture:
 
 | Pattern | Enforcement layer | Mechanism | Manifest authoring |
 |---------|------------------|-----------|--------------------|
-| [CaMeL](camel-control-data-flow-injection.md) | Dual-LLM with custom Python interpreter | Capability labels on values; security policies checked at tool-call time | Per-tool policies authored alongside tool definitions |
+| [CaMeL](camel-control-data-flow-injection.md) | Dual-LLM with custom Python interpreter | Capability labels on values; policies checked at tool-call time | Per-tool policies authored alongside tool definitions |
 | Monotonic capability attenuation | Transparent MCP proxy between agent and tools | Per-value capability budgets; intersection across composition | Per-sink budgets; expert-crafted required for 100% blocking |
-| [MCP Runtime Control Plane](mcp-runtime-control-plane.md) | Proxy between agent and tools | Identity, rate-limit, tool-name policy evaluated per call | Identity/policy rules per tool surface |
+| [MCP Runtime Control Plane](mcp-runtime-control-plane.md) | Proxy between agent and tools | Identity, rate-limit, tool-name policy per call | Identity/policy rules per tool surface |
 
-The patterns compose. A defense-in-depth posture can run all three — the control plane gates on identity, the capability budgets gate on composition, and CaMeL-style separation handles instruction-vs-data integrity. None alone covers the others' failure modes.
+The patterns compose: the control plane gates on identity, capability budgets gate on composition, and CaMeL-style separation handles instruction-vs-data integrity. None alone covers the others' failure modes.
 
 ## Key Takeaways
 

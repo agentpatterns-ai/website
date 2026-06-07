@@ -11,12 +11,12 @@ aliases:
   - per-agent private memory
   - decentralized agent memory
   - DecentMem
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Decentralized Memory for Self-Evolving Multi-Agent Systems
 
-> Per-agent private memory replaces a shared central store so each agent specialises on its own task distribution — useful only when the agent count is large enough to make central-store contention real, workloads are heterogeneous enough that specialisation has signal, deployments run long enough to amortise per-agent machinery, and writers are trusted.
+> Decentralized memory gives each agent a private store instead of a shared one, so each specialises on its own task distribution.
 
 Decentralized memory in a multi-agent system gives each agent its own persistent local store rather than a shared central repository — improvement becomes a federated process where each agent accumulates role-specific expertise without coordinating writes. The trade is write contention and central-store staleness in exchange for divergence between agents and loss of the shared-signal benefit a central store provides.
 

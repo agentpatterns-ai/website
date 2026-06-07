@@ -10,7 +10,7 @@ aliases:
   - handoff skill
   - cross-session handoff skill
   - slash-command handoff
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Handoff Skill: Structured Context Transfer Between Agent Sessions
@@ -21,7 +21,7 @@ last_reviewed: 2026-05-27
 
 The handoff skill is user-triggered, model-dispatched: you ask the agent to "hand off this work" and the model invokes the skill. The body directs it to compact the conversation into a temp file (`mktemp -t handoff-XXXXXX.md` in Matt Pocock's reference implementation), name the skills the next session should pre-load, and — critically — *not* re-state content already captured in PRDs, plans, ADRs, issues, or commits. Those are referenced by path or URL ([SKILL.md, mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md)).
 
-The full SKILL.md is five sentences. What makes it work is firing at an explicit transfer point with a no-duplication rule that prevents the most common failure: copying the whole transcript.
+The full SKILL.md is five sentences. It works by firing at an explicit transfer point with a no-duplication rule that prevents the most common failure: copying the whole transcript.
 
 ## Two Invocation Patterns
 
@@ -30,7 +30,7 @@ Matt Pocock's [AI Hero changelog (May 11 2026)](https://www.aihero.dev/skills/sk
 - **Fire-and-forget**: mid-session at ~60k tokens you need a tangent (fix a bug, prototype an alternative). Hand off to a fresh agent rather than burning the remaining context budget. The original session continues unaware.
 - **DIY sub-agent**: hand off during planning, work in the fresh session, then hand back to the original with what you learned. The handoff doc is the contract in both directions.
 
-Fire-and-forget substitutes for a sub-agent primitive when the harness lacks one. DIY-sub-agent is a manual round-trip when the harness doesn't surface a structured fork.
+Both substitute for a sub-agent primitive the harness doesn't surface.
 
 ## Distinction from Recap and from Pipeline Handoff
 
@@ -42,11 +42,11 @@ Three patterns produce structured cross-boundary artifacts. They differ in who t
 | [Session Recap](session-recap.md) | Harness (compaction / resume / fork) | Detected discontinuity | Same session's next turn, or returning human |
 | [Pipeline Handoff Protocol](../multi-agent/agent-handoff-protocols.md) | Pipeline contract | Pre-defined stage edge | The next agent in a fixed pipeline |
 
-Recap fires when the harness detects a boundary. The pipeline protocol fires on a fixed stage edge. The handoff skill fires when *you* decide to transfer — the model dispatches it based on its description, not a hook or a graph edge.
+Recap fires on a harness-detected boundary; the pipeline protocol fires on a fixed stage edge; the handoff skill fires when *you* decide to transfer — the model dispatches it from its description, not a hook or a graph edge.
 
 ## What the Handoff Document Carries
 
-The reference SKILL.md is prescriptive about what *not* to write — duplicating PRDs, ADRs, or commit diffs inflates the doc without adding decision-density. The doc captures the parts that exist *only* in the conversation:
+The doc captures only the parts that exist *only* in the conversation:
 
 - **Session intent** — why this work was started
 - **Decisions made in-conversation** — choices not yet written to a PRD or ADR, with reasoning
@@ -58,9 +58,7 @@ The reference SKILL.md is prescriptive about what *not* to write — duplicating
 
 ## Why It Works
 
-The mechanism is **decision-density preservation across a transfer boundary**. A long session encodes single-instance constraints (the unique requirement from turn 12, the rejected alternative from turn 40) in prose that gets paraphrased away under compression. Anthropic's [effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) frames the problem: each new session "begins with no memory of what came before," so structured artifacts at boundaries let the next agent "quickly understand the state of work when starting with a fresh context window."
-
-A handoff doc written *before* the transfer captures those fragments verbatim. The non-duplication rule keeps the doc small — only what doesn't exist anywhere else.
+The mechanism is **decision-density preservation across a transfer boundary**. A long session encodes single-instance constraints (the unique requirement from turn 12, the rejected alternative from turn 40) in prose that gets paraphrased away under compression. Anthropic's [effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) frames the problem: each new session "begins with no memory of what came before," so structured artifacts at boundaries let the next agent "quickly understand the state of work when starting with a fresh context window." A handoff doc written *before* the transfer captures those fragments verbatim; the non-duplication rule keeps it to only what doesn't exist anywhere else.
 
 ## When This Backfires
 
@@ -112,7 +110,6 @@ Three load-bearing constraints: a temp-file path so artifacts don't collide acro
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md) — Harness-invoked sibling for compaction, resume, and fork boundaries
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — Cross-session relay document for long-running autonomous loops
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — The pipeline-level contract this skill instantiates for the single-receiver case
-- [Audit Handoff Protocols](../agent-readiness/audit-handoff-protocols.md) — How to validate the receiver's expected schema matches what the skill produces
 - [Daily-Use Skill Library](../workflows/daily-use-skill-library.md) — The skill-library catalogue this entry slots into
 - [Discrete Phase Separation](discrete-phase-separation.md) — Phase boundaries the skill formalises into an artifact
 - [Session Initialization Ritual](session-initialization-ritual.md) — What the receiving session runs after reading the handoff doc

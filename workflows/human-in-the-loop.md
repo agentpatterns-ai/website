@@ -80,7 +80,7 @@ Execution review is waste. Decision review is value.
 
 ## Working Example
 
-A typical agent-driven [content pipeline](content-pipeline.md) places one human gate: PR review before merge. Research, drafting, initial review, and PR creation all run without human approval — they are reversible (close the PR, update the branch). The human approves the merge, which publishes the content. The gate captures public impact without interrupting the automated stages.
+A typical agent-driven content pipeline places one human gate: PR review before merge. Research, drafting, initial review, and PR creation all run without human approval — they are reversible (close the PR, update the branch). The human approves the merge, which publishes the content. The gate captures public impact without interrupting the automated stages.
 
 ## Supervision Modes: In, On, and Out of the Loop
 

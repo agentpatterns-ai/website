@@ -11,12 +11,12 @@ aliases:
   - refactor discovery skill
   - improve-codebase-architecture skill
   - deepening opportunity discovery
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Discovery-Only Refactor Pass: Surface Candidates Before Touching Code
 
-> A separate read-only pass scans the codebase for *deepening opportunities* — refactors that make modules easier to test, change, and navigate — and emits a ranked candidate list. It does not propose edits. The human picks one, then a follow-up session does the work.
+> A read-only pass scans for *deepening opportunities*, emits a ranked candidate list, and proposes no edits — the human picks one for a follow-up session.
 
 A discovery-only refactor pass is a named agent skill whose sole job is to produce a ranked list of refactor candidates against a fixed vocabulary, with zero code edits in the same session. Matt Pocock's open-source `/improve-codebase-architecture` skill is the worked example ([SKILL.md, mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md); [AIHero guide](https://www.aihero.dev/skills-improve-codebase-architecture)). The pattern matters because feature-driven agents either skip refactors entirely (off-task) or fold low-leverage cleanup into the feature diff — agentic refactoring in the wild is dominated by Change Variable Type (11.8%), Rename Parameter (10.4%), and Rename Variable (8.5%) edits ([Agentic Refactoring empirical study, arXiv:2511.04824](https://arxiv.org/abs/2511.04824)). Splitting discovery from action lets the model spend reasoning budget on candidate evaluation rather than diff synthesis.
 
@@ -96,7 +96,7 @@ Second, **constraining the ranking lens to Ousterhout-style depth narrows the so
 The conditions above are not optional. When any is missing, the pattern produces churn rather than leverage.
 
 - **No domain glossary.** Without `CONTEXT.md` or equivalent, the skill ranks against the LLM's default refactor disposition — which is the low-level edit mix the empirical study documents ([arXiv:2511.04824](https://arxiv.org/abs/2511.04824)). The ranked list will surface renames and pass-through helpers rather than genuine deepening.
-- **Small or new codebase.** The deepening signals require many callers, repeated bug locations, and accumulated extract-a-helper damage. On a service under ~5K LOC or a six-month-old repo, the pass produces premature consolidation — the same caveat the project-level [audit-agent-built-code-health](../agent-readiness/audit-agent-built-code-health.md) flags for its own applicability.
+- **Small or new codebase.** The deepening signals require many callers, repeated bug locations, and accumulated extract-a-helper damage. On a service under ~5K LOC or a six-month-old repo, the pass produces premature consolidation.
 - **Imminent feature work in the same modules.** The discovery pass reads only the glossary and ADRs, not the active issue queue or open PRDs. A deepening landed before a feature touches the same area destroys the locality the feature was about to establish and creates merge conflicts.
 - **Treating the candidate list as a TODO.** The skill is designed to produce candidates the user *picks one of* before a separate grilling session. Multi-Agent Coordinated Rename Refactoring found that heuristic-based approaches "produce an overwhelming number of false positives" while vanilla LLMs produce incomplete suggestions ([arXiv:2601.00482](https://arxiv.org/abs/2601.00482)) — a team that actions every candidate inherits this signal-to-noise ratio at PR-review cost.
 - **No prior friction surfaced.** Running the pass on a cron or before any AFK run, code review, or planning session has exposed friction produces candidates ranked on static signals alone. The Pocock trigger conditions are post-friction by design ([AIHero guide](https://www.aihero.dev/skills-improve-codebase-architecture)).
@@ -141,6 +141,5 @@ The skill stops here. The user picks candidate 3, and a follow-up grilling sessi
 
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — Sibling Pocock skill; same fixed-output, no-side-effects-without-explicit-pick discipline, applied to issue intake rather than refactor surfacing.
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](throwaway-prototype-skill.md) — Another scoped Matt Pocock skill — same constrained-output discipline applied to design-question prototyping rather than refactor candidate surfacing.
-- [Audit Agent-Built Code Health](../agent-readiness/audit-agent-built-code-health.md) — The post-hoc counterpart: this pass surfaces deepening candidates before feature work; the audit catches bloat after agent PRs have merged.
 - [Code-Health-Gated LLM Tier Routing](../agent-design/code-health-gated-tier-routing.md) — Complement: the discovery pass tells you *where* refactor cycles should be spent; tier routing tells you *which model* spends them.
 - [Demand-Driven Repository Auditing](../verification/demand-driven-repo-auditing.md) — Adjacent skill shape with a different goal: traces specific data flows to find bugs rather than ranking deepening opportunities.

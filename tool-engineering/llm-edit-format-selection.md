@@ -8,16 +8,16 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite
 
-> Edit format is how an LLM expresses code changes — full file, search-replace block, structure-aware diff, or line-numbered patch — and the choice swings accuracy and cost 2-3x in published benchmarks.
+> Edit format is how an LLM expresses code changes — full file, search-replace, or structure-aware diff — and the choice swings accuracy and cost 2-3x.
 
 ## Why Format Choice Matters
 
-Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59% with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper formalises why: *fragile offsets and fragmented hunks make generation highly unnatural for LLMs* ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296)). The Diff-XYZ benchmark — which isolates diff representation from retrieval — finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487)). The lever is real but not universal.
+Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59% with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper formalises why: *fragile offsets and fragmented hunks make generation highly unnatural for LLMs* ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296)). The Diff-XYZ benchmark finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487)). The lever is real but not universal.
 
 ## The Format Spectrum
 
@@ -46,15 +46,15 @@ LLMs drop blank lines, forget the leading `+`, and miscount offsets in `@@` head
 
 ## The Mechanism: Distribution Alignment
 
-LLMs are trained on coherent code spans, not patch fragments. A line-numbered diff forces a non-local positional commitment (the `@@` header) while emitting code; any drift produces an unappliable patch. Aligning the diff unit to a syntactic block moves generation back inside the training distribution: the model emits a complete unit as it would during code completion ([arxiv:2604.27296 §3](https://arxiv.org/html/2604.27296)).
+LLMs are trained on coherent code spans, not patch fragments. A line-numbered diff forces a non-local positional commitment (the `@@` header) while emitting code; any drift produces an unappliable patch. Aligning the diff unit to a syntactic block moves generation back inside the training distribution — the model emits a complete unit as it would during code completion ([arxiv:2604.27296 §3](https://arxiv.org/html/2604.27296)).
 
-Search-replace captures most of this gain without AST awareness — it swaps positional commitments for content anchors, and any unique span of code is an in-distribution generation target.
+Search-replace captures most of this gain without AST awareness: it swaps positional commitments for content anchors, and any unique span of code is an in-distribution target.
 
 ## Adaptive Selection (AdaEdit)
 
-For each source–target pair, AdaEdit picks whichever is shorter — diff representation or full rewrite — as the training label. The fine-tuned model learns to choose the cheaper format per sample, hitting >90% selection accuracy (>95% within a 20% token-deviation tolerance) without explicit branching logic ([arxiv:2604.27296 §4](https://arxiv.org/html/2604.27296)).
+For each source–target pair, AdaEdit picks whichever is shorter — diff or full rewrite — as the training label. The fine-tuned model learns to choose the cheaper format per sample, hitting >90% selection accuracy (>95% within a 20% token-deviation tolerance) ([arxiv:2604.27296 §4](https://arxiv.org/html/2604.27296)).
 
-Without fine-tuning, a harness can approximate this rule: full rewrite below ~300 tokens of file content, search-replace above. The crossover holds in the paper's measurements.
+Without fine-tuning, a harness can approximate this rule: full rewrite below ~300 tokens of file content, search-replace above.
 
 ## Selection Heuristic
 

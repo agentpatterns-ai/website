@@ -9,7 +9,7 @@ tags:
 aliases:
   - skill module importable interpreter
   - skill with importable module
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -74,8 +74,7 @@ A `github-triage` skill that bundles a discovery surface and a workflow module (
 ---
 name: github-triage
 description: Use this skill to triage GitHub issues, pull requests, and discussions.
-metadata:
-  module: ./index.ts
+module: ./index.ts
 ---
 
 Use this skill when a user asks for repository triage.

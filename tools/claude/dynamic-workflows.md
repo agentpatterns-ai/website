@@ -10,7 +10,7 @@ tags:
   - cost-performance
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -39,11 +39,11 @@ All three run a multi-step task; the difference is who holds the plan ([source](
 | Scale | A few per turn | A few per turn | Dozens to hundreds per run |
 | Interruption | Restarts the turn | Restarts the turn | Resumable in the same session |
 
-Because the script holds the intermediate results, the orchestrator's context stays clean no matter how many agents run — the lever that lets one run coordinate up to 1,000 agents. Moving the plan into code also lets a workflow apply a repeatable quality pattern, not just run more agents: independent agents can adversarially review each other's findings, or draft a plan from several angles and weigh them, before anything is reported.
+Because the script holds the intermediate results, the orchestrator's context stays clean — the lever that lets one run coordinate up to 1,000 agents. Moving the plan into code also lets a workflow apply a repeatable quality pattern, not just run more agents: independent agents can adversarially review each other's findings, or draft a plan from several angles and weigh them, before anything is reported.
 
 ## Writing and Running a Workflow
 
-The bundled `/deep-research` workflow is the quickest demonstration — it fans web searches across several angles, cross-checks the sources, votes on each claim, and returns a cited report (requires the WebSearch tool). To turn your own task into a workflow, include the word `workflow` in your prompt and Claude writes one instead of working turn by turn. Setting `/effort ultracode` (xhigh reasoning plus automatic workflow orchestration) lets Claude decide when a task warrants one.
+The bundled `/deep-research` workflow is the quickest demonstration (requires the WebSearch tool). To turn your own task into a workflow, ask for one in plain language ("run a workflow to…") or include the trigger keyword in your prompt, and Claude writes one instead of working turn by turn. The trigger keyword [changed to `ultracode` in v2.1.160](https://code.claude.com/docs/en/workflows#ask-for-a-workflow-in-your-prompt) (it was `workflow` before); natural-language requests work in both. Setting `/effort ultracode` (xhigh reasoning plus automatic workflow orchestration) lets Claude decide when a task warrants one.
 
 Once a run does what you wanted, open `/workflows`, select it, and press `s` to save the script as a `/<name>` command — in `.claude/workflows/` to share with the repo, or `~/.claude/workflows/` for personal use.
 
@@ -61,7 +61,7 @@ A bundled run needs only a question. The agents work in the background and one c
 /deep-research What changed in the Node.js permission model between v20 and v22?
 ```
 
-For your own task, the `workflow` keyword routes a single prompt through the runtime instead of a turn-by-turn pass:
+For your own task, a plain-language request (or the `ultracode` keyword on v2.1.160+) routes a single prompt through the runtime instead of a turn-by-turn pass:
 
 ```text
 Run a workflow to audit every API endpoint under src/routes/ for missing auth checks
@@ -81,7 +81,7 @@ Claude writes the orchestration script, the approval prompt shows the planned ph
 - A workflow is a script Claude writes and a background runtime executes, moving the orchestration plan out of the conversation
 - Intermediate results live in script variables, so the orchestrator's context holds only the final answer — enabling up to 1,000 agents per run
 - The decision axis is who holds the plan: Claude turn-by-turn (sub-agents, skills) versus the script (workflows)
-- `/deep-research` is bundled; the `workflow` keyword or `/effort ultracode` has Claude write one; save a run as a `/<name>` command
+- `/deep-research` is bundled; a plain-language request, the `ultracode` keyword (v2.1.160+; `workflow` before it), or `/effort ultracode` has Claude write one; save a run as a `/<name>` command
 - Research preview (v2.1.154+); disable via `/config`, `"disableWorkflows": true`, or `CLAUDE_CODE_DISABLE_WORKFLOWS=1`
 
 ## Related

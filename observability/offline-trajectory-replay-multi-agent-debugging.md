@@ -11,12 +11,12 @@ aliases:
   - per-node trajectory replay
   - offline multi-agent debugging
   - backward node evaluation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Offline Trajectory Replay for Multi-Agent Workflow Debugging
 
-> Replay captured multi-agent trajectories offline and score every intermediate node against a rubric — the score deltas localize blame to the upstream LLM call that introduced the failure, without re-running the end-to-end pipeline each time.
+> Replay captured multi-agent trajectories offline and score each node against a rubric; the score deltas localize blame to the failing LLM call without end-to-end re-runs.
 
 Offline trajectory replay is a node-level debugging surface for multi-agent LLM workflows. It applies when the workflow is a fixed DAG of role-specific LLM calls, per-node rubrics are graded, and captured traces still represent production. Under those conditions, replay plus per-node scoring isolates the failing node faster than end-to-end re-runs.
 

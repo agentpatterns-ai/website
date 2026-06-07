@@ -9,7 +9,7 @@ aliases:
   - terminalSequence hook field
   - out-of-band agent notifications
   - hook desktop notifications
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Out-of-Band Hook Notifications via terminalSequence
@@ -134,5 +134,4 @@ Two properties carry the load. The bytes leave the JSON parser and go straight t
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
 - [StopFailure Hook: Observability for API Error Termination](stopfailure-hook.md)
 - [Conditional Hook Execution](conditional-hook-execution.md)
-- [Audit Confirmation Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md)
 - [Terminal Tool Output Compression](terminal-output-compression.md)

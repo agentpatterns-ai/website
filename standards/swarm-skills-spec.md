@@ -9,12 +9,12 @@ aliases:
   - Swarm Skills spec
   - swarm-skill kind
   - JiuwenSwarm specification
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Swarm Skills: Multi-Agent Extension of the Agent Skills Standard
 
-> Swarm Skills is a [May 2026 proposal](https://arxiv.org/abs/2605.10052) (CC-BY 4.0) that extends the [Anthropic Agent Skills standard](agent-skills-standard.md) with multi-agent metadata, a per-role file layout, and a self-evolution lifecycle so coordination protocols travel as portable artifacts rather than framework-internal code.
+> Swarm Skills is a [2026 proposal](https://arxiv.org/abs/2605.10052) extending [Agent Skills](agent-skills-standard.md) with multi-agent roles, a workflow layout, and a self-evolution lifecycle for portable coordination protocols.
 
 ## What the Spec Adds to Agent Skills
 

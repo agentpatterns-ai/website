@@ -3,6 +3,7 @@ title: "Model-ID-as-Dependency: Migration Protocol for Deprecation Churn"
 description: "When model deprecations land weekly across providers, treat every model ID in the codebase as a versioned dependency. Inventory the surfaces, propagate updates atomically, and gate the change behind regression evals."
 tags:
   - workflows
+  - agent-design
   - cost-performance
   - tool-agnostic
   - agent-design
@@ -10,12 +11,12 @@ aliases:
   - model id as dependency
   - model deprecation migration protocol
   - versioned model dependency
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Model-ID-as-Dependency: Migration Protocol for Deprecation Churn
 
-> When provider deprecations land weekly, treat every model ID reference in the codebase as a versioned dependency. Inventory the surfaces it touches, propagate updates atomically, and gate the change behind a regression eval.
+> Treat every model ID as a versioned dependency: inventory each surface, propagate the migration atomically, and gate it behind a regression eval before deprecation hits.
 
 The protocol is the codebase-side complement to [`model-deprecation-lifecycle`](model-deprecation-lifecycle.md). Where the lifecycle workflow covers monitor, eval, canary, and fallback over time, this protocol covers the spatial dimension: every place a model ID is pinned in the codebase, treated as one inventory and updated atomically. A model ID in an agent-driven codebase is a distributed reference like a package version, and the same lockfile-style discipline applies.
 
@@ -77,7 +78,7 @@ The output is the canonical inventory. Commit it to the migration ticket — eve
 
 ### 2. Single Source of Truth Per Role
 
-Pin the per-role model in one file the other surfaces import from. For Claude Code, that is the harness env block; for self-hosted gateways, it is the routing config. Instruction files, eval suites, and prompt templates reference the role by name (`reasoning_model`, `execution_model`), not by literal ID. The discipline overlaps with [`bootstrap-reasoning-execution-routing`](../agent-readiness/bootstrap-reasoning-execution-routing.md), which establishes pinning to defeat alias drift; this protocol extends the rule by adding the inventory step.
+Pin the per-role model in one file the other surfaces import from. For Claude Code, that is the harness env block; for self-hosted gateways, it is the routing config. Instruction files, eval suites, and prompt templates reference the role by name (`reasoning_model`, `execution_model`), not by literal ID.
 
 Pin specific dated versions when reproducibility matters. Display-name aliases (`claude-opus-4-7`) are acceptable when the cost of an unannounced minor-version bump is lower than the cost of pinning maintenance ([Anthropic models overview](https://platform.claude.com/docs/en/docs/about-claude/models)).
 
@@ -149,7 +150,6 @@ The eval suite is the gate. If response length or tool-call frequency drifts bey
 
 - [Model Deprecation Lifecycle for Agent Workloads](model-deprecation-lifecycle.md) — the runtime side: monitor, eval, canary, fallback. This protocol is the codebase side.
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — required pairing when the successor changes how prompts are interpreted.
-- [Bootstrap Reasoning–Execution Model Routing](../agent-readiness/bootstrap-reasoning-execution-routing.md) — establishes the per-role pinning that this protocol inventories.
 - [Harness Impermanence](../agent-design/harness-impermanence.md) — scaffolding that wraps current-generation limits also expires; same supply-chain framing applied to harness code.
 - [Eval-Driven Development](eval-driven-development.md) — standing eval infrastructure the migration gate reuses.
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md) — discipline reused when the migration warrants traffic-split.

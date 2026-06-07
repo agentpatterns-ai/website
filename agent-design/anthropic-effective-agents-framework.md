@@ -8,7 +8,7 @@ tags:
 aliases:
   - Building Effective Agents
   - Anthropic Agent Patterns
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Anthropic's Effective Agents Framework: A Pattern Map
@@ -90,6 +90,7 @@ The patterns assume the task is well-specified and the output is verifiable. Pro
 - **Retrieval-bottlenecked tasks** — when RAG correctness dominates outcome quality, workflow-pattern selection is a second-order concern
 - **Teams with existing frameworks** — for teams without infra, LangGraph or CrewAI encode these patterns at lower upfront cost than re-implementation
 - **Definitional drift** — independent reviewers note the post's definitions of "agentic", "workflows", and "agents" are not internally consistent ([thoughtsfromthedatafront analysis](https://www.thoughtsfromthedatafront.com/p/anthropics-blueprint-for-building))
+- **Parallel sub-agents sharing implicit context** — when parallelization or orchestrator-workers is pushed into *autonomous* multi-agent territory, Cognition argues the pattern turns fragile: concurrent agents that lack each other's implicit design decisions make conflicting choices that don't compose ([Cognition: Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)). Their follow-up narrows the safe envelope to topologies where multiple agents contribute intelligence but writes stay single-threaded ([Cognition: Multi-Agents — What's Actually Working](https://cognition.ai/blog/multi-agents-working)), which is the opposite of the dynamic-dispatch framing the original post leaves open
 
 The site's [Anti-Patterns](../anti-patterns/index.md) section catalogues specific failure modes for several of these workflow shapes.
 

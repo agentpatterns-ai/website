@@ -9,7 +9,7 @@ aliases:
   - serverName allowlist trap
   - MCP label-based allowlist
   - identity-vs-label allowlist failure
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # MCP Allowlist by Label, Not by Identity (serverName Trap)

@@ -10,12 +10,12 @@ aliases:
   - JIT-Planner
   - JIT-Scheduler
   - just-in-time agent compilation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Agent JIT Compilation
 
-> Compile the natural-language task once into executable code that embeds LLM and tool calls, validate candidate plans against tool preconditions and postconditions, and pick the lowest-cost schedule — replaces the per-step screenshot-inference-act loop with a single planning round plus parallel execution.
+> JIT compilation compiles a natural-language task into one executable, contract-validated program — replacing the per-step screenshot-inference-act loop with a single planning round plus parallel execution.
 
 Agent JIT compilation translates a task description into a code program that the runtime executes directly, with embedded LLM calls and tool invocations as first-class statements ([Winston et al., ICML 2026 — arXiv:2605.21470](https://arxiv.org/abs/2605.21470)). It pays off only when four conditions hold simultaneously; outside them, a standard sequential ReAct loop dominates.
 

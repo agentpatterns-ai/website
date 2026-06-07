@@ -8,7 +8,7 @@ tags:
   - instructions
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Tool Minimalism and High-Level Prompting
@@ -27,6 +27,8 @@ OpenAI's data agent team found: "We exposed our full tool set to the agent, and 
 Redundancy is a liability, not a safety net. When two tools can accomplish the same task, the model spends reasoning on selection rather than the task itself — and a wrong selection introduces the error before any work is done.
 
 Anthropic's engineering team reaches the same conclusion from the tool-authoring side: "When tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and "Too many tools or overlapping tools can also distract agents from pursuing efficient strategies." [Source: [Writing effective tools for AI agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
+
+A controlled study reinforces the direction empirically. Across 102 tasks against a 100-tool menu, filtering each step's visible tools down to the causally necessary options matched the strongest baseline's task-success rate while cutting token cost by roughly 90% — restricting the menu did not trade away success. [Source: [ToolChoiceConfusion: Causal Minimal Tool Filtering for Reliable LLM Agents](https://arxiv.org/abs/2606.06284)]
 
 ## Removing Overlapping Tools
 

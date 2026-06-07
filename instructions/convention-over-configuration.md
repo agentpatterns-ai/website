@@ -88,7 +88,7 @@ Agents that invent conventions per task produce inconsistent results: mixed bran
 
 ## Example
 
-A [content pipeline](../workflows/content-pipeline.md) has agents that create, review, and publish pages. Without conventions, each agent invents its own patterns:
+A content pipeline has agents that create, review, and publish pages. Without conventions, each agent invents its own patterns:
 
 **Without conventions:**
 

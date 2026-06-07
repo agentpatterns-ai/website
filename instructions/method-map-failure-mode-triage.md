@@ -10,12 +10,12 @@ aliases:
   - failure-mode triage table
   - smallest-artifact discipline
   - harness method map
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Method Map: Failure-Mode to Smallest-Artifact Triage
 
-> Maintain an explicit table mapping observed long-running-agent failure modes to the smallest artifact that fixes each one — and add only that artifact, never an enlarged global instruction file.
+> A Method Map triages each observed failure mode to the smallest artifact that fixes it — add only that artifact, never a bigger instruction file.
 
 A Method Map is a lookup table — one row per recurring failure mode an agent exhibits, mapped to the single primary-fix artifact that binds that failure. When a new failure is observed, add the row's named artifact and nothing else ([walkinglabs/learn-harness-engineering, method-map.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/reference/method-map.md)).
 
@@ -111,6 +111,5 @@ The file is small, scoped, and has a clear removal condition: when premature-com
 - [Frozen Spec File](frozen-spec-file.md) — a Method Map artifact for scope drift across compaction
 - [Agent Harness: Initializer and Coding Agent Pattern](../agent-design/agent-harness.md) — canonical page for the `init.sh` and `claude-progress.txt` artifacts
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — handoff and progress artifacts in depth
-- [Audit Instruction Rule Budget](../agent-readiness/audit-instruction-rule-budget.md) — the diagnostic that detects when a project has crossed the ceiling
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — empirical counterweight: artifacts only help when curated
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the same anti-bloat discipline at the file level

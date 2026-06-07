@@ -10,12 +10,12 @@ aliases:
   - deterministic agent orchestration
   - workflow-controlled modernization
   - fixed-policy orchestration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Deterministic Orchestration for Structured Modernization
 
-> When the modernization workflow has a stable shape, encoding orchestration in code reserves the LLM for translation choices — comparable accuracy at up to 3.5x lower token cost with better worst-case behaviour.
+> When a modernization workflow has a stable shape, encode orchestration in code and reserve the LLM for translation: comparable accuracy at 3.5x lower token cost.
 
 ## The Decision
 
@@ -56,7 +56,7 @@ Two mechanisms explain the cost and robustness gap.
 
 **Variance reduction.** LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
 
-The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Different task, same pattern.
+The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Different task, same pattern — but note the asymmetry. On open-ended repair, iterative agents have since pulled ahead on raw SWE-bench Verified accuracy, while fixed workflows trail at a fraction of the token cost ([SWE-bench leaderboard 2026](https://www.codeant.ai/blogs/swe-bench-scores)). The deterministic win is one of *cost and variance*, not an accuracy ceiling — which is why this pattern is scoped to structured tasks with bounded per-step decisions, not open-ended exploration.
 
 ## What Stays in the Model
 

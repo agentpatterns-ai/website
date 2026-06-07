@@ -6,7 +6,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # Validating Token-Optimized Formats Inside Agentic Loops

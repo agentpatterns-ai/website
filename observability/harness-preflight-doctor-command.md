@@ -6,7 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - harness-engineering
-last_reviewed: 2026-05-28
+last_reviewed: 2026-06-02
 ---
 
 # Harness Preflight Doctor Command for Agent Diagnostics

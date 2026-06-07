@@ -9,12 +9,12 @@ tags:
 aliases:
   - volume-quality inverse law
   - capability-maintainability tradeoff
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # The Reasoning-Complexity Trade-off
 
-> As LLMs become more capable, they generate increasingly bloated and coupled code. Stronger models do not produce cleaner architecture — they produce more architecture. Volume becomes a near-perfect predictor of structural degradation, and neither passing tests nor detailed prompting reverses the trend.
+> The reasoning-complexity trade-off: more capable models produce more bloated, coupled code, not cleaner architecture — and output volume predicts the decay.
 
 ## The Finding
 

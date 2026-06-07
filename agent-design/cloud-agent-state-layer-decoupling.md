@@ -9,34 +9,34 @@ aliases:
   - cloud agent state decoupling
   - agent loop machine state conversation state
   - three-layer cloud agent state
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Cloud-Agent Three-Layer State Decoupling
 
-> Split a cloud agent's state across three layers — agent loop, machine state, and conversation state — so pods, sessions, and threads each migrate, hibernate, and recover independently.
+> Split a cloud agent into three independent layers — agent loop, machine state, conversation state — so pods, sessions, and threads recover separately.
 
-The three-layer state decoupling for cloud agents keeps the agent loop, the machine state, and the conversation state as separate runtime components — each addressable, serialisable, and reassignable so no single infrastructure failure costs a user thread, a sandbox, or in-flight reasoning. The pattern is named directly in Cursor's cloud-agent retrospective: "keep the agent loop, the machine state, and the conversation state as decoupled components" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
+Three-layer state decoupling keeps a cloud agent's agent loop, machine state, and conversation state as separate runtime components — each addressable and reassignable so no single infrastructure failure costs a user thread, a sandbox, or in-flight reasoning. Cursor names the pattern directly: "keep the agent loop, the machine state, and the conversation state as decoupled components" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
 
 ## When This Pattern Applies
 
 The split pays off when at least one holds:
 
 - **Sessions stretch across infrastructure events.** The layered architecture lets a cloud agent "survive blips in inference reliability, pod hibernation and resumption, and runs that stretch across days or even weeks" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
-- **Subagents fan out across heterogeneous pods.** "An agent might run on one machine, spawn async subagents across several, or start locally then delegate work to the cloud. A subagent might even outlive its parent, or run on a completely different kind of pod" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
+- **Subagents fan out across heterogeneous pods.** A subagent "might even outlive its parent, or run on a completely different kind of pod" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
 - **Pod lifecycle is optimised independently of agent identity.** Readonly VMs, prewarmed VMs, and hibernation are only reachable when the loop does not pin to a machine ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
 
-When none hold — short single-machine sessions on stable infrastructure — a coupled alternative ships faster. This is the cloud-agent variant of the more general [session-harness-sandbox separation](session-harness-sandbox-separation.md); use that page for the abstract three-primitive theory.
+When none hold — short single-machine sessions on stable infrastructure — a coupled alternative ships faster. This is the cloud-agent variant of the general [session-harness-sandbox separation](session-harness-sandbox-separation.md); use that page for the abstract three-primitive theory.
 
 ## The Three Layers
 
 | Layer | What it holds | Lifetime | Substrate | Failure mode absorbed |
 |-------|---------------|----------|-----------|-----------------------|
-| **Agent loop** | Model decisions, tool dispatch, retry control flow | Seconds to minutes per task | Durable workflow engine (Cursor on Temporal — "more than 50 million actions per day across more than 7 million unique workflows" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons))) | Inference outages, harness deploys |
+| **Agent loop** | Model decisions, tool dispatch, retry control flow | Seconds to minutes per task | Durable workflow engine (Cursor runs Temporal at "more than 50 million actions per day" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons))) | Inference outages, harness deploys |
 | **Machine state** | Sandbox filesystem, processes, env, dev server | Minutes to hours per session | Hibernatable VM, addressable independently of the loop | Spot reclamation, pod restart, region migration |
-| **Conversation state** | Transcript, tool-call records, streamed events | Days to weeks per thread | Append-only storage with retry-aware sequencing | Client disconnects, mid-stream retries, multi-device sessions |
+| **Conversation state** | Transcript, tool-call records, streamed events | Days to weeks per thread | Append-only storage with retry-aware sequencing | Client disconnects, mid-stream retries |
 
-Anthropic's Managed Agents reach the same shape under different names — Session (log), Harness (stateless loop), Sandbox (execution) — and report the decoupling cut p50 time-to-first-token by ~60% and p95 by >90% ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). Two independent primary sources converging is evidence the split is structural, not vendor-specific.
+Anthropic's Managed Agents reach the same shape under different names — Session (log), Harness (stateless loop), Sandbox (execution) — and report the decoupling cut p50 time-to-first-token by ~60% ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). Two independent primary sources converging is evidence the split is structural, not vendor-specific.
 
 ```mermaid
 graph TD
@@ -50,9 +50,9 @@ graph TD
 
 ## Why It Works
 
-The three layers have different failure modes, lifetimes, and churn rates; coupling two forces the union of their constraints onto both. A loop pinned to a VM cannot survive pod loss; a conversation pinned to a VM cannot survive region migration; machine state pinned to a conversation cannot be reused. Cursor's mechanism is operational: "Because the agent loop lives in Temporal rather than on the VM itself, we can manage pod lifecycles independently and run agents across different kinds of pods — including optimizations like readonly VMs or prewarmed VMs" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)). Anthropic's architecture reaches the same property via stateless harness replay: "Any Harness instance can pick up any Session and continue from where it left off. This is what makes horizontal scaling trivial" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). The durable layer is authoritative; any compute attached to it is replaceable.
+The three layers have different failure modes, lifetimes, and churn rates; coupling two forces the union of their constraints onto both. A loop pinned to a VM cannot survive pod loss; a conversation pinned to a VM cannot survive region migration. Cursor's mechanism is operational: because the loop lives in Temporal rather than on the VM, pod lifecycles are managed independently, enabling "readonly VMs or prewarmed VMs" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)). Anthropic reaches the same property via stateless harness replay — "Any Harness instance can pick up any Session and continue from where it left off" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)). The durable layer is authoritative; attached compute is replaceable.
 
-Loop-layer durability constrains its shape — Cursor moved from "'eternal' agent workflows to multiple shorter ones that exit after completing a single task, which makes version upgrades easier" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)). The conversation layer must reconcile streamed retries with what the client already saw — Cursor's append-only storage "accounts for retries, so that if a step of the agent loop fails after streaming partial output and then gets retried, the client can detect this, rewind its stream, and show the new data" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
+Durability also constrains loop shape — Cursor moved from "'eternal' agent workflows to multiple shorter ones that exit after completing a single task" ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)). The conversation layer reconciles streamed retries against what the client already saw: append-only storage "accounts for retries," letting a client "rewind its stream, and show the new data" after a failed step ([Cursor, 2026-05-21](https://cursor.com/blog/cloud-agent-lessons)).
 
 ## When This Backfires
 
@@ -64,13 +64,7 @@ Loop-layer durability constrains its shape — Cursor moved from "'eternal' agen
 
 ## Composition
 
-The split is the substrate other cloud-agent patterns sit on:
-
-- [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) — install/start lifecycle for the machine-state layer
-- [Prebuilt Agent Environments](prebuilt-agent-environments.md) — bakes machine-state initial conditions into a container image
-- [Delta Channels](delta-channels-checkpoint-storage.md) — keeps the conversation log linear in storage cost
-- [Long-Running Agents](long-running-agents.md) — durability and resumability primitives the loop layer uses
-- [Deep Agent Runtime](deep-agent-runtime.md) — runtime concerns the three layers expose externally
+The split is the substrate other cloud-agent patterns sit on — see [Related](#related) for the patterns that build on each layer.
 
 ## Example
 

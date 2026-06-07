@@ -5,12 +5,12 @@ tags:
   - context-engineering
   - cost-performance
   - claude
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Extended Prompt Cache TTL for Long Agent Sessions
 
-> Switch from the default 5-minute prompt cache TTL to 1-hour when interactive coding sessions sit idle longer than 5 minutes — the 2x write premium pays back on the first re-use past the default TTL.
+> Switch the prompt cache from 5-minute to 1-hour TTL when sessions idle past 5 minutes — the 2x write premium pays back on first re-use.
 
 Anthropic's prompt cache defaults to a 5-minute TTL. A cached prefix is evicted 5 minutes after its last read, and the next request pays the full cache-write cost. The 1-hour TTL is an opt-in alternative: writes cost 2x base input (vs 1.25x for 5-minute) but the entry stays warm for an hour ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). In Claude Code, opt in via `ENABLE_PROMPT_CACHING_1H=1` — added in v2.1.108 on April 14, 2026 ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). At the raw API level, set `cache_control: {"type": "ephemeral", "ttl": "1h"}` on the breakpoint.
 
@@ -29,7 +29,7 @@ The decision reduces to session shape:
 
 ## Why It Works
 
-A 1-hour cache write costs 2x base input price. Two consecutive 5-minute writes cost 2 × 1.25x = 2.5x base. When a session has an idle gap longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume — the premium buys out one rewrite up-front. Skidmore (2026) derives the closed form for the related *refresh vs let-expire* decision on the 5-minute cache: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price cancelling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix ([Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)). The same algebra extends to the 1-hour TTL choice: the multiplier ratio sets the break-even, not the prefix size or model. Reads stay at 0.10x base for both TTLs, so the only difference is the one-time write premium.
+A 1-hour cache write costs 2x base input; two consecutive 5-minute writes cost 2 × 1.25x = 2.5x base. When a session idles longer than 5 minutes but resumes within the hour, the 1-hour write is strictly cheaper than rewriting the 5-minute cache on resume — the premium buys out one rewrite up-front. Skidmore (2026) derives the closed form for the related *refresh vs let-expire* decision: `T = 5 × (W / R) = 5 × (1.25 / 0.10) = 62.5 min`, with token count and per-token price cancelling out — the crossover is identical for a 5K Sonnet prefix and a 500K Opus prefix ([Skidmore: 62.5-minute rule](https://skids.dev/blog/anthropic-cache-tokenomics/)). The same algebra sets the 1-hour break-even: the multiplier ratio decides it, not prefix size or model. Reads stay at 0.10x base for both TTLs, so the only difference is the one-time write premium.
 
 ## Pricing Reference
 
@@ -57,7 +57,7 @@ The response `usage` block separates 5-minute and 1-hour writes ([Anthropic prom
 }
 ```
 
-When the flag is on, the system prompt and tool definitions should appear in `ephemeral_1h_input_tokens` on turn 1 and in `cache_read_input_tokens` thereafter. If they keep landing in `ephemeral_5m_input_tokens` or `cache_creation_input_tokens` mid-session, the flag is not being honoured or a prefix mutation is busting the cache before the longer TTL can help — same monitoring discipline as the default cache ([Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)).
+When the flag is on, the system prompt and tool definitions should appear in `ephemeral_1h_input_tokens` on turn 1 and in `cache_read_input_tokens` thereafter. If they keep landing in `ephemeral_5m_input_tokens` or `cache_creation_input_tokens` mid-session, the flag is not honoured or a prefix mutation is busting the cache before the longer TTL can help — same discipline as the default cache ([Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)).
 
 ## When This Backfires
 
@@ -65,7 +65,7 @@ When the flag is on, the system prompt and tool definitions should appear in `ep
 - **Walk-away workflows past one hour.** When the gap exceeds 60 min the cache evicts anyway; you paid 2x for the write and still pay a rewrite on resume. Skidmore's worked example: at T = 90 min, holding a 500K Opus prefix costs $1.375 more than letting it expire ([Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)).
 - **Mostly-dynamic prefixes.** Timestamps, dynamic tool definitions, or rotating system prompt fragments mutate the prefix between turns. Neither TTL helps; the longer one just makes the wasted write 60% more expensive ([Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)).
 - **Sub-minimum prefixes.** Caching does not activate below the per-model floor (1,024 tokens on Sonnet 4.6; 4,096 on Opus 4.5/4.6/4.7 and Haiku 4.5). The API silently does not cache; `cache_creation_input_tokens` stays at 0 ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)).
-- **Session-wide flag with mixed block sizes.** `ENABLE_PROMPT_CACHING_1H` paints every breakpoint with the 1-hour premium, including small dynamic blocks where the cost rarely pays back. For finer control, set `ttl: "1h"` per breakpoint at the API level — 1-hour blocks must appear before 5-minute blocks in the same request ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+- **Session-wide flag with mixed block sizes.** `ENABLE_PROMPT_CACHING_1H` paints every breakpoint with the 1-hour premium, including small dynamic blocks that rarely pay back. For finer control, set `ttl: "1h"` per breakpoint — 1-hour blocks must precede 5-minute blocks in the same request ([Anthropic prompt caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
 - **20-block lookback exhaustion.** Each breakpoint scans at most 20 content blocks backwards for a prior write. A long tool-heavy session can exceed that depth and silently miss the cache regardless of TTL ([Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)).
 
 ## Key Takeaways

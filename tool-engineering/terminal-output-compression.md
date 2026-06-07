@@ -5,35 +5,35 @@ tags:
   - tool-engineering
   - context-engineering
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Terminal Tool Output Compression: Filtering Predictable Noise at the Harness
 
-> Strip predictable-shape noise from terminal output at the harness boundary so the model's context window holds the diff under review, not the lockfile churn next to it.
+> Strip predictable-shape noise from terminal output at the harness boundary so context holds signal, not lockfile churn.
 
 ## The Pattern
 
-Long shell output decomposes into two populations. Predictable noise — `npm install` progress, lockfile diffs, `ls -l` columns, unchanged hunks inside `git diff` — has near-zero value per token but consumes context budget at the same rate as signal. The failing test, the changed function, the deprecation advisory all compete with it.
+Long shell output decomposes into two populations. Predictable noise — `npm install` progress, lockfile diffs, `ls -l` columns, unchanged hunks inside `git diff` — has near-zero value per token but consumes context budget at the same rate as signal, competing with the failing test or changed function.
 
-Terminal output compression is a post-processing filter at the harness boundary. It drops noise, leaves signal intact, and prepends a banner so the model can opt out per call.
+Terminal output compression is a post-processing filter at the harness boundary: it drops noise, leaves signal intact, and prepends a banner so the model can opt out per call.
 
 ## Reference Implementation: VS Code 1.120
 
-VS Code 1.120 ships this as `chat.tools.compressOutput.enabled` for the agent chat tool (Preview), per the [1.120 release notes](https://code.visualstudio.com/updates/v1_120). The filter set:
+VS Code 1.120 ships this as `chat.tools.compressOutput.enabled` for the agent chat tool (Preview), per the [release notes](https://code.visualstudio.com/updates/v1_120). The filter set:
 
 | Tool output | Compression |
 |-------------|-------------|
 | `git diff` and similar | Large unchanged hunks collapsed |
 | Lockfile and snapshot diffs | Dropped entirely |
 | `ls -l` | Reduced to entry names |
-| `npm install` | Progress bars, deprecation warnings, and audit summaries stripped |
+| `npm install` | Progress bars, deprecation warnings, audit summaries stripped |
 
-The release notes specify the audit contract directly: "A short banner is prepended to any compressed output, so the model can see which filters fired and how to disable compression if it needs the raw text." The banner is non-optional — without it, the pattern degrades into silent error masking ([PostToolUse Output Replacement §When This Backfires](posttooluse-output-replacement.md#when-this-backfires)).
+The release notes specify the audit contract directly: "A short banner is prepended to any compressed output, so the model can see which filters fired and how to disable compression if it needs the raw text." The banner is non-optional — without it, the pattern degrades into [silent error masking](posttooluse-output-replacement.md#when-this-backfires).
 
 ## Where the Lever Lives
 
-Compression is a harness-layer concern. The same primitive exists across coding assistants under different names:
+Compression is a harness-layer concern. The same primitive recurs across assistants under different names:
 
 | Harness | Mechanism |
 |---------|-----------|
@@ -41,7 +41,7 @@ Compression is a harness-layer concern. The same primitive exists across coding 
 | Claude Code | `PostToolUse` hook returning [`hookSpecificOutput.modifiedToolResponse`](https://code.claude.com/docs/en/hooks) |
 | MCP server-side | `_meta["anthropic/maxResultSizeChars"]` ([Claude Code only](mcp-result-persistence-annotation.md)) |
 
-The shape is identical: the harness reads raw `tool_output`, applies filters, returns the compressed string; the original stays in the transcript for incident review ([PostToolUse Output Replacement](posttooluse-output-replacement.md)).
+The shape is identical: the harness reads raw `tool_output`, applies filters, and returns the compressed string; the original stays in the transcript for audit ([PostToolUse Output Replacement](posttooluse-output-replacement.md)).
 
 ```mermaid
 graph LR
@@ -57,56 +57,52 @@ graph LR
 
 ## Noise-Dominated vs Signal-Dominated Output
 
-The contract only works when the filter set is calibrated. False positives drop the byte that mattered; false negatives leave the noise in.
+The contract only works when the filter set is calibrated: false positives drop the byte that mattered, false negatives leave the noise in.
 
 **Noise-dominated** (safe to compress by default):
 
-- Lockfiles (`package-lock.json`, `yarn.lock`, `Cargo.lock`), snapshots, minified bundles
-- Package manager progress: download bars, percent indicators, "added N packages" tallies
-- Directory metadata: `ls -l` columns, `find -ls` output
-- Repeated structure: identical error lines across N files in a multi-file lint
+- Lockfiles (`package-lock.json`, `yarn.lock`, `Cargo.lock`), snapshots, bundles
+- Package manager progress: download bars, percent indicators, "added N packages"
+- Directory metadata: `ls -l` columns, `find -ls`
+- Repeated structure: identical error lines across files in a multi-file lint
 
 **Signal-dominated** (never compress without explicit reason):
 
-- Test output (the failing assertion is often one line in a large block)
-- Compiler diagnostics with column numbers and suggested fixes
+- Test output (the failing assertion is often one line in a block)
+- Compiler diagnostics with column numbers and fixes
 - Error traces with file paths and line numbers
 - `git diff` of source files — collapse unchanged hunks only, never changed ones
-- Anything with a URL, token, ID, or path the model may need to cite
+- Anything with a URL, token, ID, or path the model may cite
 
 ## The Banner Contract
 
-The banner is the auditability hinge. Without it, the model has no way to know compression happened, and the developer reading the transcript sees output the model never actually saw.
-
-A minimum banner records which filters fired (`lockfile-dropped`, `unchanged-hunks-collapsed`, `npm-progress-stripped`), how to disable compression next call, and original vs compressed size.
+The banner is the auditability hinge. Without it, the model cannot know compression happened, and the developer reading the transcript sees output the model never saw. A minimum banner records which filters fired (`lockfile-dropped`, `unchanged-hunks-collapsed`), how to disable compression next call, and original vs compressed size.
 
 ## Relationship to Adjacent Patterns
 
-Six levers solve adjacent problems and compose:
+Six levers solve adjacent problems and compose; none substitutes for another:
 
 | Page | Layer | Trigger |
 |------|-------|---------|
 | Terminal output compression (this page) | Harness, per-call | Tool returns predictable noise |
-| [PostToolUse Output Replacement](posttooluse-output-replacement.md) | Harness, post-hoc | Rewrite tool result before model |
+| [PostToolUse Output Replacement](posttooluse-output-replacement.md) | Harness, post-hoc | Rewrite result before model |
 | [Graceful Tool Output Truncation](graceful-tool-output-truncation.md) | Tool author, runtime | PARTIAL with continuation handle |
-| [Semantic Tool Output](semantic-tool-output.md) | Tool author, design | Less noise emitted to begin with |
+| [Semantic Tool Output](semantic-tool-output.md) | Tool author, design | Less noise emitted at source |
 | [Observation Masking](../context-engineering/observation-masking.md) | History, post-hoc | Tool result used — drop it |
-| [Context Compression Strategies](../context-engineering/context-compression-strategies.md) | History, threshold | Budget 70/85/99% — offload, summarise |
-
-None substitutes for another. [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md) identifies the call sites where compression pays.
+| [Context Compression Strategies](../context-engineering/context-compression-strategies.md) | History, threshold | Budget threshold — offload, summarise |
 
 ## When This Backfires
 
-- **Over-compression hides the failing byte.** Stripping `npm install` audit summaries also strips the advisory ID the model needs. The banner names the filter but does not surface dropped content — the model must know to rerun with compression disabled.
-- **False-positive pattern matches.** A test fixture starting with `+++` markers gets treated as a diff; a large, rarely-changing `README.md` may match the "lockfile-shape" heuristic.
-- **Interactive debugging.** Compressing "predictable progress" while narrowing a flaky test can mask the timing variance that explains the flake.
-- **Compression masks agent learning.** An agent that only sees compressed `npm install` output never builds intuition for the full shape — same tax as overly aggressive [observation masking](../context-engineering/observation-masking.md).
+- **Over-compression hides the failing byte.** Stripping `npm install` audit summaries also strips the advisory ID the model needs. The banner names the filter but not the dropped content, so the model must rerun with compression disabled.
+- **False-positive pattern matches.** A test fixture starting with `+++` markers gets treated as a diff; a rarely-changing `README.md` may match the "lockfile-shape" heuristic and be dropped.
+- **Interactive debugging.** Compressing "predictable progress" while narrowing a flaky test can mask the timing variance that explains it.
+- **Compression masks agent learning.** An agent that only sees compressed `npm install` output never learns its full shape — the same tax [observation masking](../context-engineering/observation-masking.md) levies.
 
-The fix in every case is the banner plus the opt-out. Compression without those degrades into [silent error masking](posttooluse-output-replacement.md#when-this-backfires).
+The fix in every case is the banner plus the opt-out; without those, compression degrades into [silent error masking](posttooluse-output-replacement.md#when-this-backfires).
 
 ## Example
 
-A Claude Code `PostToolUse` hook compresses `git diff` output by collapsing unchanged hunks, leaving changed hunks verbatim, and prepending a banner.
+A Claude Code `PostToolUse` hook compresses `git diff` output: it collapses unchanged hunks, leaves changed hunks verbatim, and prepends a banner.
 
 **`.claude/hooks/compress-git-diff.sh`**:
 
@@ -145,7 +141,7 @@ jq -n --arg out "${BANNER}${COMPRESSED}" \
   '{hookSpecificOutput: {hookEventName: "PostToolUse", modifiedToolResponse: $out}}'
 ```
 
-The model sees the banner first, knows compression fired, and can request raw output by adding `--no-compress` to a follow-up `git diff` call (which the hook is configured to detect and skip). The full diff remains in the transcript regardless.
+The model sees the banner first, knows compression fired, and can request raw output by adding `--no-compress` to a follow-up `git diff` call (which the hook detects and skips). The full diff remains in the transcript regardless.
 
 ## Key Takeaways
 
@@ -164,4 +160,3 @@ The model sees the banner first, knows compression fired, and can request raw ou
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Observation Masking: Filter Tool Outputs from Context](../context-engineering/observation-masking.md)
 - [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md)
-- [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md)

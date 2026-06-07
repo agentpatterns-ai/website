@@ -8,7 +8,7 @@ tags:
 aliases:
   - assistant text transformation hook
   - outbound message hook
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # MessageDisplay Hook: Transforming Assistant Text at the Display Boundary
@@ -23,11 +23,11 @@ Claude Code v2.1.152 ([2026-05-27](https://code.claude.com/docs/en/changelog)) a
 
 The event sits on the outbound text path — between the model emitting a message and the harness rendering it to the terminal, IDE pane, or downstream consumer. Use this page only when the goal is to interpose on what the **user** sees; to interpose on what the **model** sees from a tool call, use [`updatedToolOutput` on `PostToolUse`](posttooluse-output-replacement.md) instead.
 
-At time of writing, the [hooks reference](https://code.claude.com/docs/en/hooks) does not yet document the `MessageDisplay` payload schema or return shape; consult it once it lands for field-level detail.
+The [hooks reference](https://code.claude.com/docs/en/hooks) documents the return shape: a hook sets `hookSpecificOutput.displayContent` to replace the on-screen text. The replacement is **display-only** — *"the transcript and what Claude sees keep the original text"* ([hooks reference](https://code.claude.com/docs/en/hooks)). The event has no matcher support and always fires on every assistant message that streams text.
 
 ## Where It Sits in the Lifecycle
 
-`MessageDisplay` is the symmetric primitive to `PostToolUse` output replacement. The same harness-owned rewrite boundary, applied to a different channel:
+`MessageDisplay` is the symmetric primitive to `PostToolUse` output replacement — the same harness-owned rewrite boundary on a different channel. It is the missing fourth corner, outbound assistant text, that previously had no harness-side enforcement surface ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)):
 
 | Hook | Channel | Reader |
 |------|---------|--------|
@@ -36,32 +36,25 @@ At time of writing, the [hooks reference](https://code.claude.com/docs/en/hooks)
 | `MessageDisplay` | Outbound assistant text | User / downstream |
 | `PreToolUse` | Outbound tool call | External system |
 
-`PreToolUse` and `PostToolUse` gate or rewrite tool invocations and their results; `UserPromptSubmit` sees inbound user text before it reaches the model; `MessageDisplay` is the missing fourth corner — outbound text — that previously had no harness-side enforcement surface ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
-
 ## Practitioner Use Cases
 
-Four use cases motivate dedicated `MessageDisplay` handling rather than prompt-side instruction:
+Four use cases motivate dedicated `MessageDisplay` handling rather than probabilistic prompt-side instruction:
 
-- **PII redaction on user-visible output.** A regex or named-entity classifier strips emails, phone numbers, or internal hostnames before the terminal renders the message. Distinct from upstream redaction of tool output ([PII Tokenization in Agent Context](../security/pii-tokenization-in-agent-context.md)); this is the last-mile guard for what reaches a screen-share viewer or shared transcript.
-- **Citation insertion.** A hook appends inline citations to claims based on a per-session sources file. Citations the model forgot to include get added at the boundary instead of relying on the model to remember.
-- **Banner injection on long-running tasks.** Prepend a "agent is operating in autonomous mode" banner so a downstream operator UI cannot miss the context.
-- **Audit-trail capture of every model utterance.** A side-effect hook (returning the original text unchanged) writes the message to an append-only log; the action is the *capture*, not the transformation.
-
-For all four, prompt-side instruction is probabilistic and reverts under pressure across multi-turn sessions. Hook enforcement is deterministic because the harness — not the model — runs it ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)).
+- **PII redaction at the screen.** A regex or named-entity classifier strips emails, phone numbers, or internal hostnames before render — the last-mile guard for a screen-share viewer or shared transcript, distinct from upstream tool-output redaction ([PII Tokenization in Agent Context](../security/pii-tokenization-in-agent-context.md)).
+- **Citation insertion.** A hook appends inline citations the model forgot, sourced from a per-session sources file, at the boundary rather than relying on recall.
+- **Banner injection.** Prepend an "operating in autonomous mode" banner so a downstream operator UI cannot miss the context.
+- **Audit-trail capture.** A side-effect hook returns the text unchanged and writes it to an append-only log; the action is *capture*, not transform.
 
 ## Why It Works
 
-The harness — not the model — owns the display boundary. The model decides what to say; the harness decides what to show. Moving redaction, citation insertion, and audit capture *after* generation guarantees the transformation runs regardless of what the model chose. This is the same deterministic property that makes `PreToolUse` and `PostToolUse` load-bearing enforcement points: *"Hooks are user-defined shell commands that execute at specific points in Claude Code's lifecycle. They provide deterministic control over Claude Code's behavior, ensuring certain actions always happen rather than relying on the LLM to choose to run them"* ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)).
-
-Prompt-side guidance shapes generation but cannot guarantee output shape. Hook enforcement runs after the model decided, which is why the rewrite primitive belongs on the harness — not in CLAUDE.md or system prompts.
+The harness — not the model — owns the display boundary: the model decides what to say, the harness decides what to show. Moving redaction, citation insertion, and audit capture *after* generation guarantees the transformation runs regardless of what the model chose. This is the deterministic property that makes hooks "ensure certain actions always happen rather than relying on the LLM to choose to run them" ([Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide)). Prompt-side guidance shapes generation but cannot guarantee output shape, which is why the rewrite primitive belongs on the harness — not in CLAUDE.md or system prompts.
 
 ## When This Backfires
 
-- **Audit-trail divergence.** A hook that rewrites or hides text creates an invisible disagreement between what the agent said and what the user saw. Without dual logging (pre-transform plus post-transform), incident review cannot reconstruct the actual model utterance. This is the same failure mode covered in [PostToolUse Output Replacement § Audit-vs-context divergence](posttooluse-output-replacement.md), mirrored to the display boundary — the transcript must capture both versions, not just one.
-- **False sense of PII safety.** Display-side redaction does not prevent the model from reasoning over the secret — the secret already entered context. A user-facing redaction hook reduces *display* exposure but does not close the leak path through subsequent tool calls or chained sessions. For true PII safety the redaction must happen upstream (via [`PostToolUse` output replacement](posttooluse-output-replacement.md) on tool output, or by not putting the data in context at all). `MessageDisplay` is the last-mile guard, not the primary control.
-- **Hook latency on every assistant turn.** Unlike `PreToolUse`/`PostToolUse` which fire per tool call, `MessageDisplay` fires on every assistant message. A 200 ms hook becomes 200 ms of perceived latency on every turn. Heavy hooks (classifier-based PII detectors, LLM-graded filters) that are tolerable on `PostToolUse` become user-visible drag here. Keep the hot path to regex or string substitution; defer slow classifiers to `PostToolUse` upstream of generation.
-- **Race with downstream consumers.** When the displayed text drives multiple downstream systems (a transcript stored to a separate audit DB, a Slack relay, a screen-share viewer), a `MessageDisplay` hook that mutates text *after* one consumer has already read it produces consumer-specific views. If multiple `MessageDisplay` hooks are registered, the [hooks reference](https://code.claude.com/docs/en/hooks) follows the same pattern as `PreToolUse` `updatedInput` and `PostToolUse` `updatedToolOutput` — concurrent rewrites do not have a documented deterministic merge order. Register at most one rewriting hook per matcher.
-- **Stable changelog claim, unstable payload.** At time of writing, the [hooks reference](https://code.claude.com/docs/en/hooks) does not yet document the `MessageDisplay` payload schema or return shape. Hooks authored against an inferred schema may break when the docs land. Pin the hook's expected fields by reading the reference at the version you ship; treat any code in this page as a sketch, not a spec.
+- **Display/consumer divergence.** The replacement is display-only — the transcript and what Claude sees keep the original text ([hooks reference](https://code.claude.com/docs/en/hooks)), so the utterance is never lost and verbose mode shows the original. The divergence that survives is between the transcript and any *downstream consumer* reading the rendered text (a screen-share viewer, a Slack relay). Unlike [PostToolUse output replacement](posttooluse-output-replacement.md), `MessageDisplay` cannot corrupt the canonical record; log the rendered view separately only if a consumer needs it.
+- **False sense of PII safety.** Display-side redaction does not stop the model reasoning over the secret — it already entered context — and does not close the leak path through later tool calls or chained sessions. For true safety, redact upstream (via [`PostToolUse` output replacement](posttooluse-output-replacement.md), or by keeping the data out of context). `MessageDisplay` is the last-mile guard, not the primary control.
+- **Hook latency on every assistant turn.** `MessageDisplay` fires on every assistant message, not per tool call, so a 200 ms hook adds 200 ms of perceived latency every turn. Heavy classifier- or LLM-graded filters that are tolerable on `PostToolUse` become user-visible drag here. Keep the hot path to regex or string substitution; defer slow classifiers upstream.
+- **Undefined merge order across hooks.** `MessageDisplay` has no matcher support, so every registered hook fires on every message. The [hooks reference](https://code.claude.com/docs/en/hooks) says matching hooks "run in parallel" but documents no merge order for competing `displayContent` values — two rewriting hooks have no defined resolution. Register at most one rewriting hook; reserve the rest for side-effect-only capture.
 
 ## Key Takeaways
 
@@ -70,7 +63,7 @@ Prompt-side guidance shapes generation but cannot guarantee output shape. Hook e
 - Useful for PII redaction at the screen, citation insertion, banner injection, and audit capture — anywhere prompt-side instruction is probabilistic.
 - A redaction hook here does not close upstream leak paths; the secret already entered context. Pair with `PostToolUse` redaction for true safety.
 - Hooks fire on every assistant message, so latency is user-visible. Keep transforms cheap; defer classifiers to upstream events.
-- The payload schema is not yet in the [hooks reference](https://code.claude.com/docs/en/hooks) — consult the reference at the version you ship.
+- The rewrite is display-only: the transcript and what Claude sees keep the original text ([hooks reference](https://code.claude.com/docs/en/hooks)), so it cannot corrupt the canonical record.
 
 ## Related
 

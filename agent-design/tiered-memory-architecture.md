@@ -9,12 +9,12 @@ tags:
 aliases:
   - episodic-to-semantic memory promotion
   - memory consolidation pipeline
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Tiered Memory Architecture
 
-> A two-tier memory store with a consolidation pipeline that promotes episodic facts into a semantic tier on observed re-use. Reported to improve long-window retrieval over flat-file baselines, but the gain is conditional on long sessions and recurring task structure.
+> A two-tier memory store whose pipeline promotes episodic facts into a semantic tier on re-use — improving long-window retrieval only for long, recurring sessions.
 
 ## The Architecture
 

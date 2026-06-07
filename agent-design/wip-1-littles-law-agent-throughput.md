@@ -8,12 +8,12 @@ tags:
 aliases:
   - work-in-progress limit for agents
   - one-feature-at-a-time harness rule
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design
 
-> Cap an agent's active task count at one until verification passes. Little's Law turns the resulting cycle time into a quantitative property of the harness, not a vibes choice.
+> Cap an agent's active task count at one until verification passes. Little's Law makes the resulting cycle time a quantitative harness property, not a guess.
 
 ## The Queueing Identity
 

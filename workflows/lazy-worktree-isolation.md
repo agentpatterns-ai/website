@@ -6,7 +6,7 @@ tags:
   - agent-design
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -70,7 +70,7 @@ Lazy isolation works because file-system isolation is *only* needed for writes. 
 
 Lazy isolation has costs eager-on-dispatch does not have:
 
-- **Write-bound fan-outs pay the latch overhead for nothing.** When `/batch` decomposes work into 5–30 modify-and-test units, every sub-agent will write — the latch fires in every session, and the extra code branch saves zero disk. For these workflows, set `isolation: worktree` on the sub-agent ([sub-agents docs](https://code.claude.com/docs/en/sub-agents)) so the worktree is created at dispatch. See [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md) and its *When This Backfires* section for the broader fan-out trade-off; pair with the [Audit Fan-Out Capacity](../agent-readiness/audit-fan-out-capacity.md) runbook to size the fan-out against rate limits and disk before opting into eager mode.
+- **Write-bound fan-outs pay the latch overhead for nothing.** When `/batch` decomposes work into 5–30 modify-and-test units, every sub-agent will write — the latch fires in every session, and the extra code branch saves zero disk. For these workflows, set `isolation: worktree` on the sub-agent ([sub-agents docs](https://code.claude.com/docs/en/sub-agents)) so the worktree is created at dispatch. See [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md) and its *When This Backfires* section for the broader fan-out trade-off.
 - **The transition has a known recovery-path bug.** Issue [#62372](https://github.com/anthropics/claude-code/issues/62372) documents that the `bgIsolation` guard tells agents to call `EnterWorktree`, but the tool's schema is deferred and must be fetched via `ToolSearch` first; without that, the agent hits `InputValidationError` and stalls. The lazy design introduces a transition surface that eager-on-dispatch doesn't have.
 - **Orchestrators that snapshot cwd at dispatch break silently.** The session's working directory changes under it on first write. Any hook, transcript writer, or path-recording orchestrator that captured cwd at session start now points at the parent checkout, not the worktree. Coordinating the invariant across the harness is non-trivial.
 - **Non-git repos without a `WorktreeCreate` hook get no isolation.** The second skip rule routes writes straight to the working copy. Parallel sessions race. The docs warn but the default is unsafe for parallel non-git workflows ([issue #60418](https://github.com/anthropics/claude-code/issues/60418) tracks the docs gap).
@@ -113,4 +113,3 @@ A read-only investigation that ends in *no* fix never creates a worktree — the
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../tools/claude/sparse-paths-monorepo-isolation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Claude Code /batch and Worktrees](../tools/claude/batch-worktrees.md)
-- [Audit Fan-Out Capacity](../agent-readiness/audit-fan-out-capacity.md)

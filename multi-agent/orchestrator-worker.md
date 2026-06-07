@@ -9,7 +9,7 @@ tags:
 aliases:
   - Parallel Dispatch
   - Scatter-Gather
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Orchestrator-Worker Pattern for AI Agent Development
@@ -47,6 +47,8 @@ Parallelization is effective when the task requires "multiple independent direct
 - Code review across separate modules with no shared state
 
 It is not effective when subtasks are sequentially dependent -- sequential dependencies require chaining, not parallelization.
+
+The benefit is conditional, not automatic. A controlled, protocol-aligned evaluation across ten benchmarks -- single-agent versus fixed multi-agent versus evolving multi-agent under one normalized execution and logging protocol -- found most multi-agent configurations underperformed a single-agent baseline, with only one of six tested workflows beating it ([Do More Agents Help? Controlled and Protocol-Aligned Evaluation of LLM Agent Workflows](https://arxiv.org/abs/2606.05670)). Parallel dispatch pays off when subtasks are genuinely independent; adding workers to a task that does not decompose cleanly buys coordination cost with no quality return.
 
 ## Effort Scaling
 

@@ -21,8 +21,6 @@ last_reviewed: 2026-05-27
 - [Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md) — Distribute shared agent skills, instruction files, and coding conventions from a central repository to downstream projects
 - [Enterprise Skill Marketplace: Distribution, Usage Reporting, and Quality Evals](enterprise-skill-marketplace.md) — Scale a shared skill library with MDM distribution, private plugin marketplaces, OTel usage telemetry, and a manual eval cadence for high-traffic skills
 - [Closed-Loop Agent Training from Tool Schemas](closed-loop-agent-training.md) — Generate synthetic training data from MCP tool definitions, fine-tune small models to match frontier performance, and re-train incrementally as schemas evolve
-- [Content Pipeline: Idea to Published Page](content-pipeline.md) — How ideas move through GitHub issues, agent drafting, multi-reviewer quality gates, and into the published site
-- [Content & Skills Audit Workflow](content-skills-audit.md) — Automated staleness detection for URLs, site maps, and sourced claims
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — Four complementary feedback mechanisms that together keep a shared skill library accurate and useful
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
@@ -60,7 +58,6 @@ last_reviewed: 2026-05-27
 - [AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates](slop-as-process-problem.md) — Treat AI-generated slop the way CI/CD treats broken builds — a per-PR agent gate enforcing version-controlled standards, sized to agent throughput rather than reviewer attention
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — Wire up OpenTelemetry on Claude Code and LangChain agents for cost dashboards, compliance audit trails, and trajectory debugging
-- [Per-Page OG Image Generation at MkDocs Build Time](og-image-generation.md) — Auto-generate branded 1200×630 Open Graph images from page metadata at build time so every social share shows a unique, on-brand preview card
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](prototype-before-optimizing.md) — Defer production efficiency constraints until after establishing quality baselines to avoid locking in suboptimal architectures
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — Instrument-attribute-fix-verify loop that treats per-PR and per-CI workflows as a measurable cost surface, with named levers (MCP pruning, pre-agentic CLI, relevance gating, cheaper-model routing, cache reuse) and frequency-weighted preconditions
 - [Background-to-Foreground Handoff](background-foreground-handoff.md) — Transfer work from a background agent to a human at the ~90% completion mark using distilled summaries and artifact-based handoff points

@@ -28,6 +28,7 @@ nav:
       - scaffold-architecture-taxonomy.md
       - layered-domain-architecture.md
       - inversion-analysis.md
+      - governed-sources-of-truth-analytics-agents.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md
       - role-orchestration-single-model.md

@@ -11,12 +11,12 @@ aliases:
   - HBHC
   - heartbeat-bound credentials
   - cryptographic revocation for AI agent swarms
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Heartbeat-Bound Hierarchical Credentials for Agent Swarms
 
-> Bind every sub-agent credential to a periodic parent liveness proof so descendants become unusable within a deterministic window once the parent stops — no network round-trip to a revocation authority required.
+> Heartbeat-bound hierarchical credentials tie each agent swarm member to a parent liveness proof, so descendants expire deterministically once the parent stops — no revocation round-trip.
 
 Heartbeat-Bound Hierarchical Credentials (HBHC) bind every sub-agent credential to a heartbeat signed by its parent. Verifiers check freshness locally with a cached public key and a local clock; when the parent stops heartbeating, every descendant becomes unusable within a bounded window `W_z ≤ W_max + Δ_h + ε`. [Source: Deochake, *Heartbeat-Bound Hierarchical Credentials*, arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
 

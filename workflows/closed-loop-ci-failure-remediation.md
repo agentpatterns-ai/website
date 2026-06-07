@@ -9,12 +9,12 @@ tags:
 aliases:
   - CI failure auto-remediation
   - agent-driven CI fix loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Closed-Loop CI Failure Remediation with Cloud Coding Agents
 
-> A pipeline that converts a CI failure event into a cloud-agent dispatch and a fix PR is viable only under five preconditions — failure classification, payload sanitisation, scope-bounded fix, per-failure retry budget, and a PR review gate that stays load-bearing.
+> A CI failure becomes a cloud-agent fix PR only under five controls: failure classification, payload sanitisation, scoped fix, retry budget, and a load-bearing review gate.
 
 Closed-loop CI failure remediation is the design where a CI failure event triggers a cloud coding agent that reads the failure context, proposes a patch on the existing branch, and surfaces it as a reviewable PR — moving CI red from "human triages then dispatches" to "agent proposes, human reviews." The pattern is shipped in three trigger shapes by mid-2026 and only works when every step that the human used to do implicitly is replaced by an explicit dispatcher control.
 

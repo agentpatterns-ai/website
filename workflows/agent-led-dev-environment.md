@@ -8,7 +8,7 @@ tags:
 aliases:
   - agent-authored dev environment
   - agent-iterated Dockerfile
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Agent-Led Dev-Environment Iteration with Validation and Rollback
@@ -129,4 +129,5 @@ The validator (`make smoke-test`) is the gate. `env:working` is the rollback tar
 - [Rollback-First Design](../agent-design/rollback-first-design.md) — the design discipline this workflow applies to infrastructure
 - [Convergence Detection](../agent-design/convergence-detection.md) — deciding when iteration has stopped making progress
 - [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md) — the analogous validate-then-promote loop applied to code rather than infrastructure
+- [Experiential-Learning Setup Agents with Snapshot Rollback](experiential-setup-agents-snapshot-rollback.md) — the sibling workflow that reuses the snapshot-rollback substrate for repository setup, adding experience replay and prosecutor-judge verification
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — what the smoke-test validator looks like in practice

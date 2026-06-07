@@ -10,12 +10,12 @@ tags:
 aliases:
   - "prefix-risk scorer"
   - "online failure-warning monitor"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Learned Prefix Monitors for Agent Traces
 
-> A prefix monitor reads a partial agent trace and predicts whether the run will end in failure. Learning that scorer offline avoids deployment-time LLM judging cost, but the authors of [PrefixGuard](https://arxiv.org/abs/2605.06455) show that strong ranking metrics do not always translate into low-false-alarm alerts.
+> A prefix monitor scores a partial agent trace for failure. Learning that scorer offline cuts LLM-judging cost, but strong ranking need not yield usable alerts.
 
 ## The Problem with Final-Outcome Checks
 

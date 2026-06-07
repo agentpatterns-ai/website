@@ -8,12 +8,12 @@ aliases:
   - rule lifecycle frontmatter
   - source applicability expiry triple
   - undead rule detection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Rule Lifecycle Metadata for Prunable Instruction Surfaces
 
-> Tagging each instruction rule with where it came from, when it applies, and when it can be retired turns the rule-budget audit from a counting exercise into a pruning exercise.
+> Tagging each rule with its source, applicability, and expiry condition turns the rule-budget audit from a counting exercise into a pruning exercise.
 
 The [instruction compliance ceiling](instruction-compliance-ceiling.md) makes pruning non-optional — even frontier models drop to 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). But the ceiling argument only tells you *that* you must cut, not *what* to cut. Without an explicit retirement signal per rule, every audit defaults to "leave it in, just in case." Surfaces grow monotonically; they do not shrink.
 
@@ -41,7 +41,7 @@ The lifecycle triple kills the undead-rule failure mode at the write site: a rul
 
 ## How the Audit Uses It
 
-The [audit-instruction-rule-budget](../agent-readiness/audit-instruction-rule-budget.md) runbook counts rules, classifies them by safety/correctness/style, and detects duplication. Lifecycle metadata adds three roll-up percentages and one new finding class:
+An instruction-rule-budget audit counts rules, classifies them by safety/correctness/style, and detects duplication. Lifecycle metadata adds three roll-up percentages and one new finding class:
 
 ```markdown
 | Surface | Rules | with source | with applies_to | with retire_when |
@@ -119,13 +119,12 @@ After the second pass the surface dropped from 130 to 71 rules — under the cei
 - The 150-rule [compliance ceiling](instruction-compliance-ceiling.md) forces pruning; lifecycle metadata makes pruning mechanical instead of judgment-based.
 - The triple is `source` (why added), `applies_to` (when active), `retire_when` (deletion condition) — sourced from the [Walkinglabs harness-engineering curriculum](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md).
 - Undead rules — no expiry, no recent invocation — are the named failure mode that lifecycle metadata kills at the write site.
-- The [audit-instruction-rule-budget](../agent-readiness/audit-instruction-rule-budget.md) audit gains three roll-up percentages and an undead-rules finding when lifecycle metadata is present.
+- An instruction-rule-budget audit gains three roll-up percentages and an undead-rules finding when lifecycle metadata is present.
 - Skip the scheme on surfaces under ~50 rules — overhead dominates and plain deletion discipline already works.
 
 ## Related
 
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
-- [Audit Instruction Rule Budget](../agent-readiness/audit-instruction-rule-budget.md)
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)

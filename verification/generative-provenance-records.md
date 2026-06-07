@@ -5,12 +5,12 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Generative Provenance Records for Tool-Using Agents
 
-> Emit a structured record alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop.
+> Emit a structured provenance record alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop.
 
 ## The Provenance Gap
 

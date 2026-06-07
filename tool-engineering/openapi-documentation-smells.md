@@ -10,12 +10,12 @@ aliases:
   - OpenAPI smell taxonomy
   - agent-readiness API audit
   - REST documentation smells
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # OpenAPI Documentation Smells for Agent-Ready APIs
 
-> A structurally valid OpenAPI spec is not an agent-ready API. The Hermes industrial study found 2,450 deficiencies across 600 endpoints — every endpoint had at least one — and enriching only the spec text moved task success from roughly 70% to 90%.
+> A structurally valid OpenAPI spec is not an agent-ready API. Enriching the spec text alone moved agent task success from roughly 70% to 90%.
 
 ## The Semantic-Readiness Gap
 
@@ -181,5 +181,4 @@ The PATH smell (`/users/{id}/transfer` with `doTransfer`) collapsed into a resou
 - [MCP Server Design](mcp-server-design.md)
 - [Tool Description Quality](tool-description-quality.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Audit Tool Descriptions](../agent-readiness/audit-tool-descriptions.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)

@@ -9,16 +9,16 @@ tags:
 aliases:
   - operationalizing ethics in AGENTS.md
   - values in agent context files
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Encoding Values in AGENTS.md: Why Prose Without Verification Fails
 
-> Developers translate team values — fairness, accessibility, sustainability, tone — into AGENTS.md prose. Corpus studies show these values are largely absent in practice, and when present, unverified prose rarely changes agent behavior. Pair every value-bearing rule with a verification command or move it to a lower layer.
+> Values written as AGENTS.md prose rarely change agent behavior; pair each one with a verification command or move it to a lower enforcement layer.
 
 ## The Empirical Gap
 
-Two recent corpus studies measured what developers actually encode in repository context files. Functional context dominates; values content is sparse.
+Two recent corpus studies measured what developers encode in context files. Functional content dominates; values content is sparse.
 
 | Category | Wei et al. (2,303 files) | Liu et al. (466 OSS repos) |
 |---|---|---|
@@ -32,7 +32,7 @@ Two recent corpus studies measured what developers actually encode in repository
 
 Liu et al. classified instructions by writing style — descriptive, prescriptive, prohibitive, explanatory, conditional — and reported **no explicit ethical, accessibility, fairness, or tone instructions** across the analyzed AGENTS.md files ([Liu et al., 2025](https://arxiv.org/abs/2510.21413)). Wei et al. note the same gap: developers "provide few guardrails to ensure that agent-written code is secure or performant" ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
 
-The encoded-values story is largely aspirational; the files themselves contain build commands and naming conventions.
+A later vision paper tempers how absolute that gap is: [Treude et al., 2026](https://arxiv.org/abs/2605.05584) report that developers *are* already embedding fairness, accessibility, sustainability, tone, and privacy guidance, framing AGENTS.md as a "developer-authored governance layer." But the authors explicitly defer the question that matters here — *whether agents reliably adhere to* those values — to future work. Presence of values prose is not evidence it changes behavior, which is the gap this page addresses.
 
 ## Why Values-as-Prose Fails
 
@@ -59,20 +59,28 @@ Pair every value with a mechanical check the agent runs; reduce the AGENTS.md li
 | Fairness in data | "Avoid biased datasets." | "Run `scripts/dataset-audit.py` on every new dataset; CI fails on parity-check failure." |
 | Security | "Write secure code." | "Run `gitleaks detect` and `npm audit --omit=dev` before commit." |
 
-This aligns with the broader site finding that [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md) for coding agents — negative constraints with concrete triggers outperform positive prose, and tool-specific commands are the only AGENTS.md content with reliable behavioral effect ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
+This matches the broader finding that [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md) — tool-specific commands are the only AGENTS.md content with reliable behavioral effect ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
 
 ## Where Values Actually Belong
 
-If the goal is enforced values, AGENTS.md is rarely the right layer. Each value usually has a lower-level mechanism:
+If the goal is enforced values, AGENTS.md is rarely the right layer; each value usually has a lower-level mechanism:
 
-- **Permissions and sandboxes** — egress, file-write, and shell deny rules enforce "do not exfiltrate data" without prose
+- **Permissions / sandboxes** — deny rules enforce "do not exfiltrate data" without prose
 - **CI checks** — accessibility linters, license scanners, dataset audits, dependency scans
-- **Pre-commit / hook scripts** — secret scanning, formatting, deny-rule enforcement on risky operations
-- **Branch protection** — "do not commit to main" becomes a server-side rule, not an AGENTS.md sentence
+- **Pre-commit hooks** — secret scanning, formatting, deny-rule enforcement
+- **Branch protection** — "do not commit to main" becomes a server-side rule
 
-AGENTS.md then references the mechanism: "Run `make check-a11y`. If it fails, do not propose merging." That sentence works because the agent can verify the outcome.
+AGENTS.md then references the mechanism: "Run `make check-a11y`. If it fails, do not propose merging." That works because the agent can verify the outcome. Prose still earns space when it is short and points to a mechanism; a long ethics preamble with no follow-through does not.
 
-Prose values still earn space when they are short, point to a mechanism, or signal priorities to human contributors. What does not work is a long ethics preamble with no operational follow-through — high attention via primacy, no behavioral teeth, direct cost on the task budget.
+## When This Backfires
+
+Verification-pairing is the right default, but it has failure conditions:
+
+- **Not every value is mechanizable.** "Use inclusive tone" has no clean linter; forcing one yields a brittle matcher that misfires — worse than honest prose plus human review.
+- **Over-mechanization breeds checkbox theater.** Reduce a value to "CI is green" and teams optimize the check, not the value: a passing `dataset-audit.py` can certify data that is fair on the measured axis and biased on an unmeasured one.
+- **Premature mechanisms misdirect.** Wiring a check before the value is understood freezes a wrong proxy into CI; some values are better left as reviewed prose until a faithful check exists.
+
+Where no faithful, cheap check exists, prose pointing at human review beats a misleading green check.
 
 ## Example
 
@@ -129,6 +137,7 @@ The "after" version contains the same values commitments. The difference is that
 - [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988) — verbose context files reduce success and add ~20% cost
 - [Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538) — frontier models top out at 68% at 500 instructions; primacy bias peaks around 150–200 instructions
 - [Zhang et al. — Do Agent Rules Shape or Distort? Guardrails Beat Guidance in Coding Agents](https://arxiv.org/abs/2604.11088) — negative constraints help, positive directives hurt; ground for the verification-not-prose recommendation
+- [Treude et al. — Operationalizing Ethics for AI Agents: How Developers Encode Values into Repository Context Files](https://arxiv.org/abs/2605.05584) — vision paper; finds developers already embed fairness/accessibility/sustainability/tone/privacy guidance, but defers whether agents adhere to it
 
 ## Related
 

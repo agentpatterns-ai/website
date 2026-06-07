@@ -8,7 +8,7 @@ tags:
 aliases:
   - evaluating agent skills
   - skill quality evaluation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit
@@ -61,7 +61,7 @@ Skills split into two categories that upgrade differently: [Source: [Improving s
 
 ## Grading Pitfalls
 
-**Same-model LLM-as-judge.** Grader agents sharing the target model inherit its biases and inflate pass rates on outputs the model itself would not critique. Prefer code-based assertions for mechanical checks (valid JSON, row counts, file existence) and human spot-checks for subjective quality. [Source: [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+**Same-model LLM-as-judge.** Grader agents sharing the target model inherit its biases and inflate pass rates on outputs the model itself would not critique. Prefer code-based assertions for mechanical checks (valid JSON, row counts, file existence) and human spot-checks for subjective quality. [Source: [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] A pre-registered controlled study makes the failure concrete: a code-generation "skill"'s apparent quality gain was read off an LLM-as-judge — "an instrument with documented positional, self-preference, and stylistic biases" — and showed no separable execution-correctness benefit over a plain labels-only scaffold once outputs were graded by passing tests rather than by a model. [Source: [Scaffold, Not Vocabulary? A Controlled, Two-Tier, Pre-Registered Study of a Popperian Code-Generation Skill](https://arxiv.org/abs/2606.06454)]
 
 **Blind A/B judging.** When comparing skill versions, sequential grading anchors the second version to the first. Present both outputs to a judge without labels so holistic qualities are scored free from which version "should" be better. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 

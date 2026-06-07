@@ -10,18 +10,18 @@ aliases:
   - subagent trace correlation
   - agent_id propagation
   - per-subagent OTel attribution
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Subagent OTel Trace Correlation via `agent_id` Attribute
 
-> Propagate a stable agent identifier as both an HTTP header on outgoing API requests and an attribute on every OTEL span so multi-agent traces become queryable by agent identity — independent of span lineage.
+> Propagate a stable agent identifier on outgoing HTTP headers and every OTEL span, keeping multi-agent traces queryable by agent identity, independent of span lineage.
 
 ## The Correlation Problem
 
 Across 200 spans and 12 subagents, two questions span nesting alone does not answer cheaply: which spans belong to a given subagent, and which call chain caused this 429. Span hierarchy answers the first via tree traversal, but only inside a single Claude Code session. Once work crosses a boundary the instrumentation does not cover (shell-out, webhook, queue), lineage is gone.
 
-The fix is a flat, propagated identifier — one that survives where the trace context ends.
+The fix is a flat, propagated identifier that survives where the trace context ends.
 
 ## The Propagation Contract
 
@@ -34,7 +34,7 @@ Claude Code 2.1.139 ([changelog, May 11, 2026](https://code.claude.com/docs/en/c
 
 From the [monitoring docs](https://code.claude.com/docs/en/monitoring-usage): `agent_id` identifies the subagent that issued the request (absent on the main session); `parent_agent_id` identifies the agent that spawned it (absent for the main session and for agents spawned directly from it).
 
-The pair is load-bearing. `agent_id` supports "all work by this subagent". `parent_agent_id` reconstructs the dispatch hierarchy from a flat query — answering "which subagent spawned this 429-emitting child" without walking the span tree.
+The pair is load-bearing. `agent_id` supports "all work by this subagent"; `parent_agent_id` reconstructs the dispatch hierarchy from a flat query — "which subagent spawned this 429-emitting child" — without walking the span tree.
 
 ```mermaid
 graph TD
@@ -47,7 +47,7 @@ graph TD
 
 ## Why Two Surfaces
 
-Span lineage answers "what is the call structure inside this turn" — it requires the parent span to be live when the child starts. The propagated attribute answers "what work was caused by this agent identity, regardless of dispatch path" — it requires only that the identifier be copied onto every emission. OpenTelemetry separates trace context (`traceparent`) from cross-cutting context (span attributes, Baggage) for the same reason — neither alone is sufficient.
+Span lineage answers "what is the call structure inside this turn" — it needs the parent span live when the child starts. The propagated attribute answers "what work was caused by this agent identity, regardless of dispatch path" — it needs only that the identifier be copied onto every emission. OpenTelemetry separates trace context (`traceparent`) from cross-cutting context (span attributes, Baggage) for the same reason: neither alone suffices.
 
 ## Queries the Pattern Enables
 
@@ -65,7 +65,7 @@ Without the attribute, the same queries require walking parent links per-trace �
 
 ## Complementary Attributes
 
-The contract sits inside a broader set of attributes Claude Code emits on `claude_code.llm_request` spans ([attribute table](https://code.claude.com/docs/en/monitoring-usage)):
+The contract sits within the attributes Claude Code emits on `claude_code.llm_request` spans ([attribute table](https://code.claude.com/docs/en/monitoring-usage)):
 
 | Attribute | What it identifies |
 |-----------|--------------------|
@@ -78,11 +78,11 @@ The contract sits inside a broader set of attributes Claude Code emits on `claud
 
 ## Where the Propagation Breaks
 
-The contract holds only over surfaces Claude Code controls. Boundaries it cannot reach are the off-protocol egress paths catalogued in [Audit MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md):
+The contract holds only over surfaces Claude Code controls — off-protocol egress paths escape it:
 
-- **Shell-out via Bash tool**: `curl -X POST https://api.example.com` produces a `claude_code.tool` span, but the outbound request carries no `x-claude-code-agent-id` header — the receiving service sees an anonymous request.
-- **Subprocess work**: `TRACEPARENT` is auto-set for W3C context inheritance, but no analogous propagation copies `agent_id` into subprocess env. Subprocess spans inherit the trace, not the agent identity.
-- **Fire-and-forget queues**: enqueueing discards the header. The work runs untagged.
+- **Shell-out via Bash tool**: `curl -X POST https://api.example.com` produces a `claude_code.tool` span, but the request carries no `x-claude-code-agent-id` header — the service sees an anonymous request.
+- **Subprocess work**: `TRACEPARENT` is auto-set for W3C inheritance, but nothing copies `agent_id` into subprocess env. Subprocess spans inherit the trace, not the agent identity.
+- **Fire-and-forget queues**: enqueueing discards the header; the work runs untagged.
 
 Mitigation: lift the call into an MCP tool, or wrap shell-outs with an explicit `x-claude-code-agent-id` header.
 
@@ -128,8 +128,6 @@ The 429 belongs to `fanout-3`, spawned by `orch`. A cost-by-`agent.name` panel i
 ## Related
 
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
-- [Audit Fan-Out Capacity](../agent-readiness/audit-fan-out-capacity.md)
-- [Audit MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)

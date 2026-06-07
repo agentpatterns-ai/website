@@ -8,12 +8,12 @@ tags:
 aliases:
   - LLM library version vulnerabilities
   - vulnerable LLM-pinned dependencies
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # LLM-Pinned Library Versions Carry Systemic CVE Exposure
 
-> Version strings the model writes look correct but routinely point to releases with known critical CVEs — the failure is shared across models because the bias lives in training data, not in any single model.
+> LLM-pinned library versions routinely carry known CVEs because the model's prior favors popular-but-outdated releases; a bias shared across models, so pin against external CVE data.
 
 ## The Finding
 

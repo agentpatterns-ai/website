@@ -9,12 +9,12 @@ aliases:
   - hook args field
   - hook exec form
   - shell-safe hook handler
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands
 
-> Claude Code v2.1.139 added the `args: string[]` field to hook handlers — when present, the harness spawns the command directly with `execve` instead of `sh -c`, so substituted hook input cannot inject shell syntax. Use exec form whenever tool input flows into argv; keep shell form only when pipes, redirects, or expansion are the point.
+> A hook's `args` spawns the command with `execve`, not a shell, so substituted input cannot inject shell syntax. Reserve shell form for pipes and expansion.
 
 ## The Two Forms
 

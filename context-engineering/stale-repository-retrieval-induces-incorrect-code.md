@@ -10,7 +10,7 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Stale Repository Retrieval Induces Incorrect Code

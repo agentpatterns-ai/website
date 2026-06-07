@@ -9,12 +9,12 @@ tags:
 aliases:
   - life-harness
   - runtime interface adaptation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Runtime Harness Adaptation
 
-> On deterministic, rule-governed environments, evolve a four-layer harness — environment contracts, procedural skills, action realization, trajectory regulation — from interaction-failure trajectories. The frozen model gets the lift; the layers transfer across backbones to the extent the encoded structure is environment-side, not model-side.
+> Fix recurring LLM-agent failures by evolving a four-layer interface harness from failure trajectories, leaving the frozen model untouched — layers carry the lift, not retraining.
 
 Runtime harness adaptation fixes recurring LLM-agent failures by editing the model-environment interface, not the model. Each recurring failure in a training trajectory becomes a rule, skill, validator, or monitor at one of four layers; the harness is held fixed at evaluation. [Xu et al. (2026)](https://arxiv.org/abs/2605.22166) report 116 of 126 model-environment settings improved across 18 backbones — average +88.5% relative — with harnesses evolved from a single 4B model transferring to 17 others.
 

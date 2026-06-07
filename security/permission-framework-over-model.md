@@ -11,12 +11,12 @@ tags:
   - tool-agnostic
   - anti-pattern
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions
 
-> When an agent has shell, file, and network privileges over real state, the permission framework — ask-to-continue versus permissive — drives overeager-action rates an order of magnitude more than the base model. The same Sonnet-4.6 weights produce 1.1% to 27.7% overeager rates depending on harness ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
+> The permission framework drives overeager-action rates more than the base model: identical Sonnet-4.6 weights span 1.1% to 27.7% across harnesses ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
 
 ## When This Recommendation Applies
 

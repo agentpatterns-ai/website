@@ -9,12 +9,12 @@ aliases:
   - agent middleware pipeline
   - per-call agent interceptor
   - in-runtime middleware
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Agent Runtime Middleware
 
-> Compose cross-cutting concerns — retry, redaction, cost caps, observability — as ordered pre/post handlers around every model and tool call instead of scattering them through the agent loop.
+> Runtime middleware composes cross-cutting concerns — retry, redaction, cost caps, observability — as ordered pre/post handlers around every model and tool call.
 
 Agent runtime middleware is a chain of pre- and post-handlers that intercepts every model invocation and tool call inside the agent runtime. Each handler runs in declared order before the call; post-handlers run in reverse order after, letting wrappers unwind cleanly. Google Genkit and LangChain both ship the pattern with the same shape ([Genkit announcement](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/); [LangChain agent middleware](https://blog.langchain.com/agent-middleware/)).
 
@@ -57,7 +57,7 @@ The dividing line: middleware sees the conversation and wraps every call; hooks 
 
 ## Why It Works
 
-The pattern separates orthogonal concerns from sequential code. Every model call and tool invocation is a request/response pair; cross-cutting concerns compose naturally at that boundary. Genkit describes the mechanism as "composable hooks that intercept generation calls, including the tool execution loop, and inject custom behaviors" — the same aspect-oriented composition Express, ASP.NET, and gRPC interceptors have used for a decade ([Google Developers Blog](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)). The Agent Lifecycle Toolkit formalises six intervention points — post-user-request, pre-LLM prompt conditioning, post-LLM output processing, pre-tool validation, post-tool result checking, pre-response assembly — and argues that systematic interception at those boundaries is what prevents "misinterpreted tool arguments from corrupting production data" ([ALTK, CAIS '26](https://arxiv.org/abs/2603.15473)). The causal lever is the boundary, not the code: once every call passes through the same chain, adding a new concern becomes additive rather than invasive.
+Every model call and tool invocation is a request/response pair, so cross-cutting concerns compose naturally at that boundary. Genkit describes the mechanism as "composable hooks that intercept generation calls, including the tool execution loop, and inject custom behaviors" — the aspect-oriented composition Express, ASP.NET, and gRPC interceptors have used for a decade ([Google Developers Blog](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)). The Agent Lifecycle Toolkit formalises six intervention points and argues that systematic interception at those boundaries is what prevents "misinterpreted tool arguments from corrupting production data" ([ALTK, CAIS '26](https://arxiv.org/abs/2603.15473)). The causal lever is the boundary, not the code: once every call passes through the same chain, adding a concern becomes additive rather than invasive.
 
 ## Prebuilt Catalogues
 
@@ -81,8 +81,8 @@ Genkit ships in TypeScript, Go, and Dart with Python in flight; LangChain's API 
 - **Order-dependent middleware without ordering tests.** Redaction-then-logging vs logging-then-redaction is a security bug, not a style preference. Drift in registration order without tests asserting the effective order turns the middleware into a footgun.
 - **Silent-swallow middleware.** A handler that catches and discards exceptions makes failures disappear into the stack — one of the documented agent failure modes ([AI agent failure pattern recognition](https://www.mindstudio.ai/blog/ai-agent-failure-pattern-recognition)). Contain it with an explicit error-handler middleware that re-raises by default.
 - **Performance death-by-thousand-handlers.** A stack of fifteen handlers run twice per turn at 2 ms each adds 60 ms per iteration; at thirty iterations per task that is 1.8 s of pure middleware overhead.
-- **Compliance theatre.** An "approval" middleware that auto-approves teaches the audit log that controls exist when none do — the Lies-in-the-Loop failure mode ([Audit: Confirmation-Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md)).
-- **Off-protocol egress invisible to middleware.** Middleware only sees calls flowing through the runtime. An agent that shells out to curl, opens a raw socket, or uses a DB driver directly bypasses the entire chain. Pair with host-side egress controls ([Audit: MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md)).
+- **Compliance theatre.** An "approval" middleware that auto-approves teaches the audit log that controls exist when none do — the Lies-in-the-Loop failure mode.
+- **Off-protocol egress invisible to middleware.** Middleware only sees calls flowing through the runtime. An agent that shells out to curl, opens a raw socket, or uses a DB driver directly bypasses the entire chain. Pair with host-side egress controls.
 
 ## Example
 
@@ -115,6 +115,4 @@ agent = create_agent(
 - [Agent Loop Middleware](agent-loop-middleware.md) — sibling pattern that wraps the *loop* boundary with deterministic nodes; this page wraps the *per-call* boundary inside the loop.
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — host-side enforcement when OS-level guarantees matter more than runtime composition.
 - [Hooks Invoking MCP Tools](../tool-engineering/hooks-invoking-mcp-tools.md) — when hook handlers need to call into the same MCP surface middleware governs.
-- [Audit: Confirmation-Gate Logs](../agent-readiness/audit-confirmation-gate-logs.md) — the compliance-theatre failure mode when approval middleware always returns true.
-- [Audit: MCP Control-Plane Bypass](../agent-readiness/audit-mcp-control-plane-bypass.md) — the off-protocol egress paths that middleware cannot see.
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — the iteration count that determines middleware overhead per task.

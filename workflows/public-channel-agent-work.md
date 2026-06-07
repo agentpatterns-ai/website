@@ -10,12 +10,12 @@ aliases:
   - "public-channel agent work"
   - "Lehrwerkstatt agent pattern"
   - "agent in public Slack channels"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Public-Channel Agent Work as Lehrwerkstatt
 
-> Force agent conversations into public channels so the team learns from every transcript — a high-yield organizational practice when psychological safety is high and the work scope excludes sensitive data; a surveillance vector otherwise.
+> Force agent conversations into public channels so the team learns from every transcript: high-yield given psychological safety and a sensitive-data-free scope, a surveillance trap otherwise.
 
 ## The Mechanism
 

@@ -5,12 +5,12 @@ tags:
   - standards
   - agent-design
   - claude
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Plugin Dependency Declaration and Disable-Chain Hints
 
-> Plugins declare dependencies on other plugins in their manifest; the host harness validates them at install, refuses to disable a plugin that another enabled plugin depends on, and prunes orphaned auto-installs — the agent-capability analogue of `apt` over `dpkg`.
+> Plugins declare dependencies in their manifest; the harness validates them at install, refuses to disable a plugin another enabled one needs, and prunes orphaned auto-installs.
 
 A flat plugin set duplicates shared skills, MCP servers, and hooks. Plugin dependency declaration is the next layer on top of [plugin packaging](plugin-packaging.md) — a `dependencies` array in `plugin.json` plus host semantics for install, enable, disable, and prune. Claude Code v2.1.143 (2026-05-15) is the reference implementation: deps are validated, transitive deps auto-install, `disable` refuses with a hint, and `prune` removes orphans ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
@@ -51,7 +51,7 @@ Refusal forces acknowledgement: the operator disables the dependent plugin first
 
 ## Pruning Orphaned Auto-Installs
 
-`claude plugin prune` (v2.1.121, aliased `autoremove`) removes auto-installed dependencies that no installed plugin requires; user-installed plugins are never pruned ([Plugins reference — plugin prune](https://code.claude.com/docs/en/plugins-reference)). Pass `--prune` to `plugin uninstall` to cascade. The provenance bit recorded at install time lets prune distinguish the two.
+`claude plugin prune` (v2.1.121, aliased `autoremove`) removes auto-installed dependencies that no installed plugin requires; user-installed plugins are never pruned ([Plugins reference — plugin prune](https://code.claude.com/docs/en/plugins-reference)). Pass `--prune` to `plugin uninstall` to cascade.
 
 | Error code | Meaning | Fix |
 |-----------|---------|-----|
@@ -64,16 +64,17 @@ Errors surface in `claude plugin list`, `/plugin`, and `/doctor`; programmatic c
 
 ## Why It Works
 
-The host harness owns the registry of every component a plugin contributes — a skill is a record the harness consults on every prompt, not a file the user sources. Registry ownership lets the same lookup that resolves a skill on invocation walk the dependency graph at disable time. Install-time provenance lets `prune` distinguish safe-to-remove from off-limits ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). This is `apt autoremove` against dpkg's database ([Linux Journal: Debian package dependency management](https://www.linuxjournal.com/content/debian-package-dependency-management-handling-dependencies)), applied to agent capabilities.
+The host harness owns the registry of every component a plugin contributes — a skill is a record the harness consults on every prompt, not a file the user sources. Registry ownership lets the same lookup that resolves a skill on invocation walk the dependency graph at disable time, and install-time provenance lets `prune` distinguish safe-to-remove from off-limits ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). This is `apt autoremove` against dpkg's database ([Linux Journal](https://www.linuxjournal.com/content/debian-package-dependency-management-handling-dependencies)), applied to agent capabilities.
 
 ## When This Backfires
 
-- **Small flat plugin sets.** Under five plugins, the graph adds error surface without saving real duplication — the chain hint never fires because there are no chains.
-- **High-churn upstream without semver.** If an upstream force-moves a tag or treats minor bumps as breaking, downstream plugins thrash between `dependency-version-unsatisfied` and `no-matching-tag` ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)).
-- **Federated marketplaces without governance.** `allowCrossMarketplaceDependenciesOn` requires the root maintainer to actively allowlist; without a central coordinator every cross-marketplace edge becomes a manual install that defeats the automation.
-- **Always-on token budget pressure.** Every transitive plugin loads skill and agent descriptions into the always-on context — sort by the always-on column in [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge. Compounding marketplace cost is covered in [pre-install context-cost projection](marketplace-cost-projection.md).
-- **Air-gapped installs.** Dependency resolution assumes marketplace reachability; when unreachable, missing transitive deps disable the dependent plugin even though the operator never touched it.
-- **Dependency hell.** Importing the package-manager primitive imports its failure modes — the four error codes above are the agent-layer equivalent of conventional package-manager pain.
+- **Small flat plugin sets.** Under five plugins, the graph adds error surface without saving real duplication — the chain hint never fires.
+- **High-churn upstream without semver.** When an upstream force-moves a tag or treats minor bumps as breaking, downstream plugins thrash between `dependency-version-unsatisfied` and `no-matching-tag` ([plugin dependencies](https://code.claude.com/docs/en/plugin-dependencies)).
+- **Federated marketplaces without governance.** `allowCrossMarketplaceDependenciesOn` needs the root maintainer to actively allowlist; without a coordinator every cross-marketplace edge becomes a manual install.
+- **Always-on token budget pressure.** Every transitive plugin loads skill and agent descriptions into the always-on context — check [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge.
+- **Air-gapped installs.** Resolution assumes marketplace reachability; when unreachable, missing transitive deps disable the dependent plugin the operator never touched.
+- **Dependency hell.** Importing the package-manager primitive imports its failure modes — the four error codes above are the agent-layer equivalent of package-manager pain.
+- **Expanded supply-chain attack surface.** Force-enabling transitive deps and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary; a compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update.
 
 ## Example
 

@@ -8,7 +8,7 @@ tags:
 aliases:
   - pluginSuggestionMarketplaces
   - Plugin Suggestion Marketplaces
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 ---
 
 # Directory-Aware Plugin Suggestions via `pluginSuggestionMarketplaces`

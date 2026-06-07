@@ -6,12 +6,12 @@ tags:
   - workflows
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Chain-of-Verification for Coding Agents
 
-> Run factored verification only over the claims your test, type checker, and LSP cannot reach — naive intrinsic self-correction overturns correct code as often as it fixes wrong code.
+> Chain-of-Verification helps coding agents only in its factored variant, applied to claims no test, type checker, or LSP reaches; used naively, it overturns correct code.
 
 Chain-of-Verification (CoVe) is a four-step self-correction loop — draft, plan verification questions, answer each independently, revise — introduced by [Dhuliawala et al. (2023)](https://arxiv.org/abs/2309.11495) for hallucination reduction on fact-recall and longform tasks. For coding agents it is conditional: it pays off only with the **factored** variant and only over claims no external oracle covers. Applied naively, it degrades code quality.
 

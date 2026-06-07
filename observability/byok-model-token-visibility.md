@@ -8,12 +8,12 @@ tags:
 aliases:
   - BYOK token usage visibility
   - Bring Your Own Key token observability
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # BYOK Model Token Visibility
 
-> Bring-Your-Own-Key routes deserve the same in-IDE telemetry — input/output tokens, context-window percent, applied thinking effort — as IDE-owned routes. Without it, the operator either context-blinds or compacts too early.
+> BYOK model token visibility surfaces in-IDE token counts, context-window percent, and thinking effort for bring-your-own-key routes — the same telemetry IDE-owned routes already get.
 
 ## The Gap
 

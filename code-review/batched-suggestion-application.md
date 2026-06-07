@@ -9,12 +9,12 @@ aliases:
   - bulk apply agent suggestions
   - batched remediation on pull requests
   - fix all batch action
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Batched Suggestion Application
 
-> Cluster mechanical agent suggestions and apply them as a single commit, with category-bounded batches and audit-trail discipline that keep the workflow from becoming a rubber stamp.
+> Cluster each mechanical agent suggestion by rule, severity, and file scope, then apply the batch as one reviewed commit with a per-finding audit manifest.
 
 ## The Primitive
 

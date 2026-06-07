@@ -8,12 +8,12 @@ tags:
 aliases:
   - domain glossary for agents
   - CONTEXT.md ubiquitous language
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Ubiquitous Language for AI Plans
 
-> A maintained domain glossary plus a small ADR set anchors agent plans in the codebase's existing vocabulary so plans, code, and prompts share one language — and terminology collisions surface at planning time, not at implementation time.
+> A maintained domain glossary plus a small ADR set anchors agent plans to the codebase's vocabulary, surfacing terminology collisions at planning time, not in implementation.
 
 ## The Problem
 

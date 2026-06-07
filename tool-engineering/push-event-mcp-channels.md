@@ -8,18 +8,18 @@ aliases:
   - push-event MCP server
   - MCP channel server
   - MCP server push notifications
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 ---
 
 # Push-Event MCP Channels: Inverting the Pull-Tool Polarity
 
 > MCP channels invert pull-tool polarity — the server pushes events into a running session through one capability declaration, gated by a sender allowlist.
 
-A push-event MCP channel is an MCP server that declares `claude/channel` under `capabilities.experimental` so the host registers a notification listener; the server then emits `notifications/claude/channel` events that arrive in the agent's context as `<channel source="...">` tags between turns ([Channels reference](https://code.claude.com/docs/en/channels-reference)). Standard MCP servers are pull-only — Claude queries them during a task ([Channels overview, How channels compare](https://code.claude.com/docs/en/channels#how-channels-compare)). Channels flip that polarity so the agent reacts to webhooks, chat messages, and monitoring alerts in the session it already has open, with the files it was debugging in context.
+A push-event MCP channel is an MCP server that declares `claude/channel` under `capabilities.experimental`, so the host registers a notification listener; the server then emits `notifications/claude/channel` events that arrive in context as `<channel source="...">` tags between turns ([Channels reference](https://code.claude.com/docs/en/channels-reference)). Standard MCP servers are pull-only — Claude queries them during a task ([Channels overview, How channels compare](https://code.claude.com/docs/en/channels#how-channels-compare)). Channels flip that polarity so the agent reacts to webhooks, chat messages, and monitoring alerts in the session it already has open, files still in context.
 
 ## The Polarity Flip
 
-The host primitive is the capability declaration. Without it the same server is a pull-only tool surface; with it the host wires a side-band notification stream multiplexed over the same stdio transport ([Channels reference §Server options](https://code.claude.com/docs/en/channels-reference#server-options)).
+The host primitive is the capability declaration. Without it the server is a pull-only tool surface; with it the host wires a side-band notification stream multiplexed over the same stdio transport ([Channels reference §Server options](https://code.claude.com/docs/en/channels-reference#server-options)).
 
 | Dimension | Standard MCP tool | Push-event channel |
 |-----------|-------------------|--------------------|
@@ -34,38 +34,38 @@ The same server can do both — declare `tools` for the agent to call (reply too
 
 ## What This Solves
 
-The protocol-level proposal for generic MCP server push was filed against Claude Code as [#36665](https://github.com/anthropics/claude-code/issues/36665) and closed as not planned; channels are Anthropic's productised alternative for three named failure modes:
+The proposal for generic MCP server push was filed against Claude Code as [#36665](https://github.com/anthropics/claude-code/issues/36665) and closed as not planned; channels are Anthropic's productised alternative for three failure modes:
 
 - **Idle session blindness** — without push, an agent only learns about external state changes on its next tool call
-- **Polling token tax** — workarounds that append a "check channel" call to every tool response waste context-window tokens on repeated empty polls
-- **Warm-context loss** — spawning a fresh session per event ([Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web), [Claude in Slack](https://code.claude.com/docs/en/slack)) loses the in-progress file state the agent built
+- **Polling token tax** — workarounds that append a "check channel" call to every tool response waste context-window tokens on empty polls
+- **Warm-context loss** — a fresh session per event ([Claude Code on the web](https://code.claude.com/docs/en/claude-code-on-the-web), [Claude in Slack](https://code.claude.com/docs/en/slack)) loses the in-progress file state the agent built
 
-Channels move the event source-of-truth out of the agent's tool-call loop and into a side-band stream the host surfaces between turns.
+Channels move the event source-of-truth out of the tool-call loop into a side-band stream surfaced between turns.
 
 ## Why It Works
 
-The mechanism is the capability gate plus stdio multiplexing. The MCP spec already defines server-to-client notifications as a transport primitive; the `claude/channel` experimental capability is what tells Claude Code to register a listener for `notifications/claude/channel` and surface arriving events in context instead of dropping them ([reference §Overview](https://code.claude.com/docs/en/channels-reference#overview)). The same stdio pipe that carries tool requests carries the notifications — no second transport, no webhook endpoint exposed to the public internet, no session-resume problem. Presence of the capability flips the listener on; absence means a server with the same tool surface stays pull-only. That one-line opt-in is what makes the polarity inversion composable with existing MCP server code.
+The mechanism is the capability gate plus stdio multiplexing. The MCP spec already defines server-to-client notifications as a transport primitive; the `claude/channel` capability tells Claude Code to register a listener for `notifications/claude/channel` and surface arriving events in context instead of dropping them ([reference §Overview](https://code.claude.com/docs/en/channels-reference#overview)). The same stdio pipe that carries tool requests carries the notifications — no second transport, no public webhook endpoint, no session-resume problem. That one-line opt-in makes the polarity inversion composable with existing MCP server code.
 
 ## The Security Model
 
-Push polarity widens the inbound-message surface to anyone the channel accepts from. The channel docs prescribe three independent controls — none optional:
+Push polarity widens the inbound surface to anyone the channel accepts from. The docs prescribe three non-optional controls:
 
-- **Sender allowlist inside the server** — gate on `message.from.id`, not the chat or room ID, before calling `mcp.notification()`. Gating on a group chat ID lets any group member inject into the session ([reference §Gate inbound messages](https://code.claude.com/docs/en/channels-reference#gate-inbound-messages)).
-- **Session opt-in via `--channels`** — being declared in `.mcp.json` is not enough; the server must also be named in `--channels` for the session to register the listener ([Channels §Security](https://code.claude.com/docs/en/channels#security)).
-- **Organizational policy** — on Team and Enterprise plans, the `channelsEnabled` master switch is off by default; `allowedChannelPlugins` replaces the Anthropic-curated allowlist when set ([Channels §Enterprise controls](https://code.claude.com/docs/en/channels#enterprise-controls)).
+- **Sender allowlist inside the server** — gate on `message.from.id`, not the chat or room ID, before calling `mcp.notification()`. A group chat ID lets any member inject into the session ([reference §Gate inbound messages](https://code.claude.com/docs/en/channels-reference#gate-inbound-messages)).
+- **Session opt-in via `--channels`** — declaration in `.mcp.json` is not enough; the server must also be named in `--channels` to register the listener ([Channels §Security](https://code.claude.com/docs/en/channels#security)).
+- **Organizational policy** — on Team and Enterprise plans the `channelsEnabled` switch is off by default; `allowedChannelPlugins` replaces the Anthropic-curated allowlist when set ([Channels §Enterprise controls](https://code.claude.com/docs/en/channels#enterprise-controls)).
 
-Allowlist bootstrap is platform-specific: Telegram and Discord pair (user DMs the bot, bot returns a code, user approves it in-session); iMessage detects the user's own Apple ID addresses from the Messages database ([Channels §Security](https://code.claude.com/docs/en/channels#security)). The opt-in [permission relay capability](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts) sits on top of the same allowlist — anyone who can push messages can also approve or deny tool use. See [channels permission relay](../tools/claude/channels-permission-relay.md) for the relay-specific UX.
+The opt-in [permission relay capability](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts) sits on the same allowlist — anyone who can push messages can also approve or deny tool use. See [channels permission relay](../tools/claude/channels-permission-relay.md) for the relay UX.
 
 ## When This Backfires
 
 The failure modes follow from "the session has to be open" and "the inbound surface is wider":
 
-- **Sessions that aren't open 24/7** — events fire-and-forget with "no error returned to your server" if the session is closed or org policy blocks ([reference §Notification format](https://code.claude.com/docs/en/channels-reference#notification-format)). Operators believing CI alerts were delivered when they weren't is the silent-stall failure mode.
+- **Sessions that aren't open 24/7** — events are dropped with "no error returned to your server" if the session is closed or org policy blocks ([reference §Notification format](https://code.claude.com/docs/en/channels-reference#notification-format)). Operators believing undelivered CI alerts arrived is the silent-stall failure mode.
 - **Bedrock, Vertex AI, and Foundry deployments** — channels require Anthropic authentication (claude.ai account or Console API key); these backends silently lose the capability ([Channels overview](https://code.claude.com/docs/en/channels)).
-- **High-frequency event bursts** — "if several notifications arrive while Claude is busy, they're delivered together on the next turn and Claude handles them as a group" ([reference §Notification format](https://code.claude.com/docs/en/channels-reference#notification-format)). Monitoring fan-in collapses to coarse batches; per-event handling fidelity is lost.
-- **Loose sender allowlists** — the lethal-trifecta failure mode applies directly: a channel that mixes untrusted inbound with private-data repo access and any egress tool becomes a one-step exfiltration path ([lethal trifecta](../security/lethal-trifecta-threat-model.md)). Gating on `chat.id` instead of `from.id` is the most common mistake ([reference §Gate inbound messages](https://code.claude.com/docs/en/channels-reference#gate-inbound-messages)).
-- **Tasks that don't need warm context** — a fresh cloud session per event ([event-driven agent routing](../agent-design/event-driven-agent-routing.md) on GitHub Actions, Claude Code on the web, Slack mentions) is cheaper and more resilient when the agent has no in-progress state worth preserving. The MCP "Tasks" primitive in the 2025-11-25 spec was designed for this case — `taskId` plus client-driven fetch, no pinned session ([Triggers and Events charter](https://modelcontextprotocol.io/community/triggers-events/charter)).
-- **Multi-day operations** — MCP maintainers argue session-based push is the wrong shape past a few hours: "When a task spans several hours or even days, it's no longer just a 'task' — it's effectively a long-running job" ([MCP discussions #523](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/523)). Push channels are a session-lifetime primitive, not a job-orchestration primitive.
+- **High-frequency event bursts** — "if several notifications arrive while Claude is busy, they're delivered together on the next turn and Claude handles them as a group" ([reference §Notification format](https://code.claude.com/docs/en/channels-reference#notification-format)). Monitoring fan-in collapses to coarse batches; per-event fidelity is lost.
+- **Loose sender allowlists** — the lethal-trifecta failure mode applies directly: a channel mixing untrusted inbound with private-data repo access and any egress tool is a one-step exfiltration path ([lethal trifecta](../security/lethal-trifecta-threat-model.md)). Gating on `chat.id` instead of `from.id` is the most common mistake ([reference §Gate inbound messages](https://code.claude.com/docs/en/channels-reference#gate-inbound-messages)).
+- **Tasks that don't need warm context** — a fresh cloud session per event ([event-driven agent routing](../agent-design/event-driven-agent-routing.md) on GitHub Actions, the web, Slack mentions) is cheaper and more resilient with no in-progress state to preserve. The MCP "Tasks" primitive in the 2025-11-25 spec targets this case — `taskId` plus client-driven fetch, no pinned session ([Triggers and Events charter](https://modelcontextprotocol.io/community/triggers-events/charter)).
+- **Multi-day operations** — MCP maintainers argue session-based push is the wrong shape past a few hours: "When a task spans several hours or even days, it's no longer just a 'task' — it's effectively a long-running job" ([MCP discussions #523](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions/523)). Channels are a session-lifetime primitive, not a job-orchestration one.
 
 ## Example
 

@@ -9,12 +9,12 @@ aliases:
   - tier-aware hooks
   - reasoning-effort hooks
   - effort level hook input
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Effort-Aware Hooks: Reading the Reasoning Tier from PreToolUse and PostToolUse
 
-> Claude Code v2.1.133 added the active effort level to every hook payload. The harness's reasoning tier is now a first-class hook input alongside `tool_name` and `permission_mode` — deterministic gates can branch on it without parsing transcripts.
+> Claude Code v2.1.133 exposes the active effort level as a first-class hook input, so deterministic gates can branch on the reasoning tier without parsing transcripts.
 
 ## The Signal
 
@@ -37,11 +37,11 @@ A tier-aware hook is safe when it gets *stricter* at higher tiers and dangerous 
 
 ### Loop-Detector Threshold Scaling
 
-The [bootstrap loop detector hook](../agent-readiness/bootstrap-loop-detector-hook.md) counts per-file edits at `PostToolUse` and escalates from nudge → pause → block. Lower-effort runs naturally make fewer tool calls — the [effort docs](https://platform.claude.com/docs/en/build-with-claude/effort) note that lower levels "combine multiple operations into fewer tool calls" and "make fewer tool calls." A static threshold tuned for `xhigh` produces false negatives at `low`. The fix is to scale the threshold by tier (read `$CLAUDE_EFFORT`, pick from a table) — never to disable the detector.
+The bootstrap loop detector hook counts per-file edits at `PostToolUse` and escalates from nudge → pause → block. Lower-effort runs naturally make fewer tool calls — the [effort docs](https://platform.claude.com/docs/en/build-with-claude/effort) note that lower levels "combine multiple operations into fewer tool calls" and "make fewer tool calls." A static threshold tuned for `xhigh` produces false negatives at `low`. The fix is to scale the threshold by tier (read `$CLAUDE_EFFORT`, pick from a table) — never to disable the detector.
 
 ### Pre-Completion Check Selection
 
-The [bootstrap pre-completion hook](../agent-readiness/bootstrap-precompletion-hook.md) runs deterministic checks at `Stop`. Effort-aware variants require a stricter checklist when the operator paid for a stricter run: every tier runs the standard set (lint, build, test); `high` adds a slow check; `xhigh` / `max` add the slowest. Higher tiers add; no tier subtracts.
+The bootstrap pre-completion hook runs deterministic checks at `Stop`. Effort-aware variants require a stricter checklist when the operator paid for a stricter run: every tier runs the standard set (lint, build, test); `high` adds a slow check; `xhigh` / `max` add the slowest. Higher tiers add; no tier subtracts.
 
 ### Telemetry Labelling
 
@@ -104,8 +104,5 @@ The threshold scales upward with tier (more thinking → more legitimate explora
 - [Hooks and Lifecycle Events: Intercepting Agent Behavior](hooks-lifecycle-events.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)
-- [Bootstrap Loop Detector Hook](../agent-readiness/bootstrap-loop-detector-hook.md)
-- [Bootstrap Pre-Completion Hook](../agent-readiness/bootstrap-precompletion-hook.md)
 - [Heuristic-Based Effort Scaling in Agent Prompts](../agent-design/heuristic-effort-scaling.md)
-- [Bootstrap Reasoning/Execution Routing](../agent-readiness/bootstrap-reasoning-execution-routing.md)
 - [Agent Observability with OpenTelemetry](../observability/agent-observability-otel.md)

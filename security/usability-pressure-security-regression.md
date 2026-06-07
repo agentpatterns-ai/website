@@ -10,12 +10,12 @@ aliases:
   - usability pressure attack
   - UPAttack
   - explicit-implicit requirement asymmetry
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Usability Pressure as a Silent Security-Regression Vector
 
-> When a prompt makes usability requirements explicit and leaves security requirements implicit, the model satisfies the explicit ones and silently drops the implicit ones — measured at up to 98.1% attack success rate across 25 CWEs.
+> Making usability explicit while leaving security implicit drives the model to silently drop the implicit constraints — up to 98.1% attack success across 25 CWEs.
 
 ## The Asymmetry
 

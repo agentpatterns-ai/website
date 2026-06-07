@@ -9,12 +9,12 @@ tags:
   - code-review
   - cost-performance
   - cursor
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Tunable Effort Levels for Code Review Agents
 
-> Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost on the runs that need it.
+> Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost where it matters.
 
 ## The Primitive
 

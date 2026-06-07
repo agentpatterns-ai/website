@@ -10,12 +10,12 @@ aliases:
   - multi-repo automation template
   - no-repo automation template
   - signal-driven coding agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Multi-Repo and No-Repo Coding Agent Automation Templates
 
-> Adopt trigger/scope-decoupled automation templates only when your agent vendor exposes the primitive natively and you have reconstructed the four safeguards — dedupe across attached repos, signal-source verification, per-repo credential scoping, and out-of-band audit attribution — that single-repo dispatch provided implicitly.
+> Adopt trigger/scope-decoupled automation templates only when your vendor exposes the primitive natively and you have rebuilt the four safeguards single-repo dispatch supplied implicitly.
 
 A multi-repo or no-repo automation template is a coding-agent automation whose trigger is a signal (cron, chat event, data-warehouse threshold) and whose scope is declared separately as zero or more attached repositories. Cursor Automations v3.5 (2026-05-20) was the first vendor surface to expose it as a first-class primitive: "You can now attach multiple repos to an automation so agents reason across all required context and work across repos to deliver, test, and verify tasks" and "Many useful automations exist apart from code, where agents monitor your tools and act on key signals. You can now create automations without an attached repository." ([Cursor changelog 05-20-26](https://cursor.com/changelog/05-20-26))
 

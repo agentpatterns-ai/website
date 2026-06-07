@@ -11,12 +11,12 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Cross-Session Memory Poisoning for Data Exfiltration (Trojan Hippo)
 
-> A single untrusted tool call can plant a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics, exfiltrating their data via outbound tools.
+> One untrusted tool call plants a dormant payload in agent memory; it activates sessions later when the user raises a sensitive topic, exfiltrating their data.
 
 ## The Attack in Two Stages
 

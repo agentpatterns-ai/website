@@ -8,12 +8,12 @@ tags:
 aliases:
   - background-vs-foreground model routing
   - utility model configuration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
-# Utility-Model Split
+# Utility-Model Split: Background Tasks on a Cheaper Model
 
-> Pin the primary model for reasoning; route the dozens of background calls a harness makes per session — titles, summaries, commit messages, intent detection — to a smaller utility model, and split that utility tier further into general and small-utility work.
+> Pin the primary model for reasoning, then route background harness calls — titles, commit messages, intent detection — to a cheaper utility model.
 
 The utility-model split is a routing axis that operates *within* a single user turn: the model that drives the agent loop is held constant, but background calls the user never directly issues — session title generation, summarisation, commit messages, prompt categorisation, intent detection, Git review — are sent to a cheaper model. VS Code 1.121 (2026-05-20) ships this as two settings, `chat.utilityModel` and `chat.utilitySmallModel`, with the small tier reserved for "fast, lightweight utility flows" ([VS Code: AI language models](https://code.visualstudio.com/docs/copilot/customization/language-models)).
 

@@ -11,12 +11,12 @@ tags:
 aliases:
   - predict-then-verify harness edits
   - falsifiable harness edits
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Observability-Driven Harness Evolution
 
-> Pair every harness edit with a self-declared prediction, then verify the prediction against the next round's task-level outcome. The mismatch — not the score — drives convergence.
+> Pair every harness edit with a self-declared prediction, then verify it against the next round's outcome. The mismatch, not the score, drives convergence.
 
 ## The Mechanism
 

@@ -11,12 +11,12 @@ aliases:
   - relevance-authorization gap
   - multi-tenant RAG isolation
   - ABAC-gated retrieval
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Multitenant RAG: Closing the Relevance-Authorization Gap
 
-> Retrieval systems rank documents by relevance, not by authorization. In a shared corpus, the highest-scoring chunk for one tenant can belong to another. Close the gap with policy-aware ingestion, retrieval-time gating, and server-side orchestration.
+> The multitenant RAG relevance-authorization gap: retrieval ranks by relevance, not authorization, so one tenant's top chunk may belong to another. Gate retrieval by policy.
 
 ## The Gap
 
@@ -127,11 +127,12 @@ The pre-filter restricts candidates before scoring; the post-filter catches ANN 
 
 ## Related
 
+- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
-- [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md)
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
+- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)

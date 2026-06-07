@@ -6,7 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-31
+last_reviewed: 2026-06-03
 ---
 
 # Token-Cost Profiling and Reduction for Always-On Agentic Workflows
@@ -66,7 +66,7 @@ Prioritise by `ET/run × runs/day`, not `ET/run`. The published cuts on incremen
 
 Five levers, ordered by yield in the GitHub case study:
 
-- **MCP tool pruning.** Tool manifests add 10–15 KB per turn even when unused. GitHub's Smoke Claude went 40 → 13 tools and dropped 59% combined with a Haiku swap ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cross-reference the manifest against the actual call log — if a tool never appears in `token-usage.jsonl`, it shouldn't be in the manifest. The [tool-output-token-cost audit runbook](../agent-readiness/audit-tool-output-token-cost.md) gives the per-tool sizing heuristic.
+- **MCP tool pruning.** Tool manifests add 10–15 KB per turn even when unused. GitHub's Smoke Claude went 40 → 13 tools and dropped 59% combined with a Haiku swap ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cross-reference the manifest against the actual call log — if a tool never appears in `token-usage.jsonl`, it shouldn't be in the manifest.
 - **Pre-agentic CLI substitution.** Move deterministic reads out of the LLM loop. Auto-Triage saved 62% by running `gh` commands before the agent started and writing the result to a workspace file the agent read directly — no decide-call-receive round-trip ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)).
 - **Relevance gating.** Skip the LLM entirely for inputs the workflow doesn't apply to. Security Guard dropped 43% by adding a cheap upstream check that bypasses the model for non-security PRs ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)).
 - **Cheaper-model routing for narrow steps.** Per [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md), validation-cheap steps cascade from a fast model with deterministic-gate escalation. Combine with prompt caching: cache writes cost 1.25×, cache reads cost 0.1× — a 10K-token static prefix reused 10 times costs 22,500 vs 110,000 uncached, a 79% reduction (min prefix 1,024–4,096 tokens depending on model; 5-min TTL refreshed at no cost on each hit) ([Anthropic Prompt Caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
@@ -86,7 +86,7 @@ GitHub closes the loop with two agentic workflows: a Daily Token Usage Auditor t
 
 ## Why It Works
 
-The three structural costs are invisible inside one run and only emerge against aggregated history — the proxy, normalized log, and ET metric close that attribution gap. Each named lever maps one-to-one to a cost mechanism, which is the same just-in-time-loading and stable-prefix-reuse pattern the broader context-engineering literature names for long-running agents, applied at the workflow loop rather than the per-call boundary ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). The loop converges because the optimiser closes the same data path the auditor opened — any regression surfaces on the next day's report.
+The three structural costs are invisible inside one run and only emerge against aggregated history — the proxy, normalized log, and ET metric close that attribution gap. Each named lever maps one-to-one to a cost mechanism — the same just-in-time-loading and stable-prefix-reuse pattern the context-engineering literature names for long-running agents, applied at the workflow loop rather than the per-call boundary ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). The loop converges because the optimiser closes the same data path the auditor opened — any regression surfaces on the next day's report.
 
 ## When This Backfires
 
@@ -116,7 +116,7 @@ The instrumentation surface differs by tool; the loop is tool-agnostic.
 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../agent-design/cost-aware-agent-design.md) — the per-request routing decision that complements workflow-level optimisation
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](../observability/context-usage-attribution.md) — the orthogonal per-source cut (rules, skills, MCP returns) inside one session
-- [Audit Tool-Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md) — the per-tool sizing runbook that feeds the manifest-pruning lever
 - [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md) — the cross-vendor instrumentation surface for `gen_ai.usage.*`
 - [Auto-Triage Workflow](auto-triage-workflow.md) — the canonical high-frequency always-on workflow and the GitHub case where pre-agentic CLI substitution delivered the headline 62%
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](prototype-before-optimizing.md) — why deferring optimisation until the workflow stabilises is the same logic at a different scope
+- [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — a complementary token-cost lever under the same cheaper-than-the-savings precondition

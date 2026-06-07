@@ -10,14 +10,14 @@ tags:
   - tool-agnostic
   - agent-design
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers
 
-> Reach a hosted agent's private MCP servers through a customer-run tunnel client that opens outbound HTTPS to the provider — no inbound ports, no public exposure.
+> Reach a hosted agent's private MCP servers through a customer-run tunnel client that opens outbound HTTPS to the provider: no inbound ports or public exposure.
 
-A customer-hosted MCP tunnel is the connectivity pattern that lets a hosted agent reach MCP servers inside a private network without those servers having any public listener. A tunnel client runs inside the customer network, establishes an outbound HTTPS connection to the provider's tunnel edge, and the provider routes MCP JSON-RPC traffic back through that single open flow. OpenAI's *Secure MCP Tunnel* and Anthropic's *MCP tunnels* both shipped this primitive in May 2026; both wire it the same way ([OpenAI guide](https://developers.openai.com/api/docs/guides/secure-mcp-tunnels), [Anthropic MCP tunnels overview](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview)).
+A customer-hosted MCP tunnel lets a hosted agent reach MCP servers inside a private network with no public listener. A tunnel client inside the customer network holds an outbound HTTPS connection to the provider's tunnel edge, and the provider routes MCP JSON-RPC back through that single open flow. OpenAI's *Secure MCP Tunnel* and Anthropic's *MCP tunnels* both shipped this primitive in May 2026, wired the same way ([OpenAI guide](https://developers.openai.com/api/docs/guides/secure-mcp-tunnels), [Anthropic MCP tunnels overview](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview)).
 
 ## When This Pattern Fits
 
@@ -27,7 +27,7 @@ The shape is right only when **all three** conditions hold:
 - The MCP servers it must reach live inside a private network — on-prem databases, internal APIs, ticketing systems, regulated document stores.
 - The network posture forbids inbound public exposure of those servers.
 
-When the agent can also run inside the network — Anthropic's self-hosted sandboxes, Codex on a self-hosted runner — keeping agent and tools on the same tenancy boundary is structurally simpler than tunnelling a remote agent in. If you do not need a hosted agent, you do not need the tunnel ([Anthropic blog](https://claude.com/blog/claude-managed-agents-updates)).
+When the agent can run inside the network — Anthropic's self-hosted sandboxes, Codex on a self-hosted runner — keeping agent and tools on one tenancy boundary is simpler than tunnelling a remote agent in. No hosted agent, no tunnel ([Anthropic blog](https://claude.com/blog/claude-managed-agents-updates)).
 
 ## How It Works
 
@@ -53,7 +53,7 @@ sequenceDiagram
 
 ## Why It Works
 
-Outbound HTTPS on 443 is the default-allow direction on essentially every enterprise firewall. The tunnel client establishes a long-lived outbound flow over that allowed direction, then multiplexes the provider's MCP requests across it. From the firewall the traffic is an ordinary outbound HTTPS session; from the MCP server the only client that ever connects is the local tunnel client on the same network. The same primitive underpins Cloudflare Tunnel and ngrok; the MCP variant constrains the multiplexed protocol to MCP JSON-RPC and pins three independent trust anchors. Anthropic documents the layering: outer mTLS between provider and transport network with IP validation, inner TLS from the provider's backend to the customer's proxy (the transport network "cannot read request or response payloads" because only the customer holds the inner certificate), and OAuth on each MCP server ([Anthropic MCP tunnels overview](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview)).
+Outbound HTTPS on 443 is the default-allow direction on essentially every enterprise firewall. The tunnel client opens a long-lived outbound flow over that allowed direction and multiplexes the provider's MCP requests across it: to the firewall it is an ordinary outbound session, and the only client the MCP server ever sees is the local tunnel client. The same primitive underpins Cloudflare Tunnel and ngrok; the MCP variant constrains the multiplexed protocol to JSON-RPC and pins three independent trust anchors — outer mTLS between provider and transport network with IP validation, inner TLS from the provider backend to the customer proxy (the transport network "cannot read request or response payloads" because only the customer holds the inner certificate), and OAuth on each MCP server ([Anthropic MCP tunnels overview](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/overview)).
 
 ## Distinct from Adjacent Patterns
 

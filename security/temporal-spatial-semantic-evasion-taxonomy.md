@@ -10,24 +10,24 @@ aliases:
   - temporal spatial semantic evasion
   - three-vector evasion taxonomy
   - A3S-Bench
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Three-Vector Evasion Taxonomy for Agent Security Tests
 
-> Use the temporal, spatial, and semantic evasion axes as a diagnostic for what single-turn benchmarks miss — but only for agents that hold state, ingest external artifacts, or chain tool calls. One-shot agents have no surface for any of the three.
+> These three evasion axes — temporal, spatial, semantic — diagnose what single-turn benchmarks miss for agents that hold state, ingest artifacts, or chain tool calls.
 
-A three-vector evasion taxonomy organises agent-security test payloads by the dimension along which they hide from per-prompt review: **temporal** (payload fragmented across turns), **spatial** (payload concealed inside an external artifact whose parsing path bypasses the safety classifier), and **semantic** (payload's intent obscured by benign-looking context). [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) introduce A3S-Bench — 2,254 real-world agent execution trajectories across 10 mainstream LLM backbones and 20 attack scenarios — and report that combining the three vectors raises attack success rate from a 28.3% single-turn baseline to **52.6%** against stateful tool-using agents. The framing is diagnostic: it tells an auditor which axis a candidate payload exploits so coverage can be checked axis-by-axis rather than relying on per-prompt screening.
+A three-vector evasion taxonomy organises agent-security test payloads by the dimension along which they hide from per-prompt review: **temporal** (fragmented across turns), **spatial** (concealed inside an external artifact whose parsing path bypasses the safety classifier), and **semantic** (intent obscured by benign-looking context). [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) introduce A3S-Bench — 2,254 real-world agent execution trajectories across 10 LLM backbones and 20 attack scenarios — and report that combining the three vectors raises attack success rate from a 28.3% single-turn baseline to **52.6%** against stateful tool-using agents. The framing is diagnostic: it tells an auditor which axis a candidate payload exploits, so coverage can be checked axis-by-axis rather than by per-prompt screening alone.
 
 ## When the Three-Vector Framing Fits
 
-The taxonomy adds diagnostic value only under specific preconditions. Apply it when the agent satisfies all three:
+The taxonomy adds diagnostic value only when the agent satisfies all three preconditions:
 
 - **Persistent state across turns** — memory, scratchpad, or planning context that one turn writes and another reads
 - **External artifact ingestion** — web fetches, PDFs, MCP JSON, retrieved files, dependency manifests
 - **Tool catalog larger than the immediate task** — capabilities the model could compose into harmful sequences
 
-When any precondition is absent, the relevant vector collapses to known single-turn injection. [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) report the 28.3%→52.6% gap is concentrated on stateful agents — numbers for stateless agents are not the paper's contribution.
+When any precondition is absent, the relevant vector collapses to known single-turn injection. [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) report the 28.3%→52.6% gap is concentrated on stateful agents.
 
 ## The Three Vectors
 
@@ -72,11 +72,11 @@ The vectors compose. A payload can be fragmented temporally (split across three 
 | Spatial | [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md), [Indirect Injection Discovery](indirect-injection-discovery.md), [Trojan Hippo](trojan-hippo-memory-attack.md) | Schema-level tool exclusion, isolated fetch context, parsing-stage sanitisation |
 | Semantic | [Goal Reframing](goal-reframing-exploitation-trigger.md), [History Anchor Consistency Injection](history-anchor-consistency-injection.md), [Clarification Mode Injection Amplification](clarification-mode-injection-amplification.md) | Plan-then-execute commit; CaMeL control/data flow separation; provenance-aware auditing |
 
-The taxonomy is orthogonal to the [four-layer defender taxonomy](four-layer-agent-security-taxonomy.md). The four layers describe *where the defender places controls*; the three vectors describe *along which axis the attacker evades them*. A spatial-axis payload at L1 (instruction surface) is a different audit cell from a spatial-axis payload at L2 (tool return surface) — the vector tells you the attack technique, the layer tells you the defense placement.
+The taxonomy is orthogonal to the [four-layer defender taxonomy](four-layer-agent-security-taxonomy.md): the four layers describe *where the defender places controls*, the three vectors *along which axis the attacker evades them*. The vector names the attack technique; the layer names the defense placement.
 
 ## Why It Works
 
-Multi-vector evasion succeeds because per-prompt classifiers and refusal policies score the visible features of each message in isolation, not the joint policy implied by the sequence of messages, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321); [Steinberg & Gal, 2026](https://arxiv.org/abs/2605.03952)). Each fragment passes the per-prompt gate; the harmful state composes across surfaces the gate cannot see. Spatial evasion exploits the same gap differently — tokens reaching the model originate from a parsing path the classifier never inspected. Semantic evasion exploits the flat attention surface that makes plain injection possible: there is no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173)). The 28.3% → 52.6% ASR rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
+Multi-vector evasion succeeds because per-prompt classifiers score each message's visible features in isolation, not the joint policy implied by the message sequence, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321); [Steinberg & Gal, 2026](https://arxiv.org/abs/2605.03952)). Each fragment passes the gate; the harmful state composes across surfaces the gate cannot see. The flat attention surface offers no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173)). The 28.3% → 52.6% ASR rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
 
 ## When This Backfires
 
@@ -124,3 +124,4 @@ If the standard suite passes but the three-vector additions succeed, the audit c
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — pDFA enforcement that forecloses the temporal axis in structured workflows
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](cognitive-poisoning-tool-feedback.md) — joint-state attack that defeats per-message defenses
 - [History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions](history-anchor-consistency-injection.md) — semantic-axis cue that flips frontier agents to 91–98% unsafe-selection rate
+- [External Artifacts Treated as Data, Not Adversarial Input](../anti-patterns/external-artifacts-as-data.md) — the spatial-axis mental-model failure: why agents process artifact-concealed payloads as instructions

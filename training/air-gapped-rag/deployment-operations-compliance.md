@@ -101,7 +101,7 @@ Three isolation models for multi-tenant RAG deployments, ordered by isolation st
 
 [Chroma's multi-tenancy documentation](https://docs.trychroma.com/production/administration/multi-tenancy) covers collection-per-tenant and database-level isolation. [Qdrant collections](https://qdrant.tech/documentation/concepts/collections/) support multiple named collections on a single node with independent HNSW indexes.
 
-For metadata filtering to provide meaningful isolation, the filter must be enforced at the query layer — not left to the application to apply voluntarily. Wrap the retriever in a thin service that injects the tenant filter from the authenticated session, not from the query payload.
+For metadata filtering to provide meaningful isolation, the filter must be enforced at the query layer — not left to the application to apply voluntarily. Wrap the retriever in a thin service that injects the tenant filter from the authenticated session, not from the query payload. This closes the [multitenant RAG relevance-authorization gap](../../security/multitenant-rag-authorization-gap.md): retrieval ranks by relevance, so without a query-layer filter the top chunk for one tenant can belong to another.
 
 **Per-user document visibility** requires attaching allowed document IDs or classification labels to each user's session and enforcing them as mandatory filters. Qdrant payload indexing on a `clearance_level` or `allowed_users` field supports this without a separate access control service.
 

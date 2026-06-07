@@ -10,71 +10,39 @@ aliases:
   - sourcegraph five failure patterns
   - large codebase agent failures
   - coding agent failure patterns
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)
 
 > Five repeatable failure shapes coding agents exhibit once a codebase passes roughly 400,000 lines — recognise each by its transcript signature before shipping the patch.
 
-The Sourcegraph CodeScaleBench study scored 1,281 agent runs across 40+ enterprise open-source repositories in 9 programming languages and isolated five recurring failure patterns ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). The patterns are behavioural — each has a transcript signature a reviewer can spot before merge, paired with a remediation measured against the same patches.
+The Sourcegraph CodeScaleBench study scored 1,281 agent runs across 40+ open-source repositories in 9 languages and isolated five recurring failure patterns ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). Each is a transcript signature a reviewer can spot before merge.
 
 ## When This Applies
 
-The catalogue is qualified, not universal. Apply it when all three conditions hold ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)):
-
-- **Codebase above ~400,000 LOC.** Below this threshold standard tools (`grep`, `read`, `glob`) suffice and code-intelligence infrastructure is overhead.
-- **Discovery-bound task.** The patterns surface when the agent must locate which files to touch. Single-file edits, hand-curated file lists, and tightly-scoped refactors inside a known directory bypass them entirely.
-- **Multi-file or cross-repo scope.** Sourcegraph measured a +0.209 F1 delta from code-intelligence tools on multi-repo tasks versus +0.085 on single-repo — the patterns scale with change-set dispersion, not just repo size.
+Apply it only when all three hold ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)): a codebase above ~400,000 LOC; a discovery-bound task where the agent must find which files to touch; and multi-file or cross-repo scope (a +0.209 F1 delta versus +0.085 single-repo). Single-file edits and hand-curated lists bypass the patterns.
 
 ## The Five Patterns
 
-### 1. Lost in the Codebase
+Each is a transcript signature paired with a remediation ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)):
 
-**Symptom signature.** The agent exhausts its timeout exploring files without producing output, following import chains that branch exponentially ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). The transcript shows long sequences of `read` or `glob` calls with no edits.
-
-**Remediation.** Code search and indexing — Sourcegraph measured a +0.259 reward delta when intelligence tools were added for codebases in the 400K–2M LOC band ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
-
-### 2. Wrong File, Wrong Symbol
-
-**Symptom signature.** The agent locates files matching search terms but selects the wrong symbol among dozens of similarly-named matches across the tree. The patch lands in the wrong module ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
-
-**Remediation.** Structural navigation — go-to-definition, find-references, type-hierarchy resolution. Compiler-driven navigation short-circuits textual ambiguity that pure grep cannot resolve.
-
-### 3. Partial Completion
-
-**Symptom signature.** The agent modifies some affected files but misses others, leaving the change set in an inconsistent state ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). The signature overlaps with [premature completion](premature-completion.md), but the root cause is discovery failure rather than verification skip.
-
-**Remediation.** Hybrid retrieval combining keyword, semantic, and structural search to enumerate affected files comprehensively. This is the most contested remediation — see *When This Backfires* below.
-
-### 4. Tool Thrashing
-
-**Symptom signature.** Excessive tool calls with repeated backtracking — Sourcegraph observed 96 calls against an optimal of 5 on the same task ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). Token and time costs balloon. The same observable pattern surfaces in autocompact loops that refill context within a few turns of compaction ([anthropics/claude-agent-sdk-python#958](https://github.com/anthropics/claude-agent-sdk-python/issues/958)).
-
-**Remediation.** Task-aware retrieval and context management — reduce unnecessary exploration through better initial search quality so the agent does not have to grope for the file set.
-
-### 5. Context Overflow
-
-**Symptom signature.** The agent reads entire file contents into context, diluting relevant signal with surrounding code despite having found the correct files ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). Closely related to [the infinite context anti-pattern](infinite-context.md) but triggered by discovery, not by deliberate overloading.
-
-**Remediation.** Smart context selection via code intelligence — fetch the function, the type, the call site, not the file.
-
-Aggregate effect across all five remediations on the same benchmark: file recall 0.127 → 0.277, Precision@5 0.140 → 0.478, F1@5 0.099 → 0.262, with 38% shorter execution time and 30% lower per-task cost ([CodeScaleBench](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)).
+1. **Lost in the Codebase** — the agent burns its timeout on `read`/`glob` chains with no edits. Fix: code search and indexing (+0.259 reward delta, 400K–2M LOC band).
+2. **Wrong File, Wrong Symbol** — it picks the wrong symbol among dozens of similar matches. Fix: structural navigation (go-to-definition, find-references) short-circuits ambiguity grep cannot resolve.
+3. **Partial Completion** — it edits some files and misses others — overlapping [premature completion](premature-completion.md) but rooted in discovery failure, not verification skip. Fix: hybrid keyword + semantic + structural retrieval, the most contested remediation (see below).
+4. **Tool Thrashing** — Sourcegraph saw 96 calls against an optimal of 5. The same signature surfaces in autocompact loops that refill context within a few turns of compaction ([anthropics/claude-agent-sdk-python#958](https://github.com/anthropics/claude-agent-sdk-python/issues/958)). Fix: task-aware retrieval.
+5. **Context Overflow** — it reads whole files, diluting signal despite finding the right ones — [the infinite context anti-pattern](infinite-context.md) triggered by discovery. Fix: fetch the function, type, and call site, not the file. All five remediations together: file recall 0.127 → 0.277, F1@5 0.099 → 0.262, 38% shorter runtime, 30% lower cost ([CodeScaleBench](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)).
 
 ## Why It Works
 
-The five patterns share one root cause: the agent's effective working set exceeds what its context window plus naive search can carry. Below ~400K LOC the model can hold the working set implicitly; above it, the discovery step degrades together with everything downstream — symbol resolution, file selection, change application, context retention. Code intelligence works because it externalises the indexing the model would otherwise perform implicitly inside its context window. Indexes precompute import graphs, symbol tables, and reference chains, so the agent retrieves the answer rather than searching for it ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). The +0.259 reward delta appears specifically in the 400K–2M LOC band because that is where externalised indexing replaces failed implicit search.
-
-The same mechanism explains why structural navigation (Pattern 2) outperforms textual matching: it short-circuits a search that would otherwise consume context to no useful end. A 2026 study on repository-scale agent navigation names this the "Navigation Paradox" — larger context windows do not eliminate the need for structural navigation, because architecturally critical but semantically distant files fall outside the model's attention without an external index ([Zylos Research, 2026-04](https://zylos.ai/research/2026-04-19-codebase-intelligence-repository-understanding-ai-agents)).
+All five share one cause: the working set exceeds what context plus search can carry. Below ~400K LOC the model holds it implicitly; above it, discovery degrades. Code intelligence externalises that indexing — precomputed import graphs, symbol tables, and reference chains let it retrieve rather than search ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)). A 2026 study calls this the "Navigation Paradox": larger context windows do not remove the need for structural navigation, because architecturally critical but semantically distant files fall outside the model's attention without an index ([Zylos Research, 2026-04](https://zylos.ai/research/2026-04-19-codebase-intelligence-repository-understanding-ai-agents)).
 
 ## When This Backfires
 
-- **Small or single-repo codebases.** Below Sourcegraph's own ~400K LOC threshold, the failure patterns rarely fire and code-intelligence infrastructure is overhead without measurable benefit ([Sourcegraph, 2026-05](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
-- **Semantic retrieval as the Partial Completion remediation is contested.** Claude Code, Cursor, and Devin dropped vector-DB-based RAG in favour of agentic search (grep, file-tree walk, named-file reads) because agentic search outperformed semantic retrieval on real code exploration ([SmartScope, 2026](https://smartscope.blog/en/ai-development/practices/rag-debate-agentic-search-code-exploration/); [MindStudio, 2026](https://www.mindstudio.ai/blog/is-rag-dead-what-ai-agents-use-instead)). Hybrid retrieval is one of several plausible answers, not the only one.
-- **Vendor-study framing.** Sourcegraph sells the recommended remediation. The five patterns are independently observable; the specific stack Sourcegraph benchmarks against is not the only solution and a competing harness with strong agentic search may close the gap without the indexing infrastructure.
-- **Polyglot or build-broken repos.** Structural navigation depends on a working build — type hierarchies and references silently degrade when compilation fails, types are partial (legacy Python, JavaScript without TS), or the repo spans languages with no unified index.
-- **Hand-curated file lists in the prompt.** When the human can name the files, the discovery patterns (Lost, Wrong File, Partial Completion) cannot fire. The remediation cost dominates and the simpler harness wins.
-- **Task restructuring is cheaper than infrastructure.** Splitting a multi-repo change into per-repo PRs, narrowing the discovery scope, or scoping the task to one bounded component often costs less than standing up indexing for the whole monorepo.
+- **Semantic retrieval for Partial Completion is contested.** Claude Code, Cursor, and Devin dropped vector-DB RAG for agentic search, which beat it on real code ([SmartScope, 2026](https://smartscope.blog/en/ai-development/practices/rag-debate-agentic-search-code-exploration/); [MindStudio, 2026](https://www.mindstudio.ai/blog/is-rag-dead-what-ai-agents-use-instead)). Hybrid retrieval is one answer among several.
+- **Vendor-study framing.** Sourcegraph sells the remediation; a strong agentic-search harness may close the gap without indexing.
+- **Polyglot or build-broken repos.** Structural navigation needs a working build — references degrade silently when compilation fails or no unified cross-language index exists.
+- **Task restructuring beats infrastructure.** Per-repo PRs or scoping to one component often cost less than indexing a monorepo.
 
 ## Example
 
@@ -92,11 +60,11 @@ A reviewer reads an agent transcript on a 1.2M LOC monorepo and observes:
 
 Three patterns visible in one transcript:
 
-- **Lost in the Codebase** at turns 7–24: 17 read calls without a single targeted lookup; the agent groped through the match set.
-- **Wrong File, Wrong Symbol** at turn 25: the agent edited `UserService` when `UserAccountService` (also in the match set) was the change site. The bug report referenced "user account creation," but textual `User*` matching surfaced both.
-- **Partial Completion** at turn 26: the patch updated the service layer but missed the matching repository and controller — three subclasses still reference the old contract.
+- **Lost in the Codebase** at turns 7–24: 17 read calls without a single targeted lookup.
+- **Wrong File, Wrong Symbol** at turn 25: the agent edited `UserService` when `UserAccountService` — also in the match set — was the change site for the bug report's "user account creation."
+- **Partial Completion** at turn 26: the service-layer patch missed the matching repository and controller; three subclasses still reference the old contract.
 
-A reviewer who recognises these signatures stops the PR before merge and either asks the agent to widen the change set or hands the agent a structural-navigation tool (find-references on the changed signature) to enumerate the affected sites.
+A reviewer who spots these signatures stops the PR and either asks the agent to widen the change set or hands it find-references on the changed signature to enumerate the affected sites.
 
 ## Key Takeaways
 

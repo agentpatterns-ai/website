@@ -51,6 +51,8 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Semantic Density Optimization](semantic-density-optimization.md) — Maximize task-relevant tokens in a codebase by eliminating zero-information ceremony while preserving naming, documentation, and commit context that agents cannot reconstruct without inference cost
 - [Tokenizer Swap Tax](tokenizer-swap-tax.md) — When a model upgrade ships a new tokenizer, the same prompt maps to more tokens; effective cost, context window headroom, and rate limits all shift before you change a line of code
 - [Validating Token-Optimized Formats Inside Agentic Loops](validate-token-optimized-formats-in-agentic-loops.md) — Switching tool schemas from JSON to TOON or TRON saves up to 27% tokens but regresses accuracy by 9-14 percentage points in end-to-end agentic loops; input-side and output-side compression carry different risk
+- [Source Code Minification for State-in-Context Agents](source-code-minification-trade-off.md) — Stripping comments, whitespace, and shortening identifiers cuts input tokens 42% but drops SWE-bench Verified resolution rate from 50% to 38% — apply only when measured savings beat the accuracy cost
+- [Cross-Lingual Prompt Preprocessing (Local-LLM Token Arbitrage)](cross-lingual-prompt-preprocessing.md) — A local small model translates non-English prompts to English and rewrites them into compact task-oriented form before send; cuts input tokens 34–47% only when latency, accuracy, and fidelity costs do not erase the savings
 
 ## Assembly & Composition
 

@@ -9,14 +9,14 @@ tags:
 aliases:
   - project state nuke
   - session state reset primitive
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Agent Project State Purge: Clean-Slate Session Reset
 
-> A clean-slate primitive that tears down all per-project session state — transcripts, auto-memory, indexed sessions — returning the agent to a known-empty baseline. The pattern is conditional: it pays off when state contamination is the real diagnosis, not when it masks an instruction-file or hook bug.
+> A primitive that tears down per-project session state — transcripts, auto-memory, indexed sessions — when contamination is the diagnosis, not an instruction or hook bug.
 
-A project state purge deletes every artefact a coding-agent harness accumulated for one project — transcripts, auto-memory, sessions index, and the harness's project record. Claude Code v2.1.126 (May 1, 2026) added `claude project purge [path]` with `--dry-run`, `-y/--yes`, `-i/--interactive`, and `--all` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The pattern matters because long-running projects accumulate stale plans and half-finished todo lists that bias future sessions; without a first-class primitive, operators hand-edit state files they do not fully understand.
+A project state purge deletes every artefact a coding-agent harness accumulated for one project — transcripts, auto-memory, sessions index, and the harness's project record. Claude Code v2.1.126 (May 1, 2026) added `claude project purge [path]` with `--dry-run`, `-y/--yes`, `-i/--interactive`, and `--all` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). It matters because long-running projects accumulate stale plans and half-finished todos that bias future sessions; without it, operators hand-edit state files they do not understand.
 
 ## When the Purge Is the Right Move
 
@@ -67,13 +67,13 @@ Three modes matter:
 - **`-i/--interactive`** lets the operator pick which sessions to drop. Use this when only part of the project record is contaminated.
 - **`-y`** (with or without `--all`) is the unattended form. Reserve it for batch cleanups in disposable environments.
 
-The snapshot-then-purge variant (`cp -r ~/.claude/projects/<project> /tmp/backup-$(date +%s) && claude project purge -y`) preserves the JSONL audit trail — a purge without snapshot deletes the diagnostic record at the exact moment something went wrong.
+The snapshot-then-purge variant (`cp -r ~/.claude/projects/<project> /tmp/backup-$(date +%s) && claude project purge -y`) preserves the JSONL audit trail — purging without a snapshot deletes the diagnostic record at the moment something went wrong.
 
 ## Why It Works
 
 Three kinds of state accumulate under `~/.claude/projects/<project>/`: JSONL transcripts, auto-memory the agent wrote, and indexed session metadata ([Claude Code: Manage sessions](https://code.claude.com/docs/en/sessions)). Each is loaded back on resume — explicitly via `--resume`/`--continue`, or implicitly when auto-memory is consulted. When that state diverges from current intent, the next session reconstructs the old objective and reasons on a wrong goal — the "stale world model" failure where agents look operational while reasoning on outdated information ([TianPan.co](https://tianpan.co/blog/2026-04-10-stale-world-model-long-running-agents)).
 
-A purge breaks the loop at the surface that reintroduces stale context. An empty baseline forces the next session to reconstruct from authoritative sources — current `CLAUDE.md`, current code, current prompt. Removing stale tokens is context engineering: every token competes for the model's attention ([Anthropic: April 23 postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+A purge breaks the loop at the surface that reintroduces stale context. An empty baseline forces the next session to reconstruct from authoritative sources — current `CLAUDE.md`, current code, current prompt. Removing stale tokens is context engineering: every token competes for the model's attention ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
 ## When This Backfires
 

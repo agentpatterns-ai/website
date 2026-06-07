@@ -9,12 +9,12 @@ aliases:
   - SDB pattern
   - stochastic deterministic boundary
   - proposer verifier commit reject contract
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Stochastic-Deterministic Boundary as First-Class Contract
 
-> Treat the boundary between an LLM proposal and a deterministic system action as a typed four-part contract — proposer, verifier, commit, reject — once a system has multiple action sites or non-trivial commit side effects.
+> Treat the LLM-proposal-to-system-action boundary as a typed four-part contract — proposer, verifier, commit, reject — once a system has multiple action sites or risky commits.
 
 The stochastic-deterministic boundary (SDB) names the transition where an LLM's probabilistic output becomes a deterministic system effect. Naming it as a first-class object places a typed verifier and structured reject signal at every such transition, instead of scattering ad-hoc `try/except` downstream where the error context is gone ([Srinivasan, 2026 — arXiv:2605.20173](https://arxiv.org/abs/2605.20173)).
 

@@ -159,6 +159,5 @@ Treat the stack as incremental: adopt managed distribution first, add telemetry 
 - [Agent Governance Policies](agent-governance-policies.md)
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
-- [Content & Skills Audit Workflow](content-skills-audit.md)
 - [Agent Skills Standard](../standards/agent-skills-standard.md)
 - [OpenTelemetry Agent Observability](../standards/opentelemetry-agent-observability.md)

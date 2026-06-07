@@ -9,12 +9,12 @@ aliases:
   - multi-shape BYOK
   - custom endpoint provider
   - BYOK API family declaration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Multi-Shape BYOK Provider
 
-> One BYOK provider that natively speaks Chat Completions, Responses, and Messages — with the API family declared per endpoint — replaces a thicket of one-off "OpenAI-compatible" adapters that silently down-translate provider-specific capability.
+> One BYOK provider that natively speaks Chat Completions, Responses, and Messages — declared per endpoint — replaces one-off "OpenAI-compatible" adapters that silently down-translate capability.
 
 A multi-shape BYOK provider exposes a single configuration surface that supports several LLM API envelope shapes — `chat-completions`, `responses`, `messages` — and lets the operator declare which envelope each configured endpoint speaks. VS Code 1.121 ships this design as the Custom Endpoint provider: "We now ship a new BYOK provider, the Custom Endpoint provider, that lets you plug any Chat Completions, Responses, or Messages-compatible endpoint into Copilot Chat from a single configuration" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). The provider replaces the legacy single-shape `customoai`, "which only supported Chat Completions and is now marked for deprecation" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)).
 
@@ -45,7 +45,7 @@ Capability is encoded in the request/response envelope, not in the endpoint URL.
 ## When This Backfires
 
 - **Single-vendor team that only ever speaks one envelope.** Three code paths where one would do; the legacy `customoai` adapter was strictly smaller surface for these teams. The provider abstraction only pays off when the BYOK pool actually spans shapes.
-- **Preview-only availability.** At 1.121 the provider is Insiders-only: "The Custom Endpoint provider is currently in preview and only available in VS Code Insiders" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). Building team workflows on it before the stable channel ships couples operations to a feature flag.
+- **Channel maturity (resolved at 1.122).** At 1.121 the provider was Insiders-only: "The Custom Endpoint provider is currently in preview and only available in VS Code Insiders" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). VS Code 1.122 then moved it to the stable channel — "The Custom Endpoint provider is now available in VS Code Stable" ([VS Code 1.122 release notes](https://code.visualstudio.com/updates/v1_122)) — so the preview-gating caveat no longer applies on current stable. Teams pinned to an older release should still confirm the provider is present before building workflows on it.
 - **Gateway already normalises to one shape.** If a fronting gateway terminates the multi-shape problem before the IDE — the contract documented for Anthropic-compatible gateways ([Gateway Model Routing](gateway-model-routing.md)) — IDE-side multi-shape selection just relocates the translation point without removing it.
 - **Wrong-shape declaration.** The "pick the API family" step is user-declared, not auto-detected ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). A user who picks the wrong family for their endpoint gets silently degraded behaviour. Without the BYOK telemetry surface that landed in 1.120 ([VS Code 1.120 release notes](https://code.visualstudio.com/updates/v1_120) via [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md)), the mis-declaration may not surface for many turns.
 - **Capability assumption only holds when shape matches model.** Picking `chat-completions` for an Anthropic endpoint still loses `cache_control` and native tool-block shapes regardless of which provider class is wrapping it. Multi-shape buys preservation only when the operator picks the shape *native to the model* — which assumes the operator knows that mapping.

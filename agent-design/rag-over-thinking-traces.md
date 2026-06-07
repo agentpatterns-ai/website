@@ -9,27 +9,27 @@ tags:
 aliases:
   - thinking trace retrieval
   - reasoning trace corpus
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # RAG over Thinking Traces
 
-> For math, code, and science tasks, the lever is the corpus, not the retriever — index intermediate reasoning trajectories from prior problem-solving attempts and the same retrieve-then-generate pipeline beats both no-RAG and document-RAG.
+> RAG over thinking traces indexes prior reasoning trajectories instead of documents; on reasoning tasks, the same retrieve-then-generate pipeline beats both no-RAG and document-RAG.
 
 ## The Corpus Is the Lever
 
-Document RAG is widely treated as ineffective for reasoning-intensive tasks: a textbook chunk does not close the gap between problem and solution. Recent evidence pushes back — the limitation is the corpus, not retrieval. When the index holds **thinking traces** (intermediate trajectories produced by a model attempting similar problems), retrieve-then-generate consistently lifts reasoning performance ([Arabzadeh et al., 2026](https://arxiv.org/abs/2605.03344)).
+Document RAG is widely treated as ineffective for reasoning-intensive tasks: a textbook chunk does not close the gap between problem and solution. The limitation is the corpus, not retrieval. When the index holds **thinking traces** (intermediate trajectories from a model attempting similar problems), retrieve-then-generate consistently lifts reasoning performance — beating both no-RAG and retrieval over standard web corpora ([Arabzadeh et al., 2026](https://arxiv.org/abs/2605.03344)).
 
-On AIME 2025–2026, indexing traces produced by Gemini-2-thinking delivered relative gains of +56.3% for Gemini-2.5-Flash, +8.6% for GPT-OSS-120B, and +7.6% for GPT-5, with inference cost flat or down up to 15%. The pattern held on LiveCodeBench (code) and GPQA-Diamond (science), outperforming both no-RAG and retrieval over standard web corpora ([Arabzadeh et al., 2026](https://arxiv.org/abs/2605.03344)).
+On AIME 2025–2026, traces produced by Gemini-2-thinking delivered relative gains of +56.3% for Gemini-2.5-Flash, +8.6% for GPT-OSS-120B, and +7.6% for GPT-5, with inference cost flat or down up to 15%. The pattern held on LiveCodeBench (code) and GPQA-Diamond (science).
 
-The mechanism is distribution match. Document chunks describe procedural knowledge; reasoning trajectories enact it. Retrieved exemplars in the same modality as the desired output narrow the gap the model must bridge — the same reason few-shot exemplars beat instruction-only prompting, applied to a retrieval index. Independent confirmation comes from [Buffer of Thoughts](https://arxiv.org/abs/2406.04271), which retrieves distilled "thought-templates", and [Procedural Knowledge at Scale](https://arxiv.org/html/2604.01348), which finds that injecting procedural traces into the thinking stream improves reasoning on math and coding.
+The mechanism is distribution match. Document chunks describe procedural knowledge; reasoning trajectories enact it. Retrieved exemplars in the desired output modality narrow the gap the model must bridge — the same reason few-shot exemplars beat instruction-only prompting. Two independent lines confirm it: [Buffer of Thoughts](https://arxiv.org/abs/2406.04271) retrieves distilled "thought-templates", and [Procedural Knowledge at Scale](https://arxiv.org/html/2604.01348) finds that injecting procedural traces into the thinking stream improves math and coding reasoning.
 
 ## What Goes in the Index
 
-A thinking-trace corpus is built offline from prior solve attempts. Three properties separate a usable corpus from a misleading one:
+A thinking-trace corpus is built offline from prior solve attempts. Three properties separate a usable one from a misleading one:
 
-- **Provenance** — each trace records source model, prompt, and problem class so retrieval can prefer comparable solvers.
-- **Outcome label** — successful and failed traces both carry signal, in different ways: successful trajectories serve as direct exemplars, failed ones for negative-example pruning.
+- **Provenance** — each trace records source model, prompt, and problem class so retrieval prefers comparable solvers.
+- **Outcome label** — successful traces serve as direct exemplars; failed ones drive negative-example pruning.
 - **Structure** — the T3 transform converts long, noisy traces into compact, retrieval-friendly representations, lifting retrieval precision and reducing inference cost ([Arabzadeh et al., 2026](https://arxiv.org/abs/2605.03344)).
 
 ```mermaid
@@ -43,11 +43,11 @@ graph TD
     G --> H[Answer]
 ```
 
-This sits next to but is distinct from agent memory patterns. [Episodic memory retrieval](episodic-memory-retrieval.md) stores problem-solving arcs from a single agent's history — typically per project or per session — for cross-session recall. Trace-RAG indexes a separate, larger corpus of trajectories — often from many runs or from a stronger model — used as a reasoning corpus the solver consults at inference time. Both argue the unit of storage matters; they differ on scope and source.
+This is distinct from agent memory. [Episodic memory retrieval](episodic-memory-retrieval.md) stores one agent's own problem-solving arcs for cross-session recall; trace-RAG indexes a separate, larger corpus of trajectories — often from many runs or a stronger model — that the solver consults at inference time. Both hold that the unit of storage matters; they differ on scope and source.
 
 ## When the Substitution Pays Off
 
-The benchmark gains are real but not unconditional. The page lives or dies on the conditions, not the headline number.
+The benchmark gains are real but conditional.
 
 **Pays off when:**
 
@@ -60,9 +60,9 @@ The benchmark gains are real but not unconditional. The page lives or dies on th
 - The target distribution differs sharply from the corpus distribution — a coding agent on a proprietary codebase or internal DSL receives plausible but wrong-domain traces, biasing the solver.
 - Traces lack provenance and outcome labels. A corpus that mixes successful and failed runs without distinguishing them propagates failure patterns; this is the trace-side of the [reasoning misalignment](https://arxiv.org/abs/2407.12216) failure mode that already plagues document-RAG.
 - The bottleneck is elsewhere. If the agent is failing on tool reliability, prompt drift, or eval gaps, swapping the corpus does not address the cause. [Retrieval is Not Enough](https://arxiv.org/html/2504.14858) argues that even reasoning-shaped retrieval needs test-time critique to be reliable.
-- [Benchmark contamination](../verification/benchmark-contamination-eval-risk.md) risk is high. If the corpus contains traces for the exact items the system will be evaluated on, gains reflect leakage rather than transfer. Provenance metadata and held-out splits are non-negotiable for honest measurement.
+- [Benchmark contamination](../verification/benchmark-contamination-eval-risk.md) risk is high. If the corpus contains traces for the exact items the system will be evaluated on, gains reflect leakage rather than transfer; provenance metadata and held-out splits are non-negotiable for honest measurement.
 
-The headline +56% on AIME attaches to a specific configuration: math benchmark, traces from a stronger reasoning model, and no contamination across the held-out split. Real production agents that look closer to engineering work than to AIME should expect smaller gains and harder corpus engineering.
+The headline +56% attaches to one configuration — math benchmark, traces from a stronger model, clean held-out split. Agents closer to engineering work than to AIME should expect smaller gains.
 
 ## Operating the Corpus
 
@@ -70,11 +70,11 @@ Treat the trace index as a maintained artifact, not a one-time build.
 
 | Concern | What to do |
 |---------|------------|
-| Freshness | Re-harvest traces when the target distribution shifts (new product area, framework upgrade, model rotation). Stale traces silently bias toward retired patterns. |
-| Quality filter | Score traces by terminal outcome and intermediate consistency. Drop failed-without-recovery traces from the success-exemplar shard; keep them in a labelled negative shard for diagnostic retrieval. |
-| Structuring | The T3 step is doing real work — compact representations both fit more exemplars in the context budget and improve retrieval precision over raw transcripts. |
-| Evaluation | Hold out a slice of the target distribution that did not contribute traces to the corpus. Report gains against both no-RAG and document-RAG baselines, not just no-RAG. |
-| Cost accounting | Track end-to-end cost including offline harvest and refresh, not just inference — the inference savings reported in the paper do not include build cost. |
+| Freshness | Re-harvest when the target distribution shifts (new product area, framework upgrade, model rotation). Stale traces silently bias toward retired patterns. |
+| Quality filter | Score traces by terminal outcome and intermediate consistency. Drop failed-without-recovery traces from the success shard; keep them in a labelled negative shard. |
+| Structuring | T3 does real work — compact representations fit more exemplars in the context budget and improve retrieval precision over raw transcripts. |
+| Evaluation | Hold out a slice of the target distribution that contributed no traces. Report gains against both no-RAG and document-RAG baselines. |
+| Cost accounting | Track end-to-end cost including offline harvest and refresh — the paper's inference savings exclude build cost. |
 
 ## Example
 

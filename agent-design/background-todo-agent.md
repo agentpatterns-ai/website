@@ -9,16 +9,16 @@ aliases:
   - background plan maintenance
   - lightweight todo agent
   - todo offload pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Background Todo Agent
 
-> Route the agent's todo-list maintenance loop to a small background model so the frontier model spends its attention budget on the active sub-task instead of bookkeeping.
+> Route the agent's todo-list maintenance to a small background model so the frontier model spends its attention budget on the active sub-task, not bookkeeping.
 
 A background todo agent is a separate, smaller model that owns the agent's plan and progress state. The frontier model focuses on the active step; the lightweight model reads partial outputs and updates the todo list out-of-band, keeping the plan out of the main model's prompt.
 
-It is a specialisation of [cognitive reasoning vs execution separation](cognitive-reasoning-execution-separation.md) — the brain/hands principle applied to plan maintenance rather than tool execution — and presupposes per-role [model routing](../agent-readiness/bootstrap-reasoning-execution-routing.md).
+It is a specialisation of [cognitive reasoning vs execution separation](cognitive-reasoning-execution-separation.md) — the brain/hands principle applied to plan maintenance rather than tool execution — and presupposes per-role model routing.
 
 ## Why Bookkeeping Is Small-Model-Shaped
 
@@ -68,9 +68,9 @@ Three failure modes recur, and the [release notes](https://code.visualstudio.com
 
 ## Composition
 
-The pattern presupposes — and pairs with — patterns already in the catalogue: [cognitive reasoning vs execution](cognitive-reasoning-execution-separation.md) (the broader brain/hands split), [bootstrap reasoning–execution model routing](../agent-readiness/bootstrap-reasoning-execution-routing.md) (the per-role model pinning it depends on), [goal monitoring and progress tracking](goal-monitoring-progress-tracking.md) (durable progress files solve the *across-session* version of the same problem; this pattern solves the *within-session* version), and [cost-aware agent design](cost-aware-agent-design.md) (the broader route-by-complexity rule).
+The pattern presupposes — and pairs with — patterns already in the catalogue: [cognitive reasoning vs execution](cognitive-reasoning-execution-separation.md) (the broader brain/hands split), [goal monitoring and progress tracking](goal-monitoring-progress-tracking.md) (durable progress files solve the *across-session* version of the same problem; this pattern solves the *within-session* version), and [cost-aware agent design](cost-aware-agent-design.md) (the broader route-by-complexity rule).
 
-For sessions long enough that both apply, the background todo agent maintains the in-flight list while a session-end progress file durably records what was done — the two are not alternatives. Where the coordination boundary is a tool call rather than an out-of-band loop, see [Specialized SLM as Agent Tool](specialized-slm-as-agent-tool.md) for the nested-tool variant of small-model offload.
+For long sessions, the background todo agent maintains the in-flight list while a session-end progress file durably records what was done — the two are not alternatives. Where the coordination boundary is a tool call rather than an out-of-band loop, see [Specialized SLM as Agent Tool](specialized-slm-as-agent-tool.md) for the nested-tool variant.
 
 ## Example
 
@@ -101,7 +101,6 @@ That invocation reverts to the standard behaviour for the request — the main m
 ## Related
 
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
-- [Bootstrap Reasoning–Execution Model Routing](../agent-readiness/bootstrap-reasoning-execution-routing.md)
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md)

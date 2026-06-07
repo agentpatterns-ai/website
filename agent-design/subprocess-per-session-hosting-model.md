@@ -9,7 +9,7 @@ aliases:
   - subprocess-per-session hosting
   - agent SDK session lifecycle patterns
   - ephemeral long-running hybrid multi-agent container
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 status: current
 ---
 
@@ -17,7 +17,7 @@ status: current
 
 > The Agent SDK's subprocess-per-session model picks one of four hosting topologies — ephemeral, long-running, hybrid, or multi-agent container — by matching workload to lifetimes.
 
-The Agent SDK spawns one `claude` CLI subprocess per session — "that subprocess owns the shell, the working directory, and the JSONL session transcripts on local disk" ([Claude Agent SDK: Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Three orthogonal lifetimes — subprocess, container, transcript-persistence — define a 3D design space; the four patterns name the four operationally distinct corners. Choose the wrong corner for the workload and you get vanished transcripts, OOM containers, cross-agent settings leakage, or wasted operational cost.
+The Agent SDK spawns one `claude` CLI subprocess per session — "that subprocess owns the shell, the working directory, and the JSONL session transcripts on local disk" ([Claude Agent SDK: Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Three orthogonal lifetimes — subprocess, container, transcript-persistence — define the design space; the four patterns name its operationally distinct corners. Choose the wrong corner and you get vanished transcripts, OOM containers, cross-agent settings leakage, or wasted cost.
 
 ## The Three Lifetimes That Define the Choice
 
@@ -27,7 +27,7 @@ The Agent SDK spawns one `claude` CLI subprocess per session — "that subproces
 | Container | Per-task vs. per-session vs. across-idle vs. shared | Pet-container ops cost or vanished sessions on restart |
 | Transcript persistence | Local disk only vs. mirrored to `SessionStore` | "Shutting a container down without a `SessionStore` configured loses the transcript with it" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)) |
 
-Three classes of state live on the container's filesystem and "none of them survive a container restart, a scale-down, or a move to a different node" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)): session transcripts under `~/.claude/projects/`, `CLAUDE.md` memory files at user and project tier, and working-directory artifacts. Only transcripts mirror to a `SessionStore`; memory and artifacts need their own strategy ([Session storage](https://code.claude.com/docs/en/agent-sdk/session-storage)).
+Three classes of state live on the container's filesystem and "none of them survive a container restart, a scale-down, or a move to a different node" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)): transcripts under `~/.claude/projects/`, `CLAUDE.md` memory files, and working-directory artifacts. Only transcripts mirror to a `SessionStore`; memory and artifacts need their own strategy ([Session storage](https://code.claude.com/docs/en/agent-sdk/session-storage)).
 
 ## The Four Patterns
 
@@ -40,38 +40,31 @@ Three classes of state live on the container's filesystem and "none of them surv
 
 ### Ephemeral sessions
 
-Container-per-task. The container runs "a one-shot entrypoint that calls the SDK and exits" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Workloads Anthropic names directly: "bug investigation and fix, invoice and receipt extraction, document translation, and media transformation."
-
-No `SessionStore` needed when the task completes inside one container's lifetime. Cold-start latency dominates the SLO — provider choice matters: "Ephemeral patterns need sub-second starts" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
+Container-per-task, running "a one-shot entrypoint that calls the SDK and exits" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Anthropic names "bug investigation and fix, invoice and receipt extraction, document translation, and media transformation." No `SessionStore` is needed when the task completes inside one container's lifetime. Cold-start latency dominates the SLO: "Ephemeral patterns need sub-second starts" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
 
 ### Long-running sessions
 
-Persistent container instances host multiple SDK subprocesses, with each active session pinned to one subprocess. Workloads: "an email agent that triages and responds to incoming mail, a site builder that hosts a per-user editable site through container ports, and a chat bot that handles continuous traffic from a platform like Slack" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
-
-Horizontal scaling uses a load balancer plus **consistent hashing on `sessionId`**: "A pinned session keeps hitting the same container, and therefore the same running subprocess, until it is evicted or the container restarts" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Size each host with `agents per host = (host RAM - overhead) / per-session RAM ceiling`; the 1 GiB starting point is a floor measured per workload.
+Persistent containers host multiple subprocesses, each active session pinned to one. Anthropic names "an email agent that triages and responds to incoming mail, a site builder that hosts a per-user editable site through container ports, and a chat bot that handles continuous traffic from a platform like Slack" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Scaling uses a load balancer plus **consistent hashing on `sessionId`**: "A pinned session keeps hitting the same container, and therefore the same running subprocess, until it is evicted or the container restarts." Size hosts with `agents per host = (host RAM - overhead) / per-session RAM ceiling`; the 1 GiB starting point is a per-workload floor.
 
 ### Hybrid sessions
 
-Ephemeral containers that hydrate from a `SessionStore` on startup and persist back on shutdown. Best for sessions that "sit idle between" interactions: "a personal project manager with intermittent check-ins, deep research that pauses and resumes over hours, and a customer support agent that loads ticket history across interactions" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
-
-The `SessionStore` is "required for this pattern, not optional" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Reference adapters ship for S3, Redis, and Postgres; the conformance suite validates custom adapters ([Session storage](https://code.claude.com/docs/en/agent-sdk/session-storage)). Mirror writes are best-effort: failures emit a `{ type: "system", subtype: "mirror_error" }` message and the query continues without retry — alert on these if store durability matters.
+Ephemeral containers that hydrate from a `SessionStore` on startup and persist back on shutdown — for sessions that "sit idle between" interactions: "a personal project manager with intermittent check-ins, deep research that pauses and resumes over hours, and a customer support agent that loads ticket history across interactions" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). The `SessionStore` is "required for this pattern, not optional." Reference adapters ship for S3, Redis, and Postgres ([Session storage](https://code.claude.com/docs/en/agent-sdk/session-storage)). Mirror writes are best-effort: a failure emits a `{ type: "system", subtype: "mirror_error" }` message and the query continues without retry — alert on these if durability matters.
 
 ### Multi-agent container
 
-Multiple subprocesses in one container, "for example multi-agent simulations where the agents interact with each other in a shared environment" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). The collision risk is structural and isolation is the operator's job: "Give each agent its own working directory so they do not overwrite each other's files, and isolate settings loading so per-agent `CLAUDE.md` files do not leak across agents" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Four levers must be applied together for safe multi-tenant or multi-agent isolation: `settingSources: []`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, per-tenant `CLAUDE_CONFIG_DIR`, and per-tenant `cwd` on every `query()` call ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
+Multiple subprocesses in one container, "for example multi-agent simulations where the agents interact with each other in a shared environment" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Isolation is the operator's job: "Give each agent its own working directory so they do not overwrite each other's files, and isolate settings loading so per-agent `CLAUDE.md` files do not leak across agents." Four levers must be applied together: `settingSources: []`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`, per-tenant `CLAUDE_CONFIG_DIR`, and per-tenant `cwd` on every `query()` call.
 
 ## Why It Works
 
-The four-pattern split is exhaustive because the subprocess model exposes three orthogonal lifetimes the operator must independently choose, and each pattern's cold-start, persistence, and cost profile differs. The mechanism is documented as causal in the primary source: "Every hosting decision on this page follows from how the SDK runs the agent" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Naming the four corners explicitly lets operators pick by workload class instead of drifting into "long-running by default." The same three-layer split (session log, stateless harness, replaceable sandbox) is reached independently by LangChain Deep Agents Deploy ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)) and Anthropic's Managed Agents ([Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — convergent evidence the topology is structural, not vendor-specific.
+The split is exhaustive because the subprocess model exposes three orthogonal lifetimes the operator must independently choose, and each pattern's cold-start, persistence, and cost profile differs. The mechanism is documented as causal in the primary source: "Every hosting decision on this page follows from how the SDK runs the agent" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). The same three-layer split (session log, stateless harness, replaceable sandbox) is reached independently by LangChain Deep Agents Deploy ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)) and Anthropic's Managed Agents ([Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — convergent evidence the topology is structural, not vendor-specific.
 
 ## When This Backfires
 
-- **Stateless API wrapper analogy.** Teams treating the SDK like a stateless HTTP wrapper (one Lambda per call, no `SessionStore`, no `cwd` discipline) see sessions disappear on every cold start. The subprocess model assumes the container holds load-bearing state — the hosting page opens with exactly this warning: "Hosting it is not like hosting a stateless API wrapper" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
-- **Long-running container without subprocess recycling.** Memory grows with session length and tool activity; the page lists "Memory growth over long sessions" as a known limitation with the remediation "cap session length or recycle subprocesses periodically" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). A long-running pattern that never recycles becomes a pet container that OOMs.
-- **Hybrid pattern without `SessionStore`.** The pattern is undefined without one: "Shutting a container down without a `SessionStore` configured loses the transcript with it" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). Shipping hybrid topology while still designing the persistence story leaks data on every idle timeout.
-- **Multi-agent container with shared `cwd`.** Two subprocesses defaulting to the same working directory overwrite each other's files; two reading the same `CLAUDE.md` leak settings across agents. Without per-agent `cwd`, `settingSources: []`, per-agent `CLAUDE_CONFIG_DIR`, and `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` applied together, the multi-agent pattern is unsafe ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
-- **Ephemeral pattern for sessions needing cross-task memory.** A bug fix that needs to remember decisions across container boundaries is misclassified — ephemeral discards everything on completion. Hybrid is the correct pattern.
-- **Self-hosting when no infrastructure requirement justifies it.** The page itself flags the alternative: "If you do not need infrastructure control, custom isolation, or your own data plane, consider Managed Agents instead" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). The "pet container" anti-pattern in Anthropic's Managed Agents post — "if a container failed, the session was lost. If a container was unresponsive, we had to nurse it back to health" ([Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — is the failure mode the four-pattern taxonomy exists to help operators avoid.
+- **Stateless API wrapper analogy.** One Lambda per call with no `SessionStore` or `cwd` discipline makes sessions vanish on every cold start — the model assumes the container holds load-bearing state: "Hosting it is not like hosting a stateless API wrapper" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)).
+- **Long-running without subprocess recycling.** "Memory growth over long sessions" is a named limitation, remediated by "cap session length or recycle subprocesses periodically" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)); never recycling yields a pet container that OOMs.
+- **Hybrid without `SessionStore`.** The pattern is undefined without one — "Shutting a container down without a `SessionStore` configured loses the transcript with it" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)) — so shipping it before the persistence story leaks data on every idle timeout.
+- **Multi-agent with shared `cwd`.** Subprocesses sharing a working directory overwrite files and leak settings; without all four isolation levers the pattern is unsafe.
+- **Self-hosting with no infrastructure requirement.** "If you do not need infrastructure control, custom isolation, or your own data plane, consider Managed Agents instead" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)). The "pet container" anti-pattern — "if a container failed, the session was lost... we had to nurse it back to health" ([Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — is the failure mode the taxonomy exists to avoid.
 
 ## Example
 

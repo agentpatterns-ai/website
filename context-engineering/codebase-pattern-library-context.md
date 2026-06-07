@@ -9,7 +9,7 @@ tags:
   - tool-engineering
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-02
 status: current
 ---
 
@@ -31,7 +31,7 @@ This is a retrieval problem with a sharper corpus. Where [logical retrieval over
 
 ## How the Library Gets Built
 
-Turning a repository into a searchable pattern library is an extraction pipeline, not a manual catalogue. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units (functions, classes, blocks) rather than arbitrary text spans; the LLM step attaches the intent labels that make later intent-based search possible.
+Turning a repository into a searchable pattern library is an extraction pipeline, not a manual catalogue. [Pattern Vault](https://arunksingh16.github.io/pattern-vault/) is one concrete implementation: it parses source with tree-sitter to walk the AST, uses an LLM to classify and label the extracted snippets, and stores them in a local SQLite database with full-text search. The AST step bounds extraction to real syntactic units (functions, classes, blocks) rather than arbitrary text spans; the LLM step attaches the intent labels that make later intent-based search possible. The same AST-then-store-then-serve shape underpins published work on agent code retrieval — [*Codebase-Memory*](https://arxiv.org/abs/2603.27277) builds a tree-sitter knowledge graph persisted to SQLite and exposed over MCP, the route this pattern generalizes.
 
 ## Serving Patterns to the Agent
 

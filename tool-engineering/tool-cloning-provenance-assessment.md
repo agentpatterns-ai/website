@@ -10,12 +10,12 @@ aliases:
   - tool clone detection
   - mcp marketplace deduplication
   - agent tool provenance
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Tool Cloning and Provenance Assessment
 
-> Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — apply lexical and fuzzy-structural similarity before drawing ecosystem conclusions.
+> Marketplace repository counts overstate tool diversity because many entries are clones or template-derived; assess provenance with lexical and fuzzy-structural similarity before trusting ecosystem numbers.
 
 ## Why Raw Counts Mislead
 

@@ -11,12 +11,12 @@ aliases:
   - tool-use robustness benchmark
   - RobustBench-TC
   - POMDP perturbation taxonomy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Tool-Use Sim-to-Real Perturbation Taxonomy
 
-> Tool-use benchmarks assume clean inputs, unambiguous tool registries, and reliable APIs. Real deployments violate all three. Partition perturbations by which POMDP component they hit — observation, action, reward, or transition — and the robustness profile of your agent stops being a surprise.
+> Partition tool-use perturbations by which POMDP component they hit — observation, action, reward, or transition — to predict where a deployed agent's robustness collapses.
 
 ## The Sim-to-Real Gap for Tool-Use Agents
 

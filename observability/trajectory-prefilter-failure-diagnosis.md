@@ -11,22 +11,22 @@ aliases:
   - trajectory noise filtering
   - investigator pre-filter pattern
   - automated failure diagnosis pre-filter
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)
 
 > Pre-filter long agent trajectories with pattern matching and seed an investigator LLM with a test-report-derived preliminary diagnosis so long-context attention concentrates on failure-relevant spans.
 
-The technique applies when a coding agent has already failed a repository-scale task, the trajectory is long and noisy, and a structured test-failure report exists. Two pre-filters wrap the investigator LLM: a pattern-matching noise filter that strips redundant program structure and verbose code context, and a preliminary diagnosis module that converts the test-failure report into prior hypotheses the investigator consults before traversing the trajectory ([TrajAudit, arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
+Two pre-filters wrap the investigator LLM after a coding agent has failed a repository-scale task: a pattern-matching noise filter that strips redundant program structure and verbose code context, and a preliminary diagnosis module that converts the test-failure report into prior hypotheses the investigator consults before traversing the trajectory ([TrajAudit, arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
 
 ## When This Applies
 
 Confirm all three conditions before adopting:
 
-- **Trajectory length exceeds the investigator's effective long-context budget.** TrajAudit targets repository-level coding-agent runs whose trajectories are "very long, while long-context reasoning remains a known weakness of LLMs" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Short trajectories that already fit comfortably in the investigator's window do not benefit — the filter adds latency without recall improvement.
-- **A structured test-failure report exists.** The preliminary diagnosis module is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on and the second pre-filter contributes nothing ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
-- **Trajectory noise is dominated by predictable patterns.** Pattern matching only removes failure-irrelevant content when "redundant program structure and verbose code context" actually compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Trajectories whose noise is heterogeneous or context-dependent leave the filter with little to cut.
+- **Trajectory length exceeds the investigator's effective long-context budget.** TrajAudit targets repository-level runs whose trajectories are "very long, while long-context reasoning remains a known weakness of LLMs" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Short trajectories that already fit the window do not benefit — the filter adds latency without recall improvement.
+- **A structured test-failure report exists.** The preliminary diagnosis is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
+- **Trajectory noise is dominated by predictable patterns.** Pattern matching only helps when "redundant program structure and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Heterogeneous or context-dependent noise leaves the filter little to cut.
 
 If any condition is missing, fall back to [agent debugging](agent-debugging.md) for the four-mode taxonomy, or [trajectory decomposition](../verification/trajectory-decomposition-diagnosis.md) when the goal is per-stage grading rather than root-cause localization.
 
@@ -43,7 +43,7 @@ graph LR
 
 ### 1. Noise filter
 
-Pattern matching and keyword detection strip failure-irrelevant trajectory content before the investigator sees it. Redundant program structure (repeated imports, scaffolding boilerplate) and verbose code context (full file dumps where a function suffices) are the named targets ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). The filter is heuristic, not semantic — it compresses the attention budget rather than condensing meaning.
+Pattern matching and keyword detection strip failure-irrelevant content before the investigator sees it. The named targets are redundant program structure (repeated imports, scaffolding boilerplate) and verbose code context (full file dumps where a function suffices) ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). The filter is heuristic, not semantic — it compresses the attention budget rather than condensing meaning.
 
 ### 2. Preliminary diagnosis
 
@@ -51,11 +51,11 @@ The test-failure report (stack trace, assertion failure, error message) is conve
 
 ### 3. On-demand retrieval
 
-The investigator retrieves filtered trajectory spans on demand rather than ingesting everything — closer to retrieval-augmented investigation than full-context inspection. The filter and the prior together decide what to pull next ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
+The investigator pulls filtered spans on demand rather than ingesting everything — retrieval-augmented investigation, not full-context inspection, with the filter and the prior deciding what to pull next ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
 
 ## What the Evidence Shows
 
-TrajAudit reports the following on RootSE, a benchmark of 93 real-world failure instances from software maintenance tasks that the authors describe as "the most complex trajectory diagnosis benchmark to date" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)):
+TrajAudit reports the following on RootSE, a benchmark of 93 real-world software-maintenance failure instances ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)):
 
 | Metric | Result |
 |--------|--------|
@@ -66,17 +66,17 @@ The reported gains come on RootSE specifically. Generalization to trajectories w
 
 ## Why It Works
 
-Long-context LLM degradation is the load-bearing mechanism. LLMs lose recall on long contexts approximately in proportion to irrelevant tokens in the window; trajectory noise — redundant program structure, verbose code context — consumes the investigator's attention budget without contributing to localization. Pre-filtering shifts irrelevant content out of the budget. A preliminary diagnosis anchors the investigator's first hypothesis, reducing the number of trajectory traversals before convergence ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Both effects compound: a shorter, denser context window with an anchored prior is the regime LLMs handle best.
+Long-context degradation is the load-bearing mechanism: recall drops as relevant information sits deeper in a long window — models retrieve content at the start and end but lose it in the middle ([Liu et al., "Lost in the Middle", arxiv 2307.03172](https://arxiv.org/abs/2307.03172)). Trajectory noise consumes attention budget without aiding localization. Pre-filtering shifts that content out of the budget, and the preliminary diagnosis anchors the first hypothesis so the investigator converges in fewer traversals ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Both compound: a shorter, denser window with an anchored prior is the regime LLMs handle best.
 
 ## When This Backfires
 
 The technique adds infrastructure overhead and introduces failure modes of its own. Three conditions where it harms more than it helps:
 
-1. **Bug lives in the filter's blind spot.** The noise filter is pattern-matching, not semantic. When the failure root cause sits in code the filter classifies as redundant context — boilerplate that turned out to matter, a "scaffolding" file that the bug routed through — the filter actively removes the evidence the investigator needs. Aggregate localization accuracy on a benchmark does not tell you the false-negative rate on filter-discarded spans.
-2. **Symptom and cause are decoupled.** The preliminary diagnosis is seeded from the test-failure report, so it biases the investigator toward the region of the trajectory consistent with the test's framing of failure. When the symptom (test fails on assertion A) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors the investigator in the wrong place.
-3. **No test-failure artifact.** Runtime correctness bugs that pass tests but produce wrong output, agent loops without test runs, and open-ended generation tasks all lack the structured failure report the preliminary diagnosis module consumes. Without that seed, the second pre-filter contributes nothing and the noise-filter overhead remains.
+1. **Bug lives in the filter's blind spot.** The noise filter is pattern-matching, not semantic. When the root cause sits in code the filter classifies as redundant — boilerplate that turned out to matter, a "scaffolding" file the bug routed through — the filter removes the evidence the investigator needs. Aggregate accuracy on a benchmark hides the false-negative rate on discarded spans.
+2. **Symptom and cause are decoupled.** The preliminary diagnosis is seeded from the test-failure report, biasing the investigator toward the region consistent with the test's framing. When the symptom (assertion A fails) and root cause (state corrupted three calls earlier in module B) are decoupled, the prior anchors in the wrong place.
+3. **No test-failure artifact.** Runtime bugs that pass tests but produce wrong output, agent loops without test runs, and open-ended generation tasks all lack the structured report the diagnosis module consumes. Without that seed, the second pre-filter contributes nothing and the noise-filter overhead remains.
 
-A steelman of the opposite approach — feed the investigator the raw, unfiltered trajectory — is reasonable for small harnesses (<50k trajectory tokens), heterogeneous noise profiles, or workloads where the cost of dropping a critical line outweighs the latency saved. As frontier models' long-context reasoning improves, the noise-filter layer's marginal value shrinks.
+A steelman of the opposite — feed the investigator the raw, unfiltered trajectory — is reasonable for small harnesses (<50k tokens), heterogeneous noise profiles, or workloads where dropping a critical line costs more than the latency saved. As long-context reasoning improves, the noise-filter layer's marginal value shrinks.
 
 ## Example
 

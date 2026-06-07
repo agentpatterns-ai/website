@@ -11,47 +11,40 @@ aliases:
   - tangled refactoring
   - tangled agent patches
   - refactoring-aware refinement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Refactoring Runaway: Tangled Refactorings in Agent Patches
 
-> Coding agents inherit human developers' habit of bundling unsolicited refactors into bug-fix patches; the tangled changes break compilability without improving functional correctness, and stripping or repairing them recovers about half the lost build success.
+> Coding agents bundle unsolicited refactors into bug-fix patches; the tangled changes break compilability without improving correctness, and stripping them recovers lost build success.
 
-Tangled refactoring is a fix patch that also renames variables, extracts methods, or moves classes the user never asked for. The empirical signal from [Tian et al., *Refactoring Runaway* (arXiv:2605.22526)](https://arxiv.org/abs/2605.22526) — 3,691 valid patches across SWE-agent, OpenHands, and Agentless with 12 LLMs on Multi-SWE-bench — is that agents do this in 21.43% of patches, and these patches are significantly less likely to compile but no less likely to be functionally correct when they do.
+Tangled refactoring is a fix patch that also renames variables, extracts methods, or moves classes the user never asked for. [Tian et al., *Refactoring Runaway* (arXiv:2605.22526)](https://arxiv.org/abs/2605.22526) — 3,691 patches across SWE-agent, OpenHands, and Agentless with 12 LLMs on Multi-SWE-bench — finds agents do this in 21.43% of patches; these patches are significantly less likely to compile but no less likely to be functionally correct.
 
 ## When This Applies
 
-The finding is qualified, not universal. The detect-and-strip recommendation holds when all three conditions are present:
+Detect-and-strip holds only when all three conditions are present ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)):
 
-- **Statically-typed language with signature contracts.** The Multi-SWE-bench evaluation is Java-heavy; the dominant failure mode is method-level refactorings (Add Parameter, Extract Method) that change inherited signatures and silently break the `@Override` contract in subclasses the agent never opened ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)). Dynamic languages without static signature enforcement see less of this mechanism.
-- **High-autonomy agent frameworks.** Tangling rates vary almost 2x by framework — SWE-agent tangles 25.85% of patches, OpenHands 14.68% — and the paper attributes the spread to "frameworks with greater autonomy and fewer constraints" exploring a broader refactoring space ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)). Constrained completion modes (inline suggestions, single-file edit) tangle far less.
-- **No compilation gate in the agent's verification loop.** The whole problem surfaces as build failures the agent could catch itself. Teams that already run `mvn compile` / `tsc --noEmit` inside the agent loop catch this for free.
+- **Statically-typed language with signature contracts.** The dominant failure mode is method-level refactorings (Add Parameter, Extract Method) that change inherited signatures and break the `@Override` contract in subclasses the agent never opened. Dynamic languages see less of this.
+- **High-autonomy agent frameworks.** Tangling varies almost 2x — SWE-agent 25.85%, OpenHands 14.68% — which the paper attributes to "frameworks with greater autonomy and fewer constraints." Constrained completion modes (inline suggestions, single-file edit) tangle far less.
+- **No compilation gate in the agent's loop.** Teams already running `mvn compile` / `tsc --noEmit` inside the loop catch the resulting build failures for free.
 
 ## Why It Works
 
-LLMs are trained on open-source repositories where 36.72% of human bug-fix patches bundle unrelated refactorings — a baseline established by [Herzig & Zeller's foundational tangled-changes study](https://dl.acm.org/doi/pdf/10.5555/2487085.2487113) and reconfirmed in [arXiv:2605.22526](https://arxiv.org/abs/2605.22526). LLMs reproduce the statistical pattern of their training distribution, so agents inherit tangling behaviour even when the user prompt is narrowly scoped. Compilability breaks specifically because method-level refactorings modify signatures the agent treats as local but which subclasses depend on — a shadow-edit failure where the changed call site is correct but downstream callers in unopened files no longer compile ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)).
+LLMs train on repositories where 36.72% of human bug-fix patches bundle unrelated refactorings — a baseline from [Herzig & Zeller](https://dl.acm.org/doi/pdf/10.5555/2487085.2487113), reconfirmed in [arXiv:2605.22526](https://arxiv.org/abs/2605.22526) — and reproduce that distribution even under narrow prompts. Compilability breaks because method-level refactorings modify signatures the agent treats as local but subclasses depend on: the changed call site is correct, but downstream callers in unopened files no longer compile.
 
-[Agentic Refactoring (arXiv:2511.04824)](https://arxiv.org/abs/2511.04824) corroborates the mechanism on a separate corpus of 15,451 refactoring instances across 12,256 AIDev pull requests: 53.9% of agent refactorings occur in tangled commits, and agents are biased toward low-level edits (35.8% vs 24.4% for humans), making variable renames and small extractions the dominant tangled types.
+[Agentic Refactoring (arXiv:2511.04824)](https://arxiv.org/abs/2511.04824) corroborates this on 15,451 instances across 12,256 AIDev pull requests: 53.9% of agent refactorings occur in tangled commits, and agents skew toward low-level edits (35.8% vs 24.4% for humans), making variable renames and small extractions the dominant tangled types.
 
 ## Detection and Mitigation
 
-The [RefUntangle approach in Tian et al.](https://arxiv.org/abs/2605.22526) operates in two stages:
-
-1. **Assessment.** For each refactoring detected in the patch, assign one of KEEP / REMOVE / FIX based on necessity (does the bug fix require it?) and safety (does it break downstream callers?).
-2. **Refinement.** Regenerate the patch with REMOVE refactorings stripped and FIX refactorings repaired.
-
-Applied to the same 3,691 patches, the approach raises compilability from 19.34% to 38.33% and additionally resolves 2.79% of previously unresolved issues ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)).
-
-The top tangled refactoring types in agent patches are Extract Variable (expression-level), Add Parameter (method-level), and Move Class — differing from the human top-1 (Extract Method), so detection rules cannot be ported directly from prior human-commit untangling work ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)).
+The [RefUntangle approach](https://arxiv.org/abs/2605.22526) runs two stages: **assessment** labels each refactoring KEEP / REMOVE / FIX by necessity and caller-safety; **refinement** regenerates the patch with REMOVE refactorings stripped and FIX ones repaired. On the same 3,691 patches this raises compilability from 19.34% to 38.33% and resolves an additional 2.79% of issues. The top agent-tangled types — Extract Variable, Add Parameter, Move Class — differ from the human top-1 (Extract Method), so human-commit untangling rules cannot be ported directly.
 
 ## When This Backfires
 
-- **Dynamically-typed codebases.** The compilability mechanism depends on static signature contracts. Python, Ruby, and JavaScript codebases lack the `@Override` failure mode that drives the regression result; stripping tangled refactorings forfeits genuine cleanup without commensurate build-stability gain.
-- **Opportunistic refactoring is the only debt-paydown channel.** [Martin Fowler's *Opportunistic Refactoring*](https://martinfowler.com/bliki/OpportunisticRefactoring.html) argues that dedicated refactoring sprints get cut under deadline pressure, so the small improvements made while fixing a bug are where code quality actually gets preserved. A strict no-refactor-in-bugfix policy applied uniformly can accelerate [shadow tech debt](shadow-tech-debt.md).
-- **Agents already tangle less than humans.** Agents tangle at 21.43% vs the 36.72% human baseline ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)). The refactoring-aware refinement step is overhead, so for teams whose constraint is human-author tangling, anti-tangling guidance applied uniformly addresses the smaller half of the problem.
-- **CI catches it cheaply already.** A build error is loud and trivially detected. Teams running compilation in the agent's verification loop (or in pre-merge CI) get a stronger signal at lower cost than an LLM-based assessment of refactoring necessity.
-- **No association with functional correctness.** The same regression analysis finds tangled refactorings have **no significant association with whether the fix works** ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)). Stripping refactorings is a compilability intervention, not a correctness intervention — frame the cost-benefit accordingly.
+- **Dynamically-typed codebases.** Python, Ruby, and JavaScript lack the `@Override` failure mode; stripping refactorings forfeits genuine cleanup with no build-stability gain.
+- **Opportunistic refactoring is the only debt-paydown channel.** [Fowler](https://martinfowler.com/bliki/OpportunisticRefactoring.html) notes dedicated refactoring sprints get cut under deadline pressure, so bug-fix-adjacent improvements are where quality is preserved; a uniform no-refactor-in-bugfix policy can accelerate [shadow tech debt](shadow-tech-debt.md).
+- **Agents already tangle less than humans** (21.43% vs 36.72%, [arXiv:2605.22526](https://arxiv.org/abs/2605.22526)) — uniform anti-tangling guidance addresses the smaller half of the problem.
+- **CI catches it cheaply already.** A build error is a stronger signal at lower cost than an LLM-based assessment of refactoring necessity.
+- **No association with functional correctness** ([arXiv:2605.22526](https://arxiv.org/abs/2605.22526)) — stripping refactorings is a compilability intervention, not a correctness one.
 
 ## Example
 

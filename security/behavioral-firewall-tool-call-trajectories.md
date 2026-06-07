@@ -9,12 +9,12 @@ tags:
 aliases:
   - pDFA firewall
   - trajectory firewall
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Behavioral Firewall for Tool-Call Trajectories
 
-> Compile verified benign tool-call telemetry into a parameterized deterministic finite automaton, then enforce permitted sequences and parameter bounds at runtime. Fits structured workflows with stable tool catalogs; an unwhitelisted string parameter remains the residual attack surface.
+> Compile benign tool-call telemetry into a parameterized DFA, then enforce permitted sequences and parameter bounds at runtime. Unwhitelisted string parameters remain the residual attack surface.
 
 ## Core Concept
 

@@ -5,12 +5,12 @@ tags:
   - standards
   - tool-engineering
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Cross-IDE Plugin Discovery
 
-> A shared-install-surface contract — the CLI writes plugins to a per-user path, every consuming IDE on the same machine reads from it — collapses "install in CLI then install again in IDE" into one operation, at the cost of widening the supply-chain blast radius to every consumer.
+> Cross-IDE plugin discovery has one CLI install write to a shared per-user path every IDE reads, collapsing repeated installs but widening supply-chain blast radius.
 
 ## The File-System Contract
 

@@ -10,12 +10,12 @@ aliases:
   - always-on security review
   - PR security agent pattern
   - scheduled vulnerability scanner
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Always-On Agentic PR Security Review
 
-> Pair a PR-time security reviewer with a scheduled whole-codebase scanner. The reviewer covers new risk introduced by each diff; the scanner covers resident risk that no PR ever touches.
+> Pair a PR-time security reviewer with a scheduled whole-codebase scanner: the reviewer covers new risk in each diff, the scanner resident risk no PR reaches.
 
 ## Two Coverage Gaps
 

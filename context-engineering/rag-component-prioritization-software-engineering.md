@@ -11,12 +11,12 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Component-Wise RAG Prioritization for Software Engineering Tasks
 
-> Retriever choice exerts more influence on RAG quality than generator choice for code generation, summarization, and repair — and BM25 is the surprisingly robust default, conditional on SE-task corpora.
+> For software engineering RAG, retriever choice influences quality more than generator choice, and BM25 is the robust default on identifier-heavy code corpora.
 
 ## The Counter-Intuitive Result
 
@@ -37,26 +37,26 @@ graph LR
     G --> O[Code Gen / Summary / Repair]
 ```
 
-| Axis | Variants | Dominance rank in study |
+| Axis | Variants | Dominance rank |
 |------|----------|------------------------|
-| **Retriever** | 7 models — sparse (BM25), dense, hybrid | Largest effect on quality |
-| **Query processing** | 4 techniques (rewriting, expansion, decomposition variants) | Conditional — gains depend on retriever |
-| **Context refinement** | 4 methods (re-ranking, filtering, compression variants) | Conditional |
-| **Generator** | 6 models across capability tiers | Smaller effect than retriever |
+| **Retriever** | 7 models — sparse (BM25), dense, hybrid | Largest effect |
+| **Query processing** | 4 techniques (rewriting, expansion, decomposition) | Conditional on retriever |
+| **Context refinement** | 4 methods (re-ranking, filtering, compression) | Conditional |
+| **Generator** | 6 models across capability tiers | Smaller than retriever |
 
 Component effects are not independent: query processing helps some retrievers more than others ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
 ## Why Retrievers Dominate
 
-The generator can only reason about the tokens it sees. If the retriever misses the relevant function definition, error type, or test fixture, the generator cannot recover it — retrieval recall bounds generator accuracy from above. Swapping a strong generator for a stronger one does nothing for documents that were never retrieved.
+The generator can only reason about the tokens it sees. If the retriever misses the relevant function definition, error type, or test fixture, the generator cannot recover it — retrieval recall bounds generator accuracy from above. A stronger generator does nothing for documents that were never retrieved.
 
 The companion chunking study shows the same pattern: doubling cross-file context length from 2k to 8k tokens delivers more accuracy gain than picking among non-dominated chunking strategies ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). Retrieval-side levers dominate.
 
 ## Why BM25 Holds Up on SE Tasks
 
-SE retrieval queries — function names, identifiers, error messages, API symbols — share heavy lexical overlap with target documents. BM25's term-frequency signal is strong precisely when that overlap is high. Dense embeddings add value when surface forms diverge (natural-language queries against code, semantic paraphrases), but SE-task retrieval often has the term gap pre-closed by the structure of the corpus ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+SE retrieval queries — function names, identifiers, error messages, API symbols — share heavy lexical overlap with target documents, and BM25's term-frequency signal is strong precisely when that overlap is high. Dense embeddings add value when surface forms diverge (natural-language queries against code, semantic paraphrases), but SE-task retrieval often has the term gap pre-closed by the corpus structure ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
-The result is consistent with independent agentic-search evidence: a tuned BM25 paired with a frontier agent reaches 83.1% answer accuracy on BrowseComp-Plus, outperforming dense-retriever search agents ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)). Different setting, same mechanism — retrieval precision is not always the dense retriever's monopoly.
+Independent agentic-search evidence agrees: a tuned BM25 paired with a frontier agent reaches 83.1% answer accuracy on BrowseComp-Plus, outperforming dense-retriever search agents ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
 ## Prioritization Order
 
@@ -73,9 +73,9 @@ graph TD
     F -->|Yes| H[Then consider<br/>generator upgrade]
 ```
 
-1. **Retriever first** — BM25 baseline, tune `b` and `k1` against representative SE queries before assuming sophisticated retrievers help. The Ke et al. result reframes BM25 as a default, not a fallback ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
-2. **Context length and chunking** — pick a Pareto-optimal chunker (Sliding Window or cAST) and extend cross-file context length within the model's effective range ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
-3. **Query processing and refinement** — gains here depend on the retriever in use; test against the tuned retriever, not against a stock one ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+1. **Retriever first** — tune BM25's `b` and `k1` against representative SE queries before assuming sophisticated retrievers help. Ke et al. reframe BM25 as a default, not a fallback ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+2. **Context length and chunking** — pick a Pareto-optimal chunker (Sliding Window or cAST) and extend cross-file context within the model's effective range ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
+3. **Query processing and refinement** — gains depend on the retriever in use; test against the tuned retriever, not a stock one ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 4. **Generator** — the smallest lever in the study. Upgrade only after the retrieval side is exhausted.
 
 ## When the Default Inverts
@@ -85,7 +85,7 @@ The Ke et al. findings are conditional. The opposite prioritization — generato
 - **Sub-frontier generators**: weaker generators cannot compensate for retrieval-rank noise. On BrowseComp-Plus, Search-R1 + BM25 reaches 3.86% accuracy while GPT-5 + Qwen3-Embedding-8B reaches 70.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600)). With a constrained generator budget, dense retrieval shifts the precision burden off the agent.
 - **Natural-language-to-code retrieval**: when queries are user-typed descriptions ("deduplicate a list while preserving order") and target documents are identifiers (`unique_ordered`), the lexical signal collapses. Dense retrieval bridges the term gap; BM25 does not.
 - **Drifting corpora**: BM25's tuned `b` and `k1` parameters age with the codebase. Post-refactor, post-rename, or in fast-moving repos, dense embeddings re-index without parameter retuning.
-- **Open-domain or non-SE workloads**: the Ke et al. result is specifically for SE corpora where identifier-query overlap is high. The conclusion is not transferable to general QA, multilingual retrieval, or RAG over prose documents.
+- **Open-domain or non-SE workloads**: the Ke et al. result is specific to SE corpora with high identifier-query overlap. It does not transfer to general QA, multilingual retrieval, or RAG over prose.
 
 Outside these conditions, the retriever-first / BM25-default ordering is the higher-yield play.
 

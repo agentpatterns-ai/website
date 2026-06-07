@@ -104,6 +104,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 
 ## Related
 
+- [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — the cloud counterpart when the schedule must survive a closed laptop or env drift
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)
 - [/batch & Worktrees](batch-worktrees.md)
 - [Monitor Tool](monitor-tool.md)

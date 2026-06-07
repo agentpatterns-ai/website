@@ -7,31 +7,31 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Verify-Gated Completion as Admission Control
 
-> Treat "done" in a multi-agent runtime as an admission-control decision — a read-only verifier separate from the producer is the canonical authority, ambiguous cases fail closed, and every decision is captured as a packetized record.
+> Verify-gated completion makes a read-only verifier — not the producer — the admission-control authority over every "done" claim: ambiguous cases fail closed, each decision packetized.
 
-Verify-gated completion is an architecture in which the agent that produced a result is not the one that decides the work is done. A separate, read-only verifier sits on the critical path of every completion claim, admits or rejects it against deterministic checks, and writes the decision into a structured admission record ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). The pattern is worth its cost only under four conditions: independence from the producer, ground truth, on-path positioning, and a measured blocked-precision rate.
+Verify-gated completion is an architecture in which the agent that produced a result is not the one that decides the work is done. A separate, read-only verifier sits on the critical path of every completion claim, admits or rejects it against deterministic checks, and writes the decision into a structured admission record ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). It earns its cost only under the four conditions below.
 
 ## When This Pattern Applies
 
-All four conditions must hold:
+All four must hold:
 
-- **Verifier is independent of producer.** Different model class, prompt context, evidence sources. A verifier sharing the producer's training distribution admits the same hallucinations.
+- **Verifier independent of producer.** Different model class, prompt context, and evidence sources; a verifier sharing the producer's training distribution admits the same hallucinations.
 - **Ground truth exists.** Tests, type checks, schema validation, CI exit codes — not another LLM's opinion.
-- **Verifier is on the critical path.** Every claim routes through it; sidecar advisory verifiers provide audit data, not admission control.
-- **Blocked precision has been measured.** [Nguyen & Tran (2026)](https://arxiv.org/abs/2605.17998) report a shadow verifier with 98.58% rule agreement but only 0.39% blocked precision — almost every rejection was a false positive. An enforcing gate without precision evidence blocks more valid work than invalid.
+- **Verifier on the critical path.** Every claim routes through it; sidecar advisory verifiers yield audit data, not admission control.
+- **Blocked precision measured.** [Nguyen & Tran (2026)](https://arxiv.org/abs/2605.17998) report 98.58% rule agreement but only 0.39% blocked precision — almost every rejection a false positive. Without precision evidence an enforcing gate blocks more valid work than invalid.
 
-If any condition fails, prefer agent-internal verification ([pre-completion checklists](../verification/pre-completion-checklists.md)) or recording without admission control ([verification ledger](../verification/verification-ledger.md)).
+If any fails, prefer agent-internal verification ([pre-completion checklists](../verification/pre-completion-checklists.md)) or recording without admission control ([verification ledger](../verification/verification-ledger.md)).
 
 ## The Three Primitives
 
 ### Read-Only Verifier as Completion Authority
 
-The verifier has no write capability over the work product — it inspects state, runs deterministic checks, and emits an admit/reject decision ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Read-only is structural: it cannot patch or retry the output, so correctness cannot be offloaded. This complements the [evaluator-optimizer workflow](https://www.anthropic.com/engineering/building-effective-agents), which keeps refinement authority inside one agent; admission control externalises it.
+The verifier has no write capability over the work product — it inspects state, runs deterministic checks, and emits an admit/reject decision ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Read-only is structural: it cannot patch or retry the output, so correctness cannot be offloaded onto it. This inverts the [evaluator-optimizer workflow](https://www.anthropic.com/engineering/building-effective-agents), which keeps refinement authority inside one agent; admission control externalises it.
 
 ### Packetized Admission Records
 
@@ -43,20 +43,20 @@ Ambiguous cases resolve to reject ([Nguyen & Tran, 2026](https://arxiv.org/abs/2
 
 ## Why It Works
 
-Separating the authority to declare done from the agent doing the work removes a measured self-judgement bias: LLMs prefer their own generations when evaluating them, and self-refinement amplifies the preference rather than correcting for it ([Xu et al., 2024](https://arxiv.org/abs/2402.11436)). An external verifier breaks that loop. Packetized records then convert the decision into structured evidence, so the gate is auditable independent of either agent's narration ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Either half alone is weaker: self-verification without records is unfalsifiable; records without an external verifier capture only the producer's chosen evidence. [Spotify's Background Coding Agents](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3) is a deployed precedent — deterministic verifiers (format, build, test) wired into the loop, PR creation blocked on failure — functionally an admission gate at the handoff.
+Separating the authority to declare done from the agent doing the work removes a measured self-judgement bias: LLMs prefer their own generations when evaluating them, and self-refinement amplifies the preference rather than correcting it ([Xu et al., 2024](https://arxiv.org/abs/2402.11436)). An external verifier breaks that loop, and packetized records make the decision auditable independent of either agent's narration ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Either half alone is weaker: self-verification without records is unfalsifiable; records without an external verifier capture only the producer's chosen evidence. [Spotify's Background Coding Agents](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3) is a deployed precedent — deterministic verifiers (format, build, test) wired into the loop, PR creation blocked on failure — functionally an admission gate at the handoff.
 
 ## When This Backfires
 
-The architecture adds an inter-agent protocol, a verifier, and a record store. Conditions where it costs more than it returns:
+The architecture adds an inter-agent protocol, a verifier, and a record store. Where it costs more than it returns:
 
-- **Verifier shares the producer's failure modes.** Same model class, same training data, same hallucinations admitted ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
-- **Advisory verifier treated as enforcing.** Promoting an advisory verifier without precision evidence creates a blocking gate that mostly blocks valid work — 0.39% blocked precision in the cited deployment ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
-- **Short, low-stakes interactions.** Single-turn or exploratory work — bookkeeping exceeds audit value, mirroring when the [verification ledger](../verification/verification-ledger.md) backfires.
-- **No independent ground truth.** When the only "done" signal is another agent's judgement, verifier and producer argue about the same uncertain claim.
-- **Bypass paths.** If agents route around the verifier through direct file writes, the gate is a suggestion.
-- **External validity unestablished.** Evidence comes from one reporting cluster with only 17 production-classified events ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Re-measure before transferring numbers.
+- **Verifier shares the producer's failure modes.** Same model class and training data admits the same hallucinations ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
+- **Advisory verifier treated as enforcing.** Promoted without precision evidence, it mostly blocks valid work — 0.39% blocked precision in the cited deployment ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
+- **Short, low-stakes interactions.** For single-turn or exploratory work the bookkeeping exceeds the audit value, as it does for the [verification ledger](../verification/verification-ledger.md).
+- **No independent ground truth.** When "done" is only another agent's judgement, verifier and producer argue the same uncertain claim.
+- **Bypass paths.** If agents route around the verifier via direct file writes, the gate is a suggestion.
+- **External validity unestablished.** Evidence is one reporting cluster, 17 production events ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Re-measure before transferring numbers.
 
-The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) identifies inter-agent misalignment as a primary failure category. Adding a verifier creates a new misalignment surface — verifier-producer disagreement on what "done" means. The pattern re-allocates failure modes; it does not eliminate them.
+The [Multi-Agent System Failure Taxonomy](https://arxiv.org/abs/2503.13657) names inter-agent misalignment as a primary failure category, and a verifier adds one: producer-verifier disagreement over what "done" means. The pattern re-allocates failure modes; it does not eliminate them.
 
 ## Key Takeaways
 

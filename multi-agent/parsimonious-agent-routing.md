@@ -10,12 +10,12 @@ aliases:
   - parsimonious agent routing
   - joint routing and decomposition
   - selective delegation routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Parsimonious Agent Routing for Multi-Agent Dispatch
 
-> A learned router emits one delegation plan — keep, single-route, or split-and-route — with per-branch budget, jointly optimizing three decisions that hand-engineered pipelines treat as independent.
+> Parsimonious agent routing emits one delegation plan — keep, single-route, or split-and-route — jointly optimizing decompose, worker, and budget decisions that pipelines treat separately.
 
 ## The Disjoint-Decisions Problem
 

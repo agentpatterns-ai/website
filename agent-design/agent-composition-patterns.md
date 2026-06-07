@@ -40,7 +40,7 @@ graph LR
 
 **Trade-off:** No parallelism; latency accumulates across steps.
 
-**Example:** [Content pipeline](../workflows/content-pipeline.md) — research → draft → review → publish.
+**Example:** Content pipeline — research → draft → review → publish.
 
 ### Multi-Phase Chain Tactics
 

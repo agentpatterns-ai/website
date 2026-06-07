@@ -6,19 +6,20 @@ tags:
   - cost-performance
   - workflows
   - tool-agnostic
+  - long-form
 aliases:
   - pattern trade-off matrix
   - pattern decision matrix
-last_reviewed: 2026-05-26
+last_reviewed: 2026-06-02
 ---
 
 # Pattern Selection Map
 
-> Compare patterns by what they cost, where they break, and what they assume — then pick the cheapest one that solves your problem, not the most sophisticated.
+> This selection map compares patterns by what they cost, where they break, and what they assume — so you pick the cheapest one that works.
 
-Adopting agent patterns without comparing their costs leads to two failure modes documented on this site: stacking sophisticated patterns ([cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md)) and stacking frontier-model roles until economics collapse ([compound engineering's 80/20 inversion](../workflows/compound-engineering.md)). The matrix below surfaces the trade-offs already documented on each pattern's canonical page so you can compare across them without re-reading every one.
+Adopting agent patterns without comparing their costs produces two documented failure modes: stacking sophisticated patterns ([cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md)) and stacking frontier-model roles until economics collapse ([compound engineering's 80/20 inversion](../workflows/compound-engineering.md)). The matrix below surfaces the trade-offs from each pattern's canonical page so you can compare without re-reading every one.
 
-The matrix is scoped to this site's 14 patterns that map onto a common set of axes. Patterns not on the matrix exist for cases where these axes are not the dominant trade-off — they live on their own pages.
+It is scoped to this site's 14 patterns that share a common set of axes. Patterns where these axes are not the dominant trade-off live on their own pages.
 
 ## The Matrix
 
@@ -41,47 +42,47 @@ The matrix is scoped to this site's 14 patterns that map onto a common set of ax
 
 ## Axis Legend
 
-**Token cost** — relative to a baseline single-shot prompt against the same task:
+**Token cost** — relative to a baseline single-shot prompt:
 
-- `low` — fixed overhead or one-time setup; per-task addition is negligible
-- `medium` — roughly 1.5× to 2× baseline
-- `high` — roughly 2× to 5× baseline (multiple review or critic passes per task)
-- `very high` — 5×+ baseline or stacks frontier-model roles across plan/work/assess phases
+- `low` — fixed or one-time setup; per-task addition negligible
+- `medium` — roughly 1.5×–2× baseline
+- `high` — roughly 2×–5× baseline (multiple review or critic passes)
+- `very high` — 5×+ baseline, or stacks frontier-model roles across phases
 
 **Latency overhead** — wall-clock impact on time-to-result:
 
-- `none` — runs in parallel or as setup; no per-task added latency
-- `+1 turn` — adds one model round-trip
-- `+N turns` — adds a bounded loop (typically 2–5 iterations or fan-out turns)
+- `none` — runs in parallel or as setup
+- `+1 turn` — one added model round-trip
+- `+N turns` — a bounded loop (typically 2–5 iterations or fan-out turns)
 - `unbounded` — loops until convergence or human intervention
 
-**Frontier-model dependency** — how many roles require a top-tier model to function:
+**Frontier-model dependency** — how many roles need a top-tier model:
 
 - `none` — works with mid-tier or open-weight models
-- `one role` — one role (reasoning, reviewer, or planner) benefits materially from a frontier model; the rest can run on cheaper models
-- `all roles` — every role (planner, executor, critic, reviewer, summariser, memory) benefits from a frontier model; the most expensive shape
+- `one role` — one role (reasoning, reviewer, or planner) needs a frontier model; the rest run cheaper
+- `all roles` — every role needs a frontier model; the most expensive shape
 
 **Blast radius** — the maximum reach of a failure or unintended action:
 
-- `read-only` — the pattern only observes or gates; no writes outside its own state
-- `contained writes` — writes are scoped to feature branches, ephemeral state, or pre-approved paths
-- `production effects` — writes reach production systems, shared ledgers, or persistent infrastructure without an automatic gate
+- `read-only` — only observes or gates; no external writes
+- `contained writes` — writes scoped to branches, ephemeral state, or pre-approved paths
+- `production effects` — writes reach production or shared ledgers without an automatic gate
 
-**Verification cost** — how the pattern's correctness is checked:
+**Verification cost** — how correctness is checked:
 
-- `linter-able` — a deterministic script or type check confirms the pattern is wired correctly
-- `eval-able` — needs an LLM-graded or metric-based eval to confirm quality; deterministic checks are insufficient
-- `human-only` — outcomes require human judgement to validate (taste, architecture review, market dynamics)
+- `linter-able` — a deterministic script or type check confirms wiring
+- `eval-able` — needs an LLM-graded or metric-based eval; deterministic checks fall short
+- `human-only` — requires human judgement (taste, architecture, market dynamics)
 
 **Task class** — the kind of work the pattern fits:
 
 - `one-shot` — single-prompt, single-result tasks
 - `iterative` — bounded loops with a clear convergence criterion
-- `open-ended` — long-running work without a fixed convergence point (greenfield, ongoing maintenance, multi-agent operations)
+- `open-ended` — long-running work with no fixed convergence point
 
 ## Why It Works
 
-The matrix compresses information that is already present and sourced on each pattern's canonical page. Experienced engineers already think in trade-off axes when choosing architectural patterns — they just lack a centralised comparison surface. Cognitive offloading of the cross-page comparison step is the mechanism. The axes were chosen because they are the dimensions where stacking patterns blindly produces the documented failure modes: token economics, latency budgets, frontier-model cost, and blast radius are the four levers that the [80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) traces production failures back to.
+The matrix compresses information already sourced on each pattern's canonical page. Experienced engineers think in trade-off axes when choosing architectural patterns but lack a centralised comparison surface — cognitive offloading of the cross-page comparison step is the mechanism. The axes are the dimensions where stacking patterns blindly produces the documented failure modes: token economics, latency, frontier-model cost, and blast radius are the four levers the [80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) traces production failures back to.
 
 ## When This Backfires
 

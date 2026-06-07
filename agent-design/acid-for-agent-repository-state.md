@@ -8,12 +8,12 @@ tags:
 aliases:
   - ACID agent commits
   - transactional agent state
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # ACID for Agent Repository State
 
-> Apply database transaction theory — Atomicity, Consistency, Isolation, Durability — as the operating model for how an agent commits, verifies, partitions, and persists its work in the repo.
+> Apply database transaction theory — Atomicity, Consistency, Isolation, Durability — as the operating contract for how an agent commits, verifies, partitions, and persists repository work.
 
 ## Why ACID, Not Another Mnemonic
 

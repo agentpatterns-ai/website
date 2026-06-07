@@ -11,7 +11,7 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index
@@ -22,10 +22,10 @@ last_reviewed: 2026-05-27
 
 The pattern only holds under all four conditions:
 
-- **Frontier-capable agent LLM**, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches **3.86% accuracy on BrowseComp-Plus** against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
-- **Lexical-overlap-rich corpus** — multi-hop QA over Wikipedia-style text, code, technical documentation, log lines. Queries and target documents share surface forms. The pattern weakens when the same concept has many surface forms with no shared tokens.
+- **Frontier-capable agent LLM**, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches **3.86% on BrowseComp-Plus** against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+- **Lexical-overlap-rich corpus** — multi-hop QA over Wikipedia-style text, code, docs, log lines, where queries and target documents share surface forms. It weakens when one concept has many surface forms with no shared tokens.
 - **Construction cost matters** — the index is rebuilt often, or indexing budget is constrained. A static, one-time index amortises hybrid's build cost to zero.
-- **Hallucination on unanswerable queries is a tracked metric** — the boolean "no match" gives a sharper unanswerable signal than a low cosine score.
+- **Hallucination on unanswerable queries is tracked** — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
 
 Outside these conditions, an agentic hybrid baseline retains a small accuracy edge and is the more conservative default.
 
@@ -43,9 +43,7 @@ graph LR
     A -->|next query or answer| O[Answer or Refine]
 ```
 
-Two execution phases: Boolean logic determines the eligible document set, then BM25 ranks within that set. The interface exposes `AND`, `OR`, `NOT`, quoted phrases for exact matching, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-
-The agent iterates: read intermediate results, refine the logical query, re-issue. The retrieval backend has no notion of semantic similarity — it only executes what the LLM authors.
+Two execution phases: Boolean logic determines the eligible document set, then BM25 ranks within it. The interface exposes `AND`, `OR`, `NOT`, quoted phrases for exact matching, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)). The agent then iterates — read intermediate results, refine the query, re-issue. The backend has no notion of semantic similarity; it only executes what the LLM authors.
 
 ## Reported Results
 
@@ -58,24 +56,23 @@ The agent iterates: read intermediate results, refine the logical query, re-issu
 | Index construction time | **1.27 h** | 52.02 h | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 | Hallucination rate (answer-unavailable) | **0.083** | 0.128 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 
-The headline "matches hybrid" is real at KILT scale and on cost; on medium-scale multi-hop QA the pattern trails hybrid by 2.3 accuracy points. The trade is honest only when index-rebuild cost and unanswerable-query hallucination matter as much as raw accuracy.
+The headline "matches hybrid" holds at KILT scale and on cost; on medium-scale multi-hop QA the pattern trails hybrid by 2.3 accuracy points. The trade is honest only when index-rebuild cost and unanswerable-query hallucination matter as much as raw accuracy.
 
 ## Why It Works
 
-The pattern moves retrieval precision from the *index* to the *query author*. Hybrid retrieval pays for precision twice — at indexing time (dense embeddings, HNSW graphs, sometimes graph construction) and at query time (vector similarity fused with BM25). LogicalRAG eliminates both: the frontier LLM that already plans multi-hop questions decomposes the question into Boolean predicates over fielded terms, and the inverted index looks up rather than guesses ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+The pattern moves retrieval precision from the *index* to the *query author*. Hybrid retrieval pays for precision twice — at indexing time (dense embeddings, HNSW graphs, sometimes graph construction) and at query time (vector similarity fused with BM25). LogicalRAG eliminates both: the frontier LLM that already plans multi-hop questions decomposes them into Boolean predicates over fielded terms, and the inverted index looks up rather than guesses ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
 
-Hallucination reduction follows the same mechanism. A Boolean empty set is a sharp not-found signal; a low cosine score is ambiguous — "no relevant document" vs. "relevant document was paraphrased." Boolean disambiguates.
+Hallucination reduction follows the same mechanism. A Boolean empty set is a sharp not-found signal; a low cosine score is ambiguous — "no relevant document" vs. "relevant document was paraphrased."
 
-The result fits a broader retrieval-side-dominance trend: retriever choice exerts more influence than generator choice for SE-task RAG with high identifier-query overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)), and tuned BM25 + frontier agent matches dense retrieval on deep-research benchmarks ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)). When the LLM in the loop is strong, retrieval precision migrates from the retriever to the query author.
+This fits a broader retrieval-side-dominance trend: retriever choice exerts more influence than generator choice for SE-task RAG with high identifier-query overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)), and tuned BM25 + frontier agent matches dense retrieval on deep-research benchmarks ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
 ## When This Backfires
 
-- **Sub-frontier generator** — weaker LLMs cannot plan Boolean decompositions. The same BM25 index that supports 83.1% accuracy under a frontier agent supports 3.86% under Search-R1 on BrowseComp-Plus ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimisation.
-- **Semantic-gap queries** — natural-language paraphrases against identifier-heavy documents ("deduplicate while preserving order" → `unique_ordered`) have near-zero lexical overlap. Logical operators cannot bridge the gap without a thesaurus or expansion step.
-- **Synonym-heavy corpora** — medical, legal, multilingual, and consumer-product corpora where the same concept has many surface forms. BM25's insensitivity to synonymy is well documented; agents author speculative `OR` chains to compensate.
-- **Static-index, query-rate-dominated workloads** — when the index is built once and serves billions of queries, the 41× build-time win amortises to zero and the medium-scale 2.3-point accuracy gap dominates.
-- **LLM-time dominates retrieval-time** — every logical query is an inference call. On tail-latency-sensitive workloads, dense retrieval with a single round-trip can beat multi-turn Boolean refinement.
-- **Medium-scale multi-hop QA** — the regime where the pattern trails hybrid in the source paper (0.784 vs. 0.807). A viable, cheaper baseline at this scale, not a winning one ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+- **Sub-frontier generator** — weaker LLMs cannot plan Boolean decompositions. The same BM25 index that supports 83.1% under a frontier agent supports 3.86% under Search-R1 on BrowseComp-Plus ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimisation.
+- **Semantic-gap queries** — natural-language paraphrases against identifier-heavy documents ("deduplicate while preserving order" → `unique_ordered`) have near-zero lexical overlap. Logical operators cannot bridge that without a thesaurus or expansion step.
+- **Synonym-heavy corpora** — medical, legal, multilingual, and consumer-product corpora where one concept has many surface forms. BM25's insensitivity to synonymy is well documented; agents author speculative `OR` chains to compensate.
+- **Static-index, query-rate-dominated workloads** — when the index is built once and serves billions of queries, the 41× build-time win amortises to zero and the medium-scale 2.3-point gap dominates.
+- **Latency-sensitive workloads** — every logical query is an inference call, so dense retrieval with a single round-trip can beat multi-turn Boolean refinement on tail latency.
 
 ## Example
 

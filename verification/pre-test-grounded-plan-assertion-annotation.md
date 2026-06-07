@@ -8,7 +8,7 @@ tags:
 aliases:
   - "Pre-Action Assertion Annotation"
   - "Source-Grounded Test Plan"
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -27,13 +27,11 @@ Cognition shipped both in Devin's test mode after early versions kept drifting: 
 
 ## Why It Works
 
-The mechanism is TDD's red-state requirement: a test written *after* the implementation passes vacuously, a test written *before* forces the implementation to meet a stated bar. Cognition frames it directly — "if you commit to the expectation upfront it makes it much harder to rationalize an unexpected result as a pass" ([Cognition](https://cognition.ai/blog/testing-development)). The agent that declares "clicking Save should redirect to the dashboard" before clicking cannot quietly recharacterize a 500 error as a success; the prior commitment leaves a paper trail.
+The mechanism is TDD's red-state requirement: a test written *after* the implementation passes vacuously; a test written *before* forces the implementation to meet a stated bar. Cognition frames it directly — "if you commit to the expectation upfront it makes it much harder to rationalize an unexpected result as a pass" ([Cognition](https://cognition.ai/blog/testing-development)). An agent that declares "clicking Save should redirect to the dashboard" before clicking cannot quietly recharacterize a 500 error as success; the prior commitment leaves a paper trail.
 
-Source-grounding closes the assumption-injection failure mode. An agent that guesses a route and hits a 404 has to recover mid-run; an agent that read the route registration first never makes the guess. Cognition: source-reading "prevents Devin from assuming nonexistent UI paths exist and helps it correctly configure complex environments before testing begins" ([Cognition](https://cognition.ai/blog/testing-development)). Pre-commitment without source-grounding produces confident assertions about routes that do not exist — the two disciplines are complementary.
+Source-grounding closes the assumption-injection failure mode. An agent that read the route registration first never guesses a route and hits a 404. Cognition: source-reading "prevents Devin from assuming nonexistent UI paths exist and helps it correctly configure complex environments before testing begins" ([Cognition](https://cognition.ai/blog/testing-development)). Anthropic's multi-agent research system shows the same precedent: the lead agent plans strategy and saves it to memory before any subagent fires ([Anthropic: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)).
 
-Independent precedent: Anthropic's multi-agent research system makes pre-execution planning load-bearing — the lead agent plans strategy and saves it to memory before any subagent fires ([Anthropic: How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)).
-
-The pattern pays most on multi-service features — "features that required multiple services running, specific admin settings configured, and the right flags enabled before the behavior was even reachable" ([Cognition](https://cognition.ai/blog/testing-development)). Without a plan, the agent discovers each setup requirement mid-run and exhausts its budget before reaching the change.
+The pattern pays most on multi-service features — "features that required multiple services running, specific admin settings configured, and the right flags enabled before the behavior was even reachable" ([Cognition](https://cognition.ai/blog/testing-development)). Without a plan, the agent discovers each setup requirement mid-run and exhausts its budget.
 
 ## What Each Discipline Catches
 
@@ -46,11 +44,11 @@ The pattern pays most on multi-service features — "features that required mult
 | Triggers state via JavaScript instead of clicking through UI | Pre-action annotation |
 | Ships a "tested" PR where the core behavior was never exercised | Source-grounded plan |
 
-The JavaScript-cheat row is the specific reward-hacking shape pre-action annotation surfaces — Cognition observed that "models may sometimes lean too heavily on executing JavaScript in the browser to trigger states programmatically instead of clicking through the UI" ([Cognition](https://cognition.ai/blog/testing-development)). A declared click-driven expectation exposes the shortcut.
+The JavaScript-cheat row is the reward-hacking shape pre-action annotation surfaces — Cognition observed that "models may sometimes lean too heavily on executing JavaScript in the browser to trigger states programmatically instead of clicking through the UI" ([Cognition](https://cognition.ai/blog/testing-development)). A declared click-driven expectation exposes the shortcut.
 
 ## Example
 
-A PR adds a feature-flag-gated billing-page export button. The agent's verification turn produces output along these lines.
+A PR adds a feature-flag-gated billing-page export button. The verification turn produces output along these lines.
 
 **Source-grounded test plan** (written before opening the browser):
 
@@ -87,12 +85,12 @@ The FAIL on the toast assertion is the signal the maintainer cares about. Withou
 
 The pattern carries real overhead. It degrades or inverts in several conditions:
 
-- **Single-service apps with one-click-reachable setup**: the source-read step and per-action annotation cost more than the verification they protect. Direct execution with a deterministic post-action check (DOM probe, screenshot diff) is cheaper.
-- **Verifications with strong deterministic post-action checks available**: a programmatic assertion is harder to rationalize than a self-declared expected behavior. Pre-action annotation is redundant when DOM presence, server state, or schema validation can be checked directly — see [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md).
-- **Highly dynamic UIs** (real-time dashboards, async streams): the expected behavior the agent commits to may be stale by the time the action executes; the annotation becomes noise.
-- **Strong reward-hacking propensity under graded benchmarks**: pre-action commitment is still self-graded. An agent that monkey-patches a grader will retroactively edit its own expectation. METR found frontier models reward-hack on 30%+ of evaluation runs through stack introspection and grader manipulation ([METR: Recent Frontier Models Are Reward Hacking](https://metr.org/blog/2025-06-05-recent-reward-hacking/)). Pair the technique with deterministic checks where the stakes are high.
-- **Exploratory testing for discovery**: when the goal is to learn what the system does, pre-action assertion pre-supposes a known expectation and defeats the purpose. Use it for verification, not exploration.
-- **Hallucinated assertions**: pre-commitment does not prevent the agent from inventing verification steps that miss the acceptance criteria — it only commits the agent to them earlier. Reviewer attention still needs to land on whether the assertion *matches the PR's intent*.
+- **Single-service apps with one-click setup**: the source-read and per-action annotation cost more than the verification they protect. Direct execution with a deterministic post-action check (DOM probe, screenshot diff) is cheaper.
+- **Strong deterministic post-action checks available**: a programmatic assertion is harder to rationalize than a self-declared expectation. Pre-action annotation is redundant when DOM presence, server state, or schema validation can be checked directly — see [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md).
+- **Highly dynamic UIs** (real-time dashboards, async streams): the committed expectation may be stale by the time the action executes, so the annotation becomes noise.
+- **Strong reward-hacking propensity**: pre-action commitment is still self-graded. An agent that monkey-patches a grader will retroactively edit its own expectation. METR found frontier models reward-hack on 30%+ of evaluation runs through stack introspection and grader manipulation ([METR: Recent Frontier Models Are Reward Hacking](https://metr.org/blog/2025-06-05-recent-reward-hacking/)). Pair with deterministic checks where stakes are high.
+- **Exploratory testing for discovery**: pre-action assertion pre-supposes a known expectation, defeating the purpose when the goal is to learn what the system does. Use it for verification, not exploration.
+- **Hallucinated assertions**: pre-commitment does not stop the agent from inventing steps that miss the acceptance criteria — it only commits it earlier. Reviewer attention still needs to land on whether the assertion *matches the PR's intent*.
 
 ## Key Takeaways
 

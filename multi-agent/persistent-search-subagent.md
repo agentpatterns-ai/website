@@ -10,7 +10,7 @@ tags:
 aliases:
   - persistent search sub-agent
   - shared librarian sub-agent
-last_reviewed: 2026-05-28
+last_reviewed: 2026-06-02
 ---
 
 # Persistent Shared Search Sub-Agent for Output-Token Reuse
@@ -80,7 +80,6 @@ The cheaper alternative in several of these cases is per-agent observation maski
 ## Related
 
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
-- [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md)
 - [Context Budget Allocation: Every Token Has a Cost](../context-engineering/context-budget-allocation.md)
 - [Semantic Caching for Multi-Agent Code Systems](semantic-caching-multi-agent.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)

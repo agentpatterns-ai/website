@@ -11,12 +11,12 @@ aliases:
   - documentation-driven C to Rust migration
   - blueprint-driven legacy migration
   - architecture-documentation migration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Documentation-Guided Legacy Migration
 
-> Convert a legacy C repository into architecture-aware documentation, feed that documentation to coding agents as the migration blueprint, then validate by re-documenting the translated output and diffing against the original.
+> Document a legacy C repository's architecture, hand that blueprint to coding agents, then validate by redocumenting the Rust output and diffing against the original.
 
 File-by-file and function-by-function LLM translators lose architectural intent. They mirror C syntax into unsafe Rust that compiles, passes some tests, and silently violates ownership invariants the original codebase enforced implicitly. The documentation-guided approach inserts a structured intermediate representation — a human-readable architecture document — between the source and the agent that writes the target language.
 

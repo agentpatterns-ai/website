@@ -11,12 +11,12 @@ aliases:
   - adaptive generate rank verify
   - cost-sensitive inference search
   - ADAP algorithm
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Adaptive Generate-Rank-Verify Under Costly Verification
 
-> Generate candidates cheaply, rank with a cheap signal, spend expensive verifier cycles only on the top of the ranking — apply when verification dominates the per-sample cost.
+> Generate candidates cheaply, rank with a cheap signal, then spend the expensive verifier only on top-ranked candidates — used when verification dominates per-sample cost.
 
 Adaptive Generate-Rank-Verify is a cost-sensitive inference-time search policy: a generator emits N candidates, a cheap reward model scores each, and an expensive verifier — hidden-test execution, an LLM judge, an external API check — is invoked only on the top-ranked tail according to a progressive schedule. The pattern applies when a single verifier call costs an order of magnitude more than a single generation, and when the cheap score is monotonically related to verifier-pass probability ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)).
 

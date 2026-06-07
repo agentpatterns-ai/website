@@ -5,12 +5,12 @@ tags:
   - workflows
   - copilot
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Semantic Issue Search from Chat vs Query Syntax
 
-> Natural-language issue search resolves a chat-described symptom to an existing issue when paraphrasing dominates the query, and falls back to keyword or Boolean filters when exact tokens, audit semantics, or freshness dominate.
+> Natural-language issue search resolves a chat-described symptom to an existing issue when paraphrasing dominates; fall back to keyword filters for exact tokens, audits, and freshness.
 
 Semantic issue search lets you describe an issue in chat — "the flaky test about timezone parsing" — and resolve it to a real issue number without switching to the issues UI. The pattern only beats `is:issue` query syntax under specific conditions; outside those, keyword search is faster, more precise, and more reproducible. GitHub shipped this in Copilot Chat on the web on 2026-05-20 across all Copilot plans, surfacing issues that are "semantically related even when they are worded differently" ([GitHub Changelog](https://github.blog/changelog/2026-05-20-semantic-issue-search-in-copilot-chat)).
 

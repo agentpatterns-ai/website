@@ -9,18 +9,18 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Future-Based Asynchronous Function Calling
 
-> Wrap function calls in a futures protocol so a stock LLM keeps decoding while tools execute in the background — pipelining model and execution latency without retraining or breaking the synchronous call schema.
+> Return each function call as a symbolic future so a stock LLM keeps decoding while tools run in the background. Same synchronous schema, no retraining.
 
 ## The Latency Decomposition
 
 End-to-end latency on a function-calling turn decomposes into `decode_time + tool_time`. On tool-heavy workloads `tool_time` dominates. The synchronous protocol stops decoding when a tool call is emitted and resumes only after the call returns, so the two costs stack linearly.
 
-Native parallel function calling helps when the model can name N independent calls in one turn ([OpenAI](https://platform.openai.com/docs/guides/function-calling), [Anthropic](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview)), but decoding still blocks on the slowest call in the batch before the next turn begins. [LLMCompiler](https://arxiv.org/abs/2312.04511) takes another route: a planner generates a DAG of calls upfront, an executor runs the independent edges in parallel, then decoding resumes. Reported speedup is up to 3.7x on workloads with exposed parallelism, but the planner is a separate model invocation and the DAG is fixed once dispatched.
+Native parallel function calling helps when the model names N independent calls in one turn ([OpenAI](https://platform.openai.com/docs/guides/function-calling), [Anthropic](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview)), but decoding still blocks on the slowest call in the batch. [LLMCompiler](https://arxiv.org/abs/2312.04511) instead has a planner generate a DAG upfront and an executor run independent edges in parallel — up to 3.7x speedup, but the planner is a separate model call and the DAG is fixed once dispatched.
 
 ## The Futures Protocol
 
@@ -62,27 +62,29 @@ AsyncFC reports the following on stock models, no retraining ([arXiv:2605.15077v
 | HotpotQA | 1.24x |
 | Cross-model (Gemini 3.1 Pro) | 1.17x |
 
-Gains come from two effects: decode-execution overlap (next token generation runs while the previous call executes) and inter-function parallelism (independent calls dispatched in successive decoding steps run concurrently). SWE-bench Lite shows the largest speedup because file reads, test runs, and search calls take seconds — well above per-token decode latency.
+Gains come from two effects: decode-execution overlap and inter-function parallelism. SWE-bench Lite shows the largest speedup because file reads, test runs, and search calls take seconds — well above per-token decode latency.
 
 ## When the Pattern Pays Off
 
 The conditions are mechanical:
 
-- **Function execution dominates decode.** If tools return in tens of milliseconds and decode takes hundreds, there is nothing to overlap. The framework adds bookkeeping for no benefit.
-- **The workload exposes parallelism or pipelining.** A chain where every call strictly needs the resolved value of the previous one collapses to synchronous execution. The paper notes this explicitly: "strictly sequential tasks show minimal gains" ([arXiv:2605.15077v1](https://arxiv.org/html/2605.15077v1)).
-- **Return-value-driven branching is bounded.** If the model would change strategy based on the contents of a return — not just its shape — speculating downstream calls on a placeholder commits work that may need to be discarded.
+- **Function execution dominates decode.** If tools return in tens of milliseconds and decode takes hundreds, there is nothing to overlap.
+- **The workload exposes parallelism or pipelining.** A chain where every call needs the resolved value of the previous one collapses to synchronous execution — the paper notes "strictly sequential tasks show minimal gains" ([arXiv:2605.15077v1](https://arxiv.org/html/2605.15077v1)).
+- **Return-value-driven branching is bounded.** If the model would change strategy based on a return's contents — not just its shape — speculating on a placeholder commits work that may be discarded.
 
 ## When to Stay Synchronous
 
-Side-effecting functions are the sharp edge. If the model dispatches `delete_record(id)` and then dispatches `notify_user(future_1)`, a failure in the delete still triggers the notify dispatch — the runtime can only cancel calls not yet started. For destructive or money-moving operations the synchronous default — observe the return, then decide — keeps failure containment local. Audit paths push the same way: log concrete values, not unresolved future identifiers.
+Side-effecting functions are the sharp edge. If the model dispatches `delete_record(id)` then `notify_user(future_1)`, a failure in the delete still triggers the notify — the runtime can only cancel calls not yet started. For destructive or money-moving operations the synchronous default keeps failure containment local. Audit paths push the same way: log concrete values, not future identifiers.
 
 Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) chose synchronous execution at the subagent layer because "asynchronicity adds challenges in result coordination, state consistency, and error propagation." The trade-off is identical at the function-call layer — the framework you wrap around the model has to absorb that complexity.
 
+The zero-shot result is also model-dependent. [AsyncTool](https://arxiv.org/abs/2605.27995) (Shi et al., 2026) evaluates delayed tool feedback in multi-task settings and finds it "leads to clear performance degradation" — weaker models fail to coordinate task switching, dependency tracking, and state maintenance, proceeding before a dependent result resolves. AsyncFC's gains were measured on frontier models; validate yours before assuming the headline speedup.
+
 ## Relationship to Other Async Patterns
 
-- [Asynchronous Agent I/O and Speculative Tool Calling](../agent-design/asynchronous-agent-io-and-speculative-tools.md) — addresses the agent-loop FSM for real-time and voice agents; AsyncFC operates one layer down at the function-call boundary.
-- [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md) — addresses orchestrator-subagent coordination; AsyncFC addresses model-tool coordination within a single agent.
-- [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md) — addresses concurrency limits when fanning out to many workers; AsyncFC adds overlapping with the model's own decoding.
+- [Asynchronous Agent I/O and Speculative Tool Calling](../agent-design/asynchronous-agent-io-and-speculative-tools.md) — the agent-loop FSM for real-time and voice agents; AsyncFC operates one layer down at the function-call boundary.
+- [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md) — orchestrator-subagent coordination; AsyncFC handles model-tool coordination within a single agent.
+- [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md) — concurrency limits when fanning out to many workers; AsyncFC instead overlaps with the model's own decoding.
 
 ## Example
 

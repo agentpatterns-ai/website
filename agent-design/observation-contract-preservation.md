@@ -9,12 +9,12 @@ tags:
 aliases:
   - observation contracts
   - contract-bound tool outputs
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Observation Contract Preservation in Tool-Augmented Agents
 
-> Tool outputs like presigned URLs, session tokens, OAuth `state`, and idempotency keys are *observation contracts* — artifacts whose later use is constrained by the producing external system. Preserve their bytes and respect their expiry on the second call, or the chain fails in ways no single-step test catches.
+> An *observation contract* is tool output an external system later validates by exact bytes or expiry — preserve it verbatim or the chain breaks silently.
 
 An observation contract is any tool output that an external system will later validate by exact bytes, by a timestamp, or by a one-use rule. When the agent reasons about the artifact instead of carrying it verbatim, the second call breaks — even if every individual step looks correct in isolation. The benchmark that defines the term, [ContractBench](https://arxiv.org/abs/2605.17281), found no frontier model clears 80% on contract preservation across 38 evaluated models, with the best score 77.8% (Claude Opus 4.6).
 
@@ -67,7 +67,6 @@ Contract failures are mechanical, not capability-bound. [ContractBench](https://
 - **Single-step tools with no second call.** The artifact has no validator on a follow-up — preservation adds ceremony without benefit. Idempotency-key plumbing in particular is wasted on read-only chains.
 - **Opaque-handle harnesses.** When the harness already mediates artifacts (MCP `_meta` persistence, sealed-envelope adapters, server-side opaque handle indirection), prompt-level discipline fights the layer below it. The right fix is to push more state behind the harness, not to add more rules ([Towards Verifiably Safe Tool Use](https://arxiv.org/abs/2601.08012)).
 - **Reasoning-tuned models with deep thinking enabled.** Paraphrasing during extended reasoning erodes verbatim instructions ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)) — only out-of-band storage or a runtime validator survives.
-- **Stateless read-only chains.** No mutating second call exists; idempotency keys and OAuth `state` have no role.
 - **When formal verification is available.** Solver-aided runtime checks prove some violations away ([Mishra et al., 2026](https://arxiv.org/abs/2603.20449)) — preferable to a prompt-level pattern where the option exists.
 
 ## Example

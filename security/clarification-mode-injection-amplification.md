@@ -9,12 +9,12 @@ tags:
 aliases:
   - clarify-then-act injection
   - ask-user injection amplification
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Clarification Mode Amplifies Prompt Injection
 
-> A clarify-then-act turn opens a high-trust input channel that injected content can negotiate with. Across frontier models, prompt-injection success rates rise from 1–11% in standard execution to 24–63% under clarification ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
+> Clarification mode opens a high-trust channel injected content exploits, amplifying prompt-injection success from 1–11% to 24–63% across frontier models ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
 
 ## Core Concept
 

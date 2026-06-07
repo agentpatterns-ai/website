@@ -11,18 +11,18 @@ tags:
 aliases:
   - recurring review comments to rules
   - promote review feedback to harness checks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules
 
-> When the same review comment fires across 3+ PRs in a window, the rule belongs in the harness, not in the reviewer's head — promote it to a mechanical check with remediation text, and retire it when the hit count trends to zero.
+> Promote a recurring review comment into a harness rule once it fires across 3+ PRs — then retire it when the hit count hits zero.
 
 ## When a Comment Becomes a Signal
 
 A recurring review comment is evidence of an unencoded invariant — the rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold — same comment across three or more PRs in a window — is load-bearing: one or two is a hypothesis, three or more is a pattern ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
 
-Anthropic states the inverse explicitly: "If Claude already does something correctly without the instruction, delete it or convert it to a hook" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The corollary is the workflow this page describes — when reviewers keep writing the same comment, the rule belongs in deterministic enforcement.
+Anthropic states the inverse explicitly: "If Claude already does something correctly without the instruction, delete it or convert it to a hook" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The corollary: when reviewers keep writing the same comment, the rule belongs in deterministic enforcement.
 
 ## The Loop
 
@@ -37,11 +37,9 @@ graph LR
     F -->|Still firing| E
 ```
 
-Each step is mechanical and reviewable on its own.
-
 ### 1. Categorise the comment
 
-Rule placement must match the comment's category. Promoting a semantic correctness check to a regex linter is a category error — the rule will fire on legitimate exceptions and erode trust in the lint stack.
+Rule placement must match the comment's category. Promoting a semantic check to a regex linter is a category error — it fires on legitimate exceptions and erodes trust in the lint stack.
 
 | Comment category | Encoding layer |
 |---|---|
@@ -71,13 +69,13 @@ What is wrong, what to do instead, where the rationale lives. [Feedback as Capab
 
 ### 4. Track hit count and retire
 
-Every rule has a finite shelf life. Refactors obviate boundaries, model upgrades eliminate failure modes, conventions solidify enough that no one would write the violation in the first place. Without retirement, the rule library accumulates dead weight, and the priority-saturation failure mode of [standards as agent instructions](../instructions/standards-as-agent-instructions.md) kicks in: when every rule has equal weight, nothing signals priority and adherence degrades.
+Every rule has a finite shelf life. Refactors obviate boundaries, model upgrades eliminate failure modes, conventions solidify until no one would write the violation. Without retirement, the rule library accumulates dead weight and the priority-saturation failure mode of [standards as agent instructions](../instructions/standards-as-agent-instructions.md) kicks in: when every rule has equal weight, nothing signals priority and adherence degrades.
 
 Periodic decay pairs this loop with [harness impermanence](../agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition — the observable signal that it has done its job.
 
 ## Why Mechanical Enforcement Beats Repeated Comments
 
-Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The distinction holds for review comments versus lint rules — a reviewer's eye is probabilistic, a mechanical check fires every time. LangChain's harness changes lifted Terminal Bench 2.0 from 52.8% to 66.5% with self-verification among the high-impact components ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)) — mechanical pre-merge checks are the human-team analogue.
+Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The distinction holds for review comments versus lint rules — a reviewer's eye is probabilistic, a mechanical check fires every time. LangChain's harness changes lifted Terminal Bench 2.0 from 52.8% to 66.5%, with self-verification among the high-impact components ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)); mechanical pre-merge checks are the human-team analogue.
 
 ## What This is Not
 

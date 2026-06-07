@@ -7,12 +7,12 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Cross-Framework Signal Semantics
 
-> A trajectory-shape rule that predicts success in one framework can predict failure in another. Re-measure borrowed behavioral signals in your own harness before treating them as universal.
+> Cross-framework signal semantics: a behavioral signal that predicts success in one framework can predict failure in another. Re-measure borrowed signals in your own harness.
 
 Cross-framework signal semantics is the property that operational rules extracted from one agent framework — "test step follows code modification", "short error cascades", "compact trajectories" — often carry different or opposite meaning in another. A 64,380-run analysis across 126 agent configurations spanning 43 frameworks found that on error rate, 47 configurations resolve more issues when the rate is lower while 48 resolve more when it is higher ([Ma et al., 2026](https://arxiv.org/abs/2605.18332)). Five other continuous features and three of seven binary patterns from prior software-engineering agent literature showed the same directional disagreement.
 

@@ -10,12 +10,12 @@ aliases:
   - prebuilt cloud agent images
   - custom Actions images for agents
   - agent runtime prebuild
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Prebuilt Agent Environments
 
-> Bake the cloud agent's runtime — toolchain, dependencies, MCP servers — into a custom container image so each session pays an image-pull cost instead of a fresh install cost.
+> Bake the cloud agent's runtime — toolchain, dependencies, MCP servers — into a custom image, so each session pays an image-pull instead of an install.
 
 ## The Cold-Start Tax
 

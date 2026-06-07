@@ -8,12 +8,12 @@ aliases:
   - workload identity federation for AI agents
   - keyless authentication for agent runtimes
   - OIDC federation for Claude API
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Workload Identity Federation for Agent Runtimes
 
-> Replace long-lived AI provider API keys with short-lived tokens minted from the runtime's existing workload identity — but the rule that decides which workloads federate is now itself a security boundary.
+> Replace long-lived API keys with short-lived tokens minted from the runtime's existing workload identity — making the federation trust rule a security boundary.
 
 A static `sk-ant-...` API key is the highest-blast-radius credential on an agent runtime — leakable from logs, hooks, and transcripts, with rotation cadences that never match incident timelines. Workload Identity Federation (WIF) removes the key: the workload presents a signed OIDC JWT from an identity provider it already runs inside, and Anthropic mints a short-lived access token bound to a service account. [[Source]](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation)
 
@@ -59,7 +59,7 @@ The Anthropic SDKs read these and perform the exchange with no constructor argum
 
 ## Scoping Pitfalls That Widen Access
 
-WIF replaces secret sprawl with a trust-policy design problem. The rule deciding which JWTs may act as a service account is part of the threat model. Four pitfalls recur:
+WIF replaces secret sprawl with a trust-policy design problem: the rule deciding which JWTs may act as a service account is now part of the threat model. Four pitfalls recur:
 
 **Broad `subject_prefix` matches more than intended.** On GitHub Actions, `repo:your-org/*` matches every repo and, without a `ref` constraint, accepts `pull_request` runs from forks — any external contributor opening a PR can obtain a federated token. Pin to a single repository and protected branch; add `repository_owner` under `claims` as defense in depth. [[Source]](https://platform.claude.com/docs/en/manage-claude/wif-providers/github-actions)
 
@@ -73,11 +73,13 @@ WIF replaces secret sprawl with a trust-policy design problem. The rule deciding
 
 The minted token's lifetime is `min(rule.token_lifetime_seconds, 2 × JWT_remaining)` with a 60-second floor; default 3600s. The second bound prevents the Anthropic token from outliving the upstream identity. The SDK refreshes at `exp − 120s` (advisory) and `exp − 30s` (mandatory). [[Source]](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation)
 
-A leaked `sk-ant-oat01-...` expires in minutes to an hour. A leaked static key works until manual rotation, from any network the attacker controls.
+A leaked `sk-ant-oat01-...` expires in minutes; a leaked static key works until manual rotation, from any network the attacker controls.
 
 ## When Federation Is Not Worth the Complexity
 
-WIF is qualified, not unconditional. A small team on a single fixed host can match the blast-radius reduction with vault-rotated keys via wrapper script ([Scoped Credentials via Proxy](scoped-credentials-proxy.md)). Federation adds three resources, a CEL expression as a security boundary, and a trust policy an unfamiliar team can mis-scope into a worse posture than a well-rotated key. The pattern earns its complexity when the runtime already has an ambient workload identity (Kubernetes service account, AWS IRSA, GitHub Actions OIDC) and multiple workloads share one provider account.
+WIF is qualified, not unconditional. A small team on a single fixed host can match the blast-radius reduction with vault-rotated keys via wrapper script ([Scoped Credentials via Proxy](scoped-credentials-proxy.md)). Federation adds three resources and a trust policy an unfamiliar team can mis-scope into a worse posture than a well-rotated key. It earns its complexity when the runtime already has an ambient workload identity (Kubernetes service account, AWS IRSA, GitHub Actions OIDC) shared across multiple workloads.
+
+WIF also does not close the **workload attestation gap**. Token exchange verifies the JWT signature and matches its claims, but does not attest that the workload presenting the token is the one it claims to be — that must be solved at the IdP layer, which most organizations have not done. A service account scoped too broadly means WIF "will faithfully mint a valid Anthropic token for the wrong workload." Treat WIF as authentication for one destination, not a substitute for an attested workload-identity program. [[Source: Aembit]](https://aembit.io/blog/anthropic-workload-identity-federation-what-it-gets-right-and-what-it-still-doesnt-solve/)
 
 ## Key Takeaways
 
@@ -92,6 +94,4 @@ WIF is qualified, not unconditional. A small team on a single fixed host can mat
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — Complementary pattern for credential isolation when federation is not available
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — Broader credential injection patterns for agent runtimes
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md) — Keep credentials out of skill files at authoring time
-- [Bootstrap Agent Commit Attribution](../agent-readiness/bootstrap-agent-commit-attribution.md) — Cryptographic signing as the attribution counterpart to federated authentication
-- [Audit Secrets in Agent Context](../agent-readiness/audit-secrets-in-context.md) — Detect leftover keys that shadow federation during migration
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Removing credentials from agent-readable surfaces closes one leg of the trifecta
