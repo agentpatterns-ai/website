@@ -84,6 +84,7 @@ last_reviewed: 2026-05-27
 - [Dependency Gap Validation for AI-Generated Code](dependency-gap-validation.md) — AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
+- [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 
 ## Tooling
 

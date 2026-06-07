@@ -107,3 +107,4 @@ The matrix is a comparison aid, not a recommendation engine. Three failure modes
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md) — adoption phases for AI coding tools; complements the per-pattern trade-off view with a developmental view
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md) — the broader treatment of cost as a first-class design constraint
 - [Compound Engineering](../workflows/compound-engineering.md) — the highest-cost pattern on the matrix; the planning/review investment that makes it economic
+- [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) — coordination-pattern comparison (Sequential / Concurrent / Group chat / Handoff / Magentic) for the topologies above; orthogonal axes to this map's six
