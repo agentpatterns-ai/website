@@ -11,12 +11,12 @@ tags:
   - tool-agnostic
   - rag
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # AOCI: Symbolic-Semantic Repository Indexing
 
-> A persistent repository blueprint where each entry pairs symbolic architectural coordinates with semantic content describing function, dependencies, and constraints — read in a single pass before any task to give the agent global structure before it makes local decisions.
+> A persistent repository blueprint pairing each entry's symbolic architectural coordinates with semantic content — read whole before any task to give the agent global structure.
 
 ## The Orientation Problem AOCI Targets
 

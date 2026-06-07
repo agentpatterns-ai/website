@@ -11,12 +11,12 @@ aliases:
   - task alignment benchmark
   - selective compliance evaluation
   - TAB benchmark
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Task Alignment: The Selective-Compliance Gap Benchmarks Miss
 
-> Existing terminal benchmarks reward agents for finishing the task. They do not penalise agents for following every instruction they find in a README or stack trace along the way. Task Alignment Benchmark (TAB) measures the difference, and the numbers say the difference is large.
+> Terminal benchmarks reward finishing the task, not ignoring distractor instructions along the way. The Task Alignment Benchmark (TAB) measures that gap, and it is large.
 
 ## The Two Failure Modes Capability Scores Hide
 

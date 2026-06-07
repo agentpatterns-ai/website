@@ -10,12 +10,12 @@ tags:
 aliases:
   - infectious jailbreak defence
   - foresight-guided local purification
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Foresight-Guided Defense Against Infectious Jailbreaks in Multi-Agent Systems
 
-> Multi-agent systems with shared multimodal memory propagate adversarial content agent-to-agent. Local per-agent foresight simulation detects the diversity collapse that signals infection, then surgically removes the contaminated entry without homogenizing healthy agent behavior.
+> Per-agent foresight simulation detects the diversity collapse that signals an infectious jailbreak, then surgically removes the contaminated retrieval entry without homogenizing healthy agent behavior.
 
 ## The Threat Model
 
@@ -126,5 +126,3 @@ When the user-uploaded VirAE lands in agent A's album, A's next chat round trigg
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
-- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)
-- [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)

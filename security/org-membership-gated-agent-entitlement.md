@@ -9,12 +9,12 @@ tags:
   - security
   - human-factors
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Org-Membership-Gated Agent Entitlement
 
-> Gate AI chat activation on directory-managed GitHub organization membership, not seat licences alone — a fail-closed device policy that ties entitlement to identity rather than installation.
+> Gate AI chat on directory-managed GitHub org membership, not seat licences — a fail-closed device policy tying entitlement to identity, not installation.
 
 Seat licences answer "who paid" but not "who is currently allowed to send code to a model." A user offboarded from the company keeps the installed VS Code on their device and may keep a personal GitHub account that still resolves a Copilot Pro seat. Org-membership-gated entitlement closes that gap by deciding chat activation on the device against directory-managed group membership.
 

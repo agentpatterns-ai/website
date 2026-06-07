@@ -4,11 +4,12 @@ description: "Four decisions — container-lifecycle pattern, autoscale signal, 
 tags:
   - agent-design
   - claude
+  - long-form
 aliases:
   - agent SDK hosting topology
   - self-hosted agent SDK deployment
   - claude agent SDK production hosting
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-01
 ---
 
 # Production Hosting Topology for Self-Hosted Agent SDK Runtimes
@@ -19,7 +20,9 @@ A self-hosted Agent SDK runtime is not a stateless API wrapper. Every running ag
 
 ## When to Defer
 
-The pattern applies once at least one holds: real multi-tenancy, regulated egress (SOC2, FedRAMP, data residency) that disqualifies Managed Agents, session lengths exceeding function-tier ceilings, or measured concurrency hitting rate limits. Without any, start on [Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) or a single long-running container. "Anthropic token cost typically dominates container infrastructure cost by an order of magnitude or more" ([Anthropic: Hosting the Agent SDK](https://code.claude.com/docs/en/agent-sdk/hosting)) — pre-PMF teams gain more from cost caps than from topology.
+The pattern applies once at least one holds: real multi-tenancy, regulated egress (SOC2, FedRAMP, data residency) that rules out fully-managed cloud sandboxes, session lengths exceeding function-tier ceilings, or measured concurrency hitting rate limits. Without any, start on [Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) or a single long-running container. "Anthropic token cost typically dominates container infrastructure cost by an order of magnitude or more" ([Anthropic: Hosting the Agent SDK](https://code.claude.com/docs/en/agent-sdk/hosting)) — pre-PMF teams gain more from cost caps than from topology.
+
+Regulated egress no longer forces full self-hosting on its own. Anthropic's [self-hosted sandboxes](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes) (public beta, May 2026) keep orchestration — session, harness, and the agent loop — on Anthropic's side while moving tool execution onto your infrastructure, so "the filesystem the agent reads and writes, the processes it spawns, and the network it can reach are all under your control" and your existing network policy, audit logging, and DLP apply unchanged. That collapses the old binary: a team needing data residency or non-routable internal services can keep execution and egress inside its perimeter without owning the subprocess, session, and sandbox layers this page describes. Reach for the full self-hosted topology below only when you also need to control the orchestration layer itself — full on-premise operation of the agent loop is still not offered — or when multi-tenancy, function-tier overflow, or rate-limit pressure forces it.
 
 ## The Four Session-Lifecycle Patterns
 
@@ -69,7 +72,7 @@ Any missing switch leaks the corresponding input. Per-tenant egress rules at the
 
 ## Why It Works
 
-The four decisions compound because three failure modes have orthogonal mitigations. **Cold start trades off against blast radius**: pod-per-session minimises blast radius but pays a per-session cold start; pooled workers reuse warm subprocesses but accumulate tenant context that must be scrubbed. Practitioners report "starting a new pod adds about a second of overhead… when an agent is invoked after being idle, a one-second cold start breaks the continuity of the interaction" — the Kubernetes Sandbox CRD answers with a `SandboxWarmPool` that maintains pre-provisioned pods, "effectively eliminating cold starts" while preserving pod-per-session boundaries ([Kubernetes blog: Running Agents on Kubernetes with Agent Sandbox](https://kubernetes.io/blog/2026/03/20/running-agents-on-kubernetes-with-agent-sandbox/)). **Autoscale signal mismatch**: agent loops are long-tailed and token-bound, not request-bound — RPM cannot see a stuck loop. **Credentials reachable from injected content** are credentials a successful injection can exfiltrate; relocating them to a sidecar closes that path without trusting the agent to refuse. Each lever is independently load-bearing.
+The four decisions compound because three failure modes have orthogonal mitigations. **Cold start trades off against blast radius**: pod-per-session minimises blast radius but pays a per-session cold start; pooled workers reuse warm subprocesses but accumulate tenant context that must be scrubbed. Practitioners report "starting a new pod adds about a second of overhead… when an agent is invoked after being idle, a one-second cold start breaks the continuity of the interaction" — the Kubernetes Sandbox CRD answers with a `SandboxWarmPool` that maintains pre-provisioned pods, "effectively eliminating cold starts" while preserving pod-per-session boundaries ([Kubernetes blog: Running Agents on Kubernetes with Agent Sandbox](https://kubernetes.io/blog/2026/03/20/running-agents-on-kubernetes-with-agent-sandbox/)). The other two failure modes mitigate independently — a token-bound autoscale signal sees the stuck loop that RPM cannot, and a sidecar-injected credential is one a successful injection cannot exfiltrate. Each lever is independently load-bearing.
 
 Anthropic's Managed Agents architecture decomposes the runtime into Session, Harness, and Sandbox and reports the decoupling cut p50 time-to-first-token by roughly 60% and p95 by more than 90% ([Anthropic: Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — evidence the "stateless harness, durable session" pattern composes downward to any pod shape.
 
@@ -150,6 +153,7 @@ In TypeScript, each `query()` call still carries `cwd: tenantDir` and `settingSo
 
 - [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — the state-shape sibling: what is persistent vs ephemeral across loop, machine, and conversation layers
 - [Remote Agent Host Sessions over SSH and Dev Tunnels](remote-agent-host-sessions.md) — the transport-shape sibling: how the client reaches a lifecycle-decoupled agent host
+- [Subprocess-per-Session Hosting Model](subprocess-per-session-hosting-model.md) — the foundational frame: why one `claude` CLI process per session is what makes the four lifecycle patterns a real choice
 - [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the three-primitive theory that this deployment topology projects onto pod boundaries
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the decision frame for whether to self-host at all
 - [Prebuilt Agent Environments](prebuilt-agent-environments.md) — bakes machine-state initial conditions into a container image, reducing per-session start cost

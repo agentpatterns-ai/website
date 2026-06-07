@@ -9,7 +9,7 @@ tags:
 aliases:
   - selective memory injection
   - risk-sensitive memory controller
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Abstention-Aware Memory Retrieval

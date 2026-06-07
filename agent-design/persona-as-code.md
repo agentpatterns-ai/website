@@ -95,7 +95,7 @@ Personas suit multi-phase project work. Task-specific agents suit discrete autom
 
 The [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) packages this pattern at scale: 12+ agent personas — PM, Architect, Developer, UX, Scrum Master, QA — each defined as a structured Markdown file with explicit scope exclusions.
 
-A minimal two-persona [content pipeline](../workflows/content-pipeline.md) illustrates the structure:
+A minimal two-persona content pipeline illustrates the structure:
 
 ```markdown
 # Researcher persona

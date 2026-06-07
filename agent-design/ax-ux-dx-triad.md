@@ -48,7 +48,7 @@ flowchart LR
 
 ### Agent Experience (AX)
 
-What the model sees. Curate context for inference quality, not human readability:
+What the model sees. Curate context for inference quality, not human readability. When the illegibility lives on a public surface the agent calls from outside, the outward-facing complement is [Designing for Agent Consumers](../tool-engineering/designing-for-agent-consumers.md):
 
 - **Structured tool output** -- JSON or typed returns, not prose descriptions
 - **Compressed summaries** -- preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))

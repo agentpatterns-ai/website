@@ -11,12 +11,12 @@ tags:
 aliases:
   - decomposed red-teaming
   - semi-automated monitor red-teaming
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Decomposed Red-Teaming for Agent Monitors
 
-> Frontier LLMs can propose strong attacks or execute them, but rarely both at once. Decomposing red-teaming into strategy, execution, and refinement stages drops monitor catch rates from 94.9% to 60.3% in the BashArena setting.
+> Decomposed red-teaming splits attacks into strategy, execution, and refinement stages, dropping BashArena monitor catch rates from 94.9% to 60.3% and exposing the conceive-execute gap.
 
 ## Why Single-Pass Elicitation Under-Reports
 

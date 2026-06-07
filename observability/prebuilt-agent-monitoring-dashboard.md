@@ -10,12 +10,12 @@ aliases:
   - shipped agent dashboard
   - default agent monitoring view
   - templated OTel dashboard
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Prebuilt Agent Monitoring Dashboard
 
-> Shipping a templated dashboard alongside an agent stack converts a wired-but-unused OTel emitter into a glanceable monitoring surface — under the conditions that the team has a shared backend, a stable model class, and the emitter is already verified.
+> A dashboard shipped with an agent stack turns an unused OTel emitter into a glanceable surface, given a shared backend, stable models, and verified telemetry.
 
 A prebuilt agent monitoring dashboard is a JSON or template artefact distributed with an agent harness — Grafana, Datadog, Honeycomb, or equivalent — that visualises a fixed panel set (per-model latency, token cost, tool-call rate, session count) against the metrics the harness already emits. The dashboard is the *consumer* in the OTel pipeline; its panel set defines which spans, metrics, and attributes the upstream emitter must produce.
 
@@ -23,13 +23,13 @@ A prebuilt agent monitoring dashboard is a JSON or template artefact distributed
 
 The pattern pays off only when all of these hold:
 
-- **An OTel emitter is already wired and verified.** Without `CLAUDE_CODE_ENABLE_TELEMETRY=1` and a reachable OTLP collector ([Agent Observability with OpenTelemetry](agent-observability-otel.md)), the dashboard renders empty — which signals broken instrumentation, not a healthy agent. Run [`bootstrap-otel-init`](../agent-readiness/bootstrap-otel-init.md) before adopting a default view.
-- **A shared monitoring backend exists.** VS Code 1.121 ships against Azure Managed Grafana fed via OTel Collector to Azure Application Insights ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)); Anthropic's reference stack ships against self-hosted Prometheus + Grafana ([anthropics/claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide)). A dashboard with no shared audience is a dotfile.
-- **The model class is stable.** Per-model latency and per-model cost panels assume a fixed model list; routing across Sonnet, Haiku, and Opus tiers expands the dimension faster than panel definitions track.
+- **An OTel emitter is already wired and verified.** Without `CLAUDE_CODE_ENABLE_TELEMETRY=1` and a reachable OTLP collector ([Agent Observability with OpenTelemetry](agent-observability-otel.md)), the dashboard renders empty — broken instrumentation, not a healthy agent. Wire and verify the emitter first.
+- **A shared monitoring backend exists.** VS Code 1.121 ships against Azure Managed Grafana fed via OTel Collector to Application Insights ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)); Anthropic's reference stack uses self-hosted Prometheus + Grafana ([anthropics/claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide)). A dashboard with no shared audience is a dotfile.
+- **The model class is stable.** Per-model latency and cost panels assume a fixed model list; routing across Sonnet, Haiku, and Opus tiers expands the dimension faster than panel definitions track.
 
 ## The Converged Panel Set
 
-Two independent shipped examples — VS Code's Azure Managed Grafana template and Anthropic's `working-dashboard.json` — converge on a narrow default view. The VS Code dashboard visualises "agent operations, token usage, chat sessions, tool calls, and per-model response time and time to first token (TTFT)" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). Anthropic's eight-panel layout covers Total Cost, Active Users, Total Tokens, Lines of Code, Cost by Model, Token Usage by Type, Cost by User, and Lines of Code by Type, driven by three counters: `claude_code_cost_usage_USD_total`, `claude_code_token_usage_tokens_total`, `claude_code_lines_of_code_count_total` ([working-dashboard.json](https://github.com/anthropics/claude-code-monitoring-guide/blob/main/grafana/dashboards/working-dashboard.json)).
+Two independent shipped examples — VS Code's Azure Managed Grafana template and Anthropic's `working-dashboard.json` — converge on a narrow default view. VS Code visualises "agent operations, token usage, chat sessions, tool calls, and per-model response time and time to first token (TTFT)" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)). Anthropic's eight-panel layout (Total Cost, Cost by Model, Token Usage by Type, Active Users, and more) is driven by three counters: `claude_code_cost_usage_USD_total`, `claude_code_token_usage_tokens_total`, `claude_code_lines_of_code_count_total` ([working-dashboard.json](https://github.com/anthropics/claude-code-monitoring-guide/blob/main/grafana/dashboards/working-dashboard.json)).
 
 The intersection — per-model cost, token usage by type, session count, tool-call rate, per-model latency or TTFT — is the minimum opinionated panel set. Anything beyond it should be added from a real incident, not predicted.
 
@@ -49,17 +49,18 @@ Treating the dashboard as a schema check — does the panel render? — surfaces
 
 ## Why It Works
 
-A shipped dashboard inverts the activation-energy problem in observability adoption: teams enable OTel exporters but rarely build the visualisation layer, so events sit in a backend nobody opens. A default view — even a narrow opinionated one — gives the team a first surface to glance at, and forces the upstream emitter to be calibrated against a real consumer. The panels become the contract: every metric the dashboard reads must be emitted, named consistently, and bounded in cardinality. VS Code 1.121 documents the dashboard as the import target that delivers "an end-to-end setup" of agent monitoring ([release notes](https://code.visualstudio.com/updates/v1_121)) — the default view as unblocker, not destination.
+A shipped dashboard inverts the activation-energy problem in observability adoption: teams enable OTel exporters but rarely build the visualisation layer, so events sit in a backend nobody opens. A default view gives the team a surface to glance at and forces the emitter to be calibrated against a real consumer. VS Code 1.121 frames it as the import target for "an end-to-end setup" of agent monitoring ([release notes](https://code.visualstudio.com/updates/v1_121)) — unblocker, not destination.
 
-[`bootstrap-otel-init`](../agent-readiness/bootstrap-otel-init.md) (the exporter scaffold) and [`audit-observability-calibration`](../agent-readiness/audit-observability-calibration.md) (the planted-bug protocol) lean on the same mechanism: define the consumer before tuning the emitter.
+OTel bootstrap and observability-calibration runbooks lean on the same mechanism: define the consumer before tuning the emitter.
 
 ## When This Backfires
 
-- **Solo developer or pre-production project.** No shared audience, no chargeback story, no SLO — the import overhead exceeds the value. [`bootstrap-otel-init`](../agent-readiness/bootstrap-otel-init.md) already excludes this case.
+- **Solo developer or pre-production project.** No shared audience, no chargeback story, no SLO — the import overhead exceeds the value.
 - **Backend mismatch.** Each shipped example targets one stack — Azure Managed Grafana plus App Insights for VS Code ([release notes](https://code.visualstudio.com/updates/v1_121)), self-hosted Prometheus plus Grafana for Anthropic ([claude-code-monitoring-guide](https://github.com/anthropics/claude-code-monitoring-guide)). Teams on Datadog, Honeycomb, or Grafana Cloud must port panels and often metric names; porting cost can exceed building from scratch.
 - **Model routing breaks the label set.** A per-model latency panel assumes a static model list; routing across Sonnet, Haiku, and Opus tiers leaves stale dimensions on the wall.
 - **No upstream emitter.** Without `CLAUDE_CODE_ENABLE_TELEMETRY=1` and an OTLP-compatible backend ([Agent Observability with OpenTelemetry](agent-observability-otel.md)), the dashboard is empty — a fault indicator only works if the emitter is verified separately.
-- **Calibration drift.** The panels encode last-quarter's failure modes. Without a planted-bug calibration loop ([Audit Observability Calibration](../agent-readiness/audit-observability-calibration.md)), the dashboard diverges from current failure patterns and becomes a confidence trap.
+- **Calibration drift.** The panels encode last-quarter's failure modes. Without a planted-bug calibration loop, the dashboard diverges from current failure patterns and becomes a confidence trap.
+- **Infrastructure metrics measure cost, not correctness.** The converged panel set tracks latency, cost, tokens, and call rates — emitter health and resource spend, not whether the agent's output is right. An agent can hallucinate, call an unauthorized tool, or drift behaviorally while every panel stays green, so practitioners now treat these infra metrics as insufficient on their own ([OpenTelemetry: AI agent observability](https://opentelemetry.io/blog/2025/ai-agent-observability/)). Pair the dashboard with output-quality and eval signals; a green board is not a correctness guarantee.
 
 ## Example
 
@@ -94,12 +95,11 @@ The dashboard's three required metric series — `claude_code_cost_usage_USD_tot
 - Ship the dashboard with the harness when an OTel emitter is wired, the backend is shared, and the model class is stable.
 - The converged panel set across VS Code 1.121 and Anthropic's reference is per-model cost, token usage by type, session count, tool-call rate, and per-model latency or TTFT — narrow on purpose.
 - The panel set is the upstream telemetry contract; an empty panel signals an emitter drift faster than schema assertions.
+- These panels track cost and emitter health, not correctness — pair them with output-quality signals so a green board is not mistaken for a correct agent.
 - Default dashboards become wallpaper without a planted-bug calibration loop that keeps the panels aligned with current failure modes.
 
 ## Related
 
 - [Agent Observability with OpenTelemetry](agent-observability-otel.md)
-- [Bootstrap OpenTelemetry Initialization](../agent-readiness/bootstrap-otel-init.md)
-- [Audit Observability Calibration](../agent-readiness/audit-observability-calibration.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md)

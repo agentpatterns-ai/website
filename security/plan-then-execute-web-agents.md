@@ -9,12 +9,12 @@ tags:
 aliases:
   - plan then execute web agents
   - pre-committed program web automation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Plan-Then-Execute as the Default for Web Agents
 
-> Web content mixes inputs from many parties. Commit to a task-specific program before observing pages so injected content can change values inside the plan but cannot rewrite the plan.
+> Web content mixes many parties' inputs. Web agents fix a task-specific program before observing pages, so injected content changes values but never rewrites the plan.
 
 ## Why ReAct Is the Wrong Default
 
@@ -58,6 +58,8 @@ The pattern is qualified, not universal. Plan-then-execute is the right default 
 ## The Infrastructure Gap
 
 Today's browser primitives (click, type, scroll) carry page-dependent meaning — the same click coordinate does different things on different pages — so plan-then-execute at the primitive layer is brittle. Piet et al. reframe web automation as needing **typed, complete, auditable website APIs**: tools that map cleanly to semantic actions with effects known before execution ([Piet et al., 2026](https://arxiv.org/abs/2605.14290)). Until those APIs exist, plan-then-execute web agents operate against a less-than-ideal substrate, which is part of why the pattern's adoption depends on the deployment context.
+
+Treat plan-then-execute as necessary but not sufficient. Subsequent work argues the pattern is a foundation that still requires defense-in-depth — task-scoped tool access, the principle of least privilege, and sandboxed execution — rather than a standalone mitigation, because the plan-construction phase and any LLM subroutines inside the graph remain attack surfaces ([Del Rosario et al., 2026](https://arxiv.org/abs/2509.08646)). The structural guarantee closes the runtime control-flow path; it does not by itself bound the blast radius of an action the plan legitimately authorises.
 
 ## Example
 

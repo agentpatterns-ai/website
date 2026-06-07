@@ -5,14 +5,14 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Iterative Binary Feedback for Pattern Adherence
 
 > Looping a capable model with yes/no pattern judgments from a deterministic checker beats verbose critique when the predicate space is small.
 
-Iterative binary feedback is a prompting strategy where a generator LLM produces code, a deterministic checker returns a single pass/fail bit on pattern conformance, and the loop repeats with a fixed retry message until conformance or a step cap. The signal carries no diagnostic detail. The strategy beat three richer alternatives (instructions, extensive feedback, extensive feedback + few-shot) for Singleton adherence across 13 LLMs on 164 Java HumanEval-X tasks ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)).
+Iterative binary feedback is a prompting strategy where a generator LLM produces code, a deterministic checker returns a single pass/fail bit on pattern conformance, and the loop repeats with a fixed retry message — carrying no diagnostic detail — until conformance or a step cap. The strategy beat three richer alternatives (instructions, extensive feedback, extensive feedback + few-shot) for Singleton adherence across 13 LLMs on 164 Java HumanEval-X tasks ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)).
 
 ## When This Applies
 
@@ -20,22 +20,22 @@ The Singleton result is narrow. The technique is the right default only when all
 
 | Condition | Why it matters |
 |-----------|----------------|
-| **Capable instruction-following base model** | Code Llama (70B) plateaued at 29.5% Singleton compliance after 10 binary-feedback iterations; weaker code-specialised models cannot recover the missing predicate from a bare retry ([arxiv:2605.26898](https://arxiv.org/abs/2605.26898)) |
-| **Small predicate space (~3 boolean checks)** | The Singleton checker validates three predicates — Private Constructor, Instance Method, Global Access Point. As predicate count or interaction grows, blind retries cannot localise the failure |
-| **Deterministic judge available** | The paper's judge is a regex matcher. Substituting an LLM judge inherits its own brittleness — manipulated reasoning traces inflate LLM-judge false positives to 90% on related tasks ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691)) |
+| **Capable instruction-following base model** | Weaker code-specialised models cannot recover the missing predicate from a bare retry — Code Llama (70B) plateaued at 29.5% ([arxiv:2605.26898](https://arxiv.org/abs/2605.26898)) |
+| **Small predicate space (~3 boolean checks)** | The Singleton checker validates three predicates: Private Constructor, Instance Method, Global Access Point. As count grows, blind retries cannot localise the failure |
+| **Deterministic judge available** | The paper's judge is a regex matcher; an LLM judge inherits its own brittleness ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691)) |
 
-For general code repair, the comparison reverses: detailed feedback wins by ~10 pp over minimal feedback (mixed 63.6%, LLM-Expert 62.9%, minimal 53.1%) across five SOTA models on FeedbackEval ([Song et al., 2025](https://arxiv.org/abs/2504.06939)).
+For general code repair the comparison reverses: detailed feedback wins by ~10 pp (mixed 63.6%, minimal 53.1%) on FeedbackEval ([Song et al., 2025](https://arxiv.org/abs/2504.06939)).
 
 ## The Loop
 
-The protocol in the Singleton paper is intentionally minimal ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)):
+The protocol is intentionally minimal ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)):
 
 1. Generator produces code from the task description with no pattern instruction
 2. Deterministic checker (regex on the predicate set) returns pass or fail
 3. On fail, send a fixed retry: *"The following code does not include a correctly formatted &lt;Pattern&gt; class: {response}. Please correct the code and return the complete code."*
-4. Loop up to 10 iterations; on pass or cap, exit
+4. Loop up to 10 iterations; exit on pass or cap
 
-The retry contains the full prior response and no other state — no list of failed predicates, no diff, no hint. The generator re-derives the missing structure on each iteration.
+The retry carries the full prior response and no other state — no failed-predicate list, no diff, no hint — so the generator re-derives the missing structure each iteration.
 
 ```mermaid
 graph LR
@@ -63,16 +63,15 @@ Llama 3.3 also hit 100% Singleton compliance on the instruction-only strategy �
 
 ## Why It Works
 
-Binary feedback preserves the model's full self-correction pathway while collapsing the supervision signal to its minimum. Detailed feedback ("private constructor missing") biases weaker models to patch only that predicate, often at the cost of functional correctness — the paper documents models that "lost context implementing Singleton correctly but for wrong functionality" under richer feedback ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). The bare retry forces a holistic regeneration on each iteration, exercising the same code-generation circuit that produced functional code initially. Self-Refine reports the same mechanism: iterative same-model feedback improved CODEX code generation by up to 13 pp absolute, with the *iteration* — not the signal richness — as the active ingredient ([Madaan et al., 2023](https://arxiv.org/pdf/2303.17651)). Capable models can probe a small predicate space by trial and error within the 10-iteration budget; richer specifications break this scaling.
+Binary feedback collapses the supervision signal to its minimum while preserving the model's full self-correction pathway. Detailed feedback ("private constructor missing") biases weaker models to patch only that predicate, often at the cost of functional correctness — the paper documents models that "lost context implementing Singleton correctly but for wrong functionality" under richer feedback ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). The bare retry instead forces a holistic regeneration on the same circuit that produced functional code initially. Self-Refine reports the same mechanism: iterative same-model feedback improved CODEX code generation by up to 13 pp absolute, with *iteration* — not signal richness — the active ingredient ([Madaan et al., 2023](https://arxiv.org/pdf/2303.17651)). Capable models probe a small predicate space by trial and error within the budget; richer specifications break this scaling.
 
 ## When This Backfires
 
-- **Functionality-critical output** — Pattern adherence and functional correctness can diverge. DeepSeek Coder lost 9.8 pp on functional tests while improving Singleton compliance; Gemma3 (4B) lost 21.3 pp ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). For production code, gate the loop on test pass *and* pattern match
-- **Multi-predicate or interacting patterns** — Three predicates fit in a 10-iteration probe budget; ten do not. For richer patterns, FeedbackEval evidence points to structured feedback as the safer default ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
-- **Weak code-specialised base models** — Models trained narrowly on completion lack the instruction-following capacity to recover from a bare retry. Code Llama 70B is the counter-example: 29.5% after 10 iterations ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898))
-- **No deterministic judge** — When the pattern check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface. Reasoning-trace manipulation drives LLM-judge false positives above 80% on related tasks ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691))
-- **Already-converged instructions** — Llama 3.3 hit 100% Singleton compliance on instructions alone. The 10-call feedback loop in that condition spends tokens and latency for no lift
-- **General code repair** — The result does not generalise to debugging or test-failure repair. FeedbackEval shows detailed feedback wins for repair by ~10 pp ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+- **Functionality-critical output** — Pattern adherence and functional correctness can diverge. DeepSeek Coder lost 9.8 pp on functional tests while improving Singleton compliance; Gemma3 (4B) lost 21.3 pp ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898)). Gate exits on test pass *and* pattern match
+- **Multi-predicate or interacting patterns** — Three predicates fit a 10-iteration probe budget; ten do not. FeedbackEval points to structured feedback as the safer default for richer patterns ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+- **No deterministic judge** — When the check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface, with reasoning-trace manipulation driving false positives above 80% ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691))
+- **Already-converged instructions** — Llama 3.3 hit 100% on instructions alone; the feedback loop then spends tokens and latency for no lift
+- **General code repair** — The result does not generalise to debugging or test-failure repair, where FeedbackEval shows detailed feedback wins by ~10 pp ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
 
 ## Threats to Validity
 

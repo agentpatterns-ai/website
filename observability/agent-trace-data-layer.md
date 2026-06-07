@@ -8,12 +8,12 @@ tags:
 aliases:
   - agent observability storage layer
   - agent trace store
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Agent-Trace Data Layer: Storage for Hours-Long Traces
 
-> Agent traces are not application traces — hundreds of nested spans, hours-long open spans, and multi-modal payloads each violate a different assumption baked into general-purpose observability backends, and the violations compound once the workload scales past prototype.
+> An agent-trace data layer is purpose-built storage for agent runs: deep nesting, hours-long spans, and multi-modal payloads each break a different assumption in general backends.
 
 An agent-trace data layer is the storage and query tier that holds agent run records and serves them back to debugging UIs, evaluator pipelines, and replay tools. The choice to reach for a purpose-built layer — instead of OpenTelemetry on Postgres, Loki, or vanilla ClickHouse — is workload-shape-driven. Below the threshold, general-purpose stores work; above it, four properties of agent traces compound to break them.
 
@@ -66,7 +66,7 @@ The wire format above the storage layer is converging on OpenTelemetry's GenAI s
 
 ## Why It Works
 
-The four workload properties each violate a different layer of a general-purpose backend, and the violations compound. Deep nesting breaks sampling at the collector ([OTel collector-contrib #46642](https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/46642)). Long-open spans break the span-as-transaction abstraction in the SDK and processor tier ([The New Stack](https://thenewstack.io/opentelemetry-challenges-handling-long-running-spans/)). Multi-modal payloads break index sizing at the storage tier ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)). The wide query mix breaks the "trace by ID then drill in" access path. Each lever above targets one violation; remove any one and the workload still degrades on the other three. SmithDB's reported P50 latencies — 92 ms trace tree load, 400 ms full-text search, 82 ms run filter — land at the intersection of all four levers, not from any single one ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
+Each of the four properties violates a different layer — collector sampling, the SDK span-as-transaction abstraction, storage-tier index sizing, and the trace-by-ID access path — and the violations compound: fixing one leaves the workload degrading on the other three. That is why a single lever never suffices. SmithDB's reported P50 latencies — 92 ms trace tree load, 400 ms full-text search, 82 ms run filter — land at the intersection of all four levers, not from any one ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 
 ## When This Backfires
 

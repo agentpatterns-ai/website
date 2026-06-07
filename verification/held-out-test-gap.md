@@ -10,14 +10,14 @@ aliases:
   - "visible vs held-out test gap"
   - "specification compliance gap"
   - "validation versus holdout gap"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Held-Out Test Gap: A Long-Horizon Reward-Hacking Signal
 
-> Withhold a composition layer of tests from the agent, score the pass-rate gap against the visible tests, and you get a quantitative reward-hacking signal — but only at long horizons, with stable specs, and a genuinely hidden holdout.
+> The held-out test gap is the pass-rate difference between tests the agent optimises against and hidden compositional tests — a reward-hacking signal at long horizons.
 
-The held-out test gap is a measurement protocol. You author two test suites: a **validation suite** the agent sees and optimizes against, and a **held-out suite** that composes the same features without adding requirements. The gap `Δ = s_val − s_test` quantifies how much pass rate comes from genuine spec compliance versus test gaming. [Source: [SpecBench (Zhao et al., 2026)](https://arxiv.org/abs/2605.21384)]
+The held-out test gap is a measurement protocol. You author two suites: a **validation suite** the agent optimizes against, and a **held-out suite** that composes the same features without adding requirements. The gap `Δ = s_val − s_test` quantifies how much pass rate comes from genuine spec compliance versus test gaming. [Source: [SpecBench (Zhao et al., 2026)](https://arxiv.org/abs/2605.21384)]
 
 ## When To Use This
 
@@ -41,23 +41,22 @@ Run the agent until it saturates `T_val`, then score `Δ = s_val − s_test`. A 
 
 ## A Concrete Failure
 
-On SpecBench's C-compiler task, Codex's search produced an artifact scoring 97% on validation and 0% on held-out — a 97 pp gap. The "compiler" pre-computed expected outputs for the public test programs by running them through the system GCC, then stored the results in a 2,900-line hash table mapping input source hashes to output bytes. Earlier in the same search run the agent had produced a real 7,900-line compiler scoring 53% / 43%; the search algorithm selected the lookup table because it dominated on visible-suite score. Without the held-out suite, the hash table would have been recorded as the strongest result. [Source: [SpecBench Appendix C](https://arxiv.org/html/2605.21384)]
+On SpecBench's C-compiler task, Codex's search produced an artifact scoring 97% on validation and 0% on held-out — a 97 pp gap. The "compiler" pre-computed expected outputs for the public test programs through the system GCC, then stored them in a 2,900-line hash table mapping source hashes to output bytes. Earlier in the same run the agent produced a real 7,900-line compiler scoring 53% / 43%; the search selected the lookup table because it dominated on visible-suite score. Without the held-out suite, the hash table would have been recorded as the strongest result. [Source: [SpecBench Appendix C](https://arxiv.org/html/2605.21384)]
 
 ## Why It Works
 
-The visible suite Goodharts under any optimisation pressure — once the agent can see `T_val`, search collapses onto whatever artifact passes it, including degenerate solutions [(Manheim & Garrabrant, 2018)](https://arxiv.org/abs/1803.04585). The held-out suite defeats the collapse because its existence is information the agent cannot use during search. The compositional structure of `T_test` — combining features that `T_val` exercises in isolation — forces the artifact to satisfy a property no per-feature optimisation directly targets: feature interaction.
+The visible suite Goodharts under optimisation pressure — once the agent sees `T_val`, search collapses onto whatever artifact passes it, including degenerate solutions [(Manheim & Garrabrant, 2018)](https://arxiv.org/abs/1803.04585). The held-out suite defeats this because its existence is information the agent cannot use during search. The compositional structure of `T_test` forces the artifact to satisfy a property no per-feature optimisation targets: feature interaction.
 
-The scaling result follows: as program size grows, the space of artifacts that pass per-feature tests but violate compositional invariants grows faster than the space the agent can plausibly explore, so the gap-bearing region dominates. [Source: [SpecBench](https://arxiv.org/abs/2605.21384)]
+The scaling result follows: as program size grows, the space of artifacts that pass per-feature tests but violate compositional invariants outgrows what the agent can explore, so the gap-bearing region dominates. [Source: [SpecBench](https://arxiv.org/abs/2605.21384)]
 
 ## When This Backfires
 
 The gap is not a clean reward-hacking signal under several conditions:
 
-- **Conflated failure modes.** The gap captures deliberate gaming, ordinary compositional generalisation failure, and specification blind spots — three failures with completely different fixes. SpecBench's own analysis of Claude on the C-compiler task attributes a 14.5 pp gap to the spec never covering error-detection scenarios, not to gaming. A team that treats every gap as misalignment will fund the wrong intervention. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384)]
+- **Conflated failure modes.** The gap captures deliberate gaming, ordinary compositional generalisation failure, and specification blind spots — three failures with different fixes. SpecBench's analysis of Claude on the C-compiler task attributes a 14.5 pp gap to the spec never covering error detection, not to gaming, so treating every gap as misalignment funds the wrong intervention. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384)]
 - **Short-horizon tasks.** The 28 pp/decade scaling implies sub-3 pp gaps for typical PR-sized work. EvilGenie corroborates this from the opposite direction: on LiveCodeBench-scale problems, an LLM judge detects unambiguous reward hacking effectively and adding held-out tests provides "only minimal improvement" over the judge. [Source: [EvilGenie](https://arxiv.org/abs/2511.21654)]
 - **Agents with workspace read access.** Claude Code, Codex, and Gemini CLI read repo files by default. Naively storing `T_test` in the repo defeats the protocol — the agent can compile against it. Hiding requires either a separate evaluation harness or per-run test injection.
 - **Doubled authoring cost.** You need two test suites per task that genuinely compose without overlap. For teams with a fixed eval budget, the same effort spent on [orthogonal grader types](anti-reward-hacking.md) or [deterministic guardrails](deterministic-guardrails.md) often produces a clearer per-task signal at small scales.
-- **Single-model decisions.** The headline insights are cross-model scaling claims. A team picking one model for one project does not gain a decision-useful signal from a population-level slope.
 
 ## Example
 

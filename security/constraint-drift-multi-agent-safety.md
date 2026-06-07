@@ -11,12 +11,12 @@ aliases:
   - constraint state governance
   - safety constraint drift
   - multi-agent safety drift
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Constraint Drift: Why Safety Must Be Maintained, Not Asserted
 
-> Safety constraints encoded in prompts weaken as they pass through memory, delegation, communication, tool use, audit, and optimization; treat them as typed runtime state with four invariant properties — fresh, inherited, enforceable, auditable — to keep them operative across the trajectory.
+> Prompt-encoded safety constraints drift across memory, delegation, communication, tool use, audit, and optimization; treat them as runtime state that stays fresh, inherited, enforceable, and auditable.
 
 ## The Drift Problem
 

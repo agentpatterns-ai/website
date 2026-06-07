@@ -9,12 +9,12 @@ aliases:
   - cognitive poisoning attack
   - untrusted tool feedback
   - tool feedback trajectory attack
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack
 
-> A malicious tool produces benign-looking responses across multiple rounds, then triggers harm only when the final-action parameters satisfy hidden structural conditions. Per-message safety screening has zero discriminative power because maliciousness is conditioned on the joint trajectory state and the final action, not on any single message.
+> A malicious tool stays benign for rounds, triggering harm only when final-action parameters meet hidden conditions, undetectable by per-message screening that ignores the joint trajectory.
 
 ## The Attack Class
 

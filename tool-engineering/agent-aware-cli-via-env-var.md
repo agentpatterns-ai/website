@@ -5,12 +5,12 @@ tags:
   - tool-engineering
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Agent-Aware CLI Behaviour via Environment Variable
 
-> A harness sets a well-known environment variable on every agent-initiated subprocess; CLIs that check for it switch to machine-readable output, suppress pagers and prompts, and disable progress animations. The contract works when you own both ends — harness and CLI — and degrades to a no-op against CLIs that have not adopted it.
+> A harness sets a well-known environment variable on agent-spawned subprocesses; a CLI that checks it switches to machine-readable output. The contract needs both ends.
 
 ## When This Pattern Applies
 
@@ -76,7 +76,7 @@ CI runs are non-interactive with no user present. Agent runs are non-interactive
 
 ## Why It Works
 
-The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt says "always pass `--no-pager` to git, `CI=true` for npm/yarn, `-y` for apt" — N flags per CLI stored on the side that changes most often, aimed at a moving target. The env-var contract moves the locus of knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt and where pagers launch. The harness declares execution context once; the CLI decides the behaviour; the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the same mechanism that made `CI=true` succeed — `ci-info` catalogues 50+ vendors that set it and a comparable set of CLIs (`npm`, `yarn`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
+The contract inverts the direction of CLI-specific knowledge. Today, the agent's prompt carries N flags per CLI ("`--no-pager` for git, `CI=true` for npm, `-y` for apt") — stored on the side that changes most often and aimed at a moving target. The env-var contract moves that knowledge to the CLI's own source, where its maintainer already tracks which subcommands prompt and where pagers launch. The harness declares context once; the CLI decides behaviour; the contract survives flag renames on either side ([VS Code v1.121 release notes](https://code.visualstudio.com/updates/v1_121)). This is the mechanism that made `CI=true` succeed — `ci-info` catalogues 50+ vendors that set it and CLIs (`npm`, `gh`, `gcloud`, `pip`) that branch on it ([watson/ci-info](https://github.com/watson/ci-info)).
 
 ## Example
 
@@ -109,11 +109,12 @@ The same CLI binary serves both human and agent callers; the system prompt no lo
 
 Reach for the [agent-side override](override-interactive-commands.md) or [headless mode](headless-first-services.md) when:
 
-- **The CLI has not adopted any agent variable.** Setting `VSCODE_AGENT=1` against a tool that does not check it is a no-op; coverage today is sparse. For the long tail, you still need `--no-pager` in the system prompt.
-- **Env vars do not propagate.** `sudo`, `docker run`, `ssh`, and CI runners that prune environments break the chain. The agent has to either avoid the boundary or pass `sudo -E`, `--env VSCODE_AGENT`, or `-o SendEnv=VSCODE_AGENT` — another piece of tool-specific knowledge in the prompt, the exact cost the contract was meant to eliminate.
-- **`CI=true` already covers the surface.** Many CLIs (`npm`, `yarn`, `gh`, `apt-get`) already honour `CI=true`; adding a second variable is redundant for those tools.
-- **The naming has not converged.** Until the ecosystem agrees on a vendor-neutral name, CLI authors face an N-variable check and users see inconsistent behaviour across harnesses.
+- **The CLI has not adopted any agent variable.** Setting `VSCODE_AGENT=1` against a tool that ignores it is a no-op; coverage is sparse, so the long tail still needs `--no-pager` in the prompt.
+- **Env vars do not propagate.** `sudo`, `docker run`, `ssh`, and pruning CI runners break the chain. The agent must avoid the boundary or pass `sudo -E`, `--env VSCODE_AGENT`, or `-o SendEnv=VSCODE_AGENT` — the exact tool-specific prompt knowledge the contract was meant to eliminate.
+- **`CI=true` already covers the surface.** Many CLIs (`npm`, `gh`, `apt-get`) already honour `CI=true`; a second variable is redundant for those.
+- **The naming has not converged.** Until the ecosystem agrees on a vendor-neutral name, CLI authors face an N-variable check and users see inconsistent behaviour.
 - **The signal needs to be load-bearing for safety.** Env-var presence is not authenticated; any process can set `VSCODE_AGENT=1`. Treat the variable as a behavioural hint, not a permission gate.
+- **The branch itself becomes an injection surface.** The env-var channel is injectable: Cursor's allowlist bypass (CVE-2026-22708) let a prompt-injection payload run shell built-ins like `export` to poison environment variables and steer trusted commands ([CVE-2026-22708 — NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-22708)). If a CLI auto-confirms prompts on the agent variable, an attacker who sets it inherits that lever. Keep the agent branch cosmetic — pagers, colour, progress bars — never auto-confirmation of consequential actions.
 
 ## Key Takeaways
 

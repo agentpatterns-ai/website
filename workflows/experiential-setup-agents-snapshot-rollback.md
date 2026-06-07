@@ -9,7 +9,7 @@ tags:
 aliases:
   - SetupX experiential learning
   - dual-modality experience records for setup
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Experiential-Learning Setup Agents with Snapshot Rollback (SetupX)
@@ -142,4 +142,3 @@ If the repo had shipped a devcontainer, the entire pipeline above is replaced by
 - [Memory Transfer Learning](../agent-design/memory-transfer-learning.md)
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md)
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md)
-- [Audit Tool Idempotency](../agent-readiness/audit-tool-idempotency.md)

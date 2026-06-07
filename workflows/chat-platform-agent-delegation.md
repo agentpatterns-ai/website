@@ -10,7 +10,7 @@ aliases:
   - chat as agent control surface
   - chat-platform delegation
   - mentioning agents in chat channels
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Chat-Platform Agent Delegation
@@ -81,7 +81,7 @@ Chat delegation closes all three legs of the [lethal trifecta](../security/letha
 - **Untrusted content** — any channel member, and in shared or Connect channels any external participant, can post messages that become prompt context
 - **Egress** — the agent writes pull requests to the forge, and posts status back to the channel
 
-Per Willison's model, this combination is sufficient for exfiltration via a single injected message ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). Adding chat delegation to a project that already runs `agent-readiness-audit-lethal-trifecta` on every new MCP server must run the same audit on the chat principal — see [Audit Lethal Trifecta](../agent-readiness/audit-lethal-trifecta.md). The cheapest leg to remove is usually untrusted content: restrict the bot to specific channels, treat channel content outside an explicit `@mention` as out-of-scope, or run the agent in a sandbox with no network egress beyond the forge API.
+Per Willison's model, this combination is sufficient for exfiltration via a single injected message ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). Adding chat delegation to a project that already audits every new MCP server for the lethal trifecta must run the same audit on the chat principal. The cheapest leg to remove is usually untrusted content: restrict the bot to specific channels, treat channel content outside an explicit `@mention` as out-of-scope, or run the agent in a sandbox with no network egress beyond the forge API.
 
 Cursor mandates Privacy Mode for the Teams integration and ships a snippet-exposure toggle for status messages ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) — both are partial mitigations, not trifecta removal.
 
@@ -120,6 +120,5 @@ Skip it when the agent's IDE or PR-comment entry point already covers the workfl
 - [Public-Channel Agent Work](public-channel-agent-work.md) — the visibility policy layered on top of chat delegation to force conversations to channels everyone can read
 - [In-Thread Side-Channel](in-thread-side-channel.md) — adjacent same-session bounded sub-conversation, orthogonal mechanism
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model this pattern concentrates
-- [Audit Lethal Trifecta](../agent-readiness/audit-lethal-trifecta.md) — the onboarding-gate procedure that should run before merging chat integrations
 - [Agent Governance Policies](agent-governance-policies.md) — enterprise-level controls for chat-platform agent surfaces
 - [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — the GitHub-native cloud agent surface chat delegation often targets

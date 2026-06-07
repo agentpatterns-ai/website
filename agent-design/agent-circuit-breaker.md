@@ -100,3 +100,4 @@ Circuit breakers add overhead that outweighs the benefit in several common scena
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — using automated signals to steer agents away from failure states
 - [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md) — the escalation target when a circuit opens on a high-stakes operation with no fallback
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — request approval at first attempt; circuit-open is a natural trigger for the deferral
+- [Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet](../security/unbounded-consumption-resource-bounds.md) — the five-bound surface (per-call, per-task, fan-out, velocity, budget) that this tool-level breaker complements

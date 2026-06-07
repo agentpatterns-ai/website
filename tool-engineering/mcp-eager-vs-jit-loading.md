@@ -11,12 +11,12 @@ tags:
   - cost-performance
   - tool-agnostic
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time
 
-> Every MCP server is an eager-vs-JIT trade between always-paid context tax and on-demand discovery cost. Claude Code 2.1.121 made the choice a per-server flag; the decision rubric is reusable across any host that supports deferred tool loading.
+> Classify each MCP server as eager (`alwaysLoad`) or just-in-time by weighing always-paid context tax against on-demand discovery cost.
 
 ## The Decision Surface
 
@@ -32,7 +32,9 @@ The pattern generalises. Any host with deferred MCP discovery — current Claude
 
 **JIT loading** pays a search round-trip on first reference — a `server_tool_use` call before the actual tool call — and depends on the model's ability to phrase a search query that retrieves the right tool. Tool descriptions that don't match natural-language tasks fail silently; the agent reports "no tool available" when one exists.
 
-JIT loading does **not** break prompt cache. The docs are explicit: "Deferred tools are not included in the system-prompt prefix. When the model discovers a deferred tool through tool search, the tool definition is appended inline as a `tool_reference` block in the conversation. The prefix is untouched, so prompt caching is preserved" ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)). This distinguishes deferred loading from manual per-step tool swapping, which does invalidate cache (see [Dynamic Tool Fetching Cache Break](../anti-patterns/dynamic-tool-fetching-cache-break.md)).
+JIT loading does **not** break prompt cache *at the API design level*. The docs are explicit: "Deferred tools are not included in the system-prompt prefix. When the model discovers a deferred tool through tool search, the tool definition is appended inline as a `tool_reference` block in the conversation. The prefix is untouched, so prompt caching is preserved" ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)). This distinguishes deferred loading from manual per-step tool swapping, which does invalidate cache (see [Dynamic Tool Fetching Cache Break](../anti-patterns/dynamic-tool-fetching-cache-break.md)).
+
+The caveat is harness-level, not API-level: a deferred tool definition and `cache_control` are mutually exclusive on the *same* tool. The API rejects setting both — "Tools with defer_loading cannot use prompt caching" — and a Claude Code build that applied both flags unconditionally surfaced this as a hard error once 3+ MCP servers were configured ([claude-code#30920](https://github.com/anthropics/claude-code/issues/30920)). The prefix-level cache benefit still holds, but do not assume an individual deferred tool block is itself cacheable, and verify your host doesn't double-set the flags.
 
 ## Classification Rubric
 
@@ -54,7 +56,7 @@ The same docs give the explicit eager-load recommendation: "Keep your 3-5 most f
 - **Silent context bloat** — eager-loading a rarely-used MCP server pays the full token cost every turn for ambient capability the agent never invokes. Detect with per-source context attribution (see [Context Usage Attribution](../observability/context-usage-attribution.md)).
 - **Cold-start prompt churn** — JIT-loading the common-case server adds a search round-trip to the first turn that needs it, costing latency and a discovery prompt that crowds the first-turn budget.
 - **Selection cliff** — eager-loading too many servers past the ~30-50 tool threshold degrades the agent's ability to pick correctly even when the right tool is visible.
-- **Search-miss invisibility** — JIT-loading a server whose tool descriptions use jargon the model doesn't search for produces "tool not available" errors when the tool is right there. Audit description craft (see [Audit Tool Descriptions](../agent-readiness/audit-tool-descriptions.md)) before deferring.
+- **Search-miss invisibility** — JIT-loading a server whose tool descriptions use jargon the model doesn't search for produces "tool not available" errors when the tool is right there. Audit description craft before deferring.
 
 ## Example
 
@@ -102,5 +104,3 @@ Project search and GitHub stay in the prefix every turn. Linear, Sentry, and Gra
 - [Filesystem-Based Tool Discovery](filesystem-tool-discovery.md)
 - [Dynamic Tool Fetching Cache Break](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Context Usage Attribution](../observability/context-usage-attribution.md)
-- [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md)
-- [Audit Tool Descriptions](../agent-readiness/audit-tool-descriptions.md)

@@ -9,7 +9,7 @@ tags:
 aliases:
   - "security audit harness composition"
   - "steering scaling stacking"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Harness Composition for Scaled Security Audits
@@ -93,7 +93,8 @@ The April spike reflects the full stack working end-to-end; over 100 contributor
 - **Stacking step is human review.** If maintainers sit inside the filter chain rather than at the end, scaling pushes more work toward them, not less.
 - **Small targets.** Scaling adds no value when the audit surface fits in one context window.
 - **No fuzzing or test substrate.** Mozilla layered on existing fuzzing; greenfield projects pay a higher integration cost before signal appears.
-- **Lethal-trifecta exposure.** A harness combining `WebFetch`, private repo read, and write-capable egress is the canonical [lethal trifecta](lethal-trifecta-threat-model.md). Treat fetched content as data, isolate research from audit phases, and gate outbound actions behind explicit confirmation.
+
+Replications published after Mozilla's report found cheaper open-weight models reproduce most of the showcased analyses given comparable scale ([The Decoder, May 2026](https://the-decoder.com/the-myth-of-claude-mythos-crumbles-as-small-open-models-hunt-the-same-cybersecurity-bugs-anthropic-showcased/)) — the composition, not the headline model, carries the result. Frontier-inference spend is not justified by headline counts alone.
 
 ## Key Takeaways
 

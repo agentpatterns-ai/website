@@ -11,7 +11,7 @@ aliases:
   - entity-collision retrieval evaluation
   - stratified retrieval eval for agent memory
   - BM25-pinned distractor protocol
-last_reviewed: 2026-05-31
+last_reviewed: 2026-06-03
 ---
 
 # Control Lexical Leakage in Agent-Memory Retrieval Evals (Entity-Collision)
@@ -20,14 +20,14 @@ last_reviewed: 2026-05-31
 
 ## When This Protocol Is the Right Instrument
 
-Entity-collision answers one question: **does this embedder add signal beyond keyword overlap on agent-memory retrieval?** Adopt it when choosing between embedders for an agent-memory or RAG store, with the index and chunking held constant, and an eval set you can stratify into 3–5 query categories by retrieval mode. Skip it when you need end-to-end agent-memory quality — those require production traces and task-level grading. See *When This Backfires*.
+Entity-collision answers one question: **does this embedder add signal beyond keyword overlap on agent-memory retrieval?** Adopt it when choosing between embedders for an agent-memory or RAG store, with the index held constant, and an eval set you can stratify into 3–5 query categories by retrieval mode. Skip it for end-to-end agent-memory quality — that requires production traces and task-level grading. See *When This Backfires*.
 
 ## The Confound a Single hit@k Hides
 
-A naïve agent-memory eval gives every retriever one number — hit@k or NDCG@k over a fixed query set — and ranks embedders by that score. Two effects mix inside:
+A naïve agent-memory eval gives every retriever one number — hit@k or NDCG@k over a fixed query set — and ranks embedders by it. Two effects mix inside:
 
-1. **Lexical leakage.** When the gold answer shares words with the query, BM25 finds it for free, and any retriever above BM25 inherits the free win. The reported hit@k is partly a *property of the dataset*.
-2. **Tag mixing.** Queries vary by retrieval mode — phrase lookup, paraphrase, intent, multi-hop. Averaging hides where each embedder actually wins or loses.
+1. **Lexical leakage.** When the gold answer shares words with the query, BM25 finds it for free, and any retriever above BM25 inherits that free win. The reported hit@k is partly a *property of the dataset*.
+2. **Tag mixing.** Queries vary by retrieval mode — phrase lookup, paraphrase, intent, multi-hop. Averaging hides where each embedder wins or loses.
 
 The LoCo benchmark surfaced this: BM25 alone reached NDCG > 90 on 4 of 5 tasks, meaning lexical overlap dominated and any "win" over BM25 by a dense retriever was small and possibly noise. [Source: [LoCo Benchmark BM25 insights (HazyResearch/m2 issue #23)](https://github.com/HazyResearch/m2/issues/23)]
 
@@ -39,7 +39,7 @@ Entity-collision resolves both confounds at construction time. [Source: [Entity-
 
 For each evaluation query, construct the candidate pool so that **every distractor shares the gold answer's entity tokens**. Pull the named entities, IDs, and content words from the gold answer; ensure each distractor carries the same set. BM25's score is dominated by IDF-weighted term overlap, so when every candidate shares the high-signal tokens, BM25 ranks them comparably by construction. The lexical baseline is *pinned*. [Source: [Entity-Collision](https://arxiv.org/abs/2605.29630)]
 
-Any retriever that now outranks BM25 must be using non-lexical signal — semantic similarity, contextual encoding, or learned task structure — because the lexical channel has been saturated for every candidate.
+Any retriever that now outranks BM25 must be using non-lexical signal — the lexical channel is saturated for every candidate.
 
 ### Rule 2: Stratify Queries by Discriminator Tag
 
@@ -63,10 +63,10 @@ Stratification compounds the effect. 2026 work on semantic stratification shows 
 
 Entity-collision answers a model-selection question, not a deployment-quality question. It is the wrong instrument when:
 
-- **Production retrieval is hybrid.** Most production stacks fuse BM25 and dense retrieval. The protocol erases the BM25 component's real contribution and over-penalises the embedder for failing on queries where BM25 was doing the work. Use it for embedder selection, not end-to-end measurement. [Source: [Hybrid Search: BM25 and Dense Retrieval Combined](https://mbrenndoerfer.com/writing/hybrid-search-bm25-dense-retrieval-fusion)]
-- **The domain rewards lexical match.** Code search, error-code lookup, product-catalog search, function-name resolution — exact term overlap is the correct retrieval signal. Forcing entity-collision distractors makes the eval bear no resemblance to production query mix. [Source: [Sparse Embedding or BM25 (Infiniflow)](https://medium.com/@infiniflowai/sparse-embedding-or-bm25-84c942b3eda7)]
-- **Small teams without eval headcount.** Per-tag stratification, per-query distractor construction, and BM25 calibration cost real time. For teams making one model-selection decision a year, end-to-end task evals on real production traffic are cheaper and more directly informative.
-- **Embedder change paired with index change.** The protocol measures the combined lift unless the index is held constant — rare in real upgrade cycles where teams rebuild the index for the new embedder dimensions.
+- **Production retrieval is hybrid.** Most production stacks fuse BM25 and dense retrieval. The protocol erases the BM25 component's real contribution and over-penalises the embedder on queries where BM25 was doing the work. [Source: [Hybrid Search: BM25 and Dense Retrieval Combined](https://mbrenndoerfer.com/writing/hybrid-search-bm25-dense-retrieval-fusion)]
+- **The domain rewards lexical match.** Code search, error-code lookup, function-name resolution — exact term overlap is the correct signal, so forcing entity-collision distractors makes the eval bear no resemblance to the production query mix. [Source: [Sparse Embedding or BM25 (Infiniflow)](https://medium.com/@infiniflowai/sparse-embedding-or-bm25-84c942b3eda7)]
+- **Small teams without eval headcount.** Per-tag stratification, distractor construction, and BM25 calibration cost real time. For teams making one model-selection decision a year, end-to-end task evals on production traffic are cheaper and more directly informative.
+- **Embedder change paired with index change.** The protocol measures combined lift unless the index is held constant — rare in upgrade cycles where teams rebuild the index for the new embedder dimensions.
 
 ## Example
 
@@ -85,9 +85,9 @@ embedder-A         0.91     0.74     0.62
 embedder-B         0.85     0.83     0.77
 ```
 
-The lexical tier was carrying embedder A's average and BM25 was retrieving most of its winners for free. Once lexical overlap is pinned across both embedders, embedder B is the better choice for intent and multi-hop queries — which is exactly what an agent-memory system stores. The team that picked A on the single hit@k picked the wrong embedder for their workload.
+The lexical tier was carrying embedder A's average and BM25 was retrieving most of its winners for free. Once lexical overlap is pinned across both embedders, embedder B wins on intent and multi-hop queries — exactly what an agent-memory system stores. The team that picked A on the single hit@k picked the wrong embedder.
 
-(Numbers are illustrative of the protocol's mechanic; the paper provides the actual per-tag comparison across hash-trigram, MiniLM-384, and BGE-large embedders.)
+(Numbers are illustrative; the paper provides the actual per-tag comparison across hash-trigram, MiniLM-384, and BGE-large embedders.)
 
 ## Key Takeaways
 

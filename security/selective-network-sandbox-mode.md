@@ -8,12 +8,12 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern
 
-> A sandbox mode that keeps filesystem isolation but lifts network restrictions trades away the egress half of [dual-boundary sandboxing](dual-boundary-sandboxing.md) — useful only when egress is enforced at a layer below the harness.
+> Keeping filesystem isolation while lifting network restrictions trades away the egress half of [dual-boundary sandboxing](dual-boundary-sandboxing.md) — safe only when egress is enforced below the harness.
 
 ## The Two-Axis Model
 
@@ -41,9 +41,9 @@ graph TD
 
 ## Why It Exists
 
-Maintaining an outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, schema fetches, MCP services — are numerous and shift between branches. A static allowlist either lags real use (the inner loop stalls on approval prompts) or sprawls until it loses meaning.
+Maintaining an outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, MCP services — shift between branches, so a static allowlist either lags real use (stalling the inner loop on approval prompts) or sprawls until it loses meaning.
 
-`allowNetwork` resolves that pressure by **keeping the boundary that costs least to enforce against agent error** — write confinement to the workspace — and shifting network risk to a layer below the harness: the host firewall, the container's egress policy, or an org-level outbound proxy. Filesystem write-confinement still prevents the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
+`allowNetwork` resolves that pressure by **keeping the boundary that costs least to enforce against agent error** — write confinement to the workspace — and shifting network risk below the harness: the host firewall, the container's egress policy, or an org-level proxy. Write-confinement still blocks the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
 
 ## What This Is Not
 
@@ -65,12 +65,14 @@ Network policy lives somewhere — it has just moved out of the harness.
 
 The mode closes the egress leg of the [lethal trifecta](lethal-trifecta-threat-model.md). Four conditions make it dangerous:
 
-- **Broad filesystem reads.** Most implementations restrict only **writes**. Read access to `~/.aws/credentials`, `~/.ssh/`, or process environment variables is preserved. With unrestricted egress, any of these is a one-step exfiltration target.
-- **Untrusted input in the same agent.** When the agent fetches GitHub issues, third-party PR diffs, or web documentation, indirect prompt injection in any source can drive an outbound POST to an attacker host. `allowNetwork` plus `WebFetch` plus repository read is the canonical trifecta closure ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
-- **Regulated workloads.** FedRAMP, EU data-residency, and similar regimes require outbound audit trails. The audit must come from the layer below, and that layer must exist.
-- **Multi-tenant or shared-runner deployments.** `allowNetwork` defeats the org-firewall layer if no lower one exists.
+- **Broad filesystem reads.** Most implementations restrict only **writes**; read access to `~/.aws/credentials`, `~/.ssh/`, or environment variables is preserved. With open egress, each is a one-step exfiltration target.
+- **Untrusted input in the same agent.** When the agent fetches issues, third-party diffs, or web docs, prompt injection can drive an outbound POST to an attacker host. `allowNetwork` plus `WebFetch` plus repository read is the canonical trifecta closure ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).
+- **Regulated workloads.** FedRAMP and data-residency regimes require outbound audit trails — which must come from the layer below, and that layer must exist.
+- **Multi-tenant or shared runners.** `allowNetwork` defeats the org-firewall layer if no lower one exists.
 
 The [NVIDIA sandboxing guidance](https://developer.nvidia.com/blog/practical-security-guidance-for-sandboxing-agentic-workflows-and-managing-execution-risk/) treats network egress and filesystem boundaries as **mandatory complementary** layers.
+
+The retained filesystem boundary may itself be porous: VS Code marks agent sandboxing "currently in preview" and warns that "detection of file writes is currently minimal, so it might be possible to write to files with the terminal that would not be possible by using the file editing agent tools" ([VS Code agent-tools docs](https://code.visualstudio.com/docs/copilot/agents/agent-tools)). Once `allowNetwork` drops the network leg, that filesystem leg is the only one left — a further reason to enforce below the harness.
 
 ## OS-Level Generalisation
 
@@ -135,4 +137,3 @@ The same team running on a developer laptop with no container and no proxy must 
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
-- [Audit Lethal Trifecta](../agent-readiness/audit-lethal-trifecta.md)

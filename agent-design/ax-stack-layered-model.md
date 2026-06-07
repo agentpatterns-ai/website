@@ -10,21 +10,21 @@ tags:
 aliases:
   - AX stack
   - agent prompt to compile stack
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # The AX Stack
 
-> A four-layer model — model, harness, agent extensions, technology surface — for naming which surface owns a failure or an optimisation. Useful when the fixed/controllable dichotomy is treated as approximate; misleading when treated as architectural independence.
+> The AX stack names four layers — model, harness, agent extensions, technology surface — to locate where an agent failure or optimisation lives.
 
 ## When This Helps (and When It Misleads)
 
 The stack is a diagnostic and communication tool. Treat the fixed/open boundaries as approximate, not absolute:
 
 - **Use it** when a team needs shared vocabulary to locate a failure ("the agent picked the wrong SDK — that is an extensions-layer problem, not a model swap") or to prioritise where to invest first.
-- **Do not use it** when you need a portability guarantee, when one tool surface and one agent are involved, or when the team will treat "the harness is fixed" as licence to stop investigating hook scripts, system-prompt overrides, and managed settings — vendors *do* expose levers inside the harness, just not full replacement.
+- **Do not use it** when you need a portability guarantee, when one tool surface and one agent are involved, or when "the harness is fixed" becomes licence to stop investigating hook scripts, system-prompt overrides, and managed settings — vendors *do* expose levers inside the harness, just not full replacement.
 
-The site already carries a different cut of the same problem — the [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) — which deliberately enumerates five working layers without claiming independence between them. Pick the lens that fits the question: the AX stack frames fixed-vs-controllable; the failure-layers diagnostic frames attribution before model swap.
+The [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) is a different cut of the same problem — five working layers, no independence claim. The AX stack frames fixed-vs-controllable; the failure-layers diagnostic frames attribution before model swap.
 
 ## The Four Layers
 
@@ -51,23 +51,23 @@ flowchart TD
 | Agent extensions | You | Skills, MCP servers, `AGENTS.md`/`CLAUDE.md`, custom agents | Discovery, selection, or quality failure ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)) |
 | Technology surface | You | The shape of the CLI, SDK, or API the agent ultimately calls | Surface assumes human-readable feedback the agent cannot parse |
 
-The "fixed" layers (model, harness) are red because the developer cannot rewrite them. The "controllable" layers (extensions, technology surface) are green because they ship in your repository and your service.
+The "fixed" layers (model, harness) are red — the developer cannot rewrite them. The "controllable" layers (extensions, technology surface) are green — they ship in your repository and your service.
 
 ### Three Extension Failure Modes
 
-Within the controllable surface, Mastykarz names three distinct failure modes — each takes a different intervention ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)):
+Within the controllable surface, Mastykarz names three failure modes, each with a different intervention ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)):
 
-- **Discovery failure** — the extension exists but the agent never sees it. Context-window budget or harness prioritisation hides it. Fix at the [progressive-disclosure layer](progressive-disclosure-agents.md).
-- **Selection failure** — the agent sees the extension but does not connect it to the developer's intent. "Most common and most fixable" — usually a naming or description problem.
-- **Quality failure** — the extension is invoked but returns content that hurts outcomes. The extension produces *drag* instead of *lift*.
+- **Discovery failure** — the extension exists but the agent never sees it; context-window budget or harness prioritisation hides it. Fix at the [progressive-disclosure layer](progressive-disclosure-agents.md).
+- **Selection failure** — the agent sees the extension but does not connect it to intent. "Most common and most fixable" — usually a naming or description problem.
+- **Quality failure** — the extension is invoked but returns content that hurts outcomes, producing *drag* instead of *lift*.
 
 ## Why It Works
 
-The stack works as a *diagnostic vocabulary*, not as a description of architectural independence. Its mechanism is the same as the [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md): forcing the question "which layer changed?" before "which model should we swap to?" closes the cheaper interventions first. Anthropic states model swap is the most expensive option and the layered attribution discipline closes the cheaper interventions first ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+The stack works as a *diagnostic vocabulary*, not a description of architectural independence. Its mechanism matches the [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md): forcing "which layer changed?" before "which model should we swap to?" closes the cheaper interventions first — and Anthropic notes model swap is the most expensive option ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
-The empirical case for non-model layers carrying the optimisation budget is independent: LangChain raised Terminal Bench 2.0 from 52.8% to 66.5% through pure harness changes — no model swap ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Mastykarz's own argument runs the same direction at the extensions layer: improving public docs is "a long-term bet with no guaranteed payoff," changing the harness is impossible, but changing extensions gives "instant results" ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)).
+The empirical case for non-model layers carrying the optimisation budget is independent: LangChain raised Terminal Bench 2.0 from 52.8% to 66.5% through pure harness changes, no model swap ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). Mastykarz runs the same direction at the extensions layer: improving public docs is "a long-term bet with no guaranteed payoff," changing the harness is impossible, but changing extensions gives "instant results" ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)).
 
-Pair the diagnostic with measurement. Mastykarz proposes a *lift vs drag* test: run the same scenario with and without the extension; the extension produces lift if outcomes improve, drag otherwise. Without measurement, the stack vocabulary becomes a justification for unfalsifiable claims about which layer "really" caused a failure.
+Pair the diagnostic with measurement. Mastykarz's *lift vs drag* test runs the same scenario with and without the extension: lift if outcomes improve, drag otherwise. Without it, the vocabulary justifies unfalsifiable claims about which layer "really" caused a failure.
 
 ## Where Layers Leak
 
@@ -94,12 +94,10 @@ The four-layer model adds taxonomy overhead and assumes a stable enough environm
 
 A working sequence when an agent fails or you want to invest:
 
-1. **Name the layer where the failure is visible.** Wrong SDK in generated code surfaces at the technology surface but most often originates at the extensions layer (no skill steers toward your SDK) or the model layer (training data biased toward the competitor).
-2. **Check the controllable layers first.** Mastykarz: extensions are the only layer where "changing them gives instant results." Anthropic: model swap is the most expensive option.
-3. **For each candidate extension fix, run the lift-vs-drag test.** Same scenario, same harness, same model — extension on vs off. Promote lifts, remove drags.
-4. **When the controllable layers are exhausted, accept the fixed-layer constraint.** Document it as a known limitation in the project's `AGENTS.md` so future contributors do not relitigate it.
-
-The discipline is the same one [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) imposes: a fixed enumeration closes the easy escape of "the model isn't smart enough." The AX stack adds an explicit fixed-vs-controllable cut on top of that discipline.
+1. **Name the layer where the failure is visible.** A wrong SDK in generated code surfaces at the technology surface but usually originates at the extensions layer (no skill steers toward your SDK) or the model layer (training data biased toward the competitor).
+2. **Check the controllable layers first.** Extensions are the only layer where "changing them gives instant results"; model swap is the most expensive option.
+3. **Run the lift-vs-drag test on each candidate fix.** Same scenario, harness, and model — extension on vs off. Promote lifts, remove drags.
+4. **When the controllable layers are exhausted, accept the fixed-layer constraint.** Record it in the project's `AGENTS.md` so contributors do not relitigate it.
 
 ## Example
 

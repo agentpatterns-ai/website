@@ -17,6 +17,7 @@ Choosing the right structure for agent collaboration determines failure modes, l
 - [Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid](multi-agent-topology-taxonomy.md) — Choosing the wrong coordination topology for a task type is a primary source of production agent failures; each topology carries distinct failure modes
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md) — A systematic study of 94 LLM-based multi-agent SE papers identifies 16 design patterns, with Role-Based Cooperation as the dominant pattern
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — A lead agent decomposes a complex task and assigns independent subtasks to specialized workers running in parallel
+- [Specialist Orchestrated Queuing for Multi-Agent SE (SPOQ)](specialist-orchestrated-queuing-spoq.md) — Composes wave-based topological dispatch, dual validation gates, a tiered Opus/Sonnet/Haiku roster, and Human-as-an-Agent — gains hold only when four upstream conditions are met
 - [System-Level Optimization Pipeline](system-level-optimization-pipeline.md) — A four-stage agent pipeline decomposes performance engineering into summarization, analysis, optimization, and verification across component boundaries
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md) — Introduce a reference oracle to generate per-unit expected outputs, converting one monolithic task into hundreds of independently verifiable subtasks
 - [Reverse-Engineered Executable Specifications for Agentic Program Repair](reverse-engineered-executable-specifications.md) — Decompose automated program repair into specification inference then constrained patching, making the intended behaviour an inspectable intermediate artefact before any code is changed
@@ -27,6 +28,7 @@ Choosing the right structure for agent collaboration determines failure modes, l
 
 Strategies for splitting work across parallel agents — and controlling the blast radius of concurrent execution.
 
+- [Cohesion-Aware Task Partitioning for Multi-Agent Coding](cohesion-aware-task-partitioning.md) — Partition by dependency cohesion before fanning out — parallelism only pays off when cross-partition dependencies are sparse enough that context-transfer cost stays below the compute saved on the critical path
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md) — Spawn N independent agents to solve the same problem in parallel, then use a synthesis agent to merge the strongest elements from each attempt
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md) — Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees
 - [Contextual Capability Calibration for Multi-Agent Delegation](contextual-capability-calibration.md) — Replace static skill-level agent profiles with context-specific Beta posteriors so routing decisions condition on the task features that actually predict success

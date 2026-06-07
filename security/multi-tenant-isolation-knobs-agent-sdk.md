@@ -5,18 +5,18 @@ tags:
   - security
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 ---
 
 # Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting
 
 > Four Agent SDK knobs plus a per-tenant proxy-egress rule sever every default input that otherwise leaks one tenant's context into another.
 
-The Claude Agent SDK's defaults are correct for single-tenant developer use and wrong for shared-container multi-tenant hosting. The SDK reads filesystem settings, `CLAUDE.md` files, a global config at `~/.claude.json`, and an auto-memory directory regardless of `settingSources`. In a shared container, every one of those inputs is a cross-tenant leakage vector. The fix is a small, named set of options applied on every `query()` call ([Hosting the Agent SDK — Multi-tenant isolation](https://code.claude.com/docs/en/agent-sdk/hosting#multi-tenant-isolation)).
+The Claude Agent SDK's defaults are correct for single-tenant developer use and wrong for shared-container multi-tenant hosting. The SDK reads filesystem settings, `CLAUDE.md` files, a global config at `~/.claude.json`, and an auto-memory directory. In a shared container, each is a cross-tenant leakage vector. The fix is a small, named set of options applied on every `query()` call ([Hosting the Agent SDK — Multi-tenant isolation](https://code.claude.com/docs/en/agent-sdk/hosting#multi-tenant-isolation)).
 
 ## The Default Inputs That Leak
 
-When you call `query()` without isolation options, the spawned `claude` CLI subprocess loads inputs from four locations. Each one can hold prior-tenant data:
+When you call `query()` without isolation options, the spawned `claude` CLI subprocess loads inputs from four locations, each able to hold prior-tenant data:
 
 | Input | Default location | Why it leaks across tenants |
 |---|---|---|
@@ -29,7 +29,7 @@ The hosting docs are explicit: "Do not rely on default `query()` options for mul
 
 ## The Knob Set
 
-Each knob severs one specific input pathway. Apply all four on every `query()` call, plus a per-tenant egress rule at the proxy:
+Each knob severs one input pathway. Apply all four on every `query()` call, plus a per-tenant proxy egress rule:
 
 | Knob | Surface | What it neutralises |
 |---|---|---|
@@ -39,21 +39,21 @@ Each knob severs one specific input pathway. Apply all four on every `query()` c
 | `cwd: <per-tenant>` | `query()` option | Overrides the subprocess's default inheritance of the application's working directory ([Hosting the Agent SDK — The subprocess model](https://code.claude.com/docs/en/agent-sdk/hosting#the-subprocess-model)) |
 | Per-tenant egress rules (distinct outbound IPs, credentials, domain allowlists) | Proxy / network layer | Prevents a compromised tenant exfiltrating through another tenant's outbound policy ([Hosting the Agent SDK — Multi-tenant isolation](https://code.claude.com/docs/en/agent-sdk/hosting#multi-tenant-isolation)) |
 
-`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` is the non-obvious one: empty `settingSources` looks complete but auto-memory loads anyway. The docs call this out as a separate row in the bypass table ([What settingSources does not control](https://code.claude.com/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control)).
+`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` is the non-obvious one: empty `settingSources` looks complete but auto-memory loads anyway, listed as a separate bypass-table row ([What settingSources does not control](https://code.claude.com/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control)).
 
 ## Why It Works
 
-The mechanism is *input-pathway severance*. Every leakage channel is named in Anthropic's hosting docs, and every knob removes exactly one: empty `settingSources` short-circuits the filesystem walk, `CLAUDE_CONFIG_DIR` relocates `~/.claude.json`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` disables the auto-memory loader that bypasses `settingSources`, and per-tenant `cwd` overrides default inheritance. Per-tenant proxy egress closes the network leg the SDK cannot reach: the agent never holds tenant-specific outbound credentials, so a compromised session cannot use a sibling's allowlist ([Securely deploying AI agents — The proxy pattern](https://code.claude.com/docs/en/agent-sdk/secure-deployment#the-proxy-pattern)). The knobs compose published API surface, not inferred behaviour.
+The mechanism is *input-pathway severance*. Every leakage channel is named in Anthropic's hosting docs, and every knob removes exactly one: empty `settingSources` short-circuits the filesystem walk, `CLAUDE_CONFIG_DIR` relocates `~/.claude.json`, `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1` disables the auto-memory loader, and per-tenant `cwd` overrides default inheritance. Per-tenant proxy egress closes the network leg the SDK cannot reach: the agent never holds tenant-specific outbound credentials, so a compromised session cannot use a sibling's allowlist ([Securely deploying AI agents — The proxy pattern](https://code.claude.com/docs/en/agent-sdk/secure-deployment#the-proxy-pattern)). The knobs compose published API surface, not inferred behaviour.
 
 ## When This Backfires
 
 These knobs are layer-7 settings-and-state hygiene. They do not substitute for kernel-level isolation, and they harm single-tenant workflows.
 
-- **Mutually-hostile tenants with kernel-escape budget**: containers share the host kernel. Kernel exploits (Dirty Pipe, GameOver(lay), CVE-2025-23266) defeat every SDK knob simultaneously. Use [gVisor, Firecracker, or dedicated containers](https://code.claude.com/docs/en/agent-sdk/secure-deployment#isolation-technologies) when the threat model includes tenants that can run arbitrary code against a shared kernel.
-- **Managed policy settings on the host**: managed policy settings load regardless of `settingSources` ([What settingSources does not control](https://code.claude.com/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control)). If the host carries tenant-specific managed policy, the knob set does not override it — remove the managed settings file or run each tenant on a host without it.
-- **Single-tenant developer use**: applying empty `settingSources` to a solo-developer container strips out `CLAUDE.md`, project skills, and project hooks. The legitimate workflow breaks. Scope this knob set to multi-tenant hosting; do not generalise it.
+- **Mutually-hostile tenants with kernel-escape budget**: containers share the host kernel, and kernel exploits (Dirty Pipe, GameOver(lay), CVE-2025-23266) defeat every SDK knob at once. Use [gVisor, Firecracker, or dedicated containers](https://code.claude.com/docs/en/agent-sdk/secure-deployment#isolation-technologies) when tenants can run arbitrary code.
+- **Managed policy settings on the host**: these load regardless of `settingSources` ([What settingSources does not control](https://code.claude.com/docs/en/agent-sdk/claude-code-features#what-settingsources-does-not-control)). The knob set does not override tenant-specific managed policy — remove the managed settings file or run each tenant on a host without it.
+- **Single-tenant developer use**: empty `settingSources` strips out `CLAUDE.md`, project skills, and project hooks, breaking the legitimate workflow. Scope this knob set to multi-tenant hosting; do not generalise it.
 - **Proxy-bypassing libraries**: per-tenant egress only works if all outbound traffic transits the proxy. Libraries that ignore `HTTPS_PROXY` (e.g., Node.js `fetch()` before Node 24's `NODE_USE_ENV_PROXY=1`) defeat the network leg ([Securely deploying AI agents — Traffic forwarding](https://code.claude.com/docs/en/agent-sdk/secure-deployment#traffic-forwarding)).
-- **`SessionStore` mirrors transcripts only**: it does not mirror `CLAUDE.md` or working-directory artifacts ([Hosting the Agent SDK — Session and state persistence](https://code.claude.com/docs/en/agent-sdk/hosting#session-and-state-persistence)). Persisting tenant state across container restarts needs a separate per-tenant volume strategy; bind every persistence surface to the same tenant ID.
+- **`SessionStore` mirrors transcripts only**: it does not mirror `CLAUDE.md` or working-directory artifacts ([Hosting the Agent SDK — Session and state persistence](https://code.claude.com/docs/en/agent-sdk/hosting#session-and-state-persistence)). Persisting tenant state across restarts needs a per-tenant volume strategy; bind every persistence surface to the same tenant ID.
 
 ## Example
 

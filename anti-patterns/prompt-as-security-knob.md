@@ -10,7 +10,7 @@ aliases:
   - prompt-as-security-guarantee
   - prompt fragility security
   - secure-prompt fallacy
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 status: current
 ---
 
@@ -18,44 +18,40 @@ status: current
 
 > Semantic-preserving prompt perturbations collapse the secure-and-functional rate of hardened code generators to 3–17%, so a "good" prompt never proves generated code is secure.
 
-Treating prompt phrasing as a reliable security control is the failure mode. Across multiple independent benchmarks, swapping a single word, paraphrasing a sentence, or inverting a cue while preserving developer intent flips generated code from a passing security verdict to a vulnerable one — even on systems that were specifically hardened to generate secure code. The defence is to assume the prompt is never load-bearing for security and verify the output independently on every path that ships.
+Treating prompt phrasing as a reliable security control is the failure mode. Across independent benchmarks, swapping a word or paraphrasing a sentence while preserving intent flips generated code from a passing security verdict to a vulnerable one — even on systems hardened to generate secure code. The defence: assume the prompt is never load-bearing for security, and verify the output independently on every path that ships.
 
 ## When This Applies
 
-The anti-pattern surfaces wherever a team uses prompt quality, instruction files, or security-tagged prompts as the *primary* gate on generated-code security — agent PRs against deployed services with no SAST on agent diffs, `AGENTS.md` rules substituted for human security review, style gates standing in for security gates. It does *not* apply to throwaway sandboxes, single-developer scratchpads with no production path, or codebases where independent SAST plus human security review for sensitive paths already runs on every diff.
+This surfaces wherever prompt quality, instruction files, or security-tagged prompts are the *primary* gate on generated-code security — agent PRs against deployed services with no SAST on the diff, `AGENTS.md` rules standing in for human review. It does *not* apply to throwaway sandboxes, scratchpads with no production path, or codebases where independent SAST plus human review of sensitive paths already gates every diff.
 
 ## The Failure Mode
 
-Three independent results converge on the same shape.
+Three independent results converge:
 
-**Adversarial prompt collapse.** [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084) evaluated three state-of-the-art secure code generation systems (SVEN, SafeCoder, PromSec) under semantic-preserving perturbations — paraphrasing, cue inversion, context manipulation. Under adversarial conditions, the *true* secure-and-functional rate dropped to **3–17%**, and static analyzers overestimated security by a factor of **7 to 21**. Between 37% and 60% of outputs labelled "secure" by the analyzer were non-functional — both signals unreliable, in opposite directions.
-
-**Word-level is the dominant axis.** [Liu et al. (2025)](https://arxiv.org/abs/2506.07942) ran character, word, and sentence-level perturbations against code LLMs on HumanEval and MBPP. Sentence-level was the least effective (broader context preserved enough joint intent); character-level was variable; **word-level was the dominant failure axis**. A single synonym swap is more disruptive than rephrasing a whole sentence, because it shifts the local token distribution enough to flip the top-1 choice on a security-relevant token.
-
-**Prompt normativity governs defect rate.** [Wang et al. (2025/2026)](https://arxiv.org/abs/2510.22944) tested prompt-quality dimensions (goal clarity, information completeness, logical consistency) against CWE-BENCH-PYTHON across four normativity tiers. As prompt normativity decreases, insecure-code generation rises consistently and markedly. Chain-of-thought and self-correction substantially improve safety on low-quality prompts — closing some of the gap, never all of it.
+- **Adversarial prompt collapse.** [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084) ran three secure code generators (SVEN, SafeCoder, PromSec) under semantic-preserving perturbations: the *true* secure-and-functional rate fell to **3–17%**, and analyzers overstated security by **7–21x** (37–60% of "secure"-labelled outputs were non-functional).
+- **Word-level is the dominant axis.** [Liu et al. (2025)](https://arxiv.org/abs/2506.07942) found **word-level** perturbations beat character- and sentence-level on HumanEval/MBPP — a synonym swap shifts the local token distribution enough to flip the top-1 choice on a security-relevant token.
+- **Prompt normativity governs defect rate.** [Wang et al. (2025/2026)](https://arxiv.org/abs/2510.22944) found that against CWE-BENCH-PYTHON, as prompt normativity drops, insecure generation rises markedly; CoT and self-correction close some of the gap, never all.
 
 ## Why It Works (The Mechanism)
 
-Security-relevant tokens — `escape()`, parameterised query placeholders, `bcrypt` over `md5`, allowlist over blocklist — sit in a narrow probability band that is easily displaced. [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084) characterise this as "context-dependent and unstable" security alignment: the model's preference for the secure variant exists, but its margin over the insecure variant is thin enough that ordinary perturbations to surrounding context can flip the top-1 token at decoding time. [Liu et al. (2025)](https://arxiv.org/abs/2506.07942) localise the effect to word-level semantic disruption — sentence-level perturbations preserve enough joint context that the security band holds; word-level swaps shift the local distribution enough to lose it. The prompt is therefore never a security guarantee; it is a thin steering signal over a substrate that has no built-in security commitment.
-
-Transferability makes it worse: [Zhang et al. (2023)](https://arxiv.org/abs/2311.13445) demonstrated that adversarial prompts crafted against smaller code models transfer to large frontier LLMs, so an attacker — or even an unlucky paraphrase from a tired engineer — does not need white-box access to the production model to find a flipping perturbation.
+Security-relevant tokens — `escape()`, parameterised query placeholders, `bcrypt` over `md5`, allowlist over blocklist — sit in a narrow probability band that is easily displaced. [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084) call this "context-dependent and unstable" alignment: the model prefers the secure variant, but its margin is thin enough that ordinary context perturbations flip the top-1 token at decoding. The prompt is not a guarantee; it is a thin steering signal over a substrate with no built-in security commitment. Worse, [Zhang et al. (2023)](https://arxiv.org/abs/2311.13445) showed adversarial prompts crafted against small code models transfer to frontier LLMs — finding a flipping perturbation needs no white-box access.
 
 ## When This Backfires
 
-The corrective rule — "always independently security-review agent-generated code regardless of how the prompt was phrased" — has real failure modes:
+The corrective rule — "always independently security-review agent code regardless of prompt phrasing" — has real failure modes:
 
-- **Throwaway and prototype code with no production deployment path.** Independent security review costs more than the realistic blast radius of a vulnerability in a script that runs once locally.
-- **Tight-loop single-developer work** on a sandboxed scratchpad with no untrusted input surface, where the developer is already reading every line as they accept it.
-- **Mature pipelines** where SAST, branch protection, and pre-commit security scans already gate every diff. An additional per-PR review pass duplicates an already-instrumented control.
+- **Throwaway code with no production path** — review costs more than the blast radius of a bug in a run-once script.
+- **Tight-loop single-developer work** on a sandboxed scratchpad with no untrusted input, where the developer reads every line on accept.
+- **Mature pipelines** where SAST, branch protection, and pre-commit scans already gate every diff — an extra per-PR pass duplicates an instrumented control.
 
-The corrective rule is also necessary-but-not-sufficient: prompt hardening (security-tagged instructions, CoT, self-correction) measurably improves secure-output rates ([Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)) and remains worth the investment — it is just not a substitute for the independent verification step on paths that ship.
+The rule is also necessary-but-not-sufficient: prompt hardening measurably improves secure-output rates ([Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)) and stays worth the investment — it just does not substitute for independent verification on shipping paths.
 
 ## Mitigations
 
-- **Treat prompt quality and security verification as orthogonal axes.** Invest in prompt hardening for its own gains (CoT, self-correction, security-tagged instructions per [Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)), but never let prompt-side investments substitute for output-side verification.
-- **Gate agent-authored diffs to deployed paths on independent SAST.** Run analyzers on every PR; do not depend on the prompt to be the only filter. Static analyzers themselves overestimate security ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084) — 7–21x overstatement on CodeQL "secure" labels), so layer dynamic analysis or fuzzing for high-value paths.
-- **Require human security review for sensitive paths** — auth, crypto, deserialization, query construction, file I/O across trust boundaries. Engineers accept the large majority of insecure code suggestions in representative tasks ([augmentedswe.com synthesis, 2025](https://www.augmentedswe.com/p/ai-code-review-security)); the review must be deliberate, not a glance.
-- **Do not rely on iterative "improve this code" loops to close security gaps.** Security vulnerabilities persist and often increase across self-improvement loops; models introduce new vulnerabilities while fixing visible ones ([Security Degradation in Iterative AI Code Generation, 2025](https://arxiv.org/abs/2506.11022)).
+- **Treat prompt quality and security verification as orthogonal.** Invest in prompt hardening for its own gains (CoT, self-correction, security-tagged instructions per [Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)), but never let it substitute for output-side verification.
+- **Gate agent diffs to deployed paths on independent SAST.** Analyzers overstate security ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084) — 7–21x on CodeQL "secure" labels), so layer dynamic analysis or fuzzing for high-value paths.
+- **Require human review for sensitive paths** — auth, crypto, deserialization, query construction, file I/O across trust boundaries. Engineers accept most insecure suggestions in representative tasks ([augmentedswe.com synthesis, 2025](https://www.augmentedswe.com/p/ai-code-review-security)); make it deliberate.
+- **Do not trust iterative "improve this code" loops to close security gaps** — vulnerabilities persist and often increase across self-improvement loops ([Security Degradation in Iterative AI Code Generation, 2025](https://arxiv.org/abs/2506.11022)).
 
 ## Example
 

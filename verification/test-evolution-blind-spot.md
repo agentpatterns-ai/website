@@ -11,12 +11,12 @@ aliases:
   - test evolution
   - stale test detection
   - test co-evolution gap
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Test Evolution Blind Spot in Coding Agents
 
-> When production code changes, the test suite must co-evolve — but the execute-fail-fix loop that powers Claude Code, Codex CLI, and OpenCode hits a shared performance ceiling because no execution signal flags semantically stale tests.
+> Agents stall at 47% F1 on test evolution because the execute-fail-fix loop has no signal for tests that pass but no longer validate the change.
 
 ## The Three Evolution Types
 

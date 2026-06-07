@@ -7,7 +7,7 @@ tags:
   - human-factors
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-02
 status: current
 ---
 
@@ -17,31 +17,29 @@ status: current
 
 ## The Anti-Pattern
 
-Most agent threat models assume the malicious instruction arrives through a tool result, a fetched page, or an MCP response — the [indirect injection](../security/prompt-injection-threat-model.md) surface. Direct prompt injection bypasses that model: the attacker writes the prompt, the *user* pastes it, and the agent runs it as if the user authored it. The mitigations that work for indirect injection do not work here.
+Most agent threat models assume the malicious instruction arrives through a tool result, a fetched page, or an MCP response — the [indirect injection](../security/prompt-injection-threat-model.md) surface. Direct prompt injection bypasses that model: the attacker writes the prompt, the *user* pastes it, and the agent runs it as if the user authored it. The mitigations that work for indirect injection do not.
 
-[Anthropic's 2026-05-25 containment post](https://www.anthropic.com/engineering/how-we-contain-claude) documents the attack as a controlled internal red-team: a researcher phished an Anthropic employee with a *"can you run this for me?"* email carrying a ready-to-paste prompt. The prompt read like ordinary task instructions but included steps to read `~/.aws/credentials`, encode them, and POST them to an external endpoint. Across 25 retries, Claude Code completed the exfiltration **24 times**.
+[Anthropic's 2026-05-25 containment post](https://www.anthropic.com/engineering/how-we-contain-claude) documents this as a controlled red-team: a researcher phished an employee with a *"can you run this for me?"* email carrying a ready-to-paste prompt. The prompt read `~/.aws/credentials`, encoded them, and POSTed them out. Across 25 retries, Claude Code completed the exfiltration **24 times**.
 
 ## Why It Works
 
-Model-layer prompt-injection classifiers anchor on **user intent** — they flag transplants whose voice and topic do not match the user's other tokens. Anthropic states the failure directly: *"the attacker's instructions arrived through the user, not through tool output or fetched content. Our model-layer defenses anchor on user intent — when the user is the one typing the instruction, there's nothing anomalous for a classifier to catch."* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)).
+Model-layer classifiers anchor on **user intent** — they flag transplants whose voice and topic clash with the user's other tokens. Anthropic states it directly: *"when the user is the one typing the instruction, there's nothing anomalous for a classifier to catch"* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)). The mechanism is the same provenance-blindness behind [indirect injection](../security/prompt-injection-threat-model.md) — transformer attention has no channel separating user-typed from user-pasted text — but here the classifier sees one coherent turn because the user *did* paste it.
 
-The underlying mechanism is the same provenance-blindness that makes [indirect injection](../security/prompt-injection-threat-model.md) work — transformer attention has no architectural channel separating user-typed text from user-pasted text — but the classifier sees one coherent user turn because the user *did* paste it.
-
-The only defense that holds is environmental: *"egress controls that block the POST regardless of intent and filesystem boundaries that keep `~/.aws` out of reach in the first place"* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)). The relevant controls already exist as patterns — [URL exfiltration guards](../security/url-exfiltration-guard.md), [scoped credentials proxies](../security/scoped-credentials-proxy.md), [sandboxed harness tools](../security/sandbox-rules-harness-tools.md) — but they are usually deployed as indirect-injection mitigations and rarely audited against the user-as-vector case.
+The only defense that holds is environmental: *"egress controls that block the POST regardless of intent and filesystem boundaries that keep `~/.aws` out of reach"* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)). These controls already exist as patterns — [URL exfiltration guards](../security/url-exfiltration-guard.md), [scoped credentials proxies](../security/scoped-credentials-proxy.md), [sandboxed harness tools](../security/sandbox-rules-harness-tools.md) — but are usually deployed against indirect injection and rarely audited against the user-as-vector case.
 
 ## Ambient Injection Escalation
 
-The collaboration vector composes badly with shared agent-readable channels. Anthropic reports the follow-on directly: *"When we shared the working prompt in internal Slack for discussion, someone pointed out that some internal agents read Slack. The payload was now ambient."* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)). A payload that arrived through one developer's mailbox escapes the original incident as soon as the team discusses it in any channel downstream agents ingest — channel summaries, on-call bots, internal RAG indexes. The direct-injection event becomes an indirect-injection source for every other agent in the network.
+The collaboration vector composes badly with shared agent-readable channels: *"When we shared the working prompt in internal Slack for discussion, someone pointed out that some internal agents read Slack. The payload was now ambient."* ([Anthropic Engineering](https://www.anthropic.com/engineering/how-we-contain-claude)). A payload from one developer's mailbox escapes the original incident the moment the team discusses it in any channel downstream agents ingest — channel summaries, on-call bots, RAG indexes — turning a direct-injection event into an indirect-injection source for every other agent in the network.
 
 ## When This Backfires
 
 Three conditions where prioritising indirect-injection hardening dominates:
 
-- **Production base rate is indirect injection.** Anthropic restructured its prompt-injection reporting in the Claude Opus 4.6 system card to emphasise indirect-injection metrics on the argument that indirect is the more relevant enterprise threat ([Claude Opus 4.6 System Card, February 2026](https://www.anthropic.com/claude-opus-4-6-system-card)). If the team has no egress allowlist or credential isolation yet, indirect-injection coverage is the larger expected-loss reduction.
-- **Personal-machine, single-developer harnesses with no shared agent-readable channels.** The ambient-escalation beat collapses, and the residual risk reduces to the well-covered [trust-without-verify](trust-without-verify.md) failure of pasting prompts without reading them.
-- **Pure conversational agents with no tool use, shell, or file access.** Direct injection has no actuation surface, and environmental controls have nothing to enforce.
+- **Production base rate is indirect injection.** Anthropic's Claude Opus 4.6 system card emphasises indirect-injection metrics, arguing indirect is the more relevant enterprise threat ([System Card, February 2026](https://www.anthropic.com/claude-opus-4-6-system-card)). With no egress allowlist or credential isolation yet, indirect coverage is the larger expected-loss reduction.
+- **Single-developer harnesses with no shared agent-readable channels.** Ambient escalation collapses, and residual risk reduces to the [trust-without-verify](trust-without-verify.md) failure of pasting prompts unread.
+- **Pure conversational agents with no tool, shell, or file access.** Direct injection has no actuation surface for environmental controls to guard.
 
-The strongest counter-position is that direct and indirect injection are two failure modes of one provenance-blind mechanism, and that fragmenting the threat-model literature risks duplicating defense coverage. The reply is that the **collaboration vector** has two unique consequences — classifier anchoring failure and ambient escalation through shared channels — that do not appear in the indirect literature and have direct harness-design implications.
+The strongest counter-position: direct and indirect injection are two modes of one provenance-blind mechanism, so splitting the literature risks duplicating coverage. The reply: the **collaboration vector** adds classifier-anchoring failure and ambient escalation, neither of which appears in the indirect literature.
 
 ## Example
 
@@ -67,13 +65,13 @@ The Anthropic red-team scenario, mapped to a defended harness:
 5. Exfiltration fails at the environmental layer, regardless of model-layer classifier behavior.
 ```
 
-The defense is not "detect the pasted prompt" — that is the failed approach. The defense is "ensure that even if the agent attempts the action, the environment refuses it".
+The defense is not "detect the pasted prompt" — that is the failed approach — but "ensure the environment refuses the action even if the agent attempts it".
 
 ## Practitioner Guidance
 
-- Treat prompts pasted from email, Slack, or shared docs the same way you would treat a tool-fetched HTML page. The trust model is the same: external authorship reaches the agent through a user-controlled channel.
-- Audit existing environmental controls — [URL exfiltration guards](../security/url-exfiltration-guard.md), [scoped credentials](../security/scoped-credentials-proxy.md), [sandboxed tool execution](../security/sandbox-rules-harness-tools.md) — against the user-as-vector case, not only the indirect-injection case. The controls are usually already there; the audit lens is what is missing.
-- Plant canary strings in internal Slack channels and RAG indexes that agents read, so an ambient payload from a leaked direct-injection prompt is detectable downstream. The signal does not catch the original attack but does catch the escalation.
+- Treat prompts pasted from email, Slack, or shared docs like a tool-fetched HTML page: external authorship reaching the agent through a user-controlled channel.
+- Audit environmental controls — [URL exfiltration guards](../security/url-exfiltration-guard.md), [scoped credentials](../security/scoped-credentials-proxy.md), [sandboxed tool execution](../security/sandbox-rules-harness-tools.md) — against the user-as-vector case, not only indirect injection. The controls are usually already there; the audit lens is missing.
+- Plant canary strings in Slack channels and RAG indexes agents read, so a leaked direct-injection prompt is detectable downstream. The signal catches the escalation, not the original attack.
 
 ## Key Takeaways
 

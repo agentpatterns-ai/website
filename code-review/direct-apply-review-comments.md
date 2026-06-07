@@ -6,12 +6,12 @@ tags:
   - workflows
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Direct-Apply Review Comments via Cloud Agent
 
-> Direct-apply review comments are a bounded contract where a human classifies which comments are agent-eligible, a cloud agent pushes one fix commit to the existing PR branch, and re-review is re-requested — works only when classification stays human and the agent does not retrigger on its own output.
+> Direct-apply review comments let a human classify agent-eligible comments, a cloud agent push one fix commit and re-request review, with no self-retrigger.
 
 ## When This Applies
 
@@ -21,7 +21,7 @@ Three conditions must hold:
 - **The agent pushes a new commit, never a rebase or force push.** Force pushes are the strongest negative predictor of merge across 33,596 agent-authored PRs ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)).
 - **The contract terminates after one push and re-requests review.** Re-triggering the agent on its own commits produces unbounded iteration — the same circuit-breaker problem documented for [one-click CI auto-fix](../workflows/one-click-ci-auto-fix.md).
 
-Outside these conditions the pattern erodes the merge-rate signal it was meant to protect.
+Outside these conditions the pattern erodes the merge-rate signal it protects.
 
 ## The Contract
 

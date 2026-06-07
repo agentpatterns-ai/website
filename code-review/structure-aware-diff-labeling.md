@@ -6,12 +6,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Structure-Aware Diff Labeling with Two-Stage LLM Pipelines
 
-> A two-stage LLM pipeline labels diff hunks against a 12-type change taxonomy and refines cross-hunk relationships — viable as a supplement to static analysis when polyglot coverage and customizable labels outweigh determinism and cost.
+> A two-stage LLM pipeline labels diff hunks against a 12-type taxonomy, then refines cross-hunk relationships — a polyglot supplement to static analysis, not a replacement.
 
 Structure-aware diff labeling assigns a change type to each hunk in a patch, then resolves cross-hunk relationships such as which hunk declares a renamed symbol and which hunks consume it. A two-stage LLM pipeline does this without per-language static analysis tooling, trading determinism and cost for language coverage and label customization ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
 

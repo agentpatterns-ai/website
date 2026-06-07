@@ -10,12 +10,12 @@ tags:
 aliases:
   - dormant memory payload attack
   - sensitive-topic-triggered memory exfiltration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)
 
-> A single untrusted tool call plants a payload in agent long-term memory that activates only when the user later discusses sensitive topics — turning memory into a temporal channel between injection and exfiltration.
+> A single untrusted tool call plants a dormant payload in agent long-term memory; it activates only when the user later discusses sensitive topics, exfiltrating data.
 
 ## The Attack Mechanism
 
@@ -49,6 +49,8 @@ Under realistic conditions with pre-existing legitimate memories, attack effecti
 LLMs cannot reliably distinguish trusted from injected instructions inside their context window ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). Memory stores extend that limitation across sessions: once attacker-authored content enters the store, the model treats it as legitimate prior context on every future retrieval.
 
 Trojan Hippo combines all three legs of the [lethal trifecta](lethal-trifecta-threat-model.md) — private data access, untrusted input, external communication — with memory as the *temporal* bridge that decouples injection from exploitation. Single-session injection-resistance ([prompt injection threat model](prompt-injection-threat-model.md)) does not extrapolate to memory-resident payloads, because review at write time happens in a context that does not include the trigger.
+
+Independent work formalizes this as *cross-session stored prompt injection*: malicious instructions that persist in agentic system state — memories, filesystems, long-lived artifacts — and silently influence executions long after the original attacker interaction ends, expanding the threat surface beyond single-session, model-level prompt injection ([Xie et al., 2026](https://arxiv.org/abs/2606.04425)). The dormant-payload chain documented here is one instance of that broader stored-injection class.
 
 ## Architectural Defenses
 

@@ -11,21 +11,21 @@ aliases:
   - cross-component interference
   - maximally-equipped agent fallacy
   - scaffold over-stacking
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Cross-Component Interference in Agent Scaffolds
 
-> Stacking planning, memory, retrieval, and self-reflection on top of tool use is rarely the optimum. A full-factorial study finds the maximally-equipped agent loses to smaller subsets in most tasks, with planning and memory the worst offenders, and the gap largest at smaller model scales.
+> Stacking planning, memory, retrieval, self-reflection on tool use rarely wins: a full-factorial study shows the maximally-equipped agent losing to smaller subsets, planning and memory worst.
 
 ## The Default That Loses
 
-[Liu (2026)](https://arxiv.org/abs/2605.05716) ran a full factorial over all 32 subsets of {Planning, Tools, Memory, Self-Reflection, Retrieval} on HotpotQA, GSM8K, and SWE-bench Lite at Llama-3.1-8B/70B and Claude Haiku. The "All-In" agent bundling every component is consistently suboptimal:
+[Liu (2026)](https://arxiv.org/abs/2605.05716) ran a full factorial over all 32 subsets of {Planning, Tools, Memory, Self-Reflection, Retrieval} on HotpotQA, GSM8K, and SWE-bench Lite. The "All-In" agent bundling every component is consistently suboptimal:
 
 - HotpotQA at 8B: single-tool agent beats All-In by 32% (F1 0.233 vs 0.177, p=0.023).
 - GSM8K: a 3-component subset beats All-In by 79% (0.43 vs 0.24, p=0.010).
 - 30-50% of larger configurations underperform smaller subsets.
-- Submodularity violated in 56.3% of cases (183/325, median gamma=0.52) — greedy "add until marginal turns negative" selection is provably unreliable.
+- Submodularity violated in 56.3% of cases — greedy "add until marginal turns negative" selection is provably unreliable.
 
 ## Worst Offenders
 
@@ -45,7 +45,7 @@ Planning and memory are suspect by default. Tool use is the only component that 
 
 Components share one substrate: the model's context window and attention budget. Each injects its own tokens — planning traces, retrieved passages, reflection notes, memory excerpts — competing for attention with task-relevant content. Same mechanism as [attention dilution](../agent-design/progressive-disclosure-agents.md).
 
-A main-effects model fits R^2=0.916, beating pairwise interaction models (deltaBIC=25.3) ([Liu, 2026](https://arxiv.org/abs/2605.05716)) — most damage is per-component context cost, not destructive pairs. One positive triple does exist (Tool Use + Self-Reflection + Retrieval, INT_3=+0.175, 95% CI [+0.003, +0.351]), confirming interactions are real when they occur.
+A main-effects model fits R^2=0.916, beating pairwise interaction models ([Liu, 2026](https://arxiv.org/abs/2605.05716)) — most damage is per-component context cost, not destructive pairs. One positive triple exists (Tool Use + Self-Reflection + Retrieval), so interactions are real when they occur.
 
 ```mermaid
 graph TD
@@ -59,15 +59,15 @@ graph TD
 
 The All-In gap shrinks with model strength — 32% at 8B, 19% at 70B, ~0% at Claude Haiku — but All-In still never *beats* the best subset at any tested scale ([Liu, 2026](https://arxiv.org/abs/2605.05716)). Frontier models tolerate over-stacking; they do not benefit from it.
 
-Independent evidence on scaffold leverage: harness changes alone swing Terminal Bench 2.0 from 52.8% to 66.5% with no model swap ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)); on SWE-bench Pro the scaffold accounts for a 22+ point swing while frontier model swaps account for ~1 point ([particula.tech](https://particula.tech/blog/agent-scaffolding-beats-model-upgrades-swe-bench)). The scaffold is the dominant lever — which means it is the dominant way to lose.
+The scaffold is the dominant lever, which makes it the dominant way to lose: harness changes alone swing Terminal Bench 2.0 by 14 points with no model swap ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)), and on SWE-bench Pro the scaffold drives a 22+ point swing versus ~1 point for model swaps ([particula.tech](https://particula.tech/blog/agent-scaffolding-beats-model-upgrades-swe-bench)).
 
-Optimal count k* varies by task: k*=1 on HotpotQA, k*=3 on GSM8K ([Liu, 2026](https://arxiv.org/abs/2605.05716)). No universal right number.
+Optimal count k* varies by task: k*=1 on HotpotQA, k*=3 on GSM8K. No universal right number.
 
 ## When Over-Stacking Is Defensible
 
-- **Frontier model, no ablation budget** — at Haiku-scale and above the gap is small; shipping All-In and pruning later is rational when a 32-cell ablation is infeasible.
-- **Heterogeneous task distributions** — traffic mixing math-like (k*=3) and retrieval-like (k*=1) tasks cannot be served by one fixed minimal subset; per-task routing or All-In may dominate.
-- **Binary failure mode** — if missing a component means *task impossible* rather than *task suboptimal*, keep the component even at average performance cost.
+- **Frontier model, no ablation budget** — the gap is small at Haiku-scale and above; ship All-In and prune later when a 32-cell ablation is infeasible.
+- **Heterogeneous task distributions** — traffic mixing math-like (k*=3) and retrieval-like (k*=1) tasks cannot be served by one fixed minimal subset; per-task routing may dominate.
+- **Binary failure mode** — if missing a component means *task impossible* rather than *suboptimal*, keep it even at average performance cost.
 
 These are exceptions. The default failure mode is scaffold inflation that nobody measured.
 
@@ -95,15 +95,15 @@ agent = Agent(
 # F1 = 0.233 on HotpotQA, p=0.023 vs All-In (Liu, 2026)
 ```
 
-Four components were removed — Planning, Memory, Self-Reflection, Retrieval — and F1 rose 32%. The win is not from a clever combination; it is from removing components that disrupted 84% and 68% of CCI tasks (Planning and Memory) ([Liu, 2026](https://arxiv.org/abs/2605.05716)).
+Four components were removed — Planning, Memory, Self-Reflection, Retrieval — and F1 rose 32%. The win is not a clever combination; it is removing the components that disrupted 84% and 68% of CCI tasks (Planning and Memory) ([Liu, 2026](https://arxiv.org/abs/2605.05716)).
 
 ## How To Avoid It
 
-- **Ablate before shipping.** At minimum, run a leave-one-out sweep. One measured component per release beats four at once.
-- **Default-suspect Planning and Memory.** Worst per-task disruption rates. Require positive evidence to include, not the reverse.
+- **Ablate before shipping.** At minimum run a leave-one-out sweep. One measured component per release beats four at once.
+- **Default-suspect Planning and Memory.** Worst disruption rates; require positive evidence to include.
 - **Anchor on Tool Use.** It captures 70% of scaffold value; build outward from it.
 - **Measure on hard tasks.** Easy tasks have high baseline accuracy that hides interference.
-- **Re-ablate per model.** Components harmful at 8B can become beneficial at 70B; pin the scaffold to the model and re-run on swaps.
+- **Re-ablate per model.** Components harmful at 8B can help at 70B; pin the scaffold to the model and re-run on swaps.
 
 ## Key Takeaways
 

@@ -11,12 +11,12 @@ aliases:
   - prototype skill
   - build-then-discard spike
   - throwaway spike skill
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer
 
-> A throwaway-prototype skill forbids tests, error handling, and abstractions so the spike actually stays cheap — the only durable output is the answer to the question that triggered it.
+> A throwaway-prototype skill forbids tests, error handling, and abstractions to keep the spike cheap; the only durable output is the verdict it produces.
 
 Agents over-engineer prototypes. Given "spike to see if approach X works", a default agent adds types, error handling, lint compliance, and tests — burning hours and producing code so polished it gets merged when it should have been deleted. Anthropic's eval team added a dedicated over-engineering eval to Claude Code for exactly this failure mode ([Demystifying evals for AI agents — Anthropic](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)). A skill with explicit "this will be deleted" framing changes the agent's quality target for one bounded session.
 
@@ -111,6 +111,8 @@ The pattern adds cost without value in four conditions:
 - **Pure-UI tasks with an approved design spec.** Generating "radically different variations" when the Figma is signed off is rework, not exploration. The UI branch fires correctly only when the visual treatment itself is the open question.
 
 The Specification-Driven Development critique applies in those conditions: a `/prototype` skill invoked outside its preconditions is "sanctioned vibe-coding" ([SDD essay — DEV Community](https://dev.to/pockit_tools/specification-driven-development-how-to-stop-vibe-coding-and-actually-ship-production-ready-5788)). Audit whether the skill is firing only on real unknown-unknowns before keeping it in the library.
+
+A prior failure condition is worth naming: the skill never firing at all. Vercel's January 2026 evals found that in 56% of cases an agent never invoked the skill it needed even with the skill installed, and that past roughly 32 installed skills, descriptions truncate before the agent reads them — the "discovery ceiling" ([Skills and the discovery ceiling](https://dev.to/cdelgado70/skills-and-the-discovery-ceiling-why-your-ai-coding-agent-ignores-most-of-what-you-install-45f9)). Adding an explicit `/prototype` trigger to `AGENTS.md` — "when a design question can only be resolved by code, invoke prototype" — lifted comparable skills' trigger rates above 95% in Vercel's follow-up ([AGENTS.md outperforms skills](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). Do not rely on the skill being auto-discovered in a large library; pin its invocation condition in the always-loaded instruction surface.
 
 ## Key Takeaways
 

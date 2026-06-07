@@ -11,12 +11,12 @@ aliases:
   - CUGA policy system
   - policy-as-code layer
   - governance by construction
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Five-Stage Policy Layer Typology for Generalist Agents
 
-> A policy-as-code layer wrapping a generalist agent at five loop stages — intent, planning, tool selection, execution, output — closes governance gaps no single layer covers, but only pays off when all five stages exist and several deterministic controls are missing.
+> A policy-as-code layer wraps a generalist agent at five loop stages — intent, planning, tool selection, execution, output — covering gaps no single stage can.
 
 A five-stage policy layer typology decomposes agent governance into five intervention points around one unmodified generalist LLM agent: **Intent Guard** (blocks or rewrites incoming requests), **Playbook** (injects procedural guidance), **Tool Guide** (augments tool descriptions at selection), **Tool Approval** (gates execution behind deterministic checks or human consent), and **Output Formatter** (filters the final response). The taxonomy comes from IBM Research's open-source [CUGA](https://github.com/cuga-project/cuga-agent), where each type is a separate SDK method (`agent.policies.add_intent_guard(...)`, `agent.policies.add_playbook(...)`) tested as an independent integration ([cuga-project/cuga-agent](https://github.com/cuga-project/cuga-agent/blob/main/README.md)).
 

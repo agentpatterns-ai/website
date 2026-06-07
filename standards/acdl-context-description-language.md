@@ -8,12 +8,12 @@ tags:
 aliases:
   - Agentic Context Description Language
   - context description language
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # ACDL: A Language for Describing Agentic LLM Contexts
 
-> ACDL is a notation for specifying how an LLM agent's context is assembled and evolves across interaction steps — published with a parser, web renderer, VS Code extension, and Claude Code skill at acdlang.org.
+> ACDL is a notation for specifying how an LLM agent's context is assembled and evolves across interaction steps, with tooling published at acdlang.org.
 
 ## What ACDL Is
 

@@ -5,7 +5,7 @@ tags:
   - claude
   - tool-engineering
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -13,7 +13,7 @@ status: current
 
 > Claude Code 2.1.157 auto-loads plugins from `.claude/skills/<name>/.claude-plugin/plugin.json`, and `claude plugin init` scaffolds the layout in one command.
 
-The pattern earns its keep when the bundle includes components beyond a single skill, when versioning or namespacing matter, or when the plugin is destined for distribution later. For a single `SKILL.md` in a single repo, loose `.claude/skills/<name>/SKILL.md` remains the cheaper default — the manifest forces namespaced names (`/my-plugin:hello` instead of `/hello`) and project-scope `@skills-dir` plugins do not walk up to the repo root the way plain skills do ([Plugins — When to use plugins vs standalone configuration](https://code.claude.com/docs/en/plugins#when-to-use-plugins-vs-standalone-configuration); [Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+The pattern earns its keep when the bundle includes components beyond a single skill, when versioning or namespacing matter, or when the plugin is destined for distribution. For a single `SKILL.md` in a single repo, loose `.claude/skills/<name>/SKILL.md` stays the cheaper default — the manifest forces namespaced names (`/my-plugin:hello` instead of `/hello`) and project-scope `@skills-dir` plugins do not walk up to the repo root the way plain skills do ([Plugins — When to use plugins vs standalone configuration](https://code.claude.com/docs/en/plugins#when-to-use-plugins-vs-standalone-configuration); [Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
 
 ## What 2.1.157 Shipped
 
@@ -22,7 +22,7 @@ Two entries landed together on 2026-05-29 ([Claude Code changelog](https://code.
 - "Plugins in `.claude/skills` directories are now automatically loaded, no marketplace required"
 - "Added `claude plugin init <name>` to scaffold a new plugin in `.claude/skills`"
 
-A skills-directory plugin is "any folder under a skills directory that contains a `.claude-plugin/plugin.json` manifest" — loaded as `<name>@skills-dir` on the next session "with no marketplace and no install step. Unlike a marketplace install, the plugin is discovered in place rather than copied into the plugin cache" ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+A skills-directory plugin is "any folder under a skills directory that contains a `.claude-plugin/plugin.json` manifest" — loaded as `<name>@skills-dir` on the next session, "discovered in place rather than copied into the plugin cache" ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
 
 ## The Three Shapes a Skills Tree Now Supports
 
@@ -65,27 +65,27 @@ Where you scaffold the plugin determines who sees it and what it is allowed to d
 | `~/.claude/skills/` | personal | In every project — the location is yours alone |
 | `<cwd>/.claude/skills/` | project | Only after you accept the workspace trust dialog for that folder |
 
-Project-scope plugins ship with the repository, so their components run with extra restrictions because the content comes from the repo rather than from you:
+Project-scope plugins ship with the repository, so their components run under extra restrictions because the content comes from the repo rather than from you:
 
 - MCP servers go through the same per-server approval as a project `.mcp.json` ([MCP](https://code.claude.com/docs/en/mcp))
 - LSP servers start only after you trust the workspace
 - Background monitors do not load at all
 
-Personal-scope plugins under `~/.claude/skills/` have none of these restrictions — they are treated as yours.
+Personal-scope plugins under `~/.claude/skills/` carry none of these restrictions.
 
 ## Why It Works
 
-Claude Code already scans skill directories at session start to build the set of skills the model can invoke ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)). v2.1.157 extends the same scan: a child folder containing `.claude-plugin/plugin.json` is loaded in place as a plugin instead of being treated as a single skill. Because nothing is copied into the plugin cache, there is no install step to round-trip through a marketplace — the manifest is read where it sits, on every launch. `claude plugin init` collapses the manual scaffold — `mkdir -p`, hand-write `plugin.json`, hand-write a starter `SKILL.md` — into one command, with sensible defaults pulled from `git config user.name`/`user.email` ([Plugins reference — plugin init](https://code.claude.com/docs/en/plugins-reference#plugin-init)). The pair removes both the "scaffold ceremony" and the "marketplace round-trip" frictions in the same release, so for project-local bundles the scaffold-to-running-plugin loop is one command and one session restart.
+Claude Code already scans skill directories at session start to build the set of invokable skills ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)). v2.1.157 extends the same scan: a child folder containing `.claude-plugin/plugin.json` is loaded in place as a plugin instead of as a single skill. Because nothing is copied into the plugin cache, there is no marketplace round-trip — the manifest is read where it sits, on every launch. `claude plugin init` collapses the manual scaffold (`mkdir -p`, hand-written `plugin.json` and starter `SKILL.md`) into one command, with defaults pulled from `git config user.name`/`user.email` ([Plugins reference — plugin init](https://code.claude.com/docs/en/plugins-reference#plugin-init)). The pair removes both the scaffold ceremony and the marketplace round-trip in the same release, so the scaffold-to-running-plugin loop is one command and one session restart.
 
 ## When This Backfires
 
-The path is not always cheaper than loose skills, and the trade-off is concrete:
+The path is not always cheaper than loose skills:
 
-- **Single-repo, single-skill collection with no sharing intent.** The namespacing tax (`/my-plugin:deploy` vs `/deploy`) and version-field maintenance buy nothing; loose `.claude/skills/<name>/SKILL.md` is shorter to invoke and the auto-discovery walks up the repo root from any subdirectory ([Plugins — When to use plugins vs standalone configuration](https://code.claude.com/docs/en/plugins#when-to-use-plugins-vs-standalone-configuration); [Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)). Plugins earn their keep when bundling components beyond a single skill or when versioning and distribution matter.
-- **Teams that launch Claude Code from subdirectories.** Project-scope `@skills-dir` plugins do not walk up to the repo root; a plugin at the repo root is silently missed when launching from `apps/api/`. Mitigation is either launching from the repo root or running `/reload-plugins` after `cd` ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
-- **Enterprises that have set `strictKnownMarketplaces` to deny `skills-dir`.** Admins can block the `@skills-dir` source via `strictKnownMarketplaces` or by adding `{"source": "skills-dir"}` to `blockedMarketplaces` in [managed settings](https://code.claude.com/docs/en/plugin-marketplaces#managed-marketplace-restrictions); `plugin init` fails before writing. Teams in this posture must distribute via an approved marketplace instead ([Plugins reference — plugin init](https://code.claude.com/docs/en/plugins-reference#plugin-init)).
-- **Plugins that need background monitors at project scope.** Background monitors do not load for project-scope `@skills-dir` plugins; a plugin whose value depends on monitors must be installed via a marketplace or moved to `~/.claude/skills/` ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
-- **Edits to non-skill components require a reload.** Changes to a `SKILL.md` inside a skills-directory plugin take effect immediately in the current session, but changes to `hooks/`, `.mcp.json`, `agents/`, and `output-styles/` need `/reload-plugins` or a restart ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+- **Single-repo, single-skill collection with no sharing intent.** The namespacing tax (`/my-plugin:deploy` vs `/deploy`) and version-field upkeep buy nothing; loose `.claude/skills/<name>/SKILL.md` is shorter to invoke and walks up to the repo root from any subdirectory ([Plugins — When to use plugins vs standalone configuration](https://code.claude.com/docs/en/plugins#when-to-use-plugins-vs-standalone-configuration); [Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+- **Teams that launch Claude Code from subdirectories.** Project-scope `@skills-dir` plugins do not walk up to the repo root, so a plugin at the root is silently missed when launching from `apps/api/`. Launch from the root, or run `/reload-plugins` after `cd` ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+- **Enterprises that deny `skills-dir`.** Admins can block the source via `strictKnownMarketplaces` or by adding `{"source": "skills-dir"}` to `blockedMarketplaces` in [managed settings](https://code.claude.com/docs/en/plugin-marketplaces#managed-marketplace-restrictions); `plugin init` then fails before writing, and teams must distribute via an approved marketplace ([Plugins reference — plugin init](https://code.claude.com/docs/en/plugins-reference#plugin-init)).
+- **Plugins that need background monitors at project scope.** Monitors do not load for project-scope `@skills-dir` plugins; install via a marketplace or move to `~/.claude/skills/` instead ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
+- **Edits to non-skill components require a reload.** A `SKILL.md` change takes effect immediately, but changes to `hooks/`, `.mcp.json`, `agents/`, and `output-styles/` need `/reload-plugins` or a restart ([Plugins reference — Skills-directory plugins](https://code.claude.com/docs/en/plugins-reference#skills-directory-plugins)).
 
 ## Removing a Skills-Directory Plugin
 

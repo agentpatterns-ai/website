@@ -8,12 +8,12 @@ tags:
 aliases:
   - Pre-Install Token Cost Projection
   - Plugin Marketplace Cost Projection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Pre-Install Context-Cost Projection in Plugin Marketplaces
 
-> Plugin marketplaces that publish each plugin's projected per-turn and per-invocation token cost beside the install button let an operator rank candidates by context budget at the choice moment, instead of discovering cost after installation.
+> Plugin marketplaces that show each plugin's projected per-turn and per-invocation token cost beside the install button let operators rank candidates by context budget before installing.
 
 Pre-install context-cost projection is a marketplace metadata pattern: the host computes each plugin's projected token contribution from its declared components and renders it in the browse pane beside name and install action. Claude Code v2.1.143 (2026-05-15) implements it: *"Added projected context cost (per-turn and per-invocation token estimates) to the `/plugin` marketplace browse pane"* ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The same telemetry was available post-install via `claude plugin details <name>` (v2.1.141) — the marketplace projection moves it upstream, from the accountability moment to the comparison moment.
 
@@ -91,5 +91,4 @@ The reverse case sharpens the limit: two security plugins showing 150 and 200 to
 - [Per-Plugin Token-Cost Attribution via `claude plugin details`](../observability/plugin-token-cost-attribution.md) — the post-install, per-plugin cut of the same telemetry
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md) — what a plugin is and why it sits at this attribution layer
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](cross-ide-plugin-discovery.md) — the install-surface contract this pattern decorates with cost metadata
-- [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md) — drill-down for the on-invoke column when one component dominates
 - [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) — the failure mode the per-turn column makes visible

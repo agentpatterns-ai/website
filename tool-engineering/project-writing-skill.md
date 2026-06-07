@@ -8,12 +8,12 @@ tags:
   - tool-engineering
 aliases:
   - writing skill for agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Project Writing Skill
 
-> A project-scoped writing skill bundles audience, tone, banned phrases, and structural rules into a model-invocable [SKILL.md](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) loaded only when the agent generates prose — not on every turn the way `AGENTS.md`/`CLAUDE.md` rules are.
+> A project writing skill packages house-style rules into a model-invocable [SKILL.md](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) loaded only when the agent writes prose — not every turn like `AGENTS.md`.
 
 A project writing skill is a [model-invocable skill](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview) whose `description` triggers on prose tasks (docs, release notes, PR descriptions, ADRs, commit messages) and whose body carries the project's writing conventions. The contrast is with the same rules in `AGENTS.md`/`CLAUDE.md`, which enter every conversation regardless of task. Matt Pocock's [AI Hero changelog](https://www.aihero.dev/skills/skills-changelog-handoff-prototype-review-and-writing) previews a `writing` skill (fragments/beats/shape passes) — the specific application of [Skill as Knowledge](skill-as-knowledge.md) to prose rules.
 

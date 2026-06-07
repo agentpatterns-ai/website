@@ -9,12 +9,12 @@ aliases:
   - tech debt tracker
   - deferred work ledger
   - next-trigger debt log
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Acknowledged-Debt Ledger with Next-Trigger Conditions
 
-> Replace ambient TODO comments with a single versioned ledger where every deferred item carries an observable Next Trigger — the event that forces re-evaluation, not a vague "later."
+> Replace ambient TODO comments with one versioned ledger where every deferred item carries an observable Next Trigger — the event that forces re-evaluation.
 
 ## The Problem
 

@@ -8,12 +8,12 @@ tags:
 aliases:
   - Docker Sandboxes for agents
   - sbx adoption checklist
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Docker sbx Adoption for Coding Agents
 
-> Treat Docker `sbx` as a microVM-plus-host-proxy isolation harness, not a hardened container — the four isolation layers cover most of what `docker run` leaks, but the workspace mount and broad default wildcards remain your responsibility.
+> `sbx` is a microVM-plus-proxy isolation harness, not a hardened container: four layers close most `docker run` leaks; the workspace mount and default wildcards stay yours.
 
 ## What `sbx` Actually Isolates
 
@@ -33,6 +33,7 @@ This closes most container-era leak paths — shared-kernel CVEs, `DOCKER_HOST` 
 
 ## Adoption Checklist
 
+- **Confirm the host can run a hypervisor before wiring `sbx` into CI.** Being microVM-isolated, `sbx` needs host hardware virtualization: Apple `Hypervisor.framework` on macOS, the Windows Hypervisor Platform on Windows 11, or KVM on Ubuntu 24.04+ — and "if you're running inside a VM, nested virtualization must be turned on" ([Get started](https://docs.docker.com/ai/sandboxes/get-started/)). This is load-bearing for CI: most hosted runners are themselves VMs, so missing nested virtualization (or KVM) blocks `sbx run` before any policy applies. Verify with `lsmod | grep kvm`.
 - **Set the policy non-interactively before first run in CI.** First-run prompts for `Open`, `Balanced`, or `Locked Down`; headless contexts hang on this prompt. Call `sbx policy set-default <allow-all|balanced|deny-all>` first ([Policies §Non-interactive environments](https://docs.docker.com/ai/sandboxes/security/policy/#non-interactive-environments)).
 - **Default to `Locked Down` plus explicit allow-list.** `sbx policy set-default deny-all` then `sbx policy allow network "api.anthropic.com,*.npmjs.org,..."`. Wildcard syntax: `example.com` does not match subdomains; `*.example.com` does not match the root; specify both when needed ([sbx policy allow network](https://docs.docker.com/reference/cli/sbx/policy/allow/network/)).
 - **Mount extra workspaces read-only.** `sbx run claude . /path/to/docs:ro` — the `:ro` suffix forces read-only ([sbx run](https://docs.docker.com/reference/cli/sbx/run/)).

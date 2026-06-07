@@ -4,18 +4,19 @@ description: "The Claude Agent SDK exposes six distinct responses to a tool-appr
 tags:
   - agent-design
   - tool-agnostic
+  - long-form
 aliases:
   - approval response taxonomy
   - tool approval response shapes
   - canUseTool response taxonomy
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-01
 ---
 
 # Six-Shape Approval Response Taxonomy
 
 > Six distinct approval responses — approve, approve-with-changes, approve-and-remember, reject, suggest alternative, redirect entirely — compose from three callback knobs over a binary protocol.
 
-The underlying protocol is binary: a `canUseTool` callback returns either `PermissionResultAllow(updated_input=...)` or `PermissionResultDeny(message=...)` ([Claude Agent SDK — Handle approvals and user input](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). The six-shape taxonomy is what those two return types compose into when three independent knobs — input mutation, persisted permission updates, and the deny message — are treated as design surfaces. The Agent SDK doc enumerates the six shapes verbatim; harness authors decide which to surface and operators decide when to reach for them.
+The underlying protocol is binary: a `canUseTool` callback returns either `PermissionResultAllow(updated_input=...)` or `PermissionResultDeny(message=...)` ([Claude Agent SDK — Handle approvals and user input](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). Six shapes emerge when three independent knobs — input mutation, persisted permission updates, and the deny message — are treated as design surfaces. The Agent SDK doc enumerates the six verbatim; harness authors decide which to surface and operators decide when to reach for them.
 
 ## The Three Underlying Knobs
 
@@ -31,21 +32,19 @@ A fourth path — sending an entirely new instruction over [streaming input](htt
 
 ## The Six Shapes
 
+All citations below point to the [Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests), which enumerate these shapes.
+
 ### 1. Approve
 
-Return the input unchanged. The tool executes exactly as the model proposed.
+Return the input unchanged; the tool executes exactly as proposed. The baseline shape, for when the action is correct as-is.
 
 ```python
 return PermissionResultAllow(updated_input=input_data)
 ```
 
-The baseline shape. Use it when the proposed action is correct and you accept it as-is ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)).
-
 ### 2. Approve with Changes
 
-Mutate `updated_input` before returning allow. The tool runs against the new input; the model is not told the user changed anything — it only sees the (changed) tool result.
-
-The SDK doc's example sandboxes a Bash command's path silently:
+Mutate `updated_input` before returning allow. The tool runs against the new input; the model is not told it changed — it only sees the (changed) result. Useful for scoping access, sanitising parameters, or adding constraints the prompt forgot. The SDK doc's example sandboxes a Bash command's path silently:
 
 ```python
 async def can_use_tool(tool_name, input_data, context):
@@ -58,11 +57,9 @@ async def can_use_tool(tool_name, input_data, context):
     return PermissionResultAllow(updated_input=input_data)
 ```
 
-Useful for scoping access, sanitising parameters, or adding constraints the prompt forgot ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)).
-
 ### 3. Approve and Remember
 
-The third callback argument carries a `suggestions` array — ready-made `PermissionUpdate` entries the SDK pre-computed for this call. Echo one back in `updated_permissions` and the rule persists; matching calls skip the prompt next time. A suggestion with `destination: "localSettings"` writes to `.claude/settings.local.json` so future sessions also skip the prompt ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests); requires `claude-agent-sdk` 0.1.80+).
+The third callback argument carries a `suggestions` array — ready-made `PermissionUpdate` entries the SDK pre-computed for this call. Echo one back in `updated_permissions` and the rule persists; matching calls skip the prompt next time. A suggestion with `destination: "localSettings"` writes to `.claude/settings.local.json` so future sessions skip it too (requires `claude-agent-sdk` 0.1.80+).
 
 ```python
 if choice == "always":
@@ -72,17 +69,15 @@ if choice == "always":
     )
 ```
 
-The user is *not* writing the permission rule freehand — the SDK proposes a candidate and the UI binds it to a button. That constraint keeps the persisted rule scoped to the call the user actually saw.
+The user is *not* writing the rule freehand — the SDK proposes a candidate and the UI binds it to a button, keeping the persisted rule scoped to the call the user actually saw.
 
 ### 4. Reject
 
-Return deny with a message explaining why. The model receives the message and may try a different approach ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)).
+Return deny with a message explaining why; the model receives it and may try a different approach. The minimum deny, for when no follow-up direction is appropriate.
 
 ```python
 return PermissionResultDeny(message="User rejected this action")
 ```
-
-The minimum deny. Use it when no follow-up direction is appropriate.
 
 ### 5. Suggest Alternative
 
@@ -95,19 +90,17 @@ if tool_name == "Bash" and "rm" in input_data.get("command", ""):
     )
 ```
 
-The model adapts on its own — no new turn from the user is required ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). This shape teaches the model in a way that "approve with changes" does not: the model sees the correction text, learns the constraint, and is more likely to apply it on subsequent calls in the same session.
+The model adapts on its own — no new turn from the user is required ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). Unlike "approve with changes," the model sees the correction text and is more likely to apply the constraint on later calls in the same session.
 
 ### 6. Redirect Entirely
 
-The only shape that exits the callback frame. Instead of returning allow or deny, the harness sends a new instruction over [streaming input](https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode), cancelling the pending tool request and giving Claude entirely new direction ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)).
-
-Reserve it for *broad* course-correction, not single-call adjustment. The five callback shapes resolve a tool request; redirect throws the request away.
+The only shape that exits the callback frame. Instead of returning allow or deny, the harness sends a new instruction over [streaming input](https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode), cancelling the pending tool request and giving Claude entirely new direction ([Claude Agent SDK docs](https://code.claude.com/docs/en/agent-sdk/user-input#respond-to-tool-requests)). Reserve it for *broad* course-correction: the five callback shapes resolve a tool request; redirect throws the request away.
 
 ## Why It Works
 
-The approval prompt is the **highest-context moment** in the agent loop for the human: the agent has stated intent, the proposed action is visible with its full input, and the user already has the cognitive context loaded. Reducing this moment to allow/deny throws away the user's ability to apply small corrections — a path fix, a scope narrow, an alternative direction — at the only point in the loop where they are cheap.
+The approval prompt is the **highest-context moment** in the agent loop for the human: intent is stated, the proposed action is visible with its full input, and the user already has the context loaded. Reducing it to allow/deny throws away the ability to apply small corrections — a path fix, a scope narrow, an alternative direction — at the one point in the loop where they are cheap.
 
-Treating the six as a taxonomy — rather than as a stack of independent features — clarifies which shape an operator should reach for in which condition. Because each shape is a composition of the three primitives above and not a new feature, the harness only has to surface the right UI; the protocol does not need to change.
+Because each shape composes the three primitives rather than adding a feature, the harness only has to surface the right UI; the protocol never changes. Treating the six as a taxonomy clarifies which shape to reach for in which condition.
 
 The Claude Code hooks protocol mirrors the same shape under different field names: `PreToolUse` returns `permissionDecision: allow | deny | ask | defer` and `PermissionRequest` returns `decision.behavior: allow | deny` with `updatedInput` ([Claude Code hooks](https://code.claude.com/docs/en/hooks)). The mechanism transfers across surfaces.
 
@@ -115,12 +108,12 @@ The Claude Code hooks protocol mirrors the same shape under different field name
 
 Richer prompts are not the same as better approval. The taxonomy adds value only when the prompt rate is already low enough that a thoughtful per-call decision is realistic.
 
-- **High-volume prompt streams.** When the user is approving dozens of prompts per task, six buttons amplify fatigue rather than mitigating it. Anthropic notes: *"Constantly clicking 'approve' slows down development cycles and can lead to 'approval fatigue', where users might not pay close attention to what they're approving, and in turn making development less safe"* ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)). The first defence is reducing prompts via sandboxes and allowlists — Anthropic reports an 84% reduction ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)) — not enriching the surviving prompts.
-- **Headless or non-interactive runs.** None of the six shapes apply when there is no human at the surface. The [Deferred Permission Pattern](deferred-permission-pattern.md) is the right primitive — pause the session, hand the pending call to the caller, resume after out-of-band approval.
-- **Approve-with-changes when the agent should adapt.** Silently mutating the input hides the correction from the model. The same wrong input reappears on the next call. When the agent should learn from the correction, "suggest alternative" (shape 5) carries the teaching signal that shape 2 deliberately suppresses.
-- **Approve-and-remember on a sample of one.** Persisting a permission rule from a single observed call is how blanket allowlists get over-broad. The user is in the worst position to write a precise rule mid-flow. The SDK mitigates this by pre-computing rule candidates in `context.suggestions` — relying on the freeform-rule path defeats the safeguard. [Bootstrap Evidence-Based Allowlist](../agent-readiness/bootstrap-evidence-based-allowlist.md) is the steady-state pattern for promoting rules after N successful manual approvals.
-- **Redirect-entirely as a habit.** Repeated redirects without a corrective signal mask underlying instruction-following problems. The model learns nothing about why its plan was wrong. Use redirect for genuine course-correction, not as a substitute for a clearer system prompt.
-- **Smoother is not better.** [Tool Confirmation Carousel](tool-confirmation-carousel.md) notes the same trap at the UI level: a cleaner approval surface can lower review quality if the user starts dispatching the queue reflexively. The taxonomy makes the *shapes* available; the harness still has to make the *moment of review* worth the user's attention.
+- **High-volume prompt streams.** When the user approves dozens of prompts per task, six buttons amplify fatigue rather than mitigating it. Anthropic notes that *"constantly clicking 'approve'... can lead to 'approval fatigue', where users might not pay close attention to what they're approving"* and reports an 84% prompt reduction from sandboxes and allowlists ([Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)). Reduce prompts first; don't enrich the survivors.
+- **Headless or non-interactive runs.** None of the six shapes apply with no human at the surface. The [Deferred Permission Pattern](deferred-permission-pattern.md) is the right primitive — pause, hand the pending call to the caller, resume after out-of-band approval.
+- **Approve-with-changes when the agent should adapt.** Silently mutating the input hides the correction, so the same wrong input reappears next call. When the agent should learn, "suggest alternative" (shape 5) carries the teaching signal that shape 2 suppresses.
+- **Approve-and-remember on a sample of one.** Persisting a rule from a single observed call is how blanket allowlists get over-broad; the user is in the worst position to generalize mid-flow. The SDK's pre-computed `context.suggestions` mitigate this — bypassing them for a freeform rule defeats the safeguard.
+- **Redirect-entirely as a habit.** Repeated redirects without a corrective signal mask instruction-following problems — the model learns nothing about why its plan was wrong. Use it for genuine course-correction, not as a substitute for a clearer system prompt.
+- **Smoother is not better.** [Tool Confirmation Carousel](tool-confirmation-carousel.md) flags the same trap at the UI level: a cleaner surface lowers review quality if the user dispatches the queue reflexively. The taxonomy makes the *shapes* available; the harness still has to make the *moment of review* worth the attention.
 
 ## Example
 

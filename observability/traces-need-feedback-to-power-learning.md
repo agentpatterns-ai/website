@@ -10,12 +10,12 @@ aliases:
   - trace-feedback coupling
   - feedback-attached traces
   - trace as eval corpus
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Traces Need Feedback to Power Learning
 
-> A trace records what the agent did. A verdict labels whether it was right. Couple the two at write time and the trace store doubles as an eval corpus; leave them apart and you accumulate trajectories nobody can act on.
+> A trace shows what an agent did; feedback shows whether it was right. Couple them and the trace store becomes a learning corpus.
 
 ## The Gap a Trace Alone Cannot Close
 
@@ -98,6 +98,4 @@ The event sits on the same trace as the agent run, joined by trace ID. Backends 
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — the instrumentation layer this pattern attaches feedback to
 - [Observability Feedback Loop](observability-feedback-loop.md) — the seven-step debug runbook that consumes verdict-labelled traces one bug at a time
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — the offline-corpus consumer that feedback-labelled traces feed
-- [Audit Eval Suite](../agent-readiness/audit-eval-suite.md) — verifies the loop closes by checking that production traces and the eval corpus share provenance
-- [Bootstrap OTel Init](../agent-readiness/bootstrap-otel-init.md) — wires the exporter that emits traces and evaluation events
 - [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — three structural eval gaps that feedback-labelled traces help expose

@@ -11,12 +11,12 @@ aliases:
   - one-shot recording deterministic replay
   - loop skill engine pattern
   - record-replay for periodic agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # One-Shot Record and Deterministic Replay for Periodic Agent Tasks
 
-> Periodic agent tasks pay for the LLM on every run even though the plan is the same every time. Record the tool-call sequence once, parameterize what varies, and replay without the model — the LLM's first run produces the plan; subsequent runs spend zero reasoning tokens.
+> Record a periodic agent task's tool-call sequence once, parameterize what varies, and replay deterministically without the LLM — cutting per-run reasoning cost to zero.
 
 ## The Problem with Reasoning on Every Cron Tick
 

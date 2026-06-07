@@ -130,7 +130,6 @@ cat /tmp/gsc_report.md
 
 ## Related
 
-- [Content & Skills Audit Workflow](../workflows/content-skills-audit.md) — URL health and staleness detection for published docs
 - [Continuous Triage](../workflows/continuous-triage.md) — label-based routing for automated issue handling
 - [Agent Observability in Practice](../observability/agent-observability-otel.md) — structured monitoring patterns applicable beyond GSC
 

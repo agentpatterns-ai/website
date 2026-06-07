@@ -8,12 +8,12 @@ tags:
   - arxiv
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Code Cleanliness as an Agent Cost Lever
 
-> Cleaner code does not change a coding agent's pass rate, but on a controlled minimal-pair study it cut token use 7-8% and file revisitations 34% — maintainability is an operational cost lever for agent runs, applicable only where the cleanup itself is cheaper than the savings it produces.
+> Cleaner code left agent pass rate unchanged but cut token use 7-8% and file revisitations 34% — a cost lever, not a capability fix.
 
 Code cleanliness as an agent cost lever is the operational claim — backed by [Trivedi and Schmitt's minimal-pair study](https://arxiv.org/abs/2605.20049) — that reducing static-analysis violations and cognitive complexity in a codebase lowers token consumption and navigation hops for coding agents working in it, without changing whether they finish the task. The effect is real and measurable, but small enough that it only pays off when the cleanup is cheap and the codebase is large enough for navigation cost to matter.
 

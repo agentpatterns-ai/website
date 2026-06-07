@@ -214,4 +214,3 @@ This pipeline makes sense when you need programmable customization — cue-phras
 - [Skill Library Evolution](../../tool-engineering/skill-library-evolution.md)
 - [Incident Log Investigation Skill](../../workflows/incident-log-investigation-skill.md)
 - [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md)
-- [Content Skills Audit](../../workflows/content-skills-audit.md)

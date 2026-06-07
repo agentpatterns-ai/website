@@ -9,7 +9,7 @@ aliases:
   - plugin bin directory PATH injection
   - scope-bound agent activation
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -125,3 +125,4 @@ security-reviewer-plugin/
 - [Extension Points](extension-points.md) — decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md) — the `enabledPlugins` force-install surface that turns plugin-activated overrides into org-wide policy
 - [Plugin and Extension Packaging](../../standards/plugin-packaging.md) — the broader distribution model that bundles `settings.json` and `bin/` alongside agents, skills, hooks, and MCP servers
+- [Local Plugin Scaffolding via `claude plugin init`](local-plugin-scaffolding.md) — the authoring side of the same bundle: scaffolds the `settings.json` + `agents/` + `bin/` layout this page activates, gated on the same v2.1.157 release

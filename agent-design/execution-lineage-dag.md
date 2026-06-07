@@ -10,12 +10,12 @@ aliases:
   - execution lineage
   - DAG of artifacts
   - artifact-lineage agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Execution Lineage: DAG of Artifacts vs Agent Loops
 
-> Represent revisable AI-native work as a DAG of artifact-producing computations with explicit dependencies, stable intermediate boundaries, and identity-based replay — so unrelated edits don't perturb the final output.
+> Execution lineage models revisable AI work as a DAG of artifacts with explicit dependencies and identity-based replay, so unrelated edits never perturb the output.
 
 ## The Maintained-State Quality Gap
 

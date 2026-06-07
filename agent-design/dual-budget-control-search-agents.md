@@ -10,12 +10,12 @@ aliases:
   - dual budget control
   - inference-time budget control for search agents
   - VOI-based action selection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Dual-Budget Control for Search Agents
 
-> Under hard limits on both tool calls and generated tokens, score each candidate action by Value-of-Information per unit budget and spend the next unit on the highest-ranking action.
+> Dual-budget control lets a search agent under tool-call and token caps score each action by Value-of-Information per unit budget, spending next on the highest-ranking one.
 
 ## The Two-Budget Problem
 

@@ -47,7 +47,7 @@ graph TD
 | **Graph-based** | Dependency graphs, call graphs, ASTs | Captures cross-file relationships | Expensive to build and maintain |
 | **Hybrid** | Combines semantic + structural signals | Best accuracy on complex tasks | Highest computational cost |
 
-Graph-based retrieval captures dependencies that text similarity misses: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior. Relative performance is task-dependent: [one study](https://arxiv.org/abs/2503.20589) reports that retrieved similar code can introduce noise and degrade generation accuracy by up to 15%, while graph-based retrieval provides the largest gains on tasks whose required dependencies share no vocabulary with the task description.
+A strong agent loop can partly offset lexical retrieval's weakness by reading and filtering more candidates itself — see [Lexical-First Retrieval for Agentic Search](../tool-engineering/lexical-first-retrieval-for-agentic-search.md) for when that trade-off favors BM25. Graph-based retrieval captures dependencies that text similarity misses: a function importing a type from another module, a test exercising a specific code path, or a configuration file constraining runtime behavior. Relative performance is task-dependent: [one study](https://arxiv.org/abs/2503.20589) reports that retrieved similar code can introduce noise and degrade generation accuracy by up to 15%, while graph-based retrieval provides the largest gains on tasks whose required dependencies share no vocabulary with the task description.
 
 ## How Repository-Level Retrieval Works
 

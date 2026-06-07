@@ -11,12 +11,12 @@ aliases:
   - BM25 for agentic search
   - lexical retrieval for deep research
   - sparse retrieval for search agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Lexical-First Retrieval for Agentic Search
 
-> A tuned BM25 index paired with a frontier LLM and deep retrieval can match or beat dense retrieval on deep-research benchmarks — but only when the agent loop is strong enough to filter the ranking noise.
+> A tuned BM25 index plus a frontier agent loop with deep retrieval can match dense retrieval on deep-research benchmarks — when the loop filters noise.
 
 ## The Default Worth Questioning
 

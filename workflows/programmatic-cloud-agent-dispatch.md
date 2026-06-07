@@ -10,12 +10,12 @@ aliases:
   - REST API agent dispatch
   - webhook-triggered coding agent
   - programmatic agent task creation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Programmatic Cloud-Agent Dispatch via REST API and Webhooks
 
-> Dispatching coding agents from REST endpoints, webhooks, and scheduled jobs is safe only when the caller owns deduplication, payload sanitisation, per-trigger budget caps, and out-of-band principal logging — the API ships none of these. Without that discipline, a single retry storm or untrusted issue title can run a runaway agent on your AI Credit balance.
+> Dispatching coding agents from REST, webhooks, or cron is safe only when the caller adds dedupe, payload sanitisation, budget caps, and principal logging itself.
 
 Programmatic cloud-agent dispatch is the third invocation principal after the IDE and chat surfaces: any system that can issue an authenticated POST can hand work to a coding agent. GitHub's May 2026 Agent tasks REST API exposes the same control plane the IDE and chat paths use internally, opening the door to cron-triggered release notes, webhook-driven refactors, and internal-portal automation. The plumbing is shipped; the discipline is the caller's problem.
 

@@ -7,7 +7,7 @@ tags:
 aliases:
   - "Agent Experience discipline"
   - "designing for agent consumers"
-last_reviewed: 2026-05-28
+last_reviewed: 2026-06-03
 ---
 
 # Designing for Agent Consumers (Agent Experience)

@@ -6,14 +6,14 @@ tags:
   - context-engineering
   - anti-pattern
   - tool-agnostic
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # Mid-Session Config Changes as Invisible Cache Invalidators
 
 > Mid-session model, effort, or MCP changes silently invalidate the prompt cache and re-bill the full prefix at ~10x.
 
-The prompt cache is keyed by the exact prefix of each request — system prompt, tool definitions, project context, conversation history — plus the model and effort level ([Claude Code docs](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). A change at any layer recomputes everything after it, so the next turn reads zero cache and re-bills the full prefix at the standard input rate — roughly 10x the cache-read rate ([Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
+The prompt cache is keyed by the exact prefix of each request — system prompt, tool definitions, project context, conversation history — plus the model and effort level ([Claude Code docs](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). A change at any layer recomputes everything after it, so the next turn reads zero cache and re-bills the full prefix at standard input rate — roughly 10x the cache-read rate ([Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing)).
 
 ## The Invalidator Catalogue
 
@@ -32,12 +32,12 @@ Model and effort are part of the cache key but not the prompt text, so they cann
 
 ## Why It Works
 
-Prefix matching is exact at the API layer: "a change anywhere in the prefix recomputes everything after it. There is no per-file or per-segment caching" ([§How the cache is organized](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). The hierarchy is cumulative — `tools → system → messages` — so a tool-definition change invalidates everything below ([Anthropic prompt-caching reference](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Claude Code orders content rarely-changing-first specifically to maximize cached-prefix length.
+Prefix matching is exact: "a change anywhere in the prefix recomputes everything after it. There is no per-file or per-segment caching" ([§How the cache is organized](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). The hierarchy is cumulative — `tools → system → messages` — so a tool change invalidates everything below it ([Anthropic prompt-caching reference](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
 
 ## The Two Silent Cases
 
-- **MCP auto-reconnect.** Tool definitions sit in the system prompt layer, so the cache invalidates "when the set of MCP tools available to Claude changes between turns. The most common cause is an MCP server connecting or disconnecting mid-session, which can happen without any action on your part: a stdio server's process exits, an HTTP session expires, or a server reconnects automatically after a transient failure" ([§Connecting or disconnecting an MCP server](https://code.claude.com/docs/en/prompt-caching#connecting-or-disconnecting-an-mcp-server)).
-- **`opusplan` plan-mode toggle.** The `opusplan` setting "resolves to Opus during plan mode and Sonnet during execution, so each plan-mode toggle is a model switch and starts a fresh cache" ([§Switching models](https://code.claude.com/docs/en/prompt-caching#switching-models)). A permission-mode change is a model switch under the hood.
+- **MCP auto-reconnect.** Tool definitions sit in the system layer, so the cache invalidates whenever the set of MCP tools changes — which "can happen without any action on your part: a stdio server's process exits, an HTTP session expires, or a server reconnects automatically after a transient failure" ([§Connecting or disconnecting an MCP server](https://code.claude.com/docs/en/prompt-caching#connecting-or-disconnecting-an-mcp-server)).
+- **`opusplan` plan-mode toggle.** It "resolves to Opus during plan mode and Sonnet during execution, so each plan-mode toggle is a model switch and starts a fresh cache" ([§Switching models](https://code.claude.com/docs/en/prompt-caching#switching-models)).
 
 ## When This Backfires
 
@@ -49,14 +49,14 @@ The failure is *invisible cost*, not invalidation per se. Mid-session changes ar
 - **Local inference without shared KV cache** (Ollama, llama.cpp) — no cross-request cache to invalidate ([Disable Attribution Headers to Preserve KV Cache in Local Inference](../context-engineering/kv-cache-invalidation-local-inference.md)).
 - **Gateways or `ANTHROPIC_BASE_URL` deployments where caching is unsupported** — invalidation is moot ([§Where the cache lives](https://code.claude.com/docs/en/prompt-caching#where-the-cache-lives)).
 
-Several changes commonly assumed to invalidate do **not** — over-correcting is also wrong: editing `CLAUDE.md` mid-session ([§Editing CLAUDE.md mid-session](https://code.claude.com/docs/en/prompt-caching#editing-claude-md-mid-session)), changing output style ([§Changing output style](https://code.claude.com/docs/en/prompt-caching#changing-output-style)), switching permission mode without `opusplan` ([§Changing permission mode](https://code.claude.com/docs/en/prompt-caching#changing-permission-mode)), invoking skills or slash commands, running `/recap`, `/rewind`, or spawning a subagent ([§Actions that keep the cache](https://code.claude.com/docs/en/prompt-caching#actions-that-keep-the-cache)).
+Over-correcting is also wrong: several changes commonly assumed to invalidate do **not** — editing `CLAUDE.md` mid-session, changing output style, switching permission mode without `opusplan`, invoking skills or slash commands, and running `/recap`, `/rewind`, or spawning a subagent ([§Actions that keep the cache](https://code.claude.com/docs/en/prompt-caching#actions-that-keep-the-cache)).
 
 ## Cache-Preserving Alternatives
 
-- `/rewind` truncates to an earlier turn — "the next request hits the earlier cache entry" ([§Rewinding the conversation](https://code.claude.com/docs/en/prompt-caching#rewinding-the-conversation)). Prefer it over `/compact` to abandon a path.
-- `/recap` "appends the summary as command output rather than replacing your message history, so the cached prefix stays intact" ([§Running /recap](https://code.claude.com/docs/en/prompt-caching#running-recap)). Prefer it over `/compact` to surface a summary.
+- `/rewind` truncates to an earlier turn so "the next request hits the earlier cache entry" ([§Rewinding the conversation](https://code.claude.com/docs/en/prompt-caching#rewinding-the-conversation)). Prefer it over `/compact` to abandon a path.
+- `/recap` appends a summary as command output instead of replacing message history, "so the cached prefix stays intact" ([§Running /recap](https://code.claude.com/docs/en/prompt-caching#running-recap)). Prefer it over `/compact` to surface a summary.
 
-The rule of thumb from the primary docs: "Pick your model, effort level, and MCP servers at the top of a session, then save `/compact` for natural breaks between tasks" ([§How the cache is organized](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)).
+The rule of thumb: "Pick your model, effort level, and MCP servers at the top of a session, then save `/compact` for natural breaks between tasks" ([§How the cache is organized](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)).
 
 ## Example
 

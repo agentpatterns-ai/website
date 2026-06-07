@@ -8,12 +8,12 @@ tags:
 aliases:
   - Per-Plugin Token Cost
   - Plugin Token Budget
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Per-Plugin Token-Cost Attribution via `claude plugin details`
 
-> Claude Code's `claude plugin details <name>` prints a plugin's component inventory and projected per-session token cost — the unit between session-level (`/usage`) and component-level (`/context all`) attribution at which plugins are installed, disabled, and held to a budget.
+> Claude Code's `claude plugin details <name>` prints a plugin's component inventory and per-session token cost — the attribution cut between `/usage` and `/context all`.
 
 The plugin is the install/remove unit in Claude Code: one manifest bundles skills, agents, hooks, MCP servers, and LSP servers ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). Without per-plugin token accounting, a maintainer who sees the session at 78% cannot rank installed plugins by cost — the only action is *"disable a plugin"* without knowing which carries the weight. Claude Code v2.1.139 (2026-05-11) closed that gap with the `plugin details` subcommand ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
@@ -25,7 +25,7 @@ Three cuts of the same telemetry, each pointing at a different remediation primi
 |-----|---------|-------------|
 | Session | `/usage` (merged from `/cost` + `/stats` in v2.1.118) | compact, restart, swap models ([changelog](https://code.claude.com/docs/en/changelog)) |
 | Plugin | `claude plugin details <name>` (v2.1.139) | `plugin disable`, split, prune skills ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)) |
-| Component | `/context all` per-skill estimates (refined v2.1.139), [per-tool output audit](../agent-readiness/audit-tool-output-token-cost.md) | mark skill `name-only`, prune description, narrow tools |
+| Component | `/context all` per-skill estimates (refined v2.1.139), per-tool output audit | mark skill `name-only`, prune description, narrow tools |
 
 ```mermaid
 graph LR
@@ -62,7 +62,7 @@ A plugin's budget is not its always-on number alone. A verbose MCP server return
 4. Cross-reference top on-invoke components against `/usage` traffic. A 2400-token skill firing 30 times costs more than a 4000-token skill firing once.
 5. Remediate:
    - Always-on bloat → split the plugin, or set `name-only` / `off` in `skillOverrides` ([Claude Code skills reference](https://code.claude.com/docs/en/skills#override-skill-visibility-from-settings))
-   - Hot on-invoke skill → rewrite output per [audit tool-output token cost](../agent-readiness/audit-tool-output-token-cost.md)
+   - Hot on-invoke skill → rewrite output to cut tool-output token cost
    - Plugin unused in this workflow → `claude plugin disable <name>`
 
 ## When This Cut Misleads
@@ -103,7 +103,7 @@ Per-component (rounded)
   Token counts are estimates and may differ from actual usage.
 ```
 
-The 180-token always-on figure is paid every session, regardless of whether either skill fires. Cross-checking `/usage` shows `scan-dependencies` fired six times in the previous session — six × 2400 = 14400 tokens of on-invoke cost from a 100-token always-on listing. The remediation is not to disable the plugin; the always-on cost is already minimal. It is to audit `scan-dependencies` output against [audit tool-output token cost](../agent-readiness/audit-tool-output-token-cost.md) and shrink the per-call output.
+The 180-token always-on figure is paid every session, regardless of whether either skill fires. Cross-checking `/usage` shows `scan-dependencies` fired six times in the previous session — six × 2400 = 14400 tokens of on-invoke cost from a 100-token always-on listing. The remediation is not to disable the plugin; the always-on cost is already minimal. It is to audit `scan-dependencies` output for tool-output token cost and shrink the per-call output.
 
 The opposite finding from the same command: `claude plugin details` against a plugin with twelve skills shows ~1400 tokens always-on and ~0 on-invoke across the session — none fired. The remediation here is to split the plugin, or mark the unused skills `name-only` in `skillOverrides`.
 
@@ -118,8 +118,6 @@ The opposite finding from the same command: `claude plugin details` against a pl
 ## Related
 
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](context-usage-attribution.md) — the orthogonal per-source cut (rules / skills / MCP / subagent)
-- [Audit Tool Output Token Cost](../agent-readiness/audit-tool-output-token-cost.md) — drill-down when on-invoke cost concentrates in one component
-- [Audit Instruction Rule Budget](../agent-readiness/audit-instruction-rule-budget.md) — drill-down when the symptom is always-on bloat
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](../standards/plugin-packaging.md) — what a plugin is and why it sits at this attribution layer
 - [The Infinite Context anti-pattern](../anti-patterns/infinite-context.md) — the failure mode the always-on column makes visible
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md) — the export path for the same telemetry

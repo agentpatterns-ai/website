@@ -10,12 +10,12 @@ tags:
 aliases:
   - ComplexMCP benchmark
   - interdependent tool benchmark
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes
 
-> A 2026 MCP benchmark with 300+ interdependent tools across seven stateful sandboxes shows top-tier models capped near 55% while humans reach 94% — three failure modes drive the gap, each tied to a specific deployment choice.
+> ComplexMCP, a 300+ tool MCP benchmark, caps top models near 55% against a 94% human baseline through three deployment-conditional failure modes.
 
 ## The Benchmark and the Gap
 
@@ -46,11 +46,11 @@ This is the same precision-drop-at-scale mechanism documented in the [Skill Retr
 
 ### 2. Over-confidence skipping environment verification
 
-Agents commit to actions without checking environment state first. A booking flow assumes a user exists; a trade assumes the account tier permits the order type. Because the seed-driven architecture varies which users, accounts, and permissions exist between runs, any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+Agents commit to actions without checking environment state first. A booking flow assumes a user exists; a trade assumes the account tier permits the order type. Because the seed-driven architecture varies users, accounts, and permissions between runs, any hardcoded assumption fails. The paper frames the needed shift as moving from "proactive executors" to "perceptive planners" — agents that reconcile their internal plan with a dynamic, non-empty environment state. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
 ### 3. Strategic defeatism
 
-When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than attempt recovery. GPT-5 reaches only 19.14% on this benchmark, attributed to "polite surrender" after the first error. Models trained heavily on refusal and uncertainty hedging are more susceptible. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than attempt recovery. GPT-5 reaches only 19.14%, attributed to "polite surrender" after the first error. Models trained heavily on refusal and hedging are more susceptible. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
 
 ## When These Bottlenecks Bite
 
@@ -62,11 +62,11 @@ The three bottlenecks are conditional on deployment shape, not inherent to agent
 | 50-150 tools, multi-domain | Moderate | High on writes | Model-dependent |
 | 300+ tools, stateful, interdependent | High — full-context required | High — verification mandatory | High — needs explicit recovery prompts |
 
-Teams running narrow MCP servers see different failure profiles than the benchmark predicts. [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) and [Tool Minimalism](../tool-engineering/tool-minimalism.md) address bottleneck 1 by design — fewer, higher-level tools never saturate retrieval; scoped discovery and partitioned servers achieve the same at the harness layer.
+Narrow MCP servers see different failure profiles than the benchmark predicts. [Consolidate Agent Tools](../tool-engineering/consolidate-agent-tools.md) and [Tool Minimalism](../tool-engineering/tool-minimalism.md) address bottleneck 1 by design — fewer, higher-level tools never saturate retrieval; scoped discovery and partitioned servers achieve the same at the harness layer.
 
 ## Design Responses
 
-**For bottleneck 1 (retrieval):** keep the active toolset small enough to fit in context. If the surface is genuinely large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight.
+**For bottleneck 1 (retrieval):** keep the active toolset small enough to fit in context. If the surface is large, partition by task phase or sub-agent rather than retrieve from a flat pool. Track which tools the agent selects across a trajectory sample — unselected tools are dead weight.
 
 **For bottleneck 2 (over-confidence):** require state-reading tool calls before any mutating call, enforced at the harness layer. Schema-level checks on tool outputs catch agents that assume entities exist. The [Deterministic Guardrails](deterministic-guardrails.md) pattern wraps this around probabilistic agent decisions.
 

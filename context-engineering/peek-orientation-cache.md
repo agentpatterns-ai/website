@@ -11,22 +11,22 @@ tags:
   - memory
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # PEEK: Orientation Cache for Recurring-Context Agents
 
-> A small, constant-sized prompt artifact that caches reusable orientation knowledge about a recurring large context — what it contains, how it is organised, which entities, constants, and schemas have proved useful — and is maintained across sessions by a Distiller / Cartographer / Evictor pipeline. Pays off only when the same context is re-entered many times and stays stable enough that the cache does not drift.
+> A constant-sized prompt artifact caching orientation knowledge — what a recurring context holds and how it is organised. Pays off only on stable, re-entered contexts.
 
 ## When This Pattern Applies
 
-PEEK is conditional. The cache wins over per-session, just-in-time orientation (grep, file tree, [token-fitted repo maps](repository-map-pattern.md)) only when three conditions hold together:
+PEEK is conditional. The cache wins over per-session orientation (grep, file tree, [token-fitted repo maps](repository-map-pattern.md)) only when three conditions hold:
 
 - **The same large context is re-entered repeatedly** — a long-lived repo, a corpus the agent revisits, a knowledge base touched across sessions. One-shot use does not amortise the cache.
 - **The context is stable enough to outpace drift** — entities, constants, and schemas change slower than the agent re-enters. Fast-moving migrations invalidate entries before they pay back. ([Atlan, 2026](https://atlan.com/know/agent-harness-failures-anti-patterns/))
 - **An invalidation surface exists** — a hook, watcher, lint, or test fails when the cache disagrees with the source of truth. Without one, drift accumulates silently as plausible-but-wrong claims. ([Tacnode, 2026](https://tacnode.io/post/your-ai-agents-are-spinning-their-wheels))
 
-Without all three, fall through to per-session orientation: a [tree-sitter repo map](repository-map-pattern.md) for code, or just-in-time retrieval against the corpus.
+Without all three, fall through to per-session orientation: a [tree-sitter repo map](repository-map-pattern.md) for code, or just-in-time corpus retrieval.
 
 ## What PEEK Is Not
 
@@ -38,7 +38,7 @@ Without all three, fall through to per-session orientation: a [tree-sitter repo 
 | **[AOCI](aoci-symbolic-semantic-indexing.md)** | Symbolic-plus-semantic blueprint | Built once offline, read whole before each task |
 | **[Seeding Agent Context](seeding-agent-context.md)** | Static breadcrumbs (AGENTS.md, comments) | Edited by humans, discovered by the agent |
 
-The closest neighbour is [Evolving Playbooks (ACE)](evolving-playbooks.md), and PEEK was evaluated specifically against it. ACE preserves *trajectories and strategies* — what worked. PEEK preserves *orientation knowledge of the context itself* — what is there. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
+The closest neighbour is [Evolving Playbooks (ACE)](evolving-playbooks.md), which PEEK was evaluated against: ACE preserves *trajectories and strategies* — what worked; PEEK preserves *orientation knowledge of the context* — what is there. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
 
 ## The Three-Stage Cache
 
@@ -59,31 +59,29 @@ graph LR
 - **Cartographer** — converts that knowledge into structured *deltas* on the context map, not rewrites, preserving prior knowledge across updates.
 - **Evictor** — when the map approaches its fixed token budget, removes entries by priority so the artifact stays constant-sized.
 
-The fixed token budget is the load-bearing constraint — without the evictor the cache grows monotonically and re-introduces the lost-in-the-middle problem it was meant to avoid.
+The fixed token budget is load-bearing — without the evictor the cache grows monotonically and re-introduces the lost-in-the-middle problem it was meant to avoid.
 
 ## Why It Works
 
-Re-entry into the same large context is the dominant cost driver for recurring agent workloads — each session otherwise re-pays for discovery. A small constant-sized artifact amortises that discovery across sessions, and the three-stage pipeline keeps it under a fixed token budget so it does not crowd out task-specific context.
+Re-entry into the same large context is the dominant cost driver for recurring agent workloads — each session otherwise re-pays for discovery. A constant-sized artifact amortises that discovery across sessions, and the fixed token budget stops it from crowding out task-specific context. The savings come from skipping re-discovery, not from better reasoning: PEEK is a *cost-reduction* pattern for repeated re-entry, not a reasoning enhancement or a substitute for retrieval and tool design.
 
-In the PEEK paper's evaluation, the cache delivered 6.3–34.0% improvement on long-context reasoning and information-aggregation tasks and 6.0–14.0% on in-context learning, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts — with 93–145 fewer iterations and 1.7–5.8× lower cost. Results generalised across language models and agent architectures, including OpenAI Codex. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
-
-The savings come from skipping re-discovery, not from better reasoning. PEEK is a *cost-reduction* pattern for repeated re-entry, evaluated against another context-engineering baseline — not a reasoning enhancement and not a substitute for retrieval or tool design. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal.
+In the PEEK paper's evaluation, the cache delivered 6.3–34.0% improvement on long-context reasoning and information-aggregation tasks and 6.0–14.0% on in-context learning, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts — with 93–145 fewer iterations and 1.7–5.8× lower cost, generalising across models and architectures including OpenAI Codex. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
 
 ## When This Backfires
 
-- **Fast-changing context** — codebases under heavy refactor, schemas in active migration, corpora that update daily. The cache drifts faster than it pays for itself; the agent acts on stale entity/constant/schema claims. Context drift has been reported as the top failure mode of standing context files in industry surveys. ([Atlan, 2026](https://atlan.com/know/agent-harness-failures-anti-patterns/), [Tacnode, 2026](https://tacnode.io/post/your-ai-agents-are-spinning-their-wheels))
-- **Small or single-session contexts** — a one-shot script, a small repo a human can hold in their head, a corpus the agent will touch once. Fixed-cost cache construction and maintenance exceeds the savings. ([Wojtyna, 2026](https://medium.com/@mike_7149/context-mapping-4b4909cf195a))
-- **No invalidation surface** — no hook, watcher, or test fails when the cache disagrees with the source of truth. Without one, the cache becomes a confident-sounding source of falsehood — the "65% context drift" failure mode reported by enterprise AI harness reviews. ([Atlan, 2026](https://atlan.com/know/agent-harness-failures-anti-patterns/))
-- **High-stakes claims without cross-check** — if the agent trusts the cache's claim about a constant or schema without verifying, a stale entry can produce silently incorrect behaviour in security, finance, or compliance code.
-- **Single-source benchmark** — the strong reported numbers come from one paper; teams adopting on those numbers alone are extrapolating from one team's setup. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
+- **Fast-changing context** — codebases under heavy refactor, schemas in active migration, corpora that update daily. The cache drifts faster than it pays for itself and the agent acts on stale claims. Context drift is reported as the top failure mode of standing context files. ([Atlan, 2026](https://atlan.com/know/agent-harness-failures-anti-patterns/), [Tacnode, 2026](https://tacnode.io/post/your-ai-agents-are-spinning-their-wheels))
+- **Small or single-session contexts** — a one-shot script, a small repo, a corpus touched once. Cache construction and maintenance cost exceeds the savings. ([Wojtyna, 2026](https://medium.com/@mike_7149/context-mapping-4b4909cf195a))
+- **No invalidation surface** — nothing fails when the cache disagrees with the source of truth, so it becomes a confident-sounding source of falsehood. ([Atlan, 2026](https://atlan.com/know/agent-harness-failures-anti-patterns/))
+- **High-stakes claims without cross-check** — a stale entry the agent trusts about a constant or schema can produce silently incorrect behaviour in security, finance, or compliance code.
+- **Single-source benchmark** — the strong numbers come from one paper; adopting on those alone extrapolates from one team's setup. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
 
 Where any of these holds, prefer per-session orientation: a [token-fitted repo map](repository-map-pattern.md), agentic search, or [seeded breadcrumbs](seeding-agent-context.md) the agent rediscovers each session.
 
 ## Example
 
-A practitioner analogue exists in repos that maintain a small, agent-authored orientation file alongside the human-authored `AGENTS.md` — the human file declares conventions, the agent file caches what successive sessions have learned about the codebase. Reported variants include dedicated `agents/` meta-repos used to amortise re-exploration across multi-repo workloads. ([Augment Code, 2026](https://www.augmentcode.com/guides/how-to-build-agents-md))
+A practitioner analogue exists in repos that maintain a small, agent-authored orientation file alongside the human-authored `AGENTS.md` — the human file declares conventions, the agent file caches what successive sessions have learned about the codebase. Reported variants include dedicated `agents/` meta-repos that amortise re-exploration across multi-repo workloads. ([Augment Code, 2026](https://www.augmentcode.com/guides/how-to-build-agents-md))
 
-A simplified entry the Cartographer might add after a session that touched the authentication module:
+A simplified entry the Cartographer might add after touching the authentication module:
 
 ```yaml
 # Orientation cache entry — written by the Cartographer, read every session

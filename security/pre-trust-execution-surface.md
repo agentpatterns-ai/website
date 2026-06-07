@@ -6,7 +6,7 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -16,15 +16,15 @@ status: current
 
 ## The Failure Mode
 
-Most coding-agent harnesses load project-local configuration eagerly during startup: settings files, hook definitions, MCP server manifests, environment variables, localhost listeners. The trust dialog appears *after* this configuration has already been parsed and, often, executed.
+Most coding-agent harnesses eagerly load project-local config at startup: settings files, hook definitions, MCP server manifests, environment variables, localhost listeners. The trust dialog appears *after* this config is parsed and, often, executed.
 
-Anthropic's 2026-05-25 post documents this directly: "Claude Code reads project settings during startup — before presenting the standard 'Do you trust this folder?' prompt" ([How we contain Claude across products](https://www.anthropic.com/engineering/how-we-contain-claude)). Three vulnerabilities responsibly disclosed between mid-2025 and January 2026 shared this shape — a developer cloned a repo to review a PR, the repo's `.claude/settings.json` defined a hook, and the attacker-committed hook executed automatically during init ([Anthropic Engineering, 2026](https://www.anthropic.com/engineering/how-we-contain-claude)).
+Anthropic's 2026-05-25 post documents this: "Claude Code reads project settings during startup — before presenting the standard 'Do you trust this folder?' prompt" ([How we contain Claude across products](https://www.anthropic.com/engineering/how-we-contain-claude)). Three vulnerabilities disclosed between mid-2025 and January 2026 shared this shape — a developer clones a repo to review a PR, the repo's `.claude/settings.json` defines a hook, and the attacker-committed hook executes automatically during init ([Anthropic Engineering, 2026](https://www.anthropic.com/engineering/how-we-contain-claude)).
 
-The trust dialog is not the security boundary. The surface that matters is everything that runs before it appears.
+The trust dialog is not the security boundary; everything before it appears is what matters.
 
 ## What Composes the Pre-Trust Surface
 
-Across coding-agent tools, the implicitly-loaded directories follow the same shape ([Google Cloud security research, 2026](https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit)):
+Across tools, the implicitly-loaded directories follow the same shape ([Google Cloud security research, 2026](https://cloud.google.com/blog/products/identity-security/beyond-source-code-the-files-ai-coding-agents-trust-and-attackers-exploit)):
 
 | File class | Why it executes pre-trust |
 |------------|--------------------------|
@@ -34,13 +34,11 @@ Across coding-agent tools, the implicitly-loaded directories follow the same sha
 | Environment variable overrides | `ANTHROPIC_BASE_URL` and similar values are read at process init, before any dialog renders |
 | Localhost listeners | The harness opens sockets at startup so the editor extension can connect |
 
-Each is an attacker-controlled byte stream the moment the repository is cloned from an untrusted source.
+Each is an attacker-controlled byte stream once the repo is cloned from an untrusted source.
 
 ## Why This Class of Bug Exists
 
-The eager-load assumption is structural. The harness needs to know which hooks are wired, which MCP servers to start, and which permissions are allowed in order to render a trust prompt that lists configured behaviours rather than just "trust this folder?". The natural implementation reads config first, renders the trust state second.
-
-This sequencing becomes a vulnerability because the cloned repository arrived over the public internet — typically through a PR review workflow where the developer is *expected* to review code from contributors they do not know. Treating that repository's config as implicitly trusted is the same category of error as parsing an inbound HTTP request body before authenticating the request.
+The eager-load assumption is structural. To render a prompt listing configured behaviours rather than just "trust this folder?", the harness must read which hooks are wired, which MCP servers to start, and which permissions are allowed — so it reads config first, renders trust state second. That becomes a vulnerability because the cloned repo arrived over the public internet, often a PR review where the developer is *expected* to read code from unknown contributors. Treating that config as implicitly trusted is the same error as parsing an inbound HTTP body before authenticating the request.
 
 ## The Remediation
 
@@ -52,23 +50,23 @@ Anthropic's prescription is sequencing — establish the trust boundary first, t
 
 A practical split for harness authors:
 
-1. **Pre-trust phase**: read project-local config as *data* only — surface structure, paths, declared hooks, declared MCP servers — for the trust prompt to display. Never execute.
-2. **Trust boundary**: render the prompt with the parsed structure visible. The user accepts or rejects with information about what would activate.
-3. **Post-trust phase**: spawn MCP servers, register hooks, evaluate environment variable overrides, open localhost listeners.
+1. **Pre-trust phase**: read config as *data* only — structure, paths, declared hooks, declared MCP servers — for the prompt to display. Never execute.
+2. **Trust boundary**: render the prompt with the parsed structure visible, so the user accepts or rejects knowing what would activate.
+3. **Post-trust phase**: spawn MCP servers, register hooks, evaluate environment overrides, open localhost listeners.
 
-The remediation generalises — any harness that loads project-local config (Codex `.codex/`, Cursor `.cursor/rules/`, Copilot `.github/copilot/`, future tools) has the same surface and needs the same sequencing fix. The Cuckoo Attack research demonstrated the class is reproducible across nine agent and AI-IDE combinations ([Cuckoo Attack, 2025](https://arxiv.org/abs/2509.15572)).
+The fix generalises — any harness loading project-local config (Codex `.codex/`, Cursor `.cursor/rules/`, Copilot `.github/copilot/`, future tools) has the same surface and needs the same sequencing. The Cuckoo Attack research showed the class is reproducible across nine agent and AI-IDE combinations ([Cuckoo Attack, 2025](https://arxiv.org/abs/2509.15572)).
 
 ## Relationship to the Lethal Trifecta
 
-Pre-trust execution adds a time-domain dimension to the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md). The trifecta names three capabilities (private data, untrusted content, egress) that together create an exploitable principal. Pre-trust execution lets all three converge *before the principal has consented to act at all* — egress can land before the user has even seen the trust prompt.
+Pre-trust execution adds a time-domain dimension to the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md). That model's three capabilities — private data, untrusted content, egress — together create an exploitable principal. Pre-trust execution lets all three converge *before the principal has consented to act*: egress can land before the user has seen the trust prompt.
 
 ## When This Backfires
 
-The pattern matters most for *unfamiliar* repositories; specific failure conditions where the cost is uneven:
+The pattern matters most for *unfamiliar* repositories. Three failure conditions where the cost is uneven:
 
-1. **Resident first-party repos**: developers reopening a long-lived repo many times per day pay post-trust initialization latency every session. The trust state is effectively durable — a stale-trust cache needs invalidation on config-file changes, otherwise deferred-execution discipline is undone by long-lived trust ([Mindgard research, 2026](https://mindgard.ai/blog/approve-once-exploit-forever-the-trust-persistence-problem-in-ai-coding-agents)).
-2. **Headless CI runs**: when a coding agent runs in CI on every commit, there is no human at a trust prompt to defer to. The fix is not deferred execution — there is nothing to defer to — but sandbox isolation or pre-merge config review.
-3. **Devcontainer-isolated workflows**: when the agent runs inside an isolated container with a network firewall ([reference Claude Code devcontainer](https://code.claude.com/docs/en/devcontainer)), the pre-trust window's blast radius is bounded by the container. The pattern still matters for credential exfiltration — Anthropic's own docs note that `--dangerously-skip-permissions` inside the container cannot prevent exfiltration of in-container credentials ([Claude Code devcontainer docs](https://code.claude.com/docs/en/devcontainer)).
+1. **Resident first-party repos**: developers reopening a long-lived repo many times a day pay post-trust init latency every session. Trust is effectively durable — a stale-trust cache needs invalidation on config changes, or deferred-execution discipline is undone by long-lived trust ([Mindgard research, 2026](https://mindgard.ai/blog/approve-once-exploit-forever-the-trust-persistence-problem-in-ai-coding-agents)).
+2. **Headless CI runs**: when an agent runs in CI on every commit, no human is at a prompt to defer to. The fix is not deferred execution but sandbox isolation or pre-merge config review.
+3. **Devcontainer-isolated workflows**: inside a container with a network firewall, the pre-trust blast radius is bounded by the container. The pattern still matters for credential exfiltration — Anthropic's docs note `--dangerously-skip-permissions` inside the container cannot prevent exfiltration of in-container credentials ([Claude Code devcontainer docs](https://code.claude.com/docs/en/devcontainer)).
 
 ## Key Takeaways
 
@@ -85,4 +83,5 @@ The pattern matters most for *unfamiliar* repositories; specific failure conditi
 - [Sandbox Runtime Comparison](sandbox-runtime-comparison.md)
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
+- [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)

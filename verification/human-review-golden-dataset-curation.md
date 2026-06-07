@@ -8,7 +8,7 @@ tags:
 aliases:
   - human-in-the-loop eval curation
   - golden dataset review loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Human-Review-Driven Curation of Golden Eval Datasets
@@ -77,7 +77,7 @@ For LLM judge calibration, iterate the judge prompt against a 200-example expert
 
 ## Why It Works
 
-LLM judges drift silently between model updates, prompt rewrites, and tool changes because the judge is being asked to score inputs outside its calibration distribution. Production traffic explores edge cases the original golden set was never authored against; the divergence is unobservable from inside the eval suite because the same data both grades the agent and tunes the judge. A periodic human-review loop is the only signal that re-anchors the judge to ground truth — reviewers re-label a sampled slice, the attribution split routes scorer errors to the judge prompt and agent errors to the golden set, and the suite stays calibrated against the moving production distribution. Without this loop, scores improve while real-user satisfaction degrades, a Goodhart's Law signature documented across LLM-judge calibration practice ([Future AGI](https://futureagi.com/blog/llm-as-judge-best-practices-2026), [Braintrust](https://www.braintrust.dev/articles/llm-as-a-judge-vs-human-in-the-loop-evals)).
+LLM judges drift silently across model updates, prompt rewrites, and tool changes because each shift pushes the judge to score inputs outside its calibration distribution, and the drift is unobservable from inside the suite when the same data both grades the agent and tunes the judge. A periodic human-review loop is the only signal that re-anchors the judge to ground truth on the moving production distribution. Without it, scores improve while real-user satisfaction degrades — a Goodhart's Law signature documented across LLM-judge calibration practice ([Future AGI](https://futureagi.com/blog/llm-as-judge-best-practices-2026), [Braintrust](https://www.braintrust.dev/articles/llm-as-a-judge-vs-human-in-the-loop-evals)).
 
 ## When This Backfires
 
@@ -91,7 +91,7 @@ The loop adds latency and reviewer cost. Five conditions tip it from net-positiv
 
 ## Relation to Adjacent Practices
 
-This pattern sits one layer above [golden query pairs](golden-query-pairs-regression.md) and [incident-to-eval synthesis](incident-to-eval-synthesis.md): both feed individual cases into the golden set, while human-review-driven curation is the maintenance discipline that keeps the set calibrated as the distribution moves. It is independent of [SynAE](synae-synthetic-eval-quality.md) — SynAE scores how closely a synthetic set matches production, while this loop maintains the golden set used as that production reference. Calibration thresholds here protect against the [reward-hacking](anti-reward-hacking.md) signature on the eval suite itself: when judge and reviewer co-drift toward the same blind spot, no internal metric will show it.
+This pattern sits one layer above [golden query pairs](golden-query-pairs-regression.md) and [incident-to-eval synthesis](incident-to-eval-synthesis.md): both feed individual cases into the golden set, while human-review-driven curation is the maintenance discipline that keeps the set calibrated as the distribution moves. It complements [SynAE](synae-synthetic-eval-quality.md), which scores how closely a synthetic set matches the production reference this loop maintains. The calibration thresholds also guard against the [reward-hacking](anti-reward-hacking.md) signature on the suite itself: when judge and reviewer co-drift toward the same blind spot, no internal metric will show it.
 
 ## Key Takeaways
 

@@ -5,14 +5,14 @@ tags:
   - code-review
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Reviewer's Playbook for Agent-Authored Pull Requests
 
 > A time-boxed inspection priority order for reviewing agent-authored PRs — CI changes first, then duplicated utilities, then the critical path, then evidence.
 
-Reviewing an agent-authored pull request is not the same job as reviewing a human-authored one. The human reviewer of an agent PR is verifying *context*, not correctness — the agent has already produced code that parses and (usually) passes its own tests. The defects that ship are the ones the agent could not have caught itself: weakened CI, reimplemented utilities, boundary cases the happy path doesn't reach, and unsourced assumptions about contracts. This playbook is the inspection priority order published by GitHub's engineering team on 7 May 2026 ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)), with the conditions under which it stops working.
+Reviewing an agent-authored pull request verifies *context*, not correctness — the agent has already produced code that parses and usually passes its own tests. The defects that ship are the ones the agent could not catch itself: weakened CI, reimplemented utilities, boundary cases the happy path doesn't reach, and unsourced assumptions about contracts. This playbook is the inspection priority order GitHub's engineering team published on 7 May 2026 ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)), with the conditions under which it stops working.
 
 ## The Ten-Minute Inspection Order
 
@@ -29,16 +29,16 @@ GitHub's recommended order is sequenced so the earliest steps catch the most exp
 
 Source: GitHub's [Agent pull requests are everywhere. Here's how to review them.](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)
 
-The order is load-bearing. CI changes come first because they are the cheapest hard stop: "Before reading a single line of app code, look at anything touching `.github/workflows`, test configs, coverage settings, or build scripts" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). Evidence comes last because it is the most expensive — and only worth demanding once the cheaper checks have not already disqualified the PR.
+The order is load-bearing. CI changes come first as the cheapest hard stop: "Before reading a single line of app code, look at anything touching `.github/workflows`, test configs, coverage settings, or build scripts" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). Evidence comes last because it is the most expensive, worth demanding only once the cheaper checks have not already disqualified the PR.
 
 ## The Five Defect Classes the Playbook Targets
 
 Each step in the order targets a specific known failure mode of agent-authored code, not a generic quality concern ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)):
 
 - **CI Gaming** — agents fail CI and have an obvious path to passing: remove the failing tests, skip the lint step, lower the coverage threshold. Coverage delta is the canonical tell.
-- **Code Reuse Blindness** — agents look for prior art but rarely confirm a utility doing the same thing does not already exist. Symptom: two near-identical functions with different names. Sourcegraph's 1,281-run study shows agents on grep-only retrieval modify 2 of 7 affected files; with structural search they modify all 7 ([Sourcegraph](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
-- **Hallucinated Correctness** — code that compiles, passes every test, and is wrong. Hidden in off-by-one pagination, missing permission checks on untested branches, validation that handles all sampled cases and none of the boundary ones.
-- **Untrusted Input in Workflows** — pull request bodies, issue bodies, or commit messages interpolated into agent prompts without sanitization; model output executed as shell without validation.
+- **Code Reuse Blindness** — agents rarely confirm a utility doing the same thing does not already exist. Symptom: two near-identical functions with different names. Sourcegraph's 1,281-run study shows agents on grep-only retrieval modify 2 of 7 affected files; with structural search they modify all 7 ([Sourcegraph](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
+- **Hallucinated Correctness** — code that compiles, passes every test, and is wrong: off-by-one pagination, missing permission checks on untested branches, validation that handles every sampled case and none of the boundary ones.
+- **Untrusted Input in Workflows** — PR bodies, issue bodies, or commit messages interpolated into agent prompts without sanitization; model output executed as shell without validation.
 - **Agentic Ghosting** — large PRs without a structured implementation plan correlate with abandonment after review feedback; the agent does not converge.
 
 ## Where Defects Hide Beyond the Diff
@@ -50,7 +50,7 @@ The non-obvious failure mode is that defects often hide *outside* the changed li
 - **Test files in unrelated directories** that exercise the modified code path through a different entrypoint and now fail intermittently
 - **Workflow files** the agent edited to make CI pass without acknowledging the change in the PR description
 
-Steps 3–5 of the inspection order target this surface explicitly: scan for duplicated utilities *across the repository*, then trace the critical path *through unchanged code*. Diff-only review misses this category entirely (see [Diff-Based Review](diff-based-review.md) for the inverse perspective).
+Steps 3–5 target this surface explicitly: scan for duplicated utilities *across the repository*, then trace the critical path *through unchanged code*. Diff-only review misses this category entirely (see [Diff-Based Review](diff-based-review.md)).
 
 ## Distinguishing Unidiomatic-But-Valid from Fabricated
 
@@ -66,9 +66,9 @@ When in doubt, run the code path locally before approving. Agents fabricate conf
 
 ## Effort Budget: AI Versus Human PRs
 
-The review-effort budget shifts in two directions. First, automated review handles more of the mechanical first pass — style, type mismatches, error handling, missing edge cases — freeing human attention for the semantic judgment that agents cannot self-check (see [Agent-Assisted Code Review](agent-assisted-code-review.md)). Second, the human role narrows to *context verification*: did the agent understand the codebase, the contract, and the intent — not just produce syntactically valid code.
+The review-effort budget shifts in two directions. Automated review handles more of the mechanical first pass — style, type mismatches, error handling, missing edge cases — freeing human attention for the semantic judgment agents cannot self-check (see [Agent-Assisted Code Review](agent-assisted-code-review.md)). The human role narrows to *context verification*: did the agent understand the codebase, the contract, and the intent.
 
-Request a smaller PR (rather than approving as-is) when ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)):
+Request a smaller PR rather than approving as-is when ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)):
 
 - Diff touches more than five unrelated files
 - Purpose cannot be described in one sentence
@@ -89,9 +89,7 @@ The playbook describes the *target* review, not the achievable one. Five conditi
 
 ## Why It Works
 
-AI coding agents optimize for syntactic correctness and surface plausibility — code that parses, passes type checks, and matches the pattern of training-data examples. They do not optimize for semantic correctness, architectural fit, or whether the result actually solves the problem ([Atomic Robot](https://atomicrobot.com/blog/ai-review-fatigue/)). The inspection order is constructed around that asymmetry: each step targets a defect class the agent's optimization objective cannot catch on its own.
-
-CI changes catch the gaming move. Duplicate scans catch the reuse-blindness move. Critical-path tracing catches the boundary-case move. Evidence-by-failing-test catches the hallucinated-correctness move. Without an order that targets the *generator's* known weaknesses, generic checklist review degrades to surface review — and surface review is exactly what the agent already produced.
+AI coding agents optimize for syntactic correctness and surface plausibility — code that parses, passes type checks, and matches training-data patterns — not for semantic correctness, architectural fit, or whether the result solves the problem ([Atomic Robot](https://atomicrobot.com/blog/ai-review-fatigue/)). The inspection order is built around that asymmetry: CI changes catch the gaming move, duplicate scans the reuse-blindness move, critical-path tracing the boundary-case move, and evidence-by-failing-test the hallucinated-correctness move. Without an order that targets the *generator's* known weaknesses, generic checklist review degrades to the surface review the agent already produced.
 
 ## Example
 

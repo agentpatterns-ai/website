@@ -194,5 +194,4 @@ GEO techniques developed for general web content do not transfer uniformly to al
 - [Topical Authority](topical-authority.md)
 - [AI Crawler Policy](ai-crawler-policy.md)
 - [llms.txt](llms-txt.md)
-- [Content & Skills Audit Workflow](../workflows/content-skills-audit.md)
 

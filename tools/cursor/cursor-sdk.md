@@ -8,9 +8,10 @@ aliases:
   - cursor typescript sdk
   - "@cursor/sdk"
 applies_to: "cursor@3.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 status: current
 ---
+
 # Cursor SDK: Programmable TypeScript Agent Runtime
 
 > Embed Cursor's agent harness in TypeScript applications, with local, Cursor-hosted, or self-hosted runtimes behind one interface.
@@ -26,7 +27,7 @@ The full Cursor harness is available through the SDK ([Cursor docs](https://curs
 - **Skills** — auto-loaded from `.cursor/skills/`.
 - **Hooks** — file-based observers from `.cursor/hooks.json` (no programmatic callbacks).
 - **Subagents** — named delegates with independent prompts and models.
-- **Multi-model selection** — every model in Cursor, including Composer 2 (coding-specialised, frontier-level performance at lower cost).
+- **Multi-model selection** — every model in Cursor, including Composer 2 (coding-specialised, frontier-level performance).
 
 `Agent.create()` returns a long-lived agent; `agent.send(prompt)` returns a `Run` whose events stream via async iteration or callbacks.
 

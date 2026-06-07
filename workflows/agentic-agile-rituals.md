@@ -12,12 +12,12 @@ aliases:
   - agentic agile
   - agile for agent development
   - agile rituals for agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Agentic-Agile: Adapting Agile Rituals for Agent Work
 
-> A selective import of three agile rituals — definition of done as an eval threshold with a variance bound, acceptance criteria written as pass-rate plus negative constraints, and retrospectives on trace corpora — for teams whose unit of work is a non-deterministic agent.
+> Agentic-agile imports three agile rituals — eval-threshold-plus-variance done, pass-rate-plus-negative-constraint acceptance, and trace-corpus retros — for teams whose unit of work is a non-deterministic agent.
 
 Agentic-agile is a narrow workflow: it adapts three specific agile rituals to non-deterministic agent development and explicitly drops the rest. The carry-over is not metaphor — the same statistical reason agile retrospectives work for uncertain human-paced work is why trace-corpus retrospectives work for non-deterministic agent work. The cost is real: applied without the preconditions below, the rituals become theatre that legitimises feel-based approval under a new vocabulary.
 

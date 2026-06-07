@@ -10,12 +10,12 @@ aliases:
   - pre-execution rubric refinement
   - rubric-guided tool-use refinement
   - code-mode contract checking
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # RubricRefine: Pre-Execution Rubric Refinement
 
-> Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion.
+> Score candidate tool-use code against a task-specific rubric and repair contract violations before any execution — catching silent inter-tool failures that runtime feedback misses.
 
 ## When This Pattern Applies
 

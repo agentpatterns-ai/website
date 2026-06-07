@@ -22,7 +22,7 @@ This is a *workflow* — encode the standards, run a per-PR agent reviewer again
 
 Pre-CI/CD code review worked when one engineer pushed a few dozen lines a day. Manual vigilance scaled because volume was low. AI throughput collapses that equilibrium. A causal study of 806 Cursor-adopting repositories versus 1,380 matched controls found a 281% spike in lines added in month one, and the velocity gain fades within three months while static-warning rate (+30%) and complexity (+42%) persist for six months or more ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). DORA 2025 records a 154% increase in PR size against unchanged reviewer headcount ([Google Cloud — 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)); the asymmetry compounds with every PR.
 
-"Be more careful" is an exhortation that cannot scale. The only scaling primitive is the same one Humble and Farley named in 2010: move the standard off the individual and into automation that runs every time ([Humble & Farley, *Continuous Delivery*, 2010](https://www.scirp.org/reference/referencespapers?referenceid=2241209)). The pairing of an automated standards-as-code gate with a documented human review checkpoint is operationalised in [Human Review Gate for PRs](../agent-readiness/bootstrap-human-review-gate-pr.md).
+"Be more careful" is an exhortation that cannot scale. The only scaling primitive is the same one Humble and Farley named in 2010: move the standard off the individual and into automation that runs every time ([Humble & Farley, *Continuous Delivery*, 2010](https://www.scirp.org/reference/referencespapers?referenceid=2241209)).
 
 ## Three Implementation Layers
 
@@ -150,5 +150,4 @@ The empirical backing is the DORA finding that AI adoption simultaneously inflat
 - [Entropy Reduction Agents](entropy-reduction-agents.md) — the scheduled-scan counterpart that catches drift between PRs
 - [Velocity-Quality Asymmetry](velocity-quality-asymmetry.md) — empirical case for why AI throughput demands process-level QA scaling
 - [Verification-Centric Development](verification-centric-development.md) — the layered-gate vocabulary this workflow plugs into
-- [Human Review Gate for PRs](../agent-readiness/bootstrap-human-review-gate-pr.md) — agent-readiness runbook that wires the human checkpoint above the standards-as-code gate
 - [Agent-Laundered Bug Reports](../anti-patterns/agent-laundered-bug-reports.md) — adjacent anti-pattern where LLM rewriting bypasses observation discipline upstream of the gate

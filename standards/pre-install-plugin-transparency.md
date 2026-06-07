@@ -9,12 +9,12 @@ tags:
 aliases:
   - Pre-Install Plugin Disclosure
   - Plugin Capability Inventory
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Pre-Install Plugin Transparency: Capability Inventory and Cost Projection
 
-> Pre-install plugin transparency is a two-column marketplace contract — a static capability inventory of every command, agent, skill, hook, and MCP or LSP server the plugin will install, beside its projected per-turn token cost — rendered before the operator commits.
+> Pre-install plugin transparency is a two-column marketplace contract: a static inventory of the plugin's commands, agents, skills, hooks, and servers, beside its projected token cost.
 
 Pre-install plugin transparency surfaces two facts beside the install button: *what* the plugin adds (capability inventory) and *how much* context it costs (cost projection). Claude Code v2.1.145 (2026-05-19) shipped the inventory half — a **Will install** section listing commands, agents, skills, hooks, and MCP and LSP servers ([Discover and install plugins](https://code.claude.com/docs/en/discover-plugins)). The cost half landed in v2.1.143 (2026-05-15) and is treated in [pre-install context-cost projection](marketplace-cost-projection.md); the two columns are one contract.
 

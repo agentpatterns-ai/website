@@ -10,12 +10,12 @@ aliases:
   - Jira agent dispatch
   - Linear agent dispatch
   - ticket-as-prompt
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Issue-Tracker as Agent Dispatch Surface
 
-> Assigning a coding agent from Jira, Linear, or GitHub Issues turns the ticket into the prompt and the comment thread into the conversation — viable only when the team enforces WRAP-style ticket discipline, an explicit assignment-vs-mention convention, status-echo gating, and an opt-in filter that blocks auto-pickup of unscoped tickets.
+> Issue-tracker dispatch makes the ticket the agent's prompt — viable only under WRAP ticket discipline, an assignment-vs-mention convention, status-echo gating, and an opt-in pickup filter.
 
 Issue-tracker dispatch is the fourth invocation surface after the IDE, chat platform, and [programmatic REST API](programmatic-cloud-agent-dispatch.md). As of May 2026 it ships on three trackers — GitHub Issues (Copilot coding agent), Jira (Cursor and Copilot via Rovo), and Linear (Linear Agent and Copilot). The contract is identical across all three; what differs is the field model, the mention semantics, and the failure modes that surface in field reports. The pattern reuses every team's async work queue as the agent control plane — when ticket discipline holds. Without it, the machinery amplifies noise: agent-authored PRs on GitHub jumped from 4M in September 2025 to 17M in March 2026, with anecdotal reports that only 1 in 10 is legitimate. ([danilchenko.dev](https://www.danilchenko.dev/posts/2026-04-11-github-ai-agents-pull-requests/))
 

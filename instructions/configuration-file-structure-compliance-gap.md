@@ -9,19 +9,19 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Configuration File Structure Does Not Drive Compliance
 
-> Rearranging configuration files — making them shorter, moving rules to the top, splitting into hierarchies, removing contradictions between adjacent files — does not measurably improve agent compliance within realistic file sizes. The compliance lever is total rule count and session length, not file structure.
+> Within realistic file sizes, rearranging configuration files does not measurably improve agent compliance. The lever is total rule count and session length.
 
 !!! info "Also known as"
     Configuration File Structure Compliance Gap, CLAUDE.md Structure Null
 
 ## The Experiment
 
-A factorial study manipulated four structural variables of coding-agent configuration files and measured compliance with a trivial target annotation across 1,650 Claude Code CLI sessions and 16,050 function-level observations on two TypeScript codebases, three frontier models (Sonnet 4.6 primary, Opus 4.6 cross-check, Opus 4.7 descriptive), and five coding tasks. Analysis used mixed-effects models with a Bayesian companion ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+A factorial study manipulated four structural variables of coding-agent configuration files and measured compliance with a trivial target annotation across 1,650 Claude Code CLI sessions and 16,050 function-level observations — two TypeScript codebases, three frontier models (Sonnet 4.6 primary, Opus 4.6 cross-check, Opus 4.7 descriptive), and five coding tasks — using mixed-effects models with a Bayesian companion ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
 | Variable | Practitioner belief | Manipulation |
 |---|---|---|
@@ -47,7 +47,7 @@ Size and conflict are affirmatively ruled out within the tested envelope. Positi
 
 ## What Did Move Compliance
 
-The largest measured effect was **within-session**: each additional function the agent generated was associated with approximately 5.6% lower odds of compliance per step (OR = 0.944), non-monotonic across the tested range. The effect reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but was identified during analysis rather than pre-specified. Compliance also varied systematically between the five coding tasks tested ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+The largest measured effect was **within-session**: each additional function the agent generated was associated with roughly 5.6% lower odds of compliance per step (OR = 0.944), non-monotonic across the range. It reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but was identified during analysis rather than pre-specified. Compliance also varied systematically across the five coding tasks ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
 
 ```mermaid
 graph TD
@@ -61,9 +61,7 @@ graph TD
 
 ## Why This Matters for Practitioners
 
-Engineers debugging compliance failures reach for structural fixes — split CLAUDE.md, move the critical rule to line 1, deduplicate adjacent files. The evidence does not support these as compliance interventions within realistic file sizes.
-
-When a model misses a CLAUDE.md or AGENTS.md rule:
+Engineers debugging compliance failures reach for structural fixes — split CLAUDE.md, move the rule to line 1, deduplicate adjacent files — that the evidence does not support within realistic file sizes. When a model misses a rule:
 
 | Suspected cause | Correct response |
 |---|---|
@@ -76,9 +74,9 @@ When a model misses a CLAUDE.md or AGENTS.md rule:
 
 ## Reconciling With the Compliance Ceiling
 
-This finding does not contradict the [instruction compliance ceiling](instruction-compliance-ceiling.md) or [primacy bias](critical-instruction-repetition.md). Those measure stress regimes — hundreds of explicit rules, position varied across very long contexts. McMillan tested realistic configuration-file sizes and structures and found that moving the same rule around inside that envelope does not change compliance.
+This finding does not contradict the [instruction compliance ceiling](instruction-compliance-ceiling.md) or [primacy bias](critical-instruction-repetition.md). Those measure stress regimes — hundreds of rules, position varied across very long contexts. McMillan tested realistic file sizes and found that moving the same rule around inside that envelope does not change compliance.
 
-Both can hold: ceiling effects exist at extreme rule counts, but the structural choices practitioners argue about within bounded files do not move the needle. The lever is total rule count, not rearrangement. The same pattern holds for [constraint encoding](constraint-encoding-compliance-gap.md) — reformatting how a rule is written has no measurable effect; what it says does.
+Both can hold: ceiling effects exist at extreme rule counts, but the structural choices practitioners argue about within bounded files do not move the needle. The same pattern holds for [constraint encoding](constraint-encoding-compliance-gap.md) — reformatting how a rule is written has no measurable effect; what it says does.
 
 ## When This Backfires
 

@@ -9,12 +9,12 @@ tags:
 aliases:
   - observability calibration probes
   - deliberate bug planting
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Planted-Bug Methodology: Deliberate Bugs as Observability Calibration
 
-> Plant deterministic bugs that produce predictable failures, then verify the captured observability signals lead an agent to the responsible layer. Logs that exist but don't reveal cause are not observability — they are noise.
+> Plant deterministic bugs, then verify captured signals lead an agent to the responsible layer. Logs that exist but don't reveal cause are noise, not observability.
 
 Planted bugs are deterministic, deliberately-injected defects whose role is to calibrate the observability stack rather than to be fixed. They are the inverse of [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md): incidents validate end-to-end behaviour against known failures; planted bugs validate the instrumentation that watches it against known causes.
 

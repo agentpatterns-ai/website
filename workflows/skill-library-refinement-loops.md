@@ -119,7 +119,6 @@ Start with Loops 1 and 2. Add Loop 4 when the library grows large enough that pr
 ## Related
 
 - [Skill Eval Loop](../tools/claude/skill-eval-loop.md) — per-skill output quality and trigger precision evals
-- [Content & Skills Audit Workflow](content-skills-audit.md) — URL staleness and navigation drift detection
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md) — distribution, OTel telemetry, and quality maintenance at scale
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — observe-categorise-update-verify loop for individual agent configs
 - [Daily-Use Skill Library](daily-use-skill-library.md) — building a personal skill library

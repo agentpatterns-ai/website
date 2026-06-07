@@ -10,12 +10,12 @@ tags:
   - tool-agnostic
   - skills
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Contractual Skill Files
 
-> Use a fixed set of named fields in `SKILL.md` — goals, input boundaries, permissions, evidence, output contract, quality criteria, verification, approvals, handoffs — when enterprise audit and multi-author review are the bottleneck. Do not use them as a runtime safety mechanism.
+> Structure `SKILL.md` as a fixed schema of governance fields when enterprise audit and multi-author review are the bottleneck — never as a runtime safety mechanism.
 
 Contractual skill files are `SKILL.md` documents organised as a fixed schema of governance fields rather than free-form prose, making intent, boundaries, and acceptance criteria mechanically locatable for reviewers and downstream tools. In the framework's own evaluation, contractual structure outperformed no-skill and minimal-skill baselines on every model tested, but gains over information-rich plain skills were "small and mixed" — the framework improves checkability and maintainability rather than raw generation quality ([Liu, 2026](https://arxiv.org/abs/2605.22634)).
 
@@ -49,7 +49,7 @@ Fields stay readable in markdown; they are not a YAML schema. The framework sepa
 
 ## Why It Works
 
-Contractual fields convert tacit skill assumptions into typed inspection surfaces. A reviewer locates the `permissions` block, the `verification steps`, and the `human approval points` without reading every paragraph; automated tools do the same for cross-skill comparison and adapter compatibility. The framework's evaluation reports the mechanism cleanly: gains concentrate in checkability and maintainability, not output quality, which remains governed by model capability and runtime feedback ([Liu, 2026](https://arxiv.org/abs/2605.22634)).
+Contractual fields convert tacit skill assumptions into typed inspection surfaces. A reviewer locates the `permissions` block, `verification steps`, and `human approval points` without reading every paragraph; automated tools do the same for cross-skill comparison and adapter compatibility. The framework's evaluation reports the mechanism cleanly: gains concentrate in checkability and maintainability, not output quality, which remains governed by model capability and runtime feedback ([Liu, 2026](https://arxiv.org/abs/2605.22634)).
 
 The same mechanism underlies typed-debt detection at library scale: SkillOps requires typed precondition, operation, artifact, validator, and failure fields so redundancy, supersession, and type compatibility are machine-checkable — without that structure, detection collapses to body-hash comparison and string similarity over descriptions ([SkillOps, arXiv:2605.13716](https://arxiv.org/abs/2605.13716)).
 

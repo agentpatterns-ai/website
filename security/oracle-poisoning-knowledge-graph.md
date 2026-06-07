@@ -9,12 +9,12 @@ tags:
 aliases:
   - knowledge graph poisoning
   - oracle poisoning attack
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents
 
-> Corrupting the knowledge graph an agent queries via tool-use produces 100% trust at moderate attacker sophistication across nine production models, with 269 of 270 valid trials accepting fabricated security claims. The data path, not the instruction path, carries the payload.
+> Oracle poisoning corrupts the knowledge graph an agent queries via tool-use, carrying its payload on the data path rather than the instruction path.
 
 ## The Threat Model
 

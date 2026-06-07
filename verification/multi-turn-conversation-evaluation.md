@@ -11,7 +11,7 @@ aliases:
   - per-turn vs trajectory scoring
   - conversation-level evaluation
   - trace-level scoring for conversations
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Multi-Turn Conversation Evaluation
@@ -20,9 +20,9 @@ last_reviewed: 2026-05-27
 
 ## Two Layers, Different Failures
 
-A conversational agent can score 100% on per-turn brand alignment while resolving 40% of customer issues — every reply is polite and policy-compliant, but the conversation never reaches a fix. Per-turn scoring sees only local quality; it cannot tell whether the agent dropped a fact from turn 2 or kept the customer in a polite loop without progress. ([Braintrust, 2026](https://www.braintrust.dev/blog/multi-turn-scoring))
+A conversational agent can score 100% on per-turn brand alignment while resolving 40% of issues — every reply is polite and policy-compliant, but the conversation never reaches a fix. Per-turn scoring sees only local quality; it cannot tell whether the agent dropped a fact from turn 2 or kept the user in a polite loop. ([Braintrust, 2026](https://www.braintrust.dev/blog/multi-turn-scoring))
 
-Trace-level scoring evaluates the conversation as one unit against a goal-completion criterion (typically binary: "was the issue resolved?"). It catches the across-turn failures per-turn scoring is blind to but produces a coarse verdict that hides which turn caused the drift. Both scores are needed, and the most diagnostic case is when they disagree.
+Trace-level scoring grades the conversation as one unit against a goal-completion criterion (typically binary: "was the issue resolved?"). It catches the across-turn failures per-turn scoring is blind to, but its verdict is coarse and hides which turn drifted. Both are needed; the most diagnostic case is when they disagree.
 
 | Per-turn | Trace-level | What it means |
 |----------|------------|---------------|
@@ -37,36 +37,36 @@ The high-per-turn + low-trace cell is the cheapest diagnostic in the table — p
 
 Conversations carry state across turns. Three failure classes only emerge in that state-carrying setting:
 
-- **Context loss** — the agent forgets a fact the user provided earlier (order number, account email). The per-turn response is locally coherent against its immediate window; the next turn re-asks for the dropped fact.
-- **Intent drift** — the conversation gradually leaves the original goal. Stateful drift detection (RNN over per-turn embeddings, DeepContext) reaches F1 0.84 on multi-turn adversarial intent drift versus 0.67 for stateless filters like Llama-Prompt-Guard-2 and Granite-Guardian — the gap is exactly the multi-turn signal stateless eval cannot see. ([DeepContext, 2026](https://arxiv.org/abs/2602.16935))
-- **Circular exchange** — every turn is locally fine but the conversation makes no progress. The trace-level resolution check is the first metric that fails on a polite loop.
+- **Context loss** — the agent forgets a fact the user gave earlier (order number, account email). The per-turn response is locally coherent; the next turn re-asks for the dropped fact.
+- **Intent drift** — the conversation gradually leaves the original goal. Stateful drift detection (RNN over per-turn embeddings, DeepContext) reaches F1 0.84 versus 0.67 for stateless filters like Llama-Prompt-Guard-2 and Granite-Guardian — the gap is the multi-turn signal stateless eval cannot see. ([DeepContext, 2026](https://arxiv.org/abs/2602.16935))
+- **Circular exchange** — every turn is locally fine but the conversation makes no progress. The trace-level resolution check is the first metric to fail on a polite loop.
 
-Drift-Bench formalises a related taxonomy for input faults that only surface across clarification turns: implicit intent, missing parameters, false presuppositions, and ambiguous expressions. Agents that handle each turn well in isolation show substantial performance drops when these faults force iterative disambiguation. ([Drift-Bench, 2026](https://arxiv.org/abs/2602.02455))
+Drift-Bench formalises a related taxonomy of input faults that only surface across clarification turns — implicit intent, missing parameters, false presuppositions, ambiguous expressions. Agents that handle each turn well in isolation drop substantially when these faults force iterative disambiguation. ([Drift-Bench, 2026](https://arxiv.org/abs/2602.02455))
 
 ## What to Wire
 
 Three pieces have to be in place before trace-level scoring works:
 
-1. **Span grouping** — every turn in the same conversation logs as a child span under a shared trace ID. Without grouping, each turn is an unrelated root span; trace-level scoring has nothing to score because the framework cannot tell which turns belong together. ([Braintrust, 2026](https://www.braintrust.dev/blog/multi-turn-scoring))
-2. **A per-turn scorer** — graded against criteria that apply turn-by-turn (helpfulness, tone, policy compliance, format). LLM-as-a-judge against three or four binary sub-criteria is the standard pattern.
-3. **A trace-level scorer** — graded against goal completion for the whole conversation. Resolution is typically binary: did the agent satisfy the user's stated goal by the end of the trace.
+1. **Span grouping** — every turn logs as a child span under a shared trace ID. Without it, each turn is an unrelated root span and trace-level scoring has nothing to score: the framework cannot tell which turns belong together. ([Braintrust, 2026](https://www.braintrust.dev/blog/multi-turn-scoring))
+2. **A per-turn scorer** — graded turn-by-turn (helpfulness, tone, policy compliance, format). LLM-as-a-judge against three or four binary sub-criteria is the standard pattern.
+3. **A trace-level scorer** — graded against goal completion for the whole conversation, typically binary: did the agent satisfy the user's stated goal by the end of the trace.
 
-Online scoring rules then run both scorers asynchronously against new traces in production. Per-turn rules are span-scoped; trace-level rules are trace-scoped. Sampling rate is the cost lever — 100% at low volume, lower as traffic scales.
+Online scoring rules then run both scorers asynchronously against new production traces — per-turn rules span-scoped, trace-level rules trace-scoped. Sampling rate is the cost lever: 100% at low volume, lower as traffic scales.
 
 ## Why It Works
 
-Failures emerging from accumulated state must be scored at the level where that state is observable. Per-turn scoring projects the conversation into independent slices and evaluates each against its local context — exactly the projection in which context loss, intent drift, and circular exchange are invisible. Trace-level scoring evaluates the conversation as a single unit against a goal-completion criterion, which is the smallest unit that exposes those three failure classes. The state-locality argument generalises beyond chatbots: the 2025 multi-turn agent survey identifies five evaluation dimensions — task completion, response quality, user experience, memory and context retention, and planning and tool integration — and only the first two are cleanly observable from a per-turn projection. ([Multi-Turn Agent Survey, 2025](https://arxiv.org/abs/2503.22458))
+Failures emerging from accumulated state must be scored where that state is observable. Per-turn scoring projects the conversation into independent slices — exactly the projection in which context loss, intent drift, and circular exchange vanish; the trace is the smallest unit that exposes all three. The argument generalises beyond chatbots: the 2025 multi-turn agent survey names five evaluation dimensions — task completion, response quality, user experience, memory and context retention, planning and tool integration — and only the first two are cleanly observable per-turn. ([Multi-Turn Agent Survey, 2025](https://arxiv.org/abs/2503.22458))
 
 ## When This Backfires
 
-Wiring trace-level scoring is not free. Narrow scope when:
+Trace-level scoring is not free. Narrow scope when:
 
-- **The agent is one-shot, not conversational.** A PR-fix bot or CI agent that takes a task and returns a patch has no across-turn failure surface. [pass@k metrics](pass-at-k-metrics.md) and [trajectory decomposition](trajectory-decomposition-diagnosis.md) already cover the relevant axes; adding trace-level conversation scoring measures a dimension that does not exist in the workload.
-- **The judge is below the precision floor.** AgentRewardBench evaluated 12 LLM judges across 1,302 web-agent trajectories — no judge cleared 70% precision (GPT-4o 69.8%, Claude 3.7 Sonnet 68.8%, against 89.3% human inter-annotator agreement). Below that ceiling, roughly one trace-level verdict in three is wrong, and judge errors cluster around grounding mismatch, misleading reasoning, missed details, and misunderstood actions. Pin to deterministic resolution checks (was a refund issued, was a ticket closed) before defaulting to an LLM judge. ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942))
-- **Logs are not grouped.** If production logs every LLM call as its own root span, retrofitting trace-level scoring requires either re-instrumentation or reconstruction from timestamps. The failure mode is silent — scoring runs against fragments and produces numbers that look real.
-- **Volume × per-trace cost exceeds the violation cost.** Every trace-level LLM-judge call is its own inference; at tens of thousands of conversations per day, the bill can exceed the value of the violations caught. Sampling reduces the cost but moves the metric from continuous to spot-check.
+- **The agent is one-shot, not conversational.** A PR-fix or CI agent that takes a task and returns a patch has no across-turn failure surface. [pass@k metrics](pass-at-k-metrics.md) and [trajectory decomposition](trajectory-decomposition-diagnosis.md) cover the relevant axes; trace-level conversation scoring measures a dimension the workload lacks.
+- **The judge is below the precision floor.** AgentRewardBench evaluated 12 LLM judges across 1,302 web-agent trajectories — none cleared 70% precision (GPT-4o 69.8%, Claude 3.7 Sonnet 68.8%, against 89.3% human agreement). Below that ceiling roughly one trace verdict in three is wrong. Pin to deterministic resolution checks (was a refund issued, a ticket closed) before defaulting to an LLM judge. ([AgentRewardBench, 2025](https://arxiv.org/abs/2504.08942))
+- **Logs are not grouped.** If production logs every LLM call as its own root span, retrofitting trace-level scoring needs re-instrumentation or timestamp reconstruction. The failure is silent — scoring runs against fragments and produces numbers that look real.
+- **Volume × per-trace cost exceeds the violation cost.** Every trace-level judge call is its own inference; at tens of thousands of conversations a day the bill can exceed the value of the violations caught. Sampling cuts cost but moves the metric from continuous to spot-check.
 
-The related but distinct [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) covers the conjugate case for safety: outcome-only grading misses safety violations even when the conversation is single-turn. Pair the two — per-turn + trace-level for quality and resolution, outcome + trajectory auditing for safety and robustness.
+The distinct [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) covers the conjugate safety case: outcome-only grading misses safety violations even in single-turn conversations. Pair the two — per-turn + trace-level for quality and resolution, outcome + trajectory auditing for safety.
 
 ## Example
 

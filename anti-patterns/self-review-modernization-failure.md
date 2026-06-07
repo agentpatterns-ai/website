@@ -9,12 +9,12 @@ tags:
 aliases:
   - self-review code modernization
   - articulate but wrong self review
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # LLM Self-Review Failure in Code Modernization Tasks
 
-> Asking an LLM to verify behaviour preservation of its own migration output misses roughly a third of silent semantic-drift cases — and the miss rate does not improve with bigger or more expensive models.
+> LLM self-review of its own code modernization misses ~31.7% of silent semantic drift, and the miss rate does not improve with model capability.
 
 Self-review by the producing model is not a reliable safety check for code modernization. Across 1,980 Python 2→3 attempts on 11 production LLMs, self-review missed **31.7%** of behaviour-changing outputs — including cases where the same model articulated the exact Py2/Py3 semantic distinction that broke the code while certifying it as preserving behaviour ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537)).
 

@@ -10,16 +10,16 @@ aliases:
   - Skill Programs
   - Program Functions for Agents
   - Executable Skill Guardrails
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Skill Program Functions
 
-> Compiling a skill into an executable guardrail moves the *trigger* decision out of the model and into runtime code — worthwhile only when baseline failure rate is high enough that the disruption-recovery tradeoff favours intervention.
+> Compiling a skill into an executable guardrail moves the *trigger* out of the model into code — worthwhile only when baseline failure is high.
 
 ## When the Conditions Hold
 
-Skill Program Functions (PFs) replace advisory skill text with runtime predicates: a Python function checks the agent's state at each step and, if a failure-prone pattern matches, modifies the next action or injects corrective context ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)). Only worth the engineering cost under four conditions; outside them, advisory skills plus deterministic hooks dominate.
+Skill Program Functions (PFs) replace advisory skill text with runtime predicates: a Python function checks the agent's state each step and, on a failure-prone match, modifies the next action or injects corrective context ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)). They earn the engineering cost only under four conditions; outside them, advisory skills plus deterministic hooks dominate.
 
 | Condition | Why it matters |
 |----------|----------------|
@@ -28,7 +28,7 @@ Skill Program Functions (PFs) replace advisory skill text with runtime predicate
 | The skill domain is stable | A PF binds the intervention to a snapshot of failure modes; tool, model, or task drift makes the predicate fire on states that are no longer failures |
 | The corrective action is idempotent under retry | PFs fire mid-loop, not at loop boundaries — the action must be safe to repeat |
 
-Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on math reasoning over training-free and training-based baselines including ReAct and Search-R1, across AIME 2024, AMC 2023, 24 Game, HotpotQA, 2WikiMultihop, MuSiQue, and BigCodeBench ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)).
+Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on math reasoning over training-free and training-based baselines including ReAct and Search-R1 ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)).
 
 ## What a Program Function Is
 
@@ -44,7 +44,7 @@ The same library applies at inference time, during post-training as structured s
 
 Moving the trigger from instruction-following to a runtime predicate removes two known error sources: instruction fade-out across long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)) and the compliance ceiling at high instruction counts — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Neither applies to a Python predicate.
 
-The gain comes from removing model judgment from the *trigger*, not the corrective content — which is why Bondarenko et al.'s disruption-recovery framework is the limit: a perfect trigger that fires on a path the agent would have rescued anyway still degrades end-to-end performance ([Bondarenko et al., 2026](https://arxiv.org/abs/2602.03338)).
+The gain comes from removing model judgment from the *trigger*, not the corrective content — so the disruption-recovery framework still bounds it: a perfect trigger firing on a path the agent would have rescued anyway still degrades performance ([Bondarenko et al., 2026](https://arxiv.org/abs/2602.03338)).
 
 ## Relationship to Adjacent Patterns
 
@@ -54,7 +54,7 @@ The gain comes from removing model judgment from the *trigger*, not the correcti
 | [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) | Static reminder templates triggered by event detectors | Skill-derived templates whose triggers and bodies evolve from observed failures |
 | [Agent Loop Middleware](agent-loop-middleware.md) | Deterministic loop-boundary nodes for non-negotiable steps | Mid-loop intervention driven by a compiled skill library |
 
-PFs are the third leg of the skill–loop–intervention stack. Skill as Knowledge warns against skills that embed execution sequences; PFs accept that partly, on the caveat that the executable layer is *separate* from the skill text and is regenerated when the skill changes.
+PFs are the third leg of the skill–loop–intervention stack. Skill as Knowledge warns against skills that embed execution sequences; PFs accept that, with the executable layer kept *separate* from the skill text and regenerated when the skill changes.
 
 ## When This Backfires
 
@@ -63,7 +63,7 @@ PFs are the third leg of the skill–loop–intervention stack. Skill as Knowled
 - **Skill domain drifts.** A PF binds the trigger to a snapshot of failure conditions. Tool, model, or task-type shifts make the predicate fire on states that are no longer failures.
 - **Non-idempotent corrective actions.** PFs fire mid-loop, not at loop boundaries — action-modification PFs must be safe under retry.
 - **Below the compliance-ceiling threshold.** When the skill library fits in a static system prompt without saturating the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md), advisory text plus deterministic hooks captures the value at lower cost.
-- **Context-priming dominates rule content.** [Zhang et al. (2026)](https://arxiv.org/abs/2604.11088) found random rules match expert-curated ones on SWE-bench. Compiling skills into PFs removes that priming on the model — the runtime gain must exceed both the lost priming and the disruption-recovery cost.
+- **Context-priming dominates rule content.** [Zhang et al. (2026)](https://arxiv.org/abs/2604.11088) found random rules match expert-curated ones on SWE-bench. Compiling skills into PFs removes that priming — the runtime gain must exceed both the lost priming and the disruption-recovery cost.
 
 ## Example
 
@@ -114,7 +114,7 @@ def search_recovery_pf(state: AgentState) -> Intervention | None:
 
 The trigger is deterministic — `result_count == 0` and `normalize(last_query) == normalize(next_query)` either match or do not. The corrective message is the same prose the skill text contained, but it lands as a user-role injection only when the failure pattern is present, and it stops firing as soon as the agent picks a different query. The skill's text remains the source of truth; the PF is generated from it and regenerated when the skill changes.
 
-The PF should still pass a per-function pilot eval — a sample of 50 trajectories — before deployment. If the pilot shows that on tasks where this failure rarely occurs the PF disrupts paths that would have succeeded on their own, the right answer is to leave the skill as advisory text and not deploy this PF.
+The PF should still pass a per-function pilot eval — a sample of 50 trajectories — before deployment. If the pilot shows the PF disrupting paths that would have succeeded on their own, leave the skill as advisory text and do not deploy this PF.
 
 ## Key Takeaways
 

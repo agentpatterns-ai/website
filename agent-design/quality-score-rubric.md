@@ -9,14 +9,14 @@ tags:
 aliases:
   - harness quality score
   - harness simplification log
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Quality Score Rubric and Simplification Log
 
 > Pair an A/B/C/D quality rubric with a simplification log to make agent harness health measurable per module and harness shrinkage visible over time.
 
-The pattern is two artefacts maintained together: a `QUALITY_SCORE.md` that grades each module, and a simplification log that records every harness primitive retired as model capability grew enough to remove it. The rubric makes harness *health* legible; the log makes harness *shrinkage* legible. The canonical template is the [walkinglabs learn-harness-engineering repo](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/repo-template/docs/QUALITY_SCORE.md).
+The pattern is two artefacts: a `QUALITY_SCORE.md` that grades each module, and a simplification log that records every harness primitive retired as model capability grew enough to remove it. The rubric makes harness *health* legible; the log makes harness *shrinkage* legible. The canonical [template lives in the walkinglabs repo](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/resources/openai-advanced/repo-template/docs/QUALITY_SCORE.md); treating the harness as a first-class engineering surface draws on research into terminal coding agents ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
 
 ## The Four Tiers
 
@@ -44,13 +44,13 @@ The benchmark snapshots are an outcome record, not a path record — completion 
 
 ## How the Log Defends Against Bloat
 
-Harness scaffolding is depreciating capital — its value falls as model capability rises ([Harness Impermanence](harness-impermanence.md)). Without a record of what has been retired, every removal looks like a risky deletion of working code. The simplification log inverts the default: additions are easy, removals require recorded outcomes to reverse.
+Harness scaffolding is depreciating capital — its value falls as model capability rises ([Harness Impermanence](harness-impermanence.md)). Without a record of what was retired, every removal looks like a risky deletion of working code. The simplification log inverts the default: additions are easy, removals require recorded outcomes to reverse.
 
 This pairs with the classification in [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md): the log tracks compensatory removals, not structural ones. Sandboxes and permission gates are never retired by a model upgrade and should not appear in the log.
 
 ## How the Rubric Feeds the Tuning Loop
 
-[Harness hill-climbing](harness-hill-climbing.md) is an eval-driven local search over harness configuration. The benchmark snapshots table is the persistent record of that loop's output: when a tuning regression appears six weeks later, the team has the last known-good configuration with the date, variant label, and completion rate it produced. Without the snapshot, every iteration is uphill from an unknown baseline.
+[Harness hill-climbing](harness-hill-climbing.md) is an eval-driven local search over harness configuration. The benchmark snapshots table is the persistent record of that loop's output: when a tuning regression appears later, the team has the last known-good configuration with its date, variant label, and completion rate. Without the snapshot, every iteration climbs from an unknown baseline.
 
 ## Update Cadence
 

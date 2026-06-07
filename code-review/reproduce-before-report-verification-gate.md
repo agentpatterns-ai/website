@@ -9,7 +9,7 @@ aliases:
   - reproduce-before-report gate
   - verifier-gated code review
   - finding verification gate
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # Reproduce-Before-Report Verification Gate

@@ -10,12 +10,12 @@ aliases:
   - cross-trace failure analysis
   - trace corpus analysis
   - scout-investigator diagnostics
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Corpus-Level Trace Diagnostics for LLM Agents
 
-> Once your trace corpus exceeds a few hundred runs, single-trace inspection misses failure modes that only show up across populations. A scout-investigator multi-agent pipeline surveys the corpus, proposes recurring failure hypotheses, then verifies each against evidence.
+> A trace corpus past a few hundred runs needs population-level analysis: a scout-investigator pipeline proposes recurring failure hypotheses, then verifies each against corpus evidence.
 
 Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns — recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context — invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it.
 
@@ -43,7 +43,7 @@ graph LR
 - **Investigator** queries the corpus for supporting and counter-evidence on one hypothesis at a time, promoting it with linked trace IDs or discarding it.
 - **Human expert** reviews a sampled subset to filter fabricated patterns before findings are treated as ground truth.
 
-The split mirrors the proposer-verifier division in [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system): a broad surveyor generates hypotheses; a narrower verifier reduces false positives.
+The split echoes the division of labor in [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system), where a lead agent delegates to specialized subagents: a broad surveyor generates hypotheses, a narrow verifier cuts false positives.
 
 ## Why It Works
 

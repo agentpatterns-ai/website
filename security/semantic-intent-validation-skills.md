@@ -9,12 +9,12 @@ aliases:
   - semantic skill validation
   - intent-based skill scanning
   - skill intent verification
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Semantic Intent Validation for Agent Skills
 
-> Signature scanning catches the syntactically malicious. It misses the skill that is benign byte-for-byte but causes the agent to synthesise the payload at runtime through in-context learning. Semantic intent validation asks a separate model whether documented intent matches observable behavior.
+> Semantic intent validation uses a separate model to check whether a skill's documented intent matches its observable behavior, catching payloads the agent synthesises at runtime.
 
 ## The Gap Signature Scanning Cannot Close
 
@@ -63,6 +63,8 @@ Intent validation is the correct response to a narrow class of attacks. It is no
 
 The semantic layer adds seconds of latency per scan and produces false positives on legitimate security tooling and pentest utilities. Teams that fail-on-high without review capacity block productive skills. Teams that lower the threshold lose the detection the layer was added to provide. The threat model and the operating budget have to be honest before the architecture is justified.
 
+An intake-time intent check is also not a complete answer. It validates the skill as it enters the catalog, so it is blind to skills that activate conditionally after admission, to post-deployment skill updates, and to runtime behavior that diverges from the scanned artifact. [Securing LLM Agents Need Intent-to-Execution Integrity](https://arxiv.org/abs/2605.16976) argues that intent-vs-behavior validation gives "only partial and non-compositional coverage" and that preserving user intent end-to-end requires four simultaneous properties — tool, instruction, judgment, and data-flow integrity — not a single gate. Treat the intake-time semantic check as one composable layer, paired with runtime monitoring such as a [behavioral firewall](behavioral-firewall-tool-call-trajectories.md), not as the place the problem is solved.
+
 ## Example
 
 Intake-time semantic gate before a skill enters the internal mirror, using `skill-scanner` to compose static and semantic layers:
@@ -106,6 +108,8 @@ Stage 1 handles the bulk at low cost. Stage 2 is the intent check the static lay
 ## Related
 
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
+- [Skill Shell Execution Gate](skill-shell-execution-gate.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

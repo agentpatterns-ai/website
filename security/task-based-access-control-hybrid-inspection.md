@@ -10,12 +10,12 @@ aliases:
   - task-based access control for agents
   - hybrid inspection authorization
   - continuous agent semantic authorization
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Task-Based Access Control with Hybrid Inspection
 
-> Authorize each agent tool call against the user's current task — not against a long-lived OAuth scope. Bind credentials to the task on the deterministic axis; extract intent from the conversation on the semantic axis. The deterministic axis carries the security guarantee.
+> Task-based access control authorizes each agent tool call against the current task, not a static OAuth scope: load-bearing deterministic axis, detective semantic axis.
 
 ## The Gap OAuth Leaves Open
 
@@ -23,7 +23,7 @@ OAuth 2.0 assumes a single principal with pre-defined scopes. Agentic AI breaks 
 
 A compromised agent — or one redirected by [prompt injection](prompt-injection-threat-model.md) — can tamper with tool calls, falsify results, or escalate beyond intended task scope without the authorization server seeing anything wrong ([2509.13597](https://arxiv.org/abs/2509.13597)).
 
-Task-based access control (TBAC) closes the gap by binding each decision to the *current task*, not to a long-lived scope.
+Task-based access control (TBAC) closes the gap by binding each decision to the *current task*.
 
 ## Two Independent Axes
 

@@ -8,7 +8,7 @@ tags:
 aliases:
   - per-model harness profile
   - model-specific harness deltas
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Per-Model Harness Tuning
@@ -50,7 +50,7 @@ Structural mechanisms — sandboxing, permission gates, file-persistent context,
 
 LangChain published the actual changes that produced their tau2-bench deltas ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
 
-For Codex, the changes were tool-shape: replace the default `file_edit` with [`apply_patch`](https://developers.openai.com/codex/prompting/api/docs/guides/tools-apply-patch), alias `execute` as `shell_command`, and add a parallel-batch prompt: "Before any tool call, decide ALL files and resources you will need. Batch reads, searches, and other independent operations into parallel tool calls instead of issuing them one at a time."
+For Codex, the changes were tool-shape: replace the default `file_edit` with [`apply_patch`](https://developers.openai.com/api/docs/guides/tools-apply-patch), alias `execute` as `shell_command`, and add a parallel-batch prompt: "Before any tool call, decide ALL files and resources you will need. Batch reads, searches, and other independent operations into parallel tool calls instead of issuing them one at a time."
 
 For Opus 4.7, the changes were prompt-only — XML-tagged blocks the model is trained to recognise:
 

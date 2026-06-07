@@ -9,12 +9,12 @@ aliases:
   - hybrid agent authorization
   - task-based access control for agents
   - CASA pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Hybrid Deterministic + Semantic Authorization for Agent Tool Calls
 
-> Five deterministic checks at the agent-tool interception layer cover structural attacks; a semantic task-to-tool matcher covers intent drift. The two attack classes are orthogonal — one layer cannot replace the other.
+> Deterministic checks at the agent-tool layer cover structural attacks; a semantic task-to-tool matcher covers intent drift. The two attack classes are orthogonal.
 
 ## Two Orthogonal Attack Classes
 

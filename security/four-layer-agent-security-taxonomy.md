@@ -9,12 +9,12 @@ aliases:
   - layered agent security
   - agent security layers
   - four-layer threat model
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Four-Layer Taxonomy of Agent Security Risks
 
-> Group agent threats into four layers — context/instruction, tool/action, state/persistence, ecosystem/automation — to map existing controls against attack surfaces and surface coverage gaps where threats propagate across boundaries.
+> Group agent threats into four layers — context/instruction, tool/action, state/persistence, ecosystem/automation — to map controls against attack surfaces and expose coverage gaps where threats chain across them.
 
 ## The Four Layers
 
@@ -85,8 +85,7 @@ The taxonomy is a map, not a defense. Three failure modes:
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — capability-based companion to the layered taxonomy
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — independent mechanisms layered across the four surfaces
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — competing lifecycle-phase layering with cross-layer feedback
-- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — primary L1 threat
-- [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — primary L2 threat
-- [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — L3 control example
-- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — L4 supply-chain threat
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md) — production controls across all four layers
+- [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — maps named threats onto controls; pairs with the four-layer grid for coverage mapping
+- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — complementary taxonomy focused on the runtime audit boundary
+- [Three-Vector Evasion Taxonomy for Agent Security Tests](temporal-spatial-semantic-evasion-taxonomy.md) — orthogonal taxonomy organising how attacks evade per-layer checkpoints

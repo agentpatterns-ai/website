@@ -11,12 +11,12 @@ aliases:
   - semantic fuzzing for agent skills
   - skill guardrail violation discovery
   - specification violation fuzzing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Skill Specification Violation Fuzzing
 
-> Skill guardrails written in natural language can fail under benign user inputs — semantic fuzzing turns each guardrail into a reachability goal over an execution trace and surfaces violations that static review and prompt-injection defences both miss.
+> Semantic fuzzing turns each natural-language skill guardrail into a reachability goal over an execution trace, surfacing benign-input violations that static review and prompt-injection defences miss.
 
 Agent skills bundle instructions, optional scripts, and embedded safety constraints ([Agent Skills standard](../standards/agent-skills-standard.md)); the agent interprets guardrail semantics at runtime. SEFZ found 120 of 402 deployed OpenClaw skills (29.9%) silently violate their own rules on benign inputs — 26 previously unknown and exploitable in production ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044)). A separate study of 31,132 marketplace skills found 26.1% carry at least one vulnerability; script-bundling skills are 2.12× more vulnerable than instruction-only skills ([arXiv:2601.10338](https://arxiv.org/abs/2601.10338)).
 

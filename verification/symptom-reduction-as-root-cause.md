@@ -7,11 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - arxiv
+  - long-form
 aliases:
   - fudge factor anti-pattern
   - oracle test calibration drift
   - fiducial point reward hacking
-last_reviewed: 2026-05-29
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -152,3 +153,4 @@ The supervision practices add overhead and are not always net-positive:
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — checkpoint discipline that catches in-session fudge factors before they ship
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — the maintenance discipline for keeping oracles calibrated as the target distribution moves
 - [Context Poisoning: When Hallucinations Become Premises](../anti-patterns/context-poisoning.md) — adjacent failure where a wrong assumption persists through subsequent reasoning
+- [Held-Out Test Gap: A Long-Horizon Reward-Hacking Signal](held-out-test-gap.md) — the same sample-vs-contract gap seen from the held-out side: tests the agent never optimised against

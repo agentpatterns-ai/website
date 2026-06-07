@@ -5,12 +5,12 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Single-CLI Agent Platform: Create to Production in One CLI
 
-> Consolidating scaffold, dev server, eval, deploy, and publish into one CLI compresses the hand-off cost between lifecycle phases and gives the agent a stable interface to its own deployment — but only when the team is on one cloud, one language ecosystem, and willing to accept the lock-in.
+> A single-CLI agent platform bundles scaffold, eval, deploy, and publish into one binary — worth it only on one cloud and ecosystem, lock-in accepted.
 
 ## The Pattern: One CLI for the Whole Lifecycle
 

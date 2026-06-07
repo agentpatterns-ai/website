@@ -8,7 +8,7 @@ aliases:
   - skill tool denial
   - disallowed-tools frontmatter
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 status: current
 ---
 

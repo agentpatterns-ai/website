@@ -10,36 +10,36 @@ tags:
 aliases:
   - typed memory layer for repositories
   - commit-history knowledge distillation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Typed Memory from VCS History
 
-> Mine git commits, pull-request discussions, and issue threads into a typed memory layer (Facts, Skills, Patterns) that a coding agent consults before acting. The pattern only pays off under tight retrieval budgets and high commit hygiene — under typical conditions it converges with a BM25 baseline.
+> A typed memory layer of Facts, Skills, and Patterns distilled from git history — worth building only under tight budgets and good commit hygiene.
 
-Typed memory from VCS history is a memory layer that extracts structured prior knowledge from commit messages, PR discussions, and issue threads using deterministic extractors, then exposes the result to a coding agent through a budget-constrained retriever.
+Typed memory from VCS history extracts structured prior knowledge from commits, PRs, and issues with deterministic extractors, then exposes it to a coding agent through a budget-constrained retriever.
 
 ## When This Pattern Applies
 
 The reference implementation, CommitDistill, reports a 0.750 hit-rate over BM25 (0.333) and `git log` grep (0.083) at a **256-character query budget** but **no statistically detectable lift on headline LLM-as-judge metrics** in head-to-head evaluation ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)). Apply only when all four conditions hold:
 
-- **High-quality commit hygiene** — conventional commits, structured PR descriptions, linked issues. 90% of 5,000 randomly sampled GitHub commits are assessed low quality; 14% of commits across 23,000 OSS projects are empty and only 10% contain normal descriptive English ([Tian et al. 2022](https://arxiv.org/pdf/2202.02974)). Low-quality input yields a low-signal index.
-- **Tight retrieval budget** — the typing advantage shrinks as per-query character budget grows; unconstrained retrieval converges with BM25 ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)).
+- **High-quality commit hygiene** — conventional commits, structured PR descriptions, linked issues. 90% of 5,000 randomly sampled GitHub commits are assessed low quality ([Tian et al. 2022](https://arxiv.org/pdf/2202.02974)). Low-quality input yields a low-signal index.
+- **Tight retrieval budget** — the typing advantage shrinks as the per-query budget grows; unconstrained retrieval converges with BM25 ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)).
 - **Slow-evolving codebase** — extracted Facts and Patterns reflect commit-time state. Repos refactoring quarterly encode conventions the codebase no longer follows.
 - **Repository scale** — small repos let the agent read raw `git log` directly; indexing only amortises once linear scans exceed the budget.
 
-If any condition fails, prefer commit-time capture going forward (see *Trade-offs*) or rely on `git log` read ad-hoc.
+If any condition fails, prefer commit-time capture going forward (see *Trade-offs*) or read `git log` ad-hoc.
 
 ## How It Works
 
 The CommitDistill design has three components ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)):
 
 - **Deterministic extractor** — regex over commit messages, PR descriptions, and issue threads. No embeddings, no external service. Reported throughput: 10,000 commits in under 4 seconds on a laptop.
-- **Typed knowledge units** — three categories that act as a coarse-grained category filter at retrieval time:
-    - **Facts** — discrete information units (e.g. a specific configuration value, an API constraint)
-    - **Skills** — procedural knowledge (e.g. how a migration is run, the steps to regenerate a fixture)
-    - **Patterns** — recurring approaches or conventions (e.g. how this repo names files, how errors are handled)
-- **Budget-constrained TF-IDF retriever with calibrated silence threshold (theta = 2.5)** — declines to answer out-of-distribution queries rather than returning irrelevant top-k matches. The silence threshold is what makes the typed structure load-bearing under tight budgets.
+- **Typed knowledge units** — three categories that act as a coarse-grained retrieval filter:
+    - **Facts** — discrete information units (a configuration value, an API constraint)
+    - **Skills** — procedural knowledge (how a migration runs, the steps to regenerate a fixture)
+    - **Patterns** — recurring conventions (how this repo names files, how errors are handled)
+- **Budget-constrained TF-IDF retriever with calibrated silence threshold (theta = 2.5)** — declines out-of-distribution queries rather than returning irrelevant top-k matches. The silence threshold makes the typed structure load-bearing under tight budgets.
 
 ```mermaid
 graph LR
@@ -51,26 +51,26 @@ graph LR
     E --> G[Agent context]
 ```
 
-The independent finding that supports the broader approach: [Wang et al. 2025](https://arxiv.org/abs/2510.01003) shows augmenting a code-localisation agent with historical commits, linked issues, and module-functionality summaries improves repository-level bug-fix localisation. Their gain comes from the combined signal — commits alone are insufficient.
+An independent finding supports the broader approach: [Wang et al. 2025](https://arxiv.org/abs/2510.01003) shows augmenting a code-localisation agent with historical commits, linked issues, and module-functionality summaries improves repository-level bug-fix localisation. The gain comes from the combined signal — commits alone are insufficient.
 
 ## Why It Works
 
-The typed structure acts as a category filter under tight budgets because TF-IDF's lexical noise dominates when the query carries few tokens. Splitting the corpus into three disjoint pools lets the retriever route to the right pool before scoring, so a 256-character query lands in a narrower space than full lexical search over raw commits ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)). The calibrated silence threshold (theta = 2.5) is the second load-bearing element — it returns nothing when no unit clears the threshold, preventing the agent from acting on weakly relevant noise. Without abstention, top-k over noisy commits surfaces false positives that degrade output ([abstention-aware retrieval](abstention-aware-memory-retrieval.md) shows the effect generalises).
+The typed structure acts as a category filter under tight budgets because TF-IDF's lexical noise dominates when the query carries few tokens. Splitting the corpus into three disjoint pools lets the retriever route before scoring, so a 256-character query lands in a narrower space than full lexical search over raw commits ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)). The silence threshold (theta = 2.5) is the second load-bearing element — it returns nothing when no unit clears the bar, preventing the agent from acting on weakly relevant noise. Without abstention, top-k over noisy commits surfaces false positives that degrade output ([abstention-aware retrieval](abstention-aware-memory-retrieval.md) shows the effect generalises).
 
 ## When This Backfires
 
-- **Confident retrieval of stale Facts** — on fast-evolving codebases, extracted Patterns conflict with current conventions; the index becomes a confident source of wrong answers. Outdated information in RAG knowledge bases substantially reduces response accuracy and can mislead models even when current information is available ([Ouyang et al. 2025](https://arxiv.org/abs/2503.04800)).
-- **Decision Shadow already lost** — each commit captures the diff but not the reasoning, constraints, or rejected alternatives. No extractor can recover what was never recorded. The orthogonal fix is to instrument commit-time capture going forward — for example, the Lore protocol restructures commit messages with git trailers carrying constraints, rejected alternatives, and agent directives ([Stetsenko 2026](https://arxiv.org/abs/2603.15566)).
-- **Treated as a default upgrade** — CommitDistill itself reports indistinguishable performance from BM25 in head-to-head LLM-as-judge evaluation ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)). The pattern is a budget-conditional optimisation, not a default.
+- **Confident retrieval of stale Facts** — on fast-evolving codebases, extracted Patterns conflict with current conventions; the index becomes a confident source of wrong answers. Outdated information in RAG knowledge bases reduces response accuracy and can mislead models even when current information is available ([Ouyang et al. 2025](https://arxiv.org/abs/2503.04800)).
+- **Decision Shadow already lost** — each commit captures the diff but not the reasoning or rejected alternatives, and no extractor recovers what was never recorded. The fix is to instrument capture going forward, as the Lore protocol does with git trailers ([Stetsenko 2026](https://arxiv.org/abs/2603.15566)).
+- **Treated as a default upgrade** — CommitDistill reports indistinguishable performance from BM25 in head-to-head LLM-as-judge evaluation ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)). It is a budget-conditional optimisation, not a default.
 
 ## Trade-offs
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| Typed memory from VCS history (CommitDistill-style) | Cheap to build (10K commits < 4s, no embeddings); typing structure dominates under tight budgets; calibrated silence prevents noisy retrieval | No headline lift over BM25 in LLM-as-judge eval; degrades on low-quality commit history; stale on fast-moving repos |
-| Raw `git log` read into context | Zero infrastructure; always current | Linear cost in history size; agent burns context budget on irrelevant commits |
-| Instrument commit-time capture (e.g. [Lore](https://arxiv.org/abs/2603.15566)) | Preserves Decision Shadow at the source; structured trailers carry constraints and alternatives | Requires team discipline going forward; historical commits remain unstructured |
-| Combined signal (commits + linked issues + module summaries) | Reported improvement on repository-level localisation ([Wang et al. 2025](https://arxiv.org/abs/2510.01003)) | More moving parts; harder to attribute gains to a single component |
+| Typed memory from VCS history (CommitDistill-style) | Cheap to build (10K commits < 4s, no embeddings); typing dominates under tight budgets; calibrated silence prevents noisy retrieval | No headline lift over BM25 in LLM-as-judge eval; degrades on low-quality history; stale on fast-moving repos |
+| Raw `git log` read into context | Zero infrastructure; always current | Linear cost in history size; agent burns budget on irrelevant commits |
+| Instrument commit-time capture (e.g. [Lore](https://arxiv.org/abs/2603.15566)) | Preserves Decision Shadow at the source; trailers carry constraints and alternatives | Requires team discipline going forward; historical commits stay unstructured |
+| Combined signal (commits + linked issues + module summaries) | Reported improvement on repository-level localisation ([Wang et al. 2025](https://arxiv.org/abs/2510.01003)) | More moving parts; harder to attribute gains to one component |
 
 ## Key Takeaways
 

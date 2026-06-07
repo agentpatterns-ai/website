@@ -5,23 +5,23 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 ---
 
 # Spec-Derived Execution as a Correctness Oracle
 
 > Ground the spec-conformance oracle in real execution traces — judge `(input, output)` pairs against the spec, not the code itself.
 
-Spec-derived execution judging is a post-hoc correctness oracle for code that already exists. The judge derives test inputs from the natural-language spec via category partitioning, executes them against the candidate, and prompts an LLM to score each `(input, output)` pair against the spec; per-input scores aggregate into a code-level verdict ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)). It swaps the model's hardest task — simulating dynamic behaviour from static code — for its easiest: paraphrase-and-compare against a description.
+Spec-derived execution judging is a post-hoc correctness oracle for code that already exists. The judge derives test inputs from the natural-language spec via category partitioning, executes them against the candidate, and scores each `(input, output)` pair against the spec; per-input scores aggregate into a code-level verdict ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)). It swaps the model's hardest task — simulating dynamic behaviour from static code — for its easiest: paraphrase-and-compare against a description.
 
 ## When to Reach For It
 
 Use this oracle when **all four** hold:
 
-- You have a candidate (one LLM sample, an agent-authored function, a refactor) and need a yes/no on whether it matches the spec.
+- You have a candidate (an LLM sample, an agent-authored function, a refactor) and need a yes/no against the spec.
 - A natural-language spec exists; tests do not.
-- The candidate is executable in isolation — no heavy setup, no service dependencies.
-- Authoring a persistent test suite is not the right investment (e.g., judging many candidates against one spec in an eval pipeline).
+- The candidate runs in isolation — no heavy setup, no service dependencies.
+- A persistent test suite is not worth authoring (e.g., judging many candidates against one spec in an eval pipeline).
 
 When a real test suite already exists, run the candidate against it instead — same execution evidence, durable assertions, no LLM in the verdict path.
 
@@ -39,24 +39,24 @@ graph LR
     J --> A[Aggregate to correctness verdict]
 ```
 
-**Phase 1 — Derive inputs from the spec.** The LLM partitions the spec into input categories (valid ranges, edge cases, error conditions) and emits concrete inputs covering each partition ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)). The candidate code is not visible to this step.
+**Phase 1 — Derive inputs from the spec.** The LLM partitions the spec into input categories (valid ranges, edge cases, error conditions) and emits concrete inputs covering each partition ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)). The candidate code is not visible here.
 
-**Phase 2 — Execute.** The harness runs each derived input against the candidate and captures the actual output (or exception). The only step that touches the code; deterministic, no LLM judgment.
+**Phase 2 — Execute.** The harness runs each input against the candidate and captures the output or exception — the only step touching the code, and the only deterministic one.
 
-**Phase 3 — Judge I/O pairs against the spec.** The LLM receives each `(input, actual_output)` pair plus the spec, and answers: "Is this output consistent with the spec for this input?" Per-input scores aggregate into the code-level verdict ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)).
+**Phase 3 — Judge I/O pairs against the spec.** The LLM receives each `(input, output)` pair plus the spec and answers whether the output is consistent with the spec for that input. Per-input scores aggregate into the code-level verdict ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)).
 
 ## Why It Works
 
-LLM self-review of code fails in two well-documented ways: models cannot reliably simulate dynamic execution from static source, and they systematically over-correct correct implementations as non-conforming when handed code and spec together ([Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358); [Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)). HoarePrompt — the prior static-reasoning baseline using strongest-postcondition calculus — opens with the observation that LLMs "are ineffective in this task" when judging code directly against a spec ([Tsoukalas et al., 2025](https://arxiv.org/abs/2503.19599)).
+When handed code and spec together, LLMs systematically over-correct correct implementations as non-conforming — and detailed prompting makes the misjudgment rate worse, not better ([Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358); [Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)). HoarePrompt — the prior static-reasoning baseline using strongest-postcondition calculus — opens with the observation that LLMs "are ineffective in this task" when judging code directly against a spec ([Bouras et al., 2025](https://arxiv.org/abs/2503.19599)).
 
-Spec-derived execution judging removes the simulation step. The model never sees the code; it sees concrete observed I/O and judges it against the spec — a paraphrase-and-compare task. The swap raises Matthew Correlation Coefficient by up to 39% over Zero-Shot CoT and consistently outperforms HoarePrompt across LiveCodeBench and CoCoClaNeL on three open-weight models (Qwen3Coder-30B, Devstral-Small-24B, Olmo3.1-Instruct), with greater stability across seeded runs ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)).
+Spec-derived execution judging takes the code out of the judge's hands entirely. The model never sees the source; it sees concrete observed I/O and judges it against the spec — a paraphrase-and-compare task instead of a conformance verdict over code. The swap raises Matthew Correlation Coefficient by up to 39% over Zero-Shot CoT and consistently outperforms HoarePrompt across LiveCodeBench and CoCoClaNeL on three open-weight models (Qwen3Coder-30B, Devstral-Small-24B, Olmo3.1-Instruct), with greater stability across seeded runs ([Tambon & Papadakis, 2026](https://arxiv.org/abs/2605.29822)).
 
 ## When This Backfires
 
-- **The bug lives outside the derivable partitions.** Concurrency hazards, state-dependent edge cases, and scenarios the spec does not enumerate produce no execution evidence. LLM-driven test generation routinely "overlooks testing domain knowledge" including boundary cases and exception handling ([Mendes et al., 2025](https://arxiv.org/abs/2505.09830)) — Phase 1 inherits that weakness directly.
-- **Aggregation hides safety-critical failure.** A candidate that passes 90 of 100 partition inputs but fails the one safety-critical input scores well; the rare-but-load-bearing case washes out. The aggregation step is the failure mode, not the per-input judgment.
-- **The candidate is not cheap to execute.** Database-, network-, framework-, or GUI-bound code requires harness investment that competes with writing a real test suite. Once you have built the harness, a persistent test suite is the higher-leverage artifact.
-- **The spec is too vague for partitioning.** Phase 1 inherits whatever ambiguity the spec carries. If a human cannot enumerate input categories, neither can the LLM, and the derived inputs do not exercise the contract surface that matters.
+- **The bug lives outside the derivable partitions.** Concurrency hazards and state-dependent edge cases the spec does not enumerate produce no execution evidence — a fault on an unstated input class is invisible to the judge.
+- **Aggregation hides safety-critical failure.** A candidate that passes 90 of 100 inputs but fails the one safety-critical input still scores well; the rare-but-load-bearing case washes out. Aggregation is the failure mode, not the per-input judgment.
+- **The candidate is not cheap to execute.** Database-, network-, or GUI-bound code needs harness investment that competes with writing a real test suite — and once built, the suite is the higher-leverage artifact.
+- **The spec is too vague for partitioning.** Phase 1 inherits the spec's ambiguity: if a human cannot enumerate input categories, neither can the LLM.
 
 ## Where It Sits Among Verification Techniques
 

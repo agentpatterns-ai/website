@@ -9,12 +9,12 @@ aliases:
   - skill subagent context
   - dedicated context for skills
   - skill fork context
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Skill Context Isolation: Forking the Skill into a Subagent Window
 
-> Run a skill in an isolated subagent context so its auxiliary tokens — search hits, intermediate plans, raw tool output — never enter the main chat. Only the skill's distilled result returns to the parent thread.
+> Run a skill in a forked subagent context so its auxiliary tokens — search hits, plans, tool output — stay out of the main chat.
 
 !!! note "Also known as"
     Dedicated context for skills, skill fork context. For the broader sub-agent isolation pattern, see [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md). For the SKILL.md syntax, see [Skill Frontmatter Reference](skill-frontmatter-reference.md).
@@ -67,6 +67,7 @@ If any condition fails, leaving the skill in the main context is the right defau
 - **Small auxiliary footprint** — subagent framing overhead (system prompt, tool definitions, result wrapping) can exceed what the fork saves on short-output skills.
 - **Determinism-required outputs** — security audits, diff review, and other workflows where the user must see the raw work cannot tolerate a summarised return.
 - **Debug iteration** — while the skill itself is being authored, the inner trace needs to be visible. Fork after the skill is stable.
+- **Self-dispatch recursion** — a known harness bug: a `context: fork` body shaped like a skill spec (a `# Name: tagline` header, third-person prose, an `ARGUMENTS:` block) can be pattern-matched by the forked subagent as a dispatch request, re-invoking itself instead of running. With no re-entry guard it loops until killed ([anthropics/claude-code#55592](https://github.com/anthropics/claude-code/issues/55592)). Write forked bodies as direct imperative steps.
 
 ## Why It Works
 

@@ -10,12 +10,12 @@ aliases:
   - probe and prefill
   - tool necessity classifier
   - hidden-state tool-call control
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Tool Necessity Probing
 
-> A linear probe on the pre-generation hidden state predicts whether an LLM agent needs to call a tool with AUROC 0.89–0.96 — substantially above the model's own verbalized reasoning ([Sun et al., 2026 — arXiv:2605.09252](https://arxiv.org/abs/2605.09252)).
+> A linear probe on the pre-generation hidden state predicts tool necessity at AUROC 0.89–0.96 — beating the model's verbalized reasoning ([Sun et al., 2026](https://arxiv.org/abs/2605.09252)).
 
 ## The Over-Calling Problem
 

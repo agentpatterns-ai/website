@@ -328,8 +328,6 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
 - [Agent-Driven Greenfield Product Development](workflows/agent-driven-greenfield.md)
 - [The AI Development Maturity Model](workflows/ai-development-maturity-model.md)
-- [Content Pipeline: Idea to Published Page](workflows/content-pipeline.md)
-- [Content & Skills Audit Workflow](workflows/content-skills-audit.md)
 - [Continuous Agent Improvement](workflows/continuous-agent-improvement.md)
 - [The Plan-First Loop: Design Before Code](workflows/plan-first-loop.md)
 - [Repository Bootstrap Checklist](workflows/repository-bootstrap-checklist.md)

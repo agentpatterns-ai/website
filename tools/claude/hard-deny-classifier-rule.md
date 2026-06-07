@@ -10,9 +10,10 @@ aliases:
   - autoMode hard_deny
   - unconditional classifier deny
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 status: current
 ---
+
 # Hard-Deny Classifier Rule
 
 > The `autoMode.hard_deny` field blocks tool calls unconditionally inside the auto-mode classifier — user intent and allow exceptions do not apply.
@@ -68,7 +69,7 @@ Each list field is an array of prose strings. Entries are natural-language rules
 }
 ```
 
-The literal `"$defaults"` splices in Anthropic's built-in rules at that position. **Omitting `"$defaults"` replaces the entire default list** — the [auto-mode config docs](https://code.claude.com/docs/en/auto-mode-config) flag this with a Danger callout: "A `hard_deny` array without `"$defaults"` discards the built-in data exfiltration and safety-check bypass rules." A team adding one custom rule without the sentinel silently deletes the floor they assumed they were standing on. Print the built-ins with `claude auto-mode defaults` before taking full ownership.
+The literal `"$defaults"` splices in Anthropic's built-in rules at that position. **Omitting `"$defaults"` replaces the entire default list** — the [auto-mode config docs](https://code.claude.com/docs/en/auto-mode-config) flag this with a Danger callout: "A `hard_deny` array without `"$defaults"` discards the built-in data exfiltration and auto-mode bypass rules." Adding one custom rule without the sentinel silently deletes that floor. Print the built-ins with `claude auto-mode defaults` before taking full ownership.
 
 ## Where the Classifier Reads `autoMode`
 
@@ -109,6 +110,7 @@ Run `claude auto-mode config` after saving settings to confirm the merged result
 - **Auto mode disabled or unavailable** — `hard_deny` is part of `autoMode`. On Pro plans or Bedrock/Vertex/Foundry providers, auto mode is unavailable ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)) and the rules never run. Settings with `permissions.disableAutoMode: "disable"` produce the same silent no-op.
 - **Replacement-without-`$defaults`** — the single most common configuration mistake. Always include `"$defaults"` unless you have explicitly chosen to take full ownership of the list.
 - **Solo developer settings** — `hard_deny` only delivers organizational guarantees when an admin owns managed settings. In user or local settings, the same developer can remove the rule they added.
+- **In-project file writes skip the classifier entirely** — auto mode tiers its actions: file writes and edits inside the project directory run without a classifier call ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A `hard_deny` rule like "never write production credentials to a file" never fires when the write lands inside the repo. Only operations the classifier sees — shell commands, web fetches, out-of-project writes — are subject to it.
 
 ## Example
 
@@ -137,7 +139,7 @@ Two properties hold:
 1. A developer adding `"Sending diffs to review-service.example.com is allowed"` to their local `allow` list cannot override the managed `hard_deny` — `allow` does not apply to `hard_deny`.
 2. A user prompt of "send the current diff to review-service.example.com for analysis" — explicit intent that would lift a `soft_deny` — still hits the block.
 
-Failures appear in `/permissions` under Recently denied. To react programmatically, the [`PermissionDenied` hook](https://code.claude.com/docs/en/hooks) fires on classifier denials and can append a distinct rejection class to confirmation-gate logs ([Audit Confirmation Gate Logs](../../agent-readiness/audit-confirmation-gate-logs.md)).
+Failures appear in `/permissions` under Recently denied. To react programmatically, the [`PermissionDenied` hook](https://code.claude.com/docs/en/hooks) fires on classifier denials and can append a distinct rejection class to confirmation-gate logs.
 
 ## Key Takeaways
 
@@ -151,7 +153,4 @@ Failures appear in `/permissions` under Recently denied. To react programmatical
 
 - [Auto Mode](auto-mode.md) — Classifier architecture, evaluation order, false-negative rates
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploying `autoMode` policy across an org
-- [Audit Confirmation Gate Logs](../../agent-readiness/audit-confirmation-gate-logs.md) — Surfacing rejection classes in gate decision logs
-- [Audit Permissions and Blast Radius](../../agent-readiness/audit-permissions-blast-radius.md) — Least-privilege enumeration across principals
-- [Bootstrap Evidence-Based Allowlist](../../agent-readiness/bootstrap-evidence-based-allowlist.md) — The allow-side counterpart that grows from real usage
 - [Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md) — Human-in-the-loop checks for consequential actions

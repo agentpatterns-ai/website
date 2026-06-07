@@ -9,12 +9,12 @@ aliases:
   - idle-time speculative planning
   - IdleSpec
   - speculative planning idle window
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Idle-Time Speculative Planning for ReAct Agents
 
-> Convert tool-wait slack into best-of-K planning by drafting progressive and recovery plan candidates during idle windows, then aggregating against the real observation once it lands — applies only when idle windows exceed one reasoning step and wall-clock latency dominates dollar cost.
+> Speculative planning drafts progressive and recovery candidates during tool-wait idle windows, then aggregates against the observation — worth it only when latency dominates dollar cost.
 
 Idle-time speculative planning is a ReAct-loop inference technique that fills the wall-clock between tool dispatch and observation with K candidate next-steps drafted in parallel; candidates are sampled from a posterior-updated mixture of two strategies and aggregated against the real observation when it arrives, lifting accuracy without lengthening the critical path ([Choi et al., arXiv:2605.22154](https://arxiv.org/abs/2605.22154)).
 
@@ -87,4 +87,5 @@ Idle time on an agent's critical path is a structurally underutilised compute sl
 - [Future-Based Asynchronous Function Calling](../tool-engineering/future-based-async-function-calling.md) — pipelines decode with tool execution at the function-call boundary
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — allocates compute across phases; idle-time speculation allocates compute across wall-clock slack
 - [Adaptive Generate-Rank-Verify](adaptive-generate-rank-verify.md) — sister inference-time search policy where the cost asymmetry is verifier-heavy rather than idle-heavy
+- [Proactive Idle-Time Anticipation (ProAct)](proactive-idle-time-anticipation.md) — the inter-turn sibling: speculates likely user needs between turns while this page speculates plans between tool dispatch and observation within one turn
 - [Background Todo Agent](background-todo-agent.md) — another pattern that offloads bookkeeping compute off the frontier model's critical path

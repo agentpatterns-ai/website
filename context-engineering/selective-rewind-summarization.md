@@ -5,66 +5,55 @@ tags:
   - tool-agnostic
   - context-engineering
   - pattern
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-02
 ---
 
 # Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact
 
 > A user-chosen cut point compresses earlier turns to a summary while the recent turns stay verbatim — a targeted alternative to whole-session compaction.
 
-Selective rewind summarization splits the session at a specific turn: the portion before the cut becomes an AI-generated summary, while the selected message and everything after it stay in full detail. Claude Code exposes it as "Summarize up to here" in the Rewind menu, paired with its mirror "Summarize from here" ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)), both shipping in v2.1.139+ ([Week 20 digest, May 11–15 2026](https://code.claude.com/docs/en/whats-new/2026-w20)).
-
-The pattern matters because blanket compaction summarises the whole window when a threshold trips, often at the wrong moment. Selective summarization lets the practitioner pick *where* to cut — the part the harness cannot infer.
+Selective rewind summarization splits the session at a chosen turn: everything before the cut becomes an AI-generated summary, while the selected message and everything after it stay verbatim. Claude Code exposes it as "Summarize up to here" and its mirror "Summarize from here" in the Rewind menu ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)), shipping in v2.1.139+ ([Week 20 digest](https://code.claude.com/docs/en/whats-new/2026-w20)). Blanket compaction summarises the whole window when a threshold trips, often at the wrong moment; selective summarization lets the practitioner pick *where* to cut — the part the harness cannot infer.
 
 ## Cut at the Last Verified Milestone
 
-The cut point is the decision, not the keystroke. The right cut is the last *verified* milestone — a passing test, an accepted PR, a confirmed observation — not just the most recent natural break. Cutting at an unverified plan freezes speculation into the summary, and subsequent turns inherit the unchecked assumption as a fixed premise.
+The cut point is the decision, not the keystroke. The right cut is the last *verified* milestone — a passing test, an accepted PR, a confirmed observation — not the most recent natural break. Cutting at an unverified plan freezes speculation into the summary, and later turns inherit it as a fixed premise.
 
 | Cut here | Result |
 |----------|--------|
 | Last passing test | Verified state captured; recent debugging stays verbatim |
-| Last accepted patch | Confirmed work anchored; current iteration keeps full detail |
-| Last reviewed plan | Approved approach captured; execution context stays intact |
-| Mid-speculation | Speculation fixed as "what we did"; subsequent turns build on unchecked premise |
-| Arbitrary "long enough" point | Early context may have been load-bearing; recent exploration may be discardable |
+| Last accepted patch | Confirmed work anchored; current iteration keeps detail |
+| Mid-speculation | Speculation fixed as "what we did"; later turns build on it |
 
 ## Direction Matters: Up To vs From Here
 
-The two options look symmetric in the menu but invert the semantics. `Summarize up to here` compresses everything *before* the selected message — recent work survives. `Summarize from here` compresses the selected message *onward* — early context survives ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)).
-
-Pick by which side is the side you want to discard:
+The two options look symmetric but invert the semantics. `Summarize up to here` compresses everything *before* the selected message — recent work survives. `Summarize from here` compresses it *onward* — early context survives. Pick by which side you want to discard:
 
 | Session shape | Direction | Why |
 |---------------|-----------|-----|
-| Long exploration → focused execution | `Summarize up to here` at the execution start | Compress the search; preserve the build |
-| Focused setup → wandering side discussion | `Summarize from here` at the side-quest start | Preserve the setup; compress the detour |
+| Long exploration → focused execution | `Summarize up to here` | Compress the search; keep the build |
+| Focused setup → wandering detour | `Summarize from here` | Keep the setup; compress the detour |
 | Original instructions matter, recent turns are noise | `Summarize from here` | Initial prompt stays full-fidelity |
-| Setup is verbose scaffolding, recent turns are the live problem | `Summarize up to here` | Recent debugging keeps every error string |
 
-Getting the direction wrong is one of the dominant failure modes — see *When This Backfires*.
+Getting the direction wrong is a dominant failure mode — see *When This Backfires*.
 
 ## Why It Works
 
-Transformer attention is computed over every token in the window, so the model's effective per-token attention budget shrinks as the window fills ([Anthropic: Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Uniform compaction discards exploratory turns and the recent high-bandwidth working context with equal force, but recent turns are where the agent's current working model lives. Aggressive summarization of recent context is "particularly damaging because… the most recent context (containing just-accumulated insights) is heavily compressed, forcing the agent to rediscover context in subsequent turns" ([Parallel Context Compaction, arxiv 2605.23296](https://arxiv.org/abs/2605.23296)).
+Attention is computed over every token, so the per-token attention budget shrinks as the window fills ([Anthropic: Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Uniform compaction discards recent working context as forcefully as exploratory turns, yet recent turns hold the agent's current working model. Compressing them is "particularly damaging… the most recent context… is heavily compressed alongside the rest, forcing the agent to rediscover and re-establish that context" ([Parallel Context Compaction, arxiv 2605.23296](https://arxiv.org/abs/2605.23296)).
 
-Selective summarization exploits this asymmetry deliberately: heavy compression on old scaffolding, none on recent work. The same shape appears in production agents — Bui (2026) §2.3.6 keeps "recent tool outputs at full fidelity" in OPENDEV's Adaptive Context Compaction precisely because newer signal is denser per token ([Building AI Coding Agents for the Terminal, arxiv 2603.05344](https://arxiv.org/abs/2603.05344)). What Claude Code adds is moving the cut from a fixed window into the user's hands — the practitioner usually knows where the verified milestone is, and the harness does not.
-
-## Original Messages Stay Recoverable
-
-Both directions leave the original messages in the session transcript on disk; the model just stops seeing them in-context ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)). This makes the operation non-destructive at the file layer — if the cut goes wrong, `Restore conversation` can recover. The compression is in working memory, not in the durable record.
+Selective summarization exploits this asymmetry: heavy compression on old scaffolding, none on recent work — the same reason OPENDEV's Adaptive Context Compaction keeps recent tool outputs at full fidelity ([Bui, arxiv 2603.05344](https://arxiv.org/abs/2603.05344)). The operation is non-destructive: both directions leave the original messages in the on-disk transcript, and `Restore conversation` recovers if the cut goes wrong ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)).
 
 ## When This Backfires
 
-Selective summarization fails the same way blanket compaction does, plus a few new ways unique to user-chosen cuts:
+Selective summarization fails the way blanket compaction does, plus a few ways unique to user-chosen cuts:
 
-- **Cut at unverified work**: Compressing up to a speculative plan freezes speculation as "what we did." Always cut at a milestone you can name as confirmed.
-- **Early context was the load-bearing context**: Requirements pasted at turn 1, an architectural diagram, the original error trace that anchored the debugging chain. Compressing this away costs more than compressing recent exploratory chatter.
-- **Wrong direction chosen**: `Summarize up to here` and `Summarize from here` are mirror operations; picking the inverse discards what you meant to keep. The menu does not warn you.
-- **Repeated cycles compound error**: Each summarisation adds error. A session compressed three times has three layers of lossy compression on its early context — in-context detail is unrecoverable without a manual `Restore conversation` ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) warns that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later").
-- **Forking would have been safer**: When the early context is genuinely irrecoverable-on-loss, `claude --continue --fork-session` preserves it in a parallel session at zero compression cost. Selective summarization is the right primitive when continuity matters more than perfect early-context fidelity; forking is the right primitive when it does not.
-- **Implementation bugs**: Real regressions have shipped where the cut went wrong. Bug [#42293](https://github.com/anthropics/claude-code/issues/42293) summarised the *entire* conversation instead of one side; bug [#47987](https://github.com/anthropics/claude-code/issues/47987) dropped pre-rewind messages entirely on certain versions. Verify the post-cut conversation contains what you expect before continuing high-stakes work.
+- **Cut at unverified work**: compressing up to a speculative plan freezes speculation as "what we did." Cut only at a milestone you can name as confirmed.
+- **Early context was load-bearing**: turn-1 requirements, an architectural diagram, the error trace that anchored the debugging chain. Compressing these costs more than compressing recent chatter.
+- **Wrong direction chosen**: the two options are mirror operations; picking the inverse discards what you meant to keep, and the menu does not warn you.
+- **Repeated cycles compound error**: each pass adds lossy compression; a thrice-compressed session stacks three layers on its early context, unrecoverable without `Restore conversation`. Anthropic warns that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- **Forking would have been safer**: when early context is irrecoverable-on-loss, `claude --continue --fork-session` preserves it in a parallel session at zero compression cost. Summarize when continuity matters most; fork when early-context fidelity does.
+- **Implementation bugs**: regressions have shipped where the cut went wrong — bug [#42293](https://github.com/anthropics/claude-code/issues/42293) summarised the *entire* conversation, and [#47987](https://github.com/anthropics/claude-code/issues/47987) dropped pre-rewind messages. Verify the post-cut conversation before continuing high-stakes work.
 
-The strongest counter to the pattern is the Amp position: skip compaction entirely, keep sessions short, branch when they grow ([Context Compaction Showdown](https://gist.github.com/badlogic/cd2ef65b0697c4dbe2d13fbecb0a0a5f)). That argument holds when sessions have natural breaking points; selective summarization is for sessions where they do not — long exploration that resolves into focused execution, debugging chains that finally lock onto a root cause.
+The strongest counter is the Amp position: skip compaction, keep sessions short, branch when they grow ([Context Compaction Showdown](https://gist.github.com/badlogic/cd2ef65b0697c4dbe2d13fbecb0a0a5f)). That holds when sessions have natural breaks; selective summarization is for sessions that do not — long exploration resolving into focused execution, debugging chains locking onto a root cause.
 
 ## Example
 

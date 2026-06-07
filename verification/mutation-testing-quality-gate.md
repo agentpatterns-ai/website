@@ -8,12 +8,12 @@ tags:
 aliases:
   - mutation testing for LLM tests
   - mutation-guided test generation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Mutation Testing as a Quality Gate for AI-Generated Test Suites
 
-> Coverage proves a line ran; mutation testing proves the suite would notice a regression. Applied to LLM-generated tests, surviving mutants flag tests that catch nothing and name the assertions the suite is missing.
+> Coverage proves a line ran; mutation testing proves the suite would notice a regression. On LLM-generated tests, surviving mutants expose assertions that catch nothing.
 
 Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioural claim coverage cannot make.
 

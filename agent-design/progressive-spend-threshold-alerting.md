@@ -9,12 +9,12 @@ aliases:
   - graduated cost circuit breaker
   - soft spend limit alerts
   - staged budget alerting
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Progressive Spend Threshold Alerting for Agent Cost Governance
 
-> Pair a soft spend cap with progressive alerts at fixed budget percentages — typically 50%, 80%, 100% — so the budget signals approaching exhaustion ahead of the hard cutoff, giving operators time to rebalance, raise the cap, or throttle low-priority agents before user-visible failure.
+> Progressive spend threshold alerting fires alerts at fixed budget percentages (typically 50/80/100) against a soft cap, giving operators an intervention window before the hard cutoff.
 
 ## The Signal That Cost Gives You
 
@@ -31,7 +31,7 @@ A hard cap alone collapses that forecast — users learn the budget was exhauste
 
 ## Soft Cap + Overshoot Zone
 
-The pattern depends on a **soft** cap. Cursor's 2026-05-04 enterprise release introduced this as `Soft Spend Limits` paired with automatic alerts at 50%, 80%, and 100% of the configured limit ([Cursor changelog](https://cursor.com/changelog)). The release frames the goal: "keeps users productive while giving admins and users visibility into consumption patterns."
+The pattern depends on a **soft** cap. Cursor's 2026-05-04 enterprise release introduced this as `Soft Spend Limits` paired with automatic alerts at 50%, 80%, and 100% of the configured limit ([Cursor changelog, 2026-05-04](https://cursor.com/changelog/05-04-26)). The release frames the goal: "keeps users productive while giving admins and users visibility into consumption patterns."
 
 A soft cap creates an overshoot zone past 100% where requests still succeed and the operator can intervene. The same alerts on a hard cap reduce to pre-failure pings — useful, but the intervention window only exists when there is overshoot to absorb.
 
@@ -61,7 +61,7 @@ The loop-level page lists "cost threshold exceeded" as one of five stopping sign
 Three axes determine whether the pattern produces useful intervention:
 
 - **Period window.** Daily, weekly, or monthly. Spiky workloads need longer windows; metered consumer products lean shorter to bound exposure.
-- **Tier.** Per-org, per-team, or per-user. Cursor exposes admin-set limits at the user level ([Cursor changelog](https://cursor.com/changelog)); cloud platforms expose them at account, project, or tag level. The right tier matches the team with authority to act.
+- **Tier.** Per-org, per-team, or per-user. Cursor exposes admin-set limits at the user level ([Cursor changelog, 2026-05-04](https://cursor.com/changelog/05-04-26)); cloud platforms expose them at account, project, or tag level. The right tier matches the team with authority to act.
 - **Audience.** Each threshold can route differently: 50% to a finance Slack channel, 80% to an engineering manager, 100% to an on-call paging webhook. Cursor's release does not document per-threshold routing; cloud-cost vendors typically allow it.
 
 ## When This Backfires
@@ -80,7 +80,7 @@ Cursor's 2026-05-04 release announces the pattern operationally:
 
 > "Cursor can also monitor usage and sends automatic alerts to users reaching 50%, 80%, and 100% of their soft or hard limits."
 >
-> — [Cursor changelog: Spend Management Updates](https://cursor.com/changelog)
+> — [Cursor changelog: Spend Management Updates, 2026-05-04](https://cursor.com/changelog/05-04-26)
 
 The release pairs three primitives the pattern depends on: a configurable soft limit ("soft limits instead of hard limits to avoid blocking users"), automatic alerts at fixed percentages of that limit, and per-user usage analytics broken down by product surface so operators can decide *which* agent class to throttle when an alert fires.
 

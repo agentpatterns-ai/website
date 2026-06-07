@@ -10,12 +10,12 @@ tags:
   - tool-engineering
   - tool-agnostic
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools
 
-> Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings — useful in the IDE loop, useless if the agent decides not to call it.
+> Ship the security scanner as an MCP server so the agent invokes typed scans in-loop and reasons over structured findings — distinct from CI-step delivery.
 
 On 2026-05-05 GitHub MCP Server secret scanning went GA and dependency scanning entered preview ([Secret scanning GA](https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available/), [Dependency preview](https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview/)). The scanners are not new; the delivery shape is — the agent calls `list_secret_scanning_alerts` or the dependency equivalent as a typed tool and parses JSON in-loop.
 
@@ -56,7 +56,7 @@ Six conditions invert the pattern's value:
 
 1. **Agent skips the scan.** Tools the agent decides to call do not enforce. Without a system-prompt directive or user prompt naming the scan, no scan runs. CI gates remove that agency by design.
 2. **Repo lacks the upstream signal.** Secret scanning requires Secret Protection enabled; dependency scanning requires Dependabot alerts. Without them the toolset returns empty and the agent reports a clean result.
-3. **Scanner principal closes the lethal trifecta.** A scanner MCP server with repo read, a write-egress tool, and exposure to untrusted content (PR bodies, log snippets) holds all three legs on the scanner principal. Run the [Lethal Trifecta Audit](../agent-readiness/audit-lethal-trifecta.md) before merge.
+3. **Scanner principal closes the lethal trifecta.** A scanner MCP server with repo read, a write-egress tool, and exposure to untrusted content (PR bodies, log snippets) holds all three legs on the scanner principal. Audit for trifecta closure before merge.
 4. **Schema mutability.** MCP tool schemas can change between sessions and most clients do not warn. An agent that parsed `severity` yesterday can receive `note` today, then fail silently or invent a value ([DZone](https://dzone.com/articles/why-security-scanning-isnt-enough-for-mcp-servers)).
 5. **Latency on the developer path.** Each in-loop scan adds round-trip seconds; scheduled jobs cover the whole repo without per-call cost, while agent-invoked scans cover only what the agent thought to scan.
 6. **Findings are ephemeral, not a system of record.** MCP scan results live in the agent's chat for the session only — they do not persist as alerts and do not appear in the Security tab or the REST/GraphQL alert APIs ([GitHub Docs](https://docs.github.com/en/code-security/how-tos/use-ghas-with-ai-coding-agents/scan-for-secrets-with-github-mcp-server)). Treat the MCP shape as a pre-commit safety check, not the audit trail; SIEM ingestion, triage queues, and compliance evidence still rely on the alert-based scanners.
@@ -98,7 +98,6 @@ The agent calls `list_dependabot_alerts` against the current repository, receive
 
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
-- [Lethal Trifecta Audit](../agent-readiness/audit-lethal-trifecta.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../tool-engineering/mcp-eager-vs-jit-loading.md)
 - [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)

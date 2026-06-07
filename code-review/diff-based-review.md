@@ -20,7 +20,7 @@ Design agent workflows so review happens at diff boundaries — pull requests, s
 
 ## The PR Model as Review Boundary
 
-[GitHub Copilot's coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) produces output as pull requests. This is not incidental — PRs are the natural diff boundary for code review. The same structure applies to [content pipelines](../workflows/content-pipeline.md):
+[GitHub Copilot's coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) produces output as pull requests. This is not incidental — PRs are the natural diff boundary for code review. The same structure applies to content pipelines:
 
 - Draft pages open as PRs against main
 - Review agents comment on the PR diff, not on the full page

@@ -10,12 +10,12 @@ tags:
   - agent-design
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Constraint Decay in Backend Code Generation
 
-> Multi-file backend tasks expose a measured fragility: agents that pass functional asserts on a baseline contract drop ~30 percentage points when the same contract is wrapped in framework, database, and ORM constraints — with convention-heavy frameworks taking the largest hit.
+> Constraint decay: backend agents that pass a baseline API contract drop ~30 percentage points once framework, database, and ORM constraints stack on top.
 
 ## What Was Measured
 

@@ -8,12 +8,12 @@ aliases:
   - deep agent runtime
   - agent runtime layer
   - production agent runtime
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Deep Agent Runtime: The Layer Beneath the Harness
 
-> The harness is what you put around the model — prompts, tools, skills. The runtime is what runs underneath: durable execution, lifecycle controls, streaming, and versioned operational APIs. Long-horizon agents fail at the runtime layer first.
+> The runtime is the layer beneath the harness — durable execution, lifecycle controls, streaming, versioned APIs. Long-horizon agents fail at the runtime layer first.
 
 ## Harness vs Runtime
 

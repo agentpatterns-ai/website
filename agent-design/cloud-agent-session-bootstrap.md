@@ -9,12 +9,14 @@ aliases:
   - cloud agent install start lifecycle
   - session start hook bootstrap
   - environment.json install lifecycle
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-05
 ---
 
 # Cloud-Agent Session Bootstrap
 
 > Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit.
+
+Cursor reports that the single biggest factor in cloud-agent output quality is giving the agent a full development environment — the kind a local agent inherits from a developer's laptop for free ([What we've learned building cloud agents](https://cursor.com/blog/cloud-agent-lessons)). A cloud agent has no laptop to inherit, so it must bootstrap that environment explicitly. That makes *how* the bootstrap is structured a first-order quality lever, not just a latency optimisation.
 
 ## When This Pattern Applies
 
@@ -114,6 +116,7 @@ The hook config is on the default branch (Copilot only reads default-branch hook
 - [Prebuilt Agent Environments](prebuilt-agent-environments.md) — the cached-image alternative when toolchain churn is slower than the rebuild pipeline
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md) — the runtime-install lever; what to do when no cached lifecycle is available
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the architectural split that makes per-session start phases cheap to retry
+- [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — the state-layer view of the same bootstrap boundary: which session state belongs in the cached install layer versus the per-session start layer
 - [Session Initialization Ritual](session-initialization-ritual.md) — the in-session orient-before-act ritual that runs after bootstrap completes
 - [Long-Running Agents](long-running-agents.md) — the operational shape that makes bootstrap latency matter at fleet scale
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](../security/llm-pinned-vulnerable-versions.md) — why "pinned versions" is the right discipline: agent-written pins routinely point at CVE-bearing releases

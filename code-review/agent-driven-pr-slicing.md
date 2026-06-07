@@ -8,18 +8,18 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Agent-Driven PR Slicing
 
-> The agent that produced a branch proposes its own decomposition into smaller, individually reviewable PRs — using session intent, not diff clustering, as the slicing signal.
+> The agent that produced a branch proposes its own split into smaller, reviewable PRs — using session intent, not diff clustering, as the slicing signal.
 
 ## The Pattern
 
 Defect detection drops sharply once a single review exceeds 200–400 lines or 60–90 minutes of attention, per the SmartBear/Cisco study of ~2,500 reviews across 3.2M lines ([SmartBear](https://support.smartbear.com/collaborator/docs/working-with/concepts/optimal-size.html)). Slicing a 2,000-line branch into four 500-line PRs lands inside that envelope — and reviewer attention is the dominant cost on agent-authored PRs ([Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)).
 
-Agent-driven slicing differs from earlier decomposition by who decides where to cut. The slicer is the same agent that built the change, with the chat-context record of intent — which edits belonged to which sub-task, which order makes the diff comprehensible, where the dependency edges are.
+What sets agent-driven slicing apart is who decides where to cut: the same agent that built the change, holding the chat-context record of intent — which edits belonged to which sub-task and where the dependency edges are.
 
 | Mechanism | Slicing signal | Failure mode |
 |----------|---------------|--------------|
@@ -28,7 +28,7 @@ Agent-driven slicing differs from earlier decomposition by who decides where to 
 | Diff-clustering tools (`pr-splitter`) | Hunk embeddings + LLM grouping | Fails on cross-cutting refactors |
 | Agent-driven slicing | Session intent + dependency graph | Degrades when context was compacted |
 
-Cursor 3.3 (2026-05-07) ships this as a quick action: "Split PRs" uses chat context to identify logical slices, defaults to independent PRs unless dependencies require ordering, takes a backup snapshot, and proposes a plan for user approval before creating PRs ([Cursor changelog](https://cursor.com/changelog/05-07-26)). The open-source `pr-splitter` CLI is the alternative — clustering hunks by embedding similarity then grouping with an LLM ([DiffEnder/pr-splitter](https://github.com/DiffEnder/pr-splitter)).
+Cursor 3.3 (2026-05-07) ships this as a "Split PRs" quick action: chat context identifies the slices, dependencies set the ordering, and a plan goes to the author for approval before any PR is created ([Cursor changelog](https://cursor.com/changelog/05-07-26)). The open-source `pr-splitter` CLI is the diff-only alternative ([DiffEnder/pr-splitter](https://github.com/DiffEnder/pr-splitter)).
 
 ## Slicing Signals
 
@@ -72,14 +72,14 @@ A single PR is preferable when:
 
 ## When Splits Are Worse Than the Original
 
-A 1,500-line refactor sliced by directory becomes four PRs that each touch one layer; reviewing any single PR requires opening the others. Author and reviewers now hold *more* context than the monolith forced on them.
+A 1,500-line refactor sliced by directory becomes four PRs that each touch one layer; reviewing any single PR means opening the others, so everyone holds *more* context than the monolith forced on them. Two indicators the slicing was wrong:
 
-Two indicators the slicing was wrong:
+- **No PR is independently mergeable.** If every PR merges in lockstep, the slicer found syntactic boundaries, not semantic ones — `pr-splitter`'s hunk-clustering surfaces this on cross-cutting refactors.
+- **Reviewers ask for the original diff.** Review threads keep referencing files outside the slice ([renovate #14628](https://github.com/renovatebot/renovate/discussions/14628)).
 
-- **No PR is independently mergeable.** If every PR must merge in lockstep, the slicer found syntactic boundaries, not semantic ones — `pr-splitter`'s hunk-clustering surfaces this on cross-cutting refactors.
-- **Reviewers ask for the original diff.** Review threads on individual slices keep referencing files outside that slice — practitioner reports flag this on community threads ([renovate #14628](https://github.com/renovatebot/renovate/discussions/14628)).
+Stacking carries its own cost the slice plan can ignore. Practitioner consensus puts the practical ceiling at three to four PRs per stack: beyond that, dependency-tracking overhead outweighs the review benefit, and feedback on an early slice forces a rebase cascade through every downstream slice — enough that some teams abandon stacking once the cascade cost exceeds the blocking waits it replaced ([dev.to](https://dev.to/alanwest/how-to-stop-drowning-in-giant-pull-requests-with-stacked-prs-2o9d)). The four-PR OAuth example below sits at that ceiling; if any layer is likely to churn under review, a shallower split costs less.
 
-The mitigation is the author's approval gate — Cursor's flow surfaces the proposed split before creating PRs, not after.
+The mitigation is the author's approval gate — Cursor surfaces the proposed split before creating PRs, not after.
 
 ## Example
 

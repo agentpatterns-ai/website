@@ -12,7 +12,7 @@ aliases:
   - stakeholder trust evals observability
   - leadership dashboard for AI features
   - non-engineer eval review cycle
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Stakeholder Trust Through Evals and Observability
@@ -23,15 +23,15 @@ The pattern only earns trust when three preconditions hold: error-analysis narra
 
 ## Why Stakeholder-Facing Evals and Observability
 
-Eval scores, traces, and observability data are produced by structurally different subsystems — offline harness, runtime tracing, infrastructure metrics — and each surface optimises for the engineer who owns it. The legibility of any one surface to a non-engineer is incidental. Stakeholders (PM, leadership, GTM, support leads) cannot form their own opinion on whether an AI feature is working without pulling those signals onto one place and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The failure mode is engineering being pulled into status meetings to paraphrase eval scores and trace JSON, which scales poorly as the number of shipped AI features grows.
+Eval scores, traces, and observability data come from structurally different subsystems — offline harness, runtime tracing, infrastructure metrics — each optimised for the engineer who owns it. Legibility to a non-engineer is incidental. Stakeholders (PM, leadership, GTM, support leads) cannot judge whether an AI feature is working without pulling those signals onto one surface and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Otherwise engineering gets pulled into status meetings to paraphrase eval scores and trace JSON — a cost that scales poorly as shipped AI features multiply.
 
 ## Preconditions
 
-The workflow pays off only when all three are met. Adopting the artefacts before these are in place produces theatre — a leadership view that reports a regression nobody on the team can explain in the meeting it surfaces in.
+The workflow pays off only when all three are met. Adopting the artefacts beforehand produces theatre — a leadership view reporting a regression nobody on the team can explain in the meeting it surfaces in.
 
-- **Error analysis is already a habit.** The team reviews real failed traces weekly or per release and produces a written list of top failure modes. "Don't just show dashboards and metrics; tell the story of what you're finding in the data" — the trust transfer is in the narration of error analysis, not in the aggregate scores ([Hamel Husain & Shreya Shankar, LLM Evals FAQ, January 2026](https://hamel.dev/blog/posts/evals-faq/)). Without this, the dashboard is read once and then ignored.
-- **The headline view is plural.** A leadership view shows quality, cost, and volume side-by-side, not a single composite "AI quality score." A single number promoted to a KPI gets optimised for — Goodhart's law applies. "Every internal AI dashboard, every vendor ROI deck, every quarterly review surfaces the same headline: tokens consumed" hides "premium-model overuse, context stuffing, agent loops, and tokenizer drift" inside one number ([TrueFoundry: Tokenmaxxing](https://www.truefoundry.com/blog/tokenmaxxing-ai-cost-governance)).
-- **The artefact lives where the audience already works.** "The most capable observability AI does nothing for your team if it lives in a web dashboard that nobody opens" ([Honeycomb: Evaluating Observability Tools for the AI Era](https://www.honeycomb.io/blog/evaluating-observability-tools-for-the-ai-era)). PMs in Linear or Notion, executives in email or Slack, support leads in their ticketing tool — the surface needs to be in their normal review cadence, or it gets two visits and zero on the third.
+- **Error analysis is already a habit.** The team reviews real failed traces weekly or per release and produces a written list of top failure modes. "Don't just show dashboards and metrics; tell the story of what you're finding in the data" — the trust transfer is in the narration of error analysis, not the aggregate scores ([Hamel Husain & Shreya Shankar, LLM Evals FAQ, January 2026](https://hamel.dev/blog/posts/evals-faq/)). Without this, the dashboard is read once and then ignored.
+- **The headline view is plural.** A leadership view shows quality, cost, and volume side-by-side, not a single composite "AI quality score." A number promoted to a KPI gets optimised for — Goodhart's law applies. "Every internal AI dashboard, every vendor ROI deck, every quarterly review surfaces the same headline: tokens consumed" hides "premium-model overuse, context stuffing, agent loops, and tokenizer drift" inside one number ([TrueFoundry: Tokenmaxxing](https://www.truefoundry.com/blog/tokenmaxxing-ai-cost-governance)).
+- **The artefact lives where the audience already works.** "The most capable observability AI does nothing for your team if it lives in a web dashboard that nobody opens" ([Honeycomb: Evaluating Observability Tools for the AI Era](https://www.honeycomb.io/blog/evaluating-observability-tools-for-the-ai-era)). PMs in Linear or Notion, executives in email or Slack, support leads in their ticketing tool — the surface must sit in their normal review cadence, or it gets two visits and zero on the third.
 
 Without these, stay on [Eval-Driven Development](eval-driven-development.md) and [Failure-Driven Iteration](failure-driven-iteration.md) until the narration habit is in place.
 
@@ -49,7 +49,7 @@ graph TD
 
 ### Layer 1: Audience-Specific Dashboard
 
-A dashboard aggregates eval scores, cost, latency, and volume into a glanceable view scoped to one audience ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The Braintrust write-up names three concrete recipes — each picks a different segmentation that maps to the meeting the dashboard is for.
+A dashboard aggregates eval scores, cost, latency, and volume into a glanceable view scoped to one audience ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Braintrust names three recipes — each a different segmentation mapped to the meeting the dashboard serves.
 
 | Audience | Charts | Segmentation |
 |----------|--------|--------------|
@@ -61,9 +61,9 @@ Drill-through is what makes the dashboard load-bearing rather than decorative. W
 
 ### Layer 2: Custom Trace View
 
-A raw trace is a JSON-heavy, span-by-span view that engineers can read but non-technical stakeholders cannot. A custom trace view re-renders that trace in domain vocabulary — a customer-support trace rendered as a ticket card with a user-segment badge, the customer's question, the agent's resolution, quality score gauges, and the model and cost in a footer ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
+A raw trace is a JSON-heavy, span-by-span view engineers can read but non-technical stakeholders cannot. A custom trace view re-renders it in domain vocabulary — a customer-support trace as a ticket card with a user-segment badge, the customer's question, the agent's resolution, quality-score gauges, and the model and cost in a footer ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
 
-The closer the view is to the product surface the end user sees, the easier it is for stakeholders to reason about whether the behaviour is correct ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). One or two saved views per AI feature are enough — open a single trace in a meeting and have everyone follow what happened without engineering paraphrasing.
+The closer the view sits to the product surface the end user sees, the easier it is for stakeholders to judge whether the behaviour is correct ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). One or two saved views per feature suffice — open a single trace in a meeting and everyone follows what happened without engineering paraphrasing.
 
 ### Layer 3: Ad-Hoc Natural-Language Query
 
@@ -73,7 +73,7 @@ The same mechanism works against any structured trace store with a queryable bac
 
 ## Triggers and Constraints
 
-The three artefacts are not equal at every cadence. Pair each to the rhythm of the meeting that consumes it.
+The three artefacts are not equal at every cadence. Pair each to the meeting that consumes it.
 
 | Cadence | Driver | Artefact | Question it answers |
 |---------|--------|----------|---------------------|
@@ -82,17 +82,17 @@ The three artefacts are not equal at every cadence. Pair each to the rhythm of t
 | Monthly leadership review | Schedule | Leadership dashboard + a written summary of "prevented production issues" | "Is this feature working and is it worth the spend?" |
 | Incident retro | Push (incident trigger) | The trace that triggered the incident + the eval task derived from it | "What changed, and what protects us from this regression next time?" |
 
-The written paired artefact is the load-bearing piece in each row — it bounds the meeting's authority. A dashboard without paired narration produces a status surface with no falsifiable claim attached, which is the failure mode the qualified verdict guards against (see *When This Backfires*).
+The written paired artefact is load-bearing in each row — without it the dashboard is a status surface with no falsifiable claim attached (see *When This Backfires*).
 
 ## Multi-Tool Coverage
 
-The artefact triad is tool-agnostic. Braintrust documents one packaging — dashboards plus custom trace views plus Loop ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The same triad assembles from Honeycomb (dashboards), a custom React renderer over span JSON (custom trace view), and Honeycomb's NL query (ad-hoc query); from Datadog dashboards plus a Notion-embedded trace summary plus Datadog Watchdog; or from Grafana plus a `streamlit` trace viewer plus a `dbt` ad-hoc query notebook. The reader picks the vendor that already lives inside the audience's existing workflow rather than introducing a new tool.
+The artefact triad is tool-agnostic. Braintrust documents one packaging — dashboards plus custom trace views plus Loop ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The same triad assembles from Honeycomb (dashboards + NL query) plus a custom React renderer over span JSON; from Datadog dashboards plus a Notion-embedded trace summary plus Watchdog; or from Grafana plus a `streamlit` trace viewer plus a `dbt` query notebook. Pick the vendor already inside the audience's workflow rather than introducing a new tool.
 
 ## Why It Works
 
-Pulling cross-surface signals onto one artefact and re-rendering them in the audience's domain vocabulary deliberately transfers legibility — a customer-support trace shown as a ticket card with a user-segment badge and resolution closes the gap a JSON span view cannot ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The trust transfer is causal: if a PM can read the artefact in their normal cadence and form their own opinion, they stop pulling engineering into status meetings — the loop closes when the artefact answers the stakeholder's question without engineering present ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
+Pulling cross-surface signals onto one artefact and re-rendering them in the audience's domain vocabulary deliberately transfers legibility — a support trace shown as a ticket card with a user-segment badge and resolution closes the gap a JSON span view cannot ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The transfer is causal: if a PM can read the artefact in their normal cadence and form an opinion, they stop pulling engineering into status meetings — the loop closes when the artefact answers the stakeholder's question without engineering present.
 
-The Hamel/Shankar finding identifies the limit. Trust is transferred when the artefact is paired with narrated error-analysis findings: a list of top failure modes, the frequency of high-impact errors, and concrete fixes framed as "prevented production issues" ([Hamel Husain & Shreya Shankar](https://hamel.dev/blog/posts/evals-faq/)). The dashboard is the surface; the narration is the load-bearing trust signal. Teams that ship the dashboard without the narration produce a status surface that reports regressions the team cannot explain — which destroys credibility faster than no dashboard.
+The Hamel/Shankar finding marks the limit. Trust transfers only when the artefact is paired with narrated error-analysis findings: top failure modes, the frequency of high-impact errors, and fixes framed as "prevented production issues" ([Hamel Husain & Shreya Shankar](https://hamel.dev/blog/posts/evals-faq/)). The dashboard is the surface; the narration is the load-bearing trust signal. Ship the dashboard without it and you get a status surface reporting regressions the team cannot explain — which destroys credibility faster than no dashboard.
 
 ## When This Backfires
 
@@ -133,5 +133,3 @@ The dashboard, the trace view, and the narration each carry one third of the tru
 - [Grade Agent Outcomes, Not Execution Paths](../verification/grade-agent-outcomes.md) — the verification-side building block: what to measure in the eval rubric the dashboard surfaces.
 - [Observability Feedback Loop: A 7-Step Debug Runbook](../observability/observability-feedback-loop.md) — the engineering debug discipline the custom trace view draws from.
 - [Agentic-Agile: Adapting Agile Rituals for Agent Work](agentic-agile-rituals.md) — the ritual side of the same problem: how to structure the meeting that consumes these artefacts.
-- [Audit: Observability Calibration](../agent-readiness/audit-observability-calibration.md) — the audit that validates the upstream emitters the engineering dashboard depends on.
-- [Audit: Eval Suite](../agent-readiness/audit-eval-suite.md) — the audit that validates the eval rubric the leadership dashboard's quality score is computed from.

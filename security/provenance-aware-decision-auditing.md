@@ -10,18 +10,18 @@ aliases:
   - influence provenance graph
   - ARGUS provenance auditing
   - context-aware prompt injection defense
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Provenance-Aware Decision Auditing for LLM Agents
 
-> Track how every piece of untrusted context propagates into a tool call, then release the call only when benign-labeled spans alone justify it. The check turns the implicit instruction/data boundary inside the model into an explicit data-flow audit at the harness.
+> Provenance-aware decision auditing traces how untrusted context propagates into each tool call, releasing the action only when benign-labeled spans alone justify it.
 
 ## The Gap This Closes
 
 Most prompt injection benchmarks assume a static attack string against a fully specified user instruction. Real agents work over *context-dependent* tasks where the correct action depends on tool returns, retrieved documents, and inter-agent messages — defenses that filter only the user prompt or the immediate tool output miss attacks riding on legitimate-looking context ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)).
 
-Architectural defenses such as [CaMeL](camel-control-data-flow-injection.md) close this gap by separating control flow from data flow up front ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)). Provenance-aware decision auditing closes it the other way: let the agent reason over mixed context, then audit each consequential action against an explicit influence graph before execution.
+Architectural defenses such as [CaMeL](camel-control-data-flow-injection.md) close this gap by separating control flow from data flow up front ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)). Provenance-aware decision auditing closes it the other way: let the agent reason over mixed context, then audit each consequential action against an explicit influence graph before execution.
 
 ## The Influence Provenance Graph
 

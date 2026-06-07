@@ -161,7 +161,6 @@ Prefer manual or semi-automated updates when the documentation surface is small,
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — sibling continuous pattern applied to agent capability rather than docs
 - [Entropy Reduction Agents](entropy-reduction-agents.md) — scheduled background agents that also surface documentation drift alongside architectural debt
 - [Scheduled Instruction File Fact-Checker](instruction-file-fact-checker.md) — applies the same drift-detection pattern to agent instruction files
-- [Content & Skills Audit Workflow](content-skills-audit.md) — automated staleness detection across documentation and skill libraries
 - [Safe Outputs Pattern](../security/safe-outputs-pattern.md) — the constraint mechanism that keeps documentation agents to reviewable PRs rather than autonomous commits
 - [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) — orchestration layer referenced throughout this page
 - [Headless Claude in CI](headless-claude-ci.md) — running Claude in CI pipelines with safe, non-interactive execution

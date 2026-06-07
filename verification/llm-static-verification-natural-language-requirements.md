@@ -5,12 +5,12 @@ tags:
   - testing-verification
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # LLM Static Verification Against Natural-Language Requirements
 
-> A two-stage LLM workflow that extracts checkable rules from a natural-language requirements document, then audits the implementation rule by rule — useful only when the structure constrains the verifier and a human reviews flagged items.
+> Mine checkable rules from a requirements spec with one LLM, then audit the code rule by rule with a second. A human reviews flags.
 
 Use an LLM to statically verify code against a natural-language requirements document only when the verification is **factored into two stages** — an *AI rule miner* that extracts discrete checkable rules from the spec and surfaces ambiguities, followed by an *AI code auditor* that judges each rule against the implementation independently ([Zhou, Towey, Chen, 2026](https://arxiv.org/abs/2605.17926)). The single-prompt variant — handing the LLM the whole spec and the whole code base and asking "does this match?" — systematically misclassifies correct implementations as non-conforming and gets worse with elaborate prompting ([Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358); [Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
 

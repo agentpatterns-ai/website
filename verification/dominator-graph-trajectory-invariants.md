@@ -11,7 +11,7 @@ aliases:
   - "dominator analysis for agent trajectories"
   - "trajectory dominance verification"
   - "dominatory analysis for agents"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Dominator-Graph Trajectory Invariants for Non-Deterministic Agents
@@ -92,3 +92,4 @@ A new run that creates a PR without first reaching `failing test identified` fai
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — broader framing of non-deterministic agent testing; situates dominator-graph invariants within capability-matrix grading.
 - [Pre-Completion Checklists](pre-completion-checklists.md) — deterministic gating that pairs naturally with dominator-graph invariants for the constraints they do not cover.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the layer that catches what dominator analysis cannot: must-not states, duration violations, and hard schema checks.
+- [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — the failure-prediction alternative that learns from traces too, but scores partial runs for likely failure rather than checking mandatory states.

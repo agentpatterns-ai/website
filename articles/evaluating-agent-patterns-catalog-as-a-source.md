@@ -7,7 +7,7 @@ aliases:
 tags:
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-31
+last_reviewed: 2026-06-02
 ---
 
 # Evaluating Agent Patterns Catalog as a Source
@@ -67,4 +67,3 @@ The strongest near-term uses are: scanning the [anti-patterns book](https://www.
 
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md)
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md)
-- [Audit: Lethal Trifecta](../agent-readiness/audit-lethal-trifecta.md)

@@ -6,7 +6,7 @@ tags:
   - agent-design
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-03
 status: current
 ---
 
@@ -129,6 +129,7 @@ The triad adds a cloud round-trip before any code is written. That round-trip is
 - **Active Remote Control session** — Remote Control disconnects when ultraplan starts because both features occupy the claude.ai/code interface and only one can be connected at a time ([ultraplan docs](https://code.claude.com/docs/en/ultraplan)).
 - **Terminal that may close before the plan is ready** — if the polling terminal exits, the **teleport back** option disappears and only cloud-execute or save-to-file recovery remain.
 - **Dirty working tree at teleport time** — teleport requires a clean git state and will prompt to stash uncommitted changes; in flows where stashing breaks in-progress local work, the handoff is friction, not flow ([Claude Code on the web docs](https://code.claude.com/docs/en/claude-code-on-the-web)).
+- **Uncommitted local edits during the planning window** — the cloud session clones the repository from GitHub at launch ([Claude Code on the web docs](https://code.claude.com/docs/en/claude-code-on-the-web)), so it plans against the pushed commit, not your working tree. If you keep editing locally while the plan drafts — renaming a column, reworking a schema — the plan can reference state that no longer exists, and you may approve it without noticing the drift. Commit or push before dispatching, or treat the plan as point-in-time against the launch commit.
 - **Research-preview risk** — ultraplan is explicitly a research preview; "behavior and capabilities may change based on feedback" ([ultraplan docs](https://code.claude.com/docs/en/ultraplan)). Do not build durable team rituals on it without a fallback to local plan mode.
 
 For these conditions, default to local [plan mode](../tools/claude/plan-mode.md) and reserve cloud planning for tasks where async drafting and inline-comment review pay for the round-trip.
@@ -149,4 +150,3 @@ For these conditions, default to local [plan mode](../tools/claude/plan-mode.md)
 - [Cloud-Local Agent Handoff for AI Agent Development](cloud-local-agent-handoff.md) — the general handoff pattern; teleport-back is its plan-stage instantiation
 - [Multi-Model Plan Synthesis](../multi-agent/multi-model-plan-synthesis.md) — combining plans from multiple planners; complementary to where the planner runs
 - [Cloud Agent Session Bootstrap](../agent-design/cloud-agent-session-bootstrap.md) — the agent-design pattern that the cloud planner composes
-- [Set Plan Mode as the Project Default](../agent-readiness/bootstrap-plan-mode.md) — the agent-readiness runbook that makes plan mode a project default; cloud planning is the cloud-side analogue

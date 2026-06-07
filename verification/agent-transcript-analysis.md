@@ -124,7 +124,7 @@ The key instruction is to reason through the root cause before proposing a rewri
 
 Agents miss by omission as much as by commission — the Anthropic engineering team notes that "what agents omit in their feedback and responses can often be more important than what they include." An agent that confidently lists five issue classes may silently skip a sixth that is harder to articulate.
 
-Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a held-out test set after changes is not optional.
+Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity that only surfaces on task types not covered by your eval set — which is why re-running a [held-out test set after changes](held-out-test-gap.md) is not optional.
 
 When the same model both generates and reviews, self-preference bias compounds the problem: judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
 

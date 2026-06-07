@@ -9,7 +9,7 @@ tags:
 aliases:
   - infeasible task detection
   - feasibility-aware agents
-last_reviewed: 2026-05-28
+last_reviewed: 2026-06-02
 ---
 
 # Task Feasibility Awareness: Stop Before You Start

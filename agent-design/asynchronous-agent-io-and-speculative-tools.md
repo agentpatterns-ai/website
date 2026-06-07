@@ -9,7 +9,7 @@ aliases:
   - asynchronous tool usage
   - real-time agent architecture
   - speculative tool execution
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-01
 ---
 
 # Asynchronous Agent I/O and Speculative Tool Calling

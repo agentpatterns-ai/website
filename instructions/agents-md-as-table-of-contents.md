@@ -59,7 +59,7 @@ Practical approaches:
 
 ## Rule Lifecycle Metadata
 
-The pointer map controls AGENTS.md size *structurally*. Lifecycle metadata controls it *temporally* — without it, the same one-way ratchet refills the file. The walkinglabs harness-engineering lecture names the failure mode directly: *"agent makes a mistake, you say 'add a rule to prevent this,' add it to AGENTS.md, it works temporarily, agent makes a different mistake, add another rule, repeat, file bloats out of control"* ([walkinglabs lecture 04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). Each addition is one-way because no one can tell what is safe to delete.
+The pointer map controls AGENTS.md size *structurally*. [Lifecycle metadata](rule-lifecycle-metadata.md) controls it *temporally* — without it, the same one-way ratchet refills the file. The walkinglabs harness-engineering lecture names the failure mode directly: *"agent makes a mistake, you say 'add a rule to prevent this,' add it to AGENTS.md, it works temporarily, agent makes a different mistake, add another rule, repeat, file bloats out of control"* ([walkinglabs lecture 04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). Each addition is one-way because no one can tell what is safe to delete.
 
 The discipline that closes the loop is per-rule metadata. The same lecture prescribes three fields for every rule:
 

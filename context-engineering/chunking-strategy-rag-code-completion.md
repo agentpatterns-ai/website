@@ -11,12 +11,12 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Chunking Strategy for RAG-Based Code Completion
 
-> Function-based chunking is the wrong default for line-level retrieval-augmented code completion; Sliding Window and cAST sit on the cost-quality Pareto frontier, and doubling cross-file context length matters more than any choice between them.
+> For line-level code completion, function-based chunking is the wrong default; use Sliding Window or cAST, and doubling cross-file context length matters more than that choice.
 
 ## The Counter-Intuitive Result
 

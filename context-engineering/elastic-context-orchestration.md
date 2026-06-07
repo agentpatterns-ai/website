@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Elastic Context Orchestration
 
-> A long-horizon search agent picks a context-management operation per turn — Skip, Compress, Rollback, Snippet, or Delete — instead of accumulating raw trajectory or running a single periodic compaction. Different parts of the trajectory are kept at different fidelity based on current task relevance.
+> Elastic context orchestration picks one of five retention operations per turn instead of accumulating raw trajectory or compacting on a fixed schedule.
 
 ## Why Uniform Retention Fails on Long-Horizon Search
 

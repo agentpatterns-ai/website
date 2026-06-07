@@ -6,12 +6,12 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-03
 ---
 
 # Distilled Bootstrap Contract: Agent-Authored Repo Setup
 
-> Run a discovery agent once against a fresh repo, verify every step in a Docker container, then version the resolved heuristics as a `.bootstrap` contract that future agents read instead of re-deriving — converting per-session discovery cost into amortised lookup cost.
+> Version an agent's Docker-verified repo-setup heuristics as a `.bootstrap` contract, converting per-session discovery cost into amortised lookup cost for every future agent.
 
 A distilled bootstrap contract is an agent-authored, version-controlled artefact that records the dependencies, repair steps, and verification commands a coding agent discovered while bootstrapping a repository from a bare environment. Subsequent agent sessions consume the contract directly, skipping the trial-and-error phase. The pattern was introduced as BootstrapAgent, a multi-agent framework that combines evidence extraction, structured planning, Docker-based verification, and trace-driven repair to produce a `.bootstrap` contract, and reports a 92.9% bootstrap success rate alongside a 25.9% reduction in downstream agent token usage and a 22.3% reduction in build time ([arXiv 2605.15815](https://arxiv.org/abs/2605.15815)).
 

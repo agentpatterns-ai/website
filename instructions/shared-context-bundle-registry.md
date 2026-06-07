@@ -10,14 +10,14 @@ aliases:
   - context bundle registry
   - versioned context hub
   - shared context library
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-02
 ---
 
 # Shared Context Bundle Registry for Agent Teams
 
-> A versioned, addressable store of context bundles — AGENTS.md files, skills, policies, examples — that multiple agents pull at runtime instead of duplicating context across repos or wiring it inline.
+> A versioned, addressable store of context bundles — AGENTS.md, skills, policies — that multiple agents pull at runtime instead of duplicating across repos.
 
-A shared context bundle registry centralises the instruction artifacts that shape agent behaviour — `AGENTS.md`, `SKILL.md`, policies, examples — in a versioned, multi-consumer store separate from any one application repo. Agents address a bundle by stable handle and pin a commit or environment tag (`dev`, `staging`, `prod`) so production behaviour is reproducible and rollback-able ([LangChain: Introducing LangSmith Context Hub](https://www.langchain.com/blog/introducing-context-hub)).
+A shared context bundle registry centralises the instruction artifacts that shape agent behaviour — `AGENTS.md`, `SKILL.md`, policies, examples — in a versioned, multi-consumer store separate from any application repo. Agents address a bundle by stable handle and pin a commit or environment tag (`dev`, `staging`, `prod`) so production behaviour is reproducible and rollback-able ([LangChain: Introducing LangSmith Context Hub](https://www.langchain.com/blog/introducing-context-hub)).
 
 ## When the Pattern Pays Off
 
@@ -32,11 +32,11 @@ When none of these conditions hold, per-repo `AGENTS.md` and `SKILL.md` files un
 
 ## Why It Works
 
-A registry separates two concerns that pure file-in-repo workflows conflate: authoring cadence and deployment safety. Domain experts edit bundles in the UI at marketing-cycle speed; agents pin to environment-tagged versions so production changes do not propagate silently. This is the same control-plane / data-plane separation that succeeded for feature flags and config registries. LangChain frames the mechanism directly: "Most agent quality problems are instruction, memory, or policy problems ... Context files are faster to iterate on than model or harness changes" ([LangChain blog](https://www.langchain.com/blog/introducing-context-hub)).
+A registry separates two concerns that file-in-repo workflows conflate: authoring cadence and deployment safety. Domain experts edit bundles in the UI at marketing-cycle speed; agents pin environment-tagged versions so production changes do not propagate silently — the same control-plane / data-plane separation that succeeded for feature flags. LangChain frames it directly: "Most agent quality problems are instruction, memory, or policy problems ... Context files are faster to iterate on than model or harness changes" ([LangChain blog](https://www.langchain.com/blog/introducing-context-hub)).
 
 ## Reference Implementation
 
-LangSmith Context Hub (launched May 2026) supports two bundle types out of the box: agent repos (`AGENTS.md` + tool definitions) and skill repos (`SKILL.md` + supporting docs). Versions carry git-like commit IDs plus mutable environment tags ([LangSmith docs](https://docs.langchain.com/langsmith/use-the-context-hub)).
+LangSmith Context Hub (launched May 2026) supports two bundle types: agent repos (`AGENTS.md` + tool definitions) and skill repos (`SKILL.md` + supporting docs). Versions carry git-like commit IDs plus mutable environment tags ([LangSmith docs](https://docs.langchain.com/langsmith/use-the-context-hub)).
 
 ```bash
 # Scaffold and push a skill bundle
@@ -47,7 +47,7 @@ langsmith hub push support-style --type skill --dir ./skills/support-style
 langsmith hub pull support-style:<COMMIT_OR_TAG> --dir ./context/support-style-pinned
 ```
 
-`hub pull` wipes and rewrites the destination directory — point it at a dedicated folder, not a working tree ([LangChain blog](https://www.langchain.com/blog/introducing-context-hub)). For the Deep Agents SDK, a `ContextHubBackend` mounts the hub at a path prefix (typically `/memories/`) via `CompositeBackend`, so durable bundles coexist with thread-scoped state without making the whole virtual filesystem persistent ([LangChain blog](https://www.langchain.com/blog/introducing-context-hub)).
+`hub pull` wipes and rewrites the destination directory — point it at a dedicated folder, not a working tree. For the Deep Agents SDK, a `ContextHubBackend` mounts the hub at a path prefix (typically `/memories/`) via `CompositeBackend`, so durable bundles coexist with thread-scoped state ([LangChain blog](https://www.langchain.com/blog/introducing-context-hub)).
 
 ## Trade-offs
 
@@ -59,11 +59,12 @@ langsmith hub pull support-style:<COMMIT_OR_TAG> --dir ./context/support-style-p
 
 ## When This Backfires
 
-- **Consumers pull `latest` instead of pinning.** LangSmith's own prompt-management docs warn that production deployments should "always use specific prompt versions rather than the 'latest' version" ([LangSmith: Manage prompts](https://docs.langchain.com/langsmith/manage-prompts)). Once a consumer fetches the floating head, the registry degrades to a shared mutable file and silent drift returns with no rollback signal.
-- **Bundle becomes a dumping ground.** Without curation, registries accumulate stale entries; teams report saved-prompt folders where most entries go untouched and consumers stop trusting what to pick ([ALM Corp: Prompt Library Burnout](https://almcorp.com/blog/prompt-library-burnout-contextual-role-specific-ai-workflows/)).
-- **Public or untrusted bundles enter the trifecta.** LangChain explicitly disclaims its own public Prompt Hub: "prompts are user-generated and unverified ... LangChain does not review or endorse public prompts, use these at your own risk" ([LangSmith: Manage prompts](https://docs.langchain.com/langsmith/manage-prompts)). Pulling a third-party bundle into a private-data agent transfers the indirect-injection surface to that bundle's author.
-- **Single-repo, single-environment stack.** When one repo holds both agent and context, the registry adds an auth dependency and a network round-trip for zero gain — `git pull` supplies the same versioning guarantees with stronger access controls.
-- **Model upgrade drift survives the pin.** A pinned bundle does not protect against the upstream-model side of prompt drift; the same prompt against a new snapshot can produce subtly different outputs ([Comet: Prompt Drift](https://www.comet.com/site/blog/prompt-drift/)). Pin model versions alongside bundle pins, or the discipline is half-done.
+- **Consumers pull `latest` instead of pinning.** LangSmith's prompt-management docs warn that production should "always use specific prompt versions rather than the 'latest' version" ([LangSmith: Manage prompts](https://docs.langchain.com/langsmith/manage-prompts)). Fetch the floating head and the registry degrades to a shared mutable file — silent drift with no rollback signal.
+- **Bundle becomes a dumping ground.** Without curation, registries accumulate stale entries; teams report saved-prompt folders where most go untouched and consumers stop trusting what to pick ([ALM Corp: Prompt Library Burnout](https://almcorp.com/blog/prompt-library-burnout-contextual-role-specific-ai-workflows/)).
+- **Public or untrusted bundles enter the trifecta.** LangChain disclaims its own public Prompt Hub: "prompts are user-generated and unverified ... use these at your own risk" ([LangSmith: Manage prompts](https://docs.langchain.com/langsmith/manage-prompts)). Pulling a third-party bundle into a private-data agent transfers the indirect-injection surface to that bundle's author.
+- **Shared context is a lateral data-flow channel even when first-party.** Centralising one bundle means a single poisoned entry has transitive reach into every consumer — the same class of risk as a shared credential. Agents trusting a shared file with no per-consumer authentication is a documented lateral-movement vector, not just a third-party concern ([Christian Schneider: AI agents as attack pivots](https://christian-schneider.net/blog/ai-agent-lateral-movement-attack-pivots/)). Scope read access per consumer and treat promotion as privileged, or the registry widens the blast radius it was meant to contain.
+- **Single-repo, single-environment stack.** When one repo holds both agent and context, the registry adds an auth dependency and a network round-trip for zero gain — `git pull` gives the same versioning with stronger access controls.
+- **Model upgrade drift survives the pin.** A pinned bundle does not protect against the upstream-model side of drift; the same prompt against a new snapshot can produce subtly different outputs ([Comet: Prompt Drift](https://www.comet.com/site/blog/prompt-drift/)). Pin model versions alongside bundle pins, or the discipline is half-done.
 
 ## Example
 
