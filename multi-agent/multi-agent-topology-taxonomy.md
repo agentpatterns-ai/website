@@ -7,12 +7,12 @@ tags:
   - agent-design
   - tool-agnostic
   - multi-agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-07
 ---
 
 # Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid
 
-> Choosing the wrong coordination topology for a task type is a primary source of production agent failures — each topology carries distinct failure modes that must be mitigated in the harness design.
+> Coordination topology choice is a primary source of multi-agent failures; centralised, decentralised, and hybrid each carry distinct failure modes.
 
 !!! info "Also known as"
     Multi-Agent SE Design Patterns, Multi-Agent Architecture Patterns
@@ -96,6 +96,30 @@ Three failure modes appear across all topologies:
 | Unknown — start here | Centralised |
 
 Centralised is the default because its failure modes are deterministic. Decentralised topologies require shared state primitives (file locks, [CRDTs](crdt-observation-driven-coordination.md)) that add implementation surface.
+
+## Choose a Coordination Pattern
+
+Topology answers *where the task graph lives*; coordination pattern answers *how agents pass work*. Before reaching for any pattern, walk down the complexity ladder — only adopt the next level when the current one stops being reliable. Microsoft's [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) page frames the same rule: "Use the lowest level of complexity that reliably meets your requirements."
+
+1. **Direct model call** — a single well-crafted prompt; no agent logic, no tool access. Solves classification, summarisation, single-step extraction.
+2. **Single agent with tools** — one agent that reasons and chooses from tools and knowledge sources, looping until done. The right default for most enterprise tasks; [delegation-decision](../agent-design/delegation-decision.md) covers when to stop here.
+3. **Multi-agent orchestration** — multiple specialised agents coordinated by an orchestrator or a peer protocol. Justified only when prompt complexity, tool overload, or security boundaries make a single agent unreliable. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) gives the same escalation: "add multi-step agentic systems only when simpler solutions fall short."
+
+Once multi-agent is justified, the coordination-pattern choice is a separate decision from topology. The table below maps the five patterns Microsoft documents to this site's canonical page for each — use the table as a router, then read the linked page for the trade-offs.
+
+| Pattern | Coordination | Routing | Best for | Watch out for |
+|---------|--------------|---------|----------|---------------|
+| [Sequential](../context-engineering/prompt-chaining.md) (a.k.a. *prompt chaining*, *pipeline*) | Linear pipeline; each agent processes the previous agent's output | Deterministic, predefined order | Step-by-step refinement with clear stage dependencies | Failures in early stages propagate; no parallelism |
+| [Concurrent](fan-out-synthesis.md) (a.k.a. *fan-out / parallelisation*; see also [LLM Map-Reduce](llm-map-reduce.md)) | Parallel; agents work independently on the same input | Deterministic or dynamic agent selection | Independent analysis from multiple perspectives; latency-sensitive scenarios | Conflict resolution when results contradict; resource-intensive |
+| [Group chat](opponent-processor-debate.md) (a.k.a. *debate*, *maker-checker*; see also [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md)) | Conversational; agents contribute to a shared thread | Chat manager controls turn order | Consensus-building, brainstorming, iterative maker-checker validation | Conversation loops; hard to control beyond three agents |
+| [Handoff](agent-handoff-protocols.md) (a.k.a. *routing*, *triage*, *dispatch*) | Dynamic delegation; one active agent at a time | Agents decide when to transfer control | Tasks where the right specialist emerges during processing | Infinite handoff loops; unpredictable routing paths |
+| [Magentic](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns#magentic-orchestration) (a.k.a. *task-ledger orchestration*, *adaptive planning*; nearest in-site neighbour: [Orchestrator-Worker](orchestrator-worker.md)) | Plan-build-execute; manager agent builds and adapts a task ledger | Manager assigns and reorders tasks dynamically | Open-ended problems with no predetermined solution path | Slow to converge; stalls on ambiguous goals |
+
+Three constraints on reading this table:
+
+- **Don't pattern-shop.** Scanning the rows and assembling several at once produces the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure mode. Pick the pattern your task structure actually demands; the [pattern selection map](../patterns/selection-map.md) compares this site's patterns on six orthogonal axes (token cost, latency, blast radius, frontier-model dependency, verification cost, task class) when the four columns above are not enough.
+- **Sequential / Concurrent / Handoff are framework-agnostic** — every multi-agent stack supports them as plain function calls. Group chat and Magentic typically require a framework primitive ([Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/), Semantic Kernel, LangChain, CrewAI); reach for them only when a built-in helper does the heavy lifting.
+- **Patterns compose with topologies, not replace them.** A Hybrid topology often runs Concurrent within a cluster and Sequential across clusters. The topology choice (above) is *where state lives*; the pattern choice (here) is *how state moves*.
 
 ## Example
 
