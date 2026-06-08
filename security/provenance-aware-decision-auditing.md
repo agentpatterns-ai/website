@@ -10,7 +10,7 @@ aliases:
   - influence provenance graph
   - ARGUS provenance auditing
   - context-aware prompt injection defense
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-08
 ---
 
 # Provenance-Aware Decision Auditing for LLM Agents
@@ -68,6 +68,8 @@ The authors flag two boundary conditions ([Weng et al., 2026](https://arxiv.org/
 - **Inter-agent contagion under adaptive attack.** ASR climbs from 2.5% to 15.0% on this vector when the attacker has white-box access. Inter-agent messages start at the lowest base trust (0.3), but heavy reliance on agent handoffs remains the weakest line. Broader adaptive-attack work confirms that defenses evaluated against static strings tend to fail under optimization-based pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023)), so treat the published ASR as a ceiling rather than a stable bound.
 
 For fixed-action agents or workflows that never accumulate cross-turn context, the [action-selector pattern](action-selector-pattern.md) or a stateless [behavioral firewall](behavioral-firewall-tool-call-trajectories.md) cover the same risk at lower runtime cost.
+
+The same influence-provenance machinery generalizes beyond injection defense. Recent work extends evidence tracing and execution provenance into a broader trust, debug, and audit tool — tracing which evidence supported each claim, whether each tool call was justified, and how memory influenced later decisions ([From Agent Traces to Trust: Evidence Tracing and Execution Provenance in LLM Agents](https://arxiv.org/abs/2606.04990)).
 
 ## Key Takeaways
 

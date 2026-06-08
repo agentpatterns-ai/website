@@ -10,18 +10,19 @@ tags:
   - instructions
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-08
 status: current
 ---
+
 # Claude Code Hooks
 
-> Deterministic automation at lifecycle points — shell commands, HTTP calls, or LLM prompts that fire on specific events.
+> Claude Code hooks are deterministic automation at lifecycle points — shell commands, HTTP calls, or LLM prompts that fire on specific events.
 
 ## How They Work
 
 [Hooks](https://code.claude.com/docs/en/hooks) are configured in `settings.json` (user, project, or local scope) under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to extract tool input fields ([reference](https://code.claude.com/docs/en/hooks)).
 
-Hooks are deterministic because the harness — not the model — runs them at fixed points in the request loop: the harness invokes `PreToolUse` before dispatching a tool call and `PostToolUse` after receiving the result, independent of any sampling. That guarantee is what makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking because the action has already run ([reference](https://code.claude.com/docs/en/hooks)).
+Hooks are deterministic because the harness — not the model — runs them at fixed points in the request loop: the harness invokes `PreToolUse` before dispatching a tool call and `PostToolUse` after receiving the result, independent of any sampling. That guarantee is what makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking because the action has already run ([reference](https://code.claude.com/docs/en/hooks)). Beyond stderr, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext` to give Claude feedback and continue the turn without being treated as a hook error — inverting the prior limitation where only `PostToolUse` hooks could inject context ([Claude Code changelog v2.1.163](https://code.claude.com/docs/en/changelog)).
 
 ## Lifecycle Events
 
@@ -150,4 +151,3 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 - [Sub-Agents](sub-agents.md)
 - [Claude Agent SDK](agent-sdk.md)
 - [Claude Code /batch and Worktrees](batch-worktrees.md)
-- [Session Scheduling](session-scheduling.md)
