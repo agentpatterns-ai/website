@@ -9,12 +9,12 @@ aliases:
   - automated pattern mining
   - self-improving agents
   - meta-skill generation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-08
 ---
 
 # Introspective Skill Generation: Mining Agent Patterns to Create New Skills and Agents
 
-> Introspective skill generation is a workflow where a dedicated analysis agent mines session transcripts and persistent memory for recurring corrections, manual interventions, and repeated task sequences — then produces concrete skill files, agent definitions, or hook configurations to automate them.
+> Introspective skill generation is a workflow where an analysis agent mines session transcripts and memory for recurring patterns, then generates skills or agents automatically.
 
 ## The Manual Bottleneck in Agent Improvement
 
@@ -56,6 +56,8 @@ Feed the collected material to an analysis agent — a read-only subagent with a
 - **Recurring failure-then-fix sequences** — patterns where the agent makes a predictable mistake and the user applies the same correction
 
 Agents can analyze evaluation transcripts and refactor tools based on the results — Anthropic reports using this approach internally to optimize tool implementations. [Source: [Anthropic — Writing Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)] The same transcript-analysis capability applies directly to mining session logs for recurring corrections and manual steps: the agent reads transcripts, identifies patterns by frequency, and proposes automations in the same way it proposes tool improvements.
+
+OpenAI describes a production self-improving agent loop in the same shape — an agent that mines its own runs and generates improvements, built on Codex. [Source: [OpenAI — Building self-improving tax agents with Codex](https://openai.com/index/self-improving-tax-agents/)]
 
 Rank candidates by frequency and impact. A correction that appears in 80% of sessions is a stronger automation candidate than one that appears in 10%.
 

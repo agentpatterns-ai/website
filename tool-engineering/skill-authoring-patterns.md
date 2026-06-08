@@ -10,12 +10,12 @@ tags:
 aliases:
   - Skill design patterns
   - SKILL.md authoring
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-08
 ---
 
 # Skill Authoring Patterns: Description to Deployment
 
-> Skill authoring patterns are repeatable structures that make agent skills reliable — covering how to write descriptions that trigger at the right time, which implementation shape fits each task type, and how to diagnose failures when they occur.
+> Skill authoring patterns are repeatable structures that make agent skills reliable — covering description craft, the right implementation shape per task, and failure diagnosis.
 
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
@@ -113,6 +113,8 @@ Skills can reference other skills by name ([source](https://x.com/trq212/status/
 
 Reference skills by their exact `name` field, not by filename.
 
+Decomposing a monolithic skill into smaller composed units has a research-backed rationale beyond reuse: a microservices-inspired "microskill" decomposition has been proposed as a remedy for mid-context information loss, token-cost spiral, and architecture drift, explicitly tying skill granularity to context-window degradation ([Microskill Architecture, 2026](https://arxiv.org/abs/2606.05720)).
+
 ## CLI-First Design (Recommended for Executable Skills)
 
 Skills with non-trivial executable logic should ship a dedicated CLI entry point under `<skill-name>/scripts/<skill-name>.{sh,py}` rather than embedding bash or Python inline in `SKILL.md` ([nibzard catalogue: CLI-First Skill Design](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/cli-first-skill-design.md)). A single CLI interface serves humans (debugging, testing, composition with Unix tools) and agents (deterministic invocation, meaningful exit codes) at the same time.
@@ -185,6 +187,8 @@ For critical validations, bundle a script — code is deterministic; language in
 ## Why It Works
 
 Skill patterns work because agents are context-constrained token predictors — they produce output proportional to the quality and specificity of their input context. A description field acts as a learned retrieval key: the agent matches incoming user intent against description tokens to decide what to load. Concise, trigger-rich descriptions raise that match probability. Gotchas sections work because they shift the prior toward correct behavior in the narrow set of cases where the base model would otherwise guess wrong; they do not teach the model general knowledge, they override its statistical default for a specific edge case. The delta principle (only write what the base model gets wrong) is efficient because it keeps context small — every token saved in skill instructions is a token available for task reasoning ([source](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
+
+The free-form prose used here is not the only candidate representation: a structured graph/protocol form (the AIP representation) has been proposed as an alternative to free-form prose for agent skills, argued to improve reliability and editability ([AIP: A Graph Representation for Learning and Governing Agent Skills, 2026](https://arxiv.org/abs/2606.04781)).
 
 ## When This Backfires
 

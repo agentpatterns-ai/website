@@ -10,7 +10,7 @@ aliases:
   - trace-feedback coupling
   - feedback-attached traces
   - trace as eval corpus
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-08
 ---
 
 # Traces Need Feedback to Power Learning
@@ -43,6 +43,8 @@ The article's deterministic example: Claude Code's leaked `userPromptKeywords.ts
 Chase reduces the platform contract to three behaviours: store traces (trajectory, tool calls, metadata, timing, errors), store feedback attached to the run/trace/thread, and generate feedback (rules, online evaluators, sampling, annotation queues) ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
 The middle requirement is load-bearing. Feedback that lives in a different system than the trace breaks the join — you can describe how often users gave thumbs-down, but you cannot pull the *trajectories* that earned them for replay, eval seeding, or ablation.
+
+Braintrust makes the same case from the eval side: traces and eval data belong on one surface because unifying them closes the iteration loop, rather than splitting feedback and evals into a separate analytics tool ([Braintrust — Why your traces and evals belong in the same place](https://www.braintrust.dev/blog/traces-and-evals-same-place)).
 
 ## Tool-Agnostic Channel: OTel `gen_ai.evaluation.result`
 
