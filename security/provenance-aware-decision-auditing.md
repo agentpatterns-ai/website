@@ -1,5 +1,6 @@
 ---
 title: "Provenance-Aware Decision Auditing for LLM Agents"
+term: "Provenance-Aware Decision Auditing"
 description: "Build an influence provenance graph at runtime, trace each tool-call argument to its source span, and release actions only when benign evidence alone justifies them — a context-aware defense against prompt injection that complements harness-level data-flow separation."
 tags:
   - security

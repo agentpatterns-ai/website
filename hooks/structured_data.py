@@ -8,6 +8,8 @@ Schemas emitted:
   - BreadcrumbList — all pages with URL depth ≥ 1
   - FAQPage       — pages whose rendered HTML contains a recognised FAQ section
   - HowTo         — pattern/technique pages whose rendered HTML contains a numbered step list
+  - DefinedTerm   — coined-concept pages (title=term, description=definition, aliases=alternateName)
+  - DefinedTermSet — the /concepts glossary landing page (anchors every DefinedTerm)
 """
 
 import html
@@ -197,8 +199,14 @@ _HOWTO_PATHS = (
 )
 
 
+def _src_posix(page) -> str:
+    """Source path with forward slashes — src_path uses os.sep on Windows,
+    which breaks the path-prefix gates below unless normalised."""
+    return (page.file.src_path if page.file else "").replace("\\", "/")
+
+
 def _detect_howto(page, rendered_html: str) -> Optional[dict]:
-    src = page.file.src_path if page.file else ""
+    src = _src_posix(page)
     if not any(src.startswith(p) for p in _HOWTO_PATHS):
         return None
 
@@ -229,6 +237,80 @@ def _detect_howto(page, rendered_html: str) -> Optional[dict]:
         "@type": "HowTo",
         "name": _safe(meta.get("title") or page.title or ""),
         "step": steps,
+    }
+
+
+# ---------------------------------------------------------------------------
+# DefinedTerm — coined-concept pages become machine-readable glossary entries
+# ---------------------------------------------------------------------------
+# Sections whose leaf pages name a coined concept (a term worth a glossary
+# entry). Deliberately excludes articles/ (paper summaries), tools/ (vendor
+# docs), training/ (pedagogical modules), standards/ (process docs), and the
+# loose nav pages — those describe things, they don't coin terms.
+_DEFINED_TERM_PATHS = (
+    "patterns/", "anti-patterns/", "fallacies/", "frameworks/",
+    "agent-design/", "context-engineering/", "instructions/", "multi-agent/",
+    "tool-engineering/", "verification/", "security/", "workflows/",
+    "geo/", "code-review/", "observability/", "emerging/",
+)
+# Curated exceptions: pages outside the concept sections that still name a
+# canonical term worth a glossary entry (e.g. Prompt Engineering only has a
+# training module today). Exact src paths, posix-separated.
+_DEFINED_TERM_ALLOW = (
+    "training/foundations/prompt-engineering.md",
+)
+# Canonical glossary that every DefinedTerm points back to via inDefinedTermSet.
+_TERM_SET_SRC = "concepts.md"
+_TERM_SET_ID = "/concepts/"
+
+
+def _term_set_url() -> str:
+    return f"{_site_url}{_TERM_SET_ID}"
+
+
+def _build_defined_term(page, config) -> Optional[dict]:
+    """A coined-concept leaf page → one DefinedTerm anchored to /concepts/."""
+    src = _src_posix(page)
+    if src.endswith("index.md"):
+        return None
+    in_section = any(src.startswith(p) for p in _DEFINED_TERM_PATHS)
+    if not in_section and src not in _DEFINED_TERM_ALLOW:
+        return None
+
+    meta = page.meta or {}
+    # `term:` is the clean canonical moniker; the page title is SEO-shaped, so
+    # prefer the explicit term and let the full title stay in the headline only.
+    name = _safe(meta.get("term") or meta.get("title") or page.title or "")
+    description = _safe(meta.get("description") or "")
+    # A term without a name or a definition is not a useful glossary entry.
+    if not name or not description:
+        return None
+
+    term = {
+        "@context": "https://schema.org",
+        "@type": "DefinedTerm",
+        "name": name,
+        "description": description,
+        "url": urljoin(_site_url + "/", page.url or ""),
+        "inDefinedTermSet": _term_set_url(),
+    }
+
+    aliases = meta.get("aliases") or []
+    alt = [_safe(str(a).strip()) for a in aliases if str(a).strip()]
+    if alt:
+        term["alternateName"] = alt
+
+    return term
+
+
+def _build_defined_term_set(config) -> dict:
+    """Stub DefinedTermSet on /concepts/ so every term's reference resolves."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "DefinedTermSet",
+        "@id": _term_set_url(),
+        "name": f"{config.get('site_name') or 'Agent Patterns'} Glossary",
+        "url": _term_set_url(),
     }
 
 
@@ -312,6 +394,15 @@ def on_post_page(output: str, *, page, config, **kwargs) -> str:
         howto = _detect_howto(page, output)
         if howto:
             schemas.append(howto)
+
+        # DefinedTermSet — the glossary landing page anchors every term
+        if src_path == _TERM_SET_SRC:
+            schemas.append(_build_defined_term_set(config))
+
+        # DefinedTerm — coined-concept leaf pages
+        dt = _build_defined_term(page, config)
+        if dt:
+            schemas.append(dt)
 
     if not schemas:
         return output

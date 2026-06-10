@@ -1,5 +1,6 @@
 ---
 title: "Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric"
+term: "Markov-Chain Reliability for LLM Agents"
 description: "pass@k, pass^k, and the reliability decay curve are projections of one underlying first-passage distribution. Fitting an absorbing Markov chain to agent traces — and reporting a goodness-of-fit certificate — is what makes those projections defensible."
 tags:
   - testing-verification

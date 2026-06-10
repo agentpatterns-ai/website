@@ -1,5 +1,6 @@
 ---
 title: "Schema and Structured Data for GEO — AI Citation Guide"
+term: "Schema and Structured Data"
 description: "FAQPage JSON-LD yields measurable citation lifts in AI responses (2.7x–3.2x across studies). Implementation guide for FAQPage, HowTo, and DefinedTerm schema in MkDocs Material."
 tags:
   - geo
@@ -16,7 +17,7 @@ last_reviewed: 2026-05-27
 
 > FAQPage schema yields a measurable citation lift in AI responses — structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing. Independent studies cite FAQPage citation improvements ranging from 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)).
 
-Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects FAQPage, HowTo, and Article schemas via `hooks/structured_data.py`.
+Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects Article, FAQPage, HowTo, DefinedTerm, and BreadcrumbList schemas via `hooks/structured_data.py`, plus a site-wide `DefinedTermSet` on the [concepts glossary](../concepts.md).
 
 ## What Changed: Google vs. AI Search
 
@@ -73,28 +74,30 @@ Auto-detection triggers on ordered lists (`<ol>`) with 3+ items, restricted to `
 
 ### DefinedTerm
 
-Machine-readable definitions for named concepts — useful where terms like "agent" are ambiguous across tools.
+Machine-readable definitions for named concepts — useful where terms like "agent" are ambiguous across tools, and the schema layer of the site's vocabulary-ownership strategy. Every coined-concept leaf page emits one `DefinedTerm`, anchored to a single `DefinedTermSet` on `/concepts/`:
 
 ```json
 {
   "@context": "https://schema.org",
-  "@type": "DefinedTermSet",
-  "@id": "https://agentpatterns.ai/concepts#",
-  "name": "Agent Patterns Glossary",
-  "hasDefinedTerm": [
-    {
-      "@type": "DefinedTerm",
-      "@id": "https://agentpatterns.ai/concepts#agent-harness",
-      "termCode": "AP-001",
-      "name": "Agent Harness",
-      "description": "Scaffolding that surrounds an agent loop, managing context, tool calls, error recovery, and output formatting.",
-      "inDefinedTermSet": "https://agentpatterns.ai/concepts#"
-    }
-  ]
+  "@type": "DefinedTerm",
+  "name": "Harness Engineering",
+  "description": "The discipline of designing agent environments so agents reliably produce correct results.",
+  "alternateName": ["agent environment design", "environment design for agents"],
+  "url": "https://agentpatterns.ai/agent-design/harness-engineering/",
+  "inDefinedTermSet": "https://agentpatterns.ai/concepts/"
 }
 ```
 
-Each term's `@id` fragment is directly linkable as an authoritative definition.
+The hook maps frontmatter to schema fields automatically:
+
+| `DefinedTerm` field | Source |
+|---|---|
+| `name` | `term:` frontmatter — the clean moniker — falling back to `title:` (SEO-shaped) |
+| `description` | `description:` frontmatter (the page's one-line definition) |
+| `alternateName` | `aliases:` frontmatter — the page's strongest vocabulary-ownership signal |
+| `url` / `inDefinedTermSet` | canonical page URL / the `/concepts/` glossary |
+
+Gated to coined-concept sections (`_DEFINED_TERM_PATHS`) plus curated `_DEFINED_TERM_ALLOW` exceptions; `articles/`, `tools/`, `training/`, and nav pages are excluded — they describe things rather than coin terms. Set `term:` on any page whose title is a headline rather than the bare term.
 
 ## How This Site Generates Schema
 
@@ -112,10 +115,12 @@ graph LR
     H -- yes --> I[FAQPage schema]
     B --> J{Ordered list 3+ steps and patterns/ or techniques/ path?}
     J -- yes --> K[HowTo schema]
-    C & E & F & G & I & K --> L[Inject before head close]
+    B --> M{Coined-concept section?}
+    M -- yes --> N[DefinedTerm schema]
+    C & E & F & G & I & K & N --> L[Inject before head close]
 ```
 
-No per-page config — add an FAQ section and schema appears.
+No per-page config — add an FAQ section and schema appears; a coined-concept page emits a `DefinedTerm` with no config at all (and a cleaner one if you set `term:`).
 
 ## Writing for Schema Auto-Detection
 
@@ -142,6 +147,14 @@ that happen to have numbered sections.
 ### HowTo Steps
 
 Write each step as a self-contained sentence — it is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` and `techniques/`.
+
+### DefinedTerm
+
+Nothing to add to the body — the term is built from frontmatter. For a coined-concept page:
+
+- Set `term:` to the bare moniker when the `title:` is a headline (e.g. `term: "Harness Engineering"` for the title *"Harness Engineering for Building Reliable AI Agents"*). Without it, `name` falls back to the full SEO title.
+- Keep `description:` a one-line definition — it becomes the term's `description`.
+- List every alternate name a reader might search under `aliases:` — they become `alternateName` and are how AI engines associate the vocabulary with this site.
 
 ## When This Backfires
 

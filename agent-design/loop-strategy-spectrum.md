@@ -1,5 +1,6 @@
 ---
 title: "Loop Strategy Spectrum: Accumulated vs Fresh Context"
+term: "Loop Strategy Spectrum"
 description: "Choose between accumulated-context loops, within-session compression, and fresh-context Ralph loops based on agent workload type."
 tags:
   - agent-design

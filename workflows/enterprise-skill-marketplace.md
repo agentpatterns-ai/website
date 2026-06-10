@@ -1,5 +1,6 @@
 ---
 title: "Enterprise Skill Marketplace: Distribution and Quality"
+term: "Enterprise Skill Marketplace"
 description: "Scale a shared skill library with MDM distribution, private plugin marketplaces, OTel usage telemetry, and a manual eval cadence for high-traffic skills."
 tags:
   - workflows

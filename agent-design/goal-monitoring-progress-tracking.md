@@ -1,5 +1,6 @@
 ---
 title: "Goal Monitoring and Progress Tracking for Long-Running Agents"
+term: "Goal Monitoring and Progress Tracking"
 description: "Runtime patterns for tracking agent progress, detecting drift, and preventing premature completion across multi-session coding workflows."
 tags:
   - agent-design

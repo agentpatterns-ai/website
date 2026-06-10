@@ -1,5 +1,6 @@
 ---
 title: "Eval Strategy by Agent Generation: A Structure-to-Eval Locator"
+term: "Eval Strategy by Agent Generation"
 description: "Six structural levels of agent architecture each open an eval surface the prior level cannot see — pick eval scorers from current structure, not generation."
 tags:
   - agent-design

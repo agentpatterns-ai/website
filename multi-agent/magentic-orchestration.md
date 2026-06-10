@@ -1,5 +1,6 @@
 ---
 title: "Magentic Orchestration: Task-Ledger-Driven Adaptive Multi-Agent Planning"
+term: "Magentic Orchestration"
 description: "A manager agent maintains a task ledger of facts, guesses, and plan, dispatches specialists, and revises the plan when progress stalls — for problems where the plan itself is the unknown."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Standards as Agent Instructions for AI Agent Development"
+term: "Standards as Agent Instructions"
 description: "Project standards precise enough for human reviewers work as agent instructions verbatim — one document serves both when written without interpretive gaps."
 tags:
   - instructions

@@ -1,5 +1,6 @@
 ---
 title: "MCP Server Design: Building Agent-Friendly Servers"
+term: "MCP Server Design"
 description: "Design principles for MCP servers: tool naming, schema design, error handling, resource exposure, and token efficiency for AI agent consumption."
 tags:
   - agent-design

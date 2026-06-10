@@ -1,5 +1,6 @@
 ---
 title: "Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands"
+term: "Hook Exec Form vs Shell Form"
 description: "Claude Code's hook args array spawns the command directly without a shell, neutralising metacharacters in substituted hook input. Use exec form whenever tool input flows into argv; reserve shell form for pipes, redirects, and expansion."
 tags:
   - tool-engineering

@@ -1,5 +1,6 @@
 ---
 title: "GEO for Technical Docs: Developer Documentation Checklist"
+term: "GEO for Technical Docs"
 description: "Apply GEO to API references, tutorials, how-to guides, and pattern pages. Checklists for new pages, existing page audits, and format-specific schema selection."
 tags:
   - geo

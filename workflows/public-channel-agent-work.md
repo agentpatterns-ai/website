@@ -1,5 +1,6 @@
 ---
 title: "Public-Channel Agent Work as Lehrwerkstatt for Team Learning"
+term: "Public-Channel Agent Work as Lehrwerkstatt"
 description: "Force agent conversations into public channels so the whole organization learns by watching — applies only when psychological safety is high and the work scope excludes sensitive data."
 tags:
   - workflows

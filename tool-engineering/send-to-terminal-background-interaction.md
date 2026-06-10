@@ -1,5 +1,6 @@
 ---
 title: "Terminal Tools for Agents: send_to_terminal and Background Interaction"
+term: "Terminal Tools for Agents"
 description: "Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes."
 tags:
   - tool-engineering

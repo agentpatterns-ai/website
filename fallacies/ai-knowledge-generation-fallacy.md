@@ -1,5 +1,6 @@
 ---
 title: "AI Knowledge Generation Fallacy: LLMs Recombine, Not Invent"
+term: "AI Knowledge Generation Fallacy"
 description: "The belief that AI generates genuinely new information leads teams to misuse it for novel architecture and test design. Learn why LLMs recombine, not invent."
 tags:
   - human-factors

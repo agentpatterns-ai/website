@@ -1,5 +1,6 @@
 ---
 title: "Failure-Aware Observability for Multi-Agent LLM Systems"
+term: "Failure-Aware Observability"
 description: "A six-signal trace taxonomy — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — that maps recurring multi-agent failure modes to online instrumentation so wasted runs are diagnosed mid-trajectory instead of at final-answer eval."
 tags:
   - observability

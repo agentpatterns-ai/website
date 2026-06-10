@@ -1,5 +1,6 @@
 ---
 title: "Three Reasoning Spaces: Plan, Bead, and Code"
+term: "Three Reasoning Spaces"
 description: "Separate agent work into plan, bead, and code spaces — explicit phase gates prevent architecture drift during implementation and reduce rework costs."
 tags:
   - agent-design

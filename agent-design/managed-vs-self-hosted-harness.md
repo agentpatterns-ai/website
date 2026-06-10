@@ -1,5 +1,6 @@
 ---
 title: "Managed vs Self-Hosted Agent Harness: Deployment Trade-offs"
+term: "Managed vs Self-Hosted Agent Harness"
 description: "Decision framework for choosing between managed agent services and self-hosted open-source harnesses — covering memory lock-in, compliance, model routing, and ops burden."
 tags:
   - agent-design

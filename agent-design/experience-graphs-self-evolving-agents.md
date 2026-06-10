@@ -1,5 +1,6 @@
 ---
 title: "Experience Graphs as Structured Memory for Self-Evolving Agents"
+term: "Experience Graphs as Structured Memory"
 description: "Organise an agent's accumulated successes and failures as an explicit relational graph — works only under long-running deployments, capable backbones, selective retrieval, and a trusted-writer boundary."
 tags:
   - agent-design

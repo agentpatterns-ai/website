@@ -1,5 +1,6 @@
 ---
 title: "Shared Agent Context Store API: When to Expose Curated Context as an Endpoint"
+term: "Shared Agent Context Store API"
 description: "Use an API-backed shared context store only when the writer is a system, ingestion is controlled, and the team accepts retrieval-time selection over deterministic reads."
 tags:
   - agent-design

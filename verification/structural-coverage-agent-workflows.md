@@ -1,5 +1,6 @@
 ---
 title: "Structural Coverage Criteria for Agent Workflows"
+term: "Structural Coverage Criteria"
 description: "Test multi-agent workflows by deriving coverage obligations from a typed coordination graph — reaching every declared agent, allowed tool edge, restricted tool edge, and delegation edge."
 tags:
   - testing-verification

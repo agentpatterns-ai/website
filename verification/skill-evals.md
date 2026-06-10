@@ -1,5 +1,6 @@
 ---
 title: "Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit"
+term: "Skill Evals"
 description: "Treat each agent skill as an evaluable unit — with a labelled dataset, pass criteria, and a parallel with-skill vs baseline runner — to detect regressions and quantify cost-benefit trade-offs."
 tags:
   - testing-verification

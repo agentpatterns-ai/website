@@ -1,5 +1,6 @@
 ---
 title: "Evaluator-Optimizer Pattern for AI Agent Development"
+term: "Evaluator-Optimizer Pattern"
 description: "Two distinct LLM roles in a loop: a generator produces output and an evaluator critiques it, feeding feedback back until a quality threshold is met."
 tags:
   - agent-design

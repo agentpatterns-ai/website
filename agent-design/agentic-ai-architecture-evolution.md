@@ -1,5 +1,6 @@
 ---
 title: "Agentic AI Architecture: From Prompt to Goal-Directed"
+term: "Agentic AI Architecture"
 description: "Reference architecture for goal-directed agentic systems: cognitive-execution separation, multi-agent topology taxonomy, and enterprise hardening."
 aliases:
   - goal-directed agent architecture

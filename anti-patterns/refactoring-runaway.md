@@ -1,5 +1,6 @@
 ---
 title: "Refactoring Runaway: Tangled Refactorings in Agent Patches"
+term: "Refactoring Runaway"
 description: "Coding agents bundle unrequested refactorings into bug-fix patches, breaking compilability without improving functional correctness; conditions and detection."
 tags:
   - anti-pattern

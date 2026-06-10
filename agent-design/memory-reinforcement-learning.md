@@ -1,5 +1,6 @@
 ---
 title: "Memory Reinforcement Learning (MemRL)"
+term: "Memory Reinforcement Learning"
 description: "How agents assign and update utility scores to stored episodic memories so that retrieval favors historically effective solutions over merely semantically similar ones."
 tags:
   - agent-design

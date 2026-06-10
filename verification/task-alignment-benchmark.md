@@ -1,5 +1,6 @@
 ---
 title: "Task Alignment: The Selective-Compliance Gap Benchmarks Miss"
+term: "Task Alignment"
 description: "Terminal-Bench measures whether an agent finishes the task. TAB measures whether it ignores the noise next to the cue. The two scores are uncorrelated for frontier agents and current injection defenses make the gap worse."
 tags:
   - testing-verification

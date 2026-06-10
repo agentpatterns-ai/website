@@ -1,5 +1,6 @@
 ---
 title: "Cross-Vendor Competitive Routing for LLM Selection"
+term: "Cross-Vendor Competitive Routing"
 description: "Assign competing vendor agents to the same task in parallel and pick the best result — surfacing capability differences that static routing cannot reveal."
 tags:
   - agent-design

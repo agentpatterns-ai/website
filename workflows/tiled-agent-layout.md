@@ -1,5 +1,6 @@
 ---
 title: "Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes"
+term: "Tiled Agent Layout"
 description: "Tiled agent layouts split the screen into panes — one per agent — so a supervisor can see all concurrent sessions at once instead of switching between tabs. The mechanism lowers switching cost; it does not raise review capacity."
 tags:
   - workflows

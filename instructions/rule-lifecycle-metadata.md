@@ -1,5 +1,6 @@
 ---
 title: "Rule Lifecycle Metadata for Prunable Instruction Surfaces"
+term: "Rule Lifecycle Metadata"
 description: "Tagging instruction rules with source, applicability, and expiry conditions converts the rule-budget audit from a counting exercise into a pruning exercise — so the instruction surface can actually shrink."
 tags:
   - instructions

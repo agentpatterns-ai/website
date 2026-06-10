@@ -1,5 +1,6 @@
 ---
 title: "Workload Identity Federation for Agent Runtimes"
+term: "Workload Identity Federation"
 description: "Replace long-lived AI provider API keys with short-lived OIDC tokens minted from the runtime's existing workload identity; scope the trust rule narrowly or federation widens access."
 tags:
   - security

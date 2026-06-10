@@ -1,5 +1,6 @@
 ---
 title: "Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels"
+term: "Hierarchical CLAUDE.md"
 description: "Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location."
 tags:
   - context-engineering

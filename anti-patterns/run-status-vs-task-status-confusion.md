@@ -1,5 +1,6 @@
 ---
 title: "Run-Status vs Task-Status Confusion in Autonomous Agent Runs"
+term: "Run-Status vs Task-Status Confusion"
 description: "A green run on a scheduled or cloud-triggered agent means the harness exited cleanly — not that the task in the prompt succeeded. Surfacing only one axis hides every silent agent failure."
 tags:
   - anti-pattern

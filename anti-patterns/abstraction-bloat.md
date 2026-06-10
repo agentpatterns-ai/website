@@ -1,5 +1,6 @@
 ---
 title: "Abstraction Bloat in AI Agent-Generated Code Output"
+term: "Abstraction Bloat"
 description: "Agents optimize for comprehensive output, not minimal implementation. Over-engineered code with unnecessary hierarchies and unrequested features."
 tags:
   - agent-design

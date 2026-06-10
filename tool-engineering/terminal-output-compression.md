@@ -1,5 +1,6 @@
 ---
 title: "Terminal Tool Output Compression: Filtering Predictable Noise at the Harness"
+term: "Terminal Tool Output Compression"
 description: "Harness-side post-processing collapses predictable shell-output noise — diff hunks, lockfiles, ls metadata, package-manager progress — before the model sees it, with a banner that lets the agent opt out per call when raw output is required."
 tags:
   - tool-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Topical Authority — Entity Coverage for AI Citation"
+term: "Topical Authority"
 description: "How building comprehensive entity coverage across a topic domain drives persistent AI citation presence and brand recognition."
 aliases:
   - "topic authority"

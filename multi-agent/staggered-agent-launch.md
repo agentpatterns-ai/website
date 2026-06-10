@@ -1,5 +1,6 @@
 ---
 title: "Staggered Agent Launch: Preventing Thundering-Herd in Swarms"
+term: "Staggered Agent Launch"
 description: "De-synchronize parallel agent starts to reduce work-queue contention without coordination infrastructure — and when to graduate to structural alternatives."
 tags:
   - agent-design

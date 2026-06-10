@@ -1,5 +1,6 @@
 ---
 title: "Indexed Regex Search for Agent Tools"
+term: "Indexed Regex Search"
 description: "Back an agent's regex search tool with a trigram or suffix-array index so query latency stays bounded as the repository and agent fleet grow, at the cost of index freshness and infra."
 tags:
   - tool-engineering

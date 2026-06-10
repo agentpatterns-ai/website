@@ -1,5 +1,6 @@
 ---
 title: "Voting / Ensemble Pattern for AI Agent Development"
+term: "Voting / Ensemble Pattern"
 description: "Run the same task N times in parallel and aggregate via voting to trade compute for confidence in classification and security decisions."
 aliases:
   - Self-Consistency

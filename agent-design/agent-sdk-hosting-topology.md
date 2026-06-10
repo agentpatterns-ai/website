@@ -1,5 +1,6 @@
 ---
 title: "Production Hosting Topology for Self-Hosted Agent SDK Runtimes"
+term: "Production Hosting Topology"
 description: "Four decisions — container-lifecycle pattern, autoscale signal, credential plane, per-tenant isolation — that turn a self-hosted Agent SDK into a production runtime."
 tags:
   - agent-design

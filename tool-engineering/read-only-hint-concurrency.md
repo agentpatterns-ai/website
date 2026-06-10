@@ -1,5 +1,6 @@
 ---
 title: "Hint-Driven Concurrency for Read-Only MCP Tools"
+term: "Hint-Driven Concurrency"
 description: "MCP readOnlyHint became a concurrency dispatcher input in Codex CLI 0.134.0 — a wall-clock win that only holds when annotations are audited."
 tags:
   - tool-engineering

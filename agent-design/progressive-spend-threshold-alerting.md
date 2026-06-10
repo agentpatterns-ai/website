@@ -1,5 +1,6 @@
 ---
 title: "Progressive Spend Threshold Alerting for Agent Cost Governance"
+term: "Progressive Spend Threshold Alerting"
 description: "Pair a soft cost cap with progressive alerts at fixed budget percentages so operators get graceful intervention windows before agent work hits a hard cutoff."
 tags:
   - agent-design

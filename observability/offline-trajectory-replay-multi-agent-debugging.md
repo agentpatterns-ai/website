@@ -1,5 +1,6 @@
 ---
 title: "Offline Trajectory Replay for Multi-Agent Workflow Debugging"
+term: "Offline Trajectory Replay"
 description: "Replay captured multi-agent trajectories offline with per-node rubric scoring so prompt revisions target the upstream LLM call that introduced the failure — applicable when the workflow is a fixed DAG, rubrics are graded, and captured traces still represent production."
 tags:
   - observability

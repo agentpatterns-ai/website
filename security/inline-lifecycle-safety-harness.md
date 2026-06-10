@@ -1,5 +1,6 @@
 ---
 title: "Inline Safety Harness with Cascade Verification (FinHarness)"
+term: "Inline Safety Harness with Cascade Verification"
 description: "Wrap each agent turn with prospective per-call monitors and cost-adaptive cascade routing between a cheap and an advanced judge by per-step risk."
 tags:
   - security

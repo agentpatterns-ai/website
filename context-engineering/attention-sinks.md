@@ -1,5 +1,6 @@
 ---
 title: "Attention Sinks: Why First Tokens Always Win"
+term: "Attention Sinks"
 description: "Transformer models disproportionately attend to initial tokens regardless of their semantic content — position determines attention weight, not importance."
 tags:
   - context-engineering

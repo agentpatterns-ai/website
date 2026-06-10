@@ -1,5 +1,6 @@
 ---
 title: "Distilled Bootstrap Contract: Agent-Authored Repo Setup"
+term: "Distilled Bootstrap Contract"
 description: "Run a multi-agent discovery pipeline once, then version the resolved setup heuristics as a contract that future agents consume instead of rediscovering."
 tags:
   - workflows

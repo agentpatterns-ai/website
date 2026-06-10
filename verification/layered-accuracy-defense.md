@@ -1,5 +1,6 @@
 ---
 title: "Layered Accuracy Defense for Reliable Agent Outputs"
+term: "Layered Accuracy Defense"
 description: "Distribute accuracy verification across every agent in a pipeline so no single agent is the sole gatekeeper — each layer catches what the previous one missed."
 tags:
   - testing-verification

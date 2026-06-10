@@ -1,5 +1,6 @@
 ---
 title: "Distillation-Induced Similarity Metrics for Tool-Use Agents"
+term: "Distillation-Induced Similarity Metrics"
 description: "Quantify how much two models share non-mandatory tool-use behaviour using Response Pattern Similarity and Action Graph Similarity — surface correlated failure modes before routing or ensembling treats them as independent."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Pre-Execution Codebase Exploration for AI Coding Agents"
+term: "Pre-Execution Codebase Exploration"
 description: "Invest in problem statement quality before launching an agent — adding reproduction steps and exploration hints improves resolution rates by 20% on SWE-bench."
 tags:
   - context-engineering

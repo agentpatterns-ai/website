@@ -1,5 +1,6 @@
 ---
 title: "Benchmark-Driven Tool Selection for Code Generation"
+term: "Benchmark-Driven Tool Selection"
 description: "Use realistic, telemetry-derived benchmarks like DevBench to evaluate AI coding tools — synthetic puzzles overstate capability and hide language-specific and task-specific weaknesses."
 tags:
   - testing-verification

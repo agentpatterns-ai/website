@@ -1,5 +1,6 @@
 ---
 title: "Layered Domain Architecture: A Prescriptive Default for Agent-Built Code"
+term: "Layered Domain Architecture"
 description: "Pin a fixed intra-domain layer order — Types → Config → Repo → Service → Runtime → UI — with directional dependency rules enforced by a linter so agents place new code in the same slot every session."
 tags:
   - agent-design

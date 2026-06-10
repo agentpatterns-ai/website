@@ -1,5 +1,6 @@
 ---
 title: "WRAP Framework for Writing Agent-Ready Issue Descriptions"
+term: "WRAP Framework"
 description: "A four-step checklist for agent-ready task descriptions: Write effective issues, Refine instructions, Atomic tasks, and Pair with the agent."
 tags:
   - instructions

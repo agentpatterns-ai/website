@@ -1,5 +1,6 @@
 ---
 title: "Layered Context Architecture for AI Agent Development"
+term: "Layered Context Architecture"
 description: "Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal"
 aliases:
   - Agent Memory Patterns

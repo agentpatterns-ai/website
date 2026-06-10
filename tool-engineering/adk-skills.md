@@ -1,5 +1,6 @@
 ---
 title: "Google ADK Skills: Portable SKILL.md Across ADK Agents"
+term: "Google ADK Skills"
 description: "Google ADK implements the Agent Skills standard via the SkillToolset — SKILL.md directories load through list_skills, load_skill, and load_skill_resource tools at L1, L2, and L3."
 tags:
   - tool-engineering

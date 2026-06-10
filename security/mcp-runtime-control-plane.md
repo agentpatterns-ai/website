@@ -1,5 +1,6 @@
 ---
 title: "MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool"
+term: "MCP Runtime Control Plane"
 description: "Intercept every MCP tool call at a single policy evaluation point — identity, tool name, arguments, rate limits — before the call reaches the server."
 aliases:
   - MCP policy gateway
@@ -10,7 +11,7 @@ tags:
   - tool-agnostic
   - agent-design
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool
@@ -40,7 +41,7 @@ sequenceDiagram
     end
 ```
 
-AWS Bedrock AgentCore wires this shape explicitly: Policy in AgentCore "intercepts all agent traffic through Amazon Bedrock AgentCore Gateways and evaluates each request against defined policies in the policy engine before allowing tool access" ([AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html)). Microsoft's Agent Governance Toolkit takes the same position one layer up, inside the framework: "every tool call, resource access, and inter-agent message is evaluated against policy *before* execution" ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)).
+AWS Bedrock AgentCore wires this shape explicitly: Policy in AgentCore "intercepts all agent traffic through Amazon Bedrock AgentCore Gateways and evaluates each request against defined policies in the policy engine before allowing tool access" ([AgentCore Policy](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html)). Microsoft's Agent Governance Toolkit takes the same position one layer up, inside the framework: "every tool call, resource access, and inter-agent message is evaluated against policy *before* execution" ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)). Microsoft frames the broader pattern as a dedicated control plane that mediates and authorises every agent tool execution before it reaches the MCP server — an enforcement-gateway model ([Securing MCP: A Control Plane for Agent Tool Execution](https://developer.microsoft.com/blog/securing-mcp-a-control-plane-for-agent-tool-execution)).
 
 ## Policy Dimensions
 

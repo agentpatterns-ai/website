@@ -1,5 +1,6 @@
 ---
 title: "Multi-Agent RAG for Spec-to-Test Automation"
+term: "Multi-Agent RAG"
 description: "A retrieval-augmented multi-agent pipeline converts test specs to runnable scripts, grounded in your team's existing test corpus."
 tags:
   - agent-design

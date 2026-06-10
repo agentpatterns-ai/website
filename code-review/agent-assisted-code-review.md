@@ -1,5 +1,6 @@
 ---
 title: "Agent-Assisted Code Review: Agents as PR First Pass"
+term: "Agent-Assisted Code Review"
 description: "Use agents to handle mechanical review checks before human review, freeing humans for architecture and design judgment. Human reviewers are better at judgment"
 tags:
   - testing-verification

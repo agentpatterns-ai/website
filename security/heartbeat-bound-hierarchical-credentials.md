@@ -1,5 +1,6 @@
 ---
 title: "Heartbeat-Bound Hierarchical Credentials for Agent Swarms"
+term: "Heartbeat-Bound Hierarchical Credentials"
 description: "Bind sub-agent credentials to a periodic parent liveness proof so descendants expire within a deterministic window when the parent stops, without a network revocation call."
 tags:
   - security

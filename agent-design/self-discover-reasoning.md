@@ -1,5 +1,6 @@
 ---
 title: "Self-Discover Reasoning: LLM-Composed Reasoning Structures"
+term: "Self-Discover Reasoning"
 description: "Enable the model to compose a task-specific reasoning structure from a library of atomic modules before solving — outperforming fixed strategies like Chain-of-Thought on complex analytical tasks."
 tags:
   - agent-design

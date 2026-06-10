@@ -1,5 +1,6 @@
 ---
 title: "Anti-Reward-Hacking: Rubrics That Resist Gaming"
+term: "Anti-Reward-Hacking"
 description: "Design eval rubrics with orthogonal signals so agents cannot game a single metric — preventing specification gaming and reward hacking."
 tags:
   - evals

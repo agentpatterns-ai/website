@@ -1,5 +1,6 @@
 ---
 title: "Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints"
+term: "Prototype Before Optimizing"
 description: "Deferring token cost constraints until after establishing quality baselines avoids locking in suboptimal architectures and ensures optimization targets something measurable."
 tags:
   - workflows

@@ -1,5 +1,6 @@
 ---
 title: "Mutation Testing as a Quality Gate for AI-Generated Test Suites"
+term: "Mutation Testing as a Quality Gate"
 description: "Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones."
 tags:
   - testing-verification

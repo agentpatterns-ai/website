@@ -1,5 +1,6 @@
 ---
 title: "Function-Level Debugger Interfaces for Coding Agents"
+term: "Function-Level Debugger Interfaces"
 description: "Line-by-line debuggers exhaust LLM agent budgets. Function-level interfaces — one frame per turn, full execution trace per frame — match debugger granularity to the agent consumer."
 tags:
   - tool-engineering

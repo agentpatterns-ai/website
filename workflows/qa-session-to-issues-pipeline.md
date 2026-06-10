@@ -1,5 +1,6 @@
 ---
 title: "QA Session to Issues Pipeline for AI Agent Development"
+term: "QA Session to Issues Pipeline"
 description: "A multi-stage agent pipeline that transforms raw QA session documents into context-rich GitHub issues via codebase investigation."
 tags:
   - workflows

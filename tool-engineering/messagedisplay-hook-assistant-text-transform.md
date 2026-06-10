@@ -1,5 +1,6 @@
 ---
 title: "MessageDisplay Hook: Transforming Assistant Text at the Display Boundary"
+term: "MessageDisplay Hook"
 description: "MessageDisplay fires on every outbound assistant message and lets a hook rewrite or hide the text before the user or downstream system sees it — the display-side analogue of PostToolUse output replacement."
 tags:
   - tool-engineering

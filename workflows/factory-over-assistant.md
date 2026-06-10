@@ -1,5 +1,6 @@
 ---
 title: "Factory Over Assistant: Orchestrating Parallel Agent Fleets"
+term: "Factory Over Assistant"
 description: "The shift from watching one agent in a sidebar to orchestrating multiple parallel agents with automated feedback loops — and the infrastructure required to make it work."
 tags:
   - workflows

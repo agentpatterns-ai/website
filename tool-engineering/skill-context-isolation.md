@@ -1,5 +1,6 @@
 ---
 title: "Skill Context Isolation: Forking the Skill into a Subagent Window"
+term: "Skill Context Isolation"
 description: "Run a skill in an isolated subagent context so its auxiliary tokens — search hits, intermediate plans, raw tool output — never enter the main chat."
 tags:
   - context-engineering

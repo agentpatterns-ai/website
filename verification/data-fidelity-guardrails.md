@@ -1,5 +1,6 @@
 ---
 title: "Data Fidelity Guardrails: Preventing Agent Data Mutation"
+term: "Data Fidelity Guardrails"
 description: "Architecture patterns that prevent agents from silently altering, summarizing, or fabricating data returned from APIs, MCP servers, and external tools."
 tags:
   - agent-design

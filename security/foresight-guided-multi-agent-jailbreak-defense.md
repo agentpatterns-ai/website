@@ -1,5 +1,6 @@
 ---
 title: "Foresight-Guided Defense Against Infectious Jailbreaks in Multi-Agent Systems"
+term: "Foresight-Guided Defense Against Infectious Jailbreaks"
 description: "Local per-agent foresight simulation detects infectious jailbreak in multimodal multi-agent systems with shared retrieval, cutting cumulative infection from 100% to under 5.5%."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools"
+term: "Context-Window Diagnostic Tooling"
 description: "Surface which tool calls inflate the context window so you can optimize targets rather than prune blindly."
 tags:
   - context-engineering

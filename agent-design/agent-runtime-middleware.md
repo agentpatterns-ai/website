@@ -1,5 +1,6 @@
 ---
 title: "Agent Runtime Middleware: Per-Call Interception Pipeline"
+term: "Agent Runtime Middleware"
 description: "Wrap every model and tool call in a composable pre/post handler pipeline — the placement matrix, ordering rules, and failure modes for in-runtime middleware."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Per-Server MCP Environment Scoping for Credential Isolation"
+term: "Per-Server MCP Environment Scoping"
 description: "Spawn each MCP server with its own minimal environment scope so one server's credentials never leak to every other server the agent talks to."
 tags:
   - security

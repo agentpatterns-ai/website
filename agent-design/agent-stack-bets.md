@@ -1,5 +1,6 @@
 ---
 title: "The Agent Stack Bet: Architectural Decisions for Production Agents"
+term: "Agent Stack Bet"
 description: "Four architectural bets that move agent identity, context, durability, and orchestration from application code to the platform layer — with the conditions under which each bet pays off."
 aliases:
   - agent stack architectural bets

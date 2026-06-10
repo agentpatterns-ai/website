@@ -1,5 +1,6 @@
 ---
 title: "LLM Code Review Overcorrection for AI Agent Development"
+term: "LLM Code Review Overcorrection"
 description: "LLMs systematically flag correct code as non-compliant; more detailed review prompts make the misclassification rate worse, not better. arXiv:2603.00539"
 aliases:
   - "code review false positives"

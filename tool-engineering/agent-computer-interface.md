@@ -1,5 +1,6 @@
 ---
 title: "Agent-Computer Interface (ACI): Tool Design as UX Discipline"
+term: "Agent-Computer Interface (ACI)"
 description: "Tools are the agent's UI. Apply the same HCI principles -- affordances, constraints, feedback, error prevention -- to make agent tools effective."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators"
+term: "Sandboxed Coding Environments"
 description: "A selection rubric for the runtime layer of sandboxed coding agents — when containers, microVMs, or OS-level isolators are the right fit and what each costs in latency, blast radius, and ergonomics."
 tags:
   - security
@@ -8,7 +9,7 @@ tags:
 aliases:
   - sandbox runtime comparison
   - agent sandbox runtime selection
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-09
 ---
 
 # Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators
@@ -22,6 +23,8 @@ last_reviewed: 2026-06-03
 - **Containerized** — Linux namespaces and cgroups, optionally hardened with [gVisor](https://github.com/google/gvisor) or seccomp. Examples: `docker sbx`, Podman.
 - **MicroVM** — KVM-backed lightweight VMs with a minimalist VMM. Examples: [Firecracker](https://github.com/firecracker-microvm/firecracker)-based providers (e2b, Daytona, Modal), Kata Containers.
 - **OS-level isolators** — host-kernel primitives without a container daemon. Examples: [bubblewrap](https://github.com/containers/bubblewrap) on Linux, `sandbox-exec`/Seatbelt on macOS.
+
+A fourth, orthogonal option is to consume one of these families as a **managed/hosted runtime** rather than self-hosting it: LangChain's LangSmith ships a managed agent sandbox that gives each agent its own dedicated isolated computer — a VM with its own environment, dependencies, and network access ([LangChain — Give your AI agent its own computer](https://blog.langchain.com/give-your-ai-agent-its-own-computer)), and GitHub now offers commodity cloud and local agent-execution sandboxes for Copilot in public preview ([GitHub changelog — Cloud and local sandboxes for GitHub Copilot](https://github.blog/changelog/2026-06-02-cloud-and-local-sandboxes-for-github-copilot)). These trade operational control for the same isolation boundaries below — the comparison still applies to whichever family the managed provider wraps.
 
 ## Comparison
 

@@ -1,5 +1,6 @@
 ---
 title: "Decentralized Memory for Self-Evolving Multi-Agent Systems"
+term: "Decentralized Memory"
 description: "Give each agent its own private memory instead of a shared store — qualified pattern that pays off only at large agent counts, heterogeneous workloads, long deployments, and trusted writers."
 tags:
   - agent-design

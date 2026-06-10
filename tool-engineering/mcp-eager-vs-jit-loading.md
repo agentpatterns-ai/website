@@ -1,5 +1,6 @@
 ---
 title: "MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time"
+term: "MCP alwaysLoad"
 description: "Decide which MCP servers earn unconditional context residence and which stay deferred behind tool search, using token cost, hit rate, and selection accuracy as signals."
 aliases:
   - MCP eager vs deferred loading

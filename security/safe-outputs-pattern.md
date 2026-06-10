@@ -1,5 +1,6 @@
 ---
 title: "Safe Outputs Pattern for Trustworthy Agent Responses"
+term: "Safe Outputs Pattern"
 description: "Agents operate with read-only permissions by default and must be granted explicit write permissions for specific output types, creating a deterministic blast radius."
 aliases:
   - output permission model

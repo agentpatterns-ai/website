@@ -1,5 +1,6 @@
 ---
 title: "Context-Usage Attribution: Per-Source Breakdown of Agent Context"
+term: "Context-Usage Attribution"
 description: "An always-on observability surface that breaks the context window into rules, skills, MCP returns, subagent transcripts, and conversation history — so operators prune the right source instead of guessing."
 tags:
   - observability

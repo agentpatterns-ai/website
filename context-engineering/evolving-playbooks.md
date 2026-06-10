@@ -1,5 +1,6 @@
 ---
 title: "Evolving Playbooks: Incremental Context That Preserves Knowledge"
+term: "Evolving Playbooks"
 description: "Replace monolithic prompt rewrites with structured delta entries that accumulate, refine, and organize agent strategies without losing domain knowledge."
 tags:
   - context-engineering

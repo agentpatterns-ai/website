@@ -1,5 +1,6 @@
 ---
 title: "Narrative Problem Reformulation for Code Generation"
+term: "Narrative Problem Reformulation"
 description: "Rewriting a fragmented coding problem as a coherent three-part narrative — task overview, constraints, examples — measurably shifts which algorithms a code LLM selects and how often it commits implementation errors."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "CausalFlow: Counterfactual Repair for Failed Agent Trajectories"
+term: "CausalFlow"
 description: "When agent runs fail in sandboxed, binary-verifiable settings, treat the trajectory as a causal chain and intervene step-by-step — the step whose oracle-guided replacement flips the outcome to success is the failure cause, and the replacement is a validated repair."
 tags:
   - testing-verification

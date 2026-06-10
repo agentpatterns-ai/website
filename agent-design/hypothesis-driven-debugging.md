@@ -1,5 +1,6 @@
 ---
 title: "Hypothesis-Driven Debugging: Instrument Before You Patch"
+term: "Hypothesis-Driven Debugging"
 description: "A three-step debugging mode where the agent enumerates competing hypotheses, instruments the failing code with hypothesis-tagged logs, and converges on the root cause from runtime evidence before writing a fix."
 tags:
   - agent-design

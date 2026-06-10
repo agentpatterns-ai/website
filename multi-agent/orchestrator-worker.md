@@ -1,5 +1,6 @@
 ---
 title: "Orchestrator-Worker Pattern for AI Agent Development"
+term: "Orchestrator-Worker Pattern"
 description: "A lead agent decomposes a task into independent subtasks, dispatches them to specialized workers in parallel, and synthesizes results into a unified output."
 tags:
   - agent-design

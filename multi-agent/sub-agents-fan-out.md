@@ -1,5 +1,6 @@
 ---
 title: "Sub-Agents for Fan-Out Research and Context Isolation"
+term: "Sub-Agents"
 description: "Fan-out dispatches N sub-agents in parallel, each with its own isolated context window, returning distilled summaries to the main thread for synthesis."
 aliases:
   - sub-agents-fan-out

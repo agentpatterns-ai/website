@@ -1,5 +1,6 @@
 ---
 title: "Parsimonious Agent Routing for Multi-Agent Dispatch"
+term: "Parsimonious Agent Routing"
 description: "A learned router emits a delegation plan — keep, single-route, or split-and-route — with per-branch budget, jointly optimizing decisions that hand-engineered pipelines treat as independent."
 tags:
   - multi-agent

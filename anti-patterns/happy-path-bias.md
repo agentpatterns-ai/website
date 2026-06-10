@@ -1,5 +1,6 @@
 ---
 title: "Happy Path Bias: How AI Agents Skip Error Handling"
+term: "Happy Path Bias"
 description: "AI agents systematically neglect error handling, edge cases, and type boundaries — producing code that passes the happy path but breaks in production."
 tags:
   - agent-design

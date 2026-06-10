@@ -1,5 +1,6 @@
 ---
 title: "Assumption Propagation: Compounding Agent Misunderstandings"
+term: "Assumption Propagation"
 description: "The agent misunderstands a requirement early and builds on the faulty premise, reinforcing the wrong assumption until the error is too expensive to unwind."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Control Lexical Leakage in Agent-Memory Retrieval Evals (Entity-Collision)"
+term: "Control Lexical Leakage in Agent-Memory Retrieval Evals"
 description: "A single hit@k confounds semantic retrieval with lexical overlap; pin BM25 by constructing distractors that share gold-answer entity tokens and stratify queries by tag so embedder lift is attributable rather than averaged."
 tags:
   - testing-verification

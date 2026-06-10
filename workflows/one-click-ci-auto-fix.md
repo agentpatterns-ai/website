@@ -1,5 +1,6 @@
 ---
 title: "One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions"
+term: "One-Click CI Auto-Fix"
 description: "A bounded-autonomy pattern for CI failures: a human click hands a failing GitHub Actions run to a cloud agent that pushes a fix to the existing branch and tags the operator for review — only useful when the three remaining confirmation gates stay exercised."
 tags:
   - workflows

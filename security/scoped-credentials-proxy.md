@@ -9,7 +9,7 @@ tags:
 aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Scoped Credentials via Proxy Outside the Agent Sandbox
@@ -59,7 +59,7 @@ A proxy does more than route — it validates the request content before attachi
 - The HTTP method is permitted (e.g., reject DELETE on read-only tasks)
 - Request body does not contain signs of injection (e.g., unexpected payload shape)
 
-This prevents the agent from being tricked into making an authenticated request to an attacker-controlled endpoint with the agent's legitimate credentials attached.
+This prevents the agent from being tricked into making an authenticated request to an attacker-controlled endpoint with the agent's legitimate credentials attached. LangChain applies the same shape to a sandbox's outbound network: its Auth Proxy mediates and scopes the egress of LangSmith agent sandboxes, a concrete implementation of the scoped-egress pattern. [[Source]](https://blog.langchain.com/auth-proxy-langsmith-agent-sandboxes)
 
 ## Audit Logging
 

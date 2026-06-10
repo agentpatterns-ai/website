@@ -1,5 +1,6 @@
 ---
 title: "In-Process WebAssembly Sandboxes for Agent-Generated Code"
+term: "In-Process WebAssembly Sandboxes"
 description: "Embed a WebAssembly runtime inside your Python or JavaScript application to execute agent- or LLM-generated code with CPU and memory caps, no filesystem or network by default, and explicit host-function interop."
 tags:
   - security

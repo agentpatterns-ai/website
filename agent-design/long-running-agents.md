@@ -1,5 +1,6 @@
 ---
 title: "Long-Running Agents: Durability and Resumability Across Sessions"
+term: "Long-Running Agents"
 description: "What changes when an agent runs for hours, days, or weeks instead of one session — finite context, no persistent state, and unreliable self-grading force a different operational shape built around durable session logs, external done-conditions, and stateless resumption."
 tags:
   - agent-design

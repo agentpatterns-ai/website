@@ -1,5 +1,6 @@
 ---
 title: "Prompt Chaining: Sequential LLM Calls for Agent Workflows"
+term: "Prompt Chaining"
 description: "Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage."
 aliases:
   - sequential prompting

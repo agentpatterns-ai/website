@@ -1,5 +1,6 @@
 ---
 title: "Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet"
+term: "Unbounded Consumption"
 description: "Frame OWASP LLM10:2025 Unbounded Consumption as a same-surface, two-owner threat — DoS for availability, denial-of-wallet for finance — and enumerate the five bounds (per-call token, per-task iteration, fan-out concurrency, cost-velocity, per-day dollar) that no single layer covers alone."
 tags:
   - security
@@ -9,7 +10,7 @@ aliases:
   - OWASP LLM10 unbounded consumption
   - denial-of-wallet agent defense
   - LLM resource exhaustion bounds
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-09
 ---
 
 # Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet
@@ -64,7 +65,7 @@ graph TD
 
 ## Why It Works
 
-LLM calls have variable, attacker-influenceable cost, priced linearly. Requests-per-second does not bind dollars-per-second when one request costs $0.001 and the next $0.50 ([Pignati, 2026](https://medium.com/@alessandro.pignati/ai-agent-rate-limiting-is-broken-7eacc83a4129)). The five-bound surface works because each bound expresses a different *unit* of cost — tokens, iterations, parallelism, velocity, dollars — and the union covers what no single unit captures. OWASP LLM10 makes the routing explicit: the same bounds serve availability and finance owners without duplicating enforcement ([OWASP LLM10:2025](https://github.com/microsoft/hve-core/blob/main/.github/skills/security/owasp-llm/references/10-unbounded-consumption.md); [Truefoundry, 2026](https://www.truefoundry.com/blog/rate-limiting-ai-agents-preventing-llm-api-exhaustion)).
+LLM calls have variable, attacker-influenceable cost, priced linearly. Requests-per-second does not bind dollars-per-second when one request costs $0.001 and the next $0.50 ([Pignati, 2026](https://medium.com/@alessandro.pignati/ai-agent-rate-limiting-is-broken-7eacc83a4129)). The unit the bound keys on also matters: Vercel reports its docs chat hit ~1,300 requests/minute — a ~10x spike — on Claude Haiku 4.5 driven through residential proxies, an inference-theft attack that per-request BotID gating stopped where session-level limits would have missed the distributed, per-request abuse ([Protecting against token theft](https://vercel.com/blog/protecting-against-token-theft)). The five-bound surface works because each bound expresses a different *unit* of cost — tokens, iterations, parallelism, velocity, dollars — and the union covers what no single unit captures. OWASP LLM10 makes the routing explicit: the same bounds serve availability and finance owners without duplicating enforcement ([OWASP LLM10:2025](https://github.com/microsoft/hve-core/blob/main/.github/skills/security/owasp-llm/references/10-unbounded-consumption.md); [Truefoundry, 2026](https://www.truefoundry.com/blog/rate-limiting-ai-agents-preventing-llm-api-exhaustion)).
 
 ## When This Backfires
 

@@ -1,5 +1,6 @@
 ---
 title: "Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs"
+term: "Auto-Triage Workflow"
 description: "An event-driven four-stage workflow — monitor, correlate, investigate, propose-fix — where an agent watches alert streams, deduplicates against memory of prior incidents, investigates with codebase and observability tools, and either tags an owner or opens a fix PR."
 tags:
   - workflows

@@ -1,5 +1,6 @@
 ---
 title: "Post-Compaction Re-read Protocol for Agent Continuity"
+term: "Post-Compaction Re-read Protocol"
 description: "Restore behavioural contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md — via hook or manual prompt."
 tags:
   - context-engineering

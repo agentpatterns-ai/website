@@ -1,5 +1,6 @@
 ---
 title: "Entropy Reduction Agents: Automated Codebase Hygiene"
+term: "Entropy Reduction Agents"
 description: "Scheduled background agents that scan for architectural violations, documentation drift, and tech debt, producing targeted refactoring PRs for human review."
 tags:
   - workflows

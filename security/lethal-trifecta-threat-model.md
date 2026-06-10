@@ -1,11 +1,12 @@
 ---
 title: "Lethal Trifecta Threat Model for AI Agent Development"
+term: "Lethal Trifecta Threat Model"
 description: "When an agent has private data access, untrusted input, and external communication simultaneously, remove at least one leg to prevent exploitation."
 tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Lethal Trifecta Threat Model
@@ -49,6 +50,8 @@ Default-deny outbound network. Most coding tasks need no network.
 # Docker-based sandbox — no network
 docker run --network none agent-image
 ```
+
+Vendors ship this as a first-class deterministic control: OpenAI's Lockdown Mode limits outbound requests with no AI evaluation in the loop, removing the egress leg without relying on the model to police itself ([Willison, 2026](https://simonwillison.net/2026/Jun/5/lockdown-mode/)).
 
 ### Remove private data access
 

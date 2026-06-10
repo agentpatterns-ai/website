@@ -1,5 +1,6 @@
 ---
 title: "Velocity-Quality Asymmetry: Why AI Speed Gains Fade"
+term: "Velocity-Quality Asymmetry"
 description: "Empirical evidence shows AI coding tools produce transient velocity gains but persistent quality degradation — sustainable speed requires scaling QA as a first-class concern."
 tags:
   - workflows

@@ -1,5 +1,6 @@
 ---
 title: "Dual-Write Append-Mirror for Agent Transcript Externalization"
+term: "Dual-Write Append-Mirror"
 description: "Write the agent transcript to local disk first and forward each batch to a remote store as a best-effort mirror — so a store outage degrades the externalization, not the agent."
 tags:
   - agent-design

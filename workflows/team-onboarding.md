@@ -1,5 +1,6 @@
 ---
 title: "Team Onboarding for AI Agent Workflows and Adoption"
+term: "Team Onboarding"
 description: "Team onboarding for agent workflows aligns a team on shared infrastructure, trust calibration, and vocabulary before individual adoption diverges."
 tags:
   - workflows

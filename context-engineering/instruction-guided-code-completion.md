@@ -1,5 +1,6 @@
 ---
 title: "Instruction-Guided Code Completion: Controlling What Models Generate"
+term: "Instruction-Guided Code Completion"
 description: "Code completion models that score well on benchmarks often ignore user instructions during completion; explicit implementation constraints and model selection close the gap."
 tags:
   - context-engineering

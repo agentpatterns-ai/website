@@ -1,5 +1,6 @@
 ---
 title: "Attention Latch: When Agents Stay Anchored to Stale Instructions"
+term: "Attention Latch"
 description: "Cumulative historical context in decoder-only Transformers can over-squash mid-task updates, leaving multi-turn agents anchored to obsolete constraints despite explicit contradictory instructions."
 tags:
   - agent-design

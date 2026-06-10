@@ -1,5 +1,6 @@
 ---
 title: "Tool-Invocation Attack Surface in Coding Agents"
+term: "Tool-Invocation Attack Surface"
 description: "Malicious MCP tools exploit argument generation to leak system prompts and chain two-channel injection to achieve remote code execution on coding agents."
 tags:
   - security

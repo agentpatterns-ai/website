@@ -1,5 +1,6 @@
 ---
 title: "MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool"
+term: "MCP LLM Sampling"
 description: "How MCP servers use sampling/createMessage to request host LLM inference mid-execution, creating hybrid tools that combine deterministic logic with embedded AI reasoning."
 tags:
   - tool-engineering

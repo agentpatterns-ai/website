@@ -1,5 +1,6 @@
 ---
 title: "Tool Engineering Principles for AI Agent Development"
+term: "Tool Engineering Principles"
 description: "Design agent tools like APIs — with documentation, examples, edge-case handling, and mistake-proofing — not as boilerplate wrappers around existing functions."
 aliases:
   - Tool Descriptions as Onboarding

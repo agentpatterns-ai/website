@@ -1,5 +1,6 @@
 ---
 title: "The Think Tool: Mid-Stream Reasoning for AI Agents"
+term: "Think Tool"
 description: "Give agents a dedicated mid-stream reasoning step after receiving tool outputs so they can re-evaluate their plan before taking the next action."
 tags:
   - agent-design

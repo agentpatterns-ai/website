@@ -1,5 +1,6 @@
 ---
 title: "Inference-Time Tool-Call Reviewer: Pre-Execution Feedback for Tool-Calling Agents"
+term: "Inference-Time Tool-Call Reviewer"
 description: "A reviewer agent inspects each provisional tool call before dispatch, gated by Helpfulness-Harmfulness metrics that quantify when feedback adds net value."
 tags:
   - agent-design

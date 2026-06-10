@@ -1,5 +1,6 @@
 ---
 title: "The Consistent Capability Fallacy in LLM Agent Design"
+term: "Consistent Capability Fallacy"
 description: "Observed success on one task does not predict success on a similar-seeming task. LLM capability is jagged — training data, not skill, determines performance."
 tags:
   - human-factors

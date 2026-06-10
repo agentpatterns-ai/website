@@ -1,5 +1,6 @@
 ---
 title: "Self-Explanation Loop for Code-Review Comments"
+term: "Self-Explanation Loop"
 description: "A prompting pattern that asks the coding agent to justify structural and tooling choices so the user builds the mental model to curate them — bounded by well-documented failure modes when LLM explanations inflate confidence without building skill."
 tags:
   - human-factors

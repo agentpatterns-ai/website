@@ -1,5 +1,6 @@
 ---
 title: "Five-Pass Blunder Hunt: Repeated Critique Passes for Plans"
+term: "Five-Pass Blunder Hunt"
 description: "Run the same critique prompt five times on a plan or spec to force each pass deeper into structural and logical problems the first pass normalises."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Gateway Model Routing: Treat the LLM Gateway as a Discovery Source"
+term: "Gateway Model Routing"
 description: "Decouple harness model selection from vendor SDKs by letting an Anthropic-compatible gateway both serve inference and publish the model catalogue, with Claude Code 2.1.126 as the reference implementation."
 tags:
   - agent-design

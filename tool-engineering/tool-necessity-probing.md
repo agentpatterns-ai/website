@@ -1,5 +1,6 @@
 ---
 title: "Tool Necessity Probing: Reading Tool-Call Decisions From Hidden States"
+term: "Tool Necessity Probing"
 description: "A linear probe on the pre-generation hidden state predicts whether an LLM agent needs to call a tool with AUROC 0.89–0.96 — substantially above the model's own verbalized reasoning."
 tags:
   - tool-engineering

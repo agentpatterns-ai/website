@@ -1,5 +1,6 @@
 ---
 title: "Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets"
+term: "Per-Tool Extended Reasoning Opt-In"
 description: "A single tool call opts itself into deeper reasoning via a per-call parameter, leaving the turn's global reasoning effort unchanged for every other step."
 tags:
   - agent-design

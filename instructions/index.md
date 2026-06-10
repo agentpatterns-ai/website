@@ -40,6 +40,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — A factorial study of file size, instruction position, file architecture, and contradictions found none of the four variables produced detectable compliance contrasts within realistic file sizes
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behaviour across variation, neither too brittle nor too vague
 - [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](three-knowledge-tiers.md) — Classify agent knowledge into three tiers to preserve useful training knowledge while maintaining accuracy standards
+- [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](cost-aware-skill-rewriting.md) — Rewriting a skill is an economic trade-off, not pure compression — stripping sparse operational anchors makes the agent explore and retry, raising total cost despite a shorter document
 
 ## Architecture & Composition
 

@@ -1,5 +1,6 @@
 ---
 title: "Trajectory Decomposition: Diagnose Where Coding Agents Fail"
+term: "Trajectory Decomposition"
 description: "Decompose agent trajectories into search, read, and edit stages with precision and recall for each — turning binary pass/fail into actionable diagnosis of where and why an agent went wrong."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Tunable Effort Levels for Code Review Agents"
+term: "Tunable Effort Levels"
 description: "Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost on the runs that need it."
 aliases:
   - per-PR review effort

@@ -1,5 +1,6 @@
 ---
 title: "Enterprise-Managed Plugin Governance for Agent CLIs"
+term: "Enterprise-Managed Plugin Governance"
 description: "Admin contracts to curate marketplaces, pin versions, force-enable plugins, and gate policy changes — closing the supply-chain leg of the lethal trifecta on the plugin code-load path."
 tags:
   - security

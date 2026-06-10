@@ -1,5 +1,6 @@
 ---
 title: "Agent Pushback Protocol for Managing Disagreements"
+term: "Agent Pushback Protocol"
 description: "Agents evaluate requests at both implementation and requirements level, surface concerns, and wait for explicit confirmation before executing."
 tags:
   - agent-design

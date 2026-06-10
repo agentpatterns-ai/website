@@ -1,5 +1,6 @@
 ---
 title: "Anthropic's Effective Agents Framework: A Pattern Map"
+term: "Anthropic's Effective Agents Framework"
 description: "Anthropic's framework — augmented LLM, five workflow patterns, autonomous loop — maps cleanly to existing agent patterns when applied with explicit conditions."
 tags:
   - agent-design

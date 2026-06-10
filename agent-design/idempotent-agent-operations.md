@@ -1,5 +1,6 @@
 ---
 title: "Idempotent Agent Operations: Safe to Retry"
+term: "Idempotent Agent Operations"
 description: "Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors"
 aliases: [idempotency, safe-retry-design]
 tags:

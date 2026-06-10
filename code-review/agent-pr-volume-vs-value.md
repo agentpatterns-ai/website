@@ -1,12 +1,13 @@
 ---
 title: "Agent PR Volume vs. Value: The Productivity Paradox"
+term: "Agent PR Volume vs. Value"
 description: "Autonomous coding agents dramatically increase PR volume but face lower merge rates than humans — speed and quantity alone do not equal engineering value."
 tags:
   - code-review
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Agent PR Volume vs. Value: The Productivity Paradox
@@ -53,6 +54,8 @@ Documentation is the clearest agent strength. Codex (88.6%) and Claude Code (85.
 ## The Review Burden Shift
 
 20% of reviewers on agent PRs are bots, compared to 10% for human PRs. This suggests an emerging pattern: agent-authored code increasingly passes through automated review before (or instead of) human review. Teams adopting agents at scale need a review triage strategy — see [Tiered Code Review](tiered-code-review.md).
+
+Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), specifically to make review fast enough to keep pace with the volume of agent-generated PRs — a tooling-side answer to the review bottleneck this page describes.
 
 ## Why Acceptance Rates Lag
 

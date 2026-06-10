@@ -1,5 +1,6 @@
 ---
 title: "Model-ID-as-Dependency: Migration Protocol for Deprecation Churn"
+term: "Model-ID-as-Dependency"
 description: "When model deprecations land weekly across providers, treat every model ID in the codebase as a versioned dependency. Inventory the surfaces, propagate updates atomically, and gate the change behind regression evals."
 tags:
   - workflows

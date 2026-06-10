@@ -1,5 +1,6 @@
 ---
 title: "Multi-Turn Conversation Evaluation: Per-Turn and Trace-Level Scoring Together"
+term: "Multi-Turn Conversation Evaluation"
 description: "Single-turn scoring misses across-turn failures — context loss, intent drift, circular exchange. Pair per-turn scorers with a trace-level resolution check so the two layers catch what each misses alone."
 tags:
   - testing-verification

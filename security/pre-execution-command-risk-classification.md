@@ -1,5 +1,6 @@
 ---
 title: "Pre-Execution Risk Classification for Terminal Commands"
+term: "Pre-Execution Risk Classification"
 description: "Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command — an attention-allocation lever that tunes which confirmations get read, paired with deterministic allowlists that carry the policy load."
 tags:
   - security

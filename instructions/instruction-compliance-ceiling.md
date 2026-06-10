@@ -1,5 +1,6 @@
 ---
 title: "The Instruction Compliance Ceiling: How Rule Count Limits AI"
+term: "Instruction Compliance Ceiling"
 description: "Instruction compliance degrades as rule count grows — adding more rules past a threshold produces omission errors, not better behavior."
 aliases:
   - The Mega-Prompt Anti-Pattern

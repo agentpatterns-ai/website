@@ -1,5 +1,6 @@
 ---
 title: "Prebuilt Agent Environments: Amortising Cloud Agent Cold Start with Custom Container Images"
+term: "Prebuilt Agent Environments"
 description: "Bake the cloud agent's runtime — toolchain, dependencies, MCP servers — into a custom container image so each session pays an image-pull cost instead of a fresh install cost."
 tags:
   - agent-design

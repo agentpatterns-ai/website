@@ -1,5 +1,6 @@
 ---
 title: "Architecting a Central Repo for Shared Agent Standards"
+term: "Architecting a Central Repo"
 description: "Distribute shared agent skills and coding conventions from a central repository to downstream projects — enforcing consistency without monolithic coupling."
 tags:
   - instructions

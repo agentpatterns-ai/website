@@ -1,5 +1,6 @@
 ---
 title: "Bootstrapping Coding Agents: The Specification Is the Program"
+term: "Bootstrapping Coding Agents"
 description: "A coding agent can re-implement itself from its own natural language specification, reproducing the classical compiler bootstrap — making the spec, not the code, the stable artifact."
 aliases:
   - meta-circular agents

@@ -1,5 +1,6 @@
 ---
 title: "AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates"
+term: "AI Slop as a Process Problem"
 description: "Reframe AI-generated slop the way CI/CD reframed broken builds — a per-PR agent gate enforcing version-controlled standards, scaled to agent throughput."
 tags:
   - workflows

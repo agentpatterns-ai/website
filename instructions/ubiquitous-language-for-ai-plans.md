@@ -1,5 +1,6 @@
 ---
 title: "Ubiquitous Language for AI Plans"
+term: "Ubiquitous Language"
 description: "A maintained domain glossary plus ADRs anchors agent plans in existing code so plans and source share one vocabulary — distinct from generic context-file rules."
 tags:
   - instructions

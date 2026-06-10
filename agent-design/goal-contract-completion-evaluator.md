@@ -1,5 +1,6 @@
 ---
 title: "Goal Contract: Separating the Doer from the Done-Checker"
+term: "Goal Contract"
 description: "A runtime pattern where the user declares a completion condition and a separate evaluator model decides when it holds — moving done-judgement out of the doing agent's context."
 tags:
   - agent-design

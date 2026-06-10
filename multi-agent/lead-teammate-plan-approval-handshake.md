@@ -1,5 +1,6 @@
 ---
 title: "Lead-to-Teammate Plan-Approval Handshake for Multi-Agent Work"
+term: "Lead-to-Teammate Plan-Approval Handshake"
 description: "A teammate agent runs in read-only plan mode until the lead approves its plan, gating writes on peer review at the cheapest point in the cycle."
 tags:
   - multi-agent

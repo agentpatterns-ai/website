@@ -1,5 +1,6 @@
 ---
 title: "Contextual Capability Calibration for Multi-Agent Delegation"
+term: "Contextual Capability Calibration"
 description: "Replace static skill-level agent profiles with context-specific posteriors so routing decisions condition on the task features that actually predict success."
 tags:
   - multi-agent

@@ -1,5 +1,6 @@
 ---
 title: "Incident-to-Eval Synthesis: Production Failures as Evals"
+term: "Incident-to-Eval Synthesis"
 description: "Convert production incidents into regression eval cases that grow your test suite organically and gate deploys against known failure modes."
 aliases:
   - Failure-to-Eval Pipeline
@@ -8,7 +9,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Incident-to-Eval Synthesis: Production Failures as Evals
@@ -56,6 +57,8 @@ Identifying the failure mode is harder than writing the eval. A structured error
 4. **Iterate** -- repeat until new traces stop producing new categories (theoretical saturation)
 
 The taxonomy reveals which failure modes are most common, most severe, and most amenable to automated detection.
+
+The axial-coding step can be partly tool-assisted: Braintrust's Topics auto-clusters production traces into failure-mode themes, operationalizing the pattern-discovery step rather than relying solely on manual journaling. [Source: [Braintrust -- Automate pattern discovery with Topics](https://www.braintrust.dev/blog/topics-ga)]
 
 [Source: [Hamel Husain -- Your AI Product Needs Evals](https://hamel.dev/blog/posts/evals/), [LLM Evals FAQ](https://hamel.dev/blog/posts/evals-faq/)]
 

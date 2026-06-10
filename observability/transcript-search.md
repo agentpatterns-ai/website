@@ -1,5 +1,6 @@
 ---
 title: "In-Session Transcript Search: Navigating Long Agent Conversations"
+term: "In-Session Transcript Search"
 description: "Claude Code's transcript-mode search (Ctrl+O then /, n, N) turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis."
 tags:
   - claude

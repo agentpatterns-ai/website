@@ -1,5 +1,6 @@
 ---
 title: "Shared Context Bundle Registry for Agent Teams"
+term: "Shared Context Bundle Registry"
 description: "A versioned, addressable registry of context bundles — AGENTS.md, skills, policies — that multiple agents pull at runtime instead of duplicating in every repo."
 tags:
   - instructions

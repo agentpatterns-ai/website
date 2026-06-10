@@ -1,5 +1,6 @@
 ---
 title: "Most-Restrictive-Wins Fusion for Parallel Agent Control Returns"
+term: "Most-Restrictive-Wins Fusion"
 description: "The deny > defer > ask > allow merge function that fuses parallel hook decisions, classifier verdicts, and permission rules into a single agent-control answer."
 tags:
   - agent-design

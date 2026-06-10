@@ -1,5 +1,6 @@
 ---
 title: "Getting Started: Setting Up Your Instruction File"
+term: "Getting Started"
 description: "The instruction file is the single highest-leverage artifact for agent development. Set one up from zero in thirty minutes."
 aliases:
   - Instruction File Setup

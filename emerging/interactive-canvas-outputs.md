@@ -1,5 +1,6 @@
 ---
 title: "Interactive Canvases: Agent-Generated Visual Artifacts as Outputs"
+term: "Interactive Canvases"
 description: "Agents increasingly return interactive canvases — tables, charts, diagrams, dashboards — instead of text. A decision framework for when that shape earns its overhead and what it does to review."
 tags:
   - agent-design

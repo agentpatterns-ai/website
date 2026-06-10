@@ -1,5 +1,6 @@
 ---
 title: "Safe Command Allowlisting: Reducing Approval Fatigue"
+term: "Safe Command Allowlisting"
 description: "Pre-authorizing low-risk operations reduces permission prompts so developers stay alert to the ones that matter, preventing approval fatigue."
 aliases:
   - command whitelisting

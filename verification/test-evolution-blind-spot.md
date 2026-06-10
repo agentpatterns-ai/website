@@ -1,5 +1,6 @@
 ---
 title: "Test Evolution Blind Spot in Coding Agents"
+term: "Test Evolution Blind Spot"
 description: "Coding agents converge on roughly 47% identification F1 for project-level test evolution because the execute-fail-fix loop structurally cannot detect stale or missing tests — closing the gap requires explicit harness changes, not better models."
 tags:
   - testing-verification

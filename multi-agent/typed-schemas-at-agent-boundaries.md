@@ -1,5 +1,6 @@
 ---
 title: "Typed Schemas at Agent Boundaries for Multi-Agent Systems"
+term: "Typed Schemas at Agent Boundaries"
 description: "Formal schemas at agent boundaries enforce explicit contracts, preventing state mismanagement and silent failures across multi-agent system handoffs."
 aliases:
   - "agent boundary contracts"

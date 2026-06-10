@@ -1,5 +1,6 @@
 ---
 title: "Memory-Induced Tool-Drift in LLM Agents"
+term: "Memory-Induced Tool-Drift"
 description: "Personality biases in agent memory act as implicit steering vectors on tool-call parameters in unrelated contexts; prompt defenses do not eliminate the drift."
 tags:
   - agent-design

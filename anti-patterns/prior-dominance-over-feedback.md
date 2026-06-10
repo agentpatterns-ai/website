@@ -1,5 +1,6 @@
 ---
 title: "Prior Dominance Over Feedback in Agent Optimization Loops"
+term: "Prior Dominance Over Feedback"
 description: "LLMs in propose-evaluate-revise loops act as greedy optimizers anchored to pretrained priors; feedback amplifies the prior rather than replacing it."
 tags:
   - agent-design

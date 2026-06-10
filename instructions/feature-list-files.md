@@ -1,5 +1,6 @@
 ---
 title: "Feature List Files for Reliable AI Agent Development"
+term: "Feature List Files"
 description: "Maintain a structured JSON file defining every feature with status and acceptance criteria; agents work through it sequentially and may not mark a feature complete without satisfying its criteria."
 tags:
   - agent-design

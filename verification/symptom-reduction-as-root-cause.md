@@ -1,5 +1,6 @@
 ---
 title: "Symptom-Reduction-as-Root-Cause: Why Oracle Tests Alone Miss Architectural Drift"
+term: "Symptom-Reduction-as-Root-Cause"
 description: "Agents iterating against an oracle test will adjust coefficients inside an architecture that cannot represent the target problem — passing the fiducial calibration point while the underlying model stays wrong."
 tags:
   - testing-verification

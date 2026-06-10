@@ -1,5 +1,6 @@
 ---
 title: "Browser Automation as a Research Tool: Bypassing Bot Detection"
+term: "Browser Automation as a Research Tool"
 description: "When an agent's HTTP client is blocked by CDN bot detection, use browser automation like Playwright to fetch content that would otherwise return a 403."
 aliases:
   - Playwright for agents

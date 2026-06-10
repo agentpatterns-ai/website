@@ -1,5 +1,6 @@
 ---
 title: "llms.txt: Full Specification, Adoption, and Limitations"
+term: "llms.txt"
 description: "The llms.txt specification gives AI agents a curated index of your site — it improves agentic comprehension but is not a citation or ranking signal."
 tags:
   - geo

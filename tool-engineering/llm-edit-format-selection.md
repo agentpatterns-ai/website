@@ -1,5 +1,6 @@
 ---
 title: "Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite"
+term: "Edit Format Selection"
 description: "How to pick an output format for LLM code edits — line-based diffs, search-replace blocks, structure-aware diffs, or full rewrites — and when each one wins."
 aliases:
   - LLM diff format

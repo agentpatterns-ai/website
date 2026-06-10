@@ -1,5 +1,6 @@
 ---
 title: "Tiered Code Review: AI-First with Human Escalation"
+term: "Tiered Code Review"
 description: "Route review effort by risk: AI handles the first pass, non-critical code merges after AI-only review, and critical code escalates to human review."
 aliases:
   - tiered review

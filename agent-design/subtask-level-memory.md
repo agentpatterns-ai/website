@@ -1,5 +1,6 @@
 ---
 title: "Subtask-Level Memory for Software Engineering Agents"
+term: "Subtask-Level Memory"
 description: "Store and retrieve memory at individual reasoning stages, not whole sessions, to prevent misguided retrieval when tasks share surface similarity."
 aliases:
   - subtask-aligned memory

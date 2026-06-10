@@ -1,5 +1,6 @@
 ---
 title: "RAG/Agent Reliability Problem Map: 16-Domain Failure Taxonomy"
+term: "RAG/Agent Reliability Problem Map"
 description: "A structured 16-domain diagnostic framework for classifying and repairing failures in RAG and agent systems — replaces ad-hoc prompt tweaks with systematic incident classification across retrieval, reasoning, state, and deployment layers."
 tags:
   - testing-verification

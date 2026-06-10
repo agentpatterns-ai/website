@@ -1,5 +1,6 @@
 ---
 title: "Prompt Injection: A First-Class Threat to Agentic Systems"
+term: "Prompt Injection"
 description: "External content consumed by agents is an attack surface. Malicious instructions in web pages or API responses can override agent behavior at the model level."
 tags:
   - context-engineering

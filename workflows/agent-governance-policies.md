@@ -1,5 +1,6 @@
 ---
 title: "Agent Governance Policies for AI Agent Development"
+term: "Agent Governance Policies"
 description: "GitHub Copilot governance controls — agent mode access, model availability, MCP allowlists, activity metrics — applied through a three-tier hierarchy."
 tags:
   - human-factors

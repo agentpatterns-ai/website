@@ -1,5 +1,6 @@
 ---
 title: "Temporary Compensatory Mechanisms in Agent Harnesses"
+term: "Temporary Compensatory Mechanisms"
 description: "Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture. Track which mechanisms are compensatory"
 tags:
   - agent-design

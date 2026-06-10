@@ -1,5 +1,6 @@
 ---
 title: "Poka-Yoke for Agent Tools: Mistake-Proof Tool Interfaces"
+term: "Poka-Yoke for Agent Tools"
 description: "Redesign agent tool interfaces so the wrong call cannot compile. Structural constraints prevent errors better than documentation."
 aliases:
   - Mistake-Proofing

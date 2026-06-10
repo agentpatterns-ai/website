@@ -1,5 +1,6 @@
 ---
 title: "Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State"
+term: "Delta Channels"
 description: "Store only the per-step diff of append-only agent state and write a full snapshot every K steps so checkpoint storage stays linear and resume latency stays bounded as long-running agent sessions extend."
 tags:
   - agent-design

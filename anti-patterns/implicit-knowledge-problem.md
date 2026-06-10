@@ -1,5 +1,6 @@
 ---
 title: "The Implicit Knowledge Problem for AI Coding Agents"
+term: "Implicit Knowledge Problem"
 description: "Knowledge that exists only in Slack threads, meetings, or team memory is invisible to agents, producing repeating errors that no amount of prompting can fix."
 tags:
   - instructions

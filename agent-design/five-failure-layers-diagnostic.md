@@ -1,5 +1,6 @@
 ---
 title: "Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model"
+term: "Five-Failure-Layers Diagnostic"
 description: "Before reaching for a model swap, attribute every observed agent failure to a specific harness layer — task specification, context, execution environment, verification, or state. The model is usually not the bottleneck."
 tags:
   - agent-design

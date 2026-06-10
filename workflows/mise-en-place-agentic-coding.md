@@ -1,5 +1,6 @@
 ---
 title: "Mise en Place for Agentic Coding"
+term: "Mise en Place"
 description: "A three-phase preparation methodology — contextual grounding, collaborative specification, task decomposition — that front-loads alignment work before parallel agent fan-out."
 tags:
   - workflows

@@ -1,5 +1,6 @@
 ---
 title: "Reviewer's Playbook for Agent-Authored Pull Requests"
+term: "Reviewer's Playbook"
 description: "A time-boxed inspection priority order for reviewing agent-authored PRs — what to read first, where defects hide, and the evidence test that catches fabricated fixes."
 tags:
   - code-review

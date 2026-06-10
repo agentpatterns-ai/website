@@ -1,5 +1,6 @@
 ---
 title: "Advanced Tool Use: Scaling Agent Tool Libraries"
+term: "Advanced Tool Use"
 description: "When good tool design isn't enough — three Anthropic API features for managing hundreds of tools without drowning in context or losing selection accuracy."
 tags:
   - cost-performance

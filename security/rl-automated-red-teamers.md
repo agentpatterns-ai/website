@@ -1,5 +1,6 @@
 ---
 title: "RL-Trained Automated Red Teamers for Prompt Injection Discovery"
+term: "RL-Trained Automated Red Teamers"
 description: "Train an LLM-based attacker using reinforcement learning to discover novel prompt injection attack vectors end-to-end — before human red teamers or external adversaries do."
 aliases:
   - "automated red teaming"

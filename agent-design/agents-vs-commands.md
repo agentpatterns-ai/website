@@ -1,5 +1,6 @@
 ---
 title: "Agents vs Commands: Separation of Role and Workflow"
+term: "Agents vs Commands"
 description: "Commands define what to do; agents define who does it — separating orchestration from expertise lets you change either without touching the other."
 tags:
   - agent-design

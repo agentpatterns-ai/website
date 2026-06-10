@@ -1,5 +1,6 @@
 ---
 title: "Abstention-Aware Memory Retrieval for Coding Agents"
+term: "Abstention-Aware Memory Retrieval"
 description: "Treat memory injection as a risk-sensitive control decision — abstain or fall back to no-memory when retrieval evidence is weak rather than always using top-k."
 tags:
   - agent-design

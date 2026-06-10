@@ -1,5 +1,6 @@
 ---
 title: "Session Initialization Ritual: How Agents Orient Themselves"
+term: "Session Initialization Ritual"
 description: "A mandatory startup sequence that every agent session executes before touching code — verify state, orient to progress, confirm baseline health, then act."
 tags:
   - context-engineering

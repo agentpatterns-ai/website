@@ -1,5 +1,6 @@
 ---
 title: "Retrieval-Augmented Agent Workflows: On-Demand Context"
+term: "Retrieval-Augmented Agent Workflows"
 description: "Pull context into the agent at the moment it is needed rather than preloading it at session start. Context Hub, Semantic Context Loading, JIT Context, RAG"
 aliases:
   - Context Hub

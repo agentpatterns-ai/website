@@ -1,5 +1,6 @@
 ---
 title: "Harness Engineering for Building Reliable AI Agents"
+term: "Harness Engineering"
 description: "The discipline of designing agent environments -- layered architecture, mechanical enforcement, legibility -- so agents reliably produce correct results"
 tags:
   - agent-design

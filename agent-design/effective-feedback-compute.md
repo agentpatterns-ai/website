@@ -1,5 +1,6 @@
 ---
 title: "Effective Feedback Compute (EFC) for Harness Comparison"
+term: "Effective Feedback Compute (EFC)"
 description: "Count only the feedback that is informative, valid, non-redundant, and retained — replacing raw tokens or tool calls as the scaling coordinate when comparing two agent harnesses."
 tags:
   - agent-design

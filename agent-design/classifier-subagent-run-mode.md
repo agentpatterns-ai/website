@@ -1,5 +1,6 @@
 ---
 title: "Classifier-Subagent Run Mode for Per-Call Permission Routing"
+term: "Classifier-Subagent Run Mode"
 description: "Allowlist-then-sandbox-then-classifier routes each side-effecting tool call along three tiers, with project-specific custom instructions steering the classifier's allow/refactor/escalate verdict."
 tags:
   - agent-design

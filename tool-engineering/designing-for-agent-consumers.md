@@ -1,5 +1,6 @@
 ---
 title: "Designing for Agent Consumers (Agent Experience)"
+term: "Agent Experience"
 description: "Design your public SDK, CLI, API, and docs so an agent consumer can discover, invoke, and recover from them — the Agent Experience (AX) discipline."
 tags:
   - tool-engineering

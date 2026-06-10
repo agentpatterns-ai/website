@@ -1,5 +1,6 @@
 ---
 title: "Progressive Disclosure for Layered Agent Definitions"
+term: "Progressive Disclosure"
 description: "Keep agent definitions minimal — identity and scope only — and load task knowledge on demand through skills rather than embedding all procedures upfront."
 aliases:
   - on-demand skill loading

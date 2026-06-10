@@ -1,5 +1,6 @@
 ---
 title: "RAG over Thinking Traces: Index Reasoning Trajectories Instead of Documents"
+term: "RAG over Thinking Traces"
 description: "Swap the corpus, not the retriever — for reasoning-intensive tasks, retrieving prior thinking trajectories outperforms retrieving documents and reduces inference cost."
 tags:
   - agent-design

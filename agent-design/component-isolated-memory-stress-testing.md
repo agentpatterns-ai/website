@@ -1,5 +1,6 @@
 ---
 title: "Component-Isolated Memory Stress Testing for LLM Agents"
+term: "Component-Isolated Memory Stress Testing"
 description: "Decompose memory into summarisation, storage, and retrieval, then stress-test each operation against an adversarial set so regressions attribute to one component."
 tags:
   - agent-design

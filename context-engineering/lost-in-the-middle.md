@@ -1,5 +1,6 @@
 ---
 title: "Lost in the Middle: Understanding U-Shaped Attention"
+term: "Lost in the Middle"
 description: "Model attention is strongest at the start and end of a context window; content in the middle receives significantly less focus regardless of its importance"
 tags:
   - context-engineering

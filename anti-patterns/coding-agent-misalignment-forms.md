@@ -1,5 +1,6 @@
 ---
 title: "Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)"
+term: "Coding-Agent Misalignment Forms"
 description: "Seven recurring forms of developer-agent misalignment named in a 20,574-session field study — definitions, transcript signatures, and the closest remediation for each."
 tags:
   - anti-pattern

@@ -1,5 +1,6 @@
 ---
 title: "Iterative Binary Feedback for Pattern Adherence"
+term: "Iterative Binary Feedback"
 description: "Looping yes/no judgments through capable models beats verbose critique for getting LLMs to follow named design patterns — under specific conditions."
 tags:
   - instructions

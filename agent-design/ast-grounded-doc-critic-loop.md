@@ -1,5 +1,6 @@
 ---
 title: "AST-Grounded Critic Loop for Documentation Maintenance"
+term: "AST-Grounded Critic Loop"
 description: "A documentation-update technique that combines AST-anchored retrieval with a critic-guided Reflexion loop, treating doc-vs-code consistency as a structural verification problem."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Context-Injected Error Recovery for AI Agent Development"
+term: "Context-Injected Error Recovery"
 description: "When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops."
 aliases:
   - error context injection

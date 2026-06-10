@@ -1,5 +1,6 @@
 ---
 title: "Context Priming: Pre-Loading Files for AI Agent Tasks"
+term: "Context Priming"
 description: "Context priming loads relevant files into an agent context window before a task, improving output quality by grounding the agent in your codebase."
 tags:
   - context-engineering

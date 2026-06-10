@@ -1,5 +1,6 @@
 ---
 title: "Diff-Based Review: Focus on Changes, Not Complete Outputs"
+term: "Diff-Based Review"
 description: "Review what changed, not the full output — diff-based review focuses on what is new, compresses effort, and supports staged pipelines at PR boundaries."
 tags:
   - testing-verification

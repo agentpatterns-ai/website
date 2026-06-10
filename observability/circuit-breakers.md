@@ -1,5 +1,6 @@
 ---
 title: "Circuit Breakers for Agent Loops"
+term: "Circuit Breakers"
 description: "Circuit breakers stop agent loops when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt."
 aliases:
   - Loop Detection & Stopping

@@ -1,5 +1,6 @@
 ---
 title: "Harness Composition for Scaled Security Audits"
+term: "Harness Composition"
 description: "Compose steering, scaling, and stacking primitives so an audit harness produces actionable findings at maintainer-tolerable triage cost rather than slop."
 tags:
   - security

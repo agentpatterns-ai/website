@@ -1,5 +1,6 @@
 ---
 title: "Repository Bootstrap Checklist: Wiring Agent Support"
+term: "Repository Bootstrap Checklist"
 description: "A sequenced checklist for wiring agent support into an existing repository — from project instructions through CI gates, built in dependency order."
 tags:
   - workflows

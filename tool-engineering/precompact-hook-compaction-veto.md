@@ -1,5 +1,6 @@
 ---
 title: "PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries"
+term: "PreCompact Hook"
 description: "Claude Code's PreCompact hook can block compaction by exiting with code 2 or returning `decision: block`, turning automatic context compression into a guarded event that defers until a safe checkpoint."
 tags:
   - tool-engineering

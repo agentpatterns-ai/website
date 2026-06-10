@@ -1,5 +1,6 @@
 ---
 title: "Evaluator Templates: Portable Primitives for Agent Eval Suites"
+term: "Evaluator Templates"
 description: "Treat LLM-as-judge evaluators as reusable, parameterised templates — but only for the subset of evaluation questions whose shape is genuinely portable across domains."
 tags:
   - evals

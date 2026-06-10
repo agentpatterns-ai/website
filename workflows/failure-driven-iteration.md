@@ -1,5 +1,6 @@
 ---
 title: "Failure-Driven Iteration for Improving Agent Workflows"
+term: "Failure-Driven Iteration"
 description: "A development technique where you deliberately run code to generate error output, then feed that output to the agent as the primary context for the next fix."
 tags:
   - workflows

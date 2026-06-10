@@ -1,5 +1,6 @@
 ---
 title: "HTML as Agent Output Format: When to Ask for HTML Instead of Markdown"
+term: "HTML as Agent Output Format"
 description: "Markdown is the default output format for coding agents because it was the format that fit small context windows. On million-token models, asking for HTML unlocks interactive review artifacts, explainers, and custom editors — but only when the output will be opened in a browser."
 aliases:
   - HTML output format technique

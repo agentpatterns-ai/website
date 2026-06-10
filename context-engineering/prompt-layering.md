@@ -1,5 +1,6 @@
 ---
 title: "Prompt Layering: How Instructions Stack and Override"
+term: "Prompt Layering"
 description: "Agent instructions stack in layers — system prompt, project instructions, skill content, user message — knowing precedence prevents unpredictable behavior."
 tags:
   - instructions

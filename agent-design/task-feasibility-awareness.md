@@ -1,5 +1,6 @@
 ---
 title: "Task Feasibility Awareness: Stop Before You Start"
+term: "Task Feasibility Awareness"
 description: "Tool-using agents burn compute on tasks made impossible by a missing tool. An up-front feasibility check against the tool manifest halts the impossible before the loop spends a token."
 tags:
   - agent-design

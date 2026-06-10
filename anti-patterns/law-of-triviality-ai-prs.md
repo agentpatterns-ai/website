@@ -1,5 +1,6 @@
 ---
 title: "Law of Triviality in AI PRs for AI Agent Development"
+term: "Law of Triviality in AI PRs"
 description: "Reviewers bikeshed small changes and rubber-stamp large ones. AI agents produce large diffs by default, so the code that needs the most scrutiny gets the least."
 aliases:
   - bikeshedding in AI PRs

@@ -1,5 +1,6 @@
 ---
 title: "Scaffold Architecture Taxonomy for Coding Agents"
+term: "Scaffold Architecture Taxonomy"
 description: "A three-layer framework for characterizing coding agent scaffolds across control architecture, tool interface, and resource management dimensions."
 tags:
   - agent-design

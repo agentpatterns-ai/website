@@ -1,5 +1,6 @@
 ---
 title: "PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason"
+term: "PostToolUse continueOnBlock"
 description: "A PostToolUse hook can reject a tool result and feed the reason back to the agent as a continuation signal instead of stopping the turn — turning policy violations from dead ends into guided corrections, where the rule is safe to teach."
 tags:
   - tool-engineering

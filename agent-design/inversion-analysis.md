@@ -1,5 +1,6 @@
 ---
 title: "Inversion Analysis: Surface Capabilities Competitors Cannot Replicate"
+term: "Inversion Analysis"
 description: "Find capabilities your unique primitives enable that competitors structurally cannot replicate by inverting standard competitive analysis."
 tags:
   - agent-design

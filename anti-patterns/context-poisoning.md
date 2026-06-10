@@ -1,5 +1,6 @@
 ---
 title: "Context Poisoning: When Hallucinations Become Premises"
+term: "Context Poisoning"
 description: "Context poisoning: an early hallucination becomes a trusted premise, causing every subsequent step to build on a false foundation the agent never questions."
 aliases:
   - hallucination propagation

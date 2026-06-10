@@ -1,5 +1,6 @@
 ---
 title: "Constraint Degradation in AI Code Generation"
+term: "Constraint Degradation"
 description: "LLM code generation accuracy drops sharply as the number of simultaneous constraints increases — reduce constraint load through decomposition, schemas, and mechanical enforcement."
 aliases:
   - Multi-Constraint Degradation

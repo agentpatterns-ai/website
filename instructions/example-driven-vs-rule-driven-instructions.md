@@ -1,5 +1,6 @@
 ---
 title: "When to Use Examples vs Rules in Agent Instructions"
+term: "When to Use Examples vs Rules"
 description: "Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own."
 aliases:
   - Hints Over Code Samples

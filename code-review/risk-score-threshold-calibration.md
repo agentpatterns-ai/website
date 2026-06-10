@@ -1,5 +1,6 @@
 ---
 title: "Risk-Score Threshold Calibration for Auto-Approval"
+term: "Risk-Score Threshold Calibration"
 description: "Expose the auto-approval cutoff on a learned diff-risk score as an explicit yield-vs-safety knob, with revert and incident telemetry to recalibrate it."
 aliases:
   - diff risk score calibration

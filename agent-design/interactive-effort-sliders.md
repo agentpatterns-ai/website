@@ -1,5 +1,6 @@
 ---
 title: "Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls"
+term: "Interactive Effort Sliders"
 description: "Expose reasoning budget as an interactive, per-turn operator control — the third option alongside static effort config and heuristic effort scaling."
 tags:
   - agent-design

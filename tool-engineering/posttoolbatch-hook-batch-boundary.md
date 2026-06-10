@@ -1,5 +1,6 @@
 ---
 title: "PostToolBatch Hook: Once-Per-Decision-Cycle Injection at the Batch Boundary"
+term: "PostToolBatch Hook"
 description: "PostToolBatch fires exactly once after a full parallel tool batch resolves, before the next model call — the right injection point for conventions and validations that should run once per decision cycle, not N times per call."
 tags:
   - tool-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Convergence Detection in Iterative Agent Refinement"
+term: "Convergence Detection"
 description: "Monitor change velocity, output size, and content similarity across passes to detect when further refinement yields diminishing returns and stop mechanically."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Credential Hygiene for Agent Skill Authorship"
+term: "Credential Hygiene"
 description: "Skills are shareable files — credentials embedded in examples or invocations travel with them. Keep credentials out of skill definitions at authoring time."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Episodic Memory Retrieval for AI Coding Agent Loops"
+term: "Episodic Memory Retrieval"
 description: "How agents retrieve past interaction episodes -- sequences of attempts, failures, and resolutions -- to make better first moves on recurring problems."
 tags:
   - context-engineering

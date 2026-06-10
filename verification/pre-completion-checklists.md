@@ -1,5 +1,6 @@
 ---
 title: "Pre-Completion Checklists for AI Agent Development"
+term: "Pre-Completion Checklists"
 description: "Block agent completion signals with a mandatory verification sequence — agents must pass explicit checks before they are allowed to declare a task done."
 tags:
   - agent-design

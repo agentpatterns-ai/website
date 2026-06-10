@@ -1,5 +1,6 @@
 ---
 title: "The Prompt Tinkerer Anti-Pattern in Agent Workflows"
+term: "Prompt Tinkerer Anti-Pattern"
 description: "Endlessly refining prompts to prevent errors that structural controls would eliminate deterministically. Use hooks and constraints instead of instruction bloat."
 tags:
   - human-factors

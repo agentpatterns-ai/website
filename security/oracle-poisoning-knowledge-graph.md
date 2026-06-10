@@ -1,5 +1,6 @@
 ---
 title: "Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents"
+term: "Oracle Poisoning"
 description: "Corrupting a knowledge graph an agent queries via tool-use produces 100% trust at moderate attacker sophistication across nine models; the attack is distinct from prompt injection because the data path, not the instruction path, carries the payload."
 tags:
   - security

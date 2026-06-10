@@ -1,5 +1,6 @@
 ---
 title: "Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot"
+term: "Hostname-Allowlist Proxy"
 description: "A hostname-allowlist proxy that does not terminate TLS enforces only the client-supplied destination; broad allowlist entries on shared-CDN domains open domain-fronting and similar exfil paths."
 aliases:
   - hostname allowlist TLS blind spot

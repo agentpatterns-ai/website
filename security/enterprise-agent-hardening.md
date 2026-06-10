@@ -1,5 +1,6 @@
 ---
 title: "Enterprise Agent Hardening: Three Production Gates"
+term: "Enterprise Agent Hardening"
 description: "Production readiness checklist for agentic systems organized around three gates: governance, observability, and reproducibility."
 aliases:
   - agent hardening

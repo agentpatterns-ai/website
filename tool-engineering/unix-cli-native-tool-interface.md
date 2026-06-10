@@ -1,5 +1,6 @@
 ---
 title: "Unix CLI as the Native Tool Interface for AI Agents"
+term: "Unix CLI as the Native Tool Interface"
 description: "How a single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives."
 tags:
   - agent-design

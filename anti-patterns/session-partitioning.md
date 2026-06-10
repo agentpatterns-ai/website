@@ -1,5 +1,6 @@
 ---
 title: "The Kitchen Sink Session Anti-Pattern in AI Agents"
+term: "Kitchen Sink Session Anti-Pattern"
 description: "Mixing unrelated tasks in a single Claude Code session fills the context window with irrelevant history, degrades output quality, and increases token costs."
 tags:
   - cost-performance

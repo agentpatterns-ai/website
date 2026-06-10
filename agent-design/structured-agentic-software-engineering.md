@@ -1,5 +1,6 @@
 ---
 title: "Structured Agentic Software Engineering (SASE)"
+term: "Structured Agentic Software Engineering"
 description: "A framework for goal-directed agentic SE: maturity levels, structured artifacts (BriefingScript, MRP, CRP), and closing the speed-vs-trust gap."
 aliases:
   - SASE

@@ -8,7 +8,7 @@ tags:
 aliases:
   - chat history as audit trail
   - queryable agent session log
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Agent Chat History as a First-Class Artifact
@@ -34,6 +34,8 @@ VS Code 1.118 (2026-04-29) ships **Chronicle**, an experimental feature that "tr
 - `/chronicle [query]` — free-form natural-language search across session history (e.g. "what files did I edit yesterday?")
 
 Chronicle is gated behind `github.copilot.chat.localIndex.enabled` and stores data locally. Recorded shape: session metadata (branch, repo, timestamps), conversation turns, files touched via tool calls, and references to PRs, issues, and commits ([VS Code 1.118](https://code.visualstudio.com/updates/v1_118)).
+
+By VS Code 1.123 (2026-06-04), Chronicle graduated from the local-only experiment to GA: `/chronicle` is generally available, and each session — conversation, files touched, repo/branch/timestamps, referenced PRs/issues/commits — now syncs to the GitHub account and is queryable across machines via `chat.sessionSync.enabled` ([VS Code 1.123](https://code.visualstudio.com/updates/v1_123)). The artifact is no longer pinned to one laptop's SQLite file, which widens both the recall benefit and the privacy surface below.
 
 Chronicle is the first commodity implementation. The same idea at infrastructure level appears in the [OTel GenAI span conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/), which define structured attributes for chat turns, tool calls, and outputs that any harness can emit and any backend can query.
 

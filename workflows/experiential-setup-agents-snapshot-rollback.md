@@ -1,5 +1,6 @@
 ---
 title: "Experiential-Learning Setup Agents with Snapshot Rollback (SetupX)"
+term: "Experiential-Learning Setup Agents with Snapshot Rollback"
 description: "An experiential-learning pipeline for repository-setup agents — capture dual-modality fix records, trial them under Docker snapshot rollback, verify with prosecutor-judge — useful only under specific repo and verification conditions."
 tags:
   - workflows

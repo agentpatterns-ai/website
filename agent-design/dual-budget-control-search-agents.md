@@ -1,5 +1,6 @@
 ---
 title: "Dual-Budget Control for Search Agents: VOI Scoring Per Action"
+term: "Dual-Budget Control for Search Agents"
 description: "Under hard limits on both tool calls and generated tokens, score each candidate action by Value-of-Information per unit budget and spend the next unit on the highest-ranking action."
 tags:
   - agent-design

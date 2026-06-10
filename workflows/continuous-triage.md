@@ -1,5 +1,6 @@
 ---
 title: "Continuous Triage: Automating Issue Classification with AI Workflows"
+term: "Continuous Triage"
 description: "Replacing manual issue triage with AI agents that classify, label, and route issues on every event or schedule — running continuously with read-only defaults and constrained safe outputs."
 tags:
   - workflows

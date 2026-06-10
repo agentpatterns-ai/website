@@ -1,5 +1,6 @@
 ---
 title: "AGENTS.md Design Patterns: Commands, Boundaries, Personas"
+term: "AGENTS.md Design Patterns"
 description: "Four patterns from 2,500+ repo analysis: executable commands, code-over-prose style, three-tier boundaries, and specialist personas for AGENTS.md."
 tags:
   - instructions

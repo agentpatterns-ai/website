@@ -1,5 +1,6 @@
 ---
 title: "Semantic Density Optimization for Agent Codebases"
+term: "Semantic Density Optimization"
 description: "Maximize the ratio of task-relevant tokens in your codebase — eliminate zero-information ceremony while preserving high-value naming, documentation, and commit context."
 tags:
   - context-engineering

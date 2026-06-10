@@ -1,5 +1,6 @@
 ---
 title: "Layered Mutability: Governing Persistent Self-Modifying Agents"
+term: "Layered Mutability"
 description: "A five-layer lens for deciding where governance attaches in persistent agents — and when rapid, tightly-coupled, weakly-reversible, or poorly-observable updates accumulate into unauthorized behavior."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Docker sbx Adoption for Coding Agents"
+term: "Docker sbx Adoption"
 description: "Adopt Docker sbx as a microVM-isolated coding-agent sandbox without inheriting container-runtime intuitions — name the four isolation layers, the residual workspace leak surface, and the policy and credential defaults that keep the on-ramp safe."
 tags:
   - security

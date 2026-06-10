@@ -1,5 +1,6 @@
 ---
 title: "Token-Efficient Tool Design: Tools That Don't Eat Your Context"
+term: "Token-Efficient Tool Design"
 description: "Design tools so that each call injects the minimum tokens needed for the next agent decision — keeping context windows filled with signal, not noise."
 aliases:
   - Tool Output Design

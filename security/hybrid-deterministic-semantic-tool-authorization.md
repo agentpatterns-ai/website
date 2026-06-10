@@ -1,5 +1,6 @@
 ---
 title: "Hybrid Deterministic + Semantic Authorization for Agent Tool Calls"
+term: "Hybrid Deterministic + Semantic Authorization"
 description: "Combine five deterministic structural checks at the agent-tool boundary with a semantic task-to-tool matcher to close orthogonal attack surfaces neither layer covers alone."
 tags:
   - security

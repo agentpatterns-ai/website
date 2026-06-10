@@ -1,5 +1,6 @@
 ---
 title: "Observability Feedback Loop: A 7-Step Debug Runbook for Agents"
+term: "Observability Feedback Loop"
 description: "A named runbook — query, correlate, reason, implement, restart, rerun, verify — that closes the loop on agent debugging by tying the verification predicate to the originating signal."
 tags:
   - observability

@@ -1,5 +1,6 @@
 ---
 title: "Objective Drift: When Agents Lose Sight of the Goal"
+term: "Objective Drift"
 description: "Objective drift occurs when context compression loses task specifics, causing agents to solve a subtly different problem than originally assigned."
 tags:
   - agent-design

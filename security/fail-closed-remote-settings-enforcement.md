@@ -1,5 +1,6 @@
 ---
 title: "Fail-Closed Remote Settings Enforcement for Enterprise Agents"
+term: "Fail-Closed Remote Settings Enforcement"
 description: "Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy. Closes the unenforced startup window that the default fail-open model leaves open."
 tags:
   - security

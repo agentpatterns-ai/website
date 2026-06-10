@@ -1,5 +1,6 @@
 ---
 title: "Seeding Agent Context: Breadcrumbs in Code"
+term: "Seeding Agent Context"
 description: "Embed context in codebases using AGENTS.md files, decision comments, type annotations, and example files so agents discover conventions automatically."
 tags:
   - context-engineering

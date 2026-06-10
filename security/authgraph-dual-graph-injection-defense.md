@@ -1,5 +1,6 @@
 ---
 title: "Dual-Graph Alignment for Indirect Prompt Injection Defense (AuthGraph)"
+term: "Dual-Graph Alignment for Indirect Prompt Injection Defense"
 description: "Construct an authorization graph from user intent in an isolated context and compare it against the execution-trace provenance graph; structural divergence flags injection-driven tool calls at parameter-source granularity while preserving most utility."
 tags:
   - security

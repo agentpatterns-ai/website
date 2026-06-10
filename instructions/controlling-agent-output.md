@@ -1,5 +1,6 @@
 ---
 title: "Controlling Agent Output: Concise Answers, Not Essays"
+term: "Controlling Agent Output"
 description: "Matching the agent's response format to what you actually need reduces noise and preserves context budget. Set output mode once in system instructions."
 tags:
   - instructions

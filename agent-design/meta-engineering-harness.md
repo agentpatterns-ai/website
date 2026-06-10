@@ -1,5 +1,6 @@
 ---
 title: "Meta-Engineering Harness for Production AI-Native Software Delivery"
+term: "Meta-Engineering Harness"
 description: "Integrate contract compilation, role-specialized agents, adversarial verification, and outer-loop calibration into one harness for continuous production — when feature throughput justifies the standing investment."
 tags:
   - agent-design

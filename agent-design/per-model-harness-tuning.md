@@ -1,5 +1,6 @@
 ---
 title: "Per-Model Harness Tuning: Treating the Backing Model as a Harness Variable"
+term: "Per-Model Harness Tuning"
 description: "Tune prompt structure, tool descriptions, planner/executor split, and middleware per backing model rather than chasing one configuration that works everywhere."
 tags:
   - agent-design

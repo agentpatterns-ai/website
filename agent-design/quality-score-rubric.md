@@ -1,5 +1,6 @@
 ---
 title: "Quality Score Rubric and Simplification Log for Agent Harnesses"
+term: "Quality Score Rubric and Simplification Log"
 description: "Pair an A/B/C/D quality rubric with a simplification log to make agent harness health measurable and harness shrinkage visible as model capability rises."
 tags:
   - agent-design
@@ -9,7 +10,7 @@ tags:
 aliases:
   - harness quality score
   - harness simplification log
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-09
 ---
 
 # Quality Score Rubric and Simplification Log
@@ -28,6 +29,8 @@ The grading scale, verbatim from the source template:
 - **D** — broken, unsafe, or structurally unclear.
 
 The discipline depends on *using* the lower grades. "Is the test suite OK?" hides ambiguity behind a yes-or-no answer; a `C` grade forces the reviewer to name the instability.
+
+The same A/B/C/D framing can drive the agent, not only the human reviewer: LangChain's rubrics let an agent evaluate and correct its own work against an explicit rubric ([LangChain, introducing rubrics](https://blog.langchain.com/introducing-rubrics)).
 
 ## What Each Artefact Captures
 

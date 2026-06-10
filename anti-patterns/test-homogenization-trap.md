@@ -1,5 +1,6 @@
 ---
 title: "The Test Homogenization Trap: When LLM-Generated Tests Mirror Model Blind Spots"
+term: "Test Homogenization Trap"
 description: "LLM-generated test suites systematically share the generating model's blind spots — tests pass because they miss the same edge cases the code misses, not because the code is correct."
 tags:
   - testing-verification

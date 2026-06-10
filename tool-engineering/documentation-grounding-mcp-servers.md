@@ -1,5 +1,6 @@
 ---
 title: "Documentation-Grounding MCP Servers for Vendor SDKs"
+term: "Documentation-Grounding MCP Servers"
 description: "Wire a vendor-operated MCP server with a search_documentation tool to ground agent code generation in current docs — the deprecated-API and hallucinated-API failure mode the pattern addresses, the conditions under which it beats the cheaper llms.txt alternative, and where it backfires."
 aliases:
   - vendor documentation MCP servers

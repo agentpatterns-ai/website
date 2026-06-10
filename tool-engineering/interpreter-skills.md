@@ -1,5 +1,6 @@
 ---
 title: "Skill as Instruction Surface and Callable API (Interpreter Skills)"
+term: "Skill as Instruction Surface and Callable API"
 description: "Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter."
 tags:
   - tool-engineering

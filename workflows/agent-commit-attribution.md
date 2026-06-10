@@ -1,5 +1,6 @@
 ---
 title: "Agent Commit Attribution: Signed Commits and Agent Identity"
+term: "Agent Commit Attribution"
 description: "Configure agents to sign or annotate their commits with verifiable identity metadata so audit trails distinguish agent-generated changes from human-authored ones."
 tags:
   - workflows

@@ -8,7 +8,7 @@ tags:
 aliases:
   - project instruction file
   - AI agent README
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # AGENTS.md: Project-Level README for AI Coding Agents
@@ -110,6 +110,8 @@ Bun; the frontend uses Vite + React.
 ```
 
 This file converts a generic agent into a project-aware one: it knows to use `bun test`, where types live, and what to read before touching the auth layer — without embedding that documentation inline.
+
+For a real, high-profile production example, the SQLite project ships its own `AGENTS.md` ([Willison — sqlite AGENTS.md](https://simonwillison.net/2026/May/27/sqlite-agents/)) — a concrete instance of the same pointers-and-constraints shape outside this synthetic sample.
 
 ## When This Backfires
 

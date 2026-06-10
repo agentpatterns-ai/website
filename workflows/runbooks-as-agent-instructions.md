@@ -1,5 +1,6 @@
 ---
 title: "Runbooks as Agent Instructions: Agent-Followable Ops"
+term: "Runbooks as Agent Instructions"
 description: "A workflow for rewriting operational runbooks so agents can execute them autonomously — replacing ambiguous steps with explicit tool calls."
 tags:
   - agent-design

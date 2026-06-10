@@ -1,5 +1,6 @@
 ---
 title: "Cost-Aware Agent Design: Route by Complexity, Not Habit"
+term: "Cost-Aware Agent Design"
 description: "Match model capability to task complexity: fast models for exploration, capable models for implementation, powerful models for architecture."
 tags:
   - agent-design

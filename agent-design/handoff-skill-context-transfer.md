@@ -1,5 +1,6 @@
 ---
 title: "Handoff Skill: Structured Context Transfer Between Agent Sessions"
+term: "Handoff Skill"
 description: "A model-invocable skill that compacts the current session into a temp-file handoff document a fresh agent can pick up — sibling to session recap, distinct from raw-transcript forwarding."
 tags:
   - agent-design

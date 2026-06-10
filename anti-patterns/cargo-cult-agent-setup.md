@@ -1,5 +1,6 @@
 ---
 title: "Cargo Cult Agent Setup: Copying Without Understanding"
+term: "Cargo Cult Agent Setup"
 description: "Copying agent configurations without understanding why they work produces agents that follow irrelevant conventions and miss project-specific needs."
 tags:
   - human-factors

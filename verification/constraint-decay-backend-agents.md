@@ -1,5 +1,6 @@
 ---
 title: "Constraint Decay in Backend Code Generation"
+term: "Constraint Decay"
 description: "On multi-file backend generation, LLM agents drop ~30 percentage points in assertion pass rate as architectural, ORM, and framework constraints accumulate — and the loss concentrates on convention-heavy frameworks."
 aliases:
   - Backend Constraint Decay

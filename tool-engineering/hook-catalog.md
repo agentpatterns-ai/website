@@ -1,5 +1,6 @@
 ---
 title: "Hook Catalog for Claude Code Enforcement"
+term: "Hook Catalog"
 description: "A reference catalog of high-value Claude Code hooks grouped by purpose — CLI enforcement, destructive operation guardrails, sandboxing, and workflow automation."
 tags:
   - agent-design

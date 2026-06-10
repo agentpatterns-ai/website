@@ -1,5 +1,6 @@
 ---
 title: "Structured Task Graphs as External Agent Memory (Beads)"
+term: "Structured Task Graphs as External Agent Memory"
 description: "Use the bd CLI to maintain a git-backed dependency graph of work items so agents resume sessions without re-discovering project state from scratch."
 aliases:
   - "bd CLI"

@@ -1,5 +1,6 @@
 ---
 title: "Filesystem-Based Tool Discovery for AI Agent Development"
+term: "Filesystem-Based Tool Discovery"
 description: "Store MCP tools as files in a directory tree so agents load only the definitions they need, reducing token overhead by up to 98% versus upfront registration."
 tags:
   - context-engineering

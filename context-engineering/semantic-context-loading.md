@@ -1,5 +1,6 @@
 ---
 title: "Semantic Context Loading: Language Server Plugins for Agents"
+term: "Semantic Context Loading"
 description: "Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files"
 aliases:
   - JIT Context

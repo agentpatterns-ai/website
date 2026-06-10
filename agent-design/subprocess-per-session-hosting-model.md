@@ -1,5 +1,6 @@
 ---
 title: "Subprocess-per-Session Hosting Model: Four Session-Lifecycle Topology Patterns"
+term: "Subprocess-per-Session Hosting Model"
 description: "Pick a session-lifecycle topology for self-hosted Agent SDK deployments — ephemeral, long-running, hybrid, or multi-agent container — by matching workload class to subprocess, container, and transcript-persistence lifetimes."
 tags:
   - agent-design

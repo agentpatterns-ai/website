@@ -1,5 +1,6 @@
 ---
 title: "Five-Stage Policy Layer Typology for Generalist Agents"
+term: "Five-Stage Policy Layer Typology"
 description: "Decompose agent governance into five intervention points — intent guard, playbook, tool guide, tool approval, output formatter — that wrap a generalist agent without fine-tuning."
 tags:
   - security

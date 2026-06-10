@@ -1,5 +1,6 @@
 ---
 title: "LLM Agent Bug Fix Taxonomy: 23 Fix Patterns from 930 Real Bugs"
+term: "LLM Agent Bug Fix Taxonomy"
 description: "An empirical taxonomy of bug fix patterns in LLM agents: the tools component dominates, framework version churn drives most fixes, and retrieval-augmented repair beats general-purpose SoTA by 21 points on the AgentDefect benchmark."
 tags:
   - testing-verification

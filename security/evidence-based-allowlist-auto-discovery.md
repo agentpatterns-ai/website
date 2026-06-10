@@ -1,5 +1,6 @@
 ---
 title: "Evidence-Based Allowlist Auto-Discovery for Agents"
+term: "Evidence-Based Allowlist Auto-Discovery"
 description: "Use Claude Code's PermissionRequest hook to turn manual approvals into persistent rules, building an allowlist from real usage instead of upfront configuration."
 tags:
   - workflows

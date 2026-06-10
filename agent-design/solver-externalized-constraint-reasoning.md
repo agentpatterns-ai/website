@@ -1,5 +1,6 @@
 ---
 title: "Solver-Externalized Constraint Reasoning (MaxSAT/SMT Encoding)"
+term: "Solver-Externalized Constraint Reasoning"
 description: "Have the agent emit solver code for z3, python-sat, or OR-Tools instead of reasoning through constraints in prose — then verify the solver output."
 tags:
   - agent-design

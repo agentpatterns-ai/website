@@ -1,5 +1,6 @@
 ---
 title: "Negative Space Instructions: What NOT to Do in Agent Prompts"
+term: "Negative Space Instructions"
 description: "Use negative constraints — banned phrases, scope exclusions, tool restrictions — to eliminate known failure modes in agent prompts with binary, greppable rules."
 tags:
   - instructions

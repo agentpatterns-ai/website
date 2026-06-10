@@ -1,5 +1,6 @@
 ---
 title: "Skill Tool as Enforcement: Loading Command Prompts at Runtime"
+term: "Skill Tool as Enforcement"
 description: "Use the Skill tool to load command prompts at invocation time rather than telling agents to 'read the file' — this eliminates stale instructions, truncation, and path drift."
 aliases:
   - runtime skill loading

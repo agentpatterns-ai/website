@@ -1,5 +1,6 @@
 ---
 title: "Agent Debugging: Diagnosing Bad Agent Output"
+term: "Agent Debugging"
 description: "A systematic process for tracing why an AI coding agent produced wrong, incomplete, or unexpected output by inspecting context, instructions, tools, and model tier."
 tags:
   - workflows

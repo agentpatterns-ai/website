@@ -1,5 +1,6 @@
 ---
 title: "Environment Specification as Context: Closing the Version Gap"
+term: "Environment Specification as Context"
 description: "Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50-70% accuracy drop caused by environment-blind code generation."
 tags:
   - context-engineering

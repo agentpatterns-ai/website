@@ -1,5 +1,6 @@
 ---
 title: "Oracle-Based Task Decomposition for AI Agent Development"
+term: "Oracle-Based Task Decomposition"
 description: "When a task is too large and interconnected for parallel agents to work on independently, introduce a reference oracle to generate per-unit expected outputs"
 tags:
   - agent-design

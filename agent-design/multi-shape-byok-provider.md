@@ -1,5 +1,6 @@
 ---
 title: "Multi-Shape BYOK Provider: Declare API Family per Endpoint"
+term: "Multi-Shape BYOK Provider"
 description: "A BYOK provider that natively speaks Chat Completions, Responses, and Messages — declared per endpoint — preserves capability that single-shape adapters lose."
 tags:
   - agent-design

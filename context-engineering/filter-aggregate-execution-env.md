@@ -1,5 +1,6 @@
 ---
 title: "Filter and Aggregate Data in the Execution Environment"
+term: "Filter and Aggregate Data"
 description: "Run filtering and aggregation inside a code execution sandbox so only the relevant subset of data enters the model's context, reducing cost and latency."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Repository-Level Retrieval for Code Generation"
+term: "Repository-Level Retrieval"
 description: "AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context."
 aliases:
   - RACG

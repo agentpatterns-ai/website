@@ -1,5 +1,6 @@
 ---
 title: "Cross-Component Interference in Agent Scaffolds"
+term: "Cross-Component Interference"
 description: "Stacking planning, memory, retrieval, and self-reflection on top of tool use is rarely the optimum — a full-factorial study shows the maximally-equipped agent loses to smaller subsets in most tasks, with planning and memory the worst offenders."
 tags:
   - agent-design

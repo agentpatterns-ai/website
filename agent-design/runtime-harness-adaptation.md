@@ -1,5 +1,6 @@
 ---
 title: "Runtime Harness Adaptation: Four-Layer Interface Fixes for Frozen LLM Agents"
+term: "Runtime Harness Adaptation"
 description: "On deterministic, rule-governed environments, evolve a four-layer harness — environment contracts, procedural skills, action realization, trajectory regulation — from failure trajectories so a frozen model can succeed without retraining."
 tags:
   - agent-design

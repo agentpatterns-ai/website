@@ -1,5 +1,6 @@
 ---
 title: "Containment Playbook: npm-to-Signing-Channel Compromise"
+term: "Containment Playbook"
 description: "When a worm inside npm install reaches a developer machine that can read internal repos containing signing material, the blast radius extends to the distribution channel. Isolate, rotate, freeze, re-sign, revoke, ship a forcing-function client update."
 tags:
   - security

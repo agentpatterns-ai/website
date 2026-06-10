@@ -1,5 +1,6 @@
 ---
 title: "Extended Prompt Cache TTL for Long Agent Sessions"
+term: "Extended Prompt Cache TTL"
 description: "Enable Anthropic's 1-hour cache TTL when interactive coding sessions sit idle longer than 5 minutes — the 2x write premium pays back on the first re-use past the default TTL."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Error Preservation in Context for AI Agent Development"
+term: "Error Preservation in Context"
 description: "Preserve failed actions and error traces in context. Retained failures act as negative examples steering the model away from approaches it has already tried."
 tags:
   - context-engineering

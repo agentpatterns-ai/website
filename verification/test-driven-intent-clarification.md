@@ -1,5 +1,6 @@
 ---
 title: "Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts"
+term: "Test-Driven Intent Clarification"
 description: "Use AI-generated tests to surface specification ambiguity before code review — validate tests instead of code to clarify intent with lower cognitive cost."
 aliases:
   - "Tests as Alignment Artifacts"

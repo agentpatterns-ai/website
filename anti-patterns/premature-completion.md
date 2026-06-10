@@ -1,5 +1,6 @@
 ---
 title: "Premature Completion: Agents That Declare Success Too Early"
+term: "Premature Completion"
 description: "Coding agents stop after the first visible signal of progress — first test passing, first patch applied — while failing tests remain. Four independent research teams named the same failure mode within a year."
 tags:
   - agent-design

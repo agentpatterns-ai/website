@@ -1,5 +1,6 @@
 ---
 title: "Agent Environment Bootstrapping for AI Agent Development"
+term: "Agent Environment Bootstrapping"
 description: "Deterministically configure an agent's ephemeral environment before it starts working, pre-installing dependencies instead of letting the agent discover them."
 tags:
   - agent-design

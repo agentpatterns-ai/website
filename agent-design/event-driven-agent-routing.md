@@ -1,5 +1,6 @@
 ---
 title: "Event-Driven Agent Routing for Multi-Team AI Pipelines"
+term: "Event-Driven Agent Routing"
 description: "Route work between agents and human teams via status-change triggers — label additions, PR transitions — rather than a central coordinator."
 tags:
   - agent-design

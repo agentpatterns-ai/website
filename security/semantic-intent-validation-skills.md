@@ -1,5 +1,6 @@
 ---
 title: "Semantic Intent Validation for Agent Skills"
+term: "Semantic Intent Validation"
 description: "Signature scanning catches 90.7% of malicious skills but misses payload-less attacks where the agent synthesises the payload at runtime. Semantic intent validation closes the gap by asking whether documented intent matches observable code behavior."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "AOCI: Symbolic-Semantic Repository Indexing"
+term: "AOCI"
 description: "A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps."
 aliases:
   - AOCI

@@ -1,5 +1,6 @@
 ---
 title: "Controlled Benchmark Rewriting for Agent Safety Judgment"
+term: "Controlled Benchmark Rewriting"
 description: "Rewrite known unsafe trajectories into deceptive variants while preserving risk labels to measure how far frontier safety judgment generalises out-of-distribution."
 tags:
   - testing-verification

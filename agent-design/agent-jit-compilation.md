@@ -1,5 +1,6 @@
 ---
 title: "Agent JIT Compilation: Compile Tasks Into Executable Plans"
+term: "Agent JIT Compilation"
 description: "Compile a natural-language task into executable code that embeds LLM and tool calls, validate against tool invariants, and schedule for parallelism — pays off only on multi-step tasks with capable code generators and contract-annotated tools."
 tags:
   - agent-design

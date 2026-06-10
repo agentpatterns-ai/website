@@ -1,5 +1,6 @@
 ---
 title: "Test Harness Design for LLM Context Windows"
+term: "Test Harness Design"
 description: "Design test harnesses as LLM-first interfaces: terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable."
 tags:
   - context-engineering

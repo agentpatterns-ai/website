@@ -1,5 +1,6 @@
 ---
 title: "Contractual Skill Files: Inspectable SKILL.md for Enterprise Agents"
+term: "Contractual Skill Files"
 description: "Structure SKILL.md files as readable task contracts with named fields for permissions, evidence, and approvals — when audit beats churn."
 aliases:
   - contractual skills

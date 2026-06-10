@@ -1,5 +1,6 @@
 ---
 title: "Secrets Management for AI Agents: Credential Injection"
+term: "Secrets Management for AI Agents"
 description: "Inject credentials as environment variables or wrapper scripts so agents work without secrets appearing in context, prompts, or generated code."
 aliases:
   - "Secrets & Credentials"

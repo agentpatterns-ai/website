@@ -1,5 +1,6 @@
 ---
 title: "LLM Self-Review Failure in Code Modernization Tasks"
+term: "LLM Self-Review Failure"
 description: "Asking an LLM to verify behaviour preservation of its own migration output misses 31.7% of semantic drift cases — independent of model capability."
 tags:
   - testing-verification

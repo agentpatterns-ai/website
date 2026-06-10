@@ -1,5 +1,6 @@
 ---
 title: "History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions"
+term: "History Anchors"
 description: "A single sentence asking the model to stay consistent with prior history flips frontier LLM agents from refusing unsafe actions to selecting them at 91–98%; the load-bearing element is the consistency cue, not the history alone."
 tags:
   - security

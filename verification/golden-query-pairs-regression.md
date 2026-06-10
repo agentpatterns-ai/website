@@ -1,5 +1,6 @@
 ---
 title: "Golden Query Pairs as Continuous Regression Tests for Agents"
+term: "Golden Query Pairs as Continuous Regression Tests"
 description: "Maintain a curated set of question-answer pairs with known-good expected outputs, and run them continuously against agent changes using semantic grading rather than string matching."
 aliases:
   - Golden Query Pairs

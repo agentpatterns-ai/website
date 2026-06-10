@@ -1,5 +1,6 @@
 ---
 title: "Defense-in-Depth Agent Safety for AI Agent Development"
+term: "Defense-in-Depth Agent Safety"
 description: "Layer multiple independent safety mechanisms so no single failure point can compromise an autonomous agent's behavior. Each layer catches what the others miss."
 tags:
   - agent-design

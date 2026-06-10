@@ -1,5 +1,6 @@
 ---
 title: "Interaction-Pattern Evaluation for Agentic PRs"
+term: "Interaction-Pattern Evaluation"
 description: "Merge and rejection labels misclassify roughly two-thirds of rejected agentic PRs and one-fifth of merges — evaluate agents by interaction patterns (review loops, reviewer commits, force pushes) rather than raw outcome rates."
 tags:
   - code-review

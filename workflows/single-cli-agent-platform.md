@@ -1,5 +1,6 @@
 ---
 title: "Single-CLI Agent Platform: Create to Production in One CLI"
+term: "Single-CLI Agent Platform"
 description: "Bundle scaffold, run, eval, deploy, and publish into one CLI when the team is on a single cloud and wants the agent itself to self-serve its own deploys."
 tags:
   - workflows

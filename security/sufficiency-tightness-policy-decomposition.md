@@ -1,5 +1,6 @@
 ---
 title: "Sufficiency-Tightness Decomposition for Agent-Authored Permissions"
+term: "Sufficiency-Tightness Decomposition"
 description: "Asking a coding agent to draft a least-privilege file policy in one pass produces a model-specific failure mode that more reasoning amplifies — generate coverage first, then audit each entry for necessity in a separate pass."
 aliases:
   - permission-boundary inference

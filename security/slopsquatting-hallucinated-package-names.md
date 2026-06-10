@@ -1,5 +1,6 @@
 ---
 title: "Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector"
+term: "Slopsquatting"
 description: "Coding LLMs hallucinate package names at 5.2% (commercial) to 21.7% (open-source); 43% of those names persist across re-runs, making them enumerable. Attackers register the persistent names and wait for an agent install."
 tags:
   - security

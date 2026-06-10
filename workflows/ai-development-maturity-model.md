@@ -1,5 +1,6 @@
 ---
 title: "The AI Development Maturity Model: From Skeptic to Agentic"
+term: "AI Development Maturity Model"
 description: "You move through recognizable phases when adopting AI coding tools — understanding your current phase clarifies what to learn next and what traps to avoid."
 aliases:
   - "AI adoption phases"

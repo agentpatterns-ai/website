@@ -1,5 +1,6 @@
 ---
 title: "Push-Event MCP Channels: Inverting the Pull-Tool Polarity"
+term: "Push-Event MCP Channels"
 description: "MCP channels invert the standard pull-tool polarity by pushing events into a running agent session — useful for warm-context reactions, gated by sender allowlist, capability declaration, and an always-open session."
 tags:
   - tool-engineering

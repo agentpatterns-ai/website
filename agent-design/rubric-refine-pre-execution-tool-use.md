@@ -1,5 +1,6 @@
 ---
 title: "RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use"
+term: "RubricRefine"
 description: "Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion."
 tags:
   - agent-design

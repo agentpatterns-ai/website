@@ -1,5 +1,6 @@
 ---
 title: "Learned Prefix Monitors for Agent Traces"
+term: "Learned Prefix Monitors"
 description: "Online failure-warning monitors learn an event abstraction and a prefix-risk score from terminal outcomes — useful when deterministic guardrails miss the failure mode, but high AUPRC does not imply usable alerts."
 tags:
   - evals

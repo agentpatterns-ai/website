@@ -1,5 +1,6 @@
 ---
 title: "Macro Evals for Agentic Systems: Population-Level Behavior Patterns"
+term: "Macro Evals for Agentic Systems"
 description: "Aggregate per-trace findings across a corpus of agent runs to surface recurring behavior patterns that single-trace evals cannot expose — when volume, judge quality, and selection bias permit."
 tags:
   - testing-verification

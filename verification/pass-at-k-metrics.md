@@ -1,5 +1,6 @@
 ---
 title: "pass@k and pass^k: Capability and Consistency Metrics"
+term: "pass@k and pass^k"
 description: "Use pass@k and pass^k together: pass@k shows if an agent can solve a problem at all; pass^k shows if it reliably does. A single pass rate conflates the two."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "The Effortless AI Fallacy for AI Agent Development"
+term: "Effortless AI Fallacy"
 description: "Expecting AI tools to work without effort consistently produces poor results and reinforces a self-fulfilling belief that the tools don't work."
 tags:
   - human-factors

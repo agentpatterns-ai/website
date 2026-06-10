@@ -1,5 +1,6 @@
 ---
 title: "Steering Running Agents: Mid-Run Redirection and Follow-Ups"
+term: "Steering Running Agents"
 description: "How to redirect a running agent mid-execution using steering or follow-up messages without discarding accumulated context or restarting from scratch."
 aliases:
   - Mid-Run Correction

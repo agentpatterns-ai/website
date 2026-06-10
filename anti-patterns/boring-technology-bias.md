@@ -1,5 +1,6 @@
 ---
 title: "Boring Technology Bias: When Agents Recommend by Popularity"
+term: "Boring Technology Bias"
 description: "LLMs recommend tools and frameworks proportional to training data frequency, not fitness for the problem. Popular beats optimal by default."
 aliases:
   - frequency prior

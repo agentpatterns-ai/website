@@ -1,5 +1,6 @@
 ---
 title: "Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls"
+term: "Mid-Trajectory Guardrail Selection"
 description: "Guardrail efficacy in multi-step tool-calling workflows correlates with structural data competence (JSON parsing) more than safety alignment. Select guard models accordingly."
 tags:
   - security

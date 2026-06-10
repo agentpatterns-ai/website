@@ -1,5 +1,6 @@
 ---
 title: "Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions"
+term: "Pre-Change Impact Analysis"
 description: "Build a graph of code-to-test dependencies and deliver it as a lightweight agent skill — agents query which tests are at risk before committing, cutting regressions by 70%."
 tags:
   - testing-verification

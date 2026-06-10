@@ -1,5 +1,6 @@
 ---
 title: "Context Budget Allocation: Spending Every Token Wisely"
+term: "Context Budget Allocation"
 description: "Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation."
 tags:
   - context-engineering

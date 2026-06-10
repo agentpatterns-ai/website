@@ -1,5 +1,6 @@
 ---
 title: "PostToolUse Output Replacement: Hooks That Rewrite Tool Results"
+term: "PostToolUse Output Replacement"
 description: "A PostToolUse hook can replace what the model sees from any tool call via updatedToolOutput — redacting secrets, compressing output, normalising platforms, or injecting structured annotations before the model reasons over the result."
 tags:
   - tool-engineering

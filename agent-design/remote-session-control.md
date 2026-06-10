@@ -1,5 +1,6 @@
 ---
 title: "Remote Session Control for Local CLI Agents"
+term: "Remote Session Control"
 description: "Stream a locally-running CLI coding agent session to a web or mobile client so you can monitor, steer, switch modes, and approve prompts from another device while the agent keeps running on your workstation."
 tags:
   - agent-design

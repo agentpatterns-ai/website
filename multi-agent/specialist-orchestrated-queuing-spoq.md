@@ -1,5 +1,6 @@
 ---
 title: "Specialist Orchestrated Queuing for Multi-Agent SE (SPOQ)"
+term: "Specialist Orchestrated Queuing for Multi-Agent SE"
 description: "A multi-agent SE pipeline composing wave-based topological dispatch, dual validation gates, a tiered model roster, and Human-as-an-Agent — useful only when its four conditions hold."
 tags:
   - multi-agent
