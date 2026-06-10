@@ -1,5 +1,6 @@
 ---
 title: "Execution-First Delegation: The AI-as-Executor Pattern"
+term: "Execution-First Delegation"
 description: "Write a delegation contract instead of scripting steps: specify the goal, constraints, success condition, and recovery path; the agent handles the how."
 tags:
   - agent-design

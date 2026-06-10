@@ -1,5 +1,6 @@
 ---
 title: "Open Agent School Pattern Mapping for Practitioners"
+term: "Open Agent School Pattern Mapping"
 description: "Map the Open Agent School academic pattern taxonomy to practical coding-agent primitives like maxTurns, PreToolUse hooks, and CLAUDE.md memory."
 aliases:
   - OAS Pattern Mapping

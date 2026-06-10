@@ -1,5 +1,6 @@
 ---
 title: "Agent Terminology Disambiguation for AI Coding Systems"
+term: "Agent Terminology Disambiguation"
 description: "Eight overlapping terms — LLM workflow, autonomous agent, AI assistant, RAG pipeline, workflow engine — describe distinct systems with distinct failure modes."
 tags:
   - agent-design

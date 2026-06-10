@@ -1,5 +1,6 @@
 ---
 title: "Measuring GEO Performance: Metrics, Monitoring, and Tools"
+term: "Measuring GEO Performance"
 tags:
   - geo
   - technique

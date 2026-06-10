@@ -1,5 +1,6 @@
 ---
 title: "Prompt Cache Economics: Comparing Costs by Provider"
+term: "Prompt Cache Economics"
 description: "Compare prompt caching costs across Anthropic, OpenAI, and Gemini. Discount rates, TTLs, activation rules, and a cost calculation framework."
 tags:
   - cost-performance

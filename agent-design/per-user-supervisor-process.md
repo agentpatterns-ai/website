@@ -1,5 +1,6 @@
 ---
 title: "Per-User Supervisor Process for Background Agent Sessions"
+term: "Per-User Supervisor Process"
 description: "A managed-daemon model where a per-user supervisor spawns each background agent session as a detached process, reconnects via on-disk roster, evicts idle non-pinned sessions, and restarts in place onto an updated binary — so terminal close, shell exit, and auto-update never end the work."
 tags:
   - agent-design

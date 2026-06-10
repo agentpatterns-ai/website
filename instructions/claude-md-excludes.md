@@ -1,5 +1,6 @@
 ---
 title: "claudeMdExcludes: Selective Ancestor Instruction-File Exclusion"
+term: "claudeMdExcludes"
 description: "Skip irrelevant ancestor CLAUDE.md files in a monorepo with a glob list, so the agent's context is not burned on conventions for packages you never touch."
 tags:
   - instructions

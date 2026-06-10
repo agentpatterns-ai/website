@@ -1,5 +1,6 @@
 ---
 title: "bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)"
+term: "Restricted-Bypass Trap"
 description: "Pairing allowedTools with permissionMode bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts."
 tags:
   - anti-pattern

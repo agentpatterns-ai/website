@@ -1,5 +1,6 @@
 ---
 title: "Continuous AI (Agentic CI/CD) for AI Agent Development"
+term: "Continuous AI (Agentic CI/CD)"
 description: "AI agents run alongside CI/CD pipelines to handle judgment-heavy tasks, produce reviewable artifacts, and avoid autonomous commits."
 aliases: ["Agentic CI/CD", "Agentic CI"]
 tags:

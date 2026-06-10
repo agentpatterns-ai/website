@@ -1,5 +1,6 @@
 ---
 title: "Isometric Harness Ablation: Rank Subsystem Investment by Removing One at a Time"
+term: "Isometric Harness Ablation"
 description: "Pin the model, remove one harness subsystem at a time, measure the score drop, and use the resulting per-subsystem table to rank investment priorities."
 tags:
   - agent-design

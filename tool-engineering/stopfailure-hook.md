@@ -1,5 +1,6 @@
 ---
 title: "StopFailure Hook: Observability for API Error Termination"
+term: "StopFailure Hook"
 description: "The StopFailure hook fires when a Claude Code turn ends due to an API error, giving harnesses a deterministic signal to log failures, alert operators, and feed external recovery workflows."
 tags:
   - agent-design

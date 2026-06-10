@@ -1,5 +1,6 @@
 ---
 title: "Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface"
+term: "Embedding Inversion"
 description: "Stored embeddings can be partially inverted to reconstruct source text, so a vector index is a copy of the corpus — the LLM08:2025 confidentiality slice that access-control and poisoning defenses miss."
 tags:
   - security

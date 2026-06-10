@@ -1,5 +1,6 @@
 ---
 title: "Machine-Readable Error Responses for AI Agents (RFC 9457)"
+term: "Machine-Readable Error Responses for AI Agents"
 description: "Request structured errors from HTTP APIs using Accept headers — and emit them from your own agent-facing services — to replace brittle HTML parsing with deterministic control flow."
 aliases:
   - Problem Details

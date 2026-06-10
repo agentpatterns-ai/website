@@ -1,5 +1,6 @@
 ---
 title: "Coding Agent Scope Expansion: When to Extend Beyond the Codebase"
+term: "Coding Agent Scope Expansion"
 description: "Expanding a coding agent into browser, ops, and knowledge-work only pays off when scaffold discipline, per-domain evals, and credential isolation carry across the boundary."
 tags:
   - agent-design

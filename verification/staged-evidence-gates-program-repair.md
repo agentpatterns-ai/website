@@ -1,5 +1,6 @@
 ---
 title: "Staged Evidence Gates for Agentic Program Repair"
+term: "Staged Evidence Gates"
 description: "Order cheap-to-evaluate evidence gates before expensive ones in agentic program-repair loops — retrieval-grounded context, compile gate, then target-test gate before full regression — but only when the gates' assumptions hold."
 tags:
   - testing-verification

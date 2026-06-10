@@ -1,5 +1,6 @@
 ---
 title: "Model Deprecation Lifecycle for Agent Workloads"
+term: "Model Deprecation Lifecycle"
 description: "Monitor provider deprecation signals, maintain per-model regression evals, stage migrations with canary traffic, and keep a tested fallback — the operational wrapper around tier-selection routing."
 tags:
   - workflows

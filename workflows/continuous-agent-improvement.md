@@ -1,5 +1,6 @@
 ---
 title: "Continuous Agent Improvement: Iterating on Agent Quality"
+term: "Continuous Agent Improvement"
 description: "An observation-to-update loop for maintaining and improving agent configurations over time. Covers how to observe, categorize, update, and verify changes."
 tags:
   - workflows

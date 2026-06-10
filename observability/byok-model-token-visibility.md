@@ -1,5 +1,6 @@
 ---
 title: "BYOK Model Token Visibility: Closing the Observability Gap on Self-Hosted Routes"
+term: "BYOK Model Token Visibility"
 description: "When a developer brings their own model, the IDE must surface token counts, context-window percent, and applied thinking effort with the same fidelity as first-party routes — otherwise BYOK becomes a black box at the point of action."
 tags:
   - observability

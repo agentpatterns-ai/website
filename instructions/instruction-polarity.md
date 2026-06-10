@@ -1,5 +1,6 @@
 ---
 title: "Instruction Polarity: Positive Rules Over Negative"
+term: "Instruction Polarity"
 description: "Positive directives outperform negative instructions in agent compliance. Reframe prohibitions as explicit requirements; reserve negatives for absolute bans."
 tags:
   - instructions

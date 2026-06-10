@@ -1,5 +1,6 @@
 ---
 title: "Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents"
+term: "Classifier-Gated Auto-Permission"
 description: "A separate classifier inspects each tool call and re-prompts only on escalations — distinct from per-call reviewers and static allowlists."
 tags:
   - agent-design

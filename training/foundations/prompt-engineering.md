@@ -1,5 +1,6 @@
 ---
 title: "Prompt Engineering for Agent Instructions and Systems"
+term: "Prompt Engineering"
 description: "Agent instructions form a system of interacting constraints — altitude, polarity, scope, and volume — that determine compliance and reliability."
 tags:
   - training
@@ -7,6 +8,7 @@ tags:
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
+
 # Prompt Engineering for Agent Instructions
 
 > Effective agent instructions form a system of interacting constraints — altitude, polarity, scope, and volume — not a list of rules appended over time.
@@ -33,7 +35,7 @@ See [System Prompt Altitude](../../instructions/system-prompt-altitude.md) for t
 
 Instructions come in two polarities. Positive instructions state what to do: "Use `const` and `let` only." Negative instructions state what to avoid: "Do not use `var`." The distinction is not stylistic — it affects compliance rates, and the effect compounds as instruction count grows.
 
-Positive instructions require execution: the agent identifies the target behavior and performs it. Negative instructions require suppression: the agent holds the prohibited action in mind while choosing not to take it. Execution is a cheaper operation than suppression [unverified — model-architecture dependent], which produces higher compliance for positive forms across equivalent rule sets. As [instruction polarity research](../../instructions/instruction-polarity.md) documents, negative rules are among the first to fail when attention is under pressure from a large instruction set [unverified].
+Positive instructions state the target behavior directly; negative instructions require the agent to hold a prohibited action in mind while choosing not to take it. As [instruction polarity research](../../instructions/instruction-polarity.md) documents, positive forms tend to achieve higher compliance across equivalent rule sets, and negative rules are among the first to fail when attention is under pressure from a large instruction set.
 
 The reframing is mechanical. "Avoid long functions" becomes "Keep functions under 30 lines." "Don't write vague commit messages" becomes "Use conventional commits: `type(scope): description`." The positive form makes the correct behavior explicit rather than leaving it implied.
 
@@ -49,7 +51,7 @@ See [Instruction Polarity](../../instructions/instruction-polarity.md) for the f
 
 [Negative space instructions](../../instructions/negative-space-instructions.md) are a distinct technique from negative *polarity*. Where polarity asks "how do I frame this rule?", negative space asks "should I define the goal or the boundary?"
 
-Negative constraints eliminate known failure modes with precision. "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is binary and verifiable — a grep confirms compliance. The equivalent positive guidance ("write in a direct, information-dense style") requires judgment to evaluate [unverified].
+Negative constraints eliminate known failure modes with precision. "No filler phrases: no 'in this guide', no 'let's explore', no 'as you may know'" is binary and verifiable — a grep confirms compliance. The equivalent positive guidance ("write in a direct, information-dense style") has no deterministic check; confirming it is a judgment call, not a grep.
 
 The design criterion is greppability: if a constraint can be expressed as a deterministic check, negative space is the right form. Banned phrases, scope exclusions ("Do not modify files outside `docs/`"), tool restrictions, and format exclusions all fit this pattern.
 
@@ -63,7 +65,7 @@ Rules generalize. Examples anchor. The choice between them depends on [what kind
 
 Use rules when the constraint is binary and acceptable variation is fine: "Never commit directly to main." Use examples when format or structure matters precisely and misinterpretation would produce wrong output: showing the exact commit message format with a correct instance and three incorrect instances eliminates ambiguity that a rule alone cannot.
 
-The most reliable pattern combines both: state the rule, show one example. "File names must be kebab-case and match the concept name. Example: `progressive-disclosure.md` (not `ProgressiveDisclosure.md`, not `prog-disc.md`)." One example is usually sufficient. Multiple examples risk teaching the agent to interpolate between them rather than follow the rule [unverified].
+The most reliable pattern combines both: state the rule, show one example. "File names must be kebab-case and match the concept name. Example: `progressive-disclosure.md` (not `ProgressiveDisclosure.md`, not `prog-disc.md`)." One example is usually sufficient; adding more near-duplicate examples spends tokens without adding constraint.
 
 For format and style constraints in a codebase, pointing at existing code outperforms inline examples. "Follow the repository pattern in `src/repos/UserRepo.ts`" stays current as the code evolves. A 30-line inline example freezes at the moment it was written and drifts as the codebase changes. [Hints over code samples](../../instructions/hints-over-code-samples.md) are cheaper in tokens and require no maintenance.
 
@@ -85,9 +87,9 @@ Complex guidance belongs in the system prompt, not in tool descriptions. [Anthro
 
 Instruction sets have a [compliance ceiling](../../instructions/instruction-compliance-ceiling.md). Below it, agents follow rules with reasonable precision. Above it, compliance degrades in a predictable sequence: modification errors first (the rule is followed imprecisely), then omission errors (the rule is skipped entirely).
 
-The agent does not choose which rules to ignore — attention distribution determines it, and attention is finite [unverified]. Adding more rules past the ceiling does not improve behavior; it degrades it. A 200-rule monolithic instruction file is the canonical anti-pattern (the "mega-prompt"). Every incident adds another rule. The file grows; compliance shrinks.
+The agent does not choose which rules to ignore — finite attention is distributed across the whole instruction set, so rules compete for it. Adding more rules past the ceiling does not improve behavior; it degrades it. A 200-rule monolithic instruction file is the canonical anti-pattern (the "mega-prompt"). Every incident adds another rule. The file grows; compliance shrinks.
 
-Position within the instruction set affects compliance independent of importance. [Primacy bias](../../instructions/critical-instruction-repetition.md) means instructions near the top receive more reliable attention than those toward the end [unverified]. A poorly ordered file effectively makes low-position rules optional.
+Position within the instruction set affects compliance independent of importance. As [primacy bias](../../instructions/critical-instruction-repetition.md) documents, instructions near the top receive more reliable attention than those toward the end. A poorly ordered file effectively makes low-position rules optional.
 
 The architectural response is structural, not editorial:
 

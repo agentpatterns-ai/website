@@ -1,5 +1,6 @@
 ---
 title: "Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity"
+term: "Claude Code ↔ Copilot CLI"
 description: "Track which CLI tool shipped a capability first and when the other matched it — extracted from public changelogs, not documentation."
 tags:
   - workflows

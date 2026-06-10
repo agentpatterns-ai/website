@@ -1,5 +1,6 @@
 ---
 title: "Web Search Agent Loop: Iterative Research Patterns"
+term: "Web Search Agent Loop"
 description: "The search-evaluate-refine-synthesize control loop for agent-driven web research, covering query formulation, result evaluation, and termination strategies."
 tags:
   - agent-design

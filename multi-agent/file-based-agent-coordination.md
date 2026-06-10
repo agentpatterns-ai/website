@@ -1,5 +1,6 @@
 ---
 title: "File-Based Agent Coordination for AI Agent Development"
+term: "File-Based Agent Coordination"
 description: "Coordinate parallel agents using file locks in a shared repository — git merge mechanics enforce task exclusivity without a central orchestrator."
 aliases:
   - lock-file coordination

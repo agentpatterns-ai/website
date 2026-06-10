@@ -1,5 +1,6 @@
 ---
 title: "Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions"
+term: "Permission Framework Choice Outweighs Model Choice"
 description: "When agents touch native filesystem, real credentials, or shared remote state, ask-to-continue frameworks cut overeager actions an order of magnitude below permissive defaults — the same model swings 1.1% to 27.7% across harnesses."
 aliases:
   - Overeager Coding Agents

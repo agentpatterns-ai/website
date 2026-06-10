@@ -1,5 +1,6 @@
 ---
 title: "Multitenant RAG: Closing the Relevance-Authorization Gap"
+term: "Multitenant RAG"
 description: "Retrieval ranks by relevance, not authorization — in a shared corpus, the highest-scoring chunk for one tenant can belong to another. Close the gap with policy-aware ingestion, retrieval-time gating, and server-side orchestration."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Skill Library Technical Debt: Library-Time Maintenance for Agent Skills"
+term: "Skill Library Technical Debt"
 description: "Skill libraries accumulate library-level defects that no single-skill eval catches. Treat the library as a software ecosystem with typed debt signatures, mechanical detectors, and named maintenance actions."
 tags:
   - tool-engineering

@@ -1,5 +1,6 @@
 ---
 title: "CLAUDE.md Convention for Structuring Agent Instructions"
+term: "CLAUDE.md Convention"
 description: "CLAUDE.md is Claude Code's project-level instruction file — read at session start to convey conventions, tooling, and behavioral rules."
 tags:
   - instructions

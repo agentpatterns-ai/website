@@ -1,5 +1,6 @@
 ---
 title: "Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting"
+term: "Multi-Tenant Isolation Knobs"
 description: "The specific set of Claude Agent SDK options and environment variables that neutralise each default settings-and-state input when one container serves multiple tenants."
 tags:
   - security

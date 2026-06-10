@@ -1,5 +1,6 @@
 ---
 title: "Convention Over Configuration in Agent Workflow Design"
+term: "Convention Over Configuration"
 description: "Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents apply patterns rather than invent them."
 tags:
   - agent-design

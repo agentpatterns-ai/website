@@ -1,5 +1,6 @@
 ---
 title: "Graph of Thoughts: Directed Graph Reasoning for Multi-Path Problems"
+term: "Graph of Thoughts"
 description: "GoT models agent reasoning as a directed graph — enabling branch, aggregate, refine, and backtrack operations that CoT and ToT cannot express."
 tags:
   - agent-design

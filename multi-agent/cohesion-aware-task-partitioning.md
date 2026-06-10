@@ -1,5 +1,6 @@
 ---
 title: "Cohesion-Aware Task Partitioning for Multi-Agent Coding"
+term: "Cohesion-Aware Task Partitioning"
 description: "Partition a coding task by dependency cohesion before fanning out — parallelism only pays off when cross-agent dependencies are sparse enough that communication overhead does not erase the speedup."
 tags:
   - multi-agent

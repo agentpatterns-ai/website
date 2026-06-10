@@ -1,5 +1,6 @@
 ---
 title: "Cognitive Architectures for Language Agents (CoALA): A Classifier for Agent Harnesses"
+term: "Cognitive Architectures for Language Agents (CoALA)"
 description: "CoALA names language agents along three axes — memory, action space, decision loop — as a classifier for harness artifacts coding-agent teams already maintain."
 tags:
   - frameworks

@@ -1,5 +1,6 @@
 ---
 title: "The Synthetic Ground Truth Fallacy in Agent Evaluation"
+term: "Synthetic Ground Truth Fallacy"
 description: "AI-generated artifacts reflect model priors, not ground truth. Using them for verification or training creates feedback loops that compound errors."
 tags:
   - testing-verification

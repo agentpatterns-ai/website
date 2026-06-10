@@ -1,5 +1,6 @@
 ---
 title: "Answer-First Writing: Structure Content for AI Retrieval"
+term: "Answer-First Writing"
 description: "How placing a direct 40–60 word answer immediately under each heading increases RAG citation probability by producing semantically tight chunk embeddings."
 aliases:
   - answer-first content structure

@@ -1,5 +1,6 @@
 ---
 title: "Direct Prompt Injection via Collaboration (User as Attack Vector)"
+term: "Direct Prompt Injection via Collaboration"
 description: "When the user pastes an attacker-crafted prompt into the agent themselves, model-layer classifiers anchored on user intent see one coherent turn — only environmental defenses catch it."
 tags:
   - security

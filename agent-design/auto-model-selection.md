@@ -1,5 +1,6 @@
 ---
 title: "Auto Model Selection: Harness-Driven Routing per Task"
+term: "Auto Model Selection"
 description: "Vendor-side Auto modes let the harness pick the model per request based on availability, policy, and plan — useful for executor-class work, costly for long sessions and eval-gated CI."
 tags:
   - agent-design

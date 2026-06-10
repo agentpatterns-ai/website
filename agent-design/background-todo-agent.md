@@ -1,5 +1,6 @@
 ---
 title: "Background Todo Agent: Offload Plan Maintenance to a Lightweight Model"
+term: "Background Todo Agent"
 description: "Route the agent's todo-list maintenance loop to a small background model so the frontier model spends its attention budget on the active sub-task instead of bookkeeping."
 tags:
   - agent-design

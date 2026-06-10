@@ -1,5 +1,6 @@
 ---
 title: "Tool Cloning and Provenance Assessment in Agent Ecosystems"
+term: "Tool Cloning and Provenance Assessment"
 description: "Raw repository counts overstate the diversity of MCP and Skills marketplaces because many entries are cloned, lightly modified, or template-derived — apply lexical and fuzzy-structural similarity before drawing ecosystem conclusions."
 tags:
   - tool-engineering

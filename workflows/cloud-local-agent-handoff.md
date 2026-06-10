@@ -1,5 +1,6 @@
 ---
 title: "Cloud-Local Agent Handoff for AI Agent Development"
+term: "Cloud-Local Agent Handoff"
 description: "Transferring agent sessions between cloud and local environments while preserving branch state, session logs, and conversation context."
 tags:
   - agent-design

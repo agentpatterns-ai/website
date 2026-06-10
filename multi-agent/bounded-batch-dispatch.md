@@ -1,5 +1,6 @@
 ---
 title: "Bounded Batch Dispatch for Parallel Agent Execution"
+term: "Bounded Batch Dispatch"
 description: "Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size — one agent per item, N items at a time"
 tags:
   - agent-design

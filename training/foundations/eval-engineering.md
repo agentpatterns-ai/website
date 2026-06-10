@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent evals
   - evaluation engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 # Eval Engineering (Training Module)
 
@@ -36,6 +36,8 @@ A single pass/fail result from one trial is a sample of size one. An agent that 
 Two metrics separate capability from consistency. **pass@k** measures whether the agent produces at least one correct solution across *k* attempts — the capability ceiling. **pass^k** measures whether *all k* attempts succeed — the consistency floor. High pass@k with low pass^k means the agent can solve the problem but cannot be trusted to do so reliably. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 The choice of primary metric depends on the deployment context. For human-in-the-loop workflows where a developer reviews every output, pass@k matters — a single correct answer in three attempts is sufficient. For automated pipelines where outputs are consumed directly, pass^k is critical — a 90% pass rate means roughly 1-in-10 automated runs fails.
+
+Correctness is also not the only quality axis. Cognition defines a "good code, not just correct code" evaluation dimension for autonomous SWE agents — a quality-vs-correctness axis that asks whether a passing solution is also well-structured and maintainable, not merely test-passing ([Cognition — Introducing FrontierCode](https://cognition.ai/blog)).
 
 See [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) for measurement methodology and worked examples.
 

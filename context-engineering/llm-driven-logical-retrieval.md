@@ -1,5 +1,6 @@
 ---
 title: "LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index"
+term: "LLM-Driven Logical Retrieval"
 description: "When the agent LLM is frontier-capable and the corpus has heavy lexical overlap, letting the LLM emit Boolean logical queries against an inverted index matches an agentic hybrid baseline at ~41x lower indexing cost and lower hallucination — but it underperforms hybrid on medium-scale multi-hop benchmarks and collapses under weaker generators."
 aliases:
   - LogicalRAG

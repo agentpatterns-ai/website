@@ -1,5 +1,6 @@
 ---
 title: "Cognitive Reasoning vs Execution: A Two-Layer Agent"
+term: "Cognitive Reasoning vs Execution"
 description: "Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable."
 tags:
   - agent-design

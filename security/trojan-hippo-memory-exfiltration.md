@@ -1,5 +1,6 @@
 ---
 title: "Cross-Session Memory Poisoning for Data Exfiltration (Trojan Hippo)"
+term: "Cross-Session Memory Poisoning for Data Exfiltration"
 description: "A single untrusted tool call can plant a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics, exfiltrating their data via outbound tools."
 aliases:
   - persistent memory attack

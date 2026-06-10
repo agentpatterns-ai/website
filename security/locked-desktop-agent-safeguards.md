@@ -1,5 +1,6 @@
 ---
 title: "Lock-State Safeguards for Desktop-Controlling Agents"
+term: "Lock-State Safeguards"
 description: "Four mechanisms — short-lived authorization, covered displays, relock on local input, and manual-unlock fallback — bound an agent's authority to drive a user's logged-in desktop while the user is away."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Semantic Caching for Multi-Agent Code Systems"
+term: "Semantic Caching"
 description: "Semantic caching with LLM-based equivalence detection achieves 67% cache hit rates and reduces token consumption by 40–60% with intent-driven filtering."
 tags:
   - context-engineering

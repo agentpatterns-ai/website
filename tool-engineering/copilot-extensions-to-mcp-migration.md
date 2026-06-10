@@ -1,5 +1,6 @@
 ---
 title: "Proprietary-to-Open-Standard Tool Migration (Copilot Extensions to MCP)"
+term: "Proprietary-to-Open-Standard Tool Migration"
 description: "How to migrate from deprecated Copilot Extensions to MCP servers, and the broader pattern of proprietary extension systems converging on open protocols."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Dual-Trace Memory Encoding: Pair Facts with the Scene They Were Learned In"
+term: "Dual-Trace Memory Encoding"
 description: "Store each agent memory entry as a fact plus a narrative scene trace of the moment it was learned, improving cross-session and temporal recall without added retrieval cost."
 aliases:
   - scene-trace memory encoding

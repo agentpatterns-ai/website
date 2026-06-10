@@ -1,5 +1,6 @@
 ---
 title: "Cryptographic Governance Audit Trail for AI Agents"
+term: "Cryptographic Governance Audit Trail"
 description: "Wrap agent tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log that satisfies regulated-industry compliance requirements."
 tags:
   - security

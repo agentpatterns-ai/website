@@ -1,5 +1,6 @@
 ---
 title: "Vibe Coding: Outcome-Oriented Agent-Assisted Development"
+term: "Vibe Coding"
 description: "Delegate implementation entirely to the agent and focus on evaluating outcomes — appropriate for low-risk work where the cost of wrong output is low."
 tags:
   - human-factors

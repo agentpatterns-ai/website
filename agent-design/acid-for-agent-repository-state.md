@@ -1,5 +1,6 @@
 ---
 title: "ACID for Agent Repository State"
+term: "ACID"
 description: "Apply database transaction theory — Atomicity, Consistency, Isolation, Durability — as the operating model for how an agent commits, verifies, partitions, and persists its work in the repo."
 tags:
   - agent-design

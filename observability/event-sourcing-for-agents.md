@@ -1,5 +1,6 @@
 ---
 title: "Event Sourcing for Agents: Separating Cognitive Intention"
+term: "Event Sourcing for Agents"
 description: "ESAA separates agent cognition from state mutation: agents emit JSON events, an orchestrator persists and applies effects, enabling replay verification."
 tags:
   - agent-design

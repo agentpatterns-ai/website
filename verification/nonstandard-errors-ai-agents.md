@@ -1,5 +1,6 @@
 ---
 title: "Nonstandard Errors in AI Agents: Model-Family Variance"
+term: "Nonstandard Errors in AI Agents"
 description: "AI agents analyzing identical data diverge systematically by model family. Single-run outputs carry hidden methodological variance not visible in the result."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "The Ralph Wiggum Loop: Fresh-Context Iteration Pattern"
+term: "Ralph Wiggum Loop"
 description: "Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation."
 aliases:
   - Fresh-Context Iteration Pattern

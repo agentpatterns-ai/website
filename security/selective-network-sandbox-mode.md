@@ -1,5 +1,6 @@
 ---
 title: "Selective Network Access in Agent Sandboxes: The allowNetwork Pattern"
+term: "Selective Network Access in Agent Sandboxes"
 description: "A sandbox mode that keeps filesystem isolation but lifts network restrictions trades away the egress half of dual-boundary sandboxing — useful only when egress is enforced at a layer below the harness."
 aliases:
   - allowNetwork sandbox mode
@@ -8,7 +9,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-09
 ---
 
 # Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern
@@ -44,6 +45,8 @@ graph TD
 Maintaining an outbound allowlist for a coding agent is expensive. Legitimate destinations — package registries, vendor APIs, documentation hosts, MCP services — shift between branches, so a static allowlist either lags real use (stalling the inner loop on approval prompts) or sprawls until it loses meaning.
 
 `allowNetwork` resolves that pressure by **keeping the boundary that costs least to enforce against agent error** — write confinement to the workspace — and shifting network risk below the harness: the host firewall, the container's egress policy, or an org-level proxy. Write-confinement still blocks the agent from modifying `~/.bashrc`, dropping startup scripts, or writing to `/etc`.
+
+A graduated escalation ladder is the other answer to the same interruption pressure: rather than flipping the whole mode, escalate per command. VS Code 1.123 added exactly this — when a network-dependent command (such as `git fetch`) fails inside the sandbox, it is auto-retried with unrestricted network, then falls back to unsandboxed execution if that still fails, while filesystem protections stay in place throughout (the `chat.agent.sandbox.retryWithAllowNetworkRequests` setting) ([VS Code 1.123 release notes](https://code.visualstudio.com/updates/v1_123)). The ladder narrows the blast radius of lifting the network leg from the whole session to a single retried command.
 
 ## What This Is Not
 

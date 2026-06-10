@@ -1,5 +1,6 @@
 ---
 title: "Committee Review Pattern for Multi-Agent Code Review"
+term: "Committee Review Pattern"
 description: "Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output."
 tags:
   - agent-design

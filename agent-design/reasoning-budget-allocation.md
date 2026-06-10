@@ -1,5 +1,6 @@
 ---
 title: "Reasoning Budget Allocation: The Reasoning Sandwich"
+term: "Reasoning Budget Allocation"
 description: "Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than a fixed level throughout all steps."
 aliases:
   - reasoning sandwich

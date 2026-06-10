@@ -1,5 +1,6 @@
 ---
 title: "Measuring Synthetic Eval Data Quality (SynAE)"
+term: "Measuring Synthetic Eval Data Quality"
 description: "Score synthetic tool-calling agent eval datasets on three axes — validity, fidelity, diversity — across four trace components, before letting a synthetic suite gate deploys against a production distribution it may have drifted from."
 tags:
   - testing-verification

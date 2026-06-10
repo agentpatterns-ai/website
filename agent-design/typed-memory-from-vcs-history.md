@@ -1,5 +1,6 @@
 ---
 title: "Typed Memory from VCS History: When It Pays Off"
+term: "Typed Memory from VCS History"
 description: "Distil git history into Facts, Skills, and Patterns — pays off only under tight retrieval budgets and high commit hygiene; otherwise it returns BM25 parity."
 tags:
   - agent-design

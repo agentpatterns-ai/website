@@ -1,5 +1,6 @@
 ---
 title: "Idle-Time Speculative Planning for ReAct Agents"
+term: "Idle-Time Speculative Planning"
 description: "Convert tool-wait slack into best-of-K planning by speculatively drafting progressive and recovery plan candidates during idle windows, then aggregating against the real observation — applies only when idle windows exceed one reasoning step and latency dominates dollar cost."
 tags:
   - agent-design

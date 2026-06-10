@@ -1,5 +1,6 @@
 ---
 title: "OpenAPI Documentation Smells for Agent-Ready APIs"
+term: "OpenAPI Documentation Smells"
 description: "A nine-category taxonomy — four documentation smells, five REST smells — that surfaces the gap between structurally valid OpenAPI specs and agent-consumable API descriptions, plus the scenario-first triage that keeps remediation tractable."
 tags:
   - tool-agnostic

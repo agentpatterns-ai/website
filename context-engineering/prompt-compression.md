@@ -1,5 +1,6 @@
 ---
 title: "Prompt Compression: Maximizing Signal Per Token"
+term: "Prompt Compression"
 description: "Write instructions that convey the same guidance in fewer words — shorter, denser instructions improve agent compliance and reduce token cost in Claude Code."
 tags:
   - cost-performance

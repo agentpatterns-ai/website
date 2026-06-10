@@ -1,5 +1,6 @@
 ---
 title: "Cross-Repo Agent Search: GitHub-API-Backed Text Search Beyond the Workspace"
+term: "Cross-Repo Agent Search"
 description: "Expose a hosted, GitHub-API-backed text-search tool to reach code outside the workspace, and compose it with local indexed search under the rate-limit, result-cap, and trust constraints of a remote index."
 tags:
   - tool-engineering

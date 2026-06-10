@@ -1,5 +1,6 @@
 ---
 title: "Durable Interactive Artifacts: Agent Output Outside the Transcript"
+term: "Durable Interactive Artifacts"
 description: "Treat agent outputs as persistent, re-openable, re-runnable workspace objects separate from the chat transcript — the transcript holds reasoning, the artifact holds state."
 tags:
   - agent-design

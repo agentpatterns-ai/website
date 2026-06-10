@@ -1,5 +1,6 @@
 ---
 title: "@import Composition Pattern for Agent Instruction Files"
+term: "@import Composition Pattern"
 description: "Use Claude Code's @path/to/file import syntax to compose CLAUDE.md from smaller, reusable files — and understand why other tools don't support it."
 tags:
   - context-engineering

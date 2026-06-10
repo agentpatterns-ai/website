@@ -1,5 +1,6 @@
 ---
 title: "Pattern Replication Risk in Agentic Code Generation"
+term: "Pattern Replication Risk"
 description: "Agents absorb existing codebase patterns and reproduce them at scale, including deprecated APIs and legacy workarounds, creating compounding technical debt."
 tags:
   - agent-design

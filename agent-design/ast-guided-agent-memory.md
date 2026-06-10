@@ -1,5 +1,6 @@
 ---
 title: "AST-Guided Agent Memory for Repository-Level Code Generation"
+term: "AST-Guided Agent Memory"
 description: "Use Abstract Syntax Tree representations instead of natural language summaries as agent memory substrate to prevent error recurrence across multi-turn code generation sessions."
 aliases:
   - CodeMEM

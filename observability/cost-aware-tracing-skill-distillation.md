@@ -1,5 +1,6 @@
 ---
 title: "Cost-Aware Tracing for Skill Distillation"
+term: "Cost-Aware Tracing"
 description: "Per-step USD cost paired with redundancy flags lets a distillation pipeline distinguish necessary steps from incidental ones — prune patches transfer across tasks; preserve patches do not."
 tags:
   - observability

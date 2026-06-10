@@ -1,5 +1,6 @@
 ---
 title: "Discovery-Only Refactor Pass: Surface Candidates Before Touching Code"
+term: "Discovery-Only Refactor Pass"
 description: "Run a separate read-only pass that ranks deepening opportunities against Ousterhout's deep-module vocabulary, emits candidates, and stops — leaving the human to pick which one to grill into a real refactor."
 tags:
   - workflows

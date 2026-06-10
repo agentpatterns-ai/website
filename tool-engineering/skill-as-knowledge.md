@@ -1,5 +1,6 @@
 ---
 title: "Skill as Knowledge Pattern for AI Agent Development"
+term: "Skill as Knowledge Pattern"
 description: "Design skills as pure knowledge containers — domain rules, heuristics, and reference material — not executable behavior, so they remain portable across agents, tools, and sessions without modification."
 tags:
   - agent-design

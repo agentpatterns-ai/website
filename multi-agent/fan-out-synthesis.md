@@ -1,5 +1,6 @@
 ---
 title: "Fan-Out Synthesis Pattern for AI Agent Development"
+term: "Fan-Out Synthesis Pattern"
 description: "Spawn N agents in parallel on the same task, then merge the strongest elements from each attempt into a single output using a dedicated synthesis agent."
 aliases:
   - Fan-Out Pattern

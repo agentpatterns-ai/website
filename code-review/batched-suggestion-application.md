@@ -1,5 +1,6 @@
 ---
 title: "Batched Suggestion Application: Bulk-Apply Agent Fixes on PRs"
+term: "Batched Suggestion Application"
 description: "Cluster mechanical agent suggestions and apply them as a single commit, with category-bounded batches and audit-trail discipline that prevent the workflow from becoming a rubber stamp."
 tags:
   - code-review

@@ -1,5 +1,6 @@
 ---
 title: "Three-Vector Evasion Taxonomy for Agent Security Tests"
+term: "Three-Vector Evasion Taxonomy"
 description: "Multi-turn agent payloads evade single-turn benchmarks along three orthogonal axes — temporal, spatial, semantic — and ASR rises from 28.3% to 52.6% when testers combine them across stateful tool-using agents."
 tags:
   - security

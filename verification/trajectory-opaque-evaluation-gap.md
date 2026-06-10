@@ -1,5 +1,6 @@
 ---
 title: "Trajectory-Opaque Evaluation Gap: Why Final-Output Grading Misses Safety Violations"
+term: "Trajectory-Opaque Evaluation Gap"
 description: "Outcome-only agent grading misses 44% of safety violations that trajectory-aware auditing catches. Add structured evidence channels for safety and robustness assessment."
 tags:
   - testing-verification

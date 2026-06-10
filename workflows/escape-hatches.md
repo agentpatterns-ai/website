@@ -1,5 +1,6 @@
 ---
 title: "Escape Hatches: Unsticking Stuck Agents"
+term: "Escape Hatches"
 description: "Pre-planned recovery paths for agents that loop, stall, or produce degrading output — interrupt, compact, reset, or scope-reduce to unstick a running agent."
 aliases:
   - "Mid-Run Correction"

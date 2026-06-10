@@ -1,5 +1,6 @@
 ---
 title: "Method Map: Failure-Mode to Smallest-Artifact Triage"
+term: "Method Map"
 description: "Maintain an explicit table mapping observed long-running-agent failure modes to the smallest artifact that fixes each one — and add only that artifact, never an enlarged global instruction file."
 tags:
   - instructions

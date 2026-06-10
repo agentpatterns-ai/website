@@ -1,5 +1,6 @@
 ---
 title: "Completion Failure Taxonomy: Why Code Suggestions Miss"
+term: "Completion Failure Taxonomy"
 description: "Two-thirds of code completion failures are model errors, but one quarter are integration failures — invocation timing, insufficient context, and redundant triggers. Fixing the harness matters as much as improving the model."
 tags:
   - testing-verification

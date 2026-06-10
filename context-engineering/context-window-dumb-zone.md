@@ -1,5 +1,6 @@
 ---
 title: "Context Window Management: Understanding the Dumb Zone"
+term: "Context Window Management"
 description: "Output quality degrades as context fills, but the onset depends on task type — retrieval, reasoning, and code generation hit different thresholds."
 tags:
   - context-engineering

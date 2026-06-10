@@ -1,5 +1,6 @@
 ---
 title: "Skill Library Evolution: Lifecycle Governance for Agents"
+term: "Skill Library Evolution"
 description: "How agent skill libraries grow, get pruned, and evolve over time through versioning, quality gates, and lifecycle governance of reusable capabilities."
 aliases:
   - "skill lifecycle management"

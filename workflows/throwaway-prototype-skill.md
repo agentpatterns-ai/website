@@ -1,5 +1,6 @@
 ---
 title: "Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer"
+term: "Throwaway-Prototype Skill"
 description: "A scoped agent skill that builds the smallest end-to-end thing to resolve one open design decision, forbids polish, and captures only the verdict before the code is deleted."
 tags:
   - workflows

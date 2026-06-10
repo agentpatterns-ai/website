@@ -1,5 +1,6 @@
 ---
 title: "WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design"
+term: "WIP=1 and Little's Law"
 description: "Treat agent task flow as a queueing system — cap work-in-progress at one and gate the next task on verified completion. Little's Law makes the cycle-time consequence quantitative."
 tags:
   - agent-design

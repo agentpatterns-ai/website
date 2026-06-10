@@ -1,5 +1,6 @@
 ---
 title: "Tool Confirmation Carousel: Batched UI for Per-Call Approvals"
+term: "Tool Confirmation Carousel"
 description: "A carousel control reviews multiple pending tool calls in one navigable surface instead of scattered modals — a last-mile UX pattern for residual approvals that allowlists and sandboxes cannot absorb."
 tags:
   - agent-design

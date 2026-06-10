@@ -1,5 +1,6 @@
 ---
 title: "Agent Memory Patterns: Learning Across Conversations"
+term: "Agent Memory Patterns"
 description: "Persist knowledge across conversations using scoped memory systems so agents accumulate institutional knowledge rather than starting fresh every session."
 aliases:
   - Layered Context Architecture

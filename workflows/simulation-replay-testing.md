@@ -1,5 +1,6 @@
 ---
 title: "Simulation and Replay Testing for Agent Verification"
+term: "Simulation and Replay Testing"
 description: "Validate agent prompt changes by replaying past merged tasks in an isolated worktree and diffing the result against the known-good outcome."
 tags:
   - testing-verification

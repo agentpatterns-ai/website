@@ -1,5 +1,6 @@
 ---
 title: "Windows Sandboxing for Coding Agents"
+term: "Windows Sandboxing"
 description: "AppContainer, Windows Sandbox, and MIC each fail a coding-agent requirement; the working pattern composes synthetic SIDs with write-restricted tokens, or moves to WSL2."
 tags:
   - security

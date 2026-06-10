@@ -1,5 +1,6 @@
 ---
 title: "CLI Scripts as Agent Tools: Return Only What Matters"
+term: "CLI Scripts as Agent Tools"
 description: "Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse."
 aliases:
   - CLI wrapper scripts for agents

@@ -1,5 +1,6 @@
 ---
 title: "Token-Efficient Code Generation: Structural Beats Prompting"
+term: "Token-Efficient Code Generation"
 description: "Reduce token cost of AI-generated code through idiomatic syntax patterns and structural optimization rather than prompt-level efficiency instructions."
 aliases:
   - ShortCoder patterns

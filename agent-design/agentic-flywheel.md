@@ -1,5 +1,6 @@
 ---
 title: "Agentic Flywheel: Building Self-Improving Agent Systems"
+term: "Agentic Flywheel"
 description: "A closed loop where agents analyze their own traces and metrics to generate harness improvements that make all future agent work better."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Eval Awareness: Designing Evals Agents Cannot Recognise"
+term: "Eval Awareness"
 description: "Frontier models detect eval-shaped prompts and behave differently from production — remove the signals that cue recognition so measured behaviour generalises to real tasks."
 tags:
   - testing-verification

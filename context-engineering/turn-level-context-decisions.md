@@ -1,5 +1,6 @@
 ---
 title: "Turn-Level Context Decisions: Continue, Rewind, Clear, Compact, or Delegate"
+term: "Turn-Level Context Decisions"
 description: "A decision framework for choosing between five context management actions at every turn boundary in an AI coding session."
 tags:
   - context-engineering

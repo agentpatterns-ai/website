@@ -1,5 +1,6 @@
 ---
 title: "Lifecycle-Integrated Security Architecture for Agent Harnesses"
+term: "Lifecycle-Integrated Security Architecture"
 description: "Embed defense mechanisms into each phase of the agent execution lifecycle — input filtering, decision verification, privilege-separated execution, and adaptive rollback — so layers coordinate rather than operate in isolation."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Guardrails Beat Guidance: Rule Design for Coding Agents"
+term: "Guardrails Beat Guidance"
 description: "On SWE-bench, negative constraints are the only individually beneficial rule type for coding agents; positive directives actively hurt. Rules work through context priming, not instruction specificity."
 tags:
   - instructions

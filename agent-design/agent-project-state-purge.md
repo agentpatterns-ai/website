@@ -1,5 +1,6 @@
 ---
 title: "Agent Project State Purge: Clean-Slate Session Reset"
+term: "Agent Project State Purge"
 description: "A clean-slate primitive for tearing down per-project session state when contamination is the real diagnosis, not an instruction-file bug."
 tags:
   - agent-design

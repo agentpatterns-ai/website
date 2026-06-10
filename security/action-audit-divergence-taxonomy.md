@@ -1,5 +1,6 @@
 ---
 title: "Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening"
+term: "Action-Audit Divergence"
 description: "Decompose the safety property an agent runtime must guarantee — that the audit record matches what actually happened — into four named divergence modes (gate-bypass, audit-forgery, silent host failure, wrong-target) and map existing controls to each."
 tags:
   - security

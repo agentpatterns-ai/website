@@ -1,5 +1,6 @@
 ---
 title: "PR Description Style as a Lever for Agent PR Merge Rates"
+term: "PR Description Style as a Lever"
 description: "PR description structure is a configurable agent parameter that measurably affects reviewer engagement, merge rates, and time-to-completion."
 tags:
   - workflows

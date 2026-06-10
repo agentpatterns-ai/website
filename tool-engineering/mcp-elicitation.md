@@ -1,5 +1,6 @@
 ---
 title: "MCP Elicitation: Servers Requesting Structured Input Mid-Task"
+term: "MCP Elicitation"
 description: "How MCP servers collect structured user input mid-task via elicitation, and how Elicitation and ElicitationResult hooks let you automate, validate, or block those requests."
 tags:
   - tool-engineering

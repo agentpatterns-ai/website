@@ -1,5 +1,6 @@
 ---
 title: "Lazy Worktree Isolation: Enter the Worktree on First Write, Not on Dispatch"
+term: "Lazy Worktree Isolation"
 description: "Background agent sessions start in the parent checkout and relocate into an isolated git worktree only on the first Edit or Write tool call."
 tags:
   - workflows

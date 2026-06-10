@@ -1,5 +1,6 @@
 ---
 title: "Monotonic Capability Attenuation for Composition-Safe Tool Use"
+term: "Monotonic Capability Attenuation"
 description: "Attach a sink-specific capability budget to every value and intersect budgets through tool composition so authority can only shrink — closes the permission-laundering gap when manifests are expert-authored and flows are explicit."
 aliases:
   - ChainCaps capability budget

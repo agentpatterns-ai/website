@@ -1,5 +1,6 @@
 ---
 title: "Headless-First Services: APIs for Agent Consumers"
+term: "Headless-First Services"
 description: "Design services so the full product surface is reachable by agents through APIs, MCP, and CLI — not just the subset that made sense for third-party developers."
 tags:
   - tool-engineering

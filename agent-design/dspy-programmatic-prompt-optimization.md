@@ -1,5 +1,6 @@
 ---
 title: "DSPy: Programmatic Prompt Optimization for Compound Agent Systems"
+term: "DSPy"
 description: "DSPy replaces hand-written prompts with optimizable modules — signatures define input/output contracts, optimizers search the prompt and few-shot space automatically against a metric."
 tags:
   - agent-design

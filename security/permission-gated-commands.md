@@ -1,5 +1,6 @@
 ---
 title: "Permission-Gated Custom Commands for AI Agent Development"
+term: "Permission-Gated Custom Commands"
 description: "Declare an allowed-tools list in a Claude Code command's frontmatter to pre-approve specific tools, cutting prompts and signaling the expected surface."
 aliases:
   - allowed-tools restriction

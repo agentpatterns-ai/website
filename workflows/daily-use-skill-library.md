@@ -1,5 +1,6 @@
 ---
 title: "Daily-Use Skill Library: Encoding Your Process as Agent Skills"
+term: "Daily-Use Skill Library"
 description: "Build a small library of purpose-built skills that encode your engineering process — from ideation through architecture — compensating for the stateless memory of AI agents."
 tags:
   - workflows

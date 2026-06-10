@@ -1,5 +1,6 @@
 ---
 title: "Dominator-Graph Trajectory Invariants for Non-Deterministic Agents"
+term: "Dominator-Graph Trajectory Invariants"
 description: "Validate agent runs by checking which states necessarily precede success — dominator analysis over trajectory graphs replaces scripted assertions when branching is real."
 tags:
   - testing-verification

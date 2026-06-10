@@ -1,5 +1,6 @@
 ---
 title: "Discovering Indirect Injection Vulnerabilities in Your Agent"
+term: "Discovering Indirect Injection Vulnerabilities"
 description: "Agents are more susceptible to indirect injection than developers expect. Standard testing misses the attack surface — here is how to find it."
 tags:
   - security

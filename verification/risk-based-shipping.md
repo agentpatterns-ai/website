@@ -1,5 +1,6 @@
 ---
 title: "Risk-Based Shipping: Review by Risk Matrix, Not by Default"
+term: "Risk-Based Shipping"
 description: "Use a risk matrix to decide which changes auto-ship and which require manual review — graduated oversight replaces blanket review or blanket trust."
 tags:
   - agent-design

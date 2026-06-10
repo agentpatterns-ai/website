@@ -1,5 +1,6 @@
 ---
 title: "Overeager-Behavior Elicitation: Scope + Trap Fragments as a Diagnostic for Out-of-Scope Tool Calls"
+term: "Overeager-Behavior Elicitation"
 description: "Compose benign scenarios from reusable scope and trap fragments, score each run with a judge-free oracle, and use Thompson sampling to elicit the overeager tool calls task-completion and jailbreak benchmarks both miss."
 tags:
   - testing-verification

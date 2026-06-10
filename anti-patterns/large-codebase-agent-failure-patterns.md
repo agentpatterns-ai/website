@@ -1,5 +1,6 @@
 ---
 title: "Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)"
+term: "Large-Codebase Coding-Agent Failure Patterns"
 description: "Five named failure shapes coding agents exhibit in 400K+ LOC codebases — lost in the codebase, wrong symbol, partial completion, tool thrashing, context overflow."
 tags:
   - anti-pattern

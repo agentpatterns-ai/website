@@ -1,5 +1,6 @@
 ---
 title: "PII Tokenization in Agent Context"
+term: "PII Tokenization"
 description: "Replace PII fields with deterministic tokens before data reaches the model; the sandbox enforces the privacy boundary and de-tokenizes for downstream tools."
 tags:
   - context-engineering

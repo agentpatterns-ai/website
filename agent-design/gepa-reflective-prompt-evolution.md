@@ -1,5 +1,6 @@
 ---
 title: "Reflective Prompt Evolution with Pareto Selection (GEPA)"
+term: "Reflective Prompt Evolution with Pareto Selection"
 description: "GEPA evolves prompts by reflecting on execution traces in natural language and keeping the Pareto frontier of candidates — a different optimizer family from MIPROv2 or RL, tuned for rich textual feedback."
 tags:
   - agent-design

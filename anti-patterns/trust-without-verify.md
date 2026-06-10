@@ -1,5 +1,6 @@
 ---
 title: "Trust Without Verify: Skipping Agent Output Checks"
+term: "Trust Without Verify"
 description: "Accepting agent output as correct because it looks polished, without independent verification. Polished output does not correlate with accuracy."
 tags:
   - testing-verification

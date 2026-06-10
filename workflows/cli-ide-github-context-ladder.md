@@ -1,5 +1,6 @@
 ---
 title: "CLI-IDE-GitHub Context Ladder for AI Agent Development"
+term: "CLI-IDE-GitHub Context Ladder"
 description: "A three-surface workflow matching the right AI environment to each development phase: CLI for exploration, IDE for refinement, GitHub for durable collaboration."
 tags:
   - workflows

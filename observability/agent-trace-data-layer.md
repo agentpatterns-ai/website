@@ -1,5 +1,6 @@
 ---
 title: "Agent-Trace Data Layer: Storage for Hours-Long Traces"
+term: "Agent-Trace Data Layer"
 description: "Agent traces break general observability stores once nesting, span duration, and payload size scale up — reach for a purpose-built layer past that threshold."
 tags:
   - observability

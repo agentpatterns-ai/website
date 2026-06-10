@@ -1,5 +1,6 @@
 ---
 title: "Syntax-Aware Completion Routing for Local-First Code Models"
+term: "Syntax-Aware Completion Routing"
 description: "Combine token confidence with a parse-time syntax check on the small model's output to decide per-request whether the local completion ships or escalates to a self-hosted larger model — a cheaper, training-free routing signal than confidence alone."
 tags:
   - agent-design

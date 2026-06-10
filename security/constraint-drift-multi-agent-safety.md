@@ -1,5 +1,6 @@
 ---
 title: "Constraint Drift: Why Safety Must Be Maintained, Not Asserted"
+term: "Constraint Drift"
 description: "Safety constraints encoded in prompts lose force as they pass through memory, delegation, communication, tool use, audit, and optimization; treat them as runtime state with four invariant properties to keep them operative across the trajectory."
 tags:
   - security

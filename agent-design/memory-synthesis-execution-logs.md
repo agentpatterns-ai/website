@@ -1,5 +1,6 @@
 ---
 title: "Memory Synthesis: Extracting Lessons from Execution Logs"
+term: "Memory Synthesis"
 description: "Extract causal lessons from agent execution traces -- what worked, what failed, and why -- turning raw logs into persistent knowledge that improves future runs."
 tags:
   - context-engineering

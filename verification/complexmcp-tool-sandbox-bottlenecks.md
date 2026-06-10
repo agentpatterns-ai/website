@@ -1,5 +1,6 @@
 ---
 title: "ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes"
+term: "ComplexMCP"
 description: "When agents face 300+ interdependent MCP tools across stateful sandboxes, tool retrieval saturates, over-confidence skips environment checks, and strategic defeatism abandons recoverable tasks — each bottleneck maps to a concrete deployment choice."
 tags:
   - evals

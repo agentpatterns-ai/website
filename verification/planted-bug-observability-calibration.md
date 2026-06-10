@@ -1,5 +1,6 @@
 ---
 title: "Planted-Bug Methodology: Deliberate Bugs as Observability Calibration"
+term: "Planted-Bug Methodology"
 description: "Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug."
 tags:
   - observability

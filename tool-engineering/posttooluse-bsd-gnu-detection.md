@@ -1,5 +1,6 @@
 ---
 title: "PostToolUse Hook for BSD/GNU CLI Incompatibilities"
+term: "PostToolUse Hook"
 description: "Catch BSD/GNU CLI incompatibilities at runtime with a PostToolUse hook: feed fixes back via additionalContext and persist knowledge to CLAUDE.md."
 tags:
   - tool-engineering

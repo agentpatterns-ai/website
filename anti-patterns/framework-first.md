@@ -1,5 +1,6 @@
 ---
 title: "Framework-First Agent Development: An AI Anti-Pattern"
+term: "Framework-First Agent Development"
 description: "Starting with a high-level framework before understanding the raw LLM API adds abstraction layers that obscure failures and lock in architectural decisions."
 tags:
   - agent-design

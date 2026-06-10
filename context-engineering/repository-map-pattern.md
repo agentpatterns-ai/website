@@ -1,5 +1,6 @@
 ---
 title: "Repository Map Pattern: AST + PageRank for Dynamic Code"
+term: "Repository Map Pattern"
 description: "Parse source files with tree-sitter, rank symbols by PageRank, then binary-search fit the most relevant entries into the agent's token budget."
 aliases:
   - repo map

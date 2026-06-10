@@ -1,5 +1,6 @@
 ---
 title: "Runtime Scaffold Evolution: Agents That Build Tools"
+term: "Runtime Scaffold Evolution"
 description: "A design pattern where agents synthesize, modify, and deploy custom tools during active problem-solving rather than relying on a fixed toolkit — achieving state-of-the-art results through a simple reflection prompt."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Hooks for Enforcement vs Prompts for Guidance: When to Use Each"
+term: "Hooks for Enforcement vs Prompts for Guidance"
 description: "Prompts request behavior; hooks require it. Use prompts for judgment calls and context-dependent guidance; use hooks for rules that must not vary."
 aliases:
   - Enforcement vs Advisory

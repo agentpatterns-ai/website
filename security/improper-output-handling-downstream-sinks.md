@@ -1,5 +1,6 @@
 ---
 title: "Improper Output Handling: Validate Agent Output Before Downstream Use"
+term: "Improper Output Handling"
 description: "OWASP LLM05 — agent output executed, rendered, or interpreted downstream without per-sink validation is an injection surface; enumerate the sinks and gate each one."
 aliases:
   - OWASP LLM05 improper output handling

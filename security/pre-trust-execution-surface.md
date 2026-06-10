@@ -1,5 +1,6 @@
 ---
 title: "Pre-Trust Execution Surface in Coding Agent Harnesses"
+term: "Pre-Trust Execution Surface"
 description: "Project-local configuration that a coding agent reads at session start executes before the user accepts the trust prompt; defer parsing and execution until after the trust boundary is established."
 tags:
   - security

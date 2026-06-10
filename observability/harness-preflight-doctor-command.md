@@ -1,5 +1,6 @@
 ---
 title: "Harness Preflight Doctor Command for Agent Diagnostics"
+term: "Harness Preflight Doctor Command"
 description: "A doctor command validates an agent harness's runtime environment — auth, MCP, config, tools, version drift — and reports problems before work starts."
 tags:
   - observability

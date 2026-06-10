@@ -1,5 +1,6 @@
 ---
 title: "The Advisor Strategy: Frontier Model as Strategic Advisor"
+term: "Advisor Strategy"
 description: "Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required."
 tags:
   - agent-design

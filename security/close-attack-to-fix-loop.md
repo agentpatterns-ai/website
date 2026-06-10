@@ -1,5 +1,6 @@
 ---
 title: "Close the Attack-to-Fix Loop: Adversarially Train Agent"
+term: "Close the Attack-to-Fix Loop"
 description: "Feed automated red-teaming attack traces straight into adversarial fine-tuning so each new agent checkpoint resists the latest prompt injection class."
 tags:
   - agent-design

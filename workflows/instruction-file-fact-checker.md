@@ -1,5 +1,6 @@
 ---
 title: "Scheduled Instruction File Fact-Checker for Accuracy"
+term: "Scheduled Instruction File Fact-Checker"
 description: "A scheduled GitHub Actions agent that verifies CLAUDE.md factual claims against the live codebase and opens correction PRs automatically."
 tags:
   - workflows

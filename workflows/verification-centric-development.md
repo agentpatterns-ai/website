@@ -1,5 +1,6 @@
 ---
 title: "Verification-Centric Development for AI-Generated Code"
+term: "Verification-Centric Development"
 description: "Shift developer value from writing code to designing verification systems — layered quality gates that make LLM-generated code production-viable."
 tags:
   - workflows

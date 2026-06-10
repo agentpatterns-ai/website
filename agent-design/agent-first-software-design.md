@@ -1,5 +1,6 @@
 ---
 title: "Agent-First Software Design for AI Agent Development"
+term: "Agent-First Software Design"
 description: "Architect systems where AI agents are the primary consumers, using machine-readable APIs and structured outputs instead of visual UIs."
 aliases:
   - Agent-First Development

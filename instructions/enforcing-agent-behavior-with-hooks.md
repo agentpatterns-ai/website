@@ -10,12 +10,12 @@ aliases:
   - Rigor Relocation
   - Deterministic Behavioral Enforcement
   - Hook-Based Agent Governance
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Enforcing Agent Behavior with Hooks
 
-> Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override — blocking forbidden actions, rewriting inputs, and gating task completion.
+> Move critical rules out of prompts into deterministic shell hooks the model cannot override — blocking forbidden actions, rewriting inputs, and gating task completion.
 
 ## The Enforcement Spectrum
 
@@ -112,7 +112,7 @@ The model sees the rewritten command, reinforcing the correct pattern for future
 }
 ```
 
-Exit 2 from a Stop hook prevents the agent from stopping; it continues with the hook's stderr as feedback. The agent cannot declare "done" until the gate passes.
+Exit 2 from a Stop hook prevents the agent from stopping; it continues with the hook's stderr as feedback. The agent cannot declare "done" until the gate passes. Beyond hard blocking, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext` to feed Claude steering feedback and keep the turn going without being flagged as a hook error ([Claude Code 2.1.163 changelog](https://code.claude.com/docs/en/changelog)) — turning a completion gate into a soft nudge rather than a halt.
 
 ## Hook Scoping Hierarchy
 

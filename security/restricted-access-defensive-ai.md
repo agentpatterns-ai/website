@@ -1,5 +1,6 @@
 ---
 title: "Restricted-Access Defensive AI: Project Glasswing as a Deployment Model"
+term: "Restricted-Access Defensive AI"
 description: "Invitation-only deployment of frontier vulnerability-discovery models to vetted defensive teams — when symmetric dual-use risk makes broad release the wrong default and what AppSec teams should evaluate when offered access."
 aliases:
   - invitation-only defensive AI

@@ -1,5 +1,6 @@
 ---
 title: "Chain-of-Verification for Coding Agents"
+term: "Chain-of-Verification"
 description: "Route an agent's draft claims through factored verification so the model checks each fact in isolation — useful only where no external oracle exists."
 tags:
   - testing-verification

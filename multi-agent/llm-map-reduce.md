@@ -1,5 +1,6 @@
 ---
 title: "LLM Map-Reduce Pattern for Parallel Input Processing"
+term: "LLM Map-Reduce Pattern"
 description: "Split large inputs into context-window-sized chunks, process each independently in parallel, then combine chunk results into a coherent output."
 aliases:
   - Chunk-Process-Merge

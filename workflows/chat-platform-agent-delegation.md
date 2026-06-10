@@ -1,5 +1,6 @@
 ---
 title: "Chat-Platform Agent Delegation: Invoking Cloud Coding Agents from Team Channels"
+term: "Chat-Platform Agent Delegation"
 description: "Mentioning an agent in a Slack or Microsoft Teams channel delegates a coding task from where coordination already happens — surfaced to the whole team, with a concentrated lethal-trifecta posture that the IDE entry point hides."
 tags:
   - workflows

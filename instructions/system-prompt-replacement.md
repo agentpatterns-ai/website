@@ -1,5 +1,6 @@
 ---
 title: "System Prompt Replacement for Domain-Specific Agent Personas"
+term: "System Prompt Replacement"
 description: "Replace an agent's default coding-focused system prompt with a domain-specific identity to eliminate engineering assumptions in non-technical workflows."
 aliases:
   - System Prompt Replacement

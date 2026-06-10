@@ -1,5 +1,6 @@
 ---
 title: "Generative Provenance Records for Tool-Using Agents"
+term: "Generative Provenance Records"
 description: "Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop."
 tags:
   - testing-verification

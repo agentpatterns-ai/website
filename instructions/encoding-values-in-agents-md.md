@@ -1,5 +1,6 @@
 ---
 title: "Encoding Values in AGENTS.md: Why Prose Without Verification Fails"
+term: "Encoding Values in AGENTS.md"
 description: "Developers operationalize ethics, fairness, accessibility, and sustainability by writing them into AGENTS.md — but corpus studies show these values are mostly absent, and prose without verification rarely changes agent behavior."
 tags:
   - instructions

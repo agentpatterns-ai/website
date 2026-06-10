@@ -1,5 +1,6 @@
 ---
 title: "Critic Agent Pattern: Dual-Model Plan Review"
+term: "Critic Agent Pattern"
 description: "A second model reviews the primary agent's plan before execution begins, catching structural errors early when recovery is cheap."
 tags:
   - agent-design

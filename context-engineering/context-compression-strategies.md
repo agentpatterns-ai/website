@@ -1,5 +1,6 @@
 ---
 title: "Context Compression Strategies: Offloading and Summarisation"
+term: "Context Compression Strategies"
 description: "Tiered compression keeps long-running agents within their context window by offloading large payloads to disk and summarising conversation history."
 aliases:
   - context compaction

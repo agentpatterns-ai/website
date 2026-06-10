@@ -1,5 +1,6 @@
 ---
 title: "Manual Compaction Strategy for Dumb Zone Mitigation"
+term: "Manual Compaction Strategy"
 description: "How to use manual /compact and lower auto-compaction thresholds to preserve reasoning quality before context window degradation sets in."
 tags:
   - context-engineering

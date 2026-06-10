@@ -1,5 +1,6 @@
 ---
 title: "Security Drift in Iterative LLM Code Refinement"
+term: "Security Drift"
 description: "Iterative LLM fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test ever exercises."
 tags:
   - agent-design

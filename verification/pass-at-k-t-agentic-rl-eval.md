@@ -1,5 +1,6 @@
 ---
 title: "PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth"
+term: "PASS@(k,T)"
 description: "A single pass@k number misreads RL's effect on tool-use agents. PASS@(k,T) varies sampling budget k and interaction depth T jointly, separating capability expansion from efficiency improvement."
 tags:
   - testing-verification

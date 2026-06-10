@@ -1,5 +1,6 @@
 ---
 title: "Canary Rollout for Agent Policy Changes"
+term: "Canary Rollout"
 description: "Progressively expose agent policy updates to a small traffic slice, monitor key metrics, and roll back automatically before full cutover — the same discipline software deployments use, applied to the LLM policy layer."
 tags:
   - workflows

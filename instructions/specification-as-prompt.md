@@ -1,5 +1,6 @@
 ---
 title: "The Specification as Prompt: Existing Artifacts as Agent"
+term: "Specification as Prompt"
 description: "Use types, schemas, tests, and API definitions as agent instructions instead of natural language descriptions — more precise and verifiable than prose."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "CoT Robustness in Code Generation"
+term: "CoT Robustness"
 description: "Chain-of-thought is not a universal win for code generation. Its effect on robustness depends on model family, task difficulty, and whether the reasoning is structured — verify before enabling by default."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Externalization in LLM Agents"
+term: "Externalization"
 description: "Reliable LLM agents externalize cognitive burdens into persistent infrastructure — four components that transform hard internal problems into tractable retrieval and composition tasks."
 tags:
   - agent-design

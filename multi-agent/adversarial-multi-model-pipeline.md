@@ -1,5 +1,6 @@
 ---
 title: "Adversarial Multi-Model Development Pipeline (VSDD)"
+term: "Adversarial Multi-Model Development Pipeline"
 description: "A six-phase pipeline where a fresh-context adversary attacks builder output until convergence, using spec-driven development, TDD, and formal verification."
 aliases:
   - VSDD

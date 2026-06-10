@@ -1,5 +1,6 @@
 ---
 title: "Agent Self-Review Loop for Iterative Self-Improvement"
+term: "Agent Self-Review Loop"
 description: "Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review."
 tags:
   - testing-verification

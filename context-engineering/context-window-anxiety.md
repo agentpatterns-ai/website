@@ -1,5 +1,6 @@
 ---
 title: "Context Window Anxiety: Countering Premature Task Closure"
+term: "Context Window Anxiety"
 description: "Advanced models exhibit behavioral shortcuts as context limits approach — strategic buffers, counter-prompting, and token budget transparency counteract premature task closure."
 tags:
   - context-engineering

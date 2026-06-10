@@ -1,5 +1,6 @@
 ---
 title: "Authority Confusion: Untrusted Context Must Not Authorize Side Effects"
+term: "Authority Confusion"
 description: "Decompose task authority into a step-level authority context the dispatch layer can check; require that side-effecting steps inherit authority from the user's request, not from the runtime content that suggested them."
 tags:
   - security
@@ -11,7 +12,7 @@ aliases:
   - authority confusion in agents
   - step-level authority enforcement
   - action-time authorization for agents
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-09
 status: current
 ---
 
@@ -23,7 +24,7 @@ status: current
 
 The most consequential failure of a tool-using agent is rarely an obviously forbidden output. It is an ordinary, allowlisted action whose target or effect was steered by attacker-controlled context against the user's interest. [Qin et al., 2026](https://arxiv.org/abs/2605.28914) name this **authority confusion** and formalize it as `Suggested(action | History) ⇏ Justified(action | goal, History)` — a step appearing reasonable given the conversation does not entail it being authorized by the user's task.
 
-Confused-deputy framing names the same gap from the infrastructure side: every natural-language wrapper compiles intent into a verb sequence the policy engine has never seen as a unit, and role-based scopes cannot tell whether deleting *these specific* pods was within the requested scope ([Pan, 2026](https://tianpan.co/blog/2026-04-27-promptable-infrastructure-least-authority)).
+Confused-deputy framing names the same gap from the infrastructure side: every natural-language wrapper compiles intent into a verb sequence the policy engine has never seen as a unit, and role-based scopes cannot tell whether deleting *these specific* pods was within the requested scope ([Pan, 2026](https://tianpan.co/blog/2026-04-27-promptable-infrastructure-least-authority)). The attack is not hypothetical: attackers took over high-profile Instagram accounts by simply asking Meta's AI support bot to relink the account email — untrusted context authorizing a side-effecting action, the exact failure this page names ([Willison, 2026](https://simonwillison.net/2026/Jun/1/hackers-simply-asked-meta-ai/)).
 
 ## The Dispatch-Layer Primitives
 
@@ -38,7 +39,7 @@ Action-time enforcement requires a small set of structured fields at every tool-
 | `authority α` | task context | `(issuer, subject, scope, ttl, allow-set, default-guard)` |
 | `trust ρ` | resource label | `(source-trust r, target-trust t)` |
 
-The hard constraint: **step-level authority may narrow `α` but never expand it**. A runtime resource cannot become the issuer of authority no matter how the planner rewrites its plan — the issuer is fixed to user, system, or organization policy at task start.
+The hard constraint: **step-level authority may narrow `α` but never expand it**. A runtime resource cannot become the issuer of authority no matter how the planner rewrites its plan — the issuer is fixed to user, system, or organization policy at task start. Claude Code ships a concrete instance of this rule: as of v2.1.166, messages relayed via `SendMessage` no longer carry user authority, so a receiving agent refuses relayed permission requests and auto mode blocks them outright ([Claude Code v2.1.166 changelog](https://code.claude.com/docs/en/changelog)).
 
 ```mermaid
 graph TD

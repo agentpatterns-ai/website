@@ -1,5 +1,6 @@
 ---
 title: "Hints Over Code Samples in Agent Prompts"
+term: "Hints Over Code Samples"
 description: "Reference existing code by path instead of embedding samples in prompts — hints stay current, cost fewer tokens, and eliminate maintenance drift."
 tags:
   - instructions

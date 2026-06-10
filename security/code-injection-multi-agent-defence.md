@@ -1,5 +1,6 @@
 ---
 title: "Code Injection Defence in Multi-Agent Pipelines"
+term: "Code Injection Defence"
 description: "Multi-agent pipelines are vulnerable to code injection. A coder-reviewer-tester plus security agent architecture achieves the highest resilience."
 tags:
   - agent-design

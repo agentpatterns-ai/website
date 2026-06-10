@@ -1,5 +1,6 @@
 ---
 title: "Execution Lineage: DAG of Artifacts vs Agent Loops"
+term: "Execution Lineage"
 description: "Represent revisable AI-native work as a DAG of artifact-producing computations with explicit dependencies, stable boundaries, and identity-based replay — so unrelated edits don't perturb the final output."
 tags:
   - agent-design

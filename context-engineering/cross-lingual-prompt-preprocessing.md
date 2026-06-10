@@ -1,5 +1,6 @@
 ---
 title: "Cross-Lingual Prompt Preprocessing (Local-LLM Token Arbitrage)"
+term: "Cross-Lingual Prompt Preprocessing"
 description: "Translate non-English prompts to English with a local small LLM before sending to a cloud coding agent — cuts input tokens 34–47% only when latency, accuracy, and fidelity costs do not erase the savings."
 tags:
   - context-engineering

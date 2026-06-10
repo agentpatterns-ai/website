@@ -1,5 +1,6 @@
 ---
 title: "Source Code Minification for State-in-Context Agents"
+term: "Source Code Minification"
 description: "Minifying source code fed to coding agents cuts input tokens up to 42% but drops SWE-bench resolution rate by 12 percentage points — measure the trade before applying."
 tags:
   - context-engineering

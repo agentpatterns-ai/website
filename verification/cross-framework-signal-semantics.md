@@ -1,5 +1,6 @@
 ---
 title: "Cross-Framework Signal Semantics: Re-Measure Borrowed Trajectory Rules"
+term: "Cross-Framework Signal Semantics"
 description: "The same trajectory-shape signal can predict opposite outcomes across agent frameworks. Re-measure borrowed behavioral rules in your own harness before adopting them."
 tags:
   - testing-verification

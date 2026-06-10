@@ -1,5 +1,6 @@
 ---
 title: "Heuristic-Based Effort Scaling in Agent System Prompts"
+term: "Heuristic-Based Effort Scaling"
 description: "Encode resource allocation rules in prompts so agents spend proportional effort — few tool calls for simple lookups, many subagents for complex research."
 tags:
   - instructions

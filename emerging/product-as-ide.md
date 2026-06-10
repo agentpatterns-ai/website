@@ -1,5 +1,6 @@
 ---
 title: "Product-as-IDE: When the Application Becomes the Development"
+term: "Product-as-IDE"
 description: "The running application becomes its own IDE, letting operators modify and ship changes entirely from within the product using background coding agents."
 tags:
   - agent-design

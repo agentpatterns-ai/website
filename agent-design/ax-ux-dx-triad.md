@@ -1,5 +1,6 @@
 ---
 title: "AX/UX/DX Triad: Three Experience Layers in Agent Systems"
+term: "AX/UX/DX Triad"
 description: "Treat Agent Experience, User Experience, and Developer Experience as separate design surfaces -- conflating them degrades all three."
 aliases:
   - "Three Experience Layers"

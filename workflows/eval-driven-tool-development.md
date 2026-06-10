@@ -1,5 +1,6 @@
 ---
 title: "Evaluation-Driven Development for Agent Tools"
+term: "Evaluation-Driven Development"
 description: "Build agent tools through a prototype-evaluate-analyze-iterate loop using real-world tasks, metrics, and transcript analysis to drive targeted improvements."
 aliases:
   - Eval-Driven Tool Development

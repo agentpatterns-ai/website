@@ -1,5 +1,6 @@
 ---
 title: "Sprint Contracts: Pre-Coding Success Agreements for Multi-Agent Tasks"
+term: "Sprint Contracts"
 description: "A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded dimensions before any code is written."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Reverse-Engineered Executable Specifications for Agentic Program Repair"
+term: "Reverse-Engineered Executable Specifications"
 description: "Infer Gherkin/BDD specifications from failing tests first, then constrain patch generation — a multi-agent decomposition of APR that shifts work from code generation to specification inference."
 tags:
   - multi-agent

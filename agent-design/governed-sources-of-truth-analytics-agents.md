@@ -1,5 +1,6 @@
 ---
 title: "Governed Sources of Truth for Analytics Agents (Structure Over Access)"
+term: "Governed Sources of Truth for Analytics Agents"
 description: "Layer semantic models, lineage, and skill routers between an analytics agent and the warehouse — raw corpus access alone moved Anthropic accuracy by less than a point."
 tags:
   - agent-design

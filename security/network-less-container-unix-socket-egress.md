@@ -1,5 +1,6 @@
 ---
 title: "Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes"
+term: "Network-less Container + Unix-Socket Egress Proxy"
 description: "Start the agent container with --network none and mount a Unix socket to a host-side proxy; topology, not policy, becomes the egress boundary."
 tags:
   - security

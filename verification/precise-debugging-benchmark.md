@@ -1,5 +1,6 @@
 ---
 title: "Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate"
+term: "Precise Debugging"
 description: "Frontier LLMs pass unit tests on debugging tasks by regenerating large chunks of code rather than making targeted edits. Edit-level precision and bug-level recall expose the gap that pass rates hide."
 tags:
   - testing-verification

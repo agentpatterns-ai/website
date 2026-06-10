@@ -1,5 +1,6 @@
 ---
 title: "Human-AI Review Synergy in Agentic Code Review"
+term: "Human-AI Review Synergy"
 description: "278,790 code reviews show AI and human reviewers have complementary strengths. Structure collaboration around these measured differences for better outcomes."
 tags:
   - code-review

@@ -1,5 +1,6 @@
 ---
 title: "The Task Framing Irrelevance Fallacy in Agent Prompting"
+term: "Task Framing Irrelevance Fallacy"
 description: "The belief that surface framing doesn't matter — variable names, context, and prompt wording are noise — causes measurable output quality degradation."
 tags:
   - context-engineering

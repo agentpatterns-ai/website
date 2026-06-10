@@ -1,5 +1,6 @@
 ---
 title: "Event-Driven System Reminders for AI Agent Development"
+term: "Event-Driven System Reminders"
 description: "Combat instruction fade-out by injecting targeted reminders at specific agent execution events rather than bloating the static system prompt."
 tags:
   - context-engineering

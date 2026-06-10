@@ -1,5 +1,6 @@
 ---
 title: "Three Knowledge Tiers: Sourced, Unverified, Hallucinated"
+term: "Three Knowledge Tiers"
 description: "Classify agent knowledge into three tiers — sourced, unverified, and hallucinated — to preserve useful training knowledge while maintaining accuracy standards"
 tags:
   - context-engineering

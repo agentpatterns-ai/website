@@ -1,5 +1,6 @@
 ---
 title: "Spec Complexity Displacement: When Specs Become Code"
+term: "Spec Complexity Displacement"
 description: "Specs tight enough for reliable generation accumulate schemas, pseudocode, and constraints until code-adjacent. Complexity is relocated, not eliminated."
 tags:
   - instructions

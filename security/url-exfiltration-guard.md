@@ -1,5 +1,6 @@
 ---
 title: "Guarding Against URL-Based Data Exfiltration in Agentic Workflows"
+term: "Guarding Against URL-Based Data Exfiltration"
 description: "The URL itself is a data channel — agents that construct or follow URLs from untrusted content can be manipulated to leak sensitive context before a single byte of the response is read."
 aliases:
   - URL data exfiltration

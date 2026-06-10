@@ -1,5 +1,6 @@
 ---
 title: "Cloud-Agent Session Bootstrap: Cached Install plus Per-Session Start"
+term: "Cloud-Agent Session Bootstrap"
 description: "Split a cloud agent's session bootstrap into a cached install phase and a per-session start phase so dependency churn amortises while ephemeral setup stays explicit."
 tags:
   - agent-design

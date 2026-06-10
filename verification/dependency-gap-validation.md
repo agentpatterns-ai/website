@@ -1,5 +1,6 @@
 ---
 title: "Dependency Gap Validation for AI-Generated Code"
+term: "Dependency Gap Validation"
 description: "AI coding agents declare a fraction of the dependencies their code actually needs at runtime — validate in clean environments before trusting the manifest."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "The Yes-Man Agent: Compliance Without Verification"
+term: "Yes-Man Agent"
 description: "Agents without explicit verification and pushback instructions execute every request without flagging problems — shipping errors at machine speed."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "In-Thread Side-Channel: Bounded Side Questions Without Losing the Main Task"
+term: "In-Thread Side-Channel"
 description: "Ask a mid-task clarifying question inside one session using a tagged sub-conversation that returns the agent to its original goal — and know when the pattern backfires."
 tags:
   - workflows

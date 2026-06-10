@@ -1,5 +1,6 @@
 ---
 title: "The Copy-Paste Agent Anti-Pattern in AI Development"
+term: "Copy-Paste Agent Anti-Pattern"
 description: "Duplicating agent definitions across projects instead of composing from shared skills causes drift and prevents improvements from propagating to all copies."
 tags:
   - agent-design

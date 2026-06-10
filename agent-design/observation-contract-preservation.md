@@ -1,5 +1,6 @@
 ---
 title: "Observation Contract Preservation in Tool-Augmented Agents"
+term: "Observation Contract Preservation"
 description: "Tool outputs like presigned URLs and session tokens are contract-bound — preserve their bytes and respect their expiry on the second call, or the chain fails silently."
 tags:
   - agent-design

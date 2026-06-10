@@ -1,5 +1,6 @@
 ---
 title: "Tool Signing and Signature Verification for Agents"
+term: "Tool Signing and Signature Verification"
 description: "Require cryptographic signature verification before an agent loads or invokes a tool, preventing untrusted or tampered modules from entering execution."
 tags:
   - security

@@ -1,5 +1,6 @@
 ---
 title: "Plan Mode for Knowledge Artifacts"
+term: "Plan Mode"
 description: "Use plan mode as a forcing function for PRDs, strategy memos, and architectural briefs — where errors hide in reviewer fatigue and first-draft anchoring is expensive."
 tags:
   - context-engineering

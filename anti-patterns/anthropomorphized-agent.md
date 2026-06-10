@@ -1,5 +1,6 @@
 ---
 title: "The Anthropomorphized Agent for AI Agent Development"
+term: "Anthropomorphized Agent"
 description: "Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust, incorrect mental models, and systematic misuse"
 aliases:
   - agent anthropomorphism

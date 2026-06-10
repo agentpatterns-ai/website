@@ -1,5 +1,6 @@
 ---
 title: "CARE: Three-Party Stage-Gated Agent Engineering"
+term: "CARE"
 description: "A methodology for engineering LLM agents across five stage-gated phases run by subject-matter experts, developers, and helper agents — when SME knowledge sits outside the engineering team."
 tags:
   - workflows

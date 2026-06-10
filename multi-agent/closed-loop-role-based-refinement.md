@@ -1,5 +1,6 @@
 ---
 title: "Closed-Loop Role-Based Refinement for Agent Systems"
+term: "Closed-Loop Role-Based Refinement"
 description: "Decompose self-improving agent loops into five specialized roles with persistent knowledge, staged validation, and gated persistence to prevent regression."
 tags:
   - agent-design

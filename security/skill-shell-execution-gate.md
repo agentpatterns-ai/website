@@ -1,5 +1,6 @@
 ---
 title: "Skill Shell Execution Gate: Disabling Inline Shell from Skills"
+term: "Skill Shell Execution Gate"
 description: "Inline shell interpolation in skills runs as preprocessing — outside the tool permission model. A managed-settings gate forces every shell side-effect through the audited Bash tool path."
 tags:
   - security

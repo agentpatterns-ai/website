@@ -1,5 +1,6 @@
 ---
 title: "Security Constitution for AI Code Generation"
+term: "Security Constitution"
 description: "Formalize security constraints as a versioned, machine-readable constitution that feeds into agent specifications, linters, and CI gates — enforcing security by construction rather than inspection."
 tags:
   - security

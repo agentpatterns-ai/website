@@ -1,5 +1,6 @@
 ---
 title: "Production MCP Agent Stack: Sequencing Six Decisions into One Deployment"
+term: "Production MCP Agent Stack"
 description: "Six MCP design decisions — server location, tool grouping, schema delivery, result processing, auth, and token storage — constrain each other. Sequence matters more than the individual choices."
 tags:
   - agent-design

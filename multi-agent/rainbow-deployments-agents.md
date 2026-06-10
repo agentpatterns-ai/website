@@ -1,5 +1,6 @@
 ---
 title: "Rainbow Deployments for Agents: Gradual Version Migration"
+term: "Rainbow Deployments for Agents"
 description: "Run multiple agent versions concurrently so old sessions drain naturally while new traffic routes to the latest version, preventing broken in-flight state."
 tags:
   - agent-design

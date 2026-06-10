@@ -1,5 +1,6 @@
 ---
 title: "Headless Claude in CI: Using -p and --max-turns for Safe Pipeline Integration"
+term: "Headless Claude in CI"
 description: "Run Claude non-interactively in CI/CD pipelines using print mode (-p) and cap agentic steps with --max-turns to keep pipelines predictable and cost-bounded."
 tags:
   - workflows

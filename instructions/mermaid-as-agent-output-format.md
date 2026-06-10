@@ -1,5 +1,6 @@
 ---
 title: "Mermaid as Agent Output Format: When to Ask for a Diagram Instead of Prose"
+term: "Mermaid as Agent Output Format"
 description: "Asking the agent for a Mermaid block instead of a prose list scans faster for graph-shaped information — but only on surfaces that render Mermaid inline. The decision is surface-gated, not capability-gated."
 aliases:
   - mermaid output format

@@ -1,5 +1,6 @@
 ---
 title: "Batch File Operations via Bash Scripts for AI Agents"
+term: "Batch File Operations via Bash Scripts"
 description: "Consolidate multiple file writes into a single bash script execution to reduce per-call overhead, token consumption, and sequential latency."
 aliases:
   - batch writes

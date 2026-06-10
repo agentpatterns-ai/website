@@ -1,5 +1,6 @@
 ---
 title: "Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts"
+term: "Tokenizer Swap Tax"
 description: "When a model upgrade ships a new tokenizer, the same prompt maps to more tokens — cost, context window, and rate-limit envelopes all shift before you change a single line of code."
 tags:
   - context-engineering

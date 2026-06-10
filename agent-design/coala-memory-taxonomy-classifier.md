@@ -1,5 +1,6 @@
 ---
 title: "CoALA Memory Taxonomy as a Classifier for Harness Artifacts"
+term: "CoALA Memory Taxonomy as a Classifier"
 description: "Apply CoALA's four memory types as a classifier over the files and stores an agent harness already has — naming working, episodic, semantic, and procedural surfaces exposes capability gaps that ad-hoc inspection misses."
 tags:
   - agent-design

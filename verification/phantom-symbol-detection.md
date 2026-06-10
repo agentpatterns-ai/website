@@ -1,5 +1,6 @@
 ---
 title: "Phantom Symbol Detection for LLM API Migration"
+term: "Phantom Symbol Detection"
 description: "Verify symbols in LLM-generated migration code against a documentation-derived knowledge base — a deterministic check that catches fabricated imports, constructors, and methods that probabilistic judges miss."
 tags:
   - testing-verification

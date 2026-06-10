@@ -1,5 +1,6 @@
 ---
 title: "Separation of Knowledge and Execution in Agent Systems"
+term: "Separation of Knowledge and Execution"
 description: "Structure agent systems in three layers — skills (knowledge), agents (execution), and commands (orchestration) — so each layer changes independently."
 tags:
   - agent-design

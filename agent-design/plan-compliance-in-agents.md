@@ -1,5 +1,6 @@
 ---
 title: "Plan Compliance in Agents: Measure What They Execute, Not What You Wrote"
+term: "Plan Compliance in Agents"
 description: "Agents silently deviate from instructed plans; plan quality, phase alignment, and periodic reminders determine whether the plan you wrote actually runs."
 tags:
   - agent-design

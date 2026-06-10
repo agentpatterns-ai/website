@@ -1,5 +1,6 @@
 ---
 title: "GROUNDING.md: Field-Scoped Hard Constraints and Convention Parameters"
+term: "GROUNDING.md"
 description: "GROUNDING.md proposes a field-scoped instruction layer above project files, splitting rules into hard constraints that error and convention parameters that warn."
 aliases:
   - field-scoped grounding document

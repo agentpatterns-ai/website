@@ -1,5 +1,6 @@
 ---
 title: "Agentic-Agile: Adapting Agile Rituals for Agent Work"
+term: "Agentic-Agile"
 description: "Selective adoption of three agile rituals (eval-threshold DoD, negative-constraint acceptance criteria, trace-corpus retros) for non-deterministic agent development."
 tags:
   - workflows

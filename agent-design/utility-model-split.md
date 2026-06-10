@@ -1,5 +1,6 @@
 ---
 title: "Utility-Model Split: Background Tasks on a Cheaper Model"
+term: "Utility-Model Split"
 description: "Route background harness calls — titles, summaries, commit messages, intent detection — to a cheaper utility model than the primary reasoning loop."
 tags:
   - agent-design

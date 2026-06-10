@@ -1,5 +1,6 @@
 ---
 title: "Documentation-Guided Legacy Migration: Architecture Docs as a C-to-Rust Blueprint"
+term: "Documentation-Guided Legacy Migration"
 description: "Convert a legacy C repository into architecture-aware documentation, feed that documentation to coding agents as the migration blueprint, then validate by re-documenting the output and diffing against the original."
 tags:
   - workflows

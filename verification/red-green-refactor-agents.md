@@ -1,5 +1,6 @@
 ---
 title: "Red-Green-Refactor with Agents: Tests as the Spec"
+term: "Red-Green-Refactor with Agents"
 description: "Apply the TDD cycle with separate agent invocations per phase: write failing tests, pass them with minimal code, then refactor against the green test suite."
 tags:
   - testing-verification

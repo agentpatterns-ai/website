@@ -1,5 +1,6 @@
 ---
 title: "The Security Review Gap in AI-Authored PRs"
+term: "Security Review Gap"
 description: "Agent-authored security PRs cluster around six CWE categories, yet 52% merge — reviewer heuristics calibrated for human PRs systematically miss AI-specific failure modes."
 tags:
   - code-review

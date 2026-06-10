@@ -1,5 +1,6 @@
 ---
 title: "Single-Branch Git for Agent Swarms: A Trade-Off Pattern"
+term: "Single-Branch Git for Agent Swarms"
 description: "At 10+ parallel agents, feature branches cause merge conflicts and waste context on rebases. Single-branch with guards is the alternative."
 tags:
   - agent-design

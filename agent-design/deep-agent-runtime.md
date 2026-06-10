@@ -1,5 +1,6 @@
 ---
 title: "Deep Agent Runtime: The Layer Beneath the Harness"
+term: "Deep Agent Runtime"
 description: "The runtime — durable runs, lifecycle controls, streaming primitives, and versioned response shapes — is the layer beneath the harness that keeps long-horizon agents running across crashes, deploys, and pauses."
 tags:
   - agent-design

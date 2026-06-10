@@ -1,5 +1,6 @@
 ---
 title: "Scoped MCP Server Discovery: Most-Specific-Wins Resolution"
+term: "Scoped MCP Server Discovery"
 description: "Resolve MCP servers across user, workspace, and project config files using a most-specific-wins precedence rule to avoid duplicate tools and shadowed routing."
 aliases:
   - layered MCP configuration

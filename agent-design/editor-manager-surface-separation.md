@@ -1,5 +1,6 @@
 ---
 title: "Editor and Manager Surface Separation in Agent IDEs"
+term: "Editor and Manager Surface Separation"
 description: "When you run more than one agent at a time, the editor and the orchestration dashboard serve different attention modes — collapsing them into one chat panel breaks both."
 tags:
   - agent-design

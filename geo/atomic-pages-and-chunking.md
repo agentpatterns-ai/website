@@ -1,5 +1,6 @@
 ---
 title: "Atomic Pages and Chunking — One Concept Per Page for RAG"
+term: "Atomic Pages and Chunking"
 description: "How one-concept-per-page design, 200–400 word sections, and descriptive headings improve RAG retrieval accuracy and citation rates."
 tags:
   - geo

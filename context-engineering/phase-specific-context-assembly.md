@@ -1,5 +1,6 @@
 ---
 title: "Phase-Specific Context Assembly for AI Agent Development"
+term: "Phase-Specific Context Assembly"
 description: "Target the context bundle delivered to each agent per phase, not the prompt. Planners get summaries; workers get targeted file excerpts and validation commands."
 tags:
   - context-engineering

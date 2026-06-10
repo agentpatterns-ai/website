@@ -1,5 +1,6 @@
 ---
 title: "Self-Healing Production Agent: Automated Regression Detection and Autofix PR"
+term: "Self-Healing Production Agent"
 description: "A closed-loop pipeline that detects regressions after every deploy, triages causality, and dispatches a sub-agent to open a fix PR — with no manual intervention until review time."
 tags:
   - agent-design

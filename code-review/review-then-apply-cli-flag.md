@@ -1,5 +1,6 @@
 ---
 title: "Review-Then-Apply CLI Flag for In-Process Auto-Fix"
+term: "Review-Then-Apply CLI Flag"
 description: "The same code-review command that scores findings also writes the patch — safe only with a calibrated rubric and a clean-tree guard."
 tags:
   - code-review

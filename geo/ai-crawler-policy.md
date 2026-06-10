@@ -1,5 +1,6 @@
 ---
 title: "AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape"
+term: "AI Crawler Policy"
 description: "Configure robots.txt to allow AI search and retrieval crawlers while blocking training scrapers — user-agent strings, decision matrix, compliance caveats."
 aliases:
   - "robots.txt for AI crawlers"

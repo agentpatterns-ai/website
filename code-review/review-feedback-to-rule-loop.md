@@ -1,5 +1,6 @@
 ---
 title: "Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules"
+term: "Review-Feedback-to-Rule Loop"
 description: "Convert recurring code review comments into mechanical checks — a lint rule, an AST boundary check, or an evaluator rubric line — so the same comment never needs to be written twice."
 tags:
   - code-review

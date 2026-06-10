@@ -1,5 +1,6 @@
 ---
 title: "Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)"
+term: "Defense-in-Depth Against Coding Agent Fabrication"
 description: "Four uncorrelated layers that reduce coding-agent fabrication: instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and a fact-checker subagent with external tools."
 tags:
   - testing-verification

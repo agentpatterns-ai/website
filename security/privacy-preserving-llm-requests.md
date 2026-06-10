@@ -1,5 +1,6 @@
 ---
 title: "Privacy-Preserving LLM Requests: Eight Techniques and a Practical Combination"
+term: "Privacy-Preserving LLM Requests"
 description: "Empirical comparison of eight privacy techniques for cloud LLM requests; the practical combination is local routing plus redact-and-rephrase, with explicit scope limits."
 tags:
   - security

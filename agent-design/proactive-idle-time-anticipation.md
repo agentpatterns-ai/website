@@ -1,5 +1,6 @@
 ---
 title: "Proactive Idle-Time Anticipation (ProAct)"
+term: "Proactive Idle-Time Anticipation"
 description: "Use idle time between user turns to prefetch likely next needs from dialogue history and persistent memory — only when need chains are predictable."
 tags:
   - agent-design

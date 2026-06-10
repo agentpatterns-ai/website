@@ -1,5 +1,6 @@
 ---
 title: "Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers"
+term: "Customer-Hosted MCP Tunnel"
 description: "Reach a hosted agent's private MCP servers through a customer-run tunnel client that opens outbound HTTPS to the provider — no inbound ports, no public exposure."
 aliases:
   - secure MCP tunnel

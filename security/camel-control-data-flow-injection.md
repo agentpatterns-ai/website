@@ -1,5 +1,6 @@
 ---
 title: "Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)"
+term: "Control/Data-Flow Separation for Prompt Injection Defense"
 description: "Architectural defense against prompt injection that separates trusted control flow from untrusted data flow, making injection attacks structurally impossible rather than probabilistically reduced."
 tags:
   - agent-design

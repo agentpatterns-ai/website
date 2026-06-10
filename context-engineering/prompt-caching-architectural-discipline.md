@@ -1,5 +1,6 @@
 ---
 title: "Prompt Caching: Architectural Discipline for Agents"
+term: "Prompt Caching"
 description: "Treat prompt caching as a structural constraint shaping how you compose, extend, and compact agent context — not an optimization to toggle on after the fact."
 aliases:
   - Keep Agent Loop Prompts Stateless

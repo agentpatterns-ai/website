@@ -1,5 +1,6 @@
 ---
 title: "Agent Composition: Chains, Fan-Out, Pipelines, Supervisors"
+term: "Agent Composition"
 description: "Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor-coordinator architectures."
 tags:
   - agent-design

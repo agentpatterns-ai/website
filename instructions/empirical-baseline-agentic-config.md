@@ -1,5 +1,6 @@
 ---
 title: "Empirical Baseline: Agentic AI Coding Tool Configuration"
+term: "Empirical Baseline"
 description: "Study of 2,923 GitHub repos: context files dominate agentic AI config while Skills, Subagents, Hooks, and MCP remain shallowly adopted."
 tags:
   - agent-design

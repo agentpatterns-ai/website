@@ -1,5 +1,6 @@
 ---
 title: "Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact"
+term: "Selective Rewind Summarization"
 description: "Pick a turn, compress everything before it, and leave the recent high-bandwidth context untouched — selective summarization beats blanket compaction when sessions have a clear last-verified milestone."
 tags:
   - tool-agnostic

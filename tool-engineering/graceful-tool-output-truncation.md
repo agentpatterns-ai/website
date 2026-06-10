@@ -1,5 +1,6 @@
 ---
 title: "Graceful Tool-Output Truncation: The PARTIAL Signal"
+term: "Graceful Tool-Output Truncation"
 description: "When tool output overflows the token budget, return a useful prefix, a structurally distinct PARTIAL marker, and a continuation handle — not a hard error."
 tags:
   - tool-engineering

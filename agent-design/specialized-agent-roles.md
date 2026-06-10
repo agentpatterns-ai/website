@@ -1,5 +1,6 @@
 ---
 title: "Specialized Agent Roles for Effective AI Pipelines"
+term: "Specialized Agent Roles"
 description: "Assign distinct specializations to parallel agents — deduplication, performance, code quality, documentation — so they complement rather than compete."
 tags:
   - agent-design

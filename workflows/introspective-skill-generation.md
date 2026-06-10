@@ -1,5 +1,6 @@
 ---
 title: "Introspective Skill Generation: Mining Agent Patterns"
+term: "Introspective Skill Generation"
 description: "A dedicated agent analyzes recurring corrections and repeated task patterns across sessions, then generates new skills or agents to automate them."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Multi-Model Plan Synthesis for System Architecture"
+term: "Multi-Model Plan Synthesis"
 description: "Get independent plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each before writing any code."
 aliases:
   - "plan triangulation"

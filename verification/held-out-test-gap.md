@@ -1,5 +1,6 @@
 ---
 title: "Held-Out Test Gap: A Long-Horizon Reward-Hacking Signal"
+term: "Held-Out Test Gap"
 description: "Measure reward hacking in coding agents by withholding compositional tests and scoring the pass-rate gap — useful only at long task horizons."
 tags:
   - testing-verification

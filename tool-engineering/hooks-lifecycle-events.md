@@ -1,5 +1,6 @@
 ---
 title: "Hooks and Lifecycle Events: Intercepting Agent Behavior"
+term: "Hooks and Lifecycle Events"
 description: "Hooks run deterministic code at defined points in an agent's execution — before and after tool calls, at session boundaries — for enforcement and audit."
 aliases:
   - How Hooks Work

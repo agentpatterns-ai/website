@@ -1,5 +1,6 @@
 ---
 title: "System Prompt as Secret Store (OWASP LLM07)"
+term: "System Prompt as Secret Store"
 description: "Treating the system prompt as a confidentiality boundary is the underlying vulnerability — secrets, credentials, and security-critical logic in the prompt are recoverable by adversarial users at 84–92% attack success rate on frontier models."
 tags:
   - security

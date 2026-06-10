@@ -1,5 +1,6 @@
 ---
 title: "Test-Driven Agent Development: Tests as Spec and Guardrail"
+term: "Test-Driven Agent Development"
 description: "Write tests first, then let agents implement against them. Tests serve as an unambiguous specification and as automated verification the agent can run to prove its work."
 tags:
   - testing-verification

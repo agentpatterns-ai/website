@@ -1,5 +1,6 @@
 ---
 title: "Skill Program Functions: Executable Guardrails Compiled From Past Failures"
+term: "Skill Program Functions"
 description: "Compile recurring skill guidance into runtime predicates that fire on detected failure-prone states — useful when baseline failure rate is high and each compiled function gets its own pilot eval."
 tags:
   - agent-design

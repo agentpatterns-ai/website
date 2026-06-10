@@ -1,5 +1,6 @@
 ---
 title: "Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)"
+term: "Trajectory Pre-Filter for Failure Diagnosis"
 description: "Wrap the failure-investigator LLM with a pattern-matching noise filter and a test-report-seeded preliminary diagnosis so long-context attention concentrates on the failure-relevant span of a repository-scale agent trajectory."
 tags:
   - observability

@@ -1,5 +1,6 @@
 ---
 title: "Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth"
+term: "Chain-of-Thought Reasoning Fallacy"
 description: "Visible reasoning steps are generated text, not a window into the model's decision process. Trusting them as proof of correct reasoning is a fallacy."
 tags:
   - human-factors

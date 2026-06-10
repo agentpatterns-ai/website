@@ -1,5 +1,6 @@
 ---
 title: "Skill Library Refinement Loops: Organisational Feedback for Shared Skills"
+term: "Skill Library Refinement Loops"
 description: "Four complementary feedback mechanisms that together keep a team's shared skill library accurate and useful — no single loop catches every failure class."
 tags:
   - workflows

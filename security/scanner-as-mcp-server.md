@@ -1,5 +1,6 @@
 ---
 title: "Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools"
+term: "Scanner-as-MCP-Server"
 description: "Ship the security scanner itself as an MCP server so agents invoke typed scans pre-commit, with structured findings the model reasons over directly — distinct from CI-step and wrapped-CLI delivery shapes."
 aliases:
   - scanner as MCP server

@@ -1,5 +1,6 @@
 ---
 title: "Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses"
+term: "Harness Hill-Climbing"
 description: "Use eval scores as the optimization signal to systematically improve agent harness configuration — replacing ad-hoc prompt tweaking with a structured local-search loop."
 tags:
   - agent-design

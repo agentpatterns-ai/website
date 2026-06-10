@@ -1,5 +1,6 @@
 ---
 title: "LLM Comprehension Fallacy: When Models Seem to Understand"
+term: "LLM Comprehension Fallacy"
 description: "The belief that correct output implies understanding. Leads to over-trust, skipped verification, and prompts relying on implied meaning the model cannot access."
 tags:
   - human-factors

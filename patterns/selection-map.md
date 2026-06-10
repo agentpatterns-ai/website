@@ -1,5 +1,6 @@
 ---
 title: "Pattern Selection Map: Trade-off Matrix for This Site's Patterns"
+term: "Pattern Selection Map"
 description: "Compare 14 patterns from this site across six axes — token cost, latency, frontier-model dependency, blast radius, verification cost, and task class — so you can pick the cheapest pattern that solves your problem."
 tags:
   - agent-design

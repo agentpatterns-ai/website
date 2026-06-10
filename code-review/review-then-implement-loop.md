@@ -1,5 +1,6 @@
 ---
 title: "Review-Then-Implement Loop for AI Agent Development"
+term: "Review-Then-Implement Loop"
 description: "Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result"
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Issue Requirements Preprocessing: Structured Input Before Code Generation"
+term: "Issue Requirements Preprocessing"
 description: "Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates by 17% on average — issue quality is a variable, not a fixed input."
 tags:
   - agent-design

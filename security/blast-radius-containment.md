@@ -1,5 +1,6 @@
 ---
 title: "Blast Radius Containment: Least Privilege for AI Agents"
+term: "Blast Radius Containment"
 description: "Grant agents only the permissions their task requires — read-only for research, branch-scoped for code changes, no external write access by default."
 aliases:
   - Permission Scoping

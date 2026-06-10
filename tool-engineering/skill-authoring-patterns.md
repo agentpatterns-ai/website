@@ -1,5 +1,6 @@
 ---
 title: "Skill Authoring Patterns: Description to Deployment"
+term: "Skill Authoring Patterns"
 description: "Practical patterns for building, testing, and troubleshooting agent skills — categories, description craft, implementation shapes, and gotchas."
 tags:
   - instructions

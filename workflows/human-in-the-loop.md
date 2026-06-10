@@ -1,5 +1,6 @@
 ---
 title: "Human-in-the-Loop Placement: Where and How to Supervise"
+term: "Human-in-the-Loop Placement"
 description: "Learn where to place human approval gates in agent pipelines using reversibility as the primary signal, and how supervision modes evolve with trust."
 aliases:
   - "Human-in-the-Loop Approval Gates"

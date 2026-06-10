@@ -1,5 +1,6 @@
 ---
 title: "VS Code Agents App: Agent-Native Parallel Task Execution"
+term: "VS Code Agents App"
 description: "Run multiple agent sessions simultaneously across projects in VS Code's Agents app — each session inherits workspace config and can interact with background processes via send_to_terminal."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Classifying and Auto-Correcting Coding Agent Misbehaviors (Wink)"
+term: "Classifying and Auto-Correcting Coding Agent Misbehaviors"
 description: "An async trajectory-observer system that classifies coding agent misbehaviors into three categories and injects targeted course-corrections without restarting."
 aliases:
   - trajectory observer

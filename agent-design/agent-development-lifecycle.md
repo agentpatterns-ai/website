@@ -1,5 +1,6 @@
 ---
 title: "Agent Development Lifecycle for Agent Products"
+term: "Agent Development Lifecycle"
 description: "A four-phase meta-lifecycle for teams shipping agent products — build, test, deploy, monitor — with feedback signals from production runs flowing back into the next evaluation and build cycle."
 tags:
   - agent-design

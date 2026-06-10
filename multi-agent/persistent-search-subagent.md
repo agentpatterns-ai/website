@@ -1,5 +1,6 @@
 ---
 title: "Persistent Shared Search Sub-Agent for Output-Token Reuse"
+term: "Persistent Shared Search Sub-Agent"
 description: "Route shared repository lookups through one persistent search sub-agent to cut the redundant output tokens that dominate multi-agent inference cost."
 tags:
   - multi-agent

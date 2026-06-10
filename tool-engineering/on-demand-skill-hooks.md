@@ -1,5 +1,6 @@
 ---
 title: "On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation"
+term: "On-Demand Skill Hooks"
 description: "Register PreToolUse hooks through a skill invocation to arm strict guardrails for a single session without imposing friction on every workflow."
 tags:
   - security

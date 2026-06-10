@@ -1,5 +1,6 @@
 ---
 title: "Observation Masking: Filter Tool Outputs from Context"
+term: "Observation Masking"
 description: "Observation masking removes processed tool outputs from conversation history to keep the context window lean, replacing each output with a one-line summary."
 aliases:
   - Tool Output Masking

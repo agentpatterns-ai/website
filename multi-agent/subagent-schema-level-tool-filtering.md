@@ -1,5 +1,6 @@
 ---
 title: "Subagent Schema-Level Tool Filtering for AI Agents"
+term: "Subagent Schema-Level Tool Filtering"
 description: "Restrict subagent capabilities by filtering their tool schemas — making unauthorized tool use structurally impossible rather than relying on prompt"
 tags:
   - agent-design

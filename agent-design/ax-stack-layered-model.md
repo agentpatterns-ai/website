@@ -1,5 +1,6 @@
 ---
 title: "The AX Stack: A Layered Model of an AI Coding Agent's Prompt-to-Compile Path"
+term: "AX Stack"
 description: "A four-layer model — model, harness, agent extensions, technology surface — for naming where an agent failure or optimisation lives. Useful as a diagnostic vocabulary, misleading when treated as architectural independence."
 tags:
   - agent-design

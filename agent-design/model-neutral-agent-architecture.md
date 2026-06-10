@@ -1,5 +1,6 @@
 ---
 title: "Model-Neutral Agent Architecture: Model Portability Over Cloud Portability"
+term: "Model-Neutral Agent Architecture"
 description: "Treat model portability as a higher-priority architectural bet than cloud portability — when cross-vendor capability churns quarterly and the team has a portable eval suite, but not for single-CLI platforms or workloads bound to a vendor's native capability."
 tags:
   - agent-design

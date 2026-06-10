@@ -1,5 +1,6 @@
 ---
 title: "Discoverable vs Non-Discoverable Context for Agents"
+term: "Discoverable vs Non-Discoverable Context"
 description: "Agent instruction files should contain only non-discoverable context: architectural decisions, constraints, and domain knowledge not visible in code."
 aliases:
   - non-discoverable context

@@ -1,5 +1,6 @@
 ---
 title: "Compound Engineering: Systematic Agent Learning Loop"
+term: "Compound Engineering"
 description: "A four-step workflow -- Plan, Work, Assess, Compound -- where each feature feeds learnings back as prompts, making subsequent features easier."
 tags:
   - workflows

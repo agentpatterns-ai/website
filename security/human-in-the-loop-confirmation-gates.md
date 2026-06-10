@@ -1,5 +1,6 @@
 ---
 title: "Confirmation Gates for Consequential Agent Actions"
+term: "Confirmation Gates"
 description: "Mandatory human confirmation checkpoints before irreversible agent actions to catch injection-driven misbehavior before it causes real harm."
 aliases:
   - Confirmation Gates

@@ -1,5 +1,6 @@
 ---
 title: "MCP Allowlist by Label, Not by Identity (serverName Trap)"
+term: "MCP Allowlist by Label, Not by Identity"
 description: "A `serverName`-only MCP allowlist filters the user-chosen label, not the underlying server — any binary or URL the user calls `github` passes the check."
 tags:
   - anti-pattern

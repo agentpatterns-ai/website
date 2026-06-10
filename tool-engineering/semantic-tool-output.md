@@ -1,5 +1,6 @@
 ---
 title: "Semantic Tool Output: Designing for Agent Readability"
+term: "Semantic Tool Output"
 description: "Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy."
 aliases:
   - Tool Output Design

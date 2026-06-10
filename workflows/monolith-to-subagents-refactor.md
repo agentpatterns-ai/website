@@ -1,5 +1,6 @@
 ---
 title: "Monolith-to-Sub-Agents Refactor: Five Lessons from a Brittle Prototype"
+term: "Monolith-to-Sub-Agents Refactor"
 description: "A five-step migration checklist for taking a monolithic agent prototype to a production-grade orchestrated pipeline — sequencing, schema discipline, dynamic RAG, observability, and framework-native circuit breakers."
 tags:
   - workflows

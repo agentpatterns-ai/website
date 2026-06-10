@@ -1,5 +1,6 @@
 ---
 title: "Token-Cost Profiling and Reduction for Always-On Agentic Workflows"
+term: "Token-Cost Profiling and Reduction"
 description: "An instrument-attribute-fix-verify loop that treats per-PR, per-CI agentic workflows as a measurable cost surface — applicable where workflows are high-frequency and stable enough that the auditor's recommendations cash out before they age."
 tags:
   - workflows

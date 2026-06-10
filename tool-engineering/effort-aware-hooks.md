@@ -1,5 +1,6 @@
 ---
 title: "Effort-Aware Hooks: Reading the Reasoning Tier from PreToolUse and PostToolUse"
+term: "Effort-Aware Hooks"
 description: "Claude Code v2.1.133 added the active effort level to hook input JSON, letting deterministic gates branch on the harness's reasoning tier without inferring it from prompt content."
 tags:
   - tool-engineering

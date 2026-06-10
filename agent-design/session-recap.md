@@ -1,5 +1,6 @@
 ---
 title: "Session Recap: Goal-Shaped Handoff at Context Boundaries"
+term: "Session Recap"
 description: "A structured, agent-authored artifact at compaction, resume, or fork boundaries that preserves goal-state rather than text-density — restoring why and what-next across discontinuities."
 tags:
   - agent-design

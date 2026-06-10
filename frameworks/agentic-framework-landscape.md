@@ -1,5 +1,6 @@
 ---
 title: "Agentic Framework Landscape: When Each Framework Fits"
+term: "Agentic Framework Landscape"
 description: "Six open-source agentic frameworks (ADK, Agno, Browser Use, Eigent, Letta, mem0) sit at different layers of the agent stack; selection turns on task horizon, action space, memory model, and deployment shape rather than feature counts."
 aliases:
   - agentic framework comparison

@@ -1,5 +1,6 @@
 ---
 title: "Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing"
+term: "Exclude Dynamic System Prompt Sections"
 description: "Move per-machine context (cwd, OS, shell, memory paths) out of the Claude Code system prompt so identical fleet configurations share one prompt-cache entry across users and machines."
 tags:
   - context-engineering

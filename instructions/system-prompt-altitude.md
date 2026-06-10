@@ -1,5 +1,6 @@
 ---
 title: "System Prompt Altitude: Specific Without Being Brittle"
+term: "System Prompt Altitude"
 description: "Effective system prompts describe how to reason, not what to decide — sitting at the altitude that produces consistent behaviour across variation."
 aliases:
   - prompt altitude

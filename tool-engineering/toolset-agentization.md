@@ -1,5 +1,6 @@
 ---
 title: "Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents"
+term: "Toolset Agentization"
 description: "Group frequently co-used tools into specialized sub-agents that the planner invokes as single actions, reducing action-space size at each routing step."
 tags:
   - agent-design

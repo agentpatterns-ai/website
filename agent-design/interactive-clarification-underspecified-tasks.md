@@ -1,5 +1,6 @@
 ---
 title: "Interactive Clarification for Underspecified Tasks"
+term: "Interactive Clarification"
 description: "Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs."
 tags:
   - agent-design

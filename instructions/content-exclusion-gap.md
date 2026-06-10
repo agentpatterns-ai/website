@@ -1,5 +1,6 @@
 ---
 title: "Content Exclusion Gap: AI Security Boundaries by Mode"
+term: "Content Exclusion Gap"
 description: "Security boundaries for one AI mode may not cover all modes — content exclusion rules for completions and chat can be silently bypassed in agent mode."
 tags:
   - agent-design

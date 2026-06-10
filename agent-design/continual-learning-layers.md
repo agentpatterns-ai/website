@@ -1,5 +1,6 @@
 ---
 title: "Continual Learning for AI Agents: Three Layers of Knowledge Accumulation"
+term: "Continual Learning for AI Agents"
 description: "AI agents accumulate knowledge at three layers — model, harness, and context — each with different costs, reversibility, and scope. Routing improvements to the correct layer is itself a practitioner pattern."
 tags:
   - agent-design

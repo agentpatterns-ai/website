@@ -1,5 +1,6 @@
 ---
 title: "Feedback as Capability Equalizer: Iterative Feedback Outweighs Model Scale"
+term: "Feedback as Capability Equalizer"
 description: "Weaker models with high-quality iterative feedback outperform stronger models without it — invest in feedback loop quality before upgrading the model."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Tool Description Quality for Effective Agent Guidance"
+term: "Tool Description Quality"
 description: "Tool descriptions determine whether agents select the right tool. Treating descriptions as prompt engineering surfaces directly multiplies task success rate."
 tags:
   - agent-design

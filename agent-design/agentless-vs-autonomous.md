@@ -1,5 +1,6 @@
 ---
 title: "Agentless vs Autonomous: When Simple Beats Complex"
+term: "Agentless vs Autonomous"
 description: "Simple two-phase workflows often outperform complex autonomous agents — empirical evidence for starting with constrained approaches rather than maximizing AI autonomy."
 tags:
   - agent-design

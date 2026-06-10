@@ -1,5 +1,6 @@
 ---
 title: "Session Harness Sandbox Separation for Long-Running Agents"
+term: "Session Harness Sandbox Separation"
 description: "Decouple long-running agent work into three replaceable primitives — an append-only Session log, a stateless Harness loop, and a provisioned Sandbox — so each evolves, scales, and crash-recovers independently."
 tags:
   - agent-design

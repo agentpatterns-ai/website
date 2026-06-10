@@ -1,5 +1,6 @@
 ---
 title: "Demo-to-Production Gap: When Demos Hide Real Costs"
+term: "Demo-to-Production Gap"
 description: "Agent demos curate inputs and ignore edge cases. Production reality - scale, security, partial context, and failing tools - is systematically underestimated."
 tags:
   - agent-design

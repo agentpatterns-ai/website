@@ -1,5 +1,6 @@
 ---
 title: "Codebase Readiness for Agents: Agent-Friendly Code"
+term: "Codebase Readiness for Agents"
 description: "Agents produce better output in codebases with strong types, comprehensive tests, and documented decisions — the same qualities that improve code for humans."
 tags:
   - agent-design

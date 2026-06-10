@@ -1,11 +1,12 @@
 ---
 title: "Exception Handling and Recovery Patterns for AI Coding Agents"
+term: "Exception Handling and Recovery Patterns"
 description: "Progressive failure response for coding agents: self-correct, fallback, degrade gracefully, escalate. Practical patterns from git-based recovery to model-driven adaptation."
 tags:
   - agent-design
   - reliability
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Exception Handling and Recovery Patterns
@@ -66,7 +67,7 @@ For agents that must survive process crashes, durable execution frameworks check
 | `async` | Persist asynchronously while next step runs | Long-running research |
 | `sync` | Persist synchronously before each step | Mission-critical workflows |
 
-State is checkpointed to a configurable backend (Postgres, DynamoDB, others); after a crash, the agent resumes from the last checkpoint.
+State is checkpointed to a configurable backend (Postgres, DynamoDB, others); after a crash, the agent resumes from the last checkpoint. LangChain pairs durability with a concrete retry / timeout / error-handler taxonomy built into the graph runtime, giving the progressive hierarchy a framework-grounded fault-tolerance reference ([LangChain, fault tolerance in LangGraph](https://blog.langchain.com/fault-tolerance-in-langgraph)).
 
 **DBOS** takes a decorator-based approach: [`@DBOS.workflow` and `@DBOS.step`](https://docs.dbos.dev/typescript/reference/workflows-steps) persist execution state automatically with exactly-once semantics.
 

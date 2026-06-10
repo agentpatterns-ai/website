@@ -1,5 +1,6 @@
 ---
 title: "The LLM Laziness Deficit Fallacy: Restraint Comes From Harness, Not Instruction"
+term: "LLM Laziness Deficit Fallacy"
 description: "The belief that agents can be instructed into the human virtue of laziness. LLMs pay no time cost for code, so restraint must come from objective harness gates — diff caps, complexity budgets, deletion targets — not from 'be concise' prompts."
 tags:
   - instructions

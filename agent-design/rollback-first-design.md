@@ -1,5 +1,6 @@
 ---
 title: "Rollback-First Design: Every Agent Action Should Be Reversible"
+term: "Rollback-First Design"
 description: "Treat recovery cost as a first-class design constraint. For every agent action, choose how you will undo it before you choose how to do it."
 tags:
   - agent-design

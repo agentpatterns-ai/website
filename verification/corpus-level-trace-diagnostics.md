@@ -1,5 +1,6 @@
 ---
 title: "Corpus-Level Trace Diagnostics for LLM Agents"
+term: "Corpus-Level Trace Diagnostics"
 description: "Survey hundreds of agent traces with a scout-investigator multi-agent pipeline to surface recurring failure modes single-trace inspection misses."
 tags:
   - testing-verification

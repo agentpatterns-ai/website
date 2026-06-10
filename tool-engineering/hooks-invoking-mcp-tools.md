@@ -1,5 +1,6 @@
 ---
 title: "Hooks Invoking MCP Tools: Closing the Loop Between Policy and Tool Execution"
+term: "Hooks Invoking MCP Tools"
 description: "A Claude Code hook can return type: 'mcp_tool' and invoke a connected MCP server directly — collapsing the hook-decides-then-harness-invokes step into a single declarative action."
 aliases:
   - mcp_tool hook action

@@ -1,5 +1,6 @@
 ---
 title: "CoALA Structured Action Space: Internal vs External Actions"
+term: "CoALA Structured Action Space"
 description: "CoALA splits agent actions into internal (reason, retrieve, learn) and external (ground) — the boundary surfaces cost, reversibility, and permission profiles tool lists hide."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries"
+term: "SDLC-Phase Skill Taxonomy"
 description: "Organize a skill library around SDLC phases — Define, Plan, Build, Verify, Review, Ship — so phase-entry commands activate only the relevant skills and selection stays deterministic at scale."
 tags:
   - workflows

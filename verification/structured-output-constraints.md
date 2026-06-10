@@ -1,5 +1,6 @@
 ---
 title: "Structured Output Constraints: Reducing Hallucination"
+term: "Structured Output Constraints"
 description: "Constrain agent output with templates and schemas to reduce hallucination surface. Required fields and JSON schemas make gaps detectable rather than invisible."
 tags:
   - testing-verification

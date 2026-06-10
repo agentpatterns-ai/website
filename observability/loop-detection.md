@@ -1,5 +1,6 @@
 ---
 title: "Loop Detection for AI Agents: Stopping Micro-Loops"
+term: "Loop Detection for AI Agents"
 description: "Loop detection tracks repeated file edits within a session and injects a prompt nudge when an agent is stuck in an unproductive cycle."
 tags:
   - agent-design

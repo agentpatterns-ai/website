@@ -1,5 +1,6 @@
 ---
 title: "Encode Project Conventions in Distributed AGENTS.md Files"
+term: "Encode Project Conventions"
 description: "Encode team-specific patterns, style rules, and tooling requirements in AGENTS.md files so every agent session inherits consistent project conventions."
 aliases:
   - Distributed Conventions

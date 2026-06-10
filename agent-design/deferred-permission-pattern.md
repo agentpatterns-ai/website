@@ -1,5 +1,6 @@
 ---
 title: "Deferred Permission Pattern: Headless Agent Session Pausing"
+term: "Deferred Permission Pattern"
 description: "Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval."
 tags:
   - agent-design

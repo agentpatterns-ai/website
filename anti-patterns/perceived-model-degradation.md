@@ -1,5 +1,6 @@
 ---
 title: "Perceived Model Degradation: Why Vibes Are Not Evals"
+term: "Perceived Model Degradation"
 description: "Why teams report LLM quality declining over time, five competing explanations, and how to replace gut feel with version pinning and eval suites."
 tags:
   - cost-performance

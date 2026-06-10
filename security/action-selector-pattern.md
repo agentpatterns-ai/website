@@ -1,5 +1,6 @@
 ---
 title: "Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution"
+term: "Action-Selector Pattern"
 description: "Bound the LLM to translating user intent into a pre-approved action ID with validated parameters — tool outputs never re-enter the model, eliminating the feedback loop that prompt injection requires."
 tags:
   - security

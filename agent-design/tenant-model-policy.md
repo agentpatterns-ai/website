@@ -1,5 +1,6 @@
 ---
 title: "Tenant Model Policy: Organization-Scoped Rules for AI Model Selection"
+term: "Tenant Model Policy"
 description: "An admin-tier policy plane that controls which AI models a tenant or organization can invoke — decoupling user-facing model pickers from enforcement — only safe when policy is deterministic, denials are explicit, and the rule set tracks model deprecations."
 tags:
   - agent-design

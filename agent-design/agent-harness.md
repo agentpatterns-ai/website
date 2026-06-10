@@ -1,5 +1,6 @@
 ---
 title: "Agent Harness: Initializer and Coding Agent Pattern"
+term: "Agent Harness"
 description: "Structure long-running agent work as an initializer that prepares the environment and a coding agent that resumes reliably from any prior session."
 tags:
   - agent-design
@@ -12,7 +13,7 @@ tags:
 aliases:
   - initializer-coding agent pattern
   - two-phase agent harness
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Agent Harness: Initializer and Coding Agent
@@ -65,6 +66,8 @@ Each iteration follows a six-phase cycle ([Bui, 2026 §2.2.2](https://arxiv.org/
 4. **Action** — LLM call with tool schemas
 5. **Tool execution** — run the selected tool
 6. **Post-processing** — update state, check termination conditions
+
+LangChain's build-your-own walkthrough traces the same primitives — the loop, the tool set, and the state passed between iterations — when assembling a custom agent harness from scratch ([LangChain, how to build a custom agent harness](https://blog.langchain.com/build-a-custom-agent-harness)).
 
 ## Failure Modes and Fixes
 

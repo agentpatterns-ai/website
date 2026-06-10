@@ -1,5 +1,6 @@
 ---
 title: "Lexical-First Retrieval for Agentic Search: When BM25 Is Enough"
+term: "Lexical-First Retrieval for Agentic Search"
 description: "Frontier LLMs in an agent loop can compensate for BM25's ranking noise through reformulation and depth — making a tuned lexical retriever competitive with dense retrieval on deep-research benchmarks, under specific conditions."
 tags:
   - tool-engineering

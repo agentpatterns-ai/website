@@ -1,5 +1,6 @@
 ---
 title: "Agent Event Streaming: Consumer Contract Above the Tokens"
+term: "Agent Event Streaming"
 description: "Subscribe UIs to harness-decision events — tool calls, sub-agents, run lifecycle — instead of raw LLM token deltas so the contract survives model and harness swaps."
 tags:
   - agent-design
@@ -9,7 +10,7 @@ aliases:
   - agent stream
   - agent-step events
   - agent event stream
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-09
 ---
 
 # Agent Event Streaming: Consumer Contract Above the Tokens
@@ -25,7 +26,7 @@ An agent event stream is the typed, ordered sequence of events the harness emits
 | Token | LLM SDK | One token chunk per delta | Provider-specific (`content_block_delta`, `delta.text`) | Breaks on model swap ([Claude API streaming](https://docs.claude.com/en/build-with-claude/streaming)) |
 | Agent | Harness | One event per decision | Semantic verbs (`RunStarted`, `ToolCallStart`, `StateDelta`) | Survives model swap ([AG-UI events](https://docs.ag-ui.com/concepts/events)) |
 
-LangGraph names both modes: `stream_mode="messages"` yields token chunks; `stream_mode="updates"` "emits an event after every agent step" ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)). Production deployments subscribe to both — tokens drive the typing animation, updates drive tool indicators, sub-agent tabs, and approval prompts.
+LangGraph names both modes: `stream_mode="messages"` yields token chunks; `stream_mode="updates"` "emits an event after every agent step" ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)). Production deployments subscribe to both — tokens drive the typing animation, updates drive tool indicators, sub-agent tabs, and approval prompts. LangChain frames this as going from token streams to agent streams: higher-level events for steps, tool calls, and state transitions, distinct from the raw token deltas underneath ([LangChain, from token streams to agent streams](https://blog.langchain.com/from-token-streams-to-agent-streams)).
 
 ## The Event Vocabulary
 

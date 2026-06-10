@@ -1,5 +1,6 @@
 ---
 title: "Forked vs Fresh Subagents: When to Inherit the Parent Conversation"
+term: "Forked vs Fresh Subagents"
 description: "Subagents either fork from the parent's full conversation or start fresh with a brief — the choice trades cache reuse and mental-model fidelity against bias and prompt-injection containment."
 tags:
   - multi-agent

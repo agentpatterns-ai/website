@@ -1,5 +1,6 @@
 ---
 title: "Generative Agents Memory Stream: Three-Layer Architecture for Long-Running Agent Sessions"
+term: "Generative Agents Memory Stream"
 description: "Store observations in a retrievable stream, score retrieval by recency, relevance, and importance, then periodically synthesize higher-level reflections to keep long-running agents coherent."
 tags:
   - agent-design

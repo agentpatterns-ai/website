@@ -1,5 +1,6 @@
 ---
 title: "Observation-Driven Coordination: CRDT-Based Parallel Agent"
+term: "Observation-Driven Coordination"
 description: "CRDT-based shared state lets parallel coding agents converge without locks or merge conflicts, but yields speedup only on truly independent subtasks."
 tags:
   - agent-design

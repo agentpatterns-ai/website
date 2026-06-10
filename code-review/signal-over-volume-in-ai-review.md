@@ -1,5 +1,6 @@
 ---
 title: "Signal Over Volume in AI Review for AI Agent Development"
+term: "Signal Over Volume in AI Review"
 description: "Design AI code review to stay silent when it has nothing useful to say — high-signal feedback builds trust while exhaustive commenting destroys it."
 tags:
   - testing-verification

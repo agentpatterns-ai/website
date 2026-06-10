@@ -1,5 +1,6 @@
 ---
 title: "The Plan-First Loop: Always Design Before Writing Code"
+term: "Plan-First Loop"
 description: "For non-trivial tasks, have the agent describe how the system works, correct its understanding, co-create a written plan, then implement — never the reverse."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Verification Ledger for Tracking Agent Output Quality"
+term: "Verification Ledger"
 description: "Replace self-reported agent claims with structured records — every verification step is an INSERT with tool and exit code; every evidence bundle is a SELECT."
 aliases:
   - verification log

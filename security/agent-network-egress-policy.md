@@ -1,5 +1,6 @@
 ---
 title: "Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny"
+term: "Agent Network Egress Policy"
 description: "Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary."
 aliases:
   - agent domain allowlist

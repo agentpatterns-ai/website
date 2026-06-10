@@ -1,5 +1,6 @@
 ---
 title: "Clock-In / Clock-Out Protocol: Bracketed Session Continuity"
+term: "Clock-In / Clock-Out Protocol"
 description: "A deterministic protocol that brackets every agent session — read continuity artefacts on entry, update them on exit — so a fresh session reaches an executable state in minutes rather than rebuilding context from scratch."
 tags:
   - agent-design

@@ -1,5 +1,6 @@
 ---
 title: "Plan-Then-Execute as the Default for Web Agents"
+term: "Plan-Then-Execute as the Default"
 description: "Web content mixes inputs from many parties; commit to a task-specific program before observing pages so injected content cannot redirect control flow."
 tags:
   - security

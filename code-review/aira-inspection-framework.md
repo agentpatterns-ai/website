@@ -1,5 +1,6 @@
 ---
 title: "AIRA: Inspection Framework for AI-Generated Code"
+term: "AIRA"
 description: "AIRA is a deterministic 15-check inspection framework targeting the failure-truthfulness patterns where AI-generated code preserves surface functionality while silently degrading guarantees."
 aliases:
   - AI-Induced Risk Audit

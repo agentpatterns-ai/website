@@ -1,5 +1,6 @@
 ---
 title: "Evaluating AGENTS.md: When Context Files Hurt More Than Help"
+term: "Evaluating AGENTS.md"
 description: "Empirical research shows auto-generated context files reduce success rates while increasing costs 20%+. Human-written files help only when minimal and specific."
 tags:
   - instructions

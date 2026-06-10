@@ -1,5 +1,6 @@
 ---
 title: "Token Preservation Backfire for AI Agent Development"
+term: "Token Preservation Backfire"
 description: 'Token-preservation instructions create a competing objective: the agent resolves the conflict by doing less work, not completing the task better.'
 tags:
   - instructions

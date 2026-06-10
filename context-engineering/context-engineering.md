@@ -1,5 +1,6 @@
 ---
 title: "Context Engineering: The Practice of Shaping Agent Context"
+term: "Context Engineering"
 description: "The discipline of designing what enters an agent context window and how it is structured to maximise output quality and reliability."
 tags:
   - context-engineering

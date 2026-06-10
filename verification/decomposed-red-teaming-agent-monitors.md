@@ -1,5 +1,6 @@
 ---
 title: "Decomposed Red-Teaming for Agent Monitors"
+term: "Decomposed Red-Teaming"
 description: "Split attack construction into strategy, execution, and refinement stages so monitor evaluations expose the conceive-execute gap instead of measuring single-pass elicitation."
 tags:
   - testing-verification

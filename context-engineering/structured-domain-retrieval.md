@@ -1,5 +1,6 @@
 ---
 title: "Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning"
+term: "Structured Domain Retrieval"
 description: "Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses."
 tags:
   - context-engineering

@@ -1,5 +1,6 @@
 ---
 title: "Goal Recitation: Countering Drift in Long Sessions"
+term: "Goal Recitation"
 description: "Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running agent sessions."
 aliases:
   - objective recitation

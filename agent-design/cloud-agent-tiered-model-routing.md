@@ -1,5 +1,6 @@
 ---
 title: "Cloud-Agent Tiered Model Routing: Cheap Tiers for Bounded Tasks"
+term: "Cloud-Agent Tiered Model Routing"
 description: "Pick the cheap tier for a cloud-agent session only when task scope, telemetry, and rework cost line up — otherwise the multiplier savings get spent back in re-runs and silent quality regressions."
 tags:
   - agent-design

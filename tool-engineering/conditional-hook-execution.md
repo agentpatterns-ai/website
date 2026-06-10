@@ -1,5 +1,6 @@
 ---
 title: "Conditional Hook Execution: Filter Hooks by Tool Pattern"
+term: "Conditional Hook Execution"
 description: "Use the if field on Claude Code hook handlers to match tool name and arguments together, skipping the subprocess entirely for non-matching calls."
 tags:
   - agent-design

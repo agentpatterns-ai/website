@@ -1,5 +1,6 @@
 ---
 title: "Memory Transfer Learning: Cross-Domain Memory Reuse in Coding Agents"
+term: "Memory Transfer Learning"
 description: "How coding agents transfer learned memories across different task domains, why abstraction level determines transferability, and when cross-domain memory causes negative transfer."
 tags:
   - agent-design

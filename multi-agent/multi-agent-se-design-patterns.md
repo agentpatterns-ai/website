@@ -1,5 +1,6 @@
 ---
 title: "Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers"
+term: "Multi-Agent SE Design Patterns"
 description: "A study of 94 LLM-based multi-agent SE papers identifies 16 design patterns across five categories, with Role-Based Cooperation as the dominant pattern."
 tags:
   - agent-design

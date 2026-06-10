@@ -1,5 +1,6 @@
 ---
 title: "Coverage-Guided Agents for Fuzz Harness Generation"
+term: "Coverage-Guided Agents"
 description: "Multi-agent systems automatically generate fuzzing harnesses for library APIs, using coverage feedback as the iteration signal to remove the manual bottleneck."
 tags:
   - agent-design

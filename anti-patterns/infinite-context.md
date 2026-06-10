@@ -1,5 +1,6 @@
 ---
 title: "The Infinite Context Anti-Pattern in Agent Systems"
+term: "Infinite Context Anti-Pattern"
 description: "Preloading irrelevant context into an agent prompt dilutes attention and degrades output quality — load only the smallest set of high-signal tokens needed."
 tags:
   - context-engineering

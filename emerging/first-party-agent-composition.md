@@ -1,5 +1,6 @@
 ---
 title: "First-Party Agent Composition: Agent-Built Features"
+term: "First-Party Agent Composition"
 description: "Instead of integrating third-party SaaS products and stitching them together with webhooks, instruct coding agents to build each capability as a native, first-party feature within your application."
 tags:
   - agent-design

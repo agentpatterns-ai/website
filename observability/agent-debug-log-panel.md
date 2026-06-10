@@ -1,5 +1,6 @@
 ---
 title: "Agent Debug Log Panel: Chronological Event Inspection for Session Debugging"
+term: "Agent Debug Log Panel"
 description: "A persistent, chronological event-log surface separate from the user-facing transcript — lets operators replay and debug past agent sessions from the same events the agent saw."
 tags:
   - observability

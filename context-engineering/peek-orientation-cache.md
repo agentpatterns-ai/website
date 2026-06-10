@@ -1,5 +1,6 @@
 ---
 title: "PEEK: Orientation Cache for Recurring-Context Agents"
+term: "PEEK"
 description: "A constant-sized prompt artifact that caches reusable orientation knowledge — what is in a recurring context, how it is organised, which entities matter — distinct from trajectory replay and playbook strategy memory."
 aliases:
   - PEEK context map

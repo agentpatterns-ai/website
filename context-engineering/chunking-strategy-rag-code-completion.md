@@ -1,5 +1,6 @@
 ---
 title: "Chunking Strategy for RAG-Based Code Completion"
+term: "Chunking Strategy"
 description: "In a controlled 864-setting study, function-based chunking is dominated by every other strategy on line-level code completion; cross-file context length is the larger lever."
 aliases:
   - code chunking strategy

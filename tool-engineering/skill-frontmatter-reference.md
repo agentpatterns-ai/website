@@ -1,5 +1,6 @@
 ---
 title: "SKILL.md Frontmatter Reference: All Fields Explained"
+term: "SKILL.md Frontmatter Reference"
 description: "All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling in Claude Code."
 tags:
   - instructions

@@ -1,5 +1,6 @@
 ---
 title: "Tiered Memory Architecture: Episodic-to-Semantic Consolidation for Long-Running Agents"
+term: "Tiered Memory Architecture"
 description: "Separate raw episode storage from a curated semantic tier and promote facts between them only on observed re-use — pays off for long operation windows, adds cost without benefit elsewhere."
 tags:
   - agent-design

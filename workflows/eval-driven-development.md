@@ -1,5 +1,6 @@
 ---
 title: "Eval-Driven Development: Write Evals Before Building Agent"
+term: "Eval-Driven Development"
 description: "Define evaluation tasks and success criteria before writing agent feature code so that done has an objective, measurable definition from the start."
 aliases:
   - Write Evals Before Building

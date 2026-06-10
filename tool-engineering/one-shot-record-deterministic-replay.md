@@ -1,5 +1,6 @@
 ---
 title: "One-Shot Record and Deterministic Replay for Periodic Agent Tasks"
+term: "One-Shot Record and Deterministic Replay"
 description: "Record the LLM's tool-call sequence once, parameterize time-dependent and result-dependent variables, replay deterministically without the model — the cost-reduction pattern for cron-style agent workloads."
 tags:
   - tool-engineering

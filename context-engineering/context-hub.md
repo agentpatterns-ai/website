@@ -1,5 +1,6 @@
 ---
 title: "Context Hub: On-Demand Versioned API Docs for Coding Agents"
+term: "Context Hub"
 description: "Fetch current, versioned API documentation into agent context at generation time so agents write against the live spec rather than stale training-data"
 tags:
   - context-engineering

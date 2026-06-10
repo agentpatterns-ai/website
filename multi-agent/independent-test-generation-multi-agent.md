@@ -1,5 +1,6 @@
 ---
 title: "Independent Test Generation in Multi-Agent Code Systems"
+term: "Independent Test Generation"
 description: "Separate code generation and test generation into independent agents — the test writer never sees the code, preventing bias that cuts test accuracy by 30%."
 tags:
   - multi-agent

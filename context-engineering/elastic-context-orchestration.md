@@ -1,5 +1,6 @@
 ---
 title: "Elastic Context Orchestration: A Per-Turn Vocabulary for Long-Horizon Search Agents"
+term: "Elastic Context Orchestration"
 description: "Long-horizon search agents manage context with an explicit operation vocabulary — Skip, Compress, Rollback, Snippet, Delete — chosen per turn, instead of accumulating raw trajectory."
 aliases:
   - elastic context orchestration

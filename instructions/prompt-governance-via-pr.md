@@ -1,5 +1,6 @@
 ---
 title: "Prompt Governance via PRs: Reviewable AI Behaviour"
+term: "Prompt Governance via PRs"
 description: "Store agent instructions as markdown files in git and use pull requests to propose, review, and merge behaviour changes — no ML expertise required."
 tags:
   - instructions

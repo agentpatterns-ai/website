@@ -1,5 +1,6 @@
 ---
 title: "Behavioral Firewall for Tool-Call Trajectories"
+term: "Behavioral Firewall"
 description: "Compile verified benign tool-call telemetry into a parameterized DFA and enforce permitted sequences and parameter bounds at runtime — fits structured workflows with stable tool catalogs, not open-ended agents."
 tags:
   - security

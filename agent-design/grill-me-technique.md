@@ -1,5 +1,6 @@
 ---
 title: "Grill Me: Developer-Initiated Plan Interrogation"
+term: "Grill Me"
 description: "Invert the usual developer-instructs-AI flow: explicitly prompt the agent to challenge your plan, surfacing gaps and hidden assumptions before any code is written."
 tags:
   - agent-design
@@ -8,7 +9,7 @@ tags:
 aliases:
   - grill me technique
   - plan interrogation technique
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-09
 ---
 
 # Grill Me: Developer-Initiated Plan Interrogation
@@ -80,6 +81,8 @@ The technique adds cost without value in three conditions:
 **Fast-iteration loops on reversible work.** If the cost of a wrong assumption is one failing test rather than a shipped feature, implementation reveals gaps faster than interrogation.
 
 **No downstream artifact.** If the session findings are not captured (PRD, spec, written plan), agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
+
+AI Hero catalogues further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/9-things-people-get-wrong-with-grill-me-and-grill-with-docs)).
 
 ## Example
 

@@ -1,5 +1,6 @@
 ---
 title: "Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack"
+term: "Cognitive Poisoning"
 description: "Malicious tools steer agent reasoning across multiple benign-looking responses, then trigger harm only when the final action satisfies hidden conditions — defenses that examine messages in isolation cannot detect the joint state-action attack model."
 tags:
   - security

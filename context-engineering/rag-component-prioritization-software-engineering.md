@@ -1,5 +1,6 @@
 ---
 title: "Component-Wise RAG Prioritization for Software Engineering Tasks"
+term: "Component-Wise RAG Prioritization"
 description: "A 21+ model component-wise empirical study finds retriever choice dominates generator choice for SE-task RAG, and BM25 is robust across code generation, summarization, and repair — under specific conditions."
 aliases:
   - RAG component prioritization

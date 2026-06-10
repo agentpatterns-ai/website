@@ -1,5 +1,6 @@
 ---
 title: "Reactive Environment Hooks: CwdChanged and FileChanged"
+term: "Reactive Environment Hooks"
 description: "CwdChanged and FileChanged hook events reload environment managers like direnv when the agent changes directory or edits a config file."
 tags:
   - agent-design

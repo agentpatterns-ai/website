@@ -1,5 +1,6 @@
 ---
 title: "Harness Impermanence: Build Scaffolding To Be Deleted"
+term: "Harness Impermanence"
 description: "Treat agent harness scaffolding as code with a finite shelf life. Architect for low cost of removal so native model capability can replace it cleanly."
 tags:
   - agent-design

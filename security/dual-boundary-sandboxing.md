@@ -1,5 +1,6 @@
 ---
 title: "Dual-Boundary Sandboxing for Secure Agent Execution"
+term: "Dual-Boundary Sandboxing"
 description: "Enforce both filesystem and network isolation; neither boundary alone prevents security breaches or data exfiltration by an autonomous agent."
 tags:
   - agent-design

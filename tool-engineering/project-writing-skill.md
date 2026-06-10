@@ -1,5 +1,6 @@
 ---
 title: "Project Writing Skill: House Style as Model-Invocable Skill"
+term: "Project Writing Skill"
 description: "Package project writing conventions — audience, tone, banned phrases, structural rules — into a model-invocable skill loaded only when the agent is actually writing prose."
 tags:
   - instructions

@@ -1,5 +1,6 @@
 ---
 title: "Incident Log Investigation Skill: Parallel Queries"
+term: "Incident Log Investigation Skill"
 description: "A precision-first skill querying Snowflake, Honeycomb, and Datadog in parallel with eval-backed quality gates for incident investigation."
 tags:
   - agent-design

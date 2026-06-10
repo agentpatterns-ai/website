@@ -1,5 +1,6 @@
 ---
 title: "Issue-to-PR Delegation Pipeline for AI Agent Development"
+term: "Issue-to-PR Delegation Pipeline"
 description: "Assign issues to AI coding agents and receive draft pull requests — treating delegation as an engineering pipeline with controllable levers."
 tags:
   - workflows

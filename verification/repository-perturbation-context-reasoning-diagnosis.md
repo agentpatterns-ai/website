@@ -1,5 +1,6 @@
 ---
 title: "Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)"
+term: "Repository Perturbation as Context-Reasoning Diagnosis"
 description: "Apply semantics-preserving perturbations to a repository before handing it to a code agent — the resulting accuracy drop isolates context reasoning from end-to-end issue-resolution scores."
 tags:
   - testing-verification

@@ -1,5 +1,6 @@
 ---
 title: "Emergent Behavior Sensitivity for AI Agent Development"
+term: "Emergent Behavior Sensitivity"
 description: "Small changes to a lead agent's prompt unpredictably alter subagent behavior. Multi-agent prompts must be frameworks for collaboration, not rigid instructions"
 tags:
   - agent-design

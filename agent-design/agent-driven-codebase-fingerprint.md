@@ -1,5 +1,6 @@
 ---
 title: "Emergent Architecture in AI-Driven Codebases"
+term: "Emergent Architecture"
 description: "AI coding agents produce codebases with measurable architectural biases — pattern replication, abstraction bloat, and stack convergence. Recognizing the fingerprint lets teams audit what agents built."
 aliases:
   - agent codebase fingerprint

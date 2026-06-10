@@ -1,5 +1,6 @@
 ---
 title: "MCP Client Design: Building Robust Host-Side Logic"
+term: "MCP Client Design"
 description: "Best practices for MCP client lifecycle management, multi-server routing, tool caching, security hardening, and observability in agent hosts."
 aliases:
   - MCP host-side logic
