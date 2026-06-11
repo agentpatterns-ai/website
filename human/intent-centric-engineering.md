@@ -88,7 +88,7 @@ The same team rejects a proposal to apply the model to a one-off prototype. The 
 
 ## Related
 
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — the identity-side framing of the same shift; this page is the operational companion.
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the identity-side framing of the same shift; this page is the operational companion.
 - [Empowerment Over Automation](empowerment-over-automation.md) — the merge-button discipline that grounds intent-centric oversight in practice.
 - [Rigor Relocation](rigor-relocation.md) — the discipline-migration framing from the harness-engineering side of the same mechanism.
 - [Skill Atrophy](skill-atrophy.md) — the self-concealing failure mode of pure oversight without retained coding capacity.

@@ -11,6 +11,7 @@ aliases:
   - long-running agent pattern
   - day-scale agent work
 last_reviewed: 2026-06-02
+maturity: adopted
 ---
 
 # Long-Running Agents: Durability and Resumability Across Sessions

@@ -1,20 +1,19 @@
 ---
-title: "Reference: Standards, Human Factors, Emerging, Fallacies, and Articles"
-description: "Reference material for AI-assisted development — standards, human factors, emerging trends, common fallacies, and long-form articles."
+title: "Reference: Standards, Human Factors, Emerging, and Fallacies"
+description: "Reference material for AI-assisted development — standards, human factors, emerging trends, and common fallacies."
 tags:
   - reference
   - standards
   - human-factors
   - emerging
   - fallacies
-  - articles
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
 
-# Reference: Standards, Human Factors, Emerging, Fallacies, and Articles
+# Reference: Standards, Human Factors, Emerging, and Fallacies
 
-> Standards, human factors, emerging trends, reasoning fallacies, and long-form articles that provide broader context for AI-assisted development.
+> Standards, human factors, emerging trends, and reasoning fallacies that provide broader context for AI-assisted development.
 
 ## [Standards](standards/index.md)
 
@@ -31,7 +30,3 @@ Trends and capabilities on the horizon — [bootstrapping coding agents](emergin
 ## [Fallacies](fallacies/index.md)
 
 Common reasoning errors about AI capabilities — the knowledge generation fallacy, chain-of-thought reasoning fallacy, consistent capability fallacy, and more.
-
-## [Articles](articles/index.md)
-
-Long-form analysis and opinion pieces on AI-assisted development.

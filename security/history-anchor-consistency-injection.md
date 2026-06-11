@@ -133,5 +133,4 @@ The deterministic action gate downstream of the model must still enforce this; t
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Oracle Poisoning: Knowledge Graph Corruption](oracle-poisoning-knowledge-graph.md)
 - [Trojan Hippo: Dormant Memory Payloads](trojan-hippo-memory-attack.md)
-- [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md)
 - [Prompt Injection: A First-Class Threat](prompt-injection-threat-model.md)

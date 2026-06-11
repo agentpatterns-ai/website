@@ -13,7 +13,7 @@ last_reviewed: 2026-05-27
 
 # AI Abundance Reshapes Software Engineering Identity
 
-> Code production is being commoditized. The profession is splitting along a fault line that was always there but never mattered: do you love writing code, or do you love building things?
+> AI abundance commoditizes code production, splitting engineering identity along a long-dormant fault line: do you love writing code, or building things?
 
 AI coding assistants have decoupled code-writing from software-building — two activities so tightly fused for decades that separating them felt impossible. The data is already measurable, the displacement already visible, and the identity crisis already underway. Whether AI amplifies or atrophies a practitioner's career depends on a conscious choice about professional identity: do you relocate your rigor, or let the tools erode it?
 
@@ -182,9 +182,9 @@ The profession is not dying. It is differentiating. And the practitioners who na
 
 ## Related
 
-- [Skill Atrophy](../human/skill-atrophy.md) — detailed treatment of the cognitive offloading mechanism
-- [Rigor Relocation](../human/rigor-relocation.md) — the pattern of discipline migrating from implementation to constraint design
-- [Bottleneck Migration](../human/bottleneck-migration.md) — how AI shifts constraints rather than removing them
+- [Skill Atrophy](skill-atrophy.md) — detailed treatment of the cognitive offloading mechanism
+- [Rigor Relocation](rigor-relocation.md) — the pattern of discipline migrating from implementation to constraint design
+- [Bottleneck Migration](bottleneck-migration.md) — how AI shifts constraints rather than removing them
 - [Harness Engineering](../agent-design/harness-engineering.md) — building the verification layer around AI agents
 - [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where identity risks are highest
-- [Addictive Flow State of Agent-Assisted Development](../human/addictive-flow-agent-development.md) — the psychological mechanisms driving compulsive engagement with AI tools
+- [Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — the psychological mechanisms driving compulsive engagement with AI tools

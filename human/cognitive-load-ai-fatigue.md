@@ -102,7 +102,7 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](attention-management-parallel-agents.md) — structuring attention across simultaneous AI tasks
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — long-term capability costs of sustained AI delegation
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the growing gap between AI-generated code and developer understanding, the third concept in the fatigue/atrophy/debt cluster
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — how the bottleneck migration and skill atrophy connect to the wider professional identity shift
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — how the bottleneck migration and skill atrophy connect to the wider professional identity shift
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](cross-tool-translation.md)
 - [Initiatives and Community: Tracking the Agentic Engineering Landscape](initiatives-community.md)
 - [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck

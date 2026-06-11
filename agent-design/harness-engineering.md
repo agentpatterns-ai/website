@@ -179,7 +179,7 @@ Three specific conditions where the investment pays off less:
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the project instruction file standard that provides agents project context before any task
 - [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the builder/coder split reframes harness engineering as the new professional discipline
+- [AI Abundance Reshapes Software Engineering Identity](../human/ai-abundance-engineering-identity.md) -- how the builder/coder split reframes harness engineering as the new professional discipline
 - [Agent Harness](agent-harness.md) -- the specific initializer/worker two-phase architecture
 - [Harness Hill-Climbing](harness-hill-climbing.md) -- eval-driven iterative improvement of the agent harness using benchmark scores as the optimization signal
 - [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs

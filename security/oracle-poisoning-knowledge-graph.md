@@ -140,4 +140,4 @@ The same query through inline context — pasting the node text into the prompt 
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Schema-Guided Graph Retrieval](../context-engineering/schema-guided-graph-retrieval.md)
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md)
-- [Trojan Hippo: Cross-Session Memory Poisoning for Data Exfiltration](trojan-hippo-memory-exfiltration.md)
+- [Trojan Hippo: Dormant Memory Payloads Triggered by Sensitive Topics](trojan-hippo-memory-attack.md)

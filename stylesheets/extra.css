@@ -142,7 +142,7 @@
   }
 }
 
-/* ── Currency badges (last_reviewed / applies_to / status) ── */
+/* ── Currency badges (last_reviewed / applies_to / status / maturity) ── */
 
 .currency-badges {
   display: flex;
@@ -193,6 +193,27 @@
   border-color: #d1d5db;
 }
 
+/* Maturity badges (maturity: established | adopted | emerging) —
+   one distinct treatment per value, STANDARDS.md §Pattern Maturity. */
+
+.currency-badge--established {
+  background: #d1fae5;
+  color: #065f46;
+  border-color: #6ee7b7;
+}
+
+.currency-badge--adopted {
+  background: #dbeafe;
+  color: #1e40af;
+  border-color: #93c5fd;
+}
+
+.currency-badge--emerging {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: #c4b5fd;
+}
+
 [data-md-color-scheme="slate"] .currency-badge {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.75);
@@ -209,6 +230,24 @@
   background: rgba(156, 163, 175, 0.16);
   color: #d1d5db;
   border-color: rgba(156, 163, 175, 0.32);
+}
+
+[data-md-color-scheme="slate"] .currency-badge--established {
+  background: rgba(110, 231, 183, 0.16);
+  color: #6ee7b7;
+  border-color: rgba(110, 231, 183, 0.32);
+}
+
+[data-md-color-scheme="slate"] .currency-badge--adopted {
+  background: rgba(147, 197, 253, 0.16);
+  color: #93c5fd;
+  border-color: rgba(147, 197, 253, 0.32);
+}
+
+[data-md-color-scheme="slate"] .currency-badge--emerging {
+  background: rgba(196, 181, 253, 0.16);
+  color: #c4b5fd;
+  border-color: rgba(196, 181, 253, 0.32);
 }
 
 @media (max-width: 600px) {

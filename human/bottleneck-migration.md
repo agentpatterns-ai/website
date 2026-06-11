@@ -145,7 +145,7 @@ After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and 
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Process Amplification](process-amplification.md) -- agents amplify practices including review
 - [Skill Atrophy](skill-atrophy.md) -- AI reliance erodes review capabilities
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- identity shift from bottleneck migration
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) -- identity shift from bottleneck migration
 - [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md) -- AI-friendly patterns reduce review load
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) -- flow state reduces scrutiny
 - [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- reducing approval fatigue

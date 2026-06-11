@@ -25,6 +25,6 @@ Cursor's agentic interface — [Agents Window](cursor/agents-window.md) for para
 
 GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integration, [Copilot Spaces](copilot/copilot-spaces.md), and [custom agents and skills](copilot/custom-agents-skills.md).
 
-## [OpenAI Agents SDK](openai/index.md)
+## [OpenAI Agents SDK](openai-agents-sdk.md)
 
 OpenAI's Python framework for sandboxed agents — a model-native harness, native sandbox execution, and configurable memory shipped as one library.

@@ -28,4 +28,4 @@ Most readers find what they need through tags or the concept map, not the sectio
 - **[GEO](geo/index.md)** — Generative Engine Optimization for technical docs
 - **[Workflows](workflows/index.md)** — End-to-end workflows for agent-assisted development
 - **Reference** — [Standards](standards/index.md), [Human Factors](human/index.md), [Emerging](emerging/index.md), [Fallacies](fallacies/index.md)
-- **Tools** — [Claude Code](tools/claude/index.md), [GitHub Copilot](tools/copilot/index.md), [Cursor](tools/cursor/index.md), [OpenAI](tools/openai/index.md)
+- **Tools** — [Claude Code](tools/claude/index.md), [GitHub Copilot](tools/copilot/index.md), [Cursor](tools/cursor/index.md), [OpenAI Agents SDK](tools/openai-agents-sdk.md)

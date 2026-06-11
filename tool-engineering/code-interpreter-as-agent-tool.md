@@ -118,4 +118,4 @@ The traditional approach issues 20 separate model round-trips and pulls thousand
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md) — the general principle the interpreter implements at the platform level
 - [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) — the OS-level enclosure for untrusted-input workloads
 - [Selective Network Sandbox Mode](../security/selective-network-sandbox-mode.md) — fine-grained network policy that pairs with interpreter-level bridges
-- [OpenAI Agents SDK Sandboxes Harness and Memory](../tools/openai/sandboxes-harness-memory.md) — vendor-specific framing of the same harness/compute split
+- [OpenAI Agents SDK Sandboxes Harness and Memory](../tools/openai-agents-sdk.md) — vendor-specific framing of the same harness/compute split

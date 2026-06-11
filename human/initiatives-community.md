@@ -70,3 +70,4 @@ Following these communities adds value only when the conditions below hold; when
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md)
 - [Process Amplification](process-amplification.md)
 - [Deliberate AI-Assisted Learning: Accelerating Skill Acquisition](deliberate-ai-learning.md)
+- [Evaluating Agent Patterns Catalog as a Source](evaluating-agent-patterns-catalog-as-a-source.md) — source assessment of a community pattern catalog, with citation guard-rails and an explicit no-MCP-wiring boundary

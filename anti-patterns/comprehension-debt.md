@@ -114,5 +114,5 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Pattern Replication Risk](pattern-replication-risk.md) -- agents reproducing codebase patterns at scale, including ones developers never understood
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt
+- [AI Abundance Reshapes Software Engineering Identity](../human/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance

@@ -123,7 +123,7 @@ Rigor relocation has real costs. The scaffolding-first bet fails or yields poor 
 - [Process Amplification](process-amplification.md) -- how agents amplify existing processes, including rigor and verification
 - [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) -- constraints and verification demands by domain
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) -- how rigor requirements evolve with increasing agent autonomy
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) -- how rigor relocation intersects with the broader shift in engineering identity
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) -- how rigor relocation intersects with the broader shift in engineering identity
 - [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
 - [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- enforcement guardrails for agent autonomy
 - [Strategy Over Code Generation](strategy-over-code-generation.md) -- prioritizing design rigor over raw output
