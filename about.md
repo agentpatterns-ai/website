@@ -16,7 +16,7 @@ Agent Patterns is a reference site for experienced developers using AI coding as
 
 ## What this site is
 
-A practitioner resource — patterns, anti-patterns, paper summaries, and tool features — written grok-fast with no academic ceremony. Browsing the tree is the fallback; the primary access pattern is LLM-first discovery and aggressive cross-linking.
+A practitioner resource — patterns, anti-patterns, paper summaries, and tool features — written to be understood in seconds, with no academic ceremony. Browsing the tree is the fallback; the primary access pattern is LLM-first discovery and aggressive cross-linking.
 
 ## How it's maintained
 

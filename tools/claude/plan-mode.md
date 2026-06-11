@@ -1,4 +1,5 @@
 ---
+applies_to: "claude-code@2.x"
 title: "Plan Mode: Read-Only Exploration Before Implementation"
 description: "Use Plan Mode to restrict agents to read-only operations, surface their understanding of a task, and correct the approach before any code is written."
 tags:
