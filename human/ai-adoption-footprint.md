@@ -92,7 +92,7 @@ METR found a 39-point perception gap — developers estimated they were 20% fast
 
 ## Related
 
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — the builder-vs-coder fault line that predicts which engineers move up the capability stack
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the builder-vs-coder fault line that predicts which engineers move up the capability stack
 - [Skill Atrophy](skill-atrophy.md) — cognitive offloading mechanism that stalls chat-tool users at the middle segment
 - [Bottleneck Migration](bottleneck-migration.md) — why the 20% power users hit a different bottleneck than the 60%
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — sustainability constraints that cap how long even power users operate at Level 5+

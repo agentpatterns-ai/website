@@ -13,6 +13,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # PEEK: Orientation Cache for Recurring-Context Agents

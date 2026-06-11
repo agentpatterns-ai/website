@@ -10,6 +10,7 @@ applies_to: "openai-agents-sdk@1.x"
 last_reviewed: 2026-05-27
 status: current
 ---
+
 # OpenAI Agents SDK Sandboxes Harness and Memory
 
 > The April 2026 OpenAI Agents SDK update ships three primitives — controlled sandboxes, an inspectable harness, and configurable memory — in one Python library.
@@ -55,15 +56,15 @@ Sandbox clients are pluggable ([reference](https://openai.github.io/openai-agent
 
 The provider lives in `RunConfig`, not the agent — [swap clients per environment](https://developers.openai.com/api/docs/guides/agents/sandboxes) while the agent, manifest, and capabilities stay stable.
 
-**Isolation caveat**: partners ship containers (Modal uses gVisor). For cross-tenant threat models, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents) — see [Subprocess and PID-namespace sandboxing](../../security/subprocess-pid-namespace-sandboxing.md).
+**Isolation caveat**: partners ship containers (Modal uses gVisor). For cross-tenant threat models, [container isolation is weaker than Firecracker microVMs](https://northflank.com/blog/best-code-execution-sandbox-for-ai-agents) — see [Subprocess and PID-namespace sandboxing](../security/subprocess-pid-namespace-sandboxing.md).
 
 ## Harness Primitives
 
 The harness standardises primitives previously bespoke per-agent ([Help Net Security](https://www.helpnetsecurity.com/2026/04/16/openai-agents-sdk-harness-and-sandbox-update/)):
 
-- Tool use via [MCP](../../standards/mcp-protocol.md)
-- Progressive disclosure via [skills](../../standards/agent-skills-standard.md)
-- Custom instructions via [`AGENTS.md`](../../standards/agents-md.md)
+- Tool use via [MCP](../standards/mcp-protocol.md)
+- Progressive disclosure via [skills](../standards/agent-skills-standard.md)
+- Custom instructions via [`AGENTS.md`](../standards/agents-md.md)
 - Code execution via a `shell` tool
 - File edits via an `apply_patch` tool
 - Compaction for long-running runs
@@ -104,7 +105,7 @@ Filesystem artifacts distilled from prior runs ([agent memory guide](https://ope
 
 The agent searches `MEMORY.md` for keywords and opens deeper rollout summaries only when needed — progressive disclosure inside the workspace.
 
-Neither system replaces a dedicated long-term vector or graph store for cross-agent knowledge — pair with [agent memory patterns](../../agent-design/agent-memory-patterns.md) for scope beyond a workspace.
+Neither system replaces a dedicated long-term vector or graph store for cross-agent knowledge — pair with [agent memory patterns](../agent-design/agent-memory-patterns.md) for scope beyond a workspace.
 
 ## When to Pick the SDK
 
@@ -120,7 +121,7 @@ Skip the SDK when:
 - You need TypeScript today
 - You require microVM isolation for cross-tenant blast radius
 - You need custom turn scheduling, non-standard handoffs, or heterogeneous model routing — call the Responses API directly
-- You already run a [self-hosted harness](../../agent-design/managed-vs-self-hosted-harness.md) with verification or replay
+- You already run a [self-hosted harness](../agent-design/managed-vs-self-hosted-harness.md) with verification or replay
 
 ## Example
 
@@ -164,11 +165,11 @@ Swap `sandbox_client="docker"` for `"unix_local"` in dev or a hosted provider in
 
 ## Related
 
-- [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — selection rubric across the OpenAI sandbox clients, `docker sbx`, bubblewrap, and Seatbelt
-- [Sandbox rules and harness tools](../../security/sandbox-rules-harness-tools.md)
-- [Harness engineering](../../agent-design/harness-engineering.md)
-- [Managed vs self-hosted harness](../../agent-design/managed-vs-self-hosted-harness.md)
-- [Agent memory patterns](../../agent-design/agent-memory-patterns.md)
-- [Session harness sandbox separation](../../agent-design/session-harness-sandbox-separation.md)
-- [Claude Agent SDK](../claude/agent-sdk.md)
-- [Copilot SDK](../copilot/copilot-sdk.md)
+- [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — selection rubric across the OpenAI sandbox clients, `docker sbx`, bubblewrap, and Seatbelt
+- [Sandbox rules and harness tools](../security/sandbox-rules-harness-tools.md)
+- [Harness engineering](../agent-design/harness-engineering.md)
+- [Managed vs self-hosted harness](../agent-design/managed-vs-self-hosted-harness.md)
+- [Agent memory patterns](../agent-design/agent-memory-patterns.md)
+- [Session harness sandbox separation](../agent-design/session-harness-sandbox-separation.md)
+- [Claude Agent SDK](claude/agent-sdk.md)
+- [Copilot SDK](copilot/copilot-sdk.md)

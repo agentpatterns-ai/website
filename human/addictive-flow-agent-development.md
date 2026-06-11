@@ -71,4 +71,4 @@ The grey literature review found 11% of practitioners abandoned projects when AI
 - [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — how friction shifts from coding to supervision
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — deliberate control patterns that counter compulsive loops
 - [Vibe Coding](../anti-patterns/vibe-coding.md)
-- [AI Abundance Reshapes Software Engineering Identity](../articles/ai-abundance-engineering-identity.md) — addictive flow accelerating the builder/coder identity fracture
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — addictive flow accelerating the builder/coder identity fracture

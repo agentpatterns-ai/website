@@ -12,6 +12,7 @@ aliases:
   - rubric-guided tool-use refinement
   - code-mode contract checking
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # RubricRefine: Pre-Execution Rubric Refinement

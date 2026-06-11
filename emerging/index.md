@@ -18,7 +18,7 @@ Content in this section differs from the rest of the site. Patterns and techniqu
 - Show potential to become established patterns but lack broad validation
 - Challenge existing assumptions about how agent-driven development works
 
-Each page links to its primary sources and notes the maturity level. Concepts that accumulate enough independent evidence graduate to the appropriate section (patterns, techniques, or workflows).
+Each page links to its primary sources and notes the maturity level. This section is deliberately small: concepts that accumulate enough independent evidence graduate out to the appropriate section (patterns, techniques, or workflows), and concepts that fail to mature are removed. A short list here signals active curation, not a coverage gap.
 
 ## Current Concepts
 
