@@ -10,7 +10,7 @@ aliases:
   - per-tool reasoning budget
   - tool-call-scoped reasoning
   - return_token_budget
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-10
 ---
 
 # Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets
@@ -31,7 +31,7 @@ Three controls share the budget vocabulary but differ in scope:
 | [Heuristic effort scaling](heuristic-effort-scaling.md) | Whole turn, tiered by complexity | Agent (from system-prompt rules) |
 | Per-tool opt-in (`return_token_budget` etc.) | One tool call | Agent (from tool-call args) |
 
-The per-tool control occupies the slot that turn-level knobs cannot reach: heterogeneous depth across tool calls in the same turn.
+The per-tool control occupies the slot that turn-level knobs cannot reach: heterogeneous depth across tool calls in the same turn. Turn-level effort control is itself spreading across tools — GitHub Copilot now exposes configurable reasoning levels (alongside larger context windows) that users can dial per request ([GitHub Copilot changelog](https://github.blog/changelog/2026-06-04-larger-context-windows-and-configurable-reasoning-levels-for-github-copilot)), a concrete instance of the turn-level row in the table above; the per-call form remains the rarer, finer-grained surface.
 
 ## How It Works
 

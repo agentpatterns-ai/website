@@ -10,7 +10,7 @@ aliases:
   - always-on security review
   - PR security agent pattern
   - scheduled vulnerability scanner
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-10
 ---
 
 # Always-On Agentic PR Security Review
@@ -51,7 +51,7 @@ graph TD
 | Output | Inline comment at the changed line | Aggregated report to a channel |
 | Failure mode | Block merge or post warning | File issue or notify owner |
 
-Cursor shipped this split in beta on 2026-04-30: a *Security Reviewer* that "checks every PR for security vulnerabilities, auth regressions, privacy and data-handling risks, agent tool auto-approvals, and prompt injection attacks" plus a *Vulnerability Scanner* that "runs scheduled scans of your codebase to check for known vulnerabilities, outdated dependencies, and configuration issues." [Source: [Cursor changelog](https://cursor.com/changelog/04-30-26)] Anthropic's [`claude-code-security-review`](https://github.com/anthropics/claude-code-security-review) Action is the convergent PR-time component; `/security-review` runs the same review locally before commit. [Source: [Anthropic Help](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code)]
+Cursor shipped this split in beta on 2026-04-30: a *Security Reviewer* that "checks every PR for security vulnerabilities, auth regressions, privacy and data-handling risks, agent tool auto-approvals, and prompt injection attacks" plus a *Vulnerability Scanner* that "runs scheduled scans of your codebase to check for known vulnerabilities, outdated dependencies, and configuration issues." [Source: [Cursor changelog](https://cursor.com/changelog/04-30-26)] Anthropic's [`claude-code-security-review`](https://github.com/anthropics/claude-code-security-review) Action is the convergent PR-time component; `/security-review` runs the same review locally before commit. [Source: [Anthropic Help](https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code)] GitHub shipped the same component into Copilot CLI on 2026-06-10 as a dedicated security-review command. [Source: [GitHub Changelog](https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli)]
 
 ## Prompt-Injection Review Is a Distinct Dimension
 

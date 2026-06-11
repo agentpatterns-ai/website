@@ -11,9 +11,10 @@ aliases:
   - GitHub Copilot CLI
   - copilot terminal agent
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-10
 status: current
 ---
+
 # Copilot CLI Agentic Workflows
 
 > Terminal-native agentic coding with GitHub Copilot CLI — interactive and headless modes, graduated authorization, delegation to cloud agents, and MCP integration in the terminal.
@@ -66,7 +67,7 @@ Commands are grouped into five categories ([GitHub Blog: Cheat Sheet](https://gi
 
 ## Custom Agents in the CLI
 
-Custom agents work across CLI, IDE, and github.com; `/agent` lists and selects them for the current session and can bundle specialized MCP tools for domain-specific tasks ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)).
+Custom agents work across CLI, IDE, and github.com; `/agent` lists and selects them for the current session and can bundle specialized MCP tools for domain-specific tasks ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/power-agentic-workflows-in-your-terminal-with-github-copilot-cli/)). GitHub's walkthrough on building custom agents in the CLI frames them as a way to turn one-off prompts into reusable, shareable workflows ([GitHub Blog: Custom Agents in Copilot CLI](https://github.blog/ai-and-ml/github-copilot/from-one-off-prompts-to-workflows-how-to-use-custom-agents-in-github-copilot-cli/)).
 
 ## MCP in the Terminal
 

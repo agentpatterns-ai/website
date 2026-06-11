@@ -122,3 +122,4 @@ The same harness *without* the probe routinely fires `schema_lookup` on Query A 
 - [Tool Minimalism](tool-minimalism.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Abstention-Aware Memory Retrieval](../agent-design/abstention-aware-memory-retrieval.md)
+- [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)

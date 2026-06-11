@@ -3,12 +3,14 @@ title: "Agentic Code Review Patterns and Review Architectures"
 description: "Patterns for integrating AI agents into code review — from architecture and review loops to signal quality and PR integration."
 tags:
   - code-review
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-10
 ---
 
 # Code Review
 
 > Patterns for integrating AI agents into code review workflows.
+
+As agents author more pull requests, review tooling is moving toward the surface where work is already tracked: Linear's Diffs feature brings code review inside the issue tracker, letting agents generate bulk diffs while keeping a human accountable for what merges ([Linear — Diffs](https://linear.app/changelog/2026-05-27-linear-diffs)). The patterns below cover the architectures and review loops that keep that accountability intact.
 
 ## Pages
 
