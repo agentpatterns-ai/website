@@ -1,5 +1,6 @@
 ---
-title: "Video Transcript Skill: Converting Recordings to Docs"
+applies_to: "claude-code@2.x"
+title: "Video Transcript Skill: Meeting Recording to Markdown"
 description: "A Claude Code skill using Whisper, ffmpeg, and the Files API to convert meeting recordings into searchable markdown transcripts with inline screenshots."
 aliases:
   - video transcription skill
@@ -13,7 +14,7 @@ last_reviewed: 2026-05-27
 
 # Video Transcript Skill: Meeting Recording to Markdown with Inline Screenshots
 
-> Orchestrate Whisper, ffmpeg, and the Files API to convert a meeting recording into a searchable, skimmable markdown document — with screenshots inserted where the speaker says "as you can see" or "look at this."
+> A video transcript skill orchestrates Whisper, ffmpeg, and the Files API to turn a meeting recording into skimmable markdown with inline screenshots.
 
 Recordings are poor knowledge artifacts: unsearchable, non-linkable, and impossible to skim. A structured transcript with visual anchors at key moments turns the same content into documentation that can be indexed, shared as a decision record, or used for onboarding — without manual editing.
 

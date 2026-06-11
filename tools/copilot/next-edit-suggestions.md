@@ -1,4 +1,5 @@
 ---
+applies_to: "copilot@1.x"
 title: "Next Edit Suggestions Paradigm for AI Agent Development"
 description: "A proactive editing paradigm where the AI predicts both where and what to edit next, sitting between reactive autocomplete and autonomous agent mode in the assistance spectrum."
 aliases:
@@ -12,7 +13,7 @@ last_reviewed: 2026-05-27
 
 # Next Edit Suggestions Paradigm
 
-> A proactive editing paradigm where the AI predicts both *where* and *what* to edit next, sitting between reactive autocomplete and autonomous agent mode in the assistance spectrum.
+> A proactive editing paradigm where the AI predicts both *where* and *what* to edit next — between reactive autocomplete and autonomous agent mode.
 
 ## Three Paradigms of AI-Assisted Editing
 

@@ -1,5 +1,6 @@
 ---
-title: "PostToolUse Hooks: Auto-Formatting on Every File Edit"
+applies_to: "claude-code@2.x"
+title: "PostToolUse Hooks: Automatic Formatting and Linting"
 description: "Configure a PostToolUse hook to run formatters automatically after every file Claude writes, removing the round-trip cost of prompting Claude to fix style."
 tags:
   - claude
@@ -8,7 +9,7 @@ last_reviewed: 2026-05-27
 
 # PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit
 
-> Configure a `PostToolUse` hook so that formatting and linting run automatically after every file Claude writes or edits, removing the round-trip cost of prompting Claude to fix style.
+> A `PostToolUse` hook runs formatting and linting automatically after every file Claude edits, removing the round-trip cost of prompting for style fixes.
 
 ## The Problem
 

@@ -1,4 +1,5 @@
 ---
+applies_to: "claude-code@2.x"
 title: "Sparse-Checkout Worktrees for Monorepo Agent Isolation"
 description: "Use worktree.sparsePaths to limit an agent's file-system view to one service subtree — reducing context noise, startup time, and accidental blast radius in large monorepos."
 tags:
@@ -9,7 +10,7 @@ last_reviewed: 2026-05-27
 
 # Sparse-Checkout Worktrees for Monorepo Agent Isolation
 
-> Restrict an agent's working tree to a single service subtree in a large monorepo using `worktree.sparsePaths` — so the agent sees only the files it needs and cannot accidentally touch unrelated services.
+> Sparse-checkout worktrees (`worktree.sparsePaths`) restrict an agent's working tree to one monorepo subtree, so it cannot touch unrelated services.
 
 ## The Problem
 
