@@ -36,6 +36,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md) — Request structured errors from HTTP APIs using Accept headers to replace brittle HTML parsing with deterministic control flow
 - [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — Expose the full product surface through API, MCP, and CLI so agents acting on behalf of users can complete any flow the GUI supports
 - [Tool Necessity Probing](tool-necessity-probing.md) — Read tool-call decisions from the pre-generation hidden state with a linear probe — AUROC 0.89–0.96, 48% fewer tool calls at 1.7% accuracy loss
+- [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md) — Bits-over-Random measures whether retrieval at depth K beats random at depth K; the missing chance-corrected metric for sizing fixed or adaptive tool-retrieval shortlists
 
 ## MCP (Model Context Protocol)
 

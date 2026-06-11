@@ -119,3 +119,4 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
+- [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)
