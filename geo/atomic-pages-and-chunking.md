@@ -11,12 +11,12 @@ aliases:
   - content atomization
   - RAG chunking strategy
   - one-topic-per-page design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Atomic Pages and Chunking — One Concept Per Page for RAG
 
-> Documentation architecture is a retrieval optimization lever, not just a UX decision.
+> One concept per page makes documentation chunk cleanly, raising retrieval accuracy for AI answer engines.
 
 When an AI answer engine retrieves your documentation, it pulls the most relevant passage from a chunked and embedded index — not the full page. How you structure content determines which passages surface and whether they contain enough context to be cited accurately.
 
@@ -41,8 +41,6 @@ One concept per page means each page maps cleanly to one chunk — the top passa
 | One concept, one page | Tight semantic cluster | High cosine similarity to on-topic queries |
 | Multiple concepts, one page | Blended average embedding | Diluted signal, lower ranking for any single query |
 
-A 1,000-word multi-topic page pools into a single coarse vector; a 300-word single-concept page produces a sharper embedding.
-
 ## Section Length: The 200–400 Word Rule
 
 Sections of 200–400 words produce chunks that are:
@@ -65,7 +63,7 @@ H1/H2/H3 headings are the strongest semantic signals in a document — they defi
 - **H3**: optional for sub-facets within an H2 — keep nesting shallow
 - **Avoid vague headings** like "Overview" or "Details" — zero semantic load
 
-Descriptive headings also enable deep links: an AI tool can cite `page.md#how-rag-chunking-works` rather than just `page.md`.
+Descriptive headings also enable deep links — an AI tool can cite `page.md#how-rag-chunking-works`, not just `page.md`.
 
 ## Why Monolithic Pages Underperform
 
@@ -73,7 +71,7 @@ Multi-concept pages hurt AI retrieval:
 
 - A 3,000-word page covering five techniques produces five blended embeddings — each weaker than a dedicated page embedding
 - Chunk boundaries may split an explanation mid-argument, stripping context needed for citation
-- Passages surrounded by off-topic content produce blended embeddings with lower cosine similarity to any single query — the same mechanism that penalizes multi-topic pages applies within a page's sections
+- Off-topic surrounding content blends a passage's embedding — the same penalty multi-topic pages suffer, applied within a page
 
 Traditional SEO tactics like keyword density show negligible or negative effects on generative engine visibility.
 
@@ -128,8 +126,4 @@ Each page produces a tight, focused embedding. A query for "how to rotate API ke
 - [How AI Engines Cite](how-ai-engines-cite.md)
 - [GEO for Technical Docs](geo-for-technical-docs.md)
 - [Topical Authority](topical-authority.md)
-- [Measuring GEO Performance](measuring-geo-performance.md)
-- [Schema and Structured Data](schema-and-structured-data.md)
-- [SEO vs GEO](seo-vs-geo.md)
-- [AI Crawler Policy](ai-crawler-policy.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)

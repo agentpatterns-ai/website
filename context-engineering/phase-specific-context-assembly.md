@@ -7,12 +7,12 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Phase-Specific Context Assembly
 
-> Phase-specific context assembly delivers a different context bundle to each agent based on its role in the workflow — planners get architecture summaries, workers get targeted file excerpts and validation commands, reviewers get diffs and acceptance criteria.
+> Phase-specific context assembly tailors the context bundle to each agent's role: planners get summaries, workers get file excerpts and validation commands, reviewers get diffs.
 
 When an agent produces poor output, the instinct is to improve the prompt or switch models. A more productive target is the **context bundle delivered to the agent for that phase**. The question shifts from "what instructions should the agent follow?" to "what information does this agent need, at this step?"
 
@@ -149,30 +149,21 @@ It does not receive the implementation history or planning artifacts.
 
 Each agent operates with under 3,000 tokens of input context; none receives the full project history.
 
+## Key Takeaways
+
+- The lever for poor agent output is often the **per-phase context bundle**, not the prompt or the model — ask "what does this agent need, at this step?"
+- Plan, Work, Review, and Ship phases have distinct context needs; deliver only what each phase uses and route failures back to the phase that caused them.
+- Orchestrators need condensed summaries to route and decompose; workers need the exact files, excerpts, and validation commands for their subtask — the same bundle to both causes drift.
+- Prefer JIT loading (lightweight references retrieved on demand) over upfront loading so early-stage context does not persist as stale noise.
+- Skip phase-specific assembly for flat workflows, heavy emergent replanning, genuine cross-phase dependencies, or projects small enough to fit in context — filtering costs more than it saves there.
+
 ## Related
 
 - [Goal Recitation](goal-recitation.md)
-- [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md)
-- [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Context Hub](context-hub.md)
-- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
-- [Prompt Chaining](prompt-chaining.md)
 - [Context Budget Allocation](context-budget-allocation.md)
-- [Context Priming](context-priming.md)
 - [Layered Context Architecture](layered-context-architecture.md)
-- [Context-Injected Error Recovery](context-injected-error-recovery.md)
-- [Seeding Agent Context](seeding-agent-context.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Lost in the Middle](lost-in-the-middle.md)
-- [Semantic Context Loading](semantic-context-loading.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Prompt Layering](prompt-layering.md)
-- [Observation Masking](observation-masking.md)
-- [Prompt Compression](prompt-compression.md)
-- [Repository Map Pattern](repository-map-pattern.md)
-- [Discoverable vs. Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
+- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
+- [Harness Engineering](../agent-design/harness-engineering.md)
 - [Context Engineering](context-engineering.md)
-- [Environment Specification as Context](environment-specification-as-context.md)
-- [Error Preservation in Context](error-preservation-in-context.md)
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — scoping each phase's context also limits injection attack surface

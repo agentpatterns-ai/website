@@ -11,14 +11,14 @@ tags:
 aliases:
   - memory induced tool drift
   - personality bias tool drift
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Memory-Induced Tool-Drift in LLM Agents
 
-> Personality biases stored in long-term memory — cost-consciousness, impatience, risk tolerance — silently influence tool-call parameters in contexts where they should not apply.
+> Memory-induced tool-drift is when personality biases in an agent's long-term memory silently steer tool-call parameters in contexts where those preferences should not apply.
 
-Memory-induced tool-drift is a failure mode in agents that combine persistent personality memory with tool-calling: biased memory entries act as implicit steering vectors on the model's activations, redirecting tool parameters toward the bias even when the current task is unrelated ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
+It is a failure mode of agents that combine persistent personality memory with tool-calling: biased memory entries act as implicit steering vectors on the model's activations, redirecting tool parameters toward the bias even when the current task is unrelated ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
 ## The Pattern
 
@@ -30,9 +30,9 @@ A "fast iteration" preference shortens timeouts on resilience tests; a "low-cost
 
 ## Why It Fails
 
-A stored "I value low cost" is indistinguishable from an in-prompt "minimize cost" once attended to. The mechanism is attention competition under semantic similarity: when the prompt activates a tool whose parameters share surface keywords with a memory entry — "configure," "deploy," "test" — that entry gets attended to even with no causal bearing on the task, and the model incorporates its preference exactly as it would an in-prompt instruction, because the activation patterns are equivalent ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
+A stored "I value low cost" is indistinguishable from an in-prompt "minimize cost" once attended to. The mechanism is attention competition under semantic similarity: when a tool's parameters share surface keywords with a memory entry — "configure," "deploy," "test" — that entry gets attended to despite no causal bearing on the task, and the model incorporates its preference exactly as it would an in-prompt instruction ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
-The effect is large and broad. Across seven frontier models — including extended-reasoning variants — biased memories raised deflection scores by **up to +3.6 points on a 1-5 scale** versus baseline, across 105 MEMDRIFT scenarios spanning five bias dimensions and seven professional domains; a scan of verified MCP servers identified **608 vulnerable tool parameters**, making this production-scale, not a benchmark artifact ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)). Prompt-based relevance instructions and memory filters **reduce drift but do not eliminate it** on any model class tested — and the residual drift compounds across long sessions.
+The effect is large and broad. Across seven frontier models, biased memories raised deflection scores by **up to +3.6 points on a 1-5 scale**, across 105 MEMDRIFT scenarios spanning five bias dimensions and seven domains; a scan of verified MCP servers identified **608 vulnerable tool parameters** ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)). Prompt-based relevance instructions and memory filters **reduce drift but do not eliminate it** on any model class tested.
 
 ## Example
 
@@ -63,12 +63,12 @@ The paper frames the gap as needing "specialized safeguards addressing memory ma
 
 The anti-pattern framing vanishes when any of the three conditions is removed:
 
-- **Single-user single-task agents** — personality and task context are aligned, so the "drift" is the intended personalization.
+- **Single-user single-task agents** — personality and task context align, so the "drift" is intended personalization.
 - **Stateless agents** — without persistent memory the failure is structurally impossible.
-- **Fully-constrained tool surfaces** — if every parameter is dictated by the user's literal request, there is no slack for bias to influence.
+- **Fully-constrained tool surfaces** — if every parameter is dictated by the user's literal request, bias has no slack to exploit.
 - **Strict task-conditional retrieval** — namespacing preferences by domain shrinks the drift surface, though it does not eliminate it ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
-Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258) reports a 14.6% personalization-score gain with trait incorporation rising from 45% to 75%, and [MEMENTO](https://arxiv.org/abs/2505.16348) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
+Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258) reports a 14.6% personalization-score gain, and [MEMENTO](https://arxiv.org/abs/2505.16348) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
 
 ## Key Takeaways
 

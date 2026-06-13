@@ -9,12 +9,12 @@ tags:
 aliases:
   - specification redundancy robustness
   - structural redundancy code generation prompts
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Multi-Layer Specification Redundancy as a Robustness Budget
 
-> Independent specification layers — description, constraints, examples, format — absorb prompt noise that would otherwise degrade code-generation correctness. Prose repetition of the same layer does not, and richer terminology can prime memorized-but-wrong solutions.
+> Independent specification layers — description, constraints, examples, format — absorb prompt noise that degrades code-generation correctness. Prose repetition of one layer does not.
 
 ## What the Evidence Shows
 

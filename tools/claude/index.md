@@ -3,6 +3,7 @@ title: "Claude Code for AI Agent Development"
 description: "Tool-specific reference for Claude Code's agentic features. - Sub-Agents — Ephemeral, isolated agents for focused task execution - Agent Teams — Coordinated"
 tags:
   - claude
+  - index
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current

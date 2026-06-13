@@ -10,7 +10,7 @@ tags:
 aliases:
   - operational anchor preservation
   - cost-aware skill compression
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-13
 ---
 
 # Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens
@@ -40,7 +40,7 @@ A skill profile — token count, code ratio, validator markers, API call frequen
 
 ## Why It Works
 
-When an anchor is present, the agent commits the correct decision in one inference step. When absent, it must enumerate candidates, run them, observe failure, and retry. Each exploration step costs a full LLM inference, and output tokens dominate cost — ~3× more expensive per token than input ([Compression Method Matters, arxiv:2603.23527](https://arxiv.org/pdf/2603.23527)). The skill-token saved by deletion is a few hundred input tokens, often cached on KV-cache hits; the per-exploration overhead is thousands of output tokens, never cached. The mechanism is this asymmetry between cached input savings and uncached output overhead — the same effect a [randomized production trial of generic prompt compression](https://arxiv.org/pdf/2603.23525) documented, where aggressive compression (r≈0.2) *increased* total cost by 1.8% via output-token explosion despite reducing input by ~80%.
+With the anchor present, the agent commits the correct decision in one inference step; absent it, it enumerates candidates, runs them, observes failure, and retries. Each exploration step is a full inference whose generated tokens are priced above the prompt tokens it replaced. Input-token reduction overstates the saving because total cost tracks output length, which compression can inflate — one benchmark showed up to 56× output expansion under aggressive compression ([Compression Method Matters, arxiv:2603.23527](https://arxiv.org/abs/2603.23527)). The deleted skill text is a few hundred input tokens, often KV-cache hits; the exploration overhead is thousands of uncached output tokens. A [randomized production trial of generic prompt compression](https://arxiv.org/pdf/2603.23525) documented exactly this asymmetry: aggressive compression (r≈0.2) *increased* total cost by 1.8% via output-token explosion despite cutting input by ~80%.
 
 ## The Diagnostic
 
@@ -49,13 +49,13 @@ Before rewriting a skill, walk the body line-by-line and answer for each candida
 1. **Is this an operational anchor?** A single-line piece of operational knowledge the base model cannot guess — a specific flag, threshold, constructor argument, file path, or recovery rule.
 2. **Would the agent fail or retry without it?** If yes, the anchor pays for itself in saved exploration cost. Keep.
 3. **Is this surrounding explanation that contextualises the anchor?** Cut. Keep the anchor; drop the framing.
-4. **Is this an example that *implicitly* defines the anchor?** Cut only if the anchor is named explicitly elsewhere. SkillReducer found that moving examples that implicitly defined expected behaviour to reference modules was the dominant compression failure mode ([arxiv:2603.29919](https://arxiv.org/abs/2603.29919)).
+4. **Is this an example that *implicitly* defines the anchor?** Cut only if the anchor is named explicitly elsewhere — non-actionable body content is the safe cut, but an example carrying an otherwise-unstated convention is an anchor in disguise ([SkillReducer, arxiv:2603.29919](https://arxiv.org/abs/2603.29919)).
 
 This is the inverse of generic prompt compression's compression test ("can I remove a word without losing meaning?"). The cost-aware test is: **can I remove this without forcing the agent to discover it by trial?**
 
 ## Example
 
-A verbose skill section before rewriting — implementation-heavy, three real anchors buried in prose:
+A verbose, implementation-heavy section with three anchors buried in prose:
 
 ```markdown
 ## Deploying to staging
@@ -81,7 +81,7 @@ the log entry, not re-run the deploy.
 - On canary failure within 5 minutes: read `/var/log/stage-deploy.log`. Do not retry.
 ```
 
-Same operational content, ~70% fewer tokens, and the three anchors that prevent exploration cycles are intact. A naive compression that also dropped "do not retry" would cut input tokens slightly more but risk a multi-thousand-token retry loop — net cost up, not down.
+Same operational content, ~70% fewer tokens, anchors intact. Dropping "do not retry" too would save a few more input tokens but risk a multi-thousand-token retry loop — net cost up.
 
 ## When This Backfires
 
@@ -91,13 +91,13 @@ The anchor-preservation framing has real costs that the 7.0% headline win must j
 - **Selection-bottlenecked libraries** — when descriptions get truncated to fit a character budget and the agent picks the wrong skill, in-skill anchors are unreachable. Fix [description craft](../tool-engineering/skill-authoring-patterns.md) first ([Anthropic best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)).
 - **Rapidly-changing APIs** — preserved anchors that go stale within weeks actively misdirect the agent. A stale anchor is worse than an absent one; pair preservation with an explicit update cadence, or accept exploration cost. See [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md).
 - **Fire-and-forget workflows** — without a validator, retry, or exploration loop, anchors aimed at preventing debugging cycles cost tokens for no payoff.
-- **The "less-is-more" baseline** — [SkillReducer](https://arxiv.org/abs/2603.29919) reports 86% functional retention and 25.3% of skills actively improving under naive compression, attributed to reduced context-window distraction. For libraries of bloated human-written skills, the simpler "compress hard, keep code-fenced blocks intact" heuristic captures most of the value. Anchor-preservation wins only where exploration overhead exceeds compression-distraction overhead.
+- **The "less-is-more" baseline** — [SkillReducer](https://arxiv.org/abs/2603.29919) achieves 48% description and 39% body compression while *improving* functional quality by 2.8% (mean cross-model retention 0.965), attributing the gain to reduced context-window distraction. For libraries of bloated human-written skills, the simpler "compress hard, keep code-fenced blocks intact" heuristic captures most of the value. Anchor-preservation wins only where exploration overhead exceeds compression-distraction overhead.
 
 ## Key Takeaways
 
 - A rewritten skill is cheaper only when it preserves the **sparse operational anchors** that prevent exploration, debugging, and retry — not because it has fewer tokens.
 - Three anchor classes cover most skills: **API/code anchoring** (constructors, flags), **workflow guarding** (ordered steps, validators), **rule/formula anchoring** (thresholds, schemas). No template wins universally — match the strategy to the skill's structural profile.
-- The mechanism is the asymmetry between cached input savings and uncached output overhead — output tokens cost ~3× input per token and never cache.
+- The mechanism is the asymmetry between cached input savings and uncached output overhead — the saved skill tokens are cheap, cacheable input, while each forced exploration step spends uncached output tokens.
 - The diagnostic test is "can I remove this without forcing the agent to discover it by trial?" — the inverse of generic compression's "without losing meaning?" test.
 - For pure-prose skills, fire-and-forget workflows, or libraries bottlenecked at selection rather than execution, fall back to [Prompt Compression](../context-engineering/prompt-compression.md).
 

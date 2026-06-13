@@ -10,12 +10,12 @@ tags:
   - agent-design
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent-First Software Design
 
-> Architect systems where AI agents are the primary consumers — machine-readable APIs, structured outputs, and programmatic interfaces replace visual UIs as the default interaction surface.
+> Agent-first software design architects systems where AI agents are primary consumers — machine-readable APIs and structured outputs replace visual UIs as the default interaction surface.
 
 ## The Agent-First Inversion
 

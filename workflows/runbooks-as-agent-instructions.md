@@ -9,12 +9,12 @@ tags:
 aliases:
   - agent-followable runbooks
   - agent-executable runbooks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Runbooks as Agent Instructions
 
-> Runbooks written for humans fail for agents: implicit context, ambiguous decision points, and actions that assume cognitive inference. The fix is not a new format — it is an audit workflow that identifies each failure mode and applies the correct transformation.
+> Runbooks written for humans fail for agents through implicit context, ambiguous decision points, and assumed knowledge — and each failure mode needs a different fix.
 
 Runbooks-as-agent-instructions are operational procedures rewritten so an agent can execute them end-to-end: every implicit action becomes an explicit tool call, every ambiguous condition becomes a measurable threshold, and every assumed context is declared in the runbook itself. The rewriting is driven by a three-question audit, not a template. A concrete adoption target — all operational runbooks followable by the agent within a fixed time window — surfaces the core problem: most runbooks are written as memory aids for experienced operators, not as executable instructions.
 

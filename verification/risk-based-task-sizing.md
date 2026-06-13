@@ -9,7 +9,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Risk-Based Task Sizing for Agent Verification Depth

@@ -1,5 +1,5 @@
 ---
-title: "Agent-Authored PR Integration and Merge Predictors"
+title: "Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success"
 description: "Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged."
 tags:
   - human-factors
@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - code-review
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success
 
-> Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged; force pushes and large changesets are the strongest negative predictors.
+> Reviewer engagement, not code correctness, is the strongest predictor of whether an agent-authored PR gets merged; force pushes are the strongest negative predictor.
 
 ## The Finding
 
@@ -86,16 +86,9 @@ An agent opens a 200-line PR adding a new webhook handler. The reviewer comments
 
 - [PR Scope Creep as a Human Review Bottleneck](../anti-patterns/pr-scope-creep-review-bottleneck.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
-- [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
 - [Predicting Reviewable Code](predicting-reviewable-code.md)
-- [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of sustained review and oversight that compound with large changesets
-- [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
-- [Diff-Based Review](diff-based-review.md)
-- [Tiered Code Review](tiered-code-review.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — merge rate gaps and the productivity paradox of high-volume agent PRs
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical data on how reviewer composition (CRA-only vs. human) affects merge rates
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers in code review collaboration
-- [Committee Review Pattern](committee-review-pattern.md)

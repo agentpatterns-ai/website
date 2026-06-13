@@ -7,12 +7,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Failure-Driven Iteration for Improving Agent Workflows
 
-> A development technique where you deliberately run code to generate error output, then feed that output to the agent as the primary context for the next fix — grounding solutions in real signals rather than speculative descriptions.
+> Failure-driven iteration feeds real error output back to the agent as the primary context for each fix, grounding solutions in signals rather than speculation.
 
 ## Core Loop
 

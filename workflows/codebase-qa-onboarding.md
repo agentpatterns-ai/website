@@ -7,12 +7,12 @@ tags:
   - context-engineering
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent-Powered Codebase Q&A and Onboarding
 
-> Agents with codebase search tools turn unfamiliar repositories into navigable systems: answer targeted questions about architecture, trace execution paths, and generate architecture documentation — compressing ramp-up time without requiring upfront reading of every file.
+> Agents with codebase search tools answer targeted questions about an unfamiliar repository, trace execution paths, and generate architecture documentation — compressing onboarding ramp-up.
 
 ## The Problem
 
@@ -161,11 +161,11 @@ The agent produces a step-by-step trace with 12 file references. The developer o
 
 ## Related
 
+- [Agent-Generated Onboarding Guide as a Durable Artefact](agent-generated-onboarding-guide.md) — the artefact complement: synthesise the ramp-up into a version-controlled document instead of a live session
 - [Team Onboarding for Agent Workflows](team-onboarding.md) — extending Q&A onboarding to a whole team
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — agent exploration as a first step before any change
 - [Codebase Readiness for Agents](../agent-design/codebase-readiness.md) — preparing a repo so agent Q&A is high-signal
 - [Getting Started with Instruction Files](../instructions/getting-started-instruction-files.md) — bootstrapping the CLAUDE.md / AGENTS.md that anchors onboarding
 - [Three Knowledge Tiers](../instructions/three-knowledge-tiers.md) — hot/warm/cold tiers for the knowledge surfaced during Q&A
 - [Continuous Documentation](continuous-documentation.md) — keeping the docs produced by onboarding in sync with the code
-- [The Plan-First Loop: Design Before Code](plan-first-loop.md) — using Plan Mode beyond initial exploration
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how agents persist and accumulate knowledge across sessions

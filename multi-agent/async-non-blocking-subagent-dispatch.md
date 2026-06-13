@@ -9,12 +9,12 @@ aliases:
   - non-blocking dispatch
   - async subagent dispatch
   - fire-and-continue delegation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Async Non-Blocking Subagent Dispatch
 
-> Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning, processing partial results, and managing state while delegates execute concurrently — but only when the orchestrator has genuine work to perform during the wait.
+> Decouple the orchestrator's loop from subagent lifecycle so it keeps working while delegates run — but only when it has genuine work during the wait.
 
 ## The Qualifying Condition
 

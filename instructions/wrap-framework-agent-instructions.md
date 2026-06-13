@@ -5,10 +5,10 @@ description: "A four-step checklist for agent-ready task descriptions: Write eff
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# WRAP Framework for Agent Instructions
+# WRAP Framework for Writing Agent-Ready Issue Descriptions
 
 > A four-step checklist for writing agent-ready task descriptions that maximize autonomous execution quality: Write effective issues, Refine instructions, Atomic tasks, Pair with the agent.
 
@@ -124,15 +124,11 @@ Agents have no persistent state between sessions; every decision must be derivab
 
 ## Related
 
-- [Context Engineering](../context-engineering/context-engineering.md)
 - [Specification as Prompt](specification-as-prompt.md)
 - [Feature List Files](feature-list-files.md)
 - [Instruction Polarity](instruction-polarity.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
-- [Narrow Task Instructions](../security/task-scope-security-boundary.md)
-- [Convention Over Configuration](convention-over-configuration.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [Negative Space Instructions](negative-space-instructions.md)
+- [Context Engineering](../context-engineering/context-engineering.md)
 - [Harness Engineering](../agent-design/harness-engineering.md) — environment design as the primary lever for agent reliability

@@ -9,12 +9,12 @@ tags:
 aliases:
   - calibrated abstention from copilot feedback
   - learned-critic deferral
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Selective Autonomy from Copilot Feedback
 
-> Decouple "what to do" from "when to act": a policy proposes the next action, a critic learned from operator accept/correct feedback decides whether to execute it or defer to a human.
+> A policy proposes the next action; a critic learned from operator accept/correct feedback decides whether to act autonomously or defer to a human.
 
 ## The Pattern
 

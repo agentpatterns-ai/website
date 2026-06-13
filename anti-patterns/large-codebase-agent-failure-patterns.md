@@ -11,7 +11,7 @@ aliases:
   - sourcegraph five failure patterns
   - large codebase agent failures
   - coding agent failure patterns
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)

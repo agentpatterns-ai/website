@@ -7,12 +7,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # QA Session to Issues Pipeline
 
-> A multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues — reducing post-QA triage overhead by automating deduplication, codebase investigation, and quality filtering.
+> A multi-stage agent pipeline that turns raw QA session documents into investigated, context-rich GitHub issues by automating deduplication, codebase investigation, and quality filtering.
 
 This pipeline starts where [continuous triage](continuous-triage.md) does not: before issues exist. It takes unstructured QA session output — notes, recordings, bug reports — and produces a smaller set of well-formed, codebase-anchored issues ready for human review.
 
@@ -20,7 +20,7 @@ This pipeline starts where [continuous triage](continuous-triage.md) does not: b
 
 Without investigation, the pipeline just reformats raw notes. The codebase investigation stage is the discriminating filter — each candidate issue gains relevant files, recent commits, and reproduction signals before the quality filter runs. This is what separates the output from a simple reformatting pass.
 
-The GitHub Security Lab's Taskflow Agent demonstrated the practical benefit at scale: from 1,003 pipeline suggestions, 79% were filtered before human review, leaving 21% confirmed as real findings ([GitHub Security Lab](https://github.blog/security/ai-supported-vulnerability-triage-with-the-github-security-lab-taskflow-agent/)).
+The GitHub Security Lab's Taskflow Agent demonstrated the filtering benefit at scale: across 40+ repositories it generated 1,003 suggestions, narrowed those to 139 labeled potential vulnerabilities, and after manual review reported 19 as impactful — roughly 30 real-world vulnerabilities surfaced since August ([GitHub Security Lab](https://github.blog/security/ai-supported-vulnerability-triage-with-the-github-security-lab-taskflow-agent/)). The aggressive funnel is the point: most candidates never reach a human.
 
 ## Pipeline Stages
 

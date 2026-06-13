@@ -10,7 +10,7 @@ aliases:
   - disableSkillShellExecution
   - inline shell gate for skills
   - skill shell interpolation gate
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Skill Shell Execution Gate: Disabling Inline Shell from Skills

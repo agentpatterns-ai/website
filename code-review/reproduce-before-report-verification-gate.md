@@ -9,7 +9,7 @@ aliases:
   - reproduce-before-report gate
   - verifier-gated code review
   - finding verification gate
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Reproduce-Before-Report Verification Gate
@@ -27,7 +27,7 @@ The verifier is not a second opinion. It takes the diff plus the reviewer's clai
 Independence is the load-bearing property. A verifier that shares context with the reviewer inherits its reasoning errors and confirms its own false positives. Two dimensions:
 
 - **Context freshness**: the verifier starts with the diff and the claim, not the reviewer's chain of thought.
-- **Model diversity**: LLM judges score same-family outputs 10-25% higher than other-family outputs ([Adaline analysis of frontier-model judge bias](https://www.adaline.ai/blog/llm-as-a-judge-reliability-bias)); same-family verifiers reproduce same-family confabulations.
+- **Model diversity**: LLM judges exhibit documented same-family bias — systematically scoring outputs from related model families higher ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685)); same-family verifiers reproduce same-family confabulations.
 
 Claude Code's `/code-review ultra` (aliased from `/ultrareview`) names this in its comparison against single-pass `/review`: ultrareview is "multi-agent fleet with independent verification" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
 

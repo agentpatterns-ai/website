@@ -5,7 +5,7 @@ description: "Agent delegation has overhead. Match task characteristics to agent
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Delegation Decision: When to Use an Agent vs Do It Yourself

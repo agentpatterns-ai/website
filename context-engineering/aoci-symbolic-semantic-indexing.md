@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - rag
   - arxiv
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # AOCI: Symbolic-Semantic Repository Indexing
@@ -66,6 +66,8 @@ The repo map is still query-shaped (PageRank personalization weights files being
 In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects, while mainstream agent-based tools introduced defects in 12 tasks and consumed 4–130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
 
 These figures come from one team's evaluation and are not yet independently replicated. Treat them as a directional signal, not a settled benchmark.
+
+**Independent counter-evidence points the other way.** The strongest independent benchmark of this category reaches the opposite conclusion: Gloaguen et al. evaluated AGENTS.md-style files — persistent context read before the task, the family AOCI belongs to — across SWE-bench Lite and AGENTbench and found they *tend to reduce* task success versus no repository context, while raising inference cost over 20% as agents over-explore. Auto-generated files fared worst (−3% success); even human-written ones gained only ~4% at ~19% cost ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md)). AOCI was not tested directly but sits squarely in that read-whole category — weigh its favorable single-source numbers against this signal before adopting.
 
 ## When This Backfires
 

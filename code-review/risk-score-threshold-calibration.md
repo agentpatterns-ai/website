@@ -11,7 +11,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Risk-Score Threshold Calibration for Auto-Approval
@@ -20,9 +20,9 @@ last_reviewed: 2026-06-02
 
 ## The Pattern
 
-A learned diff-risk model assigns each diff a numeric score predicting the likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review. Moving the threshold up automates more diffs at strictly higher marginal risk; moving it down trades automation yield for safety. The point on the curve is an operator choice, not a property of the model.
+A learned diff-risk model scores each diff by likelihood of revert or production incident. A single percentile threshold separates auto-approved diffs from those routed to human review. Moving it up automates more diffs at strictly higher marginal risk; moving it down trades yield for safety. The point on the curve is an operator choice, not a property of the model.
 
-It differs from two adjacent patterns. [Tiered code review](tiered-code-review.md) routes by *static path criticality* — auth and payment paths escalate regardless of score. [Tunable per-PR effort](tunable-review-effort.md) picks review depth per PR. Threshold calibration is the *organization-wide* dial on a learned score that decides whether human review happens at all.
+It differs from two adjacent patterns. [Tiered code review](tiered-code-review.md) routes by *static path criticality* — auth and payment paths escalate regardless of score. [Tunable per-PR effort](tunable-review-effort.md) picks review depth per PR. Threshold calibration is the *organization-wide* dial on a learned score deciding whether human review happens at all.
 
 ## How RADAR Implements It
 
@@ -65,7 +65,7 @@ Source: [arXiv:2605.30208](https://arxiv.org/abs/2605.30208).
 
 ## Why It Works
 
-Risk calibration works because three things hold at once. First, the empirical revert-rate distribution across the score is monotonic, so each threshold move corresponds to a known marginal change in expected reverts and shifts the marginal automated approval to a strictly riskier diff than the previous one ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Second, organization-scale telemetry — revert and incident counts per score bucket — funds recalibration when the diff distribution drifts. Third, a deterministic validation pass catches cases where the model under-estimates risk, so the threshold is not the sole safety boundary. Remove any one and the dial degrades: a monotonic score without telemetry is unmeasured, and telemetry without validation makes every miscalibration a production incident before the next training run.
+Risk calibration works because three things hold at once. First, the empirical revert-rate distribution across the score is monotonic, so each threshold move maps to a known marginal change in expected reverts ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Second, organization-scale telemetry — revert and incident counts per score bucket — funds recalibration when the diff distribution drifts. Third, a deterministic validation pass catches model under-estimates, so the threshold is not the sole safety boundary. Remove any one and the dial degrades: a monotonic score without telemetry is unmeasured; telemetry without validation makes every miscalibration a production incident.
 
 ## Prerequisites
 
@@ -89,7 +89,7 @@ Adopting the pattern without these inherits an opaque knob with no way to know w
 
 ## Example
 
-What the published RADAR data point looks like as a calibration curve. The paper reports two operating points directly — the 25th and 50th percentile thresholds — plus the baseline comparison:
+The published RADAR data as a calibration curve. The paper reports two operating points — the 25th and 50th percentile thresholds — plus the baseline:
 
 | Percentile threshold | Auto-approve rate | Revert rate | Incident rate |
 |----------------------|-------------------|-------------|---------------|
@@ -97,13 +97,13 @@ What the published RADAR data point looks like as a calibration curve. The paper
 | 50th | 60.31% | ~1/3 of baseline | ~1/50 of baseline |
 | Non-RADAR baseline | — | reference | reference |
 
-Source: [arXiv:2605.30208](https://arxiv.org/abs/2605.30208). The aggregated safety figures (revert ~1/3, incident ~1/50) are reported across RADAR-reviewed diffs without per-percentile breakouts in the abstract material.
+Source: [arXiv:2605.30208](https://arxiv.org/abs/2605.30208). The aggregated safety figures (revert ~1/3, incident ~1/50) are reported across RADAR-reviewed diffs without per-percentile breakouts.
 
-A team adopting the pattern in their own environment would build the equivalent table from their own telemetry: bucket diffs by score percentile, compute observed revert rate and incident rate per bucket against a non-auto-approved baseline, and pick the threshold where the marginal revert/incident cost crosses the team's tolerance line. The decision is now an explicit operator choice tied to local numbers, not a hidden assumption inside the model. Without that local telemetry, there is no curve to read — only the vendor's published point.
+A team reproduces this from its own telemetry: bucket diffs by score percentile, compute revert and incident rate per bucket against a non-auto-approved baseline, and pick the threshold where marginal cost crosses its tolerance line. Without local telemetry there is no curve to read — only the vendor's published point.
 
 ## Key Takeaways
 
-- Risk-score threshold calibration converts auto-approval into an explicit yield-vs-safety knob; moving the threshold up automates more diffs at strictly higher marginal risk.
+- Risk-score threshold calibration converts auto-approval into an explicit yield-vs-safety knob; moving it up automates more diffs at strictly higher marginal risk.
 - The pattern requires per-bucket revert/incident telemetry, a deterministic-validation backstop, and stable feature signals. Without all three, the knob is opaque.
 - RADAR's published numbers (revert rate ~1/3 baseline, incident rate ~1/50, 60.31% approval at 50th percentile) come from Meta-scale infrastructure — counter-evidence shows the dial degrades when ground-truth labels or upstream signals are noisy.
 - Calibration is distinct from static path-tiering (tiered code review) and per-PR effort dials (tunable review effort) — the three patterns compose rather than substitute.

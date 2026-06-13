@@ -8,12 +8,12 @@ tags:
   - instructions
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-06-05
+last_reviewed: 2026-06-13
 ---
 
 # Tool Minimalism and High-Level Prompting
 
-> Expose fewer, non-overlapping tools and provide goal-oriented instructions rather than step-by-step procedures — both counter-intuitive decisions that production data shows improve reliability.
+> Tool minimalism — exposing fewer, non-overlapping tools — paired with high-level prompting beats redundant tool sets and step-by-step procedures, a counter-intuitive result production data confirms.
 
 !!! info "Also known as"
     Tool Calling Schema Standards, Subagent Schema-Level Tool Filtering, Tool Schema Design

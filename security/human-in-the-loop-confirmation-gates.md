@@ -10,7 +10,7 @@ tags:
   - human-factors
   - tool-agnostic
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Human-in-the-Loop Confirmation Gates for Consequential Agent Actions

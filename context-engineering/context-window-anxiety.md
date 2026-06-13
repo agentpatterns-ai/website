@@ -8,7 +8,7 @@ tags:
 aliases:
   - context anxiety management
   - premature task closure
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -26,7 +26,7 @@ As the context window fills, some models shift behavioral mode before hitting a 
 - Rushed summarization that omits in-progress sub-tasks
 - Consistent underestimation of available remaining tokens — Cognition found the model was "very precise about these wrong estimates"
 
-This is distinct from the [context window dumb zone](context-window-dumb-zone.md), which is a measurable quality degradation in recall and reasoning as context fills. Context anxiety is a behavioral shift — the model starts acting as if it must wrap up, even when capacity remains.
+This is distinct from the [context window dumb zone](context-window-dumb-zone.md), a measurable quality degradation in recall and reasoning as context fills. Context anxiety is a behavioral shift — the model acts as if it must wrap up, even when capacity remains.
 
 [Anthropic's best-practices documentation](https://code.claude.com/docs/en/best-practices) confirms that performance degrades as context fills and that models may "forget earlier instructions or make more mistakes" — but frames this as cognitive load, not a behavioral mode shift. The behavioral framing comes from practitioner observation rather than public benchmarks, and specific token thresholds at which the behavior triggers remain model-dependent.
 
@@ -42,7 +42,7 @@ This is distinct from the [context window dumb zone](context-window-dumb-zone.md
 
 ### 1. Context Buffer Allocation
 
-Provision a larger context window than you need for the task, then cap actual usage well below it. [Cognition reports](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that enabling Claude's 1M-token beta mode while capping Devin's use at 200K "convinced the model it had plenty of runway" and restored normal behavior.
+Provision a larger context window than you need, then cap actual usage well below it. [Cognition reports](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that enabling Claude's 1M-token beta mode while capping Devin's use at 200K "convinced the model it had plenty of runway" and restored normal behavior.
 
 This is an architectural decision, not a per-request one. It applies when you control the API parameters or harness configuration.
 
@@ -62,12 +62,13 @@ The instruction mirrors how Anthropic's best-practices documentation recommends 
 
 ### 3. Token Budget Transparency
 
-Tell the model explicitly how many tokens remain. A model that underestimates available space will act on that underestimate. Communicating the actual budget — or a deliberately padded estimate — corrects the behavioral trigger.
+Tell the model explicitly how many tokens remain. A model that underestimates available space acts on that underestimate. Communicating the actual budget — or a deliberately padded estimate — corrects the trigger.
 
 Practical approaches:
 - Include a token budget field in your system prompt that the harness updates each turn
 - Use a status line showing current context usage (Claude Code supports [custom status lines](https://code.claude.com/docs/en/statusline))
-- The Claude Code `/context` command (v2.1.74+) provides capacity warnings and optimization suggestions
+
+Tools are beginning to ship this transparency as a first-class surface. Cursor's in-product context-usage report breaks token usage across system prompt, tool definitions, rules, and skills, and pairs it with a "Debug with Agent" action that surfaces reduction opportunities ([Cursor — Context explorer changelog](https://cursor.com/changelog/canvas-improvements)).
 
 ## When to Apply
 
@@ -87,7 +88,7 @@ It is less relevant for short, single-turn interactions where context fill is no
 | Counter-prompting | Adds tokens to every prompt | Long system prompts can cause rule-compliance drop-off per Anthropic guidance |
 | Budget transparency | Harness complexity; stale values if not updated | Incorrect budget values may worsen the problem |
 
-None of these mitigations eliminates the underlying behavior — they reduce its likelihood. For tasks where completeness is critical, combine all three and verify output against a checklist rather than relying on model self-reporting.
+None of these mitigations eliminates the behavior — they reduce its likelihood. Where completeness is critical, combine all three and verify output against a checklist rather than relying on model self-reporting.
 
 ## Key Takeaways
 

@@ -5,7 +5,7 @@ description: "Automated tooling — type systems, test suites, linters, CI pipel
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Backpressure: Automated Feedback for Self-Correction
@@ -32,7 +32,7 @@ Each source provides a different level of feedback precision. Type systems are t
 
 ## Autonomy Scales with Backpressure
 
-An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It doesn't need human feedback at each step because the tooling provides it. A [2025 survey of LLM agent feedback mechanisms](https://dl.acm.org/doi/10.24963/ijcai.2025/1175) identifies external environmental feedback — including compiler output and test results — as the most reliable category of feedback for agent self-correction.
+An agent operating in a codebase with strong types, comprehensive tests, and enforced linting can iterate to a correct solution autonomously. It doesn't need human feedback at each step because the tooling provides it. A [2025 survey of LLM agent feedback mechanisms](https://dl.acm.org/doi/10.24963/ijcai.2025/1175) classifies external feedback — including code interpreters and execution results — as a distinct feedback category grounded in environmental responses rather than the model's own judgment.
 
 An agent operating in a codebase with no types, no tests, and no linting produces output that looks syntactically correct but may be semantically wrong — and there's no automated signal to detect it.
 

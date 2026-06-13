@@ -8,12 +8,12 @@ aliases:
 tags:
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Addictive Flow State of Agent-Assisted Development
 
-> Agent-assisted development triggers compulsive engagement through three converging mechanisms — flow state conditions, variable ratio reinforcement, and friction removal — that feel like productivity but may produce diminishing returns.
+> Agent-assisted development triggers compulsive engagement through three mechanisms — flow conditions, variable ratio reinforcement, and friction removal — that feel productive but yield diminishing returns.
 
 ## Dark Flow vs. Productive Flow
 

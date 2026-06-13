@@ -11,7 +11,7 @@ aliases:
   - deterministic agent orchestration
   - workflow-controlled modernization
   - fixed-policy orchestration
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Deterministic Orchestration for Structured Modernization
@@ -25,7 +25,7 @@ Two orchestration strategies sit at opposite ends of a control axis:
 - **LLM-controlled** — the model decides which tool to call next, when to validate, when to retry, when to stop. The model holds execution control across the entire workflow.
 - **Deterministic** — the surrounding code decides the step sequence; the model is called only at the steps that require translation, classification, or judgement.
 
-[Anthropic's workflows-vs-agents framing](https://www.anthropic.com/engineering/building-effective-agents) describes the same split: workflows orchestrate LLMs and tools through predefined code paths, agents let LLMs dynamically direct their own processes. Anthropic's guidance is to default to workflows for well-defined tasks and reserve agents for cases where required steps cannot be predicted.
+[Anthropic's workflows-vs-agents framing](https://www.anthropic.com/engineering/building-effective-agents) describes the same split: workflows orchestrate LLMs through predefined code paths; agents let LLMs direct their own processes. The guidance is to default to workflows for well-defined tasks and reserve agents for when the required steps cannot be predicted.
 
 The empirical case for deterministic orchestration on structured tasks comes from [Lwin and Kumar's controlled study](https://arxiv.org/abs/2605.09894) of COBOL-to-Python modernization. Holding constant models, prompts, tools, and source programs — varying only execution control — deterministic orchestration achieved comparable computational accuracy, improved worst-case robustness across repeated runs, and reduced token consumption by up to 3.5x across multiple models.
 
@@ -35,9 +35,7 @@ The pattern wins on tasks with all of:
 
 - **Stable workflow shape** — the step sequence is enumerable in code (parse, translate per construct, validate, integrate). Branches exist but are knowable.
 - **Repeated execution** — the workflow runs many times over a corpus, so the cost of encoding the orchestration amortises.
-- **Per-step uncertainty bounded to the LLM call** — the genuinely uncertain decision is *what does this construct translate to*, not *what should the agent do next*.
-
-Legacy modernization fits the profile when source corpora share structural conventions: COBOL-to-Python, Cobol-to-Java, Java 8-to-17 upgrades, framework migrations.
+- **Per-step uncertainty bounded to the LLM call** — the genuinely uncertain decision is *what does this construct translate to*, not *what should the agent do next*. Legacy modernization fits when source corpora share structural conventions: COBOL-to-Python, COBOL-to-Java, Java 8-to-17 upgrades, framework migrations.
 
 ```mermaid
 graph TD
@@ -53,11 +51,11 @@ graph TD
 
 Two mechanisms explain the cost and robustness gap.
 
-**Token amplification.** An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the next step is mechanical. A deterministic orchestrator invokes the model only on the steps that need a model, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
+**Token amplification.** An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the step is mechanical. A deterministic orchestrator invokes the model only on steps that need one, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
 
 **Variance reduction.** LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
 
-The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Different task, same pattern — but note the asymmetry. On open-ended repair, iterative agents have since pulled ahead on raw SWE-bench Verified accuracy, while fixed workflows trail at a fraction of the token cost ([SWE-bench leaderboard 2026](https://www.codeant.ai/blogs/swe-bench-scores)). The deterministic win is one of *cost and variance*, not an accuracy ceiling — which is why this pattern is scoped to structured tasks with bounded per-step decisions, not open-ended exploration.
+The same mechanism explains the [Agentless result on SWE-bench Lite](https://arxiv.org/abs/2407.01489): a fixed localization-and-repair workflow beat autonomous agents at lower cost. Note the asymmetry, though. On open-ended repair, iterative agents have since pulled ahead on raw SWE-bench Verified accuracy while fixed workflows trail at a fraction of the cost ([SWE-bench leaderboard 2026](https://www.codeant.ai/blogs/swe-bench-scores)). The deterministic win is one of *cost and variance*, not an accuracy ceiling — which is why this pattern is scoped to structured tasks, not open-ended exploration.
 
 ## What Stays in the Model
 
@@ -104,7 +102,7 @@ def modernize_program(cobol_path: str) -> str:
     return program
 ```
 
-Compare to the LLM-controlled equivalent, where the model decides whether to parse first, when to validate, whether to retry, and what to retry with — incurring full context cost on every step. The deterministic path makes two model calls per program on the happy path. The LLM-controlled path makes one call per decision, and there are decisions at every node.
+In the LLM-controlled equivalent, the model decides whether to parse first, when to validate, and whether and what to retry — incurring full context cost on every step. The deterministic path makes two model calls per program on the happy path; the LLM-controlled path makes one per decision, and there is a decision at every node.
 
 ## Key Takeaways
 

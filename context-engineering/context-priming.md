@@ -10,7 +10,7 @@ aliases:
   - Providing Context to Agents
   - Seeding Agent Context
   - Breadcrumbs in Code
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Context Priming: Pre-Loading Files for AI Agent Tasks
@@ -106,19 +106,11 @@ Transformer models generate each token conditioned on all tokens currently in co
 
 ## Related
 
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
-- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
-- [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
-- [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md)
+- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
+- [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
+- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
 - [Phase-Specific Context Assembly for AI Agent Development](phase-specific-context-assembly.md)
 - [Layered Context Architecture for AI Agent Development](layered-context-architecture.md)
-- [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md)
-- [Repository Map Pattern: AST + PageRank for Dynamic Code](repository-map-pattern.md)
 - [Retrieval-Augmented Agent Workflows: On-Demand Context](retrieval-augmented-agent-workflows.md)
-- [Context Budget Allocation: Spending Every Token Wisely](context-budget-allocation.md)
-- [Context Window Management: Understanding the Dumb Zone](context-window-dumb-zone.md)
-- [Discoverable vs Non-Discoverable Context for Agents](discoverable-vs-nondiscoverable-context.md)
-- [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
+- [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)

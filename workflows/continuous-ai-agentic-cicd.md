@@ -7,12 +7,12 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Continuous AI (Agentic CI/CD)
 
-> An automation paradigm where AI agents run alongside traditional CI/CD pipelines, handling judgment-heavy tasks that deterministic rules cannot express, and producing reviewable artifacts instead of autonomous commits.
+> Continuous AI runs agents alongside CI/CD pipelines to handle judgment-heavy tasks deterministic rules cannot express, producing reviewable artifacts instead of autonomous commits.
 
 ## The Gap Between CI and Judgment
 

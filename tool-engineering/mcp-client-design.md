@@ -11,12 +11,12 @@ tags:
   - tool-agnostic
   - tool-engineering
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # MCP Client Design: Building Robust Host-Side Logic
 
-> MCP client design is the host-side logic that connects to MCP servers, negotiates capabilities, routes tool calls, caches descriptions, enforces timeouts, and degrades gracefully on failure.
+> MCP client design is the host-side logic that connects to MCP servers, negotiates capabilities, routes tool calls, caches descriptions, and degrades gracefully on failure.
 
 ## Host, Client, Server
 

@@ -10,14 +10,14 @@ aliases:
   - adaptive fan-out controller
   - dynamic sandbox parallelism
   - signal-driven fan-out
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Adaptive Sandbox Fan-Out Controller
 
-> Start with a small parallel batch, monitor four quality signals, then decide whether to scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront.
+> Adaptively size the fan-out: launch a small batch, read four quality signals, then scale up, stop early, refine, or decompose instead of fixing N.
 
 ## The Problem with Static N
 

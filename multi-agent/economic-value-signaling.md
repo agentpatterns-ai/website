@@ -5,7 +5,7 @@ description: "Attach token values to inter-agent messages so agents self-sort by
 tags:
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Economic Value Signaling in Multi-Agent Networks

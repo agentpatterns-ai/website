@@ -8,12 +8,12 @@ tags:
 aliases:
   - code quality routing signal
   - code health tier routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Code-Health-Gated LLM Tier Routing
 
-> Route software engineering tasks to the cheapest model tier whose output passes the same verification gate as the expensive model, using pre-computed code health metrics as the routing signal.
+> Route each task to the cheapest model tier whose output still passes the shared verification gate, using pre-computed code health metrics as the routing signal.
 
 ## The Routing Signal
 

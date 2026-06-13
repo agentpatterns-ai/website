@@ -11,12 +11,12 @@ aliases:
   - "TraceToChain"
   - "absorbing DTMC reliability"
   - "agent reliability certificate"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric
 
-> pass@k, pass^k, and the reliability decay curve are not independent metrics — they are projections of one success first-passage distribution. Fitting an absorbing Markov chain to agent traces, with a goodness-of-fit certificate, is what makes any of those numbers defensible.
+> pass@k, pass^k, and the reliability decay curve are projections of one Markov chain fit to agent traces — defensible only with a goodness-of-fit certificate.
 
 ## Why a Single Pass Rate Is Underspecified
 

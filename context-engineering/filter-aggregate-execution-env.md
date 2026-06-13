@@ -7,10 +7,10 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Filter and Aggregate in the Execution Environment
+# Filter and Aggregate Data in the Execution Environment
 
 > Run data processing logic inside the code execution sandbox before surfacing results to the model, so only the relevant subset of data enters context.
 
@@ -131,12 +131,10 @@ The model sees only the error lines for the target date, not the full log file.
 ## Related
 
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md) — tool-by-tool fetching patterns and their cache cost implications
-- [Filesystem-Based Tool Discovery](../tool-engineering/filesystem-tool-discovery.md)
 - [Semantic Tool Output: Designing for Agent Readability](../tool-engineering/semantic-tool-output.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Observation Masking](observation-masking.md)
-- [Prompt Compression](prompt-compression.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Semantic Context Loading](semantic-context-loading.md)
 - [Context Budget Allocation](context-budget-allocation.md)

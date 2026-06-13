@@ -9,7 +9,7 @@ tags:
 aliases:
   - clarify-then-act injection
   - ask-user injection amplification
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Clarification Mode Amplifies Prompt Injection
@@ -34,17 +34,19 @@ The ASPI benchmark (728 task-attack scenarios, four frontier models) measures at
 | Kimi K2.5 | 11.1% | 63.1% |
 | Claude-Opus-4.7 | near-zero | near-zero |
 
-Agents in clarification mode exhibit "TASK_AND_ATTACK" behaviour — integrating injected instructions into task context instead of rejecting them; judges mark responses "CONFUSED or PERSUADED" when adversarial content is treated as legitimate task data ([ASPI, 2026](https://arxiv.org/html/2605.17324)). Claude-Opus-4.7 is the one tested model that holds the gap closed — the property is model-specific, not architectural.
+Agents in clarification mode exhibit "TASK_AND_ATTACK" behaviour — integrating injected instructions into task context instead of rejecting them; judges mark responses "CONFUSED or PERSUADED" when adversarial content is treated as legitimate task data ([ASPI, 2026](https://arxiv.org/abs/2605.17324)). Claude-Opus-4.7 is the one tested model that holds the gap closed — the property is model-specific, not architectural.
+
+Read the absolute ASRs as a lower bound, not a calibrated production rate. ASPI constructs ambiguity synthetically via single-slot removal — one missing argument, one clarification round — which the authors note "may not capture the full range of real-world underspecification"; they conclude the reported rates "likely underestimate the vulnerability that would arise in more complex, naturalistic settings" ([ASPI, 2026](https://arxiv.org/abs/2605.17324)). The direction of the amplification is robust; the magnitude in a multi-turn, multi-slot production agent is plausibly worse, not better.
 
 ## Why It Works
 
-The mechanism is **provenance collapse during solicited input**. When the agent issues `ask_user`, it expects the next message to be trusted clarification. Whatever fills that slot — including injected text relayed from an earlier tool output — enters context with raised trust. Injection defences trained on tool-output flows do not generalize: the agent is now reading a message it asked for, and treats it accordingly ([ASPI, 2026](https://arxiv.org/html/2605.17324)).
+The mechanism is **provenance collapse during solicited input**. When the agent issues `ask_user`, it expects the next message to be trusted clarification. Whatever fills that slot — including injected text relayed from an earlier tool output — enters context with raised trust. Injection defences trained on tool-output flows do not generalize: the agent is now reading a message it asked for, and treats it accordingly ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
 
 This is the same failure mode that makes clarification useful on benign inputs — the reply is weighted heavily against conflicting prior context. Helpfulness and injection resistance are independent properties; see [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md).
 
 ## Defences
 
-ASPI evaluates two lightweight defences against Gemini-3-Flash's 35.7% baseline ([ASPI, 2026](https://arxiv.org/html/2605.17324)):
+ASPI evaluates two lightweight defences against Gemini-3-Flash's 35.7% baseline ([ASPI, 2026](https://arxiv.org/abs/2605.17324)):
 
 - **Prompt guard** (segment-level filter scanning both user and tool messages while preserving benign clarification content) → 27.0% ASR
 - **Tool filter** (ask_user-aware restriction firing before agent action while maintaining clarification ability) → 23.9% ASR
@@ -57,7 +59,7 @@ The amplification effect only causes harm under specific conditions:
 
 - **No untrusted content in the agent's context.** If the agent never reads external pages, emails, or third-party tool outputs, the injection vector does not exist regardless of clarification mode.
 - **Lethal-trifecta legs are missing.** Injection only causes harm when the agent also has private-data access and egress. See [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — closing any one leg defangs the amplification.
-- **Model handles solicited-input provenance correctly.** Claude-Opus-4.7 held near-zero ASR in both modes on ASPI; the property is measurable per model, not assumed ([ASPI, 2026](https://arxiv.org/html/2605.17324)).
+- **Model handles solicited-input provenance correctly.** Claude-Opus-4.7 held near-zero ASR in both modes on ASPI; the property is measurable per model, not assumed ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
 - **Action gates restrict the post-clarification turn.** If consequential actions require a [confirmation gate](human-in-the-loop-confirmation-gates.md), a successful injection cannot ride elevated trust into a destructive call.
 
 Removing clarification regresses the agent to silent assumption-making, which has its own large failure surface ([Ask or Assume?, 2026](https://arxiv.org/abs/2603.26233); [Ambig-SWE, 2026](https://arxiv.org/abs/2502.13069)). Keep clarification *and* layer defences.

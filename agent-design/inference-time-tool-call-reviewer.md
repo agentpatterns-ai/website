@@ -12,7 +12,7 @@ aliases:
   - inference-time tool-call review
   - pre-execution tool-call reviewer
   - reinforced agent reviewer
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Inference-Time Tool-Call Reviewer
@@ -55,7 +55,7 @@ The framing matters: the [self-critique paradox](https://snorkel.ai/blog/the-sel
 [Ta et al. (2026)](https://arxiv.org/abs/2604.27233) evaluate the pattern on two tool-calling benchmarks:
 
 - **[BFCL](https://arxiv.org/abs/2604.27233)** (single-turn): +5.5% on irrelevance detection — the reviewer is most useful for catching tool calls that should not have fired at all.
-- **[τ2-Bench](https://arxiv.org/abs/2406.12045)** (multi-turn stateful): +7.1% — the reviewer's value grows with turn count and state complexity.
+- **[τ2-Bench](https://arxiv.org/abs/2506.07982)** (multi-turn, dual-control): +7.1% — the reviewer's value grows with turn count and state complexity.
 
 Two findings constrain deployment:
 

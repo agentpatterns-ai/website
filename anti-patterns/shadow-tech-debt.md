@@ -10,12 +10,12 @@ aliases:
   - hidden tech debt
   - invisible technical debt
   - agentic tech debt
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Shadow Tech Debt
 
-> AI agents complete tasks without architectural context — they don't know *why* a codebase is shaped the way it is, only *what* to change. Each agentic PR looks correct in isolation. The cumulative drift erodes coherence silently.
+> Shadow tech debt is the silent architectural drift agents leave when they change *what* a codebase does without knowing *why* it is shaped that way.
 
 JetBrains coined the term **Shadow Tech Debt** ([The New Stack](https://thenewstack.io/jetbrains-names-the-debt-ai-agents-leave-behind/)) — debt that is invisible, diffuse, and compounded when agents run without structural codebase understanding.
 
@@ -114,25 +114,20 @@ async def search(self, query: str, include_inactive: bool = True):
 
 Same bug fix. No architectural drift.
 
+## Key Takeaways
+
+- Each agentic PR can pass tests yet quietly violate ADRs, naming conventions, and the architectural rationale that lives outside the context window.
+- The debt is invisible per-PR and compounds at machine speed — agents replicate whatever patterns already exist in the repo, optimal or not.
+- Machine-readable context files (AGENTS.md, CLAUDE.md) are the cheapest mitigation, but keep them to non-inferable details — bloated instruction files cut task success and raise cost.
+- Deterministic enforcement, human review gates, and periodic drift scans are what stop the accumulation; they do not move with the agent's context window.
+
 ## Related
 
-- [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md)
-- [Abstraction Bloat](abstraction-bloat.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
-- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Comprehension Debt](comprehension-debt.md)
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
-- [Trust Without Verify](trust-without-verify.md)
-- [Context Poisoning](context-poisoning.md)
+- [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md)
+- [Agent-First Software Design](../agent-design/agent-first-software-design.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Agent Harness](../agent-design/agent-harness.md)
 - [CLAUDE.md Convention](../instructions/claude-md-convention.md)
-- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md)
-- [Effortless AI Fallacy](effortless-ai-fallacy.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
-- [Framework First](framework-first.md)
-- [Boring Technology Bias](boring-technology-bias.md)
-- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
-- [Demo to Production Gap](demo-to-production-gap.md)
-- [Happy Path Bias](happy-path-bias.md)
-- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md)
+- [Trust Without Verify](trust-without-verify.md)

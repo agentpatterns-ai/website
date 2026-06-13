@@ -8,7 +8,7 @@ tags:
 aliases:
   - "Agent Experience discipline"
   - "designing for agent consumers"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # Designing for Agent Consumers (Agent Experience)
@@ -69,3 +69,4 @@ An agent's only contact with your product is the literal bytes of your surface �
 - [AX Stack: Layered Model](../agent-design/ax-stack-layered-model.md) — the internal diagnostic that names the technology-surface layer this discipline designs.
 - [AX/UX/DX Triad](../agent-design/ax-ux-dx-triad.md) — separating the agent, user, and developer audiences inside the harness; AX-as-discipline is its outward-facing complement.
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — applying HCI principles to the interface an agent calls.
+- [Human-Facing Docs in the Agent Era: Mental Models Over Reference](../human/human-docs-mental-models-agent-era.md) — the human-facing counterpart; what prose docs retain once agents absorb the machine-readable reference load.

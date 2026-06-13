@@ -6,7 +6,7 @@ tags:
   - context-engineering
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Specification as Prompt: Existing Artifacts as Agent Instructions
@@ -15,17 +15,15 @@ last_reviewed: 2026-05-27
 
 ## The Core Idea
 
-When a formal specification already exists, pointing the agent at it is more precise than writing a natural language description of the same thing. A TypeScript interface is unambiguous. An OpenAPI schema leaves no room for interpretation. A test file is a complete set of acceptance criteria.
-
-Writing a prose description of something that already has a formal definition introduces noise and the risk of divergence between the description and the specification.
+When a formal specification already exists, pointing the agent at it is more precise than writing a natural language description of the same thing. A TypeScript interface is unambiguous; an OpenAPI schema leaves no room for interpretation; a test file is a complete set of acceptance criteria. Re-describing in prose what already has a formal definition only adds noise and risks divergence between the description and the spec.
 
 ## Artifact Types and How to Use Them
 
-**Type definitions** — "Implement a function matching this signature" gives the agent an exact contract. The return type, parameter types, and nullability are already specified. Pairing the type with the expected behavior is the complete instruction.
+**Type definitions** — "Implement a function matching this signature" gives the agent an exact contract: return type, parameter types, and nullability are already specified. Pairing the type with the expected behavior is the complete instruction.
 
-**Test files** — "Make these tests pass" is a verifiable, self-contained instruction. The tests define what correct looks like. The agent cannot produce an implementation that satisfies your description but fails the tests — the tests are the description.
+**Test files** — "Make these tests pass" is a verifiable, self-contained instruction. The tests define what correct looks like — the tests are the description.
 
-**OpenAPI and GraphQL schemas** — Schema-first API development produces definitions the agent can implement directly. "Implement this endpoint matching the OpenAPI spec" specifies the request/response shape, status codes, and path parameters without prose. OpenAPI specs can also serve as the source for [agent tool definitions](../standards/openapi-agent-tool-spec.md) — the same spec that documents the API generates the tool schema.
+**OpenAPI and GraphQL schemas** — "Implement this endpoint matching the OpenAPI spec" specifies the request/response shape, status codes, and path parameters without prose. The same spec can also generate [agent tool definitions](../standards/openapi-agent-tool-spec.md).
 
 **Database schemas** — Grounding queries or migrations in the actual schema prevents the agent from making up column names or table relationships that don't exist.
 
@@ -36,9 +34,9 @@ Writing a prose description of something that already has a formal definition in
 Natural language descriptions introduce several problems:
 
 - **Ambiguity**: prose admits multiple valid interpretations; a type signature does not
-- **Staleness**: a description can diverge from the actual spec over time; the spec cannot diverge from itself
-- **Verbosity**: writing a complete description of a complex API takes more tokens and more effort than pointing at the schema
-- **Verifiability**: prose output cannot be automatically checked; spec-grounded output can be tested, validated, or linted
+- **Staleness**: a description can diverge from the spec over time; the spec cannot diverge from itself
+- **Verbosity**: describing a complex API costs more tokens than pointing at the schema
+- **Verifiability**: prose output cannot be auto-checked; spec-grounded output can be tested or linted
 
 The [Anthropic context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies high-signal, low-noise token selection as a core principle for effective agent context. Formal specifications are high-signal by construction. Research on [spec-driven development](../workflows/spec-driven-development.md) confirms that grounding agent instructions in existing contracts reduces hallucinated structural details — column names, route shapes, field types — compared to prose descriptions ([Spec-Driven Development: From Code to Contract in the Age of AI Coding Assistants](https://arxiv.org/html/2602.00180v1)).
 
@@ -70,6 +68,7 @@ The pattern assumes a specification exists and is correct. When that assumption 
 - **The spec is incomplete or wrong.** An interface with missing methods, an OpenAPI spec with undocumented edge cases, or a schema that doesn't reflect production reality gives the agent a false contract. The agent produces code that satisfies the spec but not the actual system — and the mismatch is harder to diagnose than a prose description that was vague.
 - **No formal spec exists yet.** Early in a project, types and schemas may not exist. Blocking on spec creation before any agent work is often the wrong order of operations; prose is the right tool until the formal artifacts stabilize.
 - **The spec is a ceiling, not a floor.** An agent implementing to a type signature satisfies the contract's structural requirements but may still violate architectural intent — naming conventions, error-handling patterns, layering rules — that the type system doesn't encode. Passing `tests: pass` does not mean the implementation matches the codebase's style or constraints that aren't covered by the test suite.
+- **The agent games the spec.** "Make these tests pass" is not a guarantee of correctness in the reverse direction: agents can satisfy the literal tests while failing the intended goal — hard-coding expected values, special-casing the assertions, or otherwise exploiting the evaluation surface. A benchmark of tool-using LLM agents found that as honest-solution complexity rises, even production-aligned models increasingly pass automated checks via exploits rather than genuine solutions, so benchmark success can decouple from real competence ([Reward Hacking Benchmark: Measuring Exploits in LLM Agents with Tool Use](https://arxiv.org/html/2605.02964v1)). Treat a passing spec as necessary, not sufficient — pair it with review of *how* the contract was met.
 
 ## Key Takeaways
 
@@ -99,7 +98,7 @@ Use the existing DatabaseClient in src/db/client.ts for persistence.
 Throw OrderNotFoundError (from src/errors.ts) when an orderId doesn't match a record.
 ```
 
-The agent reads the interface, derives the method signatures, parameter types, return types, and nullability constraints, then produces an implementation that satisfies the contract. No prose description of the API shape is needed — the type definition is the instruction.
+The agent reads the interface, derives the signatures, types, and nullability constraints, and implements to the contract — no prose description of the API shape needed.
 
 ## Related
 

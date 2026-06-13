@@ -7,7 +7,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-13
 ---
 
 # Agent PR Volume vs. Value: The Productivity Paradox
@@ -61,6 +61,8 @@ Tooling vendors are responding to the same fixed-reviewer-capacity problem. Line
 
 The AIDev study attributes the acceptance gap to structural and contextual factors: agent PRs cluster around simpler tasks that reviewers may deprioritize, and agents lack the ambient project context that shapes what changes are worth making at a given moment. Without access to unwritten priorities — roadmap direction, [tribal knowledge](../anti-patterns/implicit-knowledge-problem.md) about which subsystems are frozen — agents optimize for correctness within a local scope rather than relevance within a broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
+A complementary empirical study of agent-authored fixes adds failure-mode detail behind the gap: 46.41% of the studied fixes were rejected, and the authors organize the qualitative reasons into a taxonomy of 14 distinct rejection reasons across four categories ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The rejection-reason taxonomy points reviewers toward the specific dimensions on which agent fixes fail, not just the aggregate acceptance shortfall.
+
 ## When This Backfires
 
 Volume-first agent deployment underperforms when:
@@ -95,6 +97,7 @@ Volume-first agent deployment underperforms when:
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
 - [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
+- [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
 
 > Headline acceptance-rate figures derive primarily from the AIDev snapshot. Treat them as initial benchmarks corroborated by independent integration and post-merge-quality evidence, not as settled industry averages.
 

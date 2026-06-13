@@ -9,7 +9,7 @@ tags:
 aliases:
   - "evidence-driven guardrails for APR"
   - "cost-ascending verification gates"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Staged Evidence Gates for Agentic Program Repair
@@ -49,7 +49,7 @@ The [EviACT framework](https://arxiv.org/abs/2605.27238) instantiates exactly th
 
 ## Why It Works
 
-Verification cost is heterogeneous and APR failures concentrate in cheaply detectable categories. Compilation rejects type-incoherent patches at a fraction of test-execution cost; the target test confirms symptom relief before the full suite runs. Staging in cost-ascending order converts the latency-dominant "run full regression" step from an unconditional cost into a conditional one paid only by candidates that already cleared cheaper signals. The retrieval scaffold front-loads this by reducing how often invalid candidates arise at all.
+Verification cost is heterogeneous and APR failures concentrate in cheaply detectable categories. Compilation rejects type-incoherent patches at a fraction of test-execution cost; the target test confirms symptom relief before the full suite runs. Staging in cost-ascending order converts the latency-dominant "run full regression" step from an unconditional cost into one paid only by candidates that already cleared cheaper signals. The retrieval scaffold front-loads this by reducing how often invalid candidates arise.
 
 The mechanism generalizes beyond EviACT. The broader neuro-symbolic-APR literature reports the same compounding: a base ReAct agent solves 28.5% of agentic repair tasks; static analysis and test-execution feedback lift it to 42.3%, with multiple trials reaching 61.0% ([Agentic Program Repair from Test Failures at Scale, 2025](https://arxiv.org/pdf/2507.18755)). Each channel addresses a known failure of feedback-only loops, which without grounded execution context struggle with silent failures ([RepairAgent, Bouzenia et al., 2024](https://arxiv.org/abs/2403.17134)). The causal claim is narrow: cheap checks that filter dominant failure classes shift the loop's cost curve downward.
 

@@ -5,7 +5,7 @@ description: "Project standards precise enough for human reviewers work as agent
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Standards as Agent Instructions
@@ -95,7 +95,7 @@ Agents lack the sociolinguistic context humans use to interpret vague norms. A h
 
 ## When This Backfires
 
-Precision improves adherence only while the standards file stays short. Adherence degrades as length grows — [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) recommends keeping CLAUDE.md files under 200 lines.
+Precision improves adherence only while the standards file stays short. Adherence degrades as length grows — keeping context to a minimal set of high-signal tokens is the core of [Anthropic's context engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), and the [Claude Code memory docs](https://code.claude.com/docs/en/memory) put a number on it: target under 200 lines per `CLAUDE.md` file, because "longer files consume more context and reduce adherence."
 
 Three failure modes:
 
@@ -117,21 +117,10 @@ When standards files grow large, the correct response is decomposition — not m
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
-- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md)
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
-- [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md)
-- [CLAUDE.md Convention](claude-md-convention.md)
-- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md)
 - [Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes](layered-instruction-scopes.md)
-- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
-- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
 - [The Specification as Prompt: Existing Artifacts as Agent Instructions](specification-as-prompt.md)
-- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
-- [Prompt Governance via PR](prompt-governance-via-pr.md)
 - [Deferred Standards Enforcement via Review Agents](../code-review/deferred-standards-enforcement.md)
-- [Wrap Framework Agent Instructions](wrap-framework-agent-instructions.md)
-- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
-- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
-- [Prompt File Libraries](prompt-file-libraries.md)

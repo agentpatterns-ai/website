@@ -10,7 +10,7 @@ tags:
 aliases:
   - cargo cult configuration
   - copy-paste configuration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Cargo Cult Agent Setup

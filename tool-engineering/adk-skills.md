@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - instructions
   - tool-agnostic
+  - skills
 aliases:
   - ADK SkillToolset
   - Google ADK agent skills

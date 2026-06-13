@@ -9,14 +9,14 @@ tags:
 aliases:
   - SELF-DISCOVER framework
   - self-composed reasoning structures
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Self-Discover Reasoning: LLM-Composed Reasoning Structures
 
-> Enable the model to compose a task-specific reasoning plan from a library of atomic modules before solving — instead of applying a fixed strategy regardless of problem type.
+> The model composes a task-specific reasoning structure from atomic modules before solving, rather than applying one fixed strategy to every problem.
 
 ## The Technique
 
@@ -34,7 +34,7 @@ The key architectural insight is that Stage 1 (structure composition) runs **onc
 
 **Stage 2: Structured Execution** — run per instance using the cached plan.
 
-The model follows the JSON plan: `"Follow the step-by-step reasoning plan in JSON to correctly solve the task. Fill in the values following the keys by reasoning specifically about the task given."` Each key in the JSON corresponds to an adapted reasoning module, producing an explicit, inspectable trace.
+The model fills in the JSON plan, reasoning specifically about the task. Each key corresponds to an adapted reasoning module, producing an explicit, inspectable trace.
 
 ```mermaid
 graph LR
@@ -88,13 +88,13 @@ SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms id
 
 The gains are not uniform: algorithmic tasks see only moderate improvement, while world-knowledge and multi-step planning tasks (T4D: +29pp over CoT) benefit most. Computational errors remain outside the framework's reach.
 
+The "explicit structure helps" claim is also contested. An instance-level reproduction, iSelf-Discover ([Gunasekara & Ratnayake, 2025](https://arxiv.org/abs/2507.03347)), found that *unstructured* reasoning plans consistently beat structured ones — by up to 18.90% relative on MATH, with zero-shot unstructured variants exceeding five-shot structured ones. The takeaway is that the per-task-type composition step, not the JSON rigidity, likely carries the benefit; forcing reasoning into a fixed structure can cost accuracy when the task does not need it.
+
 ## Compute Trade-offs
 
 Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. Once composed, the plan is reused at no extra overhead per instance — one inference call per instance, same as plain CoT.
 
-The meaningful comparison is SELF-DISCOVER vs. CoT-Self-Consistency (which runs multiple CoT passes per instance): SELF-DISCOVER requires 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)).
-
-For a task type processed only once, the Stage 1 overhead is pure cost. For any recurring task type, amortization quickly makes it favorable.
+The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
 
 ## Key Takeaways
 

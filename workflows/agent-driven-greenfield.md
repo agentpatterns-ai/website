@@ -6,12 +6,12 @@ tags:
   - agent-design
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent-Driven Greenfield Product Development
 
-> Build a new product agent-first by defining agent roles and skills as the architectural foundation, decomposing work to context-window-safe granularity, and executing through autonomous agent loops with human review at PR boundaries.
+> Build a new product agent-first: define agent roles as the architecture, decompose work to context-safe tasks, and execute through agent loops reviewed at PR boundaries.
 
 ## Why Greenfield Is Different
 

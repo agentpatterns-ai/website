@@ -5,12 +5,12 @@ tags:
   - agent-design
   - tool-agnostic
   - standards
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent Cards: Capability Discovery Standard for AI Agents
 
-> A machine-readable JSON descriptor published at a well-known URL that advertises an agent's capabilities, supported protocols, authentication requirements, and skills — enabling automated discovery without documentation or hardcoded integrations.
+> A machine-readable JSON descriptor at a well-known URL advertising an agent's capabilities, protocols, authentication, and skills — enabling automated discovery without docs or hardcoded integrations.
 
 ## What Agent Cards Solve
 

@@ -1,7 +1,7 @@
 ---
 title: "Retrieval-Augmented Agent Workflows: On-Demand Context"
 term: "Retrieval-Augmented Agent Workflows"
-description: "Pull context into the agent at the moment it is needed rather than preloading it at session start. Context Hub, Semantic Context Loading, JIT Context, RAG"
+description: "Pull context into the agent at the moment it is needed rather than preloading it at session start, keeping the context window lean and the budget free for reasoning."
 aliases:
   - Context Hub
   - Semantic Context Loading
@@ -13,7 +13,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Retrieval-Augmented Agent Workflows: On-Demand Context
@@ -57,6 +57,8 @@ Anthropic notes that teams increasingly augment retrieval systems with ["just in
 ## Trade-offs
 
 On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput. Preloading eliminates that latency at the cost of context budget.
+
+Latency is not the only downside. Retrieval quality is a second failure mode: when the retriever surfaces irrelevant chunks, accuracy drops rather than improves — one study saw accuracy fall [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350) because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only preserves budget for reasoning when what it returns is correct; a noisy retriever spends budget on distractors and degrades the very reasoning it was meant to protect.
 
 The right balance depends on task structure:
 
@@ -116,21 +118,9 @@ A task requiring only one of five documentation sections consumes context for th
 
 - [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md)
 - [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md)
-- [Context Priming](context-priming.md)
-- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Repository Map Pattern: AST + PageRank for Dynamic Code Context](repository-map-pattern.md)
-- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
-- [Discoverable vs Non-Discoverable Context for Agents](discoverable-vs-nondiscoverable-context.md)
-- [Seeding Agent Context: Embedding Breadcrumbs in Code](seeding-agent-context.md)
-- [Observation Masking](observation-masking.md)
-- [Prompt Compression](prompt-compression.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
+- [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
 - [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
-- [Filter and Aggregate in the Execution Environment](filter-aggregate-execution-env.md)
+- [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

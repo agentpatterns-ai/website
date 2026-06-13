@@ -10,14 +10,14 @@ aliases:
   - action selector pattern
   - intent decoder pattern
   - LLM as intent decoder
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Action-Selector Pattern: LLM as Intent Decoder
 
-> Bound the LLM to selecting from a fixed action catalog — tool outputs never re-enter the model, making control-flow hijacking structurally impossible.
+> The LLM decodes intent into a pre-approved action ID; tool outputs never re-enter the model, making control-flow hijacking structurally impossible.
 
 ## The Feedback Loop Prompt Injection Requires
 

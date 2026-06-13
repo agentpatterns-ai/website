@@ -10,12 +10,12 @@ tags:
   - multi-agent
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agentic Framework Landscape: When Each Framework Fits
 
-> ADK, Agno, Browser Use, Eigent, Letta, and mem0 occupy different layers of the agent stack — runtime, action space, memory, desktop product — so framework selection is a task-shape match, not a feature-count comparison.
+> Agentic frameworks sit at different layers of the agent stack, so framework selection is a task-shape match, not a feature comparison.
 
 ## The Selection Axes
 
@@ -73,7 +73,7 @@ Stateful agent runtime — Python/TypeScript SDKs and REST API — built around 
 
 ### mem0
 
-Memory layer, not a runtime — Python and Node SDKs ([mem0 README](https://github.com/mem0ai/mem0)). Composes over any agent harness: you keep your loop and tools, mem0 handles extraction, storage, and retrieval. The April 2026 algorithm uses single-pass ADD-only extraction with entity linking and multi-signal retrieval (semantic + BM25 + entity), reporting 91.6 on LoCoMo and 94.8 on LongMemEval ([Mem0 research](https://mem0.ai/research)). The trade-off is real: an independent comparison measured mem0 at ~67% vs full-context ~73% — a ~6% accuracy gap as the price for token efficiency ([MindStudio: Mem0 vs OpenAI built-in memory](https://www.mindstudio.ai/blog/agent-memory-infrastructure-mem0-vs-openai)).
+Memory layer, not a runtime — Python and Node SDKs ([mem0 README](https://github.com/mem0ai/mem0)). Composes over any agent harness: you keep your loop and tools, mem0 handles extraction, storage, and retrieval. The April 2026 algorithm uses single-pass ADD-only extraction with entity linking and multi-signal retrieval (semantic + BM25 + entity), reporting 92.5 on LoCoMo and 94.4 on LongMemEval at under ~7,000 tokens per query ([Mem0 research](https://mem0.ai/research)). The trade-off is real: an independent comparison measured mem0 at ~67% vs full-context ~73% — a ~6% accuracy gap as the price for token efficiency ([MindStudio: Mem0 vs OpenAI built-in memory](https://www.mindstudio.ai/blog/agent-memory-infrastructure-mem0-vs-openai)).
 
 **Fits when**: you have a working agent and want cross-session memory without rewriting; recall-heavy workloads with relaxed accuracy needs (personalisation, support history).
 

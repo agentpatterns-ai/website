@@ -9,12 +9,12 @@ tags:
 aliases:
   - natural-language agent scaffolding
   - agent customization bootstrap
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Natural-Language Customization Bootstrap
 
-> Describe the customization you want in plain language; the agent produces the instruction file, skill, subagent, or hook in its tool-specific format; you review the draft and commit.
+> Describe a customization in plain language; the agent drafts the instruction file, skill, subagent, or hook in tool-specific format for you to review and commit.
 
 ## The Pattern
 

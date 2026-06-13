@@ -7,10 +7,10 @@ tags:
   - workflows
   - tool-agnostic
   - instructions
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Persona-as-Code: Defining Agent Roles as Structured Documents
+# Persona-as-Code: Defining Agent Roles as Structured Docs
 
 > Encode each agent's domain, responsibilities, constraints, output artifacts, and scope exclusions as a Markdown file so roles are explicit, auditable, and composable.
 
@@ -71,11 +71,11 @@ Persona-as-code works because agents hand off **artifacts**, not context. Each p
 
 Context evaporates between sessions in multi-agent systems; [artifact-based handoffs prevent this](https://github.com/bmad-code-org/BMAD-METHOD). A chat-based handoff loses fidelity. A file-based handoff is exact.
 
-Git-versioning the artifacts adds auditability. Every human and AI contribution is tracked. Pull requests become the review mechanism for AI-generated specs before they reach implementation.
+Git-versioning the artifacts adds auditability: every human and AI contribution is tracked, and pull requests become the review mechanism for AI-generated specs before implementation.
 
 ## Role Boundaries and Conflict Resolution
 
-When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules, two agents modifying the same artifact create a merge conflict with no principled resolution; with explicit priority, the spec resolves it. A survey of multi-agent collaboration mechanisms identifies interdependency between role-scoped agents as the primary source of cascade failures in LLM systems — explicit scope exclusions directly address this ([Tran et al., 2025](https://arxiv.org/abs/2501.06322)).
+When two personas could legitimately touch the same artifact, the persona files define priority. Without explicit rules that overlap is a merge conflict with no principled resolution; with priority, the spec resolves it. A survey of multi-agent collaboration mechanisms notes that interdependencies between agent jobs are intrinsically linked to system performance, and that efficacy can be severely impacted by blocked interactions between agents in different roles — explicit scope exclusions reduce that interaction surface ([Tran et al., 2025](https://arxiv.org/abs/2501.06322)).
 
 This mirrors the principle behind [Specialized Agent Roles](specialized-agent-roles.md): mutually exclusive scopes prevent redundant overlap. Persona-as-code makes that exclusivity durable across sessions.
 
@@ -134,7 +134,7 @@ Content drafting from research. You translate findings into publishable pages.
 - Source validity → Researcher persona
 ```
 
-Each persona operates within its file. The boundary is enforced by the spec, not by the model.
+Each persona operates within its file — the boundary is enforced by the spec, not the model.
 
 ## When This Backfires
 
@@ -158,14 +158,8 @@ Persona-as-code adds coordination surface area. Three conditions where it is wor
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Agents vs Commands](agents-vs-commands.md)
 - [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
 - [Agent Composition: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agents vs Commands](agents-vs-commands.md)
 - [Agent-First Software Design for AI Agent Development](agent-first-software-design.md)
-- [Agent Harness: Initializer and Coding Agent](agent-harness.md)
-- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
-- [GoF Patterns and SOLID as Agent Design Vocabulary Bridge](classical-se-patterns-agent-analogues.md)
-- [Event-Driven Agent Routing](event-driven-agent-routing.md)
-- [Delegation Decision](delegation-decision.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
 - [Sprint Contracts](sprint-contracts.md)

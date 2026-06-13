@@ -8,12 +8,12 @@ tags:
 aliases:
   - agent config format
   - agent manifest format
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent Definition Formats: How Tools Define Agent Behavior
 
-> Agent definitions control system prompt, tool access, model selection, and permissions — the format varies by tool but the concerns are the same across all implementations.
+> Agent definitions control system prompt, tool access, model selection, and permissions — the format varies by tool but the concerns are the same across tools.
 
 ## What an Agent Definition Controls
 

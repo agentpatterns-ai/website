@@ -7,7 +7,7 @@ tags:
   - workflows
   - harness-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Goal Monitoring and Progress Tracking
@@ -171,12 +171,9 @@ fi
 
 - [The Plan-First Loop](../workflows/plan-first-loop.md)
 - [Harness Engineering](harness-engineering.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [Convergence Detection](convergence-detection.md)
-- [Steering Running Agents](steering-running-agents.md)
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Agent Harness](agent-harness.md)
 - [Goal Recitation](../context-engineering/goal-recitation.md)
 - [Frozen Spec File](../instructions/frozen-spec-file.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)

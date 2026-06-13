@@ -1,7 +1,7 @@
 ---
 title: "Semantic Context Loading: Language Server Plugins for Agents"
 term: "Semantic Context Loading"
-description: "Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files"
+description: "Query codebases through Language Server Protocol semantics — symbol lookup, reference finding, type navigation — rather than reading raw files."
 aliases:
   - JIT Context
   - LSP-backed context loading
@@ -12,7 +12,7 @@ tags:
   - agent-design
   - tool-agnostic
   - rag
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Semantic Context Loading: Language Server Plugins for Agents
@@ -51,6 +51,7 @@ GitHub Copilot and Cursor implement their own codebase indexing that approximate
 | Approach | How It Works | When It Helps |
 |----------|-------------|---------------|
 | File reading | Load file, parse manually | Small files, simple structures |
+| Grep / ripgrep | Pattern match across the tree | Broad, low-cost exploratory search; the default backbone |
 | Native indexing | Tool's built-in semantic search | When available and configured |
 | LSP-backed queries | Direct semantic protocol | Precise navigation, large codebases |
 
@@ -65,6 +66,8 @@ LSP-backed queries are most valuable when the codebase is large, the task requir
 **Language coverage.** TypeScript, Python, Go, and Rust have strong LSP implementations; less common languages may have limited or no support.
 
 **Protocol-level critique.** LSP was designed for editors, not agents. Armin Ronacher argues LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet) and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level agent-native operations on top of LSP to avoid this overhead ([github.com/lsp-client/LSAP](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor — wrappers like Serena or LSAP-style protocols carry most of the benefit.
+
+**Grep is the baseline to beat, not file reading.** The realistic alternative most coding agents already default to is not naive whole-file reading — it is well-aimed `grep`/`ripgrep`. Claude Code, Cursor, Codex CLI, and similar agents lean on text search as their primary code-retrieval backbone, and a controlled comparison found grep-based retrieval generally more accurate than vector retrieval for agentic search ([_Is Grep All You Need?_, arXiv 2605.15184](https://arxiv.org/abs/2605.15184)). Grep needs zero infrastructure and never returns stale results. The honest case for LSP-backed loading is high-precision, symbol-grounded confirmation (exact definition site, every reference, the real type) on top of grep's broad exploratory sweep — not a replacement for it. If a single grep pins the symbol, the LSP round-trip rarely pays for itself.
 
 ## Example
 
@@ -108,19 +111,11 @@ This returns call sites across the codebase with their file paths and line numbe
 
 ## Related
 
-- [Context Budget Allocation](context-budget-allocation.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
-- [Context Priming](context-priming.md)
-- [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
-- [Repository Map Pattern](repository-map-pattern.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Discoverable vs. Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Context Engineering](context-engineering.md)
-- [Observation Masking](observation-masking.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Prompt Compression](prompt-compression.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Repository Map Pattern](repository-map-pattern.md)
+- [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
+- [Context Budget Allocation](context-budget-allocation.md)
 - [Structured Domain Retrieval](structured-domain-retrieval.md)
+- [Context Engineering](context-engineering.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)

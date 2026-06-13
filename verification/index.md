@@ -3,6 +3,7 @@ title: "Verification: Testing, Evals, and Guardrails for Agents"
 description: "How to measure agent output quality, design evaluation suites, apply guardrails, and use evals to drive agent development and catch regressions."
 tags:
   - testing-verification
+  - index
 last_reviewed: 2026-05-27
 ---
 

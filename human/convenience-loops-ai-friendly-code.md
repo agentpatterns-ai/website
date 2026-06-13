@@ -9,12 +9,12 @@ tags:
   - context-engineering
   - tool-agnostic
   - human-factors
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Convenience Loops and AI-Friendly Code
 
-> AI tools produce better output in typed, well-structured codebases — which drives you toward those technologies — which further improves AI training data. This self-reinforcing cycle reshapes technology selection.
+> A convenience loop forms when AI produces better code in typed codebases, driving adoption that improves training data and reshapes technology selection.
 
 ## The Convenience Loop
 
@@ -97,6 +97,8 @@ The convenience loop does not apply uniformly:
 - **Dynamic-typing-native ecosystems.** Python data-science workflows (NumPy, pandas, matplotlib) often rely on duck typing. Strict type annotations fight the library conventions and generate noisy mypy errors on legitimate usage.
 - **Legacy codebases without CI.** Retrofitting types onto an untyped codebase is a large batch change. If type errors can't gate merges (no CI type-check step), they provide no backpressure — just maintenance overhead.
 - **Agents that don't self-correct.** The backpressure loop requires the agent to run the type checker, read the error, and re-attempt. Agents used in single-shot mode without tool access don't benefit from the feedback cycle.
+
+Types are also not the whole story. They catch a specific error class — they do not close the semantic gap between an LLM's statistical output and a program's intended behavior, which needs formal verification and structured representations beyond type annotations ([Position Paper: Programming Language Techniques for Bridging LLM Code Generation Semantic Gaps, arxiv 2507.09135](https://arxiv.org/abs/2507.09135)). Simpler-syntax dynamic languages can also yield fewer raw generation errors, since verbose type declarations offer more surface for small mistakes. Treat type support as one signal among several, not a guarantee of correctness.
 
 ## Key Takeaways
 

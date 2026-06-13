@@ -9,7 +9,7 @@ tags:
 aliases:
   - organization-scoped model rules
   - org-admin model governance
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Tenant Model Policy
@@ -33,7 +33,7 @@ The picker reflects what a user *wants*. The harness decides what to *call*. The
 
 | Surface | How rules attach | Default stance | Override depth |
 |---|---|---|---|
-| GitHub Copilot model rules | Enterprise owner targets organizations; each model is `Enabled` (auto-on for all orgs) or `Optional` (orgs opt in) ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)) | Default-allow on new model launches under `Enabled` | Enterprise overrides organization ([GitHub Docs: Copilot policies](https://docs.github.com/en/copilot/concepts/policies)) |
+| GitHub Copilot model rules | Enterprise owner targets organizations; each model is `Enabled` (auto-on for all orgs) or `Optional` (orgs opt in) ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)) | An `Enabled` rule auto-applies to all orgs without per-org action | Enterprise overrides organization ([GitHub Docs: Copilot policies](https://docs.github.com/en/copilot/concepts/policies)) |
 | Claude Code `availableModels` | Managed/policy settings file; arrays merge across user/project/managed surfaces ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config)) | Default-allow; "Default" picker option always available regardless of `availableModels` | Managed settings take highest priority |
 | Cursor Enterprise admin controls | Enterprise admins "whitelist or blocklist repos, models, and MCP servers" ([Cursor Enterprise](https://cursor.com/enterprise)); Business tier exposes no equivalent surface, per [Cursor Forum](https://forum.cursor.com/t/cursor-business-plan-restrict-models-for-all-users/44556) | Default-allow except where admin restricts | No documented per-team override; teams reach for gateway workarounds |
 
@@ -47,7 +47,7 @@ The mechanism collapses the moment policy becomes advisory. A picker that hides 
 
 ## When This Backfires
 
-- **Default-allow under regulated workloads.** Copilot's `Enabled` stance auto-approves every newly-launched model for every organization until an admin disables it ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)). For tenants under data-residency rules (EU public sector, healthcare) this inverts the safer default — explicit allow-list rules are required.
+- **Allow-by-default rules under regulated workloads.** When an admin sets a model's stance to `Enabled`, that model is on for every organization until someone disables it ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)). Note the counter-evidence on rollout: Copilot does **not** auto-enable a newly-*launched* model for every org by default — admins must enable each new model, and a [community request to make new models enabled-by-default](https://github.com/orgs/community/discussions/187083) is still open, which means the live risk is a stale `Enabled` rule, not silent auto-onboarding. For tenants under data-residency rules (EU public sector, healthcare), pin explicit per-model rules rather than relying on either default.
 - **Silent fallback hides denials.** When the picker substitutes a default model without surfacing the denial reason, denial telemetry drops to zero and the developer reads the rejection as "the tool just feels worse." Silent fallback is independently an [anti-pattern that distorts metrics and trust](https://medium.com/@hadiyolworld007/stop-shipping-silent-fallbacks-8-ways-models-hide-errors-6df9330a3114).
 - **Picker drift after deprecations.** An `availableModels` list that was correct on day one becomes a deny-list of retired model IDs over months. Without a tied lifecycle to model-deprecation calendars, the policy ages into silent denial of every selection. Pair with [Model Deprecation Lifecycle](../workflows/model-deprecation-lifecycle.md).
 - **Missing override depth.** A security-research team needs a long-context Opus run that the cost-ceiling rule denies. Without a per-project or team-lead exception path, the request goes off-platform and the audit boundary collapses — the exact failure mode reported on the [Cursor forum](https://forum.cursor.com/t/cursor-business-plan-restrict-models-for-all-users/44556).
@@ -89,7 +89,7 @@ Without the `env` block, a user selecting `Default` in the picker would land on 
 ## Key Takeaways
 
 - Tenant model policy is the layer *above* harness routing and *below* the vendor catalogue — failure modes come from collapsing it into either neighbour.
-- Default-allow stances (Copilot `Enabled`) are wrong for regulated workloads; treat every new model launch as untrusted until an org rule says otherwise.
+- An `Enabled` Copilot rule applies a model to every org until disabled, so it is the wrong stance for regulated workloads — but note Copilot does not auto-enable newly-launched models, so the standing risk is a stale rule, not silent auto-onboarding. Treat every new model launch as untrusted until an explicit rule says otherwise.
 - Allow-lists in isolation are not deny-lists. Claude Code's `availableModels` requires `model` and `ANTHROPIC_DEFAULT_*_MODEL` companions to pin model identity.
 - Explicit denial signals matter more than the deny itself: silent fallback erases the audit trail and pushes developers off-platform.
 - Tie rule lifecycle to the model-deprecation calendar — without it, policy ages into accidental total denial.

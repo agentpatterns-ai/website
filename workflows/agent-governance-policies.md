@@ -148,6 +148,5 @@ Centralized governance creates bottlenecks when allowlist approval cycles are sl
 - [Human-in-the-Loop Placement: Where and How to Supervise](human-in-the-loop.md)
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md)
-- [Changelog-Driven Feature Parity](changelog-driven-feature-parity.md)
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md)
 - [Team Onboarding for Agent Workflows](team-onboarding.md)

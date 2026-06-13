@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Managed vs Self-Hosted Agent Harness
@@ -26,35 +26,29 @@ The choice mirrors the classic SaaS vs on-prem decision but with a compounding f
 
 ### 1. Compliance and Data Residency
 
-Hard regulatory constraints that mandate data never leave your network force self-hosted deployment regardless of other factors. Cursor's self-hosted cloud agents (March 2026) address this directly: "your codebase, build outputs, and secrets all stay on internal machines running in your infrastructure" with "tool calls handled locally" — capability-equivalent to hosted, but with no data crossing Cursor's boundary ([Cursor changelog](https://cursor.com/changelog)).
+Hard regulatory constraints that mandate data never leave your network force self-hosted *execution* regardless of other factors — though, as the hybrid pattern below shows, that need not mean a fully self-hosted harness. Cursor's self-hosted cloud agents (March 2026) address this directly: "your codebase, build outputs, and secrets all stay on internal machines running in your infrastructure" with "tool calls handled locally" — capability-equivalent to hosted, but with no data crossing Cursor's boundary ([Cursor changelog](https://cursor.com/changelog)).
 
-Managed services run workloads on vendor infrastructure. If your threat model includes vendor access to execution artifacts, managed is not an option.
+Managed services run workloads on vendor infrastructure by default. If your threat model includes vendor access to execution artifacts, the fully-hosted variant is out — though the managed/self-hosted line is blurrier than it first appears (see [The Hybrid Pattern](#the-hybrid-pattern)).
 
 ### 2. Memory Ownership
 
 Harnesses are coupled to memory management. An agent harness "is intimately tied to memory — a key role of the harness is to manage context" ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). When an agent learns from interactions — adapting to user preferences, accumulating domain knowledge, building an internal model of your codebase — that memory accumulates inside the harness.
 
-With a managed service, that memory sits behind the provider's API. Migration means resetting learned state and starting over — a cost that grows with every session. With a self-hosted harness, memory lives in your own databases and persists through vendor changes.
-
-This is the strongest argument for self-hosting when agents are long-lived or customer-facing, not just for batch tasks.
+With a managed service, that memory sits behind the provider's API; migration means resetting learned state — a cost that grows with every session. With a self-hosted harness, memory lives in your own databases and persists through vendor changes. This is the strongest argument for self-hosting when agents are long-lived or customer-facing, not just for batch tasks.
 
 ### 3. Observability Ownership
 
-Managed services emit verdict-labelled traces only through their dashboards. Self-hosted lets you wire OpenTelemetry into the same pipeline that already covers the rest of your services. If you need agent traces to flow into your existing observability stack — same backend, same retention policy, same correlation IDs — that constraint is observability-shaped, not compliance-shaped.
-
-You cannot debug what you do not own. See [Agent Observability with OpenTelemetry](../observability/agent-observability-otel.md) for the OTel-shaped instrumentation contract, which dictates whether a managed surface can plug into your stack at all.
+Managed services emit verdict-labelled traces only through their dashboards. Self-hosted lets you wire OpenTelemetry into the pipeline that already covers the rest of your services. If agent traces must flow into your existing stack — same backend, retention policy, and correlation IDs — that constraint is observability-shaped, not compliance-shaped. You cannot debug what you do not own; see [Agent Observability with OpenTelemetry](../observability/agent-observability-otel.md) for the OTel instrumentation contract that decides whether a managed surface can plug in at all.
 
 ### 4. Model Routing Flexibility
 
-Managed services vary: Claude Managed Agents uses Anthropic models exclusively; Amazon Bedrock AgentCore supports multiple providers including OpenAI and Gemini ([AWS, 2026](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-is-now-generally-available/)). The pattern holds at the platform layer — each managed service constrains you to its approved roster, even if that roster spans providers. Self-hosted harnesses eliminate the roster entirely and can route across any provider. Deep Agents Deploy supports OpenAI, Google, Anthropic, Azure, Bedrock, Fireworks, Baseten, Open Router, and Ollama — switchable per deployment or per task ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
+Managed services vary: Claude Managed Agents uses Anthropic models exclusively; Amazon Bedrock AgentCore supports multiple providers including OpenAI and Gemini ([AWS, 2026](https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-is-now-generally-available/)). The pattern holds at the platform layer — each managed service binds you to its approved roster, even one spanning providers. Self-hosted harnesses drop the roster and route across any provider: Deep Agents Deploy supports OpenAI, Google, Anthropic, Azure, Bedrock, Fireworks, Baseten, Open Router, and Ollama, switchable per deployment or task ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
 
-If your use case requires multi-model routing, cost-based routing across providers, or the ability to migrate models without re-platforming, self-hosted gives you that flexibility. If one provider's flagship model covers your workload, managed removes the routing overhead.
+If you need multi-model routing, cost-based routing across providers, or model migration without re-platforming, self-hosted gives you that. If one provider's flagship model covers your workload, managed removes the routing overhead.
 
 ### 5. Ops Capacity
 
-Self-hosted requires deploying and operating the harness, the orchestration layer, sandboxes, and the memory stores. Deep Agents Deploy reduces this by bundling deployment behind a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints — but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)).
-
-Managed services — Claude Managed Agents in particular — handle all of this: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). The trade-off is losing the ability to customize those layers.
+Self-hosted means deploying and operating the harness, orchestration layer, sandboxes, and memory stores. Deep Agents Deploy cuts this to a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints — but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). Managed services — Claude Managed Agents in particular — handle all of it: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). The trade-off is losing the ability to customize those layers.
 
 ## Decision Flow
 
@@ -80,6 +74,8 @@ graph TD
 Cursor's self-hosted cloud agents (March 2026) demonstrate a hybrid: managed orchestration and agent definitions hosted by Cursor; execution and tool calls running on customer infrastructure. You get the managed control plane without placing code, secrets, or build artifacts on vendor machines.
 
 This is the pattern to consider when compliance concerns are about execution artifacts specifically, not orchestration metadata.
+
+The hybrid is not Cursor-specific. Managed providers increasingly offer self-hosted execution as a first-class mode: Claude Managed Agents supports self-hosted sandboxes where "the agent's code, filesystem, and network egress never leave your environment," positioned for "your organization's own compliance and audit controls" ([Anthropic](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)). So the data-residency signal alone rarely forces a fully self-hosted harness. What stays genuinely managed-only is narrower: in that case, [accumulated memory](agent-memory-patterns.md) is unsupported with self-hosted sandboxes, and managed sessions remain ineligible for Zero Data Retention and HIPAA BAA ([Anthropic](https://platform.claude.com/docs/en/managed-agents/overview)). Weigh those residual constraints, not the deployment label.
 
 ## Key Takeaways
 

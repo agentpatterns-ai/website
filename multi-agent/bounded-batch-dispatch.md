@@ -1,7 +1,7 @@
 ---
 title: "Bounded Batch Dispatch for Parallel Agent Execution"
 term: "Bounded Batch Dispatch"
-description: "Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size — one agent per item, N items at a time"
+description: "Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size — one agent per item, N items at a time."
 tags:
   - agent-design
   - cost-performance
@@ -11,12 +11,12 @@ aliases:
   - sequential batch dispatch
   - bounded agent pool
   - batch agent dispatch
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Bounded Batch Dispatch
 
-> Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size — one agent per item, N items at a time.
+> Bounded batch dispatch runs large agent workloads as fixed-size sequential batches — one agent per item, N at a time — under API rate limits.
 
 ## The Problem
 
@@ -59,11 +59,11 @@ Start at N=10-20. Reduce if hitting 429s; increase if headroom exists and throug
 
 ## Why Not a True Sliding Window
 
-A sliding window keeps exactly N agents in flight, spawning a replacement the moment one finishes. It eliminates head-of-line waits but requires `wait-for-any` semantics — block until the first of N tasks completes, then act. LLM orchestrators only support `wait-for-all`: they spawn a group of background agents and resume when the entire group finishes ([Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)). A true sliding window therefore needs an external queue worker outside the LLM context — a service that polls for completions and enqueues replacements. For workloads where items have similar duration, the throughput gap is negligible.
+A sliding window keeps exactly N agents in flight, spawning a replacement the moment one finishes. It eliminates head-of-line waits but requires `wait-for-any` semantics — block until the first of N tasks completes, then act. LLM orchestrators only support `wait-for-all`: they spawn a group of background agents and resume when the entire group finishes ([Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)). A true sliding window therefore needs an external queue worker outside the LLM context. For items of similar duration, the throughput gap is negligible.
 
 ## Error Handling
 
-When an agent in a batch fails, collect completed results, record the failed item, and continue to the next batch. Failed items surface in the final report for targeted retry. A single failure never stops subsequent work.
+When an agent in a batch fails, collect completed results, record the failed item, and continue. Failed items surface in the final report for targeted retry. A single failure never stops later batches.
 
 ## When This Backfires
 
@@ -113,7 +113,6 @@ Adjusting N: if 429 errors appear, reduce to N=10. If headroom exists and throug
 - [Fan-Out Synthesis](fan-out-synthesis.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
 - [Orchestrator-Worker](orchestrator-worker.md)
-- [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Staggered Agent Launch](staggered-agent-launch.md)
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md)
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)

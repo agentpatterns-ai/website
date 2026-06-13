@@ -9,12 +9,12 @@ tags:
   - code-review
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Bottleneck Migration
 
-> Code generation is now cheap. Review, verification, and judgment are the new expensive bottleneck. High output volume masks organizational friction -- review time balloons, code size explodes, total workload stays flat.
+> Code generation is now cheap, so the bottleneck migrates to review, verification, and judgment -- output volume balloons while total workload stays flat.
 
 ## The Economics
 
@@ -35,7 +35,7 @@ flowchart LR
     style R2 fill:#c62828,color:#fff
 ```
 
-This is Jevons paradox applied to code: cheaper production leads to more production, consuming freed capacity.
+This is Jevons paradox applied to code: cheaper production leads to more production, consuming freed capacity. [Ambition scaling](ambition-scaling.md) is the supply-side decision behind that extra production — moving the task boundary as model capability rises.
 
 ## The Data
 
@@ -135,25 +135,8 @@ After 60 days: review cycle time returns to 5 hours, defect rate drops 30%, and 
 - [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md) -- reviewer psychology with large AI diffs
 - [PR Scope Creep](../anti-patterns/pr-scope-creep-review-bottleneck.md) -- stalled PRs compound review bottleneck
 - [Rigor Relocation](rigor-relocation.md) -- discipline moves from code to scaffolding
+- [Tiered Code Review](../code-review/tiered-code-review.md) -- AI-first review with human escalation
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) -- tiered review system design
-- [Tiered Code Review](../code-review/tiered-code-review.md) -- AI-first with human escalation
-- [Signal Over Volume in AI Review](../code-review/signal-over-volume-in-ai-review.md) -- high-signal over exhaustive comments
+- [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
 - [Agent Harness](../agent-design/agent-harness.md) -- structural enforcement via harness engineering
-- [Harness Engineering](../agent-design/harness-engineering.md) -- environments where agents succeed by default
-- [Diff-Based Review](../code-review/diff-based-review.md) -- reviewing behavior changes, not raw diffs
-- [Attention Management with Parallel Agents](attention-management-parallel-agents.md) -- review capacity in parallel workflows
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
-- [Process Amplification](process-amplification.md) -- agents amplify practices including review
-- [Skill Atrophy](skill-atrophy.md) -- AI reliance erodes review capabilities
-- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) -- identity shift from bottleneck migration
-- [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md) -- AI-friendly patterns reduce review load
-- [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) -- flow state reduces scrutiny
-- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- reducing approval fatigue
-- [The Context Ceiling](context-ceiling.md) -- context limits interact with bottleneck migration
-- [Distributed Computing Parallels](../multi-agent/distributed-computing-parallels.md) -- distributed systems bottleneck analogies
-- [Empirical Baseline](../instructions/empirical-baseline-agentic-config.md) -- managing writing-to-review balance
-- [Strategy Over Code Generation](strategy-over-code-generation.md) -- focus shifts from output to strategy
-- [Developer Control Strategies](developer-control-strategies-ai-agents.md) -- maintaining oversight as agent output grows
-- [Progressive Autonomy](progressive-autonomy-model-evolution.md) -- graduated trust gates review burden
-- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) -- domain complexity amplifies review load
-- [Suggestion Gating](suggestion-gating.md) -- filtering suggestions to reduce review volume

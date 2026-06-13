@@ -10,12 +10,12 @@ tags:
 aliases:
   - "vibes vs evals"
   - "LLM drift perception"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Perceived Model Degradation
 
-> "The model is getting dumber" — the recurring complaint after every major release. The real problem is not that models degrade; it is that teams have no way to tell whether they actually did.
+> Perceived model degradation is the "the model got dumber" complaint after a release, when teams cannot tell whether quality actually dropped.
 
 ## The Pattern
 
@@ -104,6 +104,12 @@ def run_regression_evals(model: str) -> dict:
 ```
 
 When the team suspects degradation, they run the eval suite against the pinned version and the previous snapshot. If the pass rate drops below 95%, they have evidence. If not, the complaint is perception bias.
+
+## Key Takeaways
+
+- "The model got dumber" is a hypothesis, not evidence — drift (behavioral change) and degradation (lost capability) are distinct and need separate measurement.
+- Pin to a dated snapshot so any observed change originates in your code, prompts, or data, not a silent upstream update.
+- Replace eyeballing with golden-query regression suites and statistical tests; selective memory credits new models and blames old ones.
 
 ## Related
 

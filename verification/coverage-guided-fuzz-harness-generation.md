@@ -9,12 +9,12 @@ tags:
 aliases:
   - "fuzz target generation"
   - "automated harness generation"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Coverage-Guided Agents for Fuzz Harness Generation
 
-> Multi-agent systems can automatically generate fuzzing harnesses for library APIs using coverage feedback as the iteration signal, removing the primary bottleneck in library fuzzing workflows.
+> Coverage-guided agents generate fuzz harnesses for library APIs automatically, using coverage feedback as the iteration signal that removes the primary harness-authoring bottleneck.
 
 ## The Manual Harness Bottleneck
 
@@ -67,7 +67,7 @@ Coverage improvement is not a universal proxy for harness quality. The approach 
 - **Side-effecting APIs**: Harness generation calls methods in combinations that may not occur in production. APIs with destructive side effects — file deletion, network writes, irreversible state changes — can cause harnesses to be unsafe to run without sandboxing.
 - **Coverage plateau without semantic progress**: Branch coverage can increase while the harness reaches semantically uninteresting code paths. Coverage metrics do not distinguish bug-prone deep paths from shallow error handlers; high coverage numbers do not guarantee the harness is exercising security-relevant behavior.
 - **Cost at scale**: At $3.20 per harness, generating harnesses for hundreds of API methods in a large library is expensive. The approach is most practical for targeted high-value APIs, not full-library coverage.
-- **Coverage is not correctness**: A concurrent line of work argues coverage-only signals fail to detect logic errors, API misuse, and lifecycle violations in the harness itself — issues that surface as false-positive crashes downstream. [Loose et al. (2026)](https://arxiv.org/abs/2605.21824) frame this as a "Four Principles" gap (Logic Correctness, API Protocol Compliance, Security Boundary Respect, Entry Point Adequacy) and add an explicit generate-check-fix loop before fuzzing. Treat the coverage signal as necessary but not sufficient; pair it with a correctness check if you want the generated harnesses to be trusted in CI.
+- **Coverage is not correctness**: A concurrent line of work argues coverage-only signals fail to detect logic errors, API misuse, and lifecycle violations in the harness itself — issues that surface as false-positive crashes downstream. [Sheng et al. (2026)](https://arxiv.org/abs/2605.21824) frame this as a "Four Principles" gap (Logic Correctness, API Protocol Compliance, Security Boundary Respect, Entry Point Adequacy) and add an explicit generate-check-fix loop (the QuartetFuzz system) before fuzzing. Treat the coverage signal as necessary but not sufficient; pair it with a correctness check if you want the generated harnesses to be trusted in CI.
 
 ## Generalization
 

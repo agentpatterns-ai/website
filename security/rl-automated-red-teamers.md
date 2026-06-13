@@ -10,7 +10,7 @@ tags:
   - testing-verification
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # RL-Trained Automated Red Teamers for Prompt Injection Discovery

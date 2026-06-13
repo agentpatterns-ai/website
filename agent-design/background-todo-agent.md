@@ -10,7 +10,7 @@ aliases:
   - background plan maintenance
   - lightweight todo agent
   - todo offload pattern
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Background Todo Agent

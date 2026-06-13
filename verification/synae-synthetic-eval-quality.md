@@ -10,20 +10,20 @@ tags:
 aliases:
   - synthetic eval quality measurement
   - SynAE framework
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Measuring Synthetic Eval Data Quality (SynAE)
 
 > Score synthetic tool-calling eval datasets on validity, fidelity, and diversity across four trace components before trusting them to gate deploys against production.
 
-SynAE is a quality-measurement layer for synthetic eval datasets that test multi-turn tool-calling agents. It scores a synthetic set against a real production-trace reference along three pillars — validity, fidelity, diversity — for each of four trace components, yielding a per-axis diagnostic instead of an opaque pass/fail ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+SynAE is a quality-measurement layer for synthetic eval datasets that test multi-turn tool-calling agents. It scores a synthetic set against a real production-trace reference along three pillars — validity, fidelity, diversity — across four trace components, yielding a per-axis diagnostic instead of a pass/fail ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
 ## When the Framework Applies
 
-Four preconditions must hold: a real production-trace reference exists, the agent is multi-turn and tool-calling, the synthetic set is large enough for distributional metrics (Vendi Score and embedding precision/recall are unstable on small samples), and the team can absorb the judge cost — validity scoring runs 450+ LLM-as-judge calls per dataset at F1 = 0.86 against humans, 14% disagreement at the measurement layer itself ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+Four preconditions must hold: a real production-trace reference exists, the agent is multi-turn and tool-calling, the synthetic set is large enough for distributional metrics (Vendi Score and embedding precision/recall are unstable on small samples), and the team can absorb the judge cost — validity scoring runs 450+ LLM-as-judge calls per dataset at F1 = 0.86 against humans ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
-If any fails, a [golden query pair](golden-query-pairs-regression.md) or [incident-derived regression](incident-to-eval-synthesis.md) suite gives a stable signal at lower cost.
+If any fails, a [golden query pair](golden-query-pairs-regression.md) or [incident-derived regression](incident-to-eval-synthesis.md) suite gives a stable signal more cheaply.
 
 ## The Three Pillars
 
@@ -35,17 +35,17 @@ Three orthogonal axes apply to each of four trace components — task instructio
 | **Fidelity** | How close is the synthetic distribution to the real one? | Key Node Dependency, embedding precision/recall, downstream task-difficulty distance |
 | **Diversity** | How much of the real-data spread does the synthetic set cover? | Vendi Score, Attribute Diversity |
 
-A set can score high on one axis and fail on another. The decomposition exists because the authors found "no single metric is sufficient to fully characterize synthetic data quality" ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+A set can score high on one axis and fail another. The decomposition exists because the authors found "no single metric is sufficient to fully characterize synthetic data quality" ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
 ## Why It Works
 
-Synthetic datasets diverge from production silently because the generator's prior is not the user's. Generators sample from model-induced distributions — templated prompts, in-context examples, fixed tool schemas — while production samples real intents, tool errors, and multi-step plans. A passing synthetic suite can still let a deploy regress against real users.
+Synthetic datasets diverge from production silently because the generator's prior is not the user's. Generators sample from model-induced distributions — templated prompts, in-context examples, fixed tool schemas — while production samples real intents, tool errors, and multi-step plans. A passing synthetic suite can still let a deploy regress.
 
-SynAE counters this by decomposition: scoring each trace component on each pillar attributes ranking distortion to a specific axis rather than a black-box verdict. The paper grounds this in controlled experiments where each generation failure mode moves a predictable pillar in a predictable direction ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+SynAE counters this by decomposition: scoring each trace component on each pillar attributes ranking distortion to a specific axis rather than a black-box verdict. The paper grounds this in controlled experiments where each generation failure mode moves a predictable pillar ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
 ## Diagnostic Patterns
 
-Five controlled failure modes the authors injected and the pillar signatures they produced ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)):
+Five failure modes the authors injected, and the pillar signatures they produced ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)):
 
 | Generation choice | Validity | Fidelity | Diversity | What to do |
 |-------------------|----------|----------|-----------|------------|
@@ -55,14 +55,14 @@ Five controlled failure modes the authors injected and the pillar signatures the
 | **Invalidation** — traces that do not work | Down | — | — | Add validity filters before entry |
 | **Naive Relabeling** — keyword substitution | Down | — | Up | Use semantically grounded transformations |
 
-Read the pillar movements together — a single failing axis often points to one specific generation choice.
+Read the pillar movements together — a single failing axis often points to one generation choice.
 
 ## How to Use It
 
 1. Pull a stable production-trace reference; [incident-to-eval synthesis](incident-to-eval-synthesis.md) is one source.
 2. Run all three pillars on all four components — a single score hides cross-axis trade-offs.
 3. Match failure signatures to fixes using the table above.
-4. Recheck after each intervention; verify lightweight fixes do not move a non-target pillar wrong ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+4. Recheck after each intervention; verify a fix does not move a non-target pillar ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 5. Do not collapse to a single score — the authors note averaging normalized metrics "is not necessarily the most meaningful way as they may scale differently."
 
 ## When This Backfires
@@ -76,17 +76,13 @@ Skip or replace the framework when:
 - **Uncalibrated LLM judge.** Without [judge calibration](anti-reward-hacking.md), the outputs mislead more than they help.
 - **Interactive or multi-agent settings.** The paper scopes SynAE to single-agent multi-turn tool-calling; extensions are future work, not validated ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
-## Relation to Adjacent Practices
-
-SynAE measures the eval suite itself; the suite it scores is built from [golden query pairs](golden-query-pairs-regression.md) and [incident-to-eval synthesis](incident-to-eval-synthesis.md). It is orthogonal to [benchmark contamination defences](benchmark-contamination-eval-risk.md): contamination asks whether the eval set leaked into training, SynAE whether it resembles production at all.
-
 ## Key Takeaways
 
-- Synthetic eval data drifts silently from production; SynAE catches the drift before a deploy gate trusts the synthetic suite.
+- Synthetic eval data drifts silently from production; SynAE catches the drift before a deploy gate trusts the suite.
 - Score on three orthogonal pillars across four trace components — the matrix is the artefact, not an aggregated number.
 - Five known generation failure modes have predictable pillar signatures; read the signatures to pick the right fix.
 - Skip when there is no production reference, the agent is single-turn, the set is small, or the LLM judge is uncalibrated.
-- The framework's own validity check is bounded by LLM-judge F1 of 0.86 against humans — treat the measurement layer as one more component that needs calibration.
+- The validity check is itself bounded by LLM-judge F1 of 0.86 — treat the measurement layer as one more component that needs calibration.
 
 ## Related
 

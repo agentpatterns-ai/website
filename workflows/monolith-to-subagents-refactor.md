@@ -12,12 +12,12 @@ tags:
 aliases:
   - prototype-to-production agent refactor
   - monolith-to-pipeline agent migration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Monolith-to-Sub-Agents Refactor: Five Lessons from a Brittle Prototype
 
-> A five-step migration checklist for taking a brittle monolithic agent prototype to a production-grade orchestrated pipeline — ordered so each step surfaces the failure modes the next step fixes.
+> A five-step checklist for refactoring a brittle monolithic agent prototype into a production-grade pipeline — each step surfaces the failures the next one fixes.
 
 A monolithic agent is a single linear script that calls one LLM with one large prompt. It works locally on small inputs. It fails silently in production. Google's Agent Development Kit team documented this exact transition in April 2026 by rebuilding "Titanium" — a sales-research agent whose job was to research a target company and draft an outreach email — from a monolithic `for` loop into a five-node `SequentialAgent` pipeline ([Production-Ready AI Agents: 5 Lessons from Refactoring a Monolith](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)).
 

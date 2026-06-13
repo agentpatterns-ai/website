@@ -1,5 +1,5 @@
 ---
-title: "Agent Composition: Chains, Fan-Out, Pipelines, Supervisors"
+title: "Agent Composition Patterns for Multi-Agent Workflows"
 term: "Agent Composition"
 description: "Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor-coordinator architectures."
 tags:
@@ -12,12 +12,12 @@ aliases:
   - Scatter-Gather
   - Orchestrator-Worker
   - Sub-Agents Fan-Out
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors
+# Agent Composition Patterns for Multi-Agent Workflows
 
-> Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor-coordinator — each suited to different task structures. Chaining tactics, model-level specialization, and agent portability extend these into production.
+> Multi-agent workflows follow four structural patterns — sequential chains, parallel fan-out, staged pipelines, and supervisor coordination — each suited to a different task structure.
 
 !!! note "Also known as"
     Parallel Dispatch, Scatter-Gather, Orchestrator-Worker, Sub-Agents Fan-Out. For specific variants, see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md), [Orchestrator-Worker](../multi-agent/orchestrator-worker.md), and [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md).
@@ -196,32 +196,20 @@ Composition does not eliminate context exhaustion — it relocates it. Two failu
 - **Silent drift in chains and supervisors:** Each downstream agent treats the previous agent's output as ground truth without validating it against the original task spec. A subtly wrong artifact at step 1 compounds through step N before any human notices ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/); [VentureBeat, April 2026](https://venturebeat.com/infrastructure/context-decay-orchestration-drift-and-the-rise-of-silent-failures-in-ai-systems)). Add a reconciliation step that validates each handoff against the original brief.
 - **Orchestrator context overflow in fan-out:** When N workers each return multi-thousand-token findings, the orchestrator's synthesis context fills before it can reason over all results ([Qubytes, May 2026](https://qubytes.substack.com/p/fan-out-agent-pipeline-production-failure-modes)). Compress worker outputs to summaries, or use external state with reference pointers, before the orchestrator synthesises.
 
+## Key Takeaways
+
+- Four patterns cover most multi-agent work: chains for strict dependencies, fan-out for independent parallel tasks, pipelines for staged work with quality gates, and supervisors for dynamic delegation.
+- Start with the simplest pattern. Chains and fan-out handle the majority of cases; reach for pipelines or supervisors only when gates or unknown task structure demand them.
+- Composition relocates context exhaustion rather than removing it — guard against silent drift in chains/supervisors with handoff reconciliation, and against orchestrator context overflow in fan-out by compressing worker outputs ([Glen Rhodes, March 2026](https://glenrhodes.com/agent-orchestration-failure-modes-silent-drift-reconciliation-and-the-supervision-mindset-shift/)).
+- Patterns nest: a fan-out of workers that each run an internal chain is common, and a fan-out can be wrapped in a pipeline when synthesis needs a quality gate.
+
 ## Related
 
 - [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Claude Code Sub-Agents](../tools/claude/sub-agents.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
-- [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Agent Harness: Initializer and Coding Agent](agent-harness.md)
-- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
-- [Agentic AI Architecture: From Prompt to Goal-Directed](agentic-ai-architecture-evolution.md)
-- [Harness Engineering for Building Reliable AI Agents](harness-engineering.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
-- [Separation of Knowledge and Execution in Agent Systems](separation-of-knowledge-and-execution.md)
-- [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md)
 - [Delegation Decision](delegation-decision.md)
 - [Evaluator-Optimizer](evaluator-optimizer.md)
-- [Event-Driven Agent Routing](event-driven-agent-routing.md)
-- [Progressive Disclosure Agents](progressive-disclosure-agents.md)
-- [Classical SE Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)

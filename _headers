@@ -2,32 +2,54 @@
 # Served from site/_headers (MkDocs copies this file into the build output).
 # Explicit beats dashboard defaults: these survive project moves and are
 # reviewable in git.
+#
+# Matching semantics (developers.cloudflare.com/workers/static-assets/headers/):
+# a request matching multiple rules inherits ALL their headers — later rules
+# APPEND rather than override. Overriding requires a `! Header-Name` reset
+# first. Two consequences shape this file:
+#   1. MkDocs serves directory URLs (/, /patterns/.../) — a `/*.html` glob
+#      never matches them, so HTML cache policy must live on `/*` and every
+#      narrower rule resets Cache-Control before setting its own.
+#   2. Rule order matters: `/assets/*` must precede the hashed-asset rules,
+#      otherwise its one-day TTL stacks onto the immutable rule — the
+#      pre-2026-06 file shipped exactly that doubled Cache-Control header.
 
+# Default: security headers everywhere. HTML (directory routes) must
+# revalidate on every request — ETag 304s are cheap, and stale pages
+# (the 2026-06 nav-skew incident) are not.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Un-hashed site assets (logo, og images, custom css): cache a day.
+# Must precede the hashed rules — see ordering note above.
+/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/stylesheets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
 
 # Material theme assets are content-hashed (assets/stylesheets/main.<hash>.css)
 # — safe to cache long and immutably.
 /assets/stylesheets/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 /assets/javascripts/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Un-hashed site assets (logo, og images, custom css): cache a day, revalidate.
-/assets/*
-  Cache-Control: public, max-age=86400
-/stylesheets/*
-  Cache-Control: public, max-age=86400
-
-# HTML and feeds: short cache so published fixes propagate quickly.
-/*.html
-  Cache-Control: public, max-age=600
+# Feeds and machine-readable indexes: an hour.
 /feed.xml
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 /sitemap.xml
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 /llms.txt
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 /llms-full.txt
+  ! Cache-Control
   Cache-Control: public, max-age=3600

@@ -6,12 +6,12 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Humans and Agents in Software Engineering Loops
 
-> Position humans to manage the loop, not to inspect every artefact — throughput and quality compound when humans engineer the harness rather than gate its outputs.
+> Position humans to manage the loop, not inspect every artefact — throughput and quality compound when humans engineer the harness rather than gate outputs.
 
 ## The Loop Hierarchy
 

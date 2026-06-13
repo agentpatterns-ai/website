@@ -8,12 +8,12 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Plan Compliance in Agents: Measure What They Execute, Not What You Wrote
 
-> Agents do not reliably execute the phases you instruct. Plan quality, phase alignment, and periodic reminders determine whether the plan you wrote is the plan that actually runs.
+> Agents do not reliably execute the phases you instruct. Plan quality, phase alignment, and periodic reminders determine whether the written plan actually runs.
 
 ## The Silent Gap
 
@@ -42,7 +42,7 @@ Effects 3 and 4 invert the naive assumption that "more plan, earlier plan" is mo
 
 ## Why Compliance Fails Without Reminders
 
-The compliance decay mechanism is documented in adjacent work. Agents exhibit goal drift correlated with increasing pattern-matching susceptibility as context grows — all tested models drift to some degree, with the best case maintaining near-perfect adherence only up to ~100,000 tokens under specific conditions ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)). Instruction fade-out is documented as a distinct failure mode that event-driven system reminders are designed to counter ([Bui, 2025](https://arxiv.org/abs/2603.05344)).
+The compliance decay mechanism is documented in adjacent work. Agents exhibit goal drift correlated with increasing pattern-matching susceptibility as context grows — all tested models drift to some degree, with the best case maintaining near-perfect adherence only up to ~100,000 tokens under specific conditions ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)). Instruction fade-out is documented as a distinct failure mode that event-driven system reminders are designed to counter ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
 
 Re-injecting the plan as the context lengthens pushes it back into the high-attention recency zone. This is the same structural defense that [goal recitation](../context-engineering/goal-recitation.md) uses for objectives and [critical instruction repetition](../instructions/critical-instruction-repetition.md) uses for hard constraints.
 

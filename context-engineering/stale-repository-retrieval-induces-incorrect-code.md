@@ -10,12 +10,12 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Stale Repository Retrieval Induces Incorrect Code
 
-> Stale repository snippets are not harmless background noise in retrieval-augmented code completion — they function as authoritative in-context examples and bias models toward writing code against obsolete API signatures.
+> Stale repository snippets are not harmless noise in retrieval-augmented code completion — they act as authoritative in-context examples and bias models toward obsolete API signatures.
 
 ## The Finding
 
@@ -57,7 +57,7 @@ This is related to but distinct from [Context Poisoning](../anti-patterns/contex
 - The study covers 17 samples and tests two models. The effect direction is consistent and the mechanism is well-specified, but absolute percentages should not be extrapolated beyond signature-change tasks in Python.
 - Mixed-context recovery depends on the current evidence actually being retrieved. A retriever that consistently surfaces only stale snippets — for example, because the current version has fewer cross-references — will not benefit.
 - The finding does not generalise to retrieval tasks that do not depend on exact signatures (docstring generation, comment completion, naming suggestions) — the study did not test these.
-- The staleness problem is acknowledged across the repository-level code generation literature: a [survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905) identifies staleness of indexed representations as a recurring limitation, and [kapa.ai's analysis of RAG failure modes](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them) confirms that semantic relevance scoring does not detect temporal staleness.
+- The staleness problem is recognised across the repository-level code generation literature. The broader RAG-for-code landscape is mapped in a [survey of retrieval-augmented code generation](https://arxiv.org/abs/2510.04905), and [kapa.ai's analysis of RAG failure modes](https://www.kapa.ai/blog/rag-gone-wrong-the-7-most-common-mistakes-and-how-to-avoid-them) treats keeping the index current as a distinct failure mode from semantic-relevance retrieval — semantic similarity scoring does not, on its own, surface temporal staleness.
 
 ## Example
 

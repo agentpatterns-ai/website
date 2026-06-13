@@ -11,12 +11,12 @@ tags:
   - workflows
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # CLI Scripts as Agent Tools: Return Only What Matters
 
-> Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse. Agents can also write and iterate on these scripts themselves through a tight write-execute-debug cycle.
+> Write thin wrapper scripts that pre-filter system output so agents receive a decision-ready summary rather than raw command output to parse.
 
 ## Raw Commands Waste Context
 

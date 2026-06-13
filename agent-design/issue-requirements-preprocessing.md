@@ -10,12 +10,12 @@ tags:
 aliases:
   - requirement-driven issue resolution
   - issue requirements engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Issue Requirements Preprocessing
 
-> Raw issue descriptions are a lossy input format. Transforming them into structured requirements before code generation improves patch resolution rates significantly — issue quality is a variable to optimize, not a fixed constraint.
+> Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates — issue quality is a variable to optimize, not a constraint.
 
 ## The Problem: Agents Take Issues at Face Value
 

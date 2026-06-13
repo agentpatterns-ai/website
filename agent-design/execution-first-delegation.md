@@ -9,20 +9,18 @@ tags:
 aliases:
   - AI-as-executor pattern
   - delegation contract pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Execution-First Delegation: The AI-as-Executor Pattern
 
-> Instead of scripting steps, specify the outcome and the boundaries. The agent determines how.
+> Execution-first delegation hands the agent an outcome and a set of boundaries instead of a step list, then lets it determine how.
 
 ## The Shift
 
-In prompt-response AI, you describe each step: "read this file, extract these fields, format the output as JSON." You remain the orchestrator; the model executes individual instructions.
+In prompt-response AI, you describe each step: "read this file, extract these fields, format as JSON." You remain the orchestrator; the model executes individual instructions.
 
-In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans steps, runs commands, modifies files, and adapts if something fails — all without you specifying the sequence.
-
-The developer's job changes from writing instructions to writing contracts.
+In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans, runs commands, modifies files, and adapts on failure — without you specifying the sequence. The developer's job shifts from writing instructions to writing contracts.
 
 | Prompt-Response | Execution-First |
 |-----------------|-----------------|
@@ -51,17 +49,13 @@ Skipping any part produces predictable failures:
 
 ## Why Boundaries Matter More Than Phrasing
 
-In prompt-response workflows, the primary skill is phrasing — write clearly, use examples, format well.
+In prompt-response workflows, the primary skill is phrasing — write clearly, use examples, format well. In execution-first workflows, it is bounding — what can the agent touch, how far can it go, when must it stop?
 
-In execution-first workflows, the primary skill is bounding — what can the agent touch, how far can it go, when must it stop?
-
-[Anthropic's research on autonomous agents](https://www.anthropic.com/engineering/building-effective-agents) identifies stopping conditions and human-in-the-loop checkpoints as required structural elements, not optional add-ons. [nibzard's production-agent pattern library](https://www.nibzard.com/agentic-handbook) concludes: most agent failures are loop design failures, not model failures — the model executed correctly within an under-specified contract.
+[Anthropic's research on autonomous agents](https://www.anthropic.com/engineering/building-effective-agents) identifies stopping conditions and human-in-the-loop checkpoints as required structural elements, not optional add-ons. [nibzard's production-agent pattern library](https://www.nibzard.com/agentic-handbook) concludes most agent failures are loop design failures, not model failures — the model executed correctly within an under-specified contract.
 
 ## MCP as the Grounding Layer
 
-Agents operating on intent need structured access to real tools and data. Without it, context gets embedded in prompts — ownership rules, API schemas, dependency constraints stuffed into text.
-
-Model Context Protocol (MCP) replaces prompt-embedded context with structured runtime access. The agent queries what it needs during execution, under defined permissions:
+Agents operating on intent need structured access to real tools and data. Without it, context gets stuffed into prompts as stale text. Model Context Protocol (MCP) replaces that with structured runtime access — the agent queries what it needs during execution, under defined permissions:
 
 - "Here is the current state of the deployment system (as text)" — prompt-embedded, stale, untestable
 - "You have access to the deployment API via MCP" — structured, permissioned, live
@@ -75,9 +69,9 @@ Execution-first is appropriate when the task has these characteristics:
 - **Large scope** — the work spans many files, systems, or decisions
 - **Clear stopping condition** — you can define done precisely enough that the agent can recognize it
 
-Avoid it when every step can be defined in advance. A fixed workflow with predictable inputs is better served by a [prompt chain](../context-engineering/prompt-chaining.md) — an autonomous loop adds cost and non-determinism without benefit.
+Avoid it when every step can be defined in advance — a fixed, predictable workflow is better served by a [prompt chain](../context-engineering/prompt-chaining.md), since an autonomous loop adds cost and non-determinism without benefit.
 
-[Addy Osmani notes](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) this fits greenfield or self-contained projects more cleanly than large existing codebases with tight coupling — the contract is harder to specify when system boundaries are unclear.
+[Addy Osmani notes](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) this fits greenfield or self-contained projects more cleanly than large, tightly coupled codebases, where the contract is harder to specify.
 
 ## Design Checklist
 

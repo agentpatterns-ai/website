@@ -9,12 +9,12 @@ tags:
 aliases:
   - Multi-Agent Performance Optimization
   - System-Wide Optimization Pipeline
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # System-Level Optimization Pipeline
 
-> A four-stage agent pipeline decomposes performance engineering into summarization, analysis, optimization, and verification — enabling AI agents to reason about bottlenecks that span component boundaries rather than optimizing functions in isolation.
+> A four-stage agent pipeline runs system-level optimization across summarize, analyze, optimize, and verify roles so agents catch bottlenecks that span component boundaries.
 
 !!! info "Also known as"
     Multi-Agent Performance Optimization, System-Wide Optimization Pipeline
@@ -69,7 +69,7 @@ The verification agent validates functional correctness (existing tests pass) an
 
 ## Early Evidence
 
-[Peng et al. (2026)](https://arxiv.org/abs/2603.14703) evaluated this pipeline on TeaStore, a Java microservices benchmark with six interacting services:
+[Peng et al. (2026)](https://arxiv.org/abs/2603.14703) evaluated this pipeline on TeaStore, a Java microservices benchmark with five interacting services plus a registry:
 
 | Metric | Before | After | Change |
 |--------|--------|-------|--------|

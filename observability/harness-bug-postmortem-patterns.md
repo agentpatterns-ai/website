@@ -10,7 +10,7 @@ tags:
 aliases:
   - harness regression detection
   - agent harness eval gaps
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Harness Bug Detection Patterns
@@ -31,20 +31,20 @@ The bugs are specific; the detection gaps generalise.
 
 ## Pattern 1: Idle-State Evals
 
-The thinking-history bug only triggered after a session was idle for one hour, then compounded across every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
+The thinking-history bug only triggered after a session idled for one hour, then compounded every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and missed it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
 Standard evals sweep input space. Idle-state evals sweep *temporal* state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
 
 Add eval cases that:
 
-- Issue N turns, sleep past the longest TTL in the harness, resume, issue N more turns, and score the post-resume turns.
-- Repeat on every TTL the harness declares (1 minute, 1 hour, 1 day) to cover boundary behaviour.
+- Issue N turns, sleep past the longest TTL, resume, issue N more turns, and score the post-resume turns.
+- Repeat on every TTL the harness declares (1 minute, 1 hour, 1 day) for boundary behaviour.
 
 ## Pattern 2: Internal-vs-Public Build Parity
 
 The thinking-history bug was active in the public build but masked internally by "an internal-only server-side experiment related to message queuing" and a CLI thinking-display suppression, so staff dogfooding did not reproduce it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-When the internal build carries unshipped experiments, different flags, or different display layers, public-only failures stay invisible to staff running the same commands daily. The postmortem's remedy — "increase staff usage of exact public builds" — translates to:
+When the internal build carries unshipped experiments, different flags, or different display layers, public-only failures stay invisible to staff running the same commands daily. The postmortem's remedy — "increase staff usage of exact public builds" — means:
 
 - List every flag, experiment, and feature gate that differs between internal and public.
 - Run a canary lane on the exact public artefact against the same eval suite and dogfood workflows.
@@ -54,7 +54,7 @@ When the internal build carries unshipped experiments, different flags, or diffe
 
 The verbosity-reduction prompt dropped quality 3% for both Opus 4.6 and Opus 4.7. The original evaluation "showed no regressions"; the drop only appeared when broader ablation ran per-model comparisons ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Aggregate evals average. A change that regresses one model and improves another — or regresses all models by a uniform small amount — vanishes in the aggregate. Per-model ablation runs the same eval with the change on, then off, for each model and reports deltas separately.
+Aggregate evals average. A change that regresses one model and improves another — or regresses all models by a uniform small amount — vanishes in the aggregate. Per-model ablation runs the same eval with the change on, then off, per model and reports deltas separately.
 
 Structure the ablation as:
 

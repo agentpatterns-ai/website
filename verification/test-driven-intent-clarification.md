@@ -9,12 +9,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts
 
-> Ask the AI to generate tests that expose ambiguity in your specification, validate those tests, then use them to constrain code generation — reviewing tests is cheaper and more precise than reviewing code.
+> Generate tests that expose specification ambiguity, validate them against your intent, then constrain code generation — validating tests is cheaper and more precise than review.
 
 ## The Intent Gap
 

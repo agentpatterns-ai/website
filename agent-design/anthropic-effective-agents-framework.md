@@ -9,16 +9,16 @@ tags:
 aliases:
   - Building Effective Agents
   - Anthropic Agent Patterns
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Anthropic's Effective Agents Framework: A Pattern Map
 
-> Anthropic's *Building Effective Agents* framework names three building blocks — augmented LLM, five workflow patterns, and the autonomous agent loop — that decompose "build an agent" into a structured selection problem. The framework is foundational but conditional: each pattern works only when its specific assumptions hold.
+> Anthropic's *Building Effective Agents* framework names three building blocks — augmented LLM, five workflow patterns, autonomous agent loop — each conditional on its own assumptions.
 
 ## Overview
 
-Anthropic's December 2024 engineering post and the expanded *Building Effective AI Agents* eBook define the most-cited taxonomy in agent-pattern literature ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); [eBook landing](https://resources.anthropic.com/building-effective-ai-agents)). This page maps that taxonomy to site pages and names the conditions under which each layer holds.
+Anthropic's December 2024 engineering post and the expanded *Building Effective AI Agents* eBook define the most-cited taxonomy in agent-pattern literature ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); [eBook landing](https://resources.anthropic.com/building-effective-ai-agents)). This page maps that taxonomy to site pages and the conditions under which each layer holds.
 
 Anthropic distinguishes three layers:
 
@@ -71,7 +71,7 @@ The site treats this as a spectrum, not a binary: see [Agentless vs Autonomous](
 
 The expanded eBook covers material the December 2024 post does not ([eBook landing](https://resources.anthropic.com/building-effective-ai-agents)):
 
-- **Case studies** — Coinbase deploys Claude as a customer-support agentic system with financial-compliance guardrails ([Coinbase engineering blog](https://www.coinbase.com/blog/building-enterprise-AI-agents-at-Coinbase)); Thomson Reuters rebuilds CoCounsel Legal on the Claude Agent SDK ([press release](https://www.prnewswire.com/news-releases/thomson-reuters-and-anthropic-expand-partnership-to-connect-claude-with-cocounsel-legal-302769890.html)); Intercom is cited as a customer-support deployment
+- **Case studies** — Coinbase runs Claude as a customer-support agentic system with financial-compliance guardrails ([Coinbase engineering blog](https://www.coinbase.com/blog/building-enterprise-AI-agents-at-Coinbase)); Thomson Reuters rebuilds CoCounsel Legal on the Claude Agent SDK ([press release](https://www.prnewswire.com/news-releases/thomson-reuters-and-anthropic-expand-partnership-to-connect-claude-with-cocounsel-legal-302769890.html))
 - **Context management** — expanded in [Anthropic's context-engineering post](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
 - **Skills** — modular instructions for cross-task agent capability, defined in the [agentskills.io standard](https://agentskills.io)
 

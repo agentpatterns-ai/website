@@ -11,7 +11,7 @@ tags:
 aliases:
   - "prefix-risk scorer"
   - "online failure-warning monitor"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Learned Prefix Monitors for Agent Traces

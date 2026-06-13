@@ -9,7 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Blast Radius Containment: Least Privilege for AI Agents

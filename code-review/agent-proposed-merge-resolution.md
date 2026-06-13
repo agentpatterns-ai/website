@@ -5,7 +5,7 @@ tags:
   - code-review
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent-Proposed Merge Resolution
@@ -19,7 +19,7 @@ Agent-proposed merge resolution is a specific division of labour:
 - **Agent** re-reads both sides of the conflict, produces a single resolution commit, and validates that builds and tests still pass in an isolated environment.
 - **Human** reviews the proposal and either confirms it or asks for an alternative. The action is bounded to a few clicks, not a full branch rebuild.
 
-The human stays in the decision loop. The agent does the expensive cognitive step — rebuilding both sides' intent — but cannot ship the merge unilaterally.
+The agent does the expensive step — rebuilding both sides' intent — but cannot ship the merge unilaterally; the human stays in the decision loop.
 
 GitHub's Copilot cloud agent implements this pattern as a "Fix with Copilot" button on the PR conflict view. The flow is three clicks: click the button, review a pre-populated comment, submit ([GitHub Changelog, 13 April 2026](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/)). The same interaction generalises to any agent that can open a sandbox, resolve, validate, and push.
 
@@ -27,7 +27,7 @@ GitHub's Copilot cloud agent implements this pattern as a "Fix with Copilot" but
 
 Merge conflict resolution decomposes into two asymmetric steps: propose a resolution (re-read both sides, pick a merge candidate, produce the code) and confirm it (check the proposal does what you expect). A human-only flow pays the proposal cost every time. The agent-proposes / human-confirms contract moves that cost to the agent, in a sandbox with build and test validation — leaving the human to confirm. The build/test gate is load-bearing: it is the minimum signal that the proposal is type- and test-consistent, not a silent pick-a-side ([GitHub Changelog](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/)).
 
-The result lands as a single new commit, not a rebase. Force pushes during active review are the strongest negative predictor of merge success in a study of 33,596 agent-authored PRs ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441), summarised in [Agent-Authored PR Integration](agent-authored-pr-integration.md)). A fresh commit preserves reviewer context; a rebase destroys it.
+The result lands as a single new commit, not a rebase. In a study of agent-authored PRs, force pushes correlate with a lower likelihood of merging ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441), summarised in [Agent-Authored PR Integration](agent-authored-pr-integration.md)). A fresh commit preserves reviewer context; a rebase destroys it.
 
 ## Why This Matters at the PR Boundary
 
@@ -68,7 +68,7 @@ The low-friction interaction is the pattern's strength and its weakness. Four co
 
 ## Availability
 
-Copilot cloud agent's three-click conflict resolution is included with all paid Copilot plans. Copilot Business and Enterprise administrators must explicitly enable the cloud agent before team members can use it ([GitHub Changelog](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/)). The design contract generalises to any agent platform that can open a sandbox and push a resolution commit — [Agent HQ](../tools/copilot/agent-hq.md) is the host for the pattern on github.com across Copilot, Claude, and Codex.
+Copilot cloud agent's three-click conflict resolution ships with all paid Copilot plans; Business and Enterprise admins must enable the cloud agent first ([GitHub Changelog](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/)). The contract generalises to any platform that can open a sandbox and push a resolution commit — [Agent HQ](../tools/copilot/agent-hq.md) hosts it on github.com across Copilot, Claude, and Codex.
 
 ## Example
 

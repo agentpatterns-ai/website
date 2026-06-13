@@ -12,14 +12,14 @@ aliases:
   - causal responsibility score
   - counterfactual agent repair
   - CRS
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # CausalFlow: Counterfactual Repair for Failed Agent Trajectories
 
 > Intervene on each step of a failed agent trajectory — the step whose oracle-guided replacement flips the outcome is the cause and the repair.
 
-This technique needs three conditions: a **binary success verifier**, **replay isolation** (steps re-executable without irreversible side effects), and a **single-trajectory failure** that is not the tip of a cascade. Where they hold, CausalFlow turns an unstructured failure log into a controlled experiment yielding both an immediate patch and a validated training pair. Where they don't, cheaper retries or deterministic guardrails win.
+This technique needs three conditions: a **binary success verifier**, **replay isolation** (steps re-executable without irreversible side effects), and a **single-trajectory failure** that is not the tip of a cascade. Where they hold, CausalFlow turns a failure log into a controlled experiment yielding an immediate patch and a validated training pair. Where they don't, cheaper retries or deterministic guardrails win.
 
 ## How It Works
 
@@ -38,11 +38,11 @@ graph LR
 
 ### 1. Causal Responsibility Score (CRS)
 
-For each step, the framework asks: *if this step had been different, would the run have succeeded?* The score is the change in success probability under intervention ([arxiv 2605.25338](https://arxiv.org/abs/2605.25338)). High CRS means high responsibility. This is Pearl-style abduct–act–predict applied to agent traces; the SCM-for-LLM-attribution framing has been formalised more generally ([A2P, arxiv 2509.10401](https://arxiv.org/abs/2509.10401)).
+For each step, the framework asks: *if this step had been different, would the run have succeeded?* The score is the change in success probability under intervention ([arxiv 2605.25338](https://arxiv.org/abs/2605.25338)); high CRS means high responsibility. This is Pearl-style abduct–act–predict applied to agent traces; the SCM-for-LLM-attribution framing is formalised more generally ([A2P, arxiv 2509.10401](https://arxiv.org/abs/2509.10401)).
 
 ### 2. Minimal edit
 
-CausalFlow then generates the **smallest edit** that makes the intervention work. The success criterion is mechanical: the edited step plus original downstream replay must produce an accepted outcome ([arxiv 2605.25338](https://arxiv.org/abs/2605.25338)). "Validated by re-execution" is what separates this from log-scanning heuristics whose proposed repairs are never tested.
+CausalFlow then generates the **smallest edit** that makes the intervention work. The success criterion is mechanical: the edited step plus original downstream replay must produce an accepted outcome ([arxiv 2605.25338](https://arxiv.org/abs/2605.25338)). Validation by re-execution is what separates this from log-scanning heuristics whose repairs are never tested.
 
 ### 3. Dual use of the (wrong, corrected) pair
 
@@ -57,13 +57,13 @@ Validated across mathematical reasoning, code generation, question answering, an
 
 ## Why It Works
 
-Treating the trajectory as a Pearl-style structural causal chain and replacing one step with an oracle-guided alternative gives a per-step counterfactual probability — the step with the highest lift is the most plausible cause, and the minimal edit that produced the flip is by construction a *validated* repair rather than a hypothesised one ([CausalFlow, arxiv 2605.25338](https://arxiv.org/abs/2605.25338); the SCM-for-LLM-attribution case is framed generally in [A2P, arxiv 2509.10401](https://arxiv.org/abs/2509.10401)). Heuristic refinement loops ask the model to "try again" without isolating which step was wrong.
+Treating the trajectory as a Pearl-style structural causal chain and replacing one step with an oracle-guided alternative gives a per-step counterfactual probability — the highest-lift step is the most plausible cause, and the minimal edit that produced the flip is by construction a *validated* repair, not a hypothesised one ([CausalFlow, arxiv 2605.25338](https://arxiv.org/abs/2605.25338); the SCM-for-LLM-attribution case is framed generally in [A2P, arxiv 2509.10401](https://arxiv.org/abs/2509.10401)). Heuristic refinement loops ask the model to "try again" without isolating the wrong step.
 
 ## When This Backfires
 
 Five conditions break the assumptions and make cheaper approaches preferable.
 
-**Side-effecting tools without replay isolation.** Counterfactual intervention requires re-executing the trajectory with an alternative action. If steps mutate external state — databases, files, paid APIs, sent emails — replay either corrupts state or is infeasible. The technique fits sandboxed reasoning, code generation, and retrieval; production tool-use agents need a snapshotting layer first.
+**Side-effecting tools without replay isolation.** Counterfactual intervention re-executes the trajectory with an alternative action. If steps mutate external state — databases, files, paid APIs, sent emails — replay corrupts state or is infeasible. The technique fits sandboxed reasoning, code generation, and retrieval; production tool-use agents need a snapshotting layer first.
 
 **Cascading or distributed failures.** Single-trajectory CRS attributes responsibility to one step. Empirically, ~40 % of LLM/Agent-node failure root causes occur at locations *different* from where the failure surfaces, rising to ~45 % for Logic/Control nodes ([arxiv 2509.23735](https://arxiv.org/abs/2509.23735)). Multi-perspective failures are ill-posed for single-step attribution because multiple distinct interventions can independently repair the task ([arxiv 2603.25001](https://arxiv.org/abs/2603.25001)). For distributed cases, prefer hierarchical causal-graph attribution ([CHIEF, arxiv 2602.23701](https://arxiv.org/abs/2602.23701)) or multi-agent attribution benchmarks ([TraceElephant, arxiv 2604.22708](https://arxiv.org/abs/2604.22708)).
 
@@ -77,9 +77,9 @@ Five conditions break the assumptions and make cheaper approaches preferable.
 
 **Audit replay isolation before the CRS pipeline.** The first investment is the sandbox that makes step-level replay safe, not the attribution model. Agents already inside a snapshottable environment ([offline trajectory replay](../observability/offline-trajectory-replay-multi-agent-debugging.md)) can adopt CausalFlow; others need that foundation first.
 
-**Start with the offline-signal use.** Aggregating pairs into a preference dataset is lower-stakes than rerouting live traffic through CRS-driven repair, and composes with [incident-to-eval synthesis](incident-to-eval-synthesis.md) — each repair becomes a regression case.
+**Start with the offline-signal use.** Aggregating pairs into a preference dataset is lower-stakes than rerouting live traffic through CRS-driven repair, and composes with [incident-to-eval synthesis](incident-to-eval-synthesis.md).
 
-**Combine with stage decomposition.** [Trajectory decomposition](trajectory-decomposition-diagnosis.md) tells you *which stage* a population fails in; CausalFlow tells you *which step* a single trajectory failed at and what would have fixed it. Use the population view to pick where to invest; use CRS to extract supervision from individual failures.
+**Combine with stage decomposition.** [Trajectory decomposition](trajectory-decomposition-diagnosis.md) tells you *which stage* a population fails in; CausalFlow tells you *which step* a single trajectory failed at and what would have fixed it. Use the population view to choose where to invest; use CRS to extract supervision per failure.
 
 ## Key Takeaways
 

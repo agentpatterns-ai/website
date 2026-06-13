@@ -11,11 +11,12 @@ tags:
   - workflows
   - tool-agnostic
   - context-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Prompt Chaining: Sequential LLM Calls for Agent Workflows
 
-> Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage.
+> Decompose a complex task into a sequence of LLM calls where each step processes the previous output, enabling verification and gate-checking between stages.
 
 ## Structure
 
@@ -76,6 +77,8 @@ Chaining adds latency proportional to the number of steps. This is the primary c
 
 For tasks where speed dominates and single-prompt performance is acceptable, chaining introduces cost without benefit.
 
+A second cost is compounding failure. Each call is a new, stochastic point of failure, so the probability that a long chain completes cleanly falls with every step — a well-documented [cascading-failure](https://dev.to/experilearning/avoiding-cascading-failure-in-llm-prompt-chains-9bf) risk in chained LLM systems ([Practical Considerations for Agentic LLM Systems](https://arxiv.org/abs/2412.04093)). Gates mitigate this only for failures a program can check; a plausible-but-wrong output that passes its gate still propagates downstream. Keep chains as short as the task allows, and reserve chaining for steps whose outputs are programmatically verifiable.
+
 ## Relationship to Other Patterns
 
 Prompt chaining is the simplest multi-step agent architecture. More complex patterns build on it:
@@ -108,7 +111,7 @@ def gate_check(output: str, required_sections: list[str]) -> bool:
 
 def run_spec_chain(feature_request: str) -> str:
     draft = client.messages.create(
-        model="claude-opus-4-5",
+        model="claude-opus-4-8",
         max_tokens=1024,
         messages=[{"role": "user", "content": f"Write a technical specification for: {feature_request}"}]
     ).content[0].text
@@ -117,7 +120,7 @@ def run_spec_chain(feature_request: str) -> str:
         raise ValueError("Draft missing required sections — aborting chain")
 
     review = client.messages.create(
-        model="claude-opus-4-5",
+        model="claude-opus-4-8",
         max_tokens=512,
         messages=[{"role": "user", "content": f"""Review this specification for gaps and risks:
 
@@ -132,7 +135,7 @@ Return JSON: {{"issues": [...], "approved": true/false}}"""}]
         raise ValueError(f"Review failed — issues: {review_result['issues']}")
 
     final = client.messages.create(
-        model="claude-opus-4-5",
+        model="claude-opus-4-8",
         max_tokens=1024,
         messages=[{"role": "user", "content": f"""Finalise this specification addressing: {review_result['issues']}
 

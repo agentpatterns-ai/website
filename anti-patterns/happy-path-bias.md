@@ -7,12 +7,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Happy Path Bias
 
-> Agents produce code that works for the common case but breaks on edge cases, error paths, and type boundaries.
+> Happy path bias is the agent tendency to write code that handles the common case but skips error paths, edge cases, and type boundaries.
 
 ## The Pattern
 
@@ -26,7 +26,7 @@ AI coding agents systematically neglect error handling, edge cases, and type saf
 
 ## Why It Happens
 
-The agent's objective is task completion: the code compiles, the tests pass, and the requested feature exists. Error handling, validation, and edge-case coverage are implicit requirements that rarely appear in the task description. A catch-all handler or type escape hatch satisfies the surface-level goal — the code compiles, the task appears done — while deferring failures to production.
+The agent's objective is task completion: the code compiles, the tests pass, and the requested feature exists. Error handling, validation, and edge-case coverage are implicit requirements that rarely appear in the task description. A catch-all handler or type escape hatch satisfies that surface goal while deferring failures to production.
 
 ## Detection
 
@@ -64,16 +64,16 @@ repos:
 
 ## When This Backfires
 
-Adding exhaustive error handling is not always the right call. Conditions where the pattern overreaches:
+Exhaustive error handling is not always right. Where it overreaches:
 
-- **Prototyping and throwaway scripts** — early-stage code that will never reach production can reasonably defer error paths; the cost of comprehensive handling outweighs the signal it provides at that stage.
-- **Framework-managed boundaries** — when a runtime, web framework, or CLI harness already catches and logs unhandled exceptions at a top-level boundary, adding redundant try/catch inside every function creates noise without adding recovery logic.
-- **Tight feedback loops with known input** — test harnesses, local dev scripts, and internal tooling operating on controlled, well-understood input rarely need the same defensive depth as user-facing production code.
-- **Over-specified exception types** — catching `FileNotFoundError` and `PermissionError` separately is correct; catching 15 distinct OS-level exceptions per function creates noise that obscures intent and discourages reading error paths at all.
-- **Linter false positives in exploratory code** — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems or test harnesses where catching `Exception` is intentional. Blanket rule application without `# noqa` discipline generates suppression churn.
-- **Prompt over-specification** — injecting long error-handling instructions into every prompt dilutes the task signal; agents may produce verbose try/except scaffolding that technically satisfies the prompt but obscures the logic under test.
+- **Prototyping and throwaway scripts** — code that never reaches production can defer error paths; handling costs more than its signal.
+- **Framework-managed boundaries** — when a runtime or web framework already catches unhandled exceptions at the top level, per-function try/catch adds noise, not recovery.
+- **Tight feedback loops with known input** — test harnesses and internal tooling on controlled input rarely need user-facing defensive depth.
+- **Over-specified exception types** — catching `FileNotFoundError` and `PermissionError` separately is correct; catching 15 OS exceptions per function obscures intent.
+- **Linter false positives** — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems where catching `Exception` is intentional; blanket rules churn suppressions.
+- **Prompt over-specification** — long error-handling instructions in every prompt dilute the task signal with verbose scaffolding.
 
-The anti-pattern targets *production-bound* code. Apply enforcement at the CI boundary, not the prompt boundary, to separate signal from noise.
+The anti-pattern targets *production-bound* code. Enforce at the CI boundary, not the prompt boundary.
 
 ## Example
 
@@ -102,6 +102,13 @@ An agent asked to write a file parser:
 
 The first version works when the file exists and contains valid JSON. The second works in production.
 
+## Key Takeaways
+
+- Agents optimize for the surface goal — compiles, tests pass, feature exists — and skip the implicit error paths, edge cases, and type boundaries.
+- Catch the common forms deterministically: `E722`, `BLE001`, `TRY003`, `TRY301`, `TRY400`, and `@typescript-eslint/no-explicit-any` at a pre-commit and CI gate.
+- Name anti-patterns by rule ID in prompts; enforce at the CI boundary, not by padding every prompt with error-handling instructions.
+- The bias is a production concern — prototypes, framework-managed boundaries, and controlled-input tooling can reasonably defer exhaustive handling.
+
 ## Sources
 
 - [CodeRabbit: AI vs Human Code Generation](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
@@ -116,14 +123,7 @@ The first version works when the file exists and contains valid JSON. The second
 - [Demo to Production Gap](demo-to-production-gap.md) — Code passes demos but fails on real-world edge cases
 - [Copy-Paste Agent](copy-paste-agent.md) — Type-safety violations from cloning code without adapting types
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — Hard checks around agent output
-- [Hooks vs Prompts](../instructions/hooks-vs-prompts.md) — Lifecycle hooks enforce safety deterministically
 - [TDD Agent Development](../verification/tdd-agent-development.md) — Tests first; agents implement against them
 - [Pattern Replication Risk](pattern-replication-risk.md) — Agents reproduce codebase patterns at scale, including bad error handling
-- [The Yes-Man Agent](yes-man-agent.md) — Executes requests without flagging missing error handling
-- [The Effortless AI Fallacy](effortless-ai-fallacy.md) — Underestimating the effort needed to make AI-generated code production-ready
-- [Shadow Tech Debt](shadow-tech-debt.md) — Hidden quality issues accumulating in AI-generated code
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) — Progressive failure hierarchy for agents that encounter errors at runtime
 - [The Test Homogenization Trap](test-homogenization-trap.md) — AI-generated tests share the model's blind spots, missing the same edge cases the code misses
-- [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) — systematic process for tracing why an agent produced wrong or incomplete output
-- [Comprehension Debt](comprehension-debt.md) — Unreviewed agent output accumulates as code the team doesn't understand
-- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — Reviews focus on style while error-handling gaps go unnoticed

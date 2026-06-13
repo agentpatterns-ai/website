@@ -13,7 +13,7 @@ tags:
   - source:opendev-paper
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Tool Engineering Principles for AI Agent Development
@@ -46,7 +46,7 @@ Tool docstrings should include:
 
 A model with no prior knowledge of your system forms its understanding entirely from the docstring. Write accordingly.
 
-This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly. A well-written docstring functions as a compact, always-present reference that shapes every tool invocation in the session.
+This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly. A well-written docstring is a compact, always-present reference that shapes every tool invocation.
 
 ## Poka-Yoke: Mistake-Proofing
 
@@ -61,17 +61,17 @@ The goal is to make the correct call easier than the incorrect call.
 
 ## Independent Testing
 
-Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse patterns and eliminates one variable from loop-level failures.
+Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
 
 ## Tool Result Optimization
 
-The preceding sections address tool *inputs*; this section addresses tool *outputs*. The OPENDEV paper reports ~54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2025 §2.3.2](https://arxiv.org/abs/2603.05344)):
+The preceding sections address tool *inputs*; this section addresses tool *outputs*. The OPENDEV paper reports ~54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
 
 - **Per-type summarization**: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
 - **Large output offloading**: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost
 - **Agent-aware truncation hints**: when output is offloaded, the truncation message includes a recovery hint tailored to the agent's capabilities (e.g., suggesting subagent delegation or incremental search)
 
-Pre-computed summaries are reused during context compaction, avoiding redundant re-processing and improving both speed and quality of emergency compaction ([Bui, 2025 §2.3.2](https://arxiv.org/abs/2603.05344)). See also [Semantic Tool Output](semantic-tool-output.md) for complementary output formatting patterns.
+Pre-computed summaries are reused during context compaction, avoiding redundant re-processing and improving both speed and quality of emergency compaction ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)). See also [Semantic Tool Output](semantic-tool-output.md) for complementary output formatting patterns.
 
 ## Example
 

@@ -1,18 +1,18 @@
 ---
 title: "The Ralph Wiggum Loop: Fresh-Context Iteration Pattern"
 term: "Ralph Wiggum Loop"
-description: "Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation."
+description: "The Ralph Wiggum Loop runs each iteration in a fresh context window, persisting state to disk so context never accumulates to the point of degradation."
 aliases:
   - Fresh-Context Iteration Pattern
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Ralph Wiggum Loop: Fresh-Context Iteration Pattern
 
-> Iterate in bounded units with fresh context each cycle, persisting state to disk between iterations, so context never accumulates to the point of degradation.
+> The Ralph Wiggum Loop runs each iteration in a fresh context window, persisting state to disk so context never accumulates to the point of degradation.
 
 ## The Pattern
 
@@ -126,23 +126,10 @@ The agent prompt instructs it to read state, complete one bounded task, and writ
 ## Related
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — project instruction file that agents read at session start for conventions and context
-- [Worktree Isolation](../workflows/worktree-isolation.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [The Delegation Decision](delegation-decision.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Convergence Detection](convergence-detection.md)
-- [Steering Running Agents](steering-running-agents.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Memory Patterns](agent-memory-patterns.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Harness Engineering for Building Reliable AI Agents](harness-engineering.md)
+- [Session Initialization Ritual](session-initialization-ritual.md) — the disk-state read that opens each fresh-context cycle
+- [Worktree Isolation](../workflows/worktree-isolation.md) — sandboxes each iteration so failures don't contaminate the working directory
+- [Loop Strategy Spectrum](loop-strategy-spectrum.md) — where fresh-context looping sits among other agent loop strategies
+- [Convergence Detection](convergence-detection.md) — the progress signal that stops a loop cycling on an unsolvable task
 - [Idempotent Agent Operations](idempotent-agent-operations.md) — design operations for safe retry across iterations
-- [Rollback-First Design](rollback-first-design.md) — plan recovery before execution, complementing fresh-context recovery
-- [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — progressive failure response strategies that complement fresh-context recovery
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — tracking progress across the multi-session iterations this pattern creates
 - [Cross-Cycle Consensus Relay](cross-cycle-consensus-relay.md) — structured relay document that preserves decisions and forward momentum across fresh-context cycles

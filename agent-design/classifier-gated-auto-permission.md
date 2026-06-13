@@ -12,7 +12,7 @@ aliases:
   - classifier-gated auto-permission
   - classifier-mediated auto-mode
   - permission classifier pattern
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents
@@ -42,7 +42,7 @@ Three implementation tiers recur across the cloud-IDE coding agents that ship th
 | 2 — In-project file ops | Writes and edits inside the project root | — |
 | 3 — Boundary-crossing | — | Shell commands, external APIs, out-of-project writes, subagent spawns |
 
-The tier table comes from Claude Code's auto-mode ([Claude Code permission modes](https://code.claude.com/docs/en/permission-modes)). VS Code 1.121's `github.copilot.chat.claudeAgent.allowAutoPermissions` ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)) and OpenAI Codex's `approvals_reviewer = "auto_review"` ([Codex Agent Approvals](https://developers.openai.com/codex/agent-approvals-security)) follow the same shape. Inputs the classifier reads typically include the user prompt, tool name, argument shape, target paths, and network destinations — never the doing agent's own reasoning (see below).
+The tier table comes from Claude Code's auto-mode ([Claude Code permission modes](https://code.claude.com/docs/en/permission-modes)). VS Code 1.121's `github.copilot.chat.claudeAgent.allowAutoPermissions` ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)) and OpenAI Codex's `approvals_reviewer = "auto_review"` ([Codex Agent Approvals](https://developers.openai.com/codex/agent-approvals-security)) follow the same shape. Cursor ships the pattern for headless agents through a natural-language classifier: `autoRun.allow_instructions` and `autoRun.block_instructions` in `permissions.json` steer which tool calls run automatically versus hold for review — for example allowing read-only build-artifact inspection while always pausing deletes ([Cursor — agent autonomy auto-review](https://cursor.com/blog/agent-autonomy-auto-review)). Inputs the classifier reads typically include the user prompt, tool name, argument shape, target paths, and network destinations — never the doing agent's own reasoning (see below).
 
 VS Code 1.121's escalation criteria are stated verbatim: the classifier blocks anything that "escalates beyond your request", "targets unrecognized infrastructure", or "appears driven by hostile content Claude read" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)).
 

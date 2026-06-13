@@ -9,12 +9,12 @@ tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Agent Stack Bet: Architectural Decisions for Production Agents
 
-> Production agents hit a stack ceiling that prompting cannot solve — identity, context, durability, and orchestration have to move from application code into the platform layer, but only after scale or compliance makes the trade-off pay.
+> Production agents hit a stack ceiling that prompting cannot solve: identity, context, durability, and orchestration must move into the platform layer.
 
 ## The Stack Ceiling
 
@@ -32,7 +32,7 @@ The bet is that agent identity moves into the network/IAM layer — an unforgeab
 
 Context fragments across tabs, dragged-in files, and bespoke session stores. Osmani argues integration must happen at the platform level — CRM, ERP, warehouse, tickets — and without it "the ceiling of agentic AI is slightly better spreadsheet autocomplete" ([Osmani](https://addyo.substack.com/p/the-agent-stack-bet)).
 
-This bet is the most aspirational. MCP is the current attempt; no platform delivers universal cross-system context as a commodity. Teams betting here bet on an emerging standard, not a shipped one.
+This bet is the most aspirational. MCP is the current attempt; no platform delivers universal cross-system context as a commodity. The standard is also contested in practice — Perplexity said in March 2026 it was stepping back from MCP internally in favour of REST APIs and CLIs ([Perplexity steps back from MCP](https://www.agent-engineering.dev/article/why-perplexity-is-stepping-back-from-the-model-context-protocol-mcp-internally)). Teams betting here bet on an emerging standard, not a shipped one.
 
 ## Bet 3: Missions That Outlive Sessions
 

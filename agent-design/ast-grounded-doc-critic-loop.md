@@ -10,7 +10,7 @@ tags:
 aliases:
   - critic-guided documentation refinement
   - AST-grounded doc maintenance
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # AST-Grounded Critic Loop for Documentation Maintenance

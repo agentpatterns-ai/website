@@ -11,7 +11,7 @@ tags:
 aliases:
   - AX stack
   - agent prompt to compile stack
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # The AX Stack
@@ -20,10 +20,7 @@ last_reviewed: 2026-06-01
 
 ## When This Helps (and When It Misleads)
 
-The stack is a diagnostic and communication tool. Treat the fixed/open boundaries as approximate, not absolute:
-
-- **Use it** when a team needs shared vocabulary to locate a failure ("the agent picked the wrong SDK — that is an extensions-layer problem, not a model swap") or to prioritise where to invest first.
-- **Do not use it** when you need a portability guarantee, when one tool surface and one agent are involved, or when "the harness is fixed" becomes licence to stop investigating hook scripts, system-prompt overrides, and managed settings — vendors *do* expose levers inside the harness, just not full replacement.
+The stack is a diagnostic and communication tool, not an architecture. **Use it** when a team needs shared vocabulary to locate a failure ("the agent picked the wrong SDK — that is an extensions-layer problem, not a model swap") or to prioritise where to invest first. Treat the fixed/open boundaries as approximate, not absolute — the cases where the framing actively misleads are catalogued in [When This Backfires](#when-this-backfires) below.
 
 The [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) is a different cut of the same problem — five working layers, no independence claim. The AX stack frames fixed-vs-controllable; the failure-layers diagnostic frames attribution before model swap.
 
@@ -77,7 +74,7 @@ The stack model imports its layering intuition from networking, where layer boun
 - **Model ↔ extensions**: Models trained on more data for one technology will default to it even when your extension steers toward another. The extension fights training-data bias rather than a clean slot ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)).
 - **Harness ↔ extensions**: "Different harnesses interpret extensions differently, making outcomes inconsistent across platforms" ([Mastykarz](https://developer.microsoft.com/blog/the-ax-stack-whats-fixed-where-you-can-win)). An MCP server that performs well in Claude Code may produce drag in Copilot.
 - **Harness ↔ model**: The harness controls system-prompt content and tool-call protocols; changing the model under the same harness can invalidate prompt-format assumptions baked into the harness's tool descriptions.
-- **Extensions ↔ technology surface**: An extension that returns human-readable prose to the model produces context bloat without inference value — the [AX/UX/DX Triad](ax-ux-dx-triad.md) names this conflation and the [Anthropic CCA paper](https://arxiv.org/abs/2512.10398) measures its cost (42.0% → 48.6% on SWE-Bench-Pro from AX-aware context shaping).
+- **Extensions ↔ technology surface**: An extension that returns human-readable prose to the model produces context bloat without inference value — the [AX/UX/DX Triad](ax-ux-dx-triad.md) names this conflation and the [Confucius Code Agent (CCA) paper](https://arxiv.org/abs/2512.10398) measures its cost (42.0% → 48.6% Resolve@1 on SWE-Bench-Pro from context compression and hierarchical working memory, on a fixed Claude 4 Sonnet).
 
 The stack model is useful precisely *because* you can name the leak points. Joel Spolsky's Law of Leaky Abstractions — all non-trivial abstractions leak — is the prior to assume here ([Spolsky](https://www.joelonsoftware.com/2002/11/11/the-law-of-leaky-abstractions/)). A stack vocabulary that hides leak points reproduces the OSI false-independence intuition.
 
@@ -95,7 +92,7 @@ The four-layer model adds taxonomy overhead and assumes a stable enough environm
 
 A working sequence when an agent fails or you want to invest:
 
-1. **Name the layer where the failure is visible.** A wrong SDK in generated code surfaces at the technology surface but usually originates at the extensions layer (no skill steers toward your SDK) or the model layer (training data biased toward the competitor).
+1. **Name the layer where the failure is visible** — and where it originates. The visible layer is often downstream of the cause.
 2. **Check the controllable layers first.** Extensions are the only layer where "changing them gives instant results"; model swap is the most expensive option.
 3. **Run the lift-vs-drag test on each candidate fix.** Same scenario, harness, and model — extension on vs off. Promote lifts, remove drags.
 4. **When the controllable layers are exhausted, accept the fixed-layer constraint.** Record it in the project's `AGENTS.md` so contributors do not relitigate it.

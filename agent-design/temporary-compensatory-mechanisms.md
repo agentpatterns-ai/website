@@ -1,14 +1,14 @@
 ---
 title: "Temporary Compensatory Mechanisms in Agent Harnesses"
 term: "Temporary Compensatory Mechanisms"
-description: "Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture. Track which mechanisms are compensatory"
+description: "Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture, and track what obsoletes each."
 tags:
   - agent-design
   - tool-agnostic
   - harness-engineering
 aliases:
   - "Compensatory Scaffolding"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Temporary Compensatory Mechanisms
@@ -139,24 +139,9 @@ Treat classification as a tagging exercise on existing scaffolding, not a mandat
 
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Agent Harness](agent-harness.md)
-- [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
+- [Agent Harness](agent-harness.md)
 - [Harness Engineering](harness-engineering.md)
-- [Loop Strategy Spectrum](loop-strategy-spectrum.md)
-- [Advanced Tool Use](../tool-engineering/advanced-tool-use.md)
-- [Agentic Flywheel](agentic-flywheel.md)
-- [GoF Patterns as Agent Design Analogues](classical-se-patterns-agent-analogues.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md)
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
-- [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)
 - [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md)
-- [Feedback Capability Equalizer](feedback-capability-equalizer.md)
+- [Runtime Scaffold Evolution](runtime-scaffold-evolution.md)

@@ -3,6 +3,7 @@ title: "Context Engineering: Shaping AI Agent Input and Attention"
 description: "Techniques for controlling what enters an agent's context window, how it is structured, and what is excluded — for quality, reliability, and cost."
 tags:
   - context-engineering
+  - index
 last_reviewed: 2026-05-27
 ---
 

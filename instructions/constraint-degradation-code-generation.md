@@ -9,7 +9,7 @@ tags:
   - instructions
   - code-generation
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Constraint Degradation in AI Code Generation

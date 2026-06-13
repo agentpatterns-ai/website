@@ -8,12 +8,12 @@ tags:
   - tool-agnostic
 aliases:
   - Greenfield Agent Bootstrap
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Bootstrapping an Agent-Driven Project from Scratch
 
-> Bootstrapping an agent-driven project means defining agent roles, skills, and instruction files as the architectural foundation of a new codebase, so agents can contribute from the first commit.
+> Bootstrapping an agent-driven project defines agent roles, skills, and instruction files as a new codebase's architectural foundation, so agents contribute from the first commit.
 
 Agent-driven bootstrapping treats the agent topology — roles, skills, and instruction files — as the project's initial architecture. Decisions about which agents own which boundaries, what lives in `AGENTS.md` or `CLAUDE.md` ([an open format adopted across the industry](https://agents.md/)), and how tasks are decomposed to fit context windows are made before the first feature is written. This follows the same structure-shapes-output logic as [Conway's Law](https://en.wikipedia.org/wiki/Conway%27s_law): the agent layout you choose at day one shapes the codebase you end up with.
 

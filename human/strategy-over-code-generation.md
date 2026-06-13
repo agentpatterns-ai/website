@@ -5,12 +5,12 @@ tags:
   - human-factors
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Strategy Over Code Generation
 
-> AI coding assistants accelerate the "how" of development but cannot replace the "why" and "what" of strategic thinking. Projects fail at the goal-setting layer, not the code-generation layer.
+> AI accelerates code generation but cannot supply strategy — clear goals predict project success far more than how fast an agent writes code.
 
 ## The Evidence
 

@@ -9,7 +9,7 @@ tags:
 aliases:
   - cognitive architectures for language agents
   - CoALA framework
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-13
 ---
 
 # Cognitive Architectures for Language Agents (CoALA): A Classifier for Agent Harnesses

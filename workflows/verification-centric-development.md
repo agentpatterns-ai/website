@@ -8,14 +8,14 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Verification-Centric Development for AI-Generated Code
 
-> Software 1.0 is software you specify. Software 2.0 is software you verify.
+> Verification-centric development moves the developer's value from writing code to proving generated code is correct.
 
-LLMs can generate implementation code faster than developers can write it. The bottleneck is no longer authorship — it is verification. Production-grade AI-assisted development invests in planning, architecture, and layered automated checks rather than manual code creation.
+LLMs can generate implementation code faster than developers can write it. The bottleneck is no longer authorship — it is verification. As the framing goes: Software 1.0 is software you specify; Software 2.0 is software you verify. Production-grade AI-assisted development invests in planning, architecture, and layered automated checks rather than manual code creation.
 
 This is the production-scale counterpart to [vibe coding](../anti-patterns/vibe-coding.md). Where vibe coding skips understanding entirely for throwaway work, verification-centric development builds systematic proof that generated code is correct, secure, and maintainable.
 

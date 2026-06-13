@@ -11,7 +11,7 @@ aliases:
   - six generations of AI agents
   - per-generation eval strategy
   - agent generation taxonomy
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Eval Strategy by Agent Generation: A Structure-to-Eval Locator

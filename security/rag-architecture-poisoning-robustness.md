@@ -11,7 +11,7 @@ tags:
 aliases:
   - knowledge base poisoning
   - RAG poisoning robustness
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # RAG Architecture as a Poisoning Robustness Decision
@@ -74,7 +74,7 @@ graph TD
 ```
 
 - **Closed corpora, strong write controls** — no poisoning surface; architecture-as-defense is pure cost.
-- **Open corpora, low pressure** — agentic RAG's 14.9% ASR at 11s is the sweet spot, *if* generation-stage prompting hardens against meta-epistemic framing.
+- **Open corpora, low pressure** — agentic RAG's 43.8% ASR at 11s is the sweet spot, *if* generation-stage prompting hardens against meta-epistemic framing.
 - **High-adversarial offline analysis** — RLM's 24.4% ASR is strongest; 79.5s latency rules out interactive use.
 - **"I don't know" is acceptable** — MADAM-RAG's contradiction detection is highest, useful only if downstream systems treat 41% non-answers as a feature.
 

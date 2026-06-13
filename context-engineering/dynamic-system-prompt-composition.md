@@ -9,7 +9,7 @@ tags:
 aliases:
   - modular prompt assembly
   - composable system prompts
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Dynamic System Prompt Composition
@@ -48,7 +48,7 @@ Conditional blocks inject provider-optimized instructions — Claude-specific, G
 
 ## Caching-Aware Structure
 
-Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders) so the stable prefix never shifts between requests ([Bui, 2026 §3.1](https://arxiv.org/abs/2603.05344)). Anthropic's prompt caching matches the prefix up to a designated breakpoint — any change to earlier tokens invalidates the cache for everything that follows ([Anthropic, Prompt Caching](https://claude.com/blog/prompt-caching)). Modular composition enforces this structurally: identity and tool schemas are always assembled first, so the cacheable prefix remains constant even as dynamic sections vary.
+Prompt structure directly affects API cache efficiency. Separate cacheable sections (core prompt, tool schemas) from dynamic sections (session history, system reminders) so the stable prefix never shifts between requests ([Bui, 2026 §3.1](https://arxiv.org/abs/2603.05344)). Anthropic's prompt caching matches the prefix up to a designated breakpoint — any change to earlier tokens invalidates the cache for everything that follows ([Anthropic, Prompt Caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). Modular composition enforces this structurally: identity and tool schemas are always assembled first, so the cacheable prefix remains constant even as dynamic sections vary.
 
 ## Two-Tier Fallback
 

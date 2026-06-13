@@ -10,12 +10,12 @@ tags:
 aliases:
   - prompt bloat
   - instruction bloat
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Prompt Tinkerer
 
-> Endlessly refining prompts to prevent errors that structural controls would eliminate deterministically.
+> Tinkering endlessly with a prompt to prevent errors that structural controls would eliminate deterministically.
 
 ## The Pattern
 

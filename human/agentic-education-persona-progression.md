@@ -8,12 +8,12 @@ tags:
 aliases:
   - persona progression onboarding
   - Guide Collaborator Peer Launcher
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agentic Education: Persona Progression for Teaching AI Coding Tools
 
-> A four-persona scaffold — Guide, Collaborator, Peer, Launcher — operationalises gradual release of responsibility for teams learning an agentic coding assistant; its value depends on pairing persona transitions with independent-reconstruction checks, not self-reported confidence.
+> The Guide–Collaborator–Peer–Launcher persona scaffold fades support as a team learns an agentic coding tool, gating each transition on independent-reconstruction checks rather than self-reported confidence.
 
 ## The Gap This Addresses
 

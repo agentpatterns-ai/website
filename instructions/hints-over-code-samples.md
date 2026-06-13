@@ -6,12 +6,12 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Hints Over Code Samples in Agent Prompts
 
-> Point agents at existing code instead of pasting samples into instructions. Hints stay current as the codebase evolves; embedded code samples become stale the moment you commit them.
+> Point agents at existing code instead of pasting samples into instructions. Hints stay current as the codebase evolves; embedded samples go stale immediately.
 
 A hint is a path reference: "follow the repository pattern in `src/repos/UserRepo.ts`." The agent reads the current file, not a frozen copy. Coding agents operate inside a live codebase — few-shot examples that work well in isolated prompts become a liability when the source of truth is already on disk.
 

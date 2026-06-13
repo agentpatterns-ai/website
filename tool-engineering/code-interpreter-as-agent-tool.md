@@ -7,14 +7,14 @@ tags:
   - security
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # Code Interpreter as a Primary Agent Tool
 
 > Expose a sandboxed code interpreter as a first-class tool for shape-of-data tasks — bounded through capability bridges, output caps, and explicit threat modeling.
 
-A code interpreter is a small embedded runtime — typically Python or JavaScript — that the agent writes against to compose tool calls, transform structured data, and hold intermediate state outside the model context ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Reach for it when the agent composes multiple tool calls, aggregates intermediate results, or iterates over structured collections. It is not a substitute for an OS-level sandbox and disqualifies several workload classes outright (see [When This Backfires](#when-this-backfires)).
+A code interpreter is a small embedded runtime — typically Python or JavaScript — that the agent writes against to compose tool calls, transform structured data, and hold intermediate state outside the model context ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). It is not a substitute for an OS-level sandbox and disqualifies several workload classes outright (see [When This Backfires](#when-this-backfires)).
 
 ## When to Add an Interpreter
 
@@ -29,7 +29,7 @@ Stay with direct tool calls for single invocations, when intermediate values are
 
 ## How the Interpreter Sits in the Loop
 
-The interpreter is middleware between the agent loop and a scoped runtime ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). The model writes code against an `eval`-shaped tool; allowlisted tools cross back to the host through explicit bridges; the final expression returns to model context.
+The interpreter is middleware between the agent loop and a scoped runtime ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)): the model writes code against an `eval`-shaped tool, allowlisted tools cross back to the host through explicit bridges, and the final expression returns to model context.
 
 ```mermaid
 graph LR
@@ -40,7 +40,7 @@ graph LR
     Runtime -->|final value| Model
 ```
 
-The same shape appears in Anthropic's [Programmatic Tool Calling (PTC)](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), [Cloudflare Code Mode](https://blog.cloudflare.com/code-mode/), and [LangChain Deep Agents interpreters](https://blog.langchain.com/give-your-agents-an-interpreter/): a narrow language runtime, capabilities added through explicit bridges, intermediate state kept off context.
+This shape — narrow runtime, capabilities via explicit bridges, intermediate state off context — recurs in Anthropic's [Programmatic Tool Calling (PTC)](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), [Cloudflare Code Mode](https://blog.cloudflare.com/code-mode/), and [LangChain Deep Agents interpreters](https://blog.langchain.com/give-your-agents-an-interpreter/).
 
 ## Choosing the Sandbox Boundary
 
@@ -71,7 +71,7 @@ Keep the return proportional to its information content: **structured JSON** for
 
 ## Why It Works
 
-The interpreter relocates intermediate state and control flow off the model's attention budget. Calling 20 tools serially pulls every result into context, re-reads it to choose each next call, and runs 20 inference passes; writing code that calls the same 20 tools keeps intermediate results in the runtime and crosses only the filtered value back ([Anthropic, advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)). Anthropic measures 37% token reduction (43,588 → 27,297) on multi-step research ([Anthropic, advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)); Cloudflare measures 99.9% input-token reduction on a large API and 81% on complex multi-event tasks ([WorkOS analysis](https://workos.com/blog/cloudflare-code-mode-cuts-token-usage-by-81)); LangChain's PTC-as-middleware tests show ~35% reduction on OOLONG `trec-coarse` ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Code is a denser, more accurate representation of control flow than a serialized chain of model-mediated calls.
+The interpreter relocates intermediate state and control flow off the model's attention budget. Calling 20 tools serially pulls every result into context and runs 20 inference passes; code calling the same 20 tools keeps intermediate results in the runtime and crosses only the filtered value back. Anthropic measures 37% token reduction (43,588 → 27,297) on multi-step research ([Anthropic, advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)); Cloudflare reports 99.9% input-token reduction on a large API and 81% on complex multi-event tasks ([WorkOS analysis](https://workos.com/blog/cloudflare-code-mode-cuts-token-usage-by-81)); LangChain's PTC-as-middleware tests show ~35% reduction on OOLONG `trec-coarse` ([LangChain, 2026-05-20](https://blog.langchain.com/give-your-agents-an-interpreter/)). Code is a denser representation of control flow than a serialized chain of model-mediated calls.
 
 ## When This Backfires
 
@@ -85,7 +85,7 @@ The interpreter relocates intermediate state and control flow off the model's at
 
 ## Example
 
-A common shape: filter a dataset across many items and return only the exceptions. Anthropic's PTC example checks budget compliance across 20 employees ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)). Tools are marked with `allowed_callers: ["code_execution_20260120"]`; the model writes code that orchestrates 40+ tool calls in one block and returns only the exceptions:
+A common shape: filter a dataset across many items and return only the exceptions. Anthropic's PTC example checks budget compliance across 20 employees ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)). Tools marked `allowed_callers: ["code_execution_20260120"]` let the model orchestrate 40+ calls in one block and return only the exceptions:
 
 ```python
 team = await get_team_members("engineering")
@@ -101,7 +101,7 @@ exceeded = [m for m, exp in zip(team, expenses)
 print(json.dumps(exceeded))
 ```
 
-The traditional approach issues 20 separate model round-trips and pulls thousands of expense line items through the context window. The programmatic approach runs all lookups in one container, filters in-runtime, and returns only the employees who exceeded their limits ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)).
+The traditional approach issues 20 round-trips and pulls thousands of line items through context; the programmatic approach runs every lookup in one container, filters in-runtime, and returns only the employees over their limit ([Claude API docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)).
 
 ## Key Takeaways
 

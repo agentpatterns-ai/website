@@ -8,7 +8,7 @@ tags:
 aliases:
   - "prompt templates"
   - "reusable prompts"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Prompt File Libraries
@@ -158,16 +158,22 @@ Prompt file libraries degrade in several predictable conditions:
 - **Silent tool unavailability** — tools declared in `tools:` frontmatter that are not installed or authorized at invocation are ignored without warning, producing different results with no signal that capabilities are missing.
 - **Overhead on small teams** — PR-driven creation and review adds process; for teams under three developers or with infrequent task repetition, the overhead exceeds the consistency benefit of inline prompting.
 
+## Key Takeaways
+
+- Prompt files are manually-invoked, version-controlled task templates — the on-demand layer beneath always-on repository-wide and path-specific instructions
+- Embedded file references (`[label](path)` or `#file:path`) are the differentiating feature: they ground a generic prompt in the project's real schemas, conventions, and examples
+- A shared prompt file replaces five developers' five different ad-hoc prompts with one consistent, reviewable workflow
+- Tool resolution is prompt-file `tools` > referenced agent tools > default agent tools, and applicable instruction layers combine rather than replace each other
+- Stale file references and single-workspace scope are the main failure modes — embedded paths break silently when source files move
+
 ## Related
 
 - [Instruction File Ecosystem](instruction-file-ecosystem.md)
+- [Shared Context Bundle Registry for Agent Teams](shared-context-bundle-registry.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Prompt Governance via PRs](prompt-governance-via-pr.md)
 - [Specification as Prompt](specification-as-prompt.md)
-- [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Custom Agents and Skills (Copilot)](../tools/copilot/custom-agents-skills.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [@import Composition Pattern](import-composition-pattern.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [CLAUDE.md Convention for Structuring Agent Instructions](claude-md-convention.md)
-- [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)

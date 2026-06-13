@@ -9,12 +9,12 @@ tags:
 aliases:
   - debug mode
   - hypothesis then instrumentation loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Hypothesis-Driven Debugging: Instrument Before You Patch
 
-> Force the agent to differentiate symptom from cause before writing a patch: enumerate competing hypotheses, instrument the failing code with hypothesis-tagged logs, converge on the root cause from runtime evidence, then remove the instrumentation.
+> Hypothesis-driven debugging enumerates competing hypotheses, instruments the failing code with hypothesis-tagged logs, and converges on the root cause from runtime evidence before writing a fix.
 
 ## The Loop
 
@@ -42,9 +42,9 @@ graph TD
 
 ## Why It Beats Fix-and-Retry
 
-A one-shot agent that proposes a patch from a stack trace alone is ranking fixes by model prior. A hypothesis-then-instrument loop ranks them by falsifiable evidence collected from the running program. Cursor reports Debug Mode typically produces "a precise two or three line modification" instead of "hundreds of lines of speculative code," and notes that "human-in-the-loop verification is critical" because the agent must confirm the bug is actually gone, not just that the code compiles. [Source: [Introducing Debug Mode — Cursor Blog](https://cursor.com/blog/debug-mode)]
+A one-shot agent that patches from a stack trace alone ranks fixes by model prior. A hypothesis-then-instrument loop ranks them by falsifiable evidence from the running program. Cursor reports Debug Mode typically produces "a precise two or three line modification" instead of "hundreds of lines of speculative code," and notes that "human-in-the-loop verification is critical" because the agent must confirm the bug is actually gone, not just that the code compiles. [Source: [Introducing Debug Mode — Cursor Blog](https://cursor.com/blog/debug-mode)]
 
-The pattern is tool-portable. An open-source Claude Code skill, `claude-code-debug-mode`, implements the same loop for Claude Code, Codex, and Gemini CLI — generating 3–5 hypotheses, tagging log lines with hypothesis identifiers (`[DEBUG H1]`, `[DEBUG H2]`), writing them to `.claude/debug.log` rather than stdout to avoid context-window overflow, and stripping instrumentation on cleanup. [Source: [claude-code-debug-mode — GitHub](https://github.com/doraemonkeys/claude-code-debug-mode)] The hypothesis tag is load-bearing: unlabelled logs force the agent to re-interpret evidence on the second pass; tagged logs map output directly to the hypotheses being tested.
+The pattern is tool-portable. An open-source Claude Code skill, `claude-code-debug-mode`, implements the same loop for Claude Code, Codex, and Gemini CLI — generating 3–5 hypotheses, tagging log lines with hypothesis identifiers (`[DEBUG H1]`, `[DEBUG H2]`), writing them to `.claude/debug.log` rather than stdout to avoid context-window overflow, and stripping instrumentation on cleanup. [Source: [claude-code-debug-mode — GitHub](https://github.com/doraemonkeys/claude-code-debug-mode)] The hypothesis tag is load-bearing: unlabelled logs force a re-interpretation pass; tagged logs map output directly to the hypotheses under test.
 
 ## When to Enter the Mode
 
@@ -63,11 +63,11 @@ Skip it when:
 
 ## Trade-offs
 
-- **Log pollution.** Even with hypothesis tags, heavy instrumentation inside a hot loop or widely-called helper can flood the log with noise that masks the discriminating line. Keep hypotheses narrow enough that each tag appears in tens of lines, not thousands.
-- **Sensitive-data exposure.** Instrumenting an auth, PII, or payment handler writes variable state to the log file; if cleanup misses an intermediate branch the instrumentation becomes a data-leak vector. Mask secrets at the log call site, not after the fact.
-- **Observer effect.** Log statements change timing. Inserted inside a race or latency-sensitive section, they can mask or shift the bug — the agent then converges on evidence from instrumented code, not the code that actually failed.
-- **Reproduction dependency.** The loop requires that you can run the failing case with instrumentation in place. Production-only failures, load-triggered races, and unreliable tests break the reproduction step, and the agent converges on hypotheses from incomplete evidence.
-- **Overhead on obvious fixes.** For bugs the model can resolve from source alone, entering the loop costs one or more agent turns on instrumentation and reproduction that were unnecessary.
+- **Log pollution.** Even with tags, heavy instrumentation inside a hot loop or widely-called helper floods the log with noise that masks the discriminating line. Keep hypotheses narrow enough that each tag appears in tens of lines, not thousands.
+- **Sensitive-data exposure.** Instrumenting an auth, PII, or payment handler writes variable state to the log; if cleanup misses a branch the instrumentation becomes a data-leak vector. Mask secrets at the log call site, not after the fact.
+- **Observer effect.** Log statements change timing. Inserted inside a race or latency-sensitive section, they can mask or shift the bug — the agent then converges on evidence from instrumented code, not the code that failed.
+- **Reproduction dependency.** The loop requires running the failing case with instrumentation in place. Production-only failures, load-triggered races, and flaky tests break the reproduction step, and the agent converges on incomplete evidence.
+- **Overhead on obvious fixes.** For bugs the model can resolve from source alone, the loop costs agent turns on instrumentation and reproduction that were unnecessary.
 
 ## Tool-Specific Notes
 
@@ -77,7 +77,7 @@ Skip it when:
 
 ## Example
 
-A Node.js service intermittently returns `undefined` from a cache lookup under concurrent load. The stack trace ends in user code, no error is thrown. A one-shot fix would guess at race conditions and add locks.
+A Node.js service intermittently returns `undefined` from a cache lookup under load. The stack trace ends in user code, no error is thrown. A one-shot fix would guess at race conditions.
 
 **Hypothesis enumeration:**
 

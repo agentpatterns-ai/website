@@ -19,6 +19,7 @@ nav:
       - coala-decision-making-loop.md
       - coala-structured-action-space.md
       - discrete-phase-separation.md
+      - domain-scoped-parallel-localization.md
       - continual-learning-layers.md
       - delegation-decision.md
       - eval-strategy-by-agent-generation.md
@@ -60,6 +61,7 @@ nav:
       - generative-agents-memory-stream.md
       - handoff-skill-context-transfer.md
       - layered-mutability.md
+      - memory-as-governance-pre-action-gate.md
       - memory-reinforcement-learning.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
@@ -89,10 +91,12 @@ nav:
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
       - remote-session-control.md
+      - self-reporting-loops.md
       - self-rewriting-meta-prompt-loop.md
       - specialized-agent-roles.md
       - sprint-contracts.md
       - steering-running-agents.md
+      - three-loops-agentic-coding.md
       - tool-preamble-status-update.md
   - "Reliability":
       - agent-circuit-breaker.md
@@ -159,6 +163,7 @@ nav:
       - persistent-connection-agent-transport.md
       - prebuilt-agent-environments.md
       - quality-score-rubric.md
+      - recursive-agent-harnesses.md
       - session-harness-sandbox-separation.md
       - subprocess-per-session-hosting-model.md
       - temporary-compensatory-mechanisms.md

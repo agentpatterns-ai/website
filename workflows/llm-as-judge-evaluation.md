@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
   - workflows
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # LLM-as-Judge Evaluation with Human Spot-Checking

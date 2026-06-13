@@ -10,7 +10,7 @@ tags:
 aliases:
   - security constitution
   - constitutional spec-driven development
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Security Constitution for AI Code Generation

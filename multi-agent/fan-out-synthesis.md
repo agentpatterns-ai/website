@@ -12,12 +12,12 @@ tags:
   - workflows
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Fan-Out Synthesis Pattern
 
-> Spawn N independent agents to solve the same problem in parallel, then use a synthesis agent to merge the strongest elements from each attempt into a single output.
+> Fan-out spawns N independent agents on one problem, then a synthesis agent merges the strongest elements from each attempt into a single output.
 
 !!! note "Also known as"
     Fan-Out Pattern, Parallel Dispatch, Scatter-Gather. The fan-out-then-synthesize variant adds a dedicated merge step after parallel execution. See [Agent Composition Patterns](../agent-design/agent-composition-patterns.md), [Orchestrator-Worker](orchestrator-worker.md), and [Sub-Agents Fan-Out](sub-agents-fan-out.md).
@@ -77,13 +77,13 @@ N parallel attempts cost N× compute. Worthwhile when:
 - Diversity of approach is genuinely valuable (design, architecture, creative output)
 - Reducing iteration rounds justifies the upfront parallel cost
 
-For routine, well-defined tasks, a single attempt usually suffices. [Anthropic's Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) documents voting and the orchestrator-workers pattern as core parallelization strategies. Best-of-N research shows diminishing returns as N grows — quality gains compress while compute grows linearly, making N=3–5 the efficient range ([CarBoN: Calibrated Best-of-N Sampling](https://arxiv.org/abs/2510.15674)).
+For routine, well-defined tasks, a single attempt usually suffices. [Anthropic's Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) documents voting and sectioning as the two forms of agent parallelization (with orchestrator-workers treated as a distinct workflow). Best-of-N research shows diminishing returns as N grows — quality gains compress while compute grows linearly, making N=3–5 the efficient range ([CarBoN: Calibrated Best-of-N Sampling](https://arxiv.org/abs/2510.15674)).
 
 ## When This Backfires
 
 Fan-out synthesis adds cost and coordination overhead that becomes counterproductive in several conditions:
 
-- **Conformity bias collapses diversity** — agents given the same prompt converge on the same confident-sounding approach rather than genuinely independent solutions. Multi-agent LLM failure research identifies this as a dominant failure mode: agents reward linguistic confidence over factual accuracy, producing a high-confidence answer that can be wrong ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)). Constrained solution spaces amplify it.
+- **Conformity bias collapses diversity** — agents given the same prompt can converge on the same approach rather than genuinely independent solutions. A study of multi-agent LLM failures builds a taxonomy in which inter-agent misalignment is one of three failure categories, so the diversity fan-out depends on is not guaranteed by simply running more agents ([Cemri et al., 2025 — Why Do Multi-Agent LLM Systems Fail?](https://arxiv.org/abs/2503.13657)). Constrained solution spaces amplify the convergence.
 - **Weak synthesis agent** — if the synthesizer cannot judge which elements are strongest, the merge step introduces errors rather than removing them and can be worse than the best individual attempt. This is the highest-risk component.
 - **Diminishing returns at high N** — quality gains compress as N grows while compute grows linearly ([CarBoN, 2025](https://arxiv.org/abs/2510.15674)); N=10 rarely justifies 10× cost over N=3.
 - **Cascading errors downstream** — passing all N outputs to one synthesizer can exceed context limits, and when the merged output feeds a subsequent agent as authoritative, synthesis errors compound rather than self-correct.
@@ -119,22 +119,11 @@ The result is a specification no single agent would have produced — combining 
 
 ## Related
 
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
-- [Committee Review Pattern](../code-review/committee-review-pattern.md)
-- [Task-Specific vs Role-Based Agents](../agent-design/task-specific-vs-role-based-agents.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Voting Ensemble Pattern](voting-ensemble-pattern.md)
-- [LLM Map-Reduce](llm-map-reduce.md)
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
-- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [Oracle Task Decomposition](oracle-task-decomposition.md)
-- [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
-- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
-- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
-- [Staggered Agent Launch](staggered-agent-launch.md)
-- [Observation-Driven Coordination](crdt-observation-driven-coordination.md)
-- [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
-- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md)
-- [Independent Test Generation in Multi-Agent Systems](independent-test-generation-multi-agent.md)
+- [Committee Review Pattern](../code-review/committee-review-pattern.md)
+- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Bounded Batch Dispatch](bounded-batch-dispatch.md)

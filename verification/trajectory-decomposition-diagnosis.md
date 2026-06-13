@@ -12,12 +12,12 @@ aliases:
   - "trajectory decomposition"
   - "TRAJEVAL"
   - "stage decomposition"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Trajectory Decomposition: Diagnose Where Coding Agents Fail
 
-> When Pass@1 tells you an agent failed but not why, decompose the trajectory into search, read, and edit stages and measure each independently. This turns "it didn't work" into "it found the right files but read too many functions and edited the wrong one."
+> Decompose an agent's trajectory into search, read, and edit stages, scoring each independently to diagnose where a failing run went wrong.
 
 ## The Problem with Binary Outcomes
 

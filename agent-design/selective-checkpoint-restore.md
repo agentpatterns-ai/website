@@ -7,7 +7,7 @@ tags:
 aliases:
   - three-way checkpoint restore
   - code-only and conversation-only rewind
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Selective Checkpoint Restore Across Code and Conversation State
@@ -24,11 +24,11 @@ Selective checkpoint restore is the affordance a harness exposes when its checkp
 | **Conversation only** | The files on disk | The edits landed correctly but the next planning step poisoned itself — drop the bad reasoning, keep the work. |
 | **Both** | Nothing from the restored range | Full reset of a short, low-value detour. For longer side-quests, [fork the session](https://code.claude.com/docs/en/checkpointing) instead so the dead-end is preserved off-thread. |
 
-The three actions map to three recovery goals — preserve debugging context, preserve partial work, or clean slate — and conflating them is worse than not having the feature.
+The three actions map to three recovery goals: preserve debugging context, keep partial work, or clean slate.
 
 ## How It Works
 
-Claude Code keys file backups by the UUID of each user message ([Claude Agent SDK: File Checkpointing](https://code.claude.com/docs/en/agent-sdk/file-checkpointing)). The transcript and the file backups are independent stores with independent identifiers, so the harness composes three restore actions from two operations:
+Claude Code keys file backups by the UUID of each user message ([Claude Agent SDK: File Checkpointing](https://code.claude.com/docs/en/agent-sdk/file-checkpointing)). The transcript and file backups are independent stores with independent identifiers, so the harness composes three restore actions from two:
 
 ```mermaid
 graph LR
@@ -40,7 +40,7 @@ graph LR
     C & D -.both.-> G[full state at UUID]
 ```
 
-Granularity is per user prompt — "Every user prompt creates a new checkpoint" ([Claude Code: Checkpointing](https://code.claude.com/docs/en/checkpointing)) — with no sub-prompt rewind. The SDK exposes only the code-only axis: `rewind_files()` (Python) / `rewindFiles()` (TypeScript) restore files but "does not rewind the conversation itself" ([Claude Agent SDK: File Checkpointing](https://code.claude.com/docs/en/agent-sdk/file-checkpointing)). No primitive rewinds conversation alone, so agent-driven selective restore is one-sided today.
+Granularity is per user prompt — "Every user prompt creates a new checkpoint" ([Claude Code: Checkpointing](https://code.claude.com/docs/en/checkpointing)) — with no sub-prompt rewind. The SDK exposes only the code-only axis: `rewind_files()` (Python) / `rewindFiles()` (TypeScript) restore files but "does not rewind the conversation itself" ([Claude Agent SDK: File Checkpointing](https://code.claude.com/docs/en/agent-sdk/file-checkpointing)). No primitive rewinds conversation alone, so agent-driven restore is one-sided today.
 
 ## Why It Works
 
@@ -50,14 +50,14 @@ Selective restore is possible because the two state stores carry independent ide
 
 The three-way affordance carries costs the docs do not surface.
 
-- **Rewind always forks the session.** Every restore creates a new conversation branch in Claude Code, so heavy use accumulates dead-end branches that clutter `--resume` history; the request for a fourth "rewind without fork" option was closed not-planned ([anthropics/claude-code #9279](https://github.com/anthropics/claude-code/issues/9279)). For short sessions the fork tax dominates the benefit.
+- **Rewind always forks the session.** Every restore creates a new conversation branch in Claude Code, so heavy use clutters `--resume` history; the fourth "rewind without fork" option was requested and closed not-planned ([anthropics/claude-code #9279](https://github.com/anthropics/claude-code/issues/9279)). For short sessions the fork tax dominates.
 - **Bash edits are outside the safety net.** "Checkpointing does not track files modified by bash commands" ([Claude Code: Checkpointing](https://code.claude.com/docs/en/checkpointing)). A code-only restore on a session where `make`, `sed -i`, or `mv` did the real work produces silent inconsistency — the backup restores some files, the bash-side changes survive untouched.
 - **Code-only restore can desync the agent's mental model.** When files revert but the conversation still references the rewound edits, the agent operates against state it only thinks exists — the drift surface Cursor's single restorable unit avoids by design.
 - **Short sessions where nothing was learned.** Picking among three options is overhead; `/clear` or `claude --continue --fork-session` is cheaper when the rewound range held no useful context.
 - **Teams that commit every agent turn.** Git already gives per-file restore (`git restore --source=<sha>`) with the same selectivity; the harness checkpoint adds a parallel rollback channel, doubling cognitive load for the same capability.
-- **Code-only restore plus re-execution can replay irreversible side effects.** A code-only restore invites the agent to retry the failed step — but an LLM agent re-synthesises a *subtly different* request rather than replaying the identical call a deterministic program would. When that retry hits an external system, the restore can produce duplicate charges or reused credentials instead of a clean rollback — the "semantic rollback attack" of [ACRFence: Preventing Semantic Rollback Attacks in Agent Checkpoint-Restore](https://arxiv.org/abs/2603.20625). Gate restore-then-retry behind idempotency keys when the rewound range touched a stateful external call.
+- **Code-only restore plus re-execution can replay irreversible side effects.** A code-only restore invites the agent to retry the failed step — but an LLM agent re-synthesises a *subtly different* request rather than replaying the identical call. When that retry hits an external system, the restore can produce duplicate charges or reused credentials instead of a clean rollback — the "semantic rollback attack" of [ACRFence: Preventing Semantic Rollback Attacks in Agent Checkpoint-Restore](https://arxiv.org/abs/2603.20625). Gate restore-then-retry behind idempotency keys when the rewound range touched a stateful external call.
 
-The pattern earns its keep when the session is long enough that learned context is genuinely valuable, the harness separates the two state stores, and bash-driven file modification is bounded.
+The pattern earns its keep when the session is long enough that learned context is valuable, the harness separates the two state stores, and bash-driven file modification is bounded.
 
 ## Example
 

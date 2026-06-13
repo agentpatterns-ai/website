@@ -9,7 +9,7 @@ aliases:
   - SDB pattern
   - stochastic deterministic boundary
   - proposer verifier commit reject contract
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Stochastic-Deterministic Boundary as First-Class Contract
@@ -49,7 +49,7 @@ The reject signal is the part most often missing. A boolean verifier leaves the 
 
 ## Why It Works
 
-Most production agent incidents happen at the transition point, not inside the proposer or commit. Augment Code's production analysis attributes "nearly 38% of all observed task failures" in multi-agent systems to parsing-related output reliability — malformed JSON, missing schema fields, instruction noncompliance — at the moment an LLM output enters a downstream component ([Augment Code, 2026](https://www.augmentcode.com/guides/why-multi-agent-llm-systems-fail-and-how-to-fix-them)). Naming the SDB forces a typed verifier and structured reject at every transition, where failure context is still local.
+Most production agent incidents happen at the transition point, not inside the proposer or commit. In the MAST failure taxonomy that Augment Code's production analysis draws on, inter-agent misalignment — where one component's output is incompatible with what the next consumes, such as a planner emitting YAML while the executor expects JSON — is one of the largest failure categories, roughly a third of observed multi-agent failures ([Augment Code, 2026](https://www.augmentcode.com/guides/why-multi-agent-llm-systems-fail-and-how-to-fix-them)). Naming the SDB forces a typed verifier and structured reject at every transition, where failure context is still local.
 
 Separating the stochastic proposer from the deterministic commit also makes "replay divergence" debuggable — the failure mode where re-executing a logged session against an updated model produces different outputs. With the proposer's output logged separately, verifier and commit can be replayed deterministically against any new model version ([Srinivasan, 2026](https://arxiv.org/abs/2605.20173)).
 

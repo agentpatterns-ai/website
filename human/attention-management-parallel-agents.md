@@ -1,5 +1,5 @@
 ---
-title: "Developer Attention Management with Parallel Agents"
+title: "Developer as CPU Scheduler: Attention Management with Parallel Agents"
 description: "When running parallel AI agents, your scarce resource is not coding but attention. Managing it well means applying CPU scheduling principles to human focus."
 tags:
   - human-factors
@@ -10,11 +10,12 @@ aliases:
   - "attention management"
   - "CPU scheduler metaphor"
   - "developer as scheduler"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Developer as CPU Scheduler: Attention Management with Parallel Agents
 
-> With multiple AI agents running simultaneously, your scarce resource is not coding ability but attention — and managing it resembles CPU scheduling more than traditional software engineering.
+> With multiple AI agents running simultaneously, your scarce resource is not coding ability but attention — and managing it resembles CPU scheduling more than engineering.
 
 ## The Scheduling Metaphor
 
@@ -105,9 +106,3 @@ The developer monitors the fully-delegated sessions only when they emit completi
 - [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
-- [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md)
-- [Skill Atrophy](skill-atrophy.md)
-- [Context Ceiling](context-ceiling.md)
-- [Rigor Relocation](rigor-relocation.md)
-- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
-- [Progressive Autonomy and Model Evolution](progressive-autonomy-model-evolution.md)

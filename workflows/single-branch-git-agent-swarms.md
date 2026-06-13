@@ -6,12 +6,12 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Single-Branch Git for Agent Swarms
 
-> Feature branches work for humans reviewing PRs one at a time. At 10+ parallel agents making frequent small commits, branching becomes the bottleneck. Single-branch git with mechanical coordination guards is the alternative — but only when the guards are in place first.
+> At 10+ parallel agents committing small changes, branching becomes the bottleneck. Single-branch git with mechanical guards is the alternative — if guards exist first.
 
 !!! warning "Conflicts with Claude Code's official recommendation"
     Claude Code's documented best practice is [worktree isolation](worktree-isolation.md) — one worktree per agent, one branch per task. The single-branch model described here is a direct counterpoint from the [Agent Flywheel methodology](https://agent-flywheel.com/core-flywheel), which rejects worktrees in favor of all agents committing directly to `main`. Industry practitioner guides [default to worktrees](https://nx.dev/blog/git-worktrees-ai-agents) for parallel agents; single-branch is the contrarian position.

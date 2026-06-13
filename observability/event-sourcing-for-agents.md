@@ -11,12 +11,12 @@ tags:
 aliases:
   - ESAA
   - Event Sourcing for Autonomous Agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Event Sourcing for Agents: Separating Cognitive Intention from State Mutation
 
-> Agents emit structured intentions in validated JSON; a deterministic orchestrator validates, persists events in an append-only log, and applies file effects — producing immutable task history and replay-verifiable execution.
+> Agents emit structured JSON intentions; a deterministic orchestrator validates, persists them to an append-only log, and applies effects — producing immutable, replay-verifiable task history.
 
 ESAA (Event Sourcing for Autonomous Agents) separates the cognitive layer — the LLM deciding what to do — from the execution layer that mutates state. Agents emit validated JSON events; a deterministic orchestrator persists them to an append-only log and applies effects. This enables replay verification, concurrent multi-agent coordination without write conflicts, and structured context injection that counters context degradation in long-horizon tasks.
 

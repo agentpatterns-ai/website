@@ -9,7 +9,7 @@ tags:
 aliases:
   - narrow scope security
   - scope as security boundary
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Treat Task Scope as a Security Boundary

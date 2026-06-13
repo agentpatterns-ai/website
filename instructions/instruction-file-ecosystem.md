@@ -149,6 +149,7 @@ With this layout, updating `AGENTS.md` propagates to Claude Code immediately (vi
 - [Getting Started: Setting Up Your Instruction File](getting-started-instruction-files.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
+- [Shared Context Bundle Registry for Agent Teams](shared-context-bundle-registry.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)

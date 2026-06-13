@@ -10,12 +10,12 @@ tags:
 aliases:
   - model retirement migration
   - llm deprecation workflow
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Model Deprecation Lifecycle for Agent Workloads
 
-> Treat LLM deprecation as a recurring supply-chain event: monitor announcements, run per-model regression evals, stage cutover with canary traffic, and keep a tested fallback to the previous model until the successor passes evals.
+> Treat model deprecation as a recurring supply-chain event: monitor announcements, run regression evals, stage canary cutover, and keep a tested fallback until the successor passes.
 
 ## Why Deprecation Is an Operational Problem
 

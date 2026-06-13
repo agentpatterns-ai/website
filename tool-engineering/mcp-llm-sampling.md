@@ -6,12 +6,12 @@ tags:
   - tool-engineering
   - copilot
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool
 
-> MCP sampling lets a server request the host's LLM to generate text mid-execution — turning a deterministic tool into a hybrid that runs code, invokes AI reasoning, and continues from the result.
+> MCP sampling lets a server request the host's LLM mid-execution, turning a deterministic tool into a hybrid that embeds AI reasoning inline.
 
 ## Inverted Request Direction
 

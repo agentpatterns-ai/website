@@ -9,10 +9,10 @@ tags:
 aliases:
   - The 50% Rule
   - Context Budget
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Context Budget Allocation: Every Token Has a Cost
+# Context Budget Allocation: Spending Every Token Wisely
 
 > Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation.
 
@@ -116,25 +116,9 @@ At session start, Claude Code loads only the two `description` strings (~30 toke
 
 - [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
 - [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
-- [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md)
-- [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
-- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Example-Driven vs Rule-Driven Instructions](../instructions/example-driven-vs-rule-driven-instructions.md)
 - [Layered Context Architecture](layered-context-architecture.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Manual Compaction and Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Prompt Cache Economics Across Providers](prompt-cache-economics.md)
-- [Semantic Context Loading](semantic-context-loading.md)
-- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
-- [Attention Sinks: Why First Tokens Always Win](attention-sinks.md)
-- [Context Priming](context-priming.md)
-- [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
-- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
-- [Repository Map Pattern](repository-map-pattern.md)
-- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Seeding Agent Context](seeding-agent-context.md)
-- [Static Content First for Cache Hits](static-content-first-caching.md)
+- [Context Compression Strategies](context-compression-strategies.md)
+- [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)

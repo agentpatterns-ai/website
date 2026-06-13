@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # L0 → L1: Making the Repo Readable
 
-> Agents cannot orient in a codebase that relies on [tribal knowledge](../../anti-patterns/implicit-knowledge-problem.md). The L0→L1 transition externalizes what humans carry in their heads — architecture, conventions, build commands — into structured, machine-readable artifacts.
+> A readable repo externalizes the [implicit knowledge](../../anti-patterns/implicit-knowledge-problem.md) humans hold — architecture, conventions, build commands — into machine-readable artifacts an agent can orient from.
 
 ---
 

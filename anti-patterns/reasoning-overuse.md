@@ -9,11 +9,12 @@ tags:
 aliases:
   - "reasoning overuse"
   - "think tool overuse"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Indiscriminate Structured Reasoning
 
-> Applying mid-stream reasoning (think tool, chain-of-thought, scratchpad steps) to every agent task regardless of whether reasoning improves outcomes — adding token cost and latency without benefit.
+> Applying mid-stream reasoning to every agent task, regardless of whether it improves outcomes, adds token cost and latency without benefit.
 
 ## The Problem
 

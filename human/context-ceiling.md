@@ -10,12 +10,12 @@ tags:
 aliases:
   - "capability boundary"
   - "AI context limit"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Context Ceiling
 
-> AI agents hit a hard capability boundary on expert-level architecture work: the context required — regulations, organizational history, legacy system quirks, political constraints — exceeds what any model window can hold simultaneously.
+> Expert architecture work requires more interconnected context — regulations, organizational history, legacy quirks, politics — than any model window can hold at once.
 
 ## The Capability Boundary
 
@@ -101,7 +101,7 @@ The context ceiling is different:
 | **Scope** | Team conventions, project decisions | Regulatory, organizational, political, and technical context spanning years |
 | **Affected by better docs** | Yes -- directly remediable | Partially -- volume still exceeds effective capacity |
 
-Even perfect documentation cannot solve the ceiling. The constraint is not that knowledge is undocumented -- it is that the volume of interconnected knowledge exceeds what a single inference pass can hold.
+Even perfect documentation cannot solve the ceiling: the constraint is volume of interconnected knowledge, not whether it is written down.
 
 ## What This Means for AI Adoption
 
@@ -156,9 +156,7 @@ The context-ceiling argument is weakest in three conditions:
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) -- the downstream cost of accepting AI output without deep understanding
 - [Bottleneck Migration](bottleneck-migration.md) -- how AI shifts bottlenecks rather than eliminating them
 - [Context Engineering](../context-engineering/context-engineering.md) -- strategies for working within context constraints
-- [Manual Compaction as Dumb Zone Mitigation](../context-engineering/manual-compaction-dumb-zone-mitigation.md) -- how to compact proactively before reasoning degrades
-- [Lost in the Middle](../context-engineering/lost-in-the-middle.md)
+- [Lost in the Middle](../context-engineering/lost-in-the-middle.md) -- the U-shaped attention curve behind the effective-capacity gap
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) -- designing tasks at context-window-safe granularity
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) -- the cognitive overhead experts bear when verifying AI output
-- [Distributed Computing Parallels in Agent Architecture](../multi-agent/distributed-computing-parallels.md) -- how context window constraints map to distributed systems memory limits
 - [Rigor Relocation](rigor-relocation.md) -- how engineering discipline adapts when agents operate above the ceiling

@@ -10,7 +10,7 @@ aliases:
   - hybrid agent authorization
   - task-based access control for agents
   - CASA pattern
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Hybrid Deterministic + Semantic Authorization for Agent Tool Calls
@@ -94,7 +94,7 @@ Now an injected instruction in a fetched issue body makes the LLM emit `db-reado
 
 ## When This Backfires
 
-- **High-frequency tool use.** Each decision adds an LLM round-trip for task extraction. AgentSpec-style declarative predicates run in 1–3 ms ([Wang et al., 2025](https://arxiv.org/abs/2503.18666)) vs. hundreds of ms per LLM call. Cache per turn or fall back to deterministic allowlists for hot paths.
+- **High-frequency tool use.** Each decision adds an LLM round-trip for task extraction. AgentSpec-style declarative predicates run with millisecond-level overhead ([Wang et al., 2025](https://arxiv.org/abs/2503.18666)) vs. hundreds of ms per LLM call. Cache per turn or fall back to deterministic allowlists for hot paths.
 - **Shared-failure mode.** Same model class for policy and agent creates correlated weakness — a jailbreak misleading one may mislead both ([§V](https://arxiv.org/html/2605.02682)). Use a different family for policy.
 - **High FNR on critical paths.** 7% multi-turn FNR is unacceptable for utility-critical workflows without a fallback (operator review or allowlist for known-good pairs).
 - **PII in tasks.** Summaries may carry PII to the auth server — encrypt at rest, minimise retention.

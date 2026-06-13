@@ -7,12 +7,12 @@ tags:
   - human-factors
   - tool-agnostic
   - fallacies
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Task Framing Irrelevance Fallacy
 
-> The belief that how you frame a task doesn't matter — only the underlying problem does — is demonstrably wrong and reliably produces lower output quality.
+> The belief that task framing doesn't matter — only the underlying problem does — is demonstrably wrong and reliably produces lower output quality.
 
 ## The Fallacy
 
@@ -36,9 +36,9 @@ Anthropic's guidance on building agents states that tool definitions deserve ["j
 ## How It Manifests
 
 - Submitting vague prompts assuming "the model knows what I mean"
-- Leaving open files, long conversation history, or irrelevant context that shifts the model's pattern associations
+- Leaving open files or stale conversation history that shifts the model's pattern associations
 - Treating prompt engineering as polish applied after the real work
-- Attributing inconsistent output quality to the model rather than framing variation
+- Blaming the model for inconsistent output rather than framing variation
 
 ## Example
 
@@ -46,7 +46,7 @@ Anthropic's guidance on building agents states that tool definitions deserve ["j
 
 > "Refactor the payment service."
 
-No files specified, no constraints, no goal. Relevant files compete for attention with everything else in context. The output addresses surface structure rather than the intended architectural change.
+No files specified, no constraints, no goal. Relevant files compete for attention with everything else in context, and the output addresses surface structure rather than the intended change.
 
 **Fallacy corrected** — closed irrelevant files, provided specific framing:
 
@@ -58,11 +58,11 @@ Same underlying problem. Different framing. Different output.
 
 The framing effect is real but uneven. In specific conditions, surface presentation has minimal measurable impact:
 
-- **Structured-output and function-calling modes** — when a model responds into a strict JSON schema or typed function signature, framing variation in the surrounding prompt often produces negligible output differences; the schema itself constrains the response space.
-- **Highly fine-tuned task-specific models** — models fine-tuned on a narrow domain develop strong priors that partially override prompt framing; a code-review model fine-tuned on a single codebase is less sensitive to how the review task is described.
-- **Very short or unambiguous queries** — for retrieval-style tasks with a single determinate answer ("What is the return type of X?"), framing variation rarely changes the output.
+- **Structured-output and function-calling modes** — a strict JSON schema or typed function signature constrains the response space, so surrounding-prompt framing produces negligible output differences.
+- **Highly fine-tuned task-specific models** — narrow-domain fine-tuning builds strong priors that partially override prompt framing.
+- **Very short, unambiguous queries** — retrieval-style tasks with one determinate answer ("What is the return type of X?") rarely shift with framing.
 
-Investing heavily in framing optimization for these cases yields diminishing returns. The fallacy is the *blanket* claim that framing never matters — not the observation that it matters less in constrained modes.
+Optimizing framing here yields diminishing returns. The fallacy is the *blanket* claim that framing never matters — not the observation that it matters less in constrained modes.
 
 ## Key Takeaways
 

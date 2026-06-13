@@ -9,8 +9,9 @@ tags:
   - cost-performance
   - source:opendev-paper
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
+
 # Reasoning Budget Allocation: The Reasoning Sandwich
 
 > Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout.
@@ -74,7 +75,7 @@ For tools without per-call configuration, approximate through prompt structure: 
 
 ## Why It Works
 
-Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploring the possibility space and accounting for requirements, edge cases, and risks — errors here propagate downstream; execution follows a decided plan and is largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark showed — causes agent timeouts that degrade completion rates. Concentrating compute where ambiguity is highest balances cost against quality at the phase level.
+Different phases impose structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)): planning requires exploring the possibility space and accounting for requirements, edge cases, and risks — errors here propagate downstream; execution follows a decided plan and is largely mechanical; verification must compare output against requirements precisely, where a missed failure produces false completion. Applying uniform maximum compute to execution wastes budget on mechanical steps and — as the LangChain benchmark showed — causes timeouts that degrade completion rates. Concentrating compute where ambiguity is highest balances cost against quality.
 
 ## When to Apply
 
@@ -137,22 +138,11 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 
 ## Related
 
-- [Think Tool](think-tool.md)
 - [Discrete Phase Separation](discrete-phase-separation.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Loop Detection](../observability/loop-detection.md)
-- [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — pre-generation model tier selection via code health metrics
-- [Harness Engineering](harness-engineering.md)
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
-- [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
-- [Agentic Flywheel](agentic-flywheel.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Turn Model](agent-turn-model.md)
-- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [The Advisor Strategy](advisor-strategy.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Think Tool](think-tool.md)
+- [Harness Engineering](harness-engineering.md)

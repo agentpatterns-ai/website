@@ -8,12 +8,12 @@ tags:
 aliases:
   - repository templates
   - project scaffolding
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Skeleton Projects as Agent Scaffolding
 
-> Source battle-tested repository templates from GitHub as architectural starting points for agent-driven development, rather than building project structure from scratch.
+> Skeleton projects scaffold agent-driven development with battle-tested repository templates instead of structure built from scratch.
 
 Skeleton projects are existing repository templates — maintained by the community and battle-tested in production — that agents can clone and adapt as a structural starting point. Rather than prompting an agent to construct project layout, dependency management, and testing patterns from scratch, you hand it a working foundation and direct it to adapt that foundation to your requirements.
 

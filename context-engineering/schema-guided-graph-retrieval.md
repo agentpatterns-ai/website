@@ -9,7 +9,7 @@ tags:
 aliases:
   - schema-guided GraphRAG
   - typed graph retrieval
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -61,6 +61,8 @@ The decomposer outputs two things for each sub-question: the sub-question text a
 ### Stage 3: Typed Retrieval
 
 Each sub-question retrieval is filtered by its declared schema types before semantic scoring. Type-filtered candidates are ranked, then merged across parallel sub-question searches. Typed filtering is the primary source of precision gain; semantic scoring operates on a pre-narrowed candidate set.
+
+The precision gain is bounded by the decomposer's ability to map an informal query onto the right schema types. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274) finds schema-aware querying strongly model-dependent — its strongest model reached 77.23% average accuracy while weaker models trailed substantially — and reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions remain hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
 
 ## When to Use
 

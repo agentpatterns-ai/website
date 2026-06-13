@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Poka-Yoke for Agent Tools
 
-> Redesign tool interfaces so the wrong call cannot compile — prevention over documentation.
+> Redesign agent tool interfaces so the wrong call cannot compile — prevention over documentation.
 
 !!! info "Also known as"
     Mistake-Proofing, Error-Proof Tool Design, Structural Constraints

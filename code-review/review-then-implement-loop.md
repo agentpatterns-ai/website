@@ -1,7 +1,7 @@
 ---
 title: "Review-Then-Implement Loop for AI Agent Development"
 term: "Review-Then-Implement Loop"
-description: "Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result"
+description: "Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result."
 tags:
   - testing-verification
   - agent-design
@@ -10,12 +10,12 @@ tags:
 aliases:
   - "Agent Self-Review Loop"
   - "Agent Review Loops"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Review-Then-Implement Loop for AI Agent Development
 
-> Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result.
+> Close the loop between AI code review and code generation: a reviewer identifies issues, a coding agent implements fixes, and a human reviews the result.
 
 !!! info "Also known as"
     Agent Self-Review Loop, Agent Review Loops
@@ -29,7 +29,7 @@ graph TD
     A[PR submitted] --> B[AI code review]
     B --> C{Issues found?}
     C -->|No| D[Ready for human review]
-    C -->|Yes| E[Implement suggestion]
+    C -->|Yes| E[Fix with Copilot]
     E --> F[Coding agent creates fix PR]
     F --> G[Human reviews fix]
     G -->|Approved| H[Merge]
@@ -38,17 +38,15 @@ graph TD
 
 ## How GitHub Implements This
 
-GitHub Copilot code review includes an **Implement suggestion** feature (currently in public preview) that bridges review and implementation. The [documented workflow](https://docs.github.com/copilot/using-github-copilot/code-review/using-copilot-code-review) operates as follows:
+GitHub Copilot code review includes a **Fix with Copilot** button that bridges review and implementation. The [documented workflow](https://docs.github.com/copilot/using-github-copilot/code-review/using-copilot-code-review) operates as follows:
 
 1. Copilot code review identifies issues and provides suggested changes on a PR
-2. On a review comment, you click **Implement suggestion**
-3. A draft comment is created where you can instruct Copilot to address the specific feedback
-4. The [Copilot coding agent creates a new pull request against the branch](https://docs.github.com/en/copilot/concepts/agents/code-review) with the suggestions applied
-5. You review the fix PR and merge
+2. On a review comment, you click **Fix with Copilot**
+3. A dialog appears where you can instruct Copilot to address the specific feedback and choose how to apply it
+4. The [Copilot coding agent](https://docs.github.com/en/copilot/concepts/agents/code-review) either applies fixes directly to the existing PR or creates a new pull request against the branch
+5. You review the result and merge
 
-This feature requires enabling the public preview for tools in Copilot code review and the Copilot coding agent.
-
-The coding agent's implementation PR is separate from the original — it targets the same branch but contains only the fixes. This preserves a clean audit trail: the original PR shows findings, and the fix PR shows what changed.
+The coding agent can target the existing PR branch or create a separate child PR — you choose in the dialog. A child PR preserves a clean audit trail: the original PR shows findings, and the fix PR shows what changed.
 
 ## Where the Loop Applies
 
@@ -75,7 +73,7 @@ Cap automated fix attempts at one pass. If the coding agent's fix does not resol
 
 ## Limitations
 
-**[Human-in-the-loop](../workflows/human-in-the-loop.md) is structural, not optional.** You click "Implement suggestion" — the agent does not autonomously decide which findings to act on. This preserves your authority over which changes proceed.
+**[Human-in-the-loop](../workflows/human-in-the-loop.md) is structural, not optional.** You click "Fix with Copilot" — the agent does not autonomously decide which findings to act on. This preserves your authority over which changes proceed.
 
 **Fix quality depends on review quality.** If the reviewer misidentifies an issue or proposes an incorrect fix, the coding agent implements the wrong change. Your review of the fix PR is the safety net.
 
@@ -118,7 +116,7 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 ## Key Takeaways
 
 - Connect AI code review to a coding agent so review findings can be implemented automatically for mechanical issues
-- GitHub Copilot's "Implement suggestion" feature creates a fix PR from review comments, collapsing the review-fix-re-review cycle
+- GitHub Copilot's "Fix with Copilot" button applies review suggestions via the coding agent, collapsing the review-fix-re-review cycle
 - The pattern applies to mechanical fixes (style, missing checks, test gaps) — not architectural or design feedback
 - Your authority is preserved: you decide which suggestions to implement and review the result
 - Cap automated fix attempts at one pass — escalate to human review if the fix does not resolve cleanly
@@ -129,15 +127,7 @@ The result: the null-check fix appears in a separate PR targeting the same branc
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Empowerment Over Automation](../human/empowerment-over-automation.md)
-- [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
-- [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Diff-Based Review](diff-based-review.md)
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md)
-- [Committee Review Pattern](committee-review-pattern.md)
-- [Human-AI Review Synergy](human-ai-review-synergy.md)
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
-- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
-- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)

@@ -11,12 +11,12 @@ tags:
 aliases:
   - experience replay for agents
   - episode-based recall
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Episodic Memory Retrieval
 
-> Retrieve relevant past interaction episodes -- not isolated facts -- so agents recall what was tried, what failed, and what worked when facing similar problems.
+> Episodic memory retrieval surfaces past episodes -- not isolated facts -- so agents recall what was tried, what failed, and what worked on similar problems.
 
 ## Semantic vs. Episodic Memory
 

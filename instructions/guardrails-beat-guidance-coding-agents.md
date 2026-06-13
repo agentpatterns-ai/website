@@ -9,12 +9,12 @@ tags:
 aliases:
   - Guardrails Over Guidance
   - Negative Rules for Coding Agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Guardrails Beat Guidance: Rule Design for Coding Agents
 
-> For coding-agent rule files on SWE-bench Verified, negative constraints are the only individually beneficial rule type; positive directives actively degrade task success. Rules improve performance mainly by priming context, not by transmitting specific instructions.
+> For coding-agent rule files on SWE-bench, negative constraints are the only individually beneficial rule type; positive directives degrade success. Rules help mainly by priming context.
 
 !!! info "Also known as"
     Guardrails Over Guidance, Negative Rules for Coding Agents

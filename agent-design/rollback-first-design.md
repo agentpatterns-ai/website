@@ -8,12 +8,12 @@ tags:
 aliases:
   - reversible agent design
   - undo-first design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Rollback-First Design: Every Agent Action Should Be Reversible
 
-> Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach.
+> Before choosing how an agent performs an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach.
 
 ## The Premise
 
@@ -42,7 +42,7 @@ Design agent workflows to stay in the left half. When a step must land in the ri
 
 **Comments over edits.** Appending a comment is reversible (delete it). Editing a body overwrites the original. Prefer comments for agent-generated observations; reserve body edits for structured fields.
 
-**Checkpoints.** [Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state before each user prompt. Restoration is selective — code only, conversation only, or both.
+**Checkpoints.** [Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state before each user prompt. Restoration is [selective — code only, conversation only, or both](selective-checkpoint-restore.md).
 
 **Staging environments.** Agent output affecting live systems should pass through staging. A bad draft in staging costs nothing to discard; a bad production deployment costs recovery time.
 

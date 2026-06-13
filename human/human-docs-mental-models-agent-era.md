@@ -7,7 +7,7 @@ tags:
 aliases:
   - human-centric documentation
   - human documentation in the agent era
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-13
 ---
 
 # Human-Facing Docs in the Agent Era: Mental Models Over Reference
@@ -61,7 +61,7 @@ The convergence is diagnostic, not prescriptive. When a skill reads better than 
 
 ## Why It Works
 
-The mechanism is asymmetric attention cost. Agents enumerate, index, and recall reference material on demand — "agents can find the details" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)) — while practitioner attention is bounded and cannot be regenerated within a session. Documentation that loads scarce human attention with what an agent retrieves trivially wastes the scarce resource. The reader who holds the *why* and the design intent can prompt and supervise an agent across an unbounded set of details; the reader armed only with a flat reference must re-derive intent every time. The skills-double-as-docs signal corroborates the mechanism: when a single artifact serves both the agent and the human well, the human doc was paying for completeness the agent already supplied ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)).
+The mechanism is asymmetric attention cost. Agents enumerate, index, and recall reference material on demand — "agents can find the details" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)) — while practitioner attention is bounded and cannot be regenerated within a session. Loading scarce human attention with what an agent retrieves trivially wastes the scarce resource. The reader who holds the *why* can supervise an agent across an unbounded set of details; the reader armed only with a flat reference must re-derive intent every time. The skills-double-as-docs signal corroborates this: when one artifact serves both the agent and the human well, the human doc was paying for completeness the agent already supplied.
 
 ## When This Backfires
 

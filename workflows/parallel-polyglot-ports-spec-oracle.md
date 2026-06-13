@@ -7,7 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Parallel Polyglot Ports as a Spec-Ambiguity Oracle
@@ -29,7 +29,7 @@ The cycle only pays back under all four conditions below. Outside them the maint
 
 The Jas case study frames itself as a revival of 1980s N-version programming (NVP), claiming AI pairing now makes the historical cost objection obsolete ([Hickey, 2026](https://arxiv.org/abs/2606.07828)). That framing carries a load-bearing premise the original literature already rejected. NVP's reliability argument depended on the assumption that independent implementations of the same specification fail independently — only then does a voter masking single-version bugs actually improve reliability. Knight and Leveson tested this empirically with 27 independent versions written from the same spec across two universities, ran one million tests, and found a statistically significant *lack* of failure independence — coincidental errors appeared in independently developed programs ([Knight & Leveson, 1986, IEEE TSE](http://sunnyday.mit.edu/papers/nver-tse.pdf)). Knight's 1990 reply defended the result against rebuttal attempts ([Knight, 1990](http://sunnyday.mit.edu/critics.pdf)).
 
-AI pairing makes the independence problem worse, not better. Frontier coding models share training corpora and inductive biases. Empirical study of independent LLM inference engines reports bug-symptom correlations above 0.9 and root-cause correlations above 0.5 across implementations ([Lin et al., 2025, "A First Look at Bugs in LLM Inference Engines"](https://arxiv.org/pdf/2506.09713)), and 90% of code-LLM failure cases occur because the model "defaults to common patterns in the training data" ([Dinh et al., 2023](https://arxiv.org/pdf/2306.03438)). When two AI-written ports agree, that agreement is weak evidence of correctness. When they disagree, the disagreement is strong evidence the spec did not pin down the behaviour they disagree on.
+AI pairing makes the independence problem worse, not better. Frontier coding models share training corpora and inductive biases. Empirical study of independent LLM inference engines reports bug-symptom correlations above 0.9 and root-cause correlations above 0.5 across implementations ([Liu et al., 2025, "A First Look at Bugs in LLM Inference Engines"](https://arxiv.org/pdf/2506.09713)), and 90% of code-LLM failure cases occur because the model "defaults to common patterns in the training data" ([Dinh et al., 2023](https://arxiv.org/pdf/2306.03438)). When two AI-written ports agree, that agreement is weak evidence of correctness. When they disagree, the disagreement is strong evidence the spec did not pin down the behaviour they disagree on.
 
 ```mermaid
 flowchart TD
@@ -76,7 +76,7 @@ Tool-agnostic. The workflow does not depend on any specific harness — Claude C
 
 ## When This Backfires
 
-- **Frontier-model homogeneity** — when all ports come from closely related LLMs (all GPT-class or all Claude-class), shared training data correlates failures and the differential signal collapses. The case study mixes runtimes but does not mix model families; the workflow's diagnostic value degrades as the model pool narrows ([Lin et al., 2025](https://arxiv.org/pdf/2506.09713); [Dinh et al., 2023](https://arxiv.org/pdf/2306.03438)).
+- **Frontier-model homogeneity** — when all ports come from closely related LLMs (all GPT-class or all Claude-class), shared training data correlates failures and the differential signal collapses. The case study mixes runtimes but does not mix model families; the workflow's diagnostic value degrades as the model pool narrows ([Liu et al., 2025](https://arxiv.org/pdf/2506.09713); [Dinh et al., 2023](https://arxiv.org/pdf/2306.03438)).
 - **Spec ambiguity that all ports interpret the same way** — when the spec is silent on a behaviour and the obvious default is plausible enough that every model picks it, the harness sees agreement and reports green while the application silently does the wrong thing. This is the classical coincidental-error failure mode Knight and Leveson identified ([Knight & Leveson, 1986](http://sunnyday.mit.edu/papers/nver-tse.pdf)).
 - **Reproducibility tax under model churn** — across three frontier coding agents given identical prompts that explicitly demanded reproducible multi-port output, only 68.3% of 300 projects executed as specified, with per-language reproducibility ranging from 89% (Python) downward ([arxiv 2512.22387, 2026](https://arxiv.org/pdf/2512.22387)). Regenerating a port after a model release will often produce a different implementation that re-introduces resolved divergences.
 - **Maintenance budget under one developer-multiple** — a solo developer who can write five ports in 120 hours cannot maintain five ports against API drift, library deprecations, and OS-level platform churn at the same multiplier. The case study reports authoring cost, not steady-state maintenance.
@@ -113,3 +113,4 @@ The diff harness operates on observable artefacts (rendered SVG, exported file b
 - [Reverse-Engineered Executable Specifications for Agentic Program Repair](../multi-agent/reverse-engineered-executable-specifications.md) — specification inference as a separate stage in a multi-agent pipeline
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — defining success criteria before code, complementary to executable specs
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md) — single-implementation alternative when cross-platform reach is not a requirement
+- [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Adjacent workflow where the oracle is the prior canonical version's output rather than sibling ports' divergence

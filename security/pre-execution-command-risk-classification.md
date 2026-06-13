@@ -11,7 +11,7 @@ aliases:
   - risk badge for terminal commands
   - terminal command risk tiers
   - pre-execution command classification
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Pre-Execution Risk Classification for Terminal Commands
@@ -56,7 +56,7 @@ graph TD
 
 **Classify on resolved scope, not raw string.** `rm -rf ./build` in a `/tmp` sandbox and the same command from a repo root where `./build` symlinks to `/` are the same string, wildly different actions. The [Theia shell-execution proposal](https://github.com/eclipse-theia/theia/issues/16772) classifies on parsed structure (binary, flags, target paths), not surface string.
 
-**Advisory, not policy.** Allowlists, deny rules, and PreToolUse hooks carry the security guarantee. VS Code's [security docs](https://code.visualstudio.com/docs/copilot/security) note that auto-approval uses "best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" — a classifier on the same parsing inherits the same limits. Organizations needing a hard floor disable terminal auto-approval via `ChatToolsTerminalEnableAutoApprove`.
+**Advisory, not policy.** Allowlists, deny rules, and PreToolUse hooks carry the security guarantee. VS Code's [security docs](https://code.visualstudio.com/docs/copilot/security) note that auto-approval uses "best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" — a classifier on the same parsing inherits the same limits, so organizations needing a hard floor disable auto-approval via `ChatToolsTerminalEnableAutoApprove`.
 
 ## How Badges Layer With Allowlists
 
@@ -73,9 +73,9 @@ Evidence-based allowlist auto-discovery promotes safe commands off the prompt pa
 
 Joining gate decisions to badge tier surfaces miscalibration:
 
-- **Safe with non-trivial rejection rate** → classifier under-rates; the green chip masks commands humans read as dangerous.
-- **Review-carefully approved in under N seconds** → highest-risk tier is being rubber-stamped.
-- **Caution with no rejections** → over-tagging, or operators trained themselves to ignore orange.
+- **Safe with a non-trivial rejection rate** → classifier under-rates; the green chip masks commands humans read as dangerous.
+- **Review-carefully approved in under N seconds** → the top tier is being rubber-stamped.
+- **Caution with no rejections** → over-tagging, or operators trained to ignore orange.
 
 ## When This Backfires
 
@@ -83,7 +83,9 @@ Joining gate decisions to badge tier surfaces miscalibration:
 
 **Color-only signal in high-volume sessions.** With dozens of green confirmations, attention collapses on the color axis before the summary text. Pair the visual signal with a textual cue (`[SAFE]` / `[CAUTION]` / `[REVIEW]` prefix) to put discriminative load on the word.
 
-**Fatigue migrates rather than dissolves.** If every command arrives with "Caution" — common in agents that install packages routinely — operators learn to ignore orange the same way they ignored the prompt. Risk classification is one lever in a stack with allowlists and sandboxing; on its own it shifts where attention collapses, not whether.
+**Fixed-appearance tiers still habituate.** Anderson et al.'s fMRI study, [How Polymorphic Warnings Reduce Habituation in the Brain](https://scholarsarchive.byu.edu/facpub/9306/) (CHI 2015), found visual-processing response to a static warning drops sharply by the *second* exposure, and that *polymorphic* warnings — ones that vary their appearance across exposures — resist that decay far better. A green "Safe" chip rendered identically across hundreds of commands is that static case: tiering separates Safe from Review-carefully, but the repeated within-tier chip still fades. Tiers reallocate attention across severity levels; they do not defeat the repetition habituation that motivated polymorphic designs.
+
+**Fatigue migrates rather than dissolves.** If every command arrives with "Caution" — common in agents that install packages routinely — operators learn to ignore orange the same way they ignored the prompt. On its own, classification shifts where attention collapses, not whether.
 
 ## Key Takeaways
 

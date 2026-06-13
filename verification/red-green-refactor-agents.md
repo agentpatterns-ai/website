@@ -10,12 +10,12 @@ aliases:
   - "Red-Green-Refactor for Agents"
   - "TDD with Agents"
   - "Tests as the Spec"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Red-Green-Refactor with Agents: Tests as the Spec
 
-> Apply the TDD cycle with separate agent invocations per phase — write failing tests, instruct the agent to pass them, then instruct it to refactor against the green suite.
+> Run the TDD cycle as separate agent invocations: write failing tests, instruct the agent to pass them, then refactor against the green suite.
 
 !!! note "Also known as"
     Red-Green-Refactor for Agents, TDD with Agents, Tests as the Spec. For the broader methodology, see [Test-Driven Agent Development](tdd-agent-development.md).

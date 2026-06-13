@@ -10,12 +10,12 @@ tags:
 aliases:
   - DevBench evaluation
   - code generation benchmark selection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Benchmark-Driven Tool Selection for Code Generation
 
-> Academic coding benchmarks overstate real-world capability. Telemetry-derived benchmarks like DevBench reveal that model performance varies sharply by language, task type, and context size — making task-specific evaluation essential before committing to a tool.
+> Academic coding benchmarks overstate real-world capability. Benchmark-driven tool selection uses telemetry-derived suites like DevBench, where performance varies sharply by language and task type.
 
 ## The Gap Between Benchmarks and Reality
 
@@ -27,7 +27,7 @@ The key finding: **models that rank similarly on synthetic benchmarks diverge si
 
 ### Performance is language-specific
 
-Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages — TypeScript underperforms across all models due to strict type-consistency requirements, while Python scores run higher overall. A model's Python performance does not predict its TypeScript or C performance. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages — TypeScript is consistently the hardest language, with most models scoring 20–30% lower than on other languages due to strict type-consistency requirements. Strong aggregate performance does not guarantee strength in every language: DeepSeek-V3, competitive overall, ranks near the bottom on C++. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ### Task type matters more than overall score
 

@@ -10,12 +10,12 @@ tags:
 aliases:
   - agent research loop
   - iterative search loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Web Search Agent Loop
 
-> An agent research loop wraps retrieval in a cycle of search, evaluate, refine, and synthesize — letting the agent decide when evidence is sufficient instead of firing one query.
+> A web search agent loop wraps retrieval in a cycle of search, evaluate, refine, and synthesize, letting the agent decide when evidence is sufficient.
 
 ## Pipeline vs. Control Loop
 

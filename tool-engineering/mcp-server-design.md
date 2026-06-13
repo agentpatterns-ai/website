@@ -8,12 +8,12 @@ tags:
   - tool-agnostic
   - tool-engineering
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# MCP Server Design: A Server Author's Checklist
+# MCP Server Design: Building Agent-Friendly Servers
 
-> A well-designed MCP server makes the right tool call obvious. A poorly designed one burns tokens on retries, confuses routing, and forces agents into blind debugging.
+> A well-designed MCP server makes the right tool call obvious. A poorly designed one burns tokens on retries, confuses routing, and forces blind debugging.
 
 ## First Decision: Tool, Resource, or Prompt?
 
@@ -146,26 +146,21 @@ The checklist assumes a stable, internally-owned API. Conditions that invert tha
 [ ] Server has clear instructions for tool search discoverability
 ```
 
+## Key Takeaways
+
+- Pick the right primitive first: tools for agent-invoked actions, resources for read-only context, prompts for user-triggered workflows.
+- Use `verb_noun` snake_case names under 32 characters; include 1–5 realistic examples in descriptions to push accuracy from 72% to 90%.
+- Put self-correction into error messages: include the constraint, the violation, and recovery context so agents can retry without a human.
+- Keep tool catalogs small — large lists burn thousands of tokens before the agent processes a single request; design for lazy discovery.
+- Enums and `additionalProperties: false` reduce guesswork; negative guidance ("do NOT use for metrics") prevents misrouting.
+
 ## Related
 
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Client Design](mcp-client-design.md)
-- [Production MCP Agent Stack](production-mcp-agent-stack.md)
-- [MCP Elicitation](mcp-elicitation.md)
-- [MCP LLM Sampling](mcp-llm-sampling.md)
-- [Copilot Extensions to MCP Migration](copilot-extensions-to-mcp-migration.md)
-- [Agent-Computer Interface](agent-computer-interface.md)
-- [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Tool Description Quality](tool-description-quality.md)
+- [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
 - [Advanced Tool Use](advanced-tool-use.md)
-- [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [Tool Descriptions as Onboarding](tool-descriptions-as-onboarding.md)
-- [Tool Engineering](tool-engineering.md)
-- [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
-- [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
-- [Semantic Tool Output](semantic-tool-output.md)
 - [Tool Minimalism](tool-minimalism.md)
-- [Self-Healing Tool Routing](self-healing-tool-routing.md)
-- [MCP Result Persistence Annotation](mcp-result-persistence-annotation.md)

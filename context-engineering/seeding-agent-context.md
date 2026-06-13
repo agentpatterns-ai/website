@@ -10,12 +10,12 @@ aliases:
   - Providing Context to Agents
   - Context Priming
   - Breadcrumbs in Code
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Seeding Agent Context: Breadcrumbs in Code
 
-> Strategically place files, comments, and markers that agents discover during exploration and use to shape their behaviour.
+> Seed breadcrumbs — files, comments, and markers — that agents discover during exploration and use to shape their behaviour.
 
 !!! note "Also known as"
     Providing Context to Agents, Context Priming, Breadcrumbs in Code. Seeding embeds contextual hints directly in the codebase for agents to discover during exploration. For the general technique of loading relevant context before a task, see [Context Priming](context-priming.md).
@@ -95,6 +95,8 @@ Seed durable information; prompt session-specific intent. See [Discoverable vs N
 - **Conflicting scopes**: Nested context files with contradictory instructions cause agents to apply the wrong scope — unpredictable and difficult to debug.
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
+
+Even accurate seeding is not free. A controlled study found that repository-level context files often *reduce* coding-agent task success versus no context while raising inference cost by over 20% — broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context — not generated bulk.
 
 ## Key Takeaways
 

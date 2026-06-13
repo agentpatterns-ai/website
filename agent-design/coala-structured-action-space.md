@@ -8,7 +8,7 @@ tags:
 aliases:
   - CoALA internal external actions
   - structured agent action space
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # CoALA Structured Action Space: Internal vs External Actions
@@ -17,7 +17,7 @@ last_reviewed: 2026-06-01
 
 ## When the Split Pays Off
 
-The internal/external boundary earns its keep when the agent has at least two of: persistent long-term memory, multi-tool harness with mixed side-effect profiles, or permission gating that has to discriminate between read-only inference and consequential writes. On a one-tool ReAct loop with no long-term memory it adds vocabulary without changing the architecture (CoALA's own classification of ReAct lists no writable memory and digital grounding only, [§5, Table 2](https://arxiv.org/html/2309.02427v3)).
+The boundary earns its keep when the agent has at least two of: persistent long-term memory, a multi-tool harness with mixed side-effect profiles, or permission gating that discriminates read-only inference from consequential writes. On a one-tool ReAct loop with no long-term memory it adds vocabulary without changing the architecture ([§5, Table 2](https://arxiv.org/html/2309.02427v3) lists no writable memory and digital grounding only for ReAct).
 
 ## The Action Space
 
@@ -51,7 +51,7 @@ Internal and external actions have categorically different cost, reversibility, 
 | Permission gating | none required (no egress) | the [lethal trifecta's](../security/lethal-trifecta-threat-model.md) egress leg sits here |
 | Observability | invisible to outside observers | produces real telemetry |
 
-Conflating the two — treating a memory read and a `curl` call as instances of one "tool call" — pushes permission, durability, and rollback questions to per-tool decisions instead of architectural defaults. The boundary is also where the [reasoning-execution split](cognitive-reasoning-execution-separation.md) anchors at runtime: reasoning and retrieval stay on the cheap, reversible side; learning and grounding cross into permanence.
+Conflating the two — treating a memory read and a `curl` call as one "tool call" — pushes permission, durability, and rollback questions to per-tool decisions. The boundary is also where the [reasoning-execution split](cognitive-reasoning-execution-separation.md) anchors at runtime: reasoning and retrieval stay on the cheap, reversible side; learning and grounding cross into permanence.
 
 ## Mapping CoALA Actions to a Coding-Agent Harness
 
@@ -62,11 +62,11 @@ Conflating the two — treating a memory read and a `curl` call as instances of 
 | Learn | Write to a persistent memory file, append to a session journal, update of a skill or rule file |
 | Ground | `Bash`, `Edit`/`Write`, `WebFetch`, `gh` CLI write, any [MCP server with side effects](../tool-engineering/documentation-grounding-mcp-servers.md) |
 
-The mapping lets you audit a harness for asymmetry: most production coding agents have rich grounding, decent reasoning, partial retrieval, and almost no learning — which is why session-to-session knowledge stays in the user's head or in `CLAUDE.md` rather than emerging from agent behaviour ([CoALA classification of existing systems, §5/Table 2](https://arxiv.org/html/2309.02427v3) shows the same gap across the academic systems it surveys).
+The mapping lets you audit a harness for asymmetry: most production coding agents have rich grounding, decent reasoning, partial retrieval, and almost no learning — which is why session-to-session knowledge stays in the user's head or in `CLAUDE.md`. CoALA's survey of existing systems ([§5/Table 2](https://arxiv.org/html/2309.02427v3)) shows the same gap across the academic systems it classifies.
 
 ## Why It Works
 
-The boundary is load-bearing because the *direction of memory access* (the formal criterion in [CoALA §5](https://arxiv.org/html/2309.02427v3)) is correlated with the *operational profile* (the engineering criterion in the table above). A read against working memory cannot have a side effect; a write against the external world generally does. Naming the boundary at the architecture layer — rather than rediscovering it per tool — is what lets one ontology drive permission gating, telemetry, and rollback policy at once. Without the named boundary, those three policies are typically wired independently per tool, and drift apart.
+The boundary is load-bearing because the *direction of memory access* (the formal criterion in [CoALA §5](https://arxiv.org/html/2309.02427v3)) correlates with the *operational profile* (the engineering criterion in the table above). A read against working memory cannot have a side effect; a write against the external world generally does. Naming the boundary at the architecture layer lets one ontology drive permission gating, telemetry, and rollback policy at once — without it, those three policies get wired independently per tool and drift apart.
 
 ## When This Backfires
 
@@ -110,3 +110,4 @@ The boundary makes three things visible at a glance: steps 4–8 need permission
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
 - [Tiered Memory Architecture](tiered-memory-architecture.md)
 - [Lethal Trifecta in Agent Tooling](../security/lethal-trifecta-threat-model.md)
+- [Cognitive Architectures for Language Agents (CoALA): A Classifier for Agent Harnesses](../frameworks/coala-cognitive-architecture-language-agents.md) — the full three-axis framework this action-space split sits within

@@ -7,7 +7,7 @@ tags:
   - technique
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Inversion Analysis: Surface Capabilities Competitors Cannot Replicate

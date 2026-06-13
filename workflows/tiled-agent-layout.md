@@ -12,12 +12,12 @@ aliases:
   - tiled agent panes
   - agent pane layout
   - parallel agent tiles
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes
 
-> Tiled agent layouts split the screen into panes — one per agent — so a supervisor can see all concurrent sessions at once instead of switching between tabs. The mechanism lowers switching cost; it does not raise review capacity.
+> Tiled agent layout splits the screen into one pane per agent — lowering a supervisor's per-switch cost across concurrent sessions, without raising review capacity.
 
 ## What Tiled Layout Solves
 

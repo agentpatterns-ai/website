@@ -10,12 +10,12 @@ tags:
   - tool-engineering
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Closed-Loop Agent Training from Tool Schemas
 
-> Generate synthetic training trajectories from tool definitions, fine-tune small models to match frontier-model performance on domain tasks, and re-train incrementally as schemas change -- a closed-loop alternative to manual data curation.
+> Synthesize training trajectories from tool schemas, fine-tune small models to match frontier performance on domain tasks, and re-train as schemas change.
 
 ## The Problem
 
@@ -94,6 +94,8 @@ For comparison, prior work required 26,000-60,000 manually curated examples to a
 The core mechanism is distribution alignment: training trajectories are derived from the exact same tool definitions the model will encounter at inference time. Unlike general-purpose instruction tuning -- where training data is drawn from a broad distribution that only partially overlaps with any given deployment -- schema-derived trajectories are guaranteed to cover the actual parameter types, argument shapes, and data-flow dependencies the model needs to navigate. The model never encounters a tool signature in production that it hasn't seen structurally during training.
 
 Trajectory-level optimization amplifies this further. Token-level fine-tuning rewards correct individual tokens but is indifferent to whether the overall tool-call sequence succeeds. Trajectory-level RL (GRPO, PPO with episode-level rewards) directly optimizes for complete workflow success, which better matches the evaluation criterion and suppresses locally-plausible but globally-failing call sequences.
+
+The "match frontier" result holds *within* the trained tool distribution. Counter-evidence cautions against over-reading it: standard fine-tuning leaves small models weak at generalizing to tools they did not see during training -- both genuinely new tools and upgraded versions of familiar ones ([He et al., 2025](https://arxiv.org/abs/2502.18990)). That limit is precisely what the incremental re-training loop below exists to manage: rather than expecting one checkpoint to generalize to schema changes for free, the pattern regenerates trajectories whenever the tool set shifts. Treat the parity claim as bounded to the schemas you actually train on, not as evidence that an 8B model has acquired tool-use competence that transfers to arbitrary unseen tools.
 
 ## Schema Evolution: Incremental Re-Training
 

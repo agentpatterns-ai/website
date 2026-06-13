@@ -8,12 +8,12 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # GROUNDING.md: Field-Scoped Hard Constraints and Convention Parameters
 
-> A proposed instruction primitive that splits rules into **hard constraints** that override user intent and **convention parameters** that supply community defaults — scoped to a field, not a project.
+> GROUNDING.md splits rules into **hard constraints** that override user intent and **convention parameters** that supply defaults — scoped to a field, not a project.
 
 ## The Field Scope Gap
 
@@ -80,7 +80,7 @@ GROUNDING.md is a proposal with preliminary evidence. The conditions where it pa
 - **No correctness invariants exist.** General web apps and internal tooling have few HCs. The document degenerates into a CP list — a normal instruction file.
 - **Stacking blows the compliance ceiling.** Loading multiple grounding files on top of `AGENTS.md`, `CLAUDE.md`, and `SKILL.md` pushes total rule count past the [compliance ceiling](instruction-compliance-ceiling.md); HCs buried mid-prompt fail silently.
 - **Hooks would be strictly more reliable.** When the constraint can be expressed as a deterministic check, [enforcing it via a hook](enforcing-agent-behavior-with-hooks.md) is more reliable than any instruction file.
-- **Empirical evidence is preliminary.** Human-written `AGENTS.md` files give roughly +4% accuracy at +19% cost on SWE-bench Lite; auto-generated files reduce success ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A field-scoped layer must justify itself against this baseline; the proposal's six-prompt validation does not yet measure it.
+- **Empirical evidence is preliminary.** Across SWE-bench Lite and AGENT-bench, both developer-provided and auto-generated `AGENTS.md` files produced no improvement in task success rate while raising inference cost by over 20% ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A field-scoped layer must justify itself against that null baseline; the proposal's six-prompt validation does not yet measure it.
 
 ## Example
 

@@ -10,12 +10,12 @@ tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Safe Outputs Pattern
 
-> Agents operate with read-only permissions by default and must be granted explicit write permissions for specific output types, creating a deterministic blast radius for any agent action.
+> The safe outputs pattern gives agents read-only access by default and gates every write behind explicit per-type authorization, bounding the blast radius.
 
 ## The Principle
 
@@ -79,13 +79,10 @@ A GitHub Actions workflow declares its safe outputs before execution. The agent 
 
 ```yaml
 safe-outputs:
-  permitted:
-    - type: pull_request
-      max_volume: 3
-    - type: issue_comment
-      max_volume: 10
-  content_moderation: true
-  secret_removal: true
+  create-pull-request:
+    max: 3
+  add-comment:
+    max: 10
 ```
 
 At runtime, the agent calls the safe outputs MCP server for every write. The server checks the operation type against the declared list, runs content moderation, strips secrets, then proxies the write to GitHub. A fourth pull request attempt is rejected and logged without reaching the repository.

@@ -9,7 +9,7 @@ tags:
 aliases:
   - dev-machine supply chain incident response
   - npm install signing certificate rotation playbook
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Containment Playbook: npm-to-Signing-Channel Compromise
@@ -25,7 +25,7 @@ All four must hold:
 3. Engineers run `npm install` against the **public registry** from machines that reach those repos.
 4. You have **endpoint telemetry** to identify which machines installed a version.
 
-If any fails, scope down: SaaS-only teams skip certificate rotation, and teams on `trustedDependencies` allowlists ([npm 10.3+](https://mondoo.com/blog/npm-supply-chain-security-package-manager-defenses-2026)) or a proxied private registry run a shorter version.
+If any fails, scope down: SaaS-only teams skip certificate rotation; teams on `trustedDependencies` allowlists ([npm 10.3+](https://mondoo.com/blog/npm-supply-chain-security-package-manager-defenses-2026)) or a proxied private registry run a shorter version.
 
 This is the **consumer-side** vector. The publisher-side compromise that hit TanStack itself — GitHub Actions cache poisoning plus OIDC token memory extraction from a CI runner ([TanStack postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem)) — is out of scope.
 
@@ -40,9 +40,9 @@ graph LR
     E --> F[Distribution channel compromised]
 ```
 
-A malicious postinstall script runs with the user's full privileges before runtime controls activate. EDR, tuned for file-hash signatures and mass-encryption behavior, does not catch a postinstall script inside a legitimate package manager ([SC Media](https://www.scworld.com/perspective/trusted-by-default-the-npm-attack-pattern-security-teams-miss), [Aikido](https://www.aikido.dev/blog/endpoint-security-for-developer-devices)).
+A malicious postinstall script runs with the user's full privileges before runtime controls activate. EDR, tuned for file-hash signatures and mass-encryption behavior, misses a postinstall script inside a legitimate package manager ([SC Media](https://www.scworld.com/perspective/trusted-by-default-the-npm-attack-pattern-security-teams-miss), [Aikido](https://www.aikido.dev/blog/endpoint-security-for-developer-devices)).
 
-The Mini Shai-Hulud worm — payload behind 170+ npm packages in May 2026, including 84 versions across 42 `@tanstack/*` packages — harvests GitHub, npm, Actions, and cloud credentials, runs TruffleHog over the filesystem, and exfiltrates an AES-256-GCM bundle to a public GitHub repo ([Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/), [Orca](https://orca.security/resources/blog/tanstack-npm-supply-chain-worm/)).
+The Mini Shai-Hulud worm — behind 170+ npm packages in May 2026, including 84 versions across 42 `@tanstack/*` packages — harvests GitHub, npm, Actions, and cloud credentials, runs TruffleHog over the filesystem, and exfiltrates an AES-256-GCM bundle to a public GitHub repo ([Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/), [Orca](https://orca.security/resources/blog/tanstack-npm-supply-chain-worm/)).
 
 ## The Playbook
 
@@ -58,7 +58,7 @@ Identify every machine that installed an affected version in the breach window a
 
 Rotate from what the worm targets outward: GitHub PATs and SSH keys, npm tokens, Actions secrets, cloud credentials. Any secret in env vars, the SDK cache, or on disk is assumed compromised ([Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/)).
 
-**Revoke only after the host is isolated and imaged.** The Mini Shai-Hulud payload installs a `gh-token-monitor` daemon (macOS LaunchAgent / Linux systemd) that polls every 60 seconds and runs `rm -rf ~/` when it sees a 40X from a revoked GitHub token — so revoking before you have removed the daemon and captured forensic images can destroy the developer machine ([OPSWAT](https://www.opswat.com/blog/mini-shai-hulud-tanstack-openai-and-the-npm-supply-chain-trap), [Wiz](https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised)). Sequence it after step 1, not in parallel.
+**Revoke only after the host is isolated and imaged.** The Mini Shai-Hulud payload installs a `gh-token-monitor` daemon (macOS LaunchAgent / Linux systemd) that polls every 60 seconds and runs `rm -rf ~/` on a 40X from a revoked GitHub token — revoking before you remove the daemon and image the host can destroy the machine ([OPSWAT](https://www.opswat.com/blog/mini-shai-hulud-tanstack-openai-and-the-npm-supply-chain-trap), [Wiz](https://www.wiz.io/blog/mini-shai-hulud-strikes-again-tanstack-more-npm-packages-compromised)). Sequence it after step 1, not in parallel.
 
 **Exit:** every credential reachable from an impacted host rotated and revoked at the issuer — after the `gh-token-monitor` daemon is confirmed removed.
 
@@ -88,7 +88,7 @@ Announce a certificate-revocation deadline that forces every user to update. Ope
 
 ## Why It Works
 
-A worm inside `npm install` inherits whatever the user account reaches; when repos hold code-signing keys, one laptop's blast radius reaches the distribution channel. The playbook breaks the chain at distribution: after revocation, even an attacker holding the stolen key cannot ship a fraudulent binary, because the platform refuses to honor it ([OpenAI](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/), [Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/)).
+The playbook breaks the chain at distribution: after revocation, even an attacker holding the stolen key cannot ship a fraudulent binary, because the platform refuses to honor it ([OpenAI](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/), [Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/)).
 
 ## When This Backfires
 
@@ -111,7 +111,7 @@ OpenAI's response to the May 2026 TanStack incident is the worked example of eve
 | 5. Notarization | Coordinated with Apple to block further notarization of macOS apps using the impacted material |
 | 6. Forcing-function | Announced May 13, 2026; revocation deadline June 12, 2026; macOS users required to update before that date |
 
-The May 13 announcement landed two days after the May 11 compromise. Rapid initial detection made a ~30-day window viable; teams without that detection speed need a longer window, which means longer breach exposure.
+The May 13 announcement landed two days after the May 11 compromise — the detection speed that made a ~30-day window viable.
 
 ## Key Takeaways
 

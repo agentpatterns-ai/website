@@ -11,7 +11,7 @@ aliases:
   - "Layered Instruction Scopes"
   - "Directory-Level Instruction Hierarchy"
   - "Hierarchical CLAUDE.md: Layered Context File Scoping"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels

@@ -1,7 +1,7 @@
 ---
 title: "Oracle-Based Task Decomposition for AI Agent Development"
 term: "Oracle-Based Task Decomposition"
-description: "When a task is too large and interconnected for parallel agents to work on independently, introduce a reference oracle to generate per-unit expected outputs"
+description: "Introduce a reference oracle to generate per-unit expected outputs, converting one monolithic interconnected task into hundreds of independently verifiable subtasks."
 tags:
   - agent-design
   - testing-verification
@@ -13,11 +13,12 @@ aliases:
   - oracle-based decomposition
   - differential testing oracle
   - reference oracle pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Oracle-Based Task Decomposition
 
-> When a task is too large and interconnected for parallel agents to work on independently, introduce a reference oracle to generate per-unit expected outputs, converting one monolithic task into hundreds of independently verifiable subtasks.
+> A reference oracle generates per-unit expected outputs, converting one monolithic, interconnected task into hundreds of independently verifiable subtasks.
 
 ## The Monolith Problem
 
@@ -102,18 +103,11 @@ A Python data pipeline team needs to migrate 400 transformation functions from p
 
 ## Related
 
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
-- [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Incremental Verification](../verification/incremental-verification.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
-- [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
-- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
-- [Adversarial Multi-Model Development Pipeline](adversarial-multi-model-pipeline.md)
 - [LLM Map-Reduce Pattern](llm-map-reduce.md)
-- [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
+- [File-Based Agent Coordination](file-based-agent-coordination.md)
+- [Incremental Verification](../verification/incremental-verification.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
-- [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
-- [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
+- [Bounded Batch Dispatch](bounded-batch-dispatch.md)

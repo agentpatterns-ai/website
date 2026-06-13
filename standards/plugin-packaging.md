@@ -5,7 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - standards
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Plugin and Extension Packaging: Distributing Agent Capabilities

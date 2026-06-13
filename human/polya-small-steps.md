@@ -8,12 +8,12 @@ tags:
 aliases:
   - small-steps AI discipline
   - comprehension-first coding
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Polya Small-Steps: Using AI to Think Better, Not Think Less
 
-> Use AI to enhance your thinking rather than replace it — working 1–2 steps at a time with instant feedback, keeping comprehension ahead of code.
+> Use AI to think better, not think less — working in small steps with instant feedback so comprehension stays ahead of the code you commit.
 
 ## The Problem This Solves
 

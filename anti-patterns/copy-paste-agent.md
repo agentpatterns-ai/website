@@ -9,7 +9,7 @@ tags:
 aliases:
   - clone and own
   - fork and forget
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Copy-Paste Agent

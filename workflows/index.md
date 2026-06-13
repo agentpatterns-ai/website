@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - index
 last_reviewed: 2026-05-27
 ---
 
@@ -15,7 +16,6 @@ last_reviewed: 2026-05-27
 ## Pages
 
 - [Agent Debugging](../observability/agent-debugging.md) — Diagnosing bad agent output
-- [Claude Code ↔ Copilot CLI: Changelog-Driven Feature Parity](changelog-driven-feature-parity.md) — Track which CLI tool shipped each capability first and when the other matched it
 - [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — Configure agents to sign or annotate their commits with verifiable identity metadata so audit trails distinguish agent-generated changes from human-authored ones
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md) — Build a new product agent-first by defining roles, decomposing to context-safe tasks, and executing through autonomous agent loops
 - [Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md) — Distribute shared agent skills, instruction files, and coding conventions from a central repository to downstream projects
@@ -37,6 +37,7 @@ last_reviewed: 2026-05-27
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md) — Running multiple simultaneous agent sessions transforms the engineer's role from contributor to tech lead
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — Multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues via codebase investigation
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — A single skill encodes a state machine into issue labels and produces a durable agent brief as the executor hand-off contract
+- [Labels as Locks: Pipelined Backlog Processing with Issue Labels as Stage Gates](labels-as-locks-pipeline.md) — Coordinate concurrent agents on a backlog by gating stages with labels and locking work with a claim label plus timestamped comment as a lease — for idempotent, minutes-scale work
 - [Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs](auto-triage-workflow.md) — Four-stage agent workflow (monitor, correlate, investigate, propose-fix) that watches alert streams and either tags the right owner or opens a fix PR — only safe under three named preconditions
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](throwaway-prototype-skill.md) — A scoped skill that builds the smallest end-to-end thing to resolve one design question, forbids polish, and captures only the verdict before the code is deleted
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — Configure a PostToolUse hook so that formatting and linting run automatically after every file Claude writes or edits
@@ -70,3 +71,5 @@ last_reviewed: 2026-05-27
 - [Public-Channel Agent Work as Lehrwerkstatt](public-channel-agent-work.md) — Force agent conversations into public channels so the team learns from every transcript — a high-yield organizational practice with hard psychological-safety and data-scope preconditions
 - [Stakeholder Trust Through Evals and Observability](stakeholder-trust-evals-observability.md) — Three-artefact stakeholder review cycle — dashboards, custom trace views, ad-hoc query — that transfers eval and observability data to non-engineers when paired with narrated error analysis, plural headline metrics, and an in-workflow surface
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](parallel-polyglot-ports-spec-oracle.md) — Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behaviour — not as a fault-tolerance vote
+- [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Split an LLM-assisted port into a numerics stage and a parallelism stage, forbid the assistant from improving the source, and gate each stage on output drawn from the prior version
+- [Building Custom Agents from Substrate to Production (Agents All the Way Down)](agents-all-the-way-down-methodology.md) — Framework-free methodology with two substrate preconditions and three iterative practices (prototype, harvest as CLI via the Turtle pattern, agent-tests-agent) for one-developer custom-agent builds

@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
   - context-engineering
   - pattern
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact
@@ -39,9 +39,9 @@ Getting the direction wrong is a dominant failure mode — see *When This Backfi
 
 ## Why It Works
 
-Attention is computed over every token, so the per-token attention budget shrinks as the window fills ([Anthropic: Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Uniform compaction discards recent working context as forcefully as exploratory turns, yet recent turns hold the agent's current working model. Compressing them is "particularly damaging… the most recent context… is heavily compressed alongside the rest, forcing the agent to rediscover and re-establish that context" ([Parallel Context Compaction, arxiv 2605.23296](https://arxiv.org/abs/2605.23296)).
+Attention is computed over every token, so the per-token attention budget shrinks as the window fills ([Anthropic: Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Uniform compaction discards recent working context as forcefully as exploratory turns, yet recent turns hold the agent's current working model. Anthropic warns that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" — compress the turns the agent is actively reasoning over and it has to rediscover what it just established.
 
-Selective summarization exploits this asymmetry: heavy compression on old scaffolding, none on recent work — the same reason OPENDEV's Adaptive Context Compaction keeps recent tool outputs at full fidelity ([Bui, arxiv 2603.05344](https://arxiv.org/abs/2603.05344)). The operation is non-destructive: both directions leave the original messages in the on-disk transcript, and `Restore conversation` recovers if the cut goes wrong ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)).
+Selective summarization exploits this asymmetry: heavy compression on old scaffolding, none on recent work — the same reason OPENDEV's adaptive context compaction "progressively reduces older observations" while leaving recent tool outputs intact ([Bui, arxiv 2603.05344](https://arxiv.org/abs/2603.05344)). The operation is non-destructive: both directions leave the original messages in the on-disk transcript, and `Restore conversation` recovers if the cut goes wrong ([Checkpointing docs](https://code.claude.com/docs/en/checkpointing)).
 
 ## When This Backfires
 
@@ -50,7 +50,7 @@ Selective summarization fails the way blanket compaction does, plus a few ways u
 - **Cut at unverified work**: compressing up to a speculative plan freezes speculation as "what we did." Cut only at a milestone you can name as confirmed.
 - **Early context was load-bearing**: turn-1 requirements, an architectural diagram, the error trace that anchored the debugging chain. Compressing these costs more than compressing recent chatter.
 - **Wrong direction chosen**: the two options are mirror operations; picking the inverse discards what you meant to keep, and the menu does not warn you.
-- **Repeated cycles compound error**: each pass adds lossy compression; a thrice-compressed session stacks three layers on its early context, unrecoverable without `Restore conversation`. Anthropic warns that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- **Repeated cycles compound error**: each pass adds lossy compression; a thrice-compressed session stacks three layers on its early context, unrecoverable without `Restore conversation`.
 - **Forking would have been safer**: when early context is irrecoverable-on-loss, `claude --continue --fork-session` preserves it in a parallel session at zero compression cost. Summarize when continuity matters most; fork when early-context fidelity does.
 - **Implementation bugs**: regressions have shipped where the cut went wrong — bug [#42293](https://github.com/anthropics/claude-code/issues/42293) summarised the *entire* conversation, and [#47987](https://github.com/anthropics/claude-code/issues/47987) dropped pre-rewind messages. Verify the post-cut conversation before continuing high-stakes work.
 
@@ -60,7 +60,7 @@ The strongest counter is the Amp position: skip compaction, keep sessions short,
 
 A developer spends an hour exploring a bug across twelve source files, four test logs, and three speculative root-cause theories. They finally confirm the issue is a race condition in `PaymentService.process()` and write a passing regression test. Context is at ~70%.
 
-The next task is the fix itself, which needs the test failure mode, the relevant module, and the recent reasoning — but not the twelve exploratory file reads or the three discarded theories.
+The fix needs the test failure mode, the relevant module, and the recent reasoning — not the twelve exploratory reads or the three discarded theories.
 
 In the Rewind menu, the developer selects the turn where the regression test passed and chooses **Summarize up to here**, with a focus directive:
 
@@ -70,7 +70,7 @@ the failing assertion in test_payment_flow.py, and the conclusion
 that the fix requires a lock around the balance read.
 ```
 
-After the cut, context drops to ~20%. The selected turn (the passing test) and everything after it remain verbatim. Earlier exploration collapses to a summary anchored on the verified mechanism. The fix turn that follows has a clean, dense context to reason against.
+After the cut, context drops to ~20%. The passing-test turn and everything after it stay verbatim; earlier exploration collapses to a summary anchored on the verified mechanism. The fix turn now has a clean, dense context to reason against.
 
 If the developer had run `/compact` instead, the recent reasoning chain — including the passing test details — would have collapsed alongside the exploration, and the fix turn would have to rediscover what the regression test proved.
 

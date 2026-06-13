@@ -1,7 +1,7 @@
 ---
 title: "Harness Engineering for Building Reliable AI Agents"
 term: "Harness Engineering"
-description: "The discipline of designing agent environments -- layered architecture, mechanical enforcement, legibility -- so agents reliably produce correct results"
+description: "The discipline of designing agent environments -- layered architecture, mechanical enforcement, legibility -- so agents reliably produce correct results."
 tags:
   - agent-design
   - tool-agnostic
@@ -10,7 +10,7 @@ tags:
 aliases:
   - agent environment design
   - environment design for agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Harness Engineering for Building Reliable AI Agents
@@ -119,14 +119,12 @@ Mid-run, the same diagnostic stance drives runtime recovery — see [Exception H
 
 ## Operational Concerns
 
-The three pillars above describe the design discipline. Production harnesses also own four runtime concerns that compound across sessions — each has dedicated coverage on this site:
+Beyond the three design pillars, production harnesses own four runtime concerns that compound across sessions — each with canonical coverage elsewhere:
 
-- **Permission boundaries** — runtime gates that enforce what CI cannot reach. See [Permission Framework Over Model Trust](../security/permission-framework-over-model.md) and [Permission-Gated Custom Commands](../security/permission-gated-commands.md).
-- **Sandboxing** — mechanical isolation at the runtime layer pairs with mechanical enforcement at the CI layer. See [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) and [Sandbox Rules at the Harness/Tools Boundary](../security/sandbox-rules-harness-tools.md).
-- **Cost controls** — the harness owns token and tool-call budgets, not just correctness. See [Cost-Aware Agent Design](cost-aware-agent-design.md) and [Dual-Budget Control](dual-budget-control-search-agents.md).
-- **Failure recovery** — runtime recovery is distinct from the harness-evolution feedback loop above. See [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) and [Rollback-First Design](rollback-first-design.md).
-
-These four axes track reviewer 3's operational checklist for production harnesses — coverage on this page is intentionally a cross-reference, not a duplicate of the canonical pages.
+- **Permission boundaries** — runtime gates that enforce what CI cannot reach: [Permission Framework Over Model Trust](../security/permission-framework-over-model.md), [Permission-Gated Custom Commands](../security/permission-gated-commands.md).
+- **Sandboxing** — runtime-layer isolation paired with CI-layer enforcement: [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md), [Sandbox Rules at the Harness/Tools Boundary](../security/sandbox-rules-harness-tools.md).
+- **Cost controls** — the harness owns token and tool-call budgets, not just correctness: [Cost-Aware Agent Design](cost-aware-agent-design.md), [Dual-Budget Control](dual-budget-control-search-agents.md).
+- **Failure recovery** — distinct from the harness-evolution loop above: [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md), [Rollback-First Design](rollback-first-design.md).
 
 ## Entropy Management
 
@@ -153,9 +151,7 @@ ESLintError [api/no-direct-db-import]:
 
 *Constrained solution spaces* — a structural test (`npm run test:arch`) enforces `types → services → api` as the only valid import direction, failing with the exact files involved on any violation.
 
-**What the agent experiences**: it creates the webhook handler, attempts to import the database client directly, receives the ESLint error, restructures to call `src/services/billing.ts` instead, and opens a PR that passes CI on the first run without human intervention.
-
-All three pillars contributed: legibility told the agent what to do, mechanical enforcement told it when it was wrong, and constrained solution spaces made the correct path the only available path.
+**What the agent experiences**: it attempts the direct database import, receives the ESLint error, restructures to call `src/services/billing.ts`, and opens a PR that passes CI on the first run. Legibility told it what to do, mechanical enforcement told it when it was wrong, and constrained solution spaces left the correct path as the only one available.
 
 ## When This Backfires
 
@@ -177,28 +173,11 @@ Three specific conditions where the investment pays off less:
 
 ## Related
 
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the project instruction file standard that provides agents project context before any task
-- [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding
-- [AI Abundance Reshapes Software Engineering Identity](../human/ai-abundance-engineering-identity.md) -- how the builder/coder split reframes harness engineering as the new professional discipline
 - [Agent Harness](agent-harness.md) -- the specific initializer/worker two-phase architecture
 - [Harness Hill-Climbing](harness-hill-climbing.md) -- eval-driven iterative improvement of the agent harness using benchmark scores as the optimization signal
-- [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs
-- [Agent-First Software Design](agent-first-software-design.md) -- designing systems where agents are the primary consumers
-- [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
-- [Process Amplification](../human/process-amplification.md) -- agents amplify existing practices, good or bad
-- [Convention over Configuration](../instructions/convention-over-configuration.md) -- conventions as constraint mechanisms
-- [Specification as Prompt](../instructions/specification-as-prompt.md) -- formal specs as agent instructions
-- [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md) -- error messages as agent context
-- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap the instruction file that feeds the harness
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion
-- [Agent Self-Review Loop](agent-self-review-loop.md) -- agents reviewing their own output using linters and tests
-- [Empowerment Over Automation](../human/empowerment-over-automation.md) -- enforcement and linter-based constraints as agent empowerment
-- [Wink: Agent Misbehavior Correction](wink-agent-misbehavior-correction.md) -- guardrail-based correction of agent behavior
-- [Agent Loop Middleware](agent-loop-middleware.md) -- wrapping the agent loop to guarantee critical enforcement steps happen regardless of agent behavior
+- [Runtime Harness Adaptation](runtime-harness-adaptation.md) -- evolving a four-layer interface from failure trajectories so a frozen model succeeds without retraining
 - [L2 → L3: Building Mechanical Enforcement](../frameworks/brownfield-to-agent-first/level-2-to-3.md) -- step-by-step implementation of PreToolUse hooks, structured task definitions, and session scaffolding
-- [Agent Backpressure](agent-backpressure.md) -- linter and guardrail signals that slow agent execution when quality degrades
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) -- short-lived linter rules and harness patches that bridge capability gaps
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) -- mapping harness and guardrail patterns across agent frameworks
-- [Agent Debugging: Diagnosing Bad Agent Output](../observability/agent-debugging.md) -- diagnosing harness failures when agent output is wrong or unexpected
-- [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) -- decoupled three-primitive architecture (Session / Harness / Sandbox) for long-running agents
-- [Agent-Driven Codebase Fingerprint](agent-driven-codebase-fingerprint.md) -- codebase-level signals the harness uses to route agents and enforce conventions
+- [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
+- [Agent-First Software Design](agent-first-software-design.md) -- designing systems where agents are the primary consumers
+- [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs
+- [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding

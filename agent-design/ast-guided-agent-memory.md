@@ -12,12 +12,12 @@ tags:
   - context-engineering
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # AST-Guided Agent Memory for Repository-Level Code Generation
 
-> Use AST (Abstract Syntax Tree) representations as the memory substrate for coding agents instead of natural language summaries — structural representations capture code relationships that text summaries miss, preventing agents from reintroducing previously fixed errors.
+> Use AST representations as coding-agent memory instead of text summaries — structure captures code relationships text loses, preventing agents from reintroducing fixed errors.
 
 ## The Error Recurrence Problem
 
@@ -55,9 +55,7 @@ Structural representation enables mechanical regression detection — text summa
 
 ## Results
 
-CodeMEM reports 12.2% current-turn and 11.5% session-level improvement in instruction following, with 2-3 fewer rounds per task. Token efficiency remains competitive with baselines. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868))
-
-Round reduction is the key practical finding: each avoided round saves wait time and token budget.
+CodeMEM reports 12.2% current-turn and 11.5% session-level improvement in instruction following, with 2-3 fewer rounds per task at competitive token efficiency. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868)) Round reduction is the key practical finding — each avoided round saves wait time and token budget.
 
 ## When This Backfires
 
@@ -73,8 +71,6 @@ AST-guided memory is not universally applicable:
 **For agent builders:** If your agent maintains session memory, check whether it encodes code structure or just text descriptions. Tree-sitter and language server protocols provide the required AST parsing. Independent work on Tree-sitter-based knowledge graphs for code exploration reports comparable efficiency gains: 10× fewer tokens and 2.1× fewer tool calls at 83% of file-exploration answer quality across 31 real-world repositories. ([arXiv:2603.27277](https://arxiv.org/abs/2603.27277))
 
 **For agent users:** Error recurrence — the agent fixing something, then breaking it two turns later — signals lost structural context. Shorter sessions, "do not change X" constraints, or diffing against validated state can mitigate this.
-
-**Token efficiency:** AST representations maintain competitive token efficiency with baseline approaches. ([arXiv:2601.02868](https://arxiv.org/abs/2601.02868))
 
 ## Relation to Other Memory Patterns
 

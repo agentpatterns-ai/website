@@ -11,7 +11,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Semantic Tool Output: Designing for Agent Readability
@@ -84,7 +84,7 @@ Errors should "clearly communicate specific and actionable improvements, rather 
 
 ## Why It Works
 
-LLMs do next-token prediction over the tool output in context. UUIDs and MIME strings are arbitrary byte sequences with no semantic relationship to the concepts they represent — the model cannot reliably reconstruct or reference them without copying verbatim. Natural-language equivalents activate existing world-knowledge associations, making downstream reference more accurate. Narrowing output to decision-relevant fields also shrinks the attention surface, lowering the chance of conflating or misattributing fields from different parts of the record.
+LLMs are trained on next-token prediction and perform better with formats that match their training data ([Anthropic](https://www.anthropic.com/engineering/writing-tools-for-agents)). UUIDs and MIME strings are arbitrary byte sequences — agents grapple with natural-language identifiers significantly more successfully than with cryptic ones, reducing hallucinations in retrieval tasks. Returning only decision-relevant fields removes irrelevant signals the model might reference or misattribute, keeping the tool result tightly scoped to what the next action actually requires.
 
 ## When This Backfires
 

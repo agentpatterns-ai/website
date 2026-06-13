@@ -9,7 +9,7 @@ tags:
 aliases:
   - review-then-apply CLI flag
   - in-process review auto-fix
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Review-Then-Apply CLI Flag for In-Process Auto-Fix
@@ -28,7 +28,7 @@ Outside these conditions the convenience is net-negative versus the two-step rea
 
 ## The Primitive
 
-The same agent run that scores the diff also writes the corrected version. Claude Code's `/code-review --fix` ships this shape at the CLI-tool tier; `/simplify` is the cleanup-only sibling that runs the reuse / simplification / efficiency / altitude review and applies the fixes, skipping the bug-hunting pass `/code-review --fix` carries ([Claude Code 2026-05-28 changelog](https://code.claude.com/docs/en/changelog)). The architectural move is the same one `cargo clippy --fix` ships for compiler-class lints ([Clippy usage docs](https://doc.rust-lang.org/stable/clippy/usage.html)) and that LSP code actions ship for editor-tier refactors via `codeAction/resolve` ([LSP 3.17 specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)).
+The same agent run that scores the diff also writes the corrected version. Claude Code's `/code-review --fix` ships this shape at the CLI-tool tier; `/simplify` is the cleanup-only sibling that runs the reuse / simplification / efficiency / altitude review and applies the fixes, skipping the bug-hunting pass `/code-review --fix` carries ([Claude Code 2026-05-27 changelog](https://code.claude.com/docs/en/changelog)). The architectural move is the same one `cargo clippy --fix` ships for compiler-class lints ([Clippy usage docs](https://doc.rust-lang.org/stable/clippy/usage.html)) and that LSP code actions ship for editor-tier refactors via `codeAction/resolve` ([LSP 3.17 specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)).
 
 The CLI-flag variant is distinct from the dialog-mediated variants this site already covers: [Review-Then-Implement Loop](review-then-implement-loop.md) covers Copilot's "Implement suggestion" two-step UI dialog, and [Direct-Apply Review Comments](direct-apply-review-comments.md) covers cloud-agent commit-push flows where classification stays human. In the CLI-flag variant the same process produces and applies — there is no separate dispatch surface.
 
@@ -48,7 +48,7 @@ The keystroke saving is small. The load-bearing claim is that the review and app
 
 ## Example
 
-A maintainer runs `/simplify` on a feature branch with three uncommitted hunks. The invocation runs the cleanup-only review-then-apply pass ([Claude Code 2026-05-28 changelog](https://code.claude.com/docs/en/changelog)) and proceeds in one of two ways:
+A maintainer runs `/simplify` on a feature branch with three uncommitted hunks. The invocation runs the cleanup-only review-then-apply pass ([Claude Code 2026-05-27 changelog](https://code.claude.com/docs/en/changelog)) and proceeds in one of two ways:
 
 **Calibrated rubric on a clean tree** — the working tree has no uncommitted changes, the diff under review is the just-merged feature, and the rubric is the published reuse / simplification / efficiency one. The agent identifies three unused imports, one duplicated helper, and one expression that can be inlined. It writes the patch in a single pass. Re-running `/simplify` returns no findings — the second invocation is a no-op. The maintainer reviews the resulting diff as one commit.
 

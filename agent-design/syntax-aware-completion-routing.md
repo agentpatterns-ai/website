@@ -11,12 +11,12 @@ aliases:
   - syntax-confidence routing
   - SynConfRoute pattern
   - confidence plus syntax routing
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Syntax-Aware Completion Routing
 
-> Escalate a local code completion to a larger model only when two stacked signals agree it is unsafe: low token confidence, then a parse check that the output is valid code.
+> Escalate a local code completion only when two signals agree: low token confidence and a failed parse check on the small model's output.
 
 ## The Routing Signal
 

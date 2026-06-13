@@ -7,16 +7,17 @@ tags:
   - code-review
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 status: current
 ---
+
 # Claude Code Review
 
 > A managed multi-agent review service that posts inline findings on every GitHub PR — no subagent configuration required.
 
 ## What It Is
 
-[Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature available on Teams and Enterprise plans. Once an admin enables it, reviews run automatically whenever a pull request opens or is updated. You write no orchestration code; Anthropic's infrastructure handles it.
+[Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature available as a research preview on Team and Enterprise plans (not on organizations with Zero Data Retention enabled). Once an admin enables it, reviews run automatically whenever a pull request opens or is updated. You write no orchestration code; Anthropic's infrastructure handles it.
 
 Contrast with [DIY subagent review](../../code-review/agent-assisted-code-review.md): hand-rolling a review subagent requires defining the agent, configuring tool access, wiring CI, and maintaining it. Code Review is a managed service — the GitHub App is the only setup step.
 
@@ -40,8 +41,9 @@ Reviews [average 20 minutes and cost $15–25](https://code.claude.com/docs/en/c
 
 An admin installs the Claude GitHub App to the organization and selects which repositories to enable. Per repository, you choose a trigger:
 
-- **After PR creation only** — one review per PR open or ready-for-review event
-- **After every push to PR branch** — reviews on each commit; auto-resolves threads when the flagged code is fixed
+- **Once after PR creation** — one review per PR open or ready-for-review event
+- **After every push** — reviews on each commit; auto-resolves threads when the flagged code is fixed
+- **Manual** — no automatic reviews; a review starts only when someone comments `@claude review` or `@claude review once` on the PR
 
 The on-push trigger multiplies cost by push count. `claude.ai/admin-settings/claude-code` shows average cost per review per repository to make the trade-off visible.
 

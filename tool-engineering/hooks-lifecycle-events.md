@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Hooks and Lifecycle Events: Intercepting Agent Behavior
 
-> Hooks run deterministic code at defined points in an agent's execution — before and after tool calls, at session boundaries — enabling enforcement, automation, and audit that instructions cannot guarantee.
+> Hooks run deterministic code at defined points in an agent's execution — around tool calls and session boundaries — enforcing what instructions cannot guarantee.
 
 !!! note "Also known as"
     **How Hooks Work** · **Hook Lifecycle** · **Hook Lifecycle Events**. For practical enforcement patterns using hooks, see [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md).

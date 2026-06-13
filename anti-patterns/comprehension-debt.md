@@ -1,16 +1,16 @@
 ---
-title: "Comprehension Debt from AI-Generated Code Velocity"
+title: "When Developers Understand Less of Their Own Codebase"
 description: "Comprehension debt is the growing gap between agent-produced code and developer understanding. Unlike technical debt, it lives in people, not the codebase."
 tags:
   - anti-pattern
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Comprehension Debt: When Developers Understand Less of Their Own Codebase
 
-> Comprehension debt is the growing gap between the code an AI agent produces and the developer's understanding of that code. Unlike technical debt, it lives in people, not in the codebase.
+> Comprehension debt is the gap between code an AI agent produces and the developer's understanding of it. It lives in people, not the codebase.
 
 ## The Problem
 
@@ -104,6 +104,14 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 
     The developer now understands the design gap, requests a fix, and merges with full comprehension.
 
+## Key Takeaways
+
+- Comprehension debt is the gap between agent-produced code and the developer's understanding of it; it accumulates in people, not the codebase, and is distinct from both technical debt and skill atrophy.
+- An [Anthropic RCT](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted juniors scored 17 percentage points lower on comprehension (50% vs 67%), with the largest gap on debugging.
+- Usage mode is the lever: conceptual inquiry ("why would this approach work?") preserves comprehension (65%+); generation delegation ("write me X") destroys it (below 40%).
+- Ask the agent to explain its approach *before* generating code, and request annotated walkthroughs of complex output instead of accepting it on a glance.
+- Debt is low or zero for throwaway code, single-owner modules, and active-inquiry workflows; it is most damaging in shared infrastructure built by multiple delegating developers.
+
 ## Related
 
 - [Skill Atrophy](../human/skill-atrophy.md) -- cumulative capability loss from reduced practice, the individual-skill pole of this problem
@@ -113,6 +121,4 @@ A coding agent produces a retry utility with exponential backoff, jitter, and [c
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) -- the belief that AI should require less engagement, which accelerates debt accumulation
 - [Shadow Tech Debt](shadow-tech-debt.md) -- AI agents silently eroding codebase coherence, a structural companion to comprehension debt
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
-- [Pattern Replication Risk](pattern-replication-risk.md) -- agents reproducing codebase patterns at scale, including ones developers never understood
-- [AI Abundance Reshapes Software Engineering Identity](../human/ai-abundance-engineering-identity.md) -- how the coder/builder identity split determines who accumulates comprehension debt
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance

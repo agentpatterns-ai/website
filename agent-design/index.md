@@ -3,6 +3,7 @@ title: "Agent Design Patterns and Architectures for AI Agents"
 description: "Architecture, delegation, memory, control, reliability, and harness patterns for building effective AI coding agents and assistants."
 tags:
   - agent-design
+  - index
 last_reviewed: 2026-05-27
 ---
 
@@ -30,6 +31,7 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [CoALA Decision-Making Loop as an Orchestration Lens](coala-decision-making-loop.md) — The propose -> evaluate -> select -> act loop from CoALA, used as a vocabulary for locating where each orchestration tactic improves an agent — not a prescription for runtime structure
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — Split the agent's actions into internal (reason, retrieve, learn) and external (ground) — the boundary surfaces cost, reversibility, and permission profiles that monolithic tool lists hide
 - [Discrete Phase Separation](discrete-phase-separation.md) — Prevent context contamination by running research, planning, and execution in separate conversations — only distilled artifacts cross phase boundaries
+- [Domain-Scoped Parallel Exploration for Multi-File Change Localization](domain-scoped-parallel-localization.md) — Partition a localization agent's exploration along domain seams when a change spans subsystems — context isolation, not parallelism, is the active ingredient
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — Agent delegation has overhead; match task characteristics to agent strengths rather than delegating everything or nothing
 - [Empowerment Over Automation](../human/empowerment-over-automation.md) — AI tools should skip tedious work while preserving your autonomy over architectural decisions, domain logic, and creative choices
 - [Eval Strategy by Agent Generation: A Structure-to-Eval Locator](eval-strategy-by-agent-generation.md) — Six structural levels of agent architecture — prompt, chain, ReAct loop, workflow graph, modern loop, harness — each open an eval surface the prior level cannot see
@@ -70,6 +72,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — Three-layer architecture (observation stream, scored retrieval, reflection synthesis) for maintaining coherent behavior across long-running, high-observation-density agent sessions
 - [Handoff Skill: Structured Context Transfer Between Agent Sessions](handoff-skill-context-transfer.md) — A model-invocable skill that compacts the current session into a temp-file handoff document a fresh agent can pick up — invoked at an explicit transfer point, distinct from harness-detected recap and from raw-transcript forwarding
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md) — A five-layer lens (pretraining, alignment, self-narrative, memory, weight-level adaptation) for deciding where governance attaches in persistent agents and when compositional drift will ratchet past a visible-layer rollback
+- [Memory-as-Governance: Pre-Action Gates for Coding Agents](memory-as-governance-pre-action-gate.md) — A memory layer that intercepts the agent's next action — warning before it repeats a failed fix or edits a known-fragile file — pays off only under tight conditions on event volume, log freshness, and false-positive tolerance
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — Extract causal lessons from agent execution traces — what worked, what failed, which approaches were abandoned and why — so every run makes future runs more effective
 - [RAG over Thinking Traces](rag-over-thinking-traces.md) — For reasoning-intensive tasks, swap the document corpus for prior thinking trajectories — the same retrieve-then-generate pipeline beats both no-RAG and document-RAG with flat or lower inference cost
 - [Session Initialization Ritual: How Agents Orient Themselves](session-initialization-ritual.md) — A mandatory startup sequence that every agent session executes before touching code — verify state, orient to progress, confirm baseline health, then act
@@ -104,9 +107,11 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](plan-compliance-in-agents.md) — Agents silently deviate from instructed plans; plan quality, phase alignment, and periodic reminders determine whether the plan you wrote actually runs
 - [Proactive Idle-Time Anticipation (ProAct)](proactive-idle-time-anticipation.md) — Predict likely next user needs from dialogue history plus persistent memory during the idle window between turns, then prefetch evidence under a value gate — pays back only when need chains are predictable and push fatigue is tolerable
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) — Keep agent definitions minimal — identity and scope only — and load detailed task knowledge on demand through skills rather than front-loading everything
+- [Self-Reporting Loops: Autonomous Routines That File Their Own Backlog](self-reporting-loops.md) — Scheduled and autonomous runs file out-of-scope observations to the tracker so signal survives the session boundary, contingent on a trusted substrate, deduplication, and severity routing
 - [Specialized Agent Roles](specialized-agent-roles.md) — Assign distinct specializations to parallel agents so they complement rather than compete on the same problems
 - [Sprint Contracts](sprint-contracts.md) — A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
+- [The Three Loops of Agentic Coding: A Diagnostic Vocabulary](three-loops-agentic-coding.md) — Name three nested loops in an agent session — tool, verification, convergence — so the symptom you see tells you which intervention applies
 - [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behaviour; apply at phase boundaries, not per call
 
 ## Reliability
@@ -178,6 +183,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Multi-Shape BYOK Provider](multi-shape-byok-provider.md) — One BYOK provider that natively speaks Chat Completions, Responses, and Messages — with the API family declared per endpoint — replaces single-shape compatibility adapters that silently down-translate provider-specific capability
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — Treat the backing model as a first-class harness variable — express prompt, tool, and middleware deltas as declarative model-keyed overrides instead of forcing one configuration to work everywhere
 - [Prebuilt Agent Environments](prebuilt-agent-environments.md) — Bake the cloud agent's runtime — toolchain, dependencies, MCP servers — into a custom container image so each session pays an image-pull cost instead of a fresh install cost; GitHub measured >20% startup improvement for Copilot cloud agent
+- [Recursive Agent Harnesses (RAH)](recursive-agent-harnesses.md) — A parent agent generates and runs a script that spawns subagent harnesses in parallel — each with its own tools and context — making the recursive unit a full harness rather than a bare model call
 - [Subprocess-per-Session Hosting Model](subprocess-per-session-hosting-model.md) — Four session-lifecycle topologies for self-hosted Agent SDK deployments — ephemeral, long-running, hybrid, and multi-agent container — chosen by matching workload class to subprocess, container, and transcript-persistence lifetimes
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture
 - [The Think Tool](think-tool.md) — A mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action

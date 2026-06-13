@@ -8,7 +8,7 @@ aliases:
   - phase isolation
   - conversation boundary pattern
   - research-plan-execute isolation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -113,4 +113,5 @@ The separation enables workload-appropriate model routing. Research and planning
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
+- [Domain-Scoped Parallel Exploration for Multi-File Change Localization](domain-scoped-parallel-localization.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

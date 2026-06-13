@@ -4,7 +4,7 @@ description: "Wrap agent output in hard, deterministic checks — linting, schem
 tags:
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Deterministic Guardrails Around Probabilistic Agents

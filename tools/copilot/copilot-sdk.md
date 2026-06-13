@@ -5,16 +5,17 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 status: current
 ---
+
 # GitHub Copilot SDK
 
 > A programmable layer that embeds Copilot agent capabilities — planning, tool invocation, file editing, and command execution — into any application.
 
 ## What the SDK Provides
 
-The [Copilot SDK](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) (public preview) exposes the same execution loop that powers GitHub Copilot CLI as a library you can embed in your own applications. Instead of interacting with Copilot through an IDE or web interface, you programmatically create agent sessions, send prompts, and handle streaming responses.
+The [Copilot SDK](https://github.blog/news-insights/company-news/build-an-agent-into-any-app-with-the-github-copilot-sdk/) exposes the same execution loop that powers GitHub Copilot CLI as a library you can embed in your own applications. Instead of interacting with Copilot through an IDE or web interface, you programmatically create agent sessions, send prompts, and handle streaming responses. GitHub announced the SDK as [generally available on 2026-06-02](https://github.blog/changelog/2026-06-02-copilot-sdk-is-now-generally-available), graduating it from public preview.
 
 Core capabilities:
 
@@ -102,7 +103,7 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 - Supports Node.js, Python, Go, .NET, and Java with the same agent capabilities across all bindings
 - Enables the agent-in-app pattern: you embed planning, tool use, and file editing into custom applications
 - MCP server support and custom tool definitions let you extend the agent's capabilities beyond built-in tools
-- Public preview with authentication through Copilot subscriptions or custom API keys; requests count against premium quotas
+- Generally available (GA as of 2026-06-02) with authentication through Copilot subscriptions or custom API keys; requests count against premium quotas
 
 ## Related
 

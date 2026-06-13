@@ -1,5 +1,5 @@
 ---
-title: "Cognitive Load, AI Fatigue, and Sustainable Agent Use"
+title: "Managing Cognitive Load and AI Fatigue for Sustainable Agent Use"
 description: "Intensive AI assistant use creates measurable cognitive costs. Recognizing and managing them is the difference between sustainable productivity and burnout."
 tags:
   - human-factors
@@ -10,10 +10,10 @@ aliases:
   - output review fatigue
   - verification anxiety
   - decision fatigue from oversight
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Cognitive Load, AI Fatigue, and Sustainable Agent Use
+# Managing Cognitive Load and AI Fatigue for Sustainable Agent Use
 
 > Intensive AI assistant use creates measurable cognitive costs — recognizing and managing them is the difference between sustainable productivity gains and burnout.
 
@@ -102,13 +102,7 @@ After the non-AI block, the developer resumes with Claude Code but caps each new
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](attention-management-parallel-agents.md) — structuring attention across simultaneous AI tasks
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — long-term capability costs of sustained AI delegation
 - [Comprehension Debt](../anti-patterns/comprehension-debt.md) — the growing gap between AI-generated code and developer understanding, the third concept in the fatigue/atrophy/debt cluster
-- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — how the bottleneck migration and skill atrophy connect to the wider professional identity shift
-- [Cross-Tool Translation: Learning from Multiple AI Assistants](cross-tool-translation.md)
-- [Initiatives and Community: Tracking the Agentic Engineering Landscape](initiatives-community.md)
 - [The Bottleneck Migration for AI Agent Development](bottleneck-migration.md) — review and verification as the new bottleneck
 - [The Context Ceiling](context-ceiling.md) — the cognitive overhead experts bear when AI output requires more correction than generation saves
 - [Process Amplification](process-amplification.md) — how AI use intensity scales workload and how to manage the amplification
-- [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — gradually increasing agent autonomy while managing oversight overhead
 - [Safe Command Allowlisting: Reducing Approval Fatigue](../security/safe-command-allowlisting.md) — pre-authorizing low-risk operations to preserve attention for high-stakes decisions
-- [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — gating AI suggestions before display to reduce alert fatigue
-- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — the plan-supervise-validate loop that manages cognitive overhead of delegation

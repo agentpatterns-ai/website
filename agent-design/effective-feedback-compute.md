@@ -9,7 +9,7 @@ tags:
 aliases:
   - effective feedback compute
   - trace-level scaling coordinate
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Effective Feedback Compute (EFC) for Harness Comparison
@@ -18,7 +18,7 @@ last_reviewed: 2026-06-01
 
 ## The Measurement Problem
 
-Raw tokens, tool calls, and wall time conflate useful work with retries and noise. On the same agent traces, raw tokens and tool calls explained R² = 0.33 and R² = 0.42 of success variance; an oracle EFC coordinate reached R² = 0.94 and an estimated EFC reached R² = 0.99 ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)) — most spend does not move the agent's posterior over the task. EFC credits an event only when it meets all four conditions below, then normalises by task feedback demand so unlike tasks compare.
+Raw tokens, tool calls, and wall time conflate useful work with retries and noise. On the same agent traces, raw tokens and tool calls explained R² = 0.33 and R² = 0.42 of success variance, while oracle EFC reached R² = 0.94 and estimated EFC R² = 0.99 ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)) — most spend never moves the agent's posterior. EFC credits an event only if it meets the four conditions below, then normalises by task feedback demand so unlike tasks compare.
 
 ## The Four Conditions
 
@@ -35,9 +35,9 @@ The composition is load-bearing. Drop *informative* and the metric rewards noisy
 
 ## Why It Works
 
-Success depends on the task posterior converging on the right solution before the budget runs out. Raw spend measures the *opportunity* for that posterior to update, not the update itself; re-reads, identical-error retries, and fact-restating critiques produce no posterior change and no success gain, and EFC subtracts exactly those events. Iterative Agent Decoding reaches the same conclusion from another angle: inserting feedback between decoding steps beats best-of-N by up to 10 percentage points under matched compute, because best-of-N spends that compute on near-identical posteriors ([Chen et al., 2025](https://arxiv.org/abs/2504.01931)).
+Success depends on the task posterior converging on the right solution before the budget runs out. Raw spend measures the *opportunity* for that posterior to update, not the update itself; re-reads, identical-error retries, and fact-restating critiques change no posterior and yield no success gain — and EFC subtracts exactly those events. Iterative Agent Decoding reaches the same conclusion from another angle: inserting feedback between decoding steps beats best-of-N by up to 10 percentage points under matched compute, because best-of-N spends it on near-identical posteriors ([Chen et al., 2025](https://arxiv.org/abs/2504.01931)).
 
-The pay-off shows up in matched-budget interventions: redirecting the same budget toward EFC-credited events lifted success from a 27% baseline to 90% ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)). The model did not change; the harness changed which events it produced.
+In matched-budget interventions, redirecting the same budget toward EFC-credited events lifted success from a 27% baseline to 90% ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)) — the model did not change, only which events the harness produced.
 
 ## Where to Use It
 
@@ -66,18 +66,18 @@ The paper's full estimator stack is research-grade, but a cheap coarse counter c
 
 - **Informative** — hash each tool input; reject events whose hash matches a credited earlier event.
 - **Valid** — count only events whose downstream assertion or test passes in-trace.
-- **Non-redundant** — deduplicate tool *outputs* by content hash; count one occurrence per re-issued call.
-- **Retained** — require the event's output to reappear (literally or by summary) in a later agent message.
+- **Non-redundant** — deduplicate tool *outputs* by content hash; count one per re-issued call.
+- **Retained** — require the output to reappear (literally or by summary) in a later agent message.
 
-Wired this way it recovers the rank order of harness candidates without solving the estimator-calibration problem. Reach for it inside a hill-climbing loop before investing in the full estimator.
+Wired this way it recovers the rank order of harness candidates without solving estimator calibration — reach for it inside a hill-climbing loop before building the full estimator.
 
 ## Key Takeaways
 
-- Raw tokens and tool calls explain a third to less than half of success variance across agent traces; EFC explains nearly all of it ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)).
-- The four gates — informative, valid, non-redundant, retained — are load-bearing as a composition; each one alone is insufficient.
-- Use EFC for harness comparison, harness hill-climbing, and plateau diagnosis. Keep raw-spend caps for cost enforcement.
-- The metric inherits a verifier-quality bottleneck and a context-ceiling blind spot; pair it with feedback provenance and a separate convergence check.
-- A coarse counter built from input-hash, verifier-pass, output-deduplication, and retention checks delivers most of the diagnostic value without the paper's full estimator stack.
+- Raw tokens and tool calls explain a third to under half of success variance; EFC explains nearly all of it ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)).
+- The four gates — informative, valid, non-redundant, retained — are load-bearing as a composition; each alone is insufficient.
+- Use EFC for harness comparison, hill-climbing, and plateau diagnosis; keep raw-spend caps for cost enforcement.
+- It inherits a verifier-quality bottleneck and a context-ceiling blind spot — pair it with feedback provenance and a separate convergence check.
+- A coarse counter (input-hash, verifier-pass, output-dedup, retention) recovers harness rank order without the full estimator stack.
 
 ## Related
 

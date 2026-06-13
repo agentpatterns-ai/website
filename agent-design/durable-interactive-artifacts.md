@@ -11,12 +11,12 @@ aliases:
   - agent canvases
   - persistent agent artifacts
   - cross-session interactive artifacts
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Durable Interactive Artifacts: Agent Output Outside the Transcript
 
-> A durable interactive artifact is an agent-produced workspace object — a canvas, dashboard, diagram, or structured view — that survives the session, can be re-opened and re-run against fresh data, and serves as a context anchor for follow-up prompts.
+> A durable interactive artifact is an agent-produced workspace object that survives the session, re-runs against fresh data, and anchors later prompts.
 
 ## Artifact vs Transcript
 

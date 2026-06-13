@@ -6,6 +6,7 @@ tags:
   - agent-design
   - security
   - cursor
+  - automation
 aliases:
   - multi-repo automation template
   - no-repo automation template

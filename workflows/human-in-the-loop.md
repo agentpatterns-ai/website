@@ -10,12 +10,12 @@ tags:
   - human-factors
   - tool-agnostic
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Human-in-the-Loop Placement: Where and How to Supervise Agent Pipelines
 
-> Gate before irreversible actions and decisions with public impact; skip gates for reversible execution steps — over-gating defeats automation, under-gating ships errors.
+> Supervise an agent pipeline by gating before irreversible actions and public-impact decisions, not reversible steps — over-gating defeats automation, under-gating ships errors.
 
 !!! info "Also known as"
     Human-in-the-Loop Approval Gates, Human-in-the-Loop. For the specific pattern on implementing confirmation gates as a HITL mechanism, see [Human-in-the-Loop Confirmation Gates](../security/human-in-the-loop-confirmation-gates.md).
@@ -63,7 +63,7 @@ New agent workflows warrant more gates. As the workflow proves reliable, remove 
 - Week 4: gate only at merge
 - Month 3: auto-merge on CI pass + review bot approval
 
-[Claude Code permission modes](https://code.claude.com/docs/en/permissions) support graduated trust: `default` mode asks before each action, `acceptEdits` allows file edits without prompting, and `dontAsk` runs with a pre-configured allowlist of permitted tools and commands — each mode adjusts the level of human oversight.
+[Claude Code permission modes](https://code.claude.com/docs/en/permissions) support graduated trust: `default` mode asks before each action, `acceptEdits` auto-accepts file edits and common filesystem commands, and `dontAsk` auto-denies tools unless they are pre-approved via `/permissions` or `permissions.allow` rules — each mode adjusts the level of human oversight.
 
 ## What Humans Should Review
 

@@ -8,12 +8,12 @@ tags:
 aliases:
   - forward-only layer stack
   - prescriptive layer ontology
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Layered Domain Architecture
 
-> Layered domain architecture pins one intra-domain order — Types → Config → Repo → Service → Runtime → UI — with downward-only dependencies a linter enforces, so an agent slots new code consistently.
+> Layered domain architecture pins one intra-domain order with downward-only dependencies a linter enforces, so an agent slots new code into the same layer every session.
 
 ## The Default Layer Order
 

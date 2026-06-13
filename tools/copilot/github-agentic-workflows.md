@@ -7,9 +7,10 @@ tags:
   - copilot
   - github-actions
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 status: current
 ---
+
 # GitHub Agentic Workflows
 
 > Event-driven repository automation defined in Markdown and compiled to GitHub Actions, with defense-in-depth security and zero-secret-access agent containers.
@@ -17,6 +18,8 @@ status: current
 ## Two-File Architecture
 
 Developers write a Markdown file with YAML frontmatter and natural-language instructions. `gh aw compile` produces a `.lock.yml` — the executable GitHub Actions workflow. Only the Markdown file is hand-edited; the lock file is generated and committed alongside it ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)).
+
+GitHub reports that Agentic Workflows entered public preview on 2026-06-11 ([GitHub Changelog](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview)).
 
 The frontmatter declares:
 
@@ -83,6 +86,8 @@ Credentials are compartmentalized across isolated containers ([GitHub Blog: Secu
 - **API proxy container** — holds LLM auth tokens; agent calls through the proxy without seeing keys
 - **MCP gateway container** (`gh-aw-mcpg`) — holds MCP credentials; routes MCP calls via HTTP with per-repo guard policies
 - **Agent container** — firewalled egress, read-only `/host` mounts, `tmpfs` overlays, `chroot` jails
+
+GitHub reports that, as of 2026-06-11, Agentic Workflows no longer require a personal access token to run ([GitHub Changelog](https://github.blog/changelog/2026-06-11-agentic-workflows-no-longer-need-a-personal-access-token)) — narrowing the standing credential surface a misconfigured workflow could expose.
 
 ### Observability
 

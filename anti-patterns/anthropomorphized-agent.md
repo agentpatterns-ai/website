@@ -1,7 +1,7 @@
 ---
 title: "The Anthropomorphized Agent for AI Agent Development"
 term: "Anthropomorphized Agent"
-description: "Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust, incorrect mental models, and systematic misuse"
+description: "Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust, incorrect mental models, and systematic misuse."
 aliases:
   - agent anthropomorphism
   - humanizing AI agents
@@ -9,7 +9,7 @@ tags:
   - human-factors
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Anthropomorphized Agent
@@ -32,7 +32,7 @@ Agents produce fluent, contextually appropriate language. That fluency activates
 
 **Degradation misattributed to fatigue.** Agents don't tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context, don't take a break.
 
-**Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. [LLMs are fine-tuned to avoid expressing uncertainty](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html) — an agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
+**Confidence as a signal.** Agents produce confident-sounding output regardless of accuracy. [LLMs stay overconfident even when wrong and fail to recalibrate after the fact](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html) — an agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
 
 ## The Correct Mental Model
 
@@ -79,14 +79,9 @@ Deliberate agent personas in end-user products — a customer support bot with a
 
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — explicit project instruction file that replaces reliance on implied agent memory
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how to actually persist knowledge across sessions
-- [The Prompt Tinkerer](prompt-tinkerer.md)
-- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
-- [The Effortless AI Fallacy](effortless-ai-fallacy.md)
-- [Trust Without Verify](trust-without-verify.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
-- [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
-- [Context Poisoning](context-poisoning.md)
-- [Perceived Model Degradation](perceived-model-degradation.md)
-- [The Kitchen Sink Session](session-partitioning.md)
-- [The Infinite Context](infinite-context.md) — unfocused context dilutes attention, compounding the effects of misplaced trust
+- [Trust Without Verify](trust-without-verify.md) — the misplaced trust this anti-pattern produces, examined directly
+- [The Implicit Knowledge Problem](implicit-knowledge-problem.md) — assuming the agent already knows what was never put in context
+- [Perceived Model Degradation](perceived-model-degradation.md) — the "it got worse" misread that follows from treating the agent as a tiring teammate
+- [The Effortless AI Fallacy](effortless-ai-fallacy.md) — the rapport-over-rigor belief that anthropomorphism feeds
+- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — another mental-model error in how developers reason about agents
 - [The Yes-Man Agent](yes-man-agent.md) — compliance without verification is amplified when developers anthropomorphize agent agreement as understanding

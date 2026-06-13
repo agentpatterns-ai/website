@@ -4,7 +4,7 @@ description: "Use the gap between an agent's generated task list and your intend
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Task List Divergence as Instruction Quality Diagnostic
@@ -56,7 +56,7 @@ Task lists are not static. When you correct the agent mid-task, the updated list
 
 ## Why It Works
 
-LLMs decompose tasks by propagating explicit prompt constraints into subtask structure. When constraints are absent or underspecified, the model fills gaps with training priors — producing a plan that reflects how similar tasks typically look rather than what was specified. That gap is the diagnostic signal: plan steps driven by prior knowledge identify exactly what was left implicit. Research on task decomposition confirms that explicit constraint specification drives measurable gains in decomposition accuracy ([Advancing Agentic Systems: Dynamic Task Decomposition, Tool Integration and Evaluation, arXiv 2410.22457](https://arxiv.org/abs/2410.22457)).
+LLMs decompose tasks by propagating explicit prompt constraints into subtask structure. When constraints are absent or underspecified, the model fills gaps with training priors — producing a plan that reflects how similar tasks typically look rather than what was specified. That gap is the diagnostic signal: plan steps driven by prior knowledge identify exactly what was left implicit. Recent work that builds decomposition around a task's stated constraints reports that this constraint-aware decomposition outperforms prior planning methods ([Decompose, Plan in Parallel, and Merge, arXiv 2506.02683](https://arxiv.org/abs/2506.02683)).
 
 ## When This Backfires
 

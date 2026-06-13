@@ -11,11 +11,12 @@ tags:
 aliases:
   - Narrow Agent Scope Over Broad Role
   - Task-Specific Agents vs Role-Based Agents (parallel context)
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
+
 # Specialized Agent Roles
 
-> Assign distinct specializations to parallel agents — deduplication, performance, code quality, documentation — rather than giving all agents identical instructions and letting them compete on the same problems.
+> Specialized agent roles assign distinct improvement dimensions to parallel agents so they complement rather than compete on identical problems.
 
 !!! info "Also known as"
     Narrow Agent Scope Over Broad Role, Task-Specific Agents vs Role-Based Agents (parallel context)
@@ -24,9 +25,9 @@ last_reviewed: 2026-05-27
 
 ## Identical Agents, Redundant Work
 
-When parallel agents receive the same instructions, they tend to identify the same issues and make similar changes. Redundant effort across agents produces marginal return: three agents finding the same ten bugs is not three times better than one agent finding them. The compute cost multiplies; the output quality does not.
+When parallel agents receive the same instructions, they identify the same issues and make similar changes. Redundant effort produces marginal return: three agents finding the same ten bugs is not three times better than one. The compute cost multiplies; the output quality does not.
 
-Role specialization reframes the parallel team. Each agent is responsible for a distinct improvement dimension. Agents do not compete; they complement. The aggregate output covers more ground than any single agent could — or any set of unspecialized agents would.
+Role specialization reframes the parallel team. Each agent owns a distinct improvement dimension, so agents complement rather than compete, and the aggregate output covers more ground than any single agent — or any unspecialized set — could.
 
 Per [Anthropic's C compiler case study](https://www.anthropic.com/engineering/building-c-compiler), assigning distinct roles (deduplication, performance optimization, architecture review, documentation) produced breadth of improvement that no single agent could achieve alone.
 
@@ -63,9 +64,9 @@ Role specialization reduces conflicts; it does not eliminate them when multiple 
 
 Role specialization limits each agent's objective function to a single domain. An agent with an exclusive scope has no incentive to drift into adjacent concerns, so it spends its full context window on the one dimension it owns. The result is deeper coverage within each domain rather than shallow coverage across all of them.
 
-The mechanism was characterized in the MetaGPT multi-agent framework: narrow roles prevent cascading errors caused by overlapping agents that hallucinate in response to each other's conflicting changes. When two agents independently modify the same code for different reasons, each may interpret the other's changes as bugs and attempt to "fix" them, creating a compounding correction loop. Exclusive scopes eliminate the shared surface area where this interference occurs ([Hong et al., 2023](https://arxiv.org/abs/2308.00352)).
+The MetaGPT multi-agent framework illustrates the mechanism: standardized roles plus verification of intermediate results curb the cascading errors that arise when chained agents hallucinate in response to each other's conflicting changes. When two agents independently modify the same code for different reasons, each may interpret the other's changes as bugs and attempt to "fix" them, creating a compounding correction loop. Exclusive scopes shrink the shared surface area where this interference occurs ([Hong et al., 2023](https://arxiv.org/abs/2308.00352)).
 
-A [literature review of LLM-based multi-agent systems for software engineering](https://arxiv.org/html/2404.04834v4) identifies task-role alignment — instructions matched to a specific responsibility — as the core mechanism behind quality gains in multi-agent code generation pipelines.
+A [literature review of LLM-based multi-agent systems for software engineering](https://arxiv.org/html/2404.04834v4) catalogs specialized roles — orchestrator, programmer, reviewer, tester — as a recurring architectural choice in multi-agent code generation pipelines, each role's instructions matched to a specific responsibility.
 
 ## Versus Unspecialized Parallel Agents
 
@@ -155,9 +156,5 @@ Specialized roles degrade when tasks are inherently cross-cutting:
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
 - [Persona-as-Code: Defining Agent Roles as Structured Documents](persona-as-code.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
-- [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Heuristic Effort Scaling](heuristic-effort-scaling.md)

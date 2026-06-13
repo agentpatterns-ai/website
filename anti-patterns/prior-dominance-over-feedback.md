@@ -11,7 +11,7 @@ aliases:
   - greedy optimizer prior
   - propose-evaluate-revise anti-pattern
   - prior over feedback
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Prior Dominance Over Feedback
@@ -20,7 +20,7 @@ last_reviewed: 2026-06-02
 
 ## The Pattern
 
-In **propose-evaluate-revise loops** — kernel generation, hyperparameter search, code optimization — the model proposes a candidate, an evaluator (compiler, profiler, test, scorer) returns feedback, and the model revises. Practitioners treat more iterations as broader search. Empirically the loop is not search: it is a greedy hill climber that starts at, and stays near, the prior's mode.
+In **propose-evaluate-revise loops** — kernel generation, hyperparameter search, code optimization — the model proposes a candidate, an evaluator (compiler, profiler, test, scorer) returns feedback, and the model revises. Practitioners treat more iterations as broader search. Empirically the loop is a greedy hill climber that starts at, and stays near, the prior's mode.
 
 ## Why It Fails Where the Prior Is Weak
 
@@ -31,7 +31,7 @@ In **propose-evaluate-revise loops** — kernel generation, hyperparameter searc
 
 ## Why It Works
 
-Each proposal samples from the LLM's pretrained conditional distribution. Feedback enters as prompt conditioning, which shifts probabilities only within the support the prior already assigns non-trivial mass. When the optimum lies where the prior assigns near-zero probability — low-resource languages (in The Stack, R is 0.04% of files and Racket 0.004% per [Cassano et al.](https://arxiv.org/abs/2308.09895)), novel ISAs, bespoke DSLs — no conditioning produces samples from that region. The model cannot explore where it was never trained. When the prior is strong, refinement still adds roughly 20% over one-shot ([Madaan et al., "Self-Refine"](https://arxiv.org/abs/2303.17651)): feedback amplifies the prior, it does not replace it.
+Each proposal samples from the LLM's pretrained conditional distribution. Feedback enters as prompt conditioning, which shifts probabilities only within the support the prior already assigns non-trivial mass. When the optimum lies where the prior assigns near-zero probability — low-resource languages like R and Racket ([Cassano et al.](https://arxiv.org/abs/2308.09895)), novel ISAs, bespoke DSLs — no conditioning produces samples from that region. The model cannot explore where it was never trained. When the prior is strong, refinement still adds roughly 20% over one-shot ([Madaan et al., "Self-Refine"](https://arxiv.org/abs/2303.17651)): feedback amplifies the prior, it does not replace it.
 
 ## When This Backfires
 
@@ -44,7 +44,7 @@ Added iterations rarely find the optimum when any of these hold:
 
 ## When Propose-Evaluate-Revise Still Works
 
-The pattern is correct when the LLM has a substantial prior on the task family, the feedback encodes information the prior lacks (compiler errors, profiler timings, failing-test traces — not bare scalars), and the horizon is short enough that the prior still steers productively. ComPilot reaches 2.66x single-run and 3.54x best-of-5 speedups on PolyBench using zero-shot LLMs in a compiler-grounded loop ([Merouani et al.](https://arxiv.org/abs/2511.00592)). Treat the loop as a prior-amplifier, not a prior-replacement.
+The pattern is correct when the LLM has a substantial prior on the task family, the feedback encodes information the prior lacks (compiler errors, profiler timings, failing-test traces — not bare scalars), and the horizon is short enough that the prior still steers productively. ComPilot reaches 2.66x single-run and 3.54x best-of-5 speedups on PolyBench using zero-shot LLMs in a compiler-grounded loop ([Merouani et al.](https://arxiv.org/abs/2511.00592)).
 
 ## Mitigations
 
@@ -57,10 +57,8 @@ The pattern is correct when the LLM has a substantial prior on the task family, 
 ## Key Takeaways
 
 - LLMs in propose-evaluate-revise loops are greedy hill climbers from the prior's mode, not search procedures over the solution space.
-- The acceptance rule and number of iterations matter less than the strength of the prior on the task family.
-- When the prior is weak, feedback cannot rescue the loop.
-- Returns decay roughly exponentially; iterations past the plateau extract no further signal.
-- Treat propose-evaluate-revise as a prior-amplifier; when the prior is weak, switch to scaffolds that enforce exploration externally.
+- The acceptance rule and iteration count matter less than the strength of the prior; returns decay roughly exponentially and iterations past the plateau extract no further signal.
+- Treat the loop as a prior-amplifier — when the prior is weak, switch to scaffolds that enforce exploration externally.
 
 ## Related
 

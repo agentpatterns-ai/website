@@ -8,10 +8,10 @@ tags:
 aliases:
   - Context Rot
   - Context Window Dumb Zone
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Context Window Management: The Dumb Zone
+# Context Window Management: Understanding the Dumb Zone
 
 > Output quality degrades as context fills, but the onset depends on task type — retrieval, reasoning, and code generation hit different thresholds.
 
@@ -105,14 +105,6 @@ The guidance to keep reasoning-task context under 32K tokens is conservative and
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction: Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
-- [Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools](context-window-diagnostic-tooling.md)
 - [Lost in the Middle](lost-in-the-middle.md)
 - [The Infinite Context](../anti-patterns/infinite-context.md)
 - [Attention Sinks](attention-sinks.md)
-- [Context Priming](context-priming.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [Semantic Context Loading](semantic-context-loading.md)

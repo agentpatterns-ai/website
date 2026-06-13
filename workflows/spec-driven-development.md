@@ -8,12 +8,12 @@ tags:
   - workflows
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Spec-Driven Development with Spec Kit
 
-> Write a Markdown specification that captures project intent, then compile it into code through structured agent phases — making the spec, not the chat history, the source of truth.
+> Spec-driven development externalizes project intent into a Markdown specification that agents compile into code, making the spec the persistent source of truth.
 
 ## The Problem
 

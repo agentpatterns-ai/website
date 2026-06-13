@@ -9,12 +9,12 @@ tags:
 aliases:
   - "headless service design"
   - "agent-accessible services"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Headless-First Services: APIs for Agent Consumers
 
-> Expose the full product surface through APIs, MCP, and CLI so an agent acting on behalf of a user can complete any flow the GUI supports — without a browser in the loop.
+> Headless-first services expose the full product surface through APIs, MCP, and CLI so an agent can complete any flow the GUI supports.
 
 ## The Shift
 

@@ -11,14 +11,14 @@ tags:
 aliases:
   - factory model
   - assistant model
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Factory Over Assistant: Orchestrating Parallel Agent Fleets
 
-> The assistant model ties human attention to a single execution stream. The factory model replaces that attention with automated feedback loops and adds parallelism — but only once the infrastructure to support it is in place.
+> The factory model replaces real-time human attention with automated feedback loops and parallel agents — but only once the supporting infrastructure is in place.
 
 ## The Two Models
 

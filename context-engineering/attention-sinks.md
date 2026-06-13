@@ -8,7 +8,7 @@ tags:
 aliases:
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Attention Sinks: Why First Tokens Always Win
@@ -23,6 +23,8 @@ last_reviewed: 2026-05-27
 In autoregressive transformer models, attention mechanisms exhibit a structural bias toward early tokens in the sequence. Initial tokens act as attention sinks: they absorb a disproportionate share of attention across all subsequent tokens, regardless of their semantic relevance to the current generation step — a phenomenon confirmed empirically by Xiao et al. (2023), who found that preserving just the KV cache of early tokens largely recovers the performance of full-window attention ([StreamingLLM](https://arxiv.org/abs/2309.17453)).
 
 This is not a quirk to mitigate — it is a structural property of how causal attention masking operates. Every token the model generates is influenced more by early tokens than by semantically equivalent tokens placed later in the context.
+
+A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates specifically on the *first* token rather than spreading smoothly across an early-position band, and that it is a *learned* behaviour that emerges during pre-training under softmax normalization — when softmax is replaced with sigmoid attention, the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781)). The practical takeaway holds — the strongest-attention position is the very start of the prompt — but treat "earlier is stronger" as a first-token-anchored, softmax-driven effect rather than a uniform positional gradient.
 
 ## Practical Implications
 

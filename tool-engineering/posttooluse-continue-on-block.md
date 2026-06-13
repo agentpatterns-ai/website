@@ -10,7 +10,7 @@ aliases:
   - continueOnBlock hook
   - refusal-with-reason hook
   - guided refusal pattern
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason
@@ -21,7 +21,7 @@ last_reviewed: 2026-06-03
 
 Claude Code v2.1.139 (2026-05-11) added a `continueOnBlock` config for `PostToolUse` hooks: when `true`, a hook returning `decision: "block"` with a `reason` no longer halts the turn — the reason arrives as a tool-result-style entry and the agent keeps working ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
-Before the option, a blocking `PostToolUse` hook ended the turn, training operators to read hook blocks as user denials rather than quality gates ([anthropics/claude-code#24327](https://github.com/anthropics/claude-code/issues/24327)). `continueOnBlock` makes the block shape-identical to a tool error.
+Before the option, a blocking `PostToolUse` hook ended the turn, training operators to read hook blocks as user denials rather than quality gates. `continueOnBlock` makes the block shape-identical to a tool error.
 
 ## Decision Modes
 
@@ -31,7 +31,7 @@ Before the option, a blocking `PostToolUse` hook ended the turn, training operat
 |------|----------|---------------------|
 | Observe | (no JSON) | Original `tool_output` |
 | Augment | `additionalContext` | Tool output + appended note |
-| Replace | `modifiedToolResponse` | Hook's string only |
+| Replace | `updatedToolOutput` | Hook's string only |
 | **Refuse** | `decision: "block"` + `reason` + `continueOnBlock: true` | Rejection text as a tool result; turn continues |
 | Halt | `decision: "block"` + `reason` | Turn ends; reason shown to user |
 

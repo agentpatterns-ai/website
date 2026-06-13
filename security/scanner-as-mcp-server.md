@@ -11,7 +11,7 @@ tags:
   - tool-engineering
   - tool-agnostic
   - mcp
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools

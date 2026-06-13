@@ -8,7 +8,7 @@ tags:
   - code-generation
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Instruction-Guided Code Completion
@@ -17,7 +17,7 @@ last_reviewed: 2026-05-27
 
 ## The Problem
 
-Standard benchmarks measure whether generated code passes tests — HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness via unit tests and gives no signal on *how* the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions — open-source models score as low as 5–7% on scale-control tasks — while implementation-control adherence reaches only 50–60% even for top proprietary models.
+Standard benchmarks measure whether generated code passes tests — HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness via unit tests and gives no signal on *how* the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions — even advanced proprietary models score as low as 7% on scale-control tasks — while implementation-control adherence reaches only 50–60% even for top proprietary models.
 
 C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
@@ -37,7 +37,7 @@ graph LR
 
 ## Benchmark Rankings Mislead
 
-Open-source models that top standard leaderboards underperform on instruction adherence. Qwen2.5-Coder-32B scores 49.2% on CrossCodeEval but only 38.7% on ICC instruction-following. Claude 3.5 Sonnet reaches 60.9% ICC — a gap invisible in standard rankings.
+Open-source models that top standard leaderboards underperform on instruction adherence. Qwen2.5-Coder-32B scores 49.2 EM on CrossCodeEval but only 28.8% on ICC instruction-following. Claude 3.5 Sonnet reaches 60.9% ICC — a gap invisible in standard rankings.
 
 If your workflow involves guided completions (Cursor Composer, Copilot Chat, agent-driven code generation), benchmark scores are not a reliable proxy for how well the model will follow your instructions.
 
@@ -62,11 +62,11 @@ Asking a model to "complete only the next 3 lines" or "just fill in the if-block
 
 ### Select Models for Instruction Adherence
 
-For workflows with heavy instruction guidance — which is the norm for agent-assisted coding — instruction-following capability matters more than raw completion accuracy. At the time of the C3-Bench evaluation (early 2025), proprietary models led on instruction-following: Claude 3.5 Sonnet reached 60.9% ICC and 50.8% SCC, while the top open-source model (Qwen2.5-Coder-32B) scored 38.7% ICC and 5.2% SCC. Model capabilities shift with each release — re-evaluate when adopting a new model version.
+For workflows with heavy instruction guidance — which is the norm for agent-assisted coding — instruction-following capability matters more than raw completion accuracy. At the time of the C3-Bench evaluation (early 2025), proprietary models led on instruction-following: Claude 3.5 Sonnet reached 60.9% ICC and 50.8% SCC, while the top open-source model (Qwen2.5-Coder-32B-Instruct) scored 28.8% ICC and 16.9% SCC. Model capabilities shift with each release — re-evaluate when adopting a new model version.
 
 ### Training Improves Instruction-Following
 
-IFCoder (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 38.7% to 52.5% and SCC from 5.2% to 80.7% using 200K synthetic instruction-completion pairs — while also improving functional correctness. This suggests instruction-following is a trainable capability, not an inherent limitation. Teams running local models can invest in instruction-tuning data to close the gap.
+Qwen2.5-Coder-32B-C3 (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 28.8% to 52.5% and SCC from 16.9% to 80.7% using 200K synthetic instruction-completion pairs — while also improving functional correctness (ICC Pass@1 rose from 49.8% to 62.0%). This suggests instruction-following is a trainable capability, not an inherent limitation. Teams running local models can invest in instruction-tuning data to close the gap.
 
 ## When This Backfires
 

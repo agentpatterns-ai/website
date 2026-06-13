@@ -6,6 +6,8 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
+  - index
+  - frameworks
 aliases:
   - team operating system
 last_reviewed: 2026-05-27

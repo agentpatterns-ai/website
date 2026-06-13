@@ -9,12 +9,12 @@ tags:
 aliases:
   - "define-and-compose"
   - "declarative agent orchestration"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Declarative Multi-Agent Composition
 
-> Define agents and their coordination as structured data — models, tools, memory, and orchestration rules — then compose them into workflows through explicit wiring rather than imperative code.
+> Declarative composition defines agents and their coordination as structured data, then wires them into workflows explicitly rather than through imperative code.
 
 ## Why Declarative
 
@@ -162,7 +162,6 @@ Adding a fourth agent requires one new block under `agents:` and one new entry u
 - [Declarative Multi-Agent Topology: Topology-as-Code](declarative-multi-agent-topology.md) — the broader topology-as-code variant covering the whole agent graph
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — choosing the right coordination structure
 - [Framework-First Development](../anti-patterns/framework-first.md) — why starting with frameworks before understanding the raw API is risky
-- [Agent Debugging](../observability/agent-debugging.md) — diagnosing bad output in single-agent systems
 - [Loop Detection](../observability/loop-detection.md) — detecting agents stuck in unproductive cycles
 - [OpenTelemetry for Agent Observability](../standards/opentelemetry-agent-observability.md) — standardized observability for agent systems
 - [Orchestrator-Worker](orchestrator-worker.md) — the most common multi-agent coordination topology

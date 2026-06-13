@@ -9,16 +9,16 @@ tags:
 aliases:
   - StopFailure event
   - API error hook
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # StopFailure Hook: Observability for API Error Termination
 
-> The `StopFailure` hook fires when a Claude Code turn ends due to an API error — rate limit, auth failure, billing error, or server error — providing a deterministic signal for logging, alerting, and external recovery coordination.
+> `StopFailure` fires when a Claude Code turn ends due to an API error, providing a deterministic signal for logging, alerting, and recovery coordination.
 
 ## What It Is (and What It Is Not)
 
-Added in [Claude Code v2.1.78](https://code.claude.com/docs/en/changelog), `StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block, retry, or resume the session; it fires after the turn has already failed.
+`StopFailure` is an **observational hook** — not a control hook. The runtime ignores its exit code and output. It cannot block, retry, or resume the session; it fires after the turn has already failed.
 
 The hook's role is notification: log, push a metric, trigger an alert. Retry or re-launch logic must live in an external process — a CI supervisor, cron job, or shell wrapper — that reads the hook's output and decides what to do next.
 
@@ -46,6 +46,7 @@ Claude Code passes JSON on stdin when `StopFailure` fires:
 | Value | Cause |
 |-------|-------|
 | `rate_limit` | Request rate or quota exceeded |
+| `overloaded` | API capacity temporarily exhausted |
 | `authentication_failed` | Invalid or expired API credentials |
 | `oauth_org_not_allowed` | OAuth identity not permitted for the organization |
 | `billing_error` | Account billing issue |

@@ -8,12 +8,12 @@ tags:
 aliases:
   - cognitive externalization in agents
   - externalization framework for agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Externalization in LLM Agents
 
-> Reliable agents are built by externalizing cognitive burdens into persistent infrastructure — not by waiting for larger models. Four components do the work: memory, skills, protocols, and the harness that coordinates them.
+> Reliable agents externalize cognitive burdens into persistent infrastructure rather than waiting for larger models — across four components: memory, skills, protocols, and a coordinating harness.
 
 ## The Core Shift
 

@@ -11,7 +11,7 @@ aliases:
   - externalize constraint reasoning to a solver
   - LLM-generated MaxSAT encoding
   - generate solver code instead of reasoning
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Solver-Externalized Constraint Reasoning (MaxSAT/SMT Encoding)
@@ -43,7 +43,7 @@ graph LR
 
 **1. Encode.** The agent writes Python that constructs the formal encoding — `z3.Solver()` calls for SMT, `pysat` clauses for MaxSAT, `ortools.sat.python.cp_model` for CP-SAT. Here natural-language preferences become hard constraints, weighted soft constraints, and an objective.
 
-**2. Solve.** An exact solver computes an optimal assignment. SAT, SMT, and MaxSAT solvers carry formal correctness guarantees on the encoded problem — the *only* layer of the stack with that property.
+**2. Solve.** An exact solver computes an optimal assignment. SAT, SMT, and MaxSAT solvers carry formal correctness guarantees on the encoded problem — the *only* layer with that property.
 
 **3. Verify.** A separate check confirms the output satisfies the original prompt constraints, not just the ones the encoding captured. The cited paper uses a dual-encoding canonicalisation that accommodates multiple optima ([Orvalho et al. — arXiv:2605.29687](https://arxiv.org/abs/2605.29687)); practical setups re-run the constraints against the candidate and print the proof.
 
@@ -51,14 +51,14 @@ Verification is not optional. LLM-generated combinatorial-optimisation output is
 
 ## Why It Works
 
-The pattern moves the load-bearing step onto a tool with formal correctness guarantees. LLMs are reliable at language understanding and code synthesis but unreliable on multi-step constraint satisfaction, where each added constraint compounds silent-mistake risk. Handing the encoding to an exact solver converts an unreliable competency into a reliable one — the mechanism behind Program-of-Thought: separate code generation from execution so the verifier certifies what the model could not ([Orvalho et al. — arXiv:2605.29687](https://arxiv.org/abs/2605.29687); [Wolfe — Program-Aided Language Models](https://cameronrwolfe.substack.com/p/program-aided-language-models)). The cited paper reports the externalised pipeline exceeding 80% acceptance on three reasoning families where chain-of-thought and program-of-thought baselines rarely yield a feasible solution. Replication on operations-research problems shows the same shape: a three-stage decomposition (model → solver code → debug) beats LLM-only baselines by 7% accuracy ([Zhang et al. — OR-LLM-Agent, arXiv:2503.10009](https://arxiv.org/abs/2503.10009)).
+The pattern moves the load-bearing step onto a tool with formal correctness guarantees. LLMs are reliable at language understanding and code synthesis but unreliable on multi-step constraint satisfaction, where each added constraint compounds silent-mistake risk. Handing the encoding to an exact solver converts an unreliable competency into a reliable one — the Program-of-Thought mechanism: separate code generation from execution so the verifier certifies what the model could not ([Orvalho et al. — arXiv:2605.29687](https://arxiv.org/abs/2605.29687); [Wolfe — Program-Aided Language Models](https://cameronrwolfe.substack.com/p/program-aided-language-models)). The cited paper reports the externalised pipeline exceeding 80% acceptance on three reasoning families where chain-of-thought and program-of-thought baselines rarely yield a feasible solution. Replication on operations-research problems shows the same shape: a three-stage decomposition (model → solver code → debug) beats LLM-only baselines by 7% accuracy ([Zhang et al. — OR-LLM-Agent, arXiv:2503.10009](https://arxiv.org/abs/2503.10009)).
 
 ## When This Backfires
 
 - **Soft preferences without a crisp objective.** When preferences cannot become numeric weights without arbitrary choices, the encoding becomes the source of error ([Cook on Z3 limits](https://www.johndcook.com/blog/2025/03/17/lessons-learned-with-the-z3-sat-smt-solver/)).
 - **Undecidable or intractable fragments.** Nonlinear integer arithmetic is undecidable; SMT solvers return `unknown` or time out, and the pattern fails silently when constraints drift there ([Cook on Z3 limits](https://www.johndcook.com/blog/2025/03/17/lessons-learned-with-the-z3-sat-smt-solver/)).
-- **Natural-language mis-translation.** The model writes valid code that encodes the wrong problem; without verification, the agent reports an "optimal" answer to a different question ([Yan et al. — arXiv:2602.01090](https://arxiv.org/abs/2602.01090); [Wang et al. — arXiv:2409.09271](https://arxiv.org/pdf/2409.09271)).
-- **Tiny problems and low stakes.** The solver dependency is not justified when prose suffices, and a human spots a prose mistake more easily than a MaxSAT-clause one.
+- **Natural-language mis-translation.** The model writes valid code that encodes the wrong problem; without verification, the agent reports an "optimal" answer to a different question ([Yan et al. — arXiv:2602.01090](https://arxiv.org/abs/2602.01090)).
+- **Tiny problems and low stakes.** The solver dependency is unjustified when prose suffices, and a human spots a prose mistake more easily than a MaxSAT-clause one.
 - **Signals the encoding cannot ingest.** When real-world state (current load, qualitative judgement) belongs in the constraints but cannot be made formal, the solver returns a mathematically optimal but operationally wrong answer.
 
 ## Off-the-Shelf Solvers

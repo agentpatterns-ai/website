@@ -13,20 +13,18 @@ aliases:
   - RepoMirage
   - repository-level perturbation diagnostic
   - context-reasoning diagnosis
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)
 
 > Perturb the repository in semantics-preserving ways before the agent sees it — the accuracy drop measures shortcut share in an issue-resolution score.
 
-Repository perturbation is a diagnostic that wraps an issue-resolution benchmark (typically SWE-Bench Verified) with semantics-preserving transformations of the repository before the agent runs, then attributes the accuracy drop to multi-file context reasoning ([Li et al., 2026](https://arxiv.org/abs/2605.26177)). The task and ground-truth patch are unchanged; only the surface form differs, so the drop is the share of the original score reachable without genuine context reasoning.
+Repository perturbation wraps an issue-resolution benchmark (typically SWE-Bench Verified) with semantics-preserving transformations of the repository before the agent runs, then attributes the accuracy drop to multi-file context reasoning ([Li et al., 2026](https://arxiv.org/abs/2605.26177)). The task and ground-truth patch are unchanged; only the surface form differs, so the drop is the share of the original score reachable without genuine context reasoning.
 
 ## Why End-to-End Scores Conflate Two Capabilities
 
-Issue resolution on SWE-Bench-style benchmarks collapses two capabilities into one number: identifying which files and relations matter, and producing a correct patch. A high score can be reached by shortcutting the first capability — through training-set memorisation, leakage from the issue description, or pattern-matching on repository-specific surface tokens. A manual review of the original SWE-Bench found 32.67% of model-marked "successful" cases had the answer in the issue description or comments ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)).
-
-Perturbation invalidates these shortcuts while keeping the reference patch correct. The residual score reflects context reasoning alone.
+Issue resolution on SWE-Bench-style benchmarks collapses two capabilities into one number: identifying which files and relations matter, and producing a correct patch. A high score can be reached by shortcutting the first — via training-set memorisation, issue-description leakage, or pattern-matching on repository-specific surface tokens. A manual review of the original SWE-Bench found 32.67% of model-marked "successful" cases had the answer in the issue description or comments ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)). Perturbation invalidates these shortcuts while keeping the reference patch correct, so the residual score reflects context reasoning alone.
 
 ## The Two-Stage Diagnostic
 
@@ -44,7 +42,7 @@ Average agent performance falls from 66.8% on the source task to 25.3% on RepoMi
 
 ## Why It Works
 
-The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorisation cannot repeat it against a repository whose surface tokens are renamed or restructured while the call graph is unchanged. The reference patch still applies; only the lookup pattern breaks. The accuracy delta is therefore a lower bound on the original score's shortcut share.
+The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorisation cannot repeat it against a repository whose tokens are renamed or restructured while the call graph holds. The reference patch still applies; only the lookup pattern breaks. The accuracy delta is therefore a lower bound on the original score's shortcut share.
 
 Independent work probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631)). SWE-EVO shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
 
@@ -58,21 +56,19 @@ Perturbation diagnostics over-predict failure or measure the wrong thing under s
 - **Production agents pinned to a known repository set.** When the agent only sees one or two well-mapped codebases, structural exploration amortises across runs and perturbation over-predicts failure.
 - **Intermediate gold-context labels already exist.** ContextBench-style annotated contexts answer the same question more directly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).
 
-The diagnostic is also confounded by other sources of inflated benchmark scores. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — that gap remains even after perturbation removes shortcut leakage.
+Other sources of inflated scores also confound it. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — a gap that remains even after perturbation removes shortcut leakage.
 
-A second confound cuts the other way. Meaning-preserving surface perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated context-reasoning shortcuts, which inflates the attributed shortcut share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
+A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
 
 ## Composing with the Sibling Family
 
-Repository perturbation is one of three approaches to the same diagnostic question:
+Repository perturbation is one of three approaches to the same question; match the probe to where the failure likely lives:
 
 | Approach | Probe shape | Independence from training | Cost |
 |---|---|---|---|
 | Repository perturbation (RepoMirage) | Transform the input, measure score drop | High — invalidates surface shortcuts | High — perturbation pipeline + oracle |
 | Trajectory decomposition (TRAJEVAL) | Instrument the agent's stages with precision/recall | Medium — relies on reference annotations | Medium — per-stage IR metrics |
 | Intermediate gold contexts (ContextBench) | Compare agent's retrieved context to human-annotated gold | Medium — requires gold context labels | High — human annotation upfront |
-
-Match the probe to where the failure likely lives: perturbation when scores look implausibly high and training overlaps the benchmark repos; decomposition when failures are inconsistent and you need the responsible stage; gold contexts when you own a private benchmark and want direct context-retrieval measurement.
 
 ## Example
 

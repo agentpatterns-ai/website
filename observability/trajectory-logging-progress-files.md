@@ -9,12 +9,12 @@ tags:
 aliases:
   - Progress File Pattern
   - Audit Trail for Agent Decisions
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Trajectory Logging via Progress Files and Git History
 
-> Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, feature-state JSON, and a bootstrap script — no observability backend required.
+> A progress file, git commits, feature-state JSON, and a bootstrap script capture a replayable audit trail of agent decisions — no observability backend required.
 
 !!! info "Also known as"
     Progress File Pattern, Audit Trail for Agent Decisions

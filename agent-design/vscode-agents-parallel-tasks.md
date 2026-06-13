@@ -8,12 +8,12 @@ tags:
 aliases:
   - VS Code Agents App
   - Agent-Native Parallel Execution
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # VS Code Agents App: Agent-Native Parallel Task Execution
 
-> The VS Code Agents app runs multiple agent sessions in parallel across projects without occupying the main editor window — each session inherits workspace custom instructions and MCP servers automatically.
+> The VS Code Agents app runs multiple agent sessions in parallel across projects, each inheriting workspace custom instructions and MCP servers automatically.
 
 ## Agent-Native vs Chat-Native
 

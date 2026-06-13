@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # L2 → L3: Building Mechanical Enforcement
 
-> An L2 repo has feedback loops that let agents self-correct after the fact. An L3 repo prevents certain errors from happening in the first place — enforcement before the agent acts, not after.
+> An L2 repo lets agents self-correct after errors. An L3 repo prevents whole categories of error first — mechanical enforcement before the agent acts.
 
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "AGENTS.md Design Patterns: Commands, Boundaries, Personas"
+title: "AGENTS.md Design Patterns for Effective Agent Files"
 term: "AGENTS.md Design Patterns"
 description: "Four patterns from 2,500+ repo analysis: executable commands, code-over-prose style, three-tier boundaries, and specialist personas for AGENTS.md."
 tags:
@@ -9,12 +9,12 @@ tags:
 aliases:
   - "AGENTS.md best practices"
   - "AGENTS.md writing patterns"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# AGENTS.md Design Patterns: Commands, Boundaries, and Personas
+# AGENTS.md Design Patterns for Effective Agent Files
 
-> Effective AGENTS.md files give agents a specific job description — not a vague identity — using four concrete patterns drawn from analysis of 2,500+ real repositories.
+> Effective AGENTS.md files give agents a specific job description — not a vague identity — using four patterns drawn from 2,500+ real repositories.
 
 ## Overview
 
@@ -144,18 +144,11 @@ The recommended starting point is one specialist (e.g. `@test-agent`), not a ful
 
 ## Related
 
+- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
 - [Persona-as-Code: Defining Agent Roles as Structured Docs](../agent-design/persona-as-code.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
 - [AGENTS.md Distributed Conventions](agents-md-distributed-conventions.md)
-- [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
-- [CLAUDE.md Convention](claude-md-convention.md)
-- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
-- [Layered Instruction Scopes](layered-instruction-scopes.md)
-- [Negative-Space Instructions](negative-space-instructions.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
-- [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md)

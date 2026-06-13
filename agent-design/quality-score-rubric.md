@@ -10,7 +10,7 @@ tags:
 aliases:
   - harness quality score
   - harness simplification log
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Quality Score Rubric and Simplification Log

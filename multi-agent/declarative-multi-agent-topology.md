@@ -8,14 +8,14 @@ tags:
 aliases:
   - topology-as-code
   - agent graph definition
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Declarative Multi-Agent Topology: Topology-as-Code
 
-> Encode an entire agent graph — agents, flows, gates, hooks, and group chats — in a single declarative file that a compiler targets to any underlying framework, making the topology auditable, portable, and reusable.
+> Encode an entire agent graph in one declarative file a compiler targets to any framework, making the topology auditable, portable, and reusable across runtimes.
 
 ## The Problem
 
@@ -60,10 +60,10 @@ Each emitted output is a native config or scaffold for the target runtime. Trans
 - `.at` file syntax for declaring topology
 - Multi-platform scaffolding targeting Claude Code, Codex, Cursor, Gemini CLI, Copilot, and Kiro
 - Interactive visualizer rendering the graph
-- Validation engine with 82+ built-in rules
+- Validation engine with built-in rules (the repo advertises 82, though its docs are internally inconsistent on the count)
 - Claude Code skill interface for natural-language topology design
 
-At time of writing: 75 GitHub stars, 84 commits. The project is early-stage; the ecosystem is emerging. Adapter fidelity across target platforms has not been independently verified — the project states adapters are "ground-truth validated against real-world configs" but does not enumerate per-platform feature gaps; evaluate against your target runtime before adopting.
+As of June 2026 the project is early-stage (under 100 GitHub stars) and the ecosystem is emerging. Adapter fidelity across target platforms has not been independently verified — the project states adapters are "ground-truth validated against real-world configs" but does not enumerate per-platform feature gaps; evaluate against your target runtime before adopting. The repo's own docs are inconsistent on the rule count (82 in one place, 29 in another), so treat the validation surface as still settling.
 
 ## How This Differs from Related Patterns
 

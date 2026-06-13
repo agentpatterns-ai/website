@@ -7,12 +7,12 @@ tags:
   - code-review
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Phantom Symbol Detection for LLM API Migration
 
-> Verify symbols extracted from generated code against an API knowledge base — a deterministic check that catches the fabricated imports, constructors, and methods that probabilistic judges miss.
+> Phantom Symbol Detection verifies symbols against an API knowledge base — a deterministic check catching fabricated imports and methods that probabilistic judges miss.
 
 ## The Failure Mode
 

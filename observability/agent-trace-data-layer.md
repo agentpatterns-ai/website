@@ -9,21 +9,21 @@ tags:
 aliases:
   - agent observability storage layer
   - agent trace store
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Agent-Trace Data Layer: Storage for Hours-Long Traces
 
 > An agent-trace data layer is purpose-built storage for agent runs: deep nesting, hours-long spans, and multi-modal payloads each break a different assumption in general backends.
 
-An agent-trace data layer is the storage and query tier that holds agent run records and serves them back to debugging UIs, evaluator pipelines, and replay tools. The choice to reach for a purpose-built layer — instead of OpenTelemetry on Postgres, Loki, or vanilla ClickHouse — is workload-shape-driven. Below the threshold, general-purpose stores work; above it, four properties of agent traces compound to break them.
+An agent-trace data layer is the storage and query tier that holds agent run records and serves them to debugging UIs, evaluator pipelines, and replay tools. Reaching for a purpose-built layer — instead of OpenTelemetry on Postgres, Loki, or vanilla ClickHouse — is workload-shape-driven. Below the threshold, general-purpose stores work; above it, four properties of agent traces compound to break them.
 
 ## When To Reach For It
 
 The pattern pays off when **all** of these hold:
 
 - **Trace shape exceeds general-store assumptions.** A single run has hundreds of nested spans, multi-modal payloads (images, audio, large JSON), and spans that stay open for hours while sub-agents and tools complete asynchronously ([LangChain — Introducing SmithDB, May 13 2026](https://www.langchain.com/blog/introducing-smithdb)).
-- **The query mix is wider than "fetch one trace by ID."** Debugging UIs need random access, interactive filtering, full-text search over inputs and outputs, JSON-path filters, tree-aware queries, thread reconstruction across many traces, and aggregations over cost, latency, tokens, and evaluator scores ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
+- **The query mix is wider than "fetch one trace by ID."** Debugging UIs need interactive filtering, full-text search over inputs and outputs, JSON-path filters, tree-aware queries, thread reconstruction across traces, and aggregations over cost, latency, tokens, and evaluator scores ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 - **Scale crosses the general-store break point.** Langfuse's Postgres architecture broke at billions of rows by mid-2024 and was rebuilt on ClickHouse plus Redis plus S3 plus an async event processor ([Langfuse v3 infrastructure post](https://langfuse.com/blog/2024-12-langfuse-v3-infrastructure-evolution)). Respan ran on Postgres until 50–100 RPS forced migration ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)).
 - **Multi-cloud or self-hosting is a hard requirement.** Object-storage-backed designs scale by adding stateless compute rather than managing local-disk sharding ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 
@@ -47,7 +47,7 @@ Agent traces routinely carry 1MB+ payloads. Indexes designed for HTTP traces inf
 
 ### The query mix outgrows trace-by-ID
 
-A general backend optimises for "fetch this trace by ID, drill into spans." Agent debugging needs tree-aware filters, sub-second full-text search across run inputs and outputs, JSON-path filters, thread reconstruction, and aggregations over evaluator scores ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)). Loki, for example, is "fast for lookups by indexed labels but unable to support the search-style discovery that SREs rely on in a crisis" ([ClickHouse — Three Villains of Agentic Observability](https://clickhouse.com/blog/three-villains-agentic-observability)).
+A general backend optimises for "fetch this trace by ID, drill into spans," but agent debugging needs tree-aware filters, sub-second full-text search, JSON-path filters, thread reconstruction, and aggregations over evaluator scores. Loki, for example, is "fast for lookups by indexed labels but unable to support the search-style discovery that SREs rely on in a crisis" ([ClickHouse — Three Villains of Agentic Observability](https://clickhouse.com/blog/three-villains-agentic-observability)).
 
 ## Architectural Levers To Look For
 

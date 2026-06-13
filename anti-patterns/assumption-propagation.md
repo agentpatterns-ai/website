@@ -8,12 +8,12 @@ tags:
   - source:osmani-80-percent
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Assumption Propagation: Compounding Agent Misunderstandings
 
-> The agent misunderstands a requirement early and builds on the faulty premise — each step reinforcing the wrong assumption until the error is too expensive to unwind.
+> The agent misunderstands a requirement early and builds on the faulty premise, reinforcing the wrong assumption until the error is too expensive to unwind.
 
 ## What It Looks Like
 
@@ -94,13 +94,18 @@ Mitigation adds cost. The ladder is not worth climbing when:
 - **Requirements drift mid-task.** The restatement goes stale when the spec changes.
 - **The spec itself is wrong.** Level 2 catches interpretation errors, not requirement errors.
 
-Apply the ladder when the cost of a wrong direction exceeds the cost of the check.
+Apply the ladder when the cost of a wrong direction exceeds the cost of the check. Failure modes seen in the wild:
 
-Concrete failure modes observed in the wild:
-
-- **Spec-first on bounded changes inflates overhead.** Spec-kit on a date-display feature produced 8 files and 1,300+ lines; Kiro turned a small bug fix into four user stories with sixteen acceptance criteria ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html)).
+- **Spec-first on bounded changes inflates overhead.** Spec-kit on a date-display feature produced 8 files and 1,300+ lines; Kiro turned a small bug fix into sixteen acceptance criteria ([Fowler, 2025](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html)).
 - **Specs frozen before discovery lock in the wrong premise.** Prototype, then spec ([Augment Code, 2026](https://www.augmentcode.com/guides/what-is-spec-driven-development)).
 - **Checkpoints at every step become rubber-stamps** once volume exceeds what the reviewer can read ([Faros AI, 2026](https://www.faros.ai/blog/best-ai-coding-agents-2026)).
+
+## Key Takeaways
+
+- The error is at the root: a wrong interpretation that compiles, passes tests, and stays internally consistent until checked against the actual requirement.
+- It differs from objective drift — immediate rather than gradual, and near-impossible to self-correct without an external check.
+- The mitigation ladder runs from restating the task (Level 1) to spec-derived tests (Level 5); climb only when a wrong direction costs more than the check.
+- Mitigation backfires on precise specs, throwaway tasks, and unattended pipelines — apply it deliberately, not universally.
 
 ## Related
 
@@ -112,8 +117,3 @@ Concrete failure modes observed in the wild:
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [Spec Complexity Displacement](spec-complexity-displacement.md)
-- [Context Poisoning](context-poisoning.md)
-- [Demo-to-Production Gap](demo-to-production-gap.md)
-- [Pattern Replication Risk](pattern-replication-risk.md)
-- [Abstraction Bloat](abstraction-bloat.md)
-- [Copy-Paste Agent](copy-paste-agent.md)

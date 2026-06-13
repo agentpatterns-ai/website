@@ -6,12 +6,12 @@ tags:
   - tool-engineering
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Indexed Regex Search for Agent Tools
 
-> Back an agent's regex search tool with a pre-built text index so query latency stays bounded on large repositories, at the cost of freshness machinery and index infrastructure.
+> Back an agent's regex search with a pre-built text index so query latency stays bounded on large repositories, at the cost of freshness machinery.
 
 ## The Harness-Level Bottleneck
 

@@ -6,12 +6,13 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+  - automation
+last_reviewed: 2026-06-12
 ---
 
 # Issue-to-PR Delegation Pipeline
 
-> Issue-to-PR delegation routes a GitHub issue to an AI coding agent that plans, executes, self-reviews, and delivers a draft pull request — a pipeline with controllable levers at each phase.
+> Issue-to-PR delegation routes a GitHub issue to an AI coding agent that plans, executes, self-reviews, and delivers a draft pull request through a controllable pipeline.
 
 ## Pipeline Shape
 

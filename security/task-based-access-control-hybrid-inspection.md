@@ -10,7 +10,7 @@ aliases:
   - task-based access control for agents
   - hybrid inspection authorization
   - continuous agent semantic authorization
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Task-Based Access Control with Hybrid Inspection

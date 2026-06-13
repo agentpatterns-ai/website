@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Permission-Gated Custom Commands
 
-> Pre-approve which tools a Claude Code slash command may use without prompting by declaring an `allowed-tools` list in its frontmatter — reducing interruptions while signaling the expected tool surface for shared commands. To actually block tools, use `deny` rules in `settings.json` or `/permissions`; the `allowed-tools` field is pre-approval only.
+> Custom commands pre-approve specific tools through an `allowed-tools` frontmatter list, so listed tools run without prompting — signaling the expected surface, not blocking unlisted tools.
 
 ## The Default Exposure Problem
 

@@ -12,7 +12,7 @@ aliases:
   - stakeholder trust evals observability
   - leadership dashboard for AI features
   - non-engineer eval review cycle
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Stakeholder Trust Through Evals and Observability
@@ -23,11 +23,11 @@ The pattern only earns trust when three preconditions hold: error-analysis narra
 
 ## Why Stakeholder-Facing Evals and Observability
 
-Eval scores, traces, and observability data come from structurally different subsystems — offline harness, runtime tracing, infrastructure metrics — each optimised for the engineer who owns it. Legibility to a non-engineer is incidental. Stakeholders (PM, leadership, GTM, support leads) cannot judge whether an AI feature is working without pulling those signals onto one surface and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Otherwise engineering gets pulled into status meetings to paraphrase eval scores and trace JSON — a cost that scales poorly as shipped AI features multiply.
+Eval scores, traces, and observability data come from structurally different subsystems — offline harness, runtime tracing, infrastructure metrics — each optimised for the engineer who owns it, with legibility to a non-engineer incidental. Stakeholders (PM, leadership, GTM, support leads) cannot judge whether an AI feature is working without pulling those signals onto one surface and re-rendering them in domain vocabulary ([Braintrust: How to earn stakeholder trust with evals and observability, 28 April 2026](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). Otherwise engineering gets pulled into status meetings to paraphrase eval scores and trace JSON — a cost that scales poorly as AI features multiply.
 
 ## Preconditions
 
-The workflow pays off only when all three are met. Adopting the artefacts beforehand produces theatre — a leadership view reporting a regression nobody on the team can explain in the meeting it surfaces in.
+The workflow pays off only when all three are met. Adopting the artefacts beforehand produces theatre — a leadership view reporting a regression nobody can explain in the meeting it surfaces in.
 
 - **Error analysis is already a habit.** The team reviews real failed traces weekly or per release and produces a written list of top failure modes. "Don't just show dashboards and metrics; tell the story of what you're finding in the data" — the trust transfer is in the narration of error analysis, not the aggregate scores ([Hamel Husain & Shreya Shankar, LLM Evals FAQ, January 2026](https://hamel.dev/blog/posts/evals-faq/)). Without this, the dashboard is read once and then ignored.
 - **The headline view is plural.** A leadership view shows quality, cost, and volume side-by-side, not a single composite "AI quality score." A number promoted to a KPI gets optimised for — Goodhart's law applies. "Every internal AI dashboard, every vendor ROI deck, every quarterly review surfaces the same headline: tokens consumed" hides "premium-model overuse, context stuffing, agent loops, and tokenizer drift" inside one number ([TrueFoundry: Tokenmaxxing](https://www.truefoundry.com/blog/tokenmaxxing-ai-cost-governance)).
@@ -57,17 +57,17 @@ A dashboard aggregates eval scores, cost, latency, and volume into a glanceable 
 | **Engineering standup** | p95 latency, error rate, token usage by model, top expensive endpoints | Grouped by deploy version tag |
 | **Cross-functional product review** | Eval score by user segment, top user tasks, failure topics, score by task type | `metadata.user_segment` and `metadata.task_type` |
 
-Drill-through is what makes the dashboard load-bearing rather than decorative. When latency spikes on the engineering view, clicking the data point opens the matching traces in the same flow ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). When a topic dominates the failure list on the product-review view, engineering knows where to investigate.
+Drill-through makes the dashboard load-bearing rather than decorative: when latency spikes on the engineering view, clicking the data point opens the matching traces in the same flow ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). When a topic dominates the product-review failure list, engineering knows where to investigate.
 
 ### Layer 2: Custom Trace View
 
-A raw trace is a JSON-heavy, span-by-span view engineers can read but non-technical stakeholders cannot. A custom trace view re-renders it in domain vocabulary — a customer-support trace as a ticket card with a user-segment badge, the customer's question, the agent's resolution, quality-score gauges, and the model and cost in a footer ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
+A raw trace is a JSON-heavy, span-by-span view engineers can read but non-technical stakeholders cannot. A custom trace view re-renders it in domain vocabulary — a support trace as a ticket card with a user-segment badge, the customer's question, the agent's resolution, quality-score gauges, and model and cost in a footer ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
 
-The closer the view sits to the product surface the end user sees, the easier it is for stakeholders to judge whether the behaviour is correct ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). One or two saved views per feature suffice — open a single trace in a meeting and everyone follows what happened without engineering paraphrasing.
+The closer the view sits to the product surface the end user sees, the easier stakeholders judge whether the behaviour is correct. One or two saved views per feature suffice — open a single trace in a meeting and everyone follows what happened without engineering paraphrasing ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
 
 ### Layer 3: Ad-Hoc Natural-Language Query
 
-A dashboard answers the question someone built a chart for. Mid-meeting questions are usually questions no chart exists for. Braintrust's Loop translates natural-language questions into SQL over production data — "what are the most expensive endpoints?", "find traces where users were frustrated", "which models had the highest p95 latency yesterday?" ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). When a one-off question turns into something asked every week, the chart it generates becomes a new panel on the dashboard ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
+A dashboard answers the question someone built a chart for; mid-meeting questions are usually ones no chart exists for. Braintrust's Loop translates natural-language questions into SQL over production data — "what are the most expensive endpoints?", "find traces where users were frustrated", "which models had the highest p95 latency yesterday?" When a one-off question turns into something asked every week, the chart it generates becomes a new panel on the dashboard ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)).
 
 The same mechanism works against any structured trace store with a queryable backend — Honeycomb, Datadog, Snowflake, or a self-hosted DuckDB log table. The artefact is a query interface a non-engineer can drive, not a specific vendor.
 
@@ -90,9 +90,9 @@ The artefact triad is tool-agnostic. Braintrust documents one packaging — dash
 
 ## Why It Works
 
-Pulling cross-surface signals onto one artefact and re-rendering them in the audience's domain vocabulary deliberately transfers legibility — a support trace shown as a ticket card with a user-segment badge and resolution closes the gap a JSON span view cannot ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The transfer is causal: if a PM can read the artefact in their normal cadence and form an opinion, they stop pulling engineering into status meetings — the loop closes when the artefact answers the stakeholder's question without engineering present.
+Re-rendering cross-surface signals in the audience's domain vocabulary deliberately transfers legibility — a support trace shown as a ticket card with a user-segment badge and resolution closes the gap a JSON span view cannot ([Braintrust](https://www.braintrust.dev/blog/stakeholder-trust-evals-observability)). The transfer is causal: once a PM can read the artefact in their normal cadence and form an opinion, the loop closes — they stop pulling engineering into status meetings.
 
-The Hamel/Shankar finding marks the limit. Trust transfers only when the artefact is paired with narrated error-analysis findings: top failure modes, the frequency of high-impact errors, and fixes framed as "prevented production issues" ([Hamel Husain & Shreya Shankar](https://hamel.dev/blog/posts/evals-faq/)). The dashboard is the surface; the narration is the load-bearing trust signal. Ship the dashboard without it and you get a status surface reporting regressions the team cannot explain — which destroys credibility faster than no dashboard.
+The Hamel/Shankar finding marks the limit: trust transfers only when the artefact is paired with narrated error-analysis findings — top failure modes, the frequency of high-impact errors, and fixes framed as "prevented production issues" ([Hamel Husain & Shreya Shankar](https://hamel.dev/blog/posts/evals-faq/)). The dashboard is the surface; the narration is the load-bearing trust signal. Ship it without the narration and you get a status surface reporting regressions the team cannot explain — which destroys credibility faster than no dashboard.
 
 ## When This Backfires
 
@@ -104,17 +104,13 @@ The Hamel/Shankar finding marks the limit. Trust transfers only when the artefac
 
 ## Example
 
-A representative monthly leadership review for a customer-support AI feature, after the workflow is in place.
+A monthly leadership review for a customer-support AI feature, after the workflow is in place.
 
-The leadership dashboard, embedded in the PM's Notion review page, shows:
+The leadership dashboard, embedded in the PM's Notion review page, shows a last-30-day average quality score of **78%** (down from 81%), a 30-day time series trending slightly down, total requests of 142,000 (flat), and total cost of $4,800 (up 12%).
 
-- A big number for last-30-day average quality score: **78%** (down from 81% last month)
-- A 30-day time series of the same metric trending slightly down
-- Total requests: 142,000 (flat) and total cost: $4,800 (up 12%)
+The paired narration, written by the team lead in the review document, reads: *"The quality dip traces to one failure mode — the agent escalating refund requests it should handle directly. Error analysis on 60 failed traces showed 38 shared a 'refund <$50' shape the policy file routed to human review unnecessarily. We patched it on day 18; the post-patch 7-day score is 82%. Cost is up because we rolled out Opus on 15% of traffic for high-stakes traces — quality on those is 91%, justifying the spend."*
 
-The paired narration, written by the team lead in the review document, reads: *"The quality dip traces to one failure mode — the agent escalating refund requests it should handle directly. Error analysis on 60 failed traces this week showed 38 of them shared a 'refund <$50' shape the agent's policy file routed to human review unnecessarily. We patched the policy on day 18 of the review window; the post-patch 7-day score is 82%. Cost is up because we rolled out Opus on 15% of traffic for high-stakes traces — quality on those is 91%, justifying the extra spend."*
-
-A custom trace view, saved to the project, renders one representative refund trace as a ticket card showing the customer's question, the agent's escalation decision, and the patched policy's expected resolution side-by-side. The exec opens it, follows it without engineering present, and the meeting moves to the next agenda item in five minutes instead of forty.
+A custom trace view renders one refund trace as a ticket card showing the customer's question, the agent's escalation decision, and the patched policy's expected resolution side-by-side. The exec follows it without engineering present, and the meeting moves on in five minutes instead of forty.
 
 The dashboard, the trace view, and the narration each carry one third of the trust transfer. None of them works alone.
 

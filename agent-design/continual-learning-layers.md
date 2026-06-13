@@ -7,12 +7,12 @@ tags:
   - tool-agnostic
   - memory
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Continual Learning for AI Agents: Three Layers of Knowledge Accumulation
 
-> AI agents can accumulate knowledge at three distinct layers — model, harness, and context — and routing an improvement to the wrong layer wastes effort or produces no lasting change.
+> AI agents accumulate knowledge at three layers — model, harness, and context — and routing a fix to the wrong layer wastes effort.
 
 ## The Three Layers
 
@@ -58,12 +58,12 @@ These scopes coexist: an agent can update its own SOUL.md, accept user-level cor
 
 Updates happen in two modes:
 
-- **Offline (batch)** — after execution, a background job analyzes traces and updates context. OpenClaw calls this ["dreaming"](https://docs.openclaw.ai/concepts/memory-dreaming).
+- **Offline (batch)** — after execution, a background job analyzes traces and updates context. OpenClaw calls this ["dreaming"](https://docs.openclaw.ai/concepts/dreaming).
 - **Hot path (inline)** — the agent updates memory mid-task, either on user instruction or harness direction.
 
 Context-layer updates are cheapest and easiest to reverse. Edit a file, reload context. The tradeoff: context has limited scope — it does not improve base model capability and only affects instances that load it.
 
-Cheapness masks silent failure modes. 2026 practitioner reports document stale memories surfacing after facts change, [context poisoning from a single wrong entry](https://ossinsight.io/blog/agent-memory-race-2026), and [recurring-correction loops where a written-down rule loses to competing retrievals](https://medium.com/@vivioo.io/your-ai-agent-keeps-forgetting-76d7bcefacf0). Retrieval quality, recency bias, and eviction policy decide whether an update actually lands.
+Cheapness masks silent failure modes. 2026 practitioner reports document stale memories surfacing after facts change and [recurring-correction loops where a written-down rule loses to competing retrievals](https://medium.com/@vivioo.io/your-ai-agent-keeps-forgetting-76d7bcefacf0). Retrieval quality, recency bias, and eviction policy decide whether an update actually lands.
 
 ## Choosing the Right Layer
 

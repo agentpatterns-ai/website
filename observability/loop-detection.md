@@ -10,14 +10,14 @@ tags:
   - tool-agnostic
 aliases:
   - Loop Detection & Stopping
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Loop Detection for AI Agents: Stopping Micro-Loops
 
-> **Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
+> Loop detection tracks repeated file edits within a session and nudges the agent to change approach when those edits stop making progress.
 
-> Track file edit history within a session; when the same files are edited repeatedly without progress, signal the agent to try a different approach rather than continue repeating the same failing steps.
+**Also known as:** Loop Detection & Stopping. For the broader pattern of automatic stopping mechanisms (iteration limits, cost thresholds, context budgets), see [Circuit Breakers for Agent Loops](circuit-breakers.md). For budgeting the context window itself, see [Context Budget Allocation](../context-engineering/context-budget-allocation.md).
 
 ## The Micro-Loop Problem
 

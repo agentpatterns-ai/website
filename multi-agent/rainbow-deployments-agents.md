@@ -10,12 +10,12 @@ aliases:
   - rainbow deployment
   - gradual version migration
   - multi-version deployment
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Rainbow Deployments for Agents: Gradual Version Migration
 
-> Shift traffic between agent versions gradually rather than atomically. New versions prove themselves alongside old ones before full cutover, preventing broken in-flight sessions.
+> Rainbow deployments shift agent traffic across versions gradually, not atomically, letting each new version prove itself alongside old ones and preventing broken in-flight sessions.
 
 Rainbow deployment keeps N versions of an agent running simultaneously. New sessions route to the latest version; existing sessions stay on whichever version started them and drain as they complete. No forced cutover, no two-version ceiling.
 

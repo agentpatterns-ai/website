@@ -6,12 +6,12 @@ tags:
   - tool-engineering
   - claude
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # MCP Elicitation: Servers Requesting Structured Input Mid-Task
 
-> MCP elicitation lets servers pause a tool call and request structured input from the user — and Claude Code hooks let you intercept, auto-fill, validate, or suppress those requests.
+> MCP elicitation lets servers pause a tool call to request structured input; Claude Code hooks intercept, auto-fill, validate, or suppress those requests.
 
 ## Elicitation vs. Upfront Parameters
 

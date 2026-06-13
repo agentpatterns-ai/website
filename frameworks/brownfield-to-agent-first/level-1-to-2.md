@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # L1 → L2: Adding Feedback Loops
 
-> An L1 repo gives agents context. An L2 repo gives agents a way to verify their own work. The L1→L2 transition adds automated feedback loops so agents can self-correct without human review on every output.
+> The L1→L2 transition adds automated feedback loops (strong types, tests, remediation-rich linters) so agents can verify and self-correct their work without human review.
 
 ---
 

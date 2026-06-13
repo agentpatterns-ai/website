@@ -8,7 +8,7 @@ tags:
 aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Separation of Knowledge and Execution
@@ -71,6 +71,8 @@ Three-layer separation adds indirection overhead that is not always worth it:
 - **Single-purpose throwaway agents**: If an agent will never be reused and has no sibling agents sharing knowledge, extracting a skill file adds file management cost with no payoff. The pattern is optimized for shared reuse.
 - **Rapidly evolving domains**: When the domain knowledge changes faster than the agents using it, a centralized skill becomes a choke point — every agent breaks when the skill is updated, requiring coordinated testing across all consumers.
 - **Small teams with one agent author**: Separation works best when different people or processes own different layers. When one person writes every skill, agent, and command, the abstraction adds navigation overhead without the coordination benefit it is designed to provide.
+
+The knowledge layer also does not scale indefinitely. A survey of agent-skill architectures ([Xu & Yan, "Agent Skills for Large Language Models", arXiv:2602.12430](https://arxiv.org/abs/2602.12430)) reports a phase transition: beyond a critical skill-library size, skill-selection accuracy degrades sharply rather than gradually, and the routing problem of deciding which skill to activate becomes combinatorially hard as libraries grow into the hundreds. Past that threshold, more skills make the system *worse*, not more reusable — so the separation pattern buys composability up to a point, then trades it back for a selection-and-context cost that a smaller, consolidated agent would not pay.
 
 ## Example
 

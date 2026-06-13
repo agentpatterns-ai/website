@@ -11,7 +11,7 @@ tags:
   - agent-design
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Constraint Decay in Backend Code Generation

@@ -1,5 +1,5 @@
 ---
-title: "Compound Engineering: Systematic Agent Learning Loop"
+title: "Compound Engineering: Learning Loops That Make Each Feature Easier"
 term: "Compound Engineering"
 description: "A four-step workflow -- Plan, Work, Assess, Compound -- where each feature feeds learnings back as prompts, making subsequent features easier."
 tags:
@@ -7,12 +7,12 @@ tags:
   - agent-design
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Compound Engineering: Learning Loops That Make Each Feature Easier
 
-> A four-step workflow -- Plan, Work, Assess, Compound -- where each feature built with agents feeds learnings back into the system as prompts, making subsequent features easier and higher quality.
+> A four-step loop -- Plan, Work, Assess, Compound -- where each feature feeds learnings back as prompts, making subsequent features easier.
 
 ## The Core Idea
 
@@ -142,7 +142,7 @@ These are not documentation. They are agent instructions stored as repository ar
 
 ## Implementation
 
-The compound engineering workflow is available as an open-source plugin: [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin). It provides slash commands (`/ce:plan`, `/ce:work`, `/ce:review`, `/ce:compound`) that orchestrate the cycle within Claude Code and other tools.
+The compound engineering workflow is available as an open-source plugin: [EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin). It provides slash commands (`/ce-plan`, `/ce-work`, `/ce-code-review`, `/ce-compound`, and more) that orchestrate the cycle within Claude Code, Cursor, Copilot, and other tools.
 
 You do not need the plugin to practice compound engineering. The workflow is tool-agnostic -- any team can implement Plan-Work-Assess-Compound using their existing agent setup, instruction files, and review process.
 
@@ -184,11 +184,4 @@ Compound engineering requires sustained discipline across all four phases. Sever
 - [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
 - [Agentic Flywheel](../agent-design/agentic-flywheel.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
-- [Process Amplification](../human/process-amplification.md)
-- [Rigor Relocation](../human/rigor-relocation.md)
-- [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md)
-- [Agent-Driven Greenfield](agent-driven-greenfield.md)
-- [AI Development Maturity Model](ai-development-maturity-model.md)
-- [Architectural Foundation First](architectural-foundation-first.md)
-- [Central Repo & Shared Agent Standards](central-repo-shared-agent-standards.md)
 - [Encoding Tacit Knowledge](encoding-tacit-knowledge.md)

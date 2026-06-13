@@ -8,7 +8,7 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Agent-Driven PR Slicing
@@ -19,7 +19,7 @@ last_reviewed: 2026-06-02
 
 Defect detection drops sharply once a single review exceeds 200–400 lines or 60–90 minutes of attention, per the SmartBear/Cisco study of ~2,500 reviews across 3.2M lines ([SmartBear](https://support.smartbear.com/collaborator/docs/working-with/concepts/optimal-size.html)). Slicing a 2,000-line branch into four 500-line PRs lands inside that envelope — and reviewer attention is the dominant cost on agent-authored PRs ([Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)).
 
-What sets agent-driven slicing apart is who decides where to cut: the same agent that built the change, holding the chat-context record of intent — which edits belonged to which sub-task and where the dependency edges are.
+What sets agent-driven slicing apart is who decides where to cut: the same agent that built the change, holding the chat-context record of which edits belonged to which sub-task and where the dependency edges are.
 
 | Mechanism | Slicing signal | Failure mode |
 |----------|---------------|--------------|
@@ -44,9 +44,9 @@ Intent-driven slicing adds a sixth axis: which task in the chat session each edi
 
 ## Stacking and Dependency Order
 
-Independent slices land as parallel PRs against the same base. Dependent slices stack — the second targets the first, the third targets the second. GitHub's native Stacked PRs (`gh-stack` CLI, private preview 2026-04-13) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
+Independent slices land as parallel PRs against the same base. Dependent slices stack — each targets the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, private preview 2026-04-13) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
 
-Dependency-aware slicing has two parts: identify the slices, then the partial order between them. Without ordering, dependent slices look independent and reviewers merge them out of order, leaving broken intermediate states ([Graphite](https://graphite.com/guides/github-pr-dependency)).
+Dependency-aware slicing has two parts: identify the slices, then their partial order. Without it, dependent slices look independent and reviewers merge them out of order, leaving broken intermediate states ([Graphite](https://graphite.com/guides/github-pr-dependency)).
 
 ```mermaid
 graph TD
@@ -72,20 +72,20 @@ A single PR is preferable when:
 
 ## When Splits Are Worse Than the Original
 
-A 1,500-line refactor sliced by directory becomes four PRs that each touch one layer; reviewing any single PR means opening the others, so everyone holds *more* context than the monolith forced on them. Two indicators the slicing was wrong:
+A 1,500-line refactor sliced by directory becomes four PRs that each touch one layer; reviewing one means opening the others, so everyone holds *more* context than the monolith forced. Two signs the slicing was wrong:
 
 - **No PR is independently mergeable.** If every PR merges in lockstep, the slicer found syntactic boundaries, not semantic ones — `pr-splitter`'s hunk-clustering surfaces this on cross-cutting refactors.
 - **Reviewers ask for the original diff.** Review threads keep referencing files outside the slice ([renovate #14628](https://github.com/renovatebot/renovate/discussions/14628)).
 
-Stacking carries its own cost the slice plan can ignore. Practitioner consensus puts the practical ceiling at three to four PRs per stack: beyond that, dependency-tracking overhead outweighs the review benefit, and feedback on an early slice forces a rebase cascade through every downstream slice — enough that some teams abandon stacking once the cascade cost exceeds the blocking waits it replaced ([dev.to](https://dev.to/alanwest/how-to-stop-drowning-in-giant-pull-requests-with-stacked-prs-2o9d)). The four-PR OAuth example below sits at that ceiling; if any layer is likely to churn under review, a shallower split costs less.
+Stacking carries its own cost. Practitioner consensus puts the ceiling at three to four PRs per stack: beyond that, feedback on an early slice forces a rebase cascade through every downstream slice — enough that some teams abandon stacking once the cascade cost exceeds the blocking waits it replaced ([dev.to](https://dev.to/alanwest/how-to-stop-drowning-in-giant-pull-requests-with-stacked-prs-2o9d)). The OAuth example below sits at that ceiling; if any layer is likely to churn, a shallower split costs less.
 
 The mitigation is the author's approval gate — Cursor surfaces the proposed split before creating PRs, not after.
 
 ## Example
 
-A developer asks an agent to "add OAuth login to the dashboard" on a feature branch. The agent ships ~1,200 lines across 18 files: a new `/auth/oauth` route, a refactored session middleware, three new database columns with a migration, a config schema change, frontend login button and redirect handling, and a test suite. Pre-split, this is one PR.
+A developer asks an agent to "add OAuth login to the dashboard" on a feature branch. The agent ships ~1,200 lines across 18 files: a new `/auth/oauth` route, a refactored session middleware, three new database columns with a migration, a config schema change, frontend login handling, and a test suite. Pre-split, this is one PR.
 
-**Naive slicing** (file-based): one PR per directory — `routes/`, `middleware/`, `db/`, `frontend/`, `tests/`. Reviewers cannot review any in isolation; the tests reference an endpoint defined in another PR, the middleware breaks against `main` because the route doesn't exist yet.
+**Naive slicing** (file-based): one PR per directory — `routes/`, `middleware/`, `db/`, `frontend/`, `tests/`. Reviewers cannot review any in isolation; the tests reference an endpoint defined in another PR, and the middleware breaks against `main` because the route doesn't exist yet.
 
 **Intent-based slicing** (the agent's chat context):
 
@@ -111,5 +111,3 @@ Each PR is independently reviewable against its own base. Each lands inside the 
 - [Tiered Code Review](tiered-code-review.md) — routing review effort by risk; complementary to intent slicing
 - [Cloud Parallel Review Pattern](cloud-parallel-review-pattern.md) — fan-out review across one PR
 - [Diff-Based Review](diff-based-review.md) — the review-the-delta scope slicing makes tractable
-
-External sources are linked inline in the body above: Cursor changelog, GitHub Stacked PRs, `pr-splitter`, `commit-work`, SmartBear/Cisco optimal review size, Graphite PR dependency.

@@ -1,5 +1,5 @@
 ---
-title: "Predicting Which AI-Generated Functions Will Be Deleted"
+title: "Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete"
 description: "Identify AI-generated functions likely to be deleted before PR review using structural analysis of call graphs and spec coverage."
 tags:
   - testing-verification
@@ -9,7 +9,7 @@ tags:
 aliases:
   - "Pre-Flagging Functions for Review"
   - "Code Deletion Prediction"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete
@@ -18,25 +18,23 @@ last_reviewed: 2026-05-27
 
 ## The Review Burden Shift
 
-Agentic coding tools shift work from writing to reviewing. When an agent generates a PR, reviewers must examine code they will ultimately delete — dead code, over-engineered helpers, spec-mismatched implementations. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) shows that AI-generated PRs contain a notable portion of functions deleted during review, and that deletion reasons produce distinct structural characteristics predictable with AUC 87.1%.
-
-The implication: reviewers are spending time on code that a pre-filter could have flagged first.
+Agentic coding tools shift work from writing to reviewing. When an agent generates a PR, reviewers must examine code they will ultimately delete — dead code, over-engineered helpers, spec-mismatched implementations. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) shows AI-generated PRs contain a notable portion of functions deleted during review, with deletion reasons producing distinct structural characteristics predictable at AUC 87.1%. Reviewers are spending time on code a pre-filter could have flagged first.
 
 ## Deletion Reason Categories (Author-Derived Taxonomy)
 
 [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) identifies structural features that distinguish deleted from surviving functions — method name length, lines of code, Halstead volume, and call count — but does not name deletion-reason categories. The taxonomy below is author-derived, organising those structural signals into three practitioner-facing buckets to make the predictors actionable. Treat the category names as framing, not findings.
 
-**Dead code**: Functions generated but never called from the PR's entry points. This bucket maps to the paper's call-count signal — functions with fewer inbound references.
+**Dead code**: Functions generated but never called from the PR's entry points. Maps to the paper's call-count signal — functions with fewer inbound references.
 
-**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. This bucket maps to the paper's three strongest predictors (longer method names, higher line counts, greater Halstead volume), which together signal more generated code than the task required.
+**Over-engineering**: Functions that introduce abstraction the spec did not require — utility helpers, base classes, factory patterns for single-instantiation objects. Maps to the paper's three strongest predictors (longer method names, higher line counts, greater Halstead volume), which together signal more generated code than the task required.
 
-**Spec mismatch**: Functions that implement different behaviour than the spec required — wrong signature, wrong return type, wrong preconditions. This bucket is not directly identified in the paper; it is included because type-contract divergence is a separate failure mode that structural metrics alone will not catch.
+**Spec mismatch**: Functions that implement different behaviour than the spec required — wrong signature, wrong return type, wrong preconditions. Not directly identified in the paper; included because type-contract divergence is a separate failure mode that structural metrics alone will not catch.
 
 Each bucket calls for a different remediation signal sent back to the agent.
 
 ## Why It Works
 
-Structural metrics expose scope overreach before a reviewer reads a single line. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) found that the strongest predictors of deletion are method name length (word count), total lines of code, and Halstead volume — all proxies for "more was generated than the task required." A function with a long descriptive name and high Halstead volume encodes more conceptual surface area than a focused function; that excess surface area is what reviewers remove. The model achieves AUC 87.1% using only these static, syntax-level features — no semantic understanding of the spec is needed to flag probable deletions.
+Structural metrics expose scope overreach before a reviewer reads a single line. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) found the strongest predictors of deletion are method name length (word count), total lines of code, and Halstead volume — all proxies for "more was generated than the task required." A function with a long descriptive name and high Halstead volume encodes more conceptual surface area than a focused one; that excess surface area is what reviewers remove. The model reaches AUC 87.1% using only these static, syntax-level features — no semantic understanding of the spec is needed to flag probable deletions.
 
 ## Applying Predictive Pre-Flagging
 
@@ -58,31 +56,21 @@ graph TD
     I -->|No| K[Human review]
 ```
 
-The pre-flag report tells the reviewer where to focus. It optionally returns flagged functions to the agent for regeneration before human time is spent.
+The pre-flag report tells the reviewer where to focus, and can return flagged functions to the agent for regeneration before human time is spent.
 
 ## Implications for Agent Scope Instructions
 
-The research outcome is a direct input to agent prompting. You can configure your agent's scope instructions to target each deletion category:
+The research outcome is a direct input to agent prompting. Configure your agent's scope instructions to target each deletion category:
 
 - **Emit only called code**: Require that generated functions are reachable from specified entry points
-- **Match spec scope**: Instruct the agent not to abstract beyond what the spec requires in the current task
-- **Declare external dependencies explicitly**: Use these signals to flag functions that depend on context outside the PR rather than letting the agent silently generate them
+- **Match spec scope**: Instruct the agent not to abstract beyond what the current task requires
+- **Declare external dependencies explicitly**: Flag functions that depend on context outside the PR rather than letting the agent silently generate them
 
-Fewer generated functions that survive review is a better outcome than more generated functions with higher deletion rate.
-
-## Reviewer Workflow Adaptation
-
-When pre-flagging is not integrated into the pipeline, human reviewers can apply the same mental model manually:
-
-- Check call graph coverage first: is every generated function called?
-- Compare function count against spec complexity: does the implementation scope match the ask?
-- Verify type signatures against the spec before reading implementation bodies
-
-This ordering surfaces the likely deletions before investing in line-by-line reading.
+Fewer generated functions that survive review beats more functions with a higher deletion rate.
 
 ## Example
 
-The following script demonstrates dead code detection by checking call graph reachability. It identifies functions in a generated module that are never called from the PR's entry point — the most mechanically detectable deletion category.
+This script demonstrates dead code detection via call-graph reachability — identifying functions in a generated module never called from the PR's entry point, the most mechanically detectable deletion category.
 
 ```python
 import ast
@@ -134,32 +122,25 @@ Pre-flagging adds value when the cost of reviewer time exceeds the cost of runni
 
 - **Infrastructure and setup functions**: Functions not yet called within the PR — setup hooks, migration helpers, exported API surface — will appear as dead code to a call-graph analyzer. Treat entry-point configuration as a first-class parameter, not an afterthought.
 - **Cross-file call graphs are expensive**: Dead code detection that only inspects the generated module (as in the example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
-- **Single-study generalization risk**: The AUC 87.1% result comes from one codebase and one AI model. Structural feature importance will differ across languages, project types, and model generations — validate false-positive rates on local data before routing suppressions to the agent.
-- **False negatives pass bad code unexamined**: A 12.9% error rate means roughly 1-in-8 deletable functions is not flagged. Reviewers who rely on the report may skip unflagged code more quickly than they should, increasing the cost of each missed deletion.
-- **False positives block valid abstractions**: A utility function called only once looks like over-engineering by metrics but may be essential for testability or future extension. Flags routed back to the agent can cause regeneration that removes intentional design decisions.
-- **Feedback loop without calibration**: Returning flagged functions to the agent for regeneration without calibrating what "spec scope" means can cause under-generation in future tasks. A regeneration count limit and human fallback are necessary to prevent loops.
+- **Single-study generalization risk**: The AUC 87.1% result comes from one codebase and one AI model. Feature importance will differ across languages, project types, and model generations — validate false-positive rates locally before routing suppressions to the agent.
+- **False negatives pass bad code unexamined**: A 12.9% error rate leaves roughly 1-in-8 deletable functions unflagged. Reviewers who lean on the report may skip unflagged code too quickly, raising the cost of each missed deletion.
+- **False positives block valid abstractions**: A utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions.
+- **Feedback loop without calibration**: Returning flags for regeneration without calibrating "spec scope" can cause under-generation in later tasks. A regeneration limit and human fallback prevent loops.
 
 ## Key Takeaways
 
-- AI-generated PRs shift the bottleneck from writing to reviewing; predictive pre-filtering reduces the cost of that shift
-- The paper shows deletion likelihood is statistically predictable from structural features (method name length, LOC, Halstead volume, call count); grouping those signals into dead code, over-engineering, and spec mismatch is an author-derived framing for agent remediation, not a result reported in the paper
-- Agent scope instructions should target the root causes: require reachability, prohibit over-abstraction, match spec scope exactly
-- Pre-flag reports returned to the agent before human review reduce total review cost
+- AI-generated PRs shift the bottleneck from writing to reviewing; predictive pre-filtering reduces that shift's cost
+- The paper shows deletion likelihood is statistically predictable from structural features (method name length, LOC, Halstead volume, call count); the dead-code, over-engineering, and spec-mismatch grouping is author-derived framing, not a paper result
+- Agent scope instructions should target the root causes: require reachability, prohibit over-abstraction, match spec scope
+- Pre-flag reports returned to the agent before human review cut total review cost
 
 ## Related
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
-- [Committee Review Pattern](committee-review-pattern.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
-- [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Risk-Based Task Sizing for Agent Verification Depth](../verification/risk-based-task-sizing.md)
-- [Specification as Prompt](../instructions/specification-as-prompt.md)
-- [Trust Without Verify](../anti-patterns/trust-without-verify.md)
 - [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — the training incentive that produces over-engineered code and drives the over-engineering deletion category
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
-- [Human-AI Review Synergy](human-ai-review-synergy.md)

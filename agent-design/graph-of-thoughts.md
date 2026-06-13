@@ -8,7 +8,7 @@ tags:
 aliases:
   - Graph of Thoughts
   - GoT prompting
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -85,7 +85,7 @@ Production GoT requires infrastructure that tree-based prompting does not:
 - **Pathfinding**: a traversal strategy for deciding which aggregated nodes to expand next
 - **Redundancy detection**: pruning to prevent duplicate reasoning paths accumulating
 
-The [nibzard catalog entry](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/graph-of-thoughts.md) flags these as adoption barriers — GoT is more common in research settings than production agent systems.
+The [nibzard catalog entry](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/graph-of-thoughts.md) lists the sophisticated scoring and path-finding algorithms GoT requires as a core trade-off — the implementation overhead that keeps it out of most production agent systems.
 
 ## Key Takeaways
 

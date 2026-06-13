@@ -11,7 +11,7 @@ aliases:
   - five failure layers
   - harness failure attribution
   - five-layer agent diagnostic
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-12
 ---
 
 # Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model
@@ -59,7 +59,7 @@ Independent quantification: LangChain raised Terminal Bench 2.0 from 52.8% to 66
 ## Diagnostic Loop
 
 1. Run the agent. Observe the failure.
-2. Attribute to one of the five layers. If unattributable, add it to a separate "novel failure" log — do not invent a sixth bucket on the fly. Recent work operationalizes this attribution step directly: a method that localizes which harness layer is responsible for a failure from failed-trajectory evidence, rather than leaving the layer to a manual guess ([From Failed Trajectories to Reliable LLM Agents](https://arxiv.org/abs/2606.06324)).
+2. Attribute to one of the five layers. If unattributable, add it to a separate "novel failure" log — do not invent a sixth bucket on the fly. Recent work operationalizes this attribution step directly: a method that localizes which harness layer is responsible for a failure from failed-trajectory evidence, rather than leaving the layer to a manual guess ([From Failed Trajectories to Reliable LLM Agents](https://arxiv.org/abs/2606.06324)). [Runtime harness adaptation](runtime-harness-adaptation.md) takes the next step — turning each attributed failure into a rule, skill, validator, or monitor at the matching interface layer.
 3. Fix that layer. Commit the fix back into the repo so all future sessions inherit it.
 4. Re-run the same task. If it succeeds, the attribution was correct.
 5. If all five layers have been cleared on the same task class and the agent still fails — only then evaluate a model swap.
@@ -102,3 +102,4 @@ The model was never the problem. The harness was.
 - [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) — the context-provision layer in concrete form
 - [Trajectory Decomposition Diagnosis](../verification/trajectory-decomposition-diagnosis.md) — finer-grained diagnosis below the harness-layer level
 - [Harness Engineering Method Map](harness-design-dimensions.md) — design dimensions the layer fixes draw from
+- [Runtime Harness Adaptation](runtime-harness-adaptation.md) — places each diagnosed failure at one of four interface layers in deterministic, rule-governed environments

@@ -8,12 +8,12 @@ tags:
   - evals
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Nonstandard Errors in AI Agents
 
-> AI agents analyzing identical data with identical instructions reach different conclusions — not randomly, but systematically, based on model family. Single-run agent outputs carry hidden variance that is not visible from the output alone.
+> AI agents analyzing identical data with identical instructions reach different conclusions systematically by model family — a single run hides this nonstandard variance.
 
 ## The Problem
 

@@ -10,7 +10,7 @@ aliases:
   - cohesion-aware partitioning
   - dependency-cohesion task partitioning
   - graph-partitioning multi-agent orchestration
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Cohesion-Aware Task Partitioning for Multi-Agent Coding
@@ -24,7 +24,7 @@ last_reviewed: 2026-06-02
 
 Multi-agent decomposition shortens critical-path computation when subtasks run in parallel, but each cross-partition dependency forces a context transfer that is not free. Yang et al. (2026) formalise this as graph partitioning over the code-dependency graph: the wall-clock cost of an N-agent run is `max(per-partition compute) + Σ(cross-partition context transfers)` ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
 
-If partitions are chosen poorly the second term dominates. Cemri et al. (2025) measure exactly this in production multi-agent systems: parallel coordination achieves up to **21.1% speedup on some tasks but up to 39.4% slowdown on others** ([arXiv:2503.13657](https://arxiv.org/abs/2503.13657)). Inter-agent communication structures inflate token consumption **2×–11.8×** over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)).
+If partitions are chosen poorly the second term dominates. Pugachev (2025) measures exactly this across 600 multi-agent coding trials: parallel coordination achieves up to **21.1% speedup on some tasks but up to 39.4% slowdown on others** ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893)). Inter-agent communication structures inflate token consumption **2×–11.8×** over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)).
 
 The pattern is the decision rule: **partition by cohesion, or do not partition at all**.
 
@@ -64,7 +64,7 @@ The pattern is not universal. The authors document the primary failure mode; thr
 - **Near-complete coupling** — when nearly every file depends on every other, Infomap returns a single community and "execution degrades to sequential", offering no latency advantage over the sequential baseline ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)). The partitioning step then adds overhead without payoff.
 - **Static-analysis blind spots** — the evaluation is Python-only and uses static dependency analysis. Codebases heavy in dynamic dispatch, plugin registries, reflection, or runtime dependency injection hide edges static analysis misses; partitions look clean while parallel workers collide at runtime. Statically-typed languages with strong cross-module type contracts (Rust, Go, TypeScript) sit in a related blind spot — a type change in one file forces edits in every dependent, but the graph understates that coupling.
 - **Small task surface** — for a feature touching three to five files, the up-front cost of building the graph, running community detection, and scheduling exceeds the parallelism gain. An [Orchestrator-Worker](orchestrator-worker.md) lead agent reading the affected files ad-hoc reaches the same partition with no algorithmic overhead.
-- **Dense communication regardless of partition** — independent measurement shows multi-agent communication structures inflating token cost 2×–11.8× over a single chain ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)), and parallel coordination producing up to 39.4% slowdowns where coordination overhead exceeds the parallelism dividend ([arXiv:2503.13657](https://arxiv.org/abs/2503.13657)). If the task lacks a sparse dependency cut, no partitioning algorithm rescues it.
+- **Dense communication regardless of partition** — independent measurement shows multi-agent communication structures inflating token cost 2×–11.8× over a single chain ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)), and parallel coordination producing up to 39.4% slowdowns where coordination overhead exceeds the parallelism dividend ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893)). If the task lacks a sparse dependency cut, no partitioning algorithm rescues it.
 
 The decision rule: **estimate dependency density before fanning out**. If the natural partition cut is dense, run sequentially. Only fan out when the cut is sparse.
 

@@ -6,12 +6,12 @@ tags:
   - agent-design
   - tool-agnostic
   - multi-agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent Handoff Protocols: Passing Work Between Agents
 
-> Define explicit contracts between pipeline stages — what the upstream agent produces and what the downstream agent expects — to prevent information loss at handoff points.
+> An agent handoff protocol is an explicit contract — what the upstream stage produces and the downstream stage expects — preventing information loss between agents.
 
 ## The Handoff Problem
 
@@ -113,16 +113,11 @@ Structured schemas eliminate ambiguity at parse time. A downstream agent consumi
 
 ## Related
 
-- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
-- [Agent Backpressure](../agent-design/agent-backpressure.md)
-- [Tool Selection Guidance](../tool-engineering/tool-description-quality.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
+- [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md)
+- [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
-- [LLM Map-Reduce Pattern](llm-map-reduce.md)
-- [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)

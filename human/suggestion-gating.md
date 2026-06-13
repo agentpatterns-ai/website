@@ -10,12 +10,12 @@ aliases:
   - suggestion filtering
   - completion gating
   - control models
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Suggestion Gating: Fewer Completions, Better DX
 
-> ~90% of AI code completion inference is wasted — suggestions generated but never shown, or shown and immediately dismissed. Gating fixes this by deciding *whether* to suggest before deciding *what* to suggest.
+> Gating decides *whether* to suggest before deciding *what* to suggest — fixing the ~90% of AI completion inference generated but never usefully shown.
 
 ## The Waste Problem
 
@@ -115,7 +115,7 @@ When gating degrades DX, the fix is exposure controls: loosen the filter, accumu
 - [Signal Over Volume in AI Review](../code-review/signal-over-volume-in-ai-review.md) — the same principle applied to code review: silence when confidence is low
 - [Next Edit Suggestions Paradigm](../tools/copilot/next-edit-suggestions.md) — GitHub's NES model independently validates the "fewer but better" approach
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — every dismissed suggestion adds to judgment fatigue
-- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) — a parallel gating pattern for agent permissions rather than completions
+- [Selective Autonomy from Copilot Feedback](../agent-design/selective-autonomy-from-copilot-feedback.md) — the same selective-classification idea applied to executing actions rather than displaying completions
 - [Agent Backpressure](../agent-design/agent-backpressure.md) — rate-limiting agent output to match developer processing capacity
 - [Attention Management with Parallel Agents](attention-management-parallel-agents.md) — managing completion fatigue when multiple agents compete for developer focus
 - [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — acceptance rate as a signal for shifting autonomy levels

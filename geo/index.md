@@ -5,6 +5,7 @@ tags:
   - geo
   - workflows
   - tool-agnostic
+  - index
 last_reviewed: 2026-05-27
 ---
 

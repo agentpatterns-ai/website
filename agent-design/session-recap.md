@@ -10,16 +10,16 @@ tags:
 aliases:
   - session handoff artifact
   - structured context recap
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Session Recap: Goal-Shaped Handoff at Context Boundaries
 
-> A recap is a structured, agent-authored artifact written at a session boundary — compaction, resume, or fork — that preserves goal-state rather than text-density, so the next turn can proceed without replaying the full trajectory.
+> A session recap is an agent-authored, fixed-schema artifact written at a context boundary that preserves goal-state, not text-density, for the next turn to resume from.
 
 ## What a Recap Is (and Isn't)
 
-Recap is the *goal-shaped* counterpart to compaction's *text-density* compression. [Compaction](../context-engineering/context-compression-strategies.md) summarises conversation turns to free context; it optimises for preserving observations and decisions in prose. A recap is invoked at a known boundary to produce a fixed-schema artifact the next turn reads as its starting context.
+Recap is the *goal-shaped* counterpart to compaction's *text-density* compression. [Compaction](../context-engineering/context-compression-strategies.md) summarises turns into prose to free context; a recap fires at a known boundary to produce a fixed-schema artifact the next turn reads as its starting context.
 
 | Artifact | Trigger | Shape | Consumer | Scope |
 |----------|---------|-------|----------|-------|
@@ -80,18 +80,18 @@ Claude Code implements the resume-return case directly: v2.1.108 added `/recap` 
 
 ## Why It Works
 
-Compaction optimises for retaining information density. Continuity requires retaining decision-density: *why* a choice was made, *what* is open, *what* comes next. These fields appear once in the trajectory and are cheap to discard during prose compression. The [objective-drift](../anti-patterns/objective-drift.md) anti-pattern captures the failure mode — a single-instance constraint dissolves in summarisation while the core task (repeated across many messages) survives, so the agent keeps working on a subtly wrong objective.
+Compaction optimises for information density; continuity requires decision-density: *why* a choice was made, *what* is open, *what* comes next. These fields appear once in the trajectory and are cheap to discard during prose compression. The [objective-drift](../anti-patterns/objective-drift.md) anti-pattern captures the failure mode — a single-instance constraint dissolves in summarisation while the repeated core task survives, so the agent keeps working on a subtly wrong objective.
 
-A structured recap authored before compression preserves decision-density verbatim; the next turn reads it as its seed context rather than reconstructing from a compressed history.
+A recap authored before compression preserves decision-density verbatim; the next turn reads it as seed context rather than reconstructing from compressed history.
 
 ## When This Backfires
 
 Recap is not always the right move. Conditions under which a recap is worse than no recap:
 
-- **Duplicates a continuous progress file.** If the agent already maintains a `todo.md` or runs [goal recitation](../context-engineering/goal-recitation.md) every step, a recap at the boundary introduces a second surface of truth that can drift from the progress file. The next turn now has two "seeds" that may disagree.
-- **Rigid schema outlives the task shape.** A fixed schema works when the fields (`session_intent`, `decisions_made`, `open_questions`, `current_focus`, `next_action`) map to the work. When the task mutates mid-session — scope widens, a new constraint emerges, the objective splits — the schema traps the agent in the old frame. Amp's handoff implementation explicitly rejects static compression in favour of letting users specify a *new* goal at the boundary ([Tessl analysis of Amp's handoff](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/), Nov 14 2025).
-- **Author predicts the wrong salience.** The authoring agent decides what the next turn will need. If the next turn needs a detail the author classified as disposable, the recap locks in that omission — and the next turn has no cheap path back because the full history was compressed behind it.
-- **Boundary is not real.** If the authoring step fires on every turn (or every N turns regardless of compaction/resume/fork), recap overhead compounds with no decision-density payoff. The token cost becomes pure waste.
+- **Duplicates a continuous progress file.** If the agent already maintains a `todo.md` or runs [goal recitation](../context-engineering/goal-recitation.md) every step, a recap introduces a second surface of truth — the next turn now has two seeds that may disagree.
+- **Rigid schema outlives the task shape.** The fixed fields (`session_intent`, `decisions_made`, `open_questions`, `current_focus`, `next_action`) work while they map to the work. When the task mutates mid-session — scope widens, a constraint emerges, the objective splits — the schema traps the agent in the old frame. Amp's handoff implementation explicitly rejects static compression in favour of letting users specify a *new* goal at the boundary ([Tessl analysis of Amp's handoff](https://tessl.io/blog/amp-retires-compaction-for-a-cleaner-handoff-in-the-coding-agent-context-race/), Nov 14 2025).
+- **Author predicts the wrong salience.** The authoring agent decides what the next turn needs. If it classifies a needed detail as disposable, the recap locks in that omission — and the full history is already compressed behind it.
+- **Boundary is not real.** If the authoring step fires every turn regardless of compaction/resume/fork, recap overhead compounds with no decision-density payoff — pure waste.
 
 ## Example
 

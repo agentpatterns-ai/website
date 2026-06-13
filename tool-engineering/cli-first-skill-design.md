@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-engineering
   - tool-agnostic
+  - skills
 aliases:
   - dual-use skill design
   - CLI-first skills

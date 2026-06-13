@@ -10,7 +10,7 @@ tags:
   - context-engineering
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Distributed Computing Parallels in Agent Architecture

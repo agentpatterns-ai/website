@@ -1,5 +1,5 @@
 ---
-title: "CARE: Three-Party Stage-Gated Agent Engineering"
+title: "CARE: Three-Party Stage-Gated Engineering of LLM Agents"
 term: "CARE"
 description: "A methodology for engineering LLM agents across five stage-gated phases run by subject-matter experts, developers, and helper agents — when SME knowledge sits outside the engineering team."
 tags:
@@ -11,10 +11,10 @@ tags:
 aliases:
   - Collaborative Agent Reasoning Engineering
   - CARE methodology
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
-# CARE: Three-Party Stage-Gated Agent Engineering
+# CARE: Three-Party Stage-Gated Engineering of LLM Agents
 
 > Collaborative Agent Reasoning Engineering (CARE) splits agent construction across SMEs, developers, and helper agents, with five stage-gated phases producing reviewable artifacts at every gate.
 

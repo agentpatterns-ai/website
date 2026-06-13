@@ -1,18 +1,18 @@
 ---
 title: "Interactive Clarification for Underspecified Tasks"
 term: "Interactive Clarification"
-description: "Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs."
+description: "Agents that explore the codebase first and ask targeted clarification questions lift resolution on underspecified tasks by up to 74% over non-interactive runs."
 tags:
   - agent-design
   - instructions
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Interactive Clarification for Underspecified Tasks
 
-> Agents that explore the codebase first and ask targeted questions recover up to 74% of the performance lost to underspecified inputs — but only if they can detect that information is missing in the first place.
+> Agents that explore the codebase first, then ask targeted questions, lift resolution on underspecified tasks by up to 74% over non-interactive runs.
 
 ## The Problem: Agents Assume Instead of Asking
 

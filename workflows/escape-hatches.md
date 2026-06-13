@@ -9,7 +9,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Escape Hatches: Unsticking Stuck Agents

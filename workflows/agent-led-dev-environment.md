@@ -8,7 +8,7 @@ tags:
 aliases:
   - agent-authored dev environment
   - agent-iterated Dockerfile
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Agent-Led Dev-Environment Iteration with Validation and Rollback
@@ -63,6 +63,7 @@ This is the same loop-strategy reasoning as [Convergence Detection](../agent-des
 ## When This Backfires
 
 - **No deterministic validator.** Without a fast `worked / did not work` gate, the harness promotes configs that build cleanly but break runtime — the agent's smoke test is only as strong as the conditions it exercises.
+- **The agent under-uses the validator it has.** Repo2Run's 86.0% is one benchmark; later process-level evaluation finds the gate itself is a weak point. [Kuang et al. (2025)](https://arxiv.org/abs/2510.25694) introduce EnConda-Bench and report that even strong models exhibit "validation gaps" — failing to properly verify the environment before proceeding — alongside redundant rebuilds and command-ordering errors, so a nominally-present validator does not guarantee the agent actually exercises it each attempt. Treat the gate as something to instrument and confirm fired, not assume.
 - **Cold-cache stacks.** Heavy native builds (Rust, C++) where most layers invalidate per change make each iteration attempt expensive enough that manual env authoring is faster. The 70% caching speedup in the [Cursor announcement](https://cursor.com/blog/cloud-agent-development-environments) assumes most layers stay cached.
 - **Regulated infrastructure.** Sectors that require human change-management approval for env edits (SOX, HIPAA-scoped infra) cannot delegate spec authorship without invalidating the control. A rollback button does not substitute for prior review.
 - **Lethal-trifecta exposure on the build step.** If the agent holds private-data read, build secrets, and egress (e.g. `RUN curl` against a private registry it can also exfiltrate to), agent-authored Dockerfiles become a prompt-injection surface — a malicious README in a dependency can rewrite the Dockerfile to leak credentials. Cursor mitigates this by scoping build secrets to the build step only ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)); teams without that scoping inherit the risk. Agent-authored Dockerfiles have been observed exposing unnecessary ports, installing outdated packages, and embedding hardcoded credentials, with the failure modes only surfacing at runtime after the build passes ([Docker: Secure AI Agents at Runtime](https://www.docker.com/blog/secure-ai-agents-runtime-security/)).

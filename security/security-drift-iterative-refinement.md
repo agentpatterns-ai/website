@@ -7,12 +7,12 @@ tags:
   - testing-verification
   - tool-agnostic
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Security Drift in Iterative LLM Code Refinement
 
-> Each iteration of an LLM-driven fix-test loop can silently introduce new vulnerabilities even as functional tests keep passing.
+> Each iteration of an LLM-driven fix-test loop can silently accumulate security regressions even as functional tests keep passing.
 
 ## The Divergence Problem
 

@@ -11,12 +11,12 @@ aliases:
   - "live self-evolving agents"
   - "on-the-fly tool synthesis"
   - "runtime tool creation"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Runtime Scaffold Evolution
 
-> Treat the agent scaffold as mutable software the agent itself can modify at runtime. A lightweight reflection prompt — "would creating a tool help here?" — lets capable agents synthesize domain-specific tools during active problem-solving, outperforming fixed toolkits.
+> A mutable scaffold lets capable agents synthesize domain-specific tools at runtime, outperforming fixed toolkits.
 
 ## The Core Insight
 
@@ -140,11 +140,8 @@ The tool was created in response to friction (noisy grep results), used for the 
 - [Introspective Skill Generation](../workflows/introspective-skill-generation.md) — offline pattern mining across sessions
 - [Agentic Flywheel](agentic-flywheel.md) — closed-loop harness self-improvement
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md) — lifecycle governance for persisted skills
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — three-layer framework for characterizing scaffold designs across control, tool interface, and resource dimensions
+- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — three-layer framework the runtime evolution operates within, across control, tool interface, and resource dimensions
 - [Harness Engineering](harness-engineering.md) — designing agent environments
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — human-driven observation-to-update loop
-- [The Think Tool](think-tool.md) — mid-stream reasoning checkpoint
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — runtime tools as removable scaffolding
-- [Agent Self-Review Loop](agent-self-review-loop.md) — self-evaluation of output quality
 - [Tool Minimalism](../tool-engineering/tool-minimalism.md) — counterpoint: fewer tools can outperform more
-- [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) — characterizes the three-layer scaffold structure that runtime evolution operates within

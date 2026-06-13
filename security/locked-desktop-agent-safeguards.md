@@ -9,7 +9,7 @@ tags:
 aliases:
   - locked-session computer use safeguards
   - desktop agent lock-state safeguards
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 status: current
 ---
 

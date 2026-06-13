@@ -14,7 +14,7 @@ tags:
   - source:opendev-paper
   - memory
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Memory Patterns: Learning Across Conversations
@@ -79,7 +79,7 @@ For shared conventions, seeded context (AGENTS.md, inline comments) is more appr
 
 ## Why It Works
 
-Without external persistence, the agent rediscovers the same facts — codebase conventions, recurring failure modes, domain-specific exceptions — on every session. Injecting relevant prior knowledge at session start lets the model reason from accumulated state rather than ground zero; OPENDEV measured a ~30% drop in redundant exploration from eliminating these re-discovery loops ([Bui, 2026 §2.3.3](https://arxiv.org/abs/2603.05344)). Scoping prevents cross-contamination: org policies stay separate from personal preferences, so one user's corrections don't override another's conventions.
+Without external persistence, the agent rediscovers the same facts — codebase conventions, recurring failure modes, domain-specific exceptions — on every session. Injecting relevant prior knowledge at session start lets the model reason from accumulated state rather than ground zero. OPENDEV pairs a cross-session memory pipeline that accumulates project-specific knowledge with persistent context that lets agents "build on past attempts rather than starting fresh," reducing redundant exploration ([Bui, 2026](https://arxiv.org/abs/2603.05344)). Scoping prevents cross-contamination: org policies stay separate from personal preferences, so one user's corrections don't override another's conventions.
 
 ## When This Backfires
 

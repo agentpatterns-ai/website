@@ -7,12 +7,12 @@ tags:
 aliases:
   - Narrow Agent Scope Over Broad Role
   - Specialized Agent Roles (sequential context)
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Task-Specific Agents vs Role-Based Agents
 
-> Build agents for specific tasks — "canary upgrade", "PR review" — rather than generic roles — "kubernetes admin", "senior engineer" — because narrow scope produces more precise output.
+> Scope agents to specific tasks — "canary upgrade", "PR review" — rather than generic roles like "kubernetes admin", because narrow scope produces more precise output.
 
 !!! info "Also known as"
 
@@ -136,6 +136,5 @@ Agent effectiveness depends on matching coordination structure to task structure
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — applies task-specific framing to balance capability against inference cost
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — narrow scope reduces prompt injection attack surface, not just context noise

@@ -6,6 +6,7 @@ tags:
   - copilot
   - tool-engineering
   - ai-coding-assistants
+  - index
 last_reviewed: 2026-05-27
 ---
 

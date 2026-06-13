@@ -8,13 +8,14 @@ tags:
 aliases:
   - commitment-forcing deprecation
   - credible commitment product strategy
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Burn the Boats — Commitment-Forcing Deprecation
 
-> Eliminate an old workflow path entirely rather than running it alongside the new one — the forced transition prevents split focus and accelerates adoption of the paradigm you actually want.
+> Remove the old path entirely on a hard deadline — irreversible deprecation forces full commitment and stops the team anchoring to what you are replacing.
 
 ## The Problem With Gradual Migration
 

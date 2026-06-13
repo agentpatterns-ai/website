@@ -8,12 +8,12 @@ tags:
   - workflows
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Plan-First Loop: Always Design Before Writing Code
 
-> For non-trivial tasks, have the agent describe how the system works, correct its understanding, co-create a written plan, then implement — never the reverse.
+> For non-trivial tasks, have the agent describe the system, correct its understanding, and co-design a written plan before it writes code — never the reverse.
 
 ## Why Implementation-First Fails
 

@@ -11,7 +11,7 @@ aliases:
   - failure-aware trace instrumentation
   - multi-agent failure signal taxonomy
   - early diagnosis of wasted agent computation
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Failure-Aware Observability for Multi-Agent LLM Systems
@@ -20,7 +20,7 @@ last_reviewed: 2026-06-02
 
 Multi-agent LLM systems burn tokens, tool calls, retries, and code-execution attempts before producing an answer. Final-answer evaluation reveals the endpoint but rarely the moment the trajectory stopped making recoverable progress. Failure-aware observability instruments a fixed set of online trace signals whose patterns precede final-answer failure — turning postmortem grading into mid-run diagnosis ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
 
-The framework is taxonomic, not algorithmic: the contribution is the *failure-mode to signal* map, not a stopping rule. Downstream policy — early stop, nudge, escalation, model swap — is the harness's call.
+The framework is taxonomic, not algorithmic: the contribution is the *failure-mode to signal* map, not a stopping rule. Downstream policy — early stop, nudge, escalation, model swap — is the harness's.
 
 ## The Six Signals
 
@@ -35,58 +35,47 @@ The paper defines six online trace signals, each tied to a distinct failure mech
 | Evidence failure | Evidence-present rate, citation consistency, answer-evidence similarity, sentence support | Final answer is unsupported by trajectory artefacts |
 | Budget waste | Tokens, tool calls, budget pressure, post-warning remaining budget | Computation budget is being exhausted; intervention window is closing |
 
-Two of the metrics carry concrete formulas in the paper:
+Two metrics carry concrete formulas, and cost is a weighted sum ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)):
 
 - **Tool reliability**: `ToolErr(r) = N_err(r) / N_tool(r)` — error fraction of tool results over a run.
-- **Evidence support**: `Support_τ(r) = (1/|S_a|) Σ 𝟙[max cos(f(s), f(c)) ≥ τ]`, with τ = 0.65 — fraction of answer sentences whose embedding has cosine similarity ≥ 0.65 with at least one trajectory citation ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
-
-Cost is a weighted sum `C_r = αT_r + βH_r + γR_r + δX_r` over tokens, tool calls, retries, and execution attempts; the paper leaves coefficients un-fixed so the harness can weight by its own marginal cost structure ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
+- **Evidence support**: `Support_τ(r) = (1/|S_a|) Σ 𝟙[max cos(f(s), f(c)) ≥ τ]`, τ = 0.65 — fraction of answer sentences whose embedding has cosine similarity ≥ 0.65 with at least one trajectory citation.
+- **Cost**: `C_r = αT_r + βH_r + γR_r + δX_r` over tokens, tool calls, retries, and execution attempts; coefficients are left un-fixed so the harness weights by its own marginal cost.
 
 ## Why It Works
 
-Recurring multi-agent failure modes leave trace-level fingerprints before final-answer failure. Tool instability manifests as a rising error ratio. An orchestration loop produces identical action keys across consecutive steps. Low information gain shows up as a streak of tool calls returning no new URLs or facts. Evidence failure is detectable from cosine similarity between answer sentences and trajectory citations — before the eval grader reads the answer. The paper's GAIA evaluation establishes these fingerprints empirically: across 165 validation traces, failure rates were 41% at Level 1 (22/53), 38% at Level 2 (33/86), and 46% at Level 3 (12/26), with mean token use rising from 8,152 to 16,389 across levels ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). The framework's job is to make the fingerprints legible while the run still has budget left to course-correct.
-
-Concurrent work reinforces the mechanism: full execution traces improve failure-attribution accuracy by up to 76% over partial-observation baselines ([Zhang et al., arxiv 2604.22708](https://arxiv.org/abs/2604.22708)).
+Recurring failure modes leave trace-level fingerprints before final-answer failure: tool instability as a rising error ratio, an orchestration loop as identical action keys, low information gain as a streak of calls returning no new URLs or facts, evidence failure as low answer-citation cosine similarity — all readable before the grader sees the answer. The paper's GAIA evaluation confirms them empirically: across 165 traces, failure rates were 41% at Level 1 (22/53), 38% at Level 2 (33/86), and 46% at Level 3 (12/26), with mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). Concurrent work reinforces the mechanism: full execution traces improve failure-attribution accuracy by up to 76% over partial-observation baselines ([Chen et al., arxiv 2604.22708](https://arxiv.org/abs/2604.22708)).
 
 ## How It Differs From Single-Signal Stopping
 
-Single-signal mechanisms — iteration caps, edit counters, cost ceilings — answer "when do I stop?". The six-signal framework answers "*why* is this run failing, *now*?". [Circuit Breakers for Agent Loops](circuit-breakers.md) enumerate stopping conditions; [Loop Detection](loop-detection.md) instruments one of them. Failure-aware observability sits a layer up — six classes of failure to six classes of signal, so the harness's policy has structured diagnostic input rather than a single binary trip. In a multi-agent setting, one cost ceiling can trip for six reasons; knowing which is the difference between swapping the model, re-prompting with explicit evidence requirements, and aborting to retry with a smaller goal.
+Single-signal mechanisms — iteration caps, edit counters, cost ceilings — answer "when do I stop?". This framework answers "*why* is this run failing, *now*?". [Circuit Breakers for Agent Loops](circuit-breakers.md) enumerate stopping conditions and [Loop Detection](loop-detection.md) instruments one of them; failure-aware observability sits a layer up, mapping six failure classes to six signal classes. One cost ceiling can trip for six reasons, and knowing which separates swapping the model from re-prompting with explicit evidence requirements from aborting to retry with a smaller goal.
 
 ## When This Backfires
 
-Four conditions where the instrumentation cost outweighs the return:
+Four conditions where instrumentation cost outweighs return:
 
-1. **Single-agent or short-trajectory workloads.** The taxonomy was designed for multi-agent, tool-using systems where 16k-token trajectories with consecutive tool failures are the failure surface ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). A solo-agent harness running fewer than ten tool calls per task surfaces loops and budget overrun at the surface level. [Loop Detection](loop-detection.md) plus [Circuit Breakers for Agent Loops](circuit-breakers.md) cover this regime.
+1. **Single-agent or short-trajectory workloads.** The taxonomy targets multi-agent systems where 16k-token trajectories with consecutive tool failures are the failure surface ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)); a solo harness under ten tool calls per task surfaces loops and budget overrun directly. [Loop Detection](loop-detection.md) plus [Circuit Breakers for Agent Loops](circuit-breakers.md) cover this regime.
 
-2. **No trace store or intervention path.** The framework produces signals. If the harness has no path to act on them — no mid-run pause, no nudge injection, no early-stop — the signals reduce to postmortem instrumentation no faster than final-answer eval. An [agent-trace data layer](agent-trace-data-layer.md) is the prerequisite.
+2. **No trace store or intervention path.** Without a way to act on the signals — mid-run pause, nudge injection, early-stop — they reduce to postmortem instrumentation no faster than final-answer eval. An [agent-trace data layer](agent-trace-data-layer.md) is the prerequisite.
 
-3. **Highly variable evidence-support baselines.** The cosine-similarity-at-0.65 threshold assumes answer-claim alignment is a tractable similarity signal ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). Tasks whose ground-truth evidence is non-text (numeric, image, code) or whose claims chain across many sentences misclassify legitimate runs as evidence failures; re-baselining τ per task class adds calibration overhead.
+3. **Highly variable evidence-support baselines.** The cosine-similarity-at-0.65 threshold assumes answer-claim alignment is a tractable similarity signal ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). Non-text ground truth (numeric, image, code) or claims chained across many sentences misclassify legitimate runs as evidence failures; re-baselining τ per task class adds calibration overhead.
 
-4. **System-level alternatives cover the loop case.** [AgentSight](https://arxiv.org/pdf/2508.02736) detects resource-wasting reasoning loops and multi-agent bottlenecks at the syscall layer via eBPF, with no per-harness instrumentation. When the dominant failure mode is loops rather than evidence failure or low information gain, system-level observation can carry more signal per instrumentation hour.
+4. **System-level alternatives cover the loop case.** [AgentSight](https://arxiv.org/pdf/2508.02736) detects resource-wasting reasoning loops and multi-agent bottlenecks at the syscall layer via eBPF, with no per-harness instrumentation. When loops dominate over evidence failure or low information gain, that can carry more signal per instrumentation hour.
 
-A steelman of the opposite recommendation: one hard budget cap and one repetition detector. Six signals create six false-positive surfaces; signal correlation — loops imply low information gain — means redundant capacity. Until the trace store and intervention tooling can act on six dimensions independently, two well-tuned signals dominate six noisy ones. This is the right start for small, single-agent harnesses; the full taxonomy earns its complexity once multi-agent failure modes diverge enough that single signals merge passing and failing runs.
+The steelman: one hard budget cap plus one repetition detector. Six signals create six false-positive surfaces, and correlation — loops imply low information gain — means redundant capacity; until the trace store and intervention tooling act on six dimensions independently, two well-tuned signals beat six noisy ones.
 
 ## Example
 
-A multi-agent research harness coordinates a planner, two retrieval agents, and a synthesis agent on a GAIA Level 2 task. The harness wires the six signals:
+A multi-agent research harness coordinates a planner, two retrieval agents, and a synthesis agent on a GAIA Level 2 task. It wires the six signals: `ToolErr(r)` per retrieval agent over a rolling window of 10 calls; a repeated-action-key counter on `(agent_id, tool, normalised-arg)`; new-URL count per retrieval call (low-gain proxy); `Support_τ(r)` on each candidate answer; and `C_r` weighted by the harness's own per-token and per-tool costs.
 
-- `ToolErr(r)` per retrieval agent over a rolling window of 10 calls.
-- Repeated-action-key counter on `(agent_id, tool, normalised-arg)`.
-- New-URL count per retrieval call (low-information-gain proxy).
-- `Support_τ(r)` computed when synthesis emits a candidate answer.
-- `C_r` weighted by the harness's own per-token and per-tool costs.
-
-At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, the repeated-action-key counter shows `(retrieval-2, web_search, "GAIA-paper authors")` firing four times, and new-URL count is zero for the last six calls. The orchestrator nudges the planner: "retrieval-agent-2 is producing low-gain repeats on `GAIA-paper authors`; reassign to retrieval-agent-1 with a reformulated query or skip this evidence requirement". The run completes within budget.
-
-Without the signals, the orchestrator sees a token count climbing and a step counter advancing — both look like progress. The failure becomes visible only when synthesis emits an answer with `Support_τ` below threshold, after the budget is already spent.
+At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, `(retrieval-2, web_search, "GAIA-paper authors")` has fired four times, and new-URL count is zero for the last six calls. The orchestrator nudges the planner to reassign that evidence requirement to retrieval-agent-1 with a reformulated query, and the run completes within budget. Without the signals it sees only a token count climbing and a step counter advancing — both look like progress — and the failure surfaces only when synthesis emits an answer with `Support_τ` below threshold, after the budget is spent.
 
 ## Key Takeaways
 
-- The six trace signals — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — map recurring multi-agent failure modes to online observability ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
-- The framework is a diagnostic taxonomy, not a stopping rule: it tells the harness *why* a run is failing while there is still budget left to intervene.
-- The empirical basis is 165 GAIA validation traces with 38–46% per-level failure rates and mean token use rising from 8,152 to 16,389 across difficulty levels ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
-- The framework presupposes a trace store and an intervention path; without them, the signals reduce to postmortem instrumentation that is no faster than final-answer eval.
-- Two signals (loops + budget) dominate six for single-agent harnesses and small trajectories; the full taxonomy earns its complexity once multi-agent failure modes diverge enough that single signals merge passing and failing runs.
+- Six trace signals — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — map recurring multi-agent failure modes to online observability ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
+- It is a diagnostic taxonomy, not a stopping rule: it tells the harness *why* a run is failing while budget remains to intervene.
+- The empirical basis is 165 GAIA validation traces with 38–46% per-level failure rates and mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
+- Without a trace store and an intervention path, the signals reduce to postmortem instrumentation no faster than final-answer eval.
+- For single-agent harnesses and short trajectories, two signals (loops + budget) dominate six.
 
 ## Related
 

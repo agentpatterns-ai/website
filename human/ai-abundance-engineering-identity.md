@@ -8,24 +8,24 @@ aliases:
 tags:
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # AI Abundance Reshapes Software Engineering Identity
 
 > AI abundance commoditizes code production, splitting engineering identity along a long-dormant fault line: do you love writing code, or building things?
 
-AI coding assistants have decoupled code-writing from software-building — two activities so tightly fused for decades that separating them felt impossible. The data is already measurable, the displacement already visible, and the identity crisis already underway. Whether AI amplifies or atrophies a practitioner's career depends on a conscious choice about professional identity: do you relocate your rigor, or let the tools erode it?
+AI coding assistants have decoupled code-writing from software-building — two activities fused so tightly for decades that separating them felt impossible. The data is measurable, the displacement visible, the identity crisis underway. Whether AI amplifies or atrophies a career depends on a conscious choice: do you relocate your rigor, or let the tools erode it?
 
-"Software developer" and "software engineer" were interchangeable titles on the same business card. The distinction was academic — something debated in university hallways and promptly ignored in industry. Writing code *was* building software. That coupling has now broken.
+"Software developer" and "software engineer" were interchangeable titles on the same business card — a distinction debated in university hallways and ignored in industry. Writing code *was* building software. That coupling has now broken.
 
 ## The Identity Fracture
 
 Andrej Karpathy framed it cleanly: "LLM coding will split up engineers based on those who primarily liked coding and those who primarily liked building." This is not a statement about competence. It is a statement about identity — about what practitioners find meaningful in their work ([Karpathy analysis](https://www.finalroundai.com/blog/karpathy-ai-builders-vs-coders)).
 
-The split matters because it predicts behavior. Engineers who identify as coders — who find satisfaction in the craft of writing elegant implementations, mastering language idioms, building deep expertise in a runtime — experience AI code generation as a threat. It automates the activity that gives their work meaning. Engineers who identify as builders — who view code as instrumental, a means to ship products and solve problems — experience the same tools as liberation. They can move faster toward the outcome they actually care about.
+The split predicts behavior. Coders — who find satisfaction in writing elegant implementations, mastering language idioms, building deep runtime expertise — experience AI code generation as a threat: it automates the activity that gives their work meaning. Builders — who treat code as instrumental, a means to ship products and solve problems — experience the same tools as liberation, moving faster toward the outcome they care about.
 
-Geoffrey Huntley pushes the argument further: "AI erases traditional developer identities — backend, frontend, Ruby, or Node.js. Anyone can now perform these roles." The specialization identities that organized careers for twenty years — the React expert, the Kubernetes specialist, the PostgreSQL wizard — lose their protective moat when a coding agent can produce competent implementations in any of these domains ([ghuntley.com](https://ghuntley.com/real/)).
+Geoffrey Huntley pushes further: "AI erases traditional developer identities — backend, frontend, Ruby, or Node.js. Anyone can now perform these roles." The specialization identities that organized careers for twenty years — the React expert, the Kubernetes specialist, the PostgreSQL wizard — lose their protective moat when a coding agent produces competent implementations in any of these domains ([ghuntley.com](https://ghuntley.com/real/)).
 
 This is not a clean binary. Most practitioners sit somewhere on the spectrum, and many feel the pull of both sides. But the direction of travel is clear: the market is repricing what each orientation is worth.
 
@@ -67,21 +67,21 @@ Stack Overflow's 2025 Developer Survey found that 66% of developers report spend
 
 ## Industry Parallels
 
-Software engineering is not the first profession to face the commoditization of its core production activity. The historical parallels are instructive, not because they predict outcomes perfectly, but because they illuminate the patterns of displacement and adaptation.
+Software engineering is not the first profession to face the commoditization of its core production activity. The historical parallels illuminate the patterns of displacement and adaptation.
 
-**Manufacturing craftsmen** faced a similar fracture during industrialization. Factory production progressively displaced artisanal skill across nineteenth- and early-twentieth-century England, compressing demand for hand-craft expertise as machine outputs became cost-competitive. The craftsmen who survived were those who moved into design, quality control, and process engineering — the judgment layer above production.
+**Manufacturing craftsmen** faced this fracture during industrialization. Factory production progressively displaced artisanal skill across nineteenth- and early-twentieth-century England as machine outputs became cost-competitive. The craftsmen who survived moved into design, quality control, and process engineering — the judgment layer above production.
 
-**Journalism** is a more recent and more uncomfortable parallel. AI is not merely automating distribution or layout (as earlier technology waves did) but intervening directly in the core creative process — writing. Journalists who redefined their value around investigation, source relationships, and editorial judgment have adapted. Those whose identity was tied to prose production face the same displacement software developers now confront.
+**Journalism** is a more uncomfortable parallel. AI is not merely automating distribution or layout (as earlier waves did) but intervening directly in the core creative process — writing. Journalists who redefined their value around investigation, source relationships, and editorial judgment have adapted; those whose identity was tied to prose production face the same displacement.
 
-**Graphic design** offers perhaps the closest analogy. Tools like Canva democratized execution — anyone can produce competent layouts. The premium shifted to taste, brand thinking, and creative direction. The designers who thrived were those who were never really selling pixel-pushing in the first place. They were selling judgment.
+**Graphic design** offers the closest analogy. Tools like Canva democratized execution — anyone can produce competent layouts — and the premium shifted to taste, brand thinking, and creative direction. The designers who thrived were never really selling pixel-pushing; they were selling judgment.
 
-In each case, the pattern is the same: production skill gets commoditized, and value migrates to the judgment layer above it.
+In each case the pattern is the same: production skill gets commoditized, and value migrates to the judgment layer above it.
 
 ## The Skill Atrophy Trap
 
 The identity shift would be manageable if practitioners could simply decide to become "builders" and move on. But there is a trap: the very tools enabling the transition also erode the skills required to supervise them.
 
-A 2025 Microsoft and Carnegie Mellon study found that "the more people leaned on AI tools, the less critical thinking they engaged in." This is not laziness. It is a well-documented cognitive phenomenon — when a tool handles a task reliably enough, the brain deprioritizes the neural pathways associated with that task ([Osmani: Avoiding Skill Atrophy](https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age)).
+A 2025 Microsoft and Carnegie Mellon study found that "the more people leaned on AI tools, the less critical thinking they engaged in." This is not laziness but a well-documented cognitive phenomenon: when a tool handles a task reliably enough, the brain deprioritizes the neural pathways tied to it ([Osmani: Avoiding Skill Atrophy](https://addyo.substack.com/p/avoiding-skill-atrophy-in-the-age)).
 
 Osmani identifies four warning signs of atrophy in practice:
 

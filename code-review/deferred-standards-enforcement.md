@@ -9,12 +9,12 @@ tags:
 aliases:
   - "CLAUDE.md standards split"
   - "review-time standards enforcement"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Deferred Standards Enforcement via Review Agents
 
-> Move post-hoc-checkable standards out of CLAUDE.md and into a reviewer agent that runs at PR time — preserving implementation context budget for the task at hand.
+> Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time — preserving implementation context budget for the task at hand.
 
 ## The Problem with Standards in CLAUDE.md
 
@@ -104,8 +104,6 @@ The implementation agent carries only what shapes code decisions. The review age
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md)
 - [Standards as Agent Instructions](../instructions/standards-as-agent-instructions.md)
 - [Rigor Relocation](../human/rigor-relocation.md)
-- [Committee Review Pattern](committee-review-pattern.md)
 - [Learned Review Rules](learned-review-rules.md)
 - [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Tiered Code Review](tiered-code-review.md)
-- [PR Description Style as a Lever](pr-description-style-lever.md)

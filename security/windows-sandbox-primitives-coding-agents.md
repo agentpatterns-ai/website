@@ -6,7 +6,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Windows Sandboxing for Coding Agents
@@ -22,21 +22,21 @@ OpenAI's [Codex Windows sandbox post](https://openai.com/index/building-codex-wi
 3. **No admin elevation** — setup and per-task launch run as the standard developer user.
 4. **Policy propagates down the process tree** — spawned children inherit the same write and network restrictions.
 
-No single Windows primitive satisfies all four, though each rejected primitive is still right for the workload it was designed for.
+No single Windows primitive satisfies all four — though each is still right for the workload it was designed for.
 
 ## Why Each Primitive Fails
 
 ### AppContainer
 
-AppContainer is "a capability-based isolation model built for apps that know, up front, exactly what they need to access" ([Codex post](https://openai.com/index/building-codex-windows-sandbox/), [Microsoft Learn](https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation)) — wrong for an agent picking binaries at runtime. And "Windows doesn't allow matching a firewall rule to the non-principal identity of a restricted token" ([aetos.ai mirror](https://aetos.ai/posts/e6b942df5f48f364)): a rule on `codex.exe` doesn't follow `git.exe` children, which is why OpenAI uses dedicated local users as the firewall-matchable principal. **Fails**: 1 and 4.
+AppContainer is "a capability-based isolation model built for apps that know, up front, exactly what they need to access" ([Codex post](https://openai.com/index/building-codex-windows-sandbox/), [Microsoft Learn](https://learn.microsoft.com/en-us/windows/win32/secauthz/appcontainer-isolation)) — wrong for an agent picking binaries at runtime. And "Windows doesn't allow matching a firewall rule to the non-principal identity of a restricted token" ([aetos.ai mirror](https://aetos.ai/posts/e6b942df5f48f364)): a rule on `codex.exe` doesn't follow `git.exe` children — hence OpenAI's dedicated local users as the firewall-matchable principal. **Fails**: 1 and 4.
 
 ### Windows Sandbox
 
-A Hyper-V-backed disposable VM with the highest pure-isolation strength here. The failure is workflow fit: "Codex needs to act directly on the user's actual checkout, tools, and environment, not inside a separate throwaway desktop" ([Codex post](https://openai.com/index/building-codex-windows-sandbox/)). Mapped folders exist ([config docs](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file)) but each launch pays VM cold-start, and Hyper-V is unavailable on Windows Home ([FAQ](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-faq)). **Fails**: 2; SKU-limited.
+A Hyper-V-backed disposable VM with the highest pure-isolation strength here. The failure is workflow fit: "Codex needs to act directly on the user's actual checkout, tools, and environment, not inside a separate throwaway desktop" ([Codex post](https://openai.com/index/building-codex-windows-sandbox/)). Mapped folders exist ([config docs](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-configure-using-wsb-file)) but each launch pays VM cold-start, and Hyper-V is absent on Windows Home ([FAQ](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/windows-sandbox-faq)). **Fails**: 2; SKU-limited.
 
 ### Mandatory Integrity Control (MIC)
 
-MIC blocks lower-integrity writes regardless of the DACL ([Microsoft Learn](https://learn.microsoft.com/en-us/windows/win32/secauthz/mandatory-integrity-control)). Confining the agent at Low integrity means labelling every workspace file's SACL with `SYSTEM_MANDATORY_LABEL_ACE` — labels that persist on disk and apply to *every* Low-integrity process on the machine (Protected Mode browsers, sandboxed renderers, other agents), leaking the boundary through the filesystem. **Fails**: 2 and 4.
+MIC blocks lower-integrity writes regardless of the DACL ([Microsoft Learn](https://learn.microsoft.com/en-us/windows/win32/secauthz/mandatory-integrity-control)). Confining the agent at Low integrity means labelling every workspace file's SACL with `SYSTEM_MANDATORY_LABEL_ACE` — labels that persist on disk and apply to *every* Low-integrity process (Protected Mode browsers, sandboxed renderers, other agents), leaking the boundary through the filesystem. **Fails**: 2 and 4.
 
 ## The Composition That Works
 
@@ -48,16 +48,16 @@ OpenAI's shipped sandbox uses three Windows primitives Microsoft never bundled a
 
 ## Why It Works
 
-The write-restricted token is an AND-gate: the user SID grants the baseline, the restricted SID list narrows it, and the synthetic SID on workspace paths is the only credential that survives. Children inherit the token, so the agent never enumerates its binaries; firewall scoping is handled orthogonally by the principal user. AppContainer, Windows Sandbox, and MIC each refuse one of those moves.
+The write-restricted token is an AND-gate: the user SID grants the baseline, the restricted SID list narrows it, and the synthetic SID on workspace paths is the only surviving credential. Children inherit the token, so the agent never enumerates its binaries; firewall scoping falls to the principal user.
 
 ## Where the AND-Gate Leaks
 
-The AND-gate is not airtight. Because `Everyone` sits in the restricted SID list, the restricted-side check passes for any directory that *already* grants `Everyone` write access, so a broadly-permissioned workspace silently weakens the boundary — OpenAI warns about these folders at setup ([Codex post](https://openai.com/index/building-codex-windows-sandbox/)). The token also confines only the filesystem: post-launch research describes Configuration-Based Sandbox Escape, where writing the CLI's own config from inside the sandbox turns startup into an escape primitive ([Cymulate, 2026](https://cymulate.com/blog/the-race-to-ship-ai-tools-left-security-behind-part-1-sandbox-escape/)). Treat it as write-scoping, not containment.
+The AND-gate is not airtight. Because `Everyone` sits in the restricted SID list, the restricted-side check passes for any directory that *already* grants `Everyone` write access, so a broadly-permissioned workspace silently weakens the boundary ([Codex post](https://openai.com/index/building-codex-windows-sandbox/)). The token also confines only the filesystem: post-launch research describes Configuration-Based Sandbox Escape, where writing the CLI's own config from inside the sandbox turns startup into an escape primitive ([Cymulate, 2026](https://cymulate.com/blog/the-race-to-ship-ai-tools-left-security-behind-part-1-sandbox-escape/)). Treat it as write-scoping, not containment.
 
 ## When This Backfires
 
 - **Computer-use agent, not coding agent.** GUI automation with no host workspace is what Windows Sandbox was built for ([cua.ai](https://cua.ai/blog/windows-sandbox)).
-- **WSL2 is the primary dev environment.** OpenAI documents WSL2 as recommended where available — Landlock, seccomp, and bubblewrap isolate more strongly than restricted-token composition ([Codex CLI on Windows](https://codex.danielvaughan.com/2026/04/01/codex-cli-windows-native-sandbox-wsl/), [joecuevas.com](https://joecuevas.com/posts/codex-wsl-sandbox/)). The cost is filesystem drift and slow cross-boundary small-file I/O.
+- **WSL2 is the primary dev environment.** OpenAI recommends WSL2 where available — Landlock, seccomp, and bubblewrap isolate more strongly than restricted-token composition ([Codex CLI on Windows](https://codex.danielvaughan.com/2026/04/01/codex-cli-windows-native-sandbox-wsl/), [joecuevas.com](https://joecuevas.com/posts/codex-wsl-sandbox/)). The cost is filesystem drift and slow small-file I/O.
 - **Workspace on a network share, mapped drive, or OneDrive path.** ACL Deny ACEs and SACL labels interact badly with remote replication; Codex CLI shipped a real instance where orphan-SID Deny ACEs produced `.git/FETCH_HEAD: Permission denied` ([openai/codex#21304](https://github.com/openai/codex/issues/21304)).
 - **Read access matters as much as write.** The token confines *writes* only; combine with [dual-boundary sandboxing](dual-boundary-sandboxing.md) for read/network threats.
 
@@ -74,10 +74,10 @@ The AND-gate is not airtight. Because `Everyone` sits in the restricted SID list
 
 ## Key Takeaways
 
-- A coding agent on Windows has four hard requirements — open-ended binaries, host workspace, no admin, child-process propagation — and no single Windows primitive satisfies all four.
-- AppContainer fails on capability enumeration and firewall rules not following spawned children; Windows Sandbox breaks host-workspace integration and is unavailable on Home; MIC mutates host SACLs and leaks the boundary to other Low-integrity processes.
+- A coding agent on Windows has four hard requirements — open-ended binaries, host workspace, no admin, child-process propagation — that no single primitive satisfies.
+- AppContainer fails on capability enumeration and firewall rules not following children; Windows Sandbox breaks host-workspace integration and is absent on Home; MIC mutates host SACLs and leaks the boundary to other Low-integrity processes.
 - OpenAI composes a synthetic SID, a write-restricted token, and a dedicated local user as the principal — the SID gates writes via the token's AND-check, the principal gives firewall rules something to match.
-- WSL2 is the strictly-stronger fallback when Linux-grade isolation matters more than native Windows filesystem fidelity; the trade is filesystem drift.
+- WSL2 is the strictly-stronger fallback when Linux-grade isolation matters more than native filesystem fidelity; the trade is filesystem drift.
 - Same primitive, different workload: Windows Sandbox fits computer-use agents, AppContainer fits packaged Win32 apps. Match primitive to workload shape.
 
 ## Related

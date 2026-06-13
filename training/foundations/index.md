@@ -4,6 +4,7 @@ description: "Tool-agnostic training in prompt, context, harness, and tool engin
 tags:
   - training
   - tool-agnostic
+  - index
 last_reviewed: 2026-05-27
 ---
 

@@ -12,7 +12,7 @@ aliases:
   - isometric model control
   - five-subsystem ablation
   - harness subsystem ablation
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Isometric Harness Ablation
@@ -21,7 +21,7 @@ last_reviewed: 2026-06-02
 
 ## The Methodology
 
-[Harness engineering](harness-engineering.md) treats the agent environment as the dominant lever on output quality. Isometric ablation quantifies *which part* of that environment is doing the work. The walkinglabs harness engineering course describes the technique — it calls it the "controlled variable exclusion test": keep the model fixed, remove subsystems one at a time, measure which removal causes the biggest performance drop ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)). *Isometric ablation* is this page's name for the same procedure, by analogy with isometric exercise: hold one variable fixed while loading another.
+[Harness engineering](harness-engineering.md) treats the agent environment as the dominant lever on output quality. Isometric ablation quantifies *which part* of that environment is doing the work. The walkinglabs course calls it the "controlled variable exclusion test": keep the model fixed, remove subsystems one at a time, measure which removal causes the biggest drop ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)). *Isometric ablation* names the same procedure here, by analogy with isometric exercise: hold one variable fixed while loading another.
 
 ```mermaid
 graph TD
@@ -58,20 +58,20 @@ Each ablation run produces one row. The table is the deliverable.
 | State | 80% | 75% | 5 pp |
 | Feedback | 80% | 50% | 30 pp |
 
-The drops rank the subsystems. The operational rule: invest in upgrading the highest-drop subsystem first. Subsystems with drops near zero are simplification candidates — they consume maintenance budget without earning their place ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)).
+The drops rank the subsystems. The operational rule: upgrade the highest-drop subsystem first. Near-zero drops mark simplification candidates — they consume maintenance budget without earning their place ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)).
 
 ## Why the Same-Model Constraint Matters
 
-The "isometric" qualifier is load-bearing. Changing model and harness together confounds the score delta — you cannot attribute it to either lever. Pinning the model converts the agent into a function of environment alone, so the delta measures environmental marginal product. This is the standard ablation argument applied to non-model components ([arxiv 2604.25850: Agentic Harness Engineering](https://arxiv.org/abs/2604.25850)).
+The "isometric" qualifier is load-bearing. Changing model and harness together confounds the score delta — you cannot attribute it to either lever. Pinning the model makes the agent a function of environment alone, so the delta measures environmental marginal product — the standard ablation argument applied to non-model components ([arxiv 2604.25850: Agentic Harness Engineering](https://arxiv.org/abs/2604.25850)).
 
-Anthropic's 2D retro game maker comparison shows the scale: same prompt, same model class, two harnesses. A solo agent produced a non-functional prototype in 20 minutes for $9; a Planner + Generator + Evaluator harness produced a working application in 6 hours for $200. After upgrading to Opus 4.6, Anthropic removed the sprint construct while keeping planner and evaluator — one row in an isometric ablation table ([Anthropic: Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)).
+Anthropic's 2D retro-game-maker comparison shows the scale: same prompt, same model class, two harnesses. A solo agent produced a non-functional prototype in 20 minutes for $9; a Planner + Generator + Evaluator harness produced a working application in 6 hours for $200. After upgrading to Opus 4.6, Anthropic dropped the sprint construct but kept planner and evaluator — one row in an isometric ablation table ([Anthropic: Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)).
 
 ## Pairing With Hill-Climbing and Impermanence
 
 The methodology slots between two adjacent practices:
 
-- [Harness hill-climbing](harness-hill-climbing.md) optimizes a *single dimension* — one change per iteration, accept if the score improves. The climb assumes you have already picked the right dimension. Isometric ablation tells you which dimension. The ablation table maps the terrain; the climber traverses it.
-- [Harness impermanence](harness-impermanence.md) flags scaffolding for deletion when native model capability subsumes it. Subsystems with near-zero ablation drop are the leading indicator: if removing the subsystem barely changes the score, the model is already doing the work the scaffold was added to provide. Add them to the [simplification log](quality-score-rubric.md).
+- [Harness hill-climbing](harness-hill-climbing.md) optimizes a *single dimension* — one change per iteration, accept if the score improves. It assumes you already picked the right dimension; isometric ablation tells you which. The ablation table maps the terrain; the climber traverses it.
+- [Harness impermanence](harness-impermanence.md) flags scaffolding for deletion when native model capability subsumes it. Near-zero ablation drop is the leading indicator: if removing a subsystem barely changes the score, the model already does the work the scaffold provided. Add them to the [simplification log](quality-score-rubric.md).
 
 The full cycle: ablate to rank, hill-climb the top-ranked subsystem, re-ablate to confirm the rank changed, retire low-drop subsystems.
 
@@ -79,11 +79,11 @@ The full cycle: ablate to rank, hill-climb the top-ranked subsystem, re-ablate t
 
 Three failure conditions matter:
 
-- **No graded benchmark slice exists.** The methodology needs a representative, deterministic eval set. Without one, "remove instructions, rerun" produces noisy drops dominated by per-run variance. The same precondition gates [harness hill-climbing](harness-hill-climbing.md) and any [eval-driven improvement loop](../verification/grade-agent-outcomes.md).
-- **Components interact non-additively.** When feedback and state co-depend — state captures eval output that feedback consumes — removing one alone undercounts its contribution. The Agentic Harness Engineering paper found "harness components interact non-additively, so stacking effective edits caps the aggregate gain" ([arxiv 2604.25850](https://arxiv.org/abs/2604.25850)). Single-component ablation ranks; it does not quantify in isolation.
-- **High per-run variance swamps small drops.** On a mature harness where remaining subsystem drops are small, single-trial ablation cannot separate signal from noise. Use [pass^k](../verification/pass-at-k-metrics.md) or multi-trial averaging before trusting drops below your noise floor.
+- **No graded benchmark slice exists.** The methodology needs a representative, deterministic eval set. Without one, "remove instructions, rerun" produces noisy drops dominated by per-run variance — the same precondition that gates [harness hill-climbing](harness-hill-climbing.md) and any [eval-driven improvement loop](../verification/grade-agent-outcomes.md).
+- **Components interact non-additively.** When feedback and state co-depend — state captures eval output that feedback consumes — removing one alone undercounts it. The Agentic Harness Engineering paper found "harness components interact non-additively, so stacking effective edits caps the aggregate gain" ([arxiv 2604.25850](https://arxiv.org/abs/2604.25850)). Single-component ablation ranks; it does not quantify in isolation.
+- **High per-run variance swamps small drops.** On a mature harness with small remaining drops, single-trial ablation cannot separate signal from noise. Use [pass^k](../verification/pass-at-k-metrics.md) or multi-trial averaging before trusting drops below your noise floor.
 
-A near-zero drop is also not evidence of a useless subsystem on its own. Other subsystems can compensate when one is removed, masking its true contribution — the compensatory-masquerade caution from neural-network ablation studies. Treat drops as a ranking signal, not a precise measurement.
+A near-zero drop is also not proof a subsystem is useless: others can compensate when one is removed, masking its true contribution — the compensatory-masquerade caution from neural-network ablation studies. Treat drops as a ranking signal, not a precise measurement.
 
 ## Example
 
@@ -96,9 +96,9 @@ A team using GPT-4o on a TypeScript + React frontend codebase (~20,000 LOC) ran 
 | 3 — add feedback | Verification commands listed | 80% |
 | 4 — add state | `PROGRESS.md` between sessions | 80–100% |
 
-Reading the same data as an ablation table: removing instructions costs 40 pp, removing feedback costs 20 pp, removing state costs at most 20 pp. Instructions is the load-bearing subsystem on this project — invest there first. State is the smallest contributor; if maintenance becomes costly, it is the candidate to drop.
+Reading the same data as an ablation table: removing instructions costs 40 pp, feedback 20 pp, state at most 20 pp. Instructions is the load-bearing subsystem here — invest there first. State is the smallest contributor and the candidate to drop if maintenance gets costly.
 
-The order-of-addition is a real artifact: a different order would yield different per-stage deltas. The ranking is more stable than the exact magnitudes.
+Order-of-addition is a real artifact: a different order yields different per-stage deltas. The ranking is more stable than the exact magnitudes.
 
 ## Key Takeaways
 

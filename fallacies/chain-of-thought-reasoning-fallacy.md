@@ -9,7 +9,7 @@ tags:
 aliases:
   - chain-of-thought proves reasoning
   - CoT reasoning fallacy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth
@@ -83,5 +83,4 @@ Traces retain diagnostic value as a starting point. The fallacy is treating them
 - [The Synthetic Ground Truth Fallacy](synthetic-ground-truth-fallacy.md) — Treating AI-generated artifacts as equivalent to human-verified ground truth
 - [LLM Comprehension Fallacy](llm-comprehension-fallacy.md) — Correct output does not imply understanding; over-trust and skipped verification follow
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md) — Design eval rubrics so agents cannot exploit hidden reward signals
-- [AI Knowledge Generation Fallacy](ai-knowledge-generation-fallacy.md) — LLMs recombine training data rather than generate genuinely new knowledge
 - [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) — Empirical evidence that CoT effects on code-gen robustness vary by model, task, and prompt perturbation

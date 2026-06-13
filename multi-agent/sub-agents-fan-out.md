@@ -11,7 +11,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - multi-agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Sub-Agents for Fan-Out Research and Context Isolation
@@ -60,6 +60,8 @@ Key frontmatter fields for sub-agents:
 - `tools`: restrict to only what the task needs (a research sub-agent may not need `Write`)
 - `model`: route to a cheaper or faster model for simpler sub-tasks
 - `isolation: worktree`: run in an isolated git worktree for file-writing sub-agents
+
+Sub-agents can themselves fan out: as of [Claude Code v2.1.172](https://code.claude.com/docs/en/changelog), a sub-agent can spawn its own sub-agents up to five levels deep, giving nested fan-out a concrete depth bound.
 
 ## Agent Teams
 
@@ -114,9 +116,9 @@ The main thread receives three 200-token summaries. The raw file contents — po
 
 ## Error Isolation in Parallel Tool Calls
 
-As of [Claude Code v2.1.72](https://code.claude.com/docs/en/changelog), parallel tool calls for `Read`, `WebFetch`, and `Glob` isolate failures — a single failed call no longer cancels siblings running in parallel. Only `Bash` errors still cascade and abort concurrent calls.
+As of a June 2, 2026 Claude Code release ([changelog](https://code.claude.com/docs/en/changelog)), a failed `Bash` command in a batch of parallel tool calls no longer cancels the other calls in that batch — each tool returns its own result independently. Previously a single failed `Bash` call would abort its siblings running in parallel.
 
-This matters for fan-out because sub-agents routinely issue parallel reads and fetches. Previously, one bad path or unreachable URL would abort every parallel call in flight; now successful calls complete and only the failed call reports an error. Fan-out sub-agents handle partial failures gracefully instead of losing all concurrent work.
+This matters for fan-out because sub-agents routinely issue parallel calls. Before the change, one failing command could abort every parallel call in flight; now successful calls complete and only the failed call reports an error. Fan-out sub-agents handle partial failures gracefully instead of losing all concurrent work.
 
 ## When This Backfires
 
@@ -134,7 +136,7 @@ Fan-out sub-agents add overhead that makes them worse than in-thread execution i
 - Main thread sees summaries, not raw work — context stays clean for synthesis
 - Claude Code sub-agent frontmatter controls tools, model, and worktree per sub-task
 - Sub-agents differ from agent teams: fire-and-forget vs persistent coordination
-- Parallel `Read`/`WebFetch`/`Glob` calls isolate failures — one bad call does not cancel siblings (Bash errors still cascade)
+- A failed `Bash` call in a parallel batch no longer cancels its siblings — each tool returns its own result independently
 
 ## Related
 

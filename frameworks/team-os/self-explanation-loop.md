@@ -7,12 +7,12 @@ tags:
   - instructions
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Self-Explanation Loop for Code-Review Comments
 
-> Ask the agent to justify its structural and tooling choices — but lead with the conditions under which the returned explanation can inflate confidence without building real competence.
+> The explanation an agent returns can inflate confidence without building competence, so lead with the conditions under which the loop backfires.
 
 The loop is simple in shape: after an agent proposes a structural or tooling decision, the user asks *why this, and what would change if we chose the alternative?* The returned answer is the learning artifact, not the code. This inverts the default user→agent direction — from *produce X* to *justify X against its alternatives* — so the user commits a hypothesis before hearing the rationale. On a Team OS repo, where a non-engineer curates agent-chosen conventions long-term, a repo they cannot explain is a repo they cannot evolve.
 

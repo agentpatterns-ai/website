@@ -7,7 +7,7 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Repository Bootstrap Checklist: Wiring Agent Support
@@ -118,7 +118,7 @@ The checklist assumes a greenfield setup — starting from a repo with no agent 
 The instructions-first sequence has a strong steelman against it: instructions are advisory and hooks are deterministic, so for teams whose primary failure mode is non-compliance with written rules, inverting the order — hooks and CI gates first, instructions last — may be more effective. The sequence above can backfire under three specific conditions:
 
 - **Compliance is the bottleneck, not context**. If your agents already produce structurally sound output but fail review for repeatable, mechanically detectable reasons (formatting, secrets, broken links), spending the first sprint writing `AGENTS.md` adds latency without addressing the failure. Add the relevant hooks first; the documentation can follow. Claude Code's own documentation makes this contrast explicit: instruction files are "context, not enforced configuration," whereas hooks "execute as shell commands at fixed lifecycle events and apply regardless of what Claude decides to do" ([source](https://code.claude.com/docs/en/memory#troubleshoot-memory-issues)).
-- **The instruction file grows beyond its useful window**. The instructions-first sequence creates an incentive to put every standard into `AGENTS.md` because that's the layer being built. ETH Zurich's evaluation across 138 real-world repositories found that LLM-generated context files reduced task success rates and added 20% to inference cost — and even hand-written context files helped only when kept minimal and precise ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A `AGENTS.md` that grows past the size the model can actually attend to becomes net-negative.
+- **The instruction file grows beyond its useful window**. The instructions-first sequence creates an incentive to put every standard into `AGENTS.md` because that's the layer being built. ETH Zurich's evaluation — spanning SWE-bench tasks with LLM-generated context files plus AGENTbench, a set of 138 issues drawn from 12 repositories with developer-committed context files — found that context files reduced task success rates and increased inference cost by over 20%, and that hand-written context files helped only when they described minimal, precise requirements ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). A `AGENTS.md` that grows past the size the model can actually attend to becomes net-negative.
 - **CI already exists and works**. Teams adopting agents into a mature repo already have linters, type checks, and test gates. Treating Step 7 as future work is wasted motion; in that environment the right sequence is "point agents at the existing CI" first, then add domain context where the agent demonstrably needs it.
 
 The order above assumes a greenfield repository where context is genuinely missing. In environments where enforcement is the missing piece, walk the sequence backwards.

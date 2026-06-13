@@ -11,7 +11,7 @@ aliases:
   - OpenAPI smell taxonomy
   - agent-readiness API audit
   - REST documentation smells
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # OpenAPI Documentation Smells for Agent-Ready APIs
@@ -22,7 +22,7 @@ last_reviewed: 2026-06-03
 
 An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312)"; enriching descriptions alone moved [task success from ~70% to ~90%](https://arxiv.org/abs/2605.14312).
 
-Adjacent work agrees. [AutoMCP reached 99.9% tool-call success only after averaging 19 lines of spec edits per API, up from a 76.5% baseline](https://arxiv.org/html/2507.16044v3). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
+Adjacent work agrees. [AutoMCP reached 99.9% tool-call success only after averaging 19 lines of spec edits per API, up from a 76.5% baseline](https://arxiv.org/abs/2507.16044). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
 
 ## The Smell Taxonomy
 
@@ -86,7 +86,7 @@ Description enrichment is not always the leverage point. The taxonomy under-deli
 
 - **The surface is too large to expose verbatim.** [Block's Linear integration collapsed 30+ tools down to 2 by moving orchestration server-side](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc). Polishing endpoints that should never have been exposed is wasted work.
 - **Auto-wrapping leaks backend shape.** Tool names like `get_customer_by_internal_id` [reflect implementation, not user intent](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc) — no description fixes a catalog whose verbs are wrong.
-- **JSON Schema dialects disagree.** [Schemas are interpreted differently across models and MCP clients](https://arxiv.org/html/2507.16044v4), so even a clean spec can produce inconsistent tool behaviour.
+- **JSON Schema dialects disagree.** MCP clients interpret schema constraints inconsistently across models and runtimes, so even a clean spec can produce inconsistent tool behaviour.
 
 Audit the prose when the endpoint set is already scoped and the resource model is sound. When the API design itself is the problem, fix the design first.
 

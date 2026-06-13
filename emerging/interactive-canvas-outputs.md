@@ -9,12 +9,12 @@ tags:
 aliases:
   - agent canvas output
   - interactive artifact output
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Interactive Canvases: Agent-Generated Visual Artifacts as Outputs
 
-> Canvases are an output-shape choice, not a new pattern. They earn their overhead when output is irreducibly multi-dimensional and lose it when a sentence would have done — and they change what "reviewing the answer" means.
+> Canvases are an output-shape choice, not a new pattern: they earn their overhead only on irreducibly multi-dimensional output, and they change what review means.
 
 Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). The shape is now available across mainstream tools; the question is when to produce one.
 
@@ -64,6 +64,8 @@ Anthropic's canonical list of agent patterns — prompt chaining, routing, paral
 
 Treating canvases as an architectural pattern conflates tooling with design. Treating them as an output-shape decision — one of several ways to package the same underlying work — keeps the focus on the real question: does this output have enough structure that rendering it beats describing it, and is the verification gap small enough to accept?
 
+This framing is contested. One line of research treats agent-generated interfaces as a distinct architectural layer — the human-agent interaction surface — rather than packaging atop unchanged architecture: "Software as Content" positions dynamically generated software as the primary medium of human-agent interaction, not one output format among many ([arxiv](https://arxiv.org/abs/2603.21334)). That holds where the surface carries persistent state and affordances the agent reasons over across turns. The output-shape framing here fits the narrower case this page addresses — a one-shot rendered artifact that packages a result — and weakens once the canvas becomes a stateful surface the agent and human co-drive.
+
 ## Example
 
 An agent is asked to audit dependency versions across five services in a monorepo and recommend upgrades.
@@ -102,4 +104,5 @@ The source-traceability requirement still applies. A "Show query" affordance on 
 - [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Diff-Based Review](../code-review/diff-based-review.md)
 - [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
+- [Durable Interactive Artifacts](../agent-design/durable-interactive-artifacts.md)
 - [Product-as-IDE](product-as-ide.md)

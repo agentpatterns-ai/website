@@ -6,12 +6,12 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Generative Agents Memory Stream
 
-> Store agent observations in a retrievable stream, score retrieval candidates by recency, relevance, and importance, then periodically synthesize higher-level reflections — enabling coherent behavior across long sessions without dumping full history into context.
+> A memory stream stores agent observations, scores retrieval by recency, relevance, and importance, and synthesizes reflections to keep long sessions coherent.
 
 ## The Problem
 
@@ -73,13 +73,15 @@ This architecture pays off for **long, observation-dense, coherence-critical** s
 
 It adds overhead without benefit for bounded tasks. Poignancy scoring requires one LLM call per substantive observation — at high observation frequency this cost compounds. Cold-start applies: retrieval returns low-quality results until sufficient observations accumulate. The pattern also requires a persistent memory store across invocations — agents starting fresh each run never build the density that makes retrieval valuable.
 
+A deeper limitation is architectural: the memory stream is *retrieval-based*, not weight-based. Critics argue this makes it a lookup mechanism rather than true memory — it generalizes by similarity to stored cases but cannot consolidate experience into abstract rules, leaving a ceiling on compositionally novel tasks that more context cannot raise ([Contextual Agentic Memory is a Memo, Not True Memory (2026)](https://arxiv.org/abs/2604.27707)). For coding agents this means the stream sharpens recall of prior observations but does not, on its own, teach the agent new general competence; novel synthesis still falls back on the frozen base model.
+
 ## Relation to Existing Memory Patterns
 
-The generative agents architecture is an integrated system, not a single technique:
+The architecture is an integrated system, not a single technique:
 
-- **[Episodic memory retrieval](episodic-memory-retrieval.md)** — episodic retrieval stores complete problem-solving episodes; the memory stream stores atomic observations that compose into episodes over time. The stream can serve as the storage substrate for episodic memory.
-- **[Memory synthesis from execution logs](memory-synthesis-execution-logs.md)** — log synthesis extracts lessons post-session; memory stream reflection triggers automatically mid-session based on importance accumulation.
-- **[Subtask-level memory](subtask-level-memory.md)** — subtask memory aligns retrieval granularity to reasoning stage; memory stream retrieval anchors to the current focal point regardless of stage.
+- **[Episodic memory retrieval](episodic-memory-retrieval.md)** — stores complete problem-solving episodes; the memory stream stores atomic observations that compose into episodes over time, and can serve as the storage substrate for episodic memory.
+- **[Memory synthesis from execution logs](memory-synthesis-execution-logs.md)** — extracts lessons post-session; memory stream reflection triggers automatically mid-session on importance accumulation.
+- **[Subtask-level memory](subtask-level-memory.md)** — aligns retrieval granularity to reasoning stage; memory stream retrieval anchors to the current focal point regardless of stage.
 
 ## Key Takeaways
 

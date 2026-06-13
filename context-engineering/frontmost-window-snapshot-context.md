@@ -8,7 +8,7 @@ aliases:
   - frontmost window snapshot
   - active window context capture
   - hotkey window grab for agents
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 status: current
 ---
 
@@ -33,11 +33,11 @@ Outside these conditions, prefer file-path attachment with per-call review or th
 
 The image encodes layout, visual affordances, and rendered state. The accessibility tree encodes selection, focus, hierarchical structure, and — critically — content beyond the visible viewport. Codex walks the AX tree of the active window via `NSWorkspace.frontmostApplication` and `kAXFocusedWindowAttribute`, returning text the user has not scrolled into view ([Kingy AI Appshots analysis](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)).
 
-The dual-modality benefit is empirical: agents receiving both a screenshot and an accessibility tree outperform single-modality baselines because the modalities cover each other's blind spots — the screenshot grounds visual affordances, the tree disambiguates element types ([Less is More: Context-Aware GUI Simplification, arxiv 2507.03730](https://arxiv.org/html/2507.03730v1)). The hotkey is the second mechanism: collapsing capture, switch, attach, and describe into one keystroke drops cross-app handoff cost below the threshold at which developers actually use it.
+The dual-modality benefit is empirical: agents receiving both a screenshot and an accessibility tree outperform single-modality baselines because the modalities cover each other's blind spots — the screenshot grounds visual affordances, the tree disambiguates element types ([Less is More: Context-Aware GUI Simplification, arxiv 2507.03730](https://arxiv.org/html/2507.03730v1)). The hotkey is the second mechanism: collapsing capture, switch, attach, and describe into one keystroke drops handoff cost below the threshold at which developers actually use it.
 
 ## The Shipping Implementation
 
-OpenAI's Codex app shipped this primitive as "Appshots" in version 26.519 on 2026-05-21: pressing both Command keys sends the frontmost macOS window — screenshot plus AX-extracted text — to Codex ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)). A new snapshot opens a new conversation by default but joins the most recent thread if the user interacted with it in the last 60 seconds; consecutive snapshots then stack into that thread ([Kingy AI](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)). Snapshots persist locally in the session file like attached files; ChatGPT-plan retention rules apply to model-bound content.
+OpenAI's Codex app shipped this primitive as "Appshots" in version 26.519 on 2026-05-21: pressing both Command keys sends the frontmost macOS window — screenshot plus AX-extracted text — to Codex ([Codex Appshots changelog](https://developers.openai.com/codex/changelog)). A new snapshot opens a new conversation but joins the most recent thread if the user interacted with it in the last 60 seconds; consecutive snapshots then stack into that thread ([Kingy AI](https://kingy.ai/blog/appshots-inside-openai-codexs-new-command-command-trick-for-macos/)). Snapshots persist locally in the session file like attached files; ChatGPT-plan retention rules apply to model-bound content.
 
 Adjacent tools accept image input but require manual capture: Claude Code's CLI uses a file-path convention or a project `/screenshots/` directory ([App Screenshots skill walkthrough](https://alexop.dev/posts/app-screenshots-claude-code-skill/), [Claude Code paste-image issue #32005](https://github.com/anthropics/claude-code/issues/32005)); Cursor reaches it through a [Screenshot MCP server](https://github.com/upnorthmedia/ScreenshotMCP/); the Claude Code VS Code extension accepts drag-and-drop. None bind frontmost-window capture to a hotkey or extract AX-tree text alongside the image — that integration gap, not the image-input capability, is what makes Appshots structurally distinct.
 

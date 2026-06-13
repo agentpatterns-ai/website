@@ -11,12 +11,12 @@ aliases:
   - "in-thread side channel"
   - "btw command pattern"
   - "bounded mid-task question"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # In-Thread Side-Channel: Bounded Side Questions Without Losing the Main Task
 
-> Ask a mid-task clarifying question inside the current session using a bounded, tagged sub-conversation that returns the agent to the prior goal — applies only when the question is short, the session is long, and the agent is not mid-transaction.
+> A tagged side question lets the agent answer mid-task and return to the main goal — only in long sessions, for short questions, outside transactions.
 
 ## When the Pattern Applies
 

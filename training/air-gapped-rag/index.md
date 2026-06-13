@@ -6,6 +6,8 @@ tags:
   - security
   - workflows
   - tool-agnostic
+  - index
+  - rag
 last_reviewed: 2026-05-27
 ---
 

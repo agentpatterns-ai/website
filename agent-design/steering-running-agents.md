@@ -10,12 +10,12 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Steering Running Agents: Mid-Run Redirection and Follow-Ups
 
-> Steering a running agent means sending a mid-execution message that redirects its tool calls without discarding the context already built — conversation history, file reads, and prior results all remain available.
+> Steering a running agent sends a mid-execution message that redirects its tool calls without discarding the context it has already built.
 
 !!! note "Also known as"
     **Mid-Run Correction**, **Unsticking Stuck Agents**. Proactive human intervention — redirecting agents before they go too far off course. For *reactive* pre-built recovery mechanisms, see [Escape Hatches](../workflows/escape-hatches.md).
@@ -138,9 +138,6 @@ LLM inference is stateless between calls, but context is not — each tool call 
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — auto-correcting misbehaving agents mid-run
 - [Agent Loop Middleware](agent-loop-middleware.md) — middleware hooks for observing and intervening in the agent loop
-- [Agent Turn Model](agent-turn-model.md) — the multi-step inference-tool-call loop that a single agent turn runs through
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — detecting wrong direction through progress signals
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — restarting with fresh context when steering cannot salvage a run
 - [Convergence Detection](convergence-detection.md) — deciding when to stop or redirect an iterating agent
-- [Team Onboarding for Agent Workflows](../workflows/team-onboarding.md)
-- [The AI Development Maturity Model: From Skeptic to Agentic](../workflows/ai-development-maturity-model.md)

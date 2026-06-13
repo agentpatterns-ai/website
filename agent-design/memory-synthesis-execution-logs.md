@@ -7,12 +7,12 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Memory Synthesis from Execution Logs
+# Memory Synthesis: Extracting Lessons from Execution Logs
 
-> Extract causal lessons from agent execution traces -- what worked, what failed, which approaches were abandoned and why -- so every run makes future runs more effective.
+> Extract causal lessons from agent execution traces -- what worked, what failed, which approaches were abandoned and why -- so future runs improve.
 
 ## Recording vs. Learning
 
@@ -116,7 +116,7 @@ Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress f
 
 Three conditions where skipping synthesis is the better call:
 
-- **N=1 generalization**: A single failure can produce a confidently-stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. Heuristics from guided trajectories are also less transferable, reflecting prior guidance rather than independent discovery ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
+- **N=1 generalization**: A single failure can produce a confidently-stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. The form of the synthesized memory matters: distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
 - **Tool/model churn**: A workaround for a 2024-era context limit becomes wrong advice once the limit lifts, but the lesson sits in `MEMORY.md` for months. The deeper cost is *trusting* aged advice without re-verification.
 - **Context budget pressure**: Retained lessons compete with task-relevant context; accumulated memory inflates cost and degrades selectivity ([SSGM Framework, 2026](https://arxiv.org/abs/2603.11768)). When the lesson library exceeds what retrieval can selectively surface, environmental scaffolding (progress files, git state) often pays off more reliably.
 
@@ -146,23 +146,21 @@ After applying the end-of-session synthesis prompt, the agent produces:
 
 The raw observation records *what happened*; the synthesized lesson records *what to do differently* and *why*, anchored to a verifiable signal (CI timing, S3 API behavior).
 
+## Key Takeaways
+
+- Recording *what happened* is not learning; synthesis extracts *why* an outcome occurred into a rule that transfers to future runs.
+- Anchor every synthesized lesson to a verifiable signal -- tests, lints, compilation, schema validation -- so reflection updates beliefs instead of rationalizing.
+- Distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples.
+- Lessons expire: prune via usage-based expiry, version tagging, or manual `/memory` audit so stale workarounds do not outlive their cause.
+- Skip synthesis when the problem class does not recur, when tools/models churn fast, or when retained lessons crowd out task-relevant context.
+
 ## Related
 
-- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)
-- [Subtask-Level Memory for SE Agents](subtask-level-memory.md)
-- [AST-Guided Agent Memory for Repository-Level Code Generation](ast-guided-agent-memory.md)
-- [Episodic Memory Retrieval](episodic-memory-retrieval.md)
-- [Generative Agents Memory Stream: Three-Layer Architecture for Long-Running Agent Sessions](generative-agents-memory-stream.md)
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](continual-learning-layers.md)
-- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md)
 - [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
-- [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
 - [Skill as Knowledge](../tool-engineering/skill-as-knowledge.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
-- [Session Initialization Ritual](session-initialization-ritual.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)
+- [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
+- [Agent Transcript Analysis](../verification/agent-transcript-analysis.md)
+- [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

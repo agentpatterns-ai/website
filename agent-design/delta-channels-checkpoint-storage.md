@@ -105,3 +105,4 @@ class MyAgentState(TypedDict):
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — append-only event log with replay; the conceptual ancestor of delta channels
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md) — filesystem-side trajectory record that complements runtime-side checkpoints
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md) — workspace state that survives sessions, complementary to delta-checkpointed graph state
+- [Agent Event Streaming: Consumer Contract Above the Tokens](agent-event-streaming-model.md) — the consumer-side event contract; this delta primitive is its runtime-side counterpart

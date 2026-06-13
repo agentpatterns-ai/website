@@ -9,7 +9,7 @@ tags:
 aliases:
   - Context Usage Breakdown
   - Per-Source Context Attribution
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Context-Usage Attribution: Per-Source Breakdown of Agent Context
@@ -55,7 +55,7 @@ Claude Code's OTel exporter ships the attributes that make per-source attributio
 - `query_source` — `"main"`, `"subagent"`, `"auxiliary"`, or compaction/auxiliary thread names
 - `model`, `effort`, request-id correlation
 
-Grouping by `query_source` produces the subagent-vs-main split; grouping by `type` separates active-input from cached-prefix tokens. The UI breakdown and the OTel export are two consumers of the same counts — Cursor's panel is the always-on surface, an OTel collector is the post-hoc audit path. See [agent observability via OTel](agent-observability-otel.md) for export wiring.
+Grouping by `query_source` produces the subagent-vs-main split; grouping by `type` separates active-input from cached-prefix tokens. The UI breakdown and the OTel export consume the same counts — Cursor's panel is the always-on surface, an OTel collector the post-hoc audit path. See [agent observability via OTel](agent-observability-otel.md) for export wiring.
 
 ## Action Signals
 
@@ -70,7 +70,7 @@ A breakdown without thresholds is just a chart. Useful signals:
 
 Per-source attribution is the right axis when configuration sources are non-trivial. It misleads when:
 
-- **Tool calls dominate the session.** A long agentic run buckets large file reads and grep output as one giant "tools"/"MCP" slice that points at no specific call. Switch to per-tool attribution ([`/context`](../context-engineering/context-window-diagnostic-tooling.md)).
+- **Tool calls dominate the session.** A long agentic run buckets file reads and grep output into one giant "tools"/"MCP" slice that points at no specific call. Switch to per-tool attribution ([`/context`](../context-engineering/context-window-diagnostic-tooling.md)).
 - **Single-shot deterministic prompts.** No compounding, no point in attribution.
 - **Tightly-pruned harnesses.** When rules, skills, and MCPs are already minimal, the breakdown reports rounding noise.
 - **The harness can't act on the cut.** Without per-skill or per-MCP unload commands, knowing skills consume 22% offers no remediation path beyond restarting the session.

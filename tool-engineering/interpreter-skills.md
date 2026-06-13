@@ -7,10 +7,11 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
+  - skills
 aliases:
   - skill module importable interpreter
   - skill with importable module
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 status: current
 ---
 

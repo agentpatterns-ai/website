@@ -9,12 +9,12 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Dual-Trace Memory Encoding
 
-> Pair every stored fact with a narrative scene trace of the moment it was learned. The extra context at write time improves cross-session, temporal, and knowledge-update recall — and does nothing for single-session retrieval.
+> Dual-trace memory encoding pairs each fact with a narrative scene of when it was learned, improving cross-session and temporal recall at no retrieval cost.
 
 ## The Encoding Gap
 

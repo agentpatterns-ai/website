@@ -10,12 +10,12 @@ tags:
 aliases:
   - "single-tool hypothesis"
   - "run command tool"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Unix CLI as the Native Tool Interface for AI Agents
 
-> A single `run(command)` tool backed by Unix CLI can replace large function catalogs, leveraging the model's dense pretraining on shell usage and Unix's built-in discovery, error reporting, and composition primitives.
+> A single `run(command)` tool backed by Unix CLI can replace large typed-function catalogs, exploiting the model's shell pretraining and Unix's discovery and composition primitives.
 
 ## Core Concept
 
@@ -82,7 +82,7 @@ Without these, binary output fills the context window with uninterpretable conte
 
 ## The Spectrum in Practice
 
-The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself uses ~27 tools in production — not a single tool.
+The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
 
 Five well-designed tools plus shell access captures most of the benefit without unrestricted execution risk.
 
@@ -135,7 +135,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
 - [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) -- code actions outperform JSON/text by 20%
 - [CLI-Anything (HKU)](https://github.com/HKUDS/CLI-Anything) -- agent-native CLI generation pipeline
-- [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- ~27 tools + CodeAct in practice
+- [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- dozens of tools + CodeAct in practice
 
 ## Related
 

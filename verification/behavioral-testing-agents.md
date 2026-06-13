@@ -7,7 +7,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Behavioral Testing for Non-Deterministic AI Agents
@@ -16,13 +16,13 @@ last_reviewed: 2026-06-09
 
 ## Why Traditional Testing Breaks Down
 
-Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs — different tool call sequences, phrasings, and solution paths. Equality checks generate false negatives on correct behavior and false positives on lucky runs.
+Traditional tests assert exact outputs for given inputs. Agents produce different valid outputs for identical inputs — different tool call sequences, phrasings, and solution paths. Equality checks then yield false negatives on correct behavior and false positives on lucky runs.
 
 Behavioral testing replaces "did the agent produce output X?" with "did the agent make good decisions and reach a valid end-state?" [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Why It Works
 
-Agents solve problems through search — iteratively selecting tools, observing results, and updating plans. The same task admits multiple valid paths because the solution space is under-constrained. End-state evaluation removes the path constraint: if the final state satisfies acceptance criteria, the agent succeeded regardless of route. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Agents solve problems through search — selecting tools, observing results, updating plans. One task admits many valid paths because the solution space is under-constrained. End-state evaluation removes the path constraint: if the final state meets acceptance criteria, the agent succeeded regardless of route. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Separate Deterministic from Agentic Components
 
@@ -33,7 +33,7 @@ Not every part of an agent system needs behavioral testing. A capability matrix 
 | Deterministic | Traditional unit/integration tests | Tool input parsing, output formatting, API call construction |
 | Agentic | Behavioral evaluation | Decision-making, tool selection, multi-step reasoning |
 
-Mock tools to test agent reasoning without external dependencies. Tool output quality — concise, filtered, well-formatted — also needs evaluation, because tool responses shape the context the agent reasons over downstream.
+Mock tools to test agent reasoning without external dependencies. Tool output quality — concise, filtered, well-formatted — also needs evaluation: tool responses shape the context the agent reasons over downstream.
 
 ## Three Grading Methods
 
@@ -47,7 +47,7 @@ Use the lightest method that covers each case:
 
 ### LLM-as-Judge
 
-For free-form outputs, an LLM judge with a structured rubric can approximate human judgment when properly calibrated. Define scoring dimensions explicitly:
+For free-form outputs, a calibrated LLM judge with a structured rubric approximates human judgment. Define scoring dimensions explicitly:
 
 ```python
 RUBRIC = """Score the agent's response on each dimension (0.0-1.0):
@@ -58,7 +58,7 @@ RUBRIC = """Score the agent's response on each dimension (0.0-1.0):
 Respond with JSON: {"scores": {...}, "pass": true/false, "explanation": "..."}"""
 ```
 
-Track precision and recall of LLM graders against human assessments separately, and avoid class-imbalanced eval sets where lopsided positive/negative ratios distort headline accuracy. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Track precision and recall of LLM graders against human assessments, and avoid class-imbalanced eval sets that distort headline accuracy. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## Three-Part Eval Foundation
 
@@ -71,11 +71,11 @@ graph LR
     C -->|regressions fed back to| A
 ```
 
-**Representative dataset**: Start with ~20 queries. Small-sample evaluation catches dramatic effect sizes (e.g., 30% to 80% from a prompt change) without a large dataset upfront. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+**Representative dataset**: Start with ~20 queries. Small samples catch dramatic effect sizes (e.g., 30% to 80% from a prompt change) without a large dataset upfront. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
-**Scorer library**: Reusable grading functions — code-based checkers, LLM rubric evaluators, composite scorers — each returning a structured result (score, pass/fail, explanation).
+**Scorer library**: Reusable grading functions — code checkers, LLM rubric evaluators, composite scorers — each returning a structured result.
 
-**Feedback loop**: Every model change, prompt edit, or tool modification runs through the same dataset and scorers, catching regressions before deployment.
+**Feedback loop**: Every model, prompt, or tool change runs through the same dataset and scorers, catching regressions before deployment.
 
 ## Define Acceptable Variance
 
@@ -85,13 +85,13 @@ Pass rate thresholds are not fixed at 100% — they depend on the failures you t
 - **Security scanning agent**: 99.5% minimum (missed vulnerabilities are not tolerable)
 - **Research summarization agent**: 85% acceptable (phrasing variance expected)
 
-When pass rates drop below thresholds, the eval suite blocks deployment. Review thresholds as agent capabilities evolve.
+When pass rates drop below threshold, the eval suite blocks deployment. Revisit thresholds as capabilities evolve.
 
 ## Evaluate End-State, Not Process
 
-For agents that modify persistent state across multiple turns, evaluate final outcomes. A longer path that reaches the correct state beats a shorter path that does not. See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for implementation.
+For agents that modify persistent state across turns, evaluate final outcomes. A longer path that reaches the correct state beats a shorter path that does not. See [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) for implementation.
 
-Cognition operationalizes this at scale in Devin's test mode: rather than asserting on the execution path, the agent spins up the app in its own VM, clicks through it, and confirms the change actually works "the same way an engineer would," with each run scaling out in parallel on its own dev server. [Source: [Cognition: Verifying Agentic Development at Scale](https://cognition.ai/blog/testing-development)]
+Cognition operationalizes this in Devin's test mode: rather than asserting on the execution path, the agent spins up the app in its own VM, clicks through it, and confirms the change works "the same way an engineer would," each run scaling out in parallel on its own dev server. [Source: [Cognition: Verifying Agentic Development at Scale](https://cognition.ai/blog/testing-development)]
 
 ## Example
 
@@ -137,14 +137,14 @@ print(f"Deterministic: {deterministic['passed']} | Behavioral: {behavioral}")
 
 ## Multi-Agent Considerations
 
-Small prompt changes in one agent unpredictably alter subagent behavior. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)] Monitor interaction patterns across the full system and establish golden trajectory baselines to catch regressions across decision points.
+Small prompt changes in one agent unpredictably alter subagent behavior. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)] Monitor interaction patterns and establish golden trajectory baselines to catch regressions across decision points.
 
 ## When This Backfires
 
 Behavioral testing pays off only when outputs are genuinely non-deterministic:
 
 - **Constrained function-calling agents**: Structured JSON with a fixed schema needs equality checks. LLM grading adds cost without signal.
-- **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve it for the agentic layer; code-check structured outputs at scale. Designing the grader to be cheap at scale is itself a domain-grounded engineering decision — LangChain describes co-designing efficient verifiers with Harvey for legal agents, trading verifier cost against the economics of the domain. [Source: [Designing Efficient Verifiers for Legal Agents](https://blog.langchain.com/designing-efficient-verifiers-for-legal-agents)]
+- **High-volume regression suites**: LLM-as-judge at thousands of cases per CI run is slow and expensive. Reserve it for the agentic layer; code-check structured outputs at scale. Grader cost at scale is itself a domain-grounded decision — LangChain describes co-designing efficient verifiers with Harvey for legal agents, trading verifier cost against domain economics. [Source: [Designing Efficient Verifiers for Legal Agents](https://www.langchain.com/blog/designing-efficient-verifiers-for-legal-agents)]
 - **Uncalibrated thresholds**: Thresholds set without real failure data either block valid outputs or pass defective ones.
 - **Uncalibrated LLM judge**: An LLM grader not calibrated against human experts introduces systematic bias that invalidates the eval pipeline.
 

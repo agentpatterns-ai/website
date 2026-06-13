@@ -8,12 +8,12 @@ aliases:
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Progressive Disclosure for Agent Definitions
+# Progressive Disclosure for Layered Agent Definitions
 
-> Keep agent definitions minimal — identity and scope only — and load detailed task knowledge on demand through skills rather than front-loading everything into the definition.
+> Keep agent definitions minimal — identity and scope only — and load task knowledge on demand through skills rather than front-loading everything.
 
 ## The Problem with Monolithic Definitions
 
@@ -46,13 +46,13 @@ The agent reads the definition, then reads only the skills relevant to the curre
 
 ## Context Budget Impact
 
-A monolithic agent definition of 2000 tokens loads 2000 tokens on every invocation. Separated into a 200-token definition and five 400-token skills, a task requiring two skills loads 200 + 400 + 400 = 1000 tokens — half the baseline, with the same available knowledge.
+A monolithic 2000-token definition loads 2000 tokens on every invocation. Separated into a 200-token definition and five 400-token skills, a task requiring two skills loads 200 + 400 + 400 = 1000 tokens — half the baseline, same available knowledge.
 
-For long-running agents and agents spawned as sub-agents at scale, this compounds. Each sub-agent inheriting a bloated definition multiplies the waste across the entire fan-out.
+For sub-agents spawned at scale, this compounds: each one inheriting a bloated definition multiplies the waste across the entire fan-out.
 
 ## Implementation
 
-Agent definitions reference skills by name or path. The agent reads them when the task requires it:
+Agent definitions reference skills by name or path; the agent reads them on demand:
 
 ```
 # Content Writer Agent
@@ -63,7 +63,7 @@ You are the content writer for the documentation site.
 
 **Skills available:**
 - writing-rules: style, tone, structure standards
-- accuracy-framework: source verification and [unverified] marking
+- accuracy-framework: source verification and claim sourcing rules
 - content-pipeline: label transitions and PR conventions
 
 Read the relevant skill before beginning each task.
@@ -149,17 +149,11 @@ The pattern is most effective when tasks are clearly scoped and skills are genui
 
 ## Related
 
+- [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
+- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](../standards/agent-definition-formats.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
-- [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
-- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
-- [Externalization in LLM Agents](externalization-in-llm-agents.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Persona as Code](persona-as-code.md)
-- [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
-- [Harness Engineering for Building Reliable AI Agents](harness-engineering.md)
-- [Agent Harness: Initializer and Coding Agent Pattern](agent-harness.md)

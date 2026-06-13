@@ -8,12 +8,12 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth
 
-> A single pass@k number misreads what RL does to a tool-use agent. Vary sampling budget *k* and interaction depth *T* together to tell capability expansion apart from efficiency gains.
+> A pass@k number misreads RL's effect on a tool-use agent. Vary sampling budget *k* and interaction depth *T* jointly to separate capability expansion from efficiency.
 
 ## Why One-Dimensional pass@k Misleads for Agents
 

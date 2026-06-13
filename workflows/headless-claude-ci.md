@@ -8,6 +8,7 @@ tags:
   - claude
   - github-actions
   - agent-design
+  - automation
 aliases:
   - "claude print mode"
   - "non-interactive Claude"

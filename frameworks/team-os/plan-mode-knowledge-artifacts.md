@@ -8,12 +8,12 @@ tags:
   - human-factors
   - claude
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Plan Mode for Knowledge Artifacts
 
-> The plan is the work: for PRDs, strategy memos, and architectural briefs, freezing direction in a reviewed plan before any prose is generated compounds the gains plan mode already delivers for code.
+> For PRDs, strategy memos, and architectural briefs, freezing direction in a reviewed plan before prose is generated compounds the gains plan mode delivers for code.
 
 Plan mode's value on knowledge artifacts is higher than on code, not lower. Prose errors do not fail a test suite — they hide in reviewer fatigue, anchor downstream readers on the first draft, and only surface after someone has already built on a wrong assumption. Hannah Stulberg, who runs her PM workflow through this pattern, states the thesis plainly: "The plan is not overhead. The plan is the work" ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 

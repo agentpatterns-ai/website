@@ -6,12 +6,12 @@ tags:
   - agent-design
   - workflows
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Cloud-Local Agent Handoff
 
-> Transitioning work between cloud-based agents and local CLI/IDE environments while preserving branches, logs, and context for continuous development across execution surfaces.
+> Cloud-local handoff moves an agent session between cloud and local surfaces while preserving the branch, session logs, and conversation context for continuous work.
 
 ## The Problem
 
@@ -112,7 +112,5 @@ Cloud-local handoff depends on session state being transferable, which breaks do
 - [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md)
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md)
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](../workflows/programmatic-cloud-agent-dispatch.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [CLI-IDE-GitHub Context Ladder](../workflows/cli-ide-github-context-ladder.md)
-- [Changelog-Driven Feature Parity](../workflows/changelog-driven-feature-parity.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)

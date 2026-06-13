@@ -9,12 +9,12 @@ aliases:
   - asynchronous tool usage
   - real-time agent architecture
   - speculative tool execution
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Asynchronous Agent I/O and Speculative Tool Calling
 
-> A synchronous agent loop blocks on every tool call, so user-perceived latency stacks linearly with tool I/O. An event-driven FSM with priority scheduling — optionally extended with speculative tool calls — keeps the response budget bounded by dispatch time instead of tool completion time.
+> Asynchronous tool I/O runs an event-driven FSM so latency is bounded by dispatch time, not tool completion; speculative calls dispatch predicted tools early.
 
 ## The Latency Budget Problem
 
