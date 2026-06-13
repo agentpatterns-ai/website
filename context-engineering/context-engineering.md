@@ -9,12 +9,12 @@ aliases:
   - context management
   - context design
   - context window management
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Context Engineering: The Discipline of Designing Agent Context
+# Context Engineering: The Practice of Shaping Agent Context
 
-> Context engineering is the practice of designing what information enters a model's context window, how it is structured, and what is excluded — to maximise the quality and reliability of agent output.
+> Context engineering designs what enters a model's context window, how it is structured, and what is excluded — to maximise output quality.
 
 ## What Context Engineering Is
 
@@ -116,42 +116,11 @@ The key decisions were about exclusion: what not to load, when not to load it, a
 
 ## Related
 
-- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
+- [Layered Context Architecture](layered-context-architecture.md)
+- [Context Budget Allocation](context-budget-allocation.md)
 - [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
-- [Context Priming](context-priming.md)
-- [Layered Context Architecture](layered-context-architecture.md)
 - [Lost in the Middle](lost-in-the-middle.md)
-- [Semantic Context Loading](semantic-context-loading.md)
-- [Prompt Compression](prompt-compression.md)
+- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Seeding Agent Context](seeding-agent-context.md)
-- [Attention Sinks](attention-sinks.md)
-- [Context Budget Allocation](context-budget-allocation.md)
-- [Context Window Dumb Zone](context-window-dumb-zone.md)
-- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
-- [Filter and Aggregate in the Execution Environment](filter-aggregate-execution-env.md)
-- [Repository Map Pattern](repository-map-pattern.md)
-- [Prompt Chaining](prompt-chaining.md)
-- [Observation Masking](observation-masking.md)
-- [Goal Recitation](goal-recitation.md)
-- [Prompt Cache Economics](prompt-cache-economics.md)
-- [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md)
-- [Error Preservation in Context](error-preservation-in-context.md)
-- [Context-Injected Error Recovery](context-injected-error-recovery.md)
-- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
-- [Static Content First: Maximizing Prompt Cache Hits](static-content-first-caching.md)
-- [Disable Attribution Headers to Preserve KV Cache in Local Inference](kv-cache-invalidation-local-inference.md)
-- [Environment Specification as Context](environment-specification-as-context.md)
-- [Instruction-Guided Code Completion](instruction-guided-code-completion.md)
-- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
-- [Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning](structured-domain-retrieval.md)
-- [Token-Efficient Code Generation: Structural Beats Prompting](token-efficient-code-generation.md)
-- [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
-- [Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools](context-window-diagnostic-tooling.md)
-- [Evolving Playbooks: Incremental Context That Preserves Knowledge](evolving-playbooks.md)
-- [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)
 - [Turn-Level Context Decisions: Continue, Rewind, Clear, Compact, or Delegate](turn-level-context-decisions.md)

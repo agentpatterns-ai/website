@@ -5,7 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
   - human-factors
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Process Amplification: Scaling Human Work with Agents
@@ -102,15 +102,8 @@ The agent did not become smarter. The environment gave it something to push agai
 - [Codebase Readiness](../agent-design/codebase-readiness.md)
 - [Agent Backpressure](../agent-design/agent-backpressure.md)
 - [Convention Over Configuration](../instructions/convention-over-configuration.md)
-- [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
 - [Verification Ledger](../verification/verification-ledger.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Rigor Relocation](rigor-relocation.md)
-- [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md)
-- [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md)
-- [Skill Atrophy](skill-atrophy.md)
-- [Progressive Autonomy with Model Evolution](progressive-autonomy-model-evolution.md)
 - [The Bottleneck Migration](bottleneck-migration.md)
-- [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md)
 - [Strategy Over Code Generation](strategy-over-code-generation.md)
-- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)

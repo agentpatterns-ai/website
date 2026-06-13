@@ -1,7 +1,7 @@
 ---
 title: "Coding Agent Scope Expansion: When to Extend Beyond the Codebase"
 term: "Coding Agent Scope Expansion"
-description: "Expanding a coding agent into browser, ops, and knowledge-work only pays off when scaffold discipline, per-domain evals, and credential isolation carry across the boundary."
+description: "Expanding a coding agent beyond the codebase pays off only when scaffold discipline, per-domain evals, and credential isolation carry across the boundary."
 tags:
   - agent-design
   - workflows
@@ -10,12 +10,12 @@ tags:
 aliases:
   - general-purpose coding agent
   - coding agent generalization
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Coding Agent Scope Expansion: When to Extend Beyond the Codebase
 
-> Extending a coding agent into browser, ops, and knowledge-work only works when the coding scaffold — loops, verification, evals, credential boundaries — carries into the new domain. Without that transfer, the generalist agent regresses to base-model behavior on unfamiliar tasks.
+> Extending a coding agent beyond the codebase only works when its scaffold — loops, verification, evals, credential boundaries — carries into the new domain.
 
 ## The Expansion Decision
 

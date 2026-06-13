@@ -11,7 +11,7 @@ tags:
 aliases:
   - agent troubleshooting
   - LLM debugging
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent Debugging: Diagnosing Bad Agent Output
@@ -65,7 +65,7 @@ Some failures are capability problems, not context problems. A smaller model pro
 
 ## Transcript Analysis
 
-Claude Code stores session history under `~/.claude/projects/` ([configuration file locations](https://code.claude.com/docs/en/troubleshooting#configuration-file-locations)). Use it to trace what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether the agent flagged a missing resource.
+Claude Code stores session transcripts locally under `~/.claude/projects/` ([data retention — local caching](https://code.claude.com/docs/en/data-usage#data-retention)). Use it to trace what the agent did first, when behavior diverged, whether tool failures caused a pivot, and whether it flagged a missing resource.
 
 The [troubleshooting documentation](https://code.claude.com/docs/en/troubleshooting) recommends `/doctor` to surface environment issues (malformed config, MCP errors, oversized instruction files) not visible during normal operation.
 

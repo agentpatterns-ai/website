@@ -10,7 +10,7 @@ tags:
 aliases:
   - AGENTS.md evaluation
   - context file benchmarks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Evaluating AGENTS.md: When Context Files Hurt More Than Help
@@ -25,8 +25,9 @@ Two studies evaluated AGENTS.md-style context files on real coding benchmarks:
 |-------|-----------|---------|
 | Gloaguen et al. (2026) | SWE-bench Lite (300 tasks), AGENTbench (138 tasks) | LLM-generated files: **-3% success, +20% cost**. Human-written files: **+4% success, +19% cost** |
 | Lulla et al. (2026) | 10 repos, 124 PRs | AGENTS.md present: **-28.6% runtime, -16.6% output tokens**, completion rates unchanged |
+| AIDev (2026) | Agentic PRs across many projects | Context files do not reliably improve merge rate: **27.7% of projects improved ≥20%** while **26.35% degraded** |
 
-One measures success, the other efficiency. Context files can make agents faster but not more successful.
+One measures success, the other efficiency. A third, PR-level study reaches the same place from the merge-rate angle: an [AIDev empirical analysis](https://arxiv.org/abs/2606.13449) found instruction/context files do not reliably improve agentic-PR merge rate — roughly as many projects degraded (26.35%) as improved by ≥20% (27.7%). Context files can make agents faster but not more reliably successful.
 
 ## Why Auto-Generated Files Fail
 
@@ -101,6 +102,7 @@ The two studies also used different model and agent sets, so it is unclear wheth
 
 - [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988)
 - [Lulla et al. — On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents](https://arxiv.org/abs/2601.20404)
+- [AIDev — Empirical analysis of agentic-PR merge rates and context files](https://arxiv.org/abs/2606.13449)
 - [InfoQ — New Research Reassesses the Value of AGENTS.md Files for AI Coding](https://www.infoq.com/news/2026/03/agents-context-file-value-review/)
 - [Upsun — The research is in: your AGENTS.md is probably too long](https://devcenter.upsun.com/posts/agents-md-less-is-more/)
 

@@ -12,7 +12,7 @@ aliases:
   - MemFail-style memory testing
   - three-operation memory benchmark
   - per-component memory diagnostics
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Component-Isolated Memory Stress Testing

@@ -9,12 +9,12 @@ tags:
 aliases:
   - reasoning checkpoint
   - mid-stream reasoning
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Think Tool
 
-> The think tool is a mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action.
+> The think tool is a mid-stream reasoning checkpoint between tool calls, giving agents space to reflect on tool output before deciding the next action.
 
 ## What the Think Tool Does
 
@@ -133,5 +133,4 @@ Without this prompt guidance, the model may invoke `think` too rarely on novel o
 - [The Plan-First Loop: Design Before Code](../workflows/plan-first-loop.md)
 - [Three Reasoning Spaces](three-reasoning-spaces.md)
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md)
-- [Controlling Agent Output](../instructions/controlling-agent-output.md)
 - [Rollback-First Design](rollback-first-design.md)

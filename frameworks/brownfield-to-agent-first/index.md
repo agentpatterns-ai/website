@@ -6,6 +6,8 @@ tags:
   - workflows
   - human-factors
   - tool-agnostic
+  - index
+  - frameworks
 aliases:
   - brownfield to agent-first
   - repo maturity framework

@@ -12,7 +12,7 @@ aliases:
   - ADR for agents
   - MCP runtime detection
   - agentic detection and response
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Agentic Detection and Response at the MCP Boundary
@@ -62,7 +62,7 @@ The pattern is calibrated for enterprise deployments; smaller or differently-sha
 - **Tightly constrained tool catalogs.** When tool sequences are fully enumerable, a [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) gives deterministic enforcement at ~2.2 ms per call. A probabilistic detector only generates alerts the firewall already blocks.
 - **Slow-drift and memory-poisoning attacks.** Triggered backdoors in agent memory or RAG stores activate only on attacker-chosen conditions — AgentPoison achieves >80% attack success with <1% benign-task degradation ([Chen et al., arXiv:2407.12784](https://arxiv.org/abs/2407.12784)) — so per-session detectors that never observe the trigger miss them. Pair ADR with offline baselining or memory provenance; see [Trojan Hippo: Dormant Memory Payloads](trojan-hippo-memory-attack.md).
 - **No SOC capacity to action alerts.** A ~97% precision detector at 67% recall still generates triage load. Teams without incident response accumulate unactioned alerts and devalue the signal.
-- **Naive telemetry without two-tier amortisation.** Provenance-EDR systems have historically added up to **821% runtime overhead** and 10x the industry-expected memory footprint per host ([Inam et al., arXiv:2307.08349](https://arxiv.org/pdf/2307.08349)). Copying the sensor without the triage architecture reproduces that cost problem.
+- **Naive telemetry without two-tier amortisation.** Provenance-EDR systems have historically added up to **821% runtime overhead** and 10x the industry-expected memory footprint per host ([Dong et al., arXiv:2307.08349](https://arxiv.org/pdf/2307.08349)). Copying the sensor without the triage architecture reproduces that cost problem.
 
 ## Trade-offs
 

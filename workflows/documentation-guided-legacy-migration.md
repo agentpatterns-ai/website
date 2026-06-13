@@ -12,7 +12,7 @@ aliases:
   - documentation-driven C to Rust migration
   - blueprint-driven legacy migration
   - architecture-documentation migration
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Documentation-Guided Legacy Migration
@@ -120,3 +120,4 @@ The diff surfaces a real bug: the Rust version changed ownership semantics from 
 - [Lay the Architectural Foundation by Hand Before Delegating](architectural-foundation-first.md) — Greenfield analogue: human-authored architecture as the agent's anchor.
 - [Monolith-to-Sub-Agents Refactor](monolith-to-subagents-refactor.md) — Sibling pattern for migrating brittle agent prototypes through schema-first contracts.
 - [The Research-Plan-Implement Pattern](research-plan-implement.md) — The general three-phase shape this workflow specializes for legacy migration.
+- [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Sibling workflow for the case where a verified executable reference exists; uses production output as the IR rather than a generated architecture document.

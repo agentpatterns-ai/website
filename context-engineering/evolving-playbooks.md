@@ -12,12 +12,12 @@ aliases:
   - agentic context engineering
   - context collapse
   - brevity bias in context
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Evolving Playbooks: Incremental Context That Preserves Knowledge
 
-> Replace monolithic prompt rewrites with structured delta entries that accumulate, refine, and organize agent strategies -- preventing the brevity bias and context collapse that erode knowledge during iterative rewriting.
+> Structured delta entries that accumulate and refine agent strategies prevent the brevity bias and context collapse that erode knowledge during monolithic prompt rewrites.
 
 ## When This Pattern Applies
 

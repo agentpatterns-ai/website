@@ -10,18 +10,16 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Emergent Architecture in AI-Driven Codebases
 
-> AI coding agents produce codebases with measurable architectural biases — not through mistakes, but through how agents work. Recognizing the fingerprint lets teams audit what agents built and intervene before the biases compound.
+> AI coding agents produce codebases with measurable architectural biases; recognizing the fingerprint lets teams audit what agents built before the biases compound.
 
 ## The Core Problem
 
-Human architects make deliberate decisions. Agents make locally optimal decisions. A codebase built by agents develops architectural character through accumulated bias rather than design intent — no single PR looks wrong; the aggregate does.
-
-This is a structural property of how agents work: context-window blindness to architectural rationale, training-frequency priors on tool selection, and output-completeness bias.
+Human architects decide deliberately; agents decide locally. A codebase built by agents develops architectural character through accumulated bias rather than design intent — no single PR looks wrong; the aggregate does. The drivers are structural: context-window blindness to architectural rationale, training-frequency priors on tool selection, and output-completeness bias.
 
 ## The Four Measurable Biases
 
@@ -38,11 +36,11 @@ Agents read existing code and reproduce patterns faithfully — including deprec
 
 A legacy `fetchWithRetry` utility with three existing usages becomes 23 usages after two sprints of agent work. Each usage is correct in isolation. The utility now costs 23-file migrations to remove.
 
-A counter-finding qualifies the headline duplication number: a 2026 MSR mining study of agent-first and IDE-first repositories reports duplication effects are "small and inconsistent" and locates the quality risk in structural complexity rather than copy/paste proliferation ([Agarwal et al., MSR 2026](https://arxiv.org/abs/2601.13597)). Treat raw copy/paste rate as a weak signal on its own; cognitive complexity and static-analysis warnings are the more stable indicators.
+A counter-finding qualifies the headline duplication number: a 2026 MSR mining study of agent-first and IDE-first repositories reports duplication effects are "small and inconsistent" and locates the quality risk in structural complexity rather than copy/paste proliferation ([Agarwal et al., MSR 2026](https://arxiv.org/abs/2601.13597)). Treat raw copy/paste rate as a weak signal; cognitive complexity and static-analysis warnings are the stable indicators.
 
 ### 2. Abstraction Bloat
 
-Agents optimize for comprehensive-looking output: a notification sender returns a rate limiter, analytics hook, and abstract factory never requested. LoC increases 76% in agent-assisted repositories; cognitive complexity rises 39% ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)). The bias is directional: agents add abstractions rather than collapse them, and refactoring drops because each task is treated as greenfield.
+Agents optimize for comprehensive-looking output: a notification sender returns a rate limiter, analytics hook, and abstract factory never requested. LoC increases 76% in agent-assisted repositories; cognitive complexity rises 39% ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)). The bias is directional: agents add abstractions rather than collapse them, and refactoring drops as each task is treated as greenfield.
 
 ### 3. Symptomatic Fixes Over Root-Cause Diagnosis
 
@@ -71,15 +69,15 @@ graph TD
 
 When inheriting an agent-built codebase, check these signals:
 
-**Duplication and refactoring ratio** — run a duplication scanner; compare refactoring to feature commits. Agent codebases frequently fall under 10% refactoring share (healthy: above 15%).
+**Duplication and refactoring ratio** — compare refactoring to feature commits. Agent codebases often fall under 10% refactoring share (healthy: above 15%).
 
-**ADR compliance** — agents do not read ADRs unless in the active context window.
+**ADR compliance** — agents ignore ADRs not in the active context window.
 
-**Cross-cutting concerns** — review error handling, logging, and authentication across modules separately; coherence gaps concentrate here.
+**Cross-cutting concerns** — review error handling, logging, and auth across modules; coherence gaps concentrate here.
 
-**Technology stack** — verify tool choices reflect requirements; agents default to most-represented training corpus tools.
+**Technology stack** — verify tool choices fit requirements, not training-corpus frequency.
 
-**Abstraction depth** — single-implementation abstract base classes and factory patterns wrapping simple operations are reliable bloat indicators.
+**Abstraction depth** — single-implementation abstract base classes and factories wrapping simple operations are reliable bloat indicators.
 
 ## When This Backfires
 
@@ -128,8 +126,6 @@ The team uses this scan to prioritize: the retry-logic inconsistency affects 14 
 - [Abstraction Bloat](../anti-patterns/abstraction-bloat.md) — over-engineering from output-completeness bias; measurable impact and mitigations
 - [Boring Technology Bias](../anti-patterns/boring-technology-bias.md) — training-frequency priors on tool selection
 - [Codebase Readiness for Agents](codebase-readiness.md) — preparing a codebase before scaling agent usage
-- [Harness Engineering](harness-engineering.md) — structural constraints on agent behavior
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md) — linters and CI as the primary enforcement layer
-- [Implicit Knowledge Problem](../anti-patterns/implicit-knowledge-problem.md)
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) — why architectural rationale is invisible to agents by default
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md) — the machine-readable instruction file standard for encoding architectural rules

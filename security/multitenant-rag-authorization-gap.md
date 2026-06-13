@@ -12,7 +12,7 @@ aliases:
   - relevance-authorization gap
   - multi-tenant RAG isolation
   - ABAC-gated retrieval
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Multitenant RAG: Closing the Relevance-Authorization Gap
@@ -136,4 +136,3 @@ The pre-filter restricts candidates before scoring; the post-filter catches ANN 
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md)
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
-- [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md)

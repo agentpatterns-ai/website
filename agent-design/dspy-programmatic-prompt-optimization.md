@@ -9,12 +9,12 @@ tags:
 aliases:
   - programmatic prompt optimization
   - DSPy prompt compiler
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # DSPy: Programmatic Prompt Optimization
 
-> DSPy treats prompts as learnable parameters: define a metric, supply training examples, and an optimizer searches the prompt and few-shot space automatically — eliminating manual prompt tuning for stable compound pipelines.
+> DSPy treats prompts as learnable parameters: given a metric and training examples, an optimizer searches the prompt and few-shot space automatically, replacing manual tuning.
 
 ## When to Apply
 

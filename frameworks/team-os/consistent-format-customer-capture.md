@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Consistent-Format Customer Capture
 
-> A frozen schema for customer-call summaries turns prose into a queryable dataset: every file shares the same headings in the same order, so an agent grep-aggregates across hundreds of calls in seconds.
+> Consistent-format customer capture freezes one heading schema across every call summary, turning prose into a dataset an agent grep-aggregates across hundreds of files in seconds.
 
 ## Why Shape Consistency Beats Content Richness
 

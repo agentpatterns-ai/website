@@ -8,14 +8,14 @@ tags:
 aliases:
   - swarm code migration
   - parallel file migration
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Swarm Migration Pattern
 
-> A coordinator agent builds a complete task list, then fans out to 10–20 parallel workers — each independently migrating a chunk of files — achieving 6–10x speedup for large-scale atomic transformations.
+> A swarm migration fans a coordinator's task list out to 10–20 parallel workers, each migrating an independent file slice for 6–10x speedup.
 
 ## How It Works
 

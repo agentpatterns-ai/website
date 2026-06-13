@@ -5,6 +5,7 @@ tags:
   - training
   - cost-performance
   - tool-agnostic
+  - rag
 last_reviewed: 2026-05-27
 ---
 

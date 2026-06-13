@@ -12,7 +12,7 @@ aliases:
   - HBHC
   - heartbeat-bound credentials
   - cryptographic revocation for AI agent swarms
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Heartbeat-Bound Hierarchical Credentials for Agent Swarms

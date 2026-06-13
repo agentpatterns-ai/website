@@ -8,7 +8,7 @@ tags:
 aliases:
   - "multi-layer fact-checking"
   - "defense in depth for accuracy"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Layered Accuracy Defense
@@ -46,13 +46,7 @@ graph TD
 
 ## Why Multiple Layers
 
-A single "fact-checker" agent at the end of the pipeline has to re-examine the entire artifact. It may miss claims that were stated confidently, may trust citations without verifying them, or may have the same knowledge gaps as the writer. Multiple independent layers catch different failure modes:
-
-- The researcher layer prevents the writer from inventing sources
-- The writer layer prevents recalled knowledge from entering as fact
-- The reviewer layer catches anything the writer missed
-
-Each layer only needs to catch some errors, not all. Because each layer checks a distinct property — source existence, note fidelity, and citation completeness — an error must evade three different detection criteria to reach the reader. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
+A single "fact-checker" agent at the end of the pipeline has to re-examine the entire artifact. It may miss confidently-stated claims, may trust citations without verifying them, or may share the writer's knowledge gaps. Splitting the work helps because each layer checks a distinct property — source existence, note fidelity, and citation completeness — so an error must evade three different detection criteria to reach the reader, not the same check repeated. A [2025 review of LLM fact-checking](https://arxiv.org/abs/2508.03860) reaches a similar conclusion: integrated approaches that combine retrieval, prompting, and external evidence validation outperform any single metric or checkpoint.
 
 ## What Each Layer Checks
 
@@ -64,9 +58,9 @@ Each layer only needs to catch some errors, not all. Because each layer checks a
 
 ## Anti-Pattern
 
-Relying on a single review agent at the end of the pipeline. That agent will see confident, well-written prose with plausible citations. It has no way to distinguish fabricated confidence from real sourcing unless it re-verifies every claim independently — which is expensive and still fallible.
+Relying on a single review agent at the end of the pipeline: it sees confident, well-written prose with plausible citations and cannot distinguish fabricated confidence from real sourcing unless it re-verifies every claim — expensive and still fallible.
 
-A second anti-pattern is allowing intermediate layers to emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer that has less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
+A second anti-pattern is letting intermediate layers emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer with less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
 
 ## Key Takeaways
 
@@ -84,6 +78,8 @@ Layered verification adds latency and cost proportional to the number of agents.
 - **Simple lookup tasks** where a single agent retrieves and returns a fact — adding a reviewer layer adds cost without addressing the root failure mode (model fabrication without retrieval).
 - **Rapid iteration contexts** where speed matters more than accuracy — a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
 - **Correlated knowledge gaps** — if the writer and reviewer share the same training data blind spots, both layers will miss the same class of errors. Independent layers require genuinely different perspectives or constraints, not just role labels.
+
+Chaining agents does not automatically reduce errors — without disciplined handoffs it can amplify them. A 2025 study of role-specialized pipelines ([Planner → Executor → Critic](https://arxiv.org/abs/2510.07614)) finds that in sequential multi-agent systems "errors quietly pass from one stage to the next": a confident but wrong intermediate output gets written into shared context as ground truth, and a downstream layer tends to align with it rather than push back. Layered accuracy defense only pays off when each handoff forces the next layer to re-derive what it checks from the source — not from the previous agent's assertion. A reviewer that trusts the writer's framing instead of re-verifying against the citation adds latency without adding a real checkpoint.
 
 The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks every assertion against a citation. If two layers are doing the same check, one is redundant.
 
@@ -119,7 +115,7 @@ defect. Return a list of flagged claims with line numbers. Hedge tags
 are not an acceptable substitute for a citation — flag those too.
 ```
 
-The researcher rejects claims without URLs. The writer omits anything beyond the notes and opens an outstanding-research item. The reviewer catches anything the writer let through. Each layer's failure mode is independent, so a fabricated claim must survive all three to reach the reader.
+Each layer's failure mode is independent, so a fabricated claim must survive all three to reach the reader.
 
 ## Related
 

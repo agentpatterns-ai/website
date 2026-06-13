@@ -10,7 +10,7 @@ tags:
   - harness-engineering
   - tool-agnostic
   - human-factors
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Rigor Relocation: Engineering Discipline with AI Agents
@@ -107,24 +107,21 @@ Rigor relocation has real costs. The scaffolding-first bet fails or yields poor 
 - **Harness correctness burden**: The harness itself can encode wrong invariants. A passing test suite that validates incorrect behavior is harder to debug than a failed prompt, because failures become invisible rather than explicit.
 - **Skill atrophy accelerates**: Mechanical enforcement reduces the need for engineers to reason about correctness directly, which compounds over time (see [Skill Atrophy](skill-atrophy.md)).
 
+## Key Takeaways
+
+- Engineering discipline does not vanish when agents write the code -- it relocates from code style and abstractions to scaffolding, feedback loops, and mechanical enforcement.
+- Environment beats prompts because constraints have no salience decay: a failing test returns the same signal on step 1 and step 100, firing at the exact moment non-compliant output is generated.
+- Mechanical enforcement (linters, structural tests, CI guardrails) compounds across every session and agent, where a written convention catches one issue in one review.
+- The bottleneck inverts from writing code to verifying it, making the verification pyramid the new quality architecture.
+- The bet backfires when scope is too narrow to recoup the overhead, when infrastructure is locked in prematurely, or when the harness encodes wrong invariants.
+
 ## Related
 
 - [Harness Engineering](../agent-design/harness-engineering.md) -- the discipline of designing agent environments for reliable results
-- [Agent Harness](../agent-design/agent-harness.md) -- the specific initializer/coding-agent two-phase architecture
-- [Codebase Readiness](../agent-design/codebase-readiness.md) -- making code agent-friendly
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
+- [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) -- verification gates before task completion
-- [Progressive Disclosure for Agents](../agent-design/progressive-disclosure-agents.md) -- layered context loading
 - [Convention over Configuration](../instructions/convention-over-configuration.md) -- structural enforcement of decisions
 - [Context Engineering](../context-engineering/context-engineering.md) -- designing what agents can access
-- [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) -- implementing rigor relocation via deterministic shell hooks
-- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) -- deterministic enforcement over advisory instructions
 - [Bottleneck Migration](bottleneck-migration.md) -- how the review bottleneck shifts as agents accelerate code generation
-- [Context Ceiling](context-ceiling.md) -- limits on what context an agent can hold and how environment design compensates
-- [Process Amplification](process-amplification.md) -- how agents amplify existing processes, including rigor and verification
-- [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) -- constraints and verification demands by domain
-- [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) -- how rigor requirements evolve with increasing agent autonomy
-- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) -- how rigor relocation intersects with the broader shift in engineering identity
 - [Skill Atrophy](skill-atrophy.md) -- risk of losing verification skills as agents handle more
-- [Safe Command Allowlisting](../security/safe-command-allowlisting.md) -- enforcement guardrails for agent autonomy
-- [Strategy Over Code Generation](strategy-over-code-generation.md) -- prioritizing design rigor over raw output
-- [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- verification burden as agents scale

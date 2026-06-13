@@ -1,5 +1,5 @@
 ---
-title: "Convention Over Configuration in Agent Workflow Design"
+title: "Convention Over Configuration for Agent Workflows"
 term: "Convention Over Configuration"
 description: "Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents apply patterns rather than invent them."
 tags:
@@ -7,7 +7,7 @@ tags:
   - workflows
   - tool-agnostic
   - instructions
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Convention Over Configuration for Agent Workflows
@@ -111,18 +111,10 @@ The key shift: decisions that previously required judgment (what naming style? w
 ## Related
 
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
-- [Context Priming](../context-engineering/context-priming.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
-- [AGENTS.md Distributed Conventions](agents-md-distributed-conventions.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
-- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
-- [Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
-- [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
-- [Import Composition Pattern](import-composition-pattern.md)
-- [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
-- [Prompt Governance via PR](prompt-governance-via-pr.md)
+- [Instruction File Ecosystem](instruction-file-ecosystem.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)

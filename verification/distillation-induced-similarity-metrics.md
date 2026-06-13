@@ -12,12 +12,12 @@ aliases:
   - response pattern similarity
   - action graph similarity
   - RPS and AGS metrics
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Distillation-Induced Similarity Metrics for Tool-Use Agents
 
-> Quantify how much two models share non-mandatory tool-use behaviour. When fallback or ensemble models are distilled echoes of the primary, treating them as independent inflates routing diversity and consensus voting.
+> Two metrics quantify how much distilled models share non-mandatory tool-use behaviour, so routing and ensemble voting stop treating correlated failure modes as independent.
 
 ## Why Behavioural Overlap Matters
 

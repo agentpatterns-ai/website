@@ -7,7 +7,7 @@ aliases:
 tags:
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Discoverable vs Non-Discoverable Context
@@ -132,16 +132,5 @@ The "after" version is shorter and will never go stale: the project structure, A
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap an instruction file with only non-discoverable content
-- [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Context Priming: Pre-Loading Files for AI Agent Tasks](context-priming.md)
-- [Retrieval-Augmented Agent Workflows: On-Demand Context](retrieval-augmented-agent-workflows.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
-- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
 - [Layered Context Architecture](layered-context-architecture.md)
-- [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Attention Sinks: Why First Tokens Always Win](attention-sinks.md)

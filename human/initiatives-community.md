@@ -5,12 +5,12 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Initiatives and Community: Tracking the Agentic Engineering Landscape
 
-> Agentic engineering has an active community producing standards (agents.md, agentskills.io), trend analysis (o16g.com), and learning resources — tracking these initiatives is how practitioners stay ahead of a field that changes faster than any single source can cover.
+> Tracking agentic engineering standards, trend analysis, and learning communities keeps practitioners ahead of a field that moves faster than any single source covers.
 
 ## Why Community Tracking Works
 

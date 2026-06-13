@@ -11,12 +11,12 @@ aliases:
   - reasoning-execution separation
   - two-layer agent architecture
   - cognitive-execution split
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture
 
-> Separate the agent layer that decides what to do from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable.
+> Separate the agent layer that decides from the layer that acts — typed tool interfaces enforce the boundary and make each independently testable.
 
 ## The Split
 
@@ -120,6 +120,5 @@ The reasoning layer never opens files. The execution layer never decides what to
 - [Execution-First Delegation](execution-first-delegation.md)
 - [Cost-Aware Agent Design](cost-aware-agent-design.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
 - [Context Engineering](../context-engineering/context-engineering.md)
 - [Permission-Gated Custom Commands](../security/permission-gated-commands.md)

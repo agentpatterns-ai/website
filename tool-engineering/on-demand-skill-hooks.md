@@ -7,16 +7,17 @@ tags:
   - agent-design
   - claude
   - tool-engineering
+  - skills
 aliases:
   - on-demand hooks
   - session-scoped guardrails
   - opt-in hooks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation
 
-> Register `PreToolUse` hooks through a skill invocation to arm strict guardrails for the duration of a single session — without imposing that friction on every workflow.
+> Register `PreToolUse` hooks through a skill invocation to arm strict guardrails for a single session — without imposing that friction on every workflow.
 
 ## The Problem with Always-On Hooks
 
@@ -30,7 +31,7 @@ Skills can declare a `hooks` field in their YAML frontmatter using the same conf
 
 Per the [Claude Code documentation](https://code.claude.com/docs/en/hooks), skill hooks "use the same configuration format as settings-based hooks but are scoped to the component's lifetime and cleaned up when it finishes." The hooks are component-scoped — active while the skill is running — rather than persistent across the whole session. This makes skills an effective way to temporarily arm guardrails for the duration of a specific task.
 
-Skill hooks support all hook event types — including `PreToolUse`, `PostToolUse`, `PermissionRequest`, and `Stop` — plus one additional field not available in `settings.json` or agents: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
+Skill hooks support all hook event types — including `PreToolUse`, `PostToolUse`, `PermissionRequest`, and `Stop` — plus one additional field not honored in `settings.json` or agent frontmatter: `once`. When `once: true`, the hook fires once per session and is then removed — useful for initialization checks ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
 Hook source is shown in the `/hooks` menu with a `Session` label, distinguishing skill-registered hooks from project or user-level settings hooks ([changelog v2.1.75](https://code.claude.com/docs/en/changelog)).
 
@@ -146,7 +147,7 @@ When the skill finishes, the hook is removed. No cleanup required.
 
 - Skill-defined hooks are component-scoped: they activate when the skill runs and are removed when it finishes ([hooks reference](https://code.claude.com/docs/en/hooks))
 - Skill invocation is both the human signal ("I need prod-safe guardrails") and the system action (arming those guardrails)
-- The `once` field, available only in skill hooks, fires a hook once per session then removes it — useful for initialization guardrails
+- The `once` field, honored only in skill hooks (ignored in settings files and agent frontmatter), fires a hook once per session then removes it — useful for initialization guardrails
 - Session-sourced hooks appear with a `Session` label in the `/hooks` menu, distinct from project and user settings hooks
 - The tradeoff: on-demand hooks require the engineer to invoke the skill; always-on hooks enforce without relying on that discipline
 - Use on-demand hooks for context-specific restrictions; use always-on hooks for universal team standards

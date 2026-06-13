@@ -1,5 +1,5 @@
 ---
-title: "Three Reasoning Spaces: Plan, Bead, and Code"
+title: "Three Reasoning Spaces: Plan-Bead-Code Phase Gates"
 term: "Three Reasoning Spaces"
 description: "Separate agent work into plan, bead, and code spaces — explicit phase gates prevent architecture drift during implementation and reduce rework costs."
 tags:
@@ -10,10 +10,10 @@ tags:
 aliases:
   - three-space framework
   - plan-bead-code
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Three Reasoning Spaces: Plan, Bead, and Code
+# Three Reasoning Spaces: Plan-Bead-Code Phase Gates
 
 > Treat plan space, bead space, and code space as explicit gates — transitioning between them deliberately prevents architecture drift during implementation.
 

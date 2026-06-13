@@ -10,7 +10,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Token-Efficient Tool Design: Tools That Don't Eat Your Context
@@ -24,7 +24,7 @@ last_reviewed: 2026-05-27
 
 Every tool call produces output that enters the context window. A tool returning a 10,000-token API response when 200 tokens would suffice consumes 10% of a 100k context window on a single call. [Context engineering](../context-engineering/context-engineering.md) ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)) identifies tool design as a direct lever on context quality: the shape of tool output determines how much of the context window is signal versus noise.
 
-The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token — irrelevant tokens compete with relevant tokens for model focus. [Liu et al. (2023)](https://arxiv.org/abs/2307.03172) show accuracy drops over 30% on multi-document QA when the target document is placed in the middle of a long context versus the beginning or end — the "lost in the middle" effect. Oversized tool output places task-relevant fields in a sea of noise, degrading the model's ability to act on them correctly.
+The mechanism is attention dilution. Transformer self-attention computes pairwise relationships across every token — irrelevant tokens compete with relevant tokens for model focus. [Liu et al. (2023)](https://arxiv.org/abs/2307.03172) find that accuracy degrades significantly on multi-document QA when the target document is placed in the middle of a long context versus the beginning or end — the "lost in the middle" effect. Oversized tool output places task-relevant fields in a sea of noise, degrading the model's ability to act on them correctly.
 
 ## Design Principles
 
@@ -52,7 +52,7 @@ A large toolset is a reasoning tax. Before each call, the agent evaluates availa
 
 **Overlapping tools for search.** Two tools that both search — one for files, one for code — without a clear distinction produce agent hesitation. The agent tries both or picks arbitrarily, consuming context in the process.
 
-**Toolset bloat.** A toolset of 30+ tools increases per-call reasoning cost. MCP tool metadata alone can add 30,000–60,000 tokens of overhead, consuming 25–30% of a 200k context window before any task work begins ([Lunar.dev](https://www.lunar.dev/post/why-is-there-mcp-tool-overload-and-how-to-solve-it-for-your-ai-agents)).
+**Toolset bloat.** A toolset of 30+ tools increases per-call reasoning cost. A typical multi-server MCP setup can consume ~55,000 tokens in tool definitions alone — before any task work begins ([Anthropic](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## Sizing Tool Output
 

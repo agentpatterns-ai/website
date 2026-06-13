@@ -9,12 +9,12 @@ tags:
   - human-factors
   - tool-agnostic
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party
 
-> When composing tools from multiple sources, define sandbox and guardrail rules only for the tools your harness controls — and document explicitly that external tools must enforce their own guardrails.
+> Define sandbox rules only for tools your harness controls, and document explicitly that external tools enforce their own guardrails.
 
 ## The Boundary Problem
 
@@ -78,6 +78,12 @@ Explicit scoping is not a cure-all. Specific failure conditions:
 1. **Exclusion confusion**: Stating "sandbox rules apply to shell tool only" can leave the model uncertain whether MCP tools have any restrictions at all, leading it to invoke them in contexts where the absent policy would have said no. Pair the exclusion with a brief statement of what governs MCP calls (e.g., "MCP tools enforce their own authorization").
 2. **False audit comfort**: A visibly scoped sandbox policy can create the impression that security has been addressed because the boundary is documented. Reviewers may skip auditing each MCP server's guardrails, assuming the explicit exclusion signals that MCP security was considered. Documentation of a gap is not closure of it.
 3. **Drift across tool upgrades**: A harness-owned tool can be reimplemented as an MCP server (or vice versa) without updating the sandbox rules. The explicit scoping then misdescribes the current surface. Treat the "which tools the sandbox covers" list as part of tool registration, not a one-time doc edit.
+
+## Counterpoint: Gateway-Enforced Uniform Policy
+
+The claim that a harness "cannot intercept" MCP calls holds for an *in-process* sandbox — once execution hands off to an MCP client, there is no interposition point. It does not hold for every architecture. A dedicated MCP gateway or proxy is a separate interposition point that all agent-to-server traffic crosses, evaluating each `tools/call` against a uniform policy and blocking violations before they reach the upstream server, without changes to the servers themselves. [Source: [MCP and Zero Trust — Cerbos](https://www.cerbos.dev/blog/mcp-and-zero-trust-securing-ai-agents-with-identity-and-policy)]
+
+This relocates a trust boundary rather than removing it. A gateway enforces coarse uniform rules (which tools are callable, rate limits, taint tracking) while each MCP server still owns the fine-grained authorization the gateway cannot see. The page's warning stands: writing in-process *shell-sandbox* rules as if they cover MCP tools is still a mistake. The correction is that "harness-level" need not mean "shell-sandbox-level" — a proxy boundary is a legitimate place to enforce some cross-tool policy, as long as it is documented as a distinct boundary, not conflated with the shell sandbox.
 
 ## Key Takeaways
 

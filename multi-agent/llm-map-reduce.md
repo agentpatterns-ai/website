@@ -11,12 +11,12 @@ tags:
   - multi-agent
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # LLM Map-Reduce Pattern
 
-> Split a large input into context-window-sized chunks, process each chunk independently (map), then combine chunk-level results into a coherent output (reduce).
+> Map-reduce splits a large input into context-window-sized chunks, processes each independently (map), then combines the chunk results into one coherent output (reduce).
 
 !!! note "Also known as"
     Chunk-Process-Merge, Parallel Summarization, Input-Partitioned Fan-Out. For the task-level delegation variant, see [Orchestrator-Worker](orchestrator-worker.md). For same-task parallel diversity, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
@@ -66,7 +66,7 @@ instructions + input_chunk + output_budget <= context_window_limit
 | Input chunk | 60–75% of remaining budget |
 | Output headroom | 25–40% of remaining budget |
 
-Err toward smaller chunks — context degradation is [non-linear](../context-engineering/context-window-dumb-zone.md), so 50% capacity outperforms 80%.
+Err toward smaller chunks. Anthropic frames context degradation ("context rot") as "a performance gradient rather than a hard cliff" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)), and its onset tracks an [absolute token threshold (~32K–100K), not a fixed percentage of the window](../context-engineering/context-window-dumb-zone.md) — so size chunks below that onset for the task type, not to a fill ratio.
 
 ## Decomposition Strategies
 
@@ -113,7 +113,7 @@ tools:
   - Read
   - Glob
   - Grep
-model: claude-haiku-3-5
+model: haiku
 ---
 
 Analyze the module at the provided path. Return:
@@ -166,7 +166,7 @@ A 200-file codebase with 15 modules, each too large for casual review in a singl
 ## Key Takeaways
 
 - Map-reduce splits by **input partition** — same operation on different data slices
-- Size chunks conservatively: 50% capacity outperforms 80% because context degradation is non-linear
+- Size chunks conservatively: keep each below the task's degradation onset (an absolute token threshold, not a fixed fill ratio) rather than near the window limit
 - Choose reduce strategy (single-pass, hierarchical, merge, vote) by chunk count and output type
 - Design for partial failure — retry individual chunks, degrade gracefully on incomplete results
 

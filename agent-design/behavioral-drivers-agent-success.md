@@ -11,7 +11,7 @@ aliases:
   - behavioral trajectory analysis
   - agent failure clusters
   - resolve rate limitations
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Behavioral Drivers of Coding Agent Success and Failure
@@ -120,4 +120,3 @@ Behavioral-pattern auditing and ensembling have diminishing returns in several c
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role loop for iterative quality improvement
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — routing tasks across competing agents to select the best result
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md) — choosing accumulated vs fresh context for iteration cycles
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating compute across exploration and execution phases

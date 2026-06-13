@@ -7,7 +7,7 @@ tags:
   - instructions
   - source:opendev-paper
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Event-Driven System Reminders

@@ -10,12 +10,12 @@ aliases:
   - session harness sandbox
   - virtualized agent primitives
   - three-primitive agent architecture
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Session Harness Sandbox Separation for Long-Running Agents
 
-> Decouple long-running agent work into three replaceable primitives — an append-only Session log, a stateless Harness loop, and a provisioned Sandbox — so each evolves, scales, and crash-recovers independently.
+> Split a long-running agent into three replaceable primitives — Session log, stateless Harness, provisioned Sandbox — so each scales and crash-recovers independently.
 
 ## The Three Primitives
 

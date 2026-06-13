@@ -9,12 +9,12 @@ tags:
 aliases:
   - self-healing agent loop
   - regression autofix pipeline
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Self-Healing Production Agent
 
-> A production pipeline that detects regressions after every deploy, determines whether the current change caused them, and dispatches a sub-agent to open a fix PR — reducing MTTR without removing human review.
+> A self-healing pipeline detects post-deploy regressions, triages whether the deploy caused them, and dispatches an agent to open a fix PR for human review.
 
 ## The Loop
 

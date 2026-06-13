@@ -9,7 +9,7 @@ tags:
 aliases:
   - grill me technique
   - plan interrogation technique
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Grill Me: Developer-Initiated Plan Interrogation
@@ -24,7 +24,7 @@ The inversion is developer-initiated and exhaustive. The agent is explicitly tas
 
 ## How It Works
 
-Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md) implements this as three directives to the agent:
+Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) implements this as three directives to the agent:
 
 1. Interview the developer relentlessly about every aspect of the plan
 2. Walk every branch of the decision tree, resolving dependencies one at a time — ask one question at a time, providing a recommended answer for each
@@ -82,11 +82,11 @@ The technique adds cost without value in three conditions:
 
 **No downstream artifact.** If the session findings are not captured (PRD, spec, written plan), agent statelessness erases them. The next session starts cold. Run Grill Me only when the output feeds a durable artifact.
 
-AI Hero catalogues further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/9-things-people-get-wrong-with-grill-me-and-grill-with-docs)).
+AI Hero catalogues further anti-patterns specific to `/grill-me` and `/grill-with-docs` — common ways plan stress-testing goes wrong before agentic implementation begins ([AI Hero, 9 things people get wrong with /grill-me and /grill-with-docs](https://www.aihero.dev/things-people-get-wrong-with-grill-me-and-grill-with-docs)).
 
 ## Example
 
-The complete grill-me skill from [mattpocock/skills](https://github.com/mattpocock/skills/blob/main/grill-me/SKILL.md) is a minimal instruction set — the [daily-use skill library](../workflows/daily-use-skill-library.md) characterises it as "three sentences" — that changes agent behavior at this decision point:
+The complete grill-me skill from [mattpocock/skills](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is a minimal instruction set — the [daily-use skill library](../workflows/daily-use-skill-library.md) characterises it as "three sentences" — that changes agent behavior at this decision point:
 
 ```
 Interview me relentlessly about every aspect of this plan until we reach a

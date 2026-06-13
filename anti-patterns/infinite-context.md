@@ -7,7 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Infinite Context

@@ -9,32 +9,34 @@ tags:
 aliases:
   - Secret-Use Delegation Protocol
   - Agent Secret Use
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # SUDP: Secret-Use Delegation Protocol for Agentic Systems
 
-> SUDP names the agentic-secrets problem and prescribes a three-role protocol — requester proposes, user authorizes, custodian redeems once — so a compromised agent never holds reusable authority.
+> SUDP prescribes a three-role secret-use protocol — requester proposes, user authorizes, custodian redeems once — so a compromised agent never holds reusable authority.
 
 ## The Authorization-by-Exposure Problem
 
-Bearer-secret interfaces — API keys, OAuth bearer tokens, refresh tokens — authorize by exposure: enabling action means placing a reusable secret, or an artifact derived from it, inside the model-steerable boundary. A transient prompt-injection becomes durable account compromise because the exfiltrated artifact remains valid for arbitrary future operations ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Bearer-secret interfaces — API keys, OAuth bearer tokens, refresh tokens — authorize by exposure: enabling action means placing a reusable secret, or an artifact derived from it, inside the model-steerable boundary. A transient prompt-injection becomes durable account compromise because the exfiltrated artifact remains valid for arbitrary future operations ([Yu et al. 2026](https://arxiv.org/abs/2604.24920)).
 
-Existing controls cover adjacent pieces — secret storage (Vault, AWS Secrets Manager), scoped delegation (OAuth scopes), sender-constrained tokens ([DPoP / RFC 9449](https://datatracker.ietf.org/doc/html/rfc9449)), runtime monitoring — but none address the combined agentic obligation: an untrusted requester causing a user-authorized secret-backed operation without exposing reusable authority ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Existing controls cover adjacent pieces — secret storage (Vault, AWS Secrets Manager), scoped delegation (OAuth scopes), sender-constrained tokens ([DPoP / RFC 9449](https://datatracker.ietf.org/doc/html/rfc9449)), runtime monitoring — but none address the combined agentic obligation: an untrusted requester causing a user-authorized secret-backed operation without exposing reusable authority ([Yu et al. 2026](https://arxiv.org/abs/2604.24920)).
 
 ## Agent Secret Use (ASU)
 
-The paper formalizes the problem as Agent Secret Use and derives a property taxonomy separating *structural* obligations (what any solution must do) from *realization-level* robustness conditions (what a concrete construction must establish):
+The paper formalizes the problem as Agent Secret Use and names seven properties: four *core* obligations any baseline must satisfy, plus three *robustness extensions* a construction adds against stronger adversaries ([Yu, Geng, Zeng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)):
 
-| Property | What it means |
-|----------|---------------|
-| **Verifiable authorization** | The custodian can verify that the user authorized this specific operation |
-| **Operation-bound** | A grant authorizes one canonical operation, not arbitrary use of the secret |
-| **Single-use** | A grant redeems exactly once; replay yields nothing |
-| **Storage confidentiality** | Secrets at rest are protected against custodian-storage compromise |
-| **Wrapping-epoch key isolation** | Compromise of one epoch's wrapping key does not unwrap other epochs' secrets |
+| Property | Class | What it means |
+|----------|-------|---------------|
+| **Authorization verifiability** | Core | Every induced execution is covered by an authorization event attributable to the user |
+| **Operation binding** | Core | An authorization binds to one operation; the mechanism cannot induce a semantically distinct one |
+| **Use boundedness** | Core | Induced execution cannot exceed the authorized bounds |
+| **Confidentiality under requester compromise** | Core | Compromising the requester exposes no authority-bearing material |
+| **Confidentiality under storage breach** | Robustness | A storage compromise of a secret-holding component does not expose the secret |
+| **Confidentiality under runtime-memory compromise** | Robustness | A runtime-memory compromise of a secret-processing component does not expose the secret |
+| **Rotation forward secrecy** | Robustness | Compromising one rotation epoch's material does not expose any other epoch's |
 
-Plaintext forward secrecy of the underlying secret is *not* structural — it requires the environment to rotate and revoke the secret independently ([SUDP abstract](https://arxiv.org/abs/2604.24920)).
+The robustness extensions are optional and, in the paper's realization, lean on a hardware-rooted runtime. Plaintext forward secrecy is environmental policy, not a named property — it needs the environment to rotate and revoke the secret ([SUDP abstract](https://arxiv.org/abs/2604.24920)).
 
 ## The Three Roles
 
@@ -54,7 +56,7 @@ sequenceDiagram
 - **User** — the principal. Authorizes the proposed operation with a fresh authenticator-backed grant.
 - **Custodian** — the secret holder. Redeems the grant **once** to perform the bounded operation.
 
-Reusable authority never crosses the requester boundary. Compromise of the requester yields at most one operation, not durable account access ([Yu, Geng, Knottenbelt 2026](https://arxiv.org/abs/2604.24920)).
+Reusable authority never crosses the requester boundary. Compromise of the requester yields at most one operation, not durable account access ([Yu et al. 2026](https://arxiv.org/abs/2604.24920)).
 
 ## How SUDP Differs from Adjacent Mechanisms
 
@@ -73,10 +75,10 @@ SUDP composes with these — it does not replace process isolation, scope minimi
 SUDP is a single April 2026 preprint with no reference implementation, no RFC track, and no independent cryptographic review. Treat it as a **vocabulary and problem framing**, not a deployable protocol:
 
 - ASU is useful for evaluating whether an existing secrets architecture leaks reusable authority into the agent boundary
-- The three-role decomposition guides the design of custom custodian services around long-lived secrets that an agent must cause to be used
-- End-to-end adoption requires a custodian implementation per upstream service — bearer-only upstreams need a custodian intermediary that itself becomes the high-value target
+- The three-role decomposition guides the design of custom custodian services around long-lived secrets an agent must cause to be used
+- End-to-end adoption needs a custodian per upstream service; bearer-only upstreams require an intermediary that becomes the new high-value target
 
-When SUDP-style guarantees matter but no custodian exists, compose available mechanisms: short-lived [scoped credentials behind a proxy](../security/scoped-credentials-proxy.md), DPoP-bound tokens where the upstream supports them, and per-operation grant issuance from a secrets manager.
+Where no custodian exists, approximate SUDP by composing short-lived [scoped credentials behind a proxy](../security/scoped-credentials-proxy.md), DPoP-bound tokens, and per-operation grants from a secrets manager.
 
 ## When the Cost Outweighs the Benefit
 
@@ -98,7 +100,7 @@ No production Slack-side custodian exists yet — SUDP describes the target shap
 
 - SUDP names the **Agent Secret Use** problem: an untrusted agent must cause a secret-backed operation without holding reusable authority
 - The protocol decomposes the responsibility into three roles — requester proposes, user authorizes with a fresh authenticator, custodian redeems exactly once
-- The structural properties are verifiable authorization, operation-binding, single-use redemption, storage confidentiality, and wrapping-epoch key isolation; plaintext forward secrecy needs environmental rotation
+- The four core properties are authorization verifiability, operation binding, use boundedness, and confidentiality under requester compromise; three robustness extensions (storage-breach, runtime-memory, and rotation-forward-secrecy confidentiality) harden against stronger adversaries, while plaintext forward secrecy needs environmental rotation
 - SUDP composes with — it does not replace — sender-constrained tokens, scope minimization, secrets-manager isolation, and sandboxing
 - Treat SUDP as a problem framing and design vocabulary today; deployable end-to-end use waits on reference implementations and independent review
 

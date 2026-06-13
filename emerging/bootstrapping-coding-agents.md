@@ -11,12 +11,12 @@ tags:
   - instructions
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Bootstrapping Coding Agents
 
-> A coding agent can re-implement itself from a natural language specification, reproducing the classical compiler bootstrap. The specification — not the implementation — is the stable artifact of record.
+> A coding agent can re-implement itself from a natural language specification, reproducing the compiler bootstrap. The specification, not the implementation, is the stable artifact.
 
 ## The Bootstrap Sequence
 
@@ -78,6 +78,7 @@ This is a single-paper finding with important caveats:
 - **Security risk.** Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models and running generation in controlled CI environments.
 - **Industrial validation is thin.** The paper cites a team of three to seven engineers that built a million-line codebase over five months using Codex, with zero manually written lines of code, by treating their `docs/` directory as the reference system ([source](https://arxiv.org/abs/2603.17399)). This is reported as an industrial existence proof, not a peer-reviewed replication.
 - **Spec is necessary but not sufficient.** Real systems require test suites, deployment configs, and operational knowledge alongside the spec. The spec is *a* primary artifact, not *the only* artifact.
+- **Convergence-testing conflates ambiguity with sampling variance.** The bootstrap framing treats any divergence between two implementations as evidence of an ambiguous spec. But LLM code generation is empirically non-deterministic: the same prompt produces non-equal output for 47–76% of tasks across benchmarks even at fixed settings ([Ouyang et al., 2023](https://arxiv.org/abs/2308.02828)). Two implementations can therefore diverge from a perfectly unambiguous spec, so a convergence test cannot cleanly separate spec defects from sampling noise without repeated trials.
 
 ## Example
 

@@ -13,12 +13,12 @@ tags:
 aliases:
   - initializer-coding agent pattern
   - two-phase agent harness
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Agent Harness: Initializer and Coding Agent
 
-> Structure long-running agent work as an initializer that prepares the environment and a coding agent that resumes reliably from any prior session — with eager construction, a structured execution cycle, and git-based handoff artifacts keeping every session on track.
+> A two-phase agent harness pairs an initializer that prepares the environment with a coding agent that resumes from any prior session via git-based handoff artifacts.
 
 ## The Stateless Session Problem
 
@@ -52,9 +52,9 @@ Each commit message is a structured handoff note documenting:
 
 `git log` becomes a human- and agent-readable audit trail of session progress.
 
-## Eager Construction
+## Lazy Tool Discovery
 
-Build system prompt and tool schemas before the constructor returns, eliminating first-call latency ([Bui, 2026 §2.2.1](https://arxiv.org/abs/2603.05344)). Assembly runs in three phases: skills discovery, subagent registration, main agent initialization. Subagents compile from spec to runtime, sharing a tool registry while isolating through [schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md).
+Keep the active tool set small instead of loading every schema up front. The OPENDEV agent uses lazy tool discovery to hold down context bloat and reasoning degradation, surfacing tools to the model on demand rather than registering them all at construction time ([Bui, 2026](https://arxiv.org/abs/2603.05344)). Subagents still compile from spec to runtime and share a tool registry, but each isolates the schemas it actually exposes through [schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) — so a session pays the schema cost only for the tools it reaches for.
 
 ## Inner Loop: Execution Cycle
 
@@ -67,7 +67,7 @@ Each iteration follows a six-phase cycle ([Bui, 2026 §2.2.2](https://arxiv.org/
 5. **Tool execution** — run the selected tool
 6. **Post-processing** — update state, check termination conditions
 
-LangChain's build-your-own walkthrough traces the same primitives — the loop, the tool set, and the state passed between iterations — when assembling a custom agent harness from scratch ([LangChain, how to build a custom agent harness](https://blog.langchain.com/build-a-custom-agent-harness)).
+LangChain's build-your-own walkthrough traces the same primitives — the loop, the tool set, and the state passed between iterations — when assembling a custom agent harness from scratch ([LangChain, how to build a custom agent harness](https://www.langchain.com/blog/how-to-build-a-custom-agent-harness)).
 
 ## Failure Modes and Fixes
 
@@ -131,7 +131,7 @@ Only after this orientation does the agent select the highest-priority incomplet
 ## Key Takeaways
 
 - The initializer runs once; the coding agent runs once per session, always reading artifacts before acting
-- Eager construction eliminates first-call latency by front-loading prompt and schema assembly
+- Lazy tool discovery surfaces schemas on demand, holding down context bloat across a long-running session
 - Git commits are structured session handoff notes, not just change records
 - Require test passage as the completion gate; never allow agent self-report alone
 

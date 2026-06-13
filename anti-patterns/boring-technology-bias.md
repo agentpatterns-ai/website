@@ -9,12 +9,12 @@ tags:
   - instructions
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Boring Technology Bias
 
-> LLMs recommend tools and frameworks proportional to training data frequency, not fitness for the problem. Popular beats optimal by default.
+> Boring technology bias: LLMs recommend tools proportional to training-data frequency, not fitness for the problem — popular beats optimal by default.
 
 ## The Problem
 
@@ -98,6 +98,13 @@ Overspecifying the technology stack in instruction files creates its own problem
 - **Maintenance burden**: locked stacks drift as pinned libraries release breaking changes, and agents are not notified — the instruction file becomes a source of stale guidance.
 
 Use instruction files to override defaults for non-negotiable choices (regulatory requirements, existing infrastructure) rather than as a blanket constraint on every dependency.
+
+## Key Takeaways
+
+- Agent tool recommendations track training-data frequency, not problem fit — popular beats optimal by default.
+- Separate the two risks: recommendation bias (what the agent suggests) is strong; execution capability (building with a named tool in context) is far weaker.
+- Pin non-negotiable technology choices in instruction files and paste docs or seed examples into context for niche tools.
+- A pinned stack is not a substitute for human review — overspecifying trades selection bias for lock-in and stale guidance.
 
 ## Related
 

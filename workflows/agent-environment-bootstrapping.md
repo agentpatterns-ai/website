@@ -7,7 +7,7 @@ tags:
   - copilot
   - github-actions
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Environment Bootstrapping

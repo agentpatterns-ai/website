@@ -13,7 +13,7 @@ aliases:
   - agentic agile
   - agile for agent development
   - agile rituals for agents
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Agentic-Agile: Adapting Agile Rituals for Agent Work
@@ -43,7 +43,7 @@ The adapted DoD has two numbers, not one:
 - **Pass rate** over N trials (Braintrust recommends averaging across 3+ runs to absorb non-deterministic variance) ([Braintrust](https://www.braintrust.dev/articles/agent-evaluation))
 - **Variance bound** — the spread across trials must be below a threshold the team commits to before implementation
 
-The "before implementation" ordering is load-bearing. Microsoft's adaptation defines DoD "that maps directly to eval checks" and runs evaluations on output artefacts rather than conversational responses ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). This mirrors the [Sprint Contracts](../agent-design/sprint-contracts.md) discipline of locking the rubric before the generator runs — pre-commitment prevents post-hoc rationalisation.
+The "before implementation" ordering is load-bearing. Microsoft's adaptation replaces the prompt-session exit ("ends when the developer feels satisfied") with a contract: each story carries "specific, testable conditions that must be true when this story is complete", so work ends "when a contract is fulfilled" rather than on feel ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). Wiring those testable conditions to eval thresholds is the agentic step. This mirrors the [Sprint Contracts](../agent-design/sprint-contracts.md) discipline of locking the rubric before the generator runs — pre-commitment prevents post-hoc rationalisation.
 
 Long-horizon work needs a stricter version. Software-engineering pass rates dropped from 0.90 to 0.44 as task horizon grew, and "capability and reliability rankings diverge substantially, with multi-rank inversions at long horizons" — pass@1 is structurally inadequate for production agent features ([arXiv 2603.29231: Beyond pass@1](https://arxiv.org/abs/2603.29231)).
 

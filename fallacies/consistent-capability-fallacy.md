@@ -10,12 +10,12 @@ tags:
 aliases:
   - consistent capability fallacy
   - capability generalization fallacy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Consistent Capability Fallacy
 
-> Observed success on one task does not predict success on a similar-seeming task.
+> Capability on one task does not predict capability on a similar-seeming task — LLM performance is jagged, not consistent.
 
 ## The Belief
 

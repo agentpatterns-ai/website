@@ -11,7 +11,7 @@ aliases:
   - dual budget control
   - inference-time budget control for search agents
   - VOI-based action selection
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Dual-Budget Control for Search Agents
@@ -48,7 +48,7 @@ graph TD
 
 The score depends on remaining budget, not just current state. A retrieval that looks valuable with 10 tool calls left may score below a commit when only 1 remains — because the marginal value of one more retrieval is bounded above by the probability it changes the answer, while the cost of running out of budget mid-trajectory is the whole task.
 
-[Snell et al. (2024)](https://arxiv.org/abs/2408.03314) report the same causal structure for test-time compute scaling more broadly: a compute-optimal allocation that adapts per prompt outperforms uniform scaling by more than 4x in FLOPs-matched evaluation. The pattern in both cases is *difficulty-conditioned allocation beats uniform when budgets bind*.
+[Snell et al. (2024)](https://arxiv.org/abs/2408.03314) report the same causal structure for test-time compute scaling more broadly: a compute-optimal allocation that adapts per prompt improves test-time-compute efficiency by more than 4x over a best-of-N baseline. The pattern in both cases is *difficulty-conditioned allocation beats uniform when budgets bind*.
 
 ## Selective Evidence-Grounded Finalizer
 

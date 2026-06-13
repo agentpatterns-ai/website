@@ -11,7 +11,7 @@ aliases:
   - kitchen sink session
   - session partitioning
   - context pollution
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Kitchen Sink Session
@@ -89,7 +89,4 @@ Split sessions remain the right call when: tasks are unrelated enough that share
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — how to persist knowledge across sessions intentionally
 - [Perceived Model Degradation](perceived-model-degradation.md) — bloated sessions can mimic apparent model quality loss
 - [Reasoning Overuse](reasoning-overuse.md) — excess reasoning compounds token cost in long sessions
-- [Demo-to-Production Gap](demo-to-production-gap.md) — session management habits from demos that break at scale
-- [Shadow Tech Debt](shadow-tech-debt.md) — hidden costs from unmanaged context accumulation
 - [Distractor Interference](distractor-interference.md) — how semantically related but irrelevant instructions degrade compliance
-- [Token Preservation Backfire](token-preservation-backfire.md) — competing cost-reduction objectives that reduce output quality

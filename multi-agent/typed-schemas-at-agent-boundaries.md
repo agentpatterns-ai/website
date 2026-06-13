@@ -9,7 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
   - multi-agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Typed Schemas at Agent Boundaries for Multi-Agent Systems

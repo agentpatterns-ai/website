@@ -10,18 +10,18 @@ tags:
 aliases:
   - AutoContext pattern
   - five-role improvement loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Closed-Loop Role-Based Refinement
 
-> Decompose the self-improving agent loop into discrete, specialized roles -- Competitor, Analyst, Coach, Architect, Curator -- with persistent knowledge layers, staged validation, and gated persistence to prevent regression.
+> Role-based refinement splits the self-improving agent loop into five specialized roles, adding persistent knowledge and gated persistence to prevent regression.
 
 ## Beyond the Single-Loop Flywheel
 
 Closed-loop role-based refinement structures the self-improvement cycle as five specialized roles -- Competitor, Analyst, Coach, Architect, and Curator -- each with a bounded contract, feeding output into the next role in sequence.
 
-Single-loop patterns like the [agentic flywheel](../agent-design/agentic-flywheel.md) and the [continuous agent improvement](../workflows/continuous-agent-improvement.md) workflow treat improvement as one activity. Role-based refinement splits it into five responsibilities with distinct objectives and failure modes.
+Single-loop patterns like the [agentic flywheel](../agent-design/agentic-flywheel.md) and the [continuous agent improvement](../workflows/continuous-agent-improvement.md) workflow treat improvement as one activity. Role-based refinement splits it into five distinct responsibilities.
 
 [AutoContext](https://github.com/greyhaven-ai/autocontext) implements this as five collaborating agent roles, with knowledge persisting between runs to avoid cold starts.
 
@@ -84,7 +84,7 @@ Weak strategies roll back automatically, preventing regressions where changes pa
 
 A cost-performance pattern: use frontier models (Claude, GPT-4) for exploration in the Competitor and Analyst roles, encode validated strategies in playbooks, then execute with local models (Ollama, vLLM, MLX) on later runs. Frontier models re-engage only on stagnation or novel problems.
 
-The Stanford ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618)) applies the same Generate/Reflect/Curate decomposition and reports +10.6% on the AppWorld benchmark over strong baselines without fine-tuning, validating that structured role decomposition with persistent context produces measurable improvement over single-loop patterns.
+The ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618)) applies the same Generate/Reflect/Curate decomposition and reports +10.6% on agent benchmarks (and +8.6% on finance) over strong baselines without fine-tuning; on AppWorld it matches the top-ranked production agent overall and surpasses it on the harder test-challenge split -- evidence that structured role decomposition with persistent context beats single-loop patterns.
 
 ## Applying the Pattern
 
@@ -97,7 +97,7 @@ The five roles map to any multi-agent system without requiring AutoContext's ful
 | A manual review process | Five review passes, each checking one dimension |
 | A single-agent loop | Five phases within the same session, with explicit transitions |
 
-The minimum viable version: separate "generate" from "evaluate" from "persist." The [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern covers the first two; adding a Curator role to gate persistence is the third step that prevents regression.
+The minimum viable version: separate "generate" from "evaluate" from "persist." The [evaluator-optimizer](../agent-design/evaluator-optimizer.md) pattern covers the first two; a Curator role to gate persistence is the third step that prevents regression.
 
 ## Example
 
@@ -150,6 +150,13 @@ Role decomposition adds coordination overhead that pays off only across many ite
 
 A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is often sufficient when tasks are bounded, the improvement signal is clear, and persistence is not a goal.
 
+## Key Takeaways
+
+- Split the self-improving loop into five role-scoped contracts -- Competitor, Analyst, Coach, Architect, Curator -- so no role exceeds its mandate.
+- Persistent knowledge layers (playbooks, hints, tools, reports) eliminate cold starts; the Curator gates promotion between them.
+- Staged validation with automatic rollback prevents improvements that pass initial tests but regress on edge cases.
+- The overhead pays off only across many iterations -- prefer a two-role evaluator-optimizer loop for bounded, low-iteration tasks.
+
 ## Related
 
 - [Agentic Flywheel](../agent-design/agentic-flywheel.md) -- the general closed-loop improvement pattern this decomposition implements
@@ -160,4 +167,3 @@ A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is
 - [Trajectory Logging via Progress Files and Git History](../observability/trajectory-logging-progress-files.md)
 - [Orchestrator-Worker](orchestrator-worker.md) -- the simpler two-tier coordination pattern that role-based refinement extends with specialized responsibilities
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) -- classification of coordination patterns including the sequential pipeline this pattern uses
-- [Voting Ensemble Pattern](voting-ensemble-pattern.md) -- another multi-agent decision-making approach using consensus rather than sequential roles

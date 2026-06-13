@@ -8,7 +8,7 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Domain-Specific System Prompts with Concrete Examples

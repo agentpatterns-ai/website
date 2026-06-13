@@ -9,12 +9,12 @@ tags:
 aliases:
   - evaluating agent skills
   - skill quality evaluation
-last_reviewed: 2026-06-05
+last_reviewed: 2026-06-12
 ---
 
 # Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit
 
-> Treat each skill as an evaluable unit: a small labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark that quantifies pass-rate, time, and token trade-offs.
+> Evaluate each skill as a unit: a labelled dataset, explicit assertions, paired with-skill and baseline runs, and a benchmark quantifying pass-rate, time, and token trade-offs.
 
 Skills are edited far more often than the agent harness, yet most teams have no objective signal that a skill still works after an edit or a model upgrade. Eval discipline applied to the skill itself closes that gap. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
@@ -29,13 +29,13 @@ Output-only evals leave trigger failures invisible; trigger-only evals leave sil
 
 ## Dataset Shape
 
-A skill eval dataset is small, hand-labelled, and version-controlled alongside `SKILL.md`. The agentskills.io spec stores cases in `evals/evals.json` next to the skill. Each case has a **prompt** (realistic message with concrete paths and context), an **expected output** description, optional **input files**, and **assertions** — verifiable statements about what the output must contain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+A skill eval dataset is small, hand-labelled, and version-controlled alongside `SKILL.md`. The agentskills.io spec stores cases in `evals/evals.json` next to the skill. Each case has a **prompt** (realistic message with concrete paths), an **expected output** description, optional **input files**, and **assertions** — verifiable statements about what the output must contain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
-Start with 2-3 cases. Add assertions after the first run — defining "good" before seeing what the skill produces leads to weak checks. Assertions must be specific and observable: `"The output file is valid JSON"` and `"The chart has labeled axes"` discriminate; `"The output is good"` does not. Brittle exact-phrase checks fail on correct outputs that use different wording. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
+Start with 2-3 cases. Add assertions after the first run — defining "good" before seeing the output leads to weak checks. Assertions must be specific and observable: `"The output file is valid JSON"` and `"The chart has labeled axes"` discriminate; `"The output is good"` does not. Brittle exact-phrase checks fail on correct outputs that use different wording. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]
 
 ## Runner Shape
 
-Each test case runs twice per iteration: **with the skill** and **without it** (or against the previous version). Runs execute in isolated agent contexts so state from earlier cases does not bleed into later ones — sequential single-session evaluation introduces cross-run contamination that biases grading. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
+Each test case runs twice per iteration: **with the skill** and **without it** (or against the previous version). Runs execute in isolated agent contexts so state from earlier cases does not bleed into later ones — single-session evaluation introduces cross-run contamination that biases grading. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 ```mermaid
 graph TD
@@ -57,12 +57,12 @@ The benchmark records three metrics per configuration: pass rate, duration, toke
 
 Skills split into two categories that upgrade differently: [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
-- **Capability uplift** — encodes techniques the base model cannot do consistently. On upgrades, run evals on raw and skill-augmented model. If raw matches or exceeds, retire the skill — the technique has been absorbed.
-- **Encoded preference** — sequences capabilities according to team workflows. Durable across model generations because the model cannot infer your process. Upgrade evals should verify workflow fidelity (step order, output format, required checks), not raw quality.
+- **Capability uplift** — encodes techniques the base model cannot do consistently. On upgrades, run evals on the raw and skill-augmented model; if raw matches or exceeds, retire the skill.
+- **Encoded preference** — sequences capabilities according to team workflows. Durable across model generations because the model cannot infer your process. Upgrade evals verify workflow fidelity (step order, output format, required checks), not raw quality.
 
 ## Grading Pitfalls
 
-**Same-model LLM-as-judge.** Grader agents sharing the target model inherit its biases and inflate pass rates on outputs the model itself would not critique. Prefer code-based assertions for mechanical checks (valid JSON, row counts, file existence) and human spot-checks for subjective quality. [Source: [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] A pre-registered controlled study makes the failure concrete: a code-generation "skill"'s apparent quality gain was read off an LLM-as-judge — "an instrument with documented positional, self-preference, and stylistic biases" — and showed no separable execution-correctness benefit over a plain labels-only scaffold once outputs were graded by passing tests rather than by a model. [Source: [Scaffold, Not Vocabulary? A Controlled, Two-Tier, Pre-Registered Study of a Popperian Code-Generation Skill](https://arxiv.org/abs/2606.06454)]
+**Same-model LLM-as-judge.** A pre-registered controlled study makes the failure concrete: a code-generation "skill"'s apparent quality gain was read off an LLM-as-judge — "an instrument with documented positional, self-preference, and stylistic biases" — and showed no separable execution-correctness benefit over a plain labels-only scaffold once outputs were graded by passing tests rather than by a model. [Source: [Scaffold, Not Vocabulary? A Controlled, Two-Tier, Pre-Registered Study of a Popperian Code-Generation Skill](https://arxiv.org/abs/2606.06454)] The defence is to keep model graders off mechanical checks: prefer code-based assertions for what software can verify (valid JSON, row counts, file existence), reserve human spot-checks for subjective quality, and calibrate any model grader against human labels. [Source: [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 **Blind A/B judging.** When comparing skill versions, sequential grading anchors the second version to the first. Present both outputs to a judge without labels so holistic qualities are scored free from which version "should" be better. [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 

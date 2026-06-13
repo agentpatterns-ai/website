@@ -10,12 +10,12 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Getting Started: Setting Up Your Instruction File
 
-> The instruction file is the single highest-leverage artifact for agent-assisted development. It gives agents the context they need to navigate your codebase, follow your conventions, and run your toolchain from the first interaction.
+> The instruction file is the highest-leverage artifact in agent-assisted development: it gives agents the context to navigate your codebase, follow conventions, and run your toolchain.
 
 ## Pick Your File
 
@@ -27,13 +27,13 @@ Each tool reads a different file. Pick the one that matches your tool, or mainta
 | GitHub Copilot | `copilot-instructions.md` | `.github/copilot-instructions.md` |
 | Any AGENTS.md-compatible tool | `AGENTS.md` | Repo root |
 
-If you use multiple tools, see [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md) for convergence strategies. The rest of this page is tool-agnostic -- the content principles apply regardless of file name.
+Using multiple tools? See [Project Instruction File Ecosystem](../instructions/instruction-file-ecosystem.md) for convergence strategies. The rest of this page is tool-agnostic -- the principles apply regardless of file name.
 
 ## Bootstrap or Start from Scratch
 
-**Claude Code users**: run `/init`. Claude analyzes your codebase -- build systems, test frameworks, code patterns -- and generates a starting file ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)). If a `CLAUDE.md` already exists, `/init` suggests improvements rather than overwriting.
+**Claude Code users**: run `/init`. Claude analyzes your codebase -- build systems, test frameworks, code patterns -- and generates a starting file ([Anthropic, Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices)). If a `CLAUDE.md` exists, `/init` suggests improvements rather than overwriting.
 
-**Everyone else**: create the file manually. A blank file with four sections is better than no file at all.
+**Everyone else**: create the file manually. A blank file with four sections beats no file at all.
 
 ## Minimal Viable Structure
 
@@ -122,15 +122,14 @@ The instruction file tells the agent what to aim for. Hooks and CI tell it what 
 
 ## Let the Agent Write Its Own File
 
-An effective bootstrapping technique: ask the agent to draft or improve the instruction file after it has explored the codebase. The agent surfaces context it actually needs rather than what you guess it needs.
+Ask the agent to draft or improve the instruction file after it has explored the codebase. It surfaces context it actually needs rather than what you guess:
 
 ```
-Analyze this codebase and draft a CLAUDE.md that covers:
-build/test commands, key conventions, and directory layout.
-Keep it under 50 lines.
+Analyze this codebase and draft a CLAUDE.md covering build/test
+commands, key conventions, and directory layout. Keep it under 50 lines.
 ```
 
-Review and edit the output. The agent often discovers conventions you follow implicitly but never documented.
+Review and trim the output -- the agent often discovers conventions you follow implicitly but never documented. Treat it as a first draft, not a finished file.
 
 ## Example: From Zero to Effective
 

@@ -10,12 +10,12 @@ tags:
   - tool-agnostic
   - tool-engineering
   - mcp
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # MCP Client/Server Architecture
 
-> A well-designed MCP server is invisible to the agent. A poor one fails systematically across every client — wrong tool selection, bloated context, silent error swallowing, security gaps.
+> A well-designed MCP server is invisible to the agent — a poor one fails systematically: wrong tool selection, bloated context, silent errors, security gaps.
 
 Five decisions determine whether an MCP integration holds up: transport, tool surface, error handling, capability negotiation, security. See [MCP protocol](../standards/mcp-protocol.md) for background.
 

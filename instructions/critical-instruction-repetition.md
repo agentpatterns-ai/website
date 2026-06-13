@@ -9,12 +9,12 @@ aliases:
   - Attention Sinks
   - Lost in the Middle
   - Attention Bias and Instruction Placement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Critical Instruction Repetition: Exploiting Primacy and Recency Bias
+# Critical Instruction Repetition via Primacy and Recency Bias
 
-> Repeating a critical instruction at both the start and end of a prompt exploits primacy and recency bias to produce higher compliance than a single well-placed statement.
+> Repeating a critical instruction at a prompt's start and end exploits primacy and recency bias for higher compliance than a single placement.
 
 !!! info "Also known as"
     Attention Sinks, Lost in the Middle, Attention Bias and Instruction Placement
@@ -116,9 +116,6 @@ The opening line places the constraint in the primacy position. The closing rest
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
-- [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
-- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
-- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — position and repetition move the compliance needle; encoding form does not

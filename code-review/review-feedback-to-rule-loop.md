@@ -12,7 +12,7 @@ tags:
 aliases:
   - recurring review comments to rules
   - promote review feedback to harness checks
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules
@@ -21,9 +21,7 @@ last_reviewed: 2026-06-02
 
 ## When a Comment Becomes a Signal
 
-A recurring review comment is evidence of an unencoded invariant — the rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold — same comment across three or more PRs in a window — is load-bearing: one or two is a hypothesis, three or more is a pattern ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
-
-Anthropic states the inverse explicitly: "If Claude already does something correctly without the instruction, delete it or convert it to a hook" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The corollary: when reviewers keep writing the same comment, the rule belongs in deterministic enforcement.
+A recurring review comment is evidence of an unencoded invariant — the rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold — same comment across three or more PRs in a window — is load-bearing: one or two occurrences is a hypothesis, three or more is a pattern. The walkinglabs harness engineering curriculum encodes this loop as a first-class practice ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
 
 ## The Loop
 
@@ -66,7 +64,7 @@ ERROR: Service layer cannot import from UI layer.
   See docs/architecture/layer-rules.md for the dependency diagram.
 ```
 
-What is wrong, what to do instead, where the rationale lives. [Feedback as Capability Equalizer](../agent-design/feedback-capability-equalizer.md) identifies this structured verbal shape as the highest-signal form for both humans and agents — promoted from review-time to author-time.
+What is wrong, what to do instead, where the rationale lives — see [Feedback as Capability Equalizer](../agent-design/feedback-capability-equalizer.md).
 
 ### 4. Track hit count and retire
 
@@ -80,9 +78,9 @@ Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which a
 
 ## What This is Not
 
-Distinct from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern extracts rules from accept/reject signals automatically and adjusts the *reviewer's behaviour*. This loop promotes the invariant out of the reviewer entirely — into the lint stack, the AST checker, the checklist, or the evaluator rubric. The two compose: Bugbot tunes reviewer defaults; this loop drains the highest-frequency comments before they reach review.
+Distinct from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern adjusts the *reviewer's behaviour* by extracting rules from accept/reject signals. This loop promotes the invariant out of the reviewer entirely — into the lint stack, checklist, or evaluator rubric. The two compose: Bugbot tunes reviewer defaults; this loop drains high-frequency comments before they reach review.
 
-Distinct also from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and enforcement layer differ.
+Distinct from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests — the trigger and enforcement layer differ.
 
 ## Example
 
@@ -105,10 +103,10 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 
 ## When This Backfires
 
-- **Premature promotion**: encoding after one or two occurrences freezes a hypothesis as a rule. Suppression comments proliferate, and the rule's signal degrades faster than the comment it replaced.
-- **Wrong enforcement layer**: a semantic check forced into a regex linter fires on every legitimate exception. The category table above is load-bearing — get the layer wrong and the rule becomes the new recurring noise source.
+- **Premature promotion**: encoding after one or two occurrences freezes a hypothesis as a rule. Suppression comments proliferate and the rule's signal degrades.
+- **Wrong enforcement layer**: a semantic check forced into a regex linter fires on every legitimate exception — get the layer wrong and the rule becomes the new recurring noise source.
 - **Remediation text omitted or stale**: a rule without "what to do instead" is a finger-wag. Developers and agents both stall, suppress, or copy-paste workarounds.
-- **No retirement discipline**: the lint stack accumulates. Past about 200 lines of standards content, adherence degrades regardless of precision ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The same pressure applies to a long lint configuration: priority saturation makes individual rules unreliable.
+- **No retirement discipline**: the lint stack accumulates. Adherence degrades as instruction volume grows — context rot means models recall earlier rules less accurately as context fills ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Priority saturation makes individual rules unreliable.
 
 ## Key Takeaways
 

@@ -5,7 +5,7 @@ description: "Constrain agent output with templates and schemas to reduce halluc
 tags:
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Structured Output Constraints: Reducing Hallucination Surface

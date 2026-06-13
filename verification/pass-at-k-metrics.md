@@ -11,12 +11,12 @@ aliases:
   - "pass at k"
   - "pass power k"
   - "pass@1 pass@k metrics"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # pass@k and pass^k: Capability and Consistency Metrics
 
-> A single pass rate conflates two distinct properties of a non-deterministic agent: whether it *can* solve the problem and whether it *reliably* does. Use pass@k and pass^k together to measure both.
+> A single pass rate conflates two agent properties: whether it *can* solve a problem and whether it *reliably* does. pass@k and pass^k separate them.
 
 ## The Problem with a Single Pass Rate
 
@@ -137,6 +137,5 @@ print(f"pass^3: {pass_pow_k:.2f}")  # pass^3: 0.40
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Extends pass@k by also varying interaction depth *T* for tool-use agents
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — Treats pass@k and pass^k as projections of one underlying success first-passage distribution
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Pass@k/pass^k summarises the aggregate spread; this technique attributes the spread to the layer that should be mitigated
-- [LLM-as-Judge Context Test Harness](llm-context-test-harness.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md)

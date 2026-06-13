@@ -10,35 +10,35 @@ tags:
 aliases:
   - "Outcome-Oriented Agent-Assisted Development"
   - "Anti-Pattern: Vibe Coding"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Vibe Coding: Outcome-Oriented Agent-Assisted Development
 
-> Delegate implementation entirely to the agent and focus on evaluating outcomes — appropriate for low-risk work where the cost of wrong output is low.
+> Vibe coding delegates implementation entirely to the agent and evaluates only outcomes — appropriate for low-risk work where wrong output is cheap to discard.
 
 !!! info "Also known as"
     Anti-Pattern: Vibe Coding, Outcome-Oriented Agent-Assisted Development
 
 ## What Vibe Coding Is
 
-Vibe coding is a development approach where the developer stops reading diffs, stops tracking implementation details, and focuses entirely on whether the output works and feels right. The term was [coined by Andrej Karpathy in February 2025](https://x.com/karpathy/status/1886192184808149383):
+Vibe coding is a development approach where the developer stops reading diffs, stops tracking implementation details, and focuses entirely on whether the output works. The term was [coined by Andrej Karpathy in February 2025](https://x.com/karpathy/status/1886192184808149383):
 
 > "There's a new kind of coding I call 'vibe coding', where you fully give in to the vibes, embrace exponentials, and forget that the code even exists."
 
-Karpathy described accepting all suggestions without reading diffs, copy-pasting error messages back to the agent without comment, and using voice input to minimize keyboard interaction. The developer's role shifts from implementation to outcome evaluation and course correction.
+Karpathy described accepting all suggestions without reading diffs, copy-pasting error messages back to the agent without comment, and using voice input. The developer's role shifts from implementation to outcome evaluation and course correction.
 
-This is the inverse of the [plan-first loop](../workflows/plan-first-loop.md). Where plan-first workflows invest in understanding before execution, vibe coding skips understanding entirely and relies on rapid iteration to converge on the desired result.
+This is the inverse of the [plan-first loop](../workflows/plan-first-loop.md): plan-first workflows invest in understanding before execution; vibe coding skips understanding and relies on rapid iteration to converge on the result.
 
 ## When Vibe Coding Works
 
 Vibe coding is appropriate when the cost of wrong output is low and iteration is cheap:
 
-**Prototyping and throwaway tools.** Scripts, one-off data transformations, internal tools that will be replaced. If the output is wrong, you discard it and try again — no production impact.
+**Prototyping and throwaway tools.** Scripts, one-off data transformations, internal tools that will be replaced. If the output is wrong, you discard it — no production impact.
 
-**Bash scripts and automation.** Short scripts with tight feedback loops where the agent can write, execute, read errors, and fix within seconds. The [write-execute-debug cycle](../tool-engineering/cli-scripts-as-agent-tools.md) is naturally suited to vibe coding because each iteration is near-zero cost.
+**Bash scripts and automation.** Short scripts with tight feedback loops where the agent can write, execute, read errors, and fix within seconds. The [write-execute-debug cycle](../tool-engineering/cli-scripts-as-agent-tools.md) suits vibe coding because each iteration is near-zero cost.
 
-**Permutation-style work.** Generating variations of an established pattern — multiple API endpoints following the same structure, test cases from a template, configuration files across environments. The pattern is already proven; the agent is replicating it ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)).
+**Permutation-style work.** Generating variations of an established pattern — API endpoints following one structure, test cases from a template, configs across environments. The pattern is proven; the agent is replicating it ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)).
 
 **Exploratory research.** Using agents to investigate libraries, APIs, or approaches where the goal is learning, not shipping code.
 
@@ -50,15 +50,15 @@ Vibe coding produces [black box nodes](../anti-patterns/trust-without-verify.md)
 
 **Security-critical code.** Authentication, authorization, encryption, input validation — these require understanding, not vibes. A [Tenzai assessment](https://www.csoonline.com/article/4116923/output-from-vibe-coding-tools-prone-to-critical-security-flaws-study-finds.html) of five AI coding tools found 69 vulnerabilities across 15 test applications, concentrated in API authorization and business logic. [Kaspersky reports](https://www.kaspersky.com/blog/vibe-coding-2025-risks/54584/) that 20% of vibe-coded applications contain serious vulnerabilities or configuration errors, including hardcoded API keys and client-side authentication logic.
 
-**Architecturally sensitive changes.** Changes that affect system structure, module boundaries, or data models require understanding of how components interact. Vibe coding optimizes for local correctness while potentially introducing structural drift.
+**Architecturally sensitive changes.** Changes to system structure, module boundaries, or data models require understanding how components interact. Vibe coding optimizes for local correctness while introducing structural drift.
 
-**Novel functionality.** When the task requires discovering APIs, designing data structures, or solving problems the agent has not seen frequently in training data, vibe coding produces output that appears correct but may use wrong abstractions or deprecated patterns.
+**Novel functionality.** When the task requires discovering APIs, designing data structures, or solving problems the agent saw rarely in training, vibe coding produces output that appears correct but may use wrong abstractions or deprecated patterns.
 
 **Review at scale.** AI generates thousands of lines per session. [CodeRabbit found](https://www.coderabbit.ai/blog/code-review-best-practices-for-vibe-coding) that AI-generated code is "notoriously verbose" with pointless loops and imaginary functions, and large PRs defeat meaningful review. PRs of 10,000+ lines guarantee reviewers miss critical issues.
 
-**Productivity expectations.** A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers were 19% slower with AI tools despite predicting they would be 24% faster. Rejected AI generations still consume review time with no output to show for it.
+**Productivity expectations.** A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found experienced developers were 19% slower with AI tools despite predicting they would be 24% faster. Rejected generations still consume review time.
 
-**Safeguard removal.** When AI output triggers linters or tests, the path of least resistance is removing the safeguard rather than fixing the code. The guardrail correctly identified dangerous code; the response was to delete the guardrail.
+**Safeguard removal.** When AI output triggers linters or tests, the path of least resistance is removing the safeguard rather than fixing the code — deleting the guardrail that correctly flagged dangerous code.
 
 **Maintainer burden.** [Open source projects report](https://www.infoq.com/news/2026/02/ai-floods-close-projects/) being flooded with AI-generated contributions — Daniel Stenberg shut down cURL's bug bounty after AI submissions reached 20% with only 5% validity. The cost of receiving contributions stays constant while the cost of creating them collapses.
 
@@ -68,7 +68,7 @@ If you choose to vibe code, these practices limit the blast radius of wrong outp
 
 ### Frequent Git Staging Outside the Session
 
-Stage and commit at every working milestone from a separate terminal — not through the agent. Agents staging version control operations can introduce subtle problems: staging incomplete work, committing with misleading messages, or triggering automation that interferes with the current task ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)).
+Stage and commit at every working milestone from a separate terminal — not through the agent. Agents staging version control can introduce subtle problems: staging incomplete work, committing with misleading messages, or triggering automation that interferes with the current task ([Source: ClaudeLog](https://claudelog.com/mechanics/vibe-coding)).
 
 ```bash
 # In a separate terminal, not through the agent

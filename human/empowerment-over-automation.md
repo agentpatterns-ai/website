@@ -7,7 +7,7 @@ tags:
 aliases:
   - "augmentation over automation"
   - "human-centered AI tooling"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Empowerment Over Automation

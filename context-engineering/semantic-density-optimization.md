@@ -8,12 +8,12 @@ tags:
   - tool-agnostic
 aliases:
   - agent-readable codebase
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Semantic Density Optimization for Agent Codebases
 
-> Maximize the ratio of task-relevant tokens in the codebase — eliminate structural ceremony while preserving naming, documentation, and commit context that agents cannot reconstruct without inference cost.
+> Semantic density optimization maximizes task-relevant tokens for agents — cut structural ceremony while preserving naming, docs, and commit context agents cannot cheaply reconstruct.
 
 ## The Compression Paradox
 
@@ -25,7 +25,7 @@ Naively compressing codebase content for agents backfires. A controlled experime
 | Structured | 7,106 | 24,000 | 3.4× |
 | Compressed | 6,695 | 31,600 | 4.7× |
 
-The compressed format cut input tokens by 17% but increased total session cost by 67%. Removing semantic content shifts interpretive burden to the model's reasoning phase — it reconstructs meaning it could have read directly.
+The compressed format cut input tokens by 17% but increased total session cost by 67%. Removing semantic content shifts interpretive burden to the reasoning phase — the model reconstructs meaning it could have read directly.
 
 The lesson: optimize for **semantic density**, not raw token count.
 
@@ -48,7 +48,7 @@ Descriptive names are high-density tokens. `VerifyOrderByAvailableAmount` is imm
 
 ### 2. Commit Messages
 
-The conventional 50-character limit is agent-hostile. When agents trace history to understand why code exists, terse commit messages force multi-turn clarification. Include the reasoning, rejected alternatives, and constraints in commit messages — information the agent would otherwise reconstruct through multiple file reads.
+The conventional 50-character limit is agent-hostile. When agents trace history to understand why code exists, terse messages force multi-turn clarification. Include the reasoning, rejected alternatives, and constraints — information the agent would otherwise reconstruct through multiple file reads.
 
 ### 3. Abstraction Depth
 
@@ -56,7 +56,7 @@ Deep call hierarchies force agents to traverse multiple files per task. Flat cal
 
 ### 4. File Splitting
 
-Human cognitive limits drive the convention of keeping files small (under 200 lines). Agents do not share this limit but do pay a navigation cost for each additional file. Let deployment boundaries and logical cohesion drive file organization, not human screen capacity.
+Human cognitive limits drive the convention of keeping files small. Agents do not share this limit but do pay a navigation cost per file. Let deployment boundaries and logical cohesion drive file organization, not human screen capacity.
 
 ### 5. SOLID Principles
 
@@ -68,7 +68,7 @@ Structured log entries with readable field names outperform abbreviation-heavy f
 
 ### 7. Classical Anti-Patterns
 
-Anti-patterns like the God Object emerged to protect human cognition from overwhelm. Under agent consumption, consolidating related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation — the paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files is a documented LLM limitation ([Liu et al., 2024](https://arxiv.org/abs/2307.03172)); the paper does not measure it in the consolidation context, so treat this recommendation as provisional.
+Anti-patterns like the God Object emerged to protect human cognition. Under agent consumption, consolidating related logic into fewer files reduces cross-file traversal. This trade-off lacks empirical validation — the paper flags it as theoretically motivated but unconfirmed. Attention degradation on very large files is a documented LLM limitation ([Liu et al., 2024](https://arxiv.org/abs/2307.03172)); the paper does not measure it here, so treat this as provisional.
 
 ## The Program Skeleton Artifact
 
@@ -92,7 +92,7 @@ The paper proposes a new artifact — a `CODEMAP.md` file — stored at the repo
 Order ID → validation → payment charge → event emission → status update
 ```
 
-This provides batch-oriented navigation in a single read. Unlike Language Server Protocol queries (one symbol at a time), a program skeleton gives agents the codebase topology before they begin exploring — reducing the number of file reads required to understand task context.
+This provides batch-oriented navigation in a single read. Unlike Language Server Protocol queries (one symbol at a time), a program skeleton gives agents the codebase topology before exploring — reducing the file reads needed to understand task context.
 
 ## Example
 
@@ -108,7 +108,7 @@ log.e(f"|PS|pf|o={oid}|rs={rs}")
 logger.error(f"Payment failed for order #{order_id}: {reason}")
 ```
 
-The compressed version uses fewer input tokens per log line — the savings are real but modest. When the agent reads this log during debugging, it must decode `PS`, `pf`, and the abbreviated field names — spending reasoning tokens that exceed the original savings. The readable version is immediately parseable; the agent proceeds without an intermediate decoding step.
+The compressed version uses fewer input tokens per log line — real but modest savings. When the agent reads this log during debugging, it must decode `PS`, `pf`, and the abbreviated field names — spending reasoning tokens that exceed the original savings. The readable version is immediately parseable; the agent proceeds without a decoding step.
 
 ## When This Backfires
 

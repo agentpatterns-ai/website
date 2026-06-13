@@ -11,14 +11,14 @@ tags:
 aliases:
   - no-token-limit magic
   - baseline-first optimization
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
 
 # Prototype Before Optimizing
 
-> Deferring production efficiency constraints until after establishing quality baselines avoids locking in suboptimal architectures — and ensures you have something to regress against.
+> Prototype with generous budgets to establish a quality baseline before applying optimization pressure — otherwise compression hides regressions and locks in suboptimal architectures.
 
 ## The Problem with Early Optimization
 

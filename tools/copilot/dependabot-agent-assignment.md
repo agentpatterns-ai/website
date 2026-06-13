@@ -6,7 +6,7 @@ tags:
   - workflows
   - security
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 status: current
 ---
 

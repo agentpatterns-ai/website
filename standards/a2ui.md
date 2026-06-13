@@ -8,12 +8,12 @@ tags:
 aliases:
   - agent-to-UI protocol
   - generative UI standard
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # A2UI: Framework-Agnostic Generative UI Standard
 
-> A2UI is an open standard for agents to emit declarative UI blueprints that a host application renders with its own native components — the wire format for the agent → UI handoff.
+> A2UI is an open standard for agents to emit declarative UI blueprints that a host renders with its own native components.
 
 ## What A2UI Is
 

@@ -10,7 +10,7 @@ tags:
   - workflows
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Classifying and Auto-Correcting Coding Agent Misbehaviors (Wink)
@@ -52,7 +52,7 @@ graph TD
 
 The observer runs asynchronously — it watches the trajectory without blocking execution. On a detected misbehavior signal, it classifies the event and injects a targeted course-correction into the agent's next inference call. The agent continues without a full restart.
 
-Unlike synchronous guardrails that block execution, async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
+Unlike synchronous guardrails such as [Skill Program Functions](skill-program-functions.md) that fire mid-loop on a deterministic trigger, async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
 
 ## Results
 
@@ -127,7 +127,7 @@ This illustrates the category-specific correction value: a generic "you seem stu
 - [Loop Detection](../observability/loop-detection.md)
 - [Context-Injected Error Recovery](../context-engineering/context-injected-error-recovery.md)
 - [Steering Running Agents](steering-running-agents.md)
+- [Skill Program Functions](skill-program-functions.md) — the synchronous, compiled-predicate counterpart; Wink observes asynchronously while PFs fire mid-loop on deterministic triggers
 - [Agent Loop Middleware](agent-loop-middleware.md)
 - [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Convergence Detection](convergence-detection.md)
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)

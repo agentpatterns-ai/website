@@ -6,7 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Tool Signing and Signature Verification

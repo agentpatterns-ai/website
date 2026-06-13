@@ -7,12 +7,12 @@ tags:
   - context-engineering
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Cross-Repo Agent Search
 
-> Expose a GitHub-API-backed text-search tool to reach code outside the workspace, and compose it with local indexed search under the rate-limit, result-cap, and trust constraints of a remote index.
+> Cross-repo search exposes a GitHub-API-backed tool to reach code outside the workspace, composed with local search under a remote index's rate-limit, result-cap, and trust constraints.
 
 ## A Different Primitive From Local Search
 
@@ -20,7 +20,7 @@ Local indexed regex search keeps the index next to the working tree so the agent
 
 ## Why Reach Beyond the Workspace
 
-The workflow shifts from "explore the open project" to "look up precedent across the org": every consumer of a deprecated API before a signature change, a working pattern in a sibling service the workspace lacks, the team that last touched a function whose name surfaces in an error, or a third-party error string traced back to its emitting repo. Glob, Grep, and Read need a `git clone` first; the cross-repo tool collapses "discover candidate repos" and "search them" into one call.
+The workflow shifts from "explore the open project" to "look up precedent across the org": every consumer of a deprecated API before a signature change, a pattern in a sibling service the workspace lacks, or a third-party error string traced back to its emitting repo. Glob, Grep, and Read need a `git clone` first; the cross-repo tool collapses "discover candidate repos" and "search them" into one call.
 
 ## Constraints The Loop Has To Respect
 
@@ -28,7 +28,7 @@ Every query is an authenticated remote call against a hosted index. Four limits 
 
 | Limit | Value | What it forces |
 |---|---|---|
-| Code-search rate limit | 9 req/min authenticated | Bound refinement turns; serialise rather than parallelise |
+| Code-search rate limit | 10 req/min authenticated | Bound refinement turns; serialise rather than parallelise |
 | Other search rate limit | 30 req/min authenticated | Issue/PR/repo lookups have a separate, larger budget |
 | Max results per query | 1,000 | Treat large hit sets as truncated; narrow, do not paginate past the cap |
 | Query length | 256 chars, max 5 boolean operators | Compose narrow queries; reject one-shot mega-queries |
@@ -78,12 +78,12 @@ Every query is an authenticated API call attached to the user's identity. The `r
 
 Cross-repo search is the wrong primitive in four common cases:
 
-- **High-iteration debugging loops.** Once the agent is querying the same repo more than a handful of times, the 9 req/min ceiling becomes a wall and snippet-only context starves the loop of surrounding code. Clone once, index locally, iterate freely.
+- **High-iteration debugging loops.** Once the agent is querying the same repo more than a handful of times, the 10 req/min ceiling becomes a wall and snippet-only context starves the loop of surrounding code. Clone once, index locally, iterate freely.
 - **Saturated result sets.** Any query whose true hit count exceeds 1,000 returns silently truncated evidence. A migration agent that bases "we found everyone" on a capped result set will miss call sites — narrow the query with `path:`/`language:` until the count is well under the cap, or accept that the tool cannot answer the question.
 - **Repos that fit on disk.** For a monorepo or a small set of known suspect repos, `gh repo clone` plus local grep gives full context with no per-query budget, no result cap, and no audit-log noise. Cross-repo search adds latency and quota burn for no extra signal.
 - **Audit-sensitive environments.** Every query lands in org-level audit logs against a real identity. In regulated orgs, an agent that issues dozens of speculative queries per task can trip security review or breach data-handling policies that ad-hoc CLI use would not. Budget queries deliberately or route through a service account with explicit approval.
 
-Recent multi-repo benchmarks reinforce the discovery-only framing: code agents reach only around 45% success on tasks requiring knowledge beyond the local codebase, exposing a gap between search proficiency and downstream coding ([CodeScaleBench, Sourcegraph 2026](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)). Treat cross-repo search as a pointer to the next clone, not as a substitute for working inside the target repo.
+Recent multi-repo benchmarks reinforce the discovery-only framing: on organisation-scale tasks, agents without cross-repo retrieval find almost none of the relevant files (Precision@5 ≈ 0.007), and even with a retrieval tool they recover under half (Precision@5 ≈ 0.47) — and the benchmark notes that better retrieval precision still does not translate into a proportional jump in task reward ([CodeScaleBench, Sourcegraph 2026](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)). Treat cross-repo search as a pointer to the next clone, not as a substitute for working inside the target repo.
 
 ## Example
 
@@ -105,7 +105,7 @@ Step 2 is the single API turn that turns "we don't know who calls this" into a b
 ## Key Takeaways
 
 - Cross-repo agent search and local indexed search solve different problems; expose both, do not pick one.
-- The 9-req/min code-search rate limit and 1,000-result cap are loop-design constraints, not edge cases — compose narrow queries and treat saturated hit sets as truncated.
+- The 10-req/min code-search rate limit and 1,000-result cap are loop-design constraints, not edge cases — compose narrow queries and treat saturated hit sets as truncated.
 - Every query crosses a trust and permission boundary; the result set inherits the caller's repo access and may include untrusted content from outside the org.
 - Lockdown mode and `org:`/`repo:` qualifiers are the two filters worth building into the tool's call site, not relying on the agent to remember.
 - Cross-repo search is best as a discovery primitive feeding into clone-then-local-index — not a substitute for either local search or full-text retrieval, and the wrong tool for high-iteration loops or saturated result sets.

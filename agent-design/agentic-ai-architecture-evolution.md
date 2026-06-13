@@ -11,12 +11,12 @@ tags:
   - observability
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agentic AI Architecture: From Prompt to Goal-Directed
 
-> The transition from stateless prompt-response models to goal-directed agentic systems requires a reference architecture separating cognitive reasoning from execution, a topology taxonomy for multi-agent coordination, and an enterprise hardening checklist.
+> Goal-directed agentic architecture separates cognitive reasoning from execution, adds a multi-agent topology taxonomy, and layers an enterprise hardening checklist over the prompt-response baseline.
 
 ## The Architectural Shift
 

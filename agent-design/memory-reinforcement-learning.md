@@ -9,12 +9,12 @@ tags:
 aliases:
   - utility-scored episodic memory
   - runtime reinforcement learning on episodic memory
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Memory Reinforcement Learning (MemRL)
 
-> Assign and update utility scores to stored episodic memories so retrieval favors historically effective solutions, not just semantically similar ones.
+> Score each stored memory by its historical effectiveness so retrieval favors approaches that worked before, not just those that look semantically similar.
 
 ## The Problem with Semantic-Only Retrieval
 

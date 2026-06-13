@@ -1,7 +1,7 @@
 ---
 title: "Layered Context Architecture for AI Agent Development"
 term: "Layered Context Architecture"
-description: "Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal"
+description: "Ground agents in multiple distinct context sources — schema, code, institutional knowledge, and persistent memory — rather than relying on any single signal."
 aliases:
   - Agent Memory Patterns
   - Multi-Layer Context Grounding
@@ -9,7 +9,7 @@ tags:
   - context-engineering
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Layered Context Architecture
@@ -38,7 +38,7 @@ OpenAI's data agent uses six context layers, aggregated offline and retrieved at
 | Persistent memory | Corrections and constraints accumulated from prior agent interactions |
 | Live runtime queries | Fresh values queried at request time for volatile data |
 
-Each layer addresses blind spots in the others. Code enrichment fills the gap schema leaves. Institutional knowledge explains anomalies neither schema nor code captures. Persistent memory surfaces corrections not documented elsewhere.
+Each layer addresses blind spots in the others. Code enrichment fills the gap schema leaves. Institutional knowledge explains anomalies neither schema nor code captures. Memory surfaces corrections documented nowhere else.
 
 ## The Coding Agent Analogue
 
@@ -53,16 +53,16 @@ For a coding agent, the layers map to:
 | Memory | Per-repo conventions the agent has learned from corrections |
 | Live queries | Current build status, open issues, recent test results |
 
-No single layer is complete. Types express intent but not rationale. Git history records what changed but not why. ADRs record decisions but not the code that implements them.
+No single layer is complete. Types express intent but not rationale; git history records what changed but not why; ADRs record decisions but not the implementing code.
 
 ## Offline Pipeline, Runtime RAG
 
 Loading all six layers per request is impractical — volume exceeds any context window. The architecture separates concerns:
 
 - **Offline**: aggregate all layers into normalized embeddings, refreshed on a schedule
-- **Runtime**: retrieve the most relevant subset for the current query via retrieval-augmented generation (RAG)
+- **Runtime**: retrieve the most relevant subset for the query via retrieval-augmented generation (RAG)
 
-Latency stays predictable regardless of corpus size. The agent receives the context most relevant to its task, not everything that might be relevant.
+Latency stays predictable regardless of corpus size. The agent receives the context relevant to its task, not everything that might be.
 
 A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confirms production systems combine heterogeneous sources — structured queries, semantic search, graph knowledge bases, and tool APIs — with specialized agents handling each source in parallel.
 
@@ -70,7 +70,7 @@ A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confir
 
 Layers are not equal. When a human annotation contradicts what the pipeline code suggests, the resolution order must be explicit. Human annotations typically take priority over code-derived enrichment, which takes priority over schema inference. Persistent memory corrections outrank general institutional knowledge.
 
-Document the resolution order. An agent that silently favors code over an annotation will be wrong in exactly the cases the annotation exists to correct.
+Document the resolution order. An agent that silently favors code over an annotation is wrong in exactly the cases the annotation exists to correct.
 
 ## Retrieval Noise Is Real
 
@@ -133,22 +133,11 @@ A two-layer approach (schema + live queries) suffices for many agents. Add layer
 
 ## Related
 
+- [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md)
 - [Seeding Agent Context: Breadcrumbs in Code](seeding-agent-context.md)
-- [Three Knowledge Tiers: Sourced, Unverified, Hallucinated](../instructions/three-knowledge-tiers.md)
-- [Context Hub](context-hub.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Semantic Context Loading](semantic-context-loading.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Context Compression Strategies](context-compression-strategies.md)
-- [Context Priming](context-priming.md)
-- [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
-- [Repository Map Pattern](repository-map-pattern.md)
-- [Lost in the Middle: Understanding U-Shaped Attention](lost-in-the-middle.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
-- [Structured Domain Retrieval](structured-domain-retrieval.md)
-- [Environment Specification as Context](environment-specification-as-context.md)

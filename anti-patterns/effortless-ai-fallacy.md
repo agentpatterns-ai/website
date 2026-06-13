@@ -7,12 +7,12 @@ tags:
   - workflows
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Effortless AI Fallacy
 
-> If you expect AI tools to work without effort, you consistently produce the worst results and are most likely to conclude the tools don't work.
+> The effortless-AI fallacy is the belief that AI tools should work without effort — a belief that produces poor results and reinforces itself.
 
 ## The Pattern
 
@@ -60,17 +60,20 @@ The cycle: minimal input → poor output → reinforced skepticism → continued
 
 The exit: provide the relevant file, describe what the current structure is, state what you want it to become, and specify one constraint you care about. The output changes immediately — not because the model changed, but because the signal did.
 
+## Key Takeaways
+
+- Output quality tracks input quality more tightly with AI than with most tools — the model has no signal beyond what you provide.
+- AI shifts effort rather than removing it: less boilerplate and recall, more context engineering, verification, and iteration.
+- The fallacy self-reinforces — low investment produces poor output, which confirms the belief that justifies not investing further.
+- The exception is throwaway, low-stakes work whose output you discard; there, minimal context is the correct level of effort.
+
 ## Related
 
 - [Vibe Coding](vibe-coding.md) — Accepting AI-generated code without structural review
 - [Trust Without Verify](trust-without-verify.md) — Accepting agent output as correct because it looks polished
-- [The Anthropomorphized Agent](anthropomorphized-agent.md) — Misattributing AI intent or memory
 - [Perceived Model Degradation](perceived-model-degradation.md) — Subjective perception diverging from measured outcomes
 - [The Prompt Tinkerer](prompt-tinkerer.md) — Effort misallocated to prompt tweaking instead of structural context
-- [Addictive Flow State of Agent-Assisted Development](../human/addictive-flow-agent-development.md) — compulsion loop and variable ratio reinforcement driving low-effort engagement
-- [Comprehension Debt](comprehension-debt.md) — understanding less of your codebase as AI-generated code accumulates without review
-- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — copying agent configurations without understanding the reasoning behind them
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) — context the model needs but the developer never provides
-- [Happy Path Bias](happy-path-bias.md) — testing only the easy case and skipping verification of edge cases
+- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — copying agent configurations without understanding the reasoning behind them
 - [The Copy-Paste Agent](copy-paste-agent.md) — accepting AI output verbatim without adaptation or review
 - [Assumption Propagation](assumption-propagation.md) — agents build on faulty premises provided by low-context prompts, compounding the initial error across commits

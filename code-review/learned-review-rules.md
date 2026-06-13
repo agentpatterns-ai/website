@@ -8,7 +8,7 @@ aliases:
   - Bugbot learned rules
   - self-improving code review
   - adaptive code review agent
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Self-Improving Code Review Agents — Learned Rules
@@ -19,7 +19,7 @@ last_reviewed: 2026-05-27
 
 A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times — including the systematic [overcorrection bias](../anti-patterns/llm-review-overcorrection.md) where LLMs misclassify correct code as non-compliant — misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. The agent does not learn.
 
-The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first. An [empirical study of 278,790 AI-reviewed pull requests](https://arxiv.org/abs/2603.15911) found AI agent suggestions achieve 16.6% adoption — roughly a third of the 56.5% rate for human reviewers — a gap that persists in part because agents cannot adjust their defaults based on team-specific dismissal patterns.
+The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent's behavior on the next PR is identical to its behavior on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911) found that AI agent suggestions are adopted into the codebase at a significantly lower rate than suggestions from human reviewers — a gap that persists in part because agents cannot adjust their defaults based on team-specific dismissal patterns.
 
 ## The Pattern
 
@@ -41,13 +41,13 @@ The rule store accumulates repository-specific knowledge: which patterns to catc
 
 ## Cursor Bugbot Implementation
 
-Cursor's Bugbot applied this pattern in its [April 8, 2026 release](https://cursor.com/changelog):
+Cursor's Bugbot applied this pattern in its [April 8, 2026 release](https://cursor.com/blog/bugbot-learning):
 
 **Learned rules from feedback.** When a developer accepts a Bugbot suggestion, Bugbot extracts a rule and stores it. When a developer dismisses a suggestion, Bugbot records a suppression rule. Future reviews on the same repository apply the accumulated rule set.
 
-**Fix All batch action.** Rather than addressing review comments one by one, developers can accept all actionable suggestions at once. Cursor [reports a 78% resolution rate](https://cursor.com/changelog) for PRs where developers use Fix All.
+**Learned rule accumulation at scale.** Since launching learned rules, more than 110,000 repositories have enabled learning. Cursor [reports a resolution rate nearing 78%](https://cursor.com/blog/bugbot-learning) — up from 52% at general availability in July 2025 — attributed to the accumulated rule set sharpening detection and reducing false positive noise.
 
-**MCP server integration.** Bugbot can connect to MCP servers to pull additional context during review — project documentation, team conventions, or codebase-specific data — enriching its analysis beyond the PR diff.
+**MCP server integration.** The same release [added MCP support](https://cursor.com/changelog/04-08-26): Bugbot can connect to MCP servers to pull additional context during review — project documentation, team conventions, or codebase-specific data from tools like GitHub, GitLab, and Linear — enriching its analysis beyond the PR diff.
 
 ## What Rules Capture
 
@@ -80,7 +80,7 @@ The mechanism is not Cursor-specific. Any review agent with structured output ca
 ## Key Takeaways
 
 - Review agents improve by converting accept/reject signals into persistent rules applied to future reviews
-- Cursor Bugbot demonstrates this at scale: learned rules combined with Fix All batch action achieve a 78% resolution rate
+- Cursor Bugbot demonstrates this at scale: learned rules across 110,000+ repositories drove resolution rates from 52% to ~78% without manual reconfiguration
 - Suppression rules reduce false positive noise; positive rules reinforce patterns the team actually enforces
 - The pattern generalizes: capture signals, extract rules, inject into context, prune periodically
 - Without maintenance, rules encode blind spots and stale conventions — the rule set itself needs periodic review

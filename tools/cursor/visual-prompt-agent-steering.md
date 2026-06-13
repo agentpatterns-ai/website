@@ -9,7 +9,7 @@ aliases:
   - visual prompt steering
   - canvas design mode
 applies_to: "cursor@3.x"
-last_reviewed: 2026-06-07
+last_reviewed: 2026-06-13
 status: current
 ---
 
@@ -17,51 +17,51 @@ status: current
 
 > Click, multi-select, or sketch on a running UI to direct a coding agent — collapsing multi-turn text clarification into one spatially-grounded instruction.
 
-Visual-prompt agent steering is the active form of multimodal direction: the developer points at the running product (or a canvas) and the agent receives both element identity and a rendered screenshot as one instruction unit. Cursor's Design Mode is the first mainstream shipping implementation; the technique generalises to any harness that accepts a `(selector, screenshot, intent)` tuple.
+Visual-prompt agent steering is the active form of multimodal direction: the developer points at the running product (or a canvas) and the agent receives element identity plus a rendered screenshot as one instruction unit. Cursor's Design Mode is the first mainstream implementation; the technique generalises to any harness taking a `(selector, screenshot, intent)` tuple.
 
 ## When Visual Beats Text
 
-The technique applies when **spatial intent is the load-bearing signal** — layout, component placement, visual relationships between two or more elements, "match this to that". Text encodes those referents lossily; one click plus "make this match" replaces a paragraph of description. If the first text attempt would have to name DOM ancestors, pixel offsets, or sibling components to be unambiguous, point instead.
+The technique applies when **spatial intent is the load-bearing signal** — layout, component placement, visual relationships, "match this to that". Text encodes those referents lossily; one click plus "make this match" replaces a paragraph. If the text version would need DOM ancestors, pixel offsets, or siblings to be unambiguous, point instead.
 
-For non-spatial work — renaming a function, restructuring a query, changing an algorithm — the visual surface has no referent. Keep those tasks in text.
+For non-spatial work, the visual surface has no referent. Keep those in text.
 
 ## What the Agent Receives
 
-Selecting an element gives the agent two complementary signals: **element identity** — "xpath, the component, attributes, computed styles, props from the fiber tree" — and **spatial context** — a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone does not communicate "match the spacing of the sibling card"; the screenshot does. The screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot — the same dual-modality property [frontmost-window snapshots](../../context-engineering/frontmost-window-snapshot-context.md) rely on for passive capture.
+Selecting an element gives the agent two complementary signals: **element identity** — "xpath, the component, attributes, computed styles, props from the fiber tree" — and **spatial context** — a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone can't say "match the spacing of the sibling card"; the screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot — the property [frontmost-window snapshots](../../context-engineering/frontmost-window-snapshot-context.md) exploit for passive capture.
 
 ## Three Multimodal Patterns, One Site
 
-Three distinct interaction shapes have shipped against AI coding harnesses; they are easy to conflate.
+Three interaction shapes have shipped against AI coding harnesses, easy to conflate.
 
 | Pattern | Direction | Surface | Example |
 |---|---|---|---|
-| **Visual-prompt steering** (this page) | Human → agent | Click / sketch / multi-select on running UI | Cursor Design Mode |
-| **Frontmost-window snapshot** | Human → agent (passive) | Hotkey-bound capture of any app window | OpenAI Codex Appshots ([page](../../context-engineering/frontmost-window-snapshot-context.md)) |
-| **Interactive canvas output** | Agent → human | Agent renders a chart, table, or diagram as response | Cursor canvases, Claude Artifacts ([page](../../emerging/interactive-canvas-outputs.md)) |
+| **Visual-prompt steering** (this page) | Human → agent | Click / multi-select on running UI | Cursor Design Mode |
+| **Frontmost-window snapshot** | Human → agent (passive) | Hotkey capture of any window | Codex Appshots ([page](../../context-engineering/frontmost-window-snapshot-context.md)) |
+| **Interactive canvas output** | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../emerging/interactive-canvas-outputs.md)) |
 
-The shapes share a substrate — rendered visual context — but direction and cost surface differ.
+They share a substrate but differ in direction and cost.
 
 ## Cursor's Implementation
 
-Design Mode launched in Cursor 3.0 on 2026-04-02 as the Agents Window's browser-annotation overlay. Shortcuts: `⌘+Shift+D` toggles; `Shift+drag` selects an area; `⌘+L` adds an element to chat; `⌥+click` adds to input ([Cursor changelog 3.0](https://cursor.com/changelog/3-0)). Two June 2026 expansions matter:
+Design Mode launched in Cursor 3.0 on 2026-04-02 as the Agents Window's browser-annotation overlay. Shortcuts: `⌘+Shift+D` toggles; `Shift+drag` selects an area; `⌘+L` adds an element to chat; `⌥+click` adds to input ([Cursor changelog 3.0](https://cursor.com/changelog/3-0)). Two June 2026 expansions extend it:
 
-- **Canvas Design Mode (2026-06-04)** — Design Mode now works inside agent-generated canvases, so annotate-and-target guides edits to dashboards and other interactive artifacts ([Cursor changelog](https://cursor.com/changelog)).
-- **Multi-select and voice (2026-06-05)** — clicking two or more elements gives the agent "the selected elements, their code, the surrounding layout, and the visual relationships on the page"; voice narrates edits and queues the next instruction without waiting for the current run ([Cursor — Design Mode](https://cursor.com/blog/design-mode)).
+- **Canvas Design Mode (2026-06-04)** — Design Mode now works inside agent-generated canvases, so annotate-and-target guides edits to dashboards and artifacts ([Cursor changelog](https://cursor.com/changelog)).
+- **Multi-select and voice (2026-06-05)** — clicking two or more elements gives the agent "the selected elements, their code, the surrounding layout, and the visual relationships on the page"; voice narrates edits and queues the next instruction without waiting ([Cursor — Design Mode](https://cursor.com/blog/design-mode)).
 
-Cursor pairs Design Mode with Composer 2.5, described as "both fast and strong at interface work" ([Cursor — Design Mode](https://cursor.com/blog/design-mode)).
+Cursor pairs it with Composer 2.5, "both fast and strong at interface work" ([Cursor — Design Mode](https://cursor.com/blog/design-mode)).
 
 ## Why It Works
 
-Spatial intent is a multi-dimensional referent that text encodes lossily. The dual signal — identity (xpath/component/computed-style/fiber-tree props) plus a screenshot — collapses a multi-turn "describe → clarify → re-describe" loop into one grounded instruction. Identity anchors *where* to edit; the screenshot anchors *what good looks like* ([Cursor — Design Mode](https://cursor.com/blog/design-mode)). This is the same dual-modality argument empirically validated for screenshot-plus-accessibility-tree capture in [GUI agent research](https://arxiv.org/html/2507.03730v1).
+Spatial intent is a multi-dimensional referent that text encodes lossily. The dual signal — identity (xpath/component/computed-style/fiber-tree props) plus a screenshot — collapses the multi-turn "describe → clarify → re-describe" loop into one grounded instruction. Identity anchors *where* to edit; the screenshot anchors *what good looks like* ([Cursor — Design Mode](https://cursor.com/blog/design-mode)) — the argument validated for screenshot-plus-accessibility-tree capture in [GUI agent research](https://arxiv.org/html/2507.03730v1).
 
 ## When This Backfires
 
-- **Non-spatial tasks.** Renaming a function, restructuring a query, changing an algorithm. The visual surface has no referent; clicking is overhead.
-- **Async or PR-bound review.** The sketch does not travel into the pull request. Reviewers reconstruct intent from the diff, not the prompt — the most expressive form of the instruction is lost. The [Interactive Canvas Outputs page](../../emerging/interactive-canvas-outputs.md) documents the same review-surface split for canvas outputs; it applies symmetrically to canvas inputs.
-- **Multimodal-reasoning failure regimes.** For precise spatial reasoning — alignment across components, perspective, depth ordering — multimodal LLMs misread layout via the projection bottleneck and answer by semantic co-occurrence rather than the visible scene, with documented failure modes including instance merging and perspective-taking errors ([Spatial Reasoning in MLLMs, arxiv 2511.15722](https://arxiv.org/abs/2511.15722)).
-- **Indirect prompt injection via the captured visual.** Third-party content rendered in the page (an embedded ad, user-generated comments, a webview) can carry hidden adversarial text the MLLM treats as instructions. Image-based prompt injection reaches up to 64% attack success under stealth constraints; no tested defence fully eliminates the risk ([Image-based Prompt Injection, arxiv 2603.03637](https://arxiv.org/abs/2603.03637); [Multimodal prompt injection, arxiv 2509.05883](https://arxiv.org/html/2509.05883v1)).
-- **Image-token budget pressure.** Voice-narrated sequential edits stack viewport screenshots into one thread; image tokens can dominate context before the agent reads its first instruction on small models or tight budgets ([frontmost-window snapshot — image-token cost](../../context-engineering/frontmost-window-snapshot-context.md)).
-- **Accessibility-disadvantaged authors.** Visual-pointing interfaces structurally exclude developers using screen readers; visual-prompt steering cannot be the only available steering channel.
+- **Non-spatial tasks.** The visual surface has no referent for renaming a function, restructuring a query, or changing an algorithm — clicking is overhead.
+- **Async or PR-bound review.** The sketch does not travel into the pull request; reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../emerging/interactive-canvas-outputs.md) documents for outputs.
+- **Multimodal-reasoning failure regimes.** For precise spatial reasoning — alignment, perspective, depth ordering — multimodal LLMs misread layout via the projection bottleneck, answering by semantic co-occurrence rather than the scene; failures include instance merging and perspective-taking errors ([Spatial Reasoning in MLLMs, arxiv 2511.15722](https://arxiv.org/abs/2511.15722)).
+- **Indirect prompt injection via the captured visual.** Third-party content in the page (an ad, comments, a webview) can carry hidden adversarial text the MLLM treats as instructions. Image-based injection reaches up to 64% attack success under stealth constraints, and no tested defence fully eliminates it ([Image-based Prompt Injection, arxiv 2603.03637](https://arxiv.org/abs/2603.03637); [Multimodal prompt injection, arxiv 2509.05883](https://arxiv.org/html/2509.05883v1)).
+- **Image-token budget pressure.** Voice-narrated sequential edits stack viewport screenshots into one thread; image tokens can dominate context before the agent reads its first instruction ([frontmost-window snapshot — image-token cost](../../context-engineering/frontmost-window-snapshot-context.md)).
+- **Accessibility-disadvantaged authors.** Visual-pointing interfaces structurally exclude screen-reader users; visual-prompt steering cannot be the only steering channel.
 
 ## Example
 

@@ -12,7 +12,7 @@ tags:
 aliases:
   - decomposed red-teaming
   - semi-automated monitor red-teaming
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Decomposed Red-Teaming for Agent Monitors

@@ -11,12 +11,12 @@ aliases:
   - chat as agent control surface
   - chat-platform delegation
   - mentioning agents in chat channels
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Chat-Platform Agent Delegation
 
-> Mentioning a coding agent in a team chat channel delegates work from where coordination already happens — making delegation visible to the whole team and concentrating the lethal trifecta on the chat principal. Use it on platforms that ship it, and audit it the same way you would a new MCP server.
+> Mentioning a coding agent in a chat channel delegates work from where the team coordinates and concentrates the lethal trifecta on the chat principal.
 
 ## The Surface
 
@@ -38,21 +38,21 @@ graph TD
 
 ## Surface Availability
 
-Chat-platform delegation exists on some agents and not others as of May 2026.
+Chat-platform delegation ships on more than one agent as of June 2026, and the set of supported chat platforms differs per agent.
 
 | Agent | Chat surface | Notes |
 |-------|--------------|-------|
-| Cursor | Microsoft Teams | Shipped 2026-05-11. `@Cursor` in any channel; auto-selects repo and model; returns PR card to the thread ([Cursor changelog](https://cursor.com/changelog/microsoft-teams)) |
-| GitHub Copilot coding agent | None | Documented entry points are github.com, GitHub Mobile, CLI, VS Code, and `@copilot` PR comments. Jira (March 2026) is ticket-system, not chat ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/assigning-and-completing-issues-with-coding-agent-in-github-copilot/), [Changelog](https://github.blog/changelog/2026-03-05-github-copilot-coding-agent-for-jira-is-now-in-public-preview/)) |
-| Claude Code | None as built-in | `@claude` triggers are GitHub-comment based ([Claude Code docs](https://code.claude.com/docs/en/github-actions)) |
+| Cursor | Slack, Microsoft Teams | `@Cursor` in any channel; auto-selects repo and model from the message and thread context; returns a PR to the thread. Teams added 2026-05 ([Cursor changelog](https://cursor.com/changelog/microsoft-teams), [Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) |
+| GitHub Copilot coding agent | Slack, Microsoft Teams | Mention `@GitHub` in a Slack thread with a prompt; the coding agent runs in the background using the thread as context and opens a PR. Slack went generally available 2025-10-28; the GitHub app for Teams offers the same context-to-PR flow ([GitHub Changelog](https://github.blog/changelog/2025-10-28-work-with-copilot-coding-agent-in-slack/), [GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/integrate-cloud-agent-with-slack)) |
+| Claude Code | None as built-in | `@claude` triggers are GitHub-comment based, not chat-platform ([Claude Code docs](https://code.claude.com/docs/en/github-actions)) |
 
-Surface availability matters when comparing delegation strategies — a team standardised on Copilot cannot adopt this pattern today without bridging to a different agent.
+Surface availability matters when comparing delegation strategies — the chat platforms a team already runs (Slack vs Teams) determine which agents can adopt the pattern without bridging to a different tool.
 
 ## The Mechanism — Locality of Coordination Context
 
 Chat-as-control-surface works because **the channel already holds the decision context** that produced the request. The thread captures who proposed the change, what objections were raised, and which constraints were agreed. An agent that reads the thread before acting inherits that context without the user having to restate it.
 
-Cursor's Teams integration makes the locality explicit: the agent "reviews full thread context before solution implementation" ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)). The IDE entry point cannot do this — an IDE-invoked agent sees only what the user pastes into the prompt.
+Cursor's Teams integration makes the locality explicit: its Cloud Agents "read the relevant thread or chat context when invoked, understanding and acting on your team's discussion" ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)). Copilot's Slack agent does the same — it "captures the entire thread as context" before opening the PR ([GitHub Changelog](https://github.blog/changelog/2025-10-28-work-with-copilot-coding-agent-in-slack/)). The IDE entry point cannot do this — an IDE-invoked agent sees only what the user pastes into the prompt.
 
 The mechanism is locality, not visibility. Visibility is a side effect — every channel member sees the delegation and the result — and it cuts both ways (see [Failure Modes](#failure-modes)).
 
@@ -62,7 +62,7 @@ Chat is one of three async delegation surfaces. Each suits different contexts.
 
 | Surface | Audience | Repo binding | Trifecta posture |
 |---------|----------|--------------|------------------|
-| Chat channel (`@Cursor` in Teams) | Whole channel | Heuristic: message content → recent history → default | All three legs co-located on the chat principal |
+| Chat channel (`@Cursor`, `@GitHub` in Slack/Teams) | Whole channel | Heuristic: message content → recent history → default | All three legs co-located on the chat principal |
 | PR comment (`@copilot` in GitHub) | PR participants | Bound to the PR's repository | Same trifecta, scoped to forge audience |
 | IDE side-panel (Copilot Chat, Cursor composer) | Single user | Bound to the open workspace | Private-data + egress; untrusted-content only if the user pastes it |
 
@@ -84,7 +84,7 @@ Chat delegation closes all three legs of the [lethal trifecta](../security/letha
 
 Per Willison's model, this combination is sufficient for exfiltration via a single injected message ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). Adding chat delegation to a project that already audits every new MCP server for the lethal trifecta must run the same audit on the chat principal. The cheapest leg to remove is usually untrusted content: restrict the bot to specific channels, treat channel content outside an explicit `@mention` as out-of-scope, or run the agent in a sandbox with no network egress beyond the forge API.
 
-Cursor mandates Privacy Mode for the Teams integration and ships a snippet-exposure toggle for status messages ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) — both are partial mitigations, not trifecta removal.
+Cursor's Cloud Agents require temporary code storage while running, so legacy Privacy Mode is not supported for the integration; Cursor instead ships a snippet-exposure toggle for status messages ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) — a partial mitigation, not trifecta removal.
 
 ## Failure Modes
 
@@ -98,7 +98,7 @@ Cursor mandates Privacy Mode for the Teams integration and ships a snippet-expos
 
 Adopt chat delegation when all of the following hold:
 
-- The agent platform ships a chat surface (today: Cursor + Teams; verify before assuming)
+- The agent platform ships a chat surface on a platform the team runs (today: Cursor and GitHub Copilot, on Slack and Microsoft Teams; verify before assuming)
 - Coordination for the affected repository already happens in the chat platform
 - The bot can be scoped to specific channels and to specific repositories
 - A lethal-trifecta audit has been run on the chat principal and the chosen leg-removal mechanism is wired before the integration goes live
@@ -108,7 +108,7 @@ Skip it when the agent's IDE or PR-comment entry point already covers the workfl
 ## Key Takeaways
 
 - Chat-platform delegation moves the invocation surface from the IDE to the team's coordination layer; the mechanism is locality of context, not visibility
-- Surface availability is uneven — Cursor + Microsoft Teams exists today, GitHub Copilot and Claude Code do not ship chat-platform invocation as of May 2026
+- Surface availability is uneven across platforms — Cursor and GitHub Copilot both ship chat delegation on Slack and Microsoft Teams today; Claude Code does not ship chat-platform invocation as of June 2026
 - Repository binding is heuristic, not channel-bound; enforce binding outside the agent if it must be a security boundary
 - The pattern concentrates the lethal trifecta on the chat principal — extend the trifecta-audit posture used for MCP servers to the chat integration
 - Shared channels, low-engineering-quorum channels, and high-frequency channels are predictable failure conditions

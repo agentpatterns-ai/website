@@ -7,12 +7,12 @@ tags:
   - human-factors
   - tool-agnostic
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Lay the Architectural Foundation by Hand Before Delegating to Agents
 
-> Build the structural skeleton and a few representative features yourself before handing a project to an agent — the foundation is the primary investment that makes large-scale delegation safe.
+> Build the structural skeleton and a few representative features by hand before delegating — the foundation is the investment that makes large-scale delegation safe.
 
 ## The Cost of Skipping the Foundation
 
@@ -56,6 +56,14 @@ The investment in the foundation is not overhead. It is the primary control mech
 Building the foundation yourself takes time upfront. The alternative — prompting without a foundation — produces architectural drift that compounds with every agent session. Correcting structural problems after the fact is significantly more expensive than establishing the structure before delegation begins.
 
 The rule of thumb: if you cannot describe the correct architectural pattern in code, the agent cannot infer it from your instructions.
+
+## When This Backfires
+
+The steelman for skipping the hand-built foundation is real: for the right project, the upfront investment never pays back, and committing to a structure too early locks in choices you have not yet earned the right to make. Foundation-first is the wrong call when:
+
+- **The project is a throwaway prototype or spike.** When the goal is to learn whether an idea is viable, the foundation is sunk cost — the code is meant to be discarded. Let the agent build the fastest path to a runnable answer, then rebuild on a foundation only if the idea survives.
+- **The architecture is genuinely unknown.** If you cannot yet describe the correct pattern in code because the problem is unexplored, hand-building a foundation is premature architecture — you risk encoding the wrong invariants and forcing the agent to match a flawed exemplar. Explore first; codify the foundation once the shape is clear.
+- **The project is small enough that drift never compounds.** A single-module script or a few-hundred-line tool has no layer separation to protect. The foundation's payoff scales with the volume of agent-written code that has to match it; below a threshold, the setup cost exceeds the correction cost it prevents.
 
 ## Example
 

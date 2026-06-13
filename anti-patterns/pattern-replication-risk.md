@@ -9,12 +9,12 @@ tags:
 aliases:
   - "pattern propagation"
   - "codebase pattern amplification"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Pattern Replication Risk
 
-> Agents absorb existing codebase patterns and reproduce them at scale -- including deprecated APIs, inconsistent error handling, and hand-rolled utilities you meant to phase out.
+> Pattern replication is an agent absorbing codebase conventions and reproducing them at scale: deprecated APIs, legacy error handling, and hand-rolled utilities you meant to retire.
 
 ## The Mechanism
 

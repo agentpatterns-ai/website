@@ -10,7 +10,7 @@ tags:
 aliases:
   - cold start safety gap
   - cold-start safety gap in agents
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)
@@ -19,11 +19,11 @@ last_reviewed: 2026-06-09
 
 ## The Anti-Pattern
 
-A common deployment assumption is that an agent's safety posture is a property of the model — fixed across turns, independent of conversation depth. Under this assumption, a single safety evaluation (a turn-1 jailbreak test, a static red-team) generalises to the whole session, and the first user request is treated like any other.
+A common deployment assumption treats an agent's safety posture as a property of the model — fixed across turns, independent of conversation depth — so a single evaluation (a turn-1 jailbreak test, a static red-team) is taken to generalise to the whole session.
 
-Sun, Liu, & Weng (2026) measure this assumption directly and find it false. Across 7 open-source models from 4 families, evaluated on the SODA benchmark (Safety Over Depth for Agents — 400 threats across 16 environments covering financial fraud, data destruction, privacy violations, infrastructure sabotage, and professional harm), safety improves by **9–52%** as the number of preceding benign agentic tasks grows from zero to twenty ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)). The same model, the same harmful request, the same tool-calling harness — only the depth changes — and the refusal rate moves by tens of percentage points.
+Sun, Liu, & Weng (2026) measure this assumption and find it false. Across 7 open-source models from 4 families on the SODA benchmark (Safety Over Depth for Agents — 400 threats across 16 environments covering financial fraud, data destruction, privacy violations, infrastructure sabotage, and professional harm), refusal of harmful requests improves by **9–52%** as the count of preceding benign agentic tasks grows from zero to twenty ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)). Same model, same request, same harness — only depth changes.
 
-The anti-pattern is not "agents are unsafe at the start." It is **treating a depth-dependent property as depth-independent**, then making deployment decisions (red-team coverage, gate placement, threat-model scope) as if the per-turn refusal rate were constant.
+The anti-pattern is not "agents are unsafe at the start." It is **treating a depth-dependent property as depth-independent**, then setting red-team coverage, gate placement, and threat-model scope as if the per-turn refusal rate were constant.
 
 ## What the Cold-Start Gap Looks Like
 
@@ -34,39 +34,37 @@ The gap is largest where alignment is weakest:
 | Llama-3.1-8B | 5.7% | 57.8% | +52pp |
 | Gemma4-26B-A4B | 82.9% | 91.8% | +9pp |
 
-Across the seven open-source models tested, intermediate gains of +28pp (Qwen3-4B) and +38pp (Llama-3.3-70B) sit between these bounds ([Sun et al. 2026](https://arxiv.org/html/2606.07867)).
-
-Smaller and less-aligned baselines show the largest absolute gain; already-safer models still show a measurable but smaller gap ([Sun et al. 2026, full text](https://arxiv.org/html/2606.07867)). Representation analysis explains why (see *Why It Works* below) — but the operational point is that **a one-shot safety eval at depth 0 systematically over-states risk for the same model at depth 10, and a one-shot eval at depth 20 systematically under-states risk for that model at session start.**
+Intermediate gains of +28pp (Qwen3-4B) and +38pp (Llama-3.3-70B) sit between these bounds — smaller, less-aligned baselines gain most, while already-safer models retain a measurable but smaller gap ([Sun et al. 2026](https://arxiv.org/html/2606.07867)). The operational point: **a one-shot eval at depth 0 over-states risk for the same model at depth 10, and a one-shot eval at depth 20 under-states risk at session start.**
 
 ## Why It Works
 
-The mechanism is not new safety knowledge acquired mid-session — the model learns nothing new. Sun, Liu, & Weng (2026) trained linear probes on hidden states and found that safe and unsafe outcomes occupy clearly separable regions in PCA space (classification accuracy >0.9). With each additional benign agentic task in the conversation history, the model's representations for the *same* later query progressively migrate across the probe's decision boundary into the safety-aligned region ([Sun et al. 2026](https://arxiv.org/html/2606.07867)).
+The model learns nothing new mid-session. Sun, Liu, & Weng (2026) trained linear probes on hidden states and found safe and unsafe outcomes occupy separable regions in PCA space (classification accuracy >0.9); with each added benign task, representations for the *same* later query migrate across the decision boundary into the safety-aligned region ([Sun et al. 2026](https://arxiv.org/html/2606.07867)).
 
-The authors interpret this as **persona activation via context**: alignment training instills an "agent persona" whose safety-aligned behavior is fully activated only when the conversation history matches the distribution of agentic interaction the model was trained on. A bare system prompt with no task history sits outside that region; benign tool-calling turns pull representations into it. Critically, the agent's own prior *responses* contribute little to the safety shift — the *user-task turns* are the load-bearing signal. Faking agent responses preserves safety but degrades utility on later turns.
+The authors interpret this as **persona activation via context**: alignment training instills an "agent persona" whose safety-aligned behavior activates only when the history matches the agentic distribution the model was trained on. A bare system prompt sits outside that region; benign tool-calling turns pull representations into it. The *user-task turns* are the load-bearing signal — the agent's own prior responses contribute little, so faking them preserves safety but degrades later-turn utility.
 
-This is consistent with — and mirror-image to — Anthropic's many-shot jailbreaking finding ([Anthropic 2024](https://www.anthropic.com/research/many-shot-jailbreaking)): adversarial faux dialogues in the prefix shift the same representation in the *opposite* direction, dropping refusal rates substantially. Depth itself is neither safe nor unsafe; the content of the prefix determines direction.
+This mirrors Anthropic's many-shot jailbreaking finding ([Anthropic 2024](https://www.anthropic.com/research/many-shot-jailbreaking)): adversarial faux dialogues shift the same representation the *opposite* way, dropping refusal substantially. Depth is neither safe nor unsafe; the prefix content sets the direction.
 
 ## What to Do Instead
 
-The mitigation the paper recommends is straightforward: prepend a brief warm-up of real benign agentic tasks (D=5 to D=10 typically suffices) to every safety-relevant session, and keep that history visible to the model ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)). For utility-preserving deployments, include actual agent responses; for budget-constrained ones, prepending only the user-task turns (no responses) also helps, with a small utility cost.
+The paper's mitigation: prepend a brief warm-up of real benign agentic tasks (D=5 to D=10 usually suffices) and keep that history visible to the model ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)). Include actual agent responses to preserve utility; prepending only user-task turns also helps, at a small utility cost.
 
-This is necessary but **not sufficient**. The warm-up closes 9–52% of the gap, not 100% — residual cold-start risk remains, and the mechanism is orthogonal to several other safety surfaces:
+This is necessary but **not sufficient** — warm-up closes part of the gap, not all of it, and is orthogonal to other surfaces:
 
-1. **Per-turn safety filters and tool-call authorization** — apply regardless of conversational state. Warm-up shifts a refusal probability; authorization is a hard boundary. Pair them.
-2. **Defence-in-depth** — the cold-start finding is one layer of model-level posture; infrastructure-level egress controls and product-level confirmation gates remain independent and necessary ([Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)).
-3. **Tool-call safety transfer** — text-trained refusal does not transfer cleanly to tool-call refusal ([Yi et al. 2026](https://arxiv.org/pdf/2602.16943)). A warmed-up agent can still execute harmful tool calls that bypass text-level refusal.
-4. **Red-team coverage** — evaluate refusal at depth 0, 5, and 20 (or representative depths for your deployment). A single-depth eval reports a single point on the curve.
+1. **Per-turn filters and tool-call authorization** — apply regardless of state. Warm-up shifts a refusal probability; authorization is a hard boundary. Pair them.
+2. **Defence-in-depth** — cold-start is one model-level layer; infrastructure egress controls and product confirmation gates remain independent and necessary ([Single-Layer Prompt Injection Defence](single-layer-injection-defence.md)).
+3. **Tool-call safety transfer** — text-trained refusal does not transfer cleanly to tool-call refusal ([Yi et al. 2026](https://arxiv.org/pdf/2602.16943)); a warmed-up agent can still execute harmful tool calls.
+4. **Red-team coverage** — evaluate refusal at depth 0, 5, and 20 (or depths representative of your deployment). A single-depth eval reports one point on the curve.
 
 ## When This Backfires
 
 The "warm-up before deploying" mitigation has its own failure conditions:
 
-- **Adversary-controlled warm-up content.** If an attacker can plant tasks in conversation history — compromised long-term memory, untrusted retrieval, multi-tenant session reuse — prepending tasks is structurally a many-shot jailbreak surface ([Anthropic 2024](https://www.anthropic.com/research/many-shot-jailbreaking)). The same mechanism that pulls representations into the safe region can pull them out. Treat warm-up content as a trust boundary, not free padding.
-- **Closed-source frontier models with external guardrails.** Sun et al. (2026) excluded GPT-4, Claude, and Gemini because system-level guardrails block harmful test inputs before the model sees them, confounding the signal. The magnitude of the gap on these production models is not characterised. Apply with measurement, not assumption.
-- **Tool-call harms outside text-safety scope.** "Mind the GAP" ([Yi et al. 2026](https://arxiv.org/pdf/2602.16943)) shows text-safety refusal does not transfer to tool-call refusal. Warm-up shifts text-level posture; harmful tool calls disguised as legitimate function invocations remain a separate surface that warm-up does not address.
-- **Short or single-turn deployments.** One-shot completions, single API calls, and short workflows have no warm-up budget. The mitigation does not apply — fall back to per-turn authorization and refusal.
-- **High-stakes early actions.** Even at D=20, the gap closes 9–52%, not to zero. Any flow where the first safety-critical request must be refused with 99%+ reliability cannot rely on warm-up alone.
-- **Cost and latency.** Warm-up tasks consume tokens and time on every session start. On already-aligned models, the marginal safety gain may not justify the cost; on small models with weak baselines, the cost is well-spent.
+- **Adversary-controlled warm-up content.** If an attacker can plant tasks in conversation history — compromised long-term memory, untrusted retrieval, multi-tenant session reuse — prepending tasks is structurally a many-shot jailbreak surface ([Anthropic 2024](https://www.anthropic.com/research/many-shot-jailbreaking)). The same mechanism that pulls representations into the safe region can pull them out; treat warm-up content as a trust boundary, not free padding.
+- **Closed-source frontier models with external guardrails.** Sun et al. (2026) excluded GPT-4, Claude, and Gemini because system-level guardrails block harmful test inputs before the model sees them. The gap's magnitude on these production models is not characterised — apply with measurement, not assumption.
+- **Tool-call harms outside text-safety scope.** "Mind the GAP" ([Yi et al. 2026](https://arxiv.org/pdf/2602.16943)) shows text-safety refusal does not transfer to tool-call refusal. Harmful calls disguised as legitimate function invocations remain a separate surface warm-up does not address.
+- **Short or single-turn deployments.** One-shot completions and short workflows have no warm-up budget; fall back to per-turn authorization and refusal.
+- **High-stakes early actions.** Warm-up closes the gap, not to zero. Any flow whose first safety-critical request must be refused with 99%+ reliability cannot rely on warm-up alone.
+- **Cost and latency.** Warm-up consumes tokens and time on every session start. On already-aligned models the marginal gain may not justify it; on weak-baseline small models it is well-spent.
 
 ## Example
 

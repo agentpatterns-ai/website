@@ -9,7 +9,7 @@ tags:
   - context-engineering
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Observation Masking: Filter Tool Outputs from Context
@@ -130,19 +130,9 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Context Compression Strategies: Offloading and Summarisation](context-compression-strategies.md)
-- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md)
-- [Context-Injected Error Recovery for AI Agent Development](context-injected-error-recovery.md)
-- [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
 - [Error Preservation in Context for AI Agent Development](error-preservation-in-context.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
-- [The Infinite Context](../anti-patterns/infinite-context.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](../agent-design/agent-turn-model.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Filter, Aggregate, and Execution Environment](filter-aggregate-execution-env.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
-- [Lost in the Middle: The U-Shaped Attention Curve](lost-in-the-middle.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Attention Sinks and Why Token Position Shapes Focus](attention-sinks.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Context Priming: Pre-Loading Files for AI Agent Tasks](context-priming.md)
+- [The Infinite Context](../anti-patterns/infinite-context.md)

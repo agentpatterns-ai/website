@@ -9,12 +9,12 @@ tags:
   - context-engineering
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # System Prompt Altitude: Specific Without Being Brittle
 
-> System prompts fail in two directions — too brittle on edge cases or too vague to constrain behaviour. Effective prompts sit at the altitude that produces consistent behaviour across variation.
+> System prompts fail when too brittle on edge cases or too vague to constrain. The right altitude produces consistent behaviour across variation.
 
 ## The Two Failure Modes
 
@@ -53,13 +53,13 @@ Background sections can be general. Tool guidance should be precise. Mixing alti
 
 ## Testing Altitude
 
-The practical test for altitude calibration: introduce an edge case the prompt didn't anticipate, then observe behaviour. A well-altitude prompt degrades gracefully — the agent applies the nearest applicable heuristic. A too-brittle prompt breaks or falls through to vague default behaviour. A too-vague prompt was never constrained to begin with.
+The practical test for altitude calibration: introduce an edge case the prompt didn't anticipate, then observe. A well-altitude prompt degrades gracefully — the agent applies the nearest heuristic. A too-brittle prompt breaks or falls through to vague defaults. A too-vague prompt was never constrained to begin with.
 
 If adding one new instruction requires adding three others to handle its edge cases, the original instruction was too brittle. Raise the altitude — describe the principle, not the case.
 
 ## Why It Works
 
-Instruction-tuned models generalise from principle-level guidance by applying stated reasoning to novel inputs rather than pattern-matching enumerated cases. A heuristic like "treat authentication code as high-risk" activates the model's existing knowledge of session and token effects — knowledge that would require dozens of rules to approximate. Enumerated rules also consume context budget: [instruction-count scaling research](https://arxiv.org/abs/2507.11538) shows frontier models lose significant accuracy beyond ~150 simultaneous constraints. Altitude trades case coverage for generalisability and context efficiency.
+Instruction-tuned models generalise from principle-level guidance by applying stated reasoning to novel inputs rather than pattern-matching enumerated cases. A heuristic like "treat authentication code as high-risk" activates the model's existing knowledge of session and token effects — knowledge that would require dozens of rules to approximate. Enumerated rules also consume context budget: [instruction-count scaling research](https://arxiv.org/abs/2507.11538) shows accuracy degrades as the number of simultaneous instructions grows, with even the best frontier models reaching only 68% accuracy at a density of 500 instructions. Altitude trades case coverage for generalisability and context efficiency.
 
 ## When This Backfires
 
@@ -113,14 +113,10 @@ This version works across Go, TypeScript, Ruby, Python, and any future test fram
 ## Related
 
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
-- [Seeding Agent Context: Breadcrumbs in Code](../context-engineering/seeding-agent-context.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
-- [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md)
-- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
-- [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
-- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
-- [Layer Agent Instructions by Specificity: Global, Project](layered-instruction-scopes.md)
 - [The Instruction Compliance Ceiling: How Rule Count Limits AI](instruction-compliance-ceiling.md)
+- [Layer Agent Instructions by Specificity: Global, Project](layered-instruction-scopes.md)
+- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
+- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
+- [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
-- [System Prompt Replacement](system-prompt-replacement.md)
-- [Critical Instruction Repetition](critical-instruction-repetition.md)

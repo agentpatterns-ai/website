@@ -12,7 +12,7 @@ aliases:
   - task alignment benchmark
   - selective compliance evaluation
   - TAB benchmark
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Task Alignment: The Selective-Compliance Gap Benchmarks Miss

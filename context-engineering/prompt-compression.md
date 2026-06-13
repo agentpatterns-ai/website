@@ -6,7 +6,7 @@ tags:
   - cost-performance
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Prompt Compression: Maximizing Signal Per Token
@@ -15,9 +15,7 @@ last_reviewed: 2026-05-27
 
 ## Why Density Matters
 
-Claude Code's context window fills fast. A debugging session or codebase exploration can consume tens of thousands of tokens. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) warns that bloated instruction files cause important rules to get lost — instructions near the end of a long context receive less attention than instructions at the start.
-
-The same problem applies to instruction files. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) explicitly warns: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions!" A shorter file where every rule applies outperforms a longer file where important rules are buried and skipped.
+Claude Code's context window fills fast — a debugging session or codebase exploration can consume tens of thousands of tokens, and instructions near the end of a long context receive less attention than those at the start. The [Claude Code best practices documentation](https://code.claude.com/docs/en/best-practices) is blunt about the consequence: "Bloated CLAUDE.md files cause Claude to ignore your actual instructions!" A shorter file where every rule applies outperforms a longer file where important rules are buried and skipped.
 
 Prompt compression is not about losing guidance — it is about removing the words that carry no meaning.
 
@@ -25,7 +23,7 @@ Prompt compression is not about losing guidance — it is about removing the wor
 
 ### Tables Over Prose
 
-Structured data communicates more information per line than prose. A table of examples communicates the contrast between correct and incorrect behavior with zero explanation overhead.
+Structured data carries more information per line than prose. A table conveys the contrast between correct and incorrect behavior with zero explanation overhead.
 
 ```markdown
 | ✅ Include                          | ❌ Exclude                           |
@@ -55,7 +53,7 @@ The instruction delivers the same constraint at one-third the length.
 
 ### Examples Over Descriptions
 
-Show the pattern instead of describing it. An example collapses the description of a pattern and its application into a single piece of text that the agent can directly imitate.
+Show the pattern instead of describing it. An example collapses a pattern and its application into a single piece of text the agent can directly imitate.
 
 ### Put the Most Important Rules First
 
@@ -109,6 +107,7 @@ Compression removes words, not meaning — but the two are not always separable.
 - **Edge-case context removed**: A rule like "Write tests before submitting" compresses cleanly, but "Write integration tests when the function touches the database, unit tests otherwise" cannot be compressed further without losing the conditional. Cutting context that disambiguates applies the rule uniformly where it should apply selectively.
 - **Implicit reasoning stripped**: Rules without *why* rely on the agent inferring intent correctly. When the agent encounters a case the rule author didn't anticipate, absence of rationale means no basis for generalization. Add rationale only when compliance on unforeseen inputs depends on it.
 - **Compression as premature optimization**: Trimming a CLAUDE.md that is already under 20 rules produces marginal gains. The [Claude Code documentation](https://code.claude.com/docs/en/best-practices) identifies long, bloated files as the failure mode — not files that are merely imperfect. Compress to remove noise; stop before removing signal.
+- **The compliance U-curve**: "Shorter" is not monotonically "better." A benchmark study of instruction-following under compression — [Separating Constraint Compliance from Semantic Accuracy (arXiv:2512.17920)](https://arxiv.org/abs/2512.17920) — found constraint violations peak at *medium* compression, with compliance recovering at both the verbose and the extreme-compression ends. Half-compressing a rule (paraphrasing it tighter without committing to a terse, unambiguous form) can hurt compliance more than leaving it verbose. Compress decisively to a crisp rule; a partially-trimmed instruction is the worst of both worlds.
 
 ## Key Takeaways
 

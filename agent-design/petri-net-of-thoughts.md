@@ -9,7 +9,7 @@ tags:
 aliases:
   - Petri Net of Thoughts
   - PNoT prompting
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)
@@ -20,7 +20,7 @@ last_reviewed: 2026-05-27
 
 Standard structured prompting (CoT, ToT, GoT) relies on the developer to decompose reasoning steps by hand. Petri Net of Thoughts (PNoT) inverts this: the structure comes from a formally discovered or expert-defined process model, not ad-hoc intuition.
 
-A Petri net is a bipartite graph of **places** (states) and **transitions** (decisions). Tokens flow through the net according to firing rules — a transition fires when all its input places hold tokens, consuming them and producing tokens in output places. This gives three properties that looser prompting topologies lack:
+A Petri net is a bipartite graph of **places** (states) and **transitions** (decisions). Tokens flow by firing rules — a transition fires when all its input places hold tokens, consuming them and producing tokens in output places. This gives three properties looser prompting topologies lack:
 
 1. **Formally defined paths** — places and transitions encode sequence, concurrency, and choice explicitly
 2. **State-aware prompts** — each transition receives a system prompt reflecting the current marking (token distribution), not just the prior step's output
@@ -43,7 +43,7 @@ graph TD
 
 ## How Token Replay Drives Prompting
 
-[Token replay](https://en.wikipedia.org/wiki/Token-based_replay) is a process mining algorithm that simulates execution by moving tokens through the net. In PNoT, each transition firing maps to an LLM call:
+[Token replay](https://en.wikipedia.org/wiki/Token-based_replay) is a process mining algorithm that simulates execution by moving tokens through the net. In PNoT, each transition firing is an LLM call:
 
 1. **Initialize** — place tokens at the start place; the initial system prompt encodes the task definition and net structure
 2. **Fire** — when a transition is enabled (all input places have tokens), call the LLM with a system prompt reflecting the current state and the decision the transition represents
@@ -60,7 +60,7 @@ PNoT pays off when the reasoning process has **known structure** — a defined s
 - **Code review workflows** — check style, check logic, check security, aggregate findings
 - **Regulatory or compliance checks** — sequential gates with defined pass/fail criteria
 
-MedVerse (2026) independently applied Petri net theory to medical diagnosis, reformulating differential diagnosis as a [DAG-structured parallel execution framework](https://arxiv.org/abs/2602.07529). Reported results: 4.8-8.9% accuracy gains over CoT baselines (Qwen2.5-7B, Llama-3.1-8B), and a 1.3x inference-latency reduction with 1.7x throughput gain relative to specialized medical LLMs.
+MedVerse (2026) independently applied Petri net theory to medical diagnosis, reformulating differential diagnosis as a [DAG-structured parallel execution framework](https://arxiv.org/abs/2602.07529). Reported results: up to 8.9% accuracy gain over general-purpose LLM baselines, plus a 1.3x inference-latency reduction and 1.7x throughput gain relative to specialized medical LLMs.
 
 ## When Simpler Approaches Suffice
 
@@ -68,7 +68,7 @@ The overhead of defining a Petri net — places, transitions, firing rules — i
 
 - **Open-ended exploration** — the reasoning path is unknown upfront; a [Plan Mode](../tools/claude/plan-mode.md) prompt or Tree of Thoughts is more appropriate
 - **Single-step tasks** — one decision, one action; [structured reasoning adds no benefit](../anti-patterns/reasoning-overuse.md)
-- **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; adding external scaffolding introduces overhead that may not improve outcomes for tasks where the model's native reasoning already covers the necessary decision structure
+- **Advanced reasoning models** — models with extended thinking (Claude with ultrathink, o1) internalize multi-step reasoning; external scaffolding adds overhead where the model's native reasoning already covers the decision structure
 
 [Besta et al. (IEEE TPAMI 2025)](https://arxiv.org/abs/2401.14295) provides the formal taxonomy of CoT (chain), ToT (tree), and GoT (graph) reasoning topologies — each suited to different task structures. The PNoT paper itself ([Gavric, Bork, and Proper 2025](https://doi.org/10.18420/EMISA2025_15)) situates Petri nets as an additional topology that is strongest when the structure is derivable from evidence rather than designed by intuition.
 

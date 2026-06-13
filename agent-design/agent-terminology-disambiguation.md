@@ -9,22 +9,22 @@ tags:
 aliases:
   - workflow vs agent
   - what is an AI agent
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Agent Terminology Disambiguation for AI Coding Systems
 
 > Eight overlapping terms — LLM workflow through autonomous agent — name distinct systems with distinct failure modes, and the vendor you read shapes each definition.
 
-"Agent" is one of the most overloaded words in AI engineering. Anthropic, OpenAI, Google, and LangChain each define it differently, and the ambiguity drives cargo-culting: teams building sequential prompts with state passing reach for multi-agent orchestration patterns because they called their system "multi-agent". A 2025 paper argued the term has been "diluted beyond utility" and proposed multidimensional characterization — across environmental interaction, autonomy, goal complexity, and temporal coherence — over single definitions ([arxiv 2508.05338](https://arxiv.org/abs/2508.05338)). This page names the working definitions practitioners meet today and the one conflation each invites.
+"Agent" is one of the most overloaded words in AI engineering. Anthropic, OpenAI, Google, and LangChain each define it differently, and the ambiguity drives cargo-culting: teams building sequential prompts reach for multi-agent orchestration because they called their system "multi-agent". A 2025 paper argued the term is "diluted beyond utility" and proposed multidimensional characterization — environmental interaction, autonomy, goal complexity, temporal coherence — over single definitions ([arxiv 2508.05338](https://arxiv.org/abs/2508.05338)). This page names the working definitions practitioners meet today and the conflation each invites.
 
 ## Conditions Under Which This Page Applies
 
 The disambiguation here is **vendor-aware and time-bound**:
 
-- **Anthropic's framing is canonical on this site** because the pattern catalogue is structured around control-flow ownership. Readers on OpenAI's Agents SDK or LangGraph state machines will meet alternative framings — none is "the" right one.
+- **Anthropic's framing is canonical on this site** because the pattern catalogue is structured around control-flow ownership. Readers on OpenAI's Agents SDK or LangGraph state machines meet alternative framings — none is "the" right one.
 - **Categories are spectrum points, not boxes**. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) treats workflow-vs-agent as a continuum.
-- **Definitions shift quarterly**. Use this page to recognise which patterns to reach for today, not as permanent taxonomy. Simon Willison crowdsourced 211 "agent" definitions, showing convergence is still in progress ([agent-definitions tag](https://simonwillison.net/tags/agent-definitions/)).
+- **Definitions shift quarterly**. Use this page to recognise which patterns to reach for today, not as permanent taxonomy. Simon Willison crowdsourced 211 "agent" definitions — convergence is still in progress ([agent-definitions tag](https://simonwillison.net/tags/agent-definitions/)).
 
 ## The Eight Terms
 
@@ -37,7 +37,7 @@ A system where LLMs and tools are orchestrated through predefined code paths ([A
 
 ### Deterministic Orchestration
 
-Workflow code that executes the same sequence for the same input, with non-deterministic work confined to clearly-bounded activities. Temporal-class engines require this property so workflows can survive process crashes via replay ([Temporal — dynamic AI agents](https://temporal.io/blog/of-course-you-can-build-dynamic-ai-agents-with-temporal)).
+Workflow code that executes the same sequence for the same input, with non-deterministic work confined to bounded activities. Temporal-class engines require this so workflows survive process crashes via replay ([Temporal — dynamic AI agents](https://temporal.io/blog/of-course-you-can-build-dynamic-ai-agents-with-temporal)).
 
 - **Example.** A code-modernization pipeline that runs the same translate-validate-commit sequence per file, with the LLM only making translation choices ([Deterministic Orchestration for Structured Modernization](deterministic-orchestration-structured-modernization.md)).
 - **Most-likely conflation: workflow engine.** Deterministic orchestration is a *property* of how workflow code is written; a workflow engine is the *runtime* that enforces it.
@@ -103,7 +103,7 @@ Workflows pull from [Anthropic's Effective Agents Framework](anthropic-effective
 
 ## Why It Works
 
-Category recognition reduces over-engineering. The [Agentless paper](https://arxiv.org/abs/2407.01489) demonstrated a two-phase non-autonomous workflow achieved 27.33% on SWE-bench Lite at $0.70 per issue, outperforming contemporary autonomous-agent baselines. The empirical lesson: teams that recognise they are building a workflow stop reaching for autonomous-loop patterns. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) is explicit: "find the simplest solution possible, and only increasing complexity when needed", adding agentic patterns "only when it demonstrably improves outcomes". Shared vocabulary makes that judgment legible inside a team.
+Category recognition reduces over-engineering. The [Agentless paper](https://arxiv.org/abs/2407.01489) demonstrated a two-phase non-autonomous workflow achieved 32.00% on SWE-bench Lite at $0.70 per issue, outperforming all existing open-source autonomous-agent baselines. The lesson: teams that recognise they are building a workflow stop reaching for autonomous-loop patterns. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) is explicit — "find the simplest solution possible", adding agentic patterns "only when it demonstrably improves outcomes". Shared vocabulary makes that judgment legible inside a team.
 
 ## When This Backfires
 

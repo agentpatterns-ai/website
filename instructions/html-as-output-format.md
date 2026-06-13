@@ -8,7 +8,7 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # HTML as Agent Output Format: When to Ask for HTML Instead of Markdown
@@ -35,7 +35,7 @@ The pattern works when the artifact will be opened in a browser as an end state 
 | Status or incident report | Minute-by-minute timeline, log excerpts, follow-up checklist |
 | Throwaway editor | Drag-and-drop board, toggles with dependency warnings, export-to-markdown button |
 
-Each takes spatial information that Markdown flattens — call graphs, severity, motion, comparison — and gives the agent a medium to render it.
+Each takes spatial information Markdown flattens — call graphs, severity, motion, comparison — and gives the agent a medium to render it.
 
 ## When Markdown Still Wins
 
@@ -80,7 +80,7 @@ Output-format guidance belongs in the most precise section of the system prompt 
 
 ## Why the Mechanism Works
 
-Output format determines what the human can do with the artifact after the model stops talking. A Markdown plan is read, then the reader context-switches to act on it. An HTML plan encodes the next workspace inline — filters on the triage list, tabs in the explainer, severity columns on the review. The marginal token cost is dominated by the value of interactivity in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — which is why the technique is conditional, not a default.
+Output format determines what the human can do with the artifact after the model stops talking. A Markdown plan is read, then the reader context-switches to act on it. An HTML plan encodes the next workspace inline — filters on the triage list, tabs in the explainer, severity columns on the review. The marginal token cost is dominated by the value of interactivity in the cases that warrant it. For ad-hoc replies that lack those affordances, the cost-benefit inverts — the technique is conditional, not a default.
 
 ## Key Takeaways
 
@@ -112,9 +112,9 @@ for the author. Add filter buttons to show only files at a given risk
 level. Keep all CSS inline; no external scripts.
 ```
 
-The reply is one HTML file the reviewer opens in a browser, filters to the high-risk files, and walks through linearly. The artifact survives the chat session and is shareable as a link. The interactive layer is the workflow the reviewer was going to do manually anyway.
+The reply is one HTML file the reviewer opens in a browser, filters to the high-risk files, and walks through linearly. It survives the session, is shareable as a link, and gives the reviewer the interactive layer they were going to build manually anyway.
 
-The HTML version is heavier in tokens. It is worth those tokens because the reviewer is going to open the file in a browser and act on it, not skim and discard. Reverse those conditions and Markdown remains the right call.
+The HTML version costs more tokens. It is worth them because the reviewer opens the file in a browser and acts on it, rather than skimming and discarding.
 
 ## Related
 

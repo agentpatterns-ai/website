@@ -9,12 +9,12 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # AI Adoption Footprint: The Segmented Shape of Engineering Orgs
 
-> Engineering orgs do not adopt AI uniformly. Usage concentrates in a small power-user segment, a large chat-tool middle, and a refuser tail — and the shape, not the headline adoption number, is what determines where enablement and tooling investment pays back.
+> AI adoption splits into power users, a chat-tool middle, and a refuser tail. The shape, not the headline number, drives where investment pays back.
 
 ## The Pattern
 
@@ -44,11 +44,11 @@ Rob Bowley's read of DX 2025 adds the plateau: "Time savings have plateaued arou
 
 ## The Mechanism: Capability Layering
 
-Agentic workflows stack skills — prompt scaffolding, harness design, verification discipline, context engineering — and each layer filters the adopter pool. A 20% power-user ceiling coexists with 95% weekly usage because almost everyone clears the first gate (chat, autocomplete); far fewer clear the gate into multi-agent orchestration.
+Agentic workflows stack skills — prompt scaffolding, harness design, verification discipline, context engineering — and each layer filters the adopter pool. A 20% power-user ceiling coexists with 95% weekly usage because almost everyone clears the first gate (chat, autocomplete); far fewer reach multi-agent orchestration.
 
-Yegge's 8-level framework formalizes the stack: tab completion, IDE agents with supervision, IDE-less development, multi-agent orchestration. The architectural break is at Level 5 — one synchronous agent against your context window gives way to multiple agents running asynchronously with their own ([Pragmatic Engineer](https://newsletter.pragmaticengineer.com/p/from-ides-to-ai-agents-with-steve)).
+Yegge's 8-level framework formalizes the stack, from tab completion to multi-agent orchestration. The architectural break is at Level 5 — one synchronous agent against your context window gives way to multiple agents running asynchronously with their own ([Pragmatic Engineer](https://newsletter.pragmaticengineer.com/p/from-ides-to-ai-agents-with-steve)).
 
-Osmani's "human 30%" supplies the floor mechanism: the tasks the 60% cannot delegate to chat tools — edge-case discovery, review, debugging, cross-team communication — are exactly where agentic workflows pay off, and those workflows require harness skill the middle has not built ([Addy Osmani](https://addyo.substack.com/p/beyond-the-70-maximizing-the-human)).
+Osmani's "human 30%" supplies the floor: the tasks the 60% cannot delegate to chat tools — edge-case discovery, review, debugging — are exactly where agentic workflows pay off, and those workflows require harness skill the middle has not built ([Addy Osmani](https://addyo.substack.com/p/beyond-the-70-maximizing-the-human)).
 
 The refuser segment is not one population. It mixes principled non-adopters, practitioners in domains with weak tool coverage, and engineers under data-egress restrictions.
 
@@ -56,13 +56,13 @@ The refuser segment is not one population. It mixes principled non-adopters, pra
 
 ### Enablement Returns Compound in the Middle
 
-Training a refuser to use chat completion and a chat user to design an agent harness both unlock new capability. Training a refuser to design a harness skips a layer and usually fails. Enablement pays back highest in the 60% middle, where the next layer is in reach.
+Moving a refuser to chat completion, or a chat user to harness design, unlocks new capability. Asking a refuser to design a harness skips a layer and usually fails. Enablement pays back highest in the 60% middle, where the next layer is in reach.
 
-The refuser tail rarely converts under direct investment. Mandates produce surface compliance (license activation, weekly usage) without capability change — the plateau Bowley identifies when adoption climbs but time savings flatline.
+The refuser tail rarely converts under direct investment. Mandates produce surface compliance (license activation, weekly usage) without capability change — the plateau Bowley identifies.
 
 ### Tooling Decisions Serve One Segment at a Time
 
-Optimizing a harness or CLI for the 20% power users often harms the 60% middle. Default-on agent modes, aggressive context auto-loading, and multi-agent primitives raise the floor for power users and raise the learning curve for chat users. Chat-first defaults make it harder for power users to operate at Level 5+.
+Optimizing a harness or CLI for the 20% power users often harms the 60% middle. Default-on agent modes and multi-agent primitives raise the learning curve for chat users; chat-first defaults make it harder for power users to operate at Level 5+.
 
 Platform teams should know which segment they serve. A tool that "serves everyone" usually serves the 60% and leaves the 20% on personal stacks.
 

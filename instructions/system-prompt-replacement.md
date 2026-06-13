@@ -8,8 +8,9 @@ aliases:
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # System Prompt Replacement for Domain-Specific Agent Personas
 
 > Replace the default coding-focused system prompt entirely to transform an agent into a domain specialist while preserving its tool ecosystem.
@@ -77,7 +78,7 @@ for await (const message of query({
 }
 ```
 
-Note: custom `systemPrompt` strings in the SDK lose [default tool instructions and safety guardrails](https://platform.claude.com/docs/en/agent-sdk/modifying-system-prompts) unless you include them manually.
+Note: custom `systemPrompt` strings in the SDK lose [default tool instructions and safety guardrails](https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts) unless you include them manually.
 
 ## When Replacement Outperforms Augmentation
 

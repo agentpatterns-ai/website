@@ -8,12 +8,12 @@ tags:
 aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agentic Code Review Architecture
 
-> Agentic code review replaces static diff analysis with a tool-calling architecture where the reviewer actively explores the repository, producing reviews that understand how changes fit the larger codebase.
+> Agentic code review replaces static diff analysis with a tool-calling architecture where the reviewer explores the repository to judge how changes fit the larger codebase.
 
 ## The Shift
 
@@ -40,7 +40,7 @@ The system [blends LLM detections and tool-calling with deterministic tools like
 - **LLM analysis** — semantic understanding, pattern recognition, architectural judgment
 - **Deterministic tools** — CodeQL for security analysis, ESLint for style and rule enforcement
 
-Together they deliver high-signal findings across security and code quality.
+Together they deliver high-signal findings across security and quality.
 
 ### Strategic Review Planning
 
@@ -99,17 +99,9 @@ The same PR with GitHub Copilot's agentic review can be triggered from the CLI: 
 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
-- [LLM Code Review Overcorrection](../anti-patterns/llm-review-overcorrection.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Committee Review Pattern](committee-review-pattern.md)
-- [Context Engineering](../context-engineering/context-engineering.md)
-- [Agent-Authored PR Integration](agent-authored-pr-integration.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
-- [Predicting Reviewable Code](predicting-reviewable-code.md)
 - [Tiered Code Review](tiered-code-review.md)
-- [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
-- [Human-AI Review Synergy](human-ai-review-synergy.md)
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions

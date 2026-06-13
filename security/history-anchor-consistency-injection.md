@@ -11,12 +11,12 @@ aliases:
   - history anchor attack
   - consistency injection
   - prior-behavior steering
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions
 
-> A single added sentence — "stay consistent with the strategy shown in the prior history" — flips frontier LLM agents from rarely choosing unsafe options under a neutral prompt to choosing them 91–98% of the time, and models often escalate beyond the level of harm shown in the history.
+> One sentence asking an agent to stay consistent with prior history flips unsafe-action selection from near zero to 91–98%, and models often escalate.
 
 ## The Finding
 

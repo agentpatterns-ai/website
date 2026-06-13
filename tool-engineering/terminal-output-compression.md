@@ -6,7 +6,7 @@ tags:
   - tool-engineering
   - context-engineering
   - copilot
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # Terminal Tool Output Compression: Filtering Predictable Noise at the Harness
@@ -39,7 +39,7 @@ Compression is a harness-layer concern. The same primitive recurs across assista
 | Harness | Mechanism |
 |---------|-----------|
 | VS Code agent chat | `chat.tools.compressOutput.enabled` setting |
-| Claude Code | `PostToolUse` hook returning [`hookSpecificOutput.modifiedToolResponse`](https://code.claude.com/docs/en/hooks) |
+| Claude Code | `PostToolUse` hook returning [`hookSpecificOutput.updatedToolOutput`](https://code.claude.com/docs/en/hooks) |
 | MCP server-side | `_meta["anthropic/maxResultSizeChars"]` ([Claude Code only](mcp-result-persistence-annotation.md)) |
 
 The shape is identical: the harness reads raw `tool_output`, applies filters, and returns the compressed string; the original stays in the transcript for audit ([PostToolUse Output Replacement](posttooluse-output-replacement.md)).
@@ -139,7 +139,7 @@ fi
 BANNER=$(printf "[compress-git-diff: collapsed unchanged hunks, %d -> %d bytes. To disable: rerun with --no-compress in the command.]\n\n" "$ORIG_SIZE" "$NEW_SIZE")
 
 jq -n --arg out "${BANNER}${COMPRESSED}" \
-  '{hookSpecificOutput: {hookEventName: "PostToolUse", modifiedToolResponse: $out}}'
+  '{hookSpecificOutput: {hookEventName: "PostToolUse", updatedToolOutput: $out}}'
 ```
 
 The model sees the banner first, knows compression fired, and can request raw output by adding `--no-compress` to a follow-up `git diff` call (which the hook detects and skips). The full diff remains in the transcript regardless.
@@ -147,7 +147,7 @@ The model sees the banner first, knows compression fired, and can request raw ou
 ## Key Takeaways
 
 - Terminal output compression strips predictable noise (lockfile diffs, package-manager progress, `ls -l` metadata, unchanged diff hunks) at the harness boundary before the model sees it.
-- The lever lives at the harness, not the tool — VS Code ships it as `chat.tools.compressOutput.enabled` in 1.120 (Preview); Claude Code implements the same shape via `PostToolUse` `modifiedToolResponse`.
+- The lever lives at the harness, not the tool — VS Code ships it as `chat.tools.compressOutput.enabled` in 1.120 (Preview); Claude Code implements the same shape via `PostToolUse` `updatedToolOutput`.
 - The banner is non-optional. Without a record of which filters fired and how to disable them, compression becomes silent error masking.
 - Compress the noise-dominated set (lockfiles, progress bars, directory metadata, unchanged hunks). Never compress the signal-dominated set (test failures, error traces, changed code, anything carrying an ID the model may need to cite).
 - Compression composes with — does not replace — semantic tool output, observation masking, and threshold-triggered context compression.

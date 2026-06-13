@@ -10,14 +10,14 @@ aliases:
   - Schema Markup
   - Structured Data for GEO
   - JSON-LD for AI
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Schema Markup for AI Citation
+# Schema and Structured Data for GEO
 
-> FAQPage schema yields a measurable citation lift in AI responses — structured data pre-packages content in the same Q&A and step formats AI uses to generate answers, reducing extraction effort during indexing. Independent studies cite FAQPage citation improvements ranging from 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)).
+> Structured data lifts AI citation rates by pre-packaging content in the Q&A and step formats engines reuse — studies report 2.7x–3.2x FAQPage gains.
 
-Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects Article, FAQPage, HowTo, DefinedTerm, and BreadcrumbList schemas via `hooks/structured_data.py`, plus a site-wide `DefinedTermSet` on the [concepts glossary](../concepts.md).
+Independent studies report FAQPage citation improvements of 2.7x to 3.2x ([Frase.io](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo); [DEV Community](https://dev.to/wilow445/schemaorg-is-your-secret-weapon-for-ai-citations-heres-the-data-1if3)) because structured data reduces extraction effort during indexing. Schema's primary value has shifted from SEO to AI citation — ChatGPT, Perplexity, Gemini, and Claude process it at indexing time. This site auto-injects Article, FAQPage, HowTo, DefinedTerm, and BreadcrumbList schemas via `hooks/structured_data.py`, plus a site-wide `DefinedTermSet` on the [concepts glossary](../concepts.md).
 
 ## What Changed: Google vs. AI Search
 
@@ -74,7 +74,7 @@ Auto-detection triggers on ordered lists (`<ol>`) with 3+ items, restricted to `
 
 ### DefinedTerm
 
-Machine-readable definitions for named concepts — useful where terms like "agent" are ambiguous across tools, and the schema layer of the site's vocabulary-ownership strategy. Every coined-concept leaf page emits one `DefinedTerm`, anchored to a single `DefinedTermSet` on `/concepts/`:
+Machine-readable definitions for named concepts — useful where terms like "agent" are ambiguous across tools. Every coined-concept leaf page emits one `DefinedTerm`, anchored to a single `DefinedTermSet` on `/concepts/`:
 
 ```json
 {
@@ -97,7 +97,7 @@ The hook maps frontmatter to schema fields automatically:
 | `alternateName` | `aliases:` frontmatter — the page's strongest vocabulary-ownership signal |
 | `url` / `inDefinedTermSet` | canonical page URL / the `/concepts/` glossary |
 
-Gated to coined-concept sections (`_DEFINED_TERM_PATHS`) plus curated `_DEFINED_TERM_ALLOW` exceptions; `articles/`, `tools/`, `training/`, and nav pages are excluded — they describe things rather than coin terms. Set `term:` on any page whose title is a headline rather than the bare term.
+Gated to coined-concept sections (`_DEFINED_TERM_PATHS`) plus `_DEFINED_TERM_ALLOW` exceptions; `articles/`, `tools/`, and `training/` are excluded — they describe terms rather than coin them.
 
 ## How This Site Generates Schema
 
@@ -124,37 +124,11 @@ No per-page config — add an FAQ section and schema appears; a coined-concept p
 
 ## Writing for Schema Auto-Detection
 
-### FAQ Section
+To trigger each schema type, write in the shape the hook detects:
 
-The hook matches `## FAQ` (or `## Frequently Asked Questions`) plus `**Question**` / paragraph pairs:
-
-```markdown
-## FAQ
-
-**What is an agent harness?**
-
-An agent harness is the scaffolding that surrounds an AI agent loop — managing
-context, tool calls, error recovery, and output formatting. It separates
-infrastructure concerns from the agent's reasoning logic.
-
-**When should I use HowTo schema?**
-
-Use HowTo schema for step-by-step instructional content where each step is a
-discrete, independently meaningful action. Avoid it for conceptual explanations
-that happen to have numbered sections.
-```
-
-### HowTo Steps
-
-Write each step as a self-contained sentence — it is extracted as a standalone `HowToStep.text`. Auto-injection applies only to `patterns/` and `techniques/`.
-
-### DefinedTerm
-
-Nothing to add to the body — the term is built from frontmatter. For a coined-concept page:
-
-- Set `term:` to the bare moniker when the `title:` is a headline (e.g. `term: "Harness Engineering"` for the title *"Harness Engineering for Building Reliable AI Agents"*). Without it, `name` falls back to the full SEO title.
-- Keep `description:` a one-line definition — it becomes the term's `description`.
-- List every alternate name a reader might search under `aliases:` — they become `alternateName` and are how AI engines associate the vocabulary with this site.
+- **FAQPage** — a `## FAQ` (or `## Frequently Asked Questions`) heading with `**Question?**` lines followed by paragraph answers. Keep answers 40–80 words and standalone.
+- **HowTo** — an ordered list of 3+ steps under `patterns/` or `techniques/`; write each step as a self-contained sentence, since it is extracted as a standalone `HowToStep.text`.
+- **DefinedTerm** — nothing in the body; set `term:` to the bare moniker when `title:` is a headline (else `name` falls back to the SEO title), keep `description:` a one-line definition, and list every searchable alternate name under `aliases:`.
 
 ## When This Backfires
 
@@ -191,6 +165,12 @@ mkdocs build --strict
 - [Structured Data in MkDocs](https://v-schipka.github.io/posts/schema-in-mkdocs/) — MkDocs Material approach
 - [Structured Data for SEO and GEO — Digidop](https://www.digidop.com/blog/structured-data-secret-weapon-seo) — GPT-4 accuracy 16% → 54%
 
+## Key Takeaways
+
+- Schema's payoff is now AI citation, not Google rich results — benefit accrues at indexing time, not on live fetch.
+- This site auto-injects FAQPage, HowTo, and DefinedTerm schema from page structure and frontmatter — no per-page config.
+- Match the schema type to content shape; mismatched types (HowTo on prose, stale FAQ answers) can deprioritize a page.
+
 ## Related
 
 - [GEO for Technical Docs](geo-for-technical-docs.md) — schema type selection checklist and per-format GEO priorities
@@ -201,7 +181,4 @@ mkdocs build --strict
 - [AI Crawler Policy](ai-crawler-policy.md) — controlling which crawlers index your structured data
 - [Measuring GEO Performance](measuring-geo-performance.md) — tracking schema citation lift
 - [What Is GEO](what-is-geo.md) — foundational concepts behind generative engine optimization
-- [Assertion Density](assertion-density.md) — specific claims and statistics that complement schema-marked content
-- [Atomic Pages and Chunking](atomic-pages-and-chunking.md) — page structure that improves schema auto-detection accuracy
-- [Topical Authority](topical-authority.md) — how schema markup contributes to entity coverage and domain authority
 

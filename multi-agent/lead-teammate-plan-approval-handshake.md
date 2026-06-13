@@ -8,7 +8,7 @@ tags:
 aliases:
   - peer plan approval handshake
   - teammate plan-gating handshake
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-13
 ---
 
 # Lead-to-Teammate Plan-Approval Handshake

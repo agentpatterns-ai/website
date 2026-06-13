@@ -11,12 +11,12 @@ tags:
   - tool-agnostic
   - human-factors
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Classical SE Patterns as Agent Design Analogues
 
-> Classical GoF patterns and SOLID principles have direct structural analogues in agent systems. The vocabulary transfers; the drivers shift from *reuse and maintainability* to *control, safety, and non-determinism*.
+> Classical GoF patterns and SOLID principles have direct structural analogues in agent systems. The vocabulary transfers; the drivers shift from *reuse* to *control and safety*.
 
 ## The Core Qualification
 
@@ -96,34 +96,19 @@ routing:
 | Interface Segregation | Agents receive only the tools they need; broad tool access is a smell |
 | Dependency Inversion | Agents depend on tool interfaces, not specific implementations |
 
+## Key Takeaways
+
+- Classical patterns transfer their **structure** (subscriber/publisher, context/strategy, component/composite) but not their **drivers** — agent systems optimise for control and safety, not reuse.
+- Behavioral patterns (Observer, Chain of Responsibility, Strategy) transfer most cleanly; structural patterns (Composite, Facade) transfer weakest because the uniform interface depends on enforced output schemas.
+- Treat the mapping as a starting vocabulary, not a blueprint: each metaphor imports assumptions (retriable failures, uniform interfaces, stateless instantiation) that LLM non-determinism can break.
+
 ## Related
 
-- [AGENTS.md](../standards/agents-md.md) — Facade pattern in practice
-- [CLAUDE.md Convention](../instructions/claude-md-convention.md) — Facade with four scopes
-- [Hierarchical CLAUDE.md](../instructions/hierarchical-claude-md.md)
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
-- [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- set up the Facade instruction file from scratch
-- [Agent Backpressure](agent-backpressure.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md)
-- [Multi-Agent SE Design Patterns Taxonomy](../multi-agent/multi-agent-se-design-patterns.md)
-- [Rollback-First Design](rollback-first-design.md)
-- [Agent Harness](agent-harness.md)
-- [Advanced Tool Use](../tool-engineering/advanced-tool-use.md) — Tool Search as Factory pattern
-- [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
-- [WINK Agent Misbehavior Correction](wink-agent-misbehavior-correction.md)
-- [Event-Driven Agent Routing](event-driven-agent-routing.md)
-- [Idempotent Agent Operations](idempotent-agent-operations.md)
-- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
-- [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
-- [Execution-First Delegation](execution-first-delegation.md)
+- [Multi-Agent SE Design Patterns Taxonomy](../multi-agent/multi-agent-se-design-patterns.md) — the broader pattern catalogue this page maps into
+- [Orchestrator-Worker](../multi-agent/orchestrator-worker.md) — Composite pattern realised
 - [Agent Loop Middleware](agent-loop-middleware.md) — Chain of Responsibility and Observer in the agent loop
-- [Harness Engineering](harness-engineering.md) — Factory and Facade patterns in harness design
-- [Agent Turn Model](agent-turn-model.md)
-- [Agentic Flywheel](agentic-flywheel.md)
-- [Heuristic Effort Scaling](heuristic-effort-scaling.md)
-- [Persona as Code](persona-as-code.md)
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)
-- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) — SOLID layering applied
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — Saga and Circuit Breaker in failure recovery
-- [Evaluator-Optimizer](evaluator-optimizer.md) — behavioral generator/evaluator loop
+- [Advanced Tool Use](../tool-engineering/advanced-tool-use.md) — Tool Search as Factory pattern
+- [Harness Engineering](harness-engineering.md) — Factory and Facade patterns in harness design
+- [AGENTS.md](../standards/agents-md.md) — Facade pattern in practice
+- [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) — a parallel classical-to-agent mapping

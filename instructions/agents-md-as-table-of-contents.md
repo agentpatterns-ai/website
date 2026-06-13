@@ -8,12 +8,12 @@ tags:
 aliases:
   - Pointer Map
   - AGENTS.md Content Strategy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # AGENTS.md as a Table of Contents, Not an Encyclopedia
 
-> Keep AGENTS.md to ~100 lines as a pointer map, put structured knowledge in a versioned docs/ directory, and tag every terminal rule with source, applicability, and expiry so the file is self-pruning under periodic audit.
+> Keep AGENTS.md to ~100 lines as a pointer map into a versioned docs/ directory, and tag each terminal rule with source, applicability, and expiry.
 
 !!! info "Also known as"
     Pointer Map, AGENTS.md Content Strategy. For the complementary pattern on **where** to place AGENTS.md files (distributed across directory levels), see [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md).
@@ -22,17 +22,17 @@ last_reviewed: 2026-05-27
 
 The OpenAI Harness team identified "one big AGENTS.md" as an early failure mode with four specific consequences ([OpenAI Harness Engineering](https://openai.com/index/harness-engineering/)):
 
-1. **Context crowding.** A large AGENTS.md consumes context space that should be available for the task, the relevant code, and the documentation for that specific problem. Agents have less room to reason about the actual work.
+1. **Context crowding.** A large AGENTS.md consumes context space that should belong to the task, the relevant code, and that problem's documentation, leaving agents less room to reason about the actual work.
 
-2. **Attention dilution.** When every instruction is present simultaneously, no instruction is prominent. Agents pattern-match locally rather than navigating intentionally to the relevant section of the knowledge base.
+2. **Attention dilution.** When every instruction is present at once, none is prominent. Agents pattern-match locally rather than navigating to the relevant section of the knowledge base.
 
-3. **Unverifiable scope.** A monolithic file grows without clear ownership. Agents cannot tell which sections are current; humans stop maintaining it because the file is intimidating to edit.
+3. **Unverifiable scope.** A monolithic file grows without clear ownership. Agents cannot tell which sections are current; humans stop maintaining it because it is intimidating to edit.
 
-4. **Instant rot.** Architectural decisions change. A single file updated piecemeal accumulates contradictions. What was true at month one is stale by month six, but the file still reads as authoritative.
+4. **Instant rot.** Architectural decisions change, and a file updated piecemeal accumulates contradictions. What was true at month one is stale by month six, but still reads as authoritative.
 
 ## The Pattern: Pointer Map + Structured Docs
 
-The fix is a structural one: AGENTS.md is a brief index — what this project is, where conventions live, what to read first for each type of task. The knowledge itself lives in a versioned `docs/` directory.
+The fix is structural: AGENTS.md is a brief index — what this project is, where conventions live, what to read first per task type. The knowledge itself lives in a versioned `docs/` directory.
 
 ```
 AGENTS.md                    # ~100 lines: what, where, first steps

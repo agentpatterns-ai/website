@@ -10,7 +10,7 @@ tags:
 aliases:
   - life-harness
   - runtime interface adaptation
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Runtime Harness Adaptation
@@ -53,7 +53,7 @@ Deterministic, rule-governed environments expose a stable interface the model ha
 ## When This Backfires
 
 - **Open-ended tasks.** When tool interfaces, success criteria, or contracts shift per task — research agents, exploratory coding, novel-feature builds — the four layers have no stable surface to encode. Authors flag this directly ([Xu et al., 2026](https://arxiv.org/html/2605.22166v1)). Reach for [harness impermanence](harness-impermanence.md) instead.
-- **Frontier model migrations.** When the next model handles an action natively — structured output, native tool-call repair, internal stopping — action-realization and trajectory-regulation layers become depreciating capital. Cursor measured a 30% drop on GPT-5-Codex when reasoning summaries were stripped by a harness rule designed for a prior model ([Cursor](https://cursor.com/blog/codex-model-harness)).
+- **Frontier model migrations.** When the next model handles an action natively — structured output, native tool-call repair, internal stopping — action-realization and trajectory-regulation layers become depreciating capital, and a layer that strips signal the new model depends on turns actively harmful. Cursor measured a 30% drop on GPT-5-Codex when reasoning traces were dropped between tool calls, forcing the model to re-infer its prior thought process ([Cursor](https://cursor.com/blog/codex-model-harness)).
 - **Provider-specific overfit.** Skills or contracts distilled from one model's trajectories can mask model-specific bias. Procedural-skill retrieval can fire a skill that contradicts the deployed model's preferred pattern ([per-model harness tuning](per-model-harness-tuning.md); [Cursor](https://cursor.com/blog/codex-model-harness)).
 - **No eval loop.** Evolution assumes a deterministic benchmark that can credibly score interventions. Without one, layers accumulate without falsification — see [observability-driven harness evolution](observability-driven-harness-evolution.md).
 

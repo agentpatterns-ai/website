@@ -6,12 +6,12 @@ tags:
   - context-engineering
   - observability
   - claude
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools
 
-> Surface which tool calls are inflating the context window so you can optimize specific culprits rather than prune blindly.
+> Diagnostic tooling attributes context-window growth to specific tool calls so you optimize the real culprit rather than prune blindly.
 
 Context-window diagnostic tooling is a class of commands that attribute token consumption to the specific tool calls, memory files, or outputs responsible — so an agent developer can shrink the actual culprit rather than guess. Claude Code's [`/context` command](https://code.claude.com/docs/en/changelog) (v2.1.74, 2026-03-12) is the first developer-facing example to ship in a major harness.
 

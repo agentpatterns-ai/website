@@ -1,7 +1,7 @@
 ---
-title: "Lost in the Middle: Understanding U-Shaped Attention"
+title: "Lost in the Middle: The U-Shaped Attention Curve"
 term: "Lost in the Middle"
-description: "Model attention is strongest at the start and end of a context window; content in the middle receives significantly less focus regardless of its importance"
+description: "Model attention is strongest at the start and end of a context window; content in the middle receives significantly less focus regardless of its importance."
 tags:
   - context-engineering
   - tool-agnostic
@@ -9,7 +9,7 @@ aliases:
   - Critical Instruction Repetition
   - Attention Bias
   - Instruction Placement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Lost in the Middle: The U-Shaped Attention Curve
@@ -99,18 +99,7 @@ The opening section carries the rules the agent must reliably follow. The middle
 - [Attention Sinks: Why First Tokens Always Win](attention-sinks.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](../instructions/critical-instruction-repetition.md)
 - [The Infinite Context](../anti-patterns/infinite-context.md)
-- [Context Priming: Pre-Loading Files for AI Agent Tasks](context-priming.md)
 - [Goal Recitation: Countering Drift in Long Sessions](goal-recitation.md)
 - [Prompt Layering: How Instructions Stack and Override](prompt-layering.md)
 - [Context Window Management: The Dumb Zone](context-window-dumb-zone.md)
-- [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)
-- [Context Budget Allocation](context-budget-allocation.md)
-- [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
-- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
-- [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
-- [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
-- [Layered Context Architecture](layered-context-architecture.md)
-- [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
-- [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
-- [Retrieval-Augmented Agent Workflows: On-Demand Context](retrieval-augmented-agent-workflows.md)
-- [Context Hub: On-Demand Versioned API Docs for Coding Agents](context-hub.md)
+- [Context Compression Strategies](context-compression-strategies.md)

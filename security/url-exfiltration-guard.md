@@ -10,12 +10,12 @@ tags:
   - testing-verification
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Guarding Against URL-Based Data Exfiltration in Agentic Workflows
 
-> The URL itself is a data channel — agents that construct or follow URLs from untrusted content can be manipulated to leak sensitive context before a single byte of the response is read.
+> The URL itself is a data channel — agents that follow URLs built from untrusted content can leak sensitive context before any response is read.
 
 ## The Attack
 

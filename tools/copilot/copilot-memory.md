@@ -1,5 +1,5 @@
 ---
-title: "Copilot Memory: Autonomous Cross-Agent Persistence"
+title: "Copilot Memory and Cross-Agent Persistence"
 description: "Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI."
 tags:
   - context-engineering
@@ -10,12 +10,13 @@ aliases:
   - Agentic Memory
   - Copilot Agentic Memory
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 status: current
 ---
+
 # Copilot Memory and Cross-Agent Persistence
 
-> Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI, with citation-based verification and 28-day auto-expiry. Enabled by default for Pro and Pro+ users since March 2026.
+> Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI, with citation-based verification and 28-day auto-expiry.
 
 ## How Copilot Memory Works
 
@@ -69,6 +70,7 @@ Both results were statistically significant (p < 0.00001).
 |------|--------|--------|
 | Jan 15, 2026 | Public preview, opt-in for all paid plans | [GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/) |
 | Mar 4, 2026 | Enabled by default for Pro and Pro+ individual users | [GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/) |
+| Jun 2, 2026 | User preferences supported for Business and Enterprise plans | [GitHub changelog](https://github.blog/changelog/2026-06-02-copilot-memory-supports-user-preferences-for-business-enterprise) |
 
 **Developer controls:**
 

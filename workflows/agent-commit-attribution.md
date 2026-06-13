@@ -10,7 +10,7 @@ tags:
 aliases:
   - "agent commit signing"
   - "agent identity in version control"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Commit Attribution: Signed Commits and Agent Identity

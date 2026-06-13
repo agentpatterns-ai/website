@@ -11,7 +11,7 @@ tags:
 aliases:
   - infectious jailbreak defence
   - foresight-guided local purification
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Foresight-Guided Defense Against Infectious Jailbreaks in Multi-Agent Systems

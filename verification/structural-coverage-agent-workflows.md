@@ -10,24 +10,24 @@ tags:
 aliases:
   - "agent workflow coverage"
   - "typed coordination graph testing"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Structural Coverage Criteria for Agent Workflows
 
 > Derive coverage obligations from a typed coordination graph of agents, tools, restrictions, and delegations — then check whether the test suite actually exercises declared structure.
 
-Structural coverage represents a multi-agent system as a typed coordination graph and treats every reachable agent, allowed tool edge, restricted tool edge, and delegation edge as a coverage obligation the test suite must witness ([Kahani & Bagherzadeh, arXiv:2605.26521](https://arxiv.org/abs/2605.26521)). It is a test-adequacy layer, not a correctness oracle — it answers "have I exercised the declared coordination structure?", not "did the workflow produce the right answer?".
+Structural coverage represents a multi-agent system as a typed coordination graph and treats every reachable agent, allowed tool edge, restricted tool edge, and delegation edge as a coverage obligation the test suite must witness ([Kahani & Bagherzadeh, arXiv:2605.26521](https://arxiv.org/abs/2605.26521)). It is a test-adequacy layer, not a correctness oracle: it answers "have I exercised the declared coordination structure?", not "did the workflow produce the right answer?".
 
 ## When This Applies
 
-The pattern earns its keep under three conditions:
+It earns its keep when three conditions hold:
 
 - **The workflow declares explicit restrictions or delegation rules.** Obligations come from the graph; uniform allowlists with no delegation constraints leave nothing to test beyond reachability.
 - **The spec is stable enough to amortize.** Scenarios are realized against declared edges; rapid churn invalidates witnesses faster than the suite regenerates them.
-- **The workflow is large enough that happy-path E2E tests miss declared edges.** The benchmarks held 49 agents, 47 tools, and 403 obligations across 10 workflows — restricted-tool obligations alone numbered 248.
+- **The workflow is large enough that happy-path E2E tests miss declared edges.** The benchmarks held 49 agents, 47 tools, and 403 obligations across 10 workflows — restricted-tool obligations numbered 248.
 
-When these hold, structural coverage exposes failures end-to-end scores hide; when they do not, the spec is maintenance burden without compensating signal.
+When they hold, structural coverage exposes failures end-to-end scores hide; otherwise the spec is maintenance burden without signal.
 
 ## The Four Coverage Criteria
 
@@ -44,7 +44,7 @@ The first three are positive obligations — a witness proves the edge fires. Re
 
 ## How Scenario Generation Works
 
-The graph fixes what must be covered; DSPy-based realization produces natural-language test inputs whose witnesses are checked at runtime.
+The graph fixes what must be covered; DSPy-based realization produces the natural-language test inputs, whose witnesses are checked at runtime:
 
 ```mermaid
 graph TD
@@ -57,11 +57,11 @@ graph TD
     G --> C
 ```
 
-The budget is bounded: scenarios witnessed **54/75 allowed-tool obligations (72%)** and **36/48 delegation obligations (75%)**. Unwitnessed obligations are not necessarily bugs — they may mark dead spec, infeasible edges, or scenarios the generator could not realize. Triage them; do not fail the build on them. (All figures: [arXiv:2605.26521](https://arxiv.org/abs/2605.26521).)
+The budget is bounded: scenarios witnessed **54/75 allowed-tool obligations (72%)** and **36/48 delegation obligations (75%)**. Unwitnessed obligations are not always bugs — they may mark dead spec, infeasible edges, or unrealizable scenarios. Triage them; do not fail the build on them. (All figures: [arXiv:2605.26521](https://arxiv.org/abs/2605.26521).)
 
 ## Independent Corroboration
 
-**Agentproof** ([arXiv:2603.20356](https://arxiv.org/abs/2603.20356)) reaches a similar conclusion from a different angle: it extracts unified graph models from LangGraph, CrewAI, AutoGen, and Google ADK workflows, then applies six structural checks plus temporal safety policies compiled to deterministic finite automata. Agentproof verifies the graph statically; Kahani & Bagherzadeh generate dynamic witnesses. Both treat declared structure as a first-class testable artifact rather than something to infer from end-to-end traces.
+**Agentproof** ([arXiv:2603.20356](https://arxiv.org/abs/2603.20356)) reaches a similar conclusion from a different angle: it extracts unified graph models from LangGraph, CrewAI, AutoGen, and Google ADK workflows, then applies six structural checks plus temporal safety policies compiled to deterministic finite automata. Agentproof verifies the graph statically; Kahani & Bagherzadeh generate dynamic witnesses. Both treat declared structure as a first-class testable artifact, not something to infer from end-to-end traces.
 
 ## When This Backfires
 
@@ -73,11 +73,11 @@ Structural coverage shares the failure modes of traditional code coverage ([Bull
 - **Spec churn defeats the criterion.** If the graph changes weekly, restricted-tool witnesses decay and the report becomes a treadmill of false negatives. The criterion assumes the graph is slow-moving.
 - **E2E already covers small workflows.** Below ~10 agents with few restrictions, a few happy-path tests touch most edges as a side-effect, and the maintenance cost exceeds the marginal find-rate.
 
-The authors call it a complement to semantic and end-to-end evaluation, not a replacement. Reading it as the primary adequacy claim reproduces the "100% line coverage means tested" anti-pattern.
+The authors frame it as a complement to semantic and end-to-end evaluation, not a replacement.
 
 ## Why It Works
 
-End-to-end task-success metrics aggregate over the full workflow, masking which declared edges actually fire. A typed coordination graph reifies the author's intent — this agent has these tools, that one is restricted from this tool, agent A delegates to agent B — into testable obligations, and scenario generation produces a witness against each. The role is branch coverage's ([Bullseye](https://www.bullseye.com/coverage.html)): an adequacy floor, not a correctness oracle — you cannot claim your suite exercises a declared restriction if no scenario probes it. A fired restricted-tool obligation is concrete evidence of a misrouting failure, which is the value the 23/248 violations represent.
+End-to-end task-success metrics aggregate over the full workflow, masking which declared edges fire. A typed coordination graph reifies the author's intent — this agent has these tools, that one is restricted, agent A delegates to agent B — into testable obligations, and scenario generation produces a witness against each. The role is branch coverage's ([Bullseye](https://www.bullseye.com/coverage.html)): an adequacy floor, not a correctness oracle.
 
 ## Key Takeaways
 

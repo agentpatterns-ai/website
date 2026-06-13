@@ -11,7 +11,7 @@ aliases:
   - attention stability boundary
   - information over-squashing in agents
   - mid-task update suppression
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Attention Latch: When Agents Stay Anchored to Stale Instructions

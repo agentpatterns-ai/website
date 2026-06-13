@@ -1,5 +1,5 @@
 ---
-title: "PII Tokenization in Agent Context"
+title: "Sandbox-Enforced PII Tokenization in Agent Workflows"
 term: "PII Tokenization"
 description: "Replace PII fields with deterministic tokens before data reaches the model; the sandbox enforces the privacy boundary and de-tokenizes for downstream tools."
 tags:
@@ -11,13 +11,13 @@ aliases:
   - PII masking
   - PII redaction
   - data de-identification
-  - Sandbox-Enforced PII Tokenization in Agent Workflows
-last_reviewed: 2026-05-27
+  - PII Tokenization in Agent Context
+last_reviewed: 2026-06-12
 ---
 
 # Sandbox-Enforced PII Tokenization in Agent Workflows
 
-> Use the code execution sandbox as a privacy boundary: sensitive fields are replaced with deterministic tokens before any data reaches the model, with real values never entering the context window.
+> Sandbox-enforced PII tokenization replaces sensitive fields with deterministic tokens before data reaches the model, so real values never enter the context window.
 
 PII tokenization replaces sensitive field values — emails, names, account numbers — with deterministic placeholder tokens before they reach the model's context window. The sandbox enforces the boundary: real values never reach the model, and de-tokenization happens only inside the sandbox when downstream tools need the original data.
 
@@ -84,7 +84,7 @@ When the agent issues `send_summary(patient="{{NAME_1}}")`, the sandbox intercep
 
 Tokenization is a boundary control, not a complete privacy solution. It fails or becomes insufficient in these conditions:
 
-- **Detection gaps**: regex-based PII detection misses contextual quasi-identifiers — job titles, internal employee IDs, composite fields. [Google Cloud's de-identification reference architecture](https://cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp) recommends post-tokenization re-identification risk analysis because pattern-matching alone leaves these gaps.
+- **Detection gaps**: regex-based PII detection misses contextual quasi-identifiers — job titles, internal employee IDs, composite fields. [Google Cloud's de-identification reference architecture](https://docs.cloud.google.com/architecture/de-identification-re-identification-pii-using-cloud-dlp) recommends post-tokenization re-identification risk analysis because pattern-matching alone leaves these gaps.
 - **Safety gate interference**: type-prefixed token labels like `SSN: {{IDENTIFIER_1}}` can trigger model safety refusals. The label alongside the token signals sensitive data even without the value — mitigation requires stripping or neutralizing the field label, adding complexity.
 - **Overlong agent sessions**: when session-scoped token maps span many hours or tool calls, the map itself becomes a high-value target. Long-lived maps require the same access controls as the underlying PII vault.
 - **Rich semantic tasks**: agents asked to draft a personalized email or generate a narrative report need the actual values. Tokenization forces a de-tokenize-then-inject step that partially re-exposes data in tool inputs, narrowing the boundary's effectiveness.
@@ -107,5 +107,4 @@ Tokenization is a boundary control, not a complete privacy solution. It fails or
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md)
 - [Dual Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Scoped Credentials Proxy](scoped-credentials-proxy.md)
-- [Scope Sandbox Rules to Harness-Owned Tools](sandbox-rules-harness-tools.md)
 - [The Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)

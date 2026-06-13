@@ -4,6 +4,7 @@ description: "Incorrect beliefs about AI tools that reliably produce poor outcom
 tags:
   - human-factors
   - workflows
+  - index
 last_reviewed: 2026-05-27
 ---
 

@@ -9,18 +9,18 @@ aliases:
   - token budget hint
   - per-call reasoning budget
   - opt-in extended tool reasoning
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Per-Call Budget Hints on Tool Invocations
 
 > Raise the reasoning or returned-token cap on one tool call, only when that call is infrequent and dense, rather than re-tuning the global default.
 
-A coding agent's tool calls have uneven cost-quality curves. A grep returning ten matches needs no extra reasoning; a deep web search across a regulatory corpus does. A per-call budget hint flags one invocation as "spend more here" without raising the budget for every other call. It pays off only when the call is infrequent, information-dense, and the model or tool can spend the lifted ceiling productively. Applied uniformly, quality drops while cost rises.
+A coding agent's tool calls have uneven cost-quality curves. A grep returning ten matches needs no extra reasoning; a deep web search across a regulatory corpus does. A per-call budget hint flags one invocation as "spend more here" without raising the budget for every other call. It pays off only when the call is infrequent, information-dense, and the model or tool can spend the lifted ceiling productively — applied uniformly, quality drops while cost rises.
 
 ## The Three Shapes the Hint Takes
 
-The contract has converged on three shapes:
+The contract has converged on three shapes.
 
 | Shape | Set as | Example |
 |-------|--------|---------|
@@ -28,13 +28,13 @@ The contract has converged on three shapes:
 | Categorical tier | `low` / `medium` / `high` / `xhigh` | OpenAI `reasoning.effort` ([reasoning guide](https://developers.openai.com/api/docs/guides/reasoning)); Anthropic `effort` for adaptive thinking ([Anthropic effort docs](https://platform.claude.com/docs/en/build-with-claude/effort)) |
 | Numeric ceiling | `budget_tokens: N` | Anthropic `thinking.budget_tokens` (deprecated on Sonnet 4.6, removed on Opus 4.7 in favour of adaptive `effort`) ([extended thinking docs](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)) |
 
-The shapes are not interchangeable. The binary opt-in attaches to a *tool definition* and shapes what the tool returns; the categorical tier and numeric ceiling attach to the *message* and shape how much the model thinks between tool calls.
+The shapes are not interchangeable. The binary opt-in attaches to a *tool definition* and shapes what the tool returns; the categorical tier and numeric ceiling attach to the *message* and shape how much the model thinks between calls.
 
 ## When the Hint Pays Off
 
 Liu et al. ([2025](https://arxiv.org/abs/2511.17006)) raised tool-call budgets on web-search agents and found that simply enlarging the budget "fails to improve agent performance" because the agent lacks awareness of remaining resources and "quickly hits a performance ceiling." Three conditions must hold together:
 
-- **The call is infrequent.** Routine high-volume tools — file read, grep, status checks — should run on the default; lifting their ceiling compounds spend with no per-call return.
+- **The call is infrequent.** Routine high-volume tools — file read, grep, status checks — should run on the default; lifting their ceiling compounds spend with no return.
 - **The call is information-dense.** Deep web search, long-document analysis, multi-page evaluation — where the answer's value scales with how much the tool examines before stopping.
 - **The model or tool can spend the headroom.** OpenAI documents `return_token_budget` as applying only to GPT-5+ reasoning web search — not `web_search_preview`, Chat Completions search models, or non-reasoning search ([web search guide](https://developers.openai.com/api/docs/guides/tools-web-search)).
 
@@ -42,17 +42,17 @@ A useful default: apply the hint to the one or two calls a caller would name in 
 
 ## Why It Works
 
-Uniform global defaults misallocate compute. One `max_tokens` set high enough for the longest call inflates every short call; one set low enough for the shortest truncates the longest. Per-call hints move the allocation decision to the call site, where the caller knows whether this is a deep-research run or a routine lookup. Liu et al. ([2025, §3](https://arxiv.org/abs/2511.17006)) frame this as a resource-awareness problem: the hint sets the upper bound and an in-context budget tracker provides the spend signal; both are needed to allocate well within the lifted ceiling. OpenAI's binary `return_token_budget` is the simplest shape, but the causal structure is the same ([OpenAI changelog 2026-05-11](https://developers.openai.com/api/docs/changelog)).
+Uniform global defaults misallocate compute. One `max_tokens` set high enough for the longest call inflates every short call; one set low enough truncates the longest. Per-call hints move the decision to the call site, where the caller knows whether this is a deep-research run or a routine lookup. Liu et al. ([2025, §3](https://arxiv.org/abs/2511.17006)) frame this as a resource-awareness problem: the hint sets the upper bound and an in-context budget tracker provides the spend signal; both are needed to allocate well within the lifted ceiling. OpenAI's binary `return_token_budget` is the simplest shape, but the causal structure is the same ([OpenAI changelog 2026-05-11](https://developers.openai.com/api/docs/changelog)).
 
 ## When This Backfires
 
 The pattern's failure surface is larger than its success surface.
 
 - **Routine high-frequency calls.** A hint on a tool called dozens of times per session compounds into overspend with no quality benefit. "Lift ceiling for important calls" collapses to "lift ceiling for every call" the moment the caller's classifier is fuzzy.
-- **Higher reasoning is not monotonically better.** Su et al. ([2026](https://arxiv.org/abs/2604.05404)) report that "trajectories with higher PTE [prefill-token-equivalent] costs tend to have lower reasoning correctness." Anthropic's migration guidance agrees: on Sonnet 4.6, "if you're not setting effort, you'll see higher latency and may notice the model overthinking. Start with effort set to medium and adjust from there" ([Anthropic effort docs](https://platform.claude.com/docs/en/build-with-claude/effort)).
+- **Higher reasoning is not monotonically better.** Su et al. ([2026](https://arxiv.org/abs/2604.05404)) report that "trajectories with higher PTE [prefill-token-equivalent] costs tend to have lower reasoning correctness." Anthropic's Sonnet 4.6 guidance agrees: set effort explicitly to avoid unexpected latency, starting from `medium` ([Anthropic effort docs](https://platform.claude.com/docs/en/build-with-claude/effort)).
 - **Budget-blind tools.** If the tool is a black box returning a fixed-shape result, the agent cannot spend the lifted ceiling intelligently — the hint affects what comes back, not how the agent uses it.
 - **Tier-name aliasing across models.** OpenAI's `reasoning.effort: high` and Anthropic's `effort: high` are not equivalent — "the effort scale is calibrated per model, so the same level name does not represent the same underlying value across models" ([Claude Code model config](https://code.claude.com/docs/en/model-config#adjust-effort-level)). A multi-provider harness setting `effort: high` uniformly gets inconsistent spend.
-- **API-surface churn.** Anthropic's removal of `budget_tokens` on Opus 4.7 ([extended thinking docs](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)) shows any specific numeric-budget surface is on a deprecation timer. Categorical tiers are more portable.
+- **API-surface churn.** Anthropic's removal of `budget_tokens` on Opus 4.7 ([extended thinking docs](https://platform.claude.com/docs/en/build-with-claude/extended-thinking)) shows any numeric-budget surface is on a deprecation timer; categorical tiers are more portable.
 - **Misclassified callers.** A caller who labels every research call "high-effort" — easy under prompt pressure to "be thorough" — converts the optional hint into a default, defeating the cost discipline it enables.
 
 ## Relation to Adjacent Patterns

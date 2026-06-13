@@ -5,9 +5,10 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
-status: current
+last_reviewed: 2026-06-13
+status: archived
 ---
+
 # GitHub Copilot Extensions
 
 > **Deprecated.** GitHub App-based Copilot Extensions were [sunset on November 10, 2025](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/). Build [MCP servers](mcp-integration.md) instead. This page is retained as historical reference.

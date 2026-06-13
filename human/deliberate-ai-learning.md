@@ -8,12 +8,12 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Deliberate AI-Assisted Learning: Accelerating Skill Acquisition
 
-> The same study that documented AI-driven skill atrophy found the inverse: developers who changed *how* they interacted with AI — not whether they used it — scored as well or better than those working without it.
+> The study that documented AI-driven skill atrophy found the inverse too: *how* developers interacted with AI, not whether they used it, decided the outcome.
 
 ## The Mechanism: Adaptive Scaffolding
 

@@ -6,12 +6,12 @@ tags:
   - context-engineering
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Research-Plan-Implement Pattern
 
-> Research the problem, plan the approach, implement the solution. Skipping phases wastes context on rework.
+> The Research-Plan-Implement pattern splits agent work into three phases: gather context, plan the approach, then execute. Skipping phases wastes context on rework.
 
 Agents that jump straight to implementation produce code that compiles but misses edge cases, uses wrong patterns, or duplicates existing utilities. The fix is structural: separate information gathering from decision-making from execution.
 

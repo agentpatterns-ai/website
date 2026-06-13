@@ -10,14 +10,14 @@ aliases:
   - agent stream
   - agent-step events
   - agent event stream
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Agent Event Streaming: Consumer Contract Above the Tokens
 
 > A typed event stream the harness emits at decision points. UIs subscribe to this contract instead of raw token deltas, surviving model and harness swaps.
 
-An agent event stream is the typed, ordered sequence of events the harness emits at decision points: tool dispatched, tool returned, sub-agent spawned, state updated, run finished. It sits above the LLM's token-level SSE ([Claude API streaming](https://docs.claude.com/en/build-with-claude/streaming): `message_start`, `content_block_delta`, `content_block_stop`) and below the app's domain model — the contract lives where the agent decides, not where the model emits letters.
+An agent event stream is the typed, ordered sequence of events the harness emits at decision points: tool dispatched, tool returned, sub-agent spawned, state updated, run finished. It sits above the LLM's token-level SSE ([Claude API streaming](https://docs.claude.com/en/build-with-claude/streaming)) and below the app's domain model — the contract lives where the agent decides, not where the model emits letters.
 
 ## Token Stream vs Agent Stream
 
@@ -39,21 +39,21 @@ The AG-UI Protocol — an open standard with integrations across LangGraph, Crew
 - **Reasoning**: `ReasoningStart`, `ReasoningMessageContent`, `ReasoningMessageEnd` — LangChain normalises Anthropic `thinking` and OpenAI `reasoning` blocks into one `reasoning` content-block type ([LangChain streaming docs](https://docs.langchain.com/oss/python/langchain/streaming)).
 - **Activity**, **Special** (Custom, Raw) — escape hatches for harness-specific work.
 
-The categories are the load-bearing design choice. Subscribe by category — "render all Tool Call events" — and the consumer survives new event types within it. Hardcode names and it does not.
+The categories are the load-bearing design choice. Subscribe by category — "render all Tool Call events" — and the consumer survives new event types within it; hardcode names and it does not.
 
 ## Why It Works
 
-The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas — when the harness adds a sub-agent spawn, a guardrail, or a tool retry, none appear in the token stream, so the consumer infers them only by parsing the assembled message. An agent-stream consumer commits to harness-decision verbs, so it renders affordances — approval modals, sub-agent tabs, retry indicators — directly rather than reconstructing them from tokens ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
+The agent stream inverts consumer stability. A token-stream consumer commits to LLM-output deltas — a sub-agent spawn, guardrail, or tool retry never appears in the token stream, so the consumer infers them by parsing the assembled message. An agent-stream consumer commits to harness-decision verbs and renders affordances — approval modals, sub-agent tabs, retry indicators — directly ([AG-UI events](https://docs.ag-ui.com/concepts/events)). Swapping the LLM (Anthropic → Gemini → OpenAI) replaces the token stream but leaves the verbs intact — the abstraction inversion event-sourcing applies to databases ([Fowler, EventSourcing](https://martinfowler.com/eaaDev/EventSourcing.html)), at the harness/LLM boundary.
 
 ## Versioning the Event Schema
 
-Event-driven consumers outlive the producer code, so the vocabulary needs additive-only evolution ([theburningmonk, event versioning strategies](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)). The Confluent compatibility taxonomy applies directly: new event types and optional fields are safe (consumers ignore unknowns); renames and removals break every consumer at once because each event carries semantic weight ([Confluent schema compatibility](https://developer.confluent.io/patterns/event-stream/schema-compatibility/)). When a shape must change, ship an upcaster at the consumer boundary. The discipline matters more than in a Kafka pipeline because each event renders in a user-facing UI.
+Event-driven consumers outlive the producer code, so the vocabulary needs additive-only evolution ([theburningmonk, event versioning strategies](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)). The Confluent compatibility taxonomy applies directly: new event types and optional fields are safe (consumers ignore unknowns); renames and removals break every consumer at once ([Confluent schema compatibility](https://developer.confluent.io/patterns/event-stream/schema-compatibility/)). When a shape must change, ship an upcaster at the consumer boundary. The discipline matters more than in a Kafka pipeline because each event renders in a user-facing UI.
 
 ## When This Backfires
 
 The pattern adds a vocabulary-design and versioning obligation that does not pay off everywhere. Stay with raw token streams when:
 
-- **Pure conversational chat UIs** — step events at the bubble layer hide the time-to-first-token signal users expect. Reported TTFT with token streaming is typically 200–500 ms versus a 5–30 s wait for the full response without it ([thefrontkit, streaming UI guide](https://thefrontkit.com/blogs/what-is-streaming-ui-in-ai-applications)); dropping that channel makes the interface feel broken even when latency is unchanged.
+- **Pure conversational chat UIs** — step events at the bubble layer hide the time-to-first-token signal users expect. Reported TTFT with token streaming is typically 200–500 ms versus a 5–30 s wait for the full response without it ([thefrontkit, streaming UI guide](https://thefrontkit.com/blogs/what-is-streaming-ui-in-ai-applications)); dropping that channel makes the interface feel broken.
 - **Single-harness, single-vendor stacks** — the portability benefit disappears; raw SDK events (Anthropic SSE, OpenAI deltas) are cheaper.
 - **Ad-hoc payloads that mirror harness internals** — if `tool_call_started` carries the harness's node name, retry count, or framework-specific tool ID, the UI couples to the harness; the vocabulary must be designed semantically, not echoed from the runtime.
 - **Renames are tolerated** — without additive-only discipline, event-stream consumers degrade *worse* than token-stream ones because each event carries semantic weight ([theburningmonk](https://theburningmonk.com/2025/04/event-versioning-strategies-for-event-driven-architectures/)).

@@ -6,12 +6,12 @@ tags:
   - agent-design
   - reliability
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Exception Handling and Recovery Patterns
 
-> Agents fail. The question is whether they fail forward (recover and continue) or fail catastrophically (corrupt state, lose progress, repeat work).
+> Exception handling decides whether a failing agent recovers and continues or fails catastrophically — corrupting state, losing progress, and repeating work.
 
 Exception handling for coding agents is a progressive escalation — self-correct, fallback, degrade gracefully, escalate — that absorbs tool errors, model failures, and crashes without losing accumulated work.
 
@@ -120,17 +120,21 @@ A coding agent tasked with refactoring a module hits a test failure after changi
 
 Throughout, the agent commits after each successful file change (`git commit -m "refactor: update signature in <file>"`), so any revert affects only one file.
 
+## Key Takeaways
+
+- Treat failure as a progressive escalation — self-correct, then fallback, then degrade gracefully, then escalate — so recoverable errors never reach a human.
+- Git is the cheapest recovery substrate: frequent commits and progress files turn a crash into a resumable checkpoint rather than lost work.
+- Model-driven adaptation (tell the model the tool failed, let it reroute) beats rigid retry logic for novel errors — but only when the failure is observable, not silent.
+- Durable-execution frameworks and circuit breakers add fault tolerance for crash-survival and unreliable tools; reach for them when state must outlive the process.
+- Recovery requires detection — fail fast to a human whenever intermediate state cannot be validated.
+
 ## Related
 
 - [Rollback-First Design](rollback-first-design.md)
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — per-tool state machine implementation with configuration thresholds
-- [Circuit Breakers](../observability/circuit-breakers.md)
 - [Idempotent Agent Operations](idempotent-agent-operations.md)
 - [Agent Harness](agent-harness.md)
-- [Harness Engineering](harness-engineering.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
-- [Agent Backpressure](agent-backpressure.md)
-- [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Self-Review Loop](agent-self-review-loop.md)

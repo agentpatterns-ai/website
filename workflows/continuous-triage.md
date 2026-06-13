@@ -8,12 +8,12 @@ tags:
   - github-actions
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Continuous Triage: Automating Issue Classification with AI Workflows
 
-> Replacing manual issue triage with AI agents that classify, label, and route issues on every event or schedule — running continuously with read-only defaults and constrained write operations.
+> AI agents replace manual issue triage by classifying, labeling, and routing issues on every event or schedule, running continuously with read-only defaults and constrained writes.
 
 ## Three Triage Operations
 

@@ -8,12 +8,12 @@ tags:
   - human-factors
   - anti-pattern
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Skill Atrophy: When AI Reliance Erodes Developer Capability
 
-> Prolonged delegation of coding tasks to AI agents erodes the independent problem-solving skills needed to review, debug, and architect the code those agents produce. Unlike cognitive fatigue (a temporary state), skill atrophy is cumulative capability loss.
+> Skill atrophy is the cumulative loss of a developer's ability to review, debug, and architect code independently, driven by prolonged delegation to AI agents.
 
 ## The Mechanism: Cognitive Offloading
 
@@ -117,8 +117,6 @@ Fatigue makes you tired *during* work; atrophy makes you less capable *between* 
 - [The Addictive Flow State of Agent-Assisted Development](addictive-flow-agent-development.md) — compulsion mechanism that accelerates atrophy by increasing delegation frequency
 - [Vibe Coding](../anti-patterns/vibe-coding.md) — the workflow pattern where atrophy risk is highest
 - [Rigor Relocation](rigor-relocation.md) — engineering discipline shifts rather than disappears when agents write code
-- [Process Amplification](process-amplification.md) — strong engineering practices matter more, not less, when delegating to agents
-- [Progressive Autonomy Model Evolution](progressive-autonomy-model-evolution.md) — expanding delegation scope safely without losing underlying skill
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight
 - [Polya Small Steps](polya-small-steps.md) — incremental problem decomposition that preserves comprehension while delegating

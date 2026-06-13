@@ -7,7 +7,7 @@ tags:
   - memory
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Layered Mutability: Governing Persistent Self-Modifying Agents

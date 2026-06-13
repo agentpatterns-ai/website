@@ -9,7 +9,7 @@ tags:
 aliases:
   - mutation testing for LLM tests
   - mutation-guided test generation
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Mutation Testing as a Quality Gate for AI-Generated Test Suites
@@ -28,7 +28,7 @@ Coverage records that a line was executed. Mutation testing records whether the 
 
 **Discriminate.** Surviving mutants identify which tests are ceremonial. A test that runs against a mutated code path but does not fail is asserting nothing the mutation invalidates — a candidate for removal or strengthening. Without this signal, high coverage hides weak assertions indefinitely.
 
-**Generate.** Surviving mutants name the failure modes the suite misses. Feeding them back into the LLM as prompt context produces tests that target those gaps. [Mutation-feedback prompting in MUTGEN reaches 89.5% mutation score on HumanEval-Java vs 69.5% for EvoSuite — a 20-point gap from prompt augmentation alone](https://arxiv.org/abs/2506.02954). Survey work across the LLM-testing literature reports up to 28% improvement in fault detection over zero-shot or few-shot test generation when surviving mutants are added to the prompt. [Source: [LLM4SoftwareTesting survey](https://github.com/LLM-Testing/LLM4SoftwareTesting)]
+**Generate.** Surviving mutants name the failure modes the suite misses. Feeding them back into the LLM as prompt context produces tests that target those gaps. [Mutation-feedback prompting in MUTGEN reaches 89.5% mutation score on HumanEval-Java, significantly outperforming EvoSuite and vanilla prompt-based generation — the gain comes from prompt augmentation alone](https://arxiv.org/abs/2506.02954). The broader literature on LLM-based test generation is catalogued in the [LLM4SoftwareTesting survey](https://github.com/LLM-Testing/LLM4SoftwareTesting), which indexes the unit-test-generation and mutation-testing work this loop draws on.
 
 ## The Loop
 

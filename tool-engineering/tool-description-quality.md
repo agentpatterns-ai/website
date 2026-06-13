@@ -120,7 +120,7 @@ Each description adds tokens on every invocation. Three conditions where this ma
 ## Related
 
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
-- [Tool Engineering](tool-engineering.md)
+- [OpenAPI Documentation Smells for Agent-Ready APIs](openapi-documentation-smells.md)
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)

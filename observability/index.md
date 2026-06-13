@@ -3,6 +3,7 @@ title: "Observability for AI Agents: Tracing and Debugging"
 description: "Tracing, debugging, loop detection, circuit breakers, and logging patterns for understanding what agents are doing and diagnosing failures."
 tags:
   - observability
+  - index
 last_reviewed: 2026-05-27
 ---
 

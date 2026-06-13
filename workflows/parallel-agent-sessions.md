@@ -10,12 +10,12 @@ tags:
   - workflows
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions
 
-> When multiple agent sessions run simultaneously, the human engineer's role transforms from individual contributor to tech lead — the bottleneck shifts from writing code to making architectural decisions, giving feedback, and integrating changes.
+> Running multiple agent sessions in parallel shifts the bottleneck from writing code to architectural decisions, feedback, and integration — the engineer becomes a tech lead.
 
 !!! note "Also known as"
     Parallel Agent Infrastructure, Multi-Agent Parallelism. For the technical mechanism — git worktrees for filesystem isolation — see [Worktree Isolation](worktree-isolation.md).
@@ -103,7 +103,7 @@ When you have a design decision that affects the player API surface, stop and re
 
 With this structure, the engineer reviews progress updates from each session in turn, answers blocking architectural questions, and merges each branch via PR when the session completes. The bottleneck is the engineer's review bandwidth, not agent execution speed.
 
-The same isolation can move off the laptop. Vercel describes Conductor [migrating parallel coding agents from the laptop to cloud-isolated branches](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-to-the-cloud-with-vercel-sandbox), and Superset [running up to 10 parallel agents with a per-branch preview environment for each](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel) — cloud-sandboxed equivalents of the local-worktree setup above. [Source: [Conductor on Vercel Sandbox](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-to-the-cloud-with-vercel-sandbox), [Superset IDE for AI agents](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel)] Moving sessions to the cloud does not relax the human bottleneck: it raises the ceiling on concurrent sessions, which only sharpens the review-bandwidth constraint described above.
+The same isolation can move off the laptop. Vercel describes Conductor [moving parallel coding agents from the laptop to cloud-isolated workspaces](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-from-the-laptop-to-the-cloud-with-vercel-sandbox), and Superset [running up to 10 coding agents in parallel, each in an isolated workspace, with every branch auto-creating a preview deployment](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel) — cloud-sandboxed equivalents of the local-worktree setup above. [Source: [Conductor on Vercel Sandbox](https://vercel.com/blog/how-conductor-moved-parallel-coding-agents-from-the-laptop-to-the-cloud-with-vercel-sandbox), [Superset IDE for AI agents](https://vercel.com/blog/how-superset-built-the-ide-for-ai-agents-on-vercel)] Moving sessions to the cloud does not relax the human bottleneck: it raises the ceiling on concurrent sessions, which only sharpens the review-bandwidth constraint described above.
 
 ## Key Takeaways
 

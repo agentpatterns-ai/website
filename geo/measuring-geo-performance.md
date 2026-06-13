@@ -1,5 +1,5 @@
 ---
-title: "Measuring GEO Performance: Metrics, Monitoring, and Tools"
+title: "Measuring GEO Performance for AI Search Visibility"
 term: "Measuring GEO Performance"
 tags:
   - geo
@@ -11,7 +11,7 @@ aliases:
   - GEO Metrics
   - GEO Monitoring
   - AI Search Measurement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Measuring GEO Performance
@@ -48,10 +48,10 @@ LLMs typically cite a small number of domains per response — far fewer than Go
 |------|---------------|-------------------|----------------|
 | [Otterly.ai](https://otterly.ai/) | $29/mo | ChatGPT, AI Overviews, AI Mode, Perplexity, Gemini, Copilot | Widest platform coverage; 40+ countries |
 | [Semrush AI Toolkit](https://www.semrush.com/semrush-ai-toolkit/) | $99/mo/domain | Major LLMs | Integrates with existing Semrush ecosystem |
-| [Profound](https://www.tryprofound.com/) | $499/mo | Major LLMs + e-commerce | Enterprise; hallucination detection; compliance |
-| [Scrunch](https://scrunch.com/) | $250/mo | ChatGPT, Claude, Perplexity, Gemini | Content gap and outdated information detection |
+| [Profound](https://www.tryprofound.com/) | from $99/mo | ChatGPT (entry) → 10+ LLMs (enterprise) | Enterprise; hallucination detection; compliance |
+| [Scrunch](https://scrunch.com/) | from $100/mo | ChatGPT (entry) → Claude, Perplexity, Gemini | Content gap and outdated information detection |
 
-All tools sample by running prompts — none have access to platform-internal data.
+Starting prices are entry tiers verified June 2026; the cheapest plan is usually single-platform, with multi-LLM coverage on higher tiers. Confirm current pricing with each vendor. All tools sample by running prompts — none access platform-internal data.
 
 ## What No Tool Solves
 
@@ -66,13 +66,13 @@ graph TD
     G --> H[Brand discovered in ChatGPT<br>visits site 3 days later<br>shows as direct traffic]
 ```
 
-**Attribution gap**: Brands discovered via ChatGPT that visit days later appear as direct traffic — the discovery touch is invisible.
+**Attribution gap**: ChatGPT-discovered visits that land days later show as direct traffic — the discovery touch is invisible.
 
-**Zero-click gap**: GPTBot crawls pages heavily, but the crawl-to-click conversion rate is extremely low — AI answers surface information without driving referral traffic.
+**Zero-click gap**: GPTBot crawls heavily, but crawl-to-click conversion is very low — AI answers inform without driving referral traffic.
 
-**Unannounced model updates**: Providers update models without notice, making visibility shifts unattributable to content versus model behaviour.
+**Unannounced model updates**: Providers update models silently, making visibility shifts unattributable to content versus model behaviour.
 
-**GEO/SEO tension**: Restructuring content for AI extraction can improve citation rates while reducing organic rankings.
+**GEO/SEO tension**: Restructuring for AI extraction can raise citation rates while reducing organic rankings.
 
 ## Monitoring Cadence
 
@@ -83,7 +83,7 @@ graph TD
 | **Monthly** | Aggregate visibility trends; analyse citation source breakdown; benchmark competitors |
 | **Quarterly** | Deep-dive sentiment analysis; update competitive benchmarks; reassess prompt set |
 
-Brand web mention volume correlates with AI Overview visibility — brands with stronger organic presence tend to appear more frequently in AI-generated responses.
+Brand web mention volume correlates with AI Overview visibility — stronger organic presence tends to mean more frequent AI citation.
 
 ## When This Backfires
 
@@ -137,6 +137,14 @@ if __name__ == "__main__":
 
 Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to detect visibility drops.
 
+## Key Takeaways
+
+- GEO measurement is probabilistic, not deterministic — there are no fixed ranks, no platform APIs, and citations vary session-to-session, so all data comes from repeated sampling.
+- Track GEO-native metrics (Share of Model, Citation Share of Voice, Generative Position) rather than borrowing SEO rank concepts that do not map.
+- No tool closes the attribution gap: AI-discovered visits show as direct traffic, and unannounced model updates make visibility shifts hard to attribute to content.
+- Sample at least 20–30 prompts daily across multiple platforms; smaller budgets cannot separate genuine change from session variance.
+- Verify tool pricing and platform coverage directly with vendors — entry tiers are often single-platform and prices change frequently.
+
 ## Related
 
 - [Google Search Console Monitoring](gsc-search-console-monitoring.md) — deterministic organic search baseline
@@ -147,10 +155,6 @@ Run on a daily cron (`0 9 * * *`). Diff `mentioned` counts week-over-week to det
 - [Assertion Density](assertion-density.md) — writing technique affecting citation frequency
 - [GEO for Technical Docs](geo-for-technical-docs.md) — GEO in technical documentation contexts
 - [Schema and Structured Data](schema-and-structured-data.md) — structured markup for AI citation visibility
-- [AI Crawler Policy](ai-crawler-policy.md) — controlling AI crawler access for citation
-- [llms.txt](llms-txt.md) — machine-readable hints for AI indexing
-- [Answer-First Writing](answer-first-writing.md) — content structure for AI retrieval
-- [Atomic Pages and Chunking](atomic-pages-and-chunking.md) — one-concept-per-page for RAG accuracy
 
 ## Sources
 

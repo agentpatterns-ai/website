@@ -11,7 +11,7 @@ tags:
 aliases:
   - "model collapse from synthetic data"
   - "synthetic data feedback loop"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Synthetic Ground Truth Fallacy
@@ -22,7 +22,7 @@ last_reviewed: 2026-05-27
 
 Teams use AI to generate tests, evals, documentation, or training examples and treat the outputs as interchangeable with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth is a productivity gain.
 
-The outputs look correct because the model generates plausible outputs — not verified ones. AI-generated artifacts measure what the model finds likely, not what is true.
+But the outputs look correct because the model generates *plausible* outputs, not *verified* ones. They measure what the model finds likely, not what is true.
 
 ## Why It Fails
 
@@ -38,9 +38,9 @@ Smaller-scale versions of this loop appear in daily coding agent workflows:
 
 ### Eval Scores Are Not Self-Validating
 
-Anthropic's multi-agent research system documentation states explicitly that "people testing agents find edge cases that evals miss" and frames manual testing as essential even alongside automated LLM judgment. The recommended practice is to "[c]alibrate against humans: Frequently compare LLM judge outputs against expert human judgment." [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
+Anthropic's multi-agent research documentation notes that "people testing agents find edge cases that evals miss" and recommends you "[c]alibrate against humans: Frequently compare LLM judge outputs against expert human judgment." [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
-Broken graders compound the problem. In the CORE-Bench case, rigid string-match grading penalized correct answers — "96.12" failed against the expected "96.124991". Scores jumped from 42% to 95% after fixing the graders. A 0% pass rate that reflects a broken grader, not agent capability, is a direct consequence of treating unvalidated evaluation infrastructure as ground truth. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Broken graders compound the problem. In the CORE-Bench case, rigid string-match grading penalized correct answers — "96.12" failed against the expected "96.124991" — and scores jumped from 42% to 95% after the graders were fixed. A pass rate that reflects a broken grader, not agent capability, is what treating unvalidated evaluation infrastructure as ground truth produces. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ### Environmental Feedback Is the Correct Ground Truth
 
@@ -72,12 +72,12 @@ The fix: seed evals from real production failures and user-reported bugs, then c
 
 The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as *starting points*, not ground truth.
 
-- **Bootstrapping test coverage**: AI-generated test stubs seeded from real code paths are a productivity win — the risk is treating pass/fail rates as meaningful before humans verify the stubs reflect correct behavior
-- **Data augmentation**: Synthetic training examples improve coverage of rare cases when augmented into a dataset that already has real-world grounding — the fallacy fires only when synthetic data *replaces* real data entirely
-- **Eval templating**: LLM-generated eval rubrics reduce scaffolding work; calibrating those rubrics against human expert judgment (as Anthropic recommends) converts them from synthetic ground truth into validated artifacts
-- **Short feedback loops**: A coding agent checking its own output against a compiled binary or test runner is using environmental ground truth, not synthetic — the fallacy applies to AI-on-AI assessment, not AI-plus-deterministic-signal loops
+- **Bootstrapping test coverage**: AI-generated test stubs seeded from real code paths are a win — the risk is trusting pass/fail rates before humans verify the stubs reflect correct behavior
+- **Data augmentation**: Synthetic examples improve coverage of rare cases when added to a dataset with real-world grounding — the fallacy fires only when synthetic data *replaces* real data
+- **Eval templating**: LLM-generated rubrics reduce scaffolding work; calibrating them against human judgment converts them from synthetic ground truth into validated artifacts
+- **Short feedback loops**: An agent checking its output against a compiler or test runner uses environmental ground truth — the fallacy is AI-on-AI assessment, not AI-plus-deterministic-signal loops
 
-The pattern to avoid is circular: AI generates artifact → AI judges artifact → scores are accepted as authoritative without external grounding. Adding any external validation signal (human review, test execution, real user behavior) breaks the circularity.
+The pattern to avoid is circular: AI generates artifact → AI judges artifact → scores accepted without external grounding. Any external validation signal — human review, test execution, real user behavior — breaks the circularity.
 
 ## Key Takeaways
 
@@ -97,4 +97,3 @@ The pattern to avoid is circular: AI generates artifact → AI judges artifact �
 - [Chain-of-Thought Reasoning Fallacy](chain-of-thought-reasoning-fallacy.md)
 - [The Consistent Capability Fallacy](consistent-capability-fallacy.md)
 - [LLM Comprehension Fallacy](llm-comprehension-fallacy.md)
-- [The Task Framing Irrelevance Fallacy](task-framing-irrelevance-fallacy.md)

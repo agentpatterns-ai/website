@@ -5,7 +5,7 @@ description: "Matching the agent's response format to what you actually need red
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Controlling Agent Output: Concise Answers, Not Essays

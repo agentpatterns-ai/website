@@ -9,12 +9,12 @@ tags:
 aliases:
   - agent-generated ramp-up guide
   - agent synthesised onboarding artefact
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent-Generated Onboarding Guide as a Durable Artefact
 
-> Use an agent with broad repository access to synthesise a teammate ramp-up guide, then version-control that artefact and regenerate it on architectural change — shifting onboarding cost from repeated human reading to one-shot agent synthesis plus amortised review.
+> An agent synthesises a teammate onboarding guide from the repository; you version-control that artefact and regenerate it on architectural change rather than on a calendar.
 
 ## Artefact, Not Conversation
 

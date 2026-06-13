@@ -10,16 +10,16 @@ tags:
   - tool-agnostic
   - harness-engineering
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # AX/UX/DX Triad: Three Experience Layers in Agent Systems
 
-> Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces. Optimizing for one often degrades the others -- treat each as a first-class concern with its own interface contract.
+> Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces; optimizing one often degrades the others.
 
 ## The Problem
 
-Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)). The distinction is independently recognized in the API design community: agents need structured, machine-readable interfaces rather than human-readable affordances ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)).
+Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)). The API design community recognizes the same distinction: agents need structured, machine-readable interfaces rather than human-readable affordances ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)).
 
 ## Three Layers
 
@@ -56,8 +56,6 @@ What the model sees. Curate context for inference quality, not human readability
 - **Machine-readable error signals** -- stack traces and [RFC 9457 structured error fields](../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
 - **Hindsight failure notes** -- recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
 
-Human-readable output is often *worse* for the model -- verbose messages and decorative formatting consume context without improving inference.
-
 ### User Experience (UX)
 
 What the human sees. Clear status, predictable behavior, actionable feedback:
@@ -90,9 +88,9 @@ CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonn
 
 ## Why It Works
 
-Each conflation introduces a specific failure mode at the information channel level. AX suffers from *context overflow and spurious anchors* when human-readable formatting (whitespace, decorative headings, verbose status prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations are entangled, because extension authors must reason about both audiences simultaneously ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
+Each conflation introduces a specific failure mode at the information-channel level. AX suffers *context overflow and spurious anchors* when human-readable formatting (whitespace, decorative headings, verbose prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations entangle, forcing extension authors to reason about both audiences at once ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
 
-The triad works by routing the same underlying data through separate transformation layers -- each optimized for one consumer's constraints.
+The triad works by routing the same data through separate transformation layers, each optimized for one consumer's constraints.
 
 ## When This Backfires
 
@@ -136,7 +134,7 @@ The model receives compact JSON it can parse. The user sees a one-line summary. 
 
 - AX, UX, and DX are distinct design surfaces with different optimization targets
 - The most common failure is conflating AX and UX -- feeding human-formatted output to models or raw agent traces to users
-- Scaffold quality dominates model capability: weaker models with strong scaffolds outperform stronger models with weaker scaffolds
+- Scaffold quality dominates model capability: a strong scaffold on a weaker model beats a weak scaffold on a stronger one
 - Each boundary needs an explicit transformation layer -- shared data, different format
 
 ## Related
@@ -149,4 +147,3 @@ The model receives compact JSON it can parse. The user sees a one-line summary. 
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) -- loading context proportional to task complexity is an AX optimization
 - [Agent Debugging](../observability/agent-debugging.md) -- DX-layer concerns for diagnosing agent behavior
 - [Agent Turn Model](agent-turn-model.md) -- turn-level structure shapes what the model sees (AX) at each step
-- [Agent Loop Middleware](agent-loop-middleware.md) -- middleware layers can enforce AX/UX/DX separation per iteration

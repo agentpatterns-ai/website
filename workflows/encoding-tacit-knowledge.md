@@ -6,12 +6,12 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Encoding Tacit Knowledge into Agent Improvement Loops
 
-> Surface expert judgment that cannot be directly articulated, then convert it into agent-consumable instructions, examples, and eval criteria.
+> Tacit knowledge — the expert judgment practitioners cannot articulate on demand — becomes agent instructions, examples, and eval criteria through structured elicitation.
 
 ## The Encoding Problem
 

@@ -11,12 +11,12 @@ tags:
 aliases:
   - test homogenization trap
   - homogenization trap
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Test Homogenization Trap
 
-> LLM-generated test suites share the generating model's blind spots — tests pass because they miss the same edge cases the code misses, not because the code is correct.
+> LLM-generated test suites share the generating model's blind spots: they pass by missing the same edge cases the code misses, not by proving correctness.
 
 ## The Pattern
 
@@ -37,7 +37,7 @@ The root cause is error clustering. [LLM-induced errors are highly clustered aro
 
 **Combine human-authored edge cases with LLM-generated structural tests.** Human testers identify failure modes the model systematically misses. [SAGA's human-LLM collaborative approach achieved 90.62% detection rate](https://arxiv.org/abs/2507.06920) — a 9.55% improvement over pure LLM generation.
 
-**Use differential analysis.** Compare failed submissions against corrected ones to identify specific error patterns, then generate tests targeting those patterns. This is [SAGA's dual strategy: multidimensional analysis of correct solutions combined with differential analysis of failures](https://arxiv.org/abs/2507.06920).
+**Use differential analysis.** Compare failed submissions against corrected ones to surface specific error patterns, then target tests at them — [SAGA's dual strategy of analyzing correct solutions alongside failures](https://arxiv.org/abs/2507.06920).
 
 **Apply mutation-guided test generation.** [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
 
@@ -88,21 +88,11 @@ def test_median_no_mutation():
 
 The fix: use `sorted()` instead of `.sort()`. A human tester thinks about side effects; the model does not.
 
-## When This Doesn't Apply
-
-Extra mitigation effort — mutation testing, differential analysis, human edge cases — is unwarranted when:
-
-- **Throwaway scripts** — one-off migrations or prototypes read once and discarded; false-positive confidence causes no downstream harm.
-- **Trivial-domain pure functions** — stateless utilities whose input space an LLM can exhaust (a two-argument comparator, a unit converter). Error clustering only bites when the blind-spot space is large.
-- **Thin wrappers over hardened libraries** — code that adds no logic of its own; LLM tests covering the call signature are sufficient.
-
-Production paths, functions with side effects, and any code handling untrusted input fall outside these exceptions.
-
 ## Key Takeaways
 
-- LLM-generated tests cluster around the model's own solution strategies and miss the same edge cases the code misses
+- LLM-generated tests cluster around the model's own solution strategies, missing exactly the edge cases the code also misses
 - False confidence is the core risk: green suites that overstate correctness by ~10% on rigorous benchmarks
-- Combine human edge cases, differential analysis, mutation testing, and mixed methodologies to break the homogenization cycle
+- Combine human edge cases, mutation testing, and mixed methodologies to break the cycle
 
 ## Related
 

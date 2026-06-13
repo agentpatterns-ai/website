@@ -9,16 +9,16 @@ aliases:
   - harness memory coupling
   - memory is the harness
   - agent memory harness ownership
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Harness-Memory Coupling as a Design Axis
 
-> Treat memory as a property of the harness, not a pluggable module. The load-bearing seams between them — write timing, compaction format, instruction loading, filesystem exposure — are the axis on which to compare or build agent systems.
+> Memory is a property of the harness, not a pluggable module. The seams where the two meet are the axis for choosing an agent system.
 
 ## Memory Is Not a Plugin
 
-Agent memory is often discussed as a separate service bolted onto a harness. Harrison Chase (LangChain, April 2026) argues the opposite: "Managing context, and therefore memory, is a core capability and responsibility of the agent harness" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). Short-term memory (messages, tool results) is what the harness manipulates every turn. Long-term memory (cross-session summaries, preferences, corrections) is written and read by the same loop. Both share one context window and one token budget. A memory system outside the harness re-implements turn-aware decisions the harness is already making.
+Agent memory is often discussed as a separate service bolted onto a harness. Harrison Chase (LangChain, April 2026) argues the opposite: "Managing context, and therefore memory, is a core capability and responsibility of the agent harness" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). Short-term memory (messages, tool results) is manipulated every turn; long-term memory (cross-session summaries, preferences, corrections) is written and read by the same loop. Both share one context window and one token budget. A memory system outside the harness re-implements turn-aware decisions the harness already makes.
 
 Sarah Wooders (Letta): "Asking to plug memory into an agent harness is like asking to plug driving into a car" ([LangChain](https://blog.langchain.com/your-harness-your-memory/)).
 
@@ -53,17 +53,17 @@ graph TD
     D -. "no ownership" .-> D
 ```
 
-**Stateful provider APIs** (OpenAI Responses API, Anthropic server-side compaction) hold conversation state on the provider. Resuming a thread against a different model is blocked — memory is keyed to the provider's server.
+**Stateful provider APIs** (OpenAI Responses API, Anthropic server-side compaction) hold conversation state on the provider; resuming a thread against a different model is blocked because memory is keyed to the provider's server.
 
-**Closed client harnesses** (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape. The files are on your disk but another harness cannot read them.
+**Closed client harnesses** (Chase's example: Claude Agent SDK over closed-source Claude Code) write client-side memory artifacts in an unknown shape — the files sit on your disk but another harness cannot read them.
 
-**Fully managed harnesses with memory behind the API** are the highest-lock-in tier. [Anthropic's Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) is Chase's example — harness, session log, and long-term memory all behind one API, with no user-side inspection or migration path.
+**Fully managed harnesses with memory behind the API** are the highest-lock-in tier. [Anthropic's Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) is Chase's example: harness, session log, and long-term memory all behind one API, with no user-side inspection or migration path.
 
 Individual coupling points also leak lock-in. OpenAI's Codex is open source yet produces an encrypted compaction summary undecodable outside OpenAI ([LangChain](https://blog.langchain.com/your-harness-your-memory/)).
 
 ## Why Coupling Matters Even When You Pick a Vendor
 
-Stateless model APIs are nearly interchangeable: prompts differ, protocols are similar, migration is tractable. State changes that calculus. Memory accumulates a proprietary dataset of interactions and preferences that makes the agent progressively more useful per user — and more expensive to replace ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). The harness decides what enters that dataset and in what form. Owning the harness is how you own the memory.
+Stateless model APIs are nearly interchangeable: prompts differ, protocols are similar, migration is tractable. State changes that calculus. Memory accumulates a proprietary dataset of interactions and preferences that makes the agent more useful per user — and more expensive to replace ([LangChain](https://blog.langchain.com/your-harness-your-memory/)). The harness decides what enters that dataset and in what form, so owning the harness is how you own the memory.
 
 Industry architectures corroborate the coupling. Anthropic's Managed Agents and LangChain's Deep Agents Deploy both document the Session — the event log that is memory — as authoritative state owned and replayed by the harness loop ([Anthropic](https://www.anthropic.com/engineering/managed-agents)). See [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) for the three-primitive architecture.
 

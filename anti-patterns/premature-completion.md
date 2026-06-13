@@ -12,7 +12,7 @@ aliases:
   - fixing correct code
   - premature termination
   - incomplete-fix inflation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Premature Completion: Agents That Declare Success Too Early

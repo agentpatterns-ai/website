@@ -8,14 +8,14 @@ tags:
   - agent-design
   - tool-agnostic
   - observability
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Circuit Breakers for Agent Loops
 
-> **Also known as:** Loop Detection & Stopping. For the complementary technique of detecting repetitive edits within a session, see [Loop Detection](loop-detection.md).
+> Circuit breakers stop agent loops when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt rather than continuation.
 
-> Stop agents automatically when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior are signals to halt and surface the failure rather than continue.
+> **Also known as:** Loop Detection & Stopping. For the complementary technique of detecting repetitive edits within a session, see [Loop Detection](loop-detection.md).
 
 ## The Loop Problem
 

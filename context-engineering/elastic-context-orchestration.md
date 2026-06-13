@@ -11,7 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Elastic Context Orchestration
@@ -20,7 +20,7 @@ last_reviewed: 2026-06-02
 
 ## Why Uniform Retention Fails on Long-Horizon Search
 
-Long-horizon search visits many irrelevant pages before finding the answer. A ReAct agent that logs every observation accumulates noisy raw history; quality degrades as context fills, attention spreads thin, and signal competes with resolved sub-tasks. AgentFold's authors describe this as "context saturation" and frame it as the dominant failure mode for ReAct on web-search tasks ([AgentFold, Feng et al., 2025](https://arxiv.org/abs/2510.24699)). Anthropic frames the same effect as a [context performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline as context grows, not a cliff.
+Long-horizon search visits many irrelevant pages before finding the answer. A ReAct agent that logs every observation accumulates noisy raw history; quality degrades as context fills, attention spreads thin, and signal competes with resolved sub-tasks. AgentFold's authors describe this as "context saturation" and frame it as the dominant failure mode for ReAct on web-search tasks ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)). Anthropic frames the same effect as a [context performance gradient](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) across all models — a steady decline as context grows, not a cliff.
 
 A single periodic summariser is not enough either: summarising the full history at fixed intervals risks irreversible loss of fine-grained evidence the agent needed for the current step ([AgentFold §1](https://arxiv.org/abs/2510.24699)).
 
@@ -57,7 +57,7 @@ graph TD
 
 Two reported signals support adaptive multi-fidelity retention over uniform accumulation:
 
-- **Sub-linear context growth.** AgentFold-30B reports context length growing from ~3.5k to ~7k tokens across 100 turns — less than doubling — against a 128k window, while raw ReAct accumulates linearly ([AgentFold, Feng et al., 2025](https://arxiv.org/abs/2510.24699)).
+- **Sub-linear context growth.** AgentFold-30B reports context length growing from ~3.5k to ~7k tokens across 100 turns — less than doubling — against a 128k window, while raw ReAct accumulates linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)).
 - **BrowseComp deltas at fixed parameter class.** LongSeeker (Qwen3-30B-A3B base, 10,000 synthesised trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)). All numbers come from the proposing labs; no third-party replication exists yet.
 
 Adjacent results in the same literature cluster point in the same direction: ReSum's external summariser yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313)).

@@ -7,12 +7,12 @@ tags:
   - instructions
   - copilot
   - security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Content Exclusion Gap in Agent Systems
+# Content Exclusion Gap: AI Security Boundaries by Mode
 
-> Security boundaries defined for one AI interaction mode may not apply across all modes — content exclusion rules that work for completions and chat can be silently ignored by agent-mode features.
+> Content exclusion rules that work for completions and chat can be silently ignored by agent-mode features.
 
 ## The Gap
 

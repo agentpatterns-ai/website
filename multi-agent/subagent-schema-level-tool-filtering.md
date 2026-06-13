@@ -1,7 +1,7 @@
 ---
 title: "Subagent Schema-Level Tool Filtering for AI Agents"
 term: "Subagent Schema-Level Tool Filtering"
-description: "Restrict subagent capabilities by filtering their tool schemas — making unauthorized tool use structurally impossible rather than relying on prompt"
+description: "Restrict subagent capabilities by filtering their tool schemas, making unauthorized tool use structurally impossible rather than relying on prompt instructions."
 tags:
   - agent-design
   - source:opendev-paper
@@ -11,8 +11,9 @@ aliases:
   - Tool Calling Schema Standards
   - Tool Minimalism
   - Tool Schema Design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Subagent Schema-Level Tool Filtering
 
 > Restrict subagent capabilities by filtering their tool schemas — making unauthorized tool use structurally impossible rather than relying on prompt instructions.
@@ -120,17 +121,11 @@ Schema filtering adds structural rigidity — when it fails to match the actual 
 
 ## Related
 
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
-- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](../security/defense-in-depth-agent-safety.md)
-- [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)
-- [Orchestrator-Worker Pattern](orchestrator-worker.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
-- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md)
-- [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
+- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
+- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
-- [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
-- [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
-- [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
+- [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
+- [Tool Minimalism and High-Level Prompting](../tool-engineering/tool-minimalism.md)

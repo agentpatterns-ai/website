@@ -10,18 +10,18 @@ tags:
 aliases:
   - feature spec file
   - feature contract
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Feature List Files
 
-> Maintain a structured JSON file defining every feature with status and acceptance criteria; agents work through it sequentially and may not mark a feature complete without satisfying its criteria.
+> Maintain a JSON feature list with per-feature status and acceptance criteria; agents work it sequentially and cannot mark a feature passing until its criteria pass.
 
 ## The Problem with Agent Self-Report
 
-Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete based on whether the implementation looks plausible — not whether it passes acceptance criteria. Partially implemented work gets labeled as done, and the error compounds across multi-session projects.
+Agents left to self-report progress are optimistic. [Anthropic's harness post](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) documents a specific failure mode: "after some features had already been built, a later agent instance would look around, see that progress had been made, and declare the job done." Without an external contract, an agent marks a feature complete on whether the implementation looks plausible — not whether it passes acceptance criteria, so partially implemented work gets labeled done and the error compounds across sessions.
 
-A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract — the foundation of reliable long-running agent work per Anthropic's harness post.
+A machine-readable feature list with explicit pass/fail status replaces self-report with a verifiable contract — the foundation of reliable long-running agent work.
 
 ## Structure
 
@@ -63,7 +63,7 @@ The explicit instruction from [Anthropic's harness post](https://www.anthropic.c
 3. No blocking error is present in the tested path
 4. The implementation does not leave the app in a broken or ambiguous state
 
-Treat the gate as a database trigger, not an application-level check: a separate verifier runs the conditions on each transition attempt and rejects the write if any fail. Conditions 1–2 defeat the tests-pass-but-feature-doesn't-work failure mode [Anthropic documents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); condition 4 forces the agent to consider half-applied migrations, partial config edits, and inconsistent background-job state.
+Treat the gate as a database trigger, not an application-level check: a separate verifier runs the conditions on each transition attempt and rejects the write if any fail. Conditions 1–2 defeat the tests-pass-but-feature-doesn't-work failure mode [Anthropic documents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents); condition 4 forces the agent to account for half-applied migrations, partial config edits, and inconsistent background-job state.
 
 ## Feature List as State Machine
 

@@ -6,10 +6,10 @@ tags:
   - context-engineering
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Distractor Interference: Relevance Is Not Enough
+# Distractor Interference: Why Relevance Is Not Enough
 
 > Semantically related but inapplicable instructions actively reduce compliance with the instructions that are applicable — proximity in meaning creates interference, not safety.
 
@@ -63,7 +63,6 @@ Over-pruning creates its own failure mode. Narrowing context too aggressively ri
 - [Token Preservation Backfire](token-preservation-backfire.md)
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md)
-- [Cargo Cult Agent Setup](cargo-cult-agent-setup.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — task-scoped instructions also reduce prompt injection attack surface

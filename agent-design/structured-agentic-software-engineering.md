@@ -9,12 +9,12 @@ tags:
   - agent-design
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Structured Agentic Software Engineering
 
-> Autonomous coding agents produce PRs in minutes but nearly 30% of plausible fixes introduce regressions and over 68% of agent PRs stall in review. Structured artifacts — not faster models — close the gap between agent speed and human trust.
+> Structured agentic software engineering closes the gap between agent speed and human trust with durable artifacts — not faster models.
 
 ## The Speed-vs-Trust Gap
 

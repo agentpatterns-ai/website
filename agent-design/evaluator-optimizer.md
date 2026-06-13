@@ -10,12 +10,12 @@ tags:
 aliases:
   - generator-critic loop
   - refinement loop
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Evaluator-Optimizer Pattern for AI Agent Development
 
-> Two distinct LLM roles in a loop: a generator produces output and an evaluator critiques it, feeding structured feedback back to the generator until a quality threshold is met.
+> The evaluator-optimizer pattern loops a generator and an evaluator: the generator produces output, the evaluator critiques it, and feedback recycles until quality is met.
 
 ## Structure
 

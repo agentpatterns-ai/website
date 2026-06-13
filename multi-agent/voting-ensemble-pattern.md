@@ -12,7 +12,7 @@ tags:
   - workflows
   - multi-agent
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Voting / Ensemble Pattern
@@ -46,7 +46,7 @@ Unlike fan-out synthesis (which assembles the best parts from diverse outputs) o
 | Prompt ensembles | Same model, varied prompts | Different framings surface different reasoning |
 | Multi-model consensus | Different models, same prompt | Independent training data and failure modes |
 
-Multi-model consensus provides the strongest diversity. Calling the same model N times tends to repeat the same mistakes; different models fail independently.
+Multi-model consensus provides the strongest diversity: calling one model N times repeats its mistakes, while different models fail independently.
 
 ## When Voting Helps
 
@@ -80,26 +80,25 @@ Simple majority voting treats all runs equally but leaves accuracy on the table.
 |----------|-----------|-----------|
 | Majority vote | Most common answer wins | Simple; ignores model quality differences |
 | Weighted vote | Runs scored by model capability or historical accuracy | Better accuracy; requires calibration data |
-| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy ([Kossen et al. 2025](https://arxiv.org/abs/2502.06233)) |
+| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233)) |
 | Unanimous | All runs must agree; else escalate | High precision, low recall — good for safety-critical |
 | Semantic similarity | Cluster answers by meaning, pick densest cluster | Handles paraphrased equivalents |
 
-Advanced methods like Optimal Weight and Inverse Surprisingly Popular algorithms improve accuracy by 1–3% over standard majority voting by accounting for model heterogeneity and answer correlations ([Plaat et al. 2024](https://arxiv.org/abs/2510.01499)).
+Advanced methods like Optimal Weight and Inverse Surprisingly Popular algorithms consistently outperform standard majority voting by accounting for model heterogeneity and answer correlations ([Ai et al. 2025](https://arxiv.org/abs/2510.01499)).
 
 ## Cost Trade-Off
 
-N runs costs N× tokens. Confidence-weighted voting can cut this nearly in half by early-stopping when confidence is high. Two practical levers:
-
-1. **Start with N=3** and measure whether accuracy justifies scaling to 5
-2. **Use confidence thresholds** — if 3/3 agree with high confidence, skip additional runs
+N runs costs N× tokens. Confidence-weighted voting cuts this nearly in half by early-stopping when confidence is high — start with N=3 and scale to 5 only if accuracy justifies it; if 3/3 agree confidently, skip the rest.
 
 For routine tasks with strong single-run baselines, voting is wasteful. Reserve it for decisions where a false positive or false negative carries real cost.
 
 ## Why It Works
 
-LLMs are stochastic: the same prompt samples from a distribution of reasoning paths. Incorrect answers are scattered across that distribution — each error arises from a distinct spurious chain of thought. Correct answers, by contrast, cluster: multiple independent paths tend to converge on the same right answer because the underlying logic is consistent. Majority voting amplifies this signal by selecting the answer most paths agree on, drowning out idiosyncratic errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
+LLMs are stochastic: the same prompt samples from a distribution of reasoning paths. Wrong answers scatter — each error follows its own spurious chain of thought — while correct answers cluster, because independent paths converge on the same consistent logic. Majority voting selects the answer most paths agree on, drowning out idiosyncratic errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
 
 Multi-model consensus strengthens this further. Different models have independent failure modes rooted in distinct training data and architectures, so an error that is systematic for one model is uncorrelated with errors in another — the correct answer remains the densest cluster even as ensemble size grows.
+
+This entire argument rests on errors being **independent**, and that assumption is fragile. When the runs share training lineage — same base model, or smaller models distilled from a common teacher — their mistakes correlate, and correlated wrong answers cluster just as tightly as correct ones, so the majority can confidently converge on the same error. Distillation makes nominally "different" models behave alike; tracking pairwise [agent-genealogical similarity](../verification/distillation-induced-similarity-metrics.md) surfaces when the ensemble's diversity is an illusion and the voting gain has collapsed.
 
 ## Example
 
@@ -137,7 +136,7 @@ The three models have independent failure modes: a vulnerability one model misse
 - Voting trades compute for confidence — same task, multiple runs, aggregated verdict
 - Multi-model diversity beats same-model repetition for genuine independence
 - 3-5 runs covers most use cases; beyond that, returns diminish or invert
-- Confidence-weighted aggregation cuts compute by ~46% vs naive majority voting ([Kossen et al. 2025](https://arxiv.org/abs/2502.06233))
+- Confidence-weighted aggregation cuts compute by ~46% vs naive majority voting ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233))
 - Reserve voting for discrete, verifiable tasks (classification, security, compliance) — not open-ended generation
 - Distinct from fan-out synthesis (which merges complementary strengths) and committee review (which applies specialized lenses)
 

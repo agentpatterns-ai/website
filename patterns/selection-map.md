@@ -11,7 +11,7 @@ tags:
 aliases:
   - pattern trade-off matrix
   - pattern decision matrix
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Pattern Selection Map
@@ -83,7 +83,7 @@ It is scoped to this site's 14 patterns that share a common set of axes. Pattern
 
 ## Why It Works
 
-The matrix compresses information already sourced on each pattern's canonical page. Experienced engineers think in trade-off axes when choosing architectural patterns but lack a centralised comparison surface — cognitive offloading of the cross-page comparison step is the mechanism. The axes are the dimensions where stacking patterns blindly produces the documented failure modes: token economics, latency, frontier-model cost, and blast radius are the four levers the [80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) traces production failures back to.
+The matrix compresses information already sourced on each pattern's canonical page. Experienced engineers think in trade-off axes when choosing architectural patterns but lack a centralised comparison surface — cognitive offloading of the cross-page comparison step is the mechanism. The axes are the dimensions where stacking patterns blindly produces the documented failure modes: token economics, latency, frontier-model cost, and blast radius. These map onto the production-engineering work the [80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding) identifies as the failure surface — the retry logic, rate limiting, and blast-radius controls that agentic coding skips on the way to a fast first draft.
 
 ## When This Backfires
 

@@ -10,12 +10,12 @@ tags:
 aliases:
   - ACI
   - tool UX design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Agent-Computer Interface (ACI): Tool Design as UX Discipline
 
-> Tools are the agent's UI. The same principles that make human interfaces usable -- affordances, constraints, feedback, error prevention -- make agent tools effective.
+> Tool design is an interface discipline: the same affordances, constraints, feedback, and error prevention that make human UIs usable make agent tools effective.
 
 ## From HCI to ACI
 

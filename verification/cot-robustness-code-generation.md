@@ -10,12 +10,12 @@ tags:
 aliases:
   - chain of thought code generation robustness
   - CoT fragility code LLM
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # CoT Robustness in Code Generation
 
-> Enabling chain-of-thought for code generation can help, hurt, or do nothing depending on the model and task. Measure the effect on robustness before accepting it as a default.
+> Enabling chain-of-thought for code generation can help, hurt, or do nothing depending on the model and task. Measure robustness before making it a default.
 
 ## What the Evidence Shows
 

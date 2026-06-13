@@ -10,12 +10,12 @@ tags:
   - testing-verification
   - code-review
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Tiered Code Review: AI-First with Human Escalation
 
-> Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory human review.
+> Route review effort by risk: AI handles the first pass, non-critical code merges after AI-only review, and critical code escalates to human review.
 
 ## The Problem
 
@@ -187,15 +187,8 @@ Tiered review is not a substitute for threat modeling or dependency scanning —
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Committee Review Pattern](committee-review-pattern.md)
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
-- [Risk-Based Shipping](../verification/risk-based-shipping.md)
-- [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
-- [Diff-Based Review Over Output Review](diff-based-review.md)
-- [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)
-- [PR Description Style as a Lever for Merge Rates](pr-description-style-lever.md)
-- [Predicting Reviewable Code](predicting-reviewable-code.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
+- [Risk-Based Shipping](../verification/risk-based-shipping.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
-- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
+- [Diff-Based Review Over Output Review](diff-based-review.md)

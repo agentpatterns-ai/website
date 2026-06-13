@@ -5,7 +5,7 @@ description: "Insert verification checkpoints between agent steps to catch error
 tags:
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Incremental Verification: Check at Each Step, Not at the End

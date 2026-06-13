@@ -9,12 +9,12 @@ tags:
   - cost-performance
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Structure Prompts with Static Content First to Maximize Cache Hits
 
-> In an agent loop, place static content (instructions, tool definitions, examples) at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear.
+> Place static content (instructions, tool definitions) at the prompt's start and variable content last to maximize cache hits and keep inference cost linear.
 
 ## Why Prompt Structure Affects Cost
 
@@ -56,6 +56,8 @@ Optimizing for cache hits requires discipline in prompt construction:
 - The split between static and dynamic sections must be maintained as the harness evolves
 
 For short agent sessions (5–10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and empirical studies on agentic workloads report 41–80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
+
+Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching — caching everything, including volatile tool results — can *paradoxically increase latency*; strategic cache-block control that excludes dynamic tool results and places variable content deliberately delivers more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
 
 ## Implementation Checklist
 

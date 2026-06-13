@@ -12,7 +12,7 @@ aliases:
   - ADLC
   - agent product lifecycle
   - agent shipping lifecycle
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Agent Development Lifecycle for Agent Products
@@ -21,11 +21,11 @@ last_reviewed: 2026-06-01
 
 ## A Lifecycle for the Agent, Not the Feature
 
-The Agent Development Lifecycle (ADLC) is a four-phase loop — build, test, deploy, monitor — for teams whose product *is* the agent, with verdict-labelled production traces feeding the next build cycle. Harrison Chase formalised it on 2026-05-09 ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
+The Agent Development Lifecycle (ADLC) is a four-phase loop — build, test, deploy, monitor — for teams whose product *is* the agent, with verdict-labelled production traces feeding the next build cycle ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
 
-That inverts two SDLC framings already on this project. [The 7 Phases of AI Development](../workflows/7-phases-ai-development.md) is a feature-level workflow for using an agent to ship code; [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) organises a skill library so an agent acting on a codebase activates the right skills. Both treat the agent as the implement; ADLC treats it as the product.
+It inverts two SDLC framings already on this project. [The 7 Phases of AI Development](../workflows/7-phases-ai-development.md) is a feature-level workflow for using an agent to ship code; [SDLC-Phase Skill Taxonomy](../workflows/sdlc-skill-taxonomy.md) organises a skill library so an agent acting on a codebase activates the right skills. Both treat the agent as the implement; ADLC treats it as the product.
 
-The ordering is deliberate: test before deploy, monitor after deploy, feed learnings into the next build. Each phase produces an artifact the next consumes — scope doc, eval verdict, deploy artifact, verdict-labelled trace corpus.
+The ordering is deliberate — test before deploy, monitor after deploy, feed learnings into the next build. Each phase produces an artifact the next consumes: scope doc, eval verdict, deploy artifact, verdict-labelled trace corpus.
 
 ```mermaid
 graph LR
@@ -40,29 +40,25 @@ graph LR
 
 ### Build
 
-Define scope, choose architecture, wire the harness. LangChain extends the phase beyond code — LangSmith Fleet, Claude Cowork, and n8n are cited as no-code and low-code surfaces letting non-engineers participate ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)). Produces: a runnable agent and a scope doc the test phase can score against.
+Define scope, choose architecture, wire the harness. LangChain extends the phase beyond code, citing no-code and low-code surfaces that let non-engineers participate ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)). Produces: a runnable agent and a scope doc the test phase can score against.
 
 ### Test
 
-Score the agent against an eval suite **before** it touches production. [Eval-Driven Development](../workflows/eval-driven-development.md) covers the discipline: define success criteria first, then build toward them. Reverse this and teams embed the live agent's current bugs into the definition of correct. Produces: a pass/fail verdict and a gated deploy artifact.
+Score the agent against an eval suite **before** it touches production. [Eval-Driven Development](../workflows/eval-driven-development.md) covers the discipline: define success criteria first, then build toward them. Reverse this and teams embed the live agent's bugs into the definition of correct. Produces: a pass/fail verdict and a gated deploy artifact.
 
 ### Deploy
 
-Ship the agent in a controlled way. Canary rollouts, traffic shadowing, and rollback paths apply directly — [Canary Rollout for Agent Policy](../workflows/canary-rollout-agent-policy.md) covers the mechanics. Produces: a running deployment plus the observability hooks the monitor phase consumes.
-
-Deploy-time permission scoping is the other half of the controlled rollout — see [Permission Framework Over Model Trust](../security/permission-framework-over-model.md) for the runtime contract the canary inherits.
+Ship the agent in a controlled way. Canary rollouts, traffic shadowing, and rollback paths apply directly — [Canary Rollout for Agent Policy](../workflows/canary-rollout-agent-policy.md) covers the mechanics, and deploy-time permission scoping is the other half ([Permission Framework Over Model Trust](../security/permission-framework-over-model.md)). Produces: a running deployment plus the observability hooks the monitor phase consumes.
 
 ### Monitor
 
 Trace every run, label every trace with a verdict, alert on drift. Agent dashboards track usage, feedback, latency, cost, tool calls, evaluator scores, and recurring failure patterns ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle)).
 
-The verdict step is load-bearing. [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) covers the four feedback sources — deterministic rule, LLM-as-judge, indirect user signal, direct user verdict — and the OTel `gen_ai.evaluation.result` channel for attaching them to the trace. Without that coupling, monitor produces trajectories nobody can act on. Produces: a verdict-labelled trace corpus and a regression-case stream for the next test cycle.
+The verdict step is load-bearing. [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) covers the four feedback sources — deterministic rule, LLM-as-judge, indirect user signal, direct user verdict — and the OTel `gen_ai.evaluation.result` channel for attaching them. Without that coupling, monitor produces trajectories nobody can act on. Produces: a verdict-labelled trace corpus and a regression-case stream for the next test cycle.
 
 ## Closing the Loop
 
-Two project pages operationalise the back-edges:
-
-- [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) — Monitor → Build: observation-to-update loop for agent configurations.
+[Continuous Agent Improvement](../workflows/continuous-agent-improvement.md) operationalises the Monitor → Build back-edge as an observation-to-update loop for agent configurations.
 
 The underlying mechanism: **agents fail on distributions, not on cases**. Bug-fix-and-redeploy optimises one failing trace; a four-phase lifecycle with verdict-labelled traces optimises the failure-rate trend across a population. The phases are the minimum cut points where verdict-carrying signal can flow back.
 
@@ -87,11 +83,9 @@ Ship the rebuild loop first; let the four phases differentiate as failure modes 
 
 ## Tool Mapping Is Not the Pattern
 
-LangChain names its own stack: LangGraph for build, LangSmith for test and monitor, LangSmith Deployment for deploy ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle), [Medium](https://medium.com/@sehaj23chawla/langsmith-and-langgraph-in-2026-how-langchains-agent-stack-quietly-became-the-default-f1609af5d658)). Other vendors converge on the same loop shape — Domino's "Agentic AI Development Lifecycle" ([NAND Research](https://nand-research.com/domino-data-lab-winter-release-2026-the-agentic-ai-development-lifecycle/)) and EPAM's "Agentic Development Lifecycle" ([EPAM](https://www.epam.com/insights/ai/blogs/agentic-development-lifecycle-explained)).
+LangChain names its own stack: LangGraph for build, LangSmith for test and monitor, LangSmith Deployment for deploy ([LangChain blog](https://www.langchain.com/blog/the-agent-development-lifecycle), [Medium](https://medium.com/@sehaj23chawla/langsmith-and-langgraph-in-2026-how-langchains-agent-stack-quietly-became-the-default-f1609af5d658)). Other vendors converge on the same loop shape — Domino's "Agentic AI Development Lifecycle" ([NAND Research](https://nand-research.com/domino-data-lab-winter-release-2026-the-agentic-ai-development-lifecycle/)) and EPAM's "Agentic Development Lifecycle" ([EPAM](https://www.epam.com/insights/ai/blogs/agentic-development-lifecycle-explained)). The vendor stack is one instantiation; any team can wire the same lifecycle from OTel traces, an eval runner, and a deploy pipeline.
 
-The pattern is the four phases and the back-edges between them; the vendor stack is one instantiation. Any team can wire the same lifecycle from OTel traces, an eval runner, and a deploy pipeline.
-
-One caveat on scope: several 2026 framings treat security and governance as a first-class lifecycle concern, not a deploy-time control. Prompt-injection red-teaming, governed agent catalogs, and mandatory release gates appear as intrinsic phases there ([Cycode](https://cycode.com/blog/securing-adlc/), [Codebridge](https://www.codebridge.tech/articles/agentic-ai-software-development-lifecycle-the-production-ready-playbook), [IBM](https://www.ibm.com/think/topics/agent-development-lifecycle-adlc)). The loop here folds that into deploy via [Permission Framework Over Model Trust](../security/permission-framework-over-model.md); regulated or multi-tenant teams should treat governance as a cross-cutting gate on every phase, not one checkpoint.
+One caveat on scope: several 2026 framings treat security and governance as a first-class lifecycle concern, not a deploy-time control — prompt-injection red-teaming, governed agent catalogs, and mandatory release gates appear as intrinsic phases ([Cycode](https://cycode.com/blog/securing-adlc/), [Codebridge](https://www.codebridge.tech/articles/agentic-ai-software-development-lifecycle-the-production-ready-playbook), [IBM](https://www.ibm.com/think/topics/agent-development-lifecycle-adlc)). The loop here folds that into deploy via [Permission Framework Over Model Trust](../security/permission-framework-over-model.md); regulated or multi-tenant teams should treat governance as a cross-cutting gate on every phase, not one checkpoint.
 
 ## Example
 

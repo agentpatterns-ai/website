@@ -5,12 +5,12 @@ tags:
   - agent-design
   - observability
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Making Application Observability Legible to Agents
 
-> Wire browser automation, application metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior from real signals.
+> Wire browser automation, metrics, and structured logs into agent context so agents can reproduce bugs, verify fixes visually, and reason about system behavior.
 
 ## The Gap
 

@@ -7,12 +7,12 @@ tags:
   - workflows
   - technique
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Incident Log Investigation Skill
 
-> A log investigation skill that returns *any* logs during an incident is worse than no skill — a false signal under time pressure actively misleads. Precision is non-negotiable, and precision without evals is unmeasurable.
+> An incident log investigation skill that surfaces *any* log is worse than none: under time pressure a false signal actively misleads, so precision is non-negotiable.
 
 An incident log investigation skill is a specialist agent that dispatches parallel queries to multiple observability backends (logs, traces, metrics), correlates results on shared time windows and service identifiers, and returns only the cross-system signals that survive corroboration — never the raw query output.
 

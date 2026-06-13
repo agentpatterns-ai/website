@@ -9,7 +9,7 @@ aliases:
   - rule lifecycle frontmatter
   - source applicability expiry triple
   - undead rule detection
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Rule Lifecycle Metadata for Prunable Instruction Surfaces

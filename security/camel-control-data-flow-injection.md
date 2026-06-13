@@ -11,12 +11,12 @@ aliases:
   - CaMeL prompt injection
   - control data flow separation
   - capability-based agent security
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)
 
-> Most prompt injection defenses are probabilistic. CaMeL eliminates whole classes of injection by construction — untrusted data retrieved by tools can never alter which tools are called or how.
+> Most prompt injection defenses are probabilistic. CaMeL eliminates whole classes of injection by construction: untrusted data can never alter which tools an agent calls.
 
 ## The Architectural Insight
 
@@ -71,6 +71,8 @@ a successful injection in a tool output cannot redirect the agent to call unauth
 **Latency**: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — unsuitable for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
 
 **Residual risk**: CaMeL does not protect against text-to-text attacks. An injected email can instruct the Q-LLM to produce a misleading summary, which the P-LLM then acts on. The structural guarantee covers tool invocation; it does not cover the semantic content of Q-LLM outputs. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+
+**Side channels**: The authors explicitly exclude side-channel attacks from the guarantee. An adversary can still leak a secret by observing data-dependent behavior — for example, a loop whose iteration count depends on a private value, or execution that halts only when a condition on the secret holds. Capability labels constrain explicit data flow, not these implicit channels. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
 **Policy maintenance**: Security policies must be authored and maintained. As tool sets evolve, policies require updates. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
 

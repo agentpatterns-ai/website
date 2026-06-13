@@ -10,7 +10,7 @@ tags:
 aliases:
   - thinking trace retrieval
   - reasoning trace corpus
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # RAG over Thinking Traces

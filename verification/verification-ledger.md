@@ -11,7 +11,7 @@ tags:
   - testing-verification
   - observability
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Verification Ledger for Tracking Agent Output Quality

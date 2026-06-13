@@ -8,12 +8,12 @@ tags:
 aliases:
   - build-to-delete agent harness
   - architect for model impermanence
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Harness Impermanence: Build Scaffolding To Be Deleted
 
-> Treat agent harness scaffolding as code with a finite shelf life. Design for low cost of removal, not elegance preservation, so native model capability can replace it cleanly.
+> Treat agent harness scaffolding as code with a finite shelf life. Architect for low cost of removal so native model capability can replace it cleanly.
 
 Harness impermanence is the discipline of authoring agent scaffolding — multi-step orchestration, tool wrappers, parsing and validation layers, retry middleware — assuming a future model release will subsume the capability. The design constraint is not "is this elegant?" but "when the next model does this natively, how hard is it to delete?" ([Google](https://developers.googleblog.com/en/build-better-ai-agents-5-developer-tips-from-the-agent-bake-off/), [philschmid.de](https://www.philschmid.de/agent-harness-2026)).
 

@@ -8,12 +8,12 @@ tags:
 aliases:
   - Positive Rules Over Negative
   - Instruction Framing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Negative Space Instructions: What NOT to Do
 
-> Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance.
+> Negative space instructions — exclusions and banned patterns — eliminate entire classes of mistakes more efficiently than equivalent positive guidance.
 
 !!! info "Also known as"
     Instruction Polarity, Positive Rules Over Negative, Instruction Framing
@@ -60,17 +60,13 @@ Relying entirely on positive guidance leaves edge cases open. Relying entirely o
 
 ## Greppability as a Design Criterion
 
-A well-formed negative constraint is one you can verify automatically. If the constraint cannot be expressed as a grep pattern or a deterministic check, it may belong in positive guidance instead. This also makes negative constraints audit-friendly: a CI step can flag violations before human review.
+A well-formed negative constraint is one you can verify automatically. If the constraint cannot be expressed as a grep pattern or a deterministic check, it may belong in positive guidance instead.
 
 ## Why It Works
 
-The effectiveness of negative constraints comes from reducing the interpretation surface. A constraint like "no filler phrases" collapses to a binary outcome — the phrase either appears or it doesn't. The agent cannot partially comply; the output is deterministically checkable. Positive guidance like "write concisely" leaves the interpretation open: the agent must model what "concise" means in context, and that model can drift.
-
-Mechanically, negative constraints eliminate entire token sequences from consideration during generation, which has a discrete and binary effect rather than a soft preference. Positive guidance ("be concise") narrows the output distribution without hard-cutting regions, so it must compete against other objectives in the model's output distribution. Negative constraints behave more like hard constraints in optimization: they create a feasibility boundary rather than a preference gradient.
+Mechanically, negative constraints eliminate entire token sequences from consideration during generation — a discrete, binary effect rather than a soft preference. Positive guidance ("be concise") only narrows the output distribution without hard-cutting regions, so it competes against other objectives. Negative constraints behave more like hard constraints in optimization: a feasibility boundary rather than a preference gradient.
 
 Palantir's prompt engineering guidance documents this directly: banning specific undesired outputs is more reliable than describing desired characteristics, because banned patterns can be verified while quality attributes require judgment ([Palantir AIP prompt engineering best practices](https://www.palantir.com/docs/foundry/aip/best-practices-prompt-engineering)).
-
-This specificity advantage also applies at enforcement time. A CI step can grep for banned phrases and block a commit; it cannot evaluate whether prose is "information-dense." The constraint is only as strong as your ability to verify it.
 
 ## What Negative Constraints Cannot Do
 
@@ -128,12 +124,8 @@ For must-never-fail constraints, rely on enforced mechanisms — hooks, CI check
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [The Mega-Prompt (Anti-Pattern)](instruction-compliance-ceiling.md)
-- [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
 - [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md)
-- [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md)
-- [Critical Instruction Repetition via Primacy and Recency](critical-instruction-repetition.md)
-- [Layer Agent Instructions by Specificity](layered-instruction-scopes.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)
 - [Guardrails Beat Guidance for Coding Agents](guardrails-beat-guidance-coding-agents.md)
+- [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)

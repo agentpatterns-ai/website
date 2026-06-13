@@ -4,6 +4,7 @@ description: "Patterns and techniques for building AI agents that resist prompt 
 tags:
   - security
   - agent-design
+  - index
 last_reviewed: 2026-05-27
 ---
 # Security
@@ -17,6 +18,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — Name the four ways an agent action can diverge from its audit record (gate-bypass, audit-forgery, silent host failure, wrong-target) to convert "is this runtime hardened?" into a coverage checklist against existing controls
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md) — Decomposing a malicious end-state into three innocuous engineering tickets bypasses refusal and hardening defenses at 53–86% ASR across nine production coding agents; pentester-framed reviewers close most of the gap
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md) — Safety constraints encoded in prompts weaken across six trajectory surfaces — memory, delegation, communication, tool use, audit, optimization; the four-property invariant (fresh, inherited, enforceable, auditable) keeps them operative when delegation depth, memory persistence, and tool surface compose
+- [Context-Fractured Decomposition Attacks on Tool-Using Agents](context-fractured-decomposition-attacks.md) — Attacks split across tools, modules, and time slip past defenders that only inspect a single contiguous conversation; artifact provenance gaps let benign intermediate steps recompose into a jailbreak downstream, lifting attack success by up to 28.3 percentage points
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — Group threats into context/instruction, tool/action, state/persistence, and ecosystem/automation layers to map controls and surface coverage gaps where attacks propagate across boundaries
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md) — A 10,000-trial taxonomy finds goal reframing — not social engineering or incentives — is the one prompt condition that reliably triggers vulnerability exploitation across models
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — OWASP LLM05 — agent output executed, rendered, or interpreted downstream without per-sink validation is an injection surface; enumerate the sinks (commit, exec, SQL, render, install) and gate each one

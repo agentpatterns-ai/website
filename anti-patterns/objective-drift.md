@@ -85,8 +85,7 @@ This combination — structured intent file plus system-prompt anchor — ensure
 ## Related
 
 - [The Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md)
-- [Agent Backpressure](../agent-design/agent-backpressure.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
+- [Attention Latch: When Agents Stay Anchored to Stale Instructions](../agent-design/attention-latch.md) — the structural over-squashing mechanism behind instruction fade-out
 - [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) — restores instruction compliance after compaction
 - [Event-Driven System Reminders](../instructions/event-driven-system-reminders.md) — counters fade-out by injecting targeted reminders
 - [Context Compression Strategies: Offloading and Summarisation](../context-engineering/context-compression-strategies.md) — tiered compression that preserves task intent through summarisation

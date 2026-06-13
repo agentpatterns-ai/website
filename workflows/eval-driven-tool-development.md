@@ -9,7 +9,7 @@ tags:
   - testing-verification
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Evaluation-Driven Development for Agent Tools
@@ -102,7 +102,7 @@ Eval-driven tool development is not free. It is the wrong investment when:
 
 - **The tool is narrow and stable.** A thin wrapper over a well-understood API rarely justifies an evaluation harness — the cost of writing and maintaining tasks exceeds the information they yield. Ship it, monitor real calls, and invest in evaluations only if failures emerge.
 - **The eval distribution drifts from production.** Fixed task suites cover a limited slice of real inputs; they can miss issues that surface only with changing data, tools, or user behaviour. [Source: [Eval-Driven Development of LLM Agents](https://arxiv.org/html/2411.13768v3)] Treat the suite as a known floor, not a ceiling, and supplement with production monitoring.
-- **The suite becomes a benchmark to game.** Once a task set is stable, targeted changes can optimise for the suite rather than the underlying capability. Benchmark overfitting — where model or tool selection is tuned to scores rather than real-world quality — is a documented failure mode. [Source: [Why Most LLM Benchmarks Are Misleading](https://dasroot.net/posts/2026/02/llm-benchmark-misleading-accurate-evaluation/)] Rotate tasks, keep the held-out set sealed, and weight production telemetry alongside eval metrics.
+- **The suite becomes a benchmark to game.** Once a task set is stable, targeted changes can optimise for the suite rather than the underlying capability. Benchmark overfitting — where model or tool selection is tuned to scores rather than real-world quality — is a documented failure mode. [Source: [The Vulnerability of Language Model Benchmarks](https://arxiv.org/abs/2412.03597)] Rotate tasks, keep the held-out set sealed, and weight production telemetry alongside eval metrics.
 - **Real usage would reveal problems faster.** For tools deployed behind an existing agent with observable transcripts, real traffic often surfaces failures more cheaply than a synthetic suite. Treat eval-driven development as one input among several, not a gate.
 
 ## Example

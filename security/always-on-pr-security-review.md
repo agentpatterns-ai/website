@@ -10,7 +10,7 @@ aliases:
   - always-on security review
   - PR security agent pattern
   - scheduled vulnerability scanner
-last_reviewed: 2026-06-10
+last_reviewed: 2026-06-12
 ---
 
 # Always-On Agentic PR Security Review
@@ -22,9 +22,9 @@ last_reviewed: 2026-06-10
 Security review fails along two temporal axes:
 
 - **New risk** — vulnerabilities in today's changes. Diff-scoped, cheap to review at PR open, lost if not caught before merge.
-- **Resident risk** — vulnerabilities already in the codebase, plus drift in dependencies, config, and policy. No PR may touch the affected files for months.
+- **Resident risk** — vulnerabilities already in the codebase, plus dependency, config, and policy drift. No PR may touch the affected files for months.
 
-PR-only review never finds resident risk; scheduled-only scanning adds days of merge-time exposure for new code.
+PR-only review never finds resident risk; scheduled-only scanning delays new-code coverage.
 
 ## The Pattern
 
@@ -64,13 +64,13 @@ The reviewer flags injection vectors *in the diff* — content that, once shippe
 | Secrets | High-entropy strings, known patterns | Regex + entropy |
 | Prompt-injection | New retrieval paths into agent context, untrusted-input boundaries, system-prompt mutations, tool descriptions, skill `SKILL.md` text | Heuristic + LLM judgement |
 
-The attack surface is semantic — the same string is benign in a code comment and dangerous in a system prompt loaded at runtime. Deterministic SAST will not flag a `SKILL.md` whose `## Examples` section contains injected instructions; an LLM reviewer with the [Lethal Trifecta](lethal-trifecta-threat-model.md) and [task-scope boundary](task-scope-security-boundary.md) in scope will. [Source: [Prompt Injection Resistant Agent Design](prompt-injection-resistant-agent-design.md)]
+The attack surface is semantic — the same string is benign in a code comment and dangerous in a runtime-loaded system prompt. Deterministic SAST will not flag a `SKILL.md` whose `## Examples` section contains injected instructions; an LLM reviewer scoped to the [Lethal Trifecta](lethal-trifecta-threat-model.md) and [task-scope boundary](task-scope-security-boundary.md) will. [Source: [Prompt Injection Resistant Agent Design](prompt-injection-resistant-agent-design.md)]
 
 ## The Reviewer Itself Is a Target
 
 A PR-triggered reviewer reading PR titles, descriptions, and comments runs untrusted input through an LLM with repository credentials in scope — the [Lethal Trifecta](lethal-trifecta-threat-model.md) at the reviewer.
 
-The April 2026 *Comment and Control* disclosure exploited this against Claude Code Security Review, Gemini CLI Action, and GitHub Copilot Agent. The attacker injects instructions in a PR title; the agent auto-triggers on `pull_request`, executes the directive (e.g. `whoami`), and exfiltrates `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, and `GEMINI_API_KEY` as a "security finding" comment. Anthropic rated it CVSS 9.4. [Source: [Comment and Control writeup](https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/); [SecurityWeek](https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/); [The Register](https://www.theregister.com/2026/04/15/claude_gemini_copilot_agents_hijacked/)]
+The April 2026 *Comment and Control* disclosure exploited this against Claude Code Security Review, Gemini CLI Action, and GitHub Copilot Agent. The attacker injects instructions in a PR title; the agent auto-triggers on `pull_request`, runs the directive, and exfiltrates `ANTHROPIC_API_KEY`, `GITHUB_TOKEN`, and `GEMINI_API_KEY` as a "security finding" comment. Anthropic rated it CVSS 9.4. [Source: [Comment and Control writeup](https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/); [SecurityWeek](https://www.securityweek.com/claude-code-gemini-cli-github-copilot-agents-vulnerable-to-prompt-injection-via-comments/); [The Register](https://www.theregister.com/2026/04/15/claude_gemini_copilot_agents_hijacked/)]
 
 Mitigations are structural:
 
@@ -83,14 +83,14 @@ Mitigations are structural:
 
 Single-stage detection is the wrong shape. One observed mitigation pairs a cheap stage-1 filter accepting an 8.5% false-positive rate with a stage-2 reasoning pass that drops it to 0.4%. [Source: [ARMO: Detecting Prompt Injection in Production AI Agent Workloads](https://www.armosec.io/blog/how-to-detect-prompt-injection-in-production-ai-agent-workloads/)]
 
-Suppression must be first-class. Cursor accepts custom instructions and MCP-wrapped SAST/SCA/secrets scanners so deterministic tools own high-confidence classes and the LLM judges residual semantic surface. [Self-improving review agents](../code-review/learned-review-rules.md) persist accept/reject signals as rules so the reviewer narrows over time.
+Suppression must be first-class. Cursor accepts custom instructions and MCP-wrapped SAST/SCA/secrets scanners so deterministic tools own high-confidence classes and the LLM judges residual semantic surface. [Self-improving review agents](../code-review/learned-review-rules.md) persist accept/reject signals as rules, narrowing over time.
 
 ## When the Pattern Backfires
 
 - **No AppSec triage owner.** Findings land on the PR author; without a triage queue, noise leads to dismissal.
 - **Mature deterministic tooling already covers the surface.** Tuned CodeQL, Semgrep, Snyk, Dependabot — incremental coverage may not exceed cost.
 - **High-volume, low-security churn.** Docs sites, generated code, config-heavy monorepos produce findings the reviewer cannot prioritise.
-- **`pull_request_target` with repository secrets.** Comment-and-Control attack precondition; fix the trust boundary first.
+- **`pull_request_target` with secrets.** A Comment-and-Control precondition; fix the trust boundary first.
 
 ## Example
 

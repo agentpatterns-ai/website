@@ -6,7 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agentic Flywheel: Self-Improving Agent Systems
@@ -118,3 +118,4 @@ LangChain's Terminal Bench 2.0 run illustrates the flywheel stages concretely ([
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — agents that synthesize and modify tools during active problem-solving
 - [Observability-Driven Harness Evolution](observability-driven-harness-evolution.md) — instrumented variant that uses trace pillars to direct each flywheel cycle's edits
 - [Harness Impermanence](harness-impermanence.md) — the rationale for cheap, repeatable harness rewrites that the flywheel depends on
+- [Self-Reporting Loops: Autonomous Routines That File Their Own Backlog](self-reporting-loops.md) — the upstream pattern that surfaces the observations the flywheel then consumes as improvement candidates

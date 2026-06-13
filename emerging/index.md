@@ -3,6 +3,7 @@ title: "Emerging Concepts for AI Agent Development"
 description: "Early-stage ideas worth tracking — not yet established patterns, but too important to ignore. Content in this section differs from the rest of the site"
 tags:
   - agent-design
+  - index
 last_reviewed: 2026-05-27
 ---
 

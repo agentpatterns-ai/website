@@ -1,5 +1,5 @@
 ---
-title: "SEO vs GEO — Signals, Metrics, Optimization Targets"
+title: "SEO vs GEO — How Signals and Metrics Differ"
 description: "Side-by-side comparison of traditional SEO signals versus GEO signals, showing where content effort should be reallocated."
 tags:
   - geo
@@ -8,22 +8,22 @@ tags:
 aliases:
   - SEO versus GEO
   - search engine optimization vs generative engine optimization
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# SEO vs GEO — Signals, Metrics, Optimization Targets
+# SEO vs GEO — How Signals and Metrics Differ
 
-> Traditional SEO optimises for rank position in a list of links; GEO optimises for citation share inside synthesised answers. The signals that drive each outcome differ substantially — some SEO practices transfer, others conflict, and several GEO-specific ones have no SEO equivalent.
+> SEO optimises for rank position in a list of links; GEO optimises for citation share inside synthesised answers — and the signals driving each differ.
 
 ## Signal Comparison
 
 | Signal | Traditional SEO | GEO | Direction |
 |--------|-----------------|-----|-----------|
 | Backlinks | Primary ranking factor | Weak predictor of AI citation | Deprioritise for GEO |
-| Brand search volume | Secondary | Strong predictor of AI citation; correlated with entity prominence | Invest heavily |
-| Off-site brand mentions | Nice-to-have | Stronger predictor than backlinks; earned media dominates AI citations | Build deliberately |
+| Brand search volume | Secondary | Strong predictor; tracks entity prominence | Invest heavily |
+| Off-site brand mentions | Nice-to-have | Stronger predictor than backlinks; dominates AI citations | Build deliberately |
 | Keyword density | Neutral to positive | Actively harmful -- decreases visibility | Abandon |
-| Content freshness | Important | High: AI engines weight recency in source selection | Carry over |
+| Content freshness | Important | High: engines weight recency in source selection | Carry over |
 | Structured data / schema | Helpful | Required for entity clarity | Expand |
 | Authoritative writing | Important | Important | Carry over |
 | Statistics and quotations | Marginal SEO benefit | 22-37% visibility improvement ([Princeton GEO study](https://arxiv.org/html/2311.09735v3)) | New priority |
@@ -31,9 +31,9 @@ last_reviewed: 2026-05-27
 
 ## What Conflicts
 
-**Keyword density is a direct conflict.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found keyword stuffing decreases AI citation rates — the opposite of its historical SEO effect. A keyword-dense paragraph burns tokens; a data table is cheaper to parse and more likely cited.
+**Keyword density is a direct conflict.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found keyword stuffing decreases AI citation rates — the opposite of its historical SEO effect. A keyword-dense paragraph burns tokens; a table is cheaper to parse and more likely cited.
 
-**Rank position is not a GEO proxy.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites while top-ranked sites saw a 30% decrease.
+**Rank position is not a GEO proxy.** The [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found citation-oriented techniques produced a 115% visibility increase for lower-ranked sites, while top-ranked sites saw a 30% decrease.
 
 ## What Is New
 
@@ -47,9 +47,9 @@ graph LR
     B --> G[User Sees Your Brand In Answer]
 ```
 
-**The majority of AI citations come from third-party earned media**, not brand-owned content: forums, review platforms, industry press, Wikipedia, YouTube, LinkedIn. A [Semrush analysis of 150,000 AI citations](https://www.semrush.com/blog/most-cited-domains-ai/) found Reddit accounted for 40.1% of LLM references, Wikipedia 26.3%, and YouTube 23.5% — corroborated by a [Search Engine Land summary of the study](https://searchengineland.com/ai-search-engines-cite-reddit-youtube-and-linkedin-most-study-473138). Owned content at most supplements; it does not dominate.
+**Most AI citations come from third-party earned media**, not brand-owned content: forums, reviews, press, Wikipedia, YouTube, LinkedIn. A [Semrush analysis of 150,000 AI citations](https://www.semrush.com/blog/most-cited-domains-ai/) found Reddit at 40.1% of LLM references, Wikipedia 26.3%, and YouTube 23.5% — corroborated by [Search Engine Land](https://searchengineland.com/ai-search-engines-cite-reddit-youtube-and-linkedin-most-study-473138). Owned content supplements; it does not dominate.
 
-**Content structure determines extractability.** AI systems pull isolated passages, not pages. Self-contained paragraphs, data tables, and FAQ sections are high-value; long-form narrative guides are low-value for extraction.
+**Content structure determines extractability.** AI systems pull isolated passages, not pages — self-contained paragraphs, data tables, and FAQ sections extract well; long-form narrative guides do not.
 
 ## Metric Comparison
 
@@ -66,24 +66,32 @@ graph LR
 
 | Action | Rationale |
 |--------|-----------|
-| Build off-site brand presence (forums, reviews, press) | Off-site earned media is a stronger predictor of AI citation than backlinks |
-| Add statistics and direct quotations to existing pages | 22-37% citation improvement per the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) |
-| Restructure key pages for extractable passages | AI cites standalone paragraphs, not full pages |
+| Build off-site brand presence (forums, reviews, press) | Earned media predicts AI citation better than backlinks |
+| Add statistics and quotations to existing pages | 22-37% citation lift per the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) |
+| Restructure key pages for extractable passages | AI cites standalone paragraphs, not pages |
 | Stop keyword-stuffing; optimise for token efficiency | Keyword density actively harms GEO |
-| Instrument AI citation tracking | Rank-based metrics do not capture AI citation signal — AI engines cite low-ranked and non-ranked pages |
+| Instrument AI citation tracking | Rank-based metrics miss AI citation — engines cite low- and non-ranked pages |
 
 ## Why These Signals Work
 
-AI engines build entity representations from training-data co-occurrence, not the link graph. Brand mentions in forums, reviews, and editorial coverage teach a model what a brand stands for — independently of any site links. Backlinks route crawlers; they do not contribute to entity association.
+AI engines build entity representations from training-data co-occurrence, not the link graph. Brand mentions in forums, reviews, and editorial coverage teach a model what a brand stands for, independently of site links. Backlinks route crawlers; they do not build entity association.
 
-Keyword density is a token cost. Repeating the same keyword consumes token budget without adding semantic signal. A data table encodes equivalent facts more compactly and is a better extraction candidate.
+Keyword density is a token cost: repetition consumes budget without adding semantic signal, whereas a table encodes the same facts more compactly and extracts better.
 
 ## When This Backfires
 
-- **Measurement opacity**: AI citation share has no standardised tracking equivalent to [Google Search Console](gsc-search-console-monitoring.md) — campaigns may run months before lift is detectable.
-- **Small-brand cold-start**: Citation pools favour established earned media — Wikipedia, major press, G2-tier review platforms. New brands must build that inventory before GEO techniques gain traction.
-- **Model-specific variability**: Citation signals don't transfer uniformly across AI engines. A source prominent in ChatGPT responses may not appear in Gemini or Perplexity. Track per model.
-- **Attribution bleed**: Brand-mention campaigns may also lift organic rankings, making it hard to isolate the GEO contribution without prompt-based measurement.
+- **Measurement opacity**: AI citation share has no tracking standard equivalent to [Google Search Console](gsc-search-console-monitoring.md) — campaigns may run months before lift is detectable.
+- **Small-brand cold-start**: Citation pools favour established earned media — Wikipedia, major press, G2-tier reviews. New brands must build that inventory before GEO techniques gain traction.
+- **Model-specific variability**: Citation signals don't transfer uniformly across engines — a source prominent in ChatGPT may not appear in Gemini or Perplexity. Track per model.
+- **Attribution bleed**: Brand-mention campaigns may also lift organic rankings, making the GEO contribution hard to isolate without prompt-based measurement.
+- **Backlinks are not worthless**: "Weak predictor" is relative, not zero. Correlation analyses still find link authority carries a positive — if secondary — signal, well behind brand mentions but above it. Read the Direction column's "deprioritise" as *reallocate away from*, not *abandon*.
+
+## Key Takeaways
+
+- Backlinks and rank position drive SEO but are weak GEO signals; brand search volume and off-site earned media predict AI citation better.
+- Keyword density transfers as a *negative* — the [Princeton GEO study](https://arxiv.org/html/2311.09735v3) found stuffing decreases AI citation; adding statistics and quotations improved visibility 22–37%.
+- Most AI citations come from third-party platforms (Reddit 40.1%, Wikipedia 26.3%, YouTube 23.5% per [Semrush](https://www.semrush.com/blog/most-cited-domains-ai/)), so structure pages for extractable passages and invest off-site.
+- Measure GEO with AI share-of-voice and citation frequency, not rank — and treat "deprioritise backlinks" as reallocation, not abandonment.
 
 ## Related
 
@@ -94,7 +102,4 @@ Keyword density is a token cost. Repeating the same keyword consumes token budge
 - [Assertion Density](assertion-density.md)
 - [Topical Authority](topical-authority.md)
 - [Schema and Structured Data for GEO](schema-and-structured-data.md)
-- [AI Crawler Policy](ai-crawler-policy.md)
 - [Atomic Pages and Chunking](atomic-pages-and-chunking.md)
-- [GEO for Technical Docs](geo-for-technical-docs.md)
-- [llms.txt](llms-txt.md)

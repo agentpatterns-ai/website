@@ -10,14 +10,14 @@ aliases:
   - fork vs fresh subagent
   - subagent context inheritance
   - forked subagent
-last_reviewed: 2026-05-30
+last_reviewed: 2026-06-13
 ---
 
 # Forked vs Fresh Subagents: When to Inherit the Parent Conversation
 
 > Fork when the parent's mental model is an asset; start fresh when bias, trifecta exposure, or token budget makes inherited context a liability.
 
-A forked subagent inherits the parent's entire system prompt, tools, and message history; a fresh subagent starts with only the task brief the orchestrator constructs. Claude Code makes the choice explicit through `CLAUDE_CODE_FORK_SUBAGENT=1` and `/fork`, available since v2.1.117 ([Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)). The same axis exists implicitly in every harness that spawns child agents, but the same orchestrator can correctly fork for one delegation and start fresh for the next — the choice is per-task, not global.
+A forked subagent inherits the parent's entire system prompt, tools, and message history; a fresh subagent starts with only the task brief the orchestrator constructs. Claude Code makes the choice explicit through `CLAUDE_CODE_FORK_SUBAGENT=1` and `/fork`, available since v2.1.117 ([Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)). The same axis exists implicitly in every harness that spawns child agents — and the choice is per-task, not global: one orchestrator can fork for one delegation and start fresh for the next.
 
 ## The Decision
 
@@ -34,7 +34,7 @@ A fork's first request shares the parent's prefix exactly — same system prompt
 
 A fresh named subagent has a different system prompt and tool set, so its prefix does not match the parent's cache. Its first call has no cache hits and it warms its own (5-minute TTL) cache from scratch ([Claude docs](https://code.claude.com/docs/en/prompt-caching#subagents-and-the-cache)).
 
-The mechanism explains both directions of the trade-off. Forks are cheap precisely because they carry the parent's entire input distribution — which is also why they inherit the parent's biases, blind spots, and accumulated tool results. Fresh subagents pay a real first-call cost because they reset the distribution — which is also what makes them useful for adversarial work.
+The mechanism cuts both ways. Forks are cheap precisely because they carry the parent's entire input distribution — which is also why they inherit its biases, blind spots, and accumulated tool results. Fresh subagents reset that distribution, which is what makes them useful for adversarial work.
 
 ## When This Backfires
 
@@ -42,21 +42,20 @@ The mechanism explains both directions of the trade-off. Forks are cheap precise
 
 **Forking a single small task.** Cache warmup is real on the first fork after a heavy parent. A one-off fork on a 180k-token parent pays the cache-write tax without parallel siblings to amortize against. Forks earn their keep when batched.
 
-**Forking a trifecta-sensitive child.** A fork pulls in every accumulated tool result, including web fetches and MCP output. The [Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation) call this out directly: a fork "drops the input isolation that subagents otherwise provide." If the parent has any [lethal-trifecta](../security/lethal-trifecta-threat-model.md) exposure, the fork inherits the injection surface. The fresh-subagent containment model — only what the orchestrator chose to pass — is the safer default for any child that can act.
+**Forking a trifecta-sensitive child.** A fork pulls in every accumulated tool result, including web fetches and MCP output. The [Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation) call this out directly: a fork "drops the input isolation that subagents otherwise provide." If the parent has any [lethal-trifecta](../security/lethal-trifecta-threat-model.md) exposure, the fork inherits the injection surface. Fresh containment — only what the orchestrator chose to pass — is the safer default for any child that can act.
 
-**Forking past the context cliff.** Forks copy the entire parent window. If the parent is already past the degradation threshold, the fork inherits the degraded baseline. Forking does not solve session bloat; it propagates it.
+**Forking past the context cliff.** Forks copy the entire parent window, so a parent already past the degradation threshold hands the fork a degraded baseline. Forking propagates session bloat rather than solving it.
 
-**Forking when the task needs to challenge prior decisions.** Counterfactual exploration is undermined when the explorer remembers why each option was rejected. Fresh context is the lever that lets a subagent disagree.
+**Forking when the task must challenge prior decisions.** Counterfactual exploration breaks when the explorer remembers why each option was rejected. Fresh context is the lever that lets a subagent disagree.
 
 ## Side Effects of Enabling Fork Mode
 
-Setting `CLAUDE_CODE_FORK_SUBAGENT=1` changes three behaviors at once ([Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)):
+Setting `CLAUDE_CODE_FORK_SUBAGENT=1` changes two behaviors at once ([Claude docs](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)):
 
 - Spawns that would have used the general-purpose subagent become forks. Named subagents (Explore, custom definitions) still spawn fresh.
 - Every subagent spawn runs in the background. Set `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1` to keep spawns synchronous.
-- `/fork` becomes the fork command instead of an alias for `/branch`.
 
-A fork cannot spawn further forks ([same docs section](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)).
+The `/fork` command itself works with or without the variable set — the variable governs *automatic* fork spawning, not the manual command. A fork cannot spawn further forks ([same docs section](https://code.claude.com/docs/en/sub-agents#fork-the-current-conversation)).
 
 ## Example
 

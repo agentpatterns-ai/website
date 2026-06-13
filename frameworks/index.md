@@ -4,6 +4,8 @@ description: "Multi-page sections that synthesize atomic patterns into named, co
 tags:
   - agent-design
   - tool-agnostic
+  - index
+  - frameworks
 last_reviewed: 2026-05-27
 ---
 

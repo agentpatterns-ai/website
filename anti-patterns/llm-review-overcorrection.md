@@ -1,7 +1,7 @@
 ---
 title: "LLM Code Review Overcorrection for AI Agent Development"
 term: "LLM Code Review Overcorrection"
-description: "LLMs systematically flag correct code as non-compliant; more detailed review prompts make the misclassification rate worse, not better. arXiv:2603.00539"
+description: "LLMs systematically flag correct code as non-compliant, and more detailed review prompts make the misclassification rate worse rather than better."
 aliases:
   - "code review false positives"
   - "fix-guided verification filter"
@@ -10,7 +10,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # LLM Code Review Overcorrection
@@ -19,13 +19,13 @@ last_reviewed: 2026-05-27
 
 ## The Problem
 
-[arXiv:2603.00539](https://arxiv.org/abs/2603.00539) documents a systematic failure mode in LLM-based code review: overcorrection. LLMs consistently misclassify correct implementations as non-compliant with requirements. The misclassification is not random noise — it is a directional bias toward finding problems.
+[arXiv:2603.00539](https://arxiv.org/abs/2603.00539) documents a systematic failure mode in LLM-based code review: overcorrection. LLMs consistently misclassify correct implementations as non-compliant. The misclassification is not random noise — it is a directional bias toward finding problems.
 
 Counterintuitively, prompts that require the model to explain its reasoning and propose corrections produce *higher* misjudgement rates than simpler prompts. The added detail amplifies the problem rather than improving reliability.
 
 ## The Risk in Review Pipelines
 
-A review agent operating as sole authority blocks correct code from merging. The downstream effects: engineers dismiss LLM comments as noise, real defects get buried in false positives, and review latency increases as developers refute valid-code rejections.
+A review agent acting as sole authority blocks correct code from merging. The fallout: engineers dismiss LLM comments as noise, real defects get buried in false positives, and latency rises as developers refute valid-code rejections.
 
 ## Why LLMs Overcorrect
 
@@ -47,12 +47,12 @@ This filter converts the bias into a falsifiable test. It requires that proposed
 
 - **Never use LLM review as sole authority**: all verdicts require either human confirmation or execution-based validation
 - **Apply the fix-guided verification filter**: run original and proposed fix against tests before acting on any flag
-- **Avoid explanation-requiring prompts** when the goal is a binary pass/fail verdict; binary prompts produce fewer false positives than explanation prompts
-- **Track false positive rate**: if the LLM flags more than a threshold of code that humans subsequently approve, treat the reviewer as miscalibrated
+- **Avoid explanation-requiring prompts** for a binary pass/fail verdict; they produce more false positives than plain binary prompts
+- **Track false positive rate**: if the LLM flags more code than a threshold that humans later approve, treat the reviewer as miscalibrated
 
 ## Example
 
-The fix-guided verification filter can be applied in a CI pipeline. When the review agent flags code as non-compliant, both the original and the proposed fix are executed against the test suite before any action is taken.
+In a CI pipeline, when the review agent flags code as non-compliant, run both the original and the proposed fix against the test suite before acting:
 
 ```python
 # review_filter.py
@@ -76,7 +76,7 @@ def apply_fix_guided_filter(original_path: str, fix_path: str) -> str:
     return "inconclusive"         # fix is also broken; escalate to human reviewer
 ```
 
-A verdict of `"false_positive"` means the model found a stylistic difference, not a defect — the original code should not be blocked. Only a `"substantiated"` result justifies acting on the LLM's flag.
+A `"false_positive"` verdict means the model found a stylistic difference, not a defect; only a `"substantiated"` result justifies acting on the LLM's flag.
 
 ## When This Backfires
 

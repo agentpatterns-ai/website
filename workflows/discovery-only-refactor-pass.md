@@ -12,7 +12,7 @@ aliases:
   - refactor discovery skill
   - improve-codebase-architecture skill
   - deepening opportunity discovery
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Discovery-Only Refactor Pass: Surface Candidates Before Touching Code
@@ -69,7 +69,7 @@ Two load-bearing rules sit on top of the vocabulary:
 - **Deletion test**: imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across N callers, it was earning its keep ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)).
 - **One adapter = hypothetical seam. Two adapters = real seam.** Don't introduce a port unless at least two adapters (typically production + test) are justified — a single-adapter seam is just indirection ([DEEPENING.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/DEEPENING.md)).
 
-This is the same constraint-as-prompt mechanism that gives [structured tool use](https://www.anthropic.com/engineering/advanced-tool-use) its reliability — the model picks a slot rather than writing free-form.
+This is the same constraint-as-prompt mechanism behind [structured outputs](https://docs.claude.com/en/docs/build-with-claude/structured-outputs): constrained decoding restricts the valid tokens at each step so the model picks a slot rather than writing free-form.
 
 ## The Dependency-Category Gate
 

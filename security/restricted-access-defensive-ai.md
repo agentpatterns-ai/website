@@ -9,12 +9,12 @@ aliases:
 tags:
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Restricted-Access Defensive AI: Project Glasswing as a Deployment Model
 
-> Invitation-only release of frontier vulnerability-discovery models to vetted defenders is a deployment category in its own right, distinct from public API and enterprise tier — appropriate when the same capability raises the offensive ceiling more than broad access raises the defensive floor.
+> Gating frontier vulnerability-discovery models to vetted defenders is a distinct deployment category — warranted when broad release raises the offensive ceiling faster than defenses adapt.
 
 ## The Deployment Model
 

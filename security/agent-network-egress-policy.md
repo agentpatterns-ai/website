@@ -10,7 +10,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny
@@ -38,9 +38,7 @@ Delivery differs — `settings.json`, organization settings, Group Policy — bu
 | Allow-first + default-deny | Regulated workloads (FedRAMP, EU residency), high-sensitivity data, cloud agent runners | All traffic blocked unless explicitly allowed |
 | Deny-first | Interactive developer loops with broad legitimate tool use, narrow known-bad blocks | All traffic allowed unless explicitly denied |
 
-VS Code documents the allow-first posture directly: filter on, both lists empty, everything blocked ([VS Code 1.116 release notes](https://code.visualstudio.com/updates/v1_116)). Claude Code's `sandbox.network.deniedDomains` layers on top of an allowlist wildcard, so denials take precedence ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). GitHub's Copilot cloud agent runs allow-first, with org admins controlling whether repos can extend the list ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
-
-Combine both lists when the allowlist must be broad — allow `*.corp.example` while denying a known-bad subdomain within it.
+All three tools default toward allow-first: VS Code blocks everything when the filter is on and both lists are empty, the Copilot cloud agent runs allow-first under org control, and Claude Code's `deniedDomains` layers over an allowlist wildcard so denials take precedence ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). Combine both lists when the allowlist must be broad — allow `*.corp.example` while denying a known-bad subdomain within it.
 
 ## What Egress Policy Does Not Solve
 
@@ -51,15 +49,15 @@ Domain policy narrows reachable destinations. It does not address every exfiltra
 - **Authenticated misuse.** The allowlist decides *whether* a request reaches a destination; a [scoped-credentials proxy](scoped-credentials-proxy.md) decides *which* credentials attach.
 - **Non-harness subprocesses.** The policy only covers tools the harness mediates. A subprocess that opens a raw socket or bundles its own HTTP client bypasses the check unless the [sandbox sits below the harness](sandbox-rules-harness-tools.md) — OS-level network namespaces or a forward proxy at the container boundary.
 - **Non-URL channels.** DNS tunnelling, timing side channels, and covert channels in headers to allowlisted endpoints are unconstrained.
-- **Parser bugs in the allowlist check itself.** The policy is only as strong as the code that enforces it. Aonan Guan's May 2026 disclosure of a SOCKS5 hostname null-byte bypass in Claude Code (2.0.24–2.1.89) showed `endsWith()` accepting `attacker.com\x00.allowed.com` while `getaddrinfo()` resolved `attacker.com` ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662); [disclosure](https://oddguan.com/blog/second-time-same-sandbox-anthropic-claude-code-network-allowlist-bypass-data-exfiltration/)). Defence-in-depth requires a lower-layer enforcement point — OS netns, forward proxy, or cloud egress gateway — that does not trust the agent process's parser.
+- **Parser bugs in the allowlist check itself.** The policy is only as strong as the code that enforces it (see [The Matcher Itself Is a Trust Boundary](#the-matcher-itself-is-a-trust-boundary) below). Defence-in-depth requires a lower-layer enforcement point — OS netns, forward proxy, or cloud egress gateway — that does not trust the agent process's parser.
 
 ## The Matcher Itself Is a Trust Boundary
 
-Moving the check into the harness moves the trust boundary onto the matcher — a bug there bypasses every policy. In May 2026, Aonan Guan disclosed a SOCKS5 hostname null-byte injection in Claude Code: a crafted `attacker.com\0.google.com` passed the JavaScript `endsWith()` allowlist while `getaddrinfo()` truncated at the null byte and dialed the attacker. Every release from v2.0.24 through v2.1.89 was vulnerable; Anthropic silently patched in v2.1.90 with no CVE or changelog note ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662); [Aonan Guan PoC](https://oddguan.com/blog/second-time-same-sandbox-anthropic-claude-code-network-allowlist-bypass-data-exfiltration/)). The earlier `allowedDomains: []` regression (CVE-2025-66479) had the same character. Pin to patched runtimes, watch disclosures for the harness you depend on, and assume the matcher will fail at least once over the deployment's lifetime.
+The check now lives in the harness, so the matcher becomes the trust boundary — one bug there bypasses every policy. In May 2026, Aonan Guan disclosed a SOCKS5 hostname null-byte injection in Claude Code: a crafted `attacker.com\0.google.com` passed the JavaScript `endsWith()` allowlist while `getaddrinfo()` truncated at the null byte and dialed the attacker. Every release from v2.0.24 through v2.1.89 was vulnerable; Anthropic silently patched in v2.1.90 with no CVE or changelog note ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662); [Aonan Guan PoC](https://oddguan.com/blog/second-time-same-sandbox-anthropic-claude-code-network-allowlist-bypass-data-exfiltration/)). The earlier `allowedDomains: []` regression (CVE-2025-66479) had the same character. Pin to patched runtimes, watch disclosures for the harness you depend on, and assume the matcher will fail at least once over the deployment's lifetime.
 
 ## Delivery Through Managed Settings
 
-Domain policy is organization-level configuration, not per-user preference. Deliver it through the same managed-settings channel used for other enforcement: MDM, Group Policy, the tool's admin console, or the CI runner's environment. For Claude Code, pair the policy with [`forceRemoteSettingsRefresh`](fail-closed-remote-settings-enforcement.md) so the agent refuses to start when the policy is stale. The Copilot cloud agent inherits org-level policy to repos via the hybrid mode ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
+Domain policy is organization-level configuration, not per-user preference — deliver it through a managed-settings channel (MDM, Group Policy, admin console, or CI runner environment). For Claude Code, pair it with [`forceRemoteSettingsRefresh`](fail-closed-remote-settings-enforcement.md) so the agent refuses to start on a stale policy. The Copilot cloud agent inherits org-level policy to repos via hybrid mode ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
 
 ## Example
 
@@ -84,7 +82,7 @@ A regulated team runs Claude Code against an internal package registry and needs
 }
 ```
 
-Denies override the `*.internal.corp.example` wildcard for two known-bad subdomains ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The equivalent VS Code Group Policy uses the three `ChatAgent*NetworkDomains` keys ([VS Code 1.116 release notes](https://code.visualstudio.com/updates/v1_116)); the equivalent Copilot configuration is set at the organization firewall settings page ([GitHub changelog](https://github.blog/changelog/2026-04-03-organization-firewall-settings-for-copilot-cloud-agent)).
+Denies override the `*.internal.corp.example` wildcard for two known-bad subdomains ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The VS Code and Copilot equivalents use the keys and org settings described above.
 
 ## Key Takeaways
 

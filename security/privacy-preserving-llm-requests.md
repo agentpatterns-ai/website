@@ -11,12 +11,12 @@ aliases:
   - prompt redaction
   - privacy preserving prompts
   - LLM request privacy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Privacy-Preserving LLM Requests
 
-> Eight techniques exist for keeping sensitive content out of cloud LLM APIs; only four are practical today, and the empirically strongest combination — local routing plus redact-and-rephrase — cuts PII leakage to 0.6% but leaves 31% of proprietary-code content exposed.
+> Privacy-preserving LLM requests combine local routing with redact-and-rephrase, cutting PII leakage to 0.6% while leaving 31% of proprietary code exposed.
 
 Coding agents and LLM-powered tools send prompts to cloud APIs that may log, retain, or train on request content. Organisation-level DLP and TLS address transport and egress; neither protects the content of the prompt itself. An empirical evaluation across 1,300 labelled samples compared eight techniques on leakage, utility, latency, and cost ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
 

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+  - automation
 aliases:
   - REST API agent dispatch
   - webhook-triggered coding agent

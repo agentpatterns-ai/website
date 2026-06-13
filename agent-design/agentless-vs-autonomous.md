@@ -141,3 +141,4 @@ The goal is not to avoid AI, but to apply it within architectures that maximize 
 - [Discrete Phase Separation](discrete-phase-separation.md) — Running locate and repair in isolated contexts so only distilled artifacts cross the phase boundary
 - [Agents vs Commands](agents-vs-commands.md) — Separating agent roles from workflow execution, reinforcing when command-style simplicity beats full autonomy
 - [Specialized Agent Roles](specialized-agent-roles.md) — When parallel execution is warranted, how to assign distinct scopes so agents complement rather than duplicate
+- [Domain-Scoped Parallel Exploration for Multi-File Change Localization](domain-scoped-parallel-localization.md) — When localization on multi-subsystem changes is the goal, partitioning along domain seams beats the agentless single-context approach

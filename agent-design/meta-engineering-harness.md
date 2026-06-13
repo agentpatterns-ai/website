@@ -12,7 +12,7 @@ tags:
 aliases:
   - meta-engineering harness
   - contract-driven adversarial verification harness
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Meta-Engineering Harness for Production AI-Native Software Delivery
@@ -25,7 +25,7 @@ The meta-engineering harness is a *production-scale* architecture. It pays back 
 
 - **Continuous production, not project work** — the same system delivers many features over months or years.
 - **Feature throughput amortises the outer loop** — the calibration mechanism only pays back across many features; below roughly ten per quarter, the failure-classification pipeline costs more than it saves.
-- **Token-cost overhead is acceptable** — multi-agent systems use about 15x more tokens than chat, 4x more than single-agent ([Anthropic Engineering](https://www.anthropic.com/engineering/multi-agent-research-system)).
+- **Token-cost overhead is acceptable** — single agents use about 4x more tokens than chat, and multi-agent systems about 15x more ([Anthropic Engineering](https://www.anthropic.com/engineering/multi-agent-research-system)).
 - **Requirements settle before generation** — the two-pass compiler needs contracts stable enough to compile against.
 
 Below this threshold, simpler architectures — single-agent harnesses, [sprint contracts](sprint-contracts.md) per task, [research-plan-implement](../workflows/research-plan-implement.md) loops — deliver better cost-per-feature.

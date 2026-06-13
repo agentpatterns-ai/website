@@ -10,12 +10,12 @@ aliases:
   - Tool Engineering
   - Mistake-Proofing
   - Poka-Yoke
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Write Tool Descriptions as Agent Onboarding Documents
 
-> Write tool descriptions assuming the agent has never seen the underlying system — include implicit context, query formats, domain terminology, and resource relationships that an experienced user would take for granted.
+> Write tool descriptions for an agent that has never seen the system — make implicit context, query formats, domain terminology, and resource relationships explicit.
 
 !!! info "Also known as"
     Tool Engineering, Mistake-Proofing / Poka-Yoke
@@ -37,7 +37,7 @@ Systems accumulate implicit knowledge over time:
 - Resource relationships (e.g., projects contain issues, issues belong to sprints — what order do you need to traverse?)
 - Encoding conventions (e.g., IDs are strings, not integers; dates are UTC, not local)
 
-None of this is typically documented in terse API references. All of it is necessary for an agent to use the tool correctly without trial and error. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds that interfaces "remain largely human-oriented and often become a bottleneck," with targeted rewrites producing consistent accuracy gains on unseen tools.
+None of this is typically documented in terse API references. All of it is necessary for an agent to use the tool correctly without trial and error. [Research on rewriting tool descriptions](https://arxiv.org/abs/2602.20426) finds that tool descriptions are often written for human developers and tolerate ambiguity that agents cannot resolve, with targeted rewrites producing consistent accuracy gains on unseen tools.
 
 ## Unambiguous Parameter Names
 

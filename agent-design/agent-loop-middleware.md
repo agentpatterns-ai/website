@@ -9,12 +9,12 @@ aliases:
   - safety nets
   - deterministic nodes
   - post-loop hooks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Loop Middleware
 
-> Treat the agent loop as a unit to wrap from the outside. Middleware nodes guarantee that critical steps happen regardless of agent behavior, and inject queued input before the next model call.
+> Wrap the agent loop from the outside: middleware nodes guarantee critical steps run regardless of agent behavior and inject queued input before each model call.
 
 ## The Problem
 
@@ -52,8 +52,6 @@ def open_pr_if_needed(state: AgentState) -> AgentState:
         create_pr(state.branch, state.title, state.body)
     return state
 ```
-
-The [Open SWE README](https://github.com/langchain-ai/open-swe) frames the project as the open-source version of this pattern — deterministic graph nodes wrapped around an agentic core to make critical steps happen regardless of LLM behavior.
 
 Common safety-net targets:
 
@@ -181,7 +179,7 @@ The `inject` node drains external messages before every model call. The `commit`
 Post-loop safety nets rely on idempotency — if a net fires when the agent already completed the step, the result must be identical, not doubled. Three conditions produce failures:
 
 - **Non-idempotent critical steps.** `open_pr_if_needed` is safe only if the `state.pr_opened` flag is reliably set. If the agent opens a PR but fails to persist the flag, the net opens a second PR. Design safety nets around verifiable state, not assumed state.
-- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate; a rate above ~5% signals an upstream issue worth addressing.
+- **Safety net masks systematic compliance failures.** If the agent never opens PRs and the net fires every run, the pattern hides a prompt or tool-call problem that should be fixed at the source. Monitor net fire-rate; a rate that climbs over time signals an upstream issue worth addressing rather than masking.
 - **Message queue injection in high-latency channels.** Pre-call injection polls an external queue synchronously before each model call. If the queue endpoint has variable latency, injection adds per-iteration overhead. Rate-limit the poll or use a local buffer when the queue source is unreliable.
 
 ## Key Takeaways
@@ -189,7 +187,7 @@ Post-loop safety nets rely on idempotency — if a net fires when the agent alre
 - Treat the agent loop as a unit to wrap from the outside — middleware nodes guarantee critical steps regardless of model compliance.
 - Post-loop safety nets perform skipped critical steps deterministically; pre-call injection nodes drain external message queues before each model invocation.
 - Safety nets require idempotent operations and verifiable state — if a flag can be wrong, the net can fire twice.
-- Monitor net fire-rate; a high rate (around 5% or more) hides an upstream prompt or tooling problem that should be fixed at the source.
+- Monitor net fire-rate; a rate that stays high or climbs hides an upstream prompt or tooling problem that should be fixed at the source.
 - Claude Code's `Stop` and `UserPromptSubmit` hooks provide host-side equivalents of the same two patterns.
 
 ## Related

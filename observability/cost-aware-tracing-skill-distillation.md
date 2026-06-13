@@ -12,12 +12,12 @@ tags:
 aliases:
   - TraceCard distillation
   - Cost-aware skill distillation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Cost-Aware Tracing for Skill Distillation
 
-> Skill distillation needs two orthogonal signals: outcome tells you whether a step contributed; cost tells you how much it cost. Without both, prune decisions have no economic meaning and preserve decisions over-fit to one trace.
+> Skill distillation needs two orthogonal signals: outcome shows whether a step contributed, cost shows how much it spent. Without both, prune decisions lack economic meaning.
 
 ## The Disambiguation Problem
 
@@ -45,7 +45,7 @@ Prune patches must name a high-cost step and supply the counterfactual. Aestheti
 
 ## The Transfer Asymmetry
 
-The empirical finding in the paper is that prune patches and preserve patches do not behave alike across tasks. On 30 held-out SpreadsheetBench tasks, prune rules cut median cost by 32% across benchmarks; preserve rules caused regressions on new task types ([ClawTrace, 2026](https://arxiv.org/abs/2604.23853)).
+The empirical finding in the paper is that prune patches and preserve patches do not behave alike across tasks. On 30 held-out SpreadsheetBench tasks, removing prune patches roughly tripled the quality-regression count without lowering median cost: prune patches act as a quality safeguard, not a net cost cut. Across the full 84-task SkillsBench transfer, CostCraft saved no aggregate cost, and preserve patches drove the regressions ([ClawTrace, 2026](https://arxiv.org/abs/2604.23853)).
 
 ```mermaid
 graph TD
@@ -73,7 +73,7 @@ For teams already on OTel, a cheaper first move is to add redundancy detection a
 
 Counterfactual-based distillation works without per-step cost ([Few-Shot Knowledge Distillation with Counterfactual Explanations, 2025](https://arxiv.org/abs/2510.21631)), and inference-time routing achieves cost savings without rewriting skills at all ([Inference-Time Distillation, 2025](https://arxiv.org/abs/2512.02543)). Per-step cost is one signal among several, not the only path to cheaper agents.
 
-Its specific contribution is *prune transferability*: cost identifies which redundant steps are worth removing across tasks rather than just within one. Where the goal is a portable skill library that gets cheaper as it grows, this signal is what closes the gap between recording traces and learning from them — adjacent to but distinct from [memory synthesis from execution logs](../agent-design/memory-synthesis-execution-logs.md), which extracts lessons without cost grounding.
+Its specific contribution is *prune transferability*: cost identifies which redundant steps are safe to remove across tasks rather than just within one. The aggregate payoff is bounded — in the paper's full transfer, preserve-patch regressions offset prune gains, so net cost barely moved — but cost grounding is what lets a portable skill library prune defensibly instead of guessing, distinct from [memory synthesis from execution logs](../agent-design/memory-synthesis-execution-logs.md), which extracts lessons without cost grounding.
 
 ## Example
 

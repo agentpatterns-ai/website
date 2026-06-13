@@ -6,7 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates
@@ -24,6 +24,8 @@ This is a *workflow* — encode the standards, run a per-PR agent reviewer again
 Pre-CI/CD code review worked when one engineer pushed a few dozen lines a day. Manual vigilance scaled because volume was low. AI throughput collapses that equilibrium. A causal study of 806 Cursor-adopting repositories versus 1,380 matched controls found a 281% spike in lines added in month one, and the velocity gain fades within three months while static-warning rate (+30%) and complexity (+42%) persist for six months or more ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). DORA 2025 records a 154% increase in PR size against unchanged reviewer headcount ([Google Cloud — 2025 DORA Report](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)); the asymmetry compounds with every PR.
 
 "Be more careful" is an exhortation that cannot scale. The only scaling primitive is the same one Humble and Farley named in 2010: move the standard off the individual and into automation that runs every time ([Humble & Farley, *Continuous Delivery*, 2010](https://www.scirp.org/reference/referencespapers?referenceid=2241209)).
+
+Developer perception lines up with the process framing. An empirical study of 1,154 Reddit and Hacker News posts, coded for review friction under a tragedy-of-the-commons lens, supplies the human-perception evidence that practitioners experience AI "slop" as a shared review-burden problem rather than an individual-discipline lapse ([developer-perception study of AI slop, 2026](https://arxiv.org/abs/2603.27249)).
 
 ## Three Implementation Layers
 

@@ -1,5 +1,5 @@
 ---
-title: "When to Use Examples vs Rules in Agent Instructions"
+title: "Example-Driven vs Rule-Driven Instructions"
 term: "When to Use Examples vs Rules"
 description: "Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own."
 aliases:
@@ -9,12 +9,12 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Example-Driven vs Rule-Driven Instructions
 
-> Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own.
+> Rules generalize and examples anchor — choosing between these instructions determines whether agents interpret your intent or invent their own.
 
 !!! info "Also known as"
 
@@ -91,7 +91,7 @@ Critical format constraints belong in the main instruction file. Reference examp
 
 ## Why It Works
 
-Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Research on in-context learning suggests examples activate induction heads — attention components that match and extend prior patterns — giving the model a concrete template to replicate rather than a constraint to interpret ([Dong et al., "A Survey on In-context Learning," 2022](https://arxiv.org/abs/2301.00234)). Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
+Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Mechanistic interpretability research traces in-context learning to induction heads — pairs of attention heads that find an earlier occurrence of the current token and copy what followed it, matching and extending prior patterns ([Olsson et al., "In-context Learning and Induction Heads," 2022](https://arxiv.org/abs/2209.11895)). An example gives the model a concrete template to replicate rather than a constraint to interpret. Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
 
 ## Key Takeaways
 
@@ -109,9 +109,6 @@ Rules and examples engage different mechanisms in how transformers process instr
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — empirical evidence on negative-vs-positive rule polarity for coding agents
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
-- [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
-- [Context Priming for AI Agent Development](../context-engineering/context-priming.md)
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — detailed treatment of when and how to use path references instead of inline code samples
 - [System Prompt Altitude](system-prompt-altitude.md) — balancing specificity and brittleness in instruction design
-- [Critical Instruction Repetition](critical-instruction-repetition.md) — exploiting primacy and recency bias to improve compliance
-- [Layered Instruction Scopes](layered-instruction-scopes.md) — organizing instructions by specificity across global, project, and directory levels
+- [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)

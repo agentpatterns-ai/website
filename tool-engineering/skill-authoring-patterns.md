@@ -11,7 +11,7 @@ tags:
 aliases:
   - Skill design patterns
   - SKILL.md authoring
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-13
 ---
 
 # Skill Authoring Patterns: Description to Deployment
@@ -21,7 +21,7 @@ last_reviewed: 2026-06-08
 !!! note "Also known as"
     Skill design patterns, SKILL.md authoring. For the portable skill format itself, see [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md). For the progressive disclosure architecture, see [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md).
 
-Skill authoring patterns are the repeatable structures that make agent skills reliable — covering how to write descriptions that trigger at the right time, what content belongs in a skill versus the base model, and which implementation shape fits each task type. Sources: [Anthropic's Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) (January 2026) and Anthropic's internal practice ([source](https://x.com/trq212/status/2033949937936085378)).
+Sources: [Anthropic's Complete Guide to Building Skills for Claude](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) (January 2026) and Anthropic's internal practice ([source](https://x.com/trq212/status/2033949937936085378)).
 
 ## Skill Categories
 
@@ -39,11 +39,9 @@ Anthropic's internal skill library clusters into nine categories ([source](https
 | **Runbooks** | Encode on-call and operational procedures as executable steps | Database failover, cache flush, alert response |
 | **Infrastructure Operations** | Manage cloud resources and configuration | Scaling operations, secret rotation, environment setup |
 
-## Problem-First vs. Tool-First Framing
+## Description Craft
 
 **Problem-first** skills define steps for an outcome ("set up a project workspace"). **Tool-first** skills embed expertise for a given tool ("I have Linear MCP connected"). This distinction drives which implementation pattern fits.
-
-## Description Craft
 
 The `description` field determines whether the agent loads a skill — it is always present in the system prompt ([progressive disclosure](../agent-design/progressive-disclosure-agents.md)), so it must earn its tokens.
 

@@ -11,18 +11,18 @@ aliases:
   - automatic allowlisting
   - usage-based allowlisting
   - dynamic allowlist discovery
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Evidence-Based Allowlist Auto-Discovery
 
-> You don't have to pre-configure your allowlist from scratch. Claude Code's `PermissionRequest` hook lets you turn every manual approval into a persistent rule — an allowlist that grows from real usage.
+> Claude Code's `PermissionRequest` hook turns every manual approval into a persistent rule, growing an allowlist from real usage instead of upfront configuration.
 
 Evidence-based allowlist auto-discovery builds the allow list incrementally from real agent usage. [Manual allowlisting](safe-command-allowlisting.md) pre-authorizes known-safe commands, but teams must predict the list before they have usage data. Auto-discovery removes that requirement: each manual approval increments a counter, and once a command crosses a threshold it is written to the allow list.
 
 ## How It Works
 
-Claude Code's `PermissionRequest` hook fires before the permission dialog is shown and can return `updatedPermissions` with `addRules` and a `destination` — writing allow rules directly to a settings file.
+Claude Code's `PermissionRequest` hook fires before the permission dialog is shown. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the sibling `updatedPermissions` array can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
 
 ```mermaid
 sequenceDiagram
@@ -71,13 +71,20 @@ KEY=$(echo "$COMMAND" | awk '{print $1}')
 COUNT=$(jq -r --arg k "$KEY" '.[$k] // 0' "$LOG_FILE" 2>/dev/null || echo 0)
 
 if [ "$COUNT" -ge "$THRESHOLD" ]; then
-  # Return updatedPermissions to write an allow rule to localSettings
+  # Approve the call and add a persistent allow rule to .claude/settings.local.json.
+  # updatedPermissions is a sibling of decision under hookSpecificOutput; an
+  # addRules entry carries a rules[] array and a destination.
   jq -n \
-    --arg cmd "Bash($KEY *)" \
+    --arg rule "$KEY *" \
     '{
-      updatedPermissions: {
-        addRules: [{ type: "allow", pattern: $cmd }],
-        destination: "localSettings"
+      hookSpecificOutput: {
+        hookEventName: "PermissionRequest",
+        decision: { behavior: "allow" },
+        updatedPermissions: [{
+          type: "addRules",
+          destination: "localSettings",
+          rules: [{ toolName: "Bash", rule: $rule, behavior: "allow" }]
+        }]
       }
     }'
 fi
@@ -140,6 +147,13 @@ Static and evidence-based allowlists are additive, not competing:
 | Evidence-based auto-discovery | Commands that emerge from real usage |
 
 Claude Code's default auto-approval list has itself grown over releases to include read-only utilities such as `lsof`, `pgrep`, `tput`, `ss`, `fd`, and `fdfind`, per the [Claude Code changelog](https://code.claude.com/docs/en/changelog). The "Yes, don't ask again" built-in is a manual variant; the hook-based approach automates the threshold across sessions.
+
+## Key Takeaways
+
+- Auto-discovery builds the allowlist from real usage, so teams skip predicting the safe-command list before they have data.
+- The `PermissionRequest` hook is the only one that can persist an allow rule, via `hookSpecificOutput.decision` plus an `updatedPermissions` `addRules` entry; `PostToolUse` can only write to a sidecar counter log.
+- Promote to the allowlist only after N flagged-side-effect-free approvals, and always keep a never-auto-allow deny list (`rm`, `curl`, `git push`, …) that falls through to the dialog.
+- Count full command fingerprints, not just first tokens, so a safe read can't promote a destructive variant under the same key.
 
 ## Related
 

@@ -1,12 +1,12 @@
 ---
 title: "Idempotent Agent Operations: Safe to Retry"
 term: "Idempotent Agent Operations"
-description: "Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors"
+description: "Design agent operations so that running the same task twice produces the same end state — not duplicate artifacts, conflicting state, or compounded errors."
 aliases: [idempotency, safe-retry-design]
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Idempotent Agent Operations: Safe to Retry
@@ -48,7 +48,9 @@ git checkout feature/123 2>/dev/null || git checkout -b feature/123
 
 ## Checkpoints
 
-[Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) automatically capture file state before each user prompt. When a task goes wrong, you can manually restore to an earlier checkpoint — reverting code, conversation, or both — rather than re-running from the beginning. This reduces the window of work that must be idempotent — only the segment since the last checkpoint needs to be safe to retry.
+[Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) automatically capture file state before each user prompt. When a task goes wrong, run `/rewind` (or press `Esc` twice at an empty prompt) to restore to an earlier checkpoint — reverting code, conversation, or both — rather than re-running from the beginning. This reduces the window of work that must be idempotent — only the segment since the last checkpoint needs to be safe to retry.
+
+The catch: checkpoints only capture edits made through Claude's file-editing tools. [Changes made by bash commands are not tracked](https://code.claude.com/docs/en/checkpointing) — an `rm`, `mv`, or migration script run as a shell call cannot be rewound. Since most agent side effects (branch creation, API calls, deployments) happen through tool and shell calls rather than file edits, checkpoints shrink the retry window but do not replace per-artifact idempotency.
 
 ## What Cannot Be Made Idempotent
 
@@ -123,12 +125,8 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
 - [Agent Circuit Breaker](agent-circuit-breaker.md)
 - [Circuit Breakers for Agent Loops](../observability/circuit-breakers.md)
-- [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
+- [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
+- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)

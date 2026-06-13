@@ -9,26 +9,28 @@ tags:
 aliases:
   - comprehension fallacy
   - LLM understanding fallacy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # LLM Comprehension Fallacy
 
-> Correct output is not evidence of understanding — it is evidence of a favorable pattern match.
+> The comprehension fallacy treats correct output as evidence of understanding — when it is only evidence of a favorable pattern match.
 
 ## The Fallacy
 
-Practitioners assume that when a model produces correct output, it *understood* the input. This belief leads to over-trusting outputs, skipping verification, and writing prompts that rely on implied meaning the model cannot access.
+Practitioners assume that when a model produces correct output, it *understood* the input. This leads to over-trust, skipped verification, and prompts that rely on implied meaning the model cannot access.
 
 ## Why It's Wrong
 
 LLMs operate on statistical correlations between token embeddings. Words that appear in similar contexts cluster mathematically in high-dimensional space, but the model has no access to the underlying referents — the actual things those words point to. [Bender et al. (2021)](https://s10251.pcdn.co/pdf/2021-bender-parrots.pdf) established this directly: LLMs "stitch together sequences of linguistic forms without any reference to meaning."
 
-A 2025 academic analysis ([arxiv 2507.05448](https://arxiv.org/html/2507.05448v1)) confirms the distinction: LLMs possess something like Fregean *sense* (relational meaning within context) but lack *reference* (connection to reality). They cannot perform knowledge by acquaintance or knowledge by description in the logical sense.
+A 2025 analysis ([arxiv 2507.05448](https://arxiv.org/html/2507.05448v1)) frames this as Fregean *sense* (relational meaning within context) without *reference* (connection to reality): the model relates tokens to each other but not to the world they describe.
 
-The practical consequence: [jagged intelligence](https://www.marktechpost.com/2024/08/11/andrej-karpathy-coined-a-new-term-jagged-intelligence-understanding-the-inconsistencies-in-advanced-ai/). The same model that solves an international Math Olympiad problem cannot reliably count the letters in a word — because one task pattern-matches to training data and the other requires a process the model does not have. Minute wording changes produce [15–66% accuracy swings](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/), which means "correct output on this prompt" is weak evidence about behavior on any other prompt.
+The practical consequence is [jagged intelligence](https://www.marktechpost.com/2024/08/11/andrej-karpathy-coined-a-new-term-jagged-intelligence-understanding-the-inconsistencies-in-advanced-ai/): the same model that solves a Math Olympiad problem cannot reliably count letters in a word. Minute wording changes produce [15–66% accuracy swings](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/), so "correct output on this prompt" is weak evidence about behavior on any other.
 
 The model also produces no internal signal distinguishing reliable from unreliable outputs. As [Karpathy observed](https://addyo.substack.com/p/the-80-problem-in-agentic-coding), AI does not manage confusion, seek clarification, or surface inconsistencies — it generates the most statistically likely continuation regardless of whether that continuation is accurate.
+
+The "pure surface statistics" framing is contested. Probing studies show models can build structured internal representations: an Othello-playing transformer encodes a linearly-recoverable board state ([Li et al. (2023)](https://arxiv.org/abs/2210.13382), refined by [Nanda et al. (2023)](https://arxiv.org/abs/2309.00941)), and a chess model shows the same ([Karvonen (2024)](https://arxiv.org/abs/2403.15498)). This does not rescue the fallacy: a recoverable representation is not the model's own self-monitored, reliably-deployed knowledge, and a correct answer still does not signal which kind of competence produced it — so the practical caution holds.
 
 ## Connection to Coding Agent Practice
 
@@ -60,7 +62,7 @@ Treating the fallacy as universally dangerous can itself produce errors:
 
 **Misattributing inconsistency to comprehension gaps.** Some output variance stems from temperature, prompt phrasing, or context placement — not from the model "not understanding." Framing every inconsistency as a comprehension failure obscures tractable prompt-engineering fixes.
 
-The practical boundary: apply comprehension-skeptic discipline where silent failures are expensive (auth flows, data migrations, security-sensitive logic) and relax it where failures are cheap and immediately visible.
+The boundary: apply comprehension-skeptic discipline where silent failures are expensive (auth flows, data migrations, security logic) and relax it where failures are cheap and visible.
 
 ## Key Takeaways
 

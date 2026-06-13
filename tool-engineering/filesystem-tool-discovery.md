@@ -12,12 +12,12 @@ tags:
 aliases:
   - "lazy tool loading"
   - "on-demand tool loading"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Filesystem-Based Tool Discovery
 
-> Structure MCP tools as files in a directory tree and let the agent load only the definitions it needs, reducing token overhead by up to 98% compared to registering all tools upfront.
+> Filesystem-based tool discovery stores each MCP tool as a file, so the agent loads only needed definitions and cuts token overhead up to 98%.
 
 ## The Problem With Upfront Tool Registration
 
@@ -123,7 +123,6 @@ Total tokens loaded: ~400 (2 tool definitions). Upfront registration of all 120 
 
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md)
-- [MCP Client-Server Architecture](mcp-client-server-architecture.md)
 - [Filter and Aggregate in the Execution Environment](../context-engineering/filter-aggregate-execution-env.md)
 - [Progressive Disclosure Agents](../agent-design/progressive-disclosure-agents.md)
 - [MCP Client Design](mcp-client-design.md)

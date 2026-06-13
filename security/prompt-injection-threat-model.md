@@ -9,12 +9,12 @@ tags:
   - tool-agnostic
 aliases:
   - indirect prompt injection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Prompt Injection: A First-Class Threat to Agentic Systems
 
-> External content consumed by agents is an attack surface. Malicious instructions embedded in web pages, documents, or API responses can override agent instructions at the model level.
+> Prompt injection hides malicious instructions in external content an agent consumes — web pages, documents, API responses — overriding agent behavior at the model level.
 
 ## What Prompt Injection Is
 

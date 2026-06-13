@@ -145,9 +145,9 @@ The `operationId` becomes the tool name, the parameter schema transfers directly
 
 - [Tool Calling Schema Standards](tool-calling-schema-standards.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
+- [OpenAPI Documentation Smells for Agent-Ready APIs](../tool-engineering/openapi-documentation-smells.md)
 - [Token-Efficient Tool Design](../tool-engineering/token-efficient-tool-design.md)
 - [Plugin Packaging](plugin-packaging.md)
 - [Agent Cards: Capability Discovery Standard for AI Agents](agent-cards.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
-- [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)

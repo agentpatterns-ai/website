@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - code-review
   - arxiv
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # PR Description Style as a Lever for Agent PR Merge Rates
@@ -59,7 +59,7 @@ Copilot's built-in PR summary generator ignores existing description content and
 
 ## Why High Volume Without Structure Fails
 
-The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode: descriptions that force reviewers to reconstruct intent from prose. The study does not establish causality, but the pattern is consistent with structured headers reducing the clarification overhead that generates review churn. The authors caveat that "presentation alone does not determine acceptance — structured descriptions do not guarantee merges, and code quality remains a central factor" ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
+The counterintuitive result — more reviewer discussion, lower merge rate — points to a failure mode: descriptions that force reviewers to reconstruct intent from prose. The study does not establish causality, but the pattern is consistent with structured headers reducing the clarification overhead that generates review churn. The authors note the analysis is observational and does not support causal claims, and that code quality remains a key factor alongside presentation ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
 ## When This Backfires
 
@@ -111,10 +111,6 @@ With this template in `CLAUDE.md`, the agent's PR descriptions consistently incl
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [AGENTS.md Convention](../standards/agents-md.md)
-- [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
 - [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
-- [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Diff-Based Review](diff-based-review.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)

@@ -1,12 +1,12 @@
 ---
-title: "Diff-Based Review: Focus on Changes, Not Complete Outputs"
+title: "Diff-Based Review Over Output Review"
 term: "Diff-Based Review"
 description: "Review what changed, not the full output — diff-based review focuses on what is new, compresses effort, and supports staged pipelines at PR boundaries."
 tags:
   - testing-verification
   - tool-agnostic
   - code-review
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Diff-Based Review Over Output Review
@@ -18,6 +18,8 @@ last_reviewed: 2026-05-27
 Reading a 500-word page and spotting one wrong claim is hard. Reading a 20-line diff and spotting it is easy. Review effort scales with what you read; error density is highest in what is new.
 
 Design agent workflows so review happens at diff boundaries — pull requests, staged changes, comment threads — not on complete artifacts.
+
+Tooling increasingly bakes this in. Cursor's Bugbot added incremental review that only re-examines what is new since the last review, plus a pre-push `/review` that recognises and skips a matching open-PR diff rather than re-reviewing it ([Cursor, "Bugbot updates"](https://cursor.com/changelog/bugbot-updates-june-2026)). Both move the review surface to the delta instead of the whole output.
 
 ## The PR Model as Review Boundary
 
@@ -48,7 +50,7 @@ Designing for diff-based review means:
 - Committing checkpoints between logical stages
 - Opening separate PRs for separate concerns rather than one large PR
 
-The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200–400 lines and drops off beyond that, with reviewers faster than 450 lines per hour below average in 87% of cases ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
+The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200–400 lines and drops off sharply beyond that ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
 
 ## Staged Review
 
@@ -114,19 +116,10 @@ Each `git diff` is 10–30 lines. The reviewer never re-reads the full page — 
 ## Related
 
 - [Incremental Verification: Check at Each Step, Not at the End](../verification/incremental-verification.md)
-- [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md)
-- [Layered Accuracy Defense](../verification/layered-accuracy-defense.md)
-- [GitHub Copilot](../tools/copilot/index.md)
 - [Review-Then-Implement Loop for AI Agent Development](review-then-implement-loop.md)
 - [Agent-Assisted Code Review: Agents as PR First Pass](agent-assisted-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
-- [Committee Review Pattern](committee-review-pattern.md)
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Predicting Reviewable Code](predicting-reviewable-code.md)
-- [Tiered Code Review: AI-First with Human Escalation](tiered-code-review.md)
-- [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)
-- [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md)
 - [Human-AI Review Synergy in Agentic Code Review](human-ai-review-synergy.md)
-- [Agent PR Volume vs. Value: The Productivity Paradox](agent-pr-volume-vs-value.md)
-- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
-- [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
+- [Agent-Authored PR Integration and Merge Predictors](agent-authored-pr-integration.md)

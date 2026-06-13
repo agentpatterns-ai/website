@@ -7,7 +7,7 @@ tags:
   - security
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Single-Layer Prompt Injection Defence
@@ -95,7 +95,6 @@ Three independent layers add real complexity:
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](../security/url-exfiltration-guard.md)
 - [Deterministic Guardrails Around Probabilistic Agents](../verification/deterministic-guardrails.md)
 - [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md)
-- [PII Tokenization in Agent Context](../security/pii-tokenization-in-agent-context.md)
 - [Context Poisoning](context-poisoning.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [Demo-to-Production Gap](demo-to-production-gap.md)

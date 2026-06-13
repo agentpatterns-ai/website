@@ -10,7 +10,7 @@ aliases:
   - EXG framework
   - experience graph memory
   - structured experience memory
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # Experience Graphs as Structured Memory for Self-Evolving Agents

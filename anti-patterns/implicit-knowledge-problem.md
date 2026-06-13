@@ -9,12 +9,12 @@ tags:
 aliases:
   - tribal knowledge problem
   - knowledge externalization
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The Implicit Knowledge Problem
 
-> Knowledge that exists only in Slack threads, meetings, or team memory is invisible to agents -- producing repeating errors that no amount of prompting can fix.
+> Knowledge living only in Slack threads, meetings, or team memory is invisible to agents -- producing repeating errors that no prompting can fix.
 
 ## The Pattern
 

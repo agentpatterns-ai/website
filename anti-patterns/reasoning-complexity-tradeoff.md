@@ -9,7 +9,7 @@ tags:
 aliases:
   - volume-quality inverse law
   - capability-maintainability tradeoff
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # The Reasoning-Complexity Trade-off

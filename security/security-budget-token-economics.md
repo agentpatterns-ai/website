@@ -8,12 +8,12 @@ tags:
   - security
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Security Budget as Token Economics
 
-> When vulnerability-discovery quality scales with inference spend, pre-release hardening reduces to an outspend duel against attackers — useful as a budgeting frame only where the scaling curve has not yet plateaued and downstream triage can absorb findings.
+> Size a security audit as a token budget: when exploit discovery scales with spend, hardening becomes an outspend duel that ends when the curve plateaus.
 
 ## The Framing
 

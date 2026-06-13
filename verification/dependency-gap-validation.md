@@ -5,7 +5,7 @@ description: "AI coding agents declare a fraction of the dependencies their code
 tags:
   - testing-verification
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Dependency Gap Validation for AI-Generated Code

@@ -11,12 +11,12 @@ tags:
 aliases:
   - adversarial fine-tuning loop
   - rapid attack-to-checkpoint cycle
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Close the Attack-to-Fix Loop: Adversarially Train Agent Checkpoints Against New Injections
 
-> When automated red teaming surfaces a new class of prompt injection attacks, immediately use those attack traces to adversarially train a new agent model checkpoint — making the agent intrinsically harder to exploit rather than relying solely on wrapper-level mitigations.
+> Feed each newly discovered prompt injection class straight from red teaming into adversarial fine-tuning, shipping a hardened agent checkpoint before the attack spreads.
 
 ## Why Prompt Injection Resilience Degrades
 
@@ -59,7 +59,7 @@ As base models improve, automated attackers grow more capable (see [RL-Trained A
 
 ## Why It Works
 
-Preference optimization constructs pairs of prompt-injected inputs with secure outputs (follows the real task) versus insecure outputs (follows the injection), then updates weights to prefer the secure response. This shifts attention allocation: weight updates reduce the influence of late-arriving imperative text in the data portion of the context, so injected instructions compete less effectively against the system prompt. [Source: [Sandoval et al., 2025](https://arxiv.org/abs/2509.14271)]
+Preference optimization builds a dataset of prompt-injected inputs paired with a secure output (responds to the legitimate instruction) and an insecure output (responds to the injection), then trains the model to prefer the secure response. Because the gradient signal contrasts the two responses on the same injected context, the model learns to follow the trusted instruction even when an injected one arrives later in the data — without a separate inference-time filter. [Source: [SecAlign: Defending Against Prompt Injection with Preference Optimization (Chen et al., 2024)](https://arxiv.org/abs/2410.05451)]
 
 ## When This Backfires
 

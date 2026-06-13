@@ -10,12 +10,12 @@ tags:
 aliases:
   - prompt injection defense
   - injection-resistant agents
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Designing Agents to Resist Prompt Injection
 
-> Prompt injection is unlikely to ever be fully solved. Treat it as a permanent constraint and design architectures where a successful injection cannot cause consequential harm.
+> Prompt injection is unlikely to ever be fully solved. Treat it as permanent and design architectures where a successful injection cannot cause harm.
 
 ## The Unsolvable Problem
 
@@ -102,6 +102,7 @@ Each pattern severs the path from untrusted content to consequential action befo
 
 - **Utility loss**: Action-Selector and Plan-Then-Execute only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
 - **Architectural cost**: Dual LLM doubles inference cost; most frameworks don't provide the privileged/quarantined split.
+- **Steep utility cost**: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
 - **False confidence**: One pattern alone, without removing another leg of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md), creates an illusion of safety — an agent that asks before acting can still exfiltrate data if egress is open.
 - **Schema drift**: Tools added post-deployment may silently reintroduce capabilities excluded by schema-level filtering.
 

@@ -1,5 +1,5 @@
 ---
-title: "Turn-Level Context Decisions: Continue, Rewind, Clear, Compact, or Delegate"
+title: "Turn-Level Context Decisions for AI Coding Sessions"
 term: "Turn-Level Context Decisions"
 description: "A decision framework for choosing between five context management actions at every turn boundary in an AI coding session."
 tags:
@@ -9,12 +9,12 @@ tags:
 aliases:
   - session management decision framework
   - context management decision tree
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Turn-Level Context Decisions
 
-> Every completed turn is a branching point with five options: continue in the same session, rewind to retry from an earlier point, clear and start fresh, compact the session summary, or delegate to a subagent.
+> Each completed turn is a context decision point with five moves: continue, rewind, clear, compact, or delegate to a subagent.
 
 ## Why This Decision Matters
 
@@ -52,7 +52,7 @@ Summarize the session and replace history with the summary. Run `/compact` with 
 
 Compaction reduces noise while preserving decision rationale, but it is lossy. [Anthropic acknowledges](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) that "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later." Each cycle introduces summarization error; multiple cycles compound drift.
 
-Timing matters. [Auto-compaction fires at ~95%](https://code.claude.com/docs/en/best-practices) — long after [reasoning quality has degraded](context-window-dumb-zone.md). For reasoning-heavy sessions, compact manually at task-type transitions or after bulk reads you no longer need. Use `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` to [lower the trigger threshold](manual-compaction-dumb-zone-mitigation.md).
+Timing matters. [Claude Code auto-compacts only as you approach the context limit](https://code.claude.com/docs/en/best-practices) — by default near the top of the window, long after [reasoning quality has degraded](context-window-dumb-zone.md). For reasoning-heavy sessions, compact manually at task-type transitions or after bulk reads you no longer need. Use `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` to [lower the trigger threshold](manual-compaction-dumb-zone-mitigation.md).
 
 Direct the compaction to preserve what matters:
 

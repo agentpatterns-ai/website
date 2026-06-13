@@ -10,12 +10,12 @@ tags:
 aliases:
   - AI PR security review gap
   - agentic PR security weaknesses
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Security Review Gap in AI-Authored PRs
 
-> Agent-authored security PRs cluster around six recurring CWE categories, 52.4% are merged despite the flaw rate, and commit-message quality — the main signal reviewers use for human PRs — carries no predictive value for AI PRs.
+> AI-authored security PRs cluster around six CWEs; 52.4% merge despite flaws, and commit-message quality carries no predictive value for security outcomes.
 
 ## The Finding
 
@@ -65,7 +65,7 @@ Pseudo-R² of 0.23 on the logistic regression confirms limited predictive power.
 
 ## Why Review Heuristics Fail on Agent PRs
 
-Reviewer proxies — message care, test scaffolding, change size, contributor history — assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. The AIDev corpus of 456K agent PRs shows reviewer engagement as the dominant merge predictor ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)) — a social signal that under-weights security analysis.
+Reviewer proxies — message care, test scaffolding, change size, contributor history — assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)) — a social signal that under-weights security analysis.
 
 ## What to Change
 
@@ -115,3 +115,4 @@ Detailed commit message, passing tests, clean CI — a human-PR heuristic approv
 - [Siddiq et al., ICPC 2024](https://s2e-lab.github.io/preprints/icpc24-preprint.pdf) — mechanism behind CWE-1333 dominance
 - [OWASP ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset corroboration
+- [arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — reviewer engagement as the strongest single merge predictor (regression on 33,596 agent-authored PRs)

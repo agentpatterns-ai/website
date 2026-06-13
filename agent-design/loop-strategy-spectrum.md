@@ -11,12 +11,12 @@ aliases:
   - Ralph loops
   - fresh-context loops
   - context loop strategy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context
+# Loop Strategy Spectrum: Accumulated vs Fresh Context
 
-> Not all agent loops should manage context the same way. Accumulated-context loops suit synthesis tasks; fresh-context loops suit execution tasks. Within-session compression sits between them. Choose based on the workload, not habit.
+> Agent loops manage context three ways: accumulated context suits synthesis, fresh context suits execution, and compression sits between. Choose by workload, not habit.
 
 ## The Decision
 
@@ -88,7 +88,7 @@ graph LR
 
 **Phase 2 -- Implementation** (fresh context): Each implementation task starts a clean session, reads the research artifacts, and executes one bounded unit of work.
 
-Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this at scale. The LeadResearcher agent accumulates context until the window exceeds 200K tokens, then spawns fresh subagents with clean contexts for parallel investigation. Subagents return condensed findings for synthesis. This is accumulated context at the orchestrator level with fresh context at the worker level.
+Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) implements this at scale. The LeadResearcher agent accumulates context as it plans, and saves that plan to memory so it survives the 200K-token point at which the context window would otherwise be truncated. It spawns fresh subagents with clean contexts for parallel investigation, and they return condensed findings for synthesis. This is accumulated context at the orchestrator level with fresh context at the worker level.
 
 OpenAI's [agent-first codebase approach](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings) uses a similar pipeline: research artifacts feed into specs, specs feed into [feature lists](../instructions/feature-list-files.md), feature lists feed into bounded implementation sessions. Each phase generates durable artifacts that contextualize subsequent phases.
 
@@ -111,25 +111,10 @@ If this were a single accumulated-context run, the agent would degrade after doz
 ## Related
 
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
-- [Agent Harness](agent-harness.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
-- [Agent-First Software Design](agent-first-software-design.md)
-- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md)
 - [Context Compression Strategies](../context-engineering/context-compression-strategies.md)
 - [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Objective Drift](../anti-patterns/objective-drift.md)
-- [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md)
-- [Agentic Flywheel: Self-Improving Agent Systems](agentic-flywheel.md)
-- [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md)
-- [Session Initialization Ritual: How Agents Orient Themselves](session-initialization-ritual.md)
-- [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md)
-- [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md)
-- [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md)
-- [Convergence Detection in Iterative Refinement](convergence-detection.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Harness](agent-harness.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
-- [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
-- [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md)

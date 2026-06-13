@@ -9,12 +9,12 @@ tags:
 aliases:
   - "event-driven routing"
   - "status-driven agent pipelines"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Event-Driven Agent Routing
 
-> Route work between AI agents and human teams by reacting to status-change events — label additions, project board transitions, PR state changes — rather than maintaining a central coordinator that owns the full workflow.
+> Event-driven agent routing reacts to status-change events — label additions, board transitions, PR changes — to advance work between handlers, with no central coordinator.
 
 ## Overview
 

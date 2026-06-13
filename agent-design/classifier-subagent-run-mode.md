@@ -11,7 +11,7 @@ aliases:
   - per-call permission routing
   - classifier-subagent permission router
   - run-mode permission classifier
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 status: current
 ---
 
@@ -82,7 +82,7 @@ The classifier is portable across very different repos only because its decision
 
 Both fields are arrays of free-form sentences; per-user and per-repo entries concatenate ([Cursor permissions.json reference](https://cursor.com/docs/reference/permissions)). Codex exposes the same mechanism through `[auto_review] policy = """..."""` in `config.toml`, with `guardian_policy_config` for enterprise managed settings ([Codex auto-review docs](https://developers.openai.com/codex/concepts/sandboxing/auto-review)). Claude Code uses block rules in managed settings with admin-enforced precedence ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
-Steering solves the *same harness, very different repos* problem: the classifier's training distribution covers generic risk signals, but a Terraform-heavy infra repo and a React app have non-overlapping definitions of "boundary-crossing." Project-specific instructions adapt the classifier without retraining or forking the harness.
+The classifier's training distribution covers generic risk signals, but a Terraform-heavy infra repo and a React app have non-overlapping definitions of "boundary-crossing." Project-specific instructions adapt the classifier to each without retraining or forking the harness.
 
 ## Why It Works
 
@@ -97,7 +97,7 @@ OpenAI names the boundary clearly: auto-review is "a reviewer swap, not a permis
 - **In-project ops state.** When production-affecting files (Terraform state, sealed-secrets, k8s manifests) live inside the project root, the Tier-2 sandbox lets the agent edit them without ever reaching the classifier — an independent stress test measured **36.8% of state-changing actions bypassing classification this way** ([Ji et al., 2026: Measuring the Permission Gate](https://arxiv.org/abs/2604.04978)). Move the state outside the root or pin the paths with deterministic deny rules.
 - **Out-of-distribution workload.** Anthropic's 17% false-negative rate is on a hand-curated calibration set. Ji et al. measured **81.0% FNR (95% CI 73.8%–87.4%)** on 128 ambiguous DevOps prompts and **92.9% FNR** on artifact-cleanup tasks ([arxiv:2604.04978](https://arxiv.org/abs/2604.04978)). Vendor numbers are workload-conditional, not universal.
 - **Untrusted configuration surface.** If an attacker can write `.cursor/permissions.json`, `.vscode/settings.json`, or local rule files, the scheme collapses to whichever layer the attacker reaches first ([Backslash: The Denylist Delusion](https://www.backslash.security/blog/cursor-ai-security-flaw-autorun-denylist)). Admin-enforced managed settings are not optional.
-- **Same model class for agent and classifier.** Same training distribution means the same jailbreak defeats both — self-review by one model class produced a measured **64.5% blind-spot rate** ([Panickssery et al., 2025](https://arxiv.org/abs/2507.02778)). Use a different model class, or at minimum reasoning-blind the classifier.
+- **Same model class for agent and classifier.** A same-class evaluator is a biased reviewer of its own work: LLM evaluators both *recognize* and *favor* their own generations, with self-recognition correlating linearly with self-preference bias ([Panickssery et al., 2024: LLM Evaluators Recognize and Favor Their Own Generations](https://arxiv.org/abs/2404.13076)). The shared training distribution also means a jailbreak that defeats the agent tends to defeat the classifier. Use a different model class, or at minimum reasoning-blind the classifier.
 - **Sandbox masks the allowlist.** Cursor users report that under "Auto-Run in Sandbox" the user-curated command allowlist is silently bypassed ([Cursor forum](https://forum.cursor.com/t/command-allowlist-is-silently-ignored-when-auto-run-in-sandbox-is-enabled/152136)). Verify precedence empirically before trusting the documented hierarchy.
 - **Irreversible actions on the classifier path.** Production deploys, money movement, IAM rotation, and credential exposure do not belong on a probabilistic auto-approval gate — they belong on deterministic deny rules with mandatory human approval. Cursor's own docs state the classifier "is non-deterministic and can make mistakes in both directions" ([Cursor terminal Run Mode docs](https://cursor.com/docs/agent/tools/terminal#run-mode)).
 - **The trifecta does not close.** The classifier narrows but does not close the egress decision. An agent with private-data access, untrusted content (a fetched page or MCP-returned document), and any allowlisted shell can still be steered into exfiltration the classifier permits because the call shape looks routine. The fix is removing one leg of the trifecta, not a smarter filter ([Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md); [Simon Willison: the lethal trifecta](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)).

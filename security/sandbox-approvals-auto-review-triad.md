@@ -1,6 +1,6 @@
 ---
 title: "Sandbox + Approvals + Auto-Review Governance Triad"
-description: "Compose sandbox, tiered approvals, auto-review of boundary crossings, and agent-native telemetry as one coding-agent governance posture — when the conditions for the trade hold."
+description: "Compose sandbox, tiered approvals, auto-review of boundary crossings, and agent-native telemetry into one coding-agent governance posture, and when to skip it."
 tags:
   - security
   - agent-design
@@ -9,14 +9,14 @@ aliases:
   - coding agent governance triad
   - sandbox approval auto-review
   - production coding agent controls
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-13
 ---
 
 # Sandbox + Approvals + Auto-Review Governance Triad
 
 > Compose a sandbox boundary, tiered approvals, an auto-review reviewer, and agent-native telemetry as one governance posture — adopt it only when the trade-off conditions hold.
 
-The triad wires an execution boundary, a when-to-ask policy, a reviewer for boundary-crossing requests, and per-action audit logs into one governance posture for coding agents. As OpenAI's Codex posture puts it, "the sandbox defines the technical execution boundary" while "approval policy determines when Codex must ask to perform an action" ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)).
+The triad wires an execution boundary, a when-to-ask policy, a reviewer for boundary-crossing requests, and per-action audit logs into one governance posture for coding agents. As OpenAI's Codex posture puts it, "the sandbox defines the technical execution boundary" while "approval policy determines when Codex must ask" ([Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/)).
 
 ## When the Triad Pays Off
 
@@ -57,18 +57,18 @@ graph LR
 
 ## Why It Works
 
-Each layer enforces a different invariant, and the layer that catches a failure is rarely the one that produced it. The sandbox bounds what is technically possible at the OS level — prompt content cannot override `bubblewrap` or Seatbelt. The approval policy turns "should I run this?" into a small auditable enum. Auto-review addresses that policy's human-factors failure: when reviewer volume exceeds attention budget, humans rubber-stamp and the policy degrades to `never` in practice. The split works because the main agent treats an approval boundary as "just another obstacle" to task completion, whereas auto-review "has a narrower job: decide whether a proposed boundary-crossing action should run" ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
+Each layer enforces a different invariant, and the layer that catches a failure is rarely the one that produced it. The sandbox bounds what is technically possible at the OS level — prompt content cannot override `bubblewrap` or Seatbelt. The approval policy turns "should I run this?" into a small auditable enum. Auto-review addresses that policy's human-factors failure: when reviewer volume exceeds attention budget, humans rubber-stamp and the policy degrades to `never` in practice. The split works because the main agent treats an approval boundary as "just another obstacle," whereas auto-review "has a narrower job: decide whether a proposed boundary-crossing action should run" ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
 
-The measured effect: Codex stops for human approval **~200x less often** in auto-review mode — in a 10,000-action snapshot, 9,280 ran in-sandbox, 720 escalated, and the reviewer denied 7 (the agent recovered via a safer path in 4). Telemetry makes the first three legs auditable; without per-action OTel events, a bypass leaves no forensic trace.
+The measured effect: Codex stops for human approval **~200x less often** in auto-review mode — in a 10,000-action snapshot, 9,280 ran in-sandbox, 720 escalated, and the reviewer denied 7 (the agent recovered via a safer path in 4). Without per-action OTel events, a bypass leaves no forensic trace.
 
 ## When This Backfires
 
-- **Solo developer, low action volume.** A few escalations an hour produce no fatigue, so an auto-review subagent costs tokens, latency, and a new attack surface for zero attention gain. Sandbox + on-request + user reviewer is the right tier.
-- **Fully isolated runner (microVM, ephemeral container).** When the agent cannot reach host or production and the runner is destroyed after the task, the sandbox alone bounds harm. Auto-review only adds an LLM-as-judge surface open to prompt injection; the CI/CD rule is "blast radius equals container, do not gate further."
-- **Irreversible actions routed through auto-review.** A 99% approval rate is the wrong tier for production deploys, money movement, or credential rotation — route those to a human gate or [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md). Auto-review can itself misclassify a destructive action as routine: a reported Codex incident had the reviewer auto-approve an `rm -rf` of the original project (`risk=medium`, `user_authorization=high`) when the agent prematurely judged a rewrite "wrapping up" ([codex#18840](https://github.com/openai/codex/issues/18840)). The fix is a hard risk-threshold floor forcing manual fallback for destructive operations.
-- **Untrusted configuration surface.** If attackers can write the file defining the sandbox or approval policy (an in-workspace `.vscode/settings.json` or `config.toml`), the [YOLO attack chain](https://ajbuilds.medium.com/the-yolo-attack-how-hackers-are-hijacking-ai-agents-by-flipping-one-switch-f8a7ff586310) bypasses the triad. It requires admin-enforced managed configuration (OpenAI's `requirements.toml`).
-- **Reviewer-agent prompt injection.** Auto-review is itself an LLM-as-judge: peer-reviewed work shows judges can be misled by the same injections they detect, and OpenAI's red-team evaluations found cases where auto-review could be tricked into approving without user authorization ([ACM AISec 2025](https://dl.acm.org/doi/10.1145/3733799.3762980); [Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
-- **No telemetry pipeline.** OTel events without aggregation, retention, and query are not an audit. The fourth leg is load-bearing for regulated deployments.
+- **Solo developer, low action volume.** A few escalations an hour produce no fatigue, so auto-review costs tokens, latency, and a new attack surface for zero attention gain. Sandbox + on-request + user reviewer is the right tier.
+- **Fully isolated runner (microVM, ephemeral container).** When the agent cannot reach host or production and the runner is destroyed after the task, the sandbox alone bounds harm. Auto-review only adds an LLM-as-judge surface; the CI/CD rule is "blast radius equals container, do not gate further."
+- **Irreversible actions routed through auto-review.** A 99% approval rate is the wrong tier for production deploys, money movement, or credential rotation — route those to a human gate or [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md). Auto-review can itself misclassify: a reported Codex incident had the reviewer auto-approve an `rm -rf` of the original project (`risk=medium`, `user_authorization=high`) when the agent prematurely judged a rewrite "wrapping up" ([codex#18840](https://github.com/openai/codex/issues/18840)). The fix is a hard risk-threshold floor forcing manual fallback for destructive operations.
+- **Untrusted configuration surface.** If attackers can write the file defining the sandbox or approval policy (an in-workspace `.vscode/settings.json` or `config.toml`), the [YOLO attack chain](https://ajbuilds.medium.com/the-yolo-attack-how-hackers-are-hijacking-ai-agents-by-flipping-one-switch-f8a7ff586310) bypasses the triad. It requires admin-enforced configuration (OpenAI's `requirements.toml`).
+- **Reviewer-agent prompt injection.** Auto-review is itself an LLM-as-judge: peer-reviewed work shows judges can be misled by the same injections they detect, and OpenAI's red-team evaluations found cases where it could be tricked into approving without user authorization ([ACM AISec 2025](https://dl.acm.org/doi/10.1145/3733799.3762980); [Auto-review of agent actions](https://alignment.openai.com/auto-review/)).
+- **No telemetry pipeline.** OTel events without aggregation, retention, and query are not an audit — the fourth leg is load-bearing for regulated deployments.
 
 ## Example
 
@@ -100,7 +100,7 @@ denied_domains = ["pastebin.com"]
 allowed_domains = ["login.microsoftonline.com", "*.openai.com"]
 ```
 
-The verbatim snippets come from [Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/). The TOML syntax is Codex-specific, but the four-layer composition is tool-agnostic — Claude Code expresses the same posture through `permissions.deny`, `acceptEdits` mode, sub-agent tool allowlists, and OTel exporters; Cursor expresses it through per-rule allow/deny and audit settings.
+The verbatim snippets come from [Running Codex safely at OpenAI](https://openai.com/index/running-codex-safely/). The TOML is Codex-specific, but the four-layer composition is tool-agnostic — Claude Code expresses it through `permissions.deny`, `acceptEdits` mode, sub-agent tool allowlists, and OTel exporters; Cursor through per-rule allow/deny and audit settings. Cursor frames the same triad from the autonomy angle: a classifier decides per-call whether to route a boundary crossing through review rather than bypassing it in headless runs ([Cursor — Agent autonomy and auto-review](https://cursor.com/blog/agent-autonomy-auto-review)). Its SDK exposes that leg as a concrete first-party API: `local.autoReview` routes headless tool calls through a classifier steered by natural-language `autoRun.allow_instructions` / `block_instructions` declared in `permissions.json` ([Cursor — SDK updates, June 2026](https://cursor.com/changelog/sdk-updates-jun-2026)).
 
 ## Key Takeaways
 

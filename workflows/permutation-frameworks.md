@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
   - agent-design
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Permutation Frameworks for Batch Code Generation
@@ -73,7 +73,7 @@ The bottleneck moves from implementation speed to review throughput. This pairs 
 
 ## Why It Works
 
-Explicit constraints narrow the token-level sampling space the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and reference implementations which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses to near zero, leaving only variation-specific logic to differ ([constrained generation research](https://arxiv.org/html/2403.06988v1) shows this mechanism operates at the token-probability level).
+Explicit constraints narrow the space of plausible outputs the model draws from when generating each variation. Without constraints, the model resolves structural ambiguity at generation time — choosing file layout, error handling style, naming patterns — and those choices vary across runs. Constraints pre-resolve those decisions: the model can see from the instruction file and reference implementations which choices are fixed, so it no longer samples freely over them. The result is that structural variance collapses toward zero, leaving only variation-specific logic to differ. The instruction file and reference examples act as in-context constraints that reduce randomness in generated output ([Domino](https://arxiv.org/html/2403.06988v1) shows the stronger, formal version of this idea — grammar-constrained decoding that masks the model's output distribution token by token).
 
 ## When It Works and When It Breaks
 

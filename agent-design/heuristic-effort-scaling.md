@@ -10,12 +10,12 @@ tags:
 aliases:
   - effort scaling
   - effort-based resource allocation
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Heuristic-Based Effort Scaling in Agent Prompts
+# Heuristic-Based Effort Scaling in Agent System Prompts
 
-> Encode resource allocation rules directly in system prompts so agents spend proportional effort on each query — few tool calls for simple lookups, many subagents for complex research.
+> Encode resource allocation rules in system prompts so agents spend proportional effort: few tool calls for simple lookups, many subagents for complex research.
 
 ## The Problem with Rigid Instructions
 
@@ -121,19 +121,11 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 
 ## Related
 
-- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
-- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
-- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md) — parallel fan-out with a dedicated synthesis step to merge the strongest elements
-- [Cost-Aware Agent Design](cost-aware-agent-design.md)
+- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md) — where to set instruction specificity so effort heuristics stay adaptable
+- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) — the parallel-subagent mechanism the higher tiers spend on
+- [Cost-Aware Agent Design](cost-aware-agent-design.md) — the cost discipline that effort scaling operationalizes
+- [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating thinking budget alongside tool-call budgets
 - [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health as a pre-generation signal
-- [Reasoning Budget Allocation](reasoning-budget-allocation.md)
-- [The Think Tool](think-tool.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
-- [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)
-- [Agentic Flywheel](agentic-flywheel.md)
-- [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
-- [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
-- [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
-- [Convergence Detection in Iterative Refinement](convergence-detection.md)
-- [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
+- [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct roles to the subagents each tier spawns
+- [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md) — context strategies that pair with effort tiers
+- [Convergence Detection in Iterative Refinement](convergence-detection.md) — knowing when the refinement loop has converged

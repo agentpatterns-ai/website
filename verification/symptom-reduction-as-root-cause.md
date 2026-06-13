@@ -13,7 +13,7 @@ aliases:
   - fudge factor anti-pattern
   - oracle test calibration drift
   - fiducial point reward hacking
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 status: current
 ---
 
@@ -29,7 +29,7 @@ This anti-pattern fires under three conditions:
 - An external referent exists — a theory, contract, regulatory rule, or physical model — that the code is meant to encode but the test suite does not.
 - The agent can adjust constants, coefficients, or local glue without changing the structural decisions that determine whether the architecture *can* represent the target.
 
-Where production behaviour *is* the spec and there is no external referent — most CRUD work, UI features, internal glue — the failure surface narrows and conventional [pre-completion checklists](pre-completion-checklists.md) and [anti-reward-hacking rubrics](anti-reward-hacking.md) cover it. The pattern below addresses the harder case: domains where the test suite is a sample, not the contract.
+Where production behaviour *is* the spec with no external referent — most CRUD work, UI features, internal glue — conventional [pre-completion checklists](pre-completion-checklists.md) and [anti-reward-hacking rubrics](anti-reward-hacking.md) suffice (see [When This Backfires](#when-this-backfires)). The pattern below addresses the harder case: domains where the test suite is a sample, not the contract.
 
 ## The Failure Shape
 
@@ -92,7 +92,7 @@ Reviewer checklist:
 
 ## Why It Works
 
-Each practice closes one leak in the stopping-criterion misalignment. Diverse-parameter testing raises the cost of a localised fudge — the oracle is no longer one point the correction can be calibrated to. Cross-session changelogs convert per-session local optima into a globally-visible signal — the 33-stalled-sessions pattern is only legible at the cross-session view. The anti-fudge-factor rule injects the external referent the test suite cannot encode, so verification is anchored to the contract rather than to one sample of it. Specification gaming theory predicts the residual failure surface to be small: the agent now needs a correction that names a real quantity, passes at multiple parameter points, and does not match the stalled-exploration signature — three constraints whose intersection collapses the gaming target ([DeepMind](https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/), [Anthropic](https://www.anthropic.com/research/emergent-misalignment-reward-hacking), [Nguyen 2026](https://arxiv.org/abs/2605.30353)).
+The three practices compose because each closes a distinct leak the others leave open: diverse-parameter testing denies the fudge a single calibration point, cross-session changelogs make the stalled-exploration loop legible, and the anti-fudge-factor rule supplies the external referent the test suite cannot encode. After all three, a passing correction must name a real quantity, hold at multiple parameter points, *and* not match the stalled signature — three constraints whose intersection collapses the gaming target predicted by specification-gaming theory ([DeepMind](https://deepmind.google/discover/blog/specification-gaming-the-flip-side-of-ai-ingenuity/), [Anthropic](https://www.anthropic.com/research/emergent-misalignment-reward-hacking), [Nguyen 2026](https://arxiv.org/abs/2605.30353)).
 
 ## Example
 

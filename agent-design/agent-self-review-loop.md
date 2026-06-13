@@ -10,12 +10,12 @@ tags:
 aliases:
   - "Review-Then-Implement Loop"
   - "Agent Review Loops"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Self-Review Loop
 
-> Agents review their own output — running code review, security scanning, and quality checks — before submitting work for human review.
+> An agent self-review loop runs code review, security scanning, and quality checks on its own output before submitting work for human review.
 
 !!! info "Also known as"
     Review-Then-Implement Loop, Agent Review Loops

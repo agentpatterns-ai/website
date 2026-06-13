@@ -11,12 +11,12 @@ tags:
   - cost-performance
   - tool-agnostic
   - long-form
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Open Agent School Pattern Mapping
 
-> The Open Agent School taxonomy names 11 Data Autonomy Patterns spanning budget control, tool policy, memory, schema grounding, and perception — five map directly to coding-agent primitives (`maxTurns`, `PreToolUse` hooks, deny lists, `CLAUDE.md` memory, and layered context); the other six target data pipelines and do not transfer.
+> The Open Agent School taxonomy names 11 Data Autonomy Patterns; five map cleanly onto coding-agent primitives like `maxTurns` and `PreToolUse` hooks, while six stay data-pipeline-specific.
 
 ## Why a Mapping Page
 
@@ -38,7 +38,7 @@ The [Open Agent School (OAS) patterns library](https://www.openagentschool.org/p
 
 OAS describes agents that track token consumption, wall-clock latency, and retry attempts against configurable budgets, triggering adaptive early stopping when thresholds are breached.
 
-In practice, this is what `maxTurns` enforces at the runtime level and what cost-threshold settings enforce at the billing level. The key insight from the OAS framing is treating these as a unified budget system rather than independent limits:
+`maxTurns` enforces this at the runtime level; cost-threshold settings enforce it at the billing level. The OAS framing's contribution is treating these as a unified budget system rather than independent limits:
 
 ```yaml
 # Claude Code sub-agent frontmatter

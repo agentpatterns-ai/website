@@ -5,12 +5,12 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Visible Thinking in AI-Assisted Development
 
-> When AI handles production speed, the practices that document reasoning — meaningful commits, signal-rich PRs, and clear branch naming — become the primary quality differentiators.
+> Visible thinking — meaningful commits, signal-rich PRs, and clear branch naming — becomes the primary quality differentiator once AI compresses code production.
 
 ## The Shift
 

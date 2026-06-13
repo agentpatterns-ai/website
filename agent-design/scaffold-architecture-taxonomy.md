@@ -11,12 +11,12 @@ aliases:
   - coding agent scaffold taxonomy
   - scaffold taxonomy
   - agent scaffold dimensions
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Scaffold Architecture Taxonomy for Coding Agents
 
-> The code surrounding an LLM — control loop, tool definitions, state management, context strategy — determines agent behavior as much as the model itself. A three-layer taxonomy makes scaffold choices explicit and comparable.
+> A coding agent's scaffold (control loop, tool interface, resource management) shapes behavior as much as the model. A three-layer taxonomy makes those choices comparable.
 
 ## Why Scaffold Architecture Matters
 
@@ -126,11 +126,6 @@ The taxonomy adds overhead without value in several conditions:
 - [Harness Engineering](harness-engineering.md)
 - [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](harness-hill-climbing.md)
 - [Runtime Scaffold Evolution: Agents That Build Tools](runtime-scaffold-evolution.md)
-- [Managed vs Self-Hosted Agent Harness: Deployment Trade-offs](managed-vs-self-hosted-harness.md)
-- [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
-- [Agent Loop Middleware](agent-loop-middleware.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
-- [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md)
-- [Agentic AI Architecture: From Prompt-Response to Goal-Directed Systems](agentic-ai-architecture-evolution.md)
 - [Context Engineering: The Discipline of Designing Agent Context](../context-engineering/context-engineering.md)

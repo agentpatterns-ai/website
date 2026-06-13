@@ -10,12 +10,12 @@ tags:
   - agent-design
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Context Poisoning: When Hallucinations Become Premises
 
-> A hallucination in step 3 becomes a trusted fact in step 4. The agent remains confident and coherent -- it is just building on a false foundation.
+> Context poisoning is when an early hallucination becomes a trusted premise, and every later step builds confidently on that false foundation.
 
 ## The Pattern
 
@@ -99,15 +99,19 @@ Add human checkpoints at key decision boundaries for high-stakes tasks.
 | [**Poka-yoke tool design**](../tool-engineering/poka-yoke-agent-tools.md) | Require absolute paths, reject ambiguous identifiers ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)) |
 | **Hard reset** | New session rather than correcting within poisoned context ([Roo Code](https://docs.roocode.com/advanced-usage/context-poisoning)) |
 
+## Key Takeaways
+
+- A single early hallucination, once it enters context as a "fact," poisons every subsequent step — output stays coherent and confident while the foundation is false.
+- Detection is hard precisely because the agent never hedges; corrective prompts patch symptoms but the poisoned content lingers and can re-activate.
+- The reliable fix is a clean context: start a new session and re-anchor on verified ground truth rather than correcting in place.
+
 ## Related
 
 - [The Infinite Context](infinite-context.md)
-- [Context Window Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Objective Drift](objective-drift.md)
 - [Distractor Interference](distractor-interference.md)
 - [Assumption Propagation](assumption-propagation.md)
 - [Session Partitioning](session-partitioning.md)
 - [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md)
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Incremental Verification](../verification/incremental-verification.md)
 - [Trust Without Verify](trust-without-verify.md)

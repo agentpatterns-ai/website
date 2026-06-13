@@ -9,7 +9,7 @@ tags:
 aliases:
   - prompt sensitivity
   - cascade sensitivity
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Emergent Behavior Sensitivity

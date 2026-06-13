@@ -7,12 +7,12 @@ tags:
   - technique
   - tool-agnostic
   - workflows
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Prompt Governance via PR
 
-> Store agent instructions as plain markdown files in git. Use pull requests to propose, review, and merge behaviour changes — the same workflow as code, without retraining anything.
+> Govern agent prompt files like code: store them as markdown in git and review behaviour changes through pull requests, no retraining required.
 
 ## Overview
 
@@ -90,24 +90,13 @@ The PR diff makes the severity definition change explicit. Reviewers can assess 
 ## Related
 
 - [Prompt File Libraries](prompt-file-libraries.md)
-- [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
 - [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md)
+- [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
 - [Central Repo for Shared Agent Standards](../workflows/central-repo-shared-agent-standards.md)
-- [CLAUDE.md Convention](claude-md-convention.md)
-- [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md)
-- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
-- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
-- [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md)
 - [Standards as Agent Instructions for AI Agent Development](standards-as-agent-instructions.md)
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
-- [Layer Agent Instructions by Specificity: Global, Project](layered-instruction-scopes.md)
-- [AGENTS.md Design Patterns: Commands, Boundaries, Personas](agents-md-design-patterns.md)
-- [@import Composition Pattern for Agent Instruction Files](import-composition-pattern.md)
-- [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md)
-- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
-- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
-- [Feature List Files](feature-list-files.md)
-- [Production System Prompt Architecture](production-system-prompt-architecture.md)
+- [CLAUDE.md Convention](claude-md-convention.md)
+- [Convention Over Configuration for Agent Workflows](convention-over-configuration.md)
 
 ## Sources
 

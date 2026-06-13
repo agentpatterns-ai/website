@@ -9,12 +9,12 @@ tags:
 aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Code Injection Defence in Multi-Agent Pipelines
 
-> Multi-agent software development pipelines are vulnerable to code injection attacks. A coder-reviewer-tester architecture with a dedicated security analysis agent achieves the highest resilience while recovering efficiency losses.
+> Multi-agent coding pipelines are vulnerable to code injection. A coder-reviewer-tester architecture with a dedicated security agent achieves the highest resilience while recovering efficiency losses.
 
 ## The Attack Vector
 

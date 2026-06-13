@@ -9,12 +9,12 @@ tags:
 aliases:
   - Self-Healing Router
   - deterministic adaptive routing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Self-Healing Tool Routing
 
-> Route agent tool-call decisions through a cost-weighted graph with parallel health monitors; recompute paths deterministically on failure and escalate to the LLM only when no feasible path exists.
+> Route tool calls through a cost-weighted graph; recompute paths on failure and invoke the LLM only when no feasible path exists.
 
 ## The Problem With LLM-Driven Control Flow
 
@@ -58,11 +58,11 @@ Every failure is either a logged reroute or an explicit escalation — the silen
 
 ## Why It Works
 
-The 93% reduction follows from a structural property: the eliminated routing decisions carry no ambiguity. A ReAct agent consults the LLM even when the only valid action is "retry with the next available tool" — each call pays fixed inference overhead regardless of decision difficulty. Dijkstra routing moves those decisions into in-process graph traversal — constant-time per edge, no token sampling — and reserves LLM inference for states where traversal returns no feasible path. The savings are proportional to the fraction of steps that are unambiguously deterministic, which dominates failure-recovery workloads.
+The 93% reduction follows from one structural property: eliminated routing decisions carry no ambiguity. A ReAct agent consults the LLM even when the only valid action is "retry with the next available tool." Dijkstra routing moves those decisions into in-process graph traversal — no token sampling — reserving LLM inference for states where no feasible path exists. Savings scale with the fraction of steps that are deterministic, which dominates failure-recovery workloads.
 
 ## Positioning on the Workflow/Agent Spectrum
 
-[Anthropic's agent design guidance](https://www.anthropic.com/engineering/building-effective-agents) distinguishes fixed workflows from LLM-directed agents. Self-Healing Tool Routing sits between them: paths adapt at runtime based on live health state, but adaptation is deterministic — the LLM is not involved until adaptation is impossible.
+[Anthropic's agent design guidance](https://www.anthropic.com/engineering/building-effective-agents) distinguishes fixed workflows from LLM-directed agents. Self-Healing Tool Routing sits between them: paths adapt based on live health state, but adaptation is deterministic — the LLM is not involved until adaptation is impossible.
 
 Complementary to, not in competition with:
 

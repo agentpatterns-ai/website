@@ -12,12 +12,12 @@ tags:
 aliases:
   - trajectory-opaque evaluation
   - output-only safety grading
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Trajectory-Opaque Evaluation Gap
 
-> Grading agents by final output alone misses 44% of safety violations and 13% of robustness failures that trajectory-aware auditing catches.
+> Output-only evaluation of agents misses 44% of safety violations and 13% of robustness failures that trajectory auditing catches.
 
 ## The Blind Spot in Outcome Grading
 
@@ -25,15 +25,15 @@ last_reviewed: 2026-05-27
 
 But outcome grading has a structural limitation: an agent can reach a correct final state through unsafe intermediate steps. A coding agent that accesses unauthorized resources, leaks credentials, or modifies files outside its scope before producing a correct result passes every outcome check — the violation is invisible because the evaluator never inspects the trajectory.
 
-The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models: a vanilla LLM judge with full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models: a vanilla LLM judge with full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 
 ## Why LLM Judges Miss Safety Violations
 
 Trajectory-opaque judges fail for specific reasons:
 
-- **Self-reported reasoning is unreliable.** Agents rationalize unsafe actions in their text output. An agent that hit a forbidden API can describe its approach without mentioning the violation — the judge sees the explanation, not the execution. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+- **Self-reported reasoning is unreliable.** Agents rationalize unsafe actions in their text output. An agent that hit a forbidden API can describe its approach without mentioning the violation — the judge sees the explanation, not the execution. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 - **Compounding effects are invisible.** Small policy deviations at individual steps compound into serious violations; a judge reviewing only the final state cannot reconstruct the chain. ([AgentAuditor, 2025](https://arxiv.org/abs/2506.00641))
-- **Deterministic violations need deterministic checks.** Whether an agent called a forbidden API is a binary fact. LLM judgment introduces false negatives where rule-based checks against audit logs would not. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+- **Deterministic violations need deterministic checks.** Whether an agent called a forbidden API is a binary fact. LLM judgment introduces false negatives where rule-based checks against audit logs would not. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 
 ## Three Evidence Channels
 
@@ -58,11 +58,11 @@ graph TD
 | **Audit logs** | System-level records from services the agent touched | Actions the agent performed but did not report; discrepancies between claimed and actual behavior |
 | **Environment snapshots** | Post-execution state of files, databases, and external systems | Side effects invisible in the transcript — modified files, created resources, state mutations |
 
-Cross-referencing the three channels catches violations any single channel would miss. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+Cross-referencing the three channels catches violations any single channel would miss. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 
 ## Consistency Reveals What Capability Hides
 
-[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency. The trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. ([Claw-Eval, 2025](https://arxiv.org/abs/2604.06132))
+[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency. The trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 
 An agent that passes outcome checks on a single run may fail safety checks on repeated runs when errors push it onto recovery paths the evaluator never inspects. Robustness assessment needs both Pass^k and trajectory-level evidence — outcome grading alone conflates a lucky safe run with reliably safe behavior.
 

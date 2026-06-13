@@ -12,11 +12,12 @@ tags:
 aliases:
   - "review panel pattern"
   - "multi-agent review committee"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
+
 # Committee Review Pattern
 
-> Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output.
+> A committee review pattern routes agent-produced work through specialized reviewers — each applying a distinct lens — before accepting or iterating on the output.
 
 The committee review pattern routes agent-produced work through multiple specialized reviewer agents running in parallel, each evaluating a single dimension (correctness, security, test coverage). An orchestrator aggregates structured verdicts and either accepts the output or routes feedback to the implementer for revision.
 
@@ -150,21 +151,9 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 
 - [Task-Specific vs Role-Based Agents](../agent-design/task-specific-vs-role-based-agents.md)
 - [Evaluator-Optimizer Pattern](../agent-design/evaluator-optimizer.md)
-- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Diff-Based Review Over Output Review](diff-based-review.md)
-- [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [Tiered Code Review](tiered-code-review.md)
-- [Agentic Code Review Architecture](agentic-code-review-architecture.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
-- [Agent-Assisted Code Review](agent-assisted-code-review.md)
-- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Adversarial Multi-Model Development Pipeline](../multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
-- [Agent-Authored PR Integration](agent-authored-pr-integration.md)
-- [Harness Engineering](../agent-design/harness-engineering.md) — environment design discipline that enables agent-to-agent code review
-- [Predicting Which AI-Generated Functions Will Be Deleted](predicting-reviewable-code.md)
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
-- [Human-AI Review Synergy](human-ai-review-synergy.md)
-- [PR Description Style as a Lever](pr-description-style-lever.md)
+- [Tiered Code Review](tiered-code-review.md)
+- [Diff-Based Review Over Output Review](diff-based-review.md)
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
+- [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive rule extraction to reduce noise across review rounds
-- [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical data on how reviewer composition affects merge outcomes

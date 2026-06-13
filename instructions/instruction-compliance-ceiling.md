@@ -10,7 +10,7 @@ tags:
   - instructions
   - context-engineering
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Instruction Compliance Ceiling
@@ -28,7 +28,7 @@ Architect instruction sets to stay well below the ceiling. Stating a rule does n
 
 ## Why It Works
 
-Transformer models process instructions and task context through the same attention mechanism. As instruction length grows, each rule competes for attention weight at every output token. Research on multi-step agents confirms that monolithic prompts encoding entire decision structures are "prone to instruction-following degradation as prompt length increases" ([Arbor, 2026](https://arxiv.org/abs/2602.14643)).
+Transformer models process instructions and task context through the same attention mechanism. As instruction length grows, each rule competes for attention weight at every output token. Research on multi-step agents confirms that monolithic prompts are "prone to instruction-following degradation as prompt length increases" ([Arbor, 2026](https://arxiv.org/abs/2602.14643)).
 
 Position compounds this: tokens near the beginning and end of a context window receive higher attention than those in the middle. Rules buried mid-prompt get less reliable attention regardless of stated importance.
 
@@ -45,7 +45,7 @@ graph TD
 
 **Modification errors** appear first: the agent follows a rule's spirit but not its letter — wrong formatting, a constraint exceeded by 10%.
 
-**Omission errors** appear later: the agent skips the rule entirely. A banned phrase appears. A scoped restriction is ignored. Adding more rules makes no difference — the set has exceeded reliable capacity.
+**Omission errors** appear later: the agent skips the rule entirely. A banned phrase appears. A scoped restriction is ignored. More rules make no difference — the set has exceeded reliable capacity.
 
 ## Primacy Bias
 
@@ -119,23 +119,11 @@ Decomposition is not the only fix. Reducing total rule count also raises headroo
 
 ## Related
 
-- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
-- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — the ~50-rule no-degradation window sits below this ceiling
-- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
-- [Layered Instruction Scopes](layered-instruction-scopes.md)
-- [Critical Instruction Repetition](critical-instruction-repetition.md)
-- [Hierarchical CLAUDE.md](hierarchical-claude-md.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [Project Instruction File Ecosystem: CLAUDE.md, copilot-instructions, AGENTS.md](instruction-file-ecosystem.md)
-- [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
-- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
-- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
-- [Convention Over Configuration](convention-over-configuration.md)
-- [Content Exclusion Gap](content-exclusion-gap.md)
-- [Event-Driven System Reminders](event-driven-system-reminders.md)
-- [Production System Prompt Architecture](production-system-prompt-architecture.md)
-- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
-- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form has no measurable effect on compliance; the compliance lever is constraint design, not format
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — the same degradation mechanism applied to code generation constraints
+- [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form has no measurable effect on compliance; the compliance lever is constraint design, not format
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md) — empirical data on when instruction files reduce compliance and increase cost
+- [Layered Instruction Scopes](layered-instruction-scopes.md)
+- [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
+- [Critical Instruction Repetition](critical-instruction-repetition.md)
+- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)

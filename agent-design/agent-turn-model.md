@@ -10,12 +10,12 @@ tags:
   - workflows
   - source:opendev-paper
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Model a Single Agent Turn as Many Inference and Tool-Call Iterations
 
-> A single user-facing "turn" is an iterative sequence of model inference and tool execution steps that repeats until the model emits an assistant message with no pending tool calls — not a single round-trip inference call.
+> An agent turn is an iterative sequence of model inference and tool-call steps, repeating until the model emits a response with no pending tool calls.
 
 ## The Misconception
 

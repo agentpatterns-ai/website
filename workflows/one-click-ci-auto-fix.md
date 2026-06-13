@@ -7,7 +7,7 @@ tags:
   - github-actions
   - copilot
   - agent-design
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions
@@ -80,7 +80,7 @@ The one-click loop is one stage of a longer pipeline. Two adjacent patterns comp
 
 GitHub's docs describe a configurable variant where Actions workflows run without the "Approve and run workflows" gate, but flag the risk explicitly: "allowing GitHub Actions workflows to run without approval may allow unreviewed code written by Copilot to gain write access to your repository or access your GitHub Actions secrets" ([docs.github.com](https://docs.github.com/en/copilot/using-github-copilot/coding-agent/reviewing-a-pull-request-created-by-copilot)). Disabling the second gate converts the pattern into a different shape — autonomous workflow execution with only the PR review gate remaining — and should be a conscious trade-off, not a default.
 
-Eligibility is currently limited: Copilot Business and Copilot Enterprise subscribers, with the cloud agent enabled by an organization administrator ([GitHub Changelog, May 18 2026](https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent/)).
+Eligibility started with Copilot Business and Copilot Enterprise subscribers ([GitHub Changelog, May 18 2026](https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent/)) and expanded on June 4, 2026 to Copilot Pro, Pro+, and Max ([GitHub Changelog, June 4 2026](https://github.blog/changelog/2026-06-04-fix-with-copilot-for-failing-actions-now-in-pro-pro-and-max/)). The cloud agent must still be enabled by an organization administrator.
 
 ## Key Takeaways
 

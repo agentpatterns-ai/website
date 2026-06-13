@@ -9,12 +9,12 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Incident-to-Eval Synthesis: Production Failures as Evals
 
-> Every production incident involving an LLM feature is a candidate for a regression eval case. Extract the failure mode, define expected behavior, and add it to a growing suite that gates future deploys.
+> Every production LLM incident is a candidate regression eval: extract the failure mode, define expected behavior, and add it to a suite that gates deploys.
 
 !!! note "Also known as"
     Failure-to-Eval Pipeline, Production Regression Evals. This technique feeds into [Eval-Driven Development](../workflows/eval-driven-development.md) and complements [Golden Query Pairs](golden-query-pairs-regression.md) by providing a systematic source of new eval cases.
@@ -23,7 +23,7 @@ last_reviewed: 2026-06-09
 
 Manually authored evals reflect what developers *think* will go wrong. Production incidents reveal what *actually* goes wrong — real users find edge cases no developer anticipates.
 
-The gap exists because developers anchor on happy-path scenarios and known failure classes. Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
+Developers anchor on happy paths and known failure classes. Production traffic explores the full input distribution — rare phrasing, adversarial queries, and domain combinations no dev imagines. Each incident proves the failure class is real and reproducible, the minimum bar for a useful eval case.
 
 ## The Pipeline
 
@@ -49,14 +49,14 @@ Each stage produces a specific output:
 
 ## Error Analysis: From Traces to Failure Taxonomy
 
-Identifying the failure mode is harder than writing the eval. A structured error analysis methodology:
+Identifying the failure mode is harder than writing the eval. A structured methodology:
 
 1. **Gather traces** -- collect 100+ production traces covering failures and near-misses
-2. **Open coding** -- domain experts review traces and journal issues without predefined categories, focusing on the first upstream failure in each trace
+2. **Open coding** -- experts journal issues without predefined categories, focusing on the first upstream failure in each trace
 3. **Axial coding** -- group journal entries into a failure taxonomy with frequency counts
 4. **Iterate** -- repeat until new traces stop producing new categories (theoretical saturation)
 
-The taxonomy reveals which failure modes are most common, most severe, and most amenable to automated detection.
+The taxonomy reveals which failure modes are most common, severe, and amenable to automated detection.
 
 The axial-coding step can be partly tool-assisted: Braintrust's Topics auto-clusters production traces into failure-mode themes, operationalizing the pattern-discovery step rather than relying solely on manual journaling. [Source: [Braintrust -- Automate pattern discovery with Topics](https://www.braintrust.dev/blog/topics-ga)]
 
@@ -162,11 +162,11 @@ Each incident adds an entry to `INCIDENT_EVALS`. Cases are never removed, only u
 
 ## Growing the Dataset
 
-Practitioner-reported dataset maturity tiers:
+Practitioner-reported maturity tiers:
 
 - **Minimum viable**: 50-100 cases covering critical failure modes
-- **Production-ready**: 200-500 cases with broad category coverage
-- **Mature**: 1000+ cases with tiered severity and automated CI gating
+- **Production-ready**: 200-500 cases with broad coverage
+- **Mature**: 1000+ cases with tiered severity and CI gating
 
 Every postmortem should ask: "What eval would have caught this?"
 
@@ -180,9 +180,9 @@ Every postmortem should ask: "What eval would have caught this?"
 
 ## Key Takeaways
 
-- Production incidents are the highest-signal source of eval cases
-- Use error analysis (open coding, axial coding) to extract failure modes from production traces
-- Cheap assertions for deterministic failures; LLM-as-judge for persistent semantic problems
+- Production incidents are the highest-signal eval source
+- Use error analysis (open and axial coding) to extract failure modes from traces
+- Cheap assertions for deterministic failures; LLM-as-judge for semantic ones
 - P0 failures block deploys; P1/P2 warn
 - Every closed incident should produce a new eval case
 

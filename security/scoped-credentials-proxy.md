@@ -9,7 +9,7 @@ tags:
 aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-12
 ---
 
 # Scoped Credentials via Proxy Outside the Agent Sandbox
@@ -23,11 +23,11 @@ last_reviewed: 2026-06-09
 
 Credentials stored inside an agent sandbox — environment variables, config files, shell history — are accessible to any code the agent executes or is manipulated into executing. A [prompt injection](prompt-injection-threat-model.md) that causes the agent to run `printenv` or read `~/.ssh/id_rsa` immediately converts a confused agent into a credential exfiltration channel.
 
-Giving an agent access to a credential file — even with limited permissions — still means every tool call, subprocess, and injected instruction has potential access to that credential. Anthropic's sandbox design explicitly keeps "sensitive credentials (such as git credentials or signing keys) never inside the sandbox with Claude Code" for this reason. [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
+Even a credential file with limited permissions is reachable by every tool call, subprocess, and injected instruction. For this reason Anthropic's sandbox design keeps "sensitive credentials (such as git credentials or signing keys) never inside the sandbox with Claude Code". [[Source]](https://www.anthropic.com/engineering/claude-code-sandboxing)
 
 ## Proxy-Based Credential Pattern
 
-The proxy pattern moves credential storage to a process outside the sandbox boundary. The agent sends unauthenticated requests; the proxy intercepts them, validates they match an allowlist, and attaches the appropriate scoped token before forwarding.
+The proxy pattern moves credential storage outside the sandbox boundary. The agent sends unauthenticated requests; the proxy validates them against an allowlist and attaches the scoped token before forwarding.
 
 ```
 Agent (sandbox) → unauthenticated request → Proxy (external)
@@ -49,7 +49,7 @@ Token scope should match the narrowest operation the agent needs:
 - A database connection role with `SELECT` only for read-heavy tasks
 - An API key that can POST to one endpoint, not an admin key
 
-This limits the blast radius: a misused token can only affect its scoped resource — a direct application of least-privilege to agent credentials. OWASP's AI Agent Security Cheat Sheet recommends the same pattern: "issue short-lived tokens that are narrowly scoped to a specific task" so an agent cannot reuse privileges across unrelated operations. [[Source]](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)
+This limits the blast radius: a misused token can only affect its scoped resource — least-privilege applied to agent credentials. OWASP's AI Agent Security Cheat Sheet recommends the same pattern: "issue short-lived tokens that are narrowly scoped to a specific task" so an agent cannot reuse privileges across unrelated operations. [[Source]](https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html)
 
 ## Request Validation Before Token Attachment
 
@@ -59,7 +59,7 @@ A proxy does more than route — it validates the request content before attachi
 - The HTTP method is permitted (e.g., reject DELETE on read-only tasks)
 - Request body does not contain signs of injection (e.g., unexpected payload shape)
 
-This prevents the agent from being tricked into making an authenticated request to an attacker-controlled endpoint with the agent's legitimate credentials attached. LangChain applies the same shape to a sandbox's outbound network: its Auth Proxy mediates and scopes the egress of LangSmith agent sandboxes, a concrete implementation of the scoped-egress pattern. [[Source]](https://blog.langchain.com/auth-proxy-langsmith-agent-sandboxes)
+This stops the agent from being tricked into sending an authenticated request to an attacker-controlled endpoint with its legitimate credentials attached. LangChain applies the same shape to outbound network egress: its Auth Proxy mediates and scopes the egress of LangSmith agent sandboxes. [[Source]](https://blog.langchain.com/auth-proxy-langsmith-agent-sandboxes)
 
 ## Audit Logging
 

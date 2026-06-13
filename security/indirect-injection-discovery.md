@@ -9,12 +9,12 @@ tags:
 aliases:
   - indirect injection testing
   - indirect prompt injection discovery
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Discovering Indirect Injection Vulnerabilities in Your Agent
 
-> Indirect prompt injection exploits the absence of privilege separation in transformer attention: the model cannot distinguish operator instructions from attacker-controlled retrieved content. Standard testing misses this surface.
+> Indirect injection exploits transformer attention's lack of privilege separation: the model cannot tell operator instructions from attacker-controlled retrieved content. Standard testing misses it.
 
 ## Why Developers Underestimate the Risk
 
@@ -76,7 +76,7 @@ Target the capabilities the agent actually has — if it can write files, instru
 
 ### Step 4: Test rules file injection
 
-Rules files are a documented repository-based injection vector — auto-processed on repo open, they bypass user review. ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)) Common files:
+Rules files are a documented repository-based injection vector — auto-processed on repo open, they bypass user review. Pillar Security's "Rules File Backdoor" weaponized Copilot and Cursor via invisible-Unicode instructions in rules files. ([Pillar Security, 2025](https://www.pillar.security/blog/new-vulnerability-in-github-copilot-and-cursor-how-hackers-can-weaponize-code-agents)) Common files:
 
 - `.cursorrules`
 - `CLAUDE.md`

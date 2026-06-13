@@ -5,7 +5,7 @@ description: "Use worktree.sparsePaths to limit an agent's file-system view to o
 tags:
   - agent-design
   - claude
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Sparse-Checkout Worktrees for Monorepo Agent Isolation

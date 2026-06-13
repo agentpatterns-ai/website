@@ -7,7 +7,7 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Team Onboarding for AI Agent Workflows and Adoption
@@ -42,7 +42,7 @@ graph TD
     D --> E[Graduate to agentic workflows with oversight]
 ```
 
-Teach the trust spectrum early. Agents perform well on high-context, well-specified tasks: boilerplate generation, refactoring with clear rules, summarizing documentation, writing tests against defined interfaces — areas where [productivity gains are consistently documented](https://arxiv.org/html/2511.04824v1). They perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring judgment about business context — domains where [validation criteria are unclear and business policy interpretation is required](https://venturebeat.com/ai/why-ai-coding-agents-arent-production-ready-brittle-context-windows-broken). Making this explicit prevents both over-reliance and under-use.
+Teach the trust spectrum early. Agents do their most reliable work on high-context, well-specified tasks: boilerplate generation, mechanical refactoring with clear rules, summarizing documentation, writing tests against defined interfaces. An [empirical study of agentic refactoring](https://arxiv.org/abs/2511.04824) found agents handle exactly this kind of low-level, consistency-oriented edit — renames, type changes — and deliver small but statistically significant structural improvements, while *not* improving high-level design. That boundary is the point: agents perform poorly on novel architecture decisions, ambiguous requirements, and tasks requiring judgment about business context. Making this explicit prevents both over-reliance and under-use.
 
 ## Shifting Review Culture
 

@@ -5,12 +5,12 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Continuous Documentation as an Agent-Driven Practice
 
-> A workflow where AI agents detect documentation-code drift on schedule or push, then open reviewable PRs to realign — treating documentation maintenance as a continuous pipeline rather than a periodic chore.
+> Continuous documentation runs AI agents on schedule or push to detect documentation-code drift and open reviewable PRs that realign docs as a pipeline.
 
 ## The Drift Problem
 

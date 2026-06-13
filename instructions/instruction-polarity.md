@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
 aliases:
   - Instruction Framing
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Instruction Polarity: Positive Rules Over Negative
@@ -108,10 +108,6 @@ The pattern is a default, not a universal. Apply it where the compliance benefit
 - [The Instruction Compliance Ceiling: Why More Rules Mean More Ignored Rules](instruction-compliance-ceiling.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [CLAUDE.md Convention for AI Agent Development](claude-md-convention.md)
-- [System Prompt Replacement for Domain-Specific Agent Personas](system-prompt-replacement.md)
-- [Layer Agent Instructions by Specificity: Global, Project](layered-instruction-scopes.md)
-- [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)
+- [Standards as Agent Instructions](standards-as-agent-instructions.md)

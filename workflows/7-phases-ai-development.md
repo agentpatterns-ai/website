@@ -8,12 +8,12 @@ tags:
 aliases:
   - seven phases of AI development
   - AI feature development phases
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # The 7 Phases of AI-Assisted Feature Development
 
-> A structured phase model for feature-scale AI-assisted development: Research → Prototype → PRD → Issues → Implement → QA → Ship. Each phase has a distinct human/agent ratio and a concrete handoff criterion.
+> Feature-scale AI-assisted development runs through seven alternating phases, each with a distinct human/agent ratio and a concrete handoff criterion.
 
 This model operates at the **feature lifecycle** level — a single feature or project from idea to production. It is distinct from the [Research-Plan-Implement pattern](research-plan-implement.md) (a per-task inner loop) and the [AI Development Maturity Model](ai-development-maturity-model.md) (a career-phase adoption arc).
 
@@ -167,3 +167,4 @@ The 7-phase model was designed for feature-scale work by one or more developers 
 - [Spec-Driven Development](spec-driven-development.md) — alternative approach to PRD formalization using a persistent spec file
 - [Humans and Agents in Development Loops](humans-agents-development-loops.md) — the why/how loop hierarchy that explains why phases alternate
 - [Parallel Agent Sessions](parallel-agent-sessions.md) — running multiple agents on independent issues during the Implement phase
+- [Agentic-Agile: Adapting Agile Rituals for Agent Work](agentic-agile-rituals.md) — turning per-issue acceptance criteria into eval-threshold DoD and negative-constraint checks for non-deterministic agents

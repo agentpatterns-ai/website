@@ -5,7 +5,7 @@ tags:
   - workflows
   - copilot
   - agent-design
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Semantic Issue Search from Chat vs Query Syntax

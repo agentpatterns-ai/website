@@ -11,12 +11,12 @@ tags:
   - cost-performance
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Multi-Model Plan Synthesis
 
-> Get independent project plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each — before writing a single line of code.
+> Synthesize one hybrid architecture plan from several frontier models' independent plans, adopting each model's strongest ideas before writing code.
 
 ## Why Triangulate
 
@@ -92,7 +92,7 @@ Diverse reasoning paths sample different regions of the hypothesis space. When m
 
 The mechanism is analogous to ensemble learning: agreement across diverse sources raises confidence precisely because each source was likely to produce different errors. Disagreement surfaces tradeoffs that a single planner would make implicitly; forcing those tradeoffs into the open allows deliberate human review rather than silent default.
 
-Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that diversity in reasoning paths improves outcomes, with ensemble disagreement reliably surfacing the highest-value decisions for human review ([Dipper, 2024](https://arxiv.org/abs/2412.15238)).
+Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that feeding a model a diverse set of prompts in parallel elicits varied reasoning paths and improves performance over a single prompt ([Dipper, 2024](https://arxiv.org/abs/2412.15238)).
 
 ## When to Use
 
@@ -159,9 +159,6 @@ observability approach, and the top 3 risks you see.
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md)
 - [Adversarial Multi-Model Pipeline](adversarial-multi-model-pipeline.md)
 - [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md)
-- [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md)
-- [Idempotent Agent Operations: Safe to Retry](../agent-design/idempotent-agent-operations.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
-- [LLM Map-Reduce Pattern](llm-map-reduce.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)

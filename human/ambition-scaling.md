@@ -8,12 +8,12 @@ tags:
 aliases:
   - task boundary audit
   - delegation frontier
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Ambition Scaling: Moving the Target as Model Capability Increases
 
-> When a new model clears a previously-uneconomic task, the right response is usually not "do the same work faster" but "expand what you attempt" — provided the harness, review capacity, and feedback loops scale with the target.
+> When a new model clears a previously-uneconomic task, move the target and attempt more — but only if harness and review scale with the ambition.
 
 ## The Boundary Is an Economic Line
 
@@ -54,7 +54,7 @@ The practice, from Anthropic's PM playbook: "deliberately ask [the model] to do 
 
 ## Ambition Requires Harness Investment
 
-Moving the target is not a prompt change. Cursor's 4–6 week discovery lag is where harness rework happens — tests that catch new failure modes, sandboxes that contain broader action scope, review loops that keep pace with larger diffs ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). This is the supply-side counterpart to [bottleneck migration](bottleneck-migration.md): expanding attempt rate without expanding review capacity converts capability gain into comprehension debt.
+Moving the target is not a prompt change. Cursor's 4–6 week discovery lag is where harness rework happens — tests that catch new failure modes, sandboxes that contain broader action scope, review loops that keep pace with larger diffs ([Melas-Kyriazi, 2026](https://cursor.com/blog/better-models-ambitious-work)). It is the supply-side counterpart to [bottleneck migration](bottleneck-migration.md): attempting more without more review capacity converts capability gain into comprehension debt.
 
 [Progressive Autonomy](progressive-autonomy-model-evolution.md) governs the autonomy level at which a task runs; ambition scaling governs task scope at a given level. The dials move independently.
 

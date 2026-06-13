@@ -11,7 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Sufficiency-Tightness Decomposition for Agent-Authored Permissions

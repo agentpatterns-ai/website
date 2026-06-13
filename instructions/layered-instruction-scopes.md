@@ -1,5 +1,5 @@
 ---
-title: "Layered Instruction Scopes: Global, Project, and Directory"
+title: "Layer Agent Instructions by Specificity Across Scopes"
 term: "Layered Instruction Scopes"
 description: "Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific rule always wins."
 aliases:
@@ -10,10 +10,10 @@ tags:
   - instructions
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes
+# Layer Agent Instructions by Specificity Across Scopes
 
 > Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific instruction always wins.
 
@@ -112,6 +112,13 @@ When an agent works in `my-repo/api/`, the harness assembles the prompt in this 
 
 The instruction "use uv not pip" from `api/AGENTS.md` appears last and takes priority over any package-manager guidance in the project root file. The `my-repo/frontend/` directory receives only the first two files — its working directory has no AGENTS.md of its own.
 
+## Key Takeaways
+
+- Concatenate instruction files from general to specific — global config, then git root, then each directory down to the working directory — so the most specific rule appears last and wins.
+- Priority is positional, not keyword-declared: later instructions override earlier ones because LLMs weight recent prompt content more heavily.
+- `AGENTS.override.md` replaces `AGENTS.md` within a single directory while parent files still concatenate normally.
+- Cap the assembled size (Codex defaults to 32 KiB) or enforce the discipline manually, since deep hierarchies can exhaust the context budget before task work begins.
+
 ## Related
 
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md)
@@ -119,19 +126,6 @@ The instruction "use uv not pip" from `api/AGENTS.md` appears last and takes pri
 - [Encode Project Conventions in AGENTS.md Files](agents-md-distributed-conventions.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [AGENTS.md as Table of Contents](agents-md-as-table-of-contents.md)
-- [AGENTS.md Design Patterns](agents-md-design-patterns.md)
-- [Content Exclusion Gap in Agent Systems](content-exclusion-gap.md)
 - [Instruction File Ecosystem](instruction-file-ecosystem.md)
-- [Convention over Configuration in Agent Instructions](convention-over-configuration.md)
-- [CLAUDE.md Convention](claude-md-convention.md)
-- [Critical Instruction Repetition](critical-instruction-repetition.md)
-- [Feature List Files](feature-list-files.md)
-- [Frozen Spec File](frozen-spec-file.md)
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
-- [Production System Prompt Architecture](production-system-prompt-architecture.md)
-- [Standards as Agent Instructions](standards-as-agent-instructions.md)
-- [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
-- [Prompt File Libraries](prompt-file-libraries.md)
-- [When to Use Examples vs Rules in Agent Instructions](example-driven-vs-rule-driven-instructions.md)
-- [WRAP Framework for Writing Agent-Ready Issue Descriptions](wrap-framework-agent-instructions.md)

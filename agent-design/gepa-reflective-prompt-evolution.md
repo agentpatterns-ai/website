@@ -10,12 +10,12 @@ tags:
 aliases:
   - reflective prompt evolution
   - genetic pareto prompt optimizer
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Reflective Prompt Evolution with Pareto Selection (GEPA)
 
-> GEPA treats every execution trace as an optimization signal: an LLM reflects on failures in natural language, proposes a targeted instruction edit, and Pareto-per-instance selection keeps candidates that specialize on different failure modes — yielding large quality gains in tens-to-hundreds of rollouts instead of thousands.
+> GEPA evolves prompts by reflecting on failure traces in natural language and keeping a Pareto frontier of candidates, reaching strong quality in hundreds of rollouts.
 
 ## When to Apply
 

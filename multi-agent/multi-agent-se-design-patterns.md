@@ -8,12 +8,12 @@ tags:
   - multi-agent
 aliases:
   - Multi-Agent Architecture Patterns
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers
 
-> A systematic study of 94 LLM-based multi-agent SE papers identifies 16 design patterns, with Role-Based Cooperation as the dominant pattern and Functional Suitability as the primary quality attribute designers optimize for.
+> A study of 94 LLM-based multi-agent SE papers identifies 16 design patterns across five categories, with Role-Based Cooperation the dominant pattern.
 
 !!! info "Also known as"
     Multi-Agent Topology Taxonomy, Multi-Agent Architecture Patterns

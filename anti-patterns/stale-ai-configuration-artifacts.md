@@ -8,7 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-09
+last_reviewed: 2026-06-13
 ---
 
 # Stale AI Configuration Artifacts (Context Rot)

@@ -9,7 +9,7 @@ aliases:
   - depth-ladder security review
   - layered in-session security review
   - per-edit end-of-turn commit security review
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Three-Depth In-Session Security Review

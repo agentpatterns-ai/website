@@ -6,16 +6,16 @@ tags:
   - agent-design
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent Pushback Protocol
 
-> Agents evaluate requests at both implementation and requirements level before executing, surfacing concerns and waiting for explicit confirmation — the solution pattern for the [yes-man agent](../anti-patterns/yes-man-agent.md).
+> A pushback protocol makes agents evaluate requests, surface concerns, and wait for explicit confirmation before executing — the cure for the [yes-man agent](../anti-patterns/yes-man-agent.md).
 
 ## Two Categories of Pushback
 
-Most agent instructions focus on the happy path: receive task, execute task, return result — this is the same optimization pressure behind [happy path bias](../anti-patterns/happy-path-bias.md) in generated code. A pushback protocol adds evaluation before execution, split into two distinct categories.
+Most agent instructions focus on the happy path: receive task, execute task, return result — the same optimization pressure behind [happy path bias](../anti-patterns/happy-path-bias.md) in generated code. A pushback protocol adds evaluation before execution, split into two categories.
 
 **Implementation concerns** (code quality): the request introduces tech debt, duplication, or unnecessary complexity. A simpler approach exists. The scope is too large or vague for one pass.
 
@@ -59,7 +59,7 @@ Concrete trigger conditions work better than vague instructions to "push back wh
 
 [Human-in-the-loop confirmation gates](../security/human-in-the-loop-confirmation-gates.md) fire on action type: "confirm before deleting files," "approve before pushing to main." They gate on *what* the agent does.
 
-Pushback protocols gate on *request quality*: "this request is a bad idea, here's why." The trigger is the agent's evaluation of the task, not the category of tool being invoked. Both patterns complement each other — gates prevent dangerous actions while pushback prevents misguided ones.
+Pushback protocols gate on *request quality*: "this request is a bad idea, here's why." The trigger is the agent's evaluation of the task, not the category of tool invoked. The two complement each other — gates prevent dangerous actions, pushback prevents misguided ones.
 
 ## When This Backfires
 

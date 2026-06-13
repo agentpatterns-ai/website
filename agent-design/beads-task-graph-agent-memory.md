@@ -10,12 +10,12 @@ tags:
   - context-engineering
   - memory
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Structured Task Graphs as External Agent Memory (Beads)
 
-> Use the `bd` CLI to maintain a git-backed dependency graph of work items so agents resume sessions methodically rather than re-discovering project state from scratch.
+> Use the `bd` CLI to keep a git-backed task graph as external agent memory, so sessions resume from recorded state rather than starting cold.
 
 ## The Problem
 

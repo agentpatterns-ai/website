@@ -6,12 +6,12 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Product-as-IDE: When the Application Becomes the Development Environment
 
-> The product itself becomes the development environment — changes are made from within the running application and shipped via background agents, eliminating the separation between product and toolchain.
+> The running product becomes its own development environment — operators change behaviour from inside the app and ship it via background agents.
 
 ## The Concept
 

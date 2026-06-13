@@ -7,12 +7,12 @@ tags:
   - workflows
   - observability
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Using the Agent to Analyze Its Own Evaluation Transcripts
 
-> Agent transcript analysis uses the agent itself to review its own evaluation transcripts — identifying tool selection errors, description ambiguities, and cross-transcript failure patterns that manual review misses at scale.
+> Feeding evaluation transcripts back to the agent surfaces tool-selection errors, description ambiguities, and cross-transcript failure patterns that manual review misses at scale.
 
 ## The Manual Review Problem
 

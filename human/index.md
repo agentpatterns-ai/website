@@ -3,6 +3,7 @@ title: "Human Impact of AI Agents on Developer Teams and Workflows"
 description: "The human side of working with AI agents -- cognitive load, sustainable use, skill preservation, identity threat, and team dynamics."
 tags:
   - human-factors
+  - index
 last_reviewed: 2026-05-27
 ---
 
@@ -35,3 +36,4 @@ last_reviewed: 2026-05-27
 - [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — When code generation is cheap, the engineer's leverage moves from authorship to specifying intent and governing humans-plus-agents-plus-tools — but only under specific conditions, with sharp failure modes (spec-as-code displacement, skill atrophy, vendor ToS gaps)
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — Long-form analysis of the builder/coder identity split: bottleneck migration, skill atrophy, and rigor relocation as code production is commoditized
 - [Evaluating Agent Patterns Catalog as a Source](evaluating-agent-patterns-catalog-as-a-source.md) — Source assessment of agentpatternscatalog.org with citation guard-rails and an explicit no-MCP-wiring boundary
+- [From Preventive to Reactive: Front-Loading Security in AI Coding Prompts](preventive-to-reactive-security-prompting.md) — AI assistants shift security thinking from writing-time to review-time; front-loading explicit security requirements in the initial prompt narrows that gap, under specific conditions

@@ -1,11 +1,10 @@
 ---
 title: "Frozen Spec File: Preserving Intent in AI Agent Sessions"
-term: "Frozen Spec File"
-description: "Write goals, non-goals, constraints, and completion criteria into an immutable file the agent reads but cannot modify — preventing drift even across context"
+description: "Write goals, non-goals, constraints, and completion criteria into a file the agent reads but cannot modify — preventing drift across context compaction."
 tags:
   - instructions
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Frozen Spec File
@@ -165,11 +164,5 @@ A frozen spec adds overhead that only pays off under specific conditions. Skip i
 - [Feature List Files](feature-list-files.md) — structured feature tracking alongside specs
 - [Hooks Beat Prompts](hooks-vs-prompts.md) — why structural enforcement outperforms prompt instructions
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — the mechanism that makes re-reading the frozen spec reliable after context compaction
-- [Context Compression Strategies](../context-engineering/context-compression-strategies.md) — tiered offloading and summarisation techniques that determine what context survives compaction
 - [The Specification as Prompt](specification-as-prompt.md) — using formal artifacts (types, schemas, tests) as agent instructions
-- [Layer Agent Instructions by Specificity](layered-instruction-scopes.md) — structural approach to organizing agent instruction files
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — why writing constraints into a spec is not the same as agents following them
-- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — limits on how reliably agents follow written instructions regardless of format
-- [Event-Driven System Reminders](event-driven-system-reminders.md) — injecting constraint reminders at specific events to reinforce spec adherence across a long session
-- [Spec Complexity Displacement](../anti-patterns/spec-complexity-displacement.md) — the failure mode when specs accumulate code-like precision
-- [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the endpoint where a sufficiently precise frozen spec can regenerate the entire implementation

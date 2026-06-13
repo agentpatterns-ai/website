@@ -11,12 +11,12 @@ tags:
 aliases:
   - "domain-specific RAG"
   - "KG-augmented retrieval"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning
 
-> Flat vector search loses structural relationships between API entities. A knowledge graph of package-function hierarchies combined with coverage-driven case selection retrieves domain context that similarity search misses.
+> A knowledge graph of package-function hierarchies plus coverage-driven case selection retrieves domain context that flat similarity search misses.
 
 ## The Problem with Flat Retrieval
 
@@ -57,7 +57,7 @@ The agent receives package location, parameter types, and sibling relationships 
 
 ### Bottom-Up: Case-Based Reasoning
 
-Working code examples show how API functions are actually used. The key insight is **coverage-driven selection**: cluster and select a minimal representative set.
+Working code examples show how API functions are actually used. The key insight is **coverage-driven selection**: cluster, then select a minimal representative set.
 
 1. **Cluster functions** by semantic similarity within each package (K-means)
 2. **Select cases iteratively** — add a case if it covers a new package or cluster
@@ -78,26 +78,15 @@ Structured domain retrieval pays off when:
 - **Repetitive tasks** — the same API patterns recur, making case curation worthwhile
 - **High accuracy requirements** — regulated or safety-critical domains where 40% pass@1 is unacceptable
 
-Skip it when the API fits in a system prompt, tasks are exploratory, or the team cannot maintain the knowledge graph. For APIs with fewer than ~100 functions, the construction and maintenance overhead typically exceeds the accuracy benefit.
+Skip it when the API fits in a system prompt, tasks are exploratory, or the team cannot maintain the knowledge graph (see *When This Backfires* below).
 
 ## Construction
 
-### Knowledge Graph
+**Knowledge graph**: parse API docs or source for packages, classes, functions, params, and return types; build containment and dependency edges; embed each function from its name, description, and signature; store in a graph DB, JSON index, or MCP server.
 
-1. Parse API docs or source to extract packages, classes, functions, params, return types
-2. Build containment (package → module → function) and dependency edges
-3. Embed each function using name + description + parameter signature
-4. Store in a graph DB, JSON index, or MCP server
+**Case base**: collect working examples from tests, docs, or production; embed, cluster by similarity, and select via coverage thresholds (90% package, 90% cluster); store with metadata linking each case to the KG entities it exercises.
 
-### Case Base
-
-1. Collect working examples from tests, docs, or production
-2. Embed, cluster by similarity, select via coverage thresholds (90% package, 90% cluster)
-3. Store with metadata linking each case to KG entities it exercises
-
-### Integration with Agent Workflows
-
-Expose both paths as tools, following the [retrieval-augmented agent workflow](retrieval-augmented-agent-workflows.md) pattern:
+Then expose both paths as tools, following the [retrieval-augmented agent workflow](retrieval-augmented-agent-workflows.md) pattern:
 
 ```
 # Agent tool descriptions (startup context)
@@ -105,7 +94,7 @@ Expose both paths as tools, following the [retrieval-augmented agent workflow](r
 - search_case_base: Retrieve representative code examples for a task
 ```
 
-The agent starts lean — only tool descriptions preloaded. On a domain task it calls `search_domain_kg` for API structure, `search_case_base` for usage patterns, then generates code grounded in both.
+The agent starts lean — only tool descriptions preloaded — then calls `search_domain_kg` and `search_case_base` on demand and generates code grounded in both.
 
 ## Example
 
@@ -158,6 +147,8 @@ Structured domain retrieval adds significant upfront cost and ongoing maintenanc
 - **KG construction ROI is negative below ~100 functions** — parsing, embedding, and indexing a small API surface costs more in engineering time than switching to curated few-shot examples in the system prompt. Measure actual retrieval failures before building graph infrastructure.
 - **Case base diversity is insufficient** — coverage-driven selection depends on having enough working examples to form meaningful clusters. Projects with thin test suites or sparse documentation produce a case base that mimics the gaps of flat retrieval.
 
+Graph retrieval is not universally better than flat vector search even once built: GraphRAG-Bench finds graph-structured retrieval frequently underperforms vanilla RAG, with benefits showing up only under specific conditions ([Xiang et al., "When to use Graphs in RAG", 2025](https://arxiv.org/abs/2506.05690)). Treat the DomAgent gains as evidence for *well-defined, hierarchical API domains*, not a blanket win — measure against a vector-RAG baseline before committing.
+
 ## Related
 
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — simpler baseline this page extends
@@ -165,8 +156,6 @@ Structured domain retrieval adds significant upfront cost and ongoing maintenanc
 - [Repository Map Pattern](repository-map-pattern.md) — AST + graph importance for code context
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-based structured code navigation
 - [Context Hub](context-hub.md) — on-demand API docs without hierarchical structure
-- [Domain-Specific System Prompts](../instructions/domain-specific-system-prompts.md) — domain adaptation via prompting
 - [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md) — human factors of domain-specific agents
-- [Agent Memory Patterns](../agent-design/agent-memory-patterns.md) — persistent knowledge vs per-task retrieval
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — cross-file dependency and AST retrieval for code generation
 - [Observation Masking](observation-masking.md) — refinement gate for intermediate tool results

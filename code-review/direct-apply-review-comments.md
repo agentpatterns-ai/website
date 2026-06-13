@@ -95,3 +95,4 @@ Contrast the failure mode: the maintainer clicks Fix with Copilot on all 14 with
 - [Agent-Proposed Merge Resolution](agent-proposed-merge-resolution.md) — the same single-commit / re-request-review contract applied to merge conflicts
 - [One-Click CI Auto-Fix](../workflows/one-click-ci-auto-fix.md) — the same dispatch shape applied to failing GitHub Actions; shares the bounded-completion constraint
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — the empirical merge-likelihood baselines (force pushes, reviewer engagement, comment-volume penalty) that direct-apply must respect
+- [Review-Then-Apply CLI Flag](review-then-apply-cli-flag.md) — the in-process variant where the same command scores and applies findings without a separate dispatch surface

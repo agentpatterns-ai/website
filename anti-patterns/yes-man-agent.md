@@ -9,12 +9,12 @@ tags:
 aliases:
   - sycophantic agent
   - sycophancy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # The Yes-Man Agent
 
-> Agents without explicit verification and [pushback instructions](../agent-design/agent-pushback-protocol.md) execute every request without flagging problems — shipping errors at machine speed.
+> A yes-man agent lacks explicit verification and [pushback instructions](../agent-design/agent-pushback-protocol.md), executing every request without flagging problems — shipping errors at machine speed.
 
 ## What It Looks Like
 
@@ -102,12 +102,10 @@ The corrected prompt adds three gate points: a pre-task duplicate check, in-task
 ## Related
 
 - [Agent Backpressure](../agent-design/agent-backpressure.md)
-- [Tool Selection Guidance](../tool-engineering/tool-description-quality.md)
 - [Separation of Knowledge and Execution](../agent-design/separation-of-knowledge-and-execution.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
 - [Assumption Propagation](assumption-propagation.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [Happy Path Bias](happy-path-bias.md)
 - [LLM Review Overcorrection](llm-review-overcorrection.md)
-- [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)

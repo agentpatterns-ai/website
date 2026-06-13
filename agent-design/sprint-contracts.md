@@ -9,12 +9,12 @@ aliases:
   - sprint contract
   - pre-coding success agreement
   - generator-evaluator agreement
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Sprint Contracts: Pre-Coding Success Agreements for Multi-Agent Tasks
 
-> A pre-coding agreement between planner, generator, and evaluator agents that converts vague goals into graded scoring dimensions before implementation begins — preventing evaluator rationalization and enabling consistent feedback loops.
+> A pre-coding agreement that converts vague goals into graded scoring dimensions before implementation begins, preventing evaluator rationalization in multi-agent loops.
 
 ## The Problem
 
@@ -56,7 +56,7 @@ Weights are explicit and agreed upfront. The generator knows what matters; the e
 
 ## Evaluator Calibration
 
-An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Research on LLM-as-judge systems identifies self-enhancement bias and position bias as common failure modes — evaluators score outputs they "authored" or encountered first more favorably regardless of quality ([Zheng et al., NeurIPS 2023](https://arxiv.org/abs/2306.05685)). Shankar et al. document a related "criteria drift" effect: evaluators and humans refine their criteria while grading outputs, so some rubric dimensions cannot be fully specified upfront ([Shankar et al., UIST 2024](https://arxiv.org/abs/2404.12272)). Sprint contracts treat the pre-committed rubric as a floor — expected to extend during calibration — not a frozen specification.
+An uncalibrated evaluator is a liability. Without tuning, LLM-based evaluators approve mediocre output — they rationalize rather than reject ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). LLM-as-judge research identifies self-enhancement and position bias as common failure modes — evaluators favor outputs they "authored" or encountered first, regardless of quality ([Zheng et al., NeurIPS 2023](https://arxiv.org/abs/2306.05685)). Shankar et al. document a related "criteria drift" effect: evaluators refine their criteria while grading, so some rubric dimensions cannot be fully specified upfront ([Shankar et al., UIST 2024](https://arxiv.org/abs/2404.12272)). Sprint contracts treat the pre-committed rubric as a floor — expected to extend during calibration — not a frozen specification.
 
 Calibration process:
 
@@ -65,13 +65,11 @@ Calibration process:
 3. Update the system prompt to enforce skepticism at those failure points.
 4. Add few-shot examples to reduce score drift.
 
-An evaluator that passes its calibration suite but drifts on production output needs its few-shot set expanded.
-
 ## Context Isolation
 
-The evaluator must not have access to the generator's reasoning. When a generator explains decisions inline — "I chose this layout because..." — an evaluator that reads those explanations inherits the generator's framing and is more likely to accept the output.
+The evaluator must not have access to the generator's reasoning. When a generator explains decisions inline — "I chose this layout because..." — an evaluator that reads those explanations inherits the framing and is more likely to accept the output.
 
-Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's session transcript. File-based communication supports this — one agent writes, the other reads, with no shared context window.
+Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's transcript. File-based communication supports this — one agent writes, the other reads, with no shared context window.
 
 ## When to Apply
 
@@ -91,11 +89,11 @@ Skip them when:
 
 Sprint contracts extend the [evaluator-optimizer pattern](evaluator-optimizer.md) with an upfront commitment step: the contract fixes the scoring rubric before generation, where the base pattern scores whatever the generator produces.
 
-The [critic agent pattern](critic-agent-plan-review.md) reviews the *plan* before execution. Sprint contracts gate on *scoring criteria* before generation — a later checkpoint focused on measurable outcomes rather than plan validity.
+The [critic agent pattern](critic-agent-plan-review.md) reviews the *plan* before execution. Sprint contracts gate on *scoring criteria* before generation — a later checkpoint on measurable outcomes, not plan validity.
 
 ## Caveat: Model Capability Changes the Trade-Off
 
-Sprint decomposition is scaffolding. It pays off when models struggle to sustain coherent work across long tasks; as frontier models improve, the overhead can outweigh the benefit. The same Anthropic post was later updated to describe removing the sprint construct once Claude Opus 4.6 could plan, sustain agentic work, and self-review over a full run — the evaluator shifted to a single end-of-run pass ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Treat the contract as conditional on model capability and revisit decomposition when a more capable model ships.
+Sprint decomposition is scaffolding. It pays off when models struggle to sustain coherent work across long tasks; as frontier models improve, the overhead can outweigh the benefit. The same Anthropic post was later updated to describe removing the sprint construct once Claude Opus 4.6 could plan and self-review over a full run — the evaluator shifted to a single end-of-run pass ([Anthropic Engineering](https://www.anthropic.com/engineering/harness-design-long-running-apps)). Treat the contract as conditional on model capability.
 
 ## Example
 

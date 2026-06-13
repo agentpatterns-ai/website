@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - code-review
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Signal Over Volume in AI Review
@@ -23,13 +23,11 @@ GitHub's Copilot code review demonstrates this at scale: [in 71% of reviews, Cop
 
 Alert fatigue is the primary failure mode. When every PR gets a wall of comments — style nits, suggestions on intentional patterns, low-confidence speculation — you stop reading AI review output entirely. The one critical security finding gets buried in twenty stylistic preferences.
 
-This mirrors noisy alerting in operations: a system that pages on everything gets ignored.
-
 ## Designing for Signal
 
 ### Silence as Output
 
-Build review agents that return no comments when confidence is low. This requires a confidence threshold: the agent evaluates whether each potential finding meets a minimum signal bar before surfacing it. Findings below the threshold are suppressed, not queued.
+Build review agents that return no comments when confidence is low. This requires a confidence threshold: each potential finding must clear a minimum signal bar before surfacing. Findings below it are suppressed, not queued.
 
 ### Multi-Line Contextual Comments
 
@@ -50,20 +48,20 @@ Two feedback loops validate signal quality:
 1. **Reactions** — thumbs-up/down on individual comments track whether suggestions prove helpful. A declining ratio indicates signal degradation.
 2. **Resolution tracking** — whether flagged issues get resolved before merging. Findings you consistently dismiss indicate false positives that should be suppressed.
 
-GitHub's agentic architecture redesign produced an [8.1% increase in positive feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) by improving signal quality, even with increased review latency — evidence that fewer, better comments outperform faster, noisier ones.
+GitHub's agentic architecture redesign produced an [8.1% increase in positive feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) by improving signal quality. A later, separate move to a stronger reasoning model added [a further 6% — despite review latency rising 16%](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) — evidence that fewer, better comments beat faster, noisier ones.
 
 ## Applying the Pattern
 
 When building or configuring AI review:
 
-- **Set a confidence floor.** Only surface findings the model is confident about. Low-confidence suggestions belong in optional "info" channels, not the PR comment thread.
+- **Set a confidence floor.** Only surface findings the model is confident about. Low-confidence suggestions belong in optional "info" channels, not the PR thread.
 - **Categorize by severity.** Critical and high findings appear as PR comments. Medium and low findings surface only when explicitly requested.
-- **Track false positive rates.** If you dismiss a category of finding more than half the time, suppress it or refine the detection criteria.
+- **Track false positive rates.** If you dismiss a category of finding more than half the time, suppress it or refine its detection criteria.
 - **Scope review instructions.** Tell the agent what to check and — equally important — what to ignore. A review prompt that says "flag all uses of `any`" will flag intentional uses alongside accidental ones.
 
 ## Why It Works
 
-The mechanism is attentional: reviewers have a fixed budget of attention per PR. When a tool produces many low-value comments, reviewers apply a consistent discount to all its output — including the high-value findings. This is a learned response to repeated false positives, not a deliberate choice. Suppressing low-confidence findings preserves the reviewer's full attention for comments that surface, so each one is read rather than skimmed.
+The mechanism is attentional: reviewers have a fixed budget of attention per PR. When a tool produces many low-value comments, reviewers discount all its output — including the high-value findings. This is a learned response to repeated false positives, not a deliberate choice. Suppressing low-confidence findings preserves attention for the comments that do surface, so each one is read rather than skimmed.
 
 ## When This Backfires
 
@@ -109,20 +107,11 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 
 ## Related
 
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md)
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
 - [Diff-Based Review](diff-based-review.md)
-- [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
-- [Yes-Man Agent](../anti-patterns/yes-man-agent.md)
-- [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of review fatigue and how to manage them sustainably
-- [Committee Review Pattern](committee-review-pattern.md)
-- [Review-Then-Implement Loop](review-then-implement-loop.md)
-- [Predicting Reviewable Code](predicting-reviewable-code.md) — predicting which AI-generated functions reviewers will flag or delete
-- [PR Description Style Lever](pr-description-style-lever.md) — how PR description structure affects reviewer engagement and merge rates
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — why higher PR volume from agents does not equal higher engineering value
-- [Agent-Authored PR Integration](agent-authored-pr-integration.md) — collaboration signals and reviewer engagement as merge predictors for agent-authored PRs
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes
+- [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md) — cognitive costs of review fatigue and how to manage them sustainably
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — how agents can persist accept/reject signals to suppress recurring false positives automatically

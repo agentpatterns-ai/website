@@ -10,12 +10,12 @@ tags:
 aliases:
   - mid-trajectory safety
   - trajectory guardrail
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls
 
-> In agentic tool-calling workflows, guardrail efficacy correlates more strongly with a model's structured data competence than with its safety training. Select guard models based on JSON parsing and schema-handling capability, not safety benchmark scores alone.
+> In agentic tool-calling workflows, guardrail efficacy tracks structured-data competence more than safety training — select guard models on JSON-parsing capability, not safety benchmarks.
 
 ## The Mid-Trajectory Gap
 

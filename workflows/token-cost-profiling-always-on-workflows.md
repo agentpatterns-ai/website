@@ -7,7 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 ---
 
 # Token-Cost Profiling and Reduction for Always-On Agentic Workflows
@@ -67,7 +67,7 @@ Prioritise by `ET/run × runs/day`, not `ET/run`. The published cuts on incremen
 
 Five levers, ordered by yield in the GitHub case study:
 
-- **MCP tool pruning.** Tool manifests add 10–15 KB per turn even when unused. GitHub's Smoke Claude went 40 → 13 tools and dropped 59% combined with a Haiku swap ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cross-reference the manifest against the actual call log — if a tool never appears in `token-usage.jsonl`, it shouldn't be in the manifest.
+- **MCP tool pruning.** Tool manifests add 10–15 KB per turn even when unused. GitHub's Smoke Claude dropped 59% from aggressive MCP tool pruning combined with a Haiku model-tier switch ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)). Cross-reference the manifest against the actual call log — if a tool never appears in `token-usage.jsonl`, it shouldn't be in the manifest.
 - **Pre-agentic CLI substitution.** Move deterministic reads out of the LLM loop. Auto-Triage saved 62% by running `gh` commands before the agent started and writing the result to a workspace file the agent read directly — no decide-call-receive round-trip ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)).
 - **Relevance gating.** Skip the LLM entirely for inputs the workflow doesn't apply to. Security Guard dropped 43% by adding a cheap upstream check that bypasses the model for non-security PRs ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)).
 - **Cheaper-model routing for narrow steps.** Per [Cost-Aware Agent Design](../agent-design/cost-aware-agent-design.md), validation-cheap steps cascade from a fast model with deterministic-gate escalation. Combine with prompt caching: cache writes cost 1.25×, cache reads cost 0.1× — a 10K-token static prefix reused 10 times costs 22,500 vs 110,000 uncached, a 79% reduction (min prefix 1,024–4,096 tokens depending on model; 5-min TTL refreshed at no cost on each hit) ([Anthropic Prompt Caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).

@@ -10,12 +10,12 @@ tags:
 aliases:
   - Agent CI Success Rate
   - AI Bot Workflow Reliability
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # AI Bot CI/CD Workflow Reliability by Agent
 
-> GitHub Actions workflow success rates for PRs authored by five AI coding agents vary from 64.86% (Claude) to 94.44% (Codex) — a 29-point spread whose interpretation is bounded by uneven sample sizes and public-repo selection effects.
+> Per-agent GitHub Actions workflow success rates span 29 points — 64.86% (Claude) to 94.44% (Codex) — but uneven samples and public-repo selection bound the reading.
 
 ## The Measurement
 

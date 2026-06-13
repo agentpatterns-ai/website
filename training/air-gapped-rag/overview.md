@@ -6,6 +6,7 @@ tags:
   - security
   - workflows
   - tool-agnostic
+  - rag
 aliases:
   - offline RAG deployment
   - on-premises RAG

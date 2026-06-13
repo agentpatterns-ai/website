@@ -9,7 +9,7 @@ tags:
 aliases:
   - ACID agent commits
   - transactional agent state
-last_reviewed: 2026-06-01
+last_reviewed: 2026-06-12
 ---
 
 # ACID for Agent Repository State

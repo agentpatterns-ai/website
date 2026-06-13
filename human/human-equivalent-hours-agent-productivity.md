@@ -8,7 +8,7 @@ tags:
   - human-factors
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-13
 status: current
 ---
 
@@ -18,7 +18,7 @@ status: current
 
 ## When the Metric Is Credible
 
-Human-equivalent hours is an estimator of *counterfactual human time*, not a direct measurement of output. It is credible under specific conditions and misleading outside them. Apply it only when:
+Human-equivalent hours estimates *counterfactual human time*, not measured output — credible under specific conditions, misleading outside them. Apply it only when:
 
 - **Sessions terminate in a merged PR or pass an independent quality classifier.** Cognition's calibration includes a PR-merged session only if any of its PRs merge; non-PR sessions go through a classifier that drops 1–20% as unproductive ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
 - **The aggregate covers enough sessions to escape the noise floor.** Their held-out r_log = 0.74 places ~50% of estimates within a factor of 2; below ~20 sessions, month-over-month deltas sit inside that band ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
@@ -28,14 +28,14 @@ Outside these conditions, prefer cost per merged PR alongside review-time-to-mer
 
 ## The Definition
 
-Cognition operationalises the metric by asking *"how long would a human engineer have taken to produce the same output?"* — chosen because hours already denominate salaries and contractor rates, so the result is directly comparable to existing finance and headcount instruments ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
+Cognition asks *"how long would a human engineer have taken to produce the same output?"* — hours already denominate salaries and contractor rates, so the result is directly comparable to existing finance and headcount instruments ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
 
 The estimator rests on four design principles:
 
-1. **Reason about the human's path, not the agent's** — discount retries, environment setup, and non-core artifacts the human would not have produced.
-2. **Credit only work the user did not specify** — measure the agent's independent contribution against the user's initial problem statement, not the full diff.
-3. **Account for codebase familiarity** — infer the exploration time a human would have needed in an unfamiliar codebase.
-4. **Assume relevant expertise** — the reference engineer already has the required skills; do not credit the agent for skill-substitution.
+1. **Reason about the human's path, not the agent's** — discount retries, setup, and non-core artifacts a human would not produce.
+2. **Credit only unspecified work** — measure the agent's contribution against the user's initial problem statement, not the full diff.
+3. **Account for codebase familiarity** — infer a human's exploration time in an unfamiliar codebase.
+4. **Assume relevant expertise** — the reference engineer already has the skills; do not credit skill-substitution.
 
 The uncalibrated model is corrected via log-space linear regression:
 
@@ -43,17 +43,17 @@ The uncalibrated model is corrected via log-space linear regression:
 h = 2.28 × m^0.923
 ```
 
-where `m` is the uncalibrated estimate and `h` the corrected human-hours figure. A simplified form uses a single multiplicative constant of 2.08 with negligible impact on metrics. Calibration used 258 sessions from 126 users across enterprise customers; held-out r_log = 0.74 on 233 sessions; F(1,231) = 279.9, p < 10⁻⁵ ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
+where `m` is the uncalibrated estimate and `h` the corrected human-hours figure (a simplified 2.08× constant performs comparably). Calibration: 258 sessions, 126 users; held-out r_log = 0.74 on 233 sessions; F(1,231) = 279.9, p < 10⁻⁵ ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)).
 
 ## Why Code Volume Is Not the Metric
 
-A naive regression of total lines changed against human-time estimates produces R²_log = 0.27 — code volume captures roughly a quarter of the variance in productive output ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). This is the empirical case against task-completion-rate and PR-count metrics: they correlate weakly with the value the team is actually paying for. Under [bottleneck migration](bottleneck-migration.md) the cheap part of the work — generation — is exactly what those metrics count.
+Regressing lines changed against human-time estimates produces R²_log = 0.27 — code volume captures roughly a quarter of the variance in productive output ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). That is the empirical case against task-completion-rate and PR-count metrics: they correlate weakly with the value the team pays for. Under [bottleneck migration](bottleneck-migration.md) the cheap part — generation — is exactly what those metrics count.
 
 ## Why It Works
 
-Engineering value is already denominated in human time. Salaries, contractor rates, and project estimates all use hours; converting agent output back into hours makes ROI directly comparable to the instruments finance and headcount planning already run ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). The mechanism is *denominator alignment*, not ground-truth measurement — the metric works because it speaks the language of the decisions it informs (renew the seat, raise the cap, hire instead).
+Engineering value is already denominated in human time — salaries, contractor rates, and estimates all use hours. Converting agent output back into hours makes ROI directly comparable to the instruments finance and headcount planning already run ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)). The mechanism is *denominator alignment*, not ground-truth measurement: it speaks the language of the decisions it informs (renew the seat, raise the cap, hire instead).
 
-The denominator is urgent right now. Agentic workloads carry **58.9% of token volume** on Vercel's AI Gateway, up from 31.6% six months earlier — tool-using requests are ~2.6× more token-heavy than the rest ([Vercel AI Gateway production index, 2026-05-12](https://vercel.com/blog/ai-gateway-production-index)). Uber capped employees at $1,500/month per agentic coding tool after burning the annual AI budget in four months ([TechCrunch, 2026-06-02](https://techcrunch.com/2026/06/02/uber-caps-employee-ai-spending-after-blowing-through-budget-in-four-months/)). Token spend has a denominator; agent output, until now, did not.
+The denominator is urgent now. Agentic workloads carry **58.9% of token volume** on Vercel's AI Gateway, up from 31.6% six months earlier — tool-using requests are ~2.6× more token-heavy than the rest ([Vercel AI Gateway production index, 2026-05-12](https://vercel.com/blog/ai-gateway-production-index)). Uber capped employees at $1,500/month per agentic coding tool after burning the annual AI budget in four months ([TechCrunch, 2026-06-02](https://techcrunch.com/2026/06/02/uber-caps-employee-ai-spending-after-blowing-through-budget-in-four-months/)). Token spend has a denominator; agent output, until now, did not.
 
 ## When This Backfires
 
@@ -61,13 +61,13 @@ The metric estimates counterfactual human time. Every failure mode below traces 
 
 - **High-context maintenance on familiar codebases.** A randomized controlled trial of experienced open-source developers measured a **19% slowdown** with AI tools while developers still reported a 20% speedup — a 39-point perception gap ([METR, 2025-07-10](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Cognition's model is calibrated against user reports and its corrected estimates still sit 1.4× *below* those reports ([Cognition, 2026-06-04](https://cognition.ai/blog/ai-productivity)) — consistent with self-report inflation, not independent of it. Pair with an observed downstream signal; the [productivity-experience paradox](productivity-experience-paradox.md) is the warning that perception and reality diverge here.
 - **Downstream cost can absorb the gain.** AI-assisted teams complete 21% more tasks and merge 98% more PRs while PR review time rises 91% — the [bottleneck migrates](bottleneck-migration.md) ([Osmani, 2025](https://addyo.substack.com/p/the-reality-of-ai-assisted-software)). An hours-saved figure that ignores review-time-spent is half a ledger.
-- **Task selection bias inflates apparent value.** Agents get assigned the tasks they are best at; the reference human is then estimated for tasks pre-selected to favour the agent. Compare baselines on stratified task mixes, not aggregate session counts.
+- **Task selection bias inflates apparent value.** Agents get the tasks they are best at; the reference human is then estimated for tasks pre-selected to favour the agent. Compare baselines on stratified task mixes, not aggregate counts.
 - **Small-team noise floor.** At r_log = 0.74, ~50% of per-session estimates fall within a factor of 2. A 10-session month sits inside that band; reading a 30% month-over-month change as signal is reading noise.
-- **Greenfield work has no stable reference.** "How long would a human have taken?" assumes a stable counterfactual. For novel problems where no comparable human baseline exists, the denominator is fabricated and the resulting hours figure is no more grounded than an opinion.
+- **Greenfield work has no stable reference.** "How long would a human have taken?" assumes a stable counterfactual. For novel problems with no comparable human baseline, the denominator is fabricated and the hours figure is no more grounded than an opinion.
 
 ## Example
 
-A platform team runs Devin and Claude Code across two months. They want to defend (or cancel) the $1,500/seat agentic-coding budget Uber-style caps would impose.
+A platform team runs Devin and Claude Code across two months, defending (or cancelling) a $1,500/seat agentic-coding budget.
 
 **Before** — counting completions:
 

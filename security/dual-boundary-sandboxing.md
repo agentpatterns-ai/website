@@ -1,15 +1,15 @@
 ---
-title: "Dual-Boundary Sandboxing for Secure Agent Execution"
+title: "Dual-Boundary Sandboxing: Filesystem and Network Isolation"
 term: "Dual-Boundary Sandboxing"
 description: "Enforce both filesystem and network isolation; neither boundary alone prevents security breaches or data exfiltration by an autonomous agent."
 tags:
   - agent-design
   - security
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
-# Dual-Boundary Sandboxing
+# Dual-Boundary Sandboxing: Filesystem and Network Isolation
 
 > Enforce both filesystem and network isolation simultaneously; neither boundary alone is sufficient to prevent security breaches or data exfiltration by an autonomous agent.
 

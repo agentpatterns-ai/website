@@ -8,16 +8,16 @@ tags:
 aliases:
   - "Graduated Autonomy"
   - "Trust Escalation"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
-# Progressive Autonomy with Model Evolution
+# Progressive Autonomy: Scaling Trust with Model Evolution
 
 > Treat agent autonomy as a dial you turn up over time based on demonstrated reliability — not a switch you flip on day one.
 
 ## The Tension
 
-Restricting autonomy limits productivity; granting too much risks costly mistakes. Progressive autonomy expands the boundary incrementally, using evidence from each stage to justify the next.
+Restricting autonomy limits productivity; granting too much risks costly mistakes. Progressive autonomy expands the boundary incrementally, using evidence from each stage to justify the next. Autonomy is one dial; [ambition scaling](../human/ambition-scaling.md) (task scope) is the other.
 
 ## Autonomy Levels
 
@@ -38,8 +38,6 @@ Anthropic's Claude Code usage data shows how developers grant autonomy over time
 - **~20%** of newer users (<50 sessions) use full auto-approve, rising to **>40%** at ~750 sessions
 - 99.9th percentile turn duration nearly doubled from <25 to >45 min (Oct 2025 – Jan 2026)
 - Experienced users show a paradox: **higher auto-approval AND higher interruption rates** (~9% vs ~5%) — shifting to a monitoring-and-intervening model
-
-Progressive autonomy shifts oversight from per-action approval to exception-based monitoring.
 
 ```mermaid
 graph LR
@@ -131,15 +129,6 @@ This trajectory is not guaranteed — a production incident in week 5 would have
 - [Delegation Decision](../agent-design/delegation-decision.md)
 - [Risk-Based Task Sizing](../verification/risk-based-task-sizing.md)
 - [AI Development Maturity Model](../workflows/ai-development-maturity-model.md)
-- [Safe Command Allowlisting](../security/safe-command-allowlisting.md)
-- [Empirical Baseline for Agentic Config](../instructions/empirical-baseline-agentic-config.md)
-- [Rigor Relocation](../human/rigor-relocation.md)
-- [Process Amplification](../human/process-amplification.md)
-- [Cognitive Load and AI Fatigue](../human/cognitive-load-ai-fatigue.md)
-- [Evidence-Based Allowlist Auto-Discovery](../security/evidence-based-allowlist-auto-discovery.md)
-- [Skill Atrophy](../human/skill-atrophy.md)
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
-- [The Bottleneck Migration](../human/bottleneck-migration.md)
 - [Domain-Specific Agent Challenges](../agent-design/domain-specific-agent-challenges.md)
 - [Suggestion Gating](../human/suggestion-gating.md)

@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
   - workflows
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Simulation and Replay Testing for Agent Verification
@@ -97,7 +97,7 @@ Each stage has an independently testable input/output boundary.
 - Simulation tests past conditions, not future ones — novel task types may not be represented in the golden library
 - Replay is not deterministic: the same agent instructions on the same task may produce different output on each run. Even at temperature 0, outputs remain only "mostly deterministic" because floating-point non-associativity on parallel GPU kernels shifts logits across runs ([Feng et al., 2025, *Get Experience from Practice: LLM Agents with Record & Replay*](https://arxiv.org/abs/2505.17716); [OpenAI Developer Community: Clarifications on temperature = 0](https://community.openai.com/t/clarifications-on-setting-temperature-0/886447))
 - A "better" output is easier to define for structured tasks (code, structured documents) than for open-ended ones
-- Naive record-and-replay of agent executions has its own failure modes: too-concrete replays break on minor context drift, while too-abstract replays lose task-specific detail. [AgentRR (Zhou et al. 2025)](https://arxiv.org/abs/2505.17716) argues that reliable replay needs a trust-anchor check function to verify preconditions before replay is allowed to apply — prompt-diff replay as described here is a lightweight analogue and carries the same risk when the upstream context (tools, skills, repo state) has shifted since the golden run was recorded
+- Naive record-and-replay of agent executions has its own failure modes: too-concrete replays break on minor context drift, while too-abstract replays lose task-specific detail. [AgentRR (Feng et al. 2025)](https://arxiv.org/abs/2505.17716) argues that reliable replay needs a trust-anchor check function to verify preconditions before replay is allowed to apply — prompt-diff replay as described here is a lightweight analogue and carries the same risk when the upstream context (tools, skills, repo state) has shifted since the golden run was recorded
 
 ## Key Takeaways
 
@@ -141,6 +141,6 @@ You update a researcher agent's instructions to add a "related pages" step. Befo
 - [Layered Accuracy Defense](../verification/layered-accuracy-defense.md)
 - [Red-Green-Refactor with Agents: Tests as the Spec](../verification/red-green-refactor-agents.md)
 - [Eval-Driven Development](eval-driven-development.md)
-- [Entropy Reduction Agents](entropy-reduction-agents.md)
 - [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md)
 - [LLM-as-Judge Evaluation with Human Spot-Checking](llm-as-judge-evaluation.md)
+- [One-Shot Record and Deterministic Replay for Periodic Agent Tasks](../tool-engineering/one-shot-record-deterministic-replay.md) — the production counterpart; same recording substrate used for cost elimination rather than verification.

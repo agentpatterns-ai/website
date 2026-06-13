@@ -6,12 +6,12 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Grade Agent Outcomes, Not Execution Paths
 
-> Evaluate agents by the final state they produce, not the sequence of steps they took to get there.
+> Grade agent outcomes — the final state produced — not the execution path taken, so valid alternative solutions are not penalized as failures.
 
 ## The Problem with Path-Based Grading
 

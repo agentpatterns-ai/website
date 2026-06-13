@@ -10,12 +10,12 @@ aliases:
   - over-engineering
   - gold-plating
   - code bloat
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Abstraction Bloat in AI Agent-Generated Code Output
 
-> Agents optimize for comprehensive-looking output, not minimal viable implementation. The result is structurally over-engineered code that passes tests but creates maintenance burden through unnecessary class hierarchies, dead code, and unrequested features.
+> Agents optimize for comprehensive-looking output, not minimal implementation. The result: over-engineered code passing tests but burdening maintenance with needless hierarchies, dead code, and unrequested features.
 
 ## What It Looks Like
 
@@ -150,9 +150,7 @@ Fifteen lines. One function. No dead abstractions waiting to be maintained.
 - [The Prompt Tinkerer](prompt-tinkerer.md)
 - [Yes-Man Agent](yes-man-agent.md)
 - [Shadow Tech Debt](shadow-tech-debt.md)
-- [Agent Harness](../agent-design/agent-harness.md)
-- [Deterministic Guardrails](../verification/deterministic-guardrails.md)
-- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
-- [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md)
 - [Comprehension Debt](comprehension-debt.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
+- [Deterministic Guardrails](../verification/deterministic-guardrails.md)
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)

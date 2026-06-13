@@ -6,12 +6,12 @@ tags:
   - instructions
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # Token Preservation Backfire
 
-> Instructions to "preserve tokens" or "be efficient" create a competing objective that overrides the user's actual task -- the agent does less, not better.
+> A token preservation instruction creates a competing objective the agent resolves by doing less work, not by completing the task better.
 
 ## The Pattern
 
@@ -47,9 +47,11 @@ Any instruction framing work as a *cost to be minimised* risks reducing agent am
 
 ## When This Applies
 
-The failure mode is specific to long-horizon agent tasks with tool use — coding agents and file-system tasks where the agent chooses whether to explore or continue. In these contexts, the efficiency constraint directly competes with task completion.
+The failure mode is specific to long-horizon, tool-using tasks where the agent chooses whether to explore or continue — coding and file-system work.
 
-Brevity framing is legitimate for conversational assistants, summarisation pipelines, and single-turn tasks without tool use — scenarios where the model has no opportunity to do *less work*.
+Brevity framing stays safe for conversational assistants, summarisation, and single-turn tasks without tool use — where the model has no opportunity to do *less work*.
+
+The backfire is not universal — a *bounded* budget differs from an open-ended "don't waste tokens" directive. The Token-Budget-Aware LLM Reasoning framework reports a 68% token reduction with under 5% accuracy loss by inserting an estimated budget into the prompt ([arxiv 2412.18547](https://arxiv.org/abs/2412.18547), ACL 2025 Findings; [code](https://github.com/GeniusHTX/TALE)). The failure is a property of vague resource-minimisation framing, not of efficiency goals as such.
 
 ## Mitigation
 
@@ -77,6 +79,14 @@ Reframe constraints as **quality targets** rather than **resource limits**.
 - [OpenAI -- Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide/)
 - [LangChain -- Improving Deep Agents with Harness Engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)
 - [Anthropic -- Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
+
+## Key Takeaways
+
+- Open-ended efficiency instructions ("preserve tokens", "don't be wasteful") create a second objective that long-horizon agents resolve by doing less work — skipping exploration, refusing ambitious tasks, stopping early.
+- The mechanism is instruction precedence: a system-level resource constraint outranks the user's task, so the agent is faithfully following a conflicting directive, not being lazy.
+- The failure mode is specific to multi-step, tool-using tasks where the agent chooses whether to continue; single-turn and summarisation work has no "less work" to fall back to.
+- A bounded, quantified token budget (e.g. TALE) can cut tokens with minimal accuracy loss — the backfire is a property of vague minimisation framing, not of efficiency goals.
+- Reframe constraints as quality targets ("be thorough", "bias to action") or make them mechanical, rather than as resource limits.
 
 ## Related
 

@@ -10,7 +10,7 @@ aliases:
   - bulk apply agent suggestions
   - batched remediation on pull requests
   - fix all batch action
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # Batched Suggestion Application
@@ -21,7 +21,7 @@ last_reviewed: 2026-06-02
 
 A reviewer with thirty open agent suggestions on a PR has two options. Walk each one — open, read, accept or dismiss, repeat — and pay the context-switching cost thirty times. Or cluster the suggestions, evaluate the rule once per batch, and apply each batch in a single commit.
 
-GitHub's [code-scanning batch apply](https://github.blog/changelog/2026-04-07-code-scanning-batch-apply-security-alert-suggestions-on-pull-requests) (April 2026, GA) ships this primitive for security alerts: reviewers add alert fixes to a batch in the **Files changed** tab and apply them in one commit. GitHub frames the CI side directly — "batching changes into a single commit means you'll run one scan instead of a separate one for each alert." Cursor's [Bugbot Fix All action](https://cursor.com/changelog) ships the same primitive for review comments, with a [78% resolution rate](https://cursor.com/changelog) on PRs where developers use it.
+GitHub's [code-scanning batch apply](https://github.blog/changelog/2026-04-07-code-scanning-batch-apply-security-alert-suggestions-on-pull-requests) (April 2026, GA) ships this primitive for security alerts: reviewers add alert fixes to a batch in the **Files changed** tab and apply them in one commit. GitHub frames the CI side directly — "batching changes into a single commit means you'll run one scan instead of a separate one for each alert." Cursor's [Bugbot](https://cursor.com/changelog) ships a bulk-apply workflow for actionable review suggestions, applying all Bugbot findings in a single pass.
 
 ## Why It Works
 
@@ -39,7 +39,7 @@ Apply the same discipline at the PR surface. Cluster on `(rule × severity × fi
 - **One rule per batch.** A SQL-injection batch and a CSRF batch are separate. Comprehension of one fix template does not transfer to the other.
 - **One severity tier per batch.** High-severity findings get individual review; medium and low can batch.
 - **Bounded file scope.** Ten files in one module is reviewable; ten files across six modules has lost the locality that made amortisation possible.
-- **Cap batch size.** Beyond ~10 fixes, the diff stops fitting working memory. [SmartBear/Cisco's code-review study](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf) (cited in [diff-based review](diff-based-review.md)) found defect detection peaks at 200–400 lines and degrades sharply beyond.
+- **Cap batch size.** Beyond ~10 fixes, the diff stops fitting working memory. SmartBear/Cisco's code-review study (cited in [diff-based review](diff-based-review.md)) found defect detection peaks at 200–400 lines and degrades sharply beyond.
 
 ## Failure Modes
 

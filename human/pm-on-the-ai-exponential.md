@@ -7,7 +7,7 @@ tags:
 aliases:
   - demos over docs
   - side quests product management
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-13
 ---
 
 # PM on the AI Exponential
@@ -93,3 +93,4 @@ These shifts are most reliable for small, fast-moving teams building AI-native p
 - [Progressive Autonomy](progressive-autonomy-model-evolution.md) -- scaling trust as models improve
 - [The Bottleneck Migration](bottleneck-migration.md) -- where effort goes when code generation becomes cheap
 - [Strategy Over Code Generation](strategy-over-code-generation.md) -- strategy clarity matters more than coding speed
+- [Prototype Before Optimizing](../workflows/prototype-before-optimizing.md) -- capability-first, cost-optimize-later, the simplicity-first principle applied to token budgets

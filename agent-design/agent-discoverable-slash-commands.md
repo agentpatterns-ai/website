@@ -8,12 +8,12 @@ tags:
 aliases:
   - Model-invocable slash commands
   - Agent-invokable commands
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Agent-Discoverable Slash Commands
 
-> Slash commands become model-callable primitives when the agent's planner can read their descriptions and invoke them mid-loop — collapsing the boundary between user-invoked shortcuts and agent-invoked tools.
+> Slash commands become model-callable primitives when the planner reads their descriptions and invokes them mid-loop, collapsing the boundary between user-invoked shortcuts and agent tools.
 
 ## The Shift
 

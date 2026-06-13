@@ -6,7 +6,7 @@ tags:
   - agent-design
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-06-03
+last_reviewed: 2026-06-12
 status: current
 ---
 

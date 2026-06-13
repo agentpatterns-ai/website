@@ -8,12 +8,12 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-12
 ---
 
 # Cost-Aware Agent Design: Route by Complexity, Not Habit
 
-> Cost-aware agent design matches model capability to task complexity, classifies agents by initialization token weight, assigns specialized roles (action, thinking, critique, vision, compact) with independent fallback chains, and applies cascade routing and economic multiplier logic to minimize cost without sacrificing output quality.
+> Cost-aware agent design routes each task to the cheapest model that meets its complexity, escalating tier only when validation fails.
 
 ## The Routing Principle
 
@@ -49,7 +49,7 @@ Borrowed from [CPU architecture](https://en.wikipedia.org/wiki/Big.LITTLE): powe
 
 ## Roo Code: Mode-Level Routing
 
-Roo Code assigns [different models to different modes](https://docs.roocode.com/features/custom-modes) — Architect, Code, Ask, and Orchestrator. When the mode switches, the model switches automatically. The recommended pattern: strong reasoning models for Architect mode, cheaper models for Code mode. This achieves similar cost segmentation to per-subagent assignment, at the mode level rather than the skill level.
+Roo Code assigns [different models to different modes](https://docs.roocode.com/features/custom-modes) — Architect, Code, Ask, Orchestrator — switching the model automatically when the mode switches. The recommended pattern pairs strong reasoning models with Architect mode and cheaper models with Code mode: the same cost segmentation as per-subagent assignment, but at the mode level.
 
 ## Role-Based Multi-Model Routing
 
@@ -63,7 +63,7 @@ Complexity routing decides *which tier*; role routing decides *which capability*
 | Vision | Vision-language model for screenshots and images | Action model (if vision-capable) |
 | Compact | Fast summarization during [context compaction](../context-engineering/context-compression-strategies.md) | Action model |
 
-Provider abstraction separates role assignment from model identity — swap providers without modifying agent code ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). HTTP client slots initialize lazily; only models actually used in a session are initialized. Model capabilities (context length, vision support, reasoning features) are cached locally with time-to-live refresh, enabling offline startup and background updates.
+Provider abstraction separates role assignment from model identity — swap providers without touching agent code ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). Clients initialize lazily (only models used in a session), and capabilities are cached locally with TTL refresh for offline startup.
 
 ## Premium Request Economics
 
@@ -143,7 +143,7 @@ The following Claude Code sub-agent configuration routes file exploration to a f
 }
 ```
 
-The `explorer` agent's description combines "Use PROACTIVELY" with "Use immediately after receiving a new task" — two activation keywords that instruct the orchestrator to delegate exploration automatically, keeping Haiku handling the high-volume read-only work while Sonnet and Opus are reserved for tasks where their reasoning capability justifies the cost.
+The `explorer` description combines "Use PROACTIVELY" with "Use immediately after receiving a new task" — activation keywords that push the orchestrator to delegate exploration automatically, keeping Haiku on high-volume read-only work while Sonnet and Opus stay reserved for tasks that justify their cost.
 
 ## Key Takeaways
 

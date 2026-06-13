@@ -12,7 +12,7 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
 ---
 
 # LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index
@@ -133,3 +133,4 @@ The "after" configuration trades ~2 accuracy points (only at medium scale; match
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — alternative structured-retrieval interface that pushes precision onto a typed schema rather than logical operators
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — knowledge-graph + case-based retrieval that captures hierarchical relationships flat vector search misses
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the JIT-context pattern this retrieval interface plugs into
+- [Codebase-Derived Pattern Libraries as Agent Context](codebase-pattern-library-context.md) — tunes *what* is in the retrieval corpus (vetted in-house code) rather than *how* queries are authored

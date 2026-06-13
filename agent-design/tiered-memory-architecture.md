@@ -10,7 +10,7 @@ tags:
 aliases:
   - episodic-to-semantic memory promotion
   - memory consolidation pipeline
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-12
 ---
 
 # Tiered Memory Architecture
@@ -97,3 +97,4 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — granularity choice in memory retrieval
 - [Memory Reinforcement Learning](memory-reinforcement-learning.md) — utility-score updates for stored memories from outcome feedback
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
+- [Component-Isolated Memory Stress Testing](component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier

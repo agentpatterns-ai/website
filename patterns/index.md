@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - anti-pattern
   - pattern
+  - index
 last_reviewed: 2026-05-27
 ---
 
