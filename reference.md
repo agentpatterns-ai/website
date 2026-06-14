@@ -2,10 +2,8 @@
 title: "Reference: Standards, Human Factors, Emerging, and Fallacies"
 description: "Reference material for AI-assisted development — standards, human factors, emerging trends, and common fallacies."
 tags:
-  - reference
   - standards
   - human-factors
-  - emerging
   - fallacies
   - tool-agnostic
 last_reviewed: 2026-05-27

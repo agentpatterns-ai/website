@@ -11,6 +11,7 @@ aliases:
   - requirement-driven issue resolution
   - issue requirements engineering
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Issue Requirements Preprocessing

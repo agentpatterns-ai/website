@@ -13,6 +13,7 @@ aliases:
   - meta-engineering harness
   - contract-driven adversarial verification harness
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Meta-Engineering Harness for Production AI-Native Software Delivery

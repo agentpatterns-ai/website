@@ -14,6 +14,7 @@ aliases:
   - repository-level perturbation diagnostic
   - context-reasoning diagnosis
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)

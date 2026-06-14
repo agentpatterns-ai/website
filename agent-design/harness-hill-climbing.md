@@ -8,6 +8,7 @@ tags:
   - evals
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses

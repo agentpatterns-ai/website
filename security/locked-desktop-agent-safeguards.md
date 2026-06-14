@@ -10,6 +10,7 @@ aliases:
   - locked-session computer use safeguards
   - desktop agent lock-state safeguards
 last_reviewed: 2026-06-12
+maturity: established
 status: current
 ---
 

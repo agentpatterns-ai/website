@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Specification as Prompt: Existing Artifacts as Agent Instructions

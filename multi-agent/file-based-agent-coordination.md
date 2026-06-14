@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # File-Based Agent Coordination

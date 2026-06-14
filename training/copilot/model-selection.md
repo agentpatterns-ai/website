@@ -31,7 +31,7 @@ As of March 2026, the general shape:
 | **Powerful** | Claude Opus 4.5/4.6, Gemini 2.5 Pro | 3x+ | Complex reasoning, architecture, large codebase analysis |
 | **Ultra** (our label) | Claude Opus 4.6 fast (preview, Pro+/Enterprise) | 30x | Maximum capability, maximum cost |
 
-**Auto mode** provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
+**[Auto mode](../../agent-design/auto-model-selection.md)** provides a 10% multiplier discount on Copilot Chat (in VS Code, GitHub.com, and JetBrains on paid plans) and routes to the model Copilot judges best for the task. Unless you have a specific reason to override, Auto is the default recommendation.
 
 ### Where models are selected
 

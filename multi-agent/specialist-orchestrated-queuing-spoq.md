@@ -13,6 +13,7 @@ aliases:
   - specialist orchestrated queuing
   - wave-based topological dispatch with dual gates
 last_reviewed: 2026-06-05
+maturity: emerging
 ---
 
 # Specialist Orchestrated Queuing for Multi-Agent SE (SPOQ)

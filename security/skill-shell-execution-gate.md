@@ -11,6 +11,7 @@ aliases:
   - inline shell gate for skills
   - skill shell interpolation gate
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Skill Shell Execution Gate: Disabling Inline Shell from Skills

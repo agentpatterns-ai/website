@@ -12,6 +12,7 @@ aliases:
   - lifecycle security
   - harness security architecture
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Lifecycle-Integrated Security Architecture for Agent Harnesses

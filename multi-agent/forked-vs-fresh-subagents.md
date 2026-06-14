@@ -11,6 +11,7 @@ aliases:
   - subagent context inheritance
   - forked subagent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Forked vs Fresh Subagents: When to Inherit the Parent Conversation

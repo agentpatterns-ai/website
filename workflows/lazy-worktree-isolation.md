@@ -8,6 +8,7 @@ tags:
   - claude
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-12
+maturity: established
 status: current
 ---
 

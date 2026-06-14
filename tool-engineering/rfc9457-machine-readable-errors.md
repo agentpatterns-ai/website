@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Machine-Readable Error Responses for AI Agents (RFC 9457)

@@ -11,6 +11,7 @@ aliases:
   - "single-tool hypothesis"
   - "run command tool"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Unix CLI as the Native Tool Interface for AI Agents

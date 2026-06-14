@@ -9,6 +9,7 @@ aliases:
   - cognitive externalization in agents
   - externalization framework for agents
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Externalization in LLM Agents

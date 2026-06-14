@@ -10,6 +10,7 @@ aliases:
   - sandbox runtime comparison
   - agent sandbox runtime selection
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators

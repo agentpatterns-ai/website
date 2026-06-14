@@ -9,6 +9,7 @@ aliases:
   - Per-Plugin Token Cost
   - Plugin Token Budget
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Per-Plugin Token-Cost Attribution via `claude plugin details`

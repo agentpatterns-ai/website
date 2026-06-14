@@ -10,6 +10,7 @@ aliases:
   - "pattern propagation"
   - "codebase pattern amplification"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Pattern Replication Risk

@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # CLI Scripts as Agent Tools: Return Only What Matters

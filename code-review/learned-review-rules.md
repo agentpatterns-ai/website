@@ -9,6 +9,7 @@ aliases:
   - self-improving code review
   - adaptive code review agent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Self-Improving Code Review Agents — Learned Rules

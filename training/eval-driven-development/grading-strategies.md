@@ -104,7 +104,7 @@ Output as JSON: {"factual_accuracy": {"score": N, "reason": "..."}, ...}
 
 **Single call outperforms multiple specialized judges.** A single comprehensive prompt with all rubric dimensions produces more consistent scores than routing each dimension to a separate evaluator. [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
-**Calibrate against human reviewers.** Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution.
+**Calibrate against human reviewers.** Score a sample set with both the judge and human reviewers using the same rubric, then resolve disagreements by refining the rubric or the judge prompt. This is not a one-time step — recalibrate when new query types enter the distribution. The reference workflow for building and maintaining that human-graded sample is [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md).
 
 See [LLM-as-Judge Evaluation with Human Spot-Checking](../../workflows/llm-as-judge-evaluation.md) for the full pipeline.
 

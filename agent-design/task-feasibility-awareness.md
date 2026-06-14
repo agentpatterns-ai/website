@@ -11,6 +11,7 @@ aliases:
   - infeasible task detection
   - feasibility-aware agents
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Task Feasibility Awareness: Stop Before You Start

@@ -11,6 +11,7 @@ aliases:
   - infrastructure-status vs task-status
   - dashboard green silent failure
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Run-Status vs Task-Status Confusion in Autonomous Agent Runs

@@ -13,6 +13,7 @@ aliases:
   - maximally-equipped agent fallacy
   - scaffold over-stacking
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Cross-Component Interference in Agent Scaffolds

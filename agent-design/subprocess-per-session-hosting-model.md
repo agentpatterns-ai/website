@@ -11,6 +11,7 @@ aliases:
   - agent SDK session lifecycle patterns
   - ephemeral long-running hybrid multi-agent container
 last_reviewed: 2026-06-02
+maturity: established
 status: current
 ---
 

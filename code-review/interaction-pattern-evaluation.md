@@ -9,6 +9,7 @@ tags:
   - arxiv
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Interaction-Pattern Evaluation for Agentic PRs

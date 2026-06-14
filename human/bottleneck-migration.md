@@ -10,6 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Bottleneck Migration

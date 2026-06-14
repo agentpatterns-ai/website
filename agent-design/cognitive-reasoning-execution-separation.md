@@ -12,6 +12,7 @@ aliases:
   - two-layer agent architecture
   - cognitive-execution split
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture

@@ -11,6 +11,7 @@ aliases:
   - agent environment design
   - environment design for agents
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Harness Engineering for Building Reliable AI Agents

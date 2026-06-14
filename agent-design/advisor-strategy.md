@@ -11,6 +11,7 @@ aliases:
   - frontier model advisor
   - opus advisor pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Advisor Strategy: Frontier Model as Strategic Advisor

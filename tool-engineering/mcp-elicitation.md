@@ -7,6 +7,7 @@ tags:
   - claude
   - mcp
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # MCP Elicitation: Servers Requesting Structured Input Mid-Task

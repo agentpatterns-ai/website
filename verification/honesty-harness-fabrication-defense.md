@@ -10,6 +10,7 @@ aliases:
   - fabrication harness
   - layered defense against agent hallucination
 last_reviewed: 2026-06-07
+maturity: established
 ---
 
 # Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)

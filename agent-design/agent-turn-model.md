@@ -11,6 +11,7 @@ tags:
   - source:opendev-paper
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Model a Single Agent Turn as Many Inference and Tool-Call Iterations

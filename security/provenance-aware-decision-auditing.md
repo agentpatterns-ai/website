@@ -12,6 +12,7 @@ aliases:
   - ARGUS provenance auditing
   - context-aware prompt injection defense
 last_reviewed: 2026-06-08
+maturity: emerging
 ---
 
 # Provenance-Aware Decision Auditing for LLM Agents

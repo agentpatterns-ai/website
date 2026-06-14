@@ -9,6 +9,7 @@ aliases:
   - "billing comparison"
   - "copilot pricing vs claude pricing"
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Copilot vs Claude Billing Semantics

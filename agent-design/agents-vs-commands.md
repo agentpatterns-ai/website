@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agents vs Commands: Separation of Role and Workflow

@@ -10,6 +10,7 @@ tags:
   - tool-agnostic
   - human-factors
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Convenience Loops and AI-Friendly Code

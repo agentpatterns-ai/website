@@ -11,6 +11,7 @@ aliases:
   - "agent workflow coverage"
   - "typed coordination graph testing"
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Structural Coverage Criteria for Agent Workflows

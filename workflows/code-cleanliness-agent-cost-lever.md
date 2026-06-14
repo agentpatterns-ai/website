@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Code Cleanliness as an Agent Cost Lever

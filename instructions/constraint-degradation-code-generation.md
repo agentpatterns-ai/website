@@ -10,6 +10,7 @@ tags:
   - code-generation
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Constraint Degradation in AI Code Generation

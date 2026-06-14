@@ -12,6 +12,7 @@ aliases:
   - trace corpus analysis
   - scout-investigator diagnostics
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Corpus-Level Trace Diagnostics for LLM Agents

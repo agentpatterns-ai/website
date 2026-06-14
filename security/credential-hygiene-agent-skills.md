@@ -10,6 +10,7 @@ aliases:
   - credential leakage in agent skills
   - secrets in skill files
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Credential Hygiene for Agent Skill Authorship

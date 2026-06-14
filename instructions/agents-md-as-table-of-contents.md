@@ -9,6 +9,7 @@ aliases:
   - Pointer Map
   - AGENTS.md Content Strategy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # AGENTS.md as a Table of Contents, Not an Encyclopedia

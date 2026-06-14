@@ -11,6 +11,7 @@ aliases:
   - gradual version migration
   - multi-version deployment
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Rainbow Deployments for Agents: Gradual Version Migration

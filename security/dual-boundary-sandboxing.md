@@ -7,6 +7,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Dual-Boundary Sandboxing: Filesystem and Network Isolation

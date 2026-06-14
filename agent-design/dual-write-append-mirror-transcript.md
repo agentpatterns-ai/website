@@ -11,6 +11,7 @@ aliases:
   - local-first agent session store
   - append-mirror session externalization
 last_reviewed: 2026-05-30
+maturity: established
 ---
 
 # Dual-Write Append-Mirror for Agent Transcript Externalization

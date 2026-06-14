@@ -9,6 +9,7 @@ tags:
   - tool-engineering
   - mcp
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # MCP Server Design: Building Agent-Friendly Servers

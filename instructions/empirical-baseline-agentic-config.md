@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Empirical Baseline: How Developers Configure Agentic AI Coding Tools

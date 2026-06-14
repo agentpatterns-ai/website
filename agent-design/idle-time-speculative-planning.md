@@ -11,6 +11,7 @@ aliases:
   - IdleSpec
   - speculative planning idle window
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Idle-Time Speculative Planning for ReAct Agents

@@ -13,6 +13,7 @@ aliases:
   - recurring review comments to rules
   - promote review feedback to harness checks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules

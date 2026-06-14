@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
   - human-factors
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Process Amplification: Scaling Human Work with Agents

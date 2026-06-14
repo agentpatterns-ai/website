@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - claude
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Extended Prompt Cache TTL for Long Agent Sessions

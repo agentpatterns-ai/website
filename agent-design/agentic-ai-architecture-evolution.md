@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Agentic AI Architecture: From Prompt to Goal-Directed

@@ -9,6 +9,7 @@ aliases:
   - small-steps AI discipline
   - comprehension-first coding
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Polya Small-Steps: Using AI to Think Better, Not Think Less

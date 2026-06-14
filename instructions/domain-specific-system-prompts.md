@@ -9,6 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Domain-Specific System Prompts with Concrete Examples

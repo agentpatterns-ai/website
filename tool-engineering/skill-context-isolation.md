@@ -11,6 +11,7 @@ aliases:
   - dedicated context for skills
   - skill fork context
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Skill Context Isolation: Forking the Skill into a Subagent Window

@@ -9,6 +9,7 @@ aliases:
   - "Agent Experience discipline"
   - "designing for agent consumers"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Designing for Agent Consumers (Agent Experience)

@@ -10,6 +10,7 @@ aliases:
   - review-then-apply CLI flag
   - in-process review auto-fix
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Review-Then-Apply CLI Flag for In-Process Auto-Fix

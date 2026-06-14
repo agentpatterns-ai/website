@@ -13,6 +13,7 @@ aliases:
   - classifier-mediated auto-mode
   - permission classifier pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents

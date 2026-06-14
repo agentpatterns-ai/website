@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Demo-to-Production Gap: When Demos Hide Real Costs

@@ -10,6 +10,7 @@ aliases:
   - agent runtime layer
   - production agent runtime
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Deep Agent Runtime: The Layer Beneath the Harness

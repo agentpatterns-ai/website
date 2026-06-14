@@ -11,6 +11,7 @@ aliases:
   - tool-call-scoped reasoning
   - return_token_budget
 last_reviewed: 2026-06-10
+maturity: established
 ---
 
 # Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets

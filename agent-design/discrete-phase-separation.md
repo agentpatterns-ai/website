@@ -9,6 +9,7 @@ aliases:
   - conversation boundary pattern
   - research-plan-execute isolation
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

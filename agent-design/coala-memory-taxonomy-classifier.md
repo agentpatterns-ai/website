@@ -12,6 +12,7 @@ aliases:
   - CoALA memory classifier
   - cognitive architecture for language agents
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # CoALA Memory Taxonomy as a Classifier for Harness Artifacts

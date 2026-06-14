@@ -13,6 +13,7 @@ aliases:
   - heartbeat-bound credentials
   - cryptographic revocation for AI agent swarms
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Heartbeat-Bound Hierarchical Credentials for Agent Swarms

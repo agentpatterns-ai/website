@@ -10,6 +10,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Restricted-Access Defensive AI: Project Glasswing as a Deployment Model

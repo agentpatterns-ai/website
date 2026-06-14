@@ -11,6 +11,7 @@ aliases:
   - skill as knowledge container
   - knowledge-only skills
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Skill as Knowledge Pattern

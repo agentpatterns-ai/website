@@ -11,6 +11,7 @@ aliases:
   - feedback over model scale
   - feedback loop quality
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Feedback as Capability Equalizer

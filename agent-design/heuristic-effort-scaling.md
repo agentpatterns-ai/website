@@ -11,6 +11,7 @@ aliases:
   - effort scaling
   - effort-based resource allocation
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Heuristic-Based Effort Scaling in Agent System Prompts

@@ -6,6 +6,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # WRAP Framework for Writing Agent-Ready Issue Descriptions

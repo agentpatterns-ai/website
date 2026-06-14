@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Improper Output Handling: Validate Agent Output Before Downstream Use

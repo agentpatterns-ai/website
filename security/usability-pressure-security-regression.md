@@ -11,6 +11,7 @@ aliases:
   - UPAttack
   - explicit-implicit requirement asymmetry
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Usability Pressure as a Silent Security-Regression Vector

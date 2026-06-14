@@ -11,6 +11,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Distributed Computing Parallels in Agent Architecture

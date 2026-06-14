@@ -12,6 +12,7 @@ aliases:
   - SynConfRoute pattern
   - confidence plus syntax routing
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Syntax-Aware Completion Routing

@@ -11,6 +11,7 @@ aliases:
   - dependency-cohesion task partitioning
   - graph-partitioning multi-agent orchestration
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Cohesion-Aware Task Partitioning for Multi-Agent Coding

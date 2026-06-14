@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Economic Value Signaling in Multi-Agent Networks

@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - harness-engineering
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Harness Preflight Doctor Command for Agent Diagnostics

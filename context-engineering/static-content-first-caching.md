@@ -10,6 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Structure Prompts with Static Content First to Maximize Cache Hits

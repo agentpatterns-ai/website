@@ -14,6 +14,7 @@ aliases:
   - managed plugin contract
   - plugin marketplace allowlist
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Enterprise-Managed Plugin Governance for Agent CLIs

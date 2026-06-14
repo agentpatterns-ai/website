@@ -12,6 +12,7 @@ aliases:
   - agent troubleshooting
   - LLM debugging
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent Debugging: Diagnosing Bad Agent Output

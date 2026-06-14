@@ -13,6 +13,7 @@ tags:
   - rag
   - arxiv
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # AOCI: Symbolic-Semantic Repository Indexing

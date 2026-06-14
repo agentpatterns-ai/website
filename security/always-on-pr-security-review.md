@@ -11,6 +11,7 @@ aliases:
   - PR security agent pattern
   - scheduled vulnerability scanner
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Always-On Agentic PR Security Review

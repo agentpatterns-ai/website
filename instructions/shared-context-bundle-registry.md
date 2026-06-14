@@ -12,6 +12,7 @@ aliases:
   - versioned context hub
   - shared context library
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Shared Context Bundle Registry for Agent Teams

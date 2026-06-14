@@ -12,6 +12,7 @@ aliases:
   - layered security
   - multi-layer safety
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Defense-in-Depth Agent Safety

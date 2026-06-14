@@ -10,6 +10,7 @@ aliases:
   - chain-of-thought proves reasoning
   - CoT reasoning fallacy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth

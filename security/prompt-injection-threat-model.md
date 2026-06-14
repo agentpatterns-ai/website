@@ -10,6 +10,7 @@ tags:
 aliases:
   - indirect prompt injection
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Prompt Injection: A First-Class Threat to Agentic Systems

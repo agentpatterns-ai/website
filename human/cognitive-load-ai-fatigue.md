@@ -11,6 +11,7 @@ aliases:
   - verification anxiety
   - decision fatigue from oversight
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Managing Cognitive Load and AI Fatigue for Sustainable Agent Use

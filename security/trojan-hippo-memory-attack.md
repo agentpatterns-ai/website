@@ -15,6 +15,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-11
+maturity: emerging
 ---
 
 # Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)

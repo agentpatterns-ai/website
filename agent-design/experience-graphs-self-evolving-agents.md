@@ -11,6 +11,7 @@ aliases:
   - experience graph memory
   - structured experience memory
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Experience Graphs as Structured Memory for Self-Evolving Agents

@@ -11,6 +11,7 @@ aliases:
   - mid-trajectory safety
   - trajectory guardrail
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls

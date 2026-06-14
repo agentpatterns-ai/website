@@ -9,6 +9,7 @@ aliases:
   - "Graduated Autonomy"
   - "Trust Escalation"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Progressive Autonomy: Scaling Trust with Model Evolution

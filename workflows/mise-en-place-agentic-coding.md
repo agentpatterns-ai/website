@@ -13,6 +13,7 @@ aliases:
   - MEP for agentic coding
   - deliberate preparation methodology
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Mise en Place for Agentic Coding

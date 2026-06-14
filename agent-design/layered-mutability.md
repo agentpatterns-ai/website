@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Layered Mutability: Governing Persistent Self-Modifying Agents

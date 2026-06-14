@@ -10,6 +10,7 @@ aliases:
   - Lost in the Middle
   - Attention Bias and Instruction Placement
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Critical Instruction Repetition via Primacy and Recency Bias

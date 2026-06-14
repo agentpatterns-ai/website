@@ -11,6 +11,7 @@ aliases:
   - untrusted tool feedback
   - tool feedback trajectory attack
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack

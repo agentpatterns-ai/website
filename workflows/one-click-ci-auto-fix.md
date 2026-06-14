@@ -8,6 +8,7 @@ tags:
   - copilot
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions

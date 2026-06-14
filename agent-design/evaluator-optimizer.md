@@ -11,6 +11,7 @@ aliases:
   - generator-critic loop
   - refinement loop
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Evaluator-Optimizer Pattern for AI Agent Development

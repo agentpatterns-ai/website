@@ -11,6 +11,7 @@ aliases:
   - "skill configuration"
   - "SKILL.md headers"
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # SKILL.md Frontmatter Reference

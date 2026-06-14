@@ -11,6 +11,7 @@ aliases:
   - denial-of-wallet agent defense
   - LLM resource exhaustion bounds
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet

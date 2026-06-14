@@ -12,6 +12,7 @@ aliases:
   - classifier-subagent permission router
   - run-mode permission classifier
 last_reviewed: 2026-06-12
+maturity: established
 status: current
 ---
 

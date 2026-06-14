@@ -12,6 +12,7 @@ aliases:
   - persistent search sub-agent
   - shared librarian sub-agent
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Persistent Shared Search Sub-Agent for Output-Token Reuse

@@ -13,6 +13,7 @@ aliases:
   - multi-tenant RAG isolation
   - ABAC-gated retrieval
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Multitenant RAG: Closing the Relevance-Authorization Gap

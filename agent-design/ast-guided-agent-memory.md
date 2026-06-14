@@ -13,6 +13,7 @@ tags:
   - arxiv
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # AST-Guided Agent Memory for Repository-Level Code Generation

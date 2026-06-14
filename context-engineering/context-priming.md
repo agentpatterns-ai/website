@@ -11,6 +11,7 @@ aliases:
   - Seeding Agent Context
   - Breadcrumbs in Code
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context Priming: Pre-Loading Files for AI Agent Tasks

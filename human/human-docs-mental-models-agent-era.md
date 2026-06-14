@@ -8,6 +8,7 @@ aliases:
   - human-centric documentation
   - human documentation in the agent era
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Human-Facing Docs in the Agent Era: Mental Models Over Reference

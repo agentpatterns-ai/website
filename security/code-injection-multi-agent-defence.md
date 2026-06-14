@@ -10,6 +10,7 @@ aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Code Injection Defence in Multi-Agent Pipelines

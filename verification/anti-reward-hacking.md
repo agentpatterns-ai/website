@@ -12,6 +12,7 @@ aliases:
   - "Specification Gaming"
   - "Anti-Gaming Checklist"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Anti-Reward-Hacking: Rubrics That Resist Gaming

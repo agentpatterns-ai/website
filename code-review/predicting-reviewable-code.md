@@ -10,6 +10,7 @@ aliases:
   - "Pre-Flagging Functions for Review"
   - "Code Deletion Prediction"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete

@@ -8,6 +8,7 @@ tags:
   - claude
   - tool-engineering
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Conditional Hook Execution: Filter Hooks by Tool Pattern

@@ -11,6 +11,7 @@ aliases:
   - session start hook bootstrap
   - environment.json install lifecycle
 last_reviewed: 2026-06-05
+maturity: established
 ---
 
 # Cloud-Agent Session Bootstrap

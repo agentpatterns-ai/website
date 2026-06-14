@@ -8,6 +8,7 @@ tags:
   - technique
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # @import Composition Pattern for Instruction Files

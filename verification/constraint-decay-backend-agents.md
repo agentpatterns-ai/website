@@ -12,6 +12,7 @@ tags:
   - arxiv
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Constraint Decay in Backend Code Generation

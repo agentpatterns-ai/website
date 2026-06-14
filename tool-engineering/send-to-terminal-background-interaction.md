@@ -11,6 +11,7 @@ aliases:
   - send_to_terminal pattern
   - background terminal notifications for agents
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Terminal Tools for Agents: send_to_terminal and Background Interaction

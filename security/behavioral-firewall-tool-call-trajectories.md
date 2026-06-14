@@ -11,6 +11,7 @@ aliases:
   - pDFA firewall
   - trajectory firewall
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Behavioral Firewall for Tool-Call Trajectories

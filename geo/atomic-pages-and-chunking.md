@@ -12,6 +12,7 @@ aliases:
   - RAG chunking strategy
   - one-topic-per-page design
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Atomic Pages and Chunking — One Concept Per Page for RAG

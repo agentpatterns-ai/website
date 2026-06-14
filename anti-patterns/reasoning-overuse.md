@@ -10,6 +10,7 @@ aliases:
   - "reasoning overuse"
   - "think tool overuse"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Indiscriminate Structured Reasoning

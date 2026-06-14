@@ -11,6 +11,7 @@ aliases:
   - LLM knowledge generation fallacy
   - AI novelty fallacy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The AI Knowledge Generation Fallacy

@@ -10,6 +10,7 @@ aliases:
   - volume-quality inverse law
   - capability-maintainability tradeoff
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # The Reasoning-Complexity Trade-off

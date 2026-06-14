@@ -1,6 +1,6 @@
 ---
 title: "Agent Patterns for AI Agent Development"
-description: "Patterns and techniques for experienced developers leveling up with AI coding assistants. A reference site covering single concepts with tool-agnostic principles."
+description: "Patterns and techniques for experienced developers leveling up with AI coding assistants. A reference site covering single concepts, demonstrated primarily on Claude Code and GitHub Copilot."
 tags:
   - index
 last_reviewed: 2026-06-12
@@ -11,7 +11,7 @@ last_reviewed: 2026-06-12
 
 [About this site](about.md)
 
-This is a reference site, not a tutorial. Every page covers a single concept — what it is, how it works, when to use it, and what to watch out for. Tool-agnostic principles with practical examples from GitHub Copilot and Claude Code.
+This is a reference site, not a tutorial. Every page covers a single concept — what it is, how it works, when to use it, and what to watch out for. The principles aim to generalize across AI coding assistants, demonstrated primarily on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK.
 
 ## Browse by topic
 

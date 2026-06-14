@@ -12,6 +12,7 @@ aliases:
   - fresh-context loops
   - context loop strategy
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Loop Strategy Spectrum: Accumulated vs Fresh Context

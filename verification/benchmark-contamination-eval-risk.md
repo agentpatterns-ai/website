@@ -9,6 +9,7 @@ aliases:
   - decontaminated evaluation
   - benchmark data leakage
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Benchmark Contamination as Eval Risk

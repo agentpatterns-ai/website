@@ -10,6 +10,7 @@ aliases:
   - SELF-DISCOVER framework
   - self-composed reasoning structures
 last_reviewed: 2026-06-12
+maturity: adopted
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

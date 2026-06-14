@@ -11,6 +11,7 @@ aliases:
   - OTel for agents
   - OpenTelemetry GenAI conventions
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # OpenTelemetry for AI Agent Observability and Tracing

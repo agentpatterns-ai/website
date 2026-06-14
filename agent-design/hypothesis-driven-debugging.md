@@ -10,6 +10,7 @@ aliases:
   - debug mode
   - hypothesis then instrumentation loop
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Hypothesis-Driven Debugging: Instrument Before You Patch

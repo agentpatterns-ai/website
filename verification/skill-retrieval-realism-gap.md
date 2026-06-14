@@ -10,6 +10,7 @@ aliases:
   - skill retrieval degradation
   - agentic skill benchmarking
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Skill Retrieval Realism Gap

@@ -12,6 +12,7 @@ aliases:
   - webhook-triggered coding agent
   - programmatic agent task creation
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Programmatic Cloud-Agent Dispatch via REST API and Webhooks

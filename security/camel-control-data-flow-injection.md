@@ -12,6 +12,7 @@ aliases:
   - control data flow separation
   - capability-based agent security
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)

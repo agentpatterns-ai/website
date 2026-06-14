@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Multi-Agent Topology Taxonomy: Centralised, Decentralised, and Hybrid

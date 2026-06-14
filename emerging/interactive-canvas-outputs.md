@@ -10,6 +10,7 @@ aliases:
   - agent canvas output
   - interactive artifact output
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Interactive Canvases: Agent-Generated Visual Artifacts as Outputs

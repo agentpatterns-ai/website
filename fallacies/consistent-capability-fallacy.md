@@ -11,6 +11,7 @@ aliases:
   - consistent capability fallacy
   - capability generalization fallacy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Consistent Capability Fallacy

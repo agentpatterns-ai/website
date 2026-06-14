@@ -11,6 +11,7 @@ aliases:
   - thundering herd prevention
   - staggered launch pattern
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Staggered Agent Launch

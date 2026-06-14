@@ -14,6 +14,7 @@ aliases:
   - inter-turn idle-time anticipation
   - anticipatory agent architecture
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Proactive Idle-Time Anticipation (ProAct)

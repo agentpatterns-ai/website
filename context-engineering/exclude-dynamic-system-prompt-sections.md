@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - claude
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing

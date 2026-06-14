@@ -14,6 +14,7 @@ aliases:
   - audit-record divergence invariant
   - agent runtime safety invariant
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening

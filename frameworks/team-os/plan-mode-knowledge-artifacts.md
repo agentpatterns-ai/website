@@ -9,6 +9,7 @@ tags:
   - claude
   - frameworks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Plan Mode for Knowledge Artifacts

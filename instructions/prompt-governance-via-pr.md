@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Prompt Governance via PR

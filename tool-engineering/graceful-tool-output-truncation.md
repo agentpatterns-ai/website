@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Graceful Tool-Output Truncation: The PARTIAL Signal

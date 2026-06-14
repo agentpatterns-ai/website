@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - long-form
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Open Agent School Pattern Mapping

@@ -9,6 +9,7 @@ tags:
 aliases:
   - Greenfield Agent Bootstrap
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Bootstrapping an Agent-Driven Project from Scratch

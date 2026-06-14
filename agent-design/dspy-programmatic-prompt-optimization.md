@@ -10,6 +10,7 @@ aliases:
   - programmatic prompt optimization
   - DSPy prompt compiler
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # DSPy: Programmatic Prompt Optimization

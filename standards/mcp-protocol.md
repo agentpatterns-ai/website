@@ -10,6 +10,7 @@ aliases:
   - MCP
   - Model Context Protocol
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # MCP: The Open Protocol Connecting Agents to External Tools

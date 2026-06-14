@@ -12,6 +12,7 @@ aliases:
   - AX stack
   - agent prompt to compile stack
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The AX Stack

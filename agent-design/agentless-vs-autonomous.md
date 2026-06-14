@@ -4,14 +4,12 @@ term: "Agentless vs Autonomous"
 description: "Simple two-phase workflows often outperform complex autonomous agents — empirical evidence for starting with constrained approaches rather than maximizing AI autonomy."
 tags:
   - agent-design
-  - agentless
-  - autonomous-agents
-  - complexity
   - tool-agnostic
 aliases:
   - agentless approach
   - simple-first AI
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Agentless vs Autonomous: When Simple Beats Complex

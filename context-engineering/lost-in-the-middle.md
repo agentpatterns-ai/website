@@ -10,6 +10,7 @@ aliases:
   - Attention Bias
   - Instruction Placement
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Lost in the Middle: The U-Shaped Attention Curve

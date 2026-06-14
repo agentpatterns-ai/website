@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Distractor Interference: Why Relevance Is Not Enough

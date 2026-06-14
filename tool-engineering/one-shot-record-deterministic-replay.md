@@ -13,6 +13,7 @@ aliases:
   - loop skill engine pattern
   - record-replay for periodic agents
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # One-Shot Record and Deterministic Replay for Periodic Agent Tasks

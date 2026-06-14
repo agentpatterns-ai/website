@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agentic Framework Landscape: When Each Framework Fits

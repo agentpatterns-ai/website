@@ -13,6 +13,7 @@ aliases:
   - three-operation memory benchmark
   - per-component memory diagnostics
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Component-Isolated Memory Stress Testing

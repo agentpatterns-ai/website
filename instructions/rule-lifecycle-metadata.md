@@ -10,6 +10,7 @@ aliases:
   - source applicability expiry triple
   - undead rule detection
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Rule Lifecycle Metadata for Prunable Instruction Surfaces

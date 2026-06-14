@@ -13,6 +13,7 @@ aliases:
   - error-path prompt injection
   - error-context sandwich injection
 last_reviewed: 2026-06-09
+maturity: emerging
 status: current
 ---
 

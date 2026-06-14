@@ -10,6 +10,7 @@ aliases:
   - MCP channel server
   - MCP server push notifications
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Push-Event MCP Channels: Inverting the Pull-Tool Polarity

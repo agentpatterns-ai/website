@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Iterative Binary Feedback for Pattern Adherence

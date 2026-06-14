@@ -11,6 +11,7 @@ aliases:
   - structure over access for analytics agents
   - grounding analytics agents in governed sources
 last_reviewed: 2026-06-04
+maturity: established
 ---
 
 # Governed Sources of Truth for Analytics Agents (Structure Over Access)

@@ -10,6 +10,7 @@ aliases:
   - agent-generated ramp-up guide
   - agent synthesised onboarding artefact
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent-Generated Onboarding Guide as a Durable Artefact

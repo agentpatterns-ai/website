@@ -13,6 +13,7 @@ aliases:
   - tangled agent patches
   - refactoring-aware refinement
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Refactoring Runaway: Tangled Refactorings in Agent Patches

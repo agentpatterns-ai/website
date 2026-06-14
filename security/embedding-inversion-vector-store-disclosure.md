@@ -12,6 +12,7 @@ aliases:
   - vector store source text recovery
   - LLM08 embedding inversion
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface

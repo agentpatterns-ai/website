@@ -11,6 +11,7 @@ aliases:
   - project state nuke
   - session state reset primitive
 last_reviewed: 2026-06-01
+maturity: established
 ---
 
 # Agent Project State Purge: Clean-Slate Session Reset

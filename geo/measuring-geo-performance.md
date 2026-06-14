@@ -12,6 +12,7 @@ aliases:
   - GEO Monitoring
   - AI Search Measurement
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Measuring GEO Performance

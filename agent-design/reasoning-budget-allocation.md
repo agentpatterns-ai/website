@@ -10,6 +10,7 @@ tags:
   - source:opendev-paper
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Reasoning Budget Allocation: The Reasoning Sandwich

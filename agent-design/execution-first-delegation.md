@@ -10,6 +10,7 @@ aliases:
   - AI-as-executor pattern
   - delegation contract pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Execution-First Delegation: The AI-as-Executor Pattern

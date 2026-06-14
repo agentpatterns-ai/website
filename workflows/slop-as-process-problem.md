@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates

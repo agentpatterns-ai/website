@@ -13,6 +13,7 @@ aliases:
   - parameter-aware cache key
   - dependency-aware step parallelism
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines

@@ -10,6 +10,7 @@ aliases:
   - ACID agent commits
   - transactional agent state
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # ACID for Agent Repository State

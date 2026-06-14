@@ -12,6 +12,7 @@ aliases:
   - "sampling vs orchestration state variance"
   - "intrinsic and orchestration variance"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)

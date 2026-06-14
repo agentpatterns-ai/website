@@ -125,7 +125,7 @@ Given a query vector, return the top-k most similar chunks from the index. Two r
 
 Re-score the top-k retrieved chunks using a cross-encoder model that attends to both the query and the chunk simultaneously, producing a more accurate relevance score than the bi-encoder used for retrieval.
 
-LLMs suffer from the "Lost in the Middle" problem — they focus on context at the extremes of the prompt and ignore chunks in the middle ([LlamaIndex](https://www.llamaindex.ai/blog/using-llms-for-retrieval-and-reranking-23cf2d3a14b6)). Reranking ensures the most relevant chunks are placed at the top before truncating to the generation context window.
+LLMs suffer from the [Lost in the Middle](../../context-engineering/lost-in-the-middle.md) problem — they focus on context at the extremes of the prompt and ignore chunks in the middle ([LlamaIndex](https://www.llamaindex.ai/blog/using-llms-for-retrieval-and-reranking-23cf2d3a14b6)). Reranking ensures the most relevant chunks are placed at the top before truncating to the generation context window.
 
 **Resource profile**: Run the reranker against the top-20 or top-30 candidates only — not the full corpus. Restricting to a small candidate set keeps precision high without destroying latency. Cross-encoders like [`cross-encoder/ms-marco-MiniLM-L-6-v2`](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-6-v2) run on CPU for small candidate sets. Module 6 covers reranker model selection in depth and settles on [`bge-reranker-v2-m3`](https://huggingface.co/BAAI/bge-reranker-v2-m3) as the series reference.
 

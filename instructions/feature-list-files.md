@@ -11,6 +11,7 @@ aliases:
   - feature spec file
   - feature contract
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Feature List Files

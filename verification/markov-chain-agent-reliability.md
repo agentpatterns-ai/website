@@ -12,6 +12,7 @@ aliases:
   - "absorbing DTMC reliability"
   - "agent reliability certificate"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric

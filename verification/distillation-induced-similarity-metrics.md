@@ -13,6 +13,7 @@ aliases:
   - action graph similarity
   - RPS and AGS metrics
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Distillation-Induced Similarity Metrics for Tool-Use Agents

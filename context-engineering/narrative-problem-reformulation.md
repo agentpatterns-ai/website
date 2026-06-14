@@ -11,6 +11,7 @@ aliases:
   - narrative reformulation prompting
   - storycoder narrative prompting
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Narrative Problem Reformulation for Code Generation

@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Five-Pass Blunder Hunt

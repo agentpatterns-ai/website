@@ -13,6 +13,7 @@ tags:
   - tool-agnostic
   - rag
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Chunking Strategy for RAG-Based Code Completion

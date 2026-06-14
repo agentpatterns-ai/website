@@ -11,6 +11,7 @@ tags:
   - arxiv
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Token-Efficient Code Generation: Structural Beats Prompting

@@ -10,6 +10,7 @@ aliases:
   - Pre-Install Plugin Disclosure
   - Plugin Capability Inventory
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Pre-Install Plugin Transparency: Capability Inventory and Cost Projection

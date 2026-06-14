@@ -11,6 +11,7 @@ aliases:
   - AI PR security review gap
   - agentic PR security weaknesses
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # The Security Review Gap in AI-Authored PRs

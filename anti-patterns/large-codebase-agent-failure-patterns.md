@@ -12,6 +12,7 @@ aliases:
   - large codebase agent failures
   - coding agent failure patterns
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)

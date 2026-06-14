@@ -11,6 +11,7 @@ aliases:
   - cold start safety gap
   - cold-start safety gap in agents
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)

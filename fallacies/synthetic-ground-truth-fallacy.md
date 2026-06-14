@@ -12,6 +12,7 @@ aliases:
   - "model collapse from synthetic data"
   - "synthetic data feedback loop"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Synthetic Ground Truth Fallacy

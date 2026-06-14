@@ -6,6 +6,7 @@ tags:
   - observability
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Making Application Observability Legible to Agents

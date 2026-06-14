@@ -13,6 +13,7 @@ aliases:
   - "TRAJEVAL"
   - "stage decomposition"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Trajectory Decomposition: Diagnose Where Coding Agents Fail

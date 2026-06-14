@@ -6,13 +6,12 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
-  - hands-on
 last_reviewed: 2026-05-27
 ---
 
 # Step-by-Step: Building Your First Eval-Driven Feature
 
-> A hands-on walkthrough — build a PR description generator from scratch using the eval-first development loop, with complete task definitions, graders, and iteration examples.
+> A hands-on walkthrough building your first eval-driven feature — a PR description generator from scratch, with complete task definitions, graders, and iteration examples.
 
 [Eval-driven development](../../workflows/eval-driven-development.md) starts by defining measurable success criteria — eval tasks and graders — before writing any agent code. The feature built here is a PR description generator that takes a git diff as input and produces a structured description. Each step below follows the eval-first loop: define tasks, build graders, run a baseline, implement, iterate until the bar is met, then ship.
 
@@ -542,7 +541,7 @@ After launch, add tasks from real usage:
 - **Incidents**: "the agent flagged every file as needing review" — new task with a normal diff that should not flag anything
 - **Edge cases discovered**: binary file diffs, diffs with non-English comments, squash commits bundling multiple features
 
-Each new task strengthens the regression net. See [Hardening Evals for Production](hardening-evals.md) for the full hardening workflow.
+Each new task strengthens the regression net. See [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) for the systematic pipeline from a production incident to a regression case, and [Hardening Evals for Production](hardening-evals.md) for the full hardening workflow.
 
 ---
 

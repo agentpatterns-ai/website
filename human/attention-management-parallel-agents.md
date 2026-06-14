@@ -11,6 +11,7 @@ aliases:
   - "CPU scheduler metaphor"
   - "developer as scheduler"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Developer as CPU Scheduler: Attention Management with Parallel Agents

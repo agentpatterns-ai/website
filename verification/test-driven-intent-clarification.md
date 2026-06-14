@@ -10,6 +10,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts

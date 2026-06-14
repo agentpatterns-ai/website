@@ -8,6 +8,7 @@ aliases:
   - "repo-level code auditing"
   - "inter-procedural analysis"
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Demand-Driven Repository Auditing

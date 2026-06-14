@@ -11,6 +11,7 @@ aliases:
   - AutoContext pattern
   - five-role improvement loop
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Closed-Loop Role-Based Refinement

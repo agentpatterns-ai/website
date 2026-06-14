@@ -11,6 +11,7 @@ aliases:
   - agent-step events
   - agent event stream
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Event Streaming: Consumer Contract Above the Tokens

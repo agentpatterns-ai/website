@@ -10,6 +10,7 @@ aliases:
   - "evidence-driven guardrails for APR"
   - "cost-ascending verification gates"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Staged Evidence Gates for Agentic Program Repair

@@ -12,6 +12,7 @@ aliases:
   - mcp marketplace deduplication
   - agent tool provenance
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Tool Cloning and Provenance Assessment

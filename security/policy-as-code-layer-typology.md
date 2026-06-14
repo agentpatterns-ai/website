@@ -13,6 +13,7 @@ aliases:
   - policy-as-code layer
   - governance by construction
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Five-Stage Policy Layer Typology for Generalist Agents

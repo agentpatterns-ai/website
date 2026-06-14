@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - instructions
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # System Prompt as Secret Store (OWASP LLM07)

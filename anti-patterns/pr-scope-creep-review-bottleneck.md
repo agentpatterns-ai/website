@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # PR Scope Creep as a Human Review Bottleneck

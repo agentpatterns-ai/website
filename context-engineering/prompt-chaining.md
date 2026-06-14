@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - context-engineering
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Prompt Chaining: Sequential LLM Calls for Agent Workflows

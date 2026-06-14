@@ -11,6 +11,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions

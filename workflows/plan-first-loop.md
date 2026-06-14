@@ -9,6 +9,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Plan-First Loop: Always Design Before Writing Code

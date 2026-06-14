@@ -11,6 +11,7 @@ aliases:
   - two-surface agent UX
   - agent dashboard vs editor
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Editor and Manager Surface Separation in Agent IDEs

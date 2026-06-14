@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - claude
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # PostToolUse Output Replacement: Hooks That Rewrite Tool Results

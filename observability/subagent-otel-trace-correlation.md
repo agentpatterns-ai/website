@@ -11,6 +11,7 @@ aliases:
   - agent_id propagation
   - per-subagent OTel attribution
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Subagent OTel Trace Correlation via `agent_id` Attribute

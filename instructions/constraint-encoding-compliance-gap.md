@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Constraint Encoding Does Not Fix Constraint Compliance

@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Plan Files as Resumable Artifacts
@@ -22,7 +23,7 @@ A *persisted* plan lives in the repo at a stable path, tracked in git — mutabl
 
 The pattern is **qualified**. Treat these as prerequisites:
 
-- **Multi-session work.** The plan externalises state the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+- **Multi-session work.** The plan [externalises state](../../agent-design/externalization-in-llm-agents.md) the context window cannot retain ([Anthropic harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 - **Recurring workflows with template value.** Stulberg reports that reusing plan files lets the next run "start at 80% done" ([Aakash x Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
 - **Cross-functional review.** When a PM, designer, or domain expert must approve the approach, the plan PR is the review surface ([transcript](https://www.aakashg.com/hannah-stulberg-podcast/)).
 
@@ -34,7 +35,7 @@ No single convention has won. Three are in active use:
 
 - **Ralph single-root.** One `IMPLEMENTATION_PLAN.md` at the repo root; one task per iteration, one commit per update. The author "throws it out often" — durability is not the goal ([Huntley](https://ghuntley.com/ralph/); [how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum)).
 - **Codex `.agent/PLANS.md`.** Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained" — progress, decision log, surprises, outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)).
-- **Manus tripartite.** Split across `task_plan.md`, `findings.md`, `progress.md`. Rewriting the todo list "recites objectives into the end of the context" — the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
+- **Manus tripartite.** Split across `task_plan.md`, `findings.md`, `progress.md`. Rewriting the todo list ["recites objectives into the end of the context"](../../context-engineering/goal-recitation.md) — the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
 Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus for phase/findings separation.
 

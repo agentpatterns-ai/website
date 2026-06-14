@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Repository Map Pattern: AST + PageRank for Dynamic Code Context

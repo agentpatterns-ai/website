@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # L3 → L5: Reaching Agent-First
@@ -89,7 +90,7 @@ jobs:
 
 ### Step 2: Add Observability for Agent Sessions
 
-L4 requires visibility into what agents did and why — not just whether the output is correct — for audit and debugging when results surprise.
+L4 requires visibility into what agents did and why — not just whether the output is correct — for audit and debugging when results surprise. See [Agent Observability with OpenTelemetry](../../observability/agent-observability-otel.md) for the tracing layer underneath this.
 
 **Structured agent work branches:** name them consistently (`agent/issue-123-add-rate-limiting`, `copilot/feature/user-preferences`) so agent PRs are identifiable and CI can apply agent-specific validation rules.
 
@@ -112,7 +113,7 @@ An in-band audit trail — reviewers understand agent decisions without reading 
 
 ### Step 3: Define Rollback Triggers
 
-Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy:
+Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy — [rollback-first design](../../agent-design/rollback-first-design.md) applied to agent PRs:
 
 | Trigger | Response |
 |---------|----------|
@@ -266,7 +267,7 @@ Stop at L4 if:
 - **Goal specifications unlock planning**. Structured tasks constrain how agents work; goal specs define what "done" means and let agents find better paths than step-by-step task lists.
 - **Evals are the L5 quality gate.** Pass/fail CI validates syntax; evals validate quality. You need both to operate at L5 without accumulating hidden quality debt.
 - **L5 is the objective, not the expectation for every task.** Experienced users enable full auto-approve in ~40% of sessions ([Anthropic](https://www.anthropic.com/research/measuring-agent-autonomy)). Reserve L5 workflows for well-specified, testable tasks in well-understood parts of the codebase.
-- **The transformation is the practice.** The infrastructure you build to reach L5 — types, tests, hooks, evals, structured tasks — benefits human developers equally. It is not agent-specific overhead; it is engineering rigor relocated.
+- **The transformation is the practice.** The infrastructure you build to reach L5 — types, tests, hooks, evals, structured tasks — benefits human developers equally. It is not agent-specific overhead; it is [engineering rigor relocated](../../human/rigor-relocation.md).
 
 ## Related
 

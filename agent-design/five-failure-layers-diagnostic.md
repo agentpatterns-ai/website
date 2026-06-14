@@ -12,6 +12,7 @@ aliases:
   - harness failure attribution
   - five-layer agent diagnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model

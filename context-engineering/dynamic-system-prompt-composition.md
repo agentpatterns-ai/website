@@ -10,6 +10,7 @@ aliases:
   - modular prompt assembly
   - composable system prompts
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Dynamic System Prompt Composition

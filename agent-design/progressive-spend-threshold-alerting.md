@@ -11,6 +11,7 @@ aliases:
   - soft spend limit alerts
   - staged budget alerting
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Progressive Spend Threshold Alerting for Agent Cost Governance

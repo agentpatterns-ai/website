@@ -11,6 +11,7 @@ aliases:
   - Mistake-Proofing
   - Poka-Yoke
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Write Tool Descriptions as Agent Onboarding Documents

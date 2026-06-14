@@ -10,6 +10,7 @@ aliases:
   - memory is the harness
   - agent memory harness ownership
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Harness-Memory Coupling as a Design Axis

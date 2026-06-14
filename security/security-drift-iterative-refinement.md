@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - security
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Security Drift in Iterative LLM Code Refinement

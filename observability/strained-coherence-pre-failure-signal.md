@@ -13,6 +13,7 @@ aliases:
   - verbalized reward hacking detection
   - acknowledged conflict trajectory signal
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Strained Coherence as a Pre-Failure Signal in Agent Trajectories

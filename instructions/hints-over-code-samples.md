@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Hints Over Code Samples in Agent Prompts

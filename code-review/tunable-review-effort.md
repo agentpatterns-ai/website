@@ -11,6 +11,7 @@ tags:
   - cost-performance
   - cursor
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Tunable Effort Levels for Code Review Agents

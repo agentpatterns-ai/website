@@ -10,6 +10,7 @@ aliases:
   - grill me technique
   - plan interrogation technique
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Grill Me: Developer-Initiated Plan Interrogation

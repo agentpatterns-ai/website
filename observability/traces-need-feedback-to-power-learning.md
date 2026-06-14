@@ -11,6 +11,7 @@ aliases:
   - feedback-attached traces
   - trace as eval corpus
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Traces Need Feedback to Power Learning

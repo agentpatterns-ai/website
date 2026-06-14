@@ -8,6 +8,7 @@ tags:
   - evals
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Behavioral Testing for Non-Deterministic AI Agents

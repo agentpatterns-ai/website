@@ -10,6 +10,7 @@ aliases:
   - dual-model plan review
   - pre-execution plan review
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Critic Agent Pattern

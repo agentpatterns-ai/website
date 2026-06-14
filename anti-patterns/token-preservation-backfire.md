@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Token Preservation Backfire

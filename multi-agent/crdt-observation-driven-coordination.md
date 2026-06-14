@@ -12,6 +12,7 @@ aliases:
   - observation-driven coordination
   - lock-free multi-agent coordination
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation

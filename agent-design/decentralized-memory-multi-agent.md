@@ -13,6 +13,7 @@ aliases:
   - decentralized agent memory
   - DecentMem
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Decentralized Memory for Self-Evolving Multi-Agent Systems

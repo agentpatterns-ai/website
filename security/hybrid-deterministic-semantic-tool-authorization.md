@@ -11,6 +11,7 @@ aliases:
   - task-based access control for agents
   - CASA pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Hybrid Deterministic + Semantic Authorization for Agent Tool Calls

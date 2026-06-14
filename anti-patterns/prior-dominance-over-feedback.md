@@ -12,6 +12,7 @@ aliases:
   - propose-evaluate-revise anti-pattern
   - prior over feedback
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Prior Dominance Over Feedback

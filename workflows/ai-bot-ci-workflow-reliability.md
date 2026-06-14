@@ -11,6 +11,7 @@ aliases:
   - Agent CI Success Rate
   - AI Bot Workflow Reliability
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # AI Bot CI/CD Workflow Reliability by Agent

@@ -3,11 +3,11 @@ title: "Agent-Powered Codebase Q&A and Onboarding Workflow"
 description: "A structured workflow for using agents to explore unfamiliar codebases through progressive Q&A, generate architecture docs, and compress onboarding."
 tags:
   - workflows
-  - onboarding
   - context-engineering
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent-Powered Codebase Q&A and Onboarding

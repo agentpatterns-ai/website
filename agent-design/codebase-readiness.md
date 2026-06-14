@@ -9,6 +9,7 @@ aliases:
   - agent-friendly code
   - codebase readiness
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Codebase Readiness for Agents: Agent-Friendly Code

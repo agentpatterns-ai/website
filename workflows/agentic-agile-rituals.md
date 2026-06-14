@@ -14,6 +14,7 @@ aliases:
   - agile for agent development
   - agile rituals for agents
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agentic-Agile: Adapting Agile Rituals for Agent Work

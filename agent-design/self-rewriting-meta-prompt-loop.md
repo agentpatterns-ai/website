@@ -7,6 +7,7 @@ tags:
 aliases:
   - autonomous prompt improvement
   - self-improving prompt loop
+maturity: adopted
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

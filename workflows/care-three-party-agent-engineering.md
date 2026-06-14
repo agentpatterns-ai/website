@@ -12,6 +12,7 @@ aliases:
   - Collaborative Agent Reasoning Engineering
   - CARE methodology
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # CARE: Three-Party Stage-Gated Engineering of LLM Agents

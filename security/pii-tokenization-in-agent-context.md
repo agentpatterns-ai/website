@@ -13,6 +13,7 @@ aliases:
   - data de-identification
   - PII Tokenization in Agent Context
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Sandbox-Enforced PII Tokenization in Agent Workflows

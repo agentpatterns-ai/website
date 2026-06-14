@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape

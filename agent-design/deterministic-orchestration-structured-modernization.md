@@ -12,6 +12,7 @@ aliases:
   - workflow-controlled modernization
   - fixed-policy orchestration
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Deterministic Orchestration for Structured Modernization

@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Ralph Wiggum Loop: Fresh-Context Iteration Pattern

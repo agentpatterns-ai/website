@@ -10,6 +10,7 @@ aliases:
   - organization-scoped model rules
   - org-admin model governance
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Tenant Model Policy

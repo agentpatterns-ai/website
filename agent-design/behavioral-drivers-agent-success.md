@@ -12,6 +12,7 @@ aliases:
   - agent failure clusters
   - resolve rate limitations
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Behavioral Drivers of Coding Agent Success and Failure

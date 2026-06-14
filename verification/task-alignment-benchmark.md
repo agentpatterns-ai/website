@@ -13,6 +13,7 @@ aliases:
   - selective compliance evaluation
   - TAB benchmark
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Task Alignment: The Selective-Compliance Gap Benchmarks Miss

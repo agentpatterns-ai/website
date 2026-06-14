@@ -12,6 +12,7 @@ aliases:
   - Skill design patterns
   - SKILL.md authoring
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Skill Authoring Patterns: Description to Deployment

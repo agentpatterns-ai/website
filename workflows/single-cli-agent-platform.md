@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Single-CLI Agent Platform: Create to Production in One CLI

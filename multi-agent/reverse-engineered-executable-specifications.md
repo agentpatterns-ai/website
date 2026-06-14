@@ -11,6 +11,7 @@ aliases:
   - executable specification inference for APR
   - specification-first program repair
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Reverse-Engineered Executable Specifications for Agentic Program Repair

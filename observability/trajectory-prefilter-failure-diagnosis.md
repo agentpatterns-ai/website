@@ -13,6 +13,7 @@ aliases:
   - investigator pre-filter pattern
   - automated failure diagnosis pre-filter
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)

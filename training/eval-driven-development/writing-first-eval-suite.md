@@ -37,7 +37,7 @@ For each task, define what a correct output looks like. This is the hardest step
 
 **Subjective outcomes** (correctness requires judgment): completeness, factual accuracy, style compliance, source quality. A summarization agent's output requires a rubric to evaluate.
 
-**The agreement test**: two domain experts should independently agree on the pass/fail verdict for every task before the task is committed to the suite. If they disagree, the task specification is ambiguous — and ambiguous task specifications are a leading source of misleading eval results. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+**The agreement test**: two domain experts should independently agree on the pass/fail verdict for every task before the task is committed to the suite. If they disagree, the task specification is ambiguous — and ambiguous task specifications are a leading source of misleading eval results. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)] See [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) for running this agreement process as a repeatable curation loop.
 
 ---
 
@@ -151,7 +151,7 @@ Do not add tasks to pad the count. Every task should represent a genuinely disti
 
 **No baseline run**: skipping the baseline means you cannot measure progress. A pass rate of 85% is meaningless without knowing the starting point.
 
-**Single-run evaluation**: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
+**Single-run evaluation**: running each task once gives a misleading confidence level. Run at least 3 times per task to detect variance — the [pass@k and pass^k metrics](../../verification/pass-at-k-metrics.md) formalise capability-versus-consistency across runs. If variance is high (pass rate swings more than 20% between runs), you need more runs or tighter task specifications.
 
 **Too few runs for small effects**: a suite of 20–50 tasks at 3 runs each can detect large improvements (30% → 80%) but not small ones (85% → 90%). As changes become incremental, increase task count or run count to maintain the ability to distinguish real improvements from noise.
 

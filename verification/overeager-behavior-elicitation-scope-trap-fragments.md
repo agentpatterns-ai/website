@@ -13,6 +13,7 @@ aliases:
   - scope and trap fragments
   - overeager behavior elicitation
 last_reviewed: 2026-06-12
+maturity: established
 status: current
 ---
 

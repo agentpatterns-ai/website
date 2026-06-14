@@ -11,6 +11,7 @@ aliases:
   - readOnlyHint parallel execution
   - parallel MCP tool dispatch
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Hint-Driven Concurrency for Read-Only MCP Tools

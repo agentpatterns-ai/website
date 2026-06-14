@@ -11,6 +11,7 @@ aliases:
   - thinking trace retrieval
   - reasoning trace corpus
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # RAG over Thinking Traces

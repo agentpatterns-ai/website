@@ -9,6 +9,7 @@ aliases:
   - three-layer agent architecture
   - skills-agents-commands pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Separation of Knowledge and Execution

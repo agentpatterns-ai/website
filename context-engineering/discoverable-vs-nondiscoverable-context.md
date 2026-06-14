@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Discoverable vs Non-Discoverable Context

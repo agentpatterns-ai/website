@@ -12,6 +12,7 @@ aliases:
   - pattern trade-off matrix
   - pattern decision matrix
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Pattern Selection Map

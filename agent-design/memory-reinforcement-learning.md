@@ -10,6 +10,7 @@ aliases:
   - utility-scored episodic memory
   - runtime reinforcement learning on episodic memory
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Memory Reinforcement Learning (MemRL)

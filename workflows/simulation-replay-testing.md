@@ -8,6 +8,7 @@ tags:
   - workflows
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Simulation and Replay Testing for Agent Verification

@@ -12,6 +12,7 @@ aliases:
   - multi-agent failure signal taxonomy
   - early diagnosis of wasted agent computation
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Failure-Aware Observability for Multi-Agent LLM Systems

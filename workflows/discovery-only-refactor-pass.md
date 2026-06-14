@@ -13,6 +13,7 @@ aliases:
   - improve-codebase-architecture skill
   - deepening opportunity discovery
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Discovery-Only Refactor Pass: Surface Candidates Before Touching Code

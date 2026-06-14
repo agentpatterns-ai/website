@@ -6,6 +6,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Controlling Agent Output: Concise Answers, Not Essays

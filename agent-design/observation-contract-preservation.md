@@ -11,6 +11,7 @@ aliases:
   - observation contracts
   - contract-bound tool outputs
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Observation Contract Preservation in Tool-Augmented Agents

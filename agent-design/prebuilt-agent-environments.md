@@ -12,6 +12,7 @@ aliases:
   - custom Actions images for agents
   - agent runtime prebuild
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Prebuilt Agent Environments

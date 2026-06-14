@@ -12,6 +12,7 @@ aliases:
   - Tool Minimalism
   - Tool Schema Design
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Subagent Schema-Level Tool Filtering

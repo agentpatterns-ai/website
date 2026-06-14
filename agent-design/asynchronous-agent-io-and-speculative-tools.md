@@ -10,6 +10,7 @@ aliases:
   - real-time agent architecture
   - speculative tool execution
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Asynchronous Agent I/O and Speculative Tool Calling

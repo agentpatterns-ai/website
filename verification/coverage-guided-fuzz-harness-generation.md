@@ -10,6 +10,7 @@ aliases:
   - "fuzz target generation"
   - "automated harness generation"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Coverage-Guided Agents for Fuzz Harness Generation

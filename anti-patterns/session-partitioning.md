@@ -12,6 +12,7 @@ aliases:
   - session partitioning
   - context pollution
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Kitchen Sink Session

@@ -10,6 +10,7 @@ aliases:
   - dual-use skill design
   - CLI-first skills
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # CLI-First Skill Design

@@ -10,6 +10,7 @@ aliases:
   - assistant text transformation hook
   - outbound message hook
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # MessageDisplay Hook: Transforming Assistant Text at the Display Boundary

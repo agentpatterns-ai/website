@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Lay the Architectural Foundation by Hand Before Delegating to Agents

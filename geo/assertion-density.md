@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Assertion Density — Stats and Quotes Over Vague Claims

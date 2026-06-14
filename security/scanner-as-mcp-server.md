@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - mcp
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools

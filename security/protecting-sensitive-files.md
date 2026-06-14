@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - security
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Protecting Sensitive Files from Agent Context

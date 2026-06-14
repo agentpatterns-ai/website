@@ -13,6 +13,7 @@ aliases:
   - agent pane layout
   - parallel agent tiles
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes

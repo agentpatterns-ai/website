@@ -13,6 +13,7 @@ aliases:
   - context collapse
   - brevity bias in context
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Evolving Playbooks: Incremental Context That Preserves Knowledge

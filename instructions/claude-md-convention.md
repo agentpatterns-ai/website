@@ -9,6 +9,7 @@ aliases:
   - Instruction File Convention
   - Project Instruction Files
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # CLAUDE.md Convention for Structuring Agent Instructions

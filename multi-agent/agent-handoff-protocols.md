@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent Handoff Protocols: Passing Work Between Agents

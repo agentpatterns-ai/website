@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # First-Party Agent Composition: Replace SaaS Stitching with Agent-Built Features

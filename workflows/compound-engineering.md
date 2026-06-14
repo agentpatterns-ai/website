@@ -8,6 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Compound Engineering: Learning Loops That Make Each Feature Easier

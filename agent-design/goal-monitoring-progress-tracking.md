@@ -8,6 +8,7 @@ tags:
   - harness-engineering
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Goal Monitoring and Progress Tracking

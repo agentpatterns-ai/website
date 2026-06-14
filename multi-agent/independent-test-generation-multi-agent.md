@@ -12,6 +12,7 @@ aliases:
   - Code-Test Separation Pattern
   - AgentCoder Pattern
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Independent Test Generation in Multi-Agent Code Systems

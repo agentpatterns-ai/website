@@ -10,6 +10,7 @@ aliases:
   - background agent supervisor
   - agent session daemon
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Per-User Supervisor Process for Background Agent Sessions

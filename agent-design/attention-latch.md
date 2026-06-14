@@ -12,6 +12,7 @@ aliases:
   - information over-squashing in agents
   - mid-task update suppression
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Attention Latch: When Agents Stay Anchored to Stale Instructions

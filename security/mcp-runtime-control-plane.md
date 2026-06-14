@@ -12,6 +12,7 @@ tags:
   - agent-design
   - mcp
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool

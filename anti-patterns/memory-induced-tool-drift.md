@@ -12,6 +12,7 @@ aliases:
   - memory induced tool drift
   - personality bias tool drift
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Memory-Induced Tool-Drift in LLM Agents

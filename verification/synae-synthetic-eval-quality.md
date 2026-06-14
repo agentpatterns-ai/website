@@ -11,6 +11,7 @@ aliases:
   - synthetic eval quality measurement
   - SynAE framework
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Measuring Synthetic Eval Data Quality (SynAE)

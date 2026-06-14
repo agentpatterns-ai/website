@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Sub-Agents for Fan-Out Research and Context Isolation
