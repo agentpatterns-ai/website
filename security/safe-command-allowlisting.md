@@ -10,6 +10,7 @@ tags:
   - claude
   - security
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Safe Command Allowlisting: Reducing Approval Fatigue

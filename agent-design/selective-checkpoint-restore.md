@@ -8,6 +8,7 @@ aliases:
   - three-way checkpoint restore
   - code-only and conversation-only rewind
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Selective Checkpoint Restore Across Code and Conversation State

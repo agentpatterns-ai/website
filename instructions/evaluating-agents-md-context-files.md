@@ -11,6 +11,7 @@ aliases:
   - AGENTS.md evaluation
   - context file benchmarks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Evaluating AGENTS.md: When Context Files Hurt More Than Help

@@ -11,6 +11,7 @@ aliases:
   - ultrareview pattern
   - parallel multi-agent code review
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Cloud Parallel Review Pattern

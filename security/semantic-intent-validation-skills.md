@@ -11,6 +11,7 @@ aliases:
   - intent-based skill scanning
   - skill intent verification
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Semantic Intent Validation for Agent Skills

@@ -13,6 +13,7 @@ aliases:
   - stratified retrieval eval for agent memory
   - BM25-pinned distractor protocol
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Control Lexical Leakage in Agent-Memory Retrieval Evals (Entity-Collision)

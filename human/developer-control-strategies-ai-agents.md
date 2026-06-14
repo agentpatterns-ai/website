@@ -10,6 +10,7 @@ aliases:
   - plan-supervise-validate loop
   - agent control strategies
 last_reviewed: 2026-06-05
+maturity: emerging
 ---
 
 # Developer Control Strategies for AI Coding Agents

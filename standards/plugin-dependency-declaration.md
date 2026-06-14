@@ -6,6 +6,7 @@ tags:
   - agent-design
   - claude
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Plugin Dependency Declaration and Disable-Chain Hints

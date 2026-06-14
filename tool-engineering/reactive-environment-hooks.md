@@ -11,6 +11,7 @@ aliases:
   - CwdChanged hook
   - FileChanged hook
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Reactive Environment Hooks: CwdChanged and FileChanged

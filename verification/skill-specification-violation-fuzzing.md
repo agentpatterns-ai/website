@@ -12,6 +12,7 @@ aliases:
   - skill guardrail violation discovery
   - specification violation fuzzing
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Skill Specification Violation Fuzzing

@@ -11,6 +11,7 @@ aliases:
   - operational anchor preservation
   - cost-aware skill compression
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens

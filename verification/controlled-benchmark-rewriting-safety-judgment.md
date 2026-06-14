@@ -13,6 +13,7 @@ aliases:
   - deceptive trajectory rewriting
   - safety judgment OOD evaluation
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Controlled Benchmark Rewriting for Agent Safety Judgment

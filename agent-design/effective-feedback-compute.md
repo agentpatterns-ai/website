@@ -10,6 +10,7 @@ aliases:
   - effective feedback compute
   - trace-level scaling coordinate
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Effective Feedback Compute (EFC) for Harness Comparison

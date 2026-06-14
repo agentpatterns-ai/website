@@ -10,6 +10,7 @@ aliases:
   - self-hosted agent harness
   - agent harness deployment
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Managed vs Self-Hosted Agent Harness

@@ -10,6 +10,7 @@ aliases:
   - "AGENTS.md best practices"
   - "AGENTS.md writing patterns"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # AGENTS.md Design Patterns for Effective Agent Files

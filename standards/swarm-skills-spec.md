@@ -10,6 +10,7 @@ aliases:
   - swarm-skill kind
   - JiuwenSwarm specification
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Swarm Skills: Multi-Agent Extension of the Agent Skills Standard

@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # LLM Code Review Overcorrection

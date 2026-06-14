@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Reviewer's Playbook for Agent-Authored Pull Requests

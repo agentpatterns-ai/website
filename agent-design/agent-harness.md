@@ -14,6 +14,7 @@ aliases:
   - initializer-coding agent pattern
   - two-phase agent harness
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Harness: Initializer and Coding Agent

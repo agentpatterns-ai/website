@@ -10,6 +10,7 @@ aliases:
   - developer adoption of LLM refactoring
   - ChatGPT refactoring suggestion modification
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # LLM Refactoring Adoption Patterns

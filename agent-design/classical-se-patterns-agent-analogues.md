@@ -12,6 +12,7 @@ tags:
   - human-factors
   - workflows
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Classical SE Patterns as Agent Design Analogues

@@ -13,6 +13,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Enterprise Agent Hardening: Three Production Gates

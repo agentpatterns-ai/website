@@ -7,6 +7,7 @@ tags:
   - workflows
   - copilot
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Cloud-Local Agent Handoff

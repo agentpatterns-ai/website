@@ -11,6 +11,7 @@ aliases:
   - prompt-based tool whitelisting
   - "do not call this tool"
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Prompt-Only Tool Access Control

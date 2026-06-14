@@ -12,6 +12,7 @@ aliases:
   - population-level agent evaluation
   - whole-task agent scoring
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Macro Evals for Agentic Systems

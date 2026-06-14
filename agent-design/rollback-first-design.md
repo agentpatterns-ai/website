@@ -9,6 +9,7 @@ aliases:
   - reversible agent design
   - undo-first design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Rollback-First Design: Every Agent Action Should Be Reversible

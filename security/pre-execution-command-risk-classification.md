@@ -12,6 +12,7 @@ aliases:
   - terminal command risk tiers
   - pre-execution command classification
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Pre-Execution Risk Classification for Terminal Commands

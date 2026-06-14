@@ -10,6 +10,7 @@ aliases:
   - OpenAPI tool definitions
   - API-first tool design
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # OpenAPI as the Source of Truth for Agent Tool Definitions

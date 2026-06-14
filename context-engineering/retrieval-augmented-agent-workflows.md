@@ -14,6 +14,7 @@ tags:
   - tool-agnostic
   - rag
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Retrieval-Augmented Agent Workflows: On-Demand Context

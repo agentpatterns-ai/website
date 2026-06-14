@@ -10,6 +10,7 @@ aliases:
   - deny-overrides hook merge
   - parallel hook decision precedence
 last_reviewed: 2026-05-30
+maturity: established
 ---
 
 # Most-Restrictive-Wins Fusion for Parallel Agent Control Returns

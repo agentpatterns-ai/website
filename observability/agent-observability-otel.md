@@ -12,6 +12,7 @@ aliases:
   - Progress File Pattern
   - Audit Trail for Agent Decisions
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Agent Observability with OpenTelemetry and Trajectory Logging

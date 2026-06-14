@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Agent-Aware CLI Behaviour via Environment Variable

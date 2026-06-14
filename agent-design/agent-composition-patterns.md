@@ -13,6 +13,7 @@ aliases:
   - Orchestrator-Worker
   - Sub-Agents Fan-Out
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Composition Patterns for Multi-Agent Workflows

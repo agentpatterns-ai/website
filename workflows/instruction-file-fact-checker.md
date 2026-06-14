@@ -11,6 +11,7 @@ aliases:
   - CLAUDE.md fact-checker
   - instruction drift detection
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Scheduled Instruction File Fact-Checker

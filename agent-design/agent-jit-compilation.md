@@ -12,6 +12,7 @@ aliases:
   - JIT-Scheduler
   - just-in-time agent compilation
 last_reviewed: 2026-06-01
+maturity: emerging
 ---
 
 # Agent JIT Compilation

@@ -8,6 +8,7 @@ aliases:
   - goal-bound autonomous loop
   - objective-driven agent loop
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Goal-Driven Autonomous Loop with Budget Cap

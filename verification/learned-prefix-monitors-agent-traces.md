@@ -12,6 +12,7 @@ aliases:
   - "prefix-risk scorer"
   - "online failure-warning monitor"
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Learned Prefix Monitors for Agent Traces

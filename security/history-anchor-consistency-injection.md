@@ -12,6 +12,7 @@ aliases:
   - consistency injection
   - prior-behavior steering
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions

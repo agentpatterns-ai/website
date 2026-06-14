@@ -10,6 +10,7 @@ aliases:
   - permission allowlist from session logs
   - session-log permission refinement
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Transcript-Driven Permission Allowlist

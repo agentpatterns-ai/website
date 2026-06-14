@@ -11,6 +11,7 @@ aliases:
   - gold-plating
   - code bloat
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Abstraction Bloat in AI Agent-Generated Code Output

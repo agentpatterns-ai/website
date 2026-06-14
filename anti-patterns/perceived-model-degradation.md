@@ -11,6 +11,7 @@ aliases:
   - "vibes vs evals"
   - "LLM drift perception"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Perceived Model Degradation

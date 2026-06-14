@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - context-engineering
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Prompt Layering: How Instructions Stack and Override

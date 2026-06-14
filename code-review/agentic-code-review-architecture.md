@@ -9,6 +9,7 @@ aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agentic Code Review Architecture

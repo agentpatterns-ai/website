@@ -13,6 +13,7 @@ aliases:
   - blueprint-driven legacy migration
   - architecture-documentation migration
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Documentation-Guided Legacy Migration

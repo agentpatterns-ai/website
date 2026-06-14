@@ -11,6 +11,7 @@ aliases:
   - dynamic sandbox parallelism
   - signal-driven fan-out
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

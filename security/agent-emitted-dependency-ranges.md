@@ -9,6 +9,7 @@ aliases:
   - LLM dependency prefix risk
   - caret tilde supply chain
 last_reviewed: 2026-06-01
+maturity: established
 ---
 
 # Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface

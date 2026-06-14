@@ -8,6 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Filter and Aggregate Data in the Execution Environment

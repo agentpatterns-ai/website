@@ -13,6 +13,7 @@ aliases:
   - five-subsystem ablation
   - harness subsystem ablation
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Isometric Harness Ablation

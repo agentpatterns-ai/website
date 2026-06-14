@@ -10,6 +10,7 @@ aliases:
   - comprehension fallacy
   - LLM understanding fallacy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # LLM Comprehension Fallacy

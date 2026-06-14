@@ -10,6 +10,7 @@ aliases:
   - domain glossary for agents
   - CONTEXT.md ubiquitous language
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Ubiquitous Language for AI Plans

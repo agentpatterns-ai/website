@@ -11,6 +11,7 @@ aliases:
   - default agent monitoring view
   - templated OTel dashboard
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Prebuilt Agent Monitoring Dashboard

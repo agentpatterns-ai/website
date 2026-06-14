@@ -10,6 +10,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot

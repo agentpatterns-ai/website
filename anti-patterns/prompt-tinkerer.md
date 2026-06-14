@@ -11,6 +11,7 @@ aliases:
   - prompt bloat
   - instruction bloat
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Prompt Tinkerer

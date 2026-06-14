@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Verification-Centric Development for AI-Generated Code

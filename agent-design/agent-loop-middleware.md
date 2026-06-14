@@ -10,6 +10,7 @@ aliases:
   - deterministic nodes
   - post-loop hooks
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Loop Middleware

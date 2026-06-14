@@ -13,6 +13,7 @@ aliases:
   - step-level authority enforcement
   - action-time authorization for agents
 last_reviewed: 2026-06-09
+maturity: emerging
 status: current
 ---
 

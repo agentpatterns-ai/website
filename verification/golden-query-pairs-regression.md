@@ -11,6 +11,7 @@ tags:
   - evals
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Golden Query Pairs as Continuous Regression Tests for Agents

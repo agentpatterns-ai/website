@@ -12,6 +12,7 @@ aliases:
   - local LLM prompt preprocessing
   - pre-flight prompt rewriting
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Cross-Lingual Prompt Preprocessing (Local-LLM Token Arbitrage)

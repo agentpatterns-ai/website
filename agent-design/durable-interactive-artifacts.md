@@ -12,6 +12,7 @@ aliases:
   - persistent agent artifacts
   - cross-session interactive artifacts
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Durable Interactive Artifacts: Agent Output Outside the Transcript

@@ -10,6 +10,7 @@ aliases:
   - evaluating agent skills
   - skill quality evaluation
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit

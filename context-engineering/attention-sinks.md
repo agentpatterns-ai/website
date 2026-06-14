@@ -9,6 +9,7 @@ aliases:
   - Critical Instruction Repetition
   - Attention Bias and Instruction Placement
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Attention Sinks: Why First Tokens Always Win

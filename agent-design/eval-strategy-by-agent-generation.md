@@ -12,6 +12,7 @@ aliases:
   - per-generation eval strategy
   - agent generation taxonomy
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Eval Strategy by Agent Generation: A Structure-to-Eval Locator

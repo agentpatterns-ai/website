@@ -7,6 +7,7 @@ tags:
   - claude
   - mcp
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # MCP Tool Result Persistence via _meta Annotation

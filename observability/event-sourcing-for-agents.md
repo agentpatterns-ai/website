@@ -11,27 +11,28 @@ tags:
 aliases:
   - ESAA
   - Event Sourcing for Autonomous Agents
-last_reviewed: 2026-06-13
+last_reviewed: 2026-06-14
+maturity: established
 ---
 
 # Event Sourcing for Agents: Separating Cognitive Intention from State Mutation
 
 > Agents emit structured JSON intentions; a deterministic orchestrator validates, persists them to an append-only log, and applies effects — producing immutable, replay-verifiable task history.
 
-ESAA (Event Sourcing for Autonomous Agents) separates the cognitive layer — the LLM deciding what to do — from the execution layer that mutates state. Agents emit validated JSON events; a deterministic orchestrator persists them to an append-only log and applies effects. This enables replay verification, concurrent multi-agent coordination without write conflicts, and structured context injection that counters context degradation in long-horizon tasks.
+ESAA (Event Sourcing for Autonomous Agents) separates the cognitive layer — the LLM deciding what to do — from the execution layer that mutates state. Agents emit validated JSON events; a deterministic orchestrator persists them to an append-only log and applies effects. This enables replay verification, concurrent multi-agent coordination without write conflicts, and structured context injection that counters context degradation.
 
 ## The Problem
 
 Long-horizon agents accumulate two failure modes as tasks grow:
 
-1. **Context degradation** — conversation history grows until earlier decisions are pushed out of the effective attention window, causing agents to repeat work or contradict earlier choices
-2. **Non-deterministic state mutation** — agents apply file changes directly, making it impossible to audit what happened, replay execution, or verify that the recorded intention matches the actual effect
+1. **Context degradation** — conversation history grows until earlier decisions fall out of the attention window, so agents repeat work or contradict earlier choices
+2. **Non-deterministic state mutation** — agents write files directly, making it impossible to audit, replay, or verify that the recorded intention matches the actual effect
 
-Both failure modes worsen as task length increases.
+Both worsen as task length increases.
 
 ## The ESAA Pattern
 
-[arXiv:2602.23193](https://arxiv.org/abs/2602.23193) presents the Event Sourcing for Autonomous Agents (ESAA) pattern — applying [Fowler's event sourcing model](https://martinfowler.com/eaaDev/EventSourcing.html) to LLM agents — validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs.
+[arXiv:2602.23193](https://arxiv.org/abs/2602.23193) presents the Event Sourcing for Autonomous Agents (ESAA) pattern — applying [Fowler's event sourcing model](https://martinfowler.com/eaaDev/EventSourcing.html) to LLM agents — validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs. The author has published a runnable MIT-licensed reference implementation, [`esaa-core`](https://github.com/elzobrito/esaa-core) (Python) — the file layout, CLI, and state machine below are drawn from it.
 
 The pattern applies event sourcing to agent execution:
 
@@ -46,27 +47,29 @@ graph TD
     G -->|next task context| A
 ```
 
-**Agents emit intentions, not mutations.** An agent produces a structured event (`agent.result` or `issue.report`) describing what it intends to happen. The agent never directly writes files or modifies project state.
+**Agents emit intentions, not mutations.** An agent produces a structured event (`agent.result` or `issue.report`) describing what it intends to happen. It never directly writes files or modifies project state.
 
-**A deterministic orchestrator executes effects.** The orchestrator validates the JSON schema, appends the event to `activity.jsonl` (append-only, never modified), then applies the described file effects. The orchestrator validates before persisting — malformed or out-of-contract events never reach the log.
+**A deterministic orchestrator executes effects.** The orchestrator validates the JSON schema, appends the event to `activity.jsonl` (append-only, never modified), then applies the file effects. Validation is fail-closed with structured error codes — malformed or out-of-contract events never reach the log. Each effect is persisted as a content-addressed artifact under `.roadmap/artifacts/file-effects/<sha>.json`, backing the "validates before persisting" guarantee with deterministic, replayable transactions.
 
-**Boundary contracts define the interface.** `AGENT_CONTRACT.yaml` specifies the exact schema each agent must emit, the tools it may call, and the tasks it may handle. This typed boundary between cognitive and execution layers is enforced at runtime, not just by convention.
+**Boundary contracts define the interface.** Governance lives under `.roadmap/`: `AGENT_CONTRACT.yaml` specifies the schema each agent must emit, the tools it may call, and the tasks it may handle; `ORCHESTRATOR_CONTRACT.yaml` encodes workflow gates and single-writer rules; `RUNTIME_POLICY.yaml` sets attempts, cooldown, TTL, and escalation. These typed boundaries are enforced at runtime, not by convention.
 
-**A materialized view replaces conversation history.** `roadmap.json` is continuously updated from the event log to reflect current task status, completed work, and open issues. Agents receive this compact, structured view as context instead of growing conversation history — directly addressing context degradation.
+**Tasks move through an explicit state machine.** A task flows `todo → in_progress → review → done` (`claim` advances it to `in_progress`, `complete` to `review`, approval to `done`); a reviewer's `request_changes` returns it from `review` to `in_progress`. `done` is terminal — defects are fixed through a new hotfix task, never by reopening or rewriting history.
+
+**A materialized view replaces conversation history.** `roadmap.json` is continuously updated from the event log to reflect current task status, completed work, and open issues. Agents receive this compact view as context instead of growing conversation history — directly addressing context degradation.
 
 ## Replay Verification
 
-The `esaa verify` command replays the `activity.jsonl` log and re-derives project state from scratch. If the derived state matches the actual filesystem, the execution record is verified. This provides:
+The `python -m esaa verify` command replays the `activity.jsonl` log and re-derives project state from scratch. (`verify` is one of the runtime's commands alongside `run`, `submit`, `claim`, `complete`, `review`, `state`, `eligible`, `metrics`, and `replay`.) If the derived state matches the actual filesystem, the execution record is verified. This provides:
 
 - **Forensic traceability** — every state change is explained by a logged event with a timestamp and agent identity
-- **Immutability guarantees** — append-only log with no in-place updates means historical execution cannot be silently revised
+- **Immutability guarantees** — an append-only log with no in-place updates means historical execution cannot be silently revised
 - **Reproducibility** — given the same event sequence, the same final state must emerge
 
 The event log is the source of truth; current state is a derived projection.
 
 ## Concurrent Heterogeneous Agents
 
-In the clinical dashboard case study, 4 concurrent heterogeneous LLMs worked on different tasks from the same roadmap. The orchestrator serializes event persistence and state mutation, preventing write conflicts without requiring agents to implement coordination logic. Agents are cognitively independent — they emit intentions and receive updated roadmap views.
+In the clinical dashboard case study, 4 concurrent heterogeneous LLMs worked different tasks from the same roadmap. The orchestrator serializes event persistence and state mutation, preventing write conflicts without agents implementing coordination logic — they stay cognitively independent, emitting intentions and receiving updated roadmap views.
 
 ## When to Apply
 
@@ -84,11 +87,11 @@ Skip when:
 
 ## When This Backfires
 
-**Infrastructure overhead exceeds benefit for short tasks.** ESAA requires an orchestrator process, schema validation layer, append-only log storage, and a materialized view projection. For single-session tasks, this adds latency and complexity with no payoff — direct mutation is faster to implement and operate.
+**Infrastructure overhead exceeds benefit for short tasks.** ESAA requires an orchestrator process, schema validation, append-only log storage, and a materialized view. For single-session tasks this adds latency and complexity with no payoff — direct mutation is faster.
 
-**Schema rigidity slows early iteration.** `AGENT_CONTRACT.yaml` enforces a typed boundary at runtime. Early in a project, the event schema changes frequently; every schema change requires updating contracts, regenerating validation logic, and migrating historical logs. Rapid prototyping phases may find contract overhead exceeds the cost of context degradation.
+**Schema rigidity slows early iteration.** Early on, the event schema changes frequently; each change means updating `AGENT_CONTRACT.yaml`, regenerating validation, and migrating historical logs. Rapid prototyping may find this overhead exceeds the cost of context degradation.
 
-**Central orchestrator becomes a throughput bottleneck.** Event persistence is serialized to prevent write conflicts. At high concurrency, this limits aggregate throughput. Sharding state by domain (each shard with its own orchestrator) mitigates this but adds coordination complexity.
+**Central orchestrator becomes a throughput bottleneck.** Serialized event persistence limits aggregate throughput at high concurrency. Sharding state by domain mitigates this but adds coordination complexity.
 
 ## Example
 
@@ -129,19 +132,20 @@ When the writer agent completes a task, it emits a structured JSON intention —
 The orchestrator validates this event against `AGENT_CONTRACT.yaml`, appends it to `activity.jsonl`, then applies the file write. To verify execution integrity at any point:
 
 ```bash
-esaa verify --log activity.jsonl --root .
+python -m esaa verify --log activity.jsonl --root .
 # ✓ 47 events replayed
 # ✓ Derived state matches filesystem
 ```
 
-If the derived state diverges from the filesystem, `esaa verify` reports which events produced unexpected effects — providing forensic traceability without requiring agents to implement any audit logic themselves.
+If the derived state diverges from the filesystem, `verify` reports which events produced unexpected effects — forensic traceability without agents implementing any audit logic.
 
 ## Key Takeaways
 
 - Agents emit structured JSON intentions; a deterministic orchestrator applies effects — cognitive and execution layers are decoupled
-- Append-only `activity.jsonl` provides immutable task history; `esaa verify` replay-verifies execution against the filesystem
+- Append-only `activity.jsonl` provides immutable task history; `python -m esaa verify` replay-verifies execution against the filesystem
+- A runnable MIT reference implementation, [`esaa-core`](https://github.com/elzobrito/esaa-core), exists from the paper's author — the pattern is operational, not paper-only
 - `roadmap.json` materialized view replaces growing conversation history, directly addressing context degradation in long-horizon tasks
-- Boundary contracts (`AGENT_CONTRACT.yaml`) enforce the typed interface between agent and orchestrator at runtime
+- Boundary contracts (`AGENT_CONTRACT.yaml`, `ORCHESTRATOR_CONTRACT.yaml`, `RUNTIME_POLICY.yaml`) enforce the typed interface between agent and orchestrator at runtime
 - Concurrent heterogeneous agents coordinate through the orchestrator, not with each other
 
 ## Related
@@ -154,3 +158,5 @@ If the derived state diverges from the filesystem, `esaa verify` reports which e
 - [Rollback-First Design](../agent-design/rollback-first-design.md)
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
+</content>
+</invoke>

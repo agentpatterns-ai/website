@@ -11,6 +11,7 @@ aliases:
   - MCP label-based allowlist
   - identity-vs-label allowlist failure
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # MCP Allowlist by Label, Not by Identity (serverName Trap)

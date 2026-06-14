@@ -8,6 +8,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Phase-Specific Context Assembly

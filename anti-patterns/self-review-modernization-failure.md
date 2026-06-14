@@ -11,6 +11,7 @@ aliases:
   - self-review code modernization
   - articulate but wrong self review
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # LLM Self-Review Failure in Code Modernization Tasks

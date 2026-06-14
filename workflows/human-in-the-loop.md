@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Human-in-the-Loop Placement: Where and How to Supervise Agent Pipelines

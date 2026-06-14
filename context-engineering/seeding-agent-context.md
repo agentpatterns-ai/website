@@ -11,6 +11,7 @@ aliases:
   - Context Priming
   - Breadcrumbs in Code
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Seeding Agent Context: Breadcrumbs in Code

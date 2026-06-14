@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agentic Flywheel: Self-Improving Agent Systems

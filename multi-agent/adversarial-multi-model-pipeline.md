@@ -11,6 +11,7 @@ tags:
   - multi-agent
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Adversarial Multi-Model Development Pipeline (VSDD)

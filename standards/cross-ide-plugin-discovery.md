@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - copilot
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Cross-IDE Plugin Discovery

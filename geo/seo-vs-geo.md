@@ -9,6 +9,7 @@ aliases:
   - SEO versus GEO
   - search engine optimization vs generative engine optimization
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # SEO vs GEO — How Signals and Metrics Differ

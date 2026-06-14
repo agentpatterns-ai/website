@@ -8,6 +8,7 @@ tags:
   - memory
   - workflows
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Continual Learning for AI Agents: Three Layers of Knowledge Accumulation

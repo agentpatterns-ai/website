@@ -10,6 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern

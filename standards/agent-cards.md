@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
   - standards
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent Cards: Capability Discovery Standard for AI Agents

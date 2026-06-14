@@ -10,6 +10,7 @@ aliases:
   - remote CLI session control
   - mobile steering for coding agents
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Remote Session Control for Local CLI Agents

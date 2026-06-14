@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - harness-engineering
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Golden Journeys: Restartability as a First-Class Verification Primitive

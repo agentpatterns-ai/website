@@ -10,6 +10,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Encode Project Conventions in Distributed AGENTS.md Files

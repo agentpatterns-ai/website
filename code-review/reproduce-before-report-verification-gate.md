@@ -10,6 +10,7 @@ aliases:
   - verifier-gated code review
   - finding verification gate
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Reproduce-Before-Report Verification Gate

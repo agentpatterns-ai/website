@@ -10,6 +10,7 @@ aliases:
   - PreCompact veto
   - compaction block hook
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries

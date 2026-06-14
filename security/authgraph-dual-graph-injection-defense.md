@@ -12,6 +12,7 @@ aliases:
   - dual-graph injection defense
   - authorization graph alignment
 last_reviewed: 2026-06-02
+maturity: emerging
 ---
 
 # Dual-Graph Alignment for Indirect Prompt Injection Defense (AuthGraph)

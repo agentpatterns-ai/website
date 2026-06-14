@@ -9,6 +9,7 @@ tags:
 aliases:
   - Multi-Agent Architecture Patterns
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers

@@ -8,6 +8,7 @@ tags:
   - copilot
   - security
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Content Exclusion Gap: AI Security Boundaries by Mode

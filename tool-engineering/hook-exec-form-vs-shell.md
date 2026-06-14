@@ -11,6 +11,7 @@ aliases:
   - hook exec form
   - shell-safe hook handler
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Hook Exec Form vs Shell Form: Shell-Injection-Safe Hook Commands

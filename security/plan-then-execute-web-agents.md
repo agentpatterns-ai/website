@@ -11,6 +11,7 @@ aliases:
   - plan then execute web agents
   - pre-committed program web automation
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Plan-Then-Execute as the Default for Web Agents

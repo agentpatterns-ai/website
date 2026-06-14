@@ -12,6 +12,7 @@ aliases:
   - LLM laziness virtue
   - effort-cost asymmetry
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The LLM Laziness Deficit Fallacy

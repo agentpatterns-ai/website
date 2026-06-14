@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - instructions
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Persona-as-Code: Defining Agent Roles as Structured Docs

@@ -12,6 +12,7 @@ aliases:
   - cost-sensitive inference search
   - ADAP algorithm
 last_reviewed: 2026-06-01
+maturity: emerging
 ---
 
 # Adaptive Generate-Rank-Verify Under Costly Verification

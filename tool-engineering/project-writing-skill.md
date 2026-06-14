@@ -10,6 +10,7 @@ tags:
 aliases:
   - writing skill for agents
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Project Writing Skill

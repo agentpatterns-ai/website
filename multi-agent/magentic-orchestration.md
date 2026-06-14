@@ -11,6 +11,7 @@ aliases:
   - dynamic plan orchestration
   - adaptive multi-agent planning
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Magentic Orchestration: Task-Ledger-Driven Adaptive Multi-Agent Planning

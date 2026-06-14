@@ -11,6 +11,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Live Browser as Agent Context Channel

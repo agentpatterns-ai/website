@@ -10,6 +10,7 @@ aliases:
   - reasoning checkpoint
   - mid-stream reasoning
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Think Tool

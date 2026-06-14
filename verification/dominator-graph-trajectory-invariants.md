@@ -13,6 +13,7 @@ aliases:
   - "trajectory dominance verification"
   - "dominatory analysis for agents"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Dominator-Graph Trajectory Invariants for Non-Deterministic Agents

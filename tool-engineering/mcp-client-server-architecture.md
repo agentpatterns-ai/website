@@ -11,6 +11,7 @@ tags:
   - tool-engineering
   - mcp
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # MCP Client/Server Architecture

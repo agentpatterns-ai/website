@@ -10,6 +10,7 @@ aliases:
   - clone and own
   - fork and forget
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Copy-Paste Agent

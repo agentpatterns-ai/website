@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Prompt Cache Economics: Comparing Costs by Provider

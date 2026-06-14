@@ -12,6 +12,7 @@ aliases:
   - privacy preserving prompts
   - LLM request privacy
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Privacy-Preserving LLM Requests

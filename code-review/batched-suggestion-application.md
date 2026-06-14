@@ -11,6 +11,7 @@ aliases:
   - batched remediation on pull requests
   - fix all batch action
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Batched Suggestion Application

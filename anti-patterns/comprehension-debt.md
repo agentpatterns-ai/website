@@ -6,6 +6,7 @@ tags:
   - human-factors
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Comprehension Debt: When Developers Understand Less of Their Own Codebase

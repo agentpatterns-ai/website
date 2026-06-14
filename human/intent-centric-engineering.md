@@ -10,6 +10,7 @@ aliases:
   - intent-first software engineering
   - oversight-centric engineering
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Intent-Centric Engineering: Oversight Over Authorship

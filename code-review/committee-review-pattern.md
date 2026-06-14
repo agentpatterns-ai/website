@@ -13,6 +13,7 @@ aliases:
   - "review panel pattern"
   - "multi-agent review committee"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Committee Review Pattern

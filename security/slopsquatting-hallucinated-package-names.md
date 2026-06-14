@@ -11,6 +11,7 @@ aliases:
   - LLM package name hallucination
   - AI-induced package squatting
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector

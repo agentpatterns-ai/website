@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Monotonic Capability Attenuation for Composition-Safe Tool Use

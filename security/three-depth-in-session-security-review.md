@@ -10,6 +10,7 @@ aliases:
   - layered in-session security review
   - per-edit end-of-turn commit security review
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Three-Depth In-Session Security Review

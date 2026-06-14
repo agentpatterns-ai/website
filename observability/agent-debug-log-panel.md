@@ -11,6 +11,7 @@ aliases:
   - Agent Debug Log
   - Chat Debug Panel
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent Debug Log Panel: Chronological Event Inspection for Session Debugging

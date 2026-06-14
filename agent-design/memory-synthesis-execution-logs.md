@@ -8,6 +8,7 @@ tags:
   - memory
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Memory Synthesis: Extracting Lessons from Execution Logs

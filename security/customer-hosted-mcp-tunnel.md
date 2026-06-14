@@ -12,6 +12,7 @@ tags:
   - agent-design
   - mcp
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers

@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Pre-Completion Checklists for AI Agent Development

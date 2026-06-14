@@ -10,6 +10,7 @@ tags:
   - human-factors
   - copilot
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Org-Membership-Gated Agent Entitlement

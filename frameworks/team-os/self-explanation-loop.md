@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Self-Explanation Loop for Code-Review Comments

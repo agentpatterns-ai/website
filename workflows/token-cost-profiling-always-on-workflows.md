@@ -8,6 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Token-Cost Profiling and Reduction for Always-On Agentic Workflows

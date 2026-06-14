@@ -9,6 +9,7 @@ aliases:
   - agent config format
   - agent manifest format
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent Definition Formats: How Tools Define Agent Behavior

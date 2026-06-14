@@ -9,6 +9,7 @@ aliases:
   - Positive Rules Over Negative
   - Instruction Framing
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Negative Space Instructions: What NOT to Do

@@ -12,6 +12,7 @@ aliases:
   - chat-platform delegation
   - mentioning agents in chat channels
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Chat-Platform Agent Delegation

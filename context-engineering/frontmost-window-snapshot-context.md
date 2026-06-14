@@ -9,6 +9,7 @@ aliases:
   - active window context capture
   - hotkey window grab for agents
 last_reviewed: 2026-06-13
+maturity: established
 status: current
 ---
 

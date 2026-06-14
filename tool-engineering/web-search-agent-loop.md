@@ -11,6 +11,7 @@ aliases:
   - agent research loop
   - iterative search loop
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Web Search Agent Loop

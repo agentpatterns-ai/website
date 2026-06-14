@@ -1,7 +1,6 @@
 ---
 title: "Google Search Console Monitoring Workflow"
 tags:
-  - seo
   - cost-performance
   - tool-agnostic
   - geo
@@ -11,11 +10,12 @@ aliases:
   - "Search Console monitoring"
   - "GSC weekly report workflow"
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Google Search Console Monitoring Workflow
 
-> Automate organic search health monitoring with GSC and Bing WMT: one-time verification, weekly API-driven reports, and an on-demand `/gsc-report` skill — replacing manual dashboard checks with structured, actionable summaries.
+> Automate Google Search Console monitoring with GSC and Bing WMT: weekly API-driven reports and an on-demand `/gsc-report` skill replace manual dashboard checks.
 
 ## Why Automate Search Console
 
@@ -127,6 +127,14 @@ cat /tmp/gsc_report.md
 | URL Inspection rate limit | 2,000 requests/day — spot-check only |
 | Bing WMT | No bulk CSV export — API exists but bulk analytics require dashboard |
 | CrUX origin eligibility | Insufficient real-user traffic returns 404 from CrUX API |
+
+## Key Takeaways
+
+- A weekly GitHub Actions workflow pulls Search Console and Bing WMT data via API, replacing manual dashboard checks with a structured report.
+- Coverage spans index status, Core Web Vitals (via the CrUX API), and top queries — the signals worth tracking week over week.
+- Data is near-real-time, not live: Search Analytics lags ~3 days and CrUX reports a trailing 28-day window, so reports reflect recent rather than current state.
+- An on-demand `/gsc-report` skill covers ad-hoc checks between scheduled runs.
+- The overhead pays off only with sufficient traffic; low-traffic or single-property sites gain little over a manual 5-minute check.
 
 ## Related
 

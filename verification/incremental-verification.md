@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Incremental Verification: Check at Each Step, Not at the End

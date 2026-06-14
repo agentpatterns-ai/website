@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - fallacies
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Task Framing Irrelevance Fallacy

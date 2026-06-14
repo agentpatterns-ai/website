@@ -12,6 +12,7 @@ aliases:
   - "interaction path coverage"
   - "agentic fuzzing"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Coverage-Guided Fuzzing for Multi-Agent LLM Systems (FLARE)

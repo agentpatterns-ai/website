@@ -12,6 +12,7 @@ aliases:
   - usage-based allowlisting
   - dynamic allowlist discovery
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Evidence-Based Allowlist Auto-Discovery

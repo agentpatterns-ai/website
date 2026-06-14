@@ -11,6 +11,7 @@ aliases:
   - general-purpose coding agent
   - coding agent generalization
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Coding Agent Scope Expansion: When to Extend Beyond the Codebase

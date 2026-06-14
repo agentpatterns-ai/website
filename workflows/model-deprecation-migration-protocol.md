@@ -13,6 +13,7 @@ aliases:
   - model deprecation migration protocol
   - versioned model dependency
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Model-ID-as-Dependency: Migration Protocol for Deprecation Churn

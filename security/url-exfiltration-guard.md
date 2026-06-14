@@ -11,6 +11,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Guarding Against URL-Based Data Exfiltration in Agentic Workflows

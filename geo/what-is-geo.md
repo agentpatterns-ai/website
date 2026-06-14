@@ -10,6 +10,7 @@ aliases:
   - Answer Engine Optimization
   - AEO
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # What is GEO

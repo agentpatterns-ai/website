@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Layer Agent Instructions by Specificity Across Scopes

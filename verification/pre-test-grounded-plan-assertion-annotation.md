@@ -9,6 +9,7 @@ aliases:
   - "Pre-Action Assertion Annotation"
   - "Source-Grounded Test Plan"
 last_reviewed: 2026-06-12
+maturity: established
 status: current
 ---
 

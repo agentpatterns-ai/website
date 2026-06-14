@@ -10,6 +10,7 @@ aliases:
   - KV cache invalidation
   - attribution header cache break
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Disable Attribution Headers to Preserve KV Cache in Local Inference

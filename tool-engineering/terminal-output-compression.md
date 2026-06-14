@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - copilot
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Terminal Tool Output Compression: Filtering Predictable Noise at the Harness

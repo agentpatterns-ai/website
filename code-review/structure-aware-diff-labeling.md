@@ -6,7 +6,8 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-02
+last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Structure-Aware Diff Labeling with Two-Stage LLM Pipelines

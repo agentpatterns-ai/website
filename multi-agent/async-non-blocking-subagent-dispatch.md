@@ -10,6 +10,7 @@ aliases:
   - async subagent dispatch
   - fire-and-continue delegation
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Async Non-Blocking Subagent Dispatch

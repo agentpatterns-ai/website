@@ -11,6 +11,7 @@ aliases:
   - unvetted artifact ingestion
   - artifact-as-data fallacy
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # External Artifacts Treated as Data, Not Adversarial Input

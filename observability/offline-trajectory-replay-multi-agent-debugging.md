@@ -13,6 +13,7 @@ aliases:
   - offline multi-agent debugging
   - backward node evaluation
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Offline Trajectory Replay for Multi-Agent Workflow Debugging

@@ -11,6 +11,7 @@ aliases:
   - per-call agent interceptor
   - in-runtime middleware
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Runtime Middleware

@@ -12,6 +12,7 @@ aliases:
   - CI/CD prompt injection
   - comment and control attack
 last_reviewed: 2026-06-10
+maturity: emerging
 status: current
 ---
 

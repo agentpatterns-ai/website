@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - anti-pattern
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Dynamic Tool Fetching Breaks KV Cache

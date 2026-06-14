@@ -12,6 +12,7 @@ aliases:
   - "on-the-fly tool synthesis"
   - "runtime tool creation"
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Runtime Scaffold Evolution

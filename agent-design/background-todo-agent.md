@@ -11,6 +11,7 @@ aliases:
   - lightweight todo agent
   - todo offload pattern
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Background Todo Agent

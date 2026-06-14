@@ -11,6 +11,7 @@ tags:
   - memory
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Structured Task Graphs as External Agent Memory (Beads)

@@ -107,7 +107,7 @@ Start with 20-50 pairs and grow the suite continuously. See [Golden Query Pairs 
 No single grader should be the sole accuracy gatekeeper. Distribute verification across the pipeline:
 
 - The **researcher** outputs only findings with retrievable source URLs
-- The **writer** uses only material from research notes and marks anything else `[unverified]`
+- The **writer** uses only material from research notes and flags anything it cannot source
 - The **reviewer** flags any unsourced claim the writer included without marking
 
 Each layer only needs to catch *some* errors — the compounded probability of an error surviving all layers is lower than any single layer's miss rate.
@@ -122,7 +122,7 @@ See [Layered Accuracy Defense](../../verification/layered-accuracy-defense.md) f
 
 Graders are code. They accumulate bugs, drift from intent, and stop matching current quality standards. Maintain them:
 
-- **Periodic human spot-checks**: sample 10-20 passing tasks per month and verify the output genuinely meets quality expectations. If the grader is passing outputs that humans would fail, the grader has drifted.
+- **Periodic human spot-checks**: sample 10-20 passing tasks per month and verify the output genuinely meets quality expectations. If the grader is passing outputs that humans would fail, the grader has drifted. [Human-Review Golden Dataset Curation](../../verification/human-review-golden-dataset-curation.md) is the reference loop for sampling and re-grading.
 - **Recalibrate LLM judges**: when the query distribution changes (new task types, new domains), the judge's calibration may no longer hold. Re-run the calibration process from [Grading Strategies](grading-strategies.md).
 - **Version the rubric and suite**: when grading criteria or task definitions change, record why. Tag eval results with the suite version so pass rates remain comparable across runs. A pass rate measured against version 2 of the suite is not directly comparable to one measured against version 1.
 

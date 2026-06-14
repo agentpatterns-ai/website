@@ -11,6 +11,7 @@ aliases:
   - Structured Data for GEO
   - JSON-LD for AI
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Schema and Structured Data for GEO

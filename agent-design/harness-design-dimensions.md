@@ -11,6 +11,7 @@ aliases:
   - agent-system archetypes
   - harness archetype taxonomy
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Harness Design Dimensions and Archetypes

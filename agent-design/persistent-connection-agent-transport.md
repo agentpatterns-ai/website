@@ -10,6 +10,7 @@ aliases:
   - websocket agent transport
   - persistent socket agent loop
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Persistent-Connection Agent Transport

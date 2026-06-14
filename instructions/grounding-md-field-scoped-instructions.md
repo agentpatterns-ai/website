@@ -9,6 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # GROUNDING.md: Field-Scoped Hard Constraints and Convention Parameters

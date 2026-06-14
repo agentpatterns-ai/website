@@ -7,6 +7,7 @@ tags:
   - workflows
   - claude
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # PostToolUse Hook for BSD/GNU Tool Miss Detection

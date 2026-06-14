@@ -10,6 +10,7 @@ aliases:
   - stochastic deterministic boundary
   - proposer verifier commit reject contract
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Stochastic-Deterministic Boundary as First-Class Contract

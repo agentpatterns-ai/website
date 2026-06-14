@@ -10,6 +10,7 @@ aliases:
   - propose evaluate select act
   - CoALA orchestration lens
 last_reviewed: 2026-06-01
+maturity: emerging
 ---
 
 # CoALA Decision-Making Loop as an Orchestration Lens

@@ -10,6 +10,7 @@ aliases:
   - cloud agent fast cheap model
   - copilot cloud agent model picker
 last_reviewed: 2026-06-01
+maturity: established
 ---
 
 # Cloud-Agent Tiered Model Routing

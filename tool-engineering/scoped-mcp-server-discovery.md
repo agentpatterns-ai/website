@@ -10,6 +10,7 @@ tags:
   - tool-agnostic
   - mcp
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Scoped MCP Server Discovery: Most-Specific-Wins Resolution

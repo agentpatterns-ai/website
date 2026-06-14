@@ -10,6 +10,7 @@ aliases:
   - keyless authentication for agent runtimes
   - OIDC federation for Claude API
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Workload Identity Federation for Agent Runtimes

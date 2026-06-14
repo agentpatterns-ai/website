@@ -11,6 +11,7 @@ aliases:
   - inline lifecycle harness
   - cascade verification harness
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Inline Safety Harness with Cascade Verification (FinHarness)

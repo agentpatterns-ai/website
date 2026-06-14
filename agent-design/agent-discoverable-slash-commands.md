@@ -9,6 +9,7 @@ aliases:
   - Model-invocable slash commands
   - Agent-invokable commands
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent-Discoverable Slash Commands

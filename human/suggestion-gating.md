@@ -11,6 +11,7 @@ aliases:
   - completion gating
   - control models
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Suggestion Gating: Fewer Completions, Better DX

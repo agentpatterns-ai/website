@@ -9,6 +9,7 @@ tags:
   - long-form
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Cost-Aware Agent Design: Route by Complexity, Not Habit

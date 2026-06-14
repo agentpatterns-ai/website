@@ -12,6 +12,7 @@ aliases:
   - ComplexMCP benchmark
   - interdependent tool benchmark
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes

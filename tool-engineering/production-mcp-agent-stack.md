@@ -12,6 +12,7 @@ aliases:
   - production MCP reference architecture
   - end-to-end MCP deployment stack
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Production MCP Agent Stack

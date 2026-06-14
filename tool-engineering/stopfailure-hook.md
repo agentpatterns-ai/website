@@ -10,6 +10,7 @@ aliases:
   - StopFailure event
   - API error hook
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # StopFailure Hook: Observability for API Error Termination

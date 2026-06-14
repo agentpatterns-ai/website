@@ -9,6 +9,7 @@ aliases:
   - build-to-delete agent harness
   - architect for model impermanence
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Harness Impermanence: Build Scaffolding To Be Deleted

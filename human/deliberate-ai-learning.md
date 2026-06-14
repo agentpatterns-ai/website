@@ -9,6 +9,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Deliberate AI-Assisted Learning: Accelerating Skill Acquisition

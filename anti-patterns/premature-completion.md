@@ -13,6 +13,7 @@ aliases:
   - premature termination
   - incomplete-fix inflation
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Premature Completion: Agents That Declare Success Too Early

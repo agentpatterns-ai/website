@@ -11,6 +11,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Hyper-Personalized Software: The Return of Rapid Application Development

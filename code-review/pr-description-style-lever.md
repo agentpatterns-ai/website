@@ -9,6 +9,7 @@ tags:
   - code-review
   - arxiv
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # PR Description Style as a Lever for Agent PR Merge Rates

@@ -13,6 +13,7 @@ aliases:
   - pre-execution tool-call reviewer
   - reinforced agent reviewer
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Inference-Time Tool-Call Reviewer

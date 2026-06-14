@@ -11,6 +11,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Getting Started: Setting Up Your Instruction File

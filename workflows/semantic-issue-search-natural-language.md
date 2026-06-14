@@ -6,6 +6,7 @@ tags:
   - copilot
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Semantic Issue Search from Chat vs Query Syntax

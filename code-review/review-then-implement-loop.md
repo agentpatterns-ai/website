@@ -11,6 +11,7 @@ aliases:
   - "Agent Self-Review Loop"
   - "Agent Review Loops"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Review-Then-Implement Loop for AI Agent Development

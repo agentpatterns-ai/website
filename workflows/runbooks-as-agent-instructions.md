@@ -10,6 +10,7 @@ aliases:
   - agent-followable runbooks
   - agent-executable runbooks
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Runbooks as Agent Instructions

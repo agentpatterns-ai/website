@@ -9,6 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Hooks for Enforcement vs Prompts for Guidance

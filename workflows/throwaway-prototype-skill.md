@@ -13,6 +13,7 @@ aliases:
   - build-then-discard spike
   - throwaway spike skill
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer

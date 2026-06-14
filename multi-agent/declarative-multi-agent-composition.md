@@ -10,6 +10,7 @@ aliases:
   - "define-and-compose"
   - "declarative agent orchestration"
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Declarative Multi-Agent Composition

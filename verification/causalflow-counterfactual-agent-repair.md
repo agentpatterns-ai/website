@@ -13,6 +13,7 @@ aliases:
   - counterfactual agent repair
   - CRS
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # CausalFlow: Counterfactual Repair for Failed Agent Trajectories

@@ -12,6 +12,7 @@ aliases:
   - test homogenization trap
   - homogenization trap
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # The Test Homogenization Trap

@@ -12,6 +12,7 @@ aliases:
   - three-vector evasion taxonomy
   - A3S-Bench
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Three-Vector Evasion Taxonomy for Agent Security Tests

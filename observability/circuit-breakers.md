@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - observability
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Circuit Breakers for Agent Loops

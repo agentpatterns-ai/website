@@ -5,6 +5,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Deterministic Guardrails Around Probabilistic Agents

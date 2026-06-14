@@ -10,6 +10,7 @@ aliases:
   - Context Usage Breakdown
   - Per-Source Context Attribution
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context-Usage Attribution: Per-Source Breakdown of Agent Context

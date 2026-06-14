@@ -14,6 +14,7 @@ aliases:
   - differential testing oracle
   - reference oracle pattern
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Oracle-Based Task Decomposition

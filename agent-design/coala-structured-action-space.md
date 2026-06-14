@@ -9,6 +9,7 @@ aliases:
   - CoALA internal external actions
   - structured agent action space
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # CoALA Structured Action Space: Internal vs External Actions

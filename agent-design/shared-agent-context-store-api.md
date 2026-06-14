@@ -7,6 +7,7 @@ tags:
   - memory
   - copilot
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Shared Agent Context Store API: When to Expose Curated Context as an Endpoint

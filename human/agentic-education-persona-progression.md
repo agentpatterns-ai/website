@@ -9,6 +9,7 @@ aliases:
   - persona progression onboarding
   - Guide Collaborator Peer Launcher
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agentic Education: Persona Progression for Teaching AI Coding Tools

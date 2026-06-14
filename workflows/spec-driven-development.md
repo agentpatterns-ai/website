@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Spec-Driven Development with Spec Kit

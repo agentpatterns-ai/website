@@ -8,6 +8,7 @@ aliases:
   - demos over docs
   - side quests product management
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # PM on the AI Exponential

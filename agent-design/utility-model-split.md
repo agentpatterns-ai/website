@@ -10,6 +10,7 @@ aliases:
   - background-vs-foreground model routing
   - utility model configuration
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Utility-Model Split: Background Tasks on a Cheaper Model

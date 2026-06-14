@@ -11,6 +11,7 @@ aliases:
   - AI agent insider threat
   - hidden side-task sabotage
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Trusting Human Review to Catch Deliberate Agent Sabotage

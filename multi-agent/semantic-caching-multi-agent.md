@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Semantic Caching for Multi-Agent Code Systems

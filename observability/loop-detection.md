@@ -11,6 +11,7 @@ tags:
 aliases:
   - Loop Detection & Stopping
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Loop Detection for AI Agents: Stopping Micro-Loops

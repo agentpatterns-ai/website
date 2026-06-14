@@ -10,6 +10,7 @@ aliases:
   - context design
   - context window management
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context Engineering: The Practice of Shaping Agent Context

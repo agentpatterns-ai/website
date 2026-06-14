@@ -12,6 +12,7 @@ aliases:
   - LLM-generated MaxSAT encoding
   - generate solver code instead of reasoning
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Solver-Externalized Constraint Reasoning (MaxSAT/SMT Encoding)

@@ -8,6 +8,7 @@ tags:
   - agent-design
   - workflows
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Permutation Frameworks for Batch Code Generation

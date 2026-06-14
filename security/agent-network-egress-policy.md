@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny

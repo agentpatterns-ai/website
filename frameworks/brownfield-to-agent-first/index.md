@@ -59,7 +59,7 @@ graph LR
 
 **Invest incrementally.** Each module covers one transition. Move to the next level before investing in the one after — the levels compound.
 
-**Use agents during transformation.** Agents help with the transformation work itself. A repo at L1 can use agents to write tests (moving toward L2), and the test suite becomes the backpressure that enables L3+. You do not have to reach a level before using agents — you use agents to help reach it.
+**Use agents during transformation.** Agents help with the transformation work itself. A repo at L1 can use agents to write tests (moving toward L2), and the test suite becomes the [backpressure](../../agent-design/agent-backpressure.md) that enables L3+. You do not have to reach a level before using agents — you use agents to help reach it.
 
 ## Readiness Scorecard
 

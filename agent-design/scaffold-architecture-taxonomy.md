@@ -12,6 +12,7 @@ aliases:
   - scaffold taxonomy
   - agent scaffold dimensions
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Scaffold Architecture Taxonomy for Coding Agents

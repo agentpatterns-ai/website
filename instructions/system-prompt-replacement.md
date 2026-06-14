@@ -9,6 +9,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # System Prompt Replacement for Domain-Specific Agent Personas

@@ -11,6 +11,7 @@ aliases:
   - selective memory injection
   - risk-sensitive memory controller
 last_reviewed: 2026-06-01
+maturity: emerging
 ---
 
 # Abstention-Aware Memory Retrieval

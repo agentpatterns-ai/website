@@ -11,6 +11,7 @@ aliases:
   - observability calibration probes
   - deliberate bug planting
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Planted-Bug Methodology: Deliberate Bugs as Observability Calibration

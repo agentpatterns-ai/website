@@ -11,6 +11,7 @@ aliases:
   - life-harness
   - runtime interface adaptation
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Runtime Harness Adaptation

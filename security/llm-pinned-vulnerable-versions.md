@@ -9,6 +9,7 @@ aliases:
   - LLM library version vulnerabilities
   - vulnerable LLM-pinned dependencies
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # LLM-Pinned Library Versions Carry Systemic CVE Exposure

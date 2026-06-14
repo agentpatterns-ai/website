@@ -10,6 +10,7 @@ aliases:
   - Docker Sandboxes for agents
   - sbx adoption checklist
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Docker sbx Adoption for Coding Agents

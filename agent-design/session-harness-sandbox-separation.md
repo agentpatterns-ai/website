@@ -11,6 +11,7 @@ aliases:
   - virtualized agent primitives
   - three-primitive agent architecture
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Session Harness Sandbox Separation for Long-Running Agents

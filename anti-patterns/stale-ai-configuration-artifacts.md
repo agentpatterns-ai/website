@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Stale AI Configuration Artifacts (Context Rot)

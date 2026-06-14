@@ -10,6 +10,7 @@ aliases:
   - agent loop machine state conversation state
   - three-layer cloud agent state
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Cloud-Agent Three-Layer State Decoupling

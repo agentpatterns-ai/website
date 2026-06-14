@@ -11,6 +11,7 @@ aliases:
   - self-hosted agent SDK deployment
   - claude agent SDK production hosting
 last_reviewed: 2026-06-01
+maturity: established
 ---
 
 # Production Hosting Topology for Self-Hosted Agent SDK Runtimes

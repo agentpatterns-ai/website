@@ -12,6 +12,7 @@ tags:
   - observability
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Verification Ledger for Tracking Agent Output Quality

@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # The Research-Plan-Implement Pattern

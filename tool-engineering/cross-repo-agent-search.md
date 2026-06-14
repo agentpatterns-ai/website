@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Cross-Repo Agent Search

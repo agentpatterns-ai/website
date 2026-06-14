@@ -10,6 +10,7 @@ aliases:
   - self-healing agent loop
   - regression autofix pipeline
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Self-Healing Production Agent

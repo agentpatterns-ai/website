@@ -12,6 +12,7 @@ aliases:
   - agent-readiness API audit
   - REST documentation smells
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # OpenAPI Documentation Smells for Agent-Ready APIs

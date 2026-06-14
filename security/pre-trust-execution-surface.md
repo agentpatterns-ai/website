@@ -8,6 +8,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 status: current
 ---
 

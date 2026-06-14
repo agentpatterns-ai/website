@@ -9,6 +9,7 @@ aliases:
   - project instruction file
   - AI agent README
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # AGENTS.md: Project-Level README for AI Coding Agents

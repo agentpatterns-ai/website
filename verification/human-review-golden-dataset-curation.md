@@ -9,6 +9,7 @@ aliases:
   - human-in-the-loop eval curation
   - golden dataset review loop
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Human-Review-Driven Curation of Golden Eval Datasets

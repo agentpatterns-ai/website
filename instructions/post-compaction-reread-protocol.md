@@ -8,6 +8,7 @@ tags:
   - technique
   - claude
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Post-Compaction Re-read Protocol

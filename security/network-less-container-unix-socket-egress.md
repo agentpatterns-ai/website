@@ -10,6 +10,7 @@ aliases:
   - unix socket egress topology
   - topology-based agent egress
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes

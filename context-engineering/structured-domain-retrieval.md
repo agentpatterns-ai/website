@@ -12,6 +12,7 @@ aliases:
   - "domain-specific RAG"
   - "KG-augmented retrieval"
 last_reviewed: 2026-06-13
+maturity: emerging
 ---
 
 # Structured Domain Retrieval: Knowledge Graphs and Case-Based Reasoning

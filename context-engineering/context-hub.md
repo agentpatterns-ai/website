@@ -14,6 +14,7 @@ aliases:
   - RAG
   - chub
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Context Hub: On-Demand Versioned API Docs for Coding Agents

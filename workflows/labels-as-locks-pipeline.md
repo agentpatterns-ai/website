@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Labels as Locks: Pipelined Backlog Processing with Stage Gates

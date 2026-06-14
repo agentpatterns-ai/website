@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Team Onboarding for AI Agent Workflows and Adoption

@@ -12,6 +12,7 @@ aliases:
   - Version-Aware Prompting
   - Dependency Context Engineering
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Environment Specification as Context

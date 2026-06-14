@@ -12,6 +12,7 @@ aliases:
   - "cold start prevention"
   - "agent startup sequence"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Session Initialization Ritual: How Agents Orient Themselves

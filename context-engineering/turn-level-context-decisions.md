@@ -10,6 +10,7 @@ aliases:
   - session management decision framework
   - context management decision tree
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Turn-Level Context Decisions

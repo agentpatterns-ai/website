@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite

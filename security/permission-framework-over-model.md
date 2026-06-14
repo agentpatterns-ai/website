@@ -13,6 +13,7 @@ tags:
   - anti-pattern
   - arxiv
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions

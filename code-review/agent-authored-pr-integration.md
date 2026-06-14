@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - code-review
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success

@@ -12,6 +12,7 @@ aliases:
   - smallest-artifact discipline
   - harness method map
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Method Map: Failure-Mode to Smallest-Artifact Triage

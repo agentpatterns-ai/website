@@ -7,6 +7,7 @@ tags:
   - observability
   - claude
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context-Window Diagnostic Tooling: Identifying Context-Heavy Tools

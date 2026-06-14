@@ -8,6 +8,7 @@ tags:
 aliases:
   - Instruction Framing
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Instruction Polarity: Positive Rules Over Negative

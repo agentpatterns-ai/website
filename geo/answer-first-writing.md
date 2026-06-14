@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - workflows
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Answer-First Writing: Structure Content for AI Retrieval

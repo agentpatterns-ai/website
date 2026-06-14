@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - mcp
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Per-Server MCP Environment Scoping for Credential Isolation

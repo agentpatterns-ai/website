@@ -10,6 +10,7 @@ aliases:
   - agent security layers
   - four-layer threat model
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Four-Layer Taxonomy of Agent Security Risks

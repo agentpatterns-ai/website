@@ -12,6 +12,7 @@ aliases:
   - predict-then-verify harness edits
   - falsifiable harness edits
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Observability-Driven Harness Evolution

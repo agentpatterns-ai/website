@@ -11,6 +11,7 @@ aliases:
   - SetupX experiential learning
   - dual-modality experience records for setup
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Experiential-Learning Setup Agents with Snapshot Rollback (SetupX)

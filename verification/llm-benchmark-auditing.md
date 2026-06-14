@@ -10,6 +10,7 @@ aliases:
   - benchmark auditing
   - automated benchmark review
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # LLM-Driven Benchmark Auditing

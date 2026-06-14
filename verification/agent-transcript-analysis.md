@@ -8,6 +8,7 @@ tags:
   - observability
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Using the Agent to Analyze Its Own Evaluation Transcripts

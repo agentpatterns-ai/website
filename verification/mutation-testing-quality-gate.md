@@ -10,6 +10,7 @@ aliases:
   - mutation testing for LLM tests
   - mutation-guided test generation
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Mutation Testing as a Quality Gate for AI-Generated Test Suites

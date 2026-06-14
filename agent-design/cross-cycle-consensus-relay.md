@@ -9,6 +9,7 @@ aliases:
   - consensus relay document
   - cross-session relay pattern
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->

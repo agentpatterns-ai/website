@@ -12,6 +12,7 @@ tags:
   - source:opendev-paper
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context Compression Strategies: Offloading and Summarisation

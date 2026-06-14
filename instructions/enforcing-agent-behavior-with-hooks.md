@@ -11,6 +11,7 @@ aliases:
   - Deterministic Behavioral Enforcement
   - Hook-Based Agent Governance
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # Enforcing Agent Behavior with Hooks

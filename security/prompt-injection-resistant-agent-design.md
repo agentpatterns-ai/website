@@ -11,6 +11,7 @@ aliases:
   - prompt injection defense
   - injection-resistant agents
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Designing Agents to Resist Prompt Injection

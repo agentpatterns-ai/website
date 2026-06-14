@@ -11,6 +11,7 @@ aliases:
   - hybrid inspection authorization
   - continuous agent semantic authorization
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # Task-Based Access Control with Hybrid Inspection

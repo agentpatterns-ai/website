@@ -10,6 +10,7 @@ aliases:
   - per-call reasoning budget
   - opt-in extended tool reasoning
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Per-Call Budget Hints on Tool Invocations

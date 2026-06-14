@@ -12,6 +12,7 @@ aliases:
   - library-time skill maintenance
   - skill library debt
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Skill Library Technical Debt

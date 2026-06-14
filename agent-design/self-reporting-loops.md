@@ -11,6 +11,7 @@ aliases:
   - autonomous routine backlog filing
   - self-filing agent observations
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Self-Reporting Loops: Autonomous Routines That File Their Own Backlog

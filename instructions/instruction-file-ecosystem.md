@@ -8,6 +8,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Project Instruction File Ecosystem

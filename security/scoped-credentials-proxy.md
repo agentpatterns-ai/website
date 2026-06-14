@@ -10,6 +10,7 @@ aliases:
   - Scoped Credentials Proxy
   - Secrets & Credentials
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Scoped Credentials via Proxy Outside the Agent Sandbox

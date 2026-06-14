@@ -11,6 +11,7 @@ aliases:
   - Client ID Metadata Documents
   - OAuth CIMD
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # OAuth Client ID Metadata Documents (CIMD) for MCP Servers

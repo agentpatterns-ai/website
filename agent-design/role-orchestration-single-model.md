@@ -12,6 +12,7 @@ aliases:
   - single-model multi-role scaffolding
   - inference-time role scaffolding
 last_reviewed: 2026-05-27
+maturity: emerging
 ---
 
 # Role Orchestration on a Single Model

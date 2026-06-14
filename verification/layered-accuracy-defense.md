@@ -9,6 +9,7 @@ aliases:
   - "multi-layer fact-checking"
   - "defense in depth for accuracy"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Layered Accuracy Defense

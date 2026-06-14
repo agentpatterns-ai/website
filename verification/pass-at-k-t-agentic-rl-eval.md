@@ -9,6 +9,7 @@ tags:
   - tool-agnostic
   - arxiv
 last_reviewed: 2026-06-12
+maturity: emerging
 ---
 
 # PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth

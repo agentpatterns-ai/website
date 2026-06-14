@@ -10,6 +10,7 @@ aliases:
   - CI failure auto-remediation
   - agent-driven CI fix loop
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Closed-Loop CI Failure Remediation with Cloud Coding Agents

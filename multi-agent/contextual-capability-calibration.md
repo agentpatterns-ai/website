@@ -12,6 +12,7 @@ aliases:
   - context-aware agent routing
   - CADMAS-CTX
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Contextual Capability Calibration for Multi-Agent Delegation

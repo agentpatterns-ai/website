@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Prompt Compression: Maximizing Signal Per Token

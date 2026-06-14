@@ -5,6 +5,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Domain-Specific Agent Challenges

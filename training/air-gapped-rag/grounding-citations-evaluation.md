@@ -24,7 +24,7 @@ The generation model produces hallucinations when retrieved context is insuffici
 
 ### Structured Output as the Contract
 
-Free-text responses with inline `[1]` references require parsing before verification. Structured JSON output separates the answer from its citation list and enables programmatic entailment checking without fragile text parsing. The whole module uses one contract:
+Free-text responses with inline `[1]` references require parsing before verification. [Structured JSON output](../../verification/structured-output-constraints.md) separates the answer from its citation list and enables programmatic entailment checking without fragile text parsing. The whole module uses one contract:
 
 ```python
 from pydantic import BaseModel
@@ -89,7 +89,7 @@ Calibrate the similarity threshold against your golden query set (see Layer 3). 
 
 ## Layer 2: Post-Generation Faithfulness Checking
 
-The grounding prompt reduces hallucination but does not eliminate it — models occasionally cite a chunk number without the claim actually appearing in that chunk. A post-generation faithfulness check catches this mechanically. Haystack ships two evaluators that cover this layer end-to-end: `FaithfulnessEvaluator` (LLM-as-judge against a local generator) and a custom NLI-based component for deterministic alternatives.
+The grounding prompt reduces hallucination but does not eliminate it — models occasionally cite a chunk number without the claim actually appearing in that chunk (the [RAG/agent reliability problem map](../../verification/rag-agent-reliability-problem-map.md) catalogues this and adjacent failure modes). A post-generation faithfulness check catches this mechanically. Haystack ships two evaluators that cover this layer end-to-end: `FaithfulnessEvaluator` (LLM-as-judge against a local generator) and a custom NLI-based component for deterministic alternatives.
 
 ### FaithfulnessEvaluator backed by a local judge
 

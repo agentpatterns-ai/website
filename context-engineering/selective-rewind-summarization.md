@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - pattern
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact

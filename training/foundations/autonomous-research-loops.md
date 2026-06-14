@@ -128,11 +128,11 @@ Long-running loops degrade because of [context rot](../../context-engineering/co
 
 ### Compaction
 
-Periodically summarize accumulated history, discard raw conversation, and keep only recent context plus the summary. The agent operates on a rolling window rather than an ever-growing transcript.
+Periodically summarize accumulated history, discard raw conversation, and keep only recent context plus the summary. The agent operates on a rolling window rather than an ever-growing transcript. See [Context Compression Strategies](../../context-engineering/context-compression-strategies.md) for the full offload-and-summarise pipeline.
 
 ### Sub-agent isolation
 
-Each sub-agent starts with a clean context window containing only its specific task and relevant background. It returns condensed output — not its full reasoning trace. The orchestrator's context contains synthesized findings, not raw sub-agent transcripts.
+Each sub-agent starts with a clean context window containing only its specific task and relevant background. It returns condensed output — not its full reasoning trace. The orchestrator's context contains synthesized findings, not raw sub-agent transcripts. See [Context Budget Allocation](../../context-engineering/context-budget-allocation.md) on sub-agents as budget isolation.
 
 ```mermaid
 graph LR

@@ -13,6 +13,7 @@ tags:
   - tool-agnostic
   - rag
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Semantic Context Loading: Language Server Plugins for Agents

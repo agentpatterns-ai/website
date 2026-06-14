@@ -12,6 +12,7 @@ aliases:
   - RobustBench-TC
   - POMDP perturbation taxonomy
 last_reviewed: 2026-06-03
+maturity: emerging
 ---
 
 # Tool-Use Sim-to-Real Perturbation Taxonomy

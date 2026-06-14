@@ -14,6 +14,7 @@ aliases:
   - "non-interactive Claude"
   - "claude -p CI"
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Headless Claude in CI: Using -p and --max-turns for Safe Pipeline Integration

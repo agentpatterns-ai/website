@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Failure-Driven Iteration for Improving Agent Workflows

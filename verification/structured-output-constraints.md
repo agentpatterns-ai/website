@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Structured Output Constraints: Reducing Hallucination Surface

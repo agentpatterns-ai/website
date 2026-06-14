@@ -11,6 +11,7 @@ aliases:
   - refusal-with-reason hook
   - guided refusal pattern
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason

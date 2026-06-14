@@ -7,6 +7,7 @@ tags:
   - technique
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Manual Compaction as Dumb Zone Mitigation

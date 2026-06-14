@@ -11,6 +11,7 @@ aliases:
   - Linear agent dispatch
   - ticket-as-prompt
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Issue-Tracker as Agent Dispatch Surface

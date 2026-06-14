@@ -10,6 +10,7 @@ aliases:
   - "Parallel Agent Infrastructure"
   - "Multi-Agent Parallelism"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Worktree Isolation: Parallel Agent Sessions in Safe Sandboxes

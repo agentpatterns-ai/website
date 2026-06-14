@@ -2,7 +2,6 @@
 title: "About Agent Patterns"
 description: "Editorial stance and inclusion criteria for the Agent Patterns site — what earns a page, what doesn't, and how to suggest one."
 tags:
-  - meta
   - tool-agnostic
 last_reviewed: 2026-05-27
 status: current
@@ -12,7 +11,7 @@ status: current
 
 > A practitioner's catalogue of patterns and primitives for engineers building with AI coding assistants.
 
-Agent Patterns is a reference site for experienced developers using AI coding assistants daily — Claude Code, GitHub Copilot, Cursor, and the surrounding ecosystem. The catalogue is tool-agnostic in its principles and tool-specific in its examples. Pages aim for a sub-60-second read with one concept per page.
+Agent Patterns is a reference site for experienced developers using AI coding assistants daily — Claude Code, GitHub Copilot, Cursor, and the surrounding ecosystem. The principles aim to generalize across assistants; the examples are demonstrated primarily on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK. Pages aim for a sub-60-second read with one concept per page.
 
 ## What this site is
 

@@ -7,6 +7,7 @@ tags:
   - anti-pattern
   - tool-agnostic
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Mid-Session Config Changes as Invisible Cache Invalidators

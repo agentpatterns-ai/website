@@ -13,6 +13,7 @@ aliases:
   - skill refinement loops
   - organisational skill feedback
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Skill Library Refinement Loops

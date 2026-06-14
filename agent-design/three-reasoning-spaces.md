@@ -11,6 +11,7 @@ aliases:
   - three-space framework
   - plan-bead-code
 last_reviewed: 2026-06-12
+maturity: adopted
 ---
 
 # Three Reasoning Spaces: Plan-Bead-Code Phase Gates

@@ -11,6 +11,7 @@ aliases:
   - Error History Retention
   - Negative Examples in Context
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Error Preservation in Context

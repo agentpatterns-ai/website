@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Encoding Tacit Knowledge into Agent Improvement Loops

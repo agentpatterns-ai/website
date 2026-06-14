@@ -10,6 +10,7 @@ aliases:
   - cognitive architectures for language agents
   - CoALA framework
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Cognitive Architectures for Language Agents (CoALA): A Classifier for Agent Harnesses
@@ -58,7 +59,7 @@ The split matters because the external leg is where permission gating, reversibi
 
 ### Decision-Making Loop
 
-CoALA frames every agent's control flow as a four-phase cycle that repeats until termination ([arXiv:2309.02427 v3](https://arxiv.org/html/2309.02427v3)):
+CoALA frames every agent's control flow as a [four-phase cycle](../agent-design/coala-decision-making-loop.md) that repeats until termination ([arXiv:2309.02427 v3](https://arxiv.org/html/2309.02427v3)):
 
 1. **Propose** — generate candidate actions through reasoning or retrieval.
 2. **Evaluate** — score candidates (heuristic, LLM judge, learned value).

@@ -11,6 +11,7 @@ tags:
   - tool-agnostic
   - long-form
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Agent-Authored Messages as a Deferred Exfiltration Channel

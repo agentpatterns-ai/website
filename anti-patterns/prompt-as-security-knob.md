@@ -11,6 +11,7 @@ aliases:
   - prompt fragility security
   - secure-prompt fallacy
 last_reviewed: 2026-06-02
+maturity: emerging
 status: current
 ---
 

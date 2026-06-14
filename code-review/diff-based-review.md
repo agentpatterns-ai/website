@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - code-review
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Diff-Based Review Over Output Review

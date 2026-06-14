@@ -12,6 +12,7 @@ aliases:
   - tool necessity classifier
   - hidden-state tool-call control
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Tool Necessity Probing

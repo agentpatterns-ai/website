@@ -12,6 +12,7 @@ aliases:
   - "pass power k"
   - "pass@1 pass@k metrics"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # pass@k and pass^k: Capability and Consistency Metrics

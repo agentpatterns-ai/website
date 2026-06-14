@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-03
+maturity: established
 ---
 
 # Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs

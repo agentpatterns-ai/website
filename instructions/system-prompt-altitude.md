@@ -10,6 +10,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # System Prompt Altitude: Specific Without Being Brittle

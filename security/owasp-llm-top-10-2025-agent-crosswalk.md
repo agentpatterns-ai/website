@@ -10,6 +10,7 @@ aliases:
   - OWASP LLM Top 10 2025 crosswalk
   - OWASP LLM Top 10 coding agent mapping
 last_reviewed: 2026-06-09
+maturity: established
 ---
 
 # OWASP LLM Top 10 (2025): Agent Security Crosswalk

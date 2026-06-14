@@ -11,6 +11,7 @@ aliases:
   - "TDD with Agents"
   - "Tests as the Spec"
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Red-Green-Refactor with Agents: Tests as the Spec

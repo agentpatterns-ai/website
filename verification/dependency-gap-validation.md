@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Dependency Gap Validation for AI-Generated Code

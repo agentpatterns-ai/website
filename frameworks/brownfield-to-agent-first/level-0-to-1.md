@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # L0 → L1: Making the Repo Readable

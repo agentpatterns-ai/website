@@ -6,6 +6,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-05-27
+maturity: established
 ---
 
 # Runnable Documentation as Agent Verification

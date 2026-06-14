@@ -10,6 +10,7 @@ aliases:
   - sycophantic agent
   - sycophancy
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # The Yes-Man Agent

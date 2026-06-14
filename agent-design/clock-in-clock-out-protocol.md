@@ -12,6 +12,7 @@ aliases:
   - bracketed session protocol
   - session continuity protocol
 last_reviewed: 2026-06-01
+maturity: established
 ---
 
 # Clock-In / Clock-Out Protocol: Bracketed Session Continuity

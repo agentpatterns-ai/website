@@ -10,6 +10,7 @@ aliases:
   - delta channel checkpointing
   - delta plus periodic snapshot
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State

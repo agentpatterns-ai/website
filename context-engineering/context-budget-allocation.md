@@ -10,6 +10,7 @@ aliases:
   - The 50% Rule
   - Context Budget
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Context Budget Allocation: Spending Every Token Wisely

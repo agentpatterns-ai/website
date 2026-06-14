@@ -9,6 +9,7 @@ tags:
   - anti-pattern
   - tool-agnostic
 last_reviewed: 2026-06-13
+maturity: established
 ---
 
 # Skill Atrophy: When AI Reliance Erodes Developer Capability

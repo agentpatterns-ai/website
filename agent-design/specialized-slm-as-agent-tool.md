@@ -10,6 +10,7 @@ aliases:
   - nested model tool
   - small model sub-tool
 last_reviewed: 2026-06-02
+maturity: established
 ---
 
 # Specialized Small Language Models as Agent Sub-Tools

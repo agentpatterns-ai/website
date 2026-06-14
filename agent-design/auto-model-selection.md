@@ -12,6 +12,7 @@ aliases:
   - harness-side model routing
   - vendor-side model broker
 last_reviewed: 2026-06-12
+maturity: established
 ---
 
 # Auto Model Selection
