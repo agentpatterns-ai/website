@@ -54,7 +54,7 @@ Each is an objective constraint the agent can observe. The prompt does not ask f
 Gates are not universal:
 
 - **Exploratory generation inside a harness** — when the harness curates and discards intermediate output, per-call gates add latency without quality gain ([venture-bystander](https://venture-bystander.ghost.io/garry-tan-loc-maxxing-and-code-abundance/)): intermediate code is search, not product.
-- **Known-growth systems** — when a factory or registry is on the roadmap, a diff cap forces a later refactor. Scope gates to the current task.
+- **Known-growth systems** — when a factory or registry is on the roadmap, a [diff cap](../verification/deterministic-guardrails.md) forces a later refactor. Scope gates to the current task.
 - **Small single-author projects** — one person's cognitive-load budget is their own; layered review adds process without addressing debt.
 
 The operative question is not "are agents lazy enough?" but "does my harness impose a cost the agent can observe?"
@@ -79,7 +79,7 @@ The same agent hits the 400-line cap on the first attempt, splits the change, an
 
 - Human laziness is produced by time scarcity; LLMs have no equivalent cost function, so instruction alone cannot reproduce it.
 - Attitude prompts like "be concise" either do nothing or backfire by changing *whether* the agent works, not *how*.
-- Restraint that binds is objective and external: diff-size caps, complexity budgets, deletion targets, review gates.
+- Restraint that binds is objective and external — [harness-engineered](../agent-design/harness-engineering.md) diff-size caps, complexity budgets, deletion targets, review gates.
 - Gates are not universal — exploratory harness calls, known-growth systems, and small single-author projects have different constraints.
 
 ## Related

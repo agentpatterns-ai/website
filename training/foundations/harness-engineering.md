@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
+
 # Harness Engineering (Training Module)
 
 > The discipline of designing development environments where agents succeed by default -- through legibility, mechanical enforcement, and constrained solution spaces.
@@ -23,7 +24,7 @@ Every harness engineering investment falls into one of three categories.
 
 | Pillar | What it means | How the agent experiences it |
 |--------|--------------|------------------------------|
-| **Legibility** | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the import graph |
+| **Legibility** | The repo is its own documentation. The agent orients by reading the codebase, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers visible in the [import graph](../../agent-design/codebase-readiness.md) |
 | **Mechanical enforcement** | Constraints are enforced by tools, not by instructions. Certain categories of mistake are impossible. | Linters that block cross-layer imports, pre-commit hooks that run formatters, CI gates that require test passage |
 | **Constrained solution spaces** | The architecture limits the number of valid approaches. The agent does not need to choose the right pattern -- there is only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
 
@@ -37,7 +38,7 @@ For the full taxonomy and worked example, see [Harness Engineering](../../agent-
 
 [Backpressure](../../agent-design/agent-backpressure.md) is the automated feedback signal that tells an agent when its output is wrong. The agent writes code, reads the error, fixes the issue, and runs again. No human review required in the loop.
 
-Agent autonomy scales directly with backpressure quality in the codebase -- not with model capability.
+Agent autonomy scales directly with backpressure quality in the codebase -- not with [model capability](../../agent-design/feedback-capability-equalizer.md).
 
 ### The backpressure spectrum
 
@@ -57,7 +58,7 @@ These investments compound: they benefit both agents and human developers. Addin
 
 ## Why Tools Beat Prompts
 
-Prompt instructions are probabilistic. Under task pressure -- context window filling, attention diverted -- compliance degrades and the agent reverts to training defaults.
+Prompt instructions are probabilistic. Under task pressure -- context window filling, attention diverted -- [compliance degrades](../../instructions/instruction-compliance-ceiling.md) and the agent reverts to training defaults.
 
 Hooks and linters are deterministic. A pre-commit hook runs outside the agent's context window; the model cannot overrule it.
 
@@ -115,11 +116,11 @@ A [pre-completion checklist](../../verification/pre-completion-checklists.md) in
 1. **Planning** -- did you understand the requirement before starting?
 2. **Building** -- did you implement what was specified, not a simpler substitute?
 3. **Verification** -- did you run end-to-end tests, check for regressions, confirm the output satisfies the stated requirement?
-4. **Fixing** -- did you address every issue found in verification before declaring done?
+4. **Fixing** -- did you address every issue found in [verification](../../verification/pre-completion-checklists.md) before declaring done?
 
 Checklist items must be specific and verifiable. "Run the test suite and confirm all tests pass" works. "Check your work" does not.
 
-Implementation options range from a mandatory final step in the system prompt to a lifecycle hook that intercepts completion signals and injects the checklist before allowing the agent to terminate. Hooks are more reliable because they run outside the model's turn: Claude Code's `Stop` hook fires when Claude finishes responding and can return a block decision that forces the conversation to continue ([Claude Code docs](https://code.claude.com/docs/en/hooks)), whereas instructions in CLAUDE.md or the system prompt are advisory and compete with the rest of the context window.
+Implementation options range from a mandatory final step in the system prompt to a lifecycle hook -- Claude Code's `Stop` hook is one -- that intercepts completion signals and injects the checklist before allowing the agent to terminate. Hooks are more reliable because they run outside the model's turn: Claude Code's `Stop` hook fires when Claude finishes responding and can return a block decision that forces the conversation to continue ([Claude Code docs](https://code.claude.com/docs/en/hooks)), whereas instructions in CLAUDE.md or the system prompt are advisory and compete with the rest of the context window.
 
 ---
 
@@ -167,7 +168,7 @@ Long sessions accumulate context and degrade output quality. Short, focused sess
 
 ### Progress files
 
-For work spanning multiple sessions, maintain a progress file the agent reads at session start. The file tracks what is completed (with commit references), what is in progress, and what remains. This replaces accumulated conversation context (which degrades) with a persistent, editable artifact (which stays accurate).
+For work spanning multiple sessions, maintain a progress file the agent reads at session start. The file tracks what is completed (with commit references), what is in progress, and what remains, as a [persistent handoff artifact](../../observability/trajectory-logging-progress-files.md). This replaces accumulated conversation context (which degrades) with a persistent, editable artifact (which stays accurate).
 
 ### Structured commits as handoffs
 
@@ -183,20 +184,20 @@ Codebases drift -- documentation goes stale, boundaries erode, conventions accum
 
 Harness investment has a break-even point. The steelman for the opposite recommendation: for short-lived prototypes, solo experiments, or throwaway code, the time spent wiring up types, test harnesses, custom linters, and pre-commit hooks can exceed the time the agent would spend producing plausibly-correct output that a human quickly reviews. Three concrete conditions where heavy harness engineering is the wrong call:
 
-- **Exploratory prototypes with no second session.** If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. Backpressure only compounds when the same harness catches the same bug class across many sessions.
+- **Exploratory prototypes with no second session.** If the codebase will be discarded after one or two runs, a brittle linter rule that blocks a one-off pattern is pure friction. [Backpressure](../../agent-design/agent-backpressure.md) only compounds when the same harness catches the same bug class across many sessions.
 - **Thin codebases with weak conventions.** Mechanical enforcement codifies rules. When the rules themselves are still being discovered, premature linting freezes the wrong constraints in place and creates churn as rules are rewritten. Establish the convention first, then encode it.
-- **Low-signal or noisy checks.** A linter that emits false positives the agent has to "work around" burns context every iteration. If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
+- **Low-signal or noisy checks.** A linter that emits false positives the agent has to "work around" burns context every iteration, degrading [feedback loop quality](../../agent-design/feedback-capability-equalizer.md). If the error messages are vague ("build failed", "lint error") rather than actionable, the feedback loop degrades into noise and the agent learns to ignore or suppress it.
 
 The threshold: invest in harness once the cost of manual review across repeated sessions exceeds the cost of building and maintaining the check. Below that threshold, ad-hoc review is cheaper.
 
 ## Key Takeaways
 
 - **Environment design beats prompt tuning.** Investing in types, tests, and linters improves agent output quality more durably than tweaking instructions. Every harness improvement compounds across all future sessions.
-- **Agent autonomy scales with backpressure quality**, not with model capability. A codebase with strict types and comprehensive tests enables autonomous agent iteration. A codebase without them requires manual review of every output.
+- **Agent autonomy scales with backpressure quality**, not with model capability. A codebase with strict types and comprehensive tests enables autonomous [agent iteration](../../agent-design/agent-backpressure.md). A codebase without them requires manual review of every output.
 - **Linter messages are just-in-time agent context.** They appear at the exact moment and location of a violation with a specific remediation. Write custom rules with actionable error messages, not violation flags.
-- **Instructions provide context; the harness provides enforcement.** Use both, but do not rely on instructions for rules that must be followed mechanically. If the consequence of violation is real, enforce it with tooling, not text.
+- **Instructions provide context; the harness provides enforcement.** Use both, but do not rely on instructions for rules that must be followed [mechanically](../../instructions/hooks-vs-prompts.md). If the consequence of violation is real, enforce it with tooling, not text.
 - **Engineering rigor relocates, it does not disappear.** The discipline shifts from writing clean code to designing clean environments. The leverage point is infrastructure, not intelligence.
-- **Design for short, focused sessions** with clean handoff artifacts. Progress files, structured commits, and one-feature-per-session discipline prevent context degradation and make multi-session work reliable.
+- **Design for short, focused sessions** with clean [handoff artifacts](../../observability/trajectory-logging-progress-files.md). Progress files, structured commits, and one-feature-per-session discipline prevent context degradation and make multi-session work reliable.
 - **Know when to stop iterating.** Convergence detection (change velocity, output similarity, content similarity) prevents wasted cycles. Hard iteration limits prevent runaway sessions.
 
 ## Related

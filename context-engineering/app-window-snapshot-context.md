@@ -1,11 +1,12 @@
 ---
-title: "Frontmost-Window Snapshot as Agent Context"
+title: "App-Window Snapshot as Agent Context"
 description: "Bind one hotkey to capture the active app window — screenshot plus accessibility-tree text — as agent context. The richer payload pays off only under specific conditions."
 tags:
   - context-engineering
   - tool-agnostic
 aliases:
   - frontmost window snapshot
+  - frontmost-window snapshot context
   - active window context capture
   - hotkey window grab for agents
 last_reviewed: 2026-06-13
@@ -13,11 +14,11 @@ maturity: established
 status: current
 ---
 
-# Frontmost-Window Snapshot as Agent Context
+# App-Window Snapshot as Agent Context
 
 > Bind one keystroke to send the active app window — rendered screenshot plus accessibility-tree text — to an agent as one context unit.
 
-A frontmost-window snapshot bundles two signals into one zero-friction event: a rendered screenshot of the active window plus a structured text extract from the OS accessibility tree, including content outside the visible scroll. The bundle becomes the agent's context unit.
+An app-window snapshot bundles two signals into one zero-friction event: a rendered screenshot of the active window plus a structured text extract from the OS accessibility tree, including content outside the visible scroll. The bundle becomes the agent's context unit.
 
 ## When the Pattern Applies
 
@@ -55,11 +56,11 @@ Adjacent tools accept image input but require manual capture: Claude Code's CLI 
 
 A developer is debugging a React app with the wrong button state. The DevTools panel is open, the React Profiler shows a re-render trace, and the Sources panel highlights the suspected component.
 
-**Without the pattern**: screenshot the DevTools window, save to disk, drag the file into the agent chat, and type the full context. The agent receives the image only; the profiler's component-tree text and the source-view selection are not included.
+**Without the pattern**: screenshot the DevTools window, save to disk, drag the file into the agent chat, and type the full context. The agent receives the image only; the profiler's component-tree text and the source-view selection are not included — the same context-continuity gap the [live browser channel](live-browser-context-channel.md) closes for web tabs.
 
 **With the pattern**: focus the DevTools window, press the hotkey. The agent receives the screenshot plus the AX-tree extract — off-screen flame-graph entries, the highlighted source range, the open file path — in one capture. The developer types "what's the most likely cause" without re-stating context the snapshot already carries.
 
-The pattern wins here because the window is single-purpose, the AX tree carries selection state pure OCR would lose, and the desktop holds no sensitive surface. The same flow against an editor with a credentials file open in an adjacent tab would silently include accessibility-labelled credential text.
+The pattern wins here because the window is single-purpose, the AX tree carries selection state pure OCR would lose, and the desktop holds [no sensitive surface](../security/prompt-injection-threat-model.md). The same flow against an editor with a credentials file open in an adjacent tab would silently include accessibility-labelled credential text.
 
 ## Key Takeaways
 

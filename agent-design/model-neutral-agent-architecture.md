@@ -11,7 +11,7 @@ aliases:
   - model portability vs cloud portability
   - neutral agent harness
 last_reviewed: 2026-06-08
-maturity: established
+maturity: adopted
 ---
 
 # Model-Neutral Agent Architecture

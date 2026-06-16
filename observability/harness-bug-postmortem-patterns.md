@@ -34,7 +34,7 @@ The bugs are specific; the detection gaps generalise.
 
 The thinking-history bug only triggered after a session idled for one hour, then compounded every subsequent turn. Unit tests, E2E tests, and dogfooding all ran on fresh sessions and missed it ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Standard evals sweep input space. Idle-state evals sweep *temporal* state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
+Standard evals sweep input space. [Idle-state evals](../verification/incident-to-eval-synthesis.md) sweep *temporal* state — where caches, TTL-bound headers, and partially-expired context interact with the next turn. Resumed sessions are a different input distribution from sessions that never paused.
 
 Add eval cases that:
 
@@ -48,14 +48,14 @@ The thinking-history bug was active in the public build but masked internally by
 When the internal build carries unshipped experiments, different flags, or different display layers, public-only failures stay invisible to staff running the same commands daily. The postmortem's remedy — "increase staff usage of exact public builds" — means:
 
 - List every flag, experiment, and feature gate that differs between internal and public.
-- Run a canary lane on the exact public artefact against the same eval suite and dogfood workflows.
+- Run a [canary lane](../multi-agent/rainbow-deployments-agents.md) on the exact public artefact against the same eval suite and dogfood workflows.
 - Track the diff as a first-class release artefact.
 
 ## Pattern 3: Per-Model Ablation
 
 The verbosity-reduction prompt dropped quality 3% for both Opus 4.6 and Opus 4.7. The original evaluation "showed no regressions"; the drop only appeared when broader ablation ran per-model comparisons ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)).
 
-Aggregate evals average. A change that regresses one model and improves another — or regresses all models by a uniform small amount — vanishes in the aggregate. Per-model ablation runs the same eval with the change on, then off, per model and reports deltas separately.
+Aggregate evals average. A change that regresses one model and improves another — or regresses all models by a uniform small amount — vanishes in the aggregate. [Per-model ablation](../anti-patterns/perceived-model-degradation.md) runs the same eval with the change on, then off, per model and reports deltas separately.
 
 Structure the ablation as:
 
@@ -90,7 +90,7 @@ The patterns are detection insurance, not free coverage:
 
 - **Per-model ablation inflates CI cost.** Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
 - **Idle-state evals introduce wall-clock flakiness.** Sleeping past a one-hour TTL is either expensive (real wait) or unfaithful (mocked clock that diverges from production). Scope to the specific TTLs the harness declares, not every temporal boundary.
-- **Build-parity gates block legitimate experimentation.** A rigid gate treats every internal flag as a defect; track the diff as a release artefact and route only high-risk divergences through a canary lane.
+- **Build-parity gates block legitimate experimentation.** A rigid gate treats every internal flag as a defect; track the diff as a release artefact and route only high-risk divergences through a [canary lane](../multi-agent/rainbow-deployments-agents.md).
 - **Skip all three for prototypes and single-turn apps** — they presume multi-turn harnesses with caches, model fan-out, and an internal/public split.
 
 ## Example
@@ -126,8 +126,8 @@ The first form is what shipped. The second is what [Anthropic reports](https://w
 ## Key Takeaways
 
 - Idle-state evals sweep temporal state; standard evals sweep input space. Both are required when harness caches or TTL-bound headers persist across turns.
-- Internal-vs-public build parity is a first-class release artefact. Dogfooding on a divergent internal build cannot catch public-only regressions.
-- Per-model ablation surfaces regressions that aggregate evals average out. Gate changes on per-model non-regression, not aggregate improvement.
+- Internal-vs-public build parity is a first-class release artefact, enforced like any other [harness-engineering](../agent-design/harness-engineering.md) gate. Dogfooding on a divergent internal build cannot catch public-only regressions.
+- Per-model ablation surfaces regressions that aggregate evals average out. Gate changes on per-model non-regression — the detection method for [perceived model degradation](../anti-patterns/perceived-model-degradation.md) — not aggregate improvement.
 - The reviewer model is a harness variable. Lower-capability reviewers can silently pass bugs that higher-capability reviewers catch.
 
 ## Related

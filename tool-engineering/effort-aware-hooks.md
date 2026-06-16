@@ -11,7 +11,7 @@ aliases:
   - reasoning-effort hooks
   - effort level hook input
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # Effort-Aware Hooks: Reading the Reasoning Tier from PreToolUse and PostToolUse

@@ -44,7 +44,7 @@ Reported results: 93.3%-99.98% monthly token reduction and 8.7x lower execution 
 
 ## Why It Works on Periodic Tasks Specifically
 
-The mechanism is memoization with parameter extraction at the tool-call level. It applies when *the tool DAG is invariant across runs and only specific arguments vary* — the shape periodic tasks have, where the schedule fixes structure and variability lives in timestamps, result fields, and identifiers. The LLM discovers the DAG on the first run; once discovered, it adds no information. Removing it cuts cost and eliminates the entropy source behind non-determinism.
+The mechanism is memoization with parameter extraction at the tool-call level. It applies when *the tool DAG is invariant across runs and only specific arguments vary* — the shape periodic tasks have, where the schedule fixes structure and variability lives in timestamps, result fields, and identifiers. The LLM discovers the DAG on the first run; once discovered, it adds no information. Removing it cuts cost (a reported 99% token reduction) and eliminates the entropy source behind non-determinism.
 
 The falsifier: when invocations face materially different inputs — open-ended research, novel debugging — the template does not generalize. The tested envelope (5-min to 24-hour intervals) is the operating range, not a general claim.
 
@@ -54,7 +54,7 @@ Three properties of the workload must hold. One violation produces silent, expen
 
 | Precondition | Why it matters |
 |---|---|
-| **Genuine periodicity** | The tool DAG must be stable across invocations. Tasks whose plan branches on input content cannot be replayed from one recording. |
+| **Genuine periodicity** | The tool DAG must be stable across invocations within the tested 5-minute to 24-hour envelope. Tasks whose plan branches on input content cannot be replayed from one recording. |
 | **Idempotent or transactional tools** | Replays may execute against partial state from a prior failed run. Non-idempotent writes (POST without idempotency key, file append, message send) corrupt state on retry. See [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md). |
 | **Stable upstream APIs and schemas** | A deterministic replay executes a now-invalid sequence when an upstream API, target HTML, or schema changes. The engine has no oracle to detect drift before failure compounds. |
 
@@ -72,9 +72,9 @@ LOOP accepts the periodic-task envelope and drops the AgentRR check-function ove
 
 ## When the Pattern Backfires
 
-- **Stochastic branch points.** The template freezes whichever branch the first run took. Inputs needing the other branch fail silently. Stress-test with adversarial input distributions before promoting.
+- **Stochastic branch points.** The template freezes whichever branch the first run took. Inputs needing the other branch fail silently. Stress-test with adversarial input distributions before promoting (see [Simulation and Replay Testing](../workflows/simulation-replay-testing.md)).
 - **Drifting external dependencies.** Without a trust anchor, replay has no oracle for upstream schema changes. Pair replay with a sentinel API call to fail fast on drift.
-- **Non-idempotent writes mid-sequence.** A partially-failed replay re-executes completed writes. Require idempotency keys on every write tool, or wrap replay in a transaction with rollback.
+- **Non-idempotent writes mid-sequence.** A partially-failed replay re-executes completed writes. Require idempotency keys on every write tool (see [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)), or wrap replay in a transaction with rollback.
 - **Short or one-shot tasks.** Amortization requires enough invocations to recoup recording and extraction cost. For a handful of runs, hand-scripting is cheaper.
 
 ## Example

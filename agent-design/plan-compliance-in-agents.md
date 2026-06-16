@@ -35,7 +35,7 @@ graph TD
 Each effect is drawn directly from [Liu et al., 2026](https://arxiv.org/abs/2604.12147):
 
 1. **Standard plans beat no plans.** A phase sequence such as navigation → reproduction → patch → validation improves issue resolution over unprompted execution.
-2. **Periodic reminders reduce violations.** Re-injecting the plan during execution mitigates drift and improves task success.
+2. **Periodic reminders reduce violations.** [Re-injecting the plan during execution](../instructions/event-driven-system-reminders.md) mitigates drift and improves task success.
 3. **Subpar plans underperform no plan.** A low-quality plan actively hurts — worse than leaving the agent to its training priors.
 4. **Misaligned extra phases degrade performance.** Adding early-stage phases that conflict with the model's internal problem-solving strategy can lower resolution rates.
 
@@ -52,9 +52,9 @@ Re-injecting the plan as the context lengthens pushes it back into the high-atte
 Treat the plan as an engineered artifact with four operational questions:
 
 - **Does the plan match the model's strategy?** If early phases contradict how the model naturally approaches the problem class, performance drops below no-plan baselines. Pilot the plan against the unprompted trajectory before locking it in.
-- **Is the plan high quality?** A bad plan is worse than no plan. Iterate on phase boundaries and success criteria rather than shipping a first draft.
+- **Is the plan high quality?** A bad plan is worse than no plan. [Iterate on phase boundaries and success criteria](../workflows/plan-first-loop.md) rather than shipping a first draft.
 - **Are there reminders?** Without mid-run reinjection, plan adherence decays in long sessions. Inject reminders at phase boundaries or on token thresholds.
-- **Is compliance measured?** Pass rate hides non-compliance. Compare executed trajectories against the instructed phases — deviation rate is the signal.
+- **Is compliance measured?** Pass rate hides non-compliance. Compare executed trajectories against the instructed phases — [deviation rate is the signal](../instructions/task-list-divergence-diagnostic.md).
 
 Measurement turns the plan from a hope into a testable contract. Without it, every benchmark number risks being a pattern-match from training rather than a product of the plan you wrote.
 
@@ -62,17 +62,17 @@ Measurement turns the plan from a hope into a testable contract. Without it, eve
 
 Two agents handle the same SWE-bench issue. Both produce a passing patch.
 
-**Agent A** — no plan. Trajectory: grep for the error string, open the matched file, edit the apparent cause, run the failing test, patch until green. Skips reproduction and validation phases entirely.
+**Agent A** — no plan. Trajectory: `grep` for the error string, open the matched file, edit the apparent cause, run the failing test, patch until green. Skips reproduction and validation phases entirely.
 
 **Agent B** — instructed plan (navigation → reproduction → patch → validation) with a reminder at each phase boundary. Trajectory: locate the module, write a minimal reproducer, confirm failure, patch, run the full test subset, verify no regression.
 
-Looking at resolution rate alone, both succeed. Looking at trajectory-to-plan diff, only Agent B followed the instructed strategy. If the benchmark is near the training distribution, Agent A's success may generalise poorly; Agent B's success is attributable to the plan and is likelier to hold on unseen issues — the distinction [Liu et al., 2026](https://arxiv.org/abs/2604.12147) identify as invisible without compliance analysis.
+Looking at [resolution rate](goal-monitoring-progress-tracking.md) alone, both succeed. Looking at trajectory-to-plan diff, only Agent B followed the instructed strategy. If the benchmark is near the training distribution, Agent A's success may generalise poorly; Agent B's success is attributable to the plan and is likelier to hold on unseen issues — the distinction [Liu et al., 2026](https://arxiv.org/abs/2604.12147) identify as invisible without compliance analysis.
 
 ## Key Takeaways
 
 - Writing a plan does not mean the agent executes it — measure compliance, not just pass rate.
 - Standard plans outperform no plans; subpar plans underperform no plans.
-- Extra early-stage phases degrade performance when they misalign with the model's internal strategy.
+- Extra early-stage phases [degrade performance](../anti-patterns/objective-drift.md) when they misalign with the model's internal strategy.
 - Periodic plan reminders during execution reduce violations and improve task success.
 - Pass rate without compliance analysis cannot distinguish strategic reasoning from training-data pattern matching.
 

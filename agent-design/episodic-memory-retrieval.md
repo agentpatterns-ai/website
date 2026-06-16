@@ -12,7 +12,7 @@ aliases:
   - experience replay for agents
   - episode-based recall
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Episodic Memory Retrieval
@@ -23,9 +23,9 @@ maturity: established
 
 Episodic memory retrieval gives an agent access to recorded problem-solving arcs -- the sequence of what was tried, what failed, and what worked the last time a similar problem appeared. Where standard semantic memory answers "what do I know about X?", episodic retrieval answers "what happened last time I encountered X?" -- surfacing the diagnostic path rather than isolated facts.
 
-Standard agent memory systems store facts or document embeddings. An agent remembers *that* the database uses UTC timestamps or *that* a particular API requires pagination. This is **semantic memory** -- context-free knowledge retrieval.
+Standard [agent memory systems](agent-memory-patterns.md) store facts or document embeddings. An agent remembers *that* the database uses UTC timestamps or *that* a particular API requires pagination. This is **semantic memory** -- context-free knowledge retrieval.
 
-**Episodic memory** stores sequences of events with outcomes: the agent encountered error X, tried approach A (failed because of Y), then tried approach B (succeeded because of Z). The narrative arc -- problem, attempts, resolution -- is the unit of storage, not isolated facts extracted from it.
+**Episodic memory** stores sequences of events with outcomes, the same raw material [memory synthesis from execution logs](memory-synthesis-execution-logs.md) mines: the agent encountered error X, tried approach A (failed because of Y), then tried approach B (succeeded because of Z). The narrative arc -- problem, attempts, resolution -- is the unit of storage, not isolated facts extracted from it.
 
 | Dimension | Semantic Memory | Episodic Memory |
 |-----------|----------------|-----------------|
@@ -59,7 +59,7 @@ Episodic memory is only useful if the right episodes surface at the right time. 
 
 ### Trigger-Based Indexing
 
-Index episodes by their triggering condition -- the error message, task type, or problem signature that started the episode. When the agent encounters a similar trigger, it retrieves episodes with matching triggers before attempting a solution.
+Index episodes by their triggering condition -- the error message, task type, or problem signature that started the episode. When the agent encounters a similar trigger, it retrieves episodes with matching triggers before attempting a solution, a form of [retrieval-augmented agent workflow](../context-engineering/retrieval-augmented-agent-workflows.md).
 
 ```mermaid
 graph LR
@@ -79,17 +79,17 @@ Index episodes by the situational context -- which part of the codebase, which t
 
 ### Outcome-Based Filtering
 
-Not all episodes are equally useful. Episodes where the first attempt succeeded provide less learning signal than episodes where early attempts failed. Prioritize retrieving episodes with **failed intermediate attempts** followed by eventual success -- these contain the diagnostic reasoning that prevents repeating mistakes. Dead-ends are the primary information source: knowing that approach A was tried and failed for reason Y is exactly what prevents the agent from repeating it.
+Not all episodes are equally useful, which is why outcome-weighted approaches like [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) score them by result. Episodes where the first attempt succeeded provide less learning signal than episodes where early attempts failed. Prioritize retrieving episodes with **failed intermediate attempts** followed by eventual success -- these contain the diagnostic reasoning that prevents repeating mistakes. Dead-ends are the primary information source: knowing that approach A was tried and failed for reason Y is exactly what prevents the agent from repeating it.
 
 ## Temporal Awareness
 
 Episodes are not equally relevant over time. Three temporal factors affect retrieval quality:
 
-**Recency weighting.** Recent episodes are more likely to reflect current system state. An episode from yesterday about a flaky test is more relevant than one from six months ago about the same test file, when the codebase has changed substantially. Score retrieval candidates with a recency multiplier to surface fresher episodes first.
+**Recency weighting.** Recent episodes are more likely to reflect current system state. An episode from yesterday about a flaky test is more relevant than one from six months ago about the same test file, when the codebase has changed substantially. Score retrieval candidates with a recency multiplier to surface fresher episodes first, the way [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) rank context by freshness.
 
-**Relevance decay.** Episodes about resolved issues (dependency upgraded, API deprecated, architecture changed) should decay in retrieval priority. Without decay, stale episodes mislead the agent into applying fixes for problems that no longer exist. Decay can be implemented via explicit invalidation on known events (e.g., a major version bump) or via time-based scoring reduction.
+**Relevance decay.** Episodes about resolved issues (dependency upgraded, API deprecated, architecture changed) should decay in retrieval priority. Without decay, stale episodes mislead the agent into applying fixes for problems that no longer exist -- the [memory-induced tool drift](../anti-patterns/memory-induced-tool-drift.md) failure mode. Decay can be implemented via explicit invalidation on known events (e.g., a major version bump) or via time-based scoring reduction.
 
-**Episode boundary detection.** Determining where one episode ends and another begins in a continuous interaction stream requires heuristics: topic shifts, explicit task transitions, or time gaps between interactions. Poor boundary detection produces episodes that conflate multiple unrelated problems, degrading retrieval precision. Heuristics include task-transition signals from the orchestrator, idle-time thresholds, or LLM-scored topic divergence.
+**Episode boundary detection.** Determining where one episode ends and another begins in a continuous interaction stream requires heuristics: topic shifts, explicit task transitions, or time gaps between interactions. Poor boundary detection produces episodes that conflate multiple unrelated problems, the [distractor-interference](../anti-patterns/distractor-interference.md) hazard at storage time, degrading retrieval precision. Heuristics include task-transition signals from the orchestrator, idle-time thresholds, or LLM-scored topic divergence.
 
 ## Practical Implementation
 
@@ -107,7 +107,7 @@ This summary becomes the episode entry. Storage can be as simple as a structured
 
 ### Retrieval Integration
 
-At task start, the agent queries the episode store with the current problem signature. Retrieved episodes are injected into context as reference material -- not as instructions. The agent uses them to inform its approach without being bound to replicate past solutions exactly.
+At task start, the agent queries the episode store with the current problem signature, often as part of a [session initialization ritual](session-initialization-ritual.md). Retrieved episodes are injected into context as reference material -- not as instructions. The agent uses them to inform its approach without being bound to replicate past solutions exactly.
 
 ```
 System prompt addition:
@@ -120,9 +120,9 @@ Use them to inform your approach, but adapt to current context."
 
 ### Session-End Extraction
 
-Episodic memory requires a deliberate extraction step. Without it, problem-solving narratives evaporate at session end. Two approaches:
+Episodic memory requires a deliberate extraction step, the same one [memory synthesis from execution logs](memory-synthesis-execution-logs.md) formalises. Without it, problem-solving narratives evaporate at session end. Two approaches:
 
-- **Agent self-summarization**: the agent writes its own episode summary before session close. Fast, but tends to omit failures -- agents optimize for task completion and treat dead-ends as noise rather than signal.
+- **Agent self-summarization**: the agent writes its own episode summary before session close, a close cousin of the [session recap](session-recap.md) handoff. Fast, but tends to omit failures -- agents optimize for task completion and treat dead-ends as noise rather than signal.
 - **Post-hoc extraction**: a separate process (or second LLM call) analyzes the full session transcript and extracts episodes. More thorough, but adds latency and cost.
 
 ## Example
@@ -202,9 +202,10 @@ Two post-2026 counter-points warrant caution before trusting an episode store bl
 
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) -- scope-based memory architecture covering episodic and working memory at a structural level
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md) -- category-aligned memory that addresses granularity mismatch in retrieval
+- [Generative Agents Memory Stream](generative-agents-memory-stream.md) — companion on the observation-stream-plus-reflection axis, orthogonal to retrieval granularity
+- [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — companion on the encoding-time axis, distinct from the retrieval angle here
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md) -- how to extract causal lessons from episodic traces into persistent knowledge
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md) -- work-state tracking that complements knowledge memory
+- [Code-Native Memory Substrates](code-native-memory-substrates.md) -- AST representations as memory substrate; work-state tracking that complements knowledge memory
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) -- on-demand context retrieval patterns
 - [Chain-of-Thought Reasoning Fallacy](../fallacies/chain-of-thought-reasoning-fallacy.md) -- why stored reasoning traces should be treated as rationalization rather than ground truth
-- [AST-Guided Agent Memory](ast-guided-agent-memory.md) -- using AST representations as memory substrate to prevent error recurrence across code generation sessions
 - [Context Engineering](../context-engineering/context-engineering.md) — the discipline of designing what enters an agent's context window to maximise output quality

@@ -138,7 +138,7 @@ send_frame(result.frame, timeout_ms=100)
 - Knowledge graphs preserve package-function structure that vector similarity loses.
 - Coverage-driven case selection produces a minimal set that outperforms larger random collections.
 - A refinement gate removes superficially similar but irrelevant context before generation.
-- Expose KG and case base as on-demand tools rather than preloading into the context window.
+- Expose KG and case base as [on-demand tools](retrieval-augmented-agent-workflows.md) rather than preloading into the context window.
 
 ## When This Backfires
 

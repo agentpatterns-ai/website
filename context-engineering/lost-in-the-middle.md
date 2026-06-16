@@ -83,14 +83,14 @@ The opening section carries the rules the agent must reliably follow. The middle
 ## When This Backfires
 
 - **Short contexts**: When the full input fits within a few hundred tokens, there is no meaningful middle zone. Placement optimisation has negligible effect and adds unnecessary structural overhead.
-- **Retrieval-augmented flows**: If the model is explicitly instructed to retrieve a specific document section, positional bias is largely overridden by the retrieval directive. Passive attention is not the bottleneck.
+- **[Retrieval-augmented flows](retrieval-augmented-agent-workflows.md)**: If the model is explicitly instructed to retrieve a specific document section, positional bias is largely overridden by the retrieval directive. Passive attention is not the bottleneck.
 - **Long-context models with position-aware training**: Some models (e.g., those trained with specific long-context fine-tuning or instruction-following reinforcement) exhibit reduced middle-degradation. Treat placement as a default safeguard, not a universal guarantee.
-- **Frequently refreshed context**: In agent loops that compact or re-inject context at each step, the "middle" shifts continuously. Optimising static layout matters less than ensuring critical state survives each compaction cycle.
+- **Frequently refreshed context**: In agent loops that [compact](manual-compaction-dumb-zone-mitigation.md) or re-inject context at each step, the "middle" shifts continuously. Optimising static layout matters less than ensuring critical state survives each compaction cycle.
 
 ## Key Takeaways
 
 - Model attention follows a U-shape: strongest at the start and end, weakest in the middle.
-- Critical rules belong at the beginning and end of instruction files; reference material can occupy the middle.
+- Critical rules belong at the beginning and end of instruction files like `AGENTS.md`; reference material can occupy the middle.
 - Adding instructions in the middle of a long file pushes existing instructions further into the low-attention zone.
 - Keep instruction files short enough to minimise the size of the weak-attention middle zone.
 

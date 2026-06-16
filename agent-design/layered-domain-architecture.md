@@ -55,7 +55,7 @@ A fixed layer ontology shrinks the placement decision. Without it, every new fun
 The fixed layer order is an *intra-domain* default, not a top-level decomposition. It backfires when:
 
 - **The codebase has more than one bounded context.** Fowler's correction: once a layer *"gets too big you should split your top level into domain oriented modules which are internally layered"* ([Fowler, 2015](https://martinfowler.com/bliki/PresentationDomainDataLayering.html)). A flat top-level `services/`, `repos/`, `ui/` hides cross-domain reaches the linter cannot see. Decompose by domain first; apply the layer order *inside* each domain.
-- **The system is event-driven, pipeline, or batch.** Runtime/UI collapses (no UI; the "request" is an event) and Service often calls Runtime adapters as peers. Forcing six layers produces empty shells and DTO ping-pong. Drop the layers that do not pay.
+- **The system is event-driven, pipeline, or batch.** Runtime/UI collapses (no UI; the "request" is an event) and Service often calls Runtime adapters as peers. Forcing six layers produces empty shells and DTO ping-pong. Drop the layers that do not pay — a [scaffold-architecture-taxonomy](harness-design-dimensions.md) choice rather than a fixed default.
 - **The project is small or short-lived.** Fowler scopes layering to "information-rich" programs. On a one-screen CLI or a one-week prototype the six-layer setup is pure overhead.
 - **The rule is documentation-only.** An unenforced layer order in `ARCHITECTURE.md` is invisible to the agent at edit time — the linter is the boundary, the doc is the rationale.
 
@@ -98,5 +98,5 @@ When the codebase later grows a second domain `subscriptions`, the top-level str
 - [Separation of Knowledge and Execution in Agent Systems](separation-of-knowledge-and-execution.md)
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md)
 - [Discrete Phase Separation](discrete-phase-separation.md)
-- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md)
+- [Scaffold Architecture Taxonomy for Coding Agents](harness-design-dimensions.md)
 - [Agent-First Software Design](agent-first-software-design.md)

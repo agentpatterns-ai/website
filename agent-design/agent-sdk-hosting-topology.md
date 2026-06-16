@@ -39,6 +39,18 @@ Anthropic documents four patterns that map directly to container lifecycle ([Ant
 
 The choice is reversible only at high cost — match the pattern to observed session-length and concurrency before locking in.
 
+### The Three Lifetimes Behind the Four Patterns
+
+The four patterns are an exhaustive partition because the subprocess model exposes three orthogonal lifetimes the operator must independently choose. Pick the wrong corner and you get vanished transcripts, OOM containers, cross-agent settings leakage, or wasted cost.
+
+| Lifetime | Decision | Failure mode if wrong |
+|----------|----------|------------------------|
+| Subprocess | One task vs. many turns held open | OOM growth over long sessions ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)) |
+| Container | Per-task vs. per-session vs. across-idle vs. shared | Pet-container ops cost or vanished sessions on restart |
+| Transcript persistence | Local disk only vs. mirrored to `SessionStore` | "Shutting a container down without a `SessionStore` configured loses the transcript with it" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)) |
+
+Three classes of state live on the container's filesystem and "none of them survive a container restart, a scale-down, or a move to a different node" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)): transcripts under `~/.claude/projects/`, `CLAUDE.md` memory files, and working-directory artifacts. Only transcripts mirror to a `SessionStore`; memory and artifacts need their own strategy ([Session storage](https://code.claude.com/docs/en/agent-sdk/session-storage)). The same three-layer split (session log, stateless harness, replaceable sandbox) is reached independently by LangChain Deep Agents Deploy ([LangChain, 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)) — convergent evidence the topology is structural, not vendor-specific. The "pet container" anti-pattern — "if a container failed, the session was lost... we had to nurse it back to health" ([Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)) — is the failure mode the taxonomy exists to avoid; for long-running containers, "cap session length or recycle subprocesses periodically" ([Hosting](https://code.claude.com/docs/en/agent-sdk/hosting)) or the pet container OOMs.
+
 ## Size on Measured RAM, Autoscale on Tokens
 
 Anthropic's sizing formula is `agents per host = (host RAM − overhead) / (per-session RAM ceiling)`. The 1 GiB / 5 GiB disk / 1 CPU starting point is "a floor, not the ceiling" — measure peak RSS at target length under expected tool load ([Anthropic: Hosting the Agent SDK](https://code.claude.com/docs/en/agent-sdk/hosting)).
@@ -155,7 +167,6 @@ In TypeScript, each `query()` call still carries `cwd: tenantDir` and `settingSo
 
 - [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — the state-shape sibling: what is persistent vs ephemeral across loop, machine, and conversation layers
 - [Remote Agent Host Sessions over SSH and Dev Tunnels](remote-agent-host-sessions.md) — the transport-shape sibling: how the client reaches a lifecycle-decoupled agent host
-- [Subprocess-per-Session Hosting Model](subprocess-per-session-hosting-model.md) — the foundational frame: why one `claude` CLI process per session is what makes the four lifecycle patterns a real choice
 - [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the three-primitive theory that this deployment topology projects onto pod boundaries
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the decision frame for whether to self-host at all
-- [Prebuilt Agent Environments](prebuilt-agent-environments.md) — bakes machine-state initial conditions into a container image, reducing per-session start cost
+- [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) — the install/start lifecycle that provisions the machine-state layer these patterns run on

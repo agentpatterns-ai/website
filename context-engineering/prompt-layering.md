@@ -26,7 +26,7 @@ graph TD
     D --> E[Agent Response]
 ```
 
-Each layer is more specific than the one above it. Specificity generally determines precedence when layers conflict: the user message overrides the skill, which overrides project instructions, which overrides the system prompt — because the more specific instruction is closer to the actual task.
+Each layer is more specific than the one above it. Specificity generally determines precedence when layers conflict: the user message overrides the skill, which overrides project instructions (`AGENTS.md`, `CLAUDE.md`), which overrides the system prompt — because the more specific instruction is closer to the actual task.
 
 This is a behavioral tendency, not a formal rule enforced by the model. Contradictions between layers produce unpredictable outputs.
 
@@ -36,7 +36,7 @@ This is a behavioral tendency, not a formal rule enforced by the model. Contradi
 
 **Project instructions.** `AGENTS.md`, `CLAUDE.md`, [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md) — loaded at session start, applies to every task in the project. Conventions, constraints, tooling preferences. This layer must apply universally; if a rule is task-specific, it does not belong here.
 
-**Skill content.** Task-specific knowledge loaded when a skill runs. A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a second source of truth that can drift.
+**Skill content.** Task-specific knowledge loaded when a skill runs (for example, a `SKILL.md` file). A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a [second source of truth that can drift](../instructions/instruction-file-ecosystem.md).
 
 **User message.** The immediate task. Overrides everything below it because it represents the most specific current intent. If the user message contradicts a higher layer, the agent typically follows the user message — correct for the immediate task, but may violate project conventions.
 
@@ -73,7 +73,7 @@ A team configures Claude Code with a project-level `CLAUDE.md` that says: "Alway
 
 The user message overrides the project instruction. Claude Code generates the function without tests. The more specific instruction (immediate task) takes precedence over the less specific one (project convention).
 
-Now the team adds a code-review skill that includes: "Flag any function without a corresponding test." When this skill runs on the same helper function, it flags the missing test — because the skill layer is more specific than the project layer for that task type, and the instruction to flag is not in conflict with the earlier user message (which was about generation, not review).
+Now the team adds a code-review skill that includes the rule `Flag any function without a corresponding test`. When this skill runs on the same helper function, it flags the missing test — because the skill layer is more specific than the project layer for that task type, and the instruction to flag is not in conflict with the earlier user message (which was about generation, not review).
 
 The gap is intentional: the project layer sets policy, the skill layer enforces it contextually, and the user message scopes the immediate action. Keeping these concerns in separate layers prevents the skill from being silenced by a user message that wasn't meant to apply to it.
 
@@ -89,8 +89,8 @@ The gap is intentional: the project layer sets policy, the skill layer enforces 
 Prompt layering assumes the model will respect layer precedence — but that assumption fails:
 
 - **Silent contradictions go undetected.** When project instructions and a skill both define a convention differently, the model picks one without signaling the conflict. A flat single-layer system prompt makes contradictions at least visible in one file.
-- **Compliance degrades with stack depth.** Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
-- **Subagent isolation amplifies drift.** Subagents start fresh — if the parent's project layer isn't explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
+- **[Compliance degrades with stack depth](../instructions/instruction-compliance-ceiling.md).** Each added layer increases total instruction volume. Beyond the compliance ceiling, low-priority rules (typically the project layer) are silently dropped. Ten critical rules in a flat prompt outperform forty rules spread across four layers.
+- **Subagent isolation amplifies drift.** [Subagents](../multi-agent/sub-agents-fan-out.md) start fresh — if the parent's project layer isn't explicitly passed, the subagent ignores those conventions entirely. Layering without an explicit injection protocol is operationally equivalent to having no project layer for subagents.
 
 ## Related
 

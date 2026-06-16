@@ -12,7 +12,7 @@ aliases:
   - Tool Minimalism
   - Tool Schema Design
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Subagent Schema-Level Tool Filtering
@@ -107,7 +107,7 @@ Both subagents can run concurrently — their filtered schemas ensure neither ca
 Schema filtering adds structural rigidity — when it fails to match the actual workload, costs outweigh the safety benefit:
 
 - **Over-scoped allowlists**: A subagent given too broad a tool allowlist provides false safety assurance while still being able to cause harm within its scope. Allowlists require ongoing maintenance as the tool registry evolves.
-- **Allowlist maintenance lag**: Adding a new tool to the shared registry does not automatically grant it to existing subagents. Conversely, removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer requires synchronization with the live tool registry.
+- **Allowlist maintenance lag**: Adding a new tool to the [shared registry](../standards/tool-calling-schema-standards.md) does not automatically grant it to existing subagents. Conversely, removing a tool from a spec that still references it causes compilation errors. The SubAgentSpec layer requires synchronization with the live tool registry.
 - **Misuse within the allowlist**: Schema filtering prevents calls to *absent* tools but does not prevent misuse of *present* ones. A Code Explorer subagent with `search_code` can still perform excessive queries or leak discovered content — prompt specialization must handle intra-allowlist safety.
 - **Parallel execution overhead**: Spawning multiple filtered subagents introduces orchestration overhead (compilation, context initialization, result aggregation). For simple linear tasks, a single agent with a broad schema is cheaper.
 - **"Structurally impossible" is a ceiling, not a guarantee**: Schema filtering narrows intent to the visible tool set, but tools inside the allowlist still expose indirect pathways. [CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w) showed that Cursor Agent's terminal allowlist could be bypassed through shell built-ins and environment-variable manipulation — poisoning the environment of allowed commands produced effects the allowlist never sanctioned. The same pattern recurs whenever an allowlisted tool (shell, package manager, HTTP client) can be steered into unintended behavior via its inputs. Treat schema filtering as one layer of defense in depth, not as a boundary the model cannot reason around.

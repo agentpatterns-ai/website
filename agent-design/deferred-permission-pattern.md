@@ -9,7 +9,7 @@ aliases:
   - deferred hook permission
   - headless session pause-resume
 last_reviewed: 2026-05-27
-maturity: established
+maturity: emerging
 ---
 
 # Deferred Permission Pattern

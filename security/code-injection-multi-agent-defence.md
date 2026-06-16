@@ -10,7 +10,7 @@ aliases:
   - "code injection attack defence"
   - "multi-agent code injection resilience"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Code Injection Defence in Multi-Agent Pipelines
@@ -36,7 +36,7 @@ The study compares four multi-agent configurations against code injection:
 
 **Coder-only:** No cross-agent validation. Injected code passes through unexamined.
 
-**Coder + Tester:** Tests validate functional correctness, not security properties. Injected code that passes tests propagates.
+**Coder + Tester:** Tests validate functional correctness, not security properties. Injected code that passes tests propagates downstream ([arXiv:2512.21818](https://arxiv.org/abs/2512.21818)).
 
 **Coder + Reviewer + Tester:** A reviewer catches injection patterns in many cases but reduces coding efficiency via false positives.
 
@@ -58,7 +58,7 @@ Mitigations:
 
 No autonomous configuration achieved full resilience. The fundamental finding: **goal-directed agents optimize for task completion, not for detecting that they are being manipulated**. An agent generating working code has no built-in incentive to refuse code that passes tests, even if that code contains a backdoor.
 
-Human review at the merge gate remains the reliable final safeguard. The security agent reduces what humans need to review, but does not replace the gate.
+Human review at the [merge gate](human-in-the-loop-confirmation-gates.md) remains the reliable final safeguard. The security agent reduces what humans need to review, but does not replace the gate.
 
 ## Why It Works
 

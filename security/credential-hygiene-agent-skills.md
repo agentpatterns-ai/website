@@ -10,7 +10,7 @@ aliases:
   - credential leakage in agent skills
   - secrets in skill files
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Credential Hygiene for Agent Skill Authorship
@@ -144,9 +144,9 @@ The skill now encodes the intent and interface; no credential is present.
 Placeholder syntax and wrapper scripts reduce leakage at authoring time but do not eliminate every vector:
 
 - **Private corpora without scanning** — Teams that never publish externally may skip scanner setup. Leaked credentials remain exploitable if the repo is later open-sourced or an insider extracts the history.
-- **Agents that resolve placeholders** — An agent with both the skill file and environment secrets may substitute real values into placeholder slots, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
+- **Agents that resolve placeholders** — An agent with both the skill file and environment secrets may substitute real values into placeholder slots such as `$STRIPE_API_KEY`, producing credential-containing outputs. Wrapper-script indirection mitigates this; placeholder-only syntax does not.
 - **Coverage gaps in CI** — Gitleaks path rules for `.claude/skills/` only work if CI runs on all branches and PRs. Skills committed before the rule was added remain unscanned.
-- **Registry-level credential reuse** — Credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials.
+- **Registry-level credential reuse** — Credentials rotated after publication remain exposed in any consumer that cached the older skill version. Pre-commit scanning prevents new leaks but does not revoke already-distributed credentials — only removing the reusable secret via [workload identity federation](workload-identity-federation-for-agents.md) closes that path.
 
 Apply wrapper-script isolation and pre-commit scanning together; neither alone closes all paths.
 

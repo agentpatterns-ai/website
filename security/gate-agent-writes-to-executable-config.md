@@ -9,7 +9,7 @@ aliases:
   - acceptEdits build-tool config prompt
   - privileged write gate for code-execution config
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Gate Agent Writes to Executable Config Files as Privileged Actions

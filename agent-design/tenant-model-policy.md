@@ -28,7 +28,7 @@ graph TD
     C --> D[Tenant catalogue<br>What the vendor exposes]
 ```
 
-The picker reflects what a user *wants*. The harness decides what to *call*. The org rules decide what is *permitted*. The tenant catalogue defines what *exists* at all for the contract. When routing logic and policy logic share a code path, the strict-priority guarantee disappears — and the strict-priority guarantee is the whole mechanism (see [Microsoft: Authorization and Governance for AI Agents](https://techcommunity.microsoft.com/blog/microsoft-security-blog/authorization-and-governance-for-ai-agents-runtime-authorization-beyond-identity/4509161)).
+The picker reflects what a user *wants*. The [harness routing layer](auto-model-selection.md) decides what to *call*. The org rules decide what is *permitted*. The tenant catalogue defines what *exists* at all for the contract. When routing logic and policy logic share a code path, the strict-priority guarantee disappears — and the strict-priority guarantee is the whole mechanism (see [Microsoft: Authorization and Governance for AI Agents](https://techcommunity.microsoft.com/blog/microsoft-security-blog/authorization-and-governance-for-ai-agents-runtime-authorization-beyond-identity/4509161)).
 
 ## The Three Implementations
 

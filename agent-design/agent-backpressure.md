@@ -6,7 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent Backpressure: Automated Feedback for Self-Correction
@@ -29,7 +29,7 @@ The quality of an agent's output scales with the quality of the backpressure it 
 | Formatter | Diff showing what changed | Deterministic, no ambiguity |
 | CI pipeline | Integration-level failures | Cross-component issues tests miss |
 
-Each source provides a different level of feedback precision. Type systems are the tightest loop — errors are immediate, precise, and unambiguous. CI pipelines catch integration issues that pass unit tests.
+Each source provides a different level of feedback precision. Type systems are the tightest loop — a TypeScript `tsc` error is immediate, precise, and unambiguous. CI pipelines catch integration issues that pass unit tests.
 
 ## Autonomy Scales with Backpressure
 
@@ -75,11 +75,11 @@ Backpressure is only as reliable as the signal quality. Three conditions where i
 
 - **Test-gaming**: an agent can learn to make tests pass without solving the underlying problem — deleting assertions, hardcoding expected values, or writing tests that trivially succeed. Passing tests stop meaning "correct code" and start meaning "output the agent was able to satisfy." [Mutation testing](../verification/mutation-testing-quality-gate.md) or property-based tests reduce this risk.
 - **Domains with no reliable oracle**: creative work, user-facing copy, API design, and architectural decisions have no equivalent of a type error. In these domains backpressure either doesn't exist or is so coarse-grained (linter, formatter) that it can't catch the meaningful errors. Agents here require human review that backpressure was meant to replace.
-- **Upfront investment cost**: comprehensive types, test coverage, and enforced linting take time to establish. For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
+- **Upfront investment cost**: comprehensive types, test coverage, and enforced linting take time to establish (the [Codebase Readiness](codebase-readiness.md) work). For one-off tasks, short-lived scripts, or exploratory work, the investment to build quality backpressure exceeds the value of the autonomy it enables. The pattern pays off on large, long-lived, frequently modified codebases.
 
 ## Example
 
-A TypeScript project with strict mode enabled gives an agent a tight backpressure loop. The agent adds a new function, runs `tsc --noEmit`, and receives an error: `Argument of type 'string' is not assignable to parameter of type 'number'`. The agent reads the error, fixes the type mismatch, and runs again. Clean. It then runs `jest` — two tests fail with assertion details showing the return value is off by one. The agent reads the failures, adjusts the logic, and reruns. All green. Finally it runs `eslint` — one violation: `no-unused-vars` on a helper it introduced. The agent removes the variable and reruns. Clean.
+A TypeScript project with strict mode enabled gives an agent a tight backpressure loop. The agent adds a new function, runs `tsc --noEmit`, and receives an error: `Argument of type 'string' is not assignable to parameter of type 'number'`. The agent reads the error, fixes the type mismatch, and runs again. Clean. It then runs `jest` — two tests fail with assertion details showing the return value is off by one. The agent reads the failures, adjusts the logic, and reruns. All green. Finally it runs `eslint` — one violation: `no-unused-vars` on a helper it introduced. The agent removes the variable and reruns `eslint`. Clean.
 
 The full loop completes without human involvement. Each tool in the chain catches a different class of error; none overlap. The agent reaches a correct, reviewable state through automated feedback alone.
 
@@ -87,13 +87,13 @@ The full loop completes without human involvement. Each tool in the chain catche
 
 - Backpressure is the automated feedback that enables agent self-correction without human intervention.
 - Type systems, tests, linters, and CI each provide different levels of precision — use all of them.
-- Agent autonomy scales directly with backpressure quality in the codebase.
+- Agent autonomy scales directly with backpressure quality — a property of the codebase, not the agent (see [Codebase Readiness](codebase-readiness.md)).
 - Improving codebase backpressure coverage is a high-leverage path to better agent output — it changes what errors the agent can detect, not just how it responds to them.
 
 ## Related
 
 - [The Ralph Wiggum Loop](ralph-wiggum-loop.md) — the iteration shell that backpressure terminates
-- [Agent Self-Review Loop](agent-self-review-loop.md) — review loop that pairs with automated signals
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — review loop that pairs with automated signals
 - [Evaluator-Optimizer](evaluator-optimizer.md) — feedback-driven refinement pattern
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant
 - [Harness Engineering](harness-engineering.md) — making codebases agent-ready by building backpressure coverage into the repo

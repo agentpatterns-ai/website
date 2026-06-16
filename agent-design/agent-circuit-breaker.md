@@ -19,7 +19,7 @@ maturity: established
 
 ## The Problem
 
-When an external tool (API, search engine, code executor) degrades mid-session, most agents enter retry loops. Each failed call consumes tokens, and the loop runs until context is exhausted or the session is abandoned. Backoff doesn't solve this — it delays rather than prevents the waste.
+When an external tool (API, search engine, code executor) degrades mid-session, most agents enter retry loops. Each failed call consumes tokens, and the loop runs until context is exhausted or the session is abandoned. Backoff doesn't solve this — it delays rather than prevents the waste, a recovery gap catalogued in [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md).
 
 The circuit breaker pattern, adapted from distributed systems, tracks per-tool failure rates and temporarily disables broken endpoints, forcing agents to attempt alternatives or degrade gracefully rather than repeat calls that will fail.
 
@@ -39,7 +39,7 @@ stateDiagram-v2
 | State | Behavior |
 |-------|----------|
 | **Closed** | Normal operation. Failures are counted. |
-| **Open** | All calls blocked immediately — no invocation, no tokens spent. |
+| **Open** | All calls blocked immediately — the agent receives `CircuitOpenError`, no invocation, no tokens spent. |
 | **Half-Open** | One probe call allowed to test recovery. Success resets to Closed; failure returns to Open. |
 
 The key distinction from simple retry: during Open state, the agent receives an immediate `CircuitOpenError` without making the tool call at all.
@@ -60,7 +60,7 @@ State is session-scoped — circuit breakers reset between agent sessions. This 
 
 Circuit breakers are only useful if agents respond to `CircuitOpenError` by attempting alternatives rather than stopping. This requires:
 
-1. **System prompt awareness** — the agent must know which tools are unavailable. Update the system prompt or add a tool-status context block when a circuit opens.
+1. **System prompt awareness** — the agent must know which tools are unavailable. Update the system prompt or add a `tool-status` context block when a circuit opens.
 2. **Fallback routing** — the agent tries an alternative tool for the same operation (e.g., a secondary search API when the primary opens).
 3. **Explicit acknowledgment** — if no alternative exists, the agent reports the degradation to the user rather than silently looping.
 4. **Human escalation** — for high-stakes operations with no alternative, route the circuit-open state to a [confirmation gate](../security/human-in-the-loop-confirmation-gates.md) or [deferred permission request](deferred-permission-pattern.md). The breaker stops the waste; the gate keeps progress reachable.
@@ -78,9 +78,9 @@ The two are complementary: loop-level breakers prevent runaway agents; tool-leve
 Circuit breakers add overhead that outweighs the benefit in several common scenarios:
 
 - **Tools are locally hosted or highly reliable** — state tracking and threshold tuning add indirection with no payoff when the tool never degrades. Measure failure rates first.
-- **Single-shot or short sessions** — the pattern assumes repeated invocations where retry compounding is possible. An agent that calls each tool once pays the configuration cost for nothing.
+- **Single-shot or short sessions** — the pattern assumes repeated invocations (a single [agent turn](agent-turn-model.md) is often many tool calls) where retry compounding is possible. An agent that calls each tool once pays the configuration cost for nothing.
 - **Transient errors are the norm** — a fast API with brief blips opens circuits unnecessarily if the threshold is too tight, blocking calls that would succeed on retry. False positives are harder to debug than the waste they prevent.
-- **No fallback exists** — without graceful degradation the circuit opens and the agent stalls anyway; the state machine stops the waste but does not preserve progress.
+- **No fallback exists** — without graceful degradation the circuit opens and the agent stalls anyway; pairing the breaker with a [confirmation gate](../security/human-in-the-loop-confirmation-gates.md) keeps progress reachable while the state machine stops the waste.
 - **Agent updates system prompt dynamically** — injecting tool-status context when a circuit opens risks prompt injection or context pollution in security-sensitive deployments.
 - **Failures are semantic, not transport-level** — LLM-backed tools routinely return HTTP 200 while producing hallucinated output. A counter keyed on transport errors never trips, so the circuit stays Closed while the agent burns tokens on bad responses ([Hannecke, 2025](https://medium.com/@michael.hannecke/resilience-circuit-breakers-for-agentic-ai-cc7075101486); [Pan, 2026](https://tianpan.co/blog/2026-04-14-treating-your-llm-provider-as-an-unreliable-upstream)). Detecting these needs inline quality evaluation alongside the state machine.
 - **Multiple agents share the failing tool** — per-session state cannot prevent retry storms when parallel agents hit the same endpoint; ten workers retrying three times each send thirty requests to a dead service. Multi-agent deployments need a shared breaker store (a `failed_services` reducer in graph state or a Redis-backed registry) with per-node retries disabled on shared tools ([LifeTidesHub, 2026](https://www.lifetideshub.com/retry-storms-multi-agent-systems/)).

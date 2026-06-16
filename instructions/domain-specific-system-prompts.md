@@ -18,7 +18,7 @@ maturity: established
 
 ## The Gap Between Generic and Domain-Specific
 
-A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. No worked examples, no domain vocabulary, no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about.
+A generic instruction like "reason carefully before acting" tells the model nothing about what good reasoning looks like in your domain. No worked examples, no domain vocabulary, no model of which edge cases matter. The result is reasoning that looks thoughtful but misses the failures you care about — the gap [example-driven instructions](example-driven-vs-rule-driven-instructions.md) close by supplying a concrete reasoning template.
 
 !!! note "Also known as"
     Domain-Specific Personas, Domain-Specific System Prompts. For replacing the default system prompt entirely with a domain-specific identity, see [System Prompt Replacement](system-prompt-replacement.md).
@@ -122,6 +122,7 @@ The after version encodes the tool call sequence, the conditions that gate each 
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [System Prompt Altitude](system-prompt-altitude.md)
 - [Production System Prompt Architecture](production-system-prompt-architecture.md)
+- [System Prompt Replacement](system-prompt-replacement.md) — sibling on system-prompt design; replacing the default prompt rather than tailoring one to a domain
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Instruction Polarity](instruction-polarity.md)
 - [Negative Space Instructions](negative-space-instructions.md)

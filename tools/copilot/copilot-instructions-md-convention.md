@@ -32,7 +32,7 @@ Place the file at `.github/copilot-instructions.md`. Standard Markdown. Keep it 
 GitHub [recommends](https://github.blog/ai-and-ml/github-copilot/5-tips-for-writing-better-custom-instructions-for-copilot/) five categories:
 
 1. **Project overview** -- purpose, audience, key features.
-2. **Tech stack** -- frameworks, ORMs, runtimes, test runners.
+2. **Tech stack** -- frameworks, ORMs, runtimes, test runners (the Example below shows a TypeScript/Node stack).
 3. **Coding guidelines** -- naming, error handling, formatting.
 4. **Project structure** -- folder layout and directory purposes.
 5. **Available resources** -- scripts, automation, MCP servers.

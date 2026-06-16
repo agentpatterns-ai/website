@@ -8,7 +8,7 @@ tags:
   - workflows
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-06-12
+last_reviewed: 2026-06-14
 maturity: established
 ---
 
@@ -18,7 +18,7 @@ maturity: established
 
 ## The Problem
 
-Chat-based coding loses design decisions across interactions. Each new session starts without knowledge of prior architectural choices, naming conventions, or rejected approaches. Agents re-derive context from code that may not reflect the original intent, or they hallucinate conventions that contradict earlier decisions.
+Chat-based coding loses design decisions across interactions. Each new session starts without knowledge of prior architectural choices, naming conventions, or rejected approaches. Agents [re-derive context](../context-engineering/context-priming.md) from code that may not reflect the original intent, or they hallucinate conventions that contradict earlier decisions.
 
 Spec-driven development addresses this by externalizing intent into a persistent document the agent reads on every compilation cycle.
 
@@ -34,11 +34,11 @@ graph TD
     D -->|Update spec| A
 ```
 
-**Specify** — Describe requirements in terms of user journeys and success criteria. Focus on *what* and *why*, not technology choices. The agent generates a detailed specification capturing who uses the system and what outcomes matter.
+**Specify** — Describe requirements in terms of user journeys and success criteria. Focus on *what* and *why*, not technology choices. The agent generates a [detailed specification](../instructions/specification-as-prompt.md) capturing who uses the system and what outcomes matter.
 
 **Plan** — Provide architecture constraints, stack preferences, and non-functional requirements. The agent creates a technical plan respecting legacy systems, compliance rules, or performance targets.
 
-**Tasks** — The agent decomposes the plan into small, reviewable units. Each task is concrete and testable — "create a user registration endpoint that validates email format" rather than "build the auth system."
+**Tasks** — The agent [decomposes the plan into small, reviewable units](../multi-agent/oracle-task-decomposition.md). Each task is concrete and testable — "create a user registration endpoint that validates email format" rather than "build the auth system."
 
 **Implement** — The agent executes tasks sequentially. You review focused changes rather than large code dumps.
 
@@ -69,6 +69,8 @@ The spec solves the same problem as [feature list files](../instructions/feature
 | Specification file | Project intent | Design decisions, data contracts, behavioral requirements |
 
 Anthropic's context engineering research identifies structured note-taking as critical for preserving intent across context resets ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The specification file is the most comprehensive form of this pattern — it captures not just *what* was decided but *why*, in a format the agent re-reads every cycle.
+
+Microsoft frames the spec as a *shared* source of truth for human and AI alike — the artifact both parties align on before either executes, so that AI-native engineering becomes an align-then-execute loop rather than an improvise-per-prompt one ([Microsoft Developer Blog — Spec-Driven Development and AI-Native Engineering](https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering)).
 
 ## Trade-Offs
 

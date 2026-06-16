@@ -46,7 +46,7 @@ graph TD
 
 **Modification errors** appear first: the agent follows a rule's spirit but not its letter — wrong formatting, a constraint exceeded by 10%.
 
-**Omission errors** appear later: the agent skips the rule entirely. A banned phrase appears. A scoped restriction is ignored. More rules make no difference — the set has exceeded reliable capacity.
+**Omission errors** appear later: the agent skips the rule entirely. A banned phrase appears. A scoped restriction is ignored. More rules make no difference — the set has exceeded reliable capacity, the regime where even frontier models hold only 68% accuracy at 500 instructions.
 
 ## Primacy Bias
 
@@ -128,3 +128,4 @@ Decomposition is not the only fix. Reducing total rule count also raises headroo
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md)
 - [Critical Instruction Repetition](critical-instruction-repetition.md)
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md)
+- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — complementary lever on rule polarity within the same compliance budget this ceiling bounds

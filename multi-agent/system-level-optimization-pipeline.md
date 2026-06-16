@@ -10,7 +10,7 @@ aliases:
   - Multi-Agent Performance Optimization
   - System-Wide Optimization Pipeline
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # System-Level Optimization Pipeline
@@ -22,7 +22,7 @@ maturity: established
 
 ## Why Local Optimization Misses System Bottlenecks
 
-The system-level optimization pipeline is a sequential multi-agent workflow that splits performance engineering across four specialized agents — summarizer, analyst, optimizer, and verifier — each reasoning within a bounded scope while collectively surfacing bottlenecks that span multiple services.
+The system-level optimization pipeline is a [sequential multi-agent workflow](multi-agent-topology-taxonomy.md) that splits performance engineering across four specialized agents — summarizer, analyst, optimizer, and verifier — each reasoning within a bounded scope while collectively surfacing bottlenecks that span multiple services.
 
 Most AI coding agents optimize at the function level: point at a function, ask for it to be faster, and the agent restructures the algorithm. This misses the bottlenecks that matter most in distributed systems — connection pool exhaustion, lock contention on shared request paths, redundant allocation in serialization layers. These emerge from **cross-component interactions** that no single-file pass can find, because the evidence is spread across services and configuration layers.
 
@@ -62,7 +62,7 @@ The analysis agent receives the summarization output, identifies optimization op
 
 ### Stage 3: Optimization
 
-The optimization agent translates each bottleneck into concrete code changes under a non-breaking constraint: public APIs and service interfaces remain stable. Changes target internal implementation only.
+The optimization agent translates each bottleneck into concrete code changes under a non-breaking constraint, a responsibility scoped to its [specialized role](../agent-design/specialized-agent-roles.md): public APIs and service interfaces remain stable. Changes target internal implementation only.
 
 ### Stage 4: Verification
 
@@ -129,9 +129,9 @@ None of these fixes are novel. The value is that the pipeline found cross-servic
 The pipeline requires conditions that not all codebases meet:
 
 1. **No existing test suite** — Stage 4 (verification) depends on passing tests to validate correctness. Without them, the pipeline cannot distinguish a valid optimization from a regression. A single failing assumption in the optimization stage silently ships broken code.
-2. **Simple or monolithic codebases** — Cross-component bottlenecks don't emerge in single-service or small-monolith systems. The four-agent coordination overhead (summarization, analysis, optimization, verification) adds latency and cost that outweighs the benefit vs. a direct single-agent pass.
+2. **Simple or monolithic codebases** — Cross-component bottlenecks don't emerge in single-service or small-monolith systems. The four-agent [coordination overhead](multi-agent-se-design-patterns.md) (summarization, analysis, optimization, verification) adds latency and cost that outweighs the benefit vs. a direct single-agent pass.
 3. **Poorly documented service boundaries** — The summarization stage extracts dependency maps and call graphs from code and config. If service contracts are implicit or undocumented, summaries will be incomplete and the analysis stage will miss bottlenecks that cross those boundaries.
-4. **Single-benchmark evidence** — Current results come from one Java microservices benchmark (TeaStore). Applying the pattern to heterogeneous stacks, stateful services, or event-driven architectures may produce different outcomes.
+4. **Single-benchmark evidence** — Current results come from one Java microservices benchmark ([TeaStore](https://github.com/DescartesResearch/TeaStore)). Applying the pattern to heterogeneous stacks, stateful services, or event-driven architectures may produce different outcomes.
 
 ## Key Takeaways
 

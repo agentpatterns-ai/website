@@ -10,7 +10,7 @@ aliases:
   - AI-as-executor pattern
   - delegation contract pattern
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Execution-First Delegation: The AI-as-Executor Pattern
@@ -21,7 +21,7 @@ maturity: established
 
 In prompt-response AI, you describe each step: "read this file, extract these fields, format as JSON." You remain the orchestrator; the model executes individual instructions.
 
-In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans, runs commands, modifies files, and adapts on failure — without you specifying the sequence. The developer's job shifts from writing instructions to writing contracts.
+In execution-first delegation, you hand over an intent: "prepare this repository for release." The agent explores the codebase, plans, runs commands, modifies files, and adapts on failure — without you specifying the sequence, the move from prompt-response to goal-directed systems traced in [agentic AI architecture evolution](agentic-ai-architecture-evolution.md). The developer's job shifts from writing instructions to writing contracts.
 
 | Prompt-Response | Execution-First |
 |-----------------|-----------------|
@@ -88,8 +88,8 @@ Before delegating execution to an agent, verify:
 ## When This Backfires
 
 - **Auditable workflows** — regulated domains require step-by-step execution records. An autonomous loop produces a goal-oriented trace, not a procedure audit trail.
-- **Tightly coupled codebases** — when system boundaries are unclear, specifying safe constraints is harder than listing the steps. The contract grows more complex than the scripted alternative.
-- **High-volume predictable operations** — autonomous loops cost more tokens and produce non-deterministic paths. Prompt chains are cheaper and easier to test.
+- **Tightly coupled codebases** — when system boundaries are unclear, specifying safe constraints (such as [blast radius containment](../security/blast-radius-containment.md)) is harder than listing the steps. The contract grows more complex than the scripted alternative.
+- **High-volume predictable operations** — autonomous loops cost more tokens and produce non-deterministic paths. [Prompt chains](../context-engineering/prompt-chaining.md) are cheaper and easier to test.
 - **Contract specification failure** — the pattern shifts complexity from steps to boundaries. Under-specified contracts produce the same loop-failure modes the pattern is meant to prevent.
 
 [Anthropic's measurement of agent autonomy](https://www.anthropic.com/research/measuring-agent-autonomy) reports full auto-approve runs in roughly 20% of new-user Claude Code sessions and 40% of experienced-user sessions; 32% of human interruptions supply missing technical context the agent could not infer. Treat execution-first delegation as the right tool when steps are unpredictable *and* the boundary is specifiable — not as the default mode.
@@ -117,7 +117,7 @@ Compare this to an under-specified version: "Update the docs for the release." T
 
 ## Key Takeaways
 
-- Execution-first delegation shifts the developer's role from writing instructions to writing contracts — goal, constraints, success condition, and recovery path.
+- Execution-first delegation shifts the developer's role from writing instructions to writing contracts — goal, constraints, success condition, and recovery path — once [the delegation decision](delegation-decision.md) says to hand the task over at all.
 - Boundary quality determines safety; phrasing quality is secondary in autonomous workflows.
 - Appropriate when steps are unpredictable upfront; inappropriate when every step can be defined in advance.
 - Under-specified contracts produce the same failures as under-specified prompts — just harder to debug.

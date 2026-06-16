@@ -11,7 +11,7 @@ aliases:
   - thinking trace retrieval
   - reasoning trace corpus
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # RAG over Thinking Traces
@@ -22,7 +22,7 @@ maturity: established
 
 Document RAG is widely treated as ineffective for reasoning-intensive tasks: a textbook chunk does not close the gap between problem and solution. The limitation is the corpus, not retrieval. When the index holds **thinking traces** (intermediate trajectories from a model attempting similar problems), retrieve-then-generate consistently lifts reasoning performance — beating both no-RAG and retrieval over standard web corpora ([Arabzadeh et al., 2026](https://arxiv.org/abs/2605.03344)).
 
-On AIME 2025–2026, traces produced by Gemini-2-thinking delivered relative gains of +56.3% for Gemini-2.5-Flash, +8.6% for GPT-OSS-120B, and +7.6% for GPT-5, with inference cost flat or down up to 15%. The pattern held on LiveCodeBench (code) and GPQA-Diamond (science).
+On AIME 2025–2026, traces produced by Gemini-2-thinking delivered relative gains of +56.3% for Gemini-2.5-Flash, +8.6% for GPT-OSS-120B, and +7.6% for GPT-5, with inference cost flat or down up to 15%. The trace-RAG pattern held on LiveCodeBench (code) and GPQA-Diamond (science).
 
 The mechanism is distribution match. Document chunks describe procedural knowledge; reasoning trajectories enact it. Retrieved exemplars in the desired output modality narrow the gap the model must bridge — the same reason few-shot exemplars beat instruction-only prompting. Two independent lines confirm it: [Buffer of Thoughts](https://arxiv.org/abs/2406.04271) retrieves distilled "thought-templates", and [Procedural Knowledge at Scale](https://arxiv.org/html/2604.01348) finds that injecting procedural traces into the thinking stream improves math and coding reasoning.
 
@@ -72,7 +72,7 @@ Treat the trace index as a maintained artifact, not a one-time build.
 
 | Concern | What to do |
 |---------|------------|
-| Freshness | Re-harvest when the target distribution shifts (new product area, framework upgrade, model rotation). Stale traces silently bias toward retired patterns. |
+| Freshness | Re-harvest when the target distribution shifts (new product area, framework upgrade, model rotation). [Stale traces](memory-synthesis-execution-logs.md) silently bias toward retired patterns. |
 | Quality filter | Score traces by terminal outcome and intermediate consistency. Drop failed-without-recovery traces from the success shard; keep them in a labelled negative shard. |
 | Structuring | T3 does real work — compact representations fit more exemplars in the context budget and improve retrieval precision over raw transcripts. |
 | Evaluation | Hold out a slice of the target distribution that contributed no traces. Report gains against both no-RAG and document-RAG baselines. |
@@ -120,4 +120,4 @@ The lift is not free — the team pays for periodic batch generation and the T3 
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md)
 - [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md)
-- [Abstention-Aware Memory Retrieval](abstention-aware-memory-retrieval.md)
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md)

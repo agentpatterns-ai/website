@@ -93,7 +93,7 @@ Every request pays for an embedding computation plus a vector-store lookup befor
 Three conditions where the pattern underperforms:
 
 1. **Threshold instability**: One similarity threshold across diverse query types produces either false positives (wrong cached responses served) or false negatives (valid matches missed). Heterogeneous query mixes demand per-intent thresholds.
-2. **Embedding drift on model updates**: Cached embeddings are tied to a specific embedding model. When that model is replaced, existing entries no longer match reliably, requiring a full cache flush and warm-up period.
+2. **Embedding drift on model updates**: Cached [embeddings](../context-engineering/retrieval-augmented-agent-workflows.md) are tied to a specific embedding model. When that model is replaced, existing entries no longer match reliably, requiring a full cache flush and warm-up period.
 3. **Cache invalidation complexity**: Results correct when cached can go stale — a product inventory answer from Tuesday may be wrong by Thursday. Unlike prompt caching (which caches computation), semantic caches cache *answers*, requiring explicit invalidation for any domain where ground truth changes.
 
 ## Example

@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Enterprise Skill Marketplace: Distribution and Quality
@@ -163,3 +163,4 @@ Treat the stack as incremental: adopt managed distribution first, add telemetry 
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
 - [Agent Skills Standard](../standards/agent-skills-standard.md)
 - [OpenTelemetry Agent Observability](../standards/opentelemetry-agent-observability.md)
+- [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the canonical home for skill authoring rules behind marketplace quality gates

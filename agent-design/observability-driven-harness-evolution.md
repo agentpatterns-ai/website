@@ -46,7 +46,7 @@ graph TD
 
 ## Why Predictions Convert Noise to Signal
 
-Score-only loops produce one bit per round: better or worse. A predicted outcome produces two bits — score direction and prediction accuracy — and the second bit attributes the change to the agent's mental model rather than to chance.
+Score-only loops produce one bit per round: better or worse. A predicted outcome produces 2 bits — score direction and prediction accuracy — and the second bit attributes the change to the agent's mental model rather than to chance.
 
 An improvement with a falsified prediction signals an accidental win: the edit worked for a reason the agent did not understand. A regression with a matched prediction means the agent correctly anticipated it — useful for ruling out a hypothesis. This is [hypothesis-driven debugging](hypothesis-driven-debugging.md) applied to harness mutations: the prediction is the hypothesis, the eval round is the experiment, the mismatch is the diagnostic.
 
@@ -73,7 +73,7 @@ Hill-climbing isolates one variable per iteration so attribution is mechanical; 
 
 ## When This Backfires
 
-- **Defective seed harness** — the loop assumes the agent's prior model is roughly correct; on a degenerate seed the same opacity that traps GEPA can trap AHE. A pre-loop validator on the seed is required, not just a per-edit gate.
+- **Defective seed harness** — the loop assumes the agent's prior model is roughly correct; on a degenerate seed the same opacity that traps [GEPA](gepa-reflective-prompt-evolution.md) can trap AHE. A pre-loop validator on the seed is required, not just a per-edit gate.
 - **Weak benchmarks** — verified predictions only matter against an eval that captures real failure modes. A benchmark rewarding surface patterns lets the loop converge to a local maximum that fails in production. Rotate eval tasks; see [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md).
 - **Sub-frontier models** — predicting edits to your own harness is meta-reasoning. AHE was evaluated on frontier models; weaker ones would likely produce miscalibrated predictions that degrade signal, mirroring the capability threshold in [runtime scaffold evolution](runtime-scaffold-evolution.md).
 - **Narrow-scope agents** — file-level component representations, layered trajectory corpora, and prediction registries are infrastructure work. For small task sets, manual edits reach good-enough faster.

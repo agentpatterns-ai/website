@@ -8,7 +8,7 @@ tags:
   - human-factors
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Evaluating Agent Patterns Catalog as a Source

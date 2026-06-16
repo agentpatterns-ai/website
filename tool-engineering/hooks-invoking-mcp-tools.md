@@ -10,7 +10,7 @@ tags:
   - security
   - claude
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Hooks Invoking MCP Tools: Closing the Loop Between Policy and Tool Execution

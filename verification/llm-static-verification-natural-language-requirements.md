@@ -43,7 +43,7 @@ Splitting verification into rule extraction and per-rule judgment is the same me
 - **Plain single-prompt verification.** Handing the LLM the full spec and the full code in one prompt inherits the systematic false-negative pattern documented in [Jin & Chen, ASE 2025](https://arxiv.org/abs/2508.12358) — correct implementations get flagged as non-conforming at rates that overwhelm reviewers. The two-stage structure is necessary, not optional.
 - **Chain-of-explanation prompts in the auditor.** Asking the code auditor to *explain* its verdict or *propose corrections* raises the misjudgment rate. The intuitive prompt-engineering instinct inverts the desired outcome ([Jin & Chen, 2026](https://arxiv.org/abs/2603.00539)).
 - **Requirements that lean on vague quality attributes.** "The system should be intuitive" or "must scale appropriately" cannot be reduced to checkable rules. The miner flags them, but the auditor has nothing to evaluate — coverage of the spec drops silently.
-- **Treated as a substitute for tests.** The pattern is a complement to runtime evidence, not a replacement. Teams that retire test investment because LLM verification "covers requirements" lose the runtime oracle that catches the residual false negatives. Even strong models score only ~64% on coding judge benchmarks ([JudgeBench, ICLR 2025](https://openreview.net/pdf?id=G0dksFayVq)) and are sensitive to formatting and paraphrase changes ([CodeJudgeBench](https://arxiv.org/abs/2507.10535)).
+- **Treated as a substitute for tests.** The pattern is a complement to runtime evidence, not a replacement. Teams that retire test investment because LLM verification "covers requirements" lose the runtime oracle that catches the residual false negatives — the oracle a pipeline like [multi-agent RAG spec-to-test](multi-agent-rag-spec-to-test.md) preserves by compiling the spec into executable tests. Even strong models score only ~64% on coding judge benchmarks ([JudgeBench, ICLR 2025](https://openreview.net/pdf?id=G0dksFayVq)) and are sensitive to formatting and paraphrase changes ([CodeJudgeBench](https://arxiv.org/abs/2507.10535)).
 - **No human gate on flagged items.** Without a reviewer triaging miner-flagged ambiguities and auditor-flagged failures, the noise dominates. Treat the LLM output as a queue that routes work to humans, not as a verdict.
 
 ## Where It Fits Among Verification Techniques
@@ -103,9 +103,9 @@ The verdict goes to a reviewer, who decides whether the race window is acceptabl
 ## Key Takeaways
 
 - The two-stage structure (rule miner, then per-rule code auditor) is what earns the pattern its place. Single-prompt verification of code against a spec misclassifies correct code as non-conforming and degrades further with elaborate prompts.
-- The rule miner's *unverifiable* output is the early-warning channel — vague quality attributes and contradictions surface before any code is judged.
+- The rule miner's *unverifiable* output is the early-warning channel — vague quality attributes and contradictions surface before any code is judged, the same upfront ambiguity-surfacing as [test-driven intent clarification](test-driven-intent-clarification.md).
 - Keep the code auditor's prompt narrow. Asking it to explain or propose corrections raises the false-negative rate.
-- LLM static verification is a complement to tests, types, and lints — not a substitute. Reserve it for the rules no executable oracle covers.
+- LLM static verification is a complement to tests, types, and lints — the [deterministic guardrails](deterministic-guardrails.md) that hold regardless of model output — not a substitute. Reserve it for the rules no executable oracle covers.
 - Route flagged items to human review. Coding judge benchmarks cap at ~64% accuracy with significant variance, so the LLM output is a triage queue, not a verdict.
 
 ## Related

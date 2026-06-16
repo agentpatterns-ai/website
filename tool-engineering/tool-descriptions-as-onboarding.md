@@ -11,7 +11,7 @@ aliases:
   - Mistake-Proofing
   - Poka-Yoke
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Write Tool Descriptions as Agent Onboarding Documents
@@ -130,11 +130,11 @@ The improved description makes explicit three things a new hire would learn on d
 
 ## When This Backfires
 
-Verbose descriptions consume context budget. A description that covers every edge case can add hundreds of tokens per tool call; in agents that invoke many tools per session, this compounds into measurable cost and latency increases. The right level of detail is the minimum needed to prevent misuse — not exhaustive documentation.
+Verbose descriptions consume context budget. A description that covers every edge case can add hundreds of tokens per tool call; in agents that invoke many tools per session, this compounds into measurable cost and latency increases, the budget [Token-Efficient Tool Design](token-efficient-tool-design.md) protects. The right level of detail is the minimum needed to prevent misuse — not exhaustive documentation.
 
 Over-specifying expected call sequences limits valid solution paths. If a description prescribes "always call `list_sprints` first," the agent cannot adapt when a sprint ID is already known from context. Describe what parameters require, not how to obtain them from scratch every time.
 
-Description maintenance is ongoing cost. As the underlying API evolves, descriptions silently go stale. An outdated description that contradicts current API behavior is worse than a terse one — it confidently misdirects the agent. Budget time for description review whenever the API changes.
+Description maintenance is ongoing cost. As the underlying API evolves, descriptions silently go stale — the decay [Tool Description Quality](tool-description-quality.md) scores for. An outdated description that contradicts current API behavior is worse than a terse one — it confidently misdirects the agent. Budget time for description review whenever the API changes.
 
 [Microsoft Research on tool-space interference in the MCP era](https://www.microsoft.com/en-us/research/blog/tool-space-interference-in-the-mcp-era-designing-for-agent-compatibility-at-scale/) adds that descriptions should publish runtime metadata — latency, token cost, tested model compatibility — alongside prose, and that flattening deeply nested parameter schemas lifts success rates.
 

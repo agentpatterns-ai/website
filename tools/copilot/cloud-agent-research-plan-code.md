@@ -88,7 +88,7 @@ The three-phase model runs on the same infrastructure as the Copilot cloud agent
 
 ## When This Backfires
 
-- **Simple tasks**: The plan gate is overhead when the implementation is obvious. A one-line fix doesn't warrant a research → plan → code cycle.
+- **Simple tasks**: The plan gate is overhead when the implementation is obvious. A one-line fix doesn't warrant a research → plan → code cycle — direct [Coding Agent](coding-agent.md) assignment is faster.
 - **Well-specified issues**: If the issue body already documents the exact changes needed, the research phase adds latency without new information.
 - **Incomplete repository context**: Research grounding is limited to repository content. If key constraints live in internal wikis, Jira, or external APIs, the research summary will be incomplete — and a plan built on it may be flawed.
 - **Bulk automation workflows**: Teams using cloud agent for high-volume tasks (security patches across many repos) pay the plan-review tax on every task. Total throughput drops significantly.

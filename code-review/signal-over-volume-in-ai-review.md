@@ -16,7 +16,7 @@ maturity: established
 
 ## The Principle
 
-AI review tools that always produce output regardless of value train you to ignore them. The signal-over-volume principle treats silence as a valid review outcome. When the AI does comment, it matters. When it has nothing high-confidence to add, it says nothing.
+AI review tools that always produce output regardless of value train you to ignore them. The signal-over-volume principle treats silence as a valid review outcome. When the AI does comment, it matters. When it has nothing high-confidence to add, it says nothing — the same silent-drop discipline a [reproduce-before-report gate](reproduce-before-report-verification-gate.md) enforces.
 
 GitHub's Copilot code review demonstrates this at scale: [in 71% of reviews, Copilot surfaces actionable feedback; in the remaining 29%, the agent says nothing at all](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). GitHub explicitly rejected maximizing comment frequency, stating "more comments don't necessarily mean a better review."
 
@@ -28,7 +28,7 @@ Alert fatigue is the primary failure mode. When every PR gets a wall of comments
 
 ### Silence as Output
 
-Build review agents that return no comments when confidence is low. This requires a confidence threshold: each potential finding must clear a minimum signal bar before surfacing. Findings below it are suppressed, not queued.
+Build review agents that return no comments when confidence is low. This requires a confidence threshold: each potential finding must clear a minimum signal bar (the Example below uses a `≥90%` floor) before surfacing. Findings below it are suppressed, not queued.
 
 ### Multi-Line Contextual Comments
 
@@ -47,7 +47,7 @@ When multiple instances of the same issue are identified, offer [batch fixes tha
 Two feedback loops validate signal quality:
 
 1. **Reactions** — thumbs-up/down on individual comments track whether suggestions prove helpful. A declining ratio indicates signal degradation.
-2. **Resolution tracking** — whether flagged issues get resolved before merging. Findings you consistently dismiss indicate false positives that should be suppressed.
+2. **Resolution tracking** — whether flagged issues get resolved before merging. Findings you consistently dismiss indicate false positives that [learned review rules](learned-review-rules.md) should suppress.
 
 GitHub's agentic architecture redesign produced an [8.1% increase in positive feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) by improving signal quality. A later, separate move to a stronger reasoning model added [a further 6% — despite review latency rising 16%](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) — evidence that fewer, better comments beat faster, noisier ones.
 
@@ -56,19 +56,19 @@ GitHub's agentic architecture redesign produced an [8.1% increase in positive fe
 When building or configuring AI review:
 
 - **Set a confidence floor.** Only surface findings the model is confident about. Low-confidence suggestions belong in optional "info" channels, not the PR thread.
-- **Categorize by severity.** Critical and high findings appear as PR comments. Medium and low findings surface only when explicitly requested.
+- **Categorize by severity.** Critical and high findings appear as PR comments. Medium and low findings surface only when explicitly requested, the routing [tiered code review](tiered-code-review.md) formalises.
 - **Track false positive rates.** If you dismiss a category of finding more than half the time, suppress it or refine its detection criteria.
 - **Scope review instructions.** Tell the agent what to check and — equally important — what to ignore. A review prompt that says "flag all uses of `any`" will flag intentional uses alongside accidental ones.
 
 ## Why It Works
 
-The mechanism is attentional: reviewers have a fixed budget of attention per PR. When a tool produces many low-value comments, reviewers discount all its output — including the high-value findings. This is a learned response to repeated false positives, not a deliberate choice. Suppressing low-confidence findings preserves attention for the comments that do surface, so each one is read rather than skimmed.
+The mechanism is attentional: reviewers have a fixed budget of attention per PR. When a tool produces many low-value comments, reviewers discount all its output — including the high-value findings, the [review-fatigue dynamic](../human/cognitive-load-ai-fatigue.md) that erodes sustainable agent use. This is a learned response to repeated false positives, not a deliberate choice. Suppressing low-confidence findings preserves attention for the comments that do surface, so each one is read rather than skimmed.
 
 ## When This Backfires
 
-- **Cross-file false negatives.** A strict confidence floor silences bugs that span multiple files — the model cannot reach high confidence without full context. This defect class is missed unless the agent receives sufficient scope.
+- **Cross-file false negatives.** A strict confidence floor silences bugs that span multiple files — the same cross-file blind spot [diff-based review](diff-based-review.md) carries when context is missing. This defect class is missed unless the agent receives sufficient scope.
 - **Silent failure on novel patterns.** Confidence thresholds reflect known patterns. A new vulnerability type may score low confidence because it is rare in training data, not because it is low risk. The agent's silence is indistinguishable from a clean bill of health — an [empirical evaluation of Copilot code review on labelled vulnerable samples](https://arxiv.org/abs/2509.13650) found it frequently misses SQL injection, XSS, and insecure deserialization while still returning clean reviews.
-- **Trust inversion.** When the agent comments rarely, developers may interpret silence as implicit approval and reduce manual review. A "No high-confidence findings." response creates false completeness if secondary review has been dropped.
+- **Trust inversion.** When the agent comments rarely, developers may interpret silence as implicit approval and reduce manual review. A `No high-confidence findings.` response creates false completeness if secondary review has been dropped.
 - **Threshold decay.** Confidence floors drift as codebases evolve. Without periodic recalibration against resolved findings, signal quality degrades silently.
 
 ## Example
@@ -111,6 +111,7 @@ A PR that receives a response of "No high-confidence findings." passes the bar. 
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Tiered Code Review](tiered-code-review.md)
+- [Tunable Review Effort](tunable-review-effort.md) — why High-by-default backfires; the per-PR effort lever that complements signal-over-volume
 - [Diff-Based Review](diff-based-review.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — complementary strengths of AI and human reviewers and how to structure collaboration
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — empirical signal ratio data showing how actionable comment rates determine merge outcomes

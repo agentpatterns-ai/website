@@ -6,7 +6,7 @@ tags:
   - tool-engineering
   - claude
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # PostToolUse Output Replacement: Hooks That Rewrite Tool Results
@@ -32,7 +32,7 @@ This is distinct from the two pre-existing modes:
 Replacement is the right mode when the original output is unsafe or unhelpful for the model to reason over directly:
 
 - **Secret redaction.** Output contains tokens, keys, or PII the model should not see or echo. Asking the model to redact post-hoc fails — the secret has already entered context.
-- **Output compression.** Long shell output (test runners, build logs) consumes context budget; a hook-side summary keeps budget for downstream reasoning.
+- **Output compression.** Long shell output (test runners, build logs) consumes context budget; a hook-side summary keeps budget for downstream reasoning, as in [Terminal Output Compression](terminal-output-compression.md).
 - **Platform normalisation.** BSD vs GNU output shape divergence is rewritten to a canonical form so the model's parsing logic works on both.
 - **Structured annotation injection.** Wrap raw tool output in a small envelope (`{"summary": "...", "raw": "..."}`) the model is trained to parse.
 
@@ -129,7 +129,7 @@ Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Fou
 - **Lossy summarisation drops the field the model needs next.** Compressing 50KB of test output to "200 lines, 3 errors" works until the model needs the exact line number from line 47 — which is no longer in context or transcript. Prefer `additionalContext` for hints layered onto the full output unless context budget is the actual bottleneck.
 - **Concurrent hooks race on the same tool.** Multiple `PostToolUse` hooks registered on the same matcher each return their own `updatedToolOutput`; the docs do not guarantee deterministic merge order. The same race is documented for `PreToolUse` `updatedInput` ([Hooks and Lifecycle Events](hooks-lifecycle-events.md)). Register at most one rewriting hook per matcher.
 - **Silent error masking.** A redactor that strips stderr-style fragments to make output cleaner can hide real failures from the model — the tool succeeded by exit code, the hook sanitised the output, and the model never sees the warning that would have triggered a fix. Test rewrite rules against actual failure transcripts before deploying.
-- **Replacement is permanent — there is no audit log of the original.** The transcript records only the replacement string. If the hook strips a warning that would have identified a bug, neither the model nor the developer can recover the original text post-session. Keep rewrites minimal and reversible (regex substitution, not summarisation) and test rewrite rules against actual failure transcripts before deploying.
+- **Replacement is permanent — there is no audit log of the original.** The transcript records only the replacement string from `updatedToolOutput`. If the hook strips a warning that would have identified a bug, neither the model nor the developer can recover the original text post-session. Keep rewrites minimal and reversible (regex substitution, not summarisation) and test rewrite rules against actual failure transcripts before deploying.
 
 ## Key Takeaways
 

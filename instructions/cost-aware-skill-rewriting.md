@@ -47,7 +47,7 @@ With the anchor present, the agent commits the correct decision in one inference
 
 Before rewriting a skill, walk the body line-by-line and answer for each candidate cut:
 
-1. **Is this an operational anchor?** A single-line piece of operational knowledge the base model cannot guess — a specific flag, threshold, constructor argument, file path, or recovery rule.
+1. **Is this an operational anchor?** A single-line piece of operational knowledge the base model cannot guess — a specific flag like `--canary 10`, a threshold, a constructor argument, a file path, or a recovery rule.
 2. **Would the agent fail or retry without it?** If yes, the anchor pays for itself in saved exploration cost. Keep.
 3. **Is this surrounding explanation that contextualises the anchor?** Cut. Keep the anchor; drop the framing.
 4. **Is this an example that *implicitly* defines the anchor?** Cut only if the anchor is named explicitly elsewhere — non-actionable body content is the safe cut, but an example carrying an otherwise-unstated convention is an anchor in disguise ([SkillReducer, arxiv:2603.29919](https://arxiv.org/abs/2603.29919)).
@@ -97,7 +97,7 @@ The anchor-preservation framing has real costs that the 7.0% headline win must j
 ## Key Takeaways
 
 - A rewritten skill is cheaper only when it preserves the **sparse operational anchors** that prevent exploration, debugging, and retry — not because it has fewer tokens.
-- Three anchor classes cover most skills: **API/code anchoring** (constructors, flags), **workflow guarding** (ordered steps, validators), **rule/formula anchoring** (thresholds, schemas). No template wins universally — match the strategy to the skill's structural profile.
+- Three anchor classes cover most skills: **API/code anchoring** (constructors, flags), **workflow guarding** (ordered steps, validators), **rule/formula anchoring** (thresholds, schemas). No template wins universally — a learned policy that matches the strategy to the skill's structural profile cut total agent cost by 7.0% on a held-out evaluation.
 - The mechanism is the asymmetry between cached input savings and uncached output overhead — the saved skill tokens are cheap, cacheable input, while each forced exploration step spends uncached output tokens.
 - The diagnostic test is "can I remove this without forcing the agent to discover it by trial?" — the inverse of generic compression's "without losing meaning?" test.
 - For pure-prose skills, fire-and-forget workflows, or libraries bottlenecked at selection rather than execution, fall back to [Prompt Compression](../context-engineering/prompt-compression.md).

@@ -12,7 +12,7 @@ aliases:
   - "sampling vs orchestration state variance"
   - "intrinsic and orchestration variance"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)
@@ -48,10 +48,10 @@ The independent agentic-eval study found single-run pass@1 standard deviations e
 The decomposition adds cost — at least one extra controlled run per layer isolated, plus the infrastructure to vary one layer at a time. It does not pay off in several conditions:
 
 - **Hosted-API consumers with no infrastructure control**: Anthropic, OpenAI, and Google do not expose batch size, stable seeds, or kernel variants to API clients in 2026. Intrinsic and extrinsic attribution is operationally indistinguishable; the only mitigation is multi-run characterisation regardless of layer.
-- **Single-step or short-horizon agents**: when the agent emits one model call with no tool-loop iteration, the orchestration-state layer is empty. Attribution adds effort without changing what you can do about the variance.
-- **Latency-critical or single-shot tasks**: CI gating, code completions, and one-shot migration scripts cannot pay the multi-run cost. Tighten guardrails so any single run is acceptable; do not decompose its variance.
+- **Single-step or short-horizon agents**: when the agent emits one model call with no tool-loop iteration, the orchestration-state layer is empty — there is no across-step state for [Markov-chain reliability](markov-chain-agent-reliability.md) to model. Attribution adds effort without changing what you can do about the variance.
+- **Latency-critical or single-shot tasks**: CI gating, code completions, and one-shot migration scripts cannot pay the multi-run cost. Fall back to aggregate [pass@k and pass^k metrics](pass-at-k-metrics.md), tighten guardrails so any single run is acceptable, and do not decompose its variance.
 - **External non-determinism dominant**: when tool outputs are themselves stochastic (web search, third-party APIs, timing-dependent state), the dominant variance is outside all three layers, and the framework misattributes external noise to whichever layer happens to be isolated when the external source is quiet.
-- **Model-version drift underneath**: silent endpoint updates and A/B routing introduce a fourth layer (model identity) the paper does not address. If you suspect drift, compare a frozen baseline against the live endpoint before attributing variance to any named layer.
+- **Model-version drift underneath**: silent endpoint updates and A/B routing introduce a fourth layer (model identity) the paper does not address. If you suspect drift, compare a frozen baseline against the live endpoint with [behavioral testing](behavioral-testing-agents.md) before attributing variance to any named layer.
 
 The dominant misattribution is treating a batch-invariance drift as a temperature problem and lowering temperature until the variance is too small to notice — leaving the bug in place and burning capability headroom. The second is treating an orchestration-state cascade as flaky-test variance and re-running for a green build, which never converges because the state surface keeps growing.
 

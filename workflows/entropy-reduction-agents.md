@@ -21,7 +21,7 @@ maturity: established
 
 Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.
 
-Codebases accumulate entropy between changes. Documentation drifts from implementation. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches. OpenAI's [harness engineering](../agent-design/harness-engineering.md) team calls this proactive scanning **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+Codebases accumulate entropy between changes. Documentation drifts from implementation faster than anyone reconciles it, which is what [continuous documentation](continuous-documentation.md) exists to counter. Deprecated patterns propagate as agents replicate existing code indiscriminately. Convention violations accumulate in corners no one actively watches. OpenAI's [harness engineering](../agent-design/harness-engineering.md) team calls this proactive scanning **"garbage collection"** of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 
 Before adopting this pattern, the OpenAI harness team spent 20% of weekly capacity on cleanup — "AI slop" that proved unsustainable at scale ([Alex Lavaee — OpenAI Agent-First Codebase Learnings](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)).
 
@@ -62,7 +62,7 @@ The two are complementary. Deterministic linters (ArchUnit, NetArchTest, PyTestA
 
 ## Why It Works
 
-Entropy accumulates because the cost of fixing each individual violation is low, but the cost of *noticing* it is high — no developer is paid to scan the entire codebase weekly for drift. Entropy reduction agents eliminate the noticing cost. Because violations are caught continuously on a short cadence, each one is small and isolated; the PR required to fix it is proportionally small and reviewable in under a minute. By contrast, entropy caught once per quarter or during a refactoring sprint has compounded into a larger, riskier change.
+Entropy accumulates because the cost of fixing each individual violation is low, but the cost of *noticing* it is high — no developer is paid to scan the entire codebase weekly for drift. Entropy reduction agents eliminate the noticing cost. Because violations are caught continuously on a short cadence, each one is small and isolated; the PR required to fix it is proportionally small and reviewable in under 1 minute. By contrast, entropy caught once per quarter or during a refactoring sprint has compounded into a larger, riskier change.
 
 The second mechanism is behavioral: encoding a standard as a machine-checkable rule forces the team to express it precisely. Vague principles ("keep things clean") cannot be enforced. Precise ones ("all retry logic must use `retry_with_backoff`") can. The act of encoding creates shared, durable, executable understanding that survives team turnover.
 
@@ -161,7 +161,7 @@ This pattern is not fire-and-forget. CodeScene data shows AI breaks code in appr
 Entropy reduction agents are only as good as the golden principles they enforce. Failure conditions:
 
 - **Poorly specified principles** — vague instructions produce high false-positive rates. Agents flag non-issues, reviewers start ignoring PRs, and the pattern collapses into noise.
-- **Missing test coverage** — without running tests against each generated PR, the agent ships breakage. The CodeScene two-thirds failure rate applies to unsupervised refactors; test gates bring this down substantially.
+- **Missing test coverage** — without running tests against each generated PR, the agent ships breakage ([CodeScene](https://codescene.com/blog/automatically-fix-technical-debt-with-ai-refactoring)). The CodeScene two-thirds failure rate applies to unsupervised refactors; test gates bring this down substantially.
 - **Review fatigue** — generating too many PRs per cadence degrades review culture. Scope agents narrowly (one violation per PR) and tune cadence until false positives are rare before scaling up.
 - **Drift in the tracker** — if `tech-debt-tracker.md` is not kept current, agents re-raise resolved issues or skip newly identified ones. The tracker requires ongoing maintenance, not just initial setup.
 

@@ -6,7 +6,7 @@ tags:
   - tool-agnostic
   - standards
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Plugin and Extension Packaging: Distributing Agent Capabilities
@@ -23,7 +23,7 @@ Plugin packaging collapses the distribution surface to a single git reference. A
 
 - **Git submodules** require consumers to initialize and update nested repos and don't bundle heterogeneous components behind one install verb.
 - **Package registries** (npm, PyPI) demand accounts, publish workflows, and language-specific runtimes — overkill for config files and shell scripts.
-- **Shared config repos** with custom sync scripts reinvent version pinning, partial updates, and rollback worse than git tags.
+- **Shared config repos** with custom sync scripts reinvent version pinning, partial updates, and rollback worse than git tags — the same versioned-artifact problem [portable agent definitions](portable-agent-definitions.md) solve with git primitives.
 
 A git repo plus a manifest gives one source of truth per tag, atomic install from one reference, and tooling every developer already has. Updating is `git pull`; pinning is a tag; auditing is `git log`.
 

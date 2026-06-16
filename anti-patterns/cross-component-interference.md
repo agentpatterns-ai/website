@@ -118,7 +118,7 @@ Four components were removed — Planning, Memory, Self-Reflection, Retrieval �
 
 ## Related
 
-- [Scaffold Architecture Taxonomy](../agent-design/scaffold-architecture-taxonomy.md) — three-layer framework for the components this anti-pattern over-stacks
+- [Scaffold Architecture Taxonomy](../agent-design/harness-design-dimensions.md) — three-layer framework for the components this anti-pattern over-stacks
 - [Harness Engineering](../agent-design/harness-engineering.md) — the broader practice of which scaffold composition is one decision
 - [Per-Model Harness Tuning](../agent-design/per-model-harness-tuning.md) — why CCI ablations must be re-run per model
 - [Indiscriminate Structured Reasoning](reasoning-overuse.md) — sibling anti-pattern: a specific case of self-reflection added without ablation

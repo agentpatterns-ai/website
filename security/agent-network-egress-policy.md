@@ -89,7 +89,7 @@ Denies override the `*.internal.corp.example` wildcard for two known-bad subdoma
 
 - Move egress decisions out of the model: the harness rejects connections before injection can bias them.
 - Allow-first with default-deny fits regulated deployments; deny-first fits broad tool use with narrow blocks.
-- Denylists must take precedence over allowlist wildcards; all three tools model this.
+- Denylists must take precedence over allowlist wildcards — Claude Code's `deniedDomains` overrides any `allowedDomains` entry; all three tools model this.
 - Domain policy composes with — not replaces — URL exfiltration guards, credentials proxies, and managed-settings enforcement.
 - Deliver the policy through MDM, Group Policy, or the tool's admin console, not per-user config.
 

@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The Technique
 
-Standard structured prompting (CoT, ToT, GoT) relies on the developer to decompose reasoning steps by hand. Petri Net of Thoughts (PNoT) inverts this: the structure comes from a formally discovered or expert-defined process model, not ad-hoc intuition.
+Standard structured prompting (CoT, ToT, [GoT](graph-of-thoughts.md)) relies on the developer to decompose reasoning steps by hand. Petri Net of Thoughts (PNoT) inverts this: the structure comes from a formally discovered or expert-defined process model, not ad-hoc intuition.
 
 A Petri net is a bipartite graph of **places** (states) and **transitions** (decisions). Tokens flow by firing rules — a transition fires when all its input places hold tokens, consuming them and producing tokens in output places. This gives three properties looser prompting topologies lack:
 

@@ -7,7 +7,7 @@ tags:
   - anti-pattern
   - tool-agnostic
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Mid-Session Config Changes as Invisible Cache Invalidators
@@ -92,7 +92,6 @@ A subagent "starts its own conversation with its own system prompt and tool set,
 ## Related
 
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — the tool-list-rebuild variant of the same prefix-invalidation failure.
-- [Prompt Cache Economics Across Providers](../context-engineering/prompt-cache-economics.md) — the cost asymmetry (cache reads at ~10% of standard input) that makes invalidation expensive.
+- [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the cost asymmetry (cache reads at ~10% of standard input) that makes invalidation expensive.
 - [Structure Prompts with Static Content First to Maximize Cache Hits](../context-engineering/static-content-first-caching.md) — the layering discipline this anti-pattern undermines.
-- [Extended Prompt Cache TTL for Long Agent Sessions](../context-engineering/extended-prompt-cache-ttl.md) — when to opt into the 1-hour TTL so the prefix survives idle gaps.
 - [Disable Attribution Headers to Preserve KV Cache in Local Inference](../context-engineering/kv-cache-invalidation-local-inference.md) — the local-inference variant where prefix invalidation has a different root cause.

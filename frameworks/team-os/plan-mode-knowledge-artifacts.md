@@ -52,7 +52,7 @@ Skip plan mode when the artifact is shorter than the plan would be, or when writ
 
 Plan-mode-for-PRDs underperforms a write-to-think workflow under three specific conditions:
 
-- **Fast-moving discovery.** An over-specified plan freezes direction before thinking has happened — every accepted plan becomes a constraint on learning the next iteration would have surfaced.
+- **Fast-moving discovery.** An over-specified plan freezes direction before thinking has happened — every accepted plan becomes a constraint on learning the next iteration would have surfaced (the [plan-first loop](../../workflows/plan-first-loop.md) documents the same backfire).
 - **Low-fidelity orchestrator synthesis.** Parallel subagents pay off only when the orchestrator faithfully composes their outputs. Contradictory findings silently resolved produce a confidently-wrong synthesis that single-agent reading would have surfaced as ambiguity.
 - **Plan-file drift after acceptance.** A plan committed at hour zero becomes stale as evidence shifts and scope contracts. Without supersession discipline ([plan files as resumable artifacts](plan-files-resumable-artifacts.md)), the accepted plan anchors the draft against reality the author has already moved past.
 

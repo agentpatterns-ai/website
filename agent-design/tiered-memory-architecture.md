@@ -72,7 +72,7 @@ Skip tiering when:
 - **Sessions are short** (sub-day) — promotion never fires often enough to amortise the daemon.
 - **Latency dominates accuracy** — per-turn cost from consolidation, attention attribution, and a PPO policy inflates inner-loop time.
 - **Single-developer, single-tenant** — tier isolation costs are not justified.
-- **A simpler design already meets the bar.** A flat JSONL store with an embedding index, a recency multiplier, and periodic LLM-summarised compaction captures most of the value. Site patterns — [episodic memory retrieval](episodic-memory-retrieval.md), [memory synthesis from execution logs](memory-synthesis-execution-logs.md), [abstention-aware retrieval](abstention-aware-memory-retrieval.md) — cover the same ground at lower operational complexity.
+- **A simpler design already meets the bar.** A flat JSONL store with an embedding index (a flat RAG store), a recency multiplier, and periodic LLM-summarised compaction captures most of the value. Site patterns — [episodic memory retrieval](episodic-memory-retrieval.md), [memory synthesis from execution logs](memory-synthesis-execution-logs.md), [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — cover the same ground at lower operational complexity.
 
 ## Risks Specific to Tier Promotion
 
@@ -93,9 +93,9 @@ Mitigate by gating promotion on a confidence signal, reviewer pass, or semantic-
 
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — episode-keyed recall without explicit tier promotion
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — scope-based memory architecture for cross-session learning
-- [Abstention-Aware Memory Retrieval](abstention-aware-memory-retrieval.md) — controller deciding *whether* to inject retrieved memory
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — controller deciding *whether* to inject retrieved memory
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — extracting causal lessons from execution traces into persistent knowledge
 - [Subtask-Level Memory for Software Engineering Agents](subtask-level-memory.md) — granularity choice in memory retrieval
-- [Memory Reinforcement Learning](memory-reinforcement-learning.md) — utility-score updates for stored memories from outcome feedback
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility-score updates for stored memories from outcome feedback
 - [Generative Agents Memory Stream](generative-agents-memory-stream.md) — three-layer architecture for long-running agents with high observation density
-- [Component-Isolated Memory Stress Testing](component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier
+- [Component-Isolated Memory Stress Testing](../verification/component-isolated-memory-stress-testing.md) — stress-tests the summarisation, storage, and retrieval stages of this pipeline so a regression attributes to one tier

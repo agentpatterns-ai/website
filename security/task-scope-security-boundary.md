@@ -10,7 +10,7 @@ aliases:
   - narrow scope security
   - scope as security boundary
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Treat Task Scope as a Security Boundary
@@ -77,7 +77,7 @@ graph TD
 
 ## The Anti-Pattern to Avoid
 
-Instructions that grant "use your judgment" or "take whatever action is needed" actively authorize redirection — providing no boundary for the model to defend. This is the highest-risk scope pattern for agents processing untrusted content.
+Instructions that grant "use your judgment" or "take whatever action is needed" actively authorize redirection — providing no boundary for the model to defend. This is the highest-risk scope pattern for agents processing [untrusted content](prompt-injection-threat-model.md).
 
 Wide latitude increases risk proportionally to the untrustworthiness of the agent's input sources. Avoid it for agents that consume external data, user-provided content, or any channel that could carry injected instructions.
 
@@ -114,7 +114,7 @@ Tight instructions reduce flexibility — a narrow-scope agent cannot handle req
 - Scope is an attack surface — the breadth of an agent's task description bounds what an injected instruction can plausibly request.
 - Tight, enumerated instructions force injections to contradict a stated directive rather than extend a vague one.
 - Capability restrictions at the tool layer enforce scope independently of model behaviour — an agent without an action cannot be coerced into taking it.
-- Narrow scope reduces but does not eliminate injection risk; pair it with confirmation gates, least-privilege permissions, and defence in depth.
+- Narrow scope reduces but does not eliminate injection risk; pair it with [confirmation gates](human-in-the-loop-confirmation-gates.md), least-privilege permissions, and defence in depth.
 - Avoid "use your judgment" framings for agents that consume any untrusted content — they authorise the redirection an attacker needs.
 
 ## Related

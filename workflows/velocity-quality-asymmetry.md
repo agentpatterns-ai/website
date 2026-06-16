@@ -109,11 +109,11 @@ Use this window deliberately:
 
 The QA-scaling recommendation is strongest for long-lived production codebases. It weakens or reverses in three cases:
 
-- **Throwaway prototypes and spikes** — code slated for deletion within weeks does not accrue debt that matters. Imposing complexity budgets and coverage gates on exploratory work wastes the velocity windfall the tooling provides.
-- **Small teams without review capacity** — if a two-person team cannot staff either human reviewers or an agent-reviewer pipeline, mandatory quality gates become a merge bottleneck that erases the velocity gain before the quality debt would have. The correct response may be to limit AI-generated code volume rather than scale QA.
+- **[Throwaway prototypes and spikes](throwaway-prototype-skill.md)** — code slated for deletion within weeks does not accrue debt that matters. Imposing complexity budgets and coverage gates on exploratory work wastes the velocity windfall the tooling provides.
+- **Small teams without review capacity** — if a two-person team cannot staff either human reviewers or an agent-reviewer pipeline, mandatory quality gates become a merge bottleneck that erases the velocity gain before the quality debt would have. The correct response may be to [limit AI-generated code volume](../code-review/agent-pr-volume-vs-value.md) rather than scale QA.
 - **Early-stage products seeking product-market fit** — shipping the wrong feature fast is often cheaper than shipping the right feature correctly. Teams whose dominant risk is building something nobody wants may rationally accept the quality debt in exchange for faster learning cycles, then pay it down once the product direction stabilizes.
 
-The underlying asymmetry still holds — velocity fades and debt compounds. The question is whether compounding debt is a problem on your timeline. For short-horizon work it may not be.
+The underlying asymmetry still holds — velocity fades by month 3 and debt compounds. The question is whether compounding debt is a problem on your timeline. For short-horizon work it may not be.
 
 ## Example
 

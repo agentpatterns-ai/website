@@ -12,7 +12,7 @@ aliases:
   - hierarchical tool agentization
   - agent-tool wrappers
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents
@@ -25,7 +25,7 @@ A flat tool catalog forces the planner to select 1-of-N at every turn. Selection
 
 ## The Pattern
 
-Identify tools that are *frequently co-used* in production trajectories. Encapsulate each group behind a single **agent tool** — a sub-agent exposing one high-level interface to the planner, and orchestrating its owned leaf tools internally.
+Identify tools that are *frequently co-used* in production trajectories. Encapsulate each group behind a single **agent tool** — a sub-agent exposing one high-level interface to the planner, and orchestrating its owned leaf tools internally, the same nesting the [orchestrator-worker pattern](../multi-agent/orchestrator-worker.md) uses.
 
 ```mermaid
 graph TD
@@ -66,7 +66,7 @@ Agentization reduces the **effective action space** visible to the top-level pla
 
 Agentization commits to a static partition. Specific conditions invert its benefits:
 
-- **Usage patterns drift** — "frequently co-used" today need not hold in six months. A stale partition forces the planner to route around wrappers or invoke multiple agent tools where one flat call would have sufficed.
+- **Usage patterns drift** — "frequently co-used" today need not hold in six months, which is why dynamic [Tool Search](advanced-tool-use.md) suits shifting libraries better than a fixed partition. A stale partition forces the planner to route around wrappers or invoke multiple agent tools where one flat call would have sufficed.
 - **Sub-agent opacity on failure** — the planner sees an aggregate error, not which leaf failed. Debugging regresses versus a flat catalog, mirroring the opacity trap flagged in [Consolidate Agent Tools](consolidate-agent-tools.md).
 - **Training dependency** — Asymmetric Planner Adaptation requires fine-tuning access. Teams on frontier proprietary models (Claude, GPT-4) inherit only the structural change.
 - **Cross-agent coordination** — when two agent tools share a leaf (calendar, auth), the hierarchy forces either leaf duplication or inter-agent coupling the planner must resolve. [Multi-agent system failures research](https://arxiv.org/html/2503.13657v1) shows agents frequently disobey role specifications; sub-agent tools inherit this risk.

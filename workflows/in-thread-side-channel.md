@@ -12,7 +12,7 @@ aliases:
   - "btw command pattern"
   - "bounded mid-task question"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # In-Thread Side-Channel: Bounded Side Questions Without Losing the Main Task
@@ -24,7 +24,7 @@ maturity: established
 The in-thread side-channel is a narrow tool, not a general-purpose one. Use it when all three conditions hold:
 
 - **The session is long enough for attention decay to matter.** Long sessions drift off-objective — earlier instructions fall into the low-attention middle zone of the context window ([Liu et al., "Lost in the Middle," TACL 2023](https://arxiv.org/abs/2307.03172)), and goal drift has been measured empirically on 100k+ token sequences ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)). In short sessions the cost of a plain interruption is low.
-- **The question is short and clarifying, not a new task.** The side-channel's value is in signalling bounded scope. A substantive question (architectural review, design debate) leaves its reasoning in the main thread regardless of framing.
+- **The question is short and clarifying, not a new task.** The side-channel's value is in signalling bounded scope. A substantive question (architectural review, design debate) leaves its reasoning in the main thread regardless of framing, [poisoning the context](../anti-patterns/context-poisoning.md) the agent must keep working in.
 - **The agent is not mid-transaction.** Interrupting during an atomic tool sequence risks breaking work the agent cannot re-synchronise.
 
 Outside these conditions, pick a different mechanism — see [Alternatives](#alternatives).
@@ -84,7 +84,7 @@ The in-thread side-channel is the wrong choice outside its narrow conditions. Th
 ## Failure Modes
 
 - **Scope creep.** The "side" question becomes the new task, and the agent never returns. The marker does not prevent this — explicit return framing is the only defence, and even that fails when the side question is substantive.
-- **Substantial side questions contaminate anyway.** If the question triggers heavy reasoning, the tokens stay in the context window and push the original goal further into the middle zone. The marker does not create isolation.
+- **Substantial side questions contaminate anyway.** If the question triggers heavy reasoning, the tokens stay in the context window and push the original goal further into the middle zone, accelerating [objective drift](../anti-patterns/objective-drift.md). The marker does not create isolation.
 - **Overuse.** Once the side-channel is cheap, users ask more questions. The pattern was meant to protect context budget; used liberally, it consumes the budget faster than plain interruptions would.
 - **Empty framing.** In a tool without a side-channel primitive, a `[SIDE]` tag is just prose — effective only if the user consistently includes the return signal and the agent reliably honours it. Neither is guaranteed without practice.
 

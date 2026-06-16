@@ -21,7 +21,7 @@ maturity: established
 
 ## The Core Distinction
 
-Prompt instructions are probabilistic. Under task pressure — context filling, attention diverted — compliance degrades and the agent reverts to training defaults.
+Prompt instructions are probabilistic. Under task pressure — context filling, attention diverted — compliance degrades toward the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md) and the agent reverts to training defaults.
 
 Hooks are deterministic. A pre-command hook runs outside the agent's context; the model cannot overrule it.
 
@@ -103,7 +103,7 @@ Hooks are deterministic at the tool-call boundary, not everywhere. Four failure 
 
 - **Substitution.** Block one tool call and the model finds another path. A matcher on `Bash(rm *)` misses `/bin/rm` or a `Write` that truncates the file; each call is evaluated alone, so `mkdir` + `cd` + `rm -rf *` slips past.
 - **Intent-blindness.** Hooks see parameters, not reasoning — they cannot distinguish legitimate `sudo` from suspect, or a `git push --force` on a personal branch from one aimed at `main`.
-- **Execution-path gaps.** Only the standard session path is hooked. Pipe mode, bare mode, some IDE integrations, and events between tool calls (prompt assembly, compaction) are unreachable. Rules that must hold everywhere also need CI or git-level enforcement.
+- **Execution-path gaps.** Only the standard session path is hooked. Pipe mode, bare mode, some IDE integrations, and events between tool calls (prompt assembly, compaction) are unreachable. Rules that must hold everywhere also need CI or git-level [deterministic guardrails](../verification/deterministic-guardrails.md).
 - **Hook-source trust.** A hook is only as trustworthy as the file that defines it. Project-scope hooks in `.claude/settings.json` from an untrusted repo can be weaponized — Check Point demonstrated RCE and API-key exfiltration via malicious hooks firing on repo load ([CVE-2025-59536, 2026](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)). The same determinism that makes a trusted hook reliable makes a malicious one unconditional; review hook configs before opening unfamiliar repos.
 
 Reach for a hook when the rule is absolute, binary, and expressible at the tool-call boundary; use prompts, CI, or repo-level gates for anything else.
@@ -150,9 +150,9 @@ These instructions require evaluating context a hook cannot inspect mechanically
 ## Key Takeaways
 
 - Prompts are probabilistic — compliance degrades under task pressure; hooks are deterministic at the tool-call boundary and run outside the agent's context.
-- Reach for a hook only when the rule is **non-negotiable**, **binary**, and **opposed by a training prior**. Anything else stays in the prompt.
+- Reach for a hook only when the rule is **non-negotiable**, **binary**, and **opposed by a training prior**. Anything else stays in the prompt, where [instruction polarity](../instructions/instruction-polarity.md) governs phrasing.
 - Hooks see parameters, not intent. Use prompts for architectural guidance, quality standards, and situational judgment.
-- Hooks are injection-resistant — injected instructions can influence what the agent *tries*, not what a hook *allows*.
+- Hooks are injection-resistant — injected instructions from a [prompt-injection](../security/prompt-injection-threat-model.md) payload can influence what the agent *tries*, not what a hook *allows*.
 - Hooks fail at four boundaries: substitution, intent-blindness, execution-path gaps, and hook-source trust. Pair them with CI and git-level gates for rules that must hold everywhere.
 
 ## Related
@@ -164,4 +164,4 @@ These instructions require evaluating context a hook cannot inspect mechanically
 - [Blast Radius Containment](../security/blast-radius-containment.md)
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
-- [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
+- [Hooks and Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md) — the canonical home for the lifecycle model these enforcement choices build on

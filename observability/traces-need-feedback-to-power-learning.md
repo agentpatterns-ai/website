@@ -57,7 +57,7 @@ This is the tool-agnostic equivalent of LangSmith's per-run feedback API or Phoe
 
 - **Ungrounded LLM-as-judge** — Judges never recalibrated against human verdicts encode their own biases — verbosity, position, self-preference — into the eval corpus. Frontier judges exceeded 50% error rates on bias benchmarks ([Justice or Prejudice, arxiv 2410.02736](https://arxiv.org/html/2410.02736v1)). Treat judge output as a triage signal, not a ground-truth label.
 - **Indirect-signal misattribution** — A reverted diff might be a stylistic preference; a reopened ticket might be a follow-up question. Treating either as a binary failure label without causal validation poisons the corpus with false negatives.
-- **Trace volume outpacing labelling capacity** — High-traffic agents accumulate traces faster than humans or judges can label them; without sampling rules the trace store becomes a graveyard.
+- **Trace volume outpacing labelling capacity** — High-traffic agents accumulate traces faster than humans or judges can label them; without sampling rules the [trace store](agent-trace-data-layer.md) becomes a graveyard.
 - **Feedback decoupled from the trace** — Thumbs-up/down in product analytics while traces sit in an APM tool means the trace ID never appears in the analytics fact table. The loop never closes.
 
 ## Example

@@ -51,7 +51,7 @@ Zigler names the underlying skill *context fluency* — "the ability to create r
 
 MEP's preparation cost is real — two hours in the case study, before any code was written. The payoff conditions are narrow and specific:
 
-- **Parallel agent fan-out.** Concurrent agents have no shared session memory; the spec and task graph become their alignment substrate. The hackathon ran four parallel subagents; without externalised intent each would have re-derived the design independently.
+- **Parallel agent fan-out.** Concurrent agents have no shared session memory; the spec and task graph become their alignment substrate. The hackathon ran 4 parallel subagents; without externalised intent each would have re-derived the design independently.
 - **Unfamiliar or domain-heavy work.** When the agent cannot infer conventions from training data — pedagogical design, regulated domains, novel architectures — externalised tacit knowledge prevents confident-sounding hallucinated patterns.
 - **Irreversible or expensive implementation.** When an implement-fail-fix cycle burns a large context window or ships incorrect code that compounds, upfront alignment cost is cheaper than downstream rework. This is the same cost asymmetry covered by the [research-plan-implement pattern](research-plan-implement.md).
 
@@ -92,7 +92,7 @@ Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in
 
 - MEP is three sequential phases — contextual grounding, collaborative specification, task decomposition — that produce written artifacts agents read before any code is generated.
 - The mechanism is alignment, not generation: parallel agents working from shared externalised intent make consistent micro-decisions that reactive correction would otherwise have to fix.
-- The paper's evidence is one practitioner, one hackathon, no control group; treat MEP as a useful synthesis of established practices, not a validated speedup.
+- The paper's evidence is 1 practitioner, 1 hackathon, no control group; treat MEP as a useful synthesis of established practices, not a validated speedup.
 - Apply it when implementation is parallel, irreversible, or domain-heavy. Skip it for tight-loop scripting, exploratory prototyping, and well-mapped single-agent work where the [plan-first loop](plan-first-loop.md) provides most of the alignment benefit at lower cost.
 - Pair MEP with an explicit replan gate so the spec evolves with the implementation rather than misleading agents when reality diverges from the plan.
 
@@ -102,7 +102,7 @@ Each subagent loads `CLAUDE.md` plus `spec.md`, queries Beads for ready tasks in
 - [The Plan-First Loop: Design Before Code](plan-first-loop.md)
 - [Spec-Driven Development with Spec Kit](spec-driven-development.md)
 - [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md)
-- [Beads Task Graph for Agent Memory](../agent-design/beads-task-graph-agent-memory.md)
+- [Code-Native Memory Substrates](../agent-design/code-native-memory-substrates.md)
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md)
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../anti-patterns/vibe-coding.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)

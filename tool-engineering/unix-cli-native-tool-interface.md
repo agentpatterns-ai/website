@@ -11,7 +11,7 @@ aliases:
   - "single-tool hypothesis"
   - "run command tool"
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Unix CLI as the Native Tool Interface for AI Agents
@@ -62,7 +62,7 @@ graph LR
 **Presentation layer** -- handles what the agent should not:
 
 - **Binary guard** -- detects non-text output (e.g., PNG) and returns a placeholder
-- **Overflow mode** -- truncates large outputs, preserving head and tail
+- **Overflow mode** -- truncates large outputs, preserving head and tail, as in [Graceful Tool Output Truncation](graceful-tool-output-truncation.md)
 - **Stderr attachment** -- surfaces stderr alongside stdout
 
 Without these, binary output fills the context window with uninterpretable content, and silent stderr hides failure signals that the agent needs to route to the next action.
@@ -144,6 +144,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
+- [Agent-Aware CLI via Environment Variable](agent-aware-cli-via-env-var.md) — orthogonal angle: a CLI adapting its output when an agent is detected, vs the output-filtering interface here
 - [Agent-Computer Interface](agent-computer-interface.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Override Interactive Commands](override-interactive-commands.md)

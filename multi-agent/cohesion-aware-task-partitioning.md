@@ -34,7 +34,7 @@ The pattern is the decision rule: **partition by cohesion, or do not partition a
 Co-Coder, the system Yang et al. evaluate, runs a three-stage pipeline on the static dependency graph ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)):
 
 1. **Hub isolation** — files with high in-degree or out-degree are removed from community detection and assigned to their own partition. Without this step, one structural hub pollutes every community.
-2. **Community detection via Infomap** — partition the remaining directed graph using the Infomap algorithm, which models the graph as a random walk and picks the partition that minimises the two-level description length. Heavy edges stay inside partitions; cuts cross sparse edges.
+2. **Community detection via Infomap** — partition the remaining directed graph using the [Infomap algorithm](https://www.mapequation.org), which models the graph as a random walk and picks the partition that minimises the two-level description length. Heavy edges stay inside partitions; cuts cross sparse edges.
 3. **Leaf lifting** — independent leaf vertices are lifted into singleton partitions when latent parallelism exists that the community step missed.
 
 Partitions feed a dependency-aware scheduler that respects topological order and runs unrelated partitions in parallel.
@@ -67,7 +67,7 @@ The pattern is not universal. The authors document the primary failure mode; thr
 - **Small task surface** — for a feature touching three to five files, the up-front cost of building the graph, running community detection, and scheduling exceeds the parallelism gain. An [Orchestrator-Worker](orchestrator-worker.md) lead agent reading the affected files ad-hoc reaches the same partition with no algorithmic overhead.
 - **Dense communication regardless of partition** — independent measurement shows multi-agent communication structures inflating token cost 2×–11.8× over a single chain ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)), and parallel coordination producing up to 39.4% slowdowns where coordination overhead exceeds the parallelism dividend ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893)). If the task lacks a sparse dependency cut, no partitioning algorithm rescues it.
 
-The decision rule: **estimate dependency density before fanning out**. If the natural partition cut is dense, run sequentially. Only fan out when the cut is sparse.
+The decision rule: **estimate dependency density before [fanning out](sub-agents-fan-out.md)**. If the natural partition cut is dense, run sequentially. Only fan out when the cut is sparse.
 
 ## Example
 

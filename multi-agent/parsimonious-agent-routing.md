@@ -12,7 +12,7 @@ aliases:
   - joint routing and decomposition
   - selective delegation routing
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Parsimonious Agent Routing for Multi-Agent Dispatch
@@ -60,7 +60,7 @@ Three conditions gate the gain:
 
 **Heterogeneous worker roster.** The router needs cheap workers that win some branches and expensive workers that win others. With homogeneous capability the keep / single-route / split decision collapses and router inference cost exceeds routing gain.
 
-**Stable task distribution.** RL-trained routers ship with their training distribution baked in. Roster churn and distribution drift invalidate the learned policy without a re-curation pipeline.
+**Stable task distribution.** RL-trained routers ship with their training distribution baked in. Roster churn and distribution drift invalidate the learned policy without a re-curation pipeline, where an online alternative like [contextual capability calibration](contextual-capability-calibration.md) keeps adapting.
 
 **Rare sequential dependencies.** Split-and-route adds handoff latency and context-token overhead. When subtasks share state, [Cemri et al. (2025)](https://arxiv.org/abs/2503.13657) shows single-agent baselines often win.
 
@@ -78,7 +78,7 @@ Below any threshold, prefer static rule-based routing or a posterior-based selec
 | Pattern | What is learned | Decisions emitted |
 |---------|-----------------|-------------------|
 | [Contextual capability calibration](contextual-capability-calibration.md) | Per (agent, context) Beta posterior | Worker only |
-| [Code-health-gated tier routing](../agent-design/code-health-gated-tier-routing.md) | Static rules over file-health score | Worker only |
+| [Code-health-gated tier routing](../agent-design/auto-model-selection.md) | Static rules over file-health score | Worker only |
 | [Cross-vendor competitive routing](../agent-design/cross-vendor-competitive-routing.md) | None — both run, select after | None during dispatch |
 | [Recursive best-of-N delegation](recursive-best-of-n-delegation.md) | None — judge picks among K candidates | None during dispatch |
 | Parsimonious agent routing | RL policy over query + roster | Decomposition + worker + budget |

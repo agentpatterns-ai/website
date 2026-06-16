@@ -9,7 +9,7 @@ aliases:
   - conversation boundary pattern
   - research-plan-execute isolation
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -64,7 +64,7 @@ flowchart LR
 
 ## Why Conversation Boundary Matters
 
-Prompt-level separation — using section headers or instruction clauses within one conversation — does not achieve the same result. The model has already processed earlier content and its attention spans the full context. Distraction and crosstalk persist.
+Prompt-level separation — using section headers or instruction clauses within one conversation — does not achieve the same result. The model has already processed earlier content and its attention spans the full context. Distraction and crosstalk persist — the [distractor-interference](../anti-patterns/distractor-interference.md) failure mode.
 
 Conversation boundary resets everything: KV cache, attention state, and implicit prior reasoning. The execution agent literally cannot see what the research agent concluded except through the artifact you pass it.
 
@@ -88,7 +88,7 @@ The separation enables workload-appropriate model routing. Research and planning
 
 - **Latency**: Spinning up a fresh conversation per phase adds setup overhead compared to continuing one session.
 - **Artifact quality ceiling**: If the research summary omits a critical finding, the plan cannot recover it. The distillation step is a lossy compression.
-- **Orchestration overhead**: Requires a harness to spawn phases, pass artifacts, and handle phase-level failures.
+- **Orchestration overhead**: Requires an [agent harness](agent-harness.md) to spawn phases, pass artifacts, and handle phase-level failures.
 - **Loss of implicit context**: Intuitions the model formed during research (e.g., which files looked suspicious) do not survive the boundary unless written into the artifact.
 
 ## Distinction from Related Patterns
@@ -101,7 +101,7 @@ The separation enables workload-appropriate model routing. Research and planning
 
 - Three phases in three conversations — not three prompts in one.
 - Only distilled artifacts (summaries, plans) cross boundaries — not raw history.
-- Conversation boundary eliminates attention crosstalk; prompt-level separation does not.
+- Conversation boundary eliminates attention crosstalk; prompt-level separation does not — contrast the structural boundary in [cognitive reasoning vs execution separation](cognitive-reasoning-execution-separation.md).
 - The distillation step is lossy: artifact quality sets the ceiling for all downstream phases.
 - Costs are higher orchestration overhead and lost implicit context — whatever the research agent noticed but did not write down is gone.
 

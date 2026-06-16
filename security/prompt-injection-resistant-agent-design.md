@@ -97,11 +97,11 @@ Platform ratings: Claude Code **Low**, Copilot **High**, Cursor **Critical**. [S
 
 ## Why It Works
 
-Each pattern severs the path from untrusted content to consequential action before the LLM processes it. Action-Selector restricts output to a fixed enumeration — injected instructions cannot name actions outside it. Plan-Then-Execute fixes intent before untrusted data is seen. Dual LLM quarantines the reader of untrusted content with no write path to privileged state. The guarantee is architectural, not behavioral. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
+Each pattern severs the path from untrusted content to consequential action before the LLM processes it. Action-Selector restricts output to a fixed enumeration — injected instructions cannot name actions outside it. [Plan-Then-Execute](plan-then-execute-web-agents.md) fixes intent before untrusted data is seen. Dual LLM quarantines the reader of untrusted content with no write path to privileged state. The guarantee is architectural, not behavioral. [Source: [Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)]
 
 ## When This Backfires
 
-- **Utility loss**: Action-Selector and Plan-Then-Execute only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
+- **Utility loss**: the [Action-Selector](action-selector-pattern.md) and Plan-Then-Execute patterns only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
 - **Architectural cost**: Dual LLM doubles inference cost; most frameworks don't provide the privileged/quarantined split.
 - **Steep utility cost**: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
 - **False confidence**: One pattern alone, without removing another leg of the [Lethal Trifecta](../security/lethal-trifecta-threat-model.md), creates an illusion of safety — an agent that asks before acting can still exfiltrate data if egress is open.

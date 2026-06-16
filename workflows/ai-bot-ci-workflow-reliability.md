@@ -44,7 +44,7 @@ The 29-point gap between Codex (94.44%) and Claude (64.86%) is real in the datas
 
 ## Repository-Level Correlation
 
-At the repository level, agent contribution frequency correlates negatively with workflow success rate — repos receiving more agentic PRs tend to show lower aggregate CI reliability ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The direction of causation is not established by the study. Two readings are consistent with the data:
+At the repository level, agent contribution frequency correlates negatively with workflow success rate — repos receiving more agentic PRs tend to show lower aggregate CI reliability ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The direction of causation is not established by the [MSR 2026 study](https://arxiv.org/abs/2604.18334). Two readings are consistent with the data:
 
 - Agent PRs introduce more failures, dragging repository CI success rates down as volume grows.
 - Repositories with less mature CI attract more agent experimentation (reverse causality).

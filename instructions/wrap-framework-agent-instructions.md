@@ -23,7 +23,7 @@ GitHub introduced WRAP in a [blog post about the Copilot coding agent](https://g
 
 Treat every issue as onboarding material for someone who has never seen your codebase. The agent cannot infer project conventions, architectural decisions, or unstated requirements.
 
-**Descriptive titles** scope the work spatially. "Update authentication middleware to use async/await" tells the agent *where* to work. "Update the entire repository" does not.
+**Descriptive titles** scope the work spatially, the same bounding move as treating the issue as a [specification](specification-as-prompt.md). "Update authentication middleware to use async/await" tells the agent *where* to work. "Update the entire repository" does not.
 
 **Concrete examples** outperform verbose prose. A before/after code snippet communicates the expected transformation faster than a paragraph of requirements ([Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
@@ -58,7 +58,7 @@ WRAP omits several techniques that improve agent task execution:
 WRAP assumes a backlog-driven workflow with well-defined task boundaries and pays an upfront specification cost. Several conditions undermine it:
 
 - **Exploratory or research tasks** resist atomization — domain knowledge emerges during exploration, so a conversational prompt beats a WRAP-compliant issue.
-- **Solo or fast-moving projects** pay the spec overhead without the payoff. If the developer is also the reviewer, prose instructions add process without reducing ambiguity.
+- **Solo or fast-moving projects** pay the spec overhead without the payoff. If the developer is also the reviewer, the [human-in-the-loop](../workflows/human-in-the-loop.md) collapses and prose instructions add process without reducing ambiguity.
 - **Tightly coupled work**: forcing atomicity on cross-module changes creates artificial boundaries, forcing agents to rediscover implicit context.
 - **Instruction conflicts**: repository instructions (CLAUDE.md, copilot-instructions.md) and issue-body instructions can contradict each other; agents then hallucinate a resolution or stall.
 - **Modern context windows reduce the atomicity payoff**. 200k+ token windows handle moderate task breadth, so aggressive decomposition fragments related changes and produces harder-to-review PRs.

@@ -56,7 +56,7 @@ graph LR
 Structural checks pass a clean call to an unrelated tool. Two stages add intent matching ([El Helou et al., 2026, §III-B](https://arxiv.org/html/2605.02682)):
 
 1. **Task extraction** — emit a concise natural-language description of the user's objective from the conversation. Separating extraction from matching keeps raw conversation off the authorization server.
-2. **Task-tool matching** — binary classify whether each requested tool aligns with the task. Mismatches deny; matches proceed to deterministic checks.
+2. **Task-tool matching** — binary classify whether each requested tool [aligns with the task](task-scope-security-boundary.md). Mismatches deny; matches proceed to deterministic checks.
 
 This extends **Task-Based Access Control (TBAC)** ([El Helou et al., 2025](https://arxiv.org/abs/2510.26702)) to multi-turn, handling "clarification exchanges, tangential information, and conversational drifts" without re-prompting.
 

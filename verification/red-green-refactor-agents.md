@@ -23,11 +23,11 @@ maturity: established
 
 ## The Cycle
 
-Red-green-refactor structures agent-driven development into three phases, each with a distinct instruction and exit condition.
+Red-green-refactor structures agent-driven development into the three phases of [test-driven agent development](tdd-agent-development.md), each with a distinct instruction and exit condition.
 
 **Red** — write failing tests that define the required behavior. No implementation exists yet.
 
-**Green** — instruct the agent to write the minimum implementation to pass the suite. "Do not change the tests" prevents satisfying tests by weakening them. Exit: all tests pass.
+**Green** — instruct the agent to write the minimum implementation to pass the suite. "Do not change the tests" prevents satisfying tests by weakening them, the [reward-hacking](anti-reward-hacking.md) shortcut models reach for. Exit: all tests pass.
 
 **Refactor** — instruct the agent to improve the implementation without changing behavior. The green suite catches regressions immediately.
 
@@ -130,8 +130,8 @@ The agent restructures without touching the tests. If it introduces a regression
 The pattern assumes tests are a faithful specification. When that breaks, it hides the problem rather than surfacing it:
 
 - **Tautological tests from context bleed.** If the red phase sees a draft implementation — in session history or a scratch file — it writes tests that mirror the implementation, not the behavior. The green phase then passes trivially.
-- **Pinning incidental behavior.** Minimal green implementations encode accidental properties (field ordering, error strings, rounding). Later refactors appear to "break" the suite when they only change incidentals, pressuring the agent to preserve artefacts instead of the contract.
-- **Brittle refactors across call sites.** With a local green suite, renames and signature changes look safe because the targeted tests pass — while uncovered downstream callers silently break. The refactor phase is only as safe as the suite's coverage of dependents.
+- **Pinning incidental behavior.** Minimal green implementations encode accidental properties (field ordering, error strings, rounding) that [behavioral testing](behavioral-testing-agents.md) would treat as outside the contract. Later refactors appear to "break" the suite when they only change incidentals, pressuring the agent to preserve artefacts instead of the contract.
+- **Brittle refactors across call sites.** With a local green suite, renames and signature changes look safe because the targeted tests pass — while uncovered downstream callers silently break. The refactor phase is only as safe as the suite's coverage of dependents, which is why [pre-change impact analysis](pre-change-impact-analysis.md) belongs alongside it.
 - **Unclear or contested specs.** Ambiguous requirements force premature commitment to one interpretation in the red phase; correction then requires editing tests and implementation together, defeating the separation.
 
 In these conditions, a prose spec plus code review is often a better fit.

@@ -10,7 +10,7 @@ aliases:
   - "Tests as the Spec"
   - "Red-Green-Refactor for Agents"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Test-Driven Agent Development: Tests as Spec and Guardrail
@@ -22,7 +22,7 @@ maturity: established
 
 ## The Technique
 
-Ask an agent to "implement a function that sorts users by activity" and it interprets the requirement. Hand it a test file with five cases defining exact expected behavior and the output is constrained by the tests. Ambiguity is resolved at specification time, not during review.
+Ask an agent to "implement a function that sorts users by activity" and it interprets the requirement. Hand it a test file with five cases defining exact expected behavior and the output is constrained by the tests. Ambiguity is resolved at specification time, not during review — the same shift toward executable specs covered in [test-driven intent clarification](test-driven-intent-clarification.md).
 
 Tests serve two roles simultaneously:
 
@@ -48,13 +48,13 @@ You write the tests; the agent writes the implementation; the suite is the contr
 
 ## Test Types and Their Roles
 
-**Unit tests with explicit assertions** — define exact expected outputs for specific inputs. Each test case is a constraint the implementation must satisfy. Write tests for happy paths, edge cases, and error conditions before any implementation exists.
+**Unit tests with explicit assertions** — define exact expected outputs for specific inputs via `assert` statements. Each test case is a constraint the implementation must satisfy. Write tests for happy paths, edge cases, and error conditions before any implementation exists.
 
-**Property-based tests** — define invariants the implementation must always satisfy (e.g., "sort output length equals input length"). These are harder to satisfy accidentally than example-based tests.
+**Property-based tests** — define invariants the implementation must always satisfy (e.g., "sort output length equals input length"). These are harder to satisfy accidentally than example-based tests, and they suit the variance-tolerant style described in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md).
 
 **Snapshot tests** — define exact expected output for known inputs. Useful when the output format matters as much as the values. The agent cannot pass a snapshot test by producing a plausible-looking but different output.
 
-**Integration tests** — verify the agent's output works with the rest of the system, not just in isolation. These catch the "implementation is internally consistent but incompatible with the calling code" failure mode.
+**Integration tests** — verify the agent's output works with the rest of the system, not just in isolation, the same end-to-end concern behind [golden query pairs as regression tests](golden-query-pairs-regression.md). These catch the "implementation is internally consistent but incompatible with the calling code" failure mode.
 
 ## What You Control, What the Agent Controls
 
@@ -68,7 +68,7 @@ If the agent writes both tests and implementation, the tests verify nothing: the
 
 **Agent writes tests and implementation** — tests are written to match the implementation, not to specify correct behavior. The suite passes but verifies the wrong thing.
 
-**No tests** — verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected.
+**No tests** — verification is manual review only. Review quality is inconsistent, review fatigue accumulates, and subtle errors pass undetected — the [trust-without-verify](../anti-patterns/trust-without-verify.md) failure mode.
 
 **Tests written after implementation** — the agent writes tests to match what it already built. Edge cases it didn't handle aren't tested.
 
@@ -79,9 +79,9 @@ If the agent writes both tests and implementation, the tests verify nothing: the
 Tests-first is not universally the right move. Specific conditions where the pattern degrades:
 
 - **Exploratory or research code where the problem shape is unclear** — writing tests first ossifies a premature interface. When the goal is to learn what the correct behavior *should* be, tests written up front encode guesses, and the agent optimizes toward those guesses instead of the underlying question.
-- **Regression risk beyond the focal tests** — an agent that makes the target tests green can still break unrelated behavior in the same codebase. Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite; run the whole regression set, not just the new tests.
+- **Regression risk beyond the focal tests** — an agent that makes the target tests green can still break unrelated behavior in the same codebase, the case for [golden query pairs as continuous regression tests](golden-query-pairs-regression.md). Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite; run the whole regression set, not just the new tests.
 - **Fuzzy or evolving requirements where precise assertions are expensive** — property-based and snapshot tests have higher authoring cost, and hand-written examples for every edge case do not scale when the spec is still in flux. Enforced TDD in this regime slows the feedback loop it was meant to tighten.
-- **Behaviors that resist cheap oracles** — UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) are poorly captured by unit-style assertions. Tests pass without confirming the thing you actually care about.
+- **Behaviors that resist cheap oracles** — UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) are poorly captured by unit-style assertions, the non-determinism handled in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md). Tests pass without confirming the thing you actually care about.
 
 ## Example
 

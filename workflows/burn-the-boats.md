@@ -9,7 +9,7 @@ aliases:
   - commitment-forcing deprecation
   - credible commitment product strategy
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -22,7 +22,7 @@ maturity: established
 
 When teams support old and new workflows in parallel, neither wins. Users stick with what they know; the team splits engineering attention across both; the product attracts users whose primary criterion is "doesn't change things." Gradual sunset timelines extend this split indefinitely.
 
-The core issue is credibility. A soft deprecation sends the signal that the old path might persist indefinitely — which is often true. This pattern is sourced from the [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/burn-the-boats.md), which applies Thomas Schelling's credible commitment theory from [*The Strategy of Conflict*](https://www.hup.harvard.edu/books/9780674840317) (Harvard University Press, 1960): eliminating retreat options makes a commitment believable to both users and the team itself.
+The core issue is credibility — the credible-commitment problem [Schelling](https://www.hup.harvard.edu/books/9780674840317) named. A soft deprecation sends the signal that the old path might persist indefinitely — which is often true. This pattern is sourced from the [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/burn-the-boats.md), which applies Thomas Schelling's credible commitment theory from [*The Strategy of Conflict*](https://www.hup.harvard.edu/books/9780674840317) (Harvard University Press, 1960): eliminating retreat options makes a commitment believable to both users and the team itself.
 
 ## What This Pattern Looks Like
 
@@ -30,7 +30,7 @@ A hard-deadline removal with three components:
 
 1. **Irreversible commitment** — the old path is removed, not hidden or flagged deprecated. No opt-out period that stretches.
 2. **Migration path** — users receive explicit alternatives and rationale before removal, not just a notice that something is going away.
-3. **Hard deadline** — a specific date or milestone, publicly communicated, after which the old feature stops working.
+3. **Hard deadline** — a specific date or milestone (AMP set roughly a 60-day window), publicly communicated, after which the old feature stops working.
 
 ```mermaid
 graph TD
@@ -81,7 +81,7 @@ Accepts: short-term churn from users who depended on the old path. This churn is
 
 ## Safety Boundary: Not an Agent Design Pattern
 
-The nibzard catalog entry explicitly warns against applying irreversibility logic to AI agent systems themselves. Giving agents irreversible operations with broad permissions creates catastrophic risk from prompt injection or context overflow. This pattern applies to *product strategy* — what features a team maintains or removes — not to agent autonomy design. Agents should be designed with reversible, bounded operations.
+The nibzard catalog entry explicitly warns against applying irreversibility logic to AI agent systems themselves. Giving agents irreversible operations with broad permissions creates catastrophic risk from prompt injection or context overflow — the case for [blast-radius containment](../security/blast-radius-containment.md). This pattern applies to *product strategy* — what features a team maintains or removes — not to agent autonomy design. Agents should be designed with reversible, bounded operations.
 
 ## Key Takeaways
 

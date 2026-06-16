@@ -49,7 +49,7 @@ Custom memory, bespoke evals, handwritten retries, and homegrown observability a
 
 The four bets are direction for enterprise-scale, long-horizon work. They are premature in three conditions:
 
-- **Small teams with bounded scope.** Two people running one internal agent against one API stay smaller and more portable with a scoped service credential and a session timeout.
+- **Small teams with bounded scope.** A 2-person team running one internal agent against one API stays smaller and more portable with a scoped service credential and a session timeout.
 - **Short-horizon interactive agents.** When the full lifecycle fits in one HITL session, checkpoint/resume adds latency with no reliability gain.
 - **Pre-product-market-fit.** Iteration speed beats governance before PMF; early platform adoption locks in patterns the product outgrows.
 

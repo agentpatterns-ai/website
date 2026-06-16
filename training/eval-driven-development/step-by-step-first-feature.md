@@ -502,7 +502,7 @@ Progress: 15% to 71%. Three tasks still fail intermittently. The suite tells you
 
 1. **config-change-env-vars** — the agent misses flagging "secret" in some runs. Fix: strengthen the system prompt to explicitly list patterns like `secret`, `key`, `token`, `credential`
 2. **massive-diff** — output slightly over 500 words in some runs. Fix: add emphasis on the word limit or add post-processing truncation
-3. **quality-test-plan-actionable** — test plan quality inconsistent. Fix: add few-shot examples of good vs. bad test plan items to the prompt
+3. **quality-test-plan-actionable** — test plan quality inconsistent. Fix: add few-shot examples of good vs. bad test plan items to the prompt (the few-shot judge pattern in [Grading Strategies](grading-strategies.md))
 
 After each change, run the suite again. The cycle repeats until you hit your bar.
 

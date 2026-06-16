@@ -11,7 +11,7 @@ aliases:
   - CLAUDE.md fact-checker
   - instruction drift detection
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Scheduled Instruction File Fact-Checker
@@ -125,7 +125,7 @@ A well-scoped correction PR is typically small and fast to review:
 
 ## Cadence
 
-Weekly is the right default cadence for most projects. Daily runs produce noise if the codebase changes slowly. The right trigger is the same trigger that drives entropy reduction agents: a slow-moving background process that catches drift the reactive CI pipeline misses.
+Weekly is the right default cadence for most projects. Daily runs produce noise if the codebase changes slowly. The right trigger is the same trigger that drives [entropy reduction agents](entropy-reduction-agents.md): a slow-moving background process that catches drift the reactive CI pipeline misses.
 
 For high-churn projects, augment the schedule with a push trigger scoped to instruction files' direct dependencies — the directories and files they reference:
 
@@ -149,7 +149,7 @@ That extension is a separate workflow from fact-checking. The fact-checker answe
 ## When This Backfires
 
 - **Stable, low-churn projects** — if the codebase changes rarely, weekly PRs with zero corrections are noise. Disable the schedule and trigger only on directory changes.
-- **Intent drift masquerading as fact drift** — the agent may propose "correcting" a path that moved intentionally as part of a refactor, without knowing the convention itself changed. Each correction PR still needs human review; this is a feature, not a bug, but reviewers who rubber-stamp will erode the quality of the instruction file over time.
+- **Intent drift masquerading as fact drift** — the agent may propose "correcting" a path that moved intentionally as part of a refactor, without knowing the convention itself changed (the manual-review loop in [continuous agent improvement](continuous-agent-improvement.md) catches what disk-checking cannot). Each correction PR still needs human review; this is a feature, not a bug, but reviewers who rubber-stamp will erode the quality of the instruction file over time.
 - **High-rename velocity** — projects that rename paths and commands frequently will produce a steady stream of correction PRs. At that point, better investment is a single post-refactor hook that prompts the developer to update CLAUDE.md before the schedule runs.
 - **Over-scoped prompts** — if the agent prompt allows editing strategy or intent (not just verifiable facts), it will rewrite the instruction file's meaning rather than its accuracy. Restrict `--allowedTools` to `Read,Bash,Write` and constrain the prompt to fact-checking only.
 

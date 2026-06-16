@@ -25,7 +25,7 @@ Context-Fractured Decomposition (CFD) is a family of cross-context multi-step ja
 
 ## The Failure Mode
 
-Tool-using agents persist state in artifacts: workspace files, transcripts, logs, memory entries, retrieval indexes. Most existing defenses — including multi-turn jailbreaks like Crescendo and Tree of Attacks — assume a single contiguous conversation visible to the defender ([Lin et al., 2026](https://arxiv.org/abs/2606.09084)). That assumption breaks in real agent pipelines, where enforcement is fragmented across tools, modules, and time, and where artifact provenance is often not tracked.
+Tool-using agents persist state in artifacts: workspace files, transcripts, logs, memory entries, retrieval indexes. Most existing defenses — including multi-turn jailbreaks like Crescendo and Tree of Attacks — assume a single contiguous conversation visible to the defender ([Lin et al., 2026](https://arxiv.org/abs/2606.09084)). That assumption breaks in real agent pipelines, where enforcement is fragmented across tools, modules, and time, and where [artifact provenance](provenance-aware-decision-auditing.md) is often not tracked.
 
 CFD exploits three structural properties:
 
@@ -59,7 +59,7 @@ Four questions decide whether a pipeline is exposed:
 1. Does any artifact cross a tool, module, session, or agent-instance boundary?
 2. At each enforcement point, can the defender observe the lineage of every artifact the action depends on?
 3. Is the lineage builder isolated from the model being defended?
-4. Does the capability sandbox bound what the eventual trigger can do?
+4. Does the [capability sandbox](lethal-trifecta-threat-model.md) bound what the eventual trigger can do?
 
 A "no" on (2) plus a "no" on (4) is the high-risk configuration — turn-local defenses, a broad tool surface, and no provenance trace to constrain it.
 

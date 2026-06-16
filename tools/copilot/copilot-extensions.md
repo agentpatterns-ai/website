@@ -29,7 +29,7 @@ Skillsets require no LLM logic on your side. You provide endpoints and schemas; 
 
 ### Agents
 
-Agent extensions give you full control over user interactions and custom logic. The agent receives the user message, processes it (potentially calling its own LLM), and returns a response. Use agents for complex workflows requiring custom prompt crafting, specific LLM models, or multi-step reasoning.
+Copilot agent extensions give you full control over user interactions and custom logic. The agent receives the user message, processes it (potentially calling its own LLM), and returns a response. Use agents for complex workflows requiring custom prompt crafting, specific LLM models, or multi-step reasoning.
 
 ## Authentication
 

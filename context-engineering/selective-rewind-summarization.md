@@ -7,7 +7,7 @@ tags:
   - context-engineering
   - pattern
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact
@@ -18,7 +18,7 @@ Selective rewind summarization splits the session at a chosen turn: everything b
 
 ## Cut at the Last Verified Milestone
 
-The cut point is the decision, not the keystroke. The right cut is the last *verified* milestone — a passing test, an accepted PR, a confirmed observation — not the most recent natural break. Cutting at an unverified plan freezes speculation into the summary, and later turns inherit it as a fixed premise.
+The cut point is [the decision](manual-compaction-dumb-zone-mitigation.md), not the keystroke. The right cut is the last *verified* milestone — a passing test, an accepted PR, a confirmed observation — not the most recent natural break. Cutting at an unverified plan freezes speculation into the summary, and later turns inherit it as a fixed premise.
 
 | Cut here | Result |
 |----------|--------|

@@ -7,7 +7,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent Pushback Protocol
@@ -18,9 +18,9 @@ maturity: established
 
 Most agent instructions focus on the happy path: receive task, execute task, return result — the same optimization pressure behind [happy path bias](../anti-patterns/happy-path-bias.md) in generated code. A pushback protocol adds evaluation before execution, split into two categories.
 
-**Implementation concerns** (code quality): the request introduces tech debt, duplication, or unnecessary complexity. A simpler approach exists. The scope is too large or vague for one pass.
+**Implementation concerns** (code quality): the request introduces tech debt, duplication, or unnecessary complexity. A simpler approach exists. The scope is too large or vague for one pass (a trigger for [interactive clarification](interactive-clarification-underspecified-tasks.md)).
 
-**Requirements concerns** (product correctness): the feature conflicts with existing behavior. The request solves symptom X but the real problem is Y. Edge cases produce surprising or dangerous behavior. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) calls these "the expensive kind" — consistent with [Boehm and Basili's (2001)](https://dl.acm.org/doi/10.1109/2.962984) finding that requirements defects cost roughly 100× more to fix after delivery than during design.
+**Requirements concerns** (product correctness): the feature conflicts with existing behavior. The request solves symptom X but the real problem is Y. Edge cases produce surprising or dangerous behavior — the class [human-in-the-loop confirmation gates](../security/human-in-the-loop-confirmation-gates.md) guard. Burke Holland's [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) calls these "the expensive kind" — consistent with [Boehm and Basili's (2001)](https://dl.acm.org/doi/10.1109/2.962984) finding that requirements defects cost roughly 100× more to fix after delivery than during design.
 
 ## Structured Format
 
@@ -30,7 +30,7 @@ The Anvil agent implements pushback as a structured callout with interactive con
 2. **Explanation** — what the problem is and why it matters
 3. **Choices** — "Proceed as requested" / "Do it the agent's way" / "Let me rethink this"
 
-The agent does NOT implement until you respond. This is the critical constraint: evaluation without a gate is advisory, and advisory feedback gets ignored.
+The agent does NOT implement until you respond. This is the critical constraint: evaluation without a gate is advisory, and advisory feedback gets ignored — the [yes-man agent](../anti-patterns/yes-man-agent.md) failure mode.
 
 ### Implementation Example
 
@@ -46,7 +46,7 @@ The agent evaluated the request against user impact, not just code correctness.
 
 ## Instruction Design That Elicits Pushback
 
-Framing matters. An agent instructed "you are a helpful assistant" optimizes for compliance. An agent instructed "you are a senior engineer with opinions" optimizes for correctness. The Anvil agent uses: "You are a senior engineer, not an order taker. You have opinions and you voice them — about the code AND the requirements" ([Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md)).
+Framing matters. An agent instructed "you are a helpful assistant" optimizes for compliance. An agent instructed "you are a senior engineer with opinions" optimizes for correctness — [persona framing](persona-as-code.md) shapes the evaluation. The Anvil agent uses: "You are a senior engineer, not an order taker. You have opinions and you voice them — about the code AND the requirements" ([Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md)).
 
 Concrete trigger conditions work better than vague instructions to "push back when appropriate":
 
@@ -68,9 +68,9 @@ The pattern degrades in three conditions:
 
 **High-frequency, low-stakes edits.** When a developer iterates quickly on minor changes — renaming a variable, reordering output fields — a gate on every request adds more interruption than it saves. SOC alert-fatigue research documents the same dynamic: at high volume, analysts disable, ignore, or offload alerts rather than triage each one ([Tariq et al., 2025](https://dl.acm.org/doi/10.1145/3723158)). Reserve pushback for genuinely risky or ambiguous requests.
 
-**Poorly calibrated trigger conditions.** Vague triggers ("push back when something seems off") cause agents to flag too many routine requests, which trains developers to dismiss concerns reflexively. When the real risky request arrives, the gate gets bypassed on habit. Concrete, enumerated conditions (as in the Anvil agent) solve this, but require upfront calibration per project context.
+**Poorly calibrated trigger conditions.** Vague triggers ("push back when something seems off") cause agents to flag too many routine requests, which trains developers to dismiss concerns reflexively. When the real risky request arrives, the gate gets bypassed on habit — the same alert-fatigue dynamic ([Tariq et al., 2025](https://dl.acm.org/doi/10.1145/3723158)). Concrete, enumerated conditions (as in the Anvil agent) solve this, but require upfront calibration per project context.
 
-**Over-reliance on agent judgment for domain correctness.** The pattern assumes the agent can reliably detect requirements-level mistakes. For novel domains, proprietary systems, or under-documented codebases, the agent lacks sufficient context to distinguish "this edge case is dangerous" from "I'm uncertain." A pushback gate backed by shallow context can produce false confidence — the check ran, so the request must have been validated. Pairing the protocol with explicit context-injection (system prompt with architecture docs, domain constraints) reduces this risk.
+**Over-reliance on agent judgment for domain correctness.** The pattern assumes the agent can reliably detect requirements-level mistakes — the roughly 100×-cost defects from the Boehm and Basili finding above. For novel domains, proprietary systems, or under-documented codebases, the agent lacks sufficient context to distinguish "this edge case is dangerous" from "I'm uncertain." A pushback gate backed by shallow context can produce false confidence — the check ran, so the request must have been validated. Pairing the protocol with explicit context-injection (system prompt with architecture docs, domain constraints) reduces this risk.
 
 ## Key Takeaways
 

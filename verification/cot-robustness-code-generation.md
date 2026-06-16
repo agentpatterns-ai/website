@@ -84,7 +84,7 @@ Qwen2.5-Coder    with CoT (std) 27.6%      —
 How to read the rows:
 
 - **CodeLlama-13B**: adding a CoT instruction halved Pass@1 and dropped Pass@10 by six points. A team shipping CodeLlama-13B in an automated pipeline should *disable* CoT by default and only re-enable it per-task after a positive evaluation.
-- **Qwen2.5-Coder-7B**: CoT produced a small Pass@1 gain with a standard prompt. The same study reports the gain diminishes or flips when the prompt includes explicit perturbation definitions — i.e. closer to real noisy input.
+- **Qwen2.5-Coder-7B**: CoT produced a small Pass@1 gain with a standard prompt. The same study reports the gain diminishes or flips when the prompt includes explicit perturbation definitions — i.e. closer to [real noisy input](tool-use-sim-to-real-perturbation-taxonomy.md).
 
 The contrast shows why a single "CoT helps code" benchmark result cannot generalize across models. Before enabling CoT as a harness default, run the same A/B on the target model and task distribution.
 

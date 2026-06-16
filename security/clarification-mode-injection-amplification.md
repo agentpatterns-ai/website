@@ -70,7 +70,7 @@ Removing clarification regresses the agent to silent assumption-making, which ha
 - Clarification-seeking is an attack surface, not a safety control. Standard injection benchmarks understate risk for any agent that asks clarifying questions ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
 - The mechanism is provenance collapse: solicited input enters context with raised trust, and injected text rides that elevation.
 - Two lightweight defences (segment-level prompt guard, ask_user-aware tool filter) narrow but do not close the gap; an explicit action gate on the post-clarification turn is the architectural fix.
-- The amplification is model-specific. Measure your model's ASPI ASR before assuming clarification is safe in your stack.
+- The amplification is model-specific — Claude-Opus-4.7 was the one tested model that held the gap closed. Measure your model's ASPI ASR before assuming clarification is safe in your stack.
 - Do not remove clarification — it has documented benign-task benefit. Treat the clarification reply like any other untrusted input.
 
 ## Related

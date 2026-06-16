@@ -19,7 +19,7 @@ maturity: established
 
 ## Why Developers Underestimate the Risk
 
-Indirect prompt injection embeds malicious instructions in external data the agent retrieves — a web page, a repo file, an API response. Transformer attention is flat: no privilege boundary separates operator instructions from retrieved content. Attacker text competes on equal terms with the system prompt and wins when phrased authoritatively.
+Indirect prompt injection embeds malicious instructions in external data the agent retrieves — a web page, a repo file, an API response. Transformer attention is flat: no privilege boundary separates operator instructions from retrieved content. Attacker text [competes on equal terms with the system prompt](prompt-injection-threat-model.md) and wins when phrased authoritatively.
 
 Developers underestimate this for three reasons:
 
@@ -117,7 +117,7 @@ This methodology addresses single-step injection. It does not cover:
 
 A coding agent is configured to research and implement a library feature. The task requires: web search, file read, file write, and no credentials in scope.
 
-**Trifecta check:** Untrusted input (web search results) + write capability but no private data, no egress beyond permitted domains. One leg (private data) is absent — acceptable.
+**[Trifecta check](lethal-trifecta-threat-model.md):** Untrusted input (web search results) + write capability but no private data, no egress beyond permitted domains. One leg (private data) is absent — acceptable.
 
 **Rules file test:** The agent clones a test repository containing:
 

@@ -44,7 +44,7 @@ The knowledge base is built directly from the target API's documentation — str
 
 ## Why This Works
 
-The mechanism is a category shift. Existing metrics ask "does this code look right?" — a question LLMs answer by pattern-matching. Phantom Symbol Detection asks "does this specific symbol appear in the authoritative index?" — a question resolved by set membership. Because the API documentation is structured and complete for the class of errors being detected, the check is deterministic where probabilistic judges are not. This is the same shift deployed by other [deterministic guardrails around probabilistic agents](deterministic-guardrails.md): encode the invariant in a check the agent cannot reason around.
+The mechanism is a category shift. Existing metrics ask "does this code look right?" — a question an [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) answers by pattern-matching. Phantom Symbol Detection asks "does this specific symbol appear in the authoritative index?" — a question resolved by set membership. Because the API documentation is structured and complete for the class of errors being detected, the check is deterministic where probabilistic judges are not. This is the same shift deployed by other [deterministic guardrails around probabilistic agents](deterministic-guardrails.md): encode the invariant in a check the agent cannot reason around.
 
 ## Where the Check Fits
 
@@ -66,7 +66,7 @@ The check is only as strong as the knowledge base and the AST. It degrades or fa
 - **Dynamic or reflective code paths** — `getattr` in Python, `send` in Ruby, string-keyed member access in JavaScript. Static AST cannot resolve the called symbol, so legitimate reflective calls produce false positives.
 - **Stale knowledge base** — the paper's evaluation is preliminary and Android-specific ([source](https://arxiv.org/abs/2604.20202)); a knowledge base out of sync with the deployed SDK flags real symbols as phantoms and trains reviewers to dismiss the output.
 - **APIs without machine-readable documentation** — the knowledge base requires structured references. For internal or undocumented APIs, building the index is the harder problem and this pattern does not solve it.
-- **Real symbol, wrong use** — the check confirms existence, not semantic correctness. An agent that calls a real constructor with the wrong argument types, or a deprecated method scheduled for removal, passes this check and still ships broken code. Pair the symbol check with type checking and tests.
+- **Real symbol, wrong use** — the check confirms existence, not semantic correctness, the same existence-versus-correctness boundary [dependency gap validation](dependency-gap-validation.md) draws for imports. An agent that calls a real constructor with the wrong argument types, or a deprecated method scheduled for removal, passes this check and still ships broken code. Pair the symbol check with type checking and tests.
 
 ## Key Takeaways
 

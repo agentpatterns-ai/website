@@ -11,7 +11,7 @@ aliases:
   - autonomous routine backlog filing
   - self-filing agent observations
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Self-Reporting Loops: Autonomous Routines That File Their Own Backlog
@@ -23,7 +23,7 @@ maturity: established
 A self-reporting loop is only worth wiring when three preconditions hold. Skipping any one turns the pattern into spam:
 
 - **The tracker is a trusted, queryable substrate.** When engineers already route real work through Slack threads or empty status fields, agent-filed issues land where no one reads. Linear's CEO argued in March 2026 that human ticket ceremony is dying ([MindStudio summary](https://www.mindstudio.ai/blog/cursor-research-100-agents-parallel-flat-agent-teams-issue-tracker)); the rebuttal — that the *substrate* matters more — only holds when state inside it is current.
-- **The routine fingerprints and dedupes before filing.** GitHub Agentic Workflows defaults to filing an issue for every no-op run and every fallback, then documents how to disable both with `noop: report-as-issue: false` and `fallback-as-issue: false` ([announcement](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)). That opt-out exists because filing-on-every-run is noisy by default. Search-before-create and update-existing-on-recurrence prevent a flaky CI step from spawning twenty-four duplicate issues a day.
+- **The routine fingerprints and dedupes before filing.** GitHub Agentic Workflows defaults to filing an issue for every no-op run and every fallback, then documents how to disable both with `noop: report-as-issue: false` and `fallback-as-issue: false` ([announcement](https://github.blog/changelog/2026-06-11-github-agentic-workflows-is-now-in-public-preview/)). That opt-out exists because filing-on-every-run is noisy by default. Search-before-create and update-existing-on-recurrence prevent a flaky CI step from spawning 24 duplicate issues a day.
 - **Severity routing separates blockers from improvements.** Blockers surface on a notification path; improvements queue silently. A single uniform-priority channel collapses both signals into noise.
 
 ## The Discipline
@@ -47,7 +47,7 @@ Routines file backlog because observations are time-limited evidence; the tracke
 - **The tracker is already a graveyard.** If your team works around the tracker today, agent-filed issues compound the problem rather than solve it. Fix the substrate first.
 - **No deduplication.** The 4M to 17M jump in agentic PR volume between September 2025 and March 2026 — with field reports that roughly one in ten is legitimate ([context in the issue-tracker dispatch page](../workflows/issue-tracker-agent-dispatch-surface.md)) — is the same risk surface that applies to filed issues. A routine without fingerprinting floods the backlog.
 - **Small-team scale.** When one engineer reviews every routine run within the hour, the transcript IS the durable surface and structured filing is overhead. The payoff scales with the gap between routine cadence and human review cadence.
-- **Sub-frontier classification.** The routine has to decide "is this in-scope (fix now) versus out-of-scope (file it)." A weak classifier mis-routes both ways and pollutes both queues.
+- **Sub-frontier classification.** The routine has to decide "is this in-scope (fix now) versus out-of-scope (file it)" before anything reaches the [issue-tracker dispatch surface](../workflows/issue-tracker-agent-dispatch-surface.md). A weak classifier mis-routes both ways and pollutes both queues.
 - **Side-channel substitute.** Routing observations to a fenced low-priority queue (a JSONL file, a draft-issue label) is the steelman counter-position when the team distrusts agent-filed work in the main tracker. It preserves externalization but adds a human promotion step — useful as a transitional posture, not a permanent end state.
 
 ## Example

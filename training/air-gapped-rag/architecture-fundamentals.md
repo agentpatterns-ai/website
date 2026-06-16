@@ -23,11 +23,11 @@ The series [reference stack](index.md#reference-stack) implements every stage be
 
 A RAG system operates in two distinct phases with different resource profiles and timing characteristics.
 
-**Indexing phase** (offline, async): Documents are ingested, parsed, chunked, embedded, and stored. This phase runs ahead of any user query. It can be batched, parallelized, and repeated. The output is a vector index on disk.
+**Indexing phase** (offline, async): Documents are ingested, parsed, chunked, embedded, and stored. This phase runs ahead of any user query. It can be batched, parallelized, and repeated. The output is a vector index on disk, covered in [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md).
 
 **Query phase** (online, sync): A user query arrives, gets embedded with the same model used in indexing, is matched against the index, optionally reranked, and passed to the generation model with retrieved context. Latency here is user-visible.
 
-The two phases share exactly one component: the embedding model. Every embedding in the index and every query embedding must use the same model version. This is the tightest coupling in the entire pipeline.
+The two phases share exactly one component: the embedding model (`SentenceTransformersDocumentEmbedder` for indexing and `SentenceTransformersTextEmbedder` for queries). Every embedding in the index and every query embedding must use the same model version. This is the tightest coupling in the entire pipeline.
 
 ---
 
@@ -57,7 +57,7 @@ Extract text from source documents. For PDFs: [PyMuPDF](https://github.com/pymup
 
 **Data lives here**: Raw document bytes → plain text strings. Documents stay on local storage throughout.
 
-**Resource profile**: CPU-bound. Parsing is embarrassingly parallel — run one process per CPU core. No GPU required. Memory scales with the largest document in the batch, not total corpus size.
+**Resource profile**: CPU-bound. Parsing is embarrassingly parallel — see [Document Ingestion and Parsing](document-ingestion-and-parsing.md) for per-core throughput. No GPU required. Memory scales with the largest document in the batch, not total corpus size.
 
 **Haystack components**: `PyPDFToDocument`, `DOCXToDocument`, `HTMLToDocument`, `MarkdownToDocument`, `TextFileToDocument` (all in `haystack.components.converters`); `DoclingConverter` from [`docling-haystack`](https://github.com/DS4SD/docling-haystack) for layout-aware parsing. Each produces a list of `haystack.Document` objects with source metadata attached, ready to hand to the next stage. Covered in detail in [Module 3](document-ingestion-and-parsing.md).
 
@@ -65,11 +65,11 @@ Extract text from source documents. For PDFs: [PyMuPDF](https://github.com/pymup
 
 ### Stage 2: Chunk
 
-Split parsed text into segments that fit within the embedding model's context window and are semantically coherent enough to stand alone as retrieval units.
+Split parsed text into segments that fit within the embedding model's context window and are semantically coherent enough to stand alone as retrieval units. The [Chunking Strategies](chunking-strategies.md) module compares fixed-size, sentence-aware, and semantic splitting in depth.
 
 **Data lives here**: Plain text strings → a list of text chunks, each with source metadata (filename, page number, character offset).
 
-**Resource profile**: CPU-bound, negligible. Chunking is fast string manipulation.
+**Resource profile**: CPU-bound, negligible. Chunking is fast string manipulation — see [Chunking Strategies](chunking-strategies.md) for the splitter benchmarks.
 
 **Coupling note**: Chunk size is constrained by embedding model max tokens, not by the vector store. Most embedding models support 512 or 8192 tokens. Set chunk size below the model's declared max to leave headroom for tokenizer special tokens (CLS, SEP) and for slack between character-based counting and the model's actual BPE token count — a 512-token model in practice accepts ~460–480 tokens of real content.
 
@@ -95,7 +95,7 @@ Convert each text chunk into a dense vector representation. This vector encodes 
 
 Persist vectors and their associated metadata (chunk text, source document, position) to a vector database on local disk.
 
-**Data lives here**: Float vectors + metadata → indexed structure on disk.
+**Data lives here**: Float vectors + metadata → an indexed structure on disk, sized in [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md).
 
 **Resource profile**: Memory-bound at query time. Vector similarity search loads index segments into RAM. For large corpora, ensure the vector database's working set fits in available RAM or plan for MMAP-based access.
 
@@ -103,11 +103,11 @@ Persist vectors and their associated metadata (chunk text, source document, posi
 
 **Haystack component**: `DocumentWriter` from `haystack.components.writers` combined with a `DocumentStore`. The reference stack uses `QdrantDocumentStore` from [`qdrant-haystack`](https://github.com/deepset-ai/haystack-core-integrations/tree/main/integrations/qdrant); alternatives include `ChromaDocumentStore`, `InMemoryDocumentStore`, `WeaviateDocumentStore`, `ElasticsearchDocumentStore`, and many others — every store is a separate integration package, so you install only what you use. Covered in [Module 5](local-embeddings-vector-stores.md).
 
-**Failure mode**: Stale index. If source documents are updated post-ingestion, the index reflects the old content. Retrieval returns outdated chunks with no warning. Implement a document hash registry: store a hash of each source document at ingest time; re-ingest on hash change. Haystack's `Document` class carries an arbitrary `meta` dict — a `source_hash` field on every document makes re-ingest detection a metadata filter at the store level.
+**Failure mode**: Stale index. If source documents are updated post-ingestion, the index reflects the old content. Retrieval returns outdated chunks with no warning — the [Deployment, Operations, and Compliance](deployment-operations-compliance.md) module covers re-ingest scheduling. Implement a document hash registry: store a hash of each source document at ingest time; re-ingest on hash change. Haystack's `Document` class carries an arbitrary `meta` dict — a `source_hash` field on every document makes re-ingest detection a metadata filter at the store level.
 
 ### Stage 5: Retrieve
 
-Given a query vector, return the top-k most similar chunks from the index. Two retrieval strategies exist and can be combined.
+Given a query vector, return the top-k most similar chunks from the index. Two retrieval strategies exist and can be combined, both detailed in [Retrieval and Re-Ranking](retrieval-and-reranking.md).
 
 **Dense retrieval**: Cosine or dot-product similarity over the full embedding space. Fast, captures semantic meaning, misses exact term matches.
 
@@ -119,7 +119,7 @@ Given a query vector, return the top-k most similar chunks from the index. Two r
 
 **Haystack components**: `QdrantEmbeddingRetriever` for dense, `QdrantSparseEmbeddingRetriever` for sparse, and `DocumentJoiner(join_mode="reciprocal_rank_fusion")` from `haystack.components.joiners` to fuse them. The fusion is a pure rank-based operation — no score normalization required — so you can plug any two retrievers into the joiner and get clean RRF output. Covered in [Module 6](retrieval-and-reranking.md).
 
-**Failure mode**: Retrieval misses. The top-k results do not include the chunk the query actually needs. Causes: chunk too large (dilutes the semantic signal), chunk too small (lacks context), wrong embedding model for the domain, or query terms not matching document vocabulary. Hybrid retrieval reduces this significantly.
+**Failure mode**: Retrieval misses. The top-k results do not include the chunk the query actually needs. Causes: chunk too large (dilutes the semantic signal), chunk too small (lacks context), wrong embedding model for the domain, or query terms not matching document vocabulary. Hybrid retrieval reduces this significantly — see [Retrieval and Re-Ranking](retrieval-and-reranking.md).
 
 ### Stage 6: Rerank
 
@@ -137,7 +137,7 @@ LLMs suffer from the [Lost in the Middle](../../context-engineering/lost-in-the-
 
 Pass the reranked chunks, query, and a system prompt to a local LLM. The model generates a response grounded in the retrieved context.
 
-**Data lives here**: Query + context chunks → generated text. This is the only stage where all data comes together.
+**Data lives here**: Query + context chunks → generated text, produced by the local model covered in [Local LLM Inference](local-llm-inference.md). This is the only stage where all data comes together.
 
 **Resource profile**: VRAM-bound. The KV cache grows linearly with context length — doubling the context doubles the VRAM. A 7B model at 4-bit quantization requires approximately 4–5GB VRAM baseline; add context overhead. For large context windows (>8k tokens), 16GB VRAM is a practical minimum. A 13B+ model at 4-bit requires 24GB+ VRAM ([simple-local-rag](https://github.com/mrdbourke/simple-local-rag)).
 
@@ -299,7 +299,7 @@ Understanding which stages are tightly coupled tells you the cost of changing ea
 | Retrieve → Generate | **Loose** | Any LLM can receive retrieved chunks; no format constraint |
 | Retrieve → Rerank | **Loose** | Reranker operates on the retrieved text, independent of how it was retrieved |
 
-**Implication**: Swapping your embedding model is the most disruptive change. It invalidates the entire index. Swapping your generation model is the least disruptive — no re-indexing required. In Haystack terms: swapping `OllamaGenerator` for `OpenAIGenerator` (pointed at vLLM) is one line and requires no pipeline rebuild; swapping `SentenceTransformersDocumentEmbedder`'s model parameter requires a full re-run of the indexing pipeline against the entire corpus.
+**Implication**: Swapping your embedding model (the `SentenceTransformersDocumentEmbedder` model parameter) is the most disruptive change. It invalidates the entire index. Swapping your generation model is the least disruptive — no re-indexing required. In Haystack terms: swapping `OllamaGenerator` for `OpenAIGenerator` (pointed at vLLM) is one line and requires no pipeline rebuild; swapping `SentenceTransformersDocumentEmbedder`'s model parameter requires a full re-run of the indexing pipeline against the entire corpus.
 
 ---
 
@@ -357,15 +357,15 @@ The seven-stage pipeline is the right default for multi-gigabyte corpora where n
 - **The corpus is small enough to fit in memory**: For under a few thousand chunks, `InMemoryDocumentStore` with exhaustive cosine similarity runs in milliseconds and skips the disk-based vector store entirely — no Qdrant process, no index tuning, no persistence layer to back up. Haystack supports this configuration out of the box as a drop-in replacement for `QdrantDocumentStore`.
 - **Re-indexing cost exceeds query-time cost**: If documents churn faster than the indexing pipeline completes, users consistently hit stale chunks. A long-context "re-read at query time" architecture sidesteps index staleness by never maintaining one.
 
-The pattern in this module scales down better than it scales up: removing reranking, sparse retrieval, or the vector store is straightforward, but adding them back later requires re-indexing. Start with the full pipeline only when corpus size and query volume justify it.
+The pattern in this module scales down better than it scales up: removing reranking, sparse retrieval, or the vector store is straightforward, but adding them back later requires re-indexing (the [Chunking Strategies](chunking-strategies.md) and [Retrieval and Re-Ranking](retrieval-and-reranking.md) modules detail each). Start with the full pipeline only when corpus size and query volume justify it.
 
 ## Key Takeaways
 
-- **Two phases, one shared component.** Indexing is offline and async; query is online and sync. The embedding model is the only component shared between phases — pin its version before building the index.
+- **Two phases, one shared component.** Indexing is offline and async; query is online and sync. The embedding model is the only component shared between phases — pin its version before building the index, as [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md) details.
 - **Tight coupling is localized.** The embed→store boundary is the hardest to change. Retrieval strategy, reranker, and generation model are all independently swappable.
-- **Hardware demands are stage-specific.** Ingest is CPU-bound. Embedding is GPU-friendly but CPU-capable. Retrieval is memory-bound. Generation is VRAM-bound. A single 32GB RAM + 24GB VRAM workstation handles the full pipeline for multi-million-page corpora.
-- **Air-gap compliance requires explicit verification.** Default Ollama binds to all interfaces. Verify at the process, network, and dependency layer — not just the architecture diagram.
-- **Stale index is the most common silent failure.** Documents update; the index does not. Implement document hashing at ingest time and re-ingest on change detection.
+- **Hardware demands are stage-specific.** Ingest is CPU-bound. Embedding is GPU-friendly but runs on CPU (`nomic-embed-text-v1.5`). Retrieval is memory-bound. Generation is VRAM-bound. A single 32GB RAM + 24GB VRAM workstation handles the full pipeline for multi-million-page corpora.
+- **Air-gap compliance requires explicit verification.** Default Ollama binds to all interfaces. Verify at the process, network, and dependency layer — the [Deployment, Operations, and Compliance](deployment-operations-compliance.md) module walks each one. Inspect the architecture diagram only as a starting point, not as proof.
+- **Stale index is the most common silent failure.** Documents update; the index does not. Implement document hashing at ingest time (a `source_hash` field on each document) and re-ingest on change detection.
 - **Reranking is not optional.** Top-k bi-encoder retrieval without reranking degrades generation quality due to the "Lost in the Middle" problem. Apply a cross-encoder to the top-20 candidates before passing context to the generation model.
 - **The seven stages map to a Haystack Pipeline one-for-one.** Indexing and query pipelines serialize to YAML — the audit artifact that accompanies every signed release. Pinning the YAML pins the architecture, the parameters, and the component classes in one reviewable document.
 - **The pipeline scales down better than up.** Skip this architecture when a long-context model, structured store, or in-memory exhaustive search fits the corpus — adding stages back later is cheap; over-engineering upfront costs re-indexing.

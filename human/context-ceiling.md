@@ -26,7 +26,7 @@ Expert architects carry hundreds of interconnected constraints simultaneously --
 
 ## The Expertise Gradient
 
-AI capability maps inversely to the complexity of context required. Standard engineering tasks -- well-documented, pattern-matchable, bounded in scope -- succeed reliably. Expert architecture tasks -- requiring simultaneous awareness of organizational, regulatory, and technical context -- fail systematically.
+AI capability maps inversely to the [complexity of context required](../context-engineering/context-engineering.md). Standard engineering tasks -- well-documented, pattern-matchable, bounded in scope -- succeed reliably. Expert architecture tasks -- requiring simultaneous awareness of organizational, regulatory, and technical context -- fail systematically.
 
 This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they were **19% slower** with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns. <!-- Noy, S. and Zhang, W. (2023). Experimental evidence on the productivity effects of generative artificial intelligence. Science, 381(6654). -->
 
@@ -69,22 +69,22 @@ Anthropic's context engineering guidance confirms: "Every new token introduced d
 
 The Dreyfus model describes five stages from novice to expert. At the expert stage, performance becomes "fluid, unconscious, and automatic" -- intuition built from vast experience, not explicit rules ([Dreyfus & Dreyfus, 1986](https://en.wikipedia.org/wiki/Dreyfus_model_of_skill_acquisition)).
 
-Expert knowledge resists serialization. The architect does not consult a checklist -- they *feel* when a design is wrong because it conflicts with something learned from a production incident years ago. That intuition cannot be externalized because the expert cannot fully articulate it. Polanyi's paradox -- "we can know more than we can tell" -- applies directly. Kambhampati (2021) calls this "Polanyi's revenge": AI creates new problems when machines lack the wisdom to know when their learned patterns do not apply. <!-- Kambhampati, S. (2021). Polanyi's Revenge and AI's New Romance with Tacit Knowledge. Communications of the ACM. -->
+Expert knowledge resists serialization. The architect does not consult a checklist -- they *feel* when a design is wrong because it [conflicts with something learned from a production incident years ago](../workflows/encoding-tacit-knowledge.md). That intuition cannot be externalized because the expert cannot fully articulate it. Polanyi's paradox -- "we can know more than we can tell" -- applies directly. Kambhampati (2021) calls this "Polanyi's revenge": AI creates new problems when machines lack the wisdom to know when their learned patterns do not apply. <!-- Kambhampati, S. (2021). Polanyi's Revenge and AI's New Romance with Tacit Knowledge. Communications of the ACM. -->
 
 | Dreyfus stage | Knowledge type | AI compatibility |
 |---|---|---|
 | Novice | Explicit rules, documented procedures | High -- rules fit in prompts |
 | Competent | Situational patterns, prioritized goals | Moderate -- patterns are learnable from examples |
 | Proficient | Holistic recognition, intuitive prioritization | Low -- requires broad contextual awareness |
-| Expert | Tacit intuition across vast interconnected domains | Fails -- cannot be serialized in sufficient volume |
+| Expert | [Tacit intuition across vast interconnected domains](../workflows/encoding-tacit-knowledge.md) | Fails -- cannot be serialized in sufficient volume |
 
 ## The Rubber Stamp Problem
 
 Doctorow's "reverse centaur" describes algorithmic systems that reduce humans to physical labor ([Doctorow, 2022](https://pluralistic.net/2022/04/17/revenge-of-the-chickenized-reverse-centaurs/)). For experts in regulated environments the problem is more specific: **they are being asked to rubber-stamp work they cannot fully understand or defend**.
 
-Approval carries graduated consequences -- from a rap on the knuckles up to personal legal liability in regulated domains. Experts build deliberate quality systems around this: peer review, experimentation labs, multiple design passes. These are not bureaucratic overhead; they are how expert work produces quality.
+Approval carries graduated consequences -- from a rap on the knuckles up to personal legal liability in regulated domains. Experts build [deliberate quality systems](rigor-relocation.md) around this: peer review, experimentation labs, multiple design passes. These are not bureaucratic overhead; they are how expert work produces quality.
 
-Rubber-stamping AI output short-circuits all of this. The expert must read the AI's proposal, identify constraint violations the AI could not know about, mentally reconstruct the correct answer, and fix or restart. That is more work than starting from scratch -- and it replaces the collaborative, iterative process experts value with solitary verification of someone else's reasoning.
+Rubber-stamping AI output short-circuits all of this. The expert must read the AI's proposal, identify constraint violations the AI could not know about, [mentally reconstruct the correct answer](../anti-patterns/comprehension-debt.md), and fix or restart. That is more work than starting from scratch -- and it replaces the collaborative, iterative process experts value with solitary verification of someone else's reasoning.
 
 !!! warning "The 80% trap"
     Osmani documents that AI excels at greenfield and boilerplate but "in mature codebases with complex invariants, the calculus inverts. The agent doesn't know what it doesn't know." Teams with high AI adoption merged 98% more PRs while review times increased 91% -- efficiency gains in generation were consumed by coordination overhead ([The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
@@ -113,7 +113,7 @@ This is not an argument against AI -- it is an argument for **honesty about wher
 | Generating boilerplate and standard implementations | Navigating regulatory corner cases |
 | Searching and summarizing documentation | Weighing organizational politics against technical constraints |
 | Prototyping options within well-defined constraints | Recognizing when a design "feels wrong" based on accumulated experience |
-| Automating repetitive operational tasks | Holding hundreds of interconnected constraints simultaneously |
+| Automating repetitive operational tasks | [Holding hundreds of interconnected constraints simultaneously](../context-engineering/lost-in-the-middle.md) |
 | Drafting communications and documentation | Making judgment calls that require context exceeding any window |
 
 The honest answer to "what am I missing?" from a capable expert who cannot make AI work for architecture is: **nothing**. Expert architecture work is above the ceiling.
@@ -139,7 +139,7 @@ The context-ceiling argument is weakest in three conditions:
 
 **Narrow, well-documented domains.** A financial institution with fully externalized regulatory requirements, machine-readable constraint files, and a tightly scoped architecture problem may fit sufficient context into a large window. The ceiling is real but its height varies with documentation quality and domain breadth.
 
-**Greenfield with no organizational history.** New projects lack the accumulated constraints — failed pilots, expired vendor contracts, political incidents — that make the ceiling binding. AI can handle genuine greenfield architecture more completely than the framing suggests; the ceiling tightens as organizations mature and accumulate history.
+**[Greenfield with no organizational history](../workflows/agent-driven-greenfield.md).** New projects lack the accumulated constraints — failed pilots, expired vendor contracts, political incidents — that make the ceiling binding. AI can handle genuine greenfield architecture more completely than the framing suggests; the ceiling tightens as organizations mature and accumulate history.
 
 **Rapidly expanding context windows.** Frontier models have moved from 4K to 1M tokens in three years. If that trend continues and retrieval quality improves proportionally, some tasks currently above the ceiling will fall below it. The ceiling is a present-day capability boundary, not a permanent one — though Du et al. (2025) show that length-induced degradation persists even at large windows, so the ceiling rises more slowly than raw token counts imply.
 

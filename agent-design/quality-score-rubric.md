@@ -22,14 +22,14 @@ The pattern is two artefacts: a `QUALITY_SCORE.md` that grades each module, and 
 
 ## The Four Tiers
 
-The grading scale, verbatim from the source template:
+The [grading scale](harness-engineering.md), verbatim from the source template:
 
 - **A** — verified, legible, stable, boundaries enforced.
 - **B** — working with minor gaps.
 - **C** — partially working, notable confusion or instability.
 - **D** — broken, unsafe, or structurally unclear.
 
-The discipline depends on *using* the lower grades. "Is the test suite OK?" hides ambiguity behind a yes-or-no answer; a `C` grade forces the reviewer to name the instability.
+The discipline depends on *using* the lower grades — `C` and `D`. "Is the test suite OK?" hides ambiguity behind a yes-or-no answer; a `C` grade forces the reviewer to name the instability.
 
 The same A/B/C/D framing can drive the agent, not only the human reviewer: LangChain's rubrics let an agent evaluate and correct its own work against an explicit rubric ([LangChain, introducing rubrics](https://blog.langchain.com/introducing-rubrics)).
 

@@ -64,13 +64,13 @@ Treating the trajectory as a Pearl-style structural causal chain and replacing o
 
 Five conditions break the assumptions and make cheaper approaches preferable.
 
-**Side-effecting tools without replay isolation.** Counterfactual intervention re-executes the trajectory with an alternative action. If steps mutate external state — databases, files, paid APIs, sent emails — replay corrupts state or is infeasible. The technique fits sandboxed reasoning, code generation, and retrieval; production tool-use agents need a snapshotting layer first.
+**Side-effecting tools without replay isolation.** Counterfactual intervention re-executes the trajectory with an alternative action. If steps mutate external state — databases, files, paid APIs, sent emails — [replay](../observability/offline-trajectory-replay-multi-agent-debugging.md) corrupts state or is infeasible. The technique fits sandboxed reasoning, code generation, and retrieval; production tool-use agents need a snapshotting layer first.
 
 **Cascading or distributed failures.** Single-trajectory CRS attributes responsibility to one step. Empirically, ~40 % of LLM/Agent-node failure root causes occur at locations *different* from where the failure surfaces, rising to ~45 % for Logic/Control nodes ([arxiv 2509.23735](https://arxiv.org/abs/2509.23735)). Multi-perspective failures are ill-posed for single-step attribution because multiple distinct interventions can independently repair the task ([arxiv 2603.25001](https://arxiv.org/abs/2603.25001)). For distributed cases, prefer hierarchical causal-graph attribution ([CHIEF, arxiv 2602.23701](https://arxiv.org/abs/2602.23701)) or multi-agent attribution benchmarks ([TraceElephant, arxiv 2604.22708](https://arxiv.org/abs/2604.22708)).
 
 **No binary verifier.** Minimal repair only works when "did the run succeed?" is mechanically checkable. Essay writing, creative code, and UX decisions lack the binary signal, so the "minimal edit that flips outcome to success" is undefined.
 
-**Cost-bounded inference pipelines.** Each counterfactual probe is at least one extra forward pass per candidate step. On long trajectories with budget-constrained backbones, the apparatus exceeds the cost of retrying with a stronger model. [Deterministic guardrails](deterministic-guardrails.md) plus retry often dominate cost per recovered failure.
+**Cost-bounded inference pipelines.** Each counterfactual probe is at least one extra forward pass per candidate step. On long trajectories with budget-constrained backbones, the apparatus exceeds the [cost of retrying](staged-evidence-gates-program-repair.md) with a stronger model. [Deterministic guardrails](deterministic-guardrails.md) plus retry often dominate cost per recovered failure.
 
 **Self-distillation collapse when fed back as offline signal.** Paired (wrong, corrected) examples derived from a model's own failures, then fed back as preference data, risk distribution collapse — see [anti-reward-hacking](anti-reward-hacking.md). External oracle guidance is what keeps the corrected step out of the model's prior.
 

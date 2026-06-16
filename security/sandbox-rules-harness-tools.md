@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
   - security
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party
@@ -68,7 +68,7 @@ Third-party MCP servers require separate security review. The harness cannot be 
 - What actions can this MCP server take?
 - Does it have its own access controls and audit logging?
 - What data does it access and what does it retain?
-- What happens if the model is injected and calls this tool with crafted inputs?
+- What happens if the model is injected and calls this tool with crafted inputs across its [tool-invocation attack surface](tool-invocation-attack-surface.md)?
 
 Document the answers. The harness sandbox policy is not a substitute for this review.
 

@@ -136,7 +136,7 @@ To trigger each schema type, write in the shape the hook detects:
 Schema lifts citation rates in aggregate, but fails under specific conditions:
 
 - **Stale schema after edits** — if body text drifts from the auto-generated schema (e.g., FAQ answers edited outside the `**Question**` / answer format), engines see contradictory signals and may deprioritize the page.
-- **Thin or low-authority domains** — lift is relative to baseline authority. Schema accelerates existing signal; it doesn't manufacture credibility.
+- **Thin or low-authority domains** — lift is relative to baseline authority. Schema accelerates the [existing topical-authority signal](topical-authority.md); it doesn't manufacture credibility.
 - **Wrong type for content shape** — HowTo on conceptual explanations, or FAQPage on unrelated Q&A, causes schema–content mismatch that validators flag and engines may penalise.
 - **Indexing pipeline changes** — benefit accrues at indexing time; if a provider downweights structured data, pages relying on the lift lose it with no on-page change.
 

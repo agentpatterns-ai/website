@@ -10,7 +10,7 @@ aliases:
   - prompt sensitivity
   - cascade sensitivity
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Emergent Behavior Sensitivity
@@ -122,7 +122,7 @@ The framework version produces the same behavioral outcome whether the prompt sa
 Framework prompts assume subagents handle ambiguity well -- this breaks down in three conditions:
 
 - **Compliance-critical contexts.** Regulated pipelines (finance, healthcare, legal) may require step-by-step auditability. Framework prompts produce flexible behavior that is harder to trace back to specific instructions, making post-hoc compliance review difficult.
-- **Brittle task types.** Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences. Framework prompts introduce unwanted interpretation where none should occur.
+- **Brittle task types.** Tasks with a single correct execution path -- exact database migrations, deterministic build steps -- benefit from rigid instruction sequences and a high [instruction-compliance ceiling](../instructions/instruction-compliance-ceiling.md). Framework prompts introduce unwanted interpretation where none should occur.
 - **Undertrained subagents.** Heuristic delegation relies on subagents having enough domain knowledge to infer intent. A model without sufficient instruction-following capability or domain context will interpret framework prompts erratically, producing worse outcomes than a prescriptive approach.
 
 ## Related

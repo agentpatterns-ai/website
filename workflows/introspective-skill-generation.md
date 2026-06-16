@@ -22,7 +22,7 @@ maturity: established
 
 Most agent improvements start the same way: a human reads session transcripts, notices a recurring correction, and writes a new skill or instruction to prevent it. Rather than waiting for someone to notice that every session runs lint after edit, the agent itself can surface that pattern and scaffold the automation directly.
 
-The [continuous improvement loop](continuous-agent-improvement.md) depends on a human noticing patterns, categorizing root causes, and writing the fix. This works when teams are small and sessions are few. As agent usage scales — more sessions, more developers, more repositories — the observation step becomes the bottleneck. Manual review does not scale: the volume of transcript data grows faster than any individual's capacity to read it systematically.
+The [continuous improvement loop](continuous-agent-improvement.md) depends on a human noticing patterns, categorizing root causes, and writing the fix. This works when teams are small and sessions are few. As agent usage scales — more sessions, more developers, more repositories — the observation step becomes the bottleneck. Manual review does not scale: the volume of [transcript data](../verification/agent-transcript-analysis.md) grows faster than any individual's capacity to read it systematically.
 
 Introspective skill generation closes that gap by delegating the pattern-mining step to the agent itself.
 
@@ -84,7 +84,7 @@ Generated artifacts require human review before deployment. This is the critical
 Review criteria:
 
 - **Is this actually automatable?** Some corrections are context-dependent and require judgment. An agent that always applies a rule that only sometimes applies makes things worse.
-- **Does it conflict with existing skills or agents?** New skills that overlap with existing ones create ambiguity in tool selection.
+- **Does it conflict with existing skills or agents?** New skills that overlap with entries already in the [skill library](../tool-engineering/skill-library-evolution.md) create ambiguity in tool selection.
 - **Does it generalize?** A pattern observed in one project may not apply across projects. Scope the generated skill or agent appropriately — project-level (`.claude/agents/`) vs. user-level (`~/.claude/agents/`). [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 
 After approval, run the new skill or agent against a held-out set of tasks to confirm it resolves the target pattern without introducing regressions.
@@ -121,13 +121,13 @@ Not every pattern should become a skill. Automating context-dependent decisions 
 - The pattern appears frequently but the correct response varies each time
 - The proposed automation changes behavior the user might want to control case-by-case
 
-When the analysis agent surfaces these, log them as "non-automatable patterns" rather than forcing a skill definition. These patterns may still inform instruction updates or documentation rather than automated tooling.
+When the analysis agent surfaces these, log them as "non-automatable patterns" rather than forcing a skill definition. These patterns may still feed the [continuous-improvement loop](continuous-agent-improvement.md) as instruction updates or documentation rather than automated tooling.
 
 ## When This Backfires
 
 Three specific conditions where the workflow produces negative returns:
 
-- **Sensitive data in transcripts.** Session logs frequently contain API keys, credentials, database connection strings, and PII entered during debugging. Feeding these transcripts to an analysis agent exposes that data. Before running pattern-miner, audit transcript retention and redact or exclude sessions containing credentials.
+- **Sensitive data in transcripts.** Session logs frequently contain API keys, credentials, database connection strings, and PII entered during debugging. Feeding these transcripts to an analysis agent exposes that data. Before running the `pattern-miner` agent, audit transcript retention and redact or exclude sessions containing credentials.
 - **False-positive pattern noise.** The analysis agent ranks candidates by frequency, but frequency is not the same as automatable. A correction that appears in 60% of sessions may reflect a project-specific quirk that resolves once a refactor completes — not a durable automation target. Human review of ranked candidates is mandatory, not optional.
 - **Analysis cost at scale.** Reading and analyzing 40 transcript files with a Sonnet-class model consumes substantial tokens. Running pattern-miner on every session directory daily quickly becomes expensive. Schedule analysis runs on a cadence (weekly or after a threshold of new sessions) and scope them to the most active repositories.
 
@@ -188,7 +188,7 @@ After deploying the hook, the team re-runs the pattern-miner on 20 new sessions 
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Skill Library Evolution](../tool-engineering/skill-library-evolution.md)
 - [Agent Memory Patterns](../agent-design/agent-memory-patterns.md)
-- [Eval-Driven Tool Development](eval-driven-tool-development.md)
-- [Video Transcript Skill: Meeting Recording to Markdown](../tools/claude/video-transcript-skill.md) — worked example of a multi-tool skill orchestrating Whisper, ffmpeg, and the Files API
+- [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md)
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — complementary feedback mechanisms that keep generated skills accurate once deployed
 - [Daily-Use Skill Library](daily-use-skill-library.md) — the target library where approved generated skills accumulate
+- [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the canonical home for authoring rules generated skills must follow

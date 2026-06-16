@@ -12,7 +12,7 @@ aliases:
   - tool necessity classifier
   - hidden-state tool-call control
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # Tool Necessity Probing
@@ -122,5 +122,5 @@ The same harness *without* the probe routinely fires `schema_lookup` on Query A 
 - [Cognitive Reasoning-Execution Separation](../agent-design/cognitive-reasoning-execution-separation.md)
 - [Tool Minimalism](tool-minimalism.md)
 - [Token-Efficient Tool Design](token-efficient-tool-design.md)
-- [Abstention-Aware Memory Retrieval](../agent-design/abstention-aware-memory-retrieval.md)
+- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md)
 - [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)

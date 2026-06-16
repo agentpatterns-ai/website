@@ -60,6 +60,7 @@ A crosswalk is a discovery aid, not a threat model — five conditions make it a
 ## Related
 
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — mechanism-organised navigation grid that pairs with the framework-organised crosswalk above
+- [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — lifecycle-phase taxonomy these named threats map onto; the crosswalk is a lookup table, not a competing frame
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — capability-based threat model for the trifecta that underlies LLM01 / LLM02 / LLM06
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — independent-mechanism layering across all ten risk categories
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — primary LLM01 entry for coding agents

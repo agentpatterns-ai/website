@@ -72,9 +72,9 @@ This intersects with [comprehension debt](../anti-patterns/comprehension-debt.md
 These shifts assume the organization tolerates rapid reprioritization. Conditions that undercut them:
 
 - **Coordination overhead**: Short sprints work for small teams. Multi-team orgs with shared roadmaps cannot drop quarterly commitments because a model shipped; realignment cost may exceed the benefit.
-- **Prototypes promoted to production**: Prototype-first breaks when time pressure turns a proof-of-concept into production without architectural review.
+- **Prototypes promoted to production**: [Prototype-first](../workflows/prototype-before-optimizing.md) breaks when time pressure turns a proof-of-concept into production without architectural review.
 - **Revisit fatigue**: Re-evaluating features each release creates prioritization instability. Teams with large legacy surfaces cannot affordably audit them each cycle.
-- **Simplicity misapplied**: "Simplest thing that works" defers necessary complexity rather than eliminating it. Some edge cases require complex handling regardless of model capability.
+- **Simplicity misapplied**: "Simplest thing that works" [defers necessary complexity](../anti-patterns/shadow-tech-debt.md) rather than eliminating it. Some edge cases require complex handling regardless of model capability.
 
 These shifts are most reliable for small, fast-moving teams building AI-native products.
 

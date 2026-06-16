@@ -17,7 +17,7 @@ maturity: established
 
 ## The Pattern
 
-Long agent sessions degrade as context fills. Early instructions get pushed out. The agent starts ignoring conventions it followed hours ago. Accumulated context is not a feature — it's a liability.
+Long agent sessions degrade as context fills. Early instructions get pushed out. The agent starts ignoring conventions it followed hours ago. [Accumulated context](loop-strategy-spectrum.md) is not a feature — it's a liability.
 
 The Ralph Wiggum Loop addresses this by design: each iteration starts with a clean context window, reads persistent state from disk, completes a bounded unit of work, and writes results back before restarting. State lives in files, not in conversation history.
 
@@ -44,7 +44,7 @@ graph TD
 
 **Execute**: The agent completes the task using its tools.
 
-**Write**: The agent writes results — output files, updated task lists, progress markers — back to disk before the session ends.
+**Write**: The agent writes results — output files, updated task lists, [progress markers](goal-monitoring-progress-tracking.md) — back to disk before the session ends.
 
 **Restart**: The next iteration opens a fresh context and reads the updated state.
 
@@ -81,9 +81,9 @@ Running one continuous session across many tasks means:
 The pattern assumes each iteration can be meaningfully bounded and verified. Several conditions break that assumption:
 
 - **Unbounded tasks**: If a single unit of work cannot be completed in one context window, the loop stalls or produces partial output every cycle. Decompose further before looping.
-- **No progress signal**: Without a reliable completion check (test suite, task-list marker, CI result), the loop can cycle indefinitely on a task it cannot solve, consuming tokens without converging.
+- **No progress signal**: Without a [reliable completion check](convergence-detection.md) (test suite, task-list marker, CI result), the loop can cycle indefinitely on a task it cannot solve, consuming tokens without converging.
 - **Shared mutable state**: If multiple concurrent loop iterations write to the same files, later iterations may overwrite earlier progress. Use per-iteration output paths or explicit locking.
-- **Context-sensitive tasks**: Tasks requiring deep continuity — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
+- **Context-sensitive tasks**: Tasks requiring [deep continuity](cross-cycle-consensus-relay.md) — extended negotiation, multi-turn clarification, stateful debugging sessions — do not benefit from fresh context. The lost context is load-bearing.
 
 Practitioner reports add three caveats. Architectural coherence suffers — generated code reflects the agent's path to a working state, not an intentional structure ([Wiggum breakdown](https://wiggum.app/blog/what-is-the-ralph-loop/)). Cost scales fast: a fifty-iteration loop on a medium codebase typically runs $50–100+ in API credits ([Leanware analysis](https://www.leanware.co/insights/ralph-wiggum-ai-coding)). Worst, an agent facing an impossible task can "overbake" — iterate destructively, chasing a spurious error for hours — so Sondera's ["Supervising Ralph"](https://blog.sondera.ai/p/ralph-wiggum-principal-skinner-agent-reliability) argues every loop needs a supervisor that detects non-convergence and halts; an iteration cap alone is a financial circuit breaker, not a quality gate.
 

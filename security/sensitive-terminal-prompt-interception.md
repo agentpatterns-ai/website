@@ -59,7 +59,7 @@ VS Code 1.121 default mode, walked through with `gh auth login`:
 1. Agent runs `gh auth login --hostname github.com --git-protocol https` in a chat-spawned terminal.
 2. The command prints `Enter your authentication token:` and waits on stdin.
 3. The harness pattern-matches the prompt, pauses the command, and surfaces a confirmation dialog asking the user to focus the terminal.
-4. The user types the token into the terminal pane. Keystrokes go to the PTY only — the harness does not capture them into the chat transcript.
+4. The user types the token into the terminal pane. VS Code routes keystrokes to the PTY only — the harness does not capture them into the chat transcript.
 5. The command completes. The agent's tool result records "command completed" without the token.
 
 In auto-approve mode, step 3 cancels the command instead and the agent receives an explicit instruction not to retry ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121#_sensitive-terminal-prompts-stay-in-the-terminal)).
@@ -70,7 +70,7 @@ In auto-approve mode, step 3 cancels the command instead and the agent receives 
 - The two safe behaviours are confirm-in-terminal (default mode) and cancel-the-command (auto-approve) — never let the agent type the secret itself.
 - Stdout regex redaction is a fallback, not a substitute: by the time output is filtered the secret has already been in an agent-controlled buffer.
 - Detection is heuristic and brittle — expect false positives on legitimate interactive flows and false negatives on non-standard prompts; instrument both failure modes.
-- The structurally better fix is to remove credentials from the TTY path entirely — browser PKCE, device-code, or credential-broker injection — and treat interception as defence-in-depth for cases where the prompt cannot be designed away.
+- The structurally better fix is to remove credentials from the TTY path entirely — browser PKCE, device-code, or [credential-broker injection via a scoped-credentials proxy](scoped-credentials-proxy.md) — and treat interception as defence-in-depth for cases where the prompt cannot be designed away.
 
 ## Related
 

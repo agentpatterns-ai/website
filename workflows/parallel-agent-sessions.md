@@ -73,13 +73,13 @@ The practical point: design parallel workflows so that resetting the foreground 
 
 ## Review Concentration and Quality
 
-When parallel sessions run, review and testing responsibilities concentrate on the human rather than being distributed across the implementation work. The human reviews more output per unit time than in a serial workflow.
+When parallel sessions run, review and testing responsibilities concentrate on the human rather than being distributed across the implementation work. The human reviews more output per unit time than in a serial workflow, which is the [attention-management](../human/attention-management-parallel-agents.md) problem at the core of parallel supervision.
 
 This increases the importance of each review decision. Rigor doesn't decrease at scale — if anything, the integration complexity of multiple concurrent sessions makes careful review more important, not less.
 
 ## Example
 
-The following shows a typical parallel session setup using git worktrees to isolate concurrent Claude Code sessions on the same repo. Each session works on a separate branch without touching shared working-tree state.
+The following shows a typical parallel session setup using git worktrees to isolate concurrent Claude Code sessions on the same repo. Each session works on a separate branch without touching shared working-tree state, the guarantee [worktree isolation](worktree-isolation.md) provides.
 
 ```bash
 # Create three isolated worktrees from main

@@ -9,7 +9,7 @@ aliases:
   - persona progression onboarding
   - Guide Collaborator Peer Launcher
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Agentic Education: Persona Progression for Teaching AI Coding Tools
@@ -68,7 +68,7 @@ Without these checks, the persona scaffold risks collapsing into cognitive offlo
 Structured persona progression adds curriculum and measurement overhead. Conditions under which it is worse than ad-hoc fading support:
 
 - **Single-learner, short-duration onboarding.** A developer joining a team that already uses Claude Code daily can reach independent use in days through pair work. A four-stage persona curriculum with transition gates costs more than it returns.
-- **Metrics unavailable.** Engagement heuristics require a harness that tracks revisions, help-seeking, and autonomy markers. Without instrumentation, transitions collapse back to elapsed-time heuristics — the failure mode the paper is designed to replace.
+- **Metrics unavailable.** Engagement heuristics require a harness that tracks revisions, help-seeking, and autonomy markers. Without instrumentation, transitions collapse back to elapsed-time heuristics — the failure mode the [cc-self-train paper](https://arxiv.org/abs/2604.17460) is designed to replace.
 - **Upstream tool churn faster than curriculum update cadence.** The paper's auto-update primitive mitigates this, but teams running on pre-release model or tool versions will see module fidelity drift inside a single learner's progression.
 - **Self-efficacy substituted for skill.** Any deployment that measures only self-reported confidence or in-session throughput reproduces the Penn paradox — procedural gains that do not survive contact with an independent task.
 

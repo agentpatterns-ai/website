@@ -21,13 +21,13 @@ Visual-prompt agent steering is the active form of multimodal direction: the dev
 
 ## When Visual Beats Text
 
-The technique applies when **spatial intent is the load-bearing signal** — layout, component placement, visual relationships, "match this to that". Text encodes those referents lossily; one click plus "make this match" replaces a paragraph. If the text version would need DOM ancestors, pixel offsets, or siblings to be unambiguous, point instead.
+The technique applies when **spatial intent is the load-bearing signal** — layout, component placement, visual relationships, "match this to that". Text encodes those referents lossily; one Cursor Design Mode click plus "make this match" replaces a paragraph. If the text version would need DOM ancestors, pixel offsets, or siblings to be unambiguous, point instead.
 
 For non-spatial work, the visual surface has no referent. Keep those in text.
 
 ## What the Agent Receives
 
-Selecting an element gives the agent two complementary signals: **element identity** — "xpath, the component, attributes, computed styles, props from the fiber tree" — and **spatial context** — a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone can't say "match the spacing of the sibling card"; the screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot — the property [frontmost-window snapshots](../../context-engineering/frontmost-window-snapshot-context.md) exploit for passive capture.
+Selecting an element gives the agent two complementary signals: **element identity** — "xpath, the component, attributes, computed styles, props from the fiber tree" — and **spatial context** — a viewport screenshot capturing layout and surrounding elements ([Cursor — Design Mode, 2026-06-05](https://cursor.com/blog/design-mode)). Identity alone can't say "match the spacing of the sibling card"; the screenshot alone leaves the agent guessing which DOM node to edit. Each modality covers the other's blind spot — the property [app-window snapshots](../../context-engineering/app-window-snapshot-context.md) exploit for passive capture.
 
 ## Three Multimodal Patterns, One Site
 
@@ -36,7 +36,7 @@ Three interaction shapes have shipped against AI coding harnesses, easy to confl
 | Pattern | Direction | Surface | Example |
 |---|---|---|---|
 | **Visual-prompt steering** (this page) | Human → agent | Click / multi-select on running UI | Cursor Design Mode |
-| **Frontmost-window snapshot** | Human → agent (passive) | Hotkey capture of any window | Codex Appshots ([page](../../context-engineering/frontmost-window-snapshot-context.md)) |
+| **App-window snapshot** | Human → agent (passive) | Hotkey capture of any window | Codex Appshots ([page](../../context-engineering/app-window-snapshot-context.md)) |
 | **Interactive canvas output** | Agent → human | Agent renders a chart or diagram | Cursor canvases, Claude Artifacts ([page](../../emerging/interactive-canvas-outputs.md)) |
 
 They share a substrate but differ in direction and cost.
@@ -60,7 +60,7 @@ Spatial intent is a multi-dimensional referent that text encodes lossily. The du
 - **Async or PR-bound review.** The sketch does not travel into the pull request; reviewers reconstruct intent from the diff, not the prompt, so the most expressive form of the instruction is lost — the same review-surface split the [Interactive Canvas Outputs page](../../emerging/interactive-canvas-outputs.md) documents for outputs.
 - **Multimodal-reasoning failure regimes.** For precise spatial reasoning — alignment, perspective, depth ordering — multimodal LLMs misread layout via the projection bottleneck, answering by semantic co-occurrence rather than the scene; failures include instance merging and perspective-taking errors ([Spatial Reasoning in MLLMs, arxiv 2511.15722](https://arxiv.org/abs/2511.15722)).
 - **Indirect prompt injection via the captured visual.** Third-party content in the page (an ad, comments, a webview) can carry hidden adversarial text the MLLM treats as instructions. Image-based injection reaches up to 64% attack success under stealth constraints, and no tested defence fully eliminates it ([Image-based Prompt Injection, arxiv 2603.03637](https://arxiv.org/abs/2603.03637); [Multimodal prompt injection, arxiv 2509.05883](https://arxiv.org/html/2509.05883v1)).
-- **Image-token budget pressure.** Voice-narrated sequential edits stack viewport screenshots into one thread; image tokens can dominate context before the agent reads its first instruction ([frontmost-window snapshot — image-token cost](../../context-engineering/frontmost-window-snapshot-context.md)).
+- **Image-token budget pressure.** Voice-narrated sequential edits stack viewport screenshots into one thread; image tokens can dominate context before the agent reads its first instruction ([app-window snapshot — image-token cost](../../context-engineering/app-window-snapshot-context.md)).
 - **Accessibility-disadvantaged authors.** Visual-pointing interfaces structurally exclude screen-reader users; visual-prompt steering cannot be the only steering channel.
 
 ## Example
@@ -96,7 +96,7 @@ The agent receives both elements' identity (component, computed styles, fiber-tr
 ## Related
 
 - [Cursor 3 Agents Window](agents-window.md) — the surface Design Mode lives inside; the original overlay shipped here in Cursor 3.0
-- [Frontmost-Window Snapshot as Agent Context](../../context-engineering/frontmost-window-snapshot-context.md) — the passive-capture sibling: hotkey-bound window snapshot rather than intentional annotation
+- [App-Window Snapshot as Agent Context](../../context-engineering/app-window-snapshot-context.md) — the passive-capture sibling: hotkey-bound window snapshot rather than intentional annotation
 - [Interactive Canvas Outputs](../../emerging/interactive-canvas-outputs.md) — the agent-as-author variant of canvas interaction; same substrate, opposite direction
 - [Live Browser as Agent Context Channel](../../context-engineering/live-browser-context-channel.md) — the channel Design Mode uses to read the running app
 - [Prompt Injection Threat Model](../../security/prompt-injection-threat-model.md) — the indirect-injection surface multimodal capture opens

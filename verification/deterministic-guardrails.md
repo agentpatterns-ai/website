@@ -16,7 +16,7 @@ maturity: established
 
 Telling an agent "don't break any links" is a prompt — probabilistic, sometimes ignored. Running a link checker on every URL in a pre-commit hook is a guardrail — deterministic, always runs, cannot be reasoned around.
 
-Agents are probabilistic and will sometimes produce bad output. Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
+Agents are probabilistic and will sometimes produce bad output — the premise behind [trust without verify](../anti-patterns/trust-without-verify.md). Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
 
 ## Guardrail Categories
 
@@ -81,7 +81,7 @@ Each layer catches what the previous missed:
 
 ## What Guardrails Cannot Do
 
-Guardrails check properties, not intent. A URL validator confirms a link resolves — not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness.
+Guardrails check properties, not intent. A URL validator confirms a link resolves — not that it points to the claimed content. A linter confirms syntax, not logic. A schema validator confirms structure, not correctness — the syntactic-vs-semantic limit detailed in [structured output constraints](structured-output-constraints.md).
 
 Design guardrails to be specific. "File is valid YAML" is weaker than "file matches the required schema with all required fields present."
 

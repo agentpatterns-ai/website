@@ -8,7 +8,7 @@ tags:
 aliases:
   - Instruction Framing
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Instruction Polarity: Positive Rules Over Negative
@@ -89,8 +89,8 @@ The last rule stays negative because the set of acceptable imports is too large 
 Positive reframing has limits. It fails or is inapplicable when:
 
 - **The acceptable-behavior space is unbounded.** "Use only approved libraries" cannot be made positive without enumerating every approved library — sometimes the negative form is the only practical option.
-- **Ambiguity in the positive form creates new errors.** "Push to a feature branch" leaves open which repo, which base branch, and who owns naming. The negative "never push directly to main" is crisper precisely because it is narrower.
-- **Context-window pressure is extreme.** Positive instructions are still subject to the lost-in-the-middle effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Long instruction sets degrade all rule types; positive phrasing mitigates but does not eliminate the problem.
+- **Ambiguity in the positive form creates new errors.** "Push to a feature branch" leaves open which repo, which base branch, and who owns naming. The negative "never push directly to main" is crisper precisely because it is narrower — the polarity that [guardrails beat guidance](guardrails-beat-guidance-coding-agents.md) shows wins for coding agents.
+- **Context-window pressure is extreme.** Positive instructions are still subject to the lost-in-the-middle effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)). Long instruction sets degrade all rule types past the [instruction compliance ceiling](instruction-compliance-ceiling.md); positive phrasing mitigates but does not eliminate the problem.
 - **Rule count is low.** With fewer than five or six instructions, the compliance gap between positive and negative forms is small enough to be outweighed by other factors such as clarity or brevity.
 
 The pattern is a default, not a universal. Apply it where the compliance benefit is material and the positive form is unambiguous.

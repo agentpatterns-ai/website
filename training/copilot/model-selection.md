@@ -104,7 +104,7 @@ Task arrives
 
 This is the cost-aware version of the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md) (Module D). The key insight: if the [backpressure](../../agent-design/agent-backpressure.md) system (tests, linter, types) provides binary pass/fail feedback, you can start cheap and escalate on failure. The test suite is the routing signal.
 
-**When cascade works**: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop tells you whether the cheaper model was sufficient.
+**When cascade works**: Tasks with verifiable outcomes — tests pass, types check, linter clean. The feedback loop — the same [backpressure](harness-engineering.md) that gates the cascade — tells you whether the cheaper model was sufficient.
 
 **When cascade doesn't work**: Tasks without binary feedback — architecture design, documentation quality, code review. There's no automated signal to trigger escalation. Use the powerful model directly for these.
 
@@ -124,7 +124,7 @@ Verification phase → high reasoning (review the implementation critically)
 
 ### Why it works
 
-Concentrating reasoning at decision points outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive — the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
+Concentrating reasoning at decision points — the [reasoning budget allocation](../../agent-design/reasoning-budget-allocation.md) pattern — outperforms both maximum reasoning throughout and uniform reduced reasoning. Maximum reasoning throughout is counterproductive — the model spends so long reasoning about each step that it risks exhausting token budgets before completing the task. Reasoning is most valuable where decisions are made, not where they're executed.
 
 ### How to apply it in Copilot
 
@@ -180,10 +180,10 @@ The coding agent runs asynchronously in GitHub Actions. Model selection affects:
 | Task | Recommended model | Reasoning |
 |------|------------------|-----------|
 | Well-defined bug fix with test | Auto or Balanced | Clear task, verifiable outcome. The test suite provides backpressure. |
-| Add tests for existing code | Auto or Balanced | Pattern-following task. Tests have clear success criteria. |
+| Add tests for existing code | Auto or Balanced | Pattern-following task. Tests give Sonnet clear success criteria. |
 | Documentation updates | Budget | Low reasoning requirement. Mostly template-filling. |
 | Feature implementation with spec | Balanced | Standard implementation work with defined requirements. |
-| Refactoring without clear spec | Powerful | Needs to understand architecture and make design decisions. |
+| Refactoring without clear spec | Powerful (Opus) | Needs to understand architecture and make design decisions. |
 | Security-sensitive changes | Powerful | Higher stakes justify higher cost. |
 
 ### The cost multiplier matters more for the coding agent
@@ -242,9 +242,9 @@ Switch back to Opus in Ask mode to review the diff. Opus identifies that the fix
 ## Key Takeaways
 
 - **Auto mode is the default**. Override only when you have a specific reason — exploration (go cheaper), architecture (go more powerful), security (go more powerful).
-- **Use display names, not pinned IDs** in custom agent definitions. Models retire; display names map to the current version automatically.
+- **Use display names, not pinned IDs** in custom agent definitions. Models retire; display names (`claude-opus-4-5`) map to the current version automatically.
 - **Cascade routing** starts cheap and escalates on failure. It works when backpressure (tests, types, linters) provides binary feedback. For tasks without automated feedback, use the powerful model directly.
-- **The reasoning sandwich** (high planning → standard execution → high verification) outperforms uniform reasoning. Use Plan mode for planning, Agent mode for execution, Ask mode for review.
+- **The [reasoning sandwich](../../agent-design/reasoning-budget-allocation.md)** (high planning → standard execution → high verification) outperforms uniform reasoning. Use Plan mode for planning, Agent mode for execution, Ask mode for review.
 - **The coding agent's cost multiplier compounds** across many actions per task. A 3x multiplier on 50 actions is significant. Reserve expensive models for tasks where reasoning quality matters.
 - **Spot-check competitive evaluation** before standardising. Run representative tasks through different models to discover which fits your codebase best.
 

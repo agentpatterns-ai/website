@@ -41,7 +41,7 @@ Error output contains structured, machine-generated information with higher sign
 | Test failure | Expected vs. actual values, failing assertion |
 | Lint violation | Rule name, file location, auto-fix suggestion |
 
-A stack trace tells the agent exactly where the problem is, what type of error occurred, and the execution path that led there. A human description ("the login page is broken") provides none of this. Pasting the actual error output eliminates ambiguity and reduces wasted iterations.
+A stack trace tells the agent exactly where the problem is, what type of error occurred, and the execution path that led there. A human description ("the login page is broken") provides none of this. Pasting the actual error output eliminates ambiguity and reduces wasted iterations — the mechanism behind [context-injected error recovery](../context-engineering/context-injected-error-recovery.md).
 
 ## Fast Feedback Tools
 
@@ -69,7 +69,7 @@ The key constraint in each pattern: the agent must verify via the same tool that
 
 ## Relationship to TDD
 
-Failure-driven iteration is broader than TDD. TDD requires writing tests first; failure-driven iteration works with any error signal — compiler output, linter warnings, runtime exceptions, even build system errors. The technique applies whenever a tool produces structured failure output that can be passed to the agent.
+Failure-driven iteration is broader than TDD. [TDD](../verification/tdd-agent-development.md) requires writing tests first; failure-driven iteration works with any error signal — compiler output, linter warnings, runtime exceptions, even build system errors. The technique applies whenever a tool produces structured failure output that can be passed to the agent.
 
 When combined with TDD, failure-driven iteration accelerates the red-green cycle: the failing test provides the error context, the agent generates the fix, and the test re-run verifies it.
 
@@ -89,13 +89,13 @@ The failure mode of this technique is the doom loop — iterating on the same er
 - The agent alternates between two conflicting fixes
 - Fix complexity increases with each iteration without convergence
 
-When iteration stalls, stop the agent, revert to the last working state, and re-approach the problem with a different strategy. Loop detection middleware (edit-count tracking, identical-failure detection) automates this judgment.
+When iteration stalls, stop the agent, revert to the last working state, and re-approach the problem with a different strategy. [Loop detection](../observability/loop-detection.md) middleware (edit-count tracking, identical-failure detection) automates this judgment.
 
 ### Known Failure Conditions
 
 The most concrete failure mode is **context pollution** — also called context rot. Each pasted error, failed attempt, and debug dump accumulates in the window, and the model starts referencing outdated or contradictory chunks rather than the current code. Sessions that involve large file pastes, long error dumps, or repeated iteration on the same code can see quality degrade after as few as 20–30 exchanges ([MindStudio: Context Rot in AI Coding Agents](https://www.mindstudio.ai/blog/context-rot-ai-coding-agents-explained), [Liip: Preventing Context Pollution for AI Agents](https://www.liip.ch/en/blog/preventing-context-pollution-for-ai-agents)). Two secondary failure modes follow from this:
 
-- **Out-of-distribution tasks**: when the current step is genuinely outside what the model can solve, more iterations will not converge — the signal is repeated near-identical failures rather than convergence. Switch from iteration to a fresh planning pass that decomposes the step into simpler sub-steps.
+- **Out-of-distribution tasks**: when the current step is genuinely outside what the model can solve, more iterations will not converge — the signal is repeated near-identical failures rather than convergence. Switch from iteration to a fresh [plan-first](plan-first-loop.md) pass that decomposes the step into simpler sub-steps.
 - **Tests that validate flawed assumptions**: when the agent authors both the code and the tests, the failing-test signal can encode the same misunderstanding the fix would need to overturn, so green tests do not imply correctness. Keep the test human-authored, or review agent-authored tests separately before trusting them as the verification loop.
 
 In all three cases the mitigation is the same: start a fresh session, compact the conversation, or hand the task back to a plan-first loop rather than iterating on degraded context.
@@ -116,7 +116,7 @@ src/api/auth.ts(42,18): error TS2345: Argument of type 'string | undefined' is n
 
 **Verification**: The agent runs `tsc --noEmit`. Output: no errors. The loop closes.
 
-The full cycle — paste error, fix root cause, re-run tool — took one iteration. No description of "the auth module is broken" was needed; the compiler error provided complete, unambiguous context.
+The full cycle — paste error, fix root cause, re-run tool — took 1 iteration. No description of "the auth module is broken" was needed; the compiler error provided complete, unambiguous context.
 
 ## Key Takeaways
 

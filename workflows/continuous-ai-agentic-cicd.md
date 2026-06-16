@@ -51,7 +51,7 @@ The following categories represent common applications of this pattern, adapted 
 
 ## When to Use Continuous AI vs. Traditional CI
 
-Use traditional CI when correctness is binary and the check can be expressed as a deterministic rule. Use Continuous AI when the task requires reasoning about intent, context, or subjective quality. The two are complementary — Continuous AI does not replace linters, tests, or build checks. It extends automation into territory that previously required human attention on every occurrence.
+Use traditional CI when correctness is binary and the check can be expressed as a deterministic rule. Use Continuous AI when the task requires reasoning about intent, context, or subjective quality — for example, [continuous documentation](continuous-documentation.md) that detects drift no linter can express. The two are complementary — Continuous AI does not replace linters, tests, or build checks. It extends automation into territory that previously required human attention on every occurrence.
 
 ## Security Considerations
 
@@ -101,7 +101,7 @@ Continuous AI is not a drop-in upgrade to every CI pipeline. Failure conditions 
 
 - **Cost-sensitive pipelines** — LLM inference runs on every trigger; a nightly schedule across a large monorepo can accumulate significant token costs that deterministic linters never incur.
 - **Compliance environments requiring reproducibility** — agent outputs are non-deterministic by nature; if audit trails require bit-for-bit reproducible CI results, agentic steps break that contract.
-- **High-churn codebases** — when the repository changes faster than agents can review it, a backlog of stale agent-authored PRs accumulates and becomes noise rather than signal.
+- **High-churn codebases** — when the repository changes faster than agents can review it, a backlog of stale agent-authored PRs accumulates and becomes [noise rather than signal](../code-review/agent-pr-volume-vs-value.md).
 - **Tasks already expressible as rules** — applying LLM reasoning to checks that a linter handles precisely adds latency and cost without improving accuracy; the non-determinism becomes a liability, not an asset.
 - **Prompt-injection attack surface** — any workflow that feeds user-controlled content (issue bodies, PR titles, commit messages) into an agent prompt is a potential injection vector; safe-output guardrails reduce but do not eliminate this risk.
 
@@ -124,4 +124,4 @@ Recent empirical work tempers the optimistic framing: an [MSR 2026 Mining Challe
 - [Continuous Documentation](continuous-documentation.md)
 - [Headless Claude in CI](headless-claude-ci.md)
 - [Continuous Triage](continuous-triage.md)
-- [Entropy Reduction Agents](entropy-reduction-agents.md)
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this paradigm among the continuous-* and triage families

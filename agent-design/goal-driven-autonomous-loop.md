@@ -17,7 +17,7 @@ maturity: established
 
 ## The Pattern
 
-The agent runs one accumulating conversation across many turns against a stored objective. After each turn, the harness injects a templated message re-stating the objective, reporting remaining budget, and demanding a completion audit before the agent can mark the goal done. A second template fires at the budget cap to wind the agent down. Two stop conditions: the agent calls a "goal complete" tool, or the budget fires.
+The agent runs one accumulating conversation across many turns against a stored objective. After each turn, the harness injects a templated message re-stating the objective, reporting remaining budget, and demanding a completion audit before the agent can mark the goal done. A second template (`budget_limit.md`) fires at the budget cap to wind the agent down. Two stop conditions: the agent calls a "goal complete" tool, or the budget fires.
 
 Distinct from a [Ralph Wiggum loop](ralph-wiggum-loop.md), which runs each iteration in a fresh context window with state on disk. Goal-driven loops keep one session, with structured turn-end injection as the steering mechanism.
 
@@ -109,9 +109,9 @@ The agent reads this each continuation turn, sees 58K tokens remaining, and pick
 ## Key Takeaways
 
 - A goal-driven loop is three things: a stored objective, a continuation prompt injected at turn end, and a budget cap that fires a separate wind-down prompt.
-- Distinct from fresh-context loops — same session, accumulating context, model-mediated stop. Trades context-rot risk for stronger objective re-anchoring each turn.
+- Distinct from fresh-context loops on the [loop strategy spectrum](loop-strategy-spectrum.md) — same session, accumulating context, model-mediated stop. Trades context-rot risk for stronger objective re-anchoring each turn.
 - The load-bearing element is the *completion audit* — proxy signals like "tests pass" do not certify completion unless they cover every requirement.
-- The budget cap is a financial circuit breaker, not a quality gate.
+- The budget cap is a financial circuit breaker, not a quality gate — 200K stops at 200K whether the artifact is done or half-done.
 - Two failure modes dominate: audit-requirement loss across compaction, and self-audit confirmation bias when the worker is also the auditor. A separate-context grader defeats the second; explicit re-injection defeats the first.
 
 ## Related

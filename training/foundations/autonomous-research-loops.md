@@ -61,7 +61,7 @@ graph LR
 
 The human steers through `program.md` — a natural-language file carrying instructions, constraints, and exploration priorities. The human never touches the code; the agent never touches the program file. This separation is the control surface.
 
-The design philosophy is deliberately aggressive: the agent runs until manually interrupted, never requests permission, and responds to stalling by intensifying exploration rather than pausing. This works because the metric provides unambiguous feedback — every change is either an improvement or it is not.
+The design philosophy is deliberately aggressive: the agent runs until manually interrupted, never requests permission, and responds to stalling by intensifying exploration rather than pausing. This works because the single `validation bits-per-byte` metric provides unambiguous feedback — every change is either an improvement or it is not.
 
 **When this pattern applies:** optimization problems with a clear, computable metric. Karpathy argues any efficiently-evaluable metric can be autoresearched. Results: ~12 experiments/hour, ~100 overnight, with measurable gains (11% in the reference run, 19% in Shopify's independent test).
 
@@ -108,7 +108,7 @@ The hardest engineering decision in autonomous loops is when to stop. Three stra
 | **Hard limits** | Max iterations, time budget, token budget | Prevents runaway cost | May stop mid-progress |
 | **Human-triggered** | Pause at checkpoints or uncertainty thresholds | Catches subtle quality issues | Breaks autonomy |
 
-Karpathy's autoresearch uses only hard limits (time budget per experiment, manual interrupt for the outer loop). This is viable because the metric makes every iteration self-evaluating. For information research, where quality assessment is subjective, completion-based termination requires explicit verification — a pre-completion checklist or a separate evaluator agent.
+Karpathy's autoresearch uses only hard limits (a ~5-minute time budget per experiment, manual interrupt for the outer loop). This is viable because the metric makes every iteration self-evaluating. For information research, where quality assessment is subjective, completion-based termination requires explicit verification — a pre-completion checklist or a separate evaluator agent.
 
 ### Doom loop prevention
 
@@ -184,9 +184,9 @@ The principle: the human defines *what* and *why*; the agent determines *how* an
 
 - **Two patterns, one challenge.** Autonomous experimentation (single metric, serial loop) and autonomous information research (multi-agent, coverage-based) share the core problem: designing loops that stop at the right time and stay grounded throughout.
 - **Three components make the minimal loop.** A modifiable artifact, a measurable evaluation criterion, and a time/iteration budget. Start here; add complexity only when the problem demands it.
-- **Layer your termination strategies.** Completion-based detection for the happy path, hard limits for cost control, human checkpoints for quality-sensitive decisions. Never rely on a single strategy.
+- **Layer your termination strategies.** Completion-based [convergence detection](../../agent-design/convergence-detection.md) for the happy path, hard limits for cost control, human checkpoints for quality-sensitive decisions. Never rely on a single strategy.
 - **Context rot is the primary degradation mechanism.** Compaction and sub-agent isolation keep context fresh. Progress files bridge sessions without accumulating stale conversation history.
-- **Grounding requires redundancy.** Citation tracking, source quality scoring, and multi-agent validation compound. A single mitigation is insufficient for long-running autonomous work.
+- **Grounding requires redundancy.** Citation tracking, source quality scoring, RAG, and multi-agent validation compound. A single mitigation is insufficient for long-running autonomous work.
 - **Design the control surface, not the steps.** Steer through instructions, constraints, and stopping criteria in a structured artifact. Let the agent determine execution within those bounds.
 
 ## Sources

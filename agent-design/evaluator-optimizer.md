@@ -11,7 +11,7 @@ aliases:
   - generator-critic loop
   - refinement loop
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Evaluator-Optimizer Pattern for AI Agent Development
@@ -68,9 +68,9 @@ For coding tasks, the pattern maps naturally: generator produces code → evalua
 
 The pattern degrades or fails in five conditions:
 
-- **Shared blind spots** — when the generator and evaluator are the same model with only a prompt swap, both may miss the same class of errors. The evaluator returns PASS on output that violates the intent, not because criteria are met but because neither role can detect the violation. Mitigation: use a different model for evaluation, or replace the LLM evaluator with a deterministic checker (tests, lint, type checker).
+- **Shared blind spots** — when the generator and evaluator are the same model with only a prompt swap, both may miss the same class of errors. The evaluator returns PASS on output that violates the intent, not because criteria are met but because neither role can detect the violation. Mitigation: use a different model for evaluation, run a [committee review](../code-review/committee-review-pattern.md) of independent reviewers, or replace the LLM evaluator with a deterministic checker (tests, lint, type checker).
 - **Vague criteria** — subjective prose ("is it high quality?") makes the PASS/FAIL signal noisy and the termination condition unpredictable. Iteration continues past the point of improvement, burning tokens without converging.
-- **Non-actionable feedback** — if the evaluator cannot identify *specific* issues, the generator has no surface to act on. Each iteration produces cosmetic variation rather than substantive improvement, hitting the round limit without resolution.
+- **Non-actionable feedback** — if the evaluator cannot identify *specific* issues, the generator has no surface to act on. Each iteration produces cosmetic variation rather than substantive improvement, hitting the round limit without resolution — exactly what [convergence detection](convergence-detection.md) is meant to catch.
 - **Tasks with a single correct answer** — when the output is either right or wrong (e.g., a lookup, a pure computation), iterative refinement adds cost without benefit. Use a direct call with deterministic validation instead.
 - **Already-high baseline accuracy** — Snorkel AI's [2025 "Self-Critique Paradox" study](https://snorkel.ai/blog/the-self-critique-paradox-why-ai-verification-fails-where-its-needed-most/) found that on tasks where the generator already scored ~98%, adding a self-critique loop dropped accuracy to ~57%, because the critic hallucinates flaws to justify its existence. The pattern pays off when the generator is weak on the task (below ~35% baseline); on tasks the generator solves reliably, skip the loop and return the first output.
 
@@ -115,7 +115,7 @@ Each iteration incurs generator + evaluator costs, so N rounds cost roughly 2N×
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Prompt Chaining](../context-engineering/prompt-chaining.md)
 - [Convergence Detection](convergence-detection.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Agent Composition Patterns](agent-composition-patterns.md)
 - [Controlling Agent Output](../instructions/controlling-agent-output.md)

@@ -7,11 +7,12 @@ tags:
   - tool-agnostic
 last_reviewed: 2026-05-27
 ---
+
 # Context Engineering (Training Module)
 
 > The discipline of designing what enters a model's context window, how it is structured, and what is excluded — to maximise output quality and reliability.
 
-Context windows have structural and economic properties that determine whether an agent produces reliable output or drifts into incoherence. Attention is not uniform — it follows a U-shaped curve. Tokens are not free — every preloaded token displaces one available for reasoning. Compression is not optional — long sessions demand it. This module covers these mechanics and the engineering strategies that exploit them, regardless of which tool you use.
+Context windows have structural and economic properties that determine whether an agent produces reliable output or drifts into incoherence. Attention is not uniform — it follows a U-shaped curve. Tokens are not free — every preloaded token displaces one available for reasoning, so [context is a budget](../../context-engineering/context-budget-allocation.md). Compression is not optional — long sessions demand it. This module covers these mechanics and the engineering strategies that exploit them, regardless of which tool you use.
 
 ---
 
@@ -31,13 +32,13 @@ Two structural properties of transformer attention determine where to place info
 
 ### Attention sinks
 
-Initial tokens receive disproportionate attention regardless of their semantic content. This is a structural property of causal attention masking, not a quirk of any particular model. Whatever role, persona, or constraint appears at the very beginning of a system prompt receives stronger model attention than the same constraint placed later. Boilerplate metadata or generic preamble at the top of an instruction file wastes the highest-attention positions on low-value content. See [Attention Sinks: Why First Tokens Always Win](../../context-engineering/attention-sinks.md).
+Initial tokens receive disproportionate attention regardless of their semantic content. This is a structural property of causal attention masking, not a quirk of any particular model. Whatever role, persona, or constraint appears at the very beginning of a system prompt — or the top of an `AGENTS.md` file — receives stronger model attention than the same constraint placed later. Boilerplate metadata or generic preamble at the top of an instruction file wastes the highest-attention positions on low-value content. See [Attention Sinks: Why First Tokens Always Win](../../context-engineering/attention-sinks.md).
 
 ### The U-shaped attention curve
 
 Model attention follows a U-shape: strongest at the start and end of the context, weakest in the middle. Content that must be reliably followed belongs at the edges. Content the agent refers to passively — schemas, examples, lookup information — can tolerate mid-context placement because the agent actively retrieves it rather than relying on passive recall.
 
-The practical consequence: a long instruction file buries most of its rules in the zone where they are least likely to be followed. Each instruction added to the middle pushes existing instructions further from the high-attention edges. See [Lost in the Middle: The U-Shaped Attention Curve](../../context-engineering/lost-in-the-middle.md).
+The practical consequence: a long `CLAUDE.md` buries most of its rules in the zone where they are least likely to be followed. Each instruction added to the middle pushes existing instructions further from the high-attention edges. See [Lost in the Middle: The U-Shaped Attention Curve](../../context-engineering/lost-in-the-middle.md).
 
 **Applying both properties together**: open instruction files with your most critical constraint. Close with a restated reminder of the same constraint. Reserve the middle for reference material.
 
@@ -85,7 +86,7 @@ For implementation details and the full five-stage pipeline, see [Context Compre
 
 ## Dynamic Context Assembly
 
-Static system prompts break down as agent capabilities grow. Every conversation pays the token cost for every section, regardless of relevance.
+Static system prompts break down as agent capabilities grow. Every conversation pays the [token cost](../../context-engineering/context-budget-allocation.md) for every section, regardless of relevance.
 
 ### Modular prompt composition
 
@@ -93,7 +94,7 @@ Assemble system prompts at runtime from priority-ordered modular sections. Toggl
 
 ### Phase-specific context
 
-Different workflow phases have structurally different context needs. A planner needs architecture summaries and constraints. A worker needs the approved plan, exact file excerpts, and validation commands. A reviewer needs the original spec, the diff, and acceptance criteria. Giving all agents the same context bundle is a common source of inconsistency.
+Different workflow phases have structurally different context needs. A planner needs architecture summaries and constraints. A worker needs the approved plan, exact file excerpts, and the [validation commands](../../verification/pre-completion-checklists.md) to run. A reviewer needs the original spec, the diff, and acceptance criteria. Giving all agents the same context bundle is a common source of inconsistency.
 
 The shift: from "what instructions should the agent follow?" to "what information does this agent need, and only this agent, at this step?" See [Phase-Specific Context Assembly](../../context-engineering/phase-specific-context-assembly.md).
 
@@ -111,7 +112,7 @@ Three patterns consistently bust the cache:
 2. **Switching models.** Model-specific instructions in the prefix change, breaking the byte-level match.
 3. **Mutating the prefix to convey state.** Timestamps, config, or metadata in early sections bust the cache on every call.
 
-For the full immutable prefix pattern and cache-safe compaction, see [Prompt Caching as Architectural Discipline](../../context-engineering/prompt-caching-architectural-discipline.md). For cost comparisons across Anthropic, OpenAI, and Gemini, see [Prompt Cache Economics](../../context-engineering/prompt-cache-economics.md). For ordering rules and common cache-busting bugs, see [Static Content First: Maximizing Prompt Cache Hits](../../context-engineering/static-content-first-caching.md).
+For the full immutable prefix pattern, cache-safe compaction, and the cross-provider cost comparison (Anthropic, OpenAI, Gemini), see [Prompt Caching as Architectural Discipline](../../context-engineering/prompt-caching-architectural-discipline.md). For ordering rules and common cache-busting bugs, see [Static Content First: Maximizing Prompt Cache Hits](../../context-engineering/static-content-first-caching.md).
 
 ---
 
@@ -123,7 +124,7 @@ Four techniques embed [discoverable context](../../context-engineering/discovera
 
 1. **Directory-scoped instruction files** (AGENTS.md, CLAUDE.md) — scope conventions to where they apply. Subdirectory files override or extend project-level instructions.
 2. **Inline decision comments** — explain *why* a decision was made, preventing agents from reverting intentional choices.
-3. **Type annotations** — eliminate agent guesswork about return types, parameter shapes, and nullability.
+3. **Type annotations** (as in `TypeScript` or typed Python) — eliminate agent guesswork about return types, parameter shapes, and nullability.
 4. **Example files** — agents pattern-match against existing code. A reference implementation communicates conventions more precisely than prose.
 
 The rule of thumb: seed durable information in the codebase; prompt session-specific intent interactively. See [Seeding Agent Context: Breadcrumbs in Code](../../context-engineering/seeding-agent-context.md).
@@ -133,12 +134,12 @@ The rule of thumb: seed durable information in the codebase; prompt session-spec
 ## Key Takeaways
 
 - The context window is the agent's complete world. What is not in it does not exist for the agent. Optimise for signal density, not volume.
-- Attention follows a U-shape: critical rules belong at the start and end of instruction files. The middle is for reference material, not rules.
-- Context is a budget. Every preloaded token displaces a token available for reasoning and implementation. Preload only what every task needs; load everything else on-demand.
+- Attention follows a U-shape: critical rules belong at the start and end of instruction files, not [lost in the middle](../../context-engineering/lost-in-the-middle.md). The middle is for reference material, not rules.
+- Context is a budget. Every preloaded token displaces a token available for reasoning and implementation. Preload only what every task needs; load everything else on-demand, per the [context budget framework](../../context-engineering/context-budget-allocation.md).
 - Compression preserves task continuity in long sessions. Summaries must retain the objective, decisions, and next steps — not just action history.
-- Assemble context dynamically per phase and per mode. A planner, a worker, and a reviewer need different context bundles, not the same monolithic prompt.
+- Assemble context dynamically per phase and per mode. A planner, a worker, and a reviewer need different context bundles, not the same monolithic prompt — see [phase-specific context assembly](../../context-engineering/phase-specific-context-assembly.md).
 - Prompt caching is a structural constraint, not an afterthought. Stable prefix first, dynamic content last. Monitor cache hit rates — misses are silent.
-- Seed durable conventions into the codebase where agents discover them naturally. Session-specific intent belongs in the prompt.
+- Seed durable conventions into the codebase where agents discover them naturally, as [breadcrumbs in code](../../context-engineering/seeding-agent-context.md). Session-specific intent belongs in the prompt.
 
 ## Related
 
@@ -154,7 +155,6 @@ The rule of thumb: seed durable information in the codebase; prompt session-spec
 - [Seeding Agent Context: Breadcrumbs in Code](../../context-engineering/seeding-agent-context.md)
 - [Prompt Caching as Architectural Discipline](../../context-engineering/prompt-caching-architectural-discipline.md)
 - [Static Content First: Maximizing Prompt Cache Hits](../../context-engineering/static-content-first-caching.md)
-- [Prompt Cache Economics: Comparing Costs by Provider](../../context-engineering/prompt-cache-economics.md)
 
 **Training modules**
 

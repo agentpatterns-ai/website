@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The Pattern
 
-When you use an LLM to generate both code and its tests, the tests cluster around the same solution strategies the model favors. Edge cases the model overlooks in code are the same edge cases it omits from tests. The result: a green test suite that provides false confidence.
+When you use an LLM to generate both code and its tests, the tests cluster around the same solution strategies the model favors. Edge cases the model overlooks in code are the same edge cases it omits from tests — the [happy-path bias](happy-path-bias.md) carried from code into the test suite. The result: a green test suite that provides false confidence.
 
 SAGA research quantifies the damage. In leading code benchmarks, [50% of problems had tests that failed to detect known errors and 84% of verifiers were flawed](https://arxiv.org/abs/2507.06920). Models showed average Pass@1 drops of 9.56% when evaluated against higher-quality test suites — meaning existing benchmarks systematically overstate model performance.
 
@@ -52,7 +52,7 @@ Three conditions make the mitigation overhead unjustified:
 
 1. **Throwaway scripts and prototypes.** A one-off proof-of-concept with no production SLA does not warrant mutation-guided generation. Cost exceeds risk.
 2. **Pure-function, well-bounded algorithms.** No side effects, no I/O, small input domain — model blind spots approximate human blind spots.
-3. **Different model for tests than for code.** Error clustering diverges when the test-generating model has different training data or architecture. Tests from Model B are not blind to Model A's gaps.
+3. **Different model for tests than for code.** Error clustering diverges when the test-generating model has different training data or architecture — the [separate-reviewer principle](yes-man-agent.md) applied to test generation. Tests from Model B are not blind to Model A's gaps.
 
 The trap is most damaging when one model generates both code and tests in a single pass and the green suite is treated as proof of correctness.
 

@@ -10,7 +10,7 @@ aliases:
   - self-healing agent loop
   - regression autofix pipeline
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Self-Healing Production Agent
@@ -48,7 +48,7 @@ Trigger condition: post-deploy score falls below a threshold or one or more test
 
 ### 2. Causality Triage
 
-Not every regression is caused by the current deploy. A triage agent compares the failure against pre-deploy baselines to determine attribution:
+Not every regression is caused by the current deploy. A triage agent — the attribution step in LangChain's GTM Agent loop — compares the failure against pre-deploy baselines to determine attribution:
 
 | Outcome | Action |
 |---|---|
@@ -60,7 +60,7 @@ The causal diff — the changes in the deploy that correlate with the failure �
 
 ### 3. Fix Agent Dispatch
 
-The fix agent receives three inputs: the failing test, the causal diff, and a fix-PR instruction. It writes the minimal change to make the test pass without broadening scope, then opens a PR against the main branch.
+The fix agent receives three inputs: the failing test, the causal diff, and a fix-PR instruction. It writes the minimal change to make the test pass without broadening scope, then opens a PR against the main branch — leaving main untouched until human merge, consistent with [rollback-first design](rollback-first-design.md).
 
 Scope constraints:
 - Fix is limited to the failing test's coverage area
@@ -124,8 +124,8 @@ jobs:
 The pattern adds overhead that only pays off under specific conditions:
 
 - **Low deploy frequency**: teams shipping once a week or less rarely need automated causality triage — the deploy-to-failure gap is wide enough for manual triage to remain fast.
-- **No stable eval suite**: the loop requires a fixed set of deterministic graders to compare pre- and post-deploy scores. If the eval suite itself is changing between deploys, the causal diff becomes unreliable and triage produces false positives.
-- **Fix agent exceeds the scope constraint**: if the fix agent regularly writes changes outside the failing test's coverage area, human reviewers face a growing review burden that can exceed the time saved by automated dispatch. This typically signals that the regression is architectural, not surgical.
+- **No stable eval suite**: the loop requires a fixed set of deterministic graders to compare pre- and post-deploy scores — the same stable suite [harness hill-climbing](harness-hill-climbing.md) tunes against. If the eval suite itself is changing between deploys, the causal diff becomes unreliable and triage produces false positives.
+- **Fix agent exceeds the scope constraint**: if the fix agent regularly writes changes outside the failing test's coverage area — [coding-agent scope expansion](coding-agent-scope-expansion.md) — human reviewers face a growing review burden that can exceed the time saved by automated dispatch. This typically signals that the regression is architectural, not surgical.
 - **High flake rate in the test suite**: intermittent failures that are not caused by any deploy trigger the triage agent repeatedly, exhaust the circuit breaker budget, and escalate noise to human tickets — the opposite of what the pattern promises.
 
 ## Key Takeaways

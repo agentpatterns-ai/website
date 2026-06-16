@@ -41,7 +41,7 @@ This is the lowest-cost hatch — no context reset, no information loss. Use it 
 
 ### 2. Manual Override for a Specific Step
 
-Take over the single step the agent can't handle, then hand control back. If an agent can't write a particular function correctly after two attempts, write it yourself and instruct the agent to continue from there.
+[Take over](../agent-design/steering-running-agents.md) the single step the agent can't handle, then hand control back. If an agent can't write a particular function correctly after two attempts, write it yourself and instruct the agent to continue from there.
 
 This keeps the session productive without abandoning work already done. It works well when the stuck point is isolated — one step in a longer task.
 
@@ -61,7 +61,7 @@ After compaction, the agent has a cleaner working context and fresh instructions
 
 Break the stuck task into smaller pieces. An agent that can't complete "refactor the auth module" may complete "extract token validation into a separate function" without issue.
 
-Scope reduction is useful when the stuck agent has a real capability gap on the full task but can handle components of it. It also generates checkpoints — each smaller completion is a testable unit you can verify before proceeding.
+Scope reduction is useful when the stuck agent has a real [capability gap](../agent-design/task-feasibility-awareness.md) on the full task but can handle components of it. It also generates checkpoints — each smaller completion is a testable unit you can verify before proceeding.
 
 ### 5. Context Reset (New Session)
 
@@ -143,7 +143,7 @@ Concrete conditions where hatches are worse than the alternative:
 - **Long-horizon web or tool navigation with persistent side-effects** — mid-run redirection leaves partially applied state (half-committed transactions, partially uploaded files) that the revised instruction rarely accounts for. Letting the original run surface its own failure produces a cleaner rollback point.
 - **Compaction during active multi-file reasoning** — `/compact` discards conversational detail, including which files were read, which hypotheses were ruled out, and which edge cases the agent had already considered. If the stuck state is within a few turns of a solution, compacting can strand that work in an unrecoverable summary.
 - **Context reset when the failure cause is structural** — starting a new session after a missing-permission or missing-tool failure repeats the same approach unless the root cause is fixed first. The reset costs context without changing the outcome.
-- **Scope reduction on tasks with cross-cutting constraints** — breaking a refactor into smaller pieces can break invariants that only hold across the whole change (e.g., renaming an API surface in one file while leaving callers in another). The smaller pieces pass individually and fail as a set.
+- **Scope reduction on tasks with cross-cutting constraints** — breaking a refactor into smaller pieces can break invariants that only hold across the whole change, the same [tight-coupling hazard](monolith-to-subagents-refactor.md) that defeats naive decomposition (e.g., renaming an API surface in one file while leaving callers in another). The smaller pieces pass individually and fail as a set.
 
 If any of these conditions apply, prefer fixing the blocker out-of-band and resuming the original run over interrupting it.
 

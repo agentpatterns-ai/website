@@ -11,7 +11,7 @@ aliases:
   - refusal-with-reason hook
   - guided refusal pattern
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason
@@ -77,7 +77,7 @@ The reason is load-bearing — it is the only signal the agent uses to choose th
 
 - **Specific.** Name the rule, the violated value, and the corrective path. "Policy violation" teaches nothing. "Path `/etc/hosts` outside allowed prefix `/src`; reroute to `/src/`" teaches one fact.
 - **Non-negotiable in tone.** Sycophantic phrasing ("I'm sorry, but…") primes the model to negotiate. State the rule and the fix.
-- **One rule per refusal.** A reason bundling five checks lets the agent fix one and retry. Each hook handles one rule; multiple hooks compose. Same principle as [Confirmation Gates §What to Surface at Confirmation](../security/human-in-the-loop-confirmation-gates.md) — exact action data, no summaries.
+- **One rule per refusal.** A reason bundling five checks lets the agent fix one and retry. Each hook handles one rule; multiple [PostToolUse hooks](hooks-lifecycle-events.md) compose. Same principle as [Confirmation Gates §What to Surface at Confirmation](../security/human-in-the-loop-confirmation-gates.md) — exact action data, no summaries.
 
 A noisy refusal trains retry-with-cosmetic-edit. The retry then counts as a fix in the transcript while the violation pattern persists across sessions.
 
@@ -147,7 +147,7 @@ sequenceDiagram
 
 ## When This Backfires
 
-- **Reason text leaks rule shape.** A prompt-injection turn iterates payloads against the reason. For adversary-facing policy, prefer a silent block.
+- **Reason text leaks rule shape.** A prompt-injection turn iterates payloads against the reason. For adversary-facing policy, prefer a silent `PreToolUse` block.
 - **Vague reasons train evasion.** "Command rejected" teaches "vary the command and retry." Specific reasons teach the rule.
 - **Latency on hot paths.** Each block adds a retry round-trip. `PreToolUse` blocks once without the retry, which is cheaper when the matcher fires often.
 - **Block-with-feedback is not undo.** The tool already ran. The refusal corrects the *next* call, not the current artefact.

@@ -10,7 +10,7 @@ tags:
   - long-form
   - tool-engineering
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Advanced Tool Use: Scaling Agent Tool Libraries

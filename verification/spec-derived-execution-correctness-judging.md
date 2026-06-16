@@ -22,7 +22,7 @@ Use this oracle when **all four** hold:
 - You have a candidate (an LLM sample, an agent-authored function, a refactor) and need a yes/no against the spec.
 - A natural-language spec exists; tests do not.
 - The candidate runs in isolation — no heavy setup, no service dependencies.
-- A persistent test suite is not worth authoring (e.g., judging many candidates against one spec in an eval pipeline).
+- A persistent test suite is not worth authoring (e.g., judging many candidates against one spec in an eval pipeline, paired with [pass@k metrics](pass-at-k-metrics.md) for a capability ceiling).
 
 When a real test suite already exists, run the candidate against it instead — same execution evidence, durable assertions, no LLM in the verdict path.
 
@@ -87,7 +87,7 @@ Phase 1 amortises across all 500 candidates. Phase 3 is per-pair, but each call 
 
 - Treat the LLM as a judge of *observed I/O*, not as a simulator of code execution — paraphrase-and-compare is reliable; trace simulation is not.
 - The mechanism only pays off when execution is cheap and no persistent test suite exists; otherwise, a real suite is strictly stronger.
-- Aggregation across partition inputs is the safety hazard — a high score does not mean the rare safety-critical case is covered.
+- Aggregation across partition inputs is the safety hazard — a high score does not mean the rare safety-critical case is covered; [mutation testing](mutation-testing-quality-gate.md) checks whether the derived inputs would catch a regression at all.
 - The partition step inherits all the limitations of LLM-driven test input generation; pair it with hand-authored boundary cases for any contract surface that must not fail silently.
 
 ## Related

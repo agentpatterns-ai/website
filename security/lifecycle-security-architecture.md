@@ -132,7 +132,8 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three harness configurations (ReA
 ## Related
 
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
-- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md)
+- [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — competing execution-surface framing of the same risks, organised by surface rather than lifecycle phase
+- [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — named-threat lookup table that maps onto the lifecycle phases here, not a competing taxonomy
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](constraint-drift-multi-agent-safety.md)
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)

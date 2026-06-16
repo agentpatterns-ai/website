@@ -68,7 +68,7 @@ repos:
 Exhaustive error handling is not always right. Where it overreaches:
 
 - **Prototyping and throwaway scripts** — code that never reaches production can defer error paths; handling costs more than its signal.
-- **Framework-managed boundaries** — when a runtime or web framework already catches unhandled exceptions at the top level, per-function try/catch adds noise, not recovery.
+- **Framework-managed boundaries** — when a runtime or web framework already catches unhandled exceptions at the top level, per-function try/catch adds noise, not recovery; reserve depth for the runtime [exception handling and recovery patterns](../agent-design/exception-handling-recovery-patterns.md) that the boundary does not cover.
 - **Tight feedback loops with known input** — test harnesses and internal tooling on controlled input rarely need user-facing defensive depth.
 - **Over-specified exception types** — catching `FileNotFoundError` and `PermissionError` separately is correct; catching 15 OS exceptions per function obscures intent.
 - **Linter false positives** — `BLE001` and `TRY003` fire on legitimate broad handlers in plugin systems where catching `Exception` is intentional; blanket rules churn suppressions.

@@ -51,7 +51,7 @@ graph TD
     G --> D
 ```
 
-**Multi-persona simulation.** Before responding, the agent runs the upcoming interaction under several distinct personas, each producing a candidate retrieval and response. In a healthy MAS, these candidates differ in expected ways.
+**Multi-persona simulation.** Before responding, the agent runs the upcoming interaction under several distinct personas, each producing a candidate retrieval and response ([Ma et al., 2026](https://arxiv.org/abs/2605.01758)). In a healthy MAS, these candidates differ in expected ways.
 
 **Diversity inconsistency as signal.** A VirAE collapses persona-driven diversity: every persona retrieves the same poisoned entry and converges on the same target. The collapse is measurable at retrieval-result level (which entries get pulled) and semantic level (what responses say). [Ma et al. (2026)](https://arxiv.org/abs/2605.01758) report this diagnostic holds across LLaVA-1.5-7B, InternVL2-8B, InstructBLIP-7B, and Qwen2-VL-8B.
 

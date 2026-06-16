@@ -50,7 +50,7 @@ Rule placement must match the comment's category. Promoting a semantic check to 
 
 ### 2. Encode the smallest enforceable check
 
-Pick the cheapest mechanism that fires deterministically. A one-line lint rule beats a multi-file AST plugin when both would work. Over-engineering adds maintenance cost the retirement step cannot recover.
+Pick the cheapest mechanism that fires deterministically. A one-line `ESLint` rule beats a multi-file AST plugin when both would work. Over-engineering adds maintenance cost the retirement step cannot recover.
 
 ### 3. Write the remediation text
 
@@ -106,13 +106,13 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 
 - **Premature promotion**: encoding after one or two occurrences freezes a hypothesis as a rule. Suppression comments proliferate and the rule's signal degrades.
 - **Wrong enforcement layer**: a semantic check forced into a regex linter fires on every legitimate exception — get the layer wrong and the rule becomes the new recurring noise source.
-- **Remediation text omitted or stale**: a rule without "what to do instead" is a finger-wag. Developers and agents both stall, suppress, or copy-paste workarounds.
+- **Remediation text omitted or stale**: a rule without "what to do instead" is a finger-wag, not the [structured remediation](../agent-design/feedback-capability-equalizer.md) that closes the loop. Developers and agents both stall, suppress, or copy-paste workarounds.
 - **No retirement discipline**: the lint stack accumulates. Adherence degrades as instruction volume grows — context rot means models recall earlier rules less accurately as context fills ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Priority saturation makes individual rules unreliable.
 
 ## Key Takeaways
 
 - Three or more occurrences of the same review comment is the trigger — fewer is a hypothesis, not a pattern.
-- Categorise before encoding: style → linter, boundary → AST check, safety → pre-completion checklist, spec → evaluator rubric. Wrong layer is a recurring-noise source.
+- Categorise before encoding: style → linter, boundary → AST check, safety → [pre-completion checklist](../verification/pre-completion-checklists.md), spec → evaluator rubric. Wrong layer is a recurring-noise source.
 - Remediation text is non-optional. A rule that says *what is wrong* without *what to do instead* relocates the bottleneck instead of removing it.
 - Hooks and mechanical checks are deterministic; CLAUDE.md instructions and review comments are advisory. Promotion converts advisory into enforced.
 - Pair promotion with retirement. Rules whose hit count trends to zero have done their job — delete them before priority saturation degrades the rest.

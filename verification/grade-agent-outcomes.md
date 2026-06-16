@@ -16,7 +16,7 @@ maturity: established
 
 ## The Problem with Path-Based Grading
 
-Path-based evals check that an agent called tool X before tool Y, or edited file A before file B. This approach penalizes agents that find valid alternative solutions — a refactored approach, a different API call order, a more efficient sequence the eval author didn't anticipate.
+[Path-based evals](eval-blind-spots.md) check that an agent called tool X before tool Y, or edited file A before file B. This approach penalizes agents that find valid alternative solutions — a refactored approach, a different API call order, a more efficient sequence the eval author didn't anticipate.
 
 Frontier models regularly discover solutions their authors didn't expect. Checking for a specific path marks these as failures and produces misleading results, making agents appear worse than they are. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
@@ -104,15 +104,15 @@ def grade_code_quality(file_contents: str) -> dict:
 
 ## Why It Works
 
-Path-based grading structurally narrows the solution space because the same correct final state is reachable via many valid execution sequences. When an eval author encodes one anticipated path, every other valid path becomes a false negative. The number of valid paths grows combinatorially with task complexity — so path-based graders become more misleading as agents and tasks grow more capable. Outcome grading sidesteps this by anchoring correctness to the state the task requires, not the implementation choices the grader anticipated. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Path-based grading structurally narrows the solution space because the same correct final state is reachable via many valid execution sequences. When an eval author encodes one anticipated path, every other valid path becomes a false negative. The number of valid paths grows combinatorially with task complexity — so path-based graders become [more misleading as agents and tasks grow more capable](behavioral-testing-agents.md). Outcome grading sidesteps this by anchoring correctness to the state the task requires, not the implementation choices the grader anticipated. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ## When This Backfires
 
 Outcome-only grading breaks down in three categories:
 
-- **Side-effecting tasks**: An agent that makes irreversible API calls, sends emails, or modifies production data en route to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or pre-flight checks are necessary.
+- **Side-effecting tasks**: An agent that makes irreversible API calls, sends emails, or modifies production data en route to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or [pre-flight checks](incremental-verification.md) are necessary.
 - **Compliance-critical paths**: Some domains (finance, healthcare, security) require specific procedural steps regardless of the outcome. An agent that achieves the correct result while skipping a required audit step or approval gate is non-compliant even if the final state is correct.
-- **Trace-as-deliverable tasks**: When the execution trace itself is the output — step-by-step reasoning chains, audit logs, explainability reports — path quality is the correctness criterion and outcome grading cannot evaluate it.
+- **Trace-as-deliverable tasks**: When the execution trace itself is the output — step-by-step reasoning chains, audit logs, explainability reports — [path quality](trajectory-decomposition-diagnosis.md) is the correctness criterion and outcome grading cannot evaluate it.
 
 In these cases, combine outcome checks with targeted trajectory constraints scoped to the specific steps that matter, rather than prescribing the full path.
 
@@ -134,6 +134,6 @@ Industry practice as of 2025–2026 increasingly adopts hybrid evaluation that u
 - [Incremental Verification](incremental-verification.md)
 - [Anti-Reward Hacking](anti-reward-hacking.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)

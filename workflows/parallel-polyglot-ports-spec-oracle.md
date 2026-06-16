@@ -21,9 +21,9 @@ This workflow pairs an AI coding assistant with a precise executable specificati
 
 The cycle only pays back under all four conditions below. Outside them the maintenance overhead exceeds the disambiguation benefit, and the agreement signal becomes misleading.
 
-- **You already need multiple targets** — cross-platform reach is a product requirement, not a verification strategy. If WebAssembly or a single runtime can carry the product, write one port and verify it directly.
+- **You already need multiple targets** — cross-platform reach is a product requirement, not a verification strategy. If WebAssembly or a single runtime can carry the product, write one port and [verify it directly](simulation-replay-testing.md).
 - **The behaviour is YAML-specifiable** — pure-function pipelines, parsers, codecs, layout engines, and protocol implementations specify cleanly. UI feel, accessibility heuristics, performance envelopes, concurrency semantics, and security posture do not, and parallel ports cannot test what the spec cannot pin down ([Knight & Leveson, 1986](http://sunnyday.mit.edu/papers/nver-tse.pdf)).
-- **The team is one person doing greenfield work** — the case study is one developer working evenings on a new application. Five-port *maintenance* against library deprecations and OS-level platform churn has not been demonstrated and scales the cost multiplier accordingly.
+- **The team is one person doing greenfield work** — the case study is one developer working evenings on a new application. 5-port *maintenance* against library deprecations and OS-level platform churn has not been demonstrated and scales the cost multiplier accordingly.
 - **You expect spec ambiguity to dominate code bugs** — the workflow optimises for the spec-is-wrong failure mode. If the harder problem is implementation correctness against a known-good spec, invest in property-based and metamorphic tests against a single port instead.
 
 ## The N-Version Programming Revival Problem
@@ -68,7 +68,7 @@ Run a diff harness over identical inputs. Compare observable artefacts: rendered
 ## Triggers And Constraints
 
 - **Trigger** — push to the spec or to any port. The diff harness runs every time, not on a schedule; the spec is the input, the harness is the gate.
-- **Bound on agent authority** — the agent edits ports and may propose spec edits, but spec edits must be human-reviewed. The agent is allowed to converge a port to the spec but never to converge the spec to a port.
+- **Bound on agent authority** — the agent edits ports and may propose spec edits, but spec edits must be [human-reviewed](human-in-the-loop.md). The agent is allowed to converge a port to the spec but never to converge the spec to a port.
 - **Out-of-scope behaviours** — the spec must declare what it does not cover (UI feel, performance envelope, platform-specific concurrency). Behaviour outside the declared scope is not a diff-harness finding; it is product judgement carried elsewhere.
 
 ## Multi-Tool Coverage

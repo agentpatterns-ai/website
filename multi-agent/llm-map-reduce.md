@@ -143,7 +143,7 @@ For file-system isolation during map phases that write files, use `isolation: wo
 Map-reduce underperforms or fails in several conditions:
 
 - **Cross-chunk dependencies** — when answering requires evidence spread across chunks (e.g., a refactor changing an interface used in 10 files), each map agent sees only its slice and cannot surface the cross-chunk pattern. Outputs look clean individually but miss the systemic issue.
-- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret partial context. The reduce agent reconciles contradictory findings without knowing they are artifacts of the split.
+- **Boundary mismatch** — fixed-size chunking splits semantic units mid-sentence or mid-function, causing map agents to misinterpret [partial context](../context-engineering/context-window-dumb-zone.md). The reduce agent reconciles contradictory findings without knowing they are artifacts of the split.
 - **Hierarchical reduce error propagation** — each reduce level loses information. A two-level hierarchy reducing 50 map outputs to 5 summaries to 1 final output compounds extraction errors at every stage — coherent but wrong in ways invisible without the raw inputs.
 - **Thin map outputs** — when chunks are small or homogeneous, each map result adds marginal information. The reduce agent processes N near-identical outputs; cost scales linearly while output quality plateaus.
 

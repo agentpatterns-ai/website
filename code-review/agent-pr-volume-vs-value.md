@@ -36,7 +36,7 @@ One developer submitted 164 Codex-assisted PRs in three days, nearly matching 17
 
 Only 9.1% of Codex-assisted PRs introduced cyclomatic complexity changes, compared to 23.3% for human PRs. Agents gravitate toward simpler, boilerplate-style modifications — routine fixes, documentation, and scaffolding rather than architectural changes.
 
-This is not inherently a problem. Many real engineering tasks are simple. But it means the volume numbers overstate the difficulty of work being completed.
+This is not inherently a problem. Many real engineering tasks are simple. But the 9.1%-versus-23.3% complexity gap means the volume numbers overstate the difficulty of work being completed.
 
 ## Task Specialization Across Agents
 

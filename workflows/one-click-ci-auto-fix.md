@@ -8,7 +8,7 @@ tags:
   - copilot
   - agent-design
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions
@@ -21,7 +21,7 @@ One-click CI auto-fix is a bounded-autonomy variant of automated CI remediation:
 
 - The failure class is in scope — linter violations, broken test skeletons, and simple test edits. GitHub markets the feature around "fixing tests or correcting linter failures" and frames it as "simple but time-consuming work" ([GitHub Changelog, May 18 2026](https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent/)). Integration, flaky-network, and infrastructure failures need context outside the diff and are out of scope.
 - Each remaining confirmation gate is treated as a real gate. The click-to-trigger gate, the "Approve and run workflows" gate, and the PR review gate each remove a distinct failure surface; rubber-stamping any of them collapses the design into autonomous auto-fix.
-- The team has a retry budget. Stacking "Fix with Copilot" clicks on a regression the agent cannot resolve produces unbounded fix attempts without convergence — the same circuit-breaker problem documented for the autonomous case in [self-healing-production-agent.md](../agent-design/self-healing-production-agent.md).
+- The team has a retry budget of 2-3 attempts per failure. Stacking "Fix with Copilot" clicks on a regression the agent cannot resolve produces unbounded fix attempts without convergence — the same circuit-breaker problem documented for the autonomous case in [self-healing-production-agent.md](../agent-design/self-healing-production-agent.md).
 
 Outside these conditions, the pattern transfers diagnosis work from the operator to the reviewer rather than removing it.
 

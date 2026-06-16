@@ -10,7 +10,7 @@ aliases:
   - Web Model Context Protocol
   - navigator.modelContext
 last_reviewed: 2026-06-03
-maturity: established
+maturity: emerging
 ---
 
 # WebMCP: Browser-Hosted Tool Contracts for In-Page AI Agents

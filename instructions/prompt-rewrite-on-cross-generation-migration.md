@@ -91,7 +91,7 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 
 - Cross-generation hops are not drop-in replacements; minor-version successors usually are. Classify the upgrade before deciding to rewrite.
 - The smallest prompt that preserves the product contract is the rewrite target — strip inherited compensation layers first, re-tune second.
-- The four-axis order is reasoning effort → verbosity → tool descriptions → output format. Tuning out of order locks in transient artifacts from unstable lower stages.
+- The four-axis order is [reasoning effort](../agent-design/reasoning-budget-allocation.md) → verbosity → tool descriptions → output format. Tuning out of order locks in transient artifacts from unstable lower stages.
 - A representative example set must predate the rewrite. Without it, the team cannot tell whether output drift is from the model, the rewrite, or their interaction.
 - Both OpenAI and Anthropic ship in-product migration tooling that automates the mechanical edits and explicitly defers the prompt review to a human pass.
 - Provider-managed harnesses, change-controlled prompts, and stable-eval minor-version successors are the conditions under which patch-forward beats rewrite.

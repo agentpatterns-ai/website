@@ -161,3 +161,4 @@ The contract makes the three preconditions executable rather than implicit — e
 - [Agent Circuit Breaker](../agent-design/agent-circuit-breaker.md) — the per-fingerprint retry budget pattern that prevents stacked low-confidence fixes against the same alert
 - [Incident Log Investigation Skill: Parallel Queries](incident-log-investigation-skill.md) — the stage-3 investigate sub-pattern in isolation, with parallel observability queries and eval-backed precision
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the propose-fix branch's three required preconditions documented for the adjacent CI-failure trigger
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this in the triage family alongside the continuous-* workflows

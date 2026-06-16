@@ -18,7 +18,7 @@ maturity: established
 
 ## Why Implementation-First Fails
 
-Jumping straight to "Here is the feature. Here are some files. Please build it." gives the agent insufficient context and no explicit alignment checkpoint. The result compiles but may stray from architectural goals and require significant correction.
+Jumping straight to "Here is the feature. Here are some files. Please build it." gives the agent [insufficient context](../context-engineering/context-priming.md) and no explicit alignment checkpoint. The result compiles but may stray from architectural goals and require significant correction.
 
 [OpenAI's Sora Android team](https://openai.com/index/shipping-sora-for-android-with-codex/) found this precisely. Initial implementation-first prompts produced code that was functional but architecturally inconsistent. Shifting to a plan-first loop gave the team confidence in the direction before implementation began — analogous to how a good design document gives a tech lead confidence in a project.
 
@@ -44,7 +44,7 @@ Read the authentication module and summarize how session management works. Do no
 
 ### Step 2: Correct Misunderstandings
 
-Review the summary. If the agent misidentified a component's responsibility or missed a critical dependency, correct it explicitly. One correction here prevents multiple correction cycles after implementation.
+Review the summary. If the agent misidentified a component's responsibility or [missed a critical dependency](pre-execution-codebase-exploration.md), correct it explicitly. One correction here prevents multiple correction cycles after implementation.
 
 ### Step 3: Co-Create the Plan
 
@@ -212,8 +212,8 @@ The plan-first loop adds a mandatory checkpoint before every implementation. Tha
 
 Specific conditions where plan-first adds cost without proportional benefit:
 
-- **Trivial or already-understood changes.** If the task has one plausible implementation path and the agent has all necessary context, the plan produces no new information. Fixing a typo, bumping a version number, or adding a single line to a config file does not benefit from a summarize-plan-implement loop.
-- **Exploratory or debugging sessions.** When the goal is to discover what is wrong rather than to execute a known change, constraining the agent to produce a plan before reading files delays the actual investigation. Discovery-mode work benefits from read-first freedom, not write-last constraints.
+- **Trivial or already-understood changes.** If the task has one plausible implementation path and the agent has all necessary context, the plan produces no new information. Fixing a typo, bumping a version number, or adding a 1-line change to a config file does not benefit from a summarize-plan-implement loop.
+- **Exploratory or debugging sessions.** When the goal is to discover what is wrong rather than to execute a known change, constraining the agent to produce a plan before reading files delays the actual investigation. Discovery-mode work benefits from [read-first freedom](pre-execution-codebase-exploration.md), not write-last constraints.
 - **Rapid-iteration feedback loops.** In a tight test-fix-test cycle — where the feedback loop is shorter than the planning overhead and errors are cheap to reverse — the plan step becomes a speed penalty with no alignment benefit.
 
 In these cases, use direct prompting or Plan Mode selectively on the specific step where scope uncertainty is high, rather than applying the full loop by default.
@@ -223,7 +223,7 @@ In these cases, use direct prompting or Plan Mode selectively on the specific st
 - Have the agent describe the subsystem before it plans; plan before it implements.
 - Correct misunderstandings at the summary stage — one correction there prevents multiple corrections after implementation.
 - Add self-critique rounds for complex tasks: critique for edge cases, redundancies, and ordering, then consolidate into a final plan.
-- Self-critique stacks with extended thinking and plan mode to compound planning quality.
+- Self-critique stacks with extended thinking and [plan mode](../tools/claude/plan-mode.md) to compound planning quality.
 - Save plans to files for long-horizon tasks that span multiple agent sessions.
 - Compare implementation diffs against the plan, not just against the original task description.
 - Activate Plan Mode in Claude Code with `Shift+Tab` twice, `/plan`, or `--permission-mode plan`; press `Ctrl+G` to edit the plan before execution.

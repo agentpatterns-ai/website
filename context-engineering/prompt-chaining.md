@@ -56,7 +56,7 @@ Do not chain when steps have no interdependency — parallel execution is more e
 
 The defining feature of a well-designed chain is the gate between steps. A gate is a programmatic check on the intermediate output:
 
-- Does the plan include all required components?
+- Does the plan include all required components? (The `gate_check` in the example below verifies named sections programmatically.)
 - Does the implementation compile / pass syntax checks?
 - Do the tests pass?
 
@@ -70,7 +70,7 @@ If a call is producing output that requires significantly different evaluation c
 
 ## Latency Trade-Off
 
-Chaining adds latency proportional to the number of steps. This is the primary cost: sequential execution cannot be parallelized. The trade-off is worthwhile when:
+Chaining adds latency proportional to the number of steps. This is the primary cost: sequential execution cannot be [parallelized](../multi-agent/fan-out-synthesis.md). The trade-off is worthwhile when:
 
 - Accuracy matters more than speed
 - Intermediate outputs need inspection or logging

@@ -16,7 +16,7 @@ maturity: established
 
 When an agent decomposes a task into steps, that decomposition mirrors how it interpreted your instructions. If the generated task list matches your intended sequence, the instructions communicated clearly. If it diverges, the divergence pattern tells you *what* was unclear and *how* to fix it.
 
-This reframes task lists from execution artifact to diagnostic tool: check whether the agent *understood* the work correctly before execution begins, not only whether it completed it correctly after.
+This reframes task lists from execution artifact to diagnostic tool, extending the [plan-first loop](../workflows/plan-first-loop.md): check whether the agent *understood* the work correctly before execution begins, not only whether it completed it correctly after.
 
 ## Five Divergence Patterns
 
@@ -41,7 +41,7 @@ The diagnostic loop:
 3. **Compare** the generated list against your intended steps.
 4. **Classify** each divergence by pattern.
 5. **Revise** instructions to address the specific weakness each pattern reveals.
-6. **Re-test** with the same or similar task to verify the fix.
+6. **Re-test** with the same or similar task to [verify the fix](../verification/pre-completion-checklists.md).
 
 Targeted fixes: add dependency markers for sequencing; surface implicit knowledge for omissions; tighten scope for additions; recalibrate abstraction for granularity; replace ambiguous terms for misinterpretations.
 
@@ -49,11 +49,11 @@ Targeted fixes: add dependency markers for sequencing; surface implicit knowledg
 
 Requesting highly detailed task descriptions — exact file paths, function names, parameter changes — forces the agent to expose design decisions before execution. "Style the navbar" becomes a list of specific CSS property changes with values, which you can approve, reject, or redirect without waiting for implementation.
 
-This trades compactness for visibility. Use it when the cost of wrong execution is high or when calibrating instructions for a new domain.
+This trades compactness for visibility. Use it when the cost of wrong execution is high or when [calibrating instruction altitude](../instructions/system-prompt-altitude.md) for a new domain.
 
 ## Real-Time Steering
 
-Task lists are not static. When you correct the agent mid-task, the updated list shows whether the correction was understood. If you change a requirement ("use green, not blue") and the remaining tasks update accordingly, the correction landed. If tasks remain unchanged, the agent did not integrate it — a signal to restate differently.
+Task lists are not static. When you [correct the agent mid-task](../agent-design/steering-running-agents.md), the updated list shows whether the correction was understood. If you change a requirement ("use green, not blue") and the remaining tasks update accordingly, the correction landed. If tasks remain unchanged, the agent did not integrate it — a signal to restate differently.
 
 ## Why It Works
 
@@ -63,7 +63,7 @@ LLMs decompose tasks by propagating explicit prompt constraints into subtask str
 
 - **Simple, well-specified tasks**: A breakdown adds a round-trip with minimal diagnostic return when the task has a single unambiguous action.
 - **Exploratory tasks**: Divergence comparison requires a known intended sequence. Open-ended tasks with no correct approach have no baseline.
-- **Non-deterministic planners**: Agents producing different plans across repeated prompts need multiple comparisons to separate instruction-driven from noise-driven variation.
+- **Non-deterministic planners**: Agents producing different plans across repeated prompts need multiple comparisons — a [trajectory-decomposition](../verification/trajectory-decomposition-diagnosis.md) concern — to separate instruction-driven from noise-driven variation.
 - **Agents without plan-before-execute modes**: The technique requires externalizing the plan before acting. Silent execution exposes no signal.
 
 ## Tool-Agnostic Application
@@ -105,7 +105,7 @@ Re-running the prompt after adding these two sentences produces a plan that matc
 
 - Treat the agent's generated task list as a diagnostic artifact, not just an execution plan — the divergence from your intended steps reveals exactly where instructions failed.
 - Classify divergences by pattern (sequencing, omission, addition, granularity, misinterpretation); each pattern maps to a different fix in your prompt.
-- Request the plan before execution begins via plan mode or an explicit "list every step you plan to take" prompt — silent execution exposes no signal.
+- Request the plan before execution begins via [plan mode](../workflows/plan-first-loop.md) or an explicit "list every step you plan to take" prompt — silent execution exposes no signal.
 - The technique only pays off when you have a known intended sequence; skip it for exploratory work or single-action tasks where comparison has no baseline.
 - Extreme granularity is a transparency strategy: force the agent to expose design decisions in the plan when the cost of wrong execution is high.
 

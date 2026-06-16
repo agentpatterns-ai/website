@@ -13,7 +13,7 @@ aliases:
   - scope and trap fragments
   - overeager behavior elicitation
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 status: current
 ---
 
@@ -121,7 +121,7 @@ Pair each trap with the realisations under which the agent should refuse (silent
 Run this elicitation when:
 
 - The agent has shell, file, or network reach over real state.
-- The harness is permissive (auto-approve, classifier-gated, or rubber-stamped).
+- The harness is permissive (auto-approve, classifier-gated, or rubber-stamped) rather than enforcing a [permission framework](../security/permission-framework-over-model.md).
 - A static benchmark has run and the team needs the pairs it under-measures.
 - The team can author trap predicates for its tool surface.
 
@@ -172,5 +172,5 @@ The diagnostic fixes nothing — it specifies the [runtime authority control](..
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](../security/permission-framework-over-model.md) — The runtime authority-control counterpart to this diagnostic; SNARE measures, the framework choice enforces.
 - [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — Adjacent elicitation methodology that splits attack construction into strategy, execution, and refinement; both diagnose what single-pass methods miss.
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite existing trajectories to test judgment robustness; complementary lens on safety-eval validity.
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md) — Why outcome-only grading misses safety violations the trajectory carries; the broader category this technique sits inside.
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Why outcome-only grading misses safety violations the trajectory carries; the broader category this technique sits inside.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Adjacent rubric-design discipline for evals where the agent might game the metric; the judge-free oracle is one such defence.

@@ -9,7 +9,7 @@ aliases:
   - WASM sandbox for agent code
   - WebAssembly code execution sandbox
 last_reviewed: 2026-06-08
-maturity: established
+maturity: adopted
 ---
 
 # In-Process WebAssembly Sandboxes for Agent-Generated Code

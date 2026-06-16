@@ -44,7 +44,7 @@ graph TD
 
 Distinct from instruction-following failure on a fresh prompt. Diagnostic signals:
 
-- The agent acknowledged the new instruction earlier in the turn but then acted on the old one.
+- The agent acknowledged the new instruction earlier in the turn but then acted on the old one — unlike [objective drift](../anti-patterns/objective-drift.md), where the instruction silently falls out of context.
 - Resetting the conversation and reissuing the same instruction produces compliance.
 - Compliance returns when the contradicting prefix is removed.
 

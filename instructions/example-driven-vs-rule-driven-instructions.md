@@ -10,7 +10,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Example-Driven vs Rule-Driven Instructions
@@ -26,7 +26,7 @@ maturity: established
 Rules are compact and context-efficient. "Use kebab-case filenames" costs five tokens and applies universally. Examples are concrete and unambiguous. `progressive-disclosure.md, not ProgressiveDisclosure.md` leaves no room for creative interpretation. Each has failure modes:
 
 - **Rules** can be misread. "Write concisely" means different things to different agents.
-- **Examples** can be over-fitted. An agent shown one example may copy its structure verbatim rather than abstracting the pattern.
+- **Examples** can be over-fitted. An agent shown one example may copy its structure verbatim rather than abstracting the pattern — the few-shot brittleness that [hints over code samples](hints-over-code-samples.md) also has to manage.
 
 The choice between them is not stylistic — it's a function of what kind of failure you're trying to prevent.
 
@@ -66,7 +66,7 @@ File names must be kebab-case and match the concept name.
 Example: progressive-disclosure.md (not ProgressiveDisclosure.md, not prog-disc.md)
 ```
 
-One example is usually enough. Multiple examples can shift agent focus from the rule to the pattern of the examples themselves, producing outputs that interpolate between cases rather than apply the constraint uniformly. For constraint rules, a single well-chosen example suffices.
+One example is usually enough. Multiple examples can shift agent focus from the rule to the pattern of the examples themselves, producing outputs that interpolate between cases rather than apply the constraint uniformly — the brittleness [system prompt altitude](system-prompt-altitude.md) warns against. For constraint rules, a single well-chosen example suffices.
 
 ## Pointing at Existing Code (Hints Over Code Samples)
 
@@ -82,7 +82,7 @@ Hints carry two advantages over inline samples:
 
 **Hints stay current.** Code samples are frozen. The real implementation changes — function signatures, dependencies, patterns — while the agent follows the stale example. A hint points to the current file and requires no maintenance.
 
-**Hints are cheaper.** A 30-line example loaded every session consumes context budget for every task, including unrelated ones. A hint costs one line. For instruction files loaded at session start, this compounds across every interaction.
+**Hints are cheaper.** A 30-line example loaded every session consumes context budget for every task, including unrelated ones. A hint costs one line. For instruction files loaded at session start, this compounds across every interaction as a recurring draw on the [context budget](../context-engineering/context-budget-allocation.md).
 
 The one case where a code sample is justified: a genuinely novel pattern with no existing example in the codebase. Once any file implements the pattern, replace the sample with a hint to that file.
 
@@ -92,7 +92,7 @@ Critical format constraints belong in the main instruction file. Reference examp
 
 ## Why It Works
 
-Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Mechanistic interpretability research traces in-context learning to induction heads — pairs of attention heads that find an earlier occurrence of the current token and copy what followed it, matching and extending prior patterns ([Olsson et al., "In-context Learning and Induction Heads," 2022](https://arxiv.org/abs/2209.11895)). An example gives the model a concrete template to replicate rather than a constraint to interpret. Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
+Rules and examples engage different mechanisms in how transformers process instructions. GPT-3 established that large language models can infer tasks from text demonstrations alone, without fine-tuning or explicit rules ([Brown et al., 2020](https://arxiv.org/abs/2005.14165)). Mechanistic interpretability research traces in-context learning to induction heads — pairs of attention heads that find an earlier occurrence of the current token and copy what followed it, matching and extending prior patterns ([Olsson et al., "In-context Learning and Induction Heads," 2022](https://arxiv.org/abs/2209.11895)). An example gives the model a concrete template to replicate rather than a constraint to interpret — the effect [domain-specific system prompts](domain-specific-system-prompts.md) exploit with worked reasoning traces. Rules require the model to derive the intended output space through inference; examples supply it directly. This is why rules tolerate ambiguity when acceptable variation is wide, and examples are necessary when the output space is tightly constrained. The combination — state the rule, provide one anchor example — engages both: the rule limits the interpretation space, the example collapses residual ambiguity to a specific format.
 
 ## Key Takeaways
 

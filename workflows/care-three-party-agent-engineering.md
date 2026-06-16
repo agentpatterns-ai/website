@@ -117,7 +117,7 @@ The contrast with ad-hoc construction: every compliance rule is a named artifact
 ## Key Takeaways
 
 - CARE organises agent construction around four design targets, five phases, and three roles, with helper agents drafting artifacts that humans approve at gates.
-- The mechanism is classical requirements engineering — externalising decisions into reviewable artifacts — applied to the four LLM-agent design targets.
+- The mechanism is classical requirements engineering — externalising decisions into reviewable artifacts, the same externalising-intent move behind [spec-driven development](spec-driven-development.md) — applied to the four LLM-agent design targets.
 - The methodology's overhead is justified mainly when SME knowledge is external, verification stakes are high, and the domain has stable ground truth.
 - Single-domain, single-team evidence (NASA Earth Science CMR) shows directional gains, not a settled result.
 

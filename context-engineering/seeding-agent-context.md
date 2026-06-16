@@ -92,8 +92,8 @@ Seed durable information; prompt session-specific intent. See [Discoverable vs N
 ## When This Backfires
 
 - **Stale breadcrumbs**: An AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
-- **Pattern replication**: Agents replicate existing code indiscriminately. A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
-- **Conflicting scopes**: Nested context files with contradictory instructions cause agents to apply the wrong scope — unpredictable and difficult to debug.
+- **Pattern replication**: Agents replicate existing code indiscriminately ([pattern replication risk](../anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
+- **Conflicting scopes**: Nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md) — unpredictable and difficult to debug.
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
 
@@ -102,7 +102,7 @@ Even accurate seeding is not free. A controlled study found that repository-leve
 ## Key Takeaways
 
 - Mechanical enforcement is the most durable seeding form — agents cannot ignore a failing check.
-- Directory-scoped context files place conventions where the work happens.
+- Directory-scoped context files (`AGENTS.md`, `CLAUDE.md`) place conventions where the work happens.
 - Agents replicate existing patterns indiscriminately — good and bad examples both propagate.
 - Progress files and git history eliminate repeated discovery across sessions.
 - A lean entry-point file outperforms a monolithic instruction file.

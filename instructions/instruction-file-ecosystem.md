@@ -8,7 +8,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Project Instruction File Ecosystem
@@ -162,6 +162,7 @@ With this layout, updating `AGENTS.md` propagates to Claude Code immediately (vi
 - [AGENTS.md Distributed Conventions](agents-md-distributed-conventions.md)
 - [AGENTS.md Design Patterns](agents-md-design-patterns.md)
 - [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
+- [Configuration File Structure Compliance Gap](configuration-file-structure-compliance-gap.md) — empirical null: file structure does not move compliance; orthogonal to the ecosystem map here
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Hints over Code Samples](hints-over-code-samples.md)

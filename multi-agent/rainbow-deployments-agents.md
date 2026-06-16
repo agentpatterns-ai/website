@@ -11,7 +11,7 @@ aliases:
   - gradual version migration
   - multi-version deployment
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Rainbow Deployments for Agents: Gradual Version Migration
@@ -25,7 +25,7 @@ Rainbow deployment keeps N versions of an agent running simultaneously. New sess
 Stateless HTTP services cut over atomically — swap the load balancer, drain connections, done. Agents differ:
 
 - **Stateful execution** -- conversation context, tool state, and multi-step plans persist across long sessions
-- **Behavioral sensitivity** -- small prompt, tool, or model changes cascade into large behavioral shifts
+- **Behavioral sensitivity** -- small prompt, tool, or model changes cascade into [large behavioral shifts](emergent-behavior-sensitivity.md)
 - **Expensive restarts** -- forced restarts lose accumulated context and waste compute
 
 Blue-green assumes atomic cutover. Canary improves this with gradual traffic shifting but caps you at two concurrent versions. Rainbow removes the version ceiling.
@@ -53,7 +53,7 @@ The term originates from [Brandon Dimcheff's work at Olark (2018)](https://brand
 
 ## What Changes Require Rainbow Deploys
 
-Not every change needs gradual migration. The cost is worth it when a change alters behavior in ways that are hard to predict or test exhaustively.
+Not every change needs gradual migration. The cost is worth it when a change alters behavior in ways that are hard to predict or [test exhaustively](../workflows/continuous-ai-agentic-cicd.md).
 
 | Change Type | Risk Level | Rainbow Deploy? |
 |---|---|---|
@@ -84,9 +84,9 @@ Compare the new version against the baseline before each percentage increase.
 | Metric | What to Watch |
 |---|---|
 | Response accuracy | Are outputs correct for representative inputs? |
-| Error rate | Are tool calls, API calls, or completions failing more? |
+| [Error rate](../observability/circuit-breakers.md) | Are tool calls, API calls, or completions failing more? |
 | Latency | Is the new version slower per turn? |
-| Cost per session | Is token usage higher (different model, longer prompts)? |
+| [Cost per session](../agent-design/cost-aware-agent-design.md) | Is token usage higher (different model, longer prompts)? |
 | Hallucination rate | Is the new version fabricating more? |
 | User feedback | Are users rejecting or correcting outputs more often? |
 
@@ -101,7 +101,7 @@ Rollback is a router change pointing new traffic at the previous version. Old ve
 Three conditions make rainbow deployment worse than the alternative:
 
 - **Version sprawl with long-lived sessions**: If agents run tasks that span hours or days (deep research, multi-day planning pipelines), old versions may never fully drain. Each deployment adds another live version consuming infrastructure. Without an explicit session timeout or forced drain policy, the fleet fragments indefinitely.
-- **Cross-version debugging complexity**: Behavioral regressions that span a version boundary are harder to isolate. If v2 and v3 sessions coexist and users report degraded output, correlating errors to a specific version tuple (code × model × prompt × tools) requires robust version tagging on every log line and trace. Teams without mature observability often spend more time on version attribution than on the fix itself.
+- **Cross-version debugging complexity**: [Behavioral regressions](emergent-behavior-sensitivity.md) that span a version boundary are harder to isolate. If v2 and v3 sessions coexist and users report degraded output, correlating errors to a specific version tuple (code × model × prompt × tools) requires robust version tagging on every log line and trace. Teams without mature observability often spend more time on version attribution than on the fix itself.
 - **Short-lived stateless agents**: For agents with sessions under a few seconds -- single-turn Q&A, inline completions, code suggestions -- atomic blue-green deployment is simpler, equally safe, and eliminates the operational overhead of running multiple concurrent deployments. The rainbow model's value scales with session duration.
 
 ## Example

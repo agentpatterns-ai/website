@@ -35,7 +35,7 @@ If any condition fails, use [orchestrator-worker](orchestrator-worker.md) for st
 
 Two ledgers, two loops, fixed specialist roster.
 
-- **Task ledger** — given facts, facts to look up, facts to derive, educated guesses, and a step-by-step plan in natural language.
+- **Task ledger** — given facts, facts to look up, facts to derive, educated guesses, and a step-by-step plan in natural language ([Magentic-One paper](https://arxiv.org/html/2411.04468v1)).
 - **Progress ledger** — per iteration: is the request satisfied, is the team looping, is progress being made, who speaks next, what to ask them.
 - **Outer loop** — initialises / updates the task ledger; resets agent context when the plan changes.
 - **Inner loop** — answers the five questions, dispatches the next specialist, increments the stall counter when no progress.

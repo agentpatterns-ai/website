@@ -38,7 +38,7 @@ Start evaluation on challenging scenarios. Easy tasks often have high baseline p
 
 ## Why It Works
 
-Mid-stream reasoning gives the model a dedicated scratchpad to process tool output before selecting the next action. Without it, the model must compress observations directly into the next tool call — a single forward pass that cannot revise earlier assumptions. With a scratchpad, the model can explicitly update its plan state after each result, preventing stale priors from propagating into dependent steps. This is the mechanism: sequential tool chains require state updates between calls, and a reasoning step provides the context window space to do that. ([Anthropic think tool post](https://www.anthropic.com/engineering/claude-think-tool))
+Mid-stream reasoning gives the model a dedicated [scratchpad](../agent-design/think-tool.md) to process tool output before selecting the next action. Without it, the model must compress observations directly into the next tool call — a single forward pass that cannot revise earlier assumptions. With a scratchpad, the model can explicitly update its plan state after each result, preventing stale priors from propagating into dependent steps. This is the mechanism: sequential tool chains require state updates between calls, and a reasoning step provides the context window space to do that. ([Anthropic think tool post](https://www.anthropic.com/engineering/claude-think-tool))
 
 ## When This Backfires
 

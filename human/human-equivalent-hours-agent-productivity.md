@@ -9,7 +9,7 @@ tags:
   - cost-performance
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 status: current
 ---
 
@@ -34,7 +34,7 @@ Cognition asks *"how long would a human engineer have taken to produce the same 
 The estimator rests on four design principles:
 
 1. **Reason about the human's path, not the agent's** — discount retries, setup, and non-core artifacts a human would not produce.
-2. **Credit only unspecified work** — measure the agent's contribution against the user's initial problem statement, not the full diff.
+2. **Credit only unspecified work** — measure the agent's contribution against the user's initial problem statement, [not the full diff](../code-review/agent-pr-volume-vs-value.md).
 3. **Account for codebase familiarity** — infer a human's exploration time in an unfamiliar codebase.
 4. **Assume relevant expertise** — the reference engineer already has the skills; do not credit skill-substitution.
 

@@ -45,7 +45,7 @@ Consistency checking adds cost — CI minutes, false-positive triage, ownership 
 
 - **Minimal pointer-style configs.** A CLAUDE.md that is a 30-line pointer table with zero direct code references has nothing to drift. Stripping references can beat policing them — [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md) finds that auto-generated, code-reference-heavy context files reduce success rates while adding cost, so minimisation is mechanistically compatible.
 - **Pre-stabilisation prototypes.** When the codebase reshapes weekly, the config will be wrong before any check completes; defer authoring until structure settles.
-- **Solo or short-lived repos.** The silent-failure mode depends on the author no longer remembering current code shape. On a solo project the author has the state in head and the agent's confusion surfaces in the conversation.
+- **Solo or short-lived repos.** The silent-failure mode of a stale CLAUDE.md depends on the author no longer remembering current code shape. On a solo project the author has the state in head and the agent's confusion surfaces in the conversation.
 - **Tool loaders that filter the file.** If the agent only reads a subset (matching headings, size-capped prefix), checker findings on the unloaded portion are theatrical — the agent never saw the stale reference.
 
 ## Example

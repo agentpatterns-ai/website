@@ -77,8 +77,8 @@ Failure conditions where ceremony costs more than it returns:
 
 - **Single-agent solo team, pre-PMF**: rebuild–redeploy–glance-at-logs dominates until a regression actually hurts. The four phases describe a destination, not a starting state.
 - **Stateless one-shot agents**: deterministic tool surfaces benefit more from classical web-service SRE than an agent-specific lifecycle.
-- **Batch or cron-driven agents with no user surface**: three of four feedback sources are unavailable, so monitor collapses to deterministic-rule scoring.
-- **Multi-tenant agents with strict privacy constraints**: trace-to-eval feedback can violate compliance unless inputs are not persisted — significant infra cost before the loop closes.
+- **Batch or cron-driven agents with no user surface**: three of four [feedback sources](../observability/traces-need-feedback-to-power-learning.md) are unavailable, so monitor collapses to deterministic-rule scoring.
+- **Multi-tenant agents with strict privacy constraints**: trace-to-eval feedback (the [Eval-Driven Development](../workflows/eval-driven-development.md) input) can violate compliance unless inputs are not persisted — significant infra cost before the loop closes.
 
 Ship the rebuild loop first; let the four phases differentiate as failure modes surface.
 
@@ -103,7 +103,7 @@ No LangGraph or LangSmith required — OTel, a pytest eval runner, and a feature
 
 - ADLC is a meta-lifecycle for the agent product itself — distinct from a feature-level SDLC or a skill-library SDLC; same loop shape, different unit of work.
 - The four phases — build, test, deploy, monitor — produce explicit hand-off artifacts: scope doc, eval verdict, deploy artifact, verdict-labelled traces.
-- The Monitor → Test back-edge is operationalised by an incident-to-eval pipeline; the Monitor → Build back-edge by a continuous-improvement loop.
+- The Monitor → Test back-edge is operationalised by an incident-to-eval pipeline; the Monitor → Build back-edge by a [continuous-improvement loop](../workflows/continuous-agent-improvement.md).
 - The mechanism is distributional: verdict-labelled traces let teams optimise failure-rate trends, not one-off failing cases.
 - The lifecycle is not free — small teams pre-PMF, stateless one-shot agents, batch jobs with no user surface, and privacy-constrained agents should ship the collapsed rebuild loop first.
 

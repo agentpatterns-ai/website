@@ -158,6 +158,6 @@ The team ships with a robustness profile instead of a single number, and they kn
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — when robustness training is RL, vary sampling and interaction depth jointly to see what it actually buys
 - [Behavioral Testing for Agents](behavioral-testing-agents.md) — non-deterministic eval design that the four-axis partition slots into
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — same theme: benchmark conditions overstate real-world capability
-- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — the retrieval-side analogue: idealized benchmark conditions collapse under realistic deployment
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — the retrieval-side analogue: idealized benchmark conditions collapse under realistic deployment
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — model-family variance under identical inputs, complementary to perturbation-class variance
 - [Tool Description Quality](../tool-engineering/tool-description-quality.md) — descriptions are part of the selection prompt; this page explains why reward-axis perturbations hit so hard

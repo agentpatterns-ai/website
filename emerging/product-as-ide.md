@@ -16,7 +16,7 @@ maturity: established
 
 ## The Concept
 
-Traditional development assumes a separation: you write code in an IDE, build it, deploy it, and then use the product. Product-as-IDE collapses this boundary. The application exposes a "designer mode" — a toggle that surfaces an editing substrate inside the running product, letting an operator modify behaviour from within the app itself.
+Traditional development assumes a separation: you write code in an IDE, build it, deploy it, and then use the product. Product-as-IDE collapses this boundary. The application exposes a "designer mode" — a toggle that surfaces an [editing substrate inside the running product](first-party-agent-composition.md), letting an operator modify behaviour from within the app itself.
 
 This is not an admin panel or CMS. The modification layer has access to the full codebase, uses coding agents to implement changes, and ships those changes to production through an automated pipeline.
 
@@ -50,7 +50,7 @@ The pattern reduces cognitive switching cost. Observing a problem in a running p
 Product-as-IDE is the wrong default in several conditions:
 
 - **Regulated environments**: financial services, healthcare, and government contexts require change-control workflows, human sign-off, and immutable audit logs. A designer-mode change to production violates these controls even with risk-based gates.
-- **Multi-team codebases**: live edits from a product surface bypass the pull-request and conflict-resolution process distributed teams depend on. Concurrent operator edits can produce silent conflicts that break unrelated features.
+- **Multi-team codebases**: live edits from a product surface bypass the pull-request and conflict-resolution process distributed teams depend on. Concurrent operator edits can produce [silent conflicts](../workflows/human-in-the-loop.md) that break unrelated features.
 - **Complex state management**: applications with distributed caches, event-sourced backends, or schema migrations cannot safely live-edit — rollout strategies require coordination an agent cannot determine from a UI observation alone.
 - **High blast-radius products**: a designer-mode change to a platform with millions of users has a much higher failure cost than a low-traffic dashboard. Risk gates rely on the agent correctly classifying blast radius — a classification that will sometimes fail.
 

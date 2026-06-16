@@ -99,7 +99,7 @@ The AX/UX/DX separation adds engineering overhead. It is less valuable when:
 
 - **Simple single-user tools**: a CLI agent with one consumer doesn't need three output formats; one well-structured log serves all audiences.
 - **Prototype or exploratory work**: maintaining separate transformation layers slows iteration when requirements change frequently.
-- **Thin context budgets**: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own.
+- **Thin context budgets**: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own, the cost [context compression strategies](../context-engineering/context-compression-strategies.md) exist to manage.
 - **Scale constraints from CCA's own evaluation**: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad doesn't remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398)).
 
 ## Applying the Triad
@@ -129,7 +129,7 @@ def tool_return_dx(results, query, elapsed_ms):
             "matches": results, "index_version": "v3"}
 ```
 
-The model receives compact JSON it can parse. The user sees a one-line summary. The developer gets timing and index metadata for debugging. One data source, three format contracts.
+The model receives compact JSON (the `matches` array) it can parse. The user sees a one-line summary. The developer gets timing and index metadata for debugging. One data source, three format contracts.
 
 ## Key Takeaways
 

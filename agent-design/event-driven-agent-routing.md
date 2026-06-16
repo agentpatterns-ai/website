@@ -10,7 +10,7 @@ aliases:
   - "event-driven routing"
   - "status-driven agent pipelines"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Event-Driven Agent Routing
@@ -19,7 +19,7 @@ maturity: established
 
 ## Overview
 
-In an orchestrator-worker pipeline, a parent agent holds the full plan and dispatches each step explicitly. Event-driven routing inverts this: each step is a stateless handler triggered by a state transition. The handler fires, does its work, and emits the next state. No agent owns the full sequence.
+In an [orchestrator-worker pipeline](../multi-agent/orchestrator-worker.md), a parent agent holds the full plan and dispatches each step explicitly. Event-driven routing inverts this: each step is a stateless handler triggered by a state transition. The handler fires, does its work, and emits the next state. No agent owns the full sequence.
 
 GitHub's accessibility feedback pipeline is a documented production deployment of this pattern: each stage in a multi-team pipeline (AI intake → human review → service team resolution) is a GitHub Actions workflow triggered by label additions and project board status changes — not by a central coordinator calling each step in turn. [Source](https://github.blog/ai-and-ml/github-copilot/continuous-ai-for-accessibility-how-github-transforms-feedback-into-inclusion/)
 

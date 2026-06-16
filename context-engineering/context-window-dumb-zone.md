@@ -96,7 +96,7 @@ The guidance to keep reasoning-task context under 32K tokens is conservative and
 
 - **Current-generation frontier models improve on this curve.** Research benchmarks like RULER and BABILong reflect model generations from 2023–2024. Models released since then show measurable improvements at longer context lengths; apply the 32K ceiling to the model version you're actually deploying, not the benchmark generation.
 - **The 32K ceiling applies to reasoning tasks only.** Applying it to retrieval-heavy or code-comprehension tasks discards legitimate context capacity — simple retrieval benchmarks show >99% recall well past 32K. Over-compacting these tasks introduces unnecessary summarization loss.
-- **Compaction has its own failure mode.** Compressing a long context into a shorter summary discards detail. For multi-step tasks with hard dependencies on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before applying a blanket early-compact policy.
+- **Compaction has its own failure mode.** [Compressing a long context into a shorter summary](context-compression-strategies.md) discards detail. For multi-step tasks with hard dependencies on specific prior outputs, aggressive compaction can drop critical intermediate state. Test compaction fidelity before applying a blanket early-compact policy.
 - **Auto-compaction threshold is configurable.** Claude Code's auto-compaction triggers at ~95%; `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower this. Setting it to 50% is common advice but introduces a fixed overhead cost on every session regardless of task type or actual degradation onset.
 
 ## Related
@@ -106,6 +106,7 @@ The guidance to keep reasoning-task context under 32K tokens is conservative and
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction: Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Context Window Anxiety: Countering Premature Task Closure](context-window-anxiety.md)
+- [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — observability for context fill; the measurement counterpart to this page's degradation mechanism
 - [Lost in the Middle](lost-in-the-middle.md)
 - [The Infinite Context](../anti-patterns/infinite-context.md)
 - [Attention Sinks](attention-sinks.md)

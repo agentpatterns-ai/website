@@ -10,7 +10,7 @@ aliases:
   - effective feedback compute
   - trace-level scaling coordinate
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Effective Feedback Compute (EFC) for Harness Comparison
@@ -67,7 +67,7 @@ The paper's full estimator stack is research-grade, but a cheap coarse counter c
 
 - **Informative** — hash each tool input; reject events whose hash matches a credited earlier event.
 - **Valid** — count only events whose downstream assertion or test passes in-trace.
-- **Non-redundant** — deduplicate tool *outputs* by content hash; count one per re-issued call.
+- **Non-redundant** — deduplicate tool *outputs* by `content_hash`; count one per re-issued call.
 - **Retained** — require the output to reappear (literally or by summary) in a later agent message.
 
 Wired this way it recovers the rank order of harness candidates without solving estimator calibration — reach for it inside a hill-climbing loop before building the full estimator.
@@ -77,7 +77,7 @@ Wired this way it recovers the rank order of harness candidates without solving 
 - Raw tokens and tool calls explain a third to under half of success variance; EFC explains nearly all of it ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682)).
 - The four gates — informative, valid, non-redundant, retained — are load-bearing as a composition; each alone is insufficient.
 - Use EFC for harness comparison, hill-climbing, and plateau diagnosis; keep raw-spend caps for cost enforcement.
-- It inherits a verifier-quality bottleneck and a context-ceiling blind spot — pair it with feedback provenance and a separate convergence check.
+- It inherits a verifier-quality bottleneck and a context-ceiling blind spot — pair it with feedback provenance and a separate [convergence detection](convergence-detection.md) check.
 - A coarse counter (input-hash, verifier-pass, output-dedup, retention) recovers harness rank order without the full estimator stack.
 
 ## Related

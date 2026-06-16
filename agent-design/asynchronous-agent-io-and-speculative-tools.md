@@ -50,14 +50,14 @@ Once tool dispatch is decoupled from the model turn, the next move is to dispatc
 - **Speculative Actions** ([Ye et al., arXiv:2510.04371](https://arxiv.org/html/2510.04371v1)). A fast Speculator proposes k candidate actions; a slow Actor validates. Losslessness via semantic guards (state-transition equivalence), safety envelopes (only idempotent, reversible, or sandboxed effects allowed), and rollback paths. Reports up to 55% next-action accuracy.
 - **Engine-resident speculation** ([Nichols et al., arXiv:2512.15834](https://arxiv.org/abs/2512.15834)). Keeps speculative sequences resident in the vLLM engine and proposes a "tool cache" provider API. Reports hundreds of extra tokens/sec throughput.
 
-The mechanism: agent workflows have stable control flow that a smaller, faster model can predict. When speculation hits, the tool result is already there when the slow model commits.
+The mechanism: agent workflows have stable control flow that a smaller, faster model can predict — the same fast/slow split as [cognitive reasoning vs execution separation](cognitive-reasoning-execution-separation.md). When speculation hits, the tool result is already there when the slow model commits.
 
 ## When This Architecture Backfires
 
 The async FSM and speculative tool calling are not free. Both add infrastructure cost that only pays back under specific conditions.
 
 - **Non-idempotent write-side tools.** Payment APIs, deploy pipelines, `git push`, outbound email — speculative execution cannot be rolled back. Speculative Actions' losslessness depends on the side effect being reversible, sandboxed, or idempotent ([arXiv:2510.04371](https://arxiv.org/html/2510.04371v1)). Real enterprise integrations rarely qualify.
-- **Text-only coding agents with no real-time UX constraint.** When the user is comfortable seeing a spinner and inference dominates latency, the FSM is dead weight. The benefit only materialises when tool I/O is the dominant cost and the user-facing budget is sub-second.
+- **Text-only coding agents with no real-time UX constraint.** When the user is comfortable seeing a spinner and inference dominates latency, the FSM is dead weight. The benefit only materialises when tool I/O is the dominant cost and the user-facing budget is sub-second — the 500 ms target above, not a multi-second batch job.
 - **Models that mis-handle interleaved ledgers.** If the deployment model degrades on the AsyncTool benchmark or the project's eval suite, the async ledger introduces *more* failures than the latency win is worth.
 - **Concurrency-throttled external APIs.** Cresta notes that when external APIs lack idempotency or have heavy concurrency caps, the implementation may have to *disable* user interruptions during the call — which defeats the responsiveness goal the async architecture was meant to deliver ([Cresta](https://cresta.com/blog/engineering-for-real-time-voice-agent-latency)).
 - **Async/parallel calls drive up cost.** Saving wall-clock seconds can cost more dollars in concurrent compute and API quota ([Arya AI: agentic system trade-offs](https://arya.ai/blog/navigating-trade-offs-in-agentic-systems)).
@@ -97,7 +97,7 @@ Perceived response time is bounded by TTS dispatch (~200 ms), not by the flight 
 
 - Synchronous agent loops blow the sub-second budget the moment any tool call is slow; voice and real-time agents need an event-driven FSM with priority scheduling, not bigger models.
 - The FSM treats user speech, model tokens, TTS output, and tool results as preemptible events on a shared ledger — adapted from real-time operating systems.
-- Speculative tool calling extends async I/O by dispatching predicted tools ahead of model authorisation; only safe when the tool is idempotent, reversible, or sandboxed.
+- Speculative tool calling extends async I/O by dispatching predicted tools ahead of model authorisation (PASTE reports a 48.5% task-time reduction); only safe when the tool is idempotent, reversible, or sandboxed.
 - The primary failure mode is not architectural — it's the model itself. Frontier LLMs degrade on out-of-order async ledgers; evaluate before adopting.
 - Skip both when latency is dominated by inference, the user is fine with a spinner, or the tools are non-idempotent write APIs.
 

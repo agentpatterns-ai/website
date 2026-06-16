@@ -23,7 +23,7 @@ Dense retrieval embeds queries and documents into fixed-dimensional vectors and 
 
 It breaks on keyword-heavy queries. If a user searches for `CVE-2024-12345`, `ERROR_CODE_0x8007007E`, or a product SKU, the embedding model may return thematically related documents rather than the document that contains the exact token string. The embedding space clusters by meaning, not by character sequence. Technical corpora — logs, code references, compliance documents — are full of these exact-match requirements.
 
-**Distance metrics** — cosine similarity, dot product, and Euclidean distance — differ in what they optimize. Cosine ignores magnitude and compares direction; use it when document length varies widely. Dot product is faster but magnitude-sensitive; use it with normalized vectors. Euclidean is sensitive to high-dimensional sparsity and rarely the best default for text embeddings.
+**Distance metrics** — cosine similarity, dot product, and Euclidean distance — are a vector-store choice covered in [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md), and they differ in what they optimize. Cosine ignores magnitude and compares direction; use it when document length varies widely. Dot product is faster but magnitude-sensitive; use it with normalized vectors. Euclidean is sensitive to high-dimensional sparsity and rarely the best default for text embeddings.
 
 ---
 
@@ -93,7 +93,7 @@ RRF fuses two independent rank lists — each retriever scores documents without
 
 [Hypothetical Document Embeddings (HyDE)](https://arxiv.org/abs/2212.10496) is an optional layer for semantically vague queries. The LLM generates a hypothetical answer to the query — a "fake" document that captures what a real answer would look like — and that hypothetical document is embedded and used for retrieval instead of the bare query.
 
-The hypothetical document is longer and richer than the original query, which helps bridge the semantic gap between short queries and longer documents in the embedding space. HyDE is particularly useful when users phrase queries as questions ("How do I configure…?") rather than as document-matching strings.
+The hypothetical document is longer and richer than the original query, which helps bridge the semantic gap between short queries and longer documents in the embedding space produced by the embedder in [Local Embeddings and Vector Stores](local-embeddings-vector-stores.md). HyDE is particularly useful when users phrase queries as questions ("How do I configure…?") rather than as document-matching strings.
 
 **Air-gapped constraint**: HyDE requires a local LLM inference call before retrieval, adding end-to-end latency. Use the same Ollama-served model that [Module 7 (Local LLM Inference)](local-llm-inference.md) sets up for answer synthesis — run it with a small `max_tokens` budget (100–200 tokens is enough for a HyDE stub) so the added latency is bounded.
 

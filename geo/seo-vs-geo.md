@@ -75,7 +75,7 @@ graph LR
 
 ## Why These Signals Work
 
-AI engines build entity representations from training-data co-occurrence, not the link graph. Brand mentions in forums, reviews, and editorial coverage teach a model what a brand stands for, independently of site links. Backlinks route crawlers; they do not build entity association.
+AI engines build entity representations from training-data co-occurrence, not the link graph. [Brand mentions](topical-authority.md) in forums, reviews, and editorial coverage teach a model what a brand stands for, independently of site links. Backlinks route crawlers; they do not build entity association.
 
 Keyword density is a token cost: repetition consumes budget without adding semantic signal, whereas a table encodes the same facts more compactly and extracts better.
 
@@ -85,7 +85,7 @@ Keyword density is a token cost: repetition consumes budget without adding seman
 - **Small-brand cold-start**: Citation pools favour established earned media — Wikipedia, major press, G2-tier reviews. New brands must build that inventory before GEO techniques gain traction.
 - **Model-specific variability**: Citation signals don't transfer uniformly across engines — a source prominent in ChatGPT may not appear in Gemini or Perplexity. Track per model.
 - **Attribution bleed**: Brand-mention campaigns may also lift organic rankings, making the GEO contribution hard to isolate without prompt-based measurement.
-- **Backlinks are not worthless**: "Weak predictor" is relative, not zero. Correlation analyses still find link authority carries a positive — if secondary — signal, well behind brand mentions but above it. Read the Direction column's "deprioritise" as *reallocate away from*, not *abandon*.
+- **Backlinks are not worthless**: "Weak predictor" is relative, not zero. Correlation analyses still find [link authority](topical-authority.md) carries a positive — if secondary — signal, well behind brand mentions but above it. Read the Direction column's "deprioritise" as *reallocate away from*, not *abandon*.
 
 ## Key Takeaways
 

@@ -7,7 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-02
-maturity: established
+maturity: adopted
 ---
 
 # Goal Contract: Separating the Doer from the Done-Checker

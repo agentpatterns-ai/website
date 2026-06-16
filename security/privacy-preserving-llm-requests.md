@@ -41,7 +41,7 @@ D–G require hardware enclaves, cryptographic protocols, or multi-party coordin
 The authors benchmark every technique individually and in combination. The empirical winner is A+B+C:
 
 1. **Route locally when possible (A).** A small local model handles requests that fit its capability envelope. The egress path never opens.
-2. **Redact what remains (B).** Detect PII, secrets, and identifiers in the remaining prompts and substitute typed placeholders. The client keeps a placeholder → real-value map.
+2. **Redact what remains (B).** Detect PII, secrets, and identifiers in the remaining prompts and substitute typed placeholders. The client keeps a placeholder → real-value map, the same mechanism as [PII tokenization](pii-tokenization-in-agent-context.md) at the tool boundary.
 3. **Rephrase the prose (C).** Rewrite surrounding natural-language context so residual style, phrasing, and collocations do not re-identify the redacted entities.
 
 ```mermaid

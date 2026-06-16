@@ -60,7 +60,7 @@ GEO techniques boosted visibility by up to 40% in benchmark testing. Effectivene
 
 ## Why It Works
 
-Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, cited statistics give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation, reducing the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
+Generative engines retrieve candidate content chunks, score them for relevance and quality, then synthesize a response. Specific, [cited statistics](assertion-density.md) give retrieval models a discrete, attributable fact — extractable without paraphrasing risk. Vague prose offers no extractable fact and no attribution target. Citations also signal external validation, reducing the engine's uncertainty about including the claim. The [Princeton GEO paper](https://arxiv.org/abs/2311.09735) benchmarked these effects at scale; the underlying mechanism is content that minimizes retrieval ambiguity and maximizes attribution confidence.
 
 ## The Citation Economy
 
@@ -73,7 +73,7 @@ This fragmentation means GEO is not a one-time optimization — it requires per-
 GEO investments carry real costs: structured data, freshness cycles, per-platform tracking, and ongoing rework as engines change retrieval strategies. These costs outweigh benefits when:
 
 - **Niche audiences**: if total readership is small, citation volume is a small target regardless of optimization quality.
-- **Fast-moving technical domains**: the Princeton paper notes generative engines are "black-box" systems that are "fast-moving" — techniques tuned to current behavior become stale quickly.
+- **Fast-moving technical domains**: the [Princeton paper](https://arxiv.org/abs/2311.09735) notes generative engines are "black-box" systems that are "fast-moving" — techniques tuned to current behavior become stale quickly.
 - **Low query volume**: AI engines cite content only when users ask relevant questions; low-query topics yield little return.
 - **Credential-dependent verticals**: legal and medical content depends on institutional trust signals that structural optimization cannot replicate.
 

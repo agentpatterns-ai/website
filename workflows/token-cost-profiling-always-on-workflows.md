@@ -83,7 +83,7 @@ GitHub closes the loop with two agentic workflows: a Daily Token Usage Auditor t
 ## Triggers and Constraints
 
 - **Auditor**: daily schedule, read-only access to `token-usage.jsonl` archives and source workflow files. Authority bound to opening GitHub issues only — no write access to production workflow configs.
-- **Optimiser**: triggered by an auditor-flagged issue. May read logs and propose source changes as a PR. Authority bound to one PR per issue; merging is human-gated to catch regressions the optimiser cannot see (quality on the routed-cheap path, for example).
+- **Optimiser**: triggered by an auditor-flagged issue. May read logs and propose source changes as a PR. Authority bound to one PR per issue; merging is human-gated to catch regressions the optimiser cannot see (quality on the [routed-cheap path](../agent-design/cost-aware-agent-design.md), for example).
 - **Proxy / OTel exporter**: always-on alongside the workflow itself. Failure must not block the workflow — the loop tolerates missing data points, not blocked runs.
 
 ## Why It Works

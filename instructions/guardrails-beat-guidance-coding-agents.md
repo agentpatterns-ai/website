@@ -10,7 +10,7 @@ aliases:
   - Guardrails Over Guidance
   - Negative Rules for Coding Agents
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Guardrails Beat Guidance: Rule Design for Coding Agents
@@ -33,7 +33,7 @@ The first large-scale evaluation of CLAUDE.md / `.cursorrules`-style files scrap
 
 Zhang et al. analyze the asymmetry through potential-based reward shaping (PBRS): rules do not teach new behavior but reshape the agent's search landscape ([Zhang et al., 2026](https://arxiv.org/abs/2604.11088)). Negative constraints remove infeasible branches — a discrete, binary cut. Positive directives add soft preferences that compete with training-time priors, producing the objective conflict that shows up as degraded benchmark performance.
 
-The context-priming half is independent: any domain-relevant text activates the coding-task subspace of the model's representations regardless of content, which explains why random rules match hand-written ones. Rule presence primes; rule content shapes the search. The two effects stack.
+The context-priming half is independent: any domain-relevant text activates the coding-task subspace of the model's representations regardless of content — [context priming](../context-engineering/context-priming.md) in action — which explains why random rules match hand-written ones. Rule presence primes; rule content shapes the search. The two effects stack.
 
 ## Applying the Pattern
 
@@ -48,7 +48,7 @@ Three rewrites follow directly from the evidence:
 
 Each "after" rule defines a feasibility boundary the agent either crosses or doesn't — the property PBRS predicts will reshape search without competing with priors. Each "before" rule asks the agent to rank its existing behavior against a goal it must interpret.
 
-For novel conventions the agent cannot discover from the codebase — an unfamiliar build command, a project-specific tool invocation — a positive directive is the only option. Keep those, and pair them with negative guardrails around the adjacent failure modes.
+For novel conventions the agent cannot discover from the codebase — an unfamiliar build command, a project-specific tool invocation, the kind of [non-discoverable context](../context-engineering/discoverable-vs-nondiscoverable-context.md) that has to be supplied — a positive directive is the only option. Keep those, and pair them with negative guardrails around the adjacent failure modes.
 
 ## Reconciling With Other Findings
 

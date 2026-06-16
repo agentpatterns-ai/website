@@ -10,7 +10,7 @@ aliases:
   - schema-guided GraphRAG
   - typed graph retrieval
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 <!-- source: nibzard/awesome-agentic-patterns (Apache 2.0, https://github.com/nibzard/awesome-agentic-patterns) — retain attribution per license -->
@@ -53,7 +53,7 @@ graph TD
 
 The seed schema defines allowed entity types, relation types, and attribute types. An extraction agent is bounded by this schema when processing documents — nodes tagged with `schema_type` metadata at creation. High-confidence new types discovered during extraction can be proposed for schema expansion, reducing the risk of premature closure without allowing unbounded ontology sprawl.
 
-A hierarchical layer sits above the base graph: community detection fuses structural topology with subgraph semantics to produce community summaries. This enables routing at multiple abstraction levels — individual nodes for precise lookups, community summaries for broader context.
+A hierarchical layer sits above the base graph: community detection fuses [structural topology](repository-map-pattern.md) with subgraph semantics to produce community summaries. This enables routing at multiple abstraction levels — individual nodes for precise lookups, community summaries for broader context.
 
 ### Stage 2: Schema-Aware Query Decomposition
 
@@ -61,7 +61,7 @@ The decomposer outputs two things for each sub-question: the sub-question text a
 
 ### Stage 3: Typed Retrieval
 
-Each sub-question retrieval is filtered by its declared schema types before semantic scoring. Type-filtered candidates are ranked, then merged across parallel sub-question searches. Typed filtering is the primary source of precision gain; semantic scoring operates on a pre-narrowed candidate set.
+Each sub-question retrieval is filtered by its declared `schema_types` before semantic scoring. Type-filtered candidates are ranked, then merged across parallel sub-question searches. Typed filtering is the primary source of precision gain; semantic scoring operates on a pre-narrowed candidate set.
 
 The precision gain is bounded by the decomposer's ability to map an informal query onto the right schema types. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274) finds schema-aware querying strongly model-dependent — its strongest model reached 77.23% average accuracy while weaker models trailed substantially — and reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions remain hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
 
@@ -114,11 +114,11 @@ Sub-question: "Which cases apply in jurisdiction X?"
   → schema_types: [Case, Jurisdiction, APPLIES_IN]
 ```
 
-Retrieval for each sub-question filters to nodes tagged with the declared types before scoring. The evidence merge combines results across both sub-questions. A community summary for the "Contract Law — Indemnification" cluster provides broader context when node-level results are sparse.
+Retrieval for each sub-question filters to nodes tagged with the declared `schema_types` before scoring. The evidence merge combines results across both sub-questions. A community summary for the "Contract Law — Indemnification" cluster provides broader context when node-level results are sparse.
 
 ## Key Takeaways
 
-- A single domain schema aligned across construction, decomposition, and retrieval eliminates the stage-to-stage mismatch that causes GraphRAG noise.
+- A single domain schema aligned across construction, decomposition, and retrieval eliminates the stage-to-stage mismatch that causes GraphRAG noise — Youtu-GraphRAG reports 16.62% higher accuracy and up to 90.71% lower token cost from this alignment.
 - Typed sub-questions are the critical coupling: decomposition without type annotations provides minimal retrieval benefit.
 - Typed filtering narrows candidates before semantic scoring — precision comes from the filter, not from a larger semantic model.
 - Schema governance is a real cost; domains with unstable ontologies are poor candidates.

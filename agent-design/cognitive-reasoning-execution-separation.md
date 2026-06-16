@@ -12,7 +12,7 @@ aliases:
   - two-layer agent architecture
   - cognitive-execution split
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture
@@ -21,7 +21,7 @@ maturity: established
 
 ## The Split
 
-Production LLM agents mix two concerns that should be structurally separate:
+Production LLM agents mix two concerns that should be structurally separate, the same cut as [separation of knowledge and execution](separation-of-knowledge-and-execution.md):
 
 - **Reasoning layer** — determines which tools to call, in what order, and how to interpret results. Contains no execution logic.
 - **Execution layer** — receives typed tool calls and acts on them. Contains no decision logic.
@@ -46,7 +46,7 @@ Execution-layer tools stay available without pre-occupying reasoning context.
 
 ## Workload-Specialized Model Routing
 
-The separation enables model routing by layer. Reasoning tasks require instruction-following depth and long-context coherence — appropriate for larger frontier models. Execution tasks are often deterministic, short-context, and high-frequency — appropriate for fast, low-cost models.
+The separation enables [model routing by layer](cost-aware-agent-design.md). Reasoning tasks require instruction-following depth and long-context coherence — appropriate for larger frontier models. Execution tasks are often deterministic, short-context, and high-frequency — appropriate for fast, low-cost models.
 
 Running execution on cheaper models while reserving frontier capacity for reasoning reduces per-task cost — this model routing is one of the main cost levers the layer separation enables.
 
@@ -60,14 +60,14 @@ graph TD
 
 ## Why It Works
 
-Layer separation works because it eliminates two categories of failure that compound in monolithic agents. First, when a reasoning model must also manage implementation details — file handles, retry loops, API pagination — those details compete with planning content in the context window and degrade decision quality. Keeping execution logic out of the reasoning context preserves the signal-to-noise ratio for the reasoning model. Second, execution failures become isolated and attributable: a failed tool call can be retried or rerun independently without re-invoking the reasoning layer, and side effects (writes, API calls) are confined to the execution layer where they can be audited or rolled back without touching reasoning state.
+Layer separation works because it eliminates two categories of failure that compound in monolithic agents. First, when a reasoning model must also manage implementation details — file handles, retry loops, API pagination — those details compete with planning content in the context window and degrade decision quality. Keeping execution logic out of the reasoning context preserves the signal-to-noise ratio for the reasoning model — the core discipline of [context engineering](../context-engineering/context-engineering.md). Second, execution failures become isolated and attributable: a failed tool call can be retried or rerun independently without re-invoking the reasoning layer, and side effects (writes, API calls) are confined to the execution layer where they can be audited or rolled back without touching reasoning state.
 
 ## When This Backfires
 
 The split adds overhead that is not always justified:
 
 - **Short-lived single-turn tasks**: For tasks that complete in one or two tool calls, the typed-interface seam adds schema validation and context-passing overhead with no testability benefit — a simple function call is often clearer.
-- **High-latency layer seams**: If the execution layer is a remote service, every reasoning-to-execution round-trip adds network latency. Tight feedback loops (reactive agents, streaming responses) may need collocated logic instead.
+- **High-latency layer seams**: If the execution layer is a remote service — an [orchestrator-worker](../multi-agent/orchestrator-worker.md) split across processes — every reasoning-to-execution round-trip adds network latency. Tight feedback loops (reactive agents, streaming responses) may need collocated logic instead.
 - **Schema versioning churn**: Typed interfaces become a maintenance burden when tool signatures change frequently — the schema contract must be versioned and both layers kept in sync, which offsets the testing advantages in fast-iteration codebases.
 
 ## Independent Testability
@@ -75,7 +75,7 @@ The split adds overhead that is not always justified:
 Each layer can be validated without the other:
 
 - **Reasoning layer**: Given a known task and known tool schemas, does the agent produce the correct tool call sequence? Feed canned execution responses to verify.
-- **Execution layer**: Given a valid typed tool call, does the execution produce the expected side effect and return value? No reasoning layer required.
+- **Execution layer**: Given a valid typed tool call (a validated `BaseModel`), does the execution produce the expected side effect and return value? No reasoning layer required.
 
 Without a schema contract, testing requires running the full system.
 

@@ -11,7 +11,7 @@ aliases:
   - effort scaling
   - effort-based resource allocation
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Heuristic-Based Effort Scaling in Agent System Prompts
@@ -36,7 +36,7 @@ These numbers come from [Anthropic's documented experience](https://www.anthropi
 
 ## Breadth-First Before Narrowing
 
-Specific query instructions cause agents to issue narrow searches. A breadth-first heuristic outperforms step-by-step specificity because the agent can adapt to what it discovers. Encode it directly: "Start with short, broad queries. Evaluate what's available. Then progressively narrow focus." [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) prompted this pattern after observing the failure mode — a broad pattern returning 50 filterable results beats a specific pattern returning zero.
+Specific query instructions cause agents to issue narrow searches — the over-low [system-prompt altitude](../instructions/system-prompt-altitude.md) failure mode. A breadth-first heuristic outperforms step-by-step specificity because the agent can adapt to what it discovers. Encode it directly: "Start with short, broad queries. Evaluate what's available. Then progressively narrow focus." [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) prompted this pattern after observing the failure mode — a broad pattern returning 50 filterable results beats a specific pattern returning zero.
 
 ## Extended Thinking as a Planning Phase
 
@@ -115,7 +115,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 
 - Define explicit complexity tiers in system prompts with agent counts and tool-call budgets per tier.
 - Breadth-first discovery heuristics outperform step-by-step specificity because they adapt to discovered context.
-- Extended thinking gives lead agents a planning phase before committing to a tool strategy.
+- Extended thinking gives lead agents a planning phase before committing to a tool strategy — see [reasoning budget allocation](reasoning-budget-allocation.md) for sizing it alongside tool-call budgets.
 - Parallelization gains compound: parallel subagents and parallel tool calls within subagents are independent multipliers.
 - Small test sets (~20 queries) are sufficient for detecting regressions during prompt refinement.
 - Claude Code's `/effort` command allows runtime effort adjustment between turns, complementing prompt-level heuristics.
@@ -126,7 +126,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md) — the parallel-subagent mechanism the higher tiers spend on
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — the cost discipline that effort scaling operationalizes
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — allocating thinking budget alongside tool-call budgets
-- [Code-Health-Gated LLM Tier Routing](code-health-gated-tier-routing.md) — route by file-level code health as a pre-generation signal
+- [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health as a pre-generation signal
 - [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct roles to the subagents each tier spawns
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](loop-strategy-spectrum.md) — context strategies that pair with effort tiers
 - [Convergence Detection in Iterative Refinement](convergence-detection.md) — knowing when the refinement loop has converged

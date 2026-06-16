@@ -14,7 +14,7 @@ last_reviewed: 2026-05-27
 
 > A practitioner pathway for teams adopting eval-driven development — the discipline of defining measurable success criteria before writing agent feature code.
 
-Traditional testing assumes deterministic systems: same input, same output. Agents are non-deterministic. The same prompt, same task, same environment can produce different results across runs. This pathway teaches the evaluation discipline that replaces gut-feel quality assessment with reproducible, automated measurement.
+Traditional testing assumes deterministic systems: same input, same output. Agents are non-deterministic. The same prompt, same task, same environment can produce different results across runs. This pathway teaches the [eval-driven development](../../workflows/eval-driven-development.md) discipline that replaces gut-feel quality assessment with reproducible, automated measurement.
 
 The modules progress from foundational concepts through hands-on suite construction to production-grade hardening. Each builds on the previous — start at the beginning if eval-driven development is new to your team.
 

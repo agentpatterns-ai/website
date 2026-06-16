@@ -49,7 +49,7 @@ Agents address observable failures rather than underlying causes ([Mason, 2026](
 
 ### 4. Training-Frequency Stack Convergence
 
-When asked to choose tools, agents recommend by training data frequency, not fitness. Greenfield projects tend to converge on a narrow stack regardless of requirements. The mechanism: more training examples → higher confidence → stronger default recommendation.
+When asked to choose tools, agents recommend by training data frequency, not fitness. Greenfield projects tend to converge on a narrow stack regardless of requirements — the [boring-technology bias](../anti-patterns/boring-technology-bias.md). The mechanism: more training examples → higher confidence → stronger default recommendation.
 
 ## Why Biases Compound in Multi-Agent Systems
 
@@ -78,11 +78,11 @@ When inheriting an agent-built codebase, check these signals:
 
 **Technology stack** — verify tool choices fit requirements, not training-corpus frequency.
 
-**Abstraction depth** — single-implementation abstract base classes and factories wrapping simple operations are reliable bloat indicators.
+**Abstraction depth** — single-implementation abstract base classes and factories wrapping simple operations are reliable [abstraction-bloat](../anti-patterns/abstraction-bloat.md) indicators.
 
 ## When This Backfires
 
-- **Small codebases** — enforcement overhead (CI rules, ADR maintenance) rarely pays back in projects under six months or ten engineers.
+- **Small codebases** — enforcement overhead (CI rules, ADR maintenance) rarely pays back in projects under 6 months old or 10 engineers.
 - **Partial enforcement** — rules ignored by half the repos create false confidence; inconsistent application is worse than none.
 - **Refactoring during scale-up** — simultaneous cleanup and agent expansion re-introduces biases faster than they're removed; stabilize scope first.
 - **Threshold-only duplication alerts** — copy/paste rate is not a proxy for architectural health; high duplication in generated test scaffolding is benign, and noise erodes trust in the signal.

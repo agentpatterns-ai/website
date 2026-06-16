@@ -31,7 +31,7 @@ More reasoning time does not narrow the gap:
 
 > Each model moves toward a model-specific authorization attractor: more reasoning makes it more consistent in its own failure mode, whether broad-but-exposed or tight-but-brittle. ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859))
 
-Extended reasoning entrenches the bias rather than escaping it. A broad-biased model produces broader policies; a tight-biased model produces tighter and more brittle ones. The single-pass framing confounds two objectives — sufficiency and tightness — and the model drifts toward whichever it weights more heavily.
+Extended reasoning entrenches the bias rather than escaping it. A broad-biased model produces broader policies — a larger [blast radius](blast-radius-containment.md) — while a tight-biased model produces tighter and more brittle ones. The single-pass framing confounds two objectives — sufficiency and tightness — and the model drifts toward whichever it weights more heavily.
 
 ## The Two-Pass Decomposition
 
@@ -94,7 +94,7 @@ Output: keep the reads under `./src`, `./tests`, `./pyproject.toml`, `./conftest
 
 - **Audit pass inherits the same attractor bias.** Pass 2 asks the same model to evaluate its own Pass 1 output — not an independent oracle. A broad-biased model may fail to prune; a tight-biased model may over-prune.
 - **Two-pass latency and token cost.** For short-lived tasks where the policy executes once, the extra cost may exceed the marginal tightening.
-- **Static artifacts still require runtime enforcement.** Skipping runtime enforcement because you trust the two-pass output is worse than using a default-deny sandbox.
+- **Static artifacts still require runtime enforcement.** Skipping [runtime authorization](task-based-access-control-hybrid-inspection.md) because you trust the two-pass output is worse than using a default-deny sandbox.
 - **Generalization is unproven.** AuthBench covers terminal file policies; network egress, database credentials, and multi-agent delegation are not established by the paper.
 
 When a transcript-driven allowlist, default-deny sandbox, or static analyzer is available, prefer those. Reserve the two-pass decomposition for cases where a model must author the initial policy and no runtime evidence yet exists.

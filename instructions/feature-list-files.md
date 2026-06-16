@@ -11,7 +11,7 @@ aliases:
   - feature spec file
   - feature contract
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Feature List Files
@@ -102,7 +102,7 @@ This triad replaces context window memory. The feature list does not forget, doe
 Feature list files add overhead that outweighs the benefit in several situations:
 
 - **Exploratory or greenfield work**: when requirements are unknown upfront, writing acceptance criteria before any implementation forces premature specification. The list becomes a fiction that diverges from what actually gets built.
-- **Short single-session tasks**: for a task completing in one session with no state continuity needed, a feature list is unnecessary scaffolding. The agent's own working memory is sufficient.
+- **Short single-session tasks**: for a task completing in one session with no state continuity needed, a feature list is unnecessary scaffolding — the same threshold at which a [frozen spec file](frozen-spec-file.md) stops paying off. The agent's own working memory is sufficient.
 - **Criteria that can be gamed**: acceptance criteria defined as command outputs can be satisfied by hardcoding responses. A poorly designed criterion (`task list` shows a checkmark) can be met without the underlying feature working correctly — the list gives false confidence rather than genuine verification.
 - **Feature list staleness**: in fast-moving projects requirements shift mid-build. Without a human reviewing and updating the list between sessions, the agent dutifully implements outdated entries while actual priorities diverge.
 - **Scale without decomposition**: at 200+ features a flat list with no dependency ordering forces the agent to attempt entries whose prerequisites have not been built. Priority order alone does not capture dependency graphs.

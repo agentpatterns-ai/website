@@ -9,7 +9,7 @@ aliases:
   - pluginSuggestionMarketplaces
   - Plugin Suggestion Marketplaces
 last_reviewed: 2026-06-03
-maturity: established
+maturity: emerging
 ---
 
 # Directory-Aware Plugin Suggestions via `pluginSuggestionMarketplaces`

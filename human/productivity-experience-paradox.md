@@ -43,7 +43,7 @@ The honest reading: instrument *both* halves. Confirm the productivity gain is r
 
 ## Example
 
-An engineer adopts an assistant and ships noticeably more: most new code is generated, and they report higher productivity in both the first survey and the follow-up six months later. But their day has reshaped — it is now mostly reading diffs, spotting subtle errors in plausible-looking output, and re-prompting. The tight build-test loop that used to produce flow is replaced by a stop-start supervision loop. On the productivity dashboard nothing looks wrong; in the six-month survey, this engineer is one of the cohort now reporting a worse experience.
+An engineer adopts an assistant and ships noticeably more: most new code is generated, and they report higher productivity in both the first survey and the follow-up six months later. But their day has reshaped — it is now mostly reading diffs, spotting subtle errors in plausible-looking output, and re-prompting. The tight build-test loop that used to produce flow is replaced by a stop-start supervision loop — the [bottleneck migration](bottleneck-migration.md) from writing to reviewing, felt at the level of a single day. On the productivity dashboard nothing looks wrong; in the six-month survey, this engineer is one of the cohort now reporting a worse experience.
 
 ## Key Takeaways
 

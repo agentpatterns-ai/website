@@ -59,7 +59,7 @@ The benchmark records three metrics per configuration: pass rate, duration, toke
 Skills split into two categories that upgrade differently: [Source: [Improving skill-creator](https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills)]
 
 - **Capability uplift** — encodes techniques the base model cannot do consistently. On upgrades, run evals on the raw and skill-augmented model; if raw matches or exceeds, retire the skill.
-- **Encoded preference** — sequences capabilities according to team workflows. Durable across model generations because the model cannot infer your process. Upgrade evals verify workflow fidelity (step order, output format, required checks), not raw quality.
+- **Encoded preference** — sequences capabilities according to team workflows, the workflow-fidelity dimension of [skill authoring](../tool-engineering/skill-authoring-patterns.md). Durable across model generations because the model cannot infer your process. Upgrade evals verify workflow fidelity (step order, output format, required checks), not raw quality.
 
 ## Grading Pitfalls
 
@@ -100,9 +100,9 @@ A CSV-analysis skill gets an `evals/evals.json` with two cases — a "top 3 mont
 ## Related
 
 - [Skill Eval Loop](../tools/claude/skill-eval-loop.md) — Claude-specific implementation using skill-creator
-- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — why skill-augmented benchmark gains shrink under realistic retrieval
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — why skill-augmented benchmark gains shrink under realistic retrieval
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md) — semantic fuzzing for natural-language skill guardrails
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — description craft and authoring context
 - [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md) — general eval-first workflow
-- [Eval-Driven Development for Agent Tools](../workflows/eval-driven-tool-development.md) — tool-level parallel to the skill-level loop
+- [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — the reference loop, including the tool-building variant parallel to the skill-level loop
 - [Agent Skills Standard](../standards/agent-skills-standard.md) — the portable skill format this technique applies to

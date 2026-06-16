@@ -123,7 +123,7 @@ test('passenger reserves a window seat on a direct train', async ({ page }) => {
 });
 ```
 
-The validator runs `npx playwright test --dry-run` plus import resolution checks. If either fails, the failure output is sent back to the generator. A passing script goes to human review, where the reviewer verifies that the test assertions match the spec's acceptance criteria — not that every line of generated code is optimal.
+The validator runs `npx playwright test --dry-run` plus import resolution checks. If either fails, the failure output is sent back to the generator. A passing script goes to human review, where the reviewer verifies that the test assertions match the spec's acceptance criteria — the central check in [spec-driven development](../workflows/spec-driven-development.md) — not that every line of generated code is optimal.
 
 The retrieval step is what makes this work at scale. Without it, the generator would invent import paths and helper function names. With the retrieved examples, it uses `loginAsPassenger`, `searchJourney`, and `data-testid` selectors that already exist in the codebase.
 
@@ -132,8 +132,8 @@ The retrieval step is what makes this work at scale. Without it, the generator w
 The pattern degrades or fails under several conditions:
 
 - **Thin corpus**: Retrieval is only as useful as the existing test library. When the corpus is too small or thin in a given domain, top-k results return generic examples, and the generator falls back to its training priors and produces style-inconsistent output.
-- **Unstable specs**: If acceptance criteria change frequently between writing and review, retrieved examples from an older spec style diverge from the incoming spec. Spec quality must be locked before pipeline entry, not after.
-- **High API churn**: The generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break — retrieved examples become misleading rather than grounding, and hallucination rates increase rather than decrease.
+- **Unstable specs**: If acceptance criteria change frequently between writing and review, retrieved examples from an older spec style diverge from the incoming spec — a recurring entry in the [RAG/agent reliability problem map](rag-agent-reliability-problem-map.md). Spec quality must be locked before pipeline entry, not after.
+- **High API churn**: The generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break — retrieved examples become misleading rather than grounding, and hallucination rates increase rather than decrease, the freshness failure mode [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) have to manage.
 - **Semantically narrow test suites**: If the existing corpus covers only one test pattern (e.g., all smoke tests), retrieval degenerates into retrieving the same unhelpful example for every spec regardless of type.
 
 Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did **not** improve the correctness of LLM-generated unit tests and only improved line coverage by 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682), ICSE 2026). The throughput and style-consistency gains justify the pattern; human review of assertion semantics remains load-bearing for correctness.

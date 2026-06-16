@@ -8,7 +8,7 @@ tags:
   - copilot
   - security
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Content Exclusion Gap: AI Security Boundaries by Mode
@@ -82,9 +82,9 @@ The same file that the organization intended to protect is fully visible to the 
 The mitigations above are not foolproof:
 
 - **Filesystem permissions** work only if agents run with restricted OS-level credentials. Many IDE-based agent features inherit the developer's full permissions, so OS restrictions require deliberate credential separation — not just configuration.
-- **Pre-commit hooks** detect after the fact. An agent that reads a sensitive file but never commits anything leaves no trace in the hook output.
+- **Pre-commit hooks** detect after the fact, even when [enforcing agent behavior with hooks](enforcing-agent-behavior-with-hooks.md). An agent that reads a sensitive file but never commits anything leaves no trace in the hook output.
 - **Repository isolation** shifts risk rather than eliminates it. Sensitive repositories still need agent access controls reviewed independently, and cross-repo agent tasks can pull credentials or logic across boundaries.
-- **Instruction-based exclusions** (AGENTS.md, copilot-instructions.md) are guidance, not enforcement. A sufficiently broad task prompt can cause an agent to traverse paths the instructions intended to exclude, especially if the agent reasons that reading the file is necessary to complete the task.
+- **Instruction-based exclusions** (AGENTS.md, copilot-instructions.md) are guidance, not enforcement. A sufficiently broad task prompt can cause an agent to traverse paths the instructions intended to exclude — the [task scope security boundary](../security/task-scope-security-boundary.md) problem — especially if the agent reasons that reading the file is necessary to complete the task.
 - **Review gates** on agent PRs catch writes but not reads. If the agent reads sensitive data to construct a plan and then produces a PR that does not directly reference that data, the read goes undetected.
 
 The underlying issue — that exclusion policies designed for passive modes do not propagate to active modes — is architectural. Until GitHub (or other vendors) builds exclusion enforcement into the agent traversal layer itself, filesystem-level controls are the only reliable boundary.

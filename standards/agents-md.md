@@ -58,7 +58,7 @@ The [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-conte
 
 ## Why It Works
 
-The mechanism is straightforward. Agents operate on context. An agent with no project context defaults to generic behavior: common tooling, conventional patterns, assumptions drawn from training data. None of these are wrong in general; most are wrong for a specific project with specific constraints.
+The mechanism is straightforward. Agents operate on context. An agent with no [project context](../instructions/instruction-file-ecosystem.md) defaults to generic behavior: common tooling, conventional patterns, assumptions drawn from training data. None of these are wrong in general; most are wrong for a specific project with specific constraints.
 
 Loading AGENTS.md at session start converts a generic agent into a project-aware one. The conversion cost is fixed (one file) and applies to every task for the life of the project.
 

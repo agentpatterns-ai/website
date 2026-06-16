@@ -7,7 +7,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Single-Branch Git for Agent Swarms
@@ -24,7 +24,7 @@ The standard branch-per-feature model assumes a small number of long-lived branc
 | Problem | Mechanism |
 |---------|-----------|
 | **Merge conflicts grow with agent count** | With n agents each touching shared files, potential conflict surface scales with the number of concurrent branches. Practitioner guides that rely on worktree isolation [cap their recommendation at 3–5 parallel agents](https://superset.sh/blog/parallel-coding-agents-guide) for this reason — beyond that, the codebase's ability to absorb parallel changes becomes the bottleneck, not agent capacity. |
-| **Rebase burns agent context** | Resolving merge conflicts and rebasing branches consumes context that should be spent on implementation. An agent that spends half its context window on git hygiene is half as productive. |
+| **Rebase burns agent context** | Resolving merge conflicts and rebasing branches consumes context that should be spent on implementation. An agent that spends half its context window on git hygiene is 50% as productive. |
 | **Logical conflicts survive textual merges** | A function signature change on one branch and a new callsite on another merge cleanly but fail to compile. On a single branch, the second agent sees the change immediately and adapts. Branches hide this class of conflict until merge time. |
 
 ## The Single-Branch Model
@@ -57,7 +57,7 @@ Workflow per agent:
 
 ### 2. Pre-Commit Guard
 
-A git hook that runs before each commit. It reads the active reservation files, checks whether any committed files are reserved by a different agent, and rejects the commit if there is a conflict. This catches the case where two agents claim the same file — one of them fails fast rather than silently overwriting.
+A git hook that runs before each commit. It reads the active [reservation files](../multi-agent/file-based-agent-coordination.md), checks whether any committed files are reserved by a different agent, and rejects the commit if there is a conflict. This catches the case where two agents claim the same file — one of them fails fast rather than silently overwriting.
 
 ### 3. Destructive Command Guard (DCG)
 
@@ -83,7 +83,7 @@ Single-branch is not a universal upgrade from worktrees. It is specifically desi
 | **Coordination infrastructure exists** (Agent Mail or equivalent) | Advisory reservations require a messaging layer to notify agents when reservations conflict |
 | **DCG is installed and active** | Without mechanical enforcement, single-branch is strictly riskier than branching |
 | **Agents are fungible** | All agents read the same AGENTS.md and can pick up any task. Specialist agents become single points of failure — if the "auth specialist" writes a function signature another agent immediately builds on, a conflict on main breaks both. Fungible agents adapt to any change they encounter. |
-| **Work is pre-partitioned into beads** | Independent, small tasks that agents can pick up, complete, and commit in short cycles. Long-running agent sessions with large uncommitted diffs defeat the model. |
+| **Work is pre-partitioned into [Code-Native Memory Substrates](../agent-design/code-native-memory-substrates.md)** | Independent, small tasks that agents can pick up, complete, and commit in short cycles. Long-running agent sessions with large uncommitted diffs defeat the model. |
 
 ## Worktrees vs. Single-Branch: When to Use Each
 
@@ -103,7 +103,7 @@ Claude Code's documented recommendation is worktrees. If you are running fewer t
 
 - Feature branches create merge overhead that grows with agent count; single-branch keeps all agents synchronized on a live shared view of the codebase.
 - Three mechanical guards replace branch isolation: advisory file reservations with TTL expiry, a pre-commit guard, and a Destructive Command Guard at the shell level.
-- The DCG exists because instructions do not prevent execution — only mechanical blocks at the shell layer do.
+- The DCG exists because instructions do not prevent execution — only [mechanical blocks at the shell layer](../verification/deterministic-guardrails.md) do.
 - Single-branch requires coordination infrastructure, fungible agents, and pre-partitioned work to be safe. Without those pre-conditions, it is strictly riskier than branching.
 - Worktrees (Claude Code's recommendation) and single-branch (Agent Flywheel's recommendation) reflect genuinely different architectural positions with different tradeoff profiles — choose based on your agent count and coordination infrastructure.
 
@@ -111,7 +111,7 @@ Claude Code's documented recommendation is worktrees. If you are running fewer t
 
 - [Worktree Isolation](worktree-isolation.md)
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
-- [Beads: Structured Task Graphs as External Agent Memory](../agent-design/beads-task-graph-agent-memory.md)
+- [Code-Native Memory Substrates](../agent-design/code-native-memory-substrates.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Idempotent Agent Operations](../agent-design/idempotent-agent-operations.md)
 - [Rollback-First Design](../agent-design/rollback-first-design.md)

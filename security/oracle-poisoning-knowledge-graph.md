@@ -11,7 +11,7 @@ aliases:
   - knowledge graph poisoning
   - oracle poisoning attack
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents
@@ -46,7 +46,7 @@ The paper demonstrates six distinct corruption shapes:
 
 - **Fact injection** — insert false nodes the agent queries directly.
 - **Relationship manipulation** — rewrite edges so the agent traverses to the wrong target.
-- **Authority spoofing** — plant high-credibility provenance on attacker-controlled facts.
+- **Authority spoofing** — plant high-credibility provenance on attacker-controlled facts, defeating naive [provenance-aware auditing](provenance-aware-decision-auditing.md).
 - **Cascading corruption** — poison foundational nodes downstream queries depend on.
 - **Semantic drift** — shift definitions just enough to evade inconsistency checks.
 - **Query hijacking** — target the queries the agent runs for a given workflow.
@@ -90,7 +90,7 @@ The paper evaluates five defenses. Only one is fully effective.
 | Confidence thresholds and uncertainty quantification | Partial, model-dependent |
 | Canary facts to detect tampering | Partial — detection only |
 
-Read-only access removes the prerequisite. Every other defense fights mid-flight, where the property that makes tool-use useful — the agent trusting structured outputs — makes the defense leaky.
+Read-only access removes the prerequisite. Every other defense fights mid-flight, where the property that makes MCP and SDK tool-use useful — the agent trusting structured outputs — makes the defense leaky.
 
 ## When Your Architecture Is Exposed
 
@@ -98,7 +98,7 @@ The attack lands when three conditions hold:
 
 - The agent consumes the knowledge graph via a tool-use protocol (not inline context).
 - The graph has a writable path — directly, via third-party ingestion, or via a shared write API.
-- Queries are directed enough that the agent does not triangulate.
+- Queries are directed enough that the agent does not triangulate — open-ended decomposition drops trust to 3-55%.
 
 ```mermaid
 graph TD

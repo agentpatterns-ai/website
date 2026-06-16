@@ -132,7 +132,7 @@ Validate the contract before declaring initialization complete: open a fresh age
 Building on the lecture's start-from-scratch versus start-from-template contrast, two starting positions are worth naming:
 
 - **Cold start** — an empty directory where the agent infers structure from scratch. High TTFV, no contract to read.
-- **Warm start** — a templated project with directory structure, test framework, and contract preset. Low TTFV from session one.
+- **Warm start** — a templated project with directory structure, test framework, and contract preset, the same idea as [prebuilt agent environments](cloud-agent-session-bootstrap.md). Low TTFV from session one.
 
 A warm-start strategy preloads init infrastructure — templates, pre-baked configs, an empty contract scaffolded in — so the first session writes only the *project-specific* portion rather than authoring it from nothing.
 
@@ -178,17 +178,17 @@ Step 5: Beginning implementation of password reset endpoint.
 
 The ritual adds overhead at session start — when that cost outweighs the benefit, the pattern degrades:
 
-- **Stale progress file**: If the file is not updated at session end, the next session reads stale state and picks the wrong task. The ritual amplifies a missing exit habit rather than replacing it.
+- **Stale progress file**: If the file is not updated at session end, the next session reads stale state and picks the wrong task. The ritual amplifies a missing exit habit — the session-end write that [trajectory logging via progress files](../observability/trajectory-logging-progress-files.md) depends on — rather than replacing it.
 - **Long baseline test suites**: When tests take minutes, agents skip the step under time pressure — scope it to a fast smoke test or targeted subset.
 - **Single-session work**: For short tasks with no prior context, startup adds latency with no orientation benefit. Apply the ritual only when prior state exists to read.
-- **Context overloading**: A large git log, verbose progress file, and multiple config files front-load context consumption. Keep progress files minimal.
+- **Context overloading**: A large git log, verbose progress file, and multiple config files front-load context consumption — the budget [context priming](../context-engineering/context-priming.md) tries to spend deliberately. Keep progress files minimal.
 
 ## Key Takeaways
 
 - Run `pwd` first — wrong working directory causes silent failures.
 - Read git log and a progress file before touching code — establish completed and remaining work.
 - Run baseline tests before implementing — catch bugs from previous sessions early.
-- Select one feature per session and finish it — no multi-tasking within a session.
+- Select one feature per session and finish it — no multi-tasking within a session, the [WIP=1](wip-1-littles-law-agent-throughput.md) discipline applied at session scope.
 - Enforce the ritual via system prompt instructions, not agent discretion.
 - Write a Bootstrap Contract — a fresh session must answer "can I start, test, see progress, pick up next steps" from repo contents alone.
 - Track TTFV across sessions — rising time-to-first-verification is the earliest signal that init quality is regressing.

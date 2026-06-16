@@ -17,7 +17,7 @@ The difference between a developer who configures Copilot and one who gets consi
 
 ## Context Engineering vs Prompt Engineering vs Harness Engineering
 
-**Prompt engineering** is writing a good question. **Context engineering** is designing the entire information environment the agent operates in — before, during, and across sessions. **Harness engineering** is building the development environment so the agent can self-correct without human intervention.
+**Prompt engineering** is writing a good question. **Context engineering** is designing the entire information environment the agent operates in — before, during, and across sessions. **[Harness engineering](harness-engineering.md)** is building the development environment so the agent can self-correct without human intervention.
 
 | | Prompt engineering | Context engineering | Harness engineering |
 |-|-------------------|-------------------|-------------------|
@@ -28,7 +28,7 @@ The difference between a developer who configures Copilot and one who gets consi
 | **Failure mode** | Bad answer to one question | Inconsistent results across sessions | Agent can't verify its own work — every output requires manual review |
 | **Durability** | Per-message | Per-repo, evolves with configuration | Permanent — compounds across all agents, all sessions, all team members |
 
-A well-crafted prompt in a poorly configured environment produces inconsistent results. A mediocre prompt in a well-engineered context produces good results reliably. A well-engineered context in a codebase without backpressure still requires manual verification of every output. All three layers compound: prompt quality × context design × environment feedback loops. The [customization stack](customization-primitives.md) — instructions, agents, skills, hooks, MCP, Spaces, memory — is context engineering infrastructure. The type system, test suite, and linter rules covered in [Harness Engineering](harness-engineering.md) are harness engineering infrastructure.
+A well-crafted prompt in a poorly configured environment produces inconsistent results. A mediocre prompt in a well-engineered context produces good results reliably. A well-engineered context in a codebase without [backpressure](../../agent-design/agent-backpressure.md) still requires manual verification of every output. All three layers compound: prompt quality × context design × environment feedback loops. The [customization stack](customization-primitives.md) — instructions, agents, skills, hooks, MCP, Spaces, memory — is context engineering infrastructure. The type system, test suite, and linter rules covered in [Harness Engineering](harness-engineering.md) are harness engineering infrastructure.
 
 ### Why this matters for Copilot specifically
 
@@ -73,7 +73,7 @@ This has practical consequences:
 
 ### Context budget
 
-The context window is finite. Every token preloaded into context displaces a token available for reasoning, tool results, and implementation.
+The context window is a [finite budget](../../context-engineering/context-budget-allocation.md). Every token preloaded into context displaces a token available for reasoning, tool results, and implementation.
 
 **Target**: ≤50% context utilization after preloading. The remaining 50% is working memory — space for the agent to read files, run commands, iterate, and think.
 
@@ -89,7 +89,7 @@ A 500-line `copilot-instructions.md` that covers every convention, every edge ca
 
 1. **Budget waste** — most of those 500 lines are irrelevant to any given task. A developer adding a React component doesn't need the database migration procedure.
 2. **Attention dilution** — the more instructions loaded, the less attention any single instruction receives. Critical rules get lost in the volume.
-3. **Stale context** — large monolithic files are harder to maintain. Rules drift out of date and start contradicting the codebase.
+3. **Stale context** — large monolithic `copilot-instructions.md` files are harder to maintain. Rules drift out of date and start contradicting the codebase.
 
 ### The progressive disclosure pattern
 
@@ -290,7 +290,7 @@ The agent works autonomously — reading files, making edits, running commands, 
 
 ### 3. Steer (if needed)
 
-If the agent is heading in the wrong direction, send a steering message **immediately** — the earlier, the better.
+If the agent is heading in the wrong direction, send a [steering message](../../agent-design/steering-running-agents.md) **immediately** — the earlier, the better.
 
 **Good steering**:
 ```
@@ -298,12 +298,12 @@ Stop — don't create a new rate limiter class. Use the existing one at
 src/middleware/rate-limiter.ts. Read it first.
 ```
 
-**Bad steering**: Waiting until the agent finishes a wrong approach, then asking it to redo everything. By then, the context is polluted with the wrong approach's tool outputs and edits.
+**Bad steering**: Waiting until the agent finishes a wrong approach, then asking it to redo everything. By then, the [context is polluted](../../context-engineering/context-window-dumb-zone.md) with the wrong approach's tool outputs and edits.
 
 **When to steer vs restart**:
 
 - **Steer**: The agent is on a wrong path but hasn't gone far. A course correction recovers.
-- **Restart**: The agent has made extensive wrong changes, and the context is saturated with the wrong approach. A fresh session with a better prompt is faster.
+- **Restart**: The agent has made extensive wrong changes, and the context is saturated with the wrong approach. A fresh Copilot session with a better prompt is faster.
 - **Let it finish**: The approach is acceptable, even if not exactly what you'd have done. The review tax for a slightly different approach is lower than restarting.
 
 Over-steering signals an underspecified initial prompt. If you're steering every 3 messages, fix the prompt — don't manage the run.
@@ -365,23 +365,23 @@ Configure Copilot Code Review to run automatically on all PRs (Repository Settin
 
 **Why it's dangerous**: Agent output quality (fluency, formatting, confidence) is independent of correctness. The agent is most dangerous when it's *almost* right — close enough to pass a casual review, wrong enough to cause production issues.
 
-**Prevention**: Verify against external ground truth. Run the tests. Read the diff line by line. Check that cited files and functions actually exist. If the agent says "this follows the existing pattern in UserRepository," open `UserRepository` and check.
+**Prevention**: Verify against external ground truth — the discipline of [trust without verify](../../anti-patterns/trust-without-verify.md). Run the tests. Read the diff line by line. Check that cited files and functions actually exist. If the agent says "this follows the existing pattern in UserRepository," open `UserRepository` and check.
 
 ### Infinite context loading
 
 **What it is**: Dumping entire documentation, all project files, or comprehensive reference material into context "just in case" the agent needs it.
 
-**Why it's dangerous**: Excess context dilutes attention, wastes budget, and accelerates context rot. The agent's ability to follow specific instructions decreases as total context volume grows.
+**Why it's dangerous**: Excess context dilutes attention, wastes budget, and accelerates context rot. The agent's ability to follow specific instructions decreases as [total context volume](../../anti-patterns/infinite-context.md) grows.
 
 **Prevention**: Load the minimum context needed. Use `#file` references for specific files, not `#codebase` for everything. Let skills and Spaces provide on-demand context rather than preloading.
 
 ### The yes-man agent
 
-**What it is**: The agent executes every request without flagging problems — missing requirements, contradictory instructions, tasks that conflict with the codebase's existing patterns.
+**What it is**: The [yes-man agent](../../anti-patterns/yes-man-agent.md) executes every request without flagging problems — missing requirements, contradictory instructions, tasks that conflict with the codebase's existing patterns.
 
 **Why it's dangerous**: Errors ship at machine speed. A human developer would say "this doesn't make sense because..." — the default agent just does it.
 
-**Prevention**: Instructions that explicitly require the agent to flag concerns:
+**Prevention**: `copilot-instructions.md` rules that explicitly require the agent to flag concerns:
 
 ```markdown
 ## In copilot-instructions.md or an agent definition:
@@ -400,15 +400,15 @@ If any check fails, explain the concern before proceeding.
 
 **Why it's dangerous**: Each addition pushes the session further from its original context. The agent's understanding of the combined task becomes progressively less coherent. Review becomes harder because the PR mixes unrelated changes.
 
-**Prevention**: One task per session. One PR per task. If you spot something else that needs fixing, note it and start a separate session.
+**Prevention**: One task per Copilot session. One PR per task. If you spot something else that needs fixing, note it and start a separate session.
 
 ### Happy path bias
 
-**What it is**: Agent-generated code that works for the common case but breaks on edge cases, error paths, and boundary conditions.
+**What it is**: Agent-generated code that works for the [common case but breaks on edge cases](../../anti-patterns/happy-path-bias.md), error paths, and boundary conditions.
 
 **Why it's dangerous**: The happy path is what you test manually and demo to stakeholders. The edge cases are what breaks in production at 2 AM.
 
-**Prevention**: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no avatar URL (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down." Naming specific failure modes reduces vulnerability density significantly compared to vague "handle errors" instructions.
+**Prevention**: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no `avatar_url` (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down." Naming specific failure modes reduces vulnerability density significantly compared to vague "handle errors" instructions.
 
 ---
 
@@ -467,7 +467,7 @@ You review the PR. Agent self-review and Copilot code review already caught mech
 
 - **Completeness**: Are there other places where `avatar_url` is assumed non-null?
 - **Design fit**: Does the fix follow the existing null-handling pattern, or did the agent introduce a new one?
-- **What's missing**: Should there be a migration to add a NOT NULL default, rather than handling null in every consumer?
+- **What's missing**: Should there be a migration to add a `NOT NULL` default, rather than handling null in every consumer?
 
 ### Step 5: Merge
 
@@ -480,12 +480,12 @@ Total human time: ~5 minutes of review. The agent handled investigation, fix, te
 ## Key Takeaways
 
 - **Context engineering, not prompt engineering**, determines consistent output quality. A well-configured `.github/` directory with instructions, agents, skills, and hooks outperforms clever prompts in an unconfigured repo.
-- **Attention is not uniform**. Critical rules belong at the top of instruction files. Restate important constraints in your message when working in long sessions.
+- **Attention is not uniform**. Critical rules belong at the top of Copilot instruction files. Restate important constraints in your message when working in long sessions.
 - **Progressive disclosure is a budget pattern**: preload only universal rules; load task-specific knowledge on demand via skills. Agent definitions should be under 50 lines. Instructions files under 100.
 - **Context rot is real**. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in the CLI. Break large tasks into agent-sized chunks.
 - **Frame tasks as contracts** (goal, constraints, success condition, recovery), not step-by-step scripts. The agent decides how; you define what and how to verify.
-- **Steer early or restart**. Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
-- **Agent self-review handles mechanical checks**. Human review should focus on design, completeness, and implicit knowledge the agent can't access.
+- **[Steer early or restart](../../agent-design/steering-running-agents.md)**. Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
+- **[Agent self-review](../../code-review/agent-self-review-loop.md) handles mechanical checks**. Human review should focus on design, completeness, and implicit knowledge the agent can't access.
 - **Name failure modes explicitly**. "Handle the case where X is null" produces better error handling than "handle errors." Specificity in the delegation contract translates directly to code quality.
 
 ## Related
@@ -514,7 +514,7 @@ Total human time: ~5 minutes of review. The agent handled investigation, fix, te
 - [Progressive Disclosure for Agents](../../agent-design/progressive-disclosure-agents.md) — minimal definitions, on-demand skills
 - [Delegation Decision](../../agent-design/delegation-decision.md) — when to delegate vs do it yourself
 - [Steering Running Agents](../../agent-design/steering-running-agents.md) — mid-run course correction
-- [Agent Self-Review Loop](../../agent-design/agent-self-review-loop.md) — automated pre-human review
+- [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md) — automated pre-human review
 - [Agent Backpressure](../../agent-design/agent-backpressure.md) — how type systems and tests enable agent autonomy
 
 **Anti-Patterns**

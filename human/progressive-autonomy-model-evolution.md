@@ -97,7 +97,7 @@ Define these **before** expanding autonomy.
 Progressive autonomy assumes measurable signals — when those don't exist, the model breaks down:
 
 - **Metrics don't exist yet.** Approval rate and defect escape rate require an instrumented workflow. Teams without CI or code review tooling have no signal to justify escalation; advancing by calendar creates phantom trust.
-- **Task distribution shifts.** Autonomy earned on scoped feature work doesn't transfer to greenfield architecture or security-sensitive domains. Treating it as a global setting rather than per-task-class causes regressions on unfamiliar work.
+- **Task distribution shifts.** Autonomy earned on scoped feature work doesn't transfer to greenfield architecture or [security-sensitive domains](../agent-design/domain-specific-agent-challenges.md). Treating it as a global setting rather than per-task-class causes regressions on unfamiliar work.
 - **Trust resets asymmetrically.** A single production incident erases accumulated trust and forces a full restart of the escalation sequence — teams that advanced quickly are disproportionately exposed.
 - **Thresholds need calibration before incidents, not after.** Rollback thresholds set reactively are often too permissive to prevent recurrence or too strict to allow useful work.
 

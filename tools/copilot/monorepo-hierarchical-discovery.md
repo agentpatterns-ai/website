@@ -86,7 +86,7 @@ Hierarchical configuration is worse than root-only configuration when:
 - **Packages drift silently.** Per-package instructions let each subtree encode its own conventions. Without a review cadence that diffs package-level config against root defaults, drift accumulates and a developer moving between packages gets conflicting guidance.
 - **Debugging becomes path-sensitive.** When agent behavior depends on the current working directory, reproducing a reported issue requires knowing exactly where the session was started. "It worked from the repo root but not from `packages/api/`" is a failure mode that root-only config does not produce.
 - **Precedence confusion.** Last-wins override across four artifact types (instructions, skills, agents, MCP servers) multiplied by multiple directory levels makes it non-obvious which configuration is active. A small monorepo can expose this without real benefit.
-- **Onboarding cost.** New contributors must learn both the hierarchical discovery model and the per-package layout. If packages share most of their agent surface, centralizing at the root reduces the number of places to look.
+- **Onboarding cost.** New contributors must learn both the Copilot CLI hierarchical discovery model and the per-package layout. If packages share most of their agent surface, centralizing at the root reduces the number of places to look.
 
 If your packages mostly share conventions, prefer root-level config and introduce per-package overrides only for directories with genuinely different tool contexts.
 

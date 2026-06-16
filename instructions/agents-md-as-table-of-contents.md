@@ -27,7 +27,7 @@ The OpenAI Harness team identified "one big AGENTS.md" as an early failure mode 
 
 2. **Attention dilution.** When every instruction is present at once, none is prominent. Agents pattern-match locally rather than navigating to the relevant section of the knowledge base.
 
-3. **Unverifiable scope.** A monolithic file grows without clear ownership. Agents cannot tell which sections are current; humans stop maintaining it because it is intimidating to edit.
+3. **Unverifiable scope.** A monolithic file grows without clear ownership — the same unbounded accumulation described by [the instruction compliance ceiling](instruction-compliance-ceiling.md). Agents cannot tell which sections are current; humans stop maintaining it because it is intimidating to edit.
 
 4. **Instant rot.** Architectural decisions change, and a file updated piecemeal accumulates contradictions. What was true at month one is stale by month six, but still reads as authoritative.
 
@@ -65,7 +65,7 @@ The pointer map controls AGENTS.md size *structurally*. [Lifecycle metadata](rul
 The discipline that closes the loop is per-rule metadata. The same lecture prescribes three fields for every rule:
 
 - **Source** — *"why was this rule added?"* The failure mode, PR comment, or incident that produced it. Auditable provenance — `git blame` answers who and when, but not *why*.
-- **Applicability** — *"when is this rule needed?"* The condition under which it fires: file pattern, task type, branch. Rules that "always apply" are usually misformed; the failure mode being prevented has a scope.
+- **Applicability** — *"when is this rule needed?"* The condition under which it fires: file pattern, task type, branch — the same scoping axes covered in [layered instruction scopes](layered-instruction-scopes.md). Rules that "always apply" are usually misformed; the failure mode being prevented has a scope.
 - **Expiry** — *"under what circumstances can this rule be removed?"* The observable that retires it: model capability rises, feature removed, never fires for N weeks.
 
 The framing the lecture uses: *"Manage your instructions like you manage code dependencies — unused dependencies should be deleted, otherwise they just slow the system down."* The metadata converts deletion from an open-ended judgement call into a closed-form predicate — has the expiry observable fired? With the predicate, the default flips from "keep when uncertain" to "delete when expired."
@@ -74,7 +74,7 @@ Anthropic's own Claude Code best-practices teaches a compatible discipline witho
 
 ### Compact Format
 
-The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; the linked doc carries its own.
+The metadata cannot itself bloat the file — that defeats the purpose. Keep it inline as a one-line YAML or HTML-comment annotation on terminal rules (rules that prescribe behavior). Pointers and structural sections do not need metadata; following the [separation of knowledge and execution](../agent-design/separation-of-knowledge-and-execution.md), the linked doc carries its own.
 
 ```markdown
 ## Critical constraints

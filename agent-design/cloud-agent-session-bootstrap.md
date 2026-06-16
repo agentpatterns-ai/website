@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - long-form
 aliases:
   - cloud agent install start lifecycle
   - session start hook bootstrap
@@ -28,7 +29,7 @@ Three conditions need to hold for the install/start split to pay off:
 - Cacheable work (`npm ci`, `bazel build`, MCP-server install) is meaningfully separable from per-session work (DB seeding, server startup, token rotation)
 - The bootstrap script is treated as production code — pinned versions, lockfile-gated rebuilds, review discipline
 
-Without all three, fall through to an adjacent lever: [prebuilt images](prebuilt-agent-environments.md) when toolchain is stable, or [runtime-install only](../workflows/agent-environment-bootstrapping.md) when no lifecycle split is available.
+Without all three, fall through to an adjacent lever: the prebuilt-image lever (see [The Prebuilt-Image Lever](#the-prebuilt-image-lever) below) when toolchain is stable, or [runtime-install only](../workflows/agent-environment-bootstrapping.md) when no lifecycle split is available.
 
 ## The Lifecycle Split
 
@@ -49,7 +50,7 @@ Cacheable installation is isomorphic to a build artifact; per-session startup is
 
 ## When This Backfires
 
-- **High dispatch volume on a stable toolchain** — when the toolchain is stable enough to justify the supply-chain pipeline, a [prebuilt image](prebuilt-agent-environments.md) pulls in less time than a cached install resumes from snapshot; GitHub measured >20% startup improvement from custom Actions images ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
+- **High dispatch volume on a stable toolchain** — when the toolchain is stable enough to justify the supply-chain pipeline, a prebuilt image (see [The Prebuilt-Image Lever](#the-prebuilt-image-lever)) pulls in less time than a cached install resumes from snapshot; GitHub measured >20% startup improvement from custom Actions images ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
 - **Bootstrap-time credential exposure** — the install hook reads more credentials than agent code should ever see: registry tokens, private-package access, baseline OAuth. Without strict secret scoping the install phase becomes a credential exfiltration surface, and any process it starts inherits its environment.
 - **Partial-install proceed-anyway semantics** — Copilot's documented behaviour when `copilot-setup-steps.yml` fails is that "Copilot will start working anyway" ([GitHub Changelog, 2025-07-30](https://github.blog/changelog/2025-07-30-copilot-coding-agent-custom-setup-steps-are-more-reliable-and-easier-to-debug/)). The agent then runs with a half-installed environment and no signal. A bootstrap script must fail loud or the start phase inherits an environment that compiles but does not run.
 - **Unpinned versions** — GitHub's onboarding guide is direct: be "explicit about versions and installation methods rather than letting the agent resolve them ad hoc, precisely to avoid unexpected versions" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/onboarding-your-ai-peer-programmer-setting-up-github-copilot-coding-agent-for-success/)). Floating versions defeat the snapshot mechanism — the snapshot is only as deterministic as the install that produced it.
@@ -105,6 +106,42 @@ The Copilot equivalent puts the cacheable work in `.github/workflows/copilot-set
 
 The hook config is on the default branch (Copilot only reads default-branch hook files) and bash/powershell variants run on the matching runner OS ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/use-hooks)).
 
+## The Prebuilt-Image Lever
+
+When dispatch volume is high and the toolchain is stable, a third structure beats the cached install: bake the runtime — toolchain, dependencies, MCP servers — into a custom container image, so each session pays an image-pull instead of an install. Two cold-start levers compose: compress provisioning (prebuild so the runner pulls a cached artifact instead of running `apt-get`/`npm ci`/`pip install` on the hot path) and remove provisioning from the hot path (start inference against the session log while the sandbox is still spinning up — see [Session Harness Sandbox Separation](session-harness-sandbox-separation.md)). GitHub reported that switching the Copilot cloud agent to GitHub Actions custom images cut startup time by over 20%, a layer on top of an earlier 50% improvement from March 2026 ([GitHub Changelog, 2026-04-27](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
+
+Bake what is stable across sessions; keep dynamic what is per-session:
+
+| Bake into image | Keep dynamic |
+|-----------------|--------------|
+| Language runtimes and package managers | Working tree (cloned per session) |
+| Pinned dependency versions and global tools | Repository secrets and ephemeral tokens |
+| Pre-installed MCP server binaries | OAuth flows and session-scoped credentials |
+| Linters, formatters, build caches | User-provided task input |
+
+A baked image is only as fresh as its last rebuild, so treat it as production code: pin the base image digest, not the tag (`ubuntu@sha256:...`, not `ubuntu:latest`); schedule rebuilds on a cadence matching dependency churn (weekly for stable stacks, daily for fast-moving); and gate rebuilds on dependency-lock changes so a security patch triggers a rebuild automatically. A custom image is also a long-lived signed registry artifact — unlike a `copilot-setup-steps.yml` install that leaves no persistent artifact — so it adds three review surfaces: base image provenance (publisher, signing key, CVE scan), layer audit (every `RUN` step touching a secret leaves it in layer history — secret leakage becomes an image-distribution leak), and registry trust (gate pulls by the same controls as the production deploy registry). Agent-purpose sandbox runtimes such as [`docker sbx`](../security/docker-sbx-adoption.md) compose with prebuilt images by mounting the baked image as the sandbox base ([Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md)).
+
+```dockerfile
+# image-build pipeline (weekly + on package-lock.json change)
+FROM ubuntu:22.04@sha256:<pinned-digest>
+RUN apt-get update && apt-get install -y nodejs npm
+COPY package.json package-lock.json /opt/prebuild/
+RUN cd /opt/prebuild && npm ci --prefix /opt/node_modules
+RUN npm install -g @company/internal-cli@1.4.2
+```
+
+```yaml
+# copilot-setup-steps.yml — only the per-session work remains
+jobs:
+  copilot-setup-steps:
+    runs-on: ghcr.io/company/copilot-runner:2026-05-01
+    steps:
+      - uses: actions/checkout@v5
+      - run: ln -s /opt/node_modules node_modules
+```
+
+Skip this lever when dispatch volume is low (the saved seconds do not amortise the rebuild pipeline and image-review overhead), when the toolchain churns weekly (the image is stale before its next rebuild), or when no signed-registry pipeline exists — without provenance review and signed registries, a custom image trades cold-start latency for amplified supply-chain risk, and the runtime-only path ([Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md)) is safer.
+
 ## Key Takeaways
 
 - The install/start lifecycle split keeps cacheable work off the hot path while keeping per-session work explicit — the third bootstrap lever alongside prebuilt images and runtime-only install
@@ -115,10 +152,12 @@ The hook config is on the default branch (Copilot only reads default-branch hook
 
 ## Related
 
-- [Prebuilt Agent Environments](prebuilt-agent-environments.md) — the cached-image alternative when toolchain churn is slower than the rebuild pipeline
 - [Agent Environment Bootstrapping](../workflows/agent-environment-bootstrapping.md) — the runtime-install lever; what to do when no cached lifecycle is available
+- [Sandbox Runtime Comparison](../security/sandbox-runtime-comparison.md) — selection rubric across bubblewrap, Seatbelt, raw Docker/Podman, and `docker sbx` for the baked-image base
+- [Cursor Self-Hosted Cloud Agents](../tools/cursor/self-hosted-cloud-agents.md) — when the runner runs on your infra, image governance is yours end-to-end
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the architectural split that makes per-session start phases cheap to retry
 - [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — the state-layer view of the same bootstrap boundary: which session state belongs in the cached install layer versus the per-session start layer
 - [Session Initialization Ritual](session-initialization-ritual.md) — the in-session orient-before-act ritual that runs after bootstrap completes
 - [Long-Running Agents](long-running-agents.md) — the operational shape that makes bootstrap latency matter at fleet scale
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](../security/llm-pinned-vulnerable-versions.md) — why "pinned versions" is the right discipline: agent-written pins routinely point at CVE-bearing releases
+  - long-form

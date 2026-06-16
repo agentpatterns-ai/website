@@ -12,7 +12,7 @@ tags:
   - tool-agnostic
   - tool-engineering
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # CLI Scripts as Agent Tools: Return Only What Matters
@@ -71,7 +71,7 @@ When writing a CLI script for agent consumption:
 
 ## Agents Writing and Iterating on Scripts
 
-A complementary pattern is agents authoring bash scripts and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal the agent already occupies — each iteration costs seconds.
+A complementary pattern is agents authoring bash scripts — as in [batch file operations](batch-file-operations.md) — and iterating through a write-execute-debug cycle. Bash has zero startup time, no compilation step, and surfaces errors in the same terminal the agent already occupies — each iteration costs seconds.
 
 Give the agent explicit input/output contracts so the first attempt is closer to correct:
 
@@ -82,7 +82,7 @@ Write a bash script that:
 - Exit 1 with a message if the directory does not exist
 ```
 
-Keep scripts modular — monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent. Once it works, have the agent add comments on platform assumptions (GNU vs BSD tools) for future modifications.
+Keep scripts modular — monolithic scripts are harder to debug when one part fails. Design the architecture yourself and delegate components to the agent. Once it works, have the agent add comments on platform assumptions (GNU vs BSD tools), which a [PostToolUse hook can detect](posttooluse-bsd-gnu-detection.md), for future modifications.
 
 Best for data-processing pipelines, build automation, and exploratory prototyping. Less effective when the task requires complex data structures, type safety, or cross-platform compatibility.
 
@@ -90,9 +90,9 @@ Best for data-processing pipelines, build automation, and exploratory prototypin
 
 **Script maintenance burden.** Wrappers hard-code assumptions about command output. When the underlying CLI changes its schema — a new column, a renamed field, a different exit code — the script silently breaks or produces wrong output. Every wrapper is a synchronization point.
 
-**Over-filtering hides signals.** A script that filters to "only errors" will miss warnings that precede errors or status transitions the agent needs. Pre-filtering bets that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
+**Over-filtering hides signals.** A script that filters to "only errors" — without the [graceful-truncation contract](graceful-tool-output-truncation.md) of a useful prefix plus a continuation handle — will miss warnings that precede errors or status transitions the agent needs. Pre-filtering bets that the script author knew exactly what the agent would need — a bet that becomes wrong when incident types change.
 
-**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper adds a layer to the investigation. Reconstructing what the raw command returned requires running it manually.
+**Hard to debug through the abstraction.** When an agent produces a wrong action, tracing the cause through a wrapper adds a layer to the investigation. Reconstructing what the raw command (for example `kubectl get pods`) returned requires running it manually.
 
 These conditions most often arise in novel incident types, rapidly evolving CLIs, and exploratory tasks where broad context beats a narrow summary.
 
@@ -142,7 +142,7 @@ Two tool calls, two concise responses. The agent identifies the root cause (data
 ## Key Takeaways
 
 - Raw CLI output is a direct context expenditure — wrapper scripts that pre-filter at the source reduce that cost.
-- Return structured, decision-ready output (JSON or concise text); bound the output and include a clear empty state.
+- Return structured, decision-ready output (`JSON` or concise text); bound the output and include a clear empty state.
 - Scripts double as an abstraction layer and enforce read-only access as a side effect.
 - Bash enables a tight write-execute-debug cycle: specify input/output signatures, keep scripts modular, document edge cases after iteration.
 - Wrappers backfire when the underlying CLI schema changes, when over-filtering hides signals, or during exploratory tasks that need broad context.

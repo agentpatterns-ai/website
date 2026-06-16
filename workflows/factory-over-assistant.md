@@ -25,7 +25,7 @@ maturity: established
 
 **Assistant model**: one human watches one agent in a sidebar. The human is the feedback loop — answering questions, correcting drift, approving actions in real time. The agent can only proceed as fast as the human can respond.
 
-**Factory model**: one human orchestrates multiple parallel agents. Automated systems — tests, CI, linters, build pipelines — are the primary feedback mechanism. The human reviews outputs asynchronously rather than watching execution.
+**Factory model**: one human orchestrates multiple [parallel agent sessions](parallel-agent-sessions.md). Automated systems — tests, CI, linters, build pipelines — are the primary feedback mechanism. The human reviews outputs asynchronously rather than watching execution.
 
 | Dimension | Assistant model | Factory model |
 |-----------|----------------|---------------|
@@ -44,7 +44,7 @@ As autonomous agent sessions extend beyond a few minutes, the assistant model in
 
 **Single-stream constraint.** You can only watch one agent at a time. A second agent running simultaneously requires a second human — or a shift to asynchronous review.
 
-**Human as bottleneck.** When the human is the feedback loop, agent speed is bounded by human response time. Automated checks run in milliseconds; humans do not.
+**Human as bottleneck.** When the human is the feedback loop, agent speed is bounded by human response time — the constraint [the bottleneck migration](../human/bottleneck-migration.md) addresses head-on. Automated checks run in milliseconds; humans do not.
 
 **Wrong surface.** Editor-centric assistant UIs optimize for observation, not orchestration. Experienced developers spend the majority of their time outside the editor — in code review, planning, debugging, and integration — yet assistant-model tools anchor attention to the editor pane.
 
@@ -52,7 +52,7 @@ As autonomous agent sessions extend beyond a few minutes, the assistant model in
 
 The factory model is not a mindset change — it requires systems that replace real-time human oversight:
 
-**Automated feedback loops.** Tests, linters, build checks, and CI pipelines must be authoritative enough for agents to self-correct. If a test is ambiguous or flaky, the agent cannot use it to determine whether its output is correct. Invest in making verification rock-solid before removing human attention.
+**Automated feedback loops.** Tests, linters, build checks, and CI pipelines must be authoritative enough for agents to self-correct. If a test is ambiguous or flaky, the agent cannot use it to determine whether its output is correct. Invest in making [verification rock-solid](verification-centric-development.md) before removing human attention.
 
 **Monitoring and signal.** You need to know when an agent is blocked, failed, or finished — without watching continuously. Claude Code agent teams provide `TeammateIdle` hooks that fire when a teammate goes idle, letting you build automated responses or notification pipelines. [Source: [Claude Code agent teams](https://code.claude.com/docs/en/agent-teams)]
 
@@ -72,7 +72,7 @@ The factory model assumes automatable feedback. It breaks down when:
 
 - **Goals are exploratory or undefined.** Automated tests cannot validate what "correct" means for open-ended research or product discovery.
 - **Tasks require frequent guidance.** If an agent needs human input every few minutes, the async review model adds latency without removing attention load.
-- **Domain knowledge is not documented.** Agents operating autonomously rely on written conventions. Tacit knowledge that exists only in developers' heads produces misaligned output. See [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md) for extraction techniques.
+- **Domain knowledge is not documented.** Agents operating autonomously rely on written conventions in `AGENTS.md` or `CLAUDE.md`. Tacit knowledge that exists only in developers' heads produces misaligned output. See [Encoding Tacit Knowledge into Agent Improvement Loops](encoding-tacit-knowledge.md) for extraction techniques.
 - **Verification is unreliable.** If CI is flaky or tests are insufficient, agents optimize for passing the gate rather than solving the actual problem.
 - **Safety-critical decisions are required.** Architecture choices, security boundaries, and product trade-offs that require human judgment should not be automated away.
 
@@ -98,7 +98,7 @@ done
 wait
 ```
 
-The human's constraint is now PR review throughput, not agent execution speed.
+The human's constraint is now PR review throughput across all 12 PRs, not agent execution speed.
 
 ## Key Takeaways
 

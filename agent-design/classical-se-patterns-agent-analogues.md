@@ -12,7 +12,7 @@ tags:
   - human-factors
   - workflows
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Classical SE Patterns as Agent Design Analogues
@@ -61,14 +61,14 @@ Classical patterns are a **starting point**, not a blueprint. They solve code-or
 
 ## Why It Works
 
-Classical patterns capture stable structural relationships — how components connect and delegate — not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs because they are defined at the call-boundary level, not the computation level. An Observer hook does not care whether the handler runs a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift — from reuse to control and safety — happens *within* each role, not at the structural connection between roles.
+Classical patterns capture stable structural relationships — how components connect and delegate — not implementation details. Those relationships (subscriber/publisher, context/strategy, component/composite) survive the shift from deterministic OOP to probabilistic LLM outputs because they are defined at the call-boundary level, not the computation level. An Observer hook (`PreToolUse`/`PostToolUse`) does not care whether the handler runs a database query or an LLM inference; it only requires that subscribers can be registered and notified. The concern shift — from reuse to control and safety — happens *within* each role, not at the structural connection between roles.
 
 ## When This Backfires
 
 Pattern vocabulary imports assumptions alongside structure. Apply with caution:
 
 - **Composite assumes a uniform interface**: sub-agents return unstructured natural language by default; the uniform interface holds only if you enforce a strict output schema on every sub-agent, which hides real engineering overhead.
-- **Circuit Breaker assumes retriable failures**: LLM failures are often prompt failures — retrying the same call after a timeout fails again. The agent analogue needs a *different retry strategy* (reformulate, reduce scope), not just a wait.
+- **[Circuit Breaker](exception-handling-recovery-patterns.md) assumes retriable failures**: LLM failures are often prompt failures — retrying the same call after a timeout fails again. The agent analogue needs a *different retry strategy* (reformulate, reduce scope), not just a wait.
 - **Factory conflates instantiation with configuration**: spawning a sub-agent also requires context, tools, and a system prompt — state that has no analogue in classical Factory, making the metaphor leaky.
 
 ## Example

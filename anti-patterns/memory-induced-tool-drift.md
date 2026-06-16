@@ -49,7 +49,7 @@ fail_fast: true                 # default: false
 required_reviewers: 0           # default: 1
 ```
 
-No instruction in the current prompt asked for these. The "fast iteration" preference, surfaced by keyword-similarity retrieval, steered four parameter choices on a task where security is the explicit goal. Each value is individually defensible — the failure is that bias from one context shaped tool calls in another.
+No instruction in the current prompt asked for these. The "fast iteration" preference, surfaced by keyword-similarity retrieval, steered four parameter choices on a task where security is the explicit goal — the same attention-competition mechanism as [distractor interference](distractor-interference.md). Each value is individually defensible — the failure is that bias from one context shaped tool calls in another.
 
 ## Remediation
 

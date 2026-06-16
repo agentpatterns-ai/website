@@ -38,7 +38,7 @@ Agentic workflows run as standard GitHub Actions with triggers and constrained o
 
 **Schedule triggers** (DailyOps pattern) — run documentation audits on a cron schedule. Each run scans the full documentation surface and proposes corrections for all detected drift.
 
-**Push triggers** — run on code changes to specific paths. Narrower scope but immediate detection — the agent checks only the documentation relevant to the changed code.
+**Push triggers** — run as GitHub Actions on code changes to specific paths. Narrower scope but immediate detection — the agent checks only the documentation relevant to the changed code.
 
 **Safe outputs** constrain what the agent can do:
 
@@ -141,9 +141,9 @@ Continuous documentation is not universally net-positive. The pattern degrades o
 
 - **Hallucinated updates that pass casual review** — LLM-generated documentation can confidently reference non-existent methods, parameters, or behaviors, especially in large or proprietary codebases ([DocAgent, ACL 2025](https://arxiv.org/abs/2504.08725)). A plausible-looking PR that aligns with the wrong mental model is worse than acknowledged drift, because it launders incorrect claims into the "reviewed and merged" tier.
 - **PR backlog noise** — scheduled runs on a large documentation surface generate steady PR volume regardless of whether the changes improve the docs. Reviewers who are paged for low-signal updates start rubber-stamping, which re-creates the hallucination-passes-review failure above.
-- **Reviewer bandwidth worse spent than on direct edits** — when documentation is already roughly accurate, the time a maintainer spends reviewing an agent-generated correction PR can exceed the time needed to fix the drift directly. The pattern pays off only when drift is frequent enough that human detection is the bottleneck.
+- **Reviewer bandwidth worse spent than on direct edits** — when documentation is already roughly accurate, the time a maintainer spends reviewing an agent-generated correction PR can exceed the time needed to fix the drift directly (the [agent PR volume against value](../code-review/agent-pr-volume-vs-value.md) trade-off). The pattern pays off only when drift is frequent enough that human detection is the bottleneck.
 - **Drift-loop churn** — two agents (or the same agent across runs) with slightly different context can rewrite each other's output, producing PRs that oscillate between equivalent phrasings without converging. Scope runs narrowly and cache prior outputs to break the loop.
-- **Stylistic homogenization** — agents trained on generic documentation regress voice and structure toward a mean, eroding project-specific conventions over time. Explicit style anchors in the prompt and a human approval gate mitigate this but do not eliminate it.
+- **Stylistic homogenization** — agents trained on generic documentation regress voice and structure toward a mean, eroding project-specific conventions over time — the [slop-as-process problem](slop-as-process-problem.md) surfacing in docs. Explicit style anchors in the prompt and a human approval gate mitigate this but do not eliminate it.
 
 Prefer manual or semi-automated updates when the documentation surface is small, drift is rare, or the codebase is private enough that the agent lacks the context to reason about it accurately.
 
@@ -165,3 +165,4 @@ Prefer manual or semi-automated updates when the documentation surface is small,
 - [Safe Outputs Pattern](../security/safe-outputs-pattern.md) — the constraint mechanism that keeps documentation agents to reviewable PRs rather than autonomous commits
 - [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) — orchestration layer referenced throughout this page
 - [Headless Claude in CI](headless-claude-ci.md) — running Claude in CI pipelines with safe, non-interactive execution
+- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map of the continuous-* and triage families this page belongs to

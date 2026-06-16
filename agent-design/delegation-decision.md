@@ -6,7 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # The Delegation Decision: When to Use an Agent vs Do It Yourself
@@ -15,7 +15,7 @@ maturity: established
 
 ## The Overhead Reality
 
-Delegating to an agent costs time: writing the prompt, waiting for output, reviewing the result, fixing mistakes. For some tasks this overhead is negligible relative to the value delivered. For others, it exceeds the task itself.
+Delegating to an agent costs time: writing the prompt, waiting for output, reviewing the result, fixing mistakes. For some tasks this overhead is negligible relative to the value delivered. For others, it exceeds the task itself — modelling that trade-off is the subject of [cost-aware agent design](cost-aware-agent-design.md).
 
 The delegation decision is not "can an agent do this?" but "does using an agent improve the outcome, accounting for the full cycle time?"
 
@@ -47,7 +47,7 @@ Keep tasks that have these characteristics:
 
 ## The Review Tax
 
-Every agent output requires review. This is not optional — it's the cost of delegation. Factor the review time into your decision: a task that takes five minutes manually may take two minutes with an agent but four minutes to review, for a net loss.
+Every agent output requires review, whether by a human or an [agent self-review loop](../code-review/agent-self-review-loop.md). This is not optional — it's the cost of delegation. Factor the review time into your decision: a task that takes five minutes manually may take two minutes with an agent but four minutes to review, for a net loss.
 
 The review tax decreases as:
 
@@ -57,21 +57,21 @@ The review tax decreases as:
 
 ## Progressive Delegation
 
-If you're unsure where to draw the line, start conservatively. Use agents for review and research before using them for implementation. As trust builds with specific task types, expand delegation in those categories. This builds calibrated confidence rather than oscillating between over-delegation and under-delegation.
+If you're unsure where to draw the line, start conservatively. Use agents for review and research before using them for implementation. As trust builds with specific task types — informed by [task-feasibility awareness](task-feasibility-awareness.md) — expand delegation in those categories. This builds calibrated confidence rather than oscillating between over-delegation and under-delegation.
 
 ## When This Backfires
 
-**[Skill atrophy](../human/skill-atrophy.md).** Developers who delegate codebase changes without reading the diffs lose familiarity with the code. The agent does the work; the developer loses the context. Reserve enough hands-on work to keep your mental model current.
+**[Skill atrophy](../human/skill-atrophy.md).** Developers who delegate codebase changes without reading the diffs lose familiarity with the code. The agent does the work; the developer loses the context — accumulating [comprehension debt](../anti-patterns/comprehension-debt.md). Reserve enough hands-on work to keep your mental model current.
 
-**Specification overhead underestimated.** The describe-it test assumes you can articulate the task. When requirements are only partially formed, the cost of specification is higher than the estimate — and the agent produces output that requires rework because the spec was wrong, not the execution.
+**Specification overhead underestimated.** The describe-it test assumes you can articulate the task. When requirements are only partially formed, the cost of specification is higher than the estimate — and the agent produces output that requires rework because the spec was wrong, not the execution. [Interactive clarification for underspecified tasks](interactive-clarification-underspecified-tasks.md) recovers some of that cost up front.
 
-**"Verifiable" in practice is harder than in theory.** A task seems verifiable ("tests pass") but the test suite doesn't cover the relevant behavior. Agent output can satisfy the stated criterion while introducing an unlisted failure mode. The review tax is non-zero even for test-covered tasks.
+**"Verifiable" in practice is harder than in theory.** A task seems verifiable ("tests pass") but the test suite doesn't cover the relevant behavior. Agent output can satisfy the stated criterion while introducing an unlisted failure mode that the [premature-completion](../anti-patterns/premature-completion.md) anti-pattern describes. The review tax is non-zero even for test-covered tasks.
 
 **Automation bias.** The tendency to trust agent output without sufficient scrutiny increases after repeated successful delegations. This creates a trust gap: the agent's actual error rate doesn't change, but the review depth decreases ([Cognitive Load Framework for Human–AI Symbiosis, Springer 2026](https://link.springer.com/article/10.1007/s10462-026-11510-z)).
 
 ## Anti-Patterns
 
-**Delegate everything because agents are available.** Some tasks genuinely don't benefit from delegation. Forcing them through an agent adds overhead without improving output quality.
+**Delegate everything because agents are available.** Some tasks genuinely don't benefit from delegation. Forcing them through an agent adds overhead without improving output quality — the [effortless-AI fallacy](../anti-patterns/effortless-ai-fallacy.md) in practice.
 
 **Never delegate because of one bad experience.** A failed delegation in one task category doesn't invalidate delegation in others. Diagnose the specific failure — poor specification, wrong tool, ambiguous criteria — rather than generalizing.
 
@@ -103,7 +103,7 @@ Applying the describe-it test: the rename prompt would require explaining which 
 
 - Delegation has overhead; the break-even point depends on task size, repeatability, and review cost.
 - The describe-it test: if describing the task takes longer than executing it, do it yourself.
-- Agent strengths are breadth, volume, and consistency — not novelty, ambiguity, or taste.
+- Agent strengths are breadth, volume, and consistency — not novelty, ambiguity, or taste; lean on them via [execution-first delegation](execution-first-delegation.md).
 - The review tax is fixed per delegation; automation (tests, CI) reduces it over time.
 
 ## Related

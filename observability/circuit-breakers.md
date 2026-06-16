@@ -9,7 +9,7 @@ tags:
   - tool-agnostic
   - observability
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Circuit Breakers for Agent Loops
@@ -32,7 +32,7 @@ Five signals warrant a circuit break:
 
 **3. Repetition detected.** The agent is doing the same thing it already did — fetching the same URL, reading the same file, attempting the same fix. Repetition without new information is a stuck loop.
 
-**4. Context budget exceeded.** The context window is approaching the "dumb zone" where output quality degrades. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your task, not at a fixed token count.
+**4. Context budget exceeded.** The context window is approaching the ["dumb zone"](../context-engineering/context-window-dumb-zone.md) where output quality degrades. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your task, not at a fixed token count.
 
 **5. Cost threshold exceeded.** The task has consumed more than the expected budget — cost overrun often correlates with loops.
 

@@ -69,7 +69,7 @@ graph TD
 
 **Attribution gap**: ChatGPT-discovered visits that land days later show as direct traffic — the discovery touch is invisible.
 
-**Zero-click gap**: GPTBot crawls heavily, but crawl-to-click conversion is very low — AI answers inform without driving referral traffic.
+**Zero-click gap**: [GPTBot](ai-crawler-policy.md) crawls heavily, but crawl-to-click conversion is very low — AI answers inform without driving referral traffic.
 
 **Unannounced model updates**: Providers update models silently, making visibility shifts unattributable to content versus model behaviour.
 
@@ -93,7 +93,7 @@ GEO monitoring can mislead or waste investment under specific conditions:
 - **High-drift queries**: Broad prompts ("best tools for X") vary so widely session-to-session that sampled data reflects noise, not visibility. Narrow, brand-specific prompts are more stable.
 - **Small sample budgets**: Fewer than 20–30 prompts daily cannot distinguish genuine change from session variance — under-sampling causes false positives and missed drops.
 - **Single-platform fixation**: A brand optimised for ChatGPT may see zero lift on Perplexity or Gemini — models differ in training data, retrieval, and citation behaviour. Per-platform results are not portable.
-- **Attribution substitution**: Treating citation counts as a revenue proxy confuses visibility with intent. A mention in a category response may yield no commercial consideration.
+- **Attribution substitution**: Treating [citation counts](how-ai-engines-cite.md) as a revenue proxy confuses visibility with intent. A mention in a category response may yield no commercial consideration.
 - **Model update blindness**: Providers update models without changelogs. A sustained drop may reflect a weight change, not content failure — rewriting in response can cause SEO regressions for no GEO benefit.
 
 ## Example

@@ -150,7 +150,7 @@ The model sees the banner first, knows compression fired, and can request raw ou
 - Terminal output compression strips predictable noise (lockfile diffs, package-manager progress, `ls -l` metadata, unchanged diff hunks) at the harness boundary before the model sees it.
 - The lever lives at the harness, not the tool — VS Code ships it as `chat.tools.compressOutput.enabled` in 1.120 (Preview); Claude Code implements the same shape via `PostToolUse` `updatedToolOutput`.
 - The banner is non-optional. Without a record of which filters fired and how to disable them, compression becomes silent error masking.
-- Compress the noise-dominated set (lockfiles, progress bars, directory metadata, unchanged hunks). Never compress the signal-dominated set (test failures, error traces, changed code, anything carrying an ID the model may need to cite).
+- Compress the noise-dominated set (lockfiles, progress bars, `ls -l` directory metadata, unchanged hunks). Never compress the signal-dominated set (test failures, error traces, changed code, anything carrying an ID the model may need to cite).
 - Compression composes with — does not replace — semantic tool output, observation masking, and threshold-triggered context compression.
 
 ## Related

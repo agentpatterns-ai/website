@@ -11,7 +11,7 @@ aliases:
   - SDLC skill library
   - lifecycle-indexed skill taxonomy
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries

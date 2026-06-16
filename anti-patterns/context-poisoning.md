@@ -84,7 +84,7 @@ Ground-truth checks and evaluator loops reduce context poisoning but do not elim
 
 - **Silent hallucinations**: A structurally plausible but wrong value passes schema validation and re-reads without flagging.
 - **Multi-agent boundaries**: Sub-agents trust the orchestrator's summary; a hallucination there propagates unchallenged.
-- **Context compaction**: Summaries can re-inject the original hallucination, resetting the error clock.
+- **Context compaction**: Summaries can re-inject the original hallucination, resetting the error clock — which is why [session partitioning](session-partitioning.md) into clean windows beats compacting a poisoned one.
 
 Add human checkpoints at key decision boundaries for high-stakes tasks.
 

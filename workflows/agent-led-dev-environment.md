@@ -25,9 +25,9 @@ This is the next shape after [operator-authored bootstrapping](agent-environment
 Four preconditions decide whether this workflow saves time or quietly adds risk:
 
 1. **Deterministic validator exists.** A fast, reliable command (project unit tests, `make build`, a smoke-test script) returns non-zero when the env is broken. Without it, the rollback signal never fires and the agent promotes broken configs.
-2. **Snapshot-and-rollback substrate is in place.** Either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline.
+2. **Snapshot-and-rollback substrate is in place.** Either per-command snapshotting (Repo2Run-style, via `docker commit`) or per-environment version history (Cursor-style). Failed attempts must cost only the build time, not the working baseline — the [rollback-first design](../agent-design/rollback-first-design.md) discipline applied to infrastructure.
 3. **Layer caching is effective.** Most layers stay cached across attempts. On stacks where most layers invalidate per change (heavy native builds, monorepos with cross-cutting base images), iteration cost can exceed the savings.
-4. **Audit-log review cadence exists.** Someone reads the env-change log. Without it, the log is theatre and the agent's freedom to edit infrastructure becomes an undetected drift vector.
+4. **Audit-log review cadence exists.** Someone reads the env-change log — the team-wide audit log Cursor records for every change. Without it, the log is theatre and the agent's freedom to edit infrastructure becomes an undetected drift vector.
 
 If any precondition is missing, fall back to operator-authored bootstrapping or treat env work as a human-gated change.
 
@@ -130,6 +130,6 @@ The validator (`make smoke-test`) is the gate. `env:working` is the rollback tar
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) — the operator-authored predecessor pattern this workflow contrasts against
 - [Rollback-First Design](../agent-design/rollback-first-design.md) — the design discipline this workflow applies to infrastructure
 - [Convergence Detection](../agent-design/convergence-detection.md) — deciding when iteration has stopped making progress
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md) — the analogous validate-then-promote loop applied to code rather than infrastructure
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — the analogous validate-then-promote loop applied to code rather than infrastructure
 - [Experiential-Learning Setup Agents with Snapshot Rollback](experiential-setup-agents-snapshot-rollback.md) — the sibling workflow that reuses the snapshot-rollback substrate for repository setup, adding experience replay and prosecutor-judge verification
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — what the smoke-test validator looks like in practice

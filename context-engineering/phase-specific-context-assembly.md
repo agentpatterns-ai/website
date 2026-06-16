@@ -42,7 +42,7 @@ Failures route back to an earlier stage. A blocked implementer means the plan wa
 ## Orchestrators vs. Workers
 
 - **Orchestrators** need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.
-- **Workers** need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
+- **Workers** ([sub-agents](../multi-agent/sub-agents-fan-out.md)) need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
 
 Giving both agents the same context bundle tends to cause drift: orchestrators get distracted by implementation details, workers carry planning artifacts that crowd out actionable context. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) makes this split explicit: the lead agent coordinates and decomposes, while each subagent "needs an objective, an output format, guidance on the tools and sources to use, and clear task boundaries" — role-specific context rather than a shared bundle.
 
@@ -88,7 +88,7 @@ Phase-specific assembly adds orchestration overhead that is not always justified
 
 - **Flat workflows** — single-phase or two-step pipelines (prompt → response) gain nothing from phase decomposition; the added assembly logic creates latency without benefit.
 - **Emergent replanning** — when agents frequently need to revise their plan mid-execution, strict phase isolation forces expensive context re-assemblies. A single unified context that the agent can reread on demand can be cheaper.
-- **Cross-phase dependencies** — if the reviewer needs implementation history to catch subtle regressions, stripping it out per the review-phase rules causes missed findings. Identify whether cross-phase context actually matters before excluding it.
+- **Cross-phase dependencies** — if the reviewer needs [implementation history](selective-rewind-summarization.md) to catch subtle regressions, stripping it out per the review-phase rules causes missed findings. Identify whether cross-phase context actually matters before excluding it.
 - **Small token budgets** — if the entire project fits comfortably within context, the cost of filtering is higher than the cost of inclusion. Apply phase-specific assembly when context exceeds what the model can usefully attend to.
 
 ## Example
@@ -155,7 +155,7 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - The lever for poor agent output is often the **per-phase context bundle**, not the prompt or the model — ask "what does this agent need, at this step?"
 - Plan, Work, Review, and Ship phases have distinct context needs; deliver only what each phase uses and route failures back to the phase that caused them.
 - Orchestrators need condensed summaries to route and decompose; workers need the exact files, excerpts, and validation commands for their subtask — the same bundle to both causes drift.
-- Prefer JIT loading (lightweight references retrieved on demand) over upfront loading so early-stage context does not persist as stale noise.
+- Prefer JIT loading (lightweight references [retrieved on demand](retrieval-augmented-agent-workflows.md)) over upfront loading so early-stage context does not persist as stale noise.
 - Skip phase-specific assembly for flat workflows, heavy emergent replanning, genuine cross-phase dependencies, or projects small enough to fit in context — filtering costs more than it saves there.
 
 ## Related

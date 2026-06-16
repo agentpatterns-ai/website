@@ -6,7 +6,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Visible Thinking in AI-Assisted Development
@@ -15,7 +15,7 @@ maturity: established
 
 ## The Shift
 
-AI coding tools compress the time between idea and implementation. Code production is no longer the bottleneck. What remains scarce is the reasoning trail: why a decision was made, what alternatives were considered, and what constraints shaped the solution.
+AI coding tools compress the time between idea and implementation. Code production is no longer the bottleneck. What remains scarce is the reasoning trail — why a decision was made, what alternatives were considered, what constraints shaped the solution — the same replayable record that [trajectory logging](../observability/trajectory-logging-progress-files.md) captures from agent runs.
 
 Visible thinking — explicit documentation of intent and rationale across the development lifecycle — makes work reviewable, maintainable, and trustworthy. GitHub frames it directly: "Speed and control aren't trade-offs. They reinforce each other" ([GitHub Blog: Speed Is Nothing Without Control](https://github.blog/ai-and-ml/generative-ai/speed-is-nothing-without-control-how-to-keep-quality-high-in-the-ai-era/)).
 
@@ -43,7 +43,7 @@ Structure PR descriptions to answer three questions ([GitHub Blog: Speed Is Noth
 - **What changed**: Concrete description of the implementation approach.
 - **Trade-offs**: Alternatives considered and reasons for the chosen path.
 
-This structure matters more when AI generates the code, because the reviewer cannot infer reasoning from the implementation alone. The PR description bridges the gap between what the agent produced and why the developer accepted it.
+This structure matters more when AI generates the code, because the reviewer cannot infer reasoning from the implementation alone. The PR description bridges the gap between what the agent produced and why the developer accepted it — and [PR description style is itself a lever on merge rates](../code-review/pr-description-style-lever.md).
 
 ## Structured Prompting as Visible Intent
 
@@ -51,7 +51,7 @@ How you prompt an agent is itself a form of visible thinking. GitHub recommends 
 
 - **Goals**: State the outcome, not the action ("improve readability while preserving functionality" rather than "refactor this file").
 - **Constraints**: Specify boundaries ("no third-party dependencies," "no breaking changes").
-- **Context**: Reference related files, architecture decisions, and existing conventions.
+- **Context**: Reference related files, architecture decisions, and existing conventions — much of which a project's [instruction-file ecosystem](../instructions/instruction-file-ecosystem.md) already encodes.
 - **Output format**: Define the expected shape of the result.
 
 Saving prompts alongside code — in commit messages, PR descriptions, or instruction files — preserves decision context that would otherwise vanish when the chat session ends. This mirrors Anthropic's guidance to "prioritize transparency by explicitly showing the agent's planning steps" ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)), and Claude Code best practices recommend checking CLAUDE.md into git so constraints persist across sessions ([Claude Code Best Practices](https://code.claude.com/docs/en/best-practices)).
@@ -98,12 +98,12 @@ The reasoning recorded in the commit and PR outlasts the chat session. A reviewe
 
 ## When This Backfires
 
-Visible thinking practices assume documentation overhead is recoverable — that is, the time spent writing clear commit messages and PR descriptions costs less than the time saved later in review and maintenance. This breaks down in several situations:
+Visible thinking practices assume documentation overhead is recoverable — that is, the time spent writing clear commit messages and PR descriptions costs less than the time saved later in review and the [distinct maintenance footprint of agent-generated code](../code-review/agent-code-maintenance-asymmetry.md). This breaks down in several situations:
 
 - **Extreme time pressure with short-lived code**: Throwaway scripts, hotfixes with an immediate rollback plan, or spike branches that are deleted after a demo rarely justify detailed commit narration. The reasoning record has no audience.
-- **AI-generated documentation accepted uncritically**: When developers prompt agents to generate commit messages and PR descriptions without review, the visible thinking artifacts are present but meaningless — they document what the agent guessed the reasoning was, not the actual constraints and trade-offs.
+- **AI-generated documentation accepted uncritically**: When developers prompt agents to generate commit messages and PR descriptions without review, the visible thinking artifacts are present but meaningless — they document what the agent guessed the reasoning was, not the actual constraints and trade-offs. [Agent transcript analysis](../verification/agent-transcript-analysis.md) recovers the real trail when the narration cannot be trusted.
 - **Context saturation in large teams**: As codebases grow and commit volume increases, the signal-to-noise ratio of commit history degrades. Teams that enforce verbose commits without pruning or tagging conventions often find the log unsearchable — the documentation exists but cannot be found.
-- **Misaligned tooling**: Repositories using squash-merge strategies collapse all commit reasoning into a single PR description. Branch-level commit discipline is lost, making per-commit narration pointless unless PR descriptions absorb that detail.
+- **Misaligned tooling**: Repositories using squash-merge strategies collapse all commit reasoning into a single PR description, which raises the stakes on [PR description style](../code-review/pr-description-style-lever.md). Branch-level commit discipline is lost, making per-commit narration pointless unless PR descriptions absorb that detail.
 
 ## Key Takeaways
 

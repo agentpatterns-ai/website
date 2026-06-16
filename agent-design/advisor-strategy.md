@@ -11,7 +11,7 @@ aliases:
   - frontier model advisor
   - opus advisor pattern
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # The Advisor Strategy: Frontier Model as Strategic Advisor
@@ -20,7 +20,7 @@ maturity: established
 
 ## The Pattern
 
-Most agent turns are mechanical — reading files, running commands, writing code. A few need strategic reasoning: choosing an architecture, recovering from a dead end, verifying completeness. A frontier model on every turn wastes compute; a cheap model alone misses the critical decisions.
+Most agent turns are mechanical — reading files, running commands, writing code. A few need strategic reasoning: choosing an architecture, recovering from a dead end, verifying completeness. An Opus call on every turn wastes compute; a Haiku-class executor alone misses the critical decisions.
 
 The advisor strategy separates these at the API level. A cost-effective executor (Sonnet or Haiku) handles tool use; on hard decisions it consults a frontier advisor (Opus) that reads the full transcript and returns strategic guidance. Anthropic's [`advisor_20260301` tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) implements this server-side in a single `/v1/messages` request — no decomposition logic, no extra round-trips.
 
@@ -40,7 +40,7 @@ sequenceDiagram
 
 ## How It Works
 
-The executor decides when to call the advisor. The server runs a separate inference pass with the executor's full transcript. The advisor returns text guidance — thinking blocks are dropped, no tool calls, no user-facing output. The executor resumes, informed by the advice.
+The executor decides when to call the advisor. The server runs a separate inference pass with the executor's full transcript. The advisor returns text guidance — thinking blocks are dropped, no tool calls, no user-facing output. Informed by that advice, the executor resumes its own [reasoning-vs-execution](cognitive-reasoning-execution-separation.md) work.
 
 ## API Integration
 

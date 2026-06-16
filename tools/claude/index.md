@@ -5,12 +5,14 @@ tags:
   - claude
   - index
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-06-14
 status: current
 ---
 # Claude Code
 
 > Tool-specific reference for Claude Code's agentic features.
+
+These features run on Anthropic's current model line. As of June 2026 the Claude models reference lists **Claude Fable 5** at general availability and **Claude Mythos 5** in preview, both fronting adaptive thinking and a 1M-token context window — positioned above the prior Opus 4.8 generation ([Claude models overview](https://platform.claude.com/docs/en/docs/about-claude/models)).
 
 ## Pages
 

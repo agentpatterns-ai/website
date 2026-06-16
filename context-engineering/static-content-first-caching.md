@@ -44,7 +44,7 @@ Prompt caching requires exact prefix matches. Common cache-busting mistakes incl
 
 **Model switching**: Codex injects model-specific instructions early in the prompt. Changing the target model mid-conversation busts the cache because the injected instructions are different. If you need to switch models, treat it as a context boundary.
 
-**Prefix mutation**: Any change to content earlier in the prompt than the current turn invalidates the cache for everything after it. Even reordering two static sections that produce identical content will bust the cache if the character sequences differ.
+**Prefix mutation**: Any change to content earlier in the prompt than the current turn [invalidates the cache](kv-cache-invalidation-local-inference.md) for everything after it. Even reordering two static sections that produce identical content will bust the cache if the character sequences differ.
 
 **Stateless vs stateful**: Some implementations send the full conversation history on every call rather than referencing a conversation ID. Full resend keeps all content available for caching but incurs quadratic network traffic. Referencing a `previous_response_id` reduces network traffic but loses the caching opportunity for historical content.
 
@@ -110,13 +110,12 @@ The key changes: tools sorted by name (deterministic order), system prompt built
 - Static content first, variable content last — exact prefix matches are required for cache hits.
 - Non-deterministic tool ordering is a common cache-busting bug; sort tool definitions consistently.
 - Switching models mid-session busts the cache because model-specific instructions are injected early.
-- Any change to a prefix segment invalidates the cache for all content after it.
+- Any change to a prefix segment invalidates the cache for all content after it, so [prefix discipline](prompt-caching-architectural-discipline.md) must hold across the session.
 - For high-volume or long-running agents, this optimization can reduce inference costs from quadratic to linear.
 
 ## Related
 
-- [Prompt Cache Economics](prompt-cache-economics.md)
-- [Prompt Caching Architectural Discipline](prompt-caching-architectural-discipline.md)
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md)
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md)

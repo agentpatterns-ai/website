@@ -29,7 +29,7 @@ Three action classes compete for the same budget:
 - **Decomposition** — break the question into sub-queries, spend tokens but no tool call.
 - **Commit** — emit the final answer and stop.
 
-A naive policy fires retrievals greedily until the tool-call cap or the token cap hits zero. A dual-budget controller picks differently: it ranks actions by expected marginal task value per unit budget consumed, then spends greedily on the highest-ranking option.
+A naive policy fires retrievals greedily until the tool-call cap or the token cap hits zero, the opposite of [heuristic-based effort scaling](heuristic-effort-scaling.md). A dual-budget controller picks differently: it ranks actions by expected marginal task value per unit budget consumed, then spends greedily on the highest-ranking option.
 
 ## Value-of-Information Scoring
 
@@ -97,7 +97,7 @@ The controller fires `commit` because its VOI/cost ratio is highest given how li
 
 - Search agents under hard caps on both tool calls and tokens face a per-action allocation problem, not a single-budget problem.
 - Score each candidate action by VOI per unit budget under current state and remaining budget; greedy selection on this score is the controller.
-- A selective finalizer should rewrite only on answer-form errors, never to overwrite a complete retrieval — otherwise it degrades correct outputs.
+- A selective finalizer should rewrite only on answer-form errors, never to overwrite a complete retrieval — otherwise it degrades correct outputs, the same hazard the [inference-time tool-call reviewer](inference-time-tool-call-reviewer.md) guards against.
 - The pattern pays back where budgets bind. Slack budgets, single-hop tasks, and harnesses without budget accounting do not benefit.
 
 ## Related

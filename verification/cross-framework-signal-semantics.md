@@ -38,7 +38,7 @@ Treat any borrowed behavioral rule as a hypothesis until re-measured locally:
 
 1. **Tag the rule with its origin framework.** "Short error cascades predict success" means nothing without "...in SWE-agent v1.2 on SWE-bench Verified" attached. Without provenance, a rule cannot be validated.
 2. **Re-measure on your harness.** Compute the same statistic on your own trajectories before adopting it as an eval signal or routing heuristic.
-3. **Prefer mechanism-grounded checks.** Signals tied to a falsifiable mechanism ("did the agent run the test command between edit and submission?") transfer better than statistical correlates ("mean turn count"). The mechanism is the same across frameworks; the correlate is not.
+3. **Prefer mechanism-grounded checks.** Signals tied to a falsifiable mechanism ("did the agent run the test command between edit and submission?") transfer better than statistical correlates ("mean turn count"), the same principle behind [behavioral testing for agents](behavioral-testing-agents.md). The mechanism is the same across frameworks; the correlate is not.
 4. **Treat split-direction signals as warnings, not features.** When a signal points opposite ways in different harnesses, do not pick a side — drop the signal from cross-framework comparisons entirely and look for a mechanism-grounded substitute.
 
 This complements [isometric harness ablation](../agent-design/isometric-harness-ablation.md): ablation tells you which of *your* subsystems carries weight; signal-semantics validation tells you which of *someone else's* rules survive the move into your stack.
@@ -62,7 +62,7 @@ Cross-framework validation is overhead, and the overhead is wasted in narrow con
 ## Related
 
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md)
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Isometric Harness Ablation](../agent-design/isometric-harness-ablation.md)
 - [Per-Model Harness Tuning](../agent-design/per-model-harness-tuning.md)

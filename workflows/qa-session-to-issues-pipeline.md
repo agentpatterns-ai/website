@@ -44,7 +44,7 @@ Output: a structured list of candidates with no filtering applied.
 
 ### Stage 2: Deduplicate and Cluster
 
-Group related candidates (same component, same symptom) into clusters. Duplicates are merged; clusters elect a single representative. This stage runs before codebase investigation to avoid wasting tokens on redundant lookups.
+Group [related candidates](semantic-issue-search-natural-language.md) (same component, same symptom) into clusters. Duplicates are merged; clusters elect a single representative. This stage runs before codebase investigation to avoid wasting tokens on redundant lookups.
 
 Output: a deduplicated candidate list with cluster membership noted.
 
@@ -55,7 +55,7 @@ For each candidate, a fresh context window receives:
 - The candidate description
 - Tool access to search the codebase
 
-The agent identifies relevant files, locates recent changes (git log / blame), and attempts to reproduce the failure path. This stage is **the discriminating filter** — candidates that cannot be anchored to specific code paths are weak signal.
+The agent identifies relevant files, locates recent changes (`git log` / `git blame`), and attempts to reproduce the failure path. This stage is **the discriminating filter** — candidates that cannot be anchored to specific code paths are weak signal.
 
 Output: each candidate annotated with file paths, recent commits, and reproduction confidence.
 

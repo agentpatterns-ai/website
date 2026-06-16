@@ -20,7 +20,7 @@ maturity: established
 
 ## What It Looks Like
 
-You ask for a notification service. The agent delivers one — plus a rate limiter, an analytics hook, a webhook system, and an abstract factory. None were requested. Together they triple the surface area you maintain.
+You ask for a notification service. The agent delivers one — plus a rate limiter, an analytics hook, a webhook system, and an abstract factory. None were requested, a pattern the [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records verbatim. Together they triple the surface area you maintain.
 
 This is not a prompting failure. It is a training incentive: agents are optimized to look comprehensive, so they produce code that appears thorough rather than sized for the task.
 
@@ -53,7 +53,7 @@ graph LR
 
 **Excessive scaffolding** — [1,000 lines where 100 suffice](https://addyo.substack.com/p/the-80-problem-in-agentic-coding). Class hierarchies where a function would do. Abstract base classes for single implementations.
 
-**Dead code accumulation** — Agents regenerate rather than reuse, leaving orphans. Refactoring drops because each task is greenfield.
+**Dead code accumulation** — Agents regenerate rather than reuse, leaving orphans. Refactoring drops because each task is greenfield — the [Mason](https://mikemason.ca/writing/ai-coding-agents-jan-2026/) figure above puts the share falling from 25% to under 10%.
 
 **Unrequested features** — A [Fowler/Garg case study](https://martinfowler.com/articles/reduce-friction-ai/design-first-collaboration.html) records a notification request returning rate limiting, analytics, and webhooks unprompted.
 
@@ -94,7 +94,7 @@ Simplicity directives applied unconditionally have costs:
 
 - **Known-growth systems** — A service gaining Slack/SMS channels this sprint benefits from the factory pattern upfront. Flat functions force a refactor days later.
 - **Team conventions** — Flat functions in a layered codebase create architectural inconsistency.
-- **Security and observability** — Abstractions for audit logging, rate limiting, and auth exist for non-functional reasons. "Minimum code" can strip them silently.
+- **Security and observability** — Abstractions for audit logging, rate limiting, and auth exist for non-functional reasons. "Minimum code" can strip them silently unless a [deterministic guardrail](../verification/deterministic-guardrails.md) fails the build when they go missing.
 
 Scope the directive: *"Write minimum code for this task. Do not add abstractions unless named in the requirements."*
 
@@ -137,7 +137,7 @@ def send_notification(recipient: str, message: str) -> bool:
     return True
 ```
 
-Fifteen lines. One function. No dead abstractions waiting to be maintained.
+Fifteen lines. One `send_notification` function. No dead abstractions waiting to be maintained.
 
 ## Key Takeaways
 

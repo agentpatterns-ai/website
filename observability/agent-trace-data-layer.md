@@ -74,14 +74,14 @@ Each of the four properties violates a different layer — collector sampling, t
 
 - **Sub-threshold workload.** A team running hundreds of traces per day on Postgres incurs no degradation. Respan and Langfuse both ran on Postgres until the workload broke ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)). Below 5 million rows and low write rates, operational simplicity often outweighs the performance gain ([Lorbic — ClickHouse vs Postgres](https://lorbic.com/clickhouse-vs-postgres-log-storage/)).
 - **No multi-cloud or self-hosting requirement.** Object-storage portability is load-bearing only for teams that actually need to run across clouds or in a customer environment. Single-cloud deployments capture none of that benefit while paying the object-store-latency tax for queries that would otherwise hit local SSD.
-- **Managed vendor already covers the workload.** Building competes against LangSmith, Langfuse, Phoenix, Helicone, Datadog LLM Observability, and Honeycomb GenAI. Without a compliance, cost, or workload reason these don't satisfy, building is roadmap displacement.
+- **Managed vendor already covers the workload.** Building competes against managed vendors — LangChain's LangSmith, Langfuse, Phoenix, Helicone, Datadog LLM Observability, and Honeycomb GenAI. Without a compliance, cost, or workload reason these don't satisfy, building is roadmap displacement.
 - **Short, structured traces dominate.** Workflow-orchestration use cases with shallow nesting, short spans, and small payloads sit inside the OTel-on-Postgres comfort zone. The pattern only pays off once nesting depth, span duration, and payload size all push outward.
 - **Read-mostly historical analysis dominates.** If offline batch analysis over completed traces is the dominant query pattern, Parquet-on-S3 plus DuckDB or Athena recovers most of the benefit without sticky routing or live-span machinery.
 
 ## Key Takeaways
 
 - Agent-trace data layers are workload-shape-driven, not a default. Hundreds of nested spans, hours-long spans, multi-modal payloads, and a wide query mix are the four properties that compound to break general-purpose stores.
-- The OTel span model is the bottleneck for long-open spans — spans must be ended for sampling and processors to fire, and incomplete spans are typically lost.
+- The [OTel span model](agent-observability-otel.md) is the bottleneck for long-open spans — spans must be ended for sampling and processors to fire, and incomplete spans are typically lost.
 - Purpose-built layers share seven levers: object-storage primary, multi-event-per-run, late materialization, time-tiered compaction, object-store-aware indexes, sticky routing, and deletion vectors.
 - Build or migrate only past the threshold — sub-threshold workloads, single-cloud deployments, and managed-vendor coverage all make a general-purpose store the better default.
 - The wire format converges on OTel GenAI semantic conventions even where storage architectures diverge.

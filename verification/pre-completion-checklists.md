@@ -7,7 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Pre-Completion Checklists for AI Agent Development
@@ -30,8 +30,8 @@ The verification sequence covers four phases:
 
 1. **Planning** — did you understand the requirement before starting?
 2. **Building** — did you implement what was specified, not a simpler substitute?
-3. **Verification** — did you run end-to-end tests? Did you check for regressions? Does output satisfy the stated requirement?
-4. **Fixing** — did you address every issue found in verification before declaring done?
+3. **Verification** — did you run the end-to-end tests that [incremental verification](incremental-verification.md) treats as the checkpoint? Did you check for regressions? Does output satisfy the stated requirement?
+4. **Fixing** — did you address every issue found in verification, tracked in a [verification ledger](verification-ledger.md), before declaring done?
 
 Each phase must complete before the next begins. The checklist is not a suggestion — it is a gate.
 
@@ -126,8 +126,8 @@ Implementing the gate as a hook rather than a prompt exploits the same principle
 
 Pre-completion checklists introduce risk in several conditions:
 
-- **Unsatisfiable checklist items create infinite loops.** If the agent cannot make a failing test pass — because the test is flawed, the requirement is contradictory, or the underlying capability is missing — the checklist becomes a deadlock. Add a maximum retry count or an explicit escalation path for persistent failures.
-- **Vague items provide false confidence.** A checklist item like "check your work" nominally passes without verifying anything. Agents satisfy the surface form of the instruction, not the intent. Every item must specify a concrete, observable output.
+- **Unsatisfiable checklist items create infinite loops.** If the agent cannot make a failing test pass — because the test is flawed, the requirement is contradictory, or the underlying capability is missing — the checklist becomes a deadlock that [loop detection](../observability/loop-detection.md) is meant to break. Add a maximum retry count or an explicit escalation path for persistent failures.
+- **Vague items provide false confidence.** A checklist item like "check your work" nominally passes without verifying anything. Agents satisfy the surface form of the instruction, not the intent — the [anti-reward-hacking](anti-reward-hacking.md) failure shape. Every item must specify a concrete, observable output.
 - **Latency compounds in long pipelines.** Each verification pass adds one full LLM round-trip. In a multi-step pipeline with a pre-completion gate at every stage, total latency can exceed the cost of just running end-to-end tests directly.
 
 ## Key Takeaways

@@ -15,7 +15,7 @@ maturity: established
 
 ## The Problem
 
-AI coding agents generate code faster than developers can thoroughly read it. Tests pass, the diff looks reasonable, you merge. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
+AI coding agents generate code faster than developers can thoroughly read it. Tests pass, the diff looks reasonable, you merge — the [trust-without-verify](trust-without-verify.md) reflex that accepts output because it looks polished. Three days later you cannot explain how the feature works. You own code you did not write and do not understand.
 
 ## Why It Is Distinct
 
@@ -62,7 +62,7 @@ Code generation bypasses the retrieval effort that consolidates memory. Writing 
 
 Debt does not accumulate uniformly. Three conditions where it is low or zero:
 
-1. **Active inquiry mode.** Developers who ask for explanations before generating code show comprehension comparable to hand-coders.
+1. **Active inquiry mode.** Developers who ask for explanations before generating code show comprehension comparable to hand-coders — the 65%+ conceptual-inquiry score above, versus below 40% for delegation.
 2. **Throwaway code.** Scaffolding, one-off scripts, and test fixtures that will never be debugged carry minimal debt.
 3. **Single-owner modules.** A specialist who owns a module end-to-end can tolerate local debt. The pattern is most damaging in shared infrastructure maintained by multiple developers who all delegated its creation.
 

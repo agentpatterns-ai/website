@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The Intent Gap
 
-"Sort users by activity" could mean descending by last-active timestamp, ascending by total actions, or weighted by recency. An LLM picks one reading; if it differs from your intent, you discover the mismatch during code review — the most expensive place to catch it.
+"Sort users by activity" could mean descending by last-active timestamp, ascending by total actions, or weighted by recency. An LLM picks one reading; if it differs from your intent, you discover the mismatch during [code review](../code-review/diff-based-review.md) — the most expensive place to catch it.
 
 The gap between what you mean and what the model generates is a specification failure, not a generation failure. Better models do not close it — clearer specs do.
 
@@ -117,7 +117,7 @@ def test_invalid_tld():
     assert extract_emails("user@localhost") == []
 ```
 
-The developer reviews each test in seconds. "Yes, extract from brackets. Yes, deduplicate. Yes, strip mailto. No, accept `user@localhost` — change that test to include it." The specification is now precise. The AI implements against validated tests, and code review focuses on implementation quality rather than specification correctness.
+The developer reviews each test in seconds — the validation path that scored 84% correctness in the user study. "Yes, extract from brackets. Yes, deduplicate. Yes, strip mailto. No, accept `user@localhost` — change that test to include it." The specification is now precise. The AI implements against validated tests, and code review focuses on implementation quality rather than specification correctness.
 
 ## Key Takeaways
 
@@ -134,6 +134,6 @@ The developer reviews each test in seconds. "Yes, extract from brackets. Yes, de
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md)
 - [Multi-Agent RAG for Spec-to-Test Automation](multi-agent-rag-spec-to-test.md)
 - [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md)
-- [Test Evolution Blind Spot in Coding Agents](test-evolution-blind-spot.md)
+- [Test Evolution Blind Spot in Coding Agents](eval-blind-spots.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)

@@ -42,7 +42,7 @@ A feasibility gate works because feasibility is a cheap, up-front, observable pr
 
 - **Mis-calibrated judgment aborts solvable tasks.** A false-negative feasibility call is strictly worse than a budget cap — it abandons work a few more steps would have finished. Abstention is only correct when calibrated; treat it as an asymmetric-loss control decision, where a wrong "can't do this" can be more expensive than a bounded overspend ([Iscan, arXiv:2604.27283](https://arxiv.org/abs/2604.27283)).
 - **Required capability isn't enumerable up front.** The gate only works when "critical tool present/absent" is observable before execution. For open-ended tasks where the solution path — and thus the required tools — is discovered mid-run, no honest up-front feasibility call exists.
-- **Cheap tokens and a tight iteration cap.** When per-task chains are short and a max-iteration cap already bounds waste, a feasibility gate adds reasoning overhead and a false-negative risk for little savings. Brute-force-with-a-cap is simpler when the infeasible-task rate is low.
+- **Cheap tokens and a tight iteration cap.** When per-task chains are short and a max-iteration cap — or an [agent circuit breaker](agent-circuit-breaker.md) — already bounds waste, a feasibility gate adds reasoning overhead and a false-negative risk for little savings. Brute-force-with-a-cap is simpler when the infeasible-task rate is low.
 - **Gameable abstention.** If "I can't do this" is rewarded as the safe answer, agents over-abstain — the inverse of the 73.9% false-continue, and just as costly.
 
 ## Key Takeaways

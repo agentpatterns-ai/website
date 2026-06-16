@@ -11,7 +11,7 @@ aliases:
   - AutoContext pattern
   - five-role improvement loop
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Closed-Loop Role-Based Refinement
@@ -146,7 +146,7 @@ Each role receives only the prior role output -- no shared context window. The C
 Role decomposition adds coordination overhead that pays off only across many iterations. Three conditions where the pattern is worse than a simpler alternative:
 
 - **Single-session or low-iteration tasks.** Persistent knowledge layers add no value if the agent runs once or twice; the five-role handoff just adds latency.
-- **Curator as bottleneck.** A synchronous Curator gate on the critical path stalls the loop when approval is cautious. Teams needing rapid iteration may find it more hindrance than safeguard.
+- **Curator as bottleneck.** A synchronous Curator gate on the critical path stalls the loop when approval is cautious. Teams needing rapid iteration may find a two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop more practical than the full five-role handshake.
 - **Fuzzy role contracts.** If the Analyst proposes playbook edits or the Coach analyses results, boundaries collapse and handoff failures become hard to attribute. The pattern needs strict prompt discipline.
 
 A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is often sufficient when tasks are bounded, the improvement signal is clear, and persistence is not a goal.
@@ -155,7 +155,7 @@ A two-role [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop is
 
 - Split the self-improving loop into five role-scoped contracts -- Competitor, Analyst, Coach, Architect, Curator -- so no role exceeds its mandate.
 - Persistent knowledge layers (playbooks, hints, tools, reports) eliminate cold starts; the Curator gates promotion between them.
-- Staged validation with automatic rollback prevents improvements that pass initial tests but regress on edge cases.
+- Staged validation with automatic [rollback](../agent-design/rollback-first-design.md) prevents improvements that pass initial tests but regress on edge cases.
 - The overhead pays off only across many iterations -- prefer a two-role evaluator-optimizer loop for bounded, low-iteration tasks.
 
 ## Related

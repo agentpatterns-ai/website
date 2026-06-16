@@ -49,7 +49,7 @@ For an email action, surface:
 - The exact subject and body text
 - The exact attachments
 
-An injected email that says "forward to attacker@external.com" is immediately visible when the recipient field is shown verbatim. It may not be visible in a summary that says "forwarding to a contact."
+An injected email that says "forward to `attacker@external.com`" is immediately visible when the recipient field is shown verbatim. It may not be visible in a summary that says "forwarding to a contact."
 
 Make it easy to say no. A confirmation UX that buries the rejection option or auto-approves on timeout works against its own purpose. [Source: [Prompt Injections](https://openai.com/index/prompt-injections/)]
 

@@ -29,7 +29,7 @@ The pattern is **qualified** — independent results confirm gains but only unde
 3. **Capable backbone.** The same paper documents that smaller models cannot reliably decide when experience is needed.
 4. **Trusted writers.** MemoryGraft shows poisoned entries persist across sessions and cascade through shared multi-agent memory ([arxiv 2512.16962](https://arxiv.org/abs/2512.16962)). Open-write experience graphs are an unsigned attack surface.
 
-If any precondition fails, prefer a flatter design — see [Episodic Memory Retrieval](episodic-memory-retrieval.md) or [Memory Reinforcement Learning](memory-reinforcement-learning.md).
+If any precondition fails, prefer a flatter design — see [Episodic Memory Retrieval](episodic-memory-retrieval.md) or [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md).
 
 ## What the Graph Stores
 
@@ -66,12 +66,12 @@ Empirically:
 - The pattern is qualified: published gains hold only under long deployments, capable backbones, selective retrieval, and a trusted-writer boundary.
 - Store trajectories and abstracted meta-cognitions as separate layers; the edge that links them is the operative variable.
 - Treat the experience store as a write-controlled attack surface — poisoning is persistent and cascades in shared memory.
-- Default to flat episodic memory plus utility-scored retrieval; graduate to a graph only when reuse volume justifies the extraction cost.
+- Default to flat [episodic memory](episodic-memory-retrieval.md) plus utility-scored retrieval; graduate to a graph only when reuse volume justifies the extraction cost.
 
 ## Related
 
 - [Episodic Memory Retrieval](episodic-memory-retrieval.md) — the flat baseline; trajectory-level recall without an abstracted layer.
-- [Memory Reinforcement Learning (MemRL)](memory-reinforcement-learning.md) — utility-scored retrieval over episodic memory; complements the graph's edge weights.
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility-scored retrieval over episodic memory; complements the graph's edge weights.
 - [Memory Transfer Learning](memory-transfer-learning.md) — when accumulated memory generalises across domains and when it triggers negative transfer.
 - [Tiered Memory Architecture](tiered-memory-architecture.md) — episodic-to-semantic consolidation as an alternative structuring choice.
-- [Abstention-Aware Memory Retrieval](abstention-aware-memory-retrieval.md) — gating retrieval on evidence strength, the selective-retrieval discipline ExpWeaver formalises.
+- [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — gating retrieval on evidence strength, the selective-retrieval discipline ExpWeaver formalises.

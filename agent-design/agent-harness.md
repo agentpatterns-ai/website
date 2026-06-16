@@ -86,7 +86,7 @@ The two-phase harness adds structure and overhead — it is not always the right
 
 - **Short-lived or predictable tasks** — a task that fits in a single context window needs no initializer, progress file, or multi-session handoff machinery. The overhead of maintaining `claude-progress.txt` and baseline commits outweighs the benefit.
 - **Human-in-the-loop workflows** — if a human reviews and redirects after every subtask, rigid single-feature sessions introduce unnecessary checkpointing friction. An interactive back-and-forth agent is simpler and faster.
-- **Environments without reliable git access** — the pattern depends on commit history as cross-session memory. Without git, the handoff mechanism degrades to manual file management with no audit trail.
+- **Environments without reliable git access** — the pattern depends on `git log` commit history as cross-session memory. Without git, the handoff mechanism degrades to manual file management with no audit trail.
 
 ## Session Handoff Checklist
 

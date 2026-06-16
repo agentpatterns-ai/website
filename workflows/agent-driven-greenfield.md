@@ -7,7 +7,7 @@ tags:
   - human-factors
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Agent-Driven Greenfield Product Development
@@ -37,14 +37,14 @@ graph TD
 
 ### Phase 1: Define Agents Before Code
 
-Start by identifying what agents will do, not what code they will produce. Map discrete task types to agent definitions:
+Start by identifying what agents will do, not what code they will produce. Map discrete task types to [agent definitions](../agent-design/agent-first-software-design.md):
 
 - Which agent handles feature implementation?
 - Which agent handles tests?
 - Which agent handles documentation?
 - Which agent reviews output?
 
-Each role maps to a separate agent definition with scoped tools, specific instructions, and bounded context.
+Each role maps to a separate agent definition with the scoped tools, specific instructions, and bounded context of a single-purpose [agent harness](../agent-design/agent-harness.md).
 
 Write AGENTS.md, standards files, and skill definitions before writing a single line of product code. These artifacts serve as both human documentation and agent instructions. The [AGENTS.md standard](https://agents.md) provides the format for expressing project-level context.
 
@@ -61,7 +61,7 @@ For each epic, identify dependencies on other epics,
 the key technical decisions, and acceptance criteria.
 ```
 
-Capture decisions and trade-offs as issue comments — not just in conversation history. Conversation history is ephemeral; issue comments persist and seed future agent sessions with context about why decisions were made.
+Capture decisions and trade-offs as [issue comments](../agent-design/agent-memory-patterns.md) — not just in conversation history. Conversation history is ephemeral; issue comments persist and seed future agent sessions with context about why decisions were made.
 
 ### Phase 3: Recursive Decomposition to Context-Safe Tasks
 
@@ -97,7 +97,7 @@ claude -w api-endpoints
 
 Agent output quality is a signal about your decomposition and instructions, not just about agent capability. When output quality drops:
 
-- **Tasks too large**: agent output degrades toward the end of implementation. Decompose further.
+- **Tasks too large**: agent output degrades toward the end of implementation. [Decompose further](../context-engineering/context-window-dumb-zone.md).
 - **Tasks too vague**: agent makes wrong assumptions. Add explicit acceptance criteria and reference files.
 - **Missing context**: agent reinvents patterns that exist elsewhere in the codebase. Add references to AGENTS.md pointing to example implementations.
 - **Wrong patterns**: agent follows conventions that differ from your intent. Add or refine standards files.
@@ -117,9 +117,9 @@ Issue templates that are human-friendly but agent-hostile force a translation st
 
 ## Dog-Food the Pipeline
 
-Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems that should be fixed before adding complexity.
+Use the pipeline you just built to build the project itself. This is the most effective validation step. If agents cannot use the pipeline to produce project content, the pipeline has problems that should be fixed before adding complexity — the [repository bootstrap checklist](repository-bootstrap-checklist.md) is the minimum that has to work first.
 
-For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions. Dog-fooding also produces the pipeline's first real history — commit logs that demonstrate agent behavior under the actual conventions.
+For a code project, use the pipeline to generate the initial scaffold. For a documentation project, generate the first content pages using the content agents. Issues that surface during dog-fooding reveal gaps in standards, missing skills, or unclear pipeline stage definitions — the same gaps [bootstrapping an agent-driven project](bootstrapping-agent-driven-project.md) closes one at a time. Dog-fooding also produces the pipeline's first real history — commit logs that demonstrate agent behavior under the actual conventions.
 
 ## Minimum Viable Agent Project
 
@@ -151,7 +151,7 @@ The agent-first greenfield approach is worse than conventional development in se
 - **Comprehensive AGENTS.md files hurt more than help.** Recent research evaluating repository-level context files found that LLM-generated AGENTS.md files reduced task success compared with no context at all, while increasing inference cost by over 20% and adding 2–4 extra steps per task; developer-written files gave only a ~4% gain ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Write only non-inferable tooling, commands, and constraints — not architectural overviews the agent can reconstruct.
 - **The team is still learning the codebase patterns.** Agent-first workflows shift humans toward reviewing PRs rather than writing code. On a greenfield project with no existing conventions, that review loop becomes the primary source of architectural learning — and newcomers lose the manual coding experience that traditionally builds foundational skills and intuition ([Rao, 2026](https://www.cio.com/article/4120168/is-ai-eradicating-the-junior-developer.html)).
 - **Decomposition cost exceeds implementation cost.** For very small projects (a single service, a CLI with fewer than ~10 commands), the overhead of defining agents, writing standards, and authoring issue templates outweighs the leverage. A solo developer writing the code directly often ships faster.
-- **Acceptance criteria cannot be mechanically verified.** Agent loops depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
+- **Acceptance criteria cannot be mechanically verified.** [Agent loops](../agent-design/ralph-wiggum-loop.md) depend on verifiable success signals. Research prototypes, UX-heavy frontends, and code whose quality is judged subjectively produce weak feedback and push quality work back onto human review at every iteration.
 
 If several of these conditions apply, start with a thin agent stack — one agent, one standards file, one command — and grow it only when the minimum proves insufficient.
 

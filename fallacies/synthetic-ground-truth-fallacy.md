@@ -21,7 +21,7 @@ maturity: established
 
 ## The Fallacy
 
-Teams use AI to generate tests, evals, documentation, or training examples and treat the outputs as interchangeable with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth is a productivity gain.
+Teams use AI to generate tests, evals, documentation, or training examples and [treat the outputs as interchangeable](../anti-patterns/trust-without-verify.md) with human-verified artifacts. The reasoning: AI is fast and the outputs look correct, so accepting them as ground truth is a productivity gain.
 
 But the outputs look correct because the model generates *plausible* outputs, not *verified* ones. They measure what the model finds likely, not what is true.
 
@@ -63,7 +63,7 @@ The agentic handbook anchors reflection loops to "objective signals: tests, lint
 
 A team building a coding agent uses Claude to generate an eval suite covering 50 representative tasks. The evals look thorough. The team ships based on a 90% pass rate.
 
-Six months later, users report failures on tasks that the evals don't cover. Post-mortem reveals the eval tasks reflected the model's idea of "representative coding problems" — skewed toward patterns common in its training data, under-representing the team's actual workload.
+Six months later, users report failures on tasks that the evals don't cover. Post-mortem reveals the 50 eval tasks reflected the model's idea of "representative coding problems" — skewed toward patterns common in its training data, under-representing the team's actual workload.
 
 The evals measured what the model found plausible. They never measured what the users needed.
 
@@ -71,7 +71,7 @@ The fix: seed evals from real production failures and user-reported bugs, then c
 
 ## When This Backfires
 
-The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as *starting points*, not ground truth.
+The fallacy is over-applying the rule. Synthetic and AI-generated artifacts are legitimate inputs when used as *starting points* feeding [incremental verification](../verification/incremental-verification.md), not ground truth.
 
 - **Bootstrapping test coverage**: AI-generated test stubs seeded from real code paths are a win — the risk is trusting pass/fail rates before humans verify the stubs reflect correct behavior
 - **Data augmentation**: Synthetic examples improve coverage of rare cases when added to a dataset with real-world grounding — the fallacy fires only when synthetic data *replaces* real data

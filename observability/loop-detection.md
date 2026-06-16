@@ -77,7 +77,7 @@ Three layers protect against unproductive execution:
 
 ## Distinction from the Ralph Wiggum Loop
 
-The [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) describes a cross-session failure pattern: an agent restarts with fresh context and repeats the same approach that already failed in a prior session. The fix is session-level continuity — reading prior session artifacts before acting.
+The [Ralph Wiggum Loop](../agent-design/ralph-wiggum-loop.md) describes a cross-session failure pattern: an agent restarts with fresh context and repeats the same approach that already failed in a prior session. The fix is session-level continuity — [reading prior session artifacts](trajectory-logging-progress-files.md) before acting.
 
 Loop detection addresses an intra-session pattern: repetition within a single context window. The intervention is a prompt nudge, not a session restart. Both produce similar symptoms but require different fixes.
 
@@ -125,7 +125,7 @@ Register in `.claude/settings.json`:
 Loop detection is not free. Across 220 instrumented agent runs, only half of 12 automated loop interventions actually reduced their target signal; one generated 13x more signals than it suppressed by triggering its own detector ([boucle2026, 2026](https://dev.to/boucle2026/how-to-tell-if-your-ai-agent-is-stuck-with-real-data-from-220-loops-4d4h)). Failure modes to watch for:
 
 - **False positives on legitimate iteration**: tight refactors on a single file look identical to an edit loop from a counter's view. Thresholds tuned for loops interrupt focused iteration.
-- **Nudge pollution**: every injected nudge consumes context the agent could use for code, and on agents already near the context limit it accelerates the failure it was meant to prevent.
+- **Nudge pollution**: every injected nudge consumes context the agent could use for code, and on agents already near the [context limit](../context-engineering/context-window-dumb-zone.md) it accelerates the failure it was meant to prevent.
 - **Detector-on-detector amplification**: if one layer fires on output another produces, signals multiply instead of settling.
 - **Problems no nudge can fix**: missing requirements or wrong architecture encode a human decision; no threshold fixes them.
 

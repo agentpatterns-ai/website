@@ -71,16 +71,16 @@ FLARE treats the multi-agent system as a black box, which requires:
 
 1. **Reproducible test harness** — the system must accept injected inputs and produce observable message traces. Injectable entry points and deterministic replay are prerequisites.
 2. **Interaction path recording** — log which agents communicated, in which order, with which tool calls. OpenTelemetry-based agent tracing satisfies this when configured to capture inter-agent message sequences (see [OpenTelemetry for Agent Observability](../observability/agent-observability-otel.md)).
-3. **Seed corpus** — representative valid inputs that exercise primary paths. Fuzzing starts from these seeds.
+3. **Seed corpus** — representative valid inputs that exercise [primary paths](coverage-guided-fuzz-harness-generation.md). Fuzzing starts from these seeds.
 4. **Failure oracle** — criteria defining what counts as a failure: timeout, exception, incorrect or missing output. Without an oracle the fuzzer explores but cannot distinguish bugs from valid behavior.
 
 ## Practical Implications
 
-**Design for observability first.** Every agent-to-agent message needs a stable identifier (agent name, message type, sequence position). Systems without structured tracing need instrumentation before fuzzing is possible.
+**Design for observability first.** Every agent-to-agent message needs a stable identifier (agent name, message type, sequence position). Systems without [structured tracing](../observability/agent-observability-otel.md) need instrumentation before fuzzing is possible.
 
 **Fuzzing complements evals.** Evals catch regressions on known scenarios; fuzzing discovers unknown failure modes. Run evals in CI; run fuzzing periodically or pre-release.
 
-**Prioritize cross-agent trust boundaries.** Data from one agent consumed as instructions by another is the highest-value target — prompt injection and hallucination propagation concentrate there.
+**Prioritize cross-agent trust boundaries.** [Data from one agent consumed as instructions by another](../security/code-injection-multi-agent-defence.md) is the highest-value target — prompt injection and hallucination propagation concentrate there.
 
 **Budget iteration time.** Sessions run for hours; schedule them as dedicated activities, not blocking CI gates.
 
@@ -116,7 +116,7 @@ The failure case is added to the behavioral eval suite as a regression test with
 
 **Source access required.** FLARE ingests MAS source code to extract agent specifications. Systems behind third-party APIs or closed-source orchestration cannot be fuzzed this way — the interaction space cannot be derived without agent definitions.
 
-**Non-determinism limits reproducibility.** A path discovered in one fuzzing run may not reproduce reliably. Failure cases need deterministic replay harnesses (seeded or mocked LLM responses) to function as stable regression tests.
+**Non-determinism limits reproducibility.** A path discovered in one fuzzing run may not reproduce reliably. Failure cases need [deterministic replay harnesses](../observability/offline-trajectory-replay-multi-agent-debugging.md) (seeded or mocked LLM responses) to function as stable regression tests.
 
 **Long runtimes exclude CI.** FLARE achieved 96.9% inter-agent and 91.1% intra-agent coverage across 16 open-source applications ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)), but sessions run for hours. Schedule fuzzing as periodic or pre-release, not a blocking gate.
 
@@ -128,6 +128,6 @@ The failure case is added to the behavioral eval suite as a regression test with
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md)
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md)
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
-- [Trajectory-Opaque Evaluation Gap](trajectory-opaque-evaluation-gap.md)
+- [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)

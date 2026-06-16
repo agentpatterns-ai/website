@@ -25,7 +25,7 @@ Iterative refinement loops — where an agent fixes a bug, runs tests, and repea
 
 Agents in standard fix-test loops receive feedback only from test runners. If the test suite lacks security cases, the agent's feedback signal is entirely functional. Security properties — input sanitization, bounds checking, resource limits, authentication invariants — are either absent from tests or pass trivially on the happy path used during iteration.
 
-The result is incremental security debt that is invisible until a targeted security review or exploit.
+The result is incremental security debt that is invisible until a targeted security review — such as an [always-on agentic PR security review](always-on-pr-security-review.md) — or an exploit surfaces it.
 
 ## Security Checkpointing
 

@@ -12,7 +12,7 @@ aliases:
   - persistent agent artifacts
   - cross-session interactive artifacts
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Durable Interactive Artifacts: Agent Output Outside the Transcript
@@ -39,7 +39,7 @@ Four properties separate the primitive from a transcript message, a static file,
 3. **Re-runnable against fresh data** — the artifact captures a *definition* (layout, query, data source), not only a render.
 4. **Addressable as context** — a named object a human or another agent can point to in a follow-up prompt.
 
-A PR description is persistent but not re-runnable. A chart is a render with no definition. A file is persistent but not interactive. The primitive is the intersection.
+A GitHub PR description is persistent but not re-runnable. A chart is a render with no definition. A file is persistent but not interactive. The primitive is the intersection.
 
 ## Context Anchoring
 
@@ -72,7 +72,7 @@ Plain-text artifacts in git — PRs, markdown, tests, specs — are already dura
 
 - **Polished render over unverified analysis.** The chart looks right; the query was wrong. A canvas adds visual confidence the reasoning has not earned. Verification precedes canvas fidelity.
 - **Tool-lock-in through the render layer.** A Cursor canvas is rendered by Cursor's UI runtime; it does not port to another harness, terminal, or CI. Canvases fit where the workspace is the delivery surface, not where output must cross tool boundaries.
-- **Stale canvas definitions.** Re-running against fresh data assumes the *definition* — queries, data sources, layout — still matches current schema. Long-lived canvases drift like dashboards; treat the definition as code.
+- **Stale canvas definitions.** Re-running against fresh data assumes the *definition* — queries, data sources, layout — still matches current schema. Long-lived canvases drift like dashboards; treat the definition as code, the discipline behind [externalization in LLM agents](externalization-in-llm-agents.md).
 - **Bias toward visualising non-visual data.** Some information is denser in prose, a diff, or a log snippet than in a chart. Canvas capability biases the agent toward visual framing; "is this better as text?" still applies.
 
 ## Implementations

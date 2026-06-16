@@ -21,19 +21,19 @@ last_reviewed: 2026-05-27
 
 ### The investment that compounds
 
-Every improvement to your development environment benefits both human developers and agents simultaneously. A stricter type system catches bugs for everyone. A better test suite validates changes regardless of who wrote them. A linter with clear error messages guides anyone — human or agent — toward the right pattern.
+Every improvement to your development environment benefits both human developers and agents simultaneously. A stricter type system catches bugs for everyone. A better test suite validates changes regardless of who wrote them — human or Copilot. A linter with clear error messages guides anyone — human or agent — toward the right pattern.
 
-But agents benefit disproportionately. A human developer who encounters a type error can reason about the fix from experience. An agent encountering the same error reads the error message literally and attempts the fix it suggests. The quality of that error message — its specificity, its remediation guidance — directly determines whether the agent self-corrects or spirals.
+But agents benefit disproportionately. A human developer who encounters a type error can reason about the fix from experience. Copilot, encountering the same error, reads the error message literally and attempts the fix it suggests. The quality of that error message — its specificity, its remediation guidance — directly determines whether the agent self-corrects or spirals.
 
-This is why harness engineering compounds: every improvement you make today applies to every agent session in the future, across every team member, on every surface.
+This is why harness engineering compounds: every improvement you make today applies to every Copilot session in the future, across every team member, on every surface.
 
 ### The three pillars
 
 | Pillar | What it means | Example |
 |--------|--------------|---------|
-| **Legibility** | The repo is its own documentation. An agent can orient itself by reading the codebase structure, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers that match the import graph |
-| **Mechanical enforcement** | Constraints are enforced by tools, not by instructions. The agent can't make certain categories of mistake because the tooling prevents them. | Linters that block cross-layer imports, pre-commit hooks that run formatters, CI gates that require test passage |
-| **Constrained solution spaces** | The architecture limits the number of valid approaches. The agent doesn't need to choose the right pattern — there's only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
+| **Legibility** | The repo is its own documentation. Copilot can orient itself by reading the codebase structure, not by being told about it. | Clear directory naming, consistent file patterns, dependency layers that match the import graph |
+| **Mechanical enforcement** | Constraints are enforced by tools, not by instructions. Copilot can't make certain categories of mistake because the tooling prevents them. | Linters that block cross-layer imports, `pre-commit` hooks that run formatters, CI gates that require test passage |
+| **Constrained solution spaces** | The architecture limits the number of valid approaches. Copilot doesn't need to choose the right pattern — there's only one valid pattern. | A single ORM (no raw SQL allowed), a single test framework, a standard component template |
 
 ### What this looks like in practice
 
@@ -48,7 +48,7 @@ This is why harness engineering compounds: every improvement you make today appl
 - Don't throw raw Error objects
 ```
 
-The agent reads these instructions. It usually follows them. Sometimes it doesn't — especially in long sessions where attention to instructions degrades (Module C: context rot). When it doesn't, you catch it in review.
+Copilot reads these instructions. It usually follows them. Sometimes it doesn't — especially in long sessions where attention to instructions degrades ([Module C: context rot](context-and-workflows.md)). When it doesn't, you catch it in review.
 
 **After harness engineering**:
 ```
@@ -95,7 +95,7 @@ Not all feedback loops are equally useful. They differ in speed, precision, and 
 | **Integration tests** | Moderate (seconds–minutes) | System-level | Moderate — shows what failed, but root cause may be indirect |
 | **CI pipeline** | Slow (minutes) | Build/deploy level | Low — "build failed" requires investigation to find the cause |
 
-The agent's ability to self-correct scales directly with the precision and speed of the feedback. Type errors and linter warnings are the tightest loop — the agent sees them instantly with exact locations and specific fixes. CI failures are the loosest — the agent gets a pass/fail after minutes, with limited diagnostic information.
+Copilot's ability to self-correct scales directly with the precision and speed of the feedback. Type errors and linter warnings are the tightest loop — the agent sees them instantly with exact locations and specific fixes. CI failures are the loosest — the agent gets a pass/fail after minutes, with limited diagnostic information.
 
 ### Autonomy scales with backpressure quality
 
@@ -120,7 +120,7 @@ If you're starting from a weak backpressure position, invest in this order:
 1. **TypeScript strict mode** (or equivalent typed language configuration) — highest-leverage single change. Catches null errors, type mismatches, and missing properties at write time.
 2. **Linter rules with remediation messages** — ESLint rules that don't just flag violations but tell the agent how to fix them. "Use `AppError` from `src/errors/` instead of raw `Error`" is actionable; "Unexpected error throw" is not.
 3. **Test coverage for critical paths** — focus on the paths agents are most likely to touch: handlers, services, data access. Integration tests over unit tests — they catch more real-world failures.
-4. **Pre-commit hooks** — gate commits on linter + type check. The agent can't commit broken code.
+4. **Pre-commit hooks** — gate commits on `lint` + `type-check`. The agent can't commit broken code.
 5. **CI pipeline with clear output** — the final safety net. Structure CI output so failures are diagnosable from the log.
 
 ---
@@ -161,7 +161,7 @@ Consistent naming eliminates an entire class of agent decisions. When every repo
 
 ### The instructions file as an architectural map
 
-Module B covered `.github/copilot-instructions.md` as a customization primitive. From a harness engineering perspective, the instructions file's highest-value role is as a compressed architectural map — not a rule book.
+[Module B](customization-primitives.md) covered `.github/copilot-instructions.md` as a customization primitive. From a harness engineering perspective, the instructions file's highest-value role is as a compressed architectural map — not a rule book.
 
 **Good architectural map** (helps the agent orient):
 ```markdown
@@ -185,7 +185,7 @@ Module B covered `.github/copilot-instructions.md` as a customization primitive.
 - ...50 more rules that ESLint already enforces
 ```
 
-If ESLint already enforces a rule, don't repeat it in the instructions file. The agent will encounter the linter error if it violates the rule — that's the backpressure working. Reserve the instructions file for context that tooling can't provide: architectural intent, layer responsibilities, and conventions that require understanding rather than enforcement.
+If `eslint` already enforces a rule, don't repeat it in the instructions file. The agent will encounter the linter error if it violates the rule — that's the backpressure working. Reserve the instructions file for context that tooling can't provide: architectural intent, layer responsibilities, and conventions that require understanding rather than enforcement.
 
 ### Linter messages as just-in-time context
 
@@ -226,7 +226,7 @@ This is more effective than any instruction file entry because it appears at the
 
 ### Hooks as the enforcement layer
 
-Module B introduced hooks as a customization primitive. From a harness engineering perspective, hooks are the final enforcement layer — they run outside the agent's context and cannot be overridden.
+[Module B](customization-primitives.md) introduced hooks as a customization primitive. From a harness engineering perspective, hooks are the final enforcement layer — they run outside the agent's context and cannot be overridden.
 
 The enforcement stack, from softest to hardest:
 
@@ -240,7 +240,7 @@ CI pipeline          → gates merge (PR must pass all checks)
 Branch protection    → gates deployment (requires approvals, signed commits)
 ```
 
-Each layer catches what the layer above missed. Instructions catch intent violations the linter can't express. Linters catch pattern violations types can't express. Types catch structural violations tests can't express. And so on.
+Each layer catches what the layer above missed. Instructions catch intent violations the linter can't express. Linters catch pattern violations `tsc` can't express. Types catch structural violations tests can't express. And so on.
 
 ### Which enforcement mechanism for which rule
 
@@ -277,7 +277,7 @@ This is the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md) at the 
 
 ### The problem with long sessions
 
-Module C covered context rot — output quality degrading as sessions run long. The harness engineering response is to design for sessions that are **short, focused, and leave clean handoff artifacts**.
+[Module C](context-and-workflows.md) covered context rot — output quality degrading as sessions run long. The harness engineering response is to design for sessions that are **short, focused, and leave clean handoff artifacts**.
 
 ### Progress files
 
@@ -306,7 +306,7 @@ For work that spans multiple sessions (multi-day features, large refactors), mai
 - Tests require Redis on port 6379 (docker-compose up redis)
 ```
 
-At the start of each session, the agent reads the progress file and git log to establish what's done and what's next. This replaces accumulated conversation context (which degrades) with a persistent, editable artifact (which stays accurate).
+At the start of each session, the agent reads the progress file and `git log` to establish what's done and what's next. This replaces accumulated conversation context (which degrades) with a persistent, editable artifact (which stays accurate).
 
 ### Structured commits as handoff notes
 
@@ -332,13 +332,13 @@ This isn't just good commit hygiene — it's a structured handoff artifact that 
 
 ### One feature per session
 
-Long sessions accumulate context and degrade quality. Short sessions start fresh. The optimal unit of work for a single agent session:
+Long sessions accumulate context and degrade quality through [context rot](context-and-workflows.md). Short sessions start fresh. The optimal unit of work for a single agent session:
 
 - **One feature or one fix** — not "implement rate limiting across the whole API"
 - **Verifiable outcome** — the session ends when a specific test passes or a specific file is correct
 - **Clean exit** — commit, update progress file, stop
 
-If the feature is too large for one session, decompose it (Module C: task decomposition) and track each chunk in the progress file.
+If the feature is too large for one session, decompose it ([Module C: task decomposition](context-and-workflows.md)) and track each chunk in the progress file.
 
 ### Checkpoints
 
@@ -441,7 +441,7 @@ Not all iteration converges. Watch for these failure patterns:
 |---------|---------|-------|----------|
 | **Oscillation** | Agent alternates between two states (adds a feature, removes it, adds it back) | Unresolvable trade-off in the constraints | Stop the agent. Resolve the trade-off yourself, then restart with clearer constraints. |
 | **Expansion** | Output grows each iteration without improving | Scope drift — the agent keeps adding tangentially related content | Stop and constrain scope explicitly. |
-| **Low-quality plateau** | Output stabilises but at an unsatisfactory quality level | The approach is wrong, not the execution | Restart with a different approach, not more iterations of the same one. |
+| **Low-quality plateau** | Output stabilises but at an unsatisfactory quality level | The approach is wrong, not the execution | Restart with a different approach via the [Ralph Wiggum Loop](../../agent-design/ralph-wiggum-loop.md), not more iterations of the same one. |
 
 ### Hard limits as safety nets
 
@@ -495,10 +495,10 @@ Always pair convergence detection with a hard iteration limit:
 ## Key Takeaways
 
 - **Environment design beats prompt tuning.** Investing in types, tests, and linters improves agent output quality more — and more durably — than tweaking instruction files. Every harness improvement compounds across all future sessions.
-- **Agent autonomy scales with backpressure quality**, not with model capability. A codebase with strict types and comprehensive tests enables autonomous agent iteration. A codebase without them requires manual review of every output.
-- **Linter messages are the best form of agent context** — they appear at the exact moment and location of a violation, with a specific remediation. Write custom linter rules with actionable error messages.
+- **Agent autonomy scales with backpressure quality**, not with model capability. A codebase with strict types and comprehensive tests enables autonomous Copilot iteration. A codebase without them requires manual review of every output.
+- **Linter messages are the best form of agent context** — they appear at the exact moment and location of a violation, with a specific remediation. Write custom `eslint` rules with actionable error messages.
 - **Instructions provide context; the harness provides enforcement.** Use both, but don't rely on instructions for rules that must be followed mechanically. If the consequence of violation is real — security, data integrity, compliance — enforce it with tooling, not text.
-- **Design for short, focused sessions** with clean handoff artifacts. Progress files, structured commits, and one-feature-per-session discipline prevent context rot and make multi-session work reliable.
+- **Design for short, focused sessions** with clean handoff artifacts. Progress files, structured commits, and one-feature-per-session discipline prevent [context rot](context-and-workflows.md) and make multi-session work reliable.
 - **Make operations reversible by default.** Branches, draft PRs, and feature flags make agent work cheap to undo. Gate irreversible external side effects with human approval.
 - **Know when to stop iterating.** Convergence detection (change velocity, output similarity, the [five-pass blunder hunt](../../verification/five-pass-blunder-hunt.md)) prevents wasted cycles. Hard iteration limits prevent runaway agent sessions.
 

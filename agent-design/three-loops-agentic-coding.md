@@ -96,7 +96,7 @@ The frame adds cognitive overhead — three loops to remember — worth paying o
 - **Single-shot tasks.** A typo fix or version bump runs entirely inside one tool loop. No verification or convergence loop exists to diagnose.
 - **Code tasks with a sharp test gate.** When `pytest -x` is the entire stopping criterion, the convergence loop collapses into the verification loop — two loops suffice. This is the case Philipp Schmid argues from ([philschmid.de](https://www.philschmid.de/inner-loop-vs-outer-loop)) and it holds for most CRUD-shaped code work.
 - **Team already uses Kim & Yegge or Morris's framing.** Introducing competing tri-loop vocabulary produces terminology drift, not better diagnosis. Adopt the local framing or accept the rename cost explicitly.
-- **Pure exploration or debugging.** When the goal is to discover what is wrong, "which loop am I in" is the wrong question. The move is read more, hypothesise — not pick-a-loop.
+- **Pure exploration or debugging.** When the goal is to discover what is wrong, "which loop am I in" is the wrong question. The move is read more, then [hypothesise](hypothesis-driven-debugging.md) — not pick-a-loop.
 
 The signal: if you can name the failing loop in under five seconds, the frame is doing its job. If you find yourself debating which loop a symptom belongs to, the underlying issue is something else (spec ambiguity, missing context) and the label is a distraction.
 
@@ -108,7 +108,7 @@ A developer is implementing a multi-step refactor with Claude Code. After 40 min
 
 **Symptom 2:** After the file is located, the agent makes a fix. `pytest` stays red across three consecutive turns; each turn the agent tries a different small edit but the failing test does not change. This is the **verification loop failing** — the error message in the test is too generic ("AssertionError") to give the agent useful signal. Intervention: rerun the test with `-v --tb=long`, paste the full traceback, and ask the agent to fix the root cause rather than the symptom.
 
-**Symptom 3:** Tests pass. But the next turn's diff looks materially different from the previous turn's — the agent has refactored a function that was already correct, introducing risk. The turn after that, the agent reverts most of those changes. This is the **outer convergence loop oscillating** — the agent has finished the original task but the session has not stopped. Intervention: end the session; the task converged two turns ago.
+**Symptom 3:** Tests pass. But the next turn's diff looks materially different from the previous turn's — the agent has refactored a function that was already correct, introducing risk. The turn after that, the agent reverts most of those changes. This is the **[outer convergence loop](convergence-detection.md) oscillating** — the agent has finished the original task but the session has not stopped. Intervention: end the session; the task converged two turns ago.
 
 The same session showed three failures across three different loops, each with a distinct fix. Without the named-loop frame they all read as "the agent is being weird"; with it, each one routed to a specific intervention page.
 
@@ -117,7 +117,7 @@ The same session showed three failures across three different loops, each with a
 - Three nested loops compose an agent session: the inner tool loop (within a turn), the verification loop (tests as boundary), and the outer convergence loop (stable state as boundary).
 - Each loop fails with a distinct observable signature — spinning tool calls, persistent red tests, oscillating diffs — so the symptom routes to the matching intervention.
 - The frame's contribution is diagnostic, not architectural — it does not change how agents are built, only how operators read traces.
-- Single-shot tasks and tasks with a deterministic test gate do not need the frame; the verification loop is sufficient.
+- Single-shot tasks and tasks with a deterministic test gate do not need the frame; the [verification loop](../workflows/failure-driven-iteration.md) is sufficient.
 - Two other tri-loop framings exist (Kim & Yegge's lifecycle, Morris's human-positioning); pick the one that matches the question you're asking and label which axis you're cutting on.
 
 ## Sources

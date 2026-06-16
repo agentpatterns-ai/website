@@ -69,7 +69,7 @@ A [survey of Agentic RAG architectures](https://arxiv.org/abs/2501.09136) confir
 
 ## Priority of Layers
 
-Layers are not equal. When a human annotation contradicts what the pipeline code suggests, the resolution order must be explicit. Human annotations typically take priority over code-derived enrichment, which takes priority over schema inference. Persistent memory corrections outrank general institutional knowledge.
+Layers are not equal. When a human annotation contradicts what the pipeline code suggests, the resolution order must be explicit. Human annotations typically take priority over code-derived enrichment, which takes priority over [schema inference](schema-guided-graph-retrieval.md). Persistent memory corrections outrank general institutional knowledge.
 
 Document the resolution order. An agent that silently favors code over an annotation is wrong in exactly the cases the annotation exists to correct.
 
@@ -120,10 +120,10 @@ The six-layer model is optimized for large, complex corpora. It carries real eng
 
 - **Small corpora** — a codebase that fits in a context window gains nothing from RAG latency. Loading directly is simpler and faster.
 - **Infrastructure cost** — aggregation pipelines, embedding refresh, and vector stores add operational surface. For teams without existing data infrastructure, maintenance can outweigh accuracy gain.
-- **Layer staleness** — when offline pipelines and live queries diverge (e.g., an un-propagated schema change), the agent acts on contradictory context.
+- **Layer staleness** — when offline pipelines and live queries diverge (e.g., an un-propagated schema change), the agent acts on [contradictory context](discoverable-vs-nondiscoverable-context.md).
 - **Priority rule complexity** — as layers multiply, explicit priority rules get harder to maintain. An undocumented exception silently produces wrong answers that are difficult to trace.
 
-A two-layer approach (schema + live queries) suffices for many agents. Add layers only when each source closes a production error, not a theoretical gap.
+A two-layer approach (schema + [live queries](retrieval-augmented-agent-workflows.md)) suffices for many agents. Add layers only when each source closes a production error, not a theoretical gap.
 
 ## Key Takeaways
 

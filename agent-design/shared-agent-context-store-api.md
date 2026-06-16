@@ -7,7 +7,7 @@ tags:
   - memory
   - copilot
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Shared Agent Context Store API: When to Expose Curated Context as an Endpoint
@@ -20,7 +20,7 @@ A shared agent context store API is a programmatic CRUD interface over a team-sc
 
 Apply this pattern only when **all** of the following hold:
 
-- **The writer is a system, not a person.** CI publishes release notes, a reviewer agent posts decisions, an orchestrator seeds sub-agent context. If the only writer is a human, a version-controlled repo file is simpler.
+- **The writer is a system, not a person.** CI publishes release notes, a reviewer agent posts decisions, an orchestrator seeds sub-agent context. If the only writer is a human, a version-controlled repo file like AGENTS.md is simpler.
 - **Ingestion is controlled.** Inputs are first-party artifacts — your own CI output or agent transcripts — not auto-attached untrusted content like external issue bodies or webhook payloads.
 - **Retrieval-time selection is acceptable.** Readers take a relevant *subset* per query, not a deterministic full read. Copilot Chat only processes a portion of a Space per response ([Responsible use of Copilot Spaces](https://docs.github.com/en/copilot/responsible-use/copilot-spaces)).
 - **Vendor-hosted is acceptable.** The team is on GitHub and needs neither airgapped operation nor point-in-time reproducibility — auto-syncing sources mean the same query can return a different answer tomorrow ([concept docs](https://docs.github.com/en/copilot/concepts/context/spaces)).

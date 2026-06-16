@@ -80,7 +80,7 @@ Reviewer proxies — message care, test scaffolding, change size, contributor hi
 - **Agent populations that rarely touch security surface**: gates add friction without protection when agent PRs are dominated by docs and refactors.
 - **Teams without security triage capacity**: SAST rules need a responder; otherwise they generate noise and dull attention.
 - **Bounded internal attack surface**: sandboxed CLIs with no untrusted input have little exposure to ReDoS or injection.
-- **Single-agent populations**: the CWE distribution aggregates five agents; measure your own before wiring to the six-category pattern.
+- **Single-agent populations**: the CWE distribution aggregates 5 agents; measure your own before wiring to the six-category pattern.
 
 ## Example
 

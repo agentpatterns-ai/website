@@ -47,7 +47,7 @@ A constraint that survives the trajectory satisfies four properties simultaneous
 
 - **Fresh** — Re-validated at each decision point against the current state, not read once at the start.
 - **Inherited** — Propagates through delegation and sub-agent spawning. The child cannot exceed the parent's scope.
-- **Enforceable** — Implemented in a deterministic runtime channel (gateway, hook, sandbox), not by model adherence to prose.
+- **Enforceable** — Implemented in a [deterministic runtime channel](action-selector-pattern.md) (gateway, hook, sandbox), not by model adherence to prose.
 - **Auditable** — The constraint state at the moment of each action is recoverable from the log.
 
 A constraint that fails any one of these has effectively drifted, even if the natural-language statement is still present in context. The four properties are necessary together, not in isolation.

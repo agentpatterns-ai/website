@@ -71,7 +71,7 @@ Each span carries timing, token counts, and error state.
 
 Frameworks instrument OTel in [two ways](https://opentelemetry.io/blog/2025/ai-agent-observability/):
 
-**Baked-in instrumentation**: framework emits OTel traces natively (e.g., CrewAI). Simpler adoption, but couples the framework to OTel versions.
+**Baked-in instrumentation**: framework emits OTel traces natively (e.g., CrewAI) — simpler adoption, but couples the framework to OTel versions.
 
 **External instrumentation libraries**: separate packages add OTel spans around framework calls (e.g., Traceloop, Langtrace). Decoupled maintenance, but potential fragmentation.
 
@@ -104,7 +104,7 @@ Structured traces enable automated detection of agent problems:
 OTel instrumentation is not cost-free:
 
 - **Telemetry volume at scale**: AI workloads generate [10–50× more telemetry](https://oneuptime.com/blog/post/2026-04-01-ai-workload-observability-cost-crisis/view) than traditional services because every LLM call produces token-level metrics, prompt/response events, and nested tool spans. Storage costs scale with trace depth; capturing full prompt/response bodies amplifies this further.
-- **PII exposure**: Prompts frequently contain user data. Forwarding raw tool inputs and LLM prompt content to observability backends without sanitization creates compliance risk under GDPR, HIPAA, and similar regulations.
+- **PII exposure**: Prompts frequently contain user data. Forwarding raw tool inputs and LLM prompt content to observability backends [without sanitization](../security/pii-tokenization-in-agent-context.md) creates compliance risk under GDPR, HIPAA, and similar regulations.
 - **Setup overhead for prototypes**: OTel SDK configuration, exporter setup, and collector deployment add days to weeks of effort. For experimental or short-lived agents, a lightweight structured log to stdout is faster to iterate on.
 - **Spec instability**: GenAI semantic conventions are still stabilizing — attribute names have already been deprecated (e.g., `gen_ai.system` → `gen_ai.provider.name`). Baked-in instrumentation in frameworks may lag upstream spec changes.
 
@@ -137,7 +137,7 @@ For sub-agent handoffs, wrap the child agent call in an `invoke_agent` span and 
 ## Key Takeaways
 
 - OpenTelemetry GenAI semantic conventions provide standard attribute names (`gen_ai.*`) for LLM calls, tool invocations, and agent spans.
-- Trace trees make multi-agent execution visible: which agent decided what, where time was spent, and where failures occurred.
+- Trace trees make [multi-agent execution visible](../observability/agent-observability-otel.md): which agent decided what, where time was spent, and where failures occurred.
 - Token usage and latency per span are the minimum viable signals for agent observability.
 - Frameworks either bake in OTel instrumentation or support it through external libraries — both produce interoperable traces.
 - Structured traces enable automated detection of loops, cost anomalies, and error cascades.

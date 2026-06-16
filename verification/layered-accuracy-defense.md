@@ -26,11 +26,11 @@ This mirrors [defense in depth](../security/defense-in-depth-agent-safety.md) fr
 
 Each agent receives explicit instructions to reject unsourced information, not just "be accurate."
 
-**Researcher** — output only findings that have a retrievable source URL. If a claim cannot be linked, exclude it. Do not summarize from memory and do not emit hedge tags — they push the verification burden onto downstream layers with less context.
+**Researcher** — output only findings that have a retrievable source URL. If a claim cannot be linked, exclude it. Do not summarize from memory — the [honesty-harness fabrication defense](honesty-harness-fabrication-defense.md) treats memory-sourced claims as the primary fabrication risk — and do not emit hedge tags, which push the verification burden onto downstream layers with less context.
 
 **Writer** — use only material present in the research notes. If a load-bearing claim has no supporting note, omit it and append an outstanding-research item naming the missing source.
 
-**Reviewer** — flag any assertion in the draft that has no inline citation. This is the catch layer for anything that slipped through, and treats an unsourced claim as a critical defect to be removed or sourced before merge.
+**Reviewer** — flag any assertion in the draft that has no inline citation, the [chain-of-verification](chain-of-verification-coding-agents.md) pass applied to prose. This is the catch layer for anything that slipped through, and treats an unsourced claim as a critical defect to be removed or sourced before merge.
 
 ```mermaid
 graph TD
@@ -55,11 +55,11 @@ A single "fact-checker" agent at the end of the pipeline has to re-examine the e
 |-------|-------|-------|-----------------|
 | Researcher | Raw sources | Can this claim be linked? | No URL → exclude |
 | Writer | Research notes | Is this from my notes? | Unknown source → omit, open research item |
-| Reviewer | Draft page | Is every claim sourced inline? | Unsourced claim → flag for removal or sourcing |
+| Reviewer | Draft page | Is every claim sourced inline? | Unsourced claim → flag for [removal or sourcing](chain-of-verification-coding-agents.md) |
 
 ## Anti-Pattern
 
-Relying on a single review agent at the end of the pipeline: it sees confident, well-written prose with plausible citations and cannot distinguish fabricated confidence from real sourcing unless it re-verifies every claim — expensive and still fallible.
+Relying on a single review agent at the end of the pipeline — instead of a [multi-pass review](five-pass-blunder-hunt.md) — means it sees confident, well-written prose with plausible citations and cannot distinguish fabricated confidence from real sourcing unless it re-verifies every claim, which is expensive and still fallible.
 
 A second anti-pattern is letting intermediate layers emit hedge tags instead of excluding the claim. Hedge tags defer the work to a downstream layer with less context, and in auto-merged pipelines no human is positioned to clear them. The claim either has a source or it does not exist.
 
@@ -77,10 +77,10 @@ A second anti-pattern is letting intermediate layers emit hedge tags instead of 
 Layered verification adds latency and cost proportional to the number of agents. Three round-trips through researcher → writer → reviewer is appropriate for high-stakes content pipelines, but can be excessive for:
 
 - **Simple lookup tasks** where a single agent retrieves and returns a fact — adding a reviewer layer adds cost without addressing the root failure mode (model fabrication without retrieval).
-- **Rapid iteration contexts** where speed matters more than accuracy — a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
+- **Rapid iteration contexts** where speed matters more than accuracy — under [risk-based shipping](risk-based-shipping.md), a draft that ships in one pass and gets corrected by a human may be faster than a three-agent pipeline.
 - **Correlated knowledge gaps** — if the writer and reviewer share the same training data blind spots, both layers will miss the same class of errors. Independent layers require genuinely different perspectives or constraints, not just role labels.
 
-Chaining agents does not automatically reduce errors — without disciplined handoffs it can amplify them. A 2025 study of role-specialized pipelines ([Planner → Executor → Critic](https://arxiv.org/abs/2510.07614)) finds that in sequential multi-agent systems "errors quietly pass from one stage to the next": a confident but wrong intermediate output gets written into shared context as ground truth, and a downstream layer tends to align with it rather than push back. Layered accuracy defense only pays off when each handoff forces the next layer to re-derive what it checks from the source — not from the previous agent's assertion. A reviewer that trusts the writer's framing instead of re-verifying against the citation adds latency without adding a real checkpoint.
+Chaining agents does not automatically reduce errors — without disciplined handoffs it can amplify them. A 2025 study of role-specialized pipelines ([Planner → Executor → Critic](https://arxiv.org/abs/2510.07614)) finds that in sequential multi-agent systems "errors quietly pass from one stage to the next": a confident but wrong intermediate output gets written into shared context as ground truth, and a downstream layer tends to align with it rather than push back. Layered accuracy defense only pays off when each handoff forces the next layer to re-derive what it checks from the source — the same logic as [incremental verification](incremental-verification.md), where each checkpoint re-checks rather than trusting the prior step. A reviewer that trusts the writer's framing instead of re-verifying against the citation adds latency without adding a real checkpoint.
 
 The pattern works when each layer has a structurally different task: the researcher fetches real URLs, the writer is constrained to those notes, and the reviewer checks every assertion against a citation. If two layers are doing the same check, one is redundant.
 

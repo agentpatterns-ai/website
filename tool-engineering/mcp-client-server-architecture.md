@@ -11,7 +11,7 @@ tags:
   - tool-engineering
   - mcp
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # MCP Client/Server Architecture
@@ -86,7 +86,7 @@ Tools can declare an `outputSchema` for [structured results](../multi-agent/type
 
 ## Capability Negotiation
 
-Capability negotiation is a mandatory initialization handshake.
+Capability negotiation is a mandatory MCP initialization handshake.
 
 ```mermaid
 sequenceDiagram

@@ -102,7 +102,7 @@ The lexical tier was carrying embedder A's average and BM25 was retrieving most 
 ## Related
 
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — a parallel measurement-validity failure mode where the eval set itself leaks signal to the system under test
-- [Skill Retrieval Realism Gap](skill-retrieval-realism-gap.md) — idealised retrieval conditions inflate skill-augmented agent benchmarks the same way unstratified hit@k inflates embedder benchmarks
+- [Skill Retrieval Realism Gap](eval-blind-spots.md) — idealised retrieval conditions inflate skill-augmented agent benchmarks the same way unstratified hit@k inflates embedder benchmarks
 - [Golden Query Pairs as Continuous Regression Tests](golden-query-pairs-regression.md) — the production-trace half of the eval discipline this protocol does not cover
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — the agent-memory systems this eval discipline measures
-- [Abstention-Aware Memory Retrieval](../agent-design/abstention-aware-memory-retrieval.md) — adjacent agent-memory retrieval concern where false positives matter more than recall
+- [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — adjacent agent-memory retrieval concern where false positives matter more than recall

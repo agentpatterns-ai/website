@@ -13,7 +13,7 @@ aliases:
   - session-scoped guardrails
   - opt-in hooks
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation

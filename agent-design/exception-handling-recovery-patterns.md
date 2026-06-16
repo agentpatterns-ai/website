@@ -31,7 +31,7 @@ graph LR
 
 **Self-correct**: detect the error and retry or adjust. Most tool errors resolve here — a failed file read triggers a path correction, a syntax error triggers a fix.
 
-**Fallback**: when the primary approach fails repeatedly, switch to an alternative strategy or model.
+**Fallback**: when the primary approach fails repeatedly, switch to an alternative strategy or model — the threshold an [agent circuit breaker](agent-circuit-breaker.md) makes explicit.
 
 **Degrade gracefully**: deliver partial results rather than failing entirely.
 
@@ -51,7 +51,7 @@ Git operations are cheap, atomic, and reversible. See [Rollback-First Design](ro
 
 Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) reports that telling the model a tool is failing and letting it adapt works "surprisingly well" — the model reroutes without explicit fallback logic in the harness.
 
-The simplest strategy: catch the tool error, include the message in the agent's next context, let the model decide. This outperforms rigid retry logic for novel failure modes.
+The simplest strategy: catch the tool error, include the message in the agent's next context, let the model decide. This outperforms rigid retry logic for novel failure modes, provided the retried action is safe to repeat (see [idempotent agent operations](idempotent-agent-operations.md)).
 
 !!! warning "When model-driven adaptation fails"
     This breaks down for **silent failures** — the agent produces output without detecting the underlying error (stale data, partial writes, skipped validation). The model has to *know* something went wrong. Add output validation and freshness checks for failure modes the model cannot observe directly.
@@ -91,7 +91,7 @@ stateDiagram-v2
     HalfOpen --> Open: Probe fails
 ```
 
-**Closed**: calls proceed, failures are counted. **Open**: calls are blocked, agent uses alternatives. **Half-open**: a single probe tests recovery.
+**Closed**: calls proceed, failures are counted. **Open**: calls are blocked, agent uses alternatives, as the [agent circuit breaker](agent-circuit-breaker.md) state machine specifies. **Half-open**: a single probe tests recovery.
 
 Most coding agents use a lighter-weight version: count failures, tell the model the tool is unreliable, and let model-driven adaptation handle routing. Full state machines are more common in multi-agent systems with shared tool infrastructure.
 
@@ -104,7 +104,7 @@ Let agents make recoverable mistakes rather than preventing all mistakes: sandbo
 The progressive hierarchy adds latency and complexity. These conditions favor failing fast instead:
 
 - **Short-lived tasks with no side effects** — a task under 30 seconds with no external writes gains nothing from recovery logic; retry overhead exceeds the benefit.
-- **Cascading failures in multi-agent systems** — when agents share infrastructure (databases, queues, tool APIs), recovery attempts amplify load on stressed components. Circuit breakers and backpressure must be coordinated across agents, not per-agent.
+- **Cascading failures in multi-agent systems** — when agents share infrastructure (databases, queues, tool APIs), recovery attempts amplify load on stressed components. Circuit breakers and [agent backpressure](agent-backpressure.md) must be coordinated across agents, not per-agent.
 - **Silent corruption without validation** — recovery requires detection. Writing to external systems without output validation means an agent that "recovers" may compound bad state. Fail fast to a human when intermediate state cannot be verified.
 
 ## Example
@@ -112,12 +112,12 @@ The progressive hierarchy adds latency and complexity. These conditions favor fa
 A coding agent tasked with refactoring a module hits a test failure after changing a function signature:
 
 1. **Self-correct** — the agent reads the test error, identifies the mismatched argument, and fixes the call site. Tests pass.
-2. On the next file, the same refactor produces a circular import. The agent retries twice, fails both times.
+2. On the next file, the same refactor produces a circular import. The agent retries twice and fails both times, which is safe only because the edits are [idempotent](idempotent-agent-operations.md).
 3. **Fallback** — the agent abandons the automated refactor for that file and applies a manual re-export to break the cycle.
 4. A third file depends on an external service that is down. The agent cannot run integration tests.
-5. **Degrade gracefully** — the agent commits the passing unit-tested changes and leaves the integration-dependent file unchanged, noting the skip in its progress log.
+5. **Degrade gracefully** — the agent commits the passing unit-tested changes and leaves the integration-dependent file unchanged, noting the skip in its [progress log](../observability/trajectory-logging-progress-files.md).
 6. The agent encounters a permissions error trying to update a protected config file.
-7. **Escalate** — the agent opens a draft PR with its completed work and flags the config change for human review, including the error message and the intended edit.
+7. **Escalate** — the agent opens a draft PR with its completed work and flags the config change for [human review](../workflows/human-in-the-loop.md), including the error message and the intended edit.
 
 Throughout, the agent commits after each successful file change (`git commit -m "refactor: update signature in <file>"`), so any revert affects only one file.
 
@@ -126,7 +126,7 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 - Treat failure as a progressive escalation — self-correct, then fallback, then degrade gracefully, then escalate — so recoverable errors never reach a human.
 - Git is the cheapest recovery substrate: frequent commits and progress files turn a crash into a resumable checkpoint rather than lost work.
 - Model-driven adaptation (tell the model the tool failed, let it reroute) beats rigid retry logic for novel errors — but only when the failure is observable, not silent.
-- Durable-execution frameworks and circuit breakers add fault tolerance for crash-survival and unreliable tools; reach for them when state must outlive the process.
+- Durable-execution frameworks and [circuit breakers](agent-circuit-breaker.md) add fault tolerance for crash-survival and unreliable tools; reach for them when state must outlive the process.
 - Recovery requires detection — fail fast to a human whenever intermediate state cannot be validated.
 
 ## Related
@@ -138,4 +138,4 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Loop Detection](../observability/loop-detection.md)
 - [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)

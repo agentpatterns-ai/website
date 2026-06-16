@@ -17,7 +17,7 @@ maturity: established
 
 ## The Data Relay Problem
 
-Agents sit between users and live data sources. The failure mode is not hallucination from nothing -- it is mutation of real data. The model receives correct data from a tool and presents an altered version: financial figures get rounded, query results get summarized, status fields get paraphrased. The user cannot distinguish faithful relay from subtle fabrication.
+Agents sit between users and live data sources -- APIs, MCP servers, and databases. The failure mode is not hallucination from nothing -- it is mutation of real data. The model receives correct data from a tool and presents an altered version: financial figures get rounded, query results get summarized, status fields get paraphrased. The user cannot distinguish faithful relay from subtle fabrication.
 
 [CyberArk's ATPA research](https://www.cyberark.com/resources/threat-research-blog/poison-everywhere-no-output-from-your-mcp-server-is-safe) demonstrates that malicious tool outputs can instruct the model to alter data deliberately -- tool poisoning extends beyond descriptions into return values.
 
@@ -116,11 +116,11 @@ Trusting the model to faithfully transcribe data because the prompt says "report
 These guardrails impose real costs. Skip the full stack when:
 
 - **The surface cannot show structured data** -- voice, SMS, and narrow chat surfaces have no room for a raw panel; passthrough becomes noise users ignore.
-- **Stakes are low and reads are casual** -- status lookups and document summaries have small mutation blast radius; the engineering cost outweighs the protection.
+- **Stakes are low and reads are casual** -- status lookups and document summaries have small mutation blast radius; the engineering cost outweighs the [protection](layered-accuracy-defense.md).
 - **Data is high-cardinality or streaming** -- large result sets make raw panels unreadable and diff engines a latency bottleneck.
 - **Token or latency budgets are tight** -- logging raw responses and returning both raw fields and commentary inflates context and response time.
 
-Under these conditions, prefer typed schemas at the boundary and spot-check evals on exact values instead of the full passthrough-plus-diff stack.
+Under these conditions, prefer [typed schemas at the boundary](structured-output-constraints.md) and spot-check evals on exact values instead of the full passthrough-plus-diff stack.
 
 ## Key Takeaways
 

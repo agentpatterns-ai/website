@@ -80,6 +80,7 @@ CoALA itself frames the loop descriptively, not prescriptively ("we use CoALA to
 
 ## Related
 
+- [CoALA Memory Taxonomy as a Classifier](coala-memory-taxonomy-classifier.md) — The other CoALA axis: this page is the decision-making *loop*, that page is the *memory* taxonomy (working/episodic/semantic/procedural) — two distinct facets of the same framework
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model that runs the evaluate sub-stage on the planner's output
 - [Adaptive Generate-Rank-Verify](adaptive-generate-rank-verify.md) — Evaluate-and-select made explicit when verification dominates cost
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two-role loop where one role generates and the other evaluates

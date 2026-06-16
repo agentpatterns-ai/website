@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
   - standards
 last_reviewed: 2026-05-27
-maturity: established
+maturity: emerging
 ---
 
 # llms.txt: Making Your Project Discoverable to AI Agents

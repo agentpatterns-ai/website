@@ -6,6 +6,7 @@ tags:
   - tool-agnostic
   - harness-engineering
   - arxiv
+  - long-form
 aliases:
   - agent harness design dimensions
   - agent-system archetypes
@@ -43,7 +44,7 @@ Each dimension is a position choice, not a binary ([arXiv:2604.18071](https://ar
 - **Safety mechanisms** — intermediate isolation ([sandboxes](../security/sandbox-runtime-comparison.md), [permission prompts](../security/permission-gated-commands.md)) is common; high-assurance audit ([provenance-aware decision auditing](../security/provenance-aware-decision-auditing.md)) is rare.
 - **Orchestration** — the control flow and scheduling layer around agent loops.
 
-The paper complements the 12-dimension / 13-system [Scaffold Architecture Taxonomy](scaffold-architecture-taxonomy.md) ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)): finer-grained analysis of individual scaffolds, lower population coverage. Pick the five-dimension view for cross-ecosystem reading; pick the 12-dimension view when characterising a single scaffold in depth.
+The paper complements the 12-dimension / 13-system scaffold-architecture taxonomy ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)) detailed in the next section: finer-grained analysis of individual scaffolds, lower population coverage. Pick the five-dimension view for cross-ecosystem reading; pick the 12-dimension view when characterising a single scaffold in depth.
 
 ## Co-occurrence: Choices Cluster
 
@@ -99,6 +100,48 @@ Reading two public harnesses through the dimensions:
 
 The dimensions frame the differences; the archetypes name the clusters.
 
+## The 12-Dimension Scaffold Taxonomy (Single-Scaffold View)
+
+For characterising one scaffold in depth, [source-code analysis of 13 open-source coding agent scaffolds](https://arxiv.org/abs/2604.03515) reduces the same harness layer to 12 dimensions grouped in three layers. Architecturally distinct systems produce identical surface capabilities — trajectory studies observe outputs without explaining differences — so the taxonomy makes the design choices comparable.
+
+```mermaid
+graph TD
+    S[Coding Agent Scaffold] --> CA[Control Architecture]
+    S --> TEI[Tool & Environment Interface]
+    S --> RM[Resource Management]
+
+    CA --> CA1[Loop topology]
+    CA --> CA2[Planning strategy]
+    CA --> CA3[Search / branching]
+    CA --> CA4[Error recovery]
+
+    TEI --> TEI1[Tool abstraction level]
+    TEI --> TEI2[Environment access model]
+    TEI --> TEI3[Feedback routing]
+    TEI --> TEI4[Output typing]
+
+    RM --> RM1[Context budget strategy]
+    RM --> RM2[State persistence]
+    RM --> RM3[Tool-call capping]
+    RM --> RM4[Cost guardrails]
+```
+
+**Layer 1 — Control architecture** decides what to do next and when to stop. *Loop topology* is a spectrum: fixed pipelines run a predetermined sequence; adaptive loops react to tool output; MCTS scaffolds build a search tree with backtracking — Moatless Tools implements full MCTS with numeric reward and backpropagation ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)).
+
+| Topology | Predictability | Compute | Best for |
+|----------|---------------|---------|----------|
+| Fixed pipeline | High | Low | Well-defined, repeatable tasks |
+| Adaptive loop | Medium | Medium | Observation-reaction cycles |
+| MCTS / search | Low | High | Unknown solution paths |
+
+*Planning strategy* decides whether the scaffold reasons about future steps before acting ([planning-first emits a plan then executes](../workflows/plan-first-loop.md); interleaved adapts at the cost of inspectability). *Error recovery* ranges from aborting on first failure to retry loops, exception-specific handlers, and [rollback to checkpoints](exception-handling-recovery-patterns.md).
+
+**Layer 2 — Tool and environment interface.** *Tool abstraction level* varies from direct shell (maximum flexibility, no boundary for testing) to typed registries that reject malformed calls and enable [reasoning/execution separation](cognitive-reasoning-execution-separation.md). *Environment access model* sets what the agent can observe and modify ([sandboxes give a recoverable surface](rollback-first-design.md)). *Feedback routing* controls where tool results go — returning all output to context is simple but expensive; routing large outputs to disk with a summary preserves budget ([Anthropic: Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+
+**Layer 3 — Resource management** handles the bounded resources of a model-in-a-loop. *Context budget strategy* decides what enters context and when it is pruned (see [Loop Strategy Spectrum](loop-strategy-spectrum.md)). *State persistence* decides what survives between iterations — in-memory state is lost on failure, file-backed state enables resumption via [progress files](../observability/trajectory-logging-progress-files.md) and [feature list files](../instructions/feature-list-files.md). *Tool-call capping* and *cost guardrails* bound unbounded loops per session, per tool, or per cost.
+
+Scaffold architectures **resist discrete classification** ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515)): 11 of 13 agents analysed compose multiple loop primitives rather than implementing one. Treat dimensions as continuous scales — ask "where does this scaffold sit on the control strategy spectrum?" rather than "is this a pipeline or an agent?" Reading three open-source scaffolds through the control layer: **[Agentless](https://arxiv.org/abs/2604.03515)** runs a 10-stage pipeline of independent scripts linked by JSONL on disk — predictable, auditable, cheap, but degrades when reproduction needs exploration; **SWE-agent** runs a single ReAct loop over a typed tool registry and restricted shell — more robust to unexpected paths, higher per-run cost; **Moatless Tools** runs full MCTS — strongest on open-ended tasks, highest compute, hardest to debug when a bad branch dominates. The 12-dimension view adds overhead without value for single-script tools (no meaningful control architecture to classify) and retrospective audits (it tells you what was built, not whether the design was right).
+
 ## Key Takeaways
 
 - Five dimensions — subagent architecture, context management, tool systems, safety mechanisms, orchestration — cover the non-LLM choices in an agent harness.
@@ -109,10 +152,12 @@ The dimensions frame the differences; the archetypes name the clusters.
 
 ## Related
 
-- [Scaffold Architecture Taxonomy for Coding Agents](scaffold-architecture-taxonomy.md)
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
 - [Harness Engineering](harness-engineering.md)
+- [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](harness-hill-climbing.md)
+- [Runtime Scaffold Evolution: Agents That Build Tools](runtime-scaffold-evolution.md)
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md)
+  - long-form

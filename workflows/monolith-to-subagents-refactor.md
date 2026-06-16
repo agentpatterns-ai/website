@@ -66,7 +66,7 @@ The generalized lesson: hardcoded context is fine for a prototype's first week a
 
 ### 4. Add Distributed Tracing Before, Not After, Production
 
-A standard monolithic script is a black box under failure: something broke, but which of the five responsibilities caused it? Fix this before deploying, not in response to the first incident.
+A standard monolithic script is a black box under failure: something broke, but which of the five responsibilities caused it? Wire [agent observability](../observability/agent-observability-otel.md) in before deploying, not in response to the first incident.
 
 The ADK refactor used [OpenTelemetry-based Cloud Trace instrumentation for ADK](https://google.github.io/adk-docs/observability/cloud-trace/) — emitting distributed traces for model requests, tokens, and tool executions out of the box — paired with Server-Sent Events for a live dashboard ([Google](https://developers.googleblog.com/production-ready-ai-agents-5-lessons-from-refactoring-a-monolith/)). OpenTelemetry is the cross-framework primitive: LangChain, LlamaIndex, and Claude Code all support it.
 
@@ -95,7 +95,7 @@ The refactor is not free. Adopting a framework, designing schemas, wiring OTel, 
 
 - Apply the five steps in order — each surfaces the failure modes the next fixes; skipping the sub-agent split leaves the other four without clear boundaries to target.
 - Decomposition is only safe when sub-tasks are loosely coupled; tightly-coupled or conversational workflows degrade under sub-agent context isolation.
-- Structured outputs belong in the schema, not the prompt — prompt-encoded JSON shapes produce fragile parsing and waste tokens.
+- [Structured outputs](../verification/structured-output-constraints.md) belong in the schema, not the prompt — prompt-encoded JSON shapes produce fragile parsing and waste tokens.
 - Hardcoded context is a prototype shortcut; production pipelines need a refresh path that does not require re-deploying the agent.
 - OpenTelemetry goes in before the first production incident, not after — black-box monoliths are debuggable only in retrospect.
 - Use the orchestration framework's retry, backoff, and timeout primitives rather than hand-written try/catch — custom retry logic is where token budgets go to die.

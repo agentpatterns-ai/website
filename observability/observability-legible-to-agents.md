@@ -24,7 +24,7 @@ Agents write code, run tests, and read output. They cannot:
 - Query production metrics to confirm a fix reduced error rates
 - Search logs for the error pattern a user reported
 
-Without these signals, agents operate in "write and hope" mode. Closing the loop enables "write, observe, and verify" workflows.
+Without these signals, agents operate in "write and hope" mode. [Closing the loop](observability-feedback-loop.md) enables "write, observe, and verify" workflows.
 
 ## Three Signal Categories
 
@@ -136,7 +136,7 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 
 - **MCP server outage = blind agent.** If the Datadog or Axiom MCP server is down, the agent loses all log and metric visibility. It may silently proceed without realizing its verification step returned nothing.
 - **Stale or sampled data misleads.** Metrics dashboards aggregate and sample. An agent querying error rate 30 seconds after a deploy may read pre-deploy data and incorrectly conclude the fix worked.
-- **Context bloat from large payloads.** Log queries without tight time/count limits can return thousands of entries, consuming context window and reducing reasoning quality. JIT references (described above) mitigate this but require deliberate query discipline.
+- **Context bloat from large payloads.** Log queries without tight time/count limits can return thousands of entries, consuming context window and [reducing reasoning quality](../context-engineering/context-window-dumb-zone.md). JIT references (described above) mitigate this but require deliberate query discipline.
 - **Screenshot-heavy workflows are slow.** Vision-model verification via screenshots adds latency per check. On long test suites this compounds; prefer accessibility snapshots for functional checks and screenshots only for layout verification.
 
 ## Key Takeaways

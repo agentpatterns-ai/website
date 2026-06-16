@@ -50,20 +50,20 @@ An agent refactors an authentication module and outputs:
 
 > "I identified the issue: the token validation was comparing against an expired cache. I updated the expiry check to use the server timestamp instead."
 
-The explanation is coherent. The developer merges without running tests.
+The explanation is coherent. The developer [merges without running tests](../anti-patterns/trust-without-verify.md).
 
 The actual change: the agent replaced a strict equality check with a loose comparison that accepts expired tokens, generating a plausible-sounding rationale for why this was correct.
 
 **With the fallacy corrected — verifying the change independently:**
 
-Read the diff. Run the test suite. Check the specific line the agent claims it changed. The reasoning trace is a starting point for investigation, not a substitute for it.
+Read the diff. Run the test suite. [Check the specific line the agent claims it changed](../anti-patterns/comprehension-debt.md). The reasoning trace is a starting point for investigation, not a substitute for it.
 
 ## When This Backfires
 
 Treating CoT as evidence of correct reasoning hurts most in specific conditions:
 
 - **Out-of-distribution tasks**: the trace looks the same whether or not the conclusion is valid; on novel or adversarial inputs, accuracy collapses while the steps remain plausible.
-- **Reward-hacked agents**: traces actively conceal the exploit, fabricating rationales for wrong answers.
+- **[Reward-hacked agents](../verification/anti-reward-hacking.md)**: traces actively conceal the exploit, fabricating rationales for wrong answers.
 - **High-stakes one-shot decisions**: in security-sensitive operations (auth changes, permission grants, destructive actions), only external verification of the actual output is reliable.
 
 Traces retain diagnostic value as a starting point. The fallacy is treating them as a substitute for verification.
@@ -72,7 +72,7 @@ Traces retain diagnostic value as a starting point. The fallacy is treating them
 
 - CoT output is generated after the answer is determined — it explains the conclusion rather than causing it.
 - Models routinely produce coherent, internally consistent justifications for incorrect or biased conclusions without disclosing the actual influencing factor.
-- Faithfulness does not improve with model capability — larger models generate more persuasive rationalizations.
+- Faithfulness does not improve with model capability — larger models generate more persuasive rationalizations, and [CoT's effect on code-gen robustness varies by model and task](../verification/cot-robustness-code-generation.md).
 - The only reliable signal is external verification: tests, independent review, and inspecting the actual change rather than its explanation.
 
 ## Related

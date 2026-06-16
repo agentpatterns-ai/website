@@ -60,8 +60,8 @@ Independent quantification: LangChain raised Terminal Bench 2.0 from 52.8% to 66
 ## Diagnostic Loop
 
 1. Run the agent. Observe the failure.
-2. Attribute to one of the five layers. If unattributable, add it to a separate "novel failure" log — do not invent a sixth bucket on the fly. Recent work operationalizes this attribution step directly: a method that localizes which harness layer is responsible for a failure from failed-trajectory evidence, rather than leaving the layer to a manual guess ([From Failed Trajectories to Reliable LLM Agents](https://arxiv.org/abs/2606.06324)). [Runtime harness adaptation](runtime-harness-adaptation.md) takes the next step — turning each attributed failure into a rule, skill, validator, or monitor at the matching interface layer.
-3. Fix that layer. Commit the fix back into the repo so all future sessions inherit it.
+2. Attribute to one of the five layers — the [agent debugging](../observability/agent-debugging.md) step. If unattributable, add it to a separate "novel failure" log — do not invent a sixth bucket on the fly. Recent work operationalizes this attribution step directly: a method that localizes which harness layer is responsible for a failure from failed-trajectory evidence, rather than leaving the layer to a manual guess ([From Failed Trajectories to Reliable LLM Agents](https://arxiv.org/abs/2606.06324)). [Runtime harness adaptation](harness-engineering.md) takes the next step — turning each attributed failure into a rule, skill, validator, or monitor at the matching interface layer.
+3. Fix that layer. Commit the fix back into the repo so all future sessions inherit it, the loop [runtime harness adaptation](harness-engineering.md) automates.
 4. Re-run the same task. If it succeeds, the attribution was correct.
 5. If all five layers have been cleared on the same task class and the agent still fails — only then evaluate a model swap.
 
@@ -89,7 +89,7 @@ The model was never the problem. The harness was.
 
 ## Key Takeaways
 
-- "The model is dumb" almost always resolves to a specific harness layer once forced through a fixed attribution.
+- "The model is dumb" almost always resolves to a specific [harness](harness-engineering.md) layer once forced through a fixed attribution.
 - Use a working enumeration of five layers — task spec, context, execution environment, verification, state — but treat the exact count as a working cut, not canonical. The discipline of fixed attribution is what matters.
 - Model swap is the last hypothesis, not the first. LangChain demonstrated +13.7 points on Terminal Bench 2.0 from harness changes alone.
 - Keep a "novel failure" log so the enumeration cannot quietly grow to fit anything.
@@ -103,4 +103,4 @@ The model was never the problem. The harness was.
 - [AGENTS.md as Table of Contents](../instructions/agents-md-as-table-of-contents.md) — the context-provision layer in concrete form
 - [Trajectory Decomposition Diagnosis](../verification/trajectory-decomposition-diagnosis.md) — finer-grained diagnosis below the harness-layer level
 - [Harness Engineering Method Map](harness-design-dimensions.md) — design dimensions the layer fixes draw from
-- [Runtime Harness Adaptation](runtime-harness-adaptation.md) — places each diagnosed failure at one of four interface layers in deterministic, rule-governed environments
+- [Runtime Harness Adaptation](harness-engineering.md) — places each diagnosed failure at one of four interface layers in deterministic, rule-governed environments

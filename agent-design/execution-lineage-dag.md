@@ -12,7 +12,7 @@ aliases:
   - DAG of artifacts
   - artifact-lineage agents
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Execution Lineage: DAG of Artifacts vs Agent Loops
@@ -55,7 +55,7 @@ When Source B changes, only `Summarize B`, `Plan`, and `Draft memo` re-run; `Sum
 
 Rosen and Rosen ran two controlled policy-memo update tasks against loop-centric baselines ([arXiv:2605.06365](https://arxiv.org/abs/2605.06365)):
 
-- **Unrelated-branch update** — DAG replay preserved the final memo exactly across all runs, with zero churn and zero contamination from the unrelated branch. Loop baselines regenerated the memo and frequently imported unrelated context.
+- **Unrelated-branch update** — DAG replay preserved the final memo exactly across all runs, with zero churn and zero contamination from the unrelated branch. Loop baselines regenerated the memo and frequently imported unrelated context — the [context-poisoning](../anti-patterns/context-poisoning.md) failure mode.
 - **Intermediate-artifact edit** — all systems reflected the new constraint in the final memo, but only DAG replay achieved upstream preservation, downstream propagation, unaffected-artifact preservation, and cross-artifact consistency.
 
 The authors are explicit that loop baselines remain competitive on bounded one-shot synthesis where every source fits in context. The DAG earns its keep when work is *revised* across time.
@@ -108,7 +108,7 @@ The loop produces a polished PR that may pass review on second look. The DAG rep
 ## Key Takeaways
 
 - Final-answer quality and maintained-state quality are distinct measurements; a polished output can mask state inconsistency that compounds over revisions.
-- Adopt the DAG-of-artifacts model when work is revised across time and intermediate artifacts factor cleanly. Stick with a loop when the task is one-shot or fan-out is genuinely runtime-decided.
+- Adopt the DAG-of-artifacts model when work is revised across time and intermediate artifacts factor cleanly — the edges it adds between [durable interactive artifacts](durable-interactive-artifacts.md). Stick with a loop when the task is one-shot or fan-out is genuinely runtime-decided.
 - The mechanism is dependency-explicit caching with content identity — the same primitive that makes Make and Dagster reproducible, applied to LLM-produced artifacts.
 - Side-effectful nodes need an idempotency layer outside the DAG model; replay alone doesn't make `send-email` safe.
 
@@ -117,5 +117,5 @@ The loop produces a polished PR that may pass review on second look. The DAG rep
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md)
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md)
-- [Beads: Structured Task Graphs as External Agent Memory](beads-task-graph-agent-memory.md)
+- [Code-Native Memory Substrates](code-native-memory-substrates.md)
 - [Simulation and Replay Testing for Agent Verification](../workflows/simulation-replay-testing.md)

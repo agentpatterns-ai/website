@@ -11,7 +11,7 @@ aliases:
   - fail-closed settings validation
   - remote policy enforcement for agents
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Fail-Closed Remote Settings Enforcement

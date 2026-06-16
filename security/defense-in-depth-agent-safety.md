@@ -12,7 +12,7 @@ aliases:
   - layered security
   - multi-layer safety
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Defense-in-Depth Agent Safety
@@ -21,7 +21,7 @@ maturity: established
 
 ## Why Layers Matter
 
-Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. Approval gates cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail and ensures each catches what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
+Any individual safety mechanism can fail. Prompt guardrails are bypassed by injection. Runtime checks miss edge cases. [Approval gates](human-in-the-loop-confirmation-gates.md) cause fatigue-driven rubber-stamping. Defense-in-depth assumes every layer will eventually fail and ensures each catches what the others miss. Perplexity's response to NIST's AI-agent security RFI reaches the same conclusion: "No single layer is sufficient on its own; the non-deterministic nature of LLM reasoning ensures that any individual defense can be circumvented under sufficiently adaptive attack strategies" ([Li et al., 2026](https://arxiv.org/abs/2603.12230)).
 
 The OPENDEV agent implements five independent safety layers, each operating at a different level of the stack ([Bui, 2026 §2.1](https://arxiv.org/abs/2603.05344)):
 
@@ -114,8 +114,8 @@ Even if the prompt guardrail is bypassed by injection, the hook still blocks pro
 Each layer adds configuration, testing, and maintenance cost — and misconfigured layers can block legitimate work or create false confidence while remaining ineffective.
 
 - **Approval fatigue compounds across layers.** If every layer raises its own prompts, users approve everything to keep moving — converting the stack into security theater. The three-level system mitigates this only when safe patterns are classified correctly upfront.
-- **Schema filtering limits legitimate capability.** Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose contexts, strict schema restrictions force constant operator intervention or fan-out into specialized agents where one broader agent would do.
-- **Hooks and validation add latency.** In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks compound response time. A single well-tuned approval gate may beat five independent layers with inspection overhead at each level.
+- **[Schema filtering](../multi-agent/subagent-schema-level-tool-filtering.md) limits legitimate capability.** Narrow subagent schemas cannot adapt outside their defined scope. In exploratory or general-purpose contexts, strict schema restrictions force constant operator intervention or fan-out into specialized agents where one broader agent would do.
+- **Hooks and validation add latency.** In streaming, high-frequency, or real-time pipelines, per-call lifecycle hooks compound response time. A single well-tuned [approval gate](human-in-the-loop-confirmation-gates.md) may beat five independent layers with inspection overhead at each level.
 
 Apply the full five-layer stack to production agents with write access, external integrations, or multi-agent pipelines. For short-lived, read-only, or sandboxed internal tools, one or two targeted layers (schema restrictions plus lifecycle hooks) often deliver sufficient protection at lower cost.
 

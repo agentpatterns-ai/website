@@ -10,7 +10,7 @@ aliases:
   - session management decision framework
   - context management decision tree
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Turn-Level Context Decisions
@@ -35,7 +35,7 @@ Continue is the default when context is still productive. Do not compact or clea
 
 Drop everything after a specific turn and reprompt from that checkpoint. In Claude Code, double-tap `Esc` or run `/rewind`.
 
-Rewind is stronger than correction. A failed approach leaves the full failed reasoning chain in context — tool calls, error messages, dead-end explorations. Stacking corrections on top anchors the model toward the same failure mode. Rewinding removes the failed branch entirely.
+Rewind is stronger than correction. A failed approach leaves the full failed reasoning chain in context — tool calls, error messages, dead-end explorations. Stacking corrections on top anchors the model toward the same failure mode. `/rewind` removes the failed branch entirely.
 
 [Claude Code best practices](https://code.claude.com/docs/en/best-practices) codify the rule: "If you've corrected Claude more than twice on the same issue in one session, the context is cluttered with failed approaches. Run `/clear` and start fresh with a more specific prompt."
 
@@ -65,7 +65,7 @@ Direct the compaction to preserve what matters:
 
 Spawn a [subagent](../tools/claude/sub-agents.md) for work that generates intermediate output you will not need again. The subagent runs in its own window; only the final result returns.
 
-The mental test: "Will I need this output again, or just the conclusion?" If "just the conclusion," delegate. Codebase exploration, security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
+The mental test: "Will I need this output again, or just the conclusion?" If "just the conclusion," delegate. [Codebase exploration](../multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
 
 ```
 Use a subagent to investigate how the auth system handles token refresh.
@@ -96,7 +96,7 @@ graph TD
 The framework assumes task boundaries are knowable in advance. Three conditions weaken it:
 
 - **Exploratory work with unpredictable direction**: Premature clearing or compacting discards context that turns out to be critical. When you cannot predict what will become relevant, err toward continue.
-- **Highly interconnected multi-file changes**: Subagent delegation loses cross-file awareness the main session preserves. If the delegated task requires accumulated decisions across files, keep it in the parent session.
+- **Highly interconnected multi-file changes**: [Subagent delegation](../tools/claude/sub-agents.md) loses cross-file awareness the main session preserves. If the delegated task requires accumulated decisions across files, keep it in the parent session.
 - **Compaction at the worst time**: The model produces the poorest summaries precisely when context rot is worst — at high fill. [Manual compaction](manual-compaction-dumb-zone-mitigation.md) at task transitions beats auto-compaction at 95%.
 
 ## Key Takeaways
@@ -104,7 +104,7 @@ The framework assumes task boundaries are knowable in advance. Three conditions 
 - Rewind beats correction: drop failed attempts from context rather than stacking error-correction messages on top of polluted reasoning.
 - Compact early, not late: auto-compaction at 95% fires after reasoning has degraded. Compact manually at task-type transitions.
 - Delegate for exploration: use subagents when intermediate output is disposable and only the conclusion matters.
-- Clear between unrelated tasks: the kitchen sink session anti-pattern shows that mixed-task context degrades every subsequent task.
+- Clear between unrelated tasks: the [kitchen sink session anti-pattern](../anti-patterns/session-partitioning.md) shows that mixed-task context degrades every subsequent task.
 - Continue is the right default: for short sessions and related follow-up work, aggressive context management adds overhead without benefit.
 
 ## Related

@@ -51,7 +51,7 @@ The pattern is correct when the LLM has a substantial prior on the task family, 
 
 - **Warm-start with diverse seeds** so the loop is not anchored to one mode.
 - **Inject expert knowledge** — idioms, reference implementations, hardware specs — to move the prior into a useful region before the loop starts.
-- **Use richer feedback than scalars** — compiler diagnostics, profiler traces, failing-test output.
+- **Use [richer feedback than scalars](../agent-design/feedback-capability-equalizer.md)** — compiler diagnostics, profiler traces, failing-test output.
 - **Switch to MAB or evolutionary scaffolds** when the prior is weak, so the scaffold enforces exploration.
 - **Detect the plateau** and stop when marginal gain falls below a threshold.
 

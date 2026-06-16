@@ -31,11 +31,11 @@ CaMeL uses four components: [Source: [Debenedetti et al., 2025](https://arxiv.or
 
 **Privileged LLM (P-LLM)** — sees only the trusted user query. Converts it into an execution plan expressed as restricted Python. Never receives raw tool outputs or untrusted content.
 
-**Quarantined LLM (Q-LLM)** — processes untrusted external data (emails, web pages, documents). Has no ability to invoke tools directly. The P-LLM delegates specific extraction tasks to it ("extract the sender's email address from this text"), receives the result, but never exposes the raw untrusted content to the P-LLM.
+**Quarantined LLM (Q-LLM)** — the [Dual LLM pattern](prompt-injection-resistant-agent-design.md)'s quarantined half — processes untrusted external data (emails, web pages, documents). Has no ability to invoke tools directly. The P-LLM delegates specific extraction tasks to it ("extract the sender's email address from this text"), receives the result, but never exposes the raw untrusted content to the P-LLM.
 
 **Custom Python interpreter** — executes the P-LLM's plan. Performs taint tracking: every value carries capability metadata encoding its provenance and permitted uses. Security policies are enforced at tool-call time.
 
-**Security policies** — capability labels on each value specify what can be done with it. If untrusted data tries to flow into a tool it is not permitted to reach, the interpreter blocks it regardless of what the model intends.
+**Security policies** — capability labels on each value specify what can be done with it. If untrusted data tries to flow into a tool it is not permitted to reach, the Python interpreter blocks it regardless of what the model intends.
 
 ```mermaid
 graph TD

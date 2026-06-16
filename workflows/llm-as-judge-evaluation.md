@@ -18,7 +18,7 @@ maturity: established
 
 Multi-agent outputs resist traditional programmatic evaluation. Research reports, synthesized answers, and generated code are free-form; they rarely have a single correct answer. Evaluating them manually at scale is not feasible — but handing evaluation entirely to automation misses the subtle failures that matter most in production.
 
-The solution is layered: automated LLM-as-judge scoring handles volume, human review handles edge cases, and observability tooling surfaces the systematic failures that neither catches individually.
+The solution is a [layered accuracy defense](../verification/layered-accuracy-defense.md): automated LLM-as-judge scoring handles volume, human review handles edge cases, and observability tooling surfaces the systematic failures that neither catches individually.
 
 ## The Evaluation Pipeline
 
@@ -39,10 +39,10 @@ graph TD
 The judge evaluates each output against a rubric with independent dimensions. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) evaluated outputs across five dimensions:
 
 - **Factual accuracy** — do claims match their cited sources?
-- **Citation accuracy** — do cited sources actually support the claims made?
+- **Citation accuracy** — do [cited sources](../verification/layered-accuracy-defense.md) actually support the claims made?
 - **Completeness** — does the output cover all requested aspects?
 - **Source quality** — are primary sources preferred over secondary ones?
-- **Tool efficiency** — did the agent use tools appropriately, without excessive calls?
+- **Tool efficiency** — did the agent use tools appropriately, without excessive calls? (Tracked as tool-call count in [eval-driven development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building).)
 
 Each dimension produces a score from 0.0–1.0 and a pass/fail grade. Scoring dimensions independently matters: an output can be factually accurate but incomplete, or complete but citing low-quality sources. Aggregating into a single score hides which dimension failed.
 
@@ -62,7 +62,7 @@ Human review catches what automation misses. Anthropic's human testers identifie
 - System-level failures not visible in individual output scores
 - Subtle source-selection biases — early agents consistently chose SEO-optimized content farms over authoritative but less highly-ranked academic sources
 
-The source-selection bias is instructive: it was not detectable from output text alone. The outputs looked well-cited. Only human testers who recognized the sources as low-quality caught it. This class of failure — plausible-looking outputs with structural biases — is invisible to a judge scoring factual accuracy from the text.
+The source-selection bias is instructive: it was not detectable from output text alone. The outputs looked well-cited. Only human testers who recognized the sources as low-quality caught it. This class of failure — plausible-looking outputs with structural biases — is invisible to a judge scoring factual accuracy from the text, which is why a [layered accuracy defense](../verification/layered-accuracy-defense.md) keeps humans in the loop.
 
 Human spot-checking is not a review of every output. It is a targeted sample: review a fixed set of known-hard queries each release, review outputs flagged by the automated judge as borderline, and rotate in novel queries that test distribution edges.
 
@@ -91,9 +91,9 @@ Calibration is not a one-time step. When new query types enter the distribution,
 LLM-as-judge evaluation degrades or fails in several conditions:
 
 - **Shared model bias**: LLM judges often share stylistic and verbosity biases with the models they evaluate. A fluent but factually incorrect output can score higher than a terse but correct one because the judge rewards surface coherence. This is especially acute when judge and subject are the same model family.
-- **Distribution shift without recalibration**: A rubric calibrated against one query distribution will drift as usage patterns change. New query types that weren't in the original calibration set can have systematically miscalibrated scores — producing false confidence in a judge that no longer aligns with human reviewers.
+- **Distribution shift without recalibration**: A rubric calibrated against one query distribution will drift as usage patterns change, the staleness [continuous agent improvement](continuous-agent-improvement.md) is built to catch. New query types that weren't in the original calibration set can have systematically miscalibrated scores — producing false confidence in a judge that no longer aligns with human reviewers.
 - **Subtlety ceiling**: The single-judge approach performs well on dimensions with clear criteria (citation accuracy, factual accuracy against cited sources) but struggles with nuanced quality signals — tone appropriateness, reasoning soundness, or whether a source is authoritative in context. Human spot-checking remains essential for these dimensions.
-- **Cost at scale**: Running a separate LLM call per output adds latency and cost. For high-volume pipelines where outputs are mostly pass and human review is infrequent, simpler deterministic heuristics (length checks, citation presence, known-bad pattern detection) may catch the same failures at a fraction of the cost before escalating to LLM scoring.
+- **Cost at scale**: Running a separate LLM call per output adds latency and cost worth [profiling as a token-cost line item](token-cost-profiling-always-on-workflows.md). For high-volume pipelines where outputs are mostly pass and human review is infrequent, simpler deterministic heuristics (length checks, citation presence, known-bad pattern detection) may catch the same failures at a fraction of the cost before escalating to LLM scoring.
 
 ## Handling Rubric Failures
 
@@ -189,6 +189,5 @@ Running this against 20 representative queries before a release surfaces whether
 - [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md)
 - [Agent-Assisted Code Review: Agents as PR First Pass](../code-review/agent-assisted-code-review.md)
 - [Eval-Driven Development](eval-driven-development.md)
-- [Eval-Driven Tool Development](eval-driven-tool-development.md)
 - [Closed-Loop Agent Training](closed-loop-agent-training.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)

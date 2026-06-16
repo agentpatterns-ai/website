@@ -10,7 +10,7 @@ aliases:
   - Lost in the Middle
   - Attention Bias and Instruction Placement
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Critical Instruction Repetition via Primacy and Recency Bias
@@ -31,13 +31,13 @@ A critical instruction placed once in the middle of a prompt sits in the weakest
 
 ## When to Use Repetition
 
-Reserve repetition for instructions where non-compliance has real consequences. If everything is repeated, the repetition conveys no priority information.
+Reserve repetition for instructions where non-compliance has real consequences. If everything is repeated, the repetition conveys no priority information — and adding rules indiscriminately runs into the [instruction compliance ceiling](instruction-compliance-ceiling.md).
 
 Criteria for repetition:
 
 - Would forgetting this cause a security, safety, or correctness problem?
 - Is it a hard constraint rather than a preference?
-- Is the context window long or dense enough that position-based attention decay is a real risk?
+- Is the context window long or dense enough that the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) attention decay is a real risk?
 
 Examples: "Never include credentials in output", "Always validate input before writing to the database", "Do not modify files outside the specified directory".
 
@@ -78,7 +78,7 @@ Repetition consumes context budget: a 20-token rule stated twice costs 40 tokens
 ## Key Takeaways
 
 - State critical instructions at the start and end of the prompt to exploit both primacy and recency bias.
-- Reserve repetition for hard constraints — repeating everything negates the priority signal.
+- Reserve repetition for hard constraints — repeating everything negates the priority signal and pushes toward the [instruction compliance ceiling](instruction-compliance-ceiling.md).
 - In long conversations, restate critical constraints at the end of your message rather than relying on earlier-session statements.
 - The context cost is real: use repetition selectively, not universally.
 
@@ -117,6 +117,7 @@ The opening line places the constraint in the primacy position. The closing rest
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md)
+- [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — complementary compliance lever working on rule framing rather than position
 - [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — position and repetition move the compliance needle; encoding form does not

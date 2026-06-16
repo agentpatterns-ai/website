@@ -72,7 +72,7 @@ A single well-tuned end-of-turn reviewer with tool-calling and clustering is a v
 - The three rungs match three different cost and false-positive profiles — one reviewer cannot occupy all three positions.
 - Flood control is per-layer; the failure mode at each rung differs.
 - Separating writer from grader through a fresh model context is what makes the model-backed layers earn their cost.
-- All layers stay advisory; pair with deterministic hooks for hard enforcement.
+- All layers stay advisory; pair with [deterministic guardrails](../verification/deterministic-guardrails.md) for hard enforcement.
 - Skip the ladder when a single reviewer already operates at adequate depth, outside git, or when usage cost dominates the review budget.
 
 ## Related

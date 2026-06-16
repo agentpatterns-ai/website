@@ -108,7 +108,7 @@ The pricing page shows $5/MTok either way. The spend forecast shifts by 34%.
 ## Related
 
 - [Context Budget Allocation](context-budget-allocation.md)
-- [Prompt Cache Economics](prompt-cache-economics.md)
+- [Prompt Cache Economics](prompt-caching-architectural-discipline.md)
 - [Context Window Anxiety](context-window-anxiety.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Token-Efficient Code Generation](token-efficient-code-generation.md)

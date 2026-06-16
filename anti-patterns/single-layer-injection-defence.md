@@ -78,7 +78,7 @@ A product-level confirmation flow ("Do you want to send data to partner.example.
 Three independent layers add real complexity:
 
 - **Low-sensitivity, read-only agents** — no egress channels means URL allow-listing alone may be proportionate; the full three-layer overhead is not always warranted.
-- **Model-level hardening as a substitute** — instruction hardening reduces injection success rates but does not create a hard security boundary; treat it as one layer, not a replacement for infrastructure controls.
+- **Model-level hardening as a substitute** — [instruction hardening](../security/prompt-injection-resistant-agent-design.md) reduces injection success rates but does not create a hard security boundary; treat it as one layer, not a replacement for infrastructure controls.
 - **Confirmation fatigue** — overly broad confirmation flows train users to approve blindly; scope confirmations to high-impact or irreversible actions only.
 - **Layer interdependency** — if all three layers share the same trust root, independence collapses and the defence-in-depth guarantee breaks.
 
@@ -86,7 +86,7 @@ Three independent layers add real complexity:
 
 - No single mitigation covers the full prompt injection attack surface — use independent layers.
 - URL validation is not content validation; allowed-URL page content can still carry injections.
-- Quiet side-effects (background requests) are hard to detect — visible-action filtering misses them.
+- Quiet side-effects ([background data-exfiltration requests](../security/url-exfiltration-guard.md)) are hard to detect — visible-action filtering misses them.
 - Three independent layers: model-level resistance, infrastructure controls, product-level confirmation flows.
 - Red-team continuously; attacker strategies adapt to published defences.
 

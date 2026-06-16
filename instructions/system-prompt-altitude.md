@@ -19,9 +19,9 @@ maturity: established
 
 ## The Two Failure Modes
 
-**Too brittle**: The system prompt enumerates cases. "If the user asks about X, do Y. If they ask about Z, do W." This works for the anticipated cases and fails on everything else. Each edge case requires a prompt update. The agent has no principle to reason from — only a lookup table.
+**Too brittle**: The system prompt enumerates cases. "If the user asks about X, do Y. If they ask about Z, do W." This works for the anticipated cases and fails on everything else. Each edge case requires a prompt update, and the enumerated list grows toward the [instruction-compliance ceiling](instruction-compliance-ceiling.md). The agent has no principle to reason from — only a lookup table.
 
-**Too vague**: "Be helpful, accurate, and concise." This gives the agent no real constraint. Any output can satisfy it. The agent defaults to its pre-training distribution rather than task-specific behaviour.
+**Too vague**: "Be helpful, accurate, and concise." This gives the agent no real constraint — unlike a [binary negative rule](negative-space-instructions.md). Any output can satisfy it. The agent defaults to its pre-training distribution rather than task-specific behaviour.
 
 [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies prompt altitude as a core design decision: effective system prompts sit in "the Goldilocks zone" — specific enough to guide behaviour, flexible enough to serve as strong heuristics — rather than hardcoding brittle, enumerated logic.
 
@@ -54,7 +54,7 @@ Background sections can be general. Tool guidance should be precise. Mixing alti
 
 ## Testing Altitude
 
-The practical test for altitude calibration: introduce an edge case the prompt didn't anticipate, then observe. A well-altitude prompt degrades gracefully — the agent applies the nearest heuristic. A too-brittle prompt breaks or falls through to vague defaults. A too-vague prompt was never constrained to begin with.
+The practical test for altitude calibration: introduce an edge case the prompt didn't anticipate, then observe. A well-altitude prompt degrades gracefully — the agent applies the nearest heuristic. A too-brittle prompt breaks or falls through to vague defaults, the [rule-driven failure mode](example-driven-vs-rule-driven-instructions.md). A too-vague prompt was never constrained to begin with.
 
 If adding one new instruction requires adding three others to handle its edge cases, the original instruction was too brittle. Raise the altitude — describe the principle, not the case.
 
@@ -67,7 +67,7 @@ Instruction-tuned models generalise from principle-level guidance by applying st
 Altitude-calibrated prompts are a worse choice than enumeration in specific conditions:
 
 - **Fixed-schema extraction**: When output must conform precisely to a regulated format (FHIR, EDI, ISO financial messages), enumerated field-level rules are more auditable and verifiable than heuristic guidance. Auditors need to trace each rule to a requirement.
-- **Low-capability or fine-tuned models**: Smaller models and heavily fine-tuned models may not generalise from principle statements — they pattern-match more reliably against explicit examples and conditions. Test generalisation before relying on heuristics.
+- **Low-capability or fine-tuned models**: Smaller models and heavily fine-tuned models may not generalise from principle statements — they pattern-match more reliably against [explicit examples](domain-specific-system-prompts.md) and conditions. Test generalisation before relying on heuristics.
 - **Security and safety boundaries**: Edge cases in security rules can have severe consequences. A heuristic like "treat sensitive data carefully" may leave gaps that an explicit rule ("never log values from the `credentials` object") would close. For hard boundaries, enumerate the boundary explicitly even if you also state the principle.
 - **Debugging and auditability**: When an agent misbehaves, enumerated rules are easier to trace to a failure cause. High-altitude prompts can make it harder to identify which principle was applied incorrectly.
 
@@ -76,7 +76,7 @@ Altitude-calibrated prompts are a worse choice than enumeration in specific cond
 - Brittle prompts enumerate cases; they break on inputs the author didn't anticipate.
 - Vague prompts give no real constraint; the agent defaults to its pre-training distribution.
 - The right altitude describes how to reason, not what to decide — strong heuristics that generalise.
-- Organise system prompts by section; each section operates at an appropriate altitude (background high, tool guidance precise).
+- Organise system prompts by section — see [production system prompt architecture](production-system-prompt-architecture.md); each section operates at an appropriate altitude (background high, tool guidance precise).
 
 ## Example
 

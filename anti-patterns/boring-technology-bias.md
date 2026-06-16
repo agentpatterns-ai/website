@@ -21,7 +21,7 @@ maturity: established
 
 When you ask an agent "what should I use for X?", the answer reflects training frequency. Greenfield recommendations cluster around a small set of dominant tools — GitHub Actions for CI/CD, Stripe for payments, shadcn/ui for components, Vercel for deployment — regardless of whether they fit the project. Less-popular alternatives receive lower confidence scores or are omitted entirely.
 
-This is a frequency prior, not a reasoning failure. More training examples of popular tools means higher confidence. Greenfield projects converge on the same narrow stack regardless of requirements.
+This is a frequency prior, not a reasoning failure — the training-data analogue of [pattern replication risk](pattern-replication-risk.md), where exposure frequency, not quality, drives what the model reaches for. More training examples of popular tools means higher confidence. Greenfield projects converge on the same narrow stack regardless of requirements.
 
 ## Two Distinct Risks
 
@@ -95,7 +95,7 @@ Overspecifying the technology stack in instruction files creates its own problem
 
 - **Stack lock-in**: pinning every tool prevents agents from suggesting a better fit when requirements change mid-project.
 - **Onboarding friction**: new contributors must learn the project's overridden defaults before the agent behaves predictably.
-- **False confidence**: a pinned stack still requires human review — agents implement the pinned tool incorrectly if their training coverage for it is thin, producing confident but broken code.
+- **False confidence**: a pinned stack still requires human review — [trust without verify](trust-without-verify.md) bites here, since agents implement the pinned tool incorrectly if their training coverage for it is thin, producing confident but broken code.
 - **Maintenance burden**: locked stacks drift as pinned libraries release breaking changes, and agents are not notified — the instruction file becomes a source of stale guidance.
 
 Use instruction files to override defaults for non-negotiable choices (regulatory requirements, existing infrastructure) rather than as a blanket constraint on every dependency.
@@ -104,7 +104,7 @@ Use instruction files to override defaults for non-negotiable choices (regulator
 
 - Agent tool recommendations track training-data frequency, not problem fit — popular beats optimal by default.
 - Separate the two risks: recommendation bias (what the agent suggests) is strong; execution capability (building with a named tool in context) is far weaker.
-- Pin non-negotiable technology choices in instruction files and paste docs or seed examples into context for niche tools.
+- Pin non-negotiable technology choices in the [instruction file ecosystem](../instructions/instruction-file-ecosystem.md) and paste docs or seed examples into context for niche tools.
 - A pinned stack is not a substitute for human review — overspecifying trades selection bias for lock-in and stale guidance.
 
 ## Related

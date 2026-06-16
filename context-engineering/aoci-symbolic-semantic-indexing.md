@@ -109,7 +109,7 @@ An agent reading this before any task knows the architectural role, the invarian
 
 - AOCI is a query-independent blueprint built once and read whole — not a retrieval method and not a token-fitted token map.
 - Each entry pairs symbolic architectural coordinates with semantic content describing function and constraints — both halves are required.
-- Position AOCI as a third option alongside agentic search and per-query retrieval; choose by codebase stability, repo size, and model context window.
+- Position AOCI as a third option alongside agentic search and [per-query retrieval](repository-level-retrieval-code-generation.md); choose by codebase stability, repo size, and model context window.
 - Reported results are strong but single-source — adopt with verification, not as a settled benchmark.
 
 ## Related

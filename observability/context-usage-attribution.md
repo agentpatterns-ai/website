@@ -10,7 +10,7 @@ aliases:
   - Context Usage Breakdown
   - Per-Source Context Attribution
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Context-Usage Attribution: Per-Source Breakdown of Agent Context
@@ -90,7 +90,7 @@ The breakdown made the difference between *"prune skills"* (right answer) and *"
 ## Key Takeaways
 
 - A single "X% full" indicator names the symptom, not the cause. Attribution cuts the same number into a remediation surface.
-- Per-source and per-tool attribution are complementary — different cuts of the same telemetry, each pointing at a different class of remediation.
+- Per-source and [per-tool attribution](../context-engineering/context-window-diagnostic-tooling.md) are complementary — different cuts of the same telemetry, each pointing at a different class of remediation.
 - The categories must match the remediation primitives: rules, skills, MCPs, subagents, tool outputs, conversation, cache prefix. Collapsing two of them defeats the cut.
 - Claude Code's OTel exporter already carries the attributes (`type`, `query_source`) needed to compute the breakdown from telemetry; the UI surface is one consumer, an OTel collector is another.
 - When configuration sources are minimal and tool calls dominate, per-tool attribution is the more actionable cut — pick the axis matching the suspected cause.

@@ -10,7 +10,7 @@ tags:
   - tool-agnostic
   - rag
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 status: current
 ---
 
@@ -22,13 +22,13 @@ status: current
 
 A codebase-derived pattern library extracts reusable implementations already proven in your own repositories, indexes them, and lets an agent retrieve them by intent during a task. Without one, an agent writing code in your repository defaults to general training-data patterns rather than your team's reviewed ones. Instead of "how does anyone paginate an API," the agent asks "how do *we* paginate an API" and gets your team's actual, reviewed implementation.
 
-This is a retrieval problem with a sharper corpus. Where [logical retrieval over an inverted index](llm-driven-logical-retrieval.md) and [RAG component prioritization for software engineering](rag-component-prioritization-software-engineering.md) tune *how* relevant context is selected, a pattern library tunes *what* is in the corpus — narrowing it to vetted, in-house code rather than the open web.
+This is a [retrieval problem](retrieval-augmented-agent-workflows.md) with a sharper corpus. Where [logical retrieval over an inverted index](llm-driven-logical-retrieval.md) and [RAG component prioritization for software engineering](rag-component-prioritization-software-engineering.md) tune *how* relevant context is selected, a pattern library tunes *what* is in the corpus — narrowing it to vetted, in-house code rather than the open web.
 
 ## Why a Private Corpus Wins
 
 - **Higher signal.** Your merged code already encodes your conventions, error handling, and domain constraints. A retrieved in-house example needs less correction than a generic one synthesized from training data.
 - **Consistency.** Reusing an existing implementation keeps new code aligned with established patterns instead of introducing a third way to do the same thing.
-- **Privacy.** A library built and stored locally keeps proprietary code out of third-party retrieval services.
+- **Privacy.** A library built and stored locally — and served over a local MCP server — keeps proprietary code out of third-party retrieval services.
 
 ## How the Library Gets Built
 
@@ -50,7 +50,7 @@ The MCP server returns the team's actual pagination helper and its call sites. T
 
 ## Trade-offs
 
-- **Staleness.** The index reflects the codebase at extraction time. A library that is not re-built drifts from the current code and can surface deprecated patterns.
+- **Staleness.** The index reflects the codebase at extraction time. A library that is not re-built [drifts from the current code](repository-level-retrieval-code-generation.md) and can surface deprecated patterns.
 - **Pattern lock-in.** Retrieving an existing implementation propagates whatever is already there — including suboptimal patterns. The library amplifies the codebase's habits, good and bad.
 - **Maintenance cost.** Extraction, classification, and re-indexing are recurring work; the library earns its keep only when reuse is frequent enough to offset that cost.
 

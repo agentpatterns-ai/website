@@ -37,7 +37,7 @@ Brand search volume is a stronger predictor of AI citation rates than backlinks 
 
 ### Entity Recognition
 
-AI systems identify your site as an authority by mapping it to known entities. Consistent terminology across many pages creates stable entity entries AI can reliably retrieve. Content with many interconnected entities is selected more frequently than entity-sparse content.
+AI systems identify your site as an authority by mapping it to known entities. Consistent terminology across many pages creates stable entity entries AI can reliably retrieve. Content with many interconnected entities is [selected more frequently](how-ai-engines-cite.md) than entity-sparse content.
 
 ### Coverage Breadth vs. Depth
 
@@ -45,7 +45,7 @@ Deep coverage of one subtopic is not equivalent to broad coverage of a domain. A
 
 ### Internal Linking as Semantic Graph Construction
 
-Internal links are semantic relationships between entities and topics — not navigational cues. The authority formula:
+Internal links are [semantic relationships](atomic-pages-and-chunking.md) between entities and topics — not navigational cues. The authority formula:
 
 ```
 Topical Authority = Content Engineering + Information Architecture + Internal Linking
@@ -63,7 +63,7 @@ External knowledge infrastructure amplifies entity recognition:
 
 ## Why It Works
 
-AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more frequently in training data and retrieval indexes for that subject area — making it more likely to be selected when a query touches the domain. Retrieval-augmented systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but lacking topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
+AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more frequently in training data and retrieval indexes for that subject area — making it more likely to be selected when a query touches the domain. RAG systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but lacking topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
 
 ## Diagram
 

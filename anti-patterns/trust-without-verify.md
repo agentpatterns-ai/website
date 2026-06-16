@@ -16,7 +16,7 @@ maturity: established
 
 ## The Pattern
 
-Agent output is seductively plausible. Well-formatted prose with inline citations looks authoritative. Code that compiles looks correct. None of these surface signals correlate reliably with correctness.
+Agent output is seductively plausible. Well-formatted prose with inline citations looks authoritative. [Code that compiles looks correct](happy-path-bias.md). None of these surface signals correlate reliably with correctness.
 
 The mistake is using output quality as a proxy for accuracy. An agent can produce hallucinated URLs, fabricated statistics, and plausible-but-wrong claims — all in grammatically perfect prose.
 
@@ -39,7 +39,7 @@ Verify independently — not by re-reading the output, but by checking against e
 
 - **Fetch cited URLs.** Confirm the source exists and says what the agent claims.
 - **Run the code.** Compile, execute tests, check edge cases. "Compiles" and "correct" are different properties.
-- **Cross-reference claims.** Look up assertions in official documentation, not in the agent's summary of it.
+- **Cross-reference claims.** Look up assertions in official documentation, not in the agent's summary of it — unchecked, a hallucinated summary becomes a trusted premise ([Context Poisoning](context-poisoning.md)).
 - **Review the diff.** Diffs are easier to verify than full artifacts.
 
 If something can be checked programmatically, check it automatically. Linters, type checkers, and test suites are verification, not overhead.
@@ -49,8 +49,8 @@ If something can be checked programmatically, check it automatically. Linters, t
 Constant verification has a cost. Over-verifying introduces its own failure modes:
 
 - **Verification theater**: Running tests that don't cover the actual change, then treating a passing test suite as ground truth. The motion of verification without the substance.
-- **Alert fatigue**: Automated checks that fire too often train reviewers to dismiss failures. When every warning is noise, real errors get approved.
-- **Bottleneck on low-stakes output**: Applying the same scrutiny to a one-off throwaway script as to production auth code destroys the productivity benefit of AI assistance. Reserve manual verification for high-stakes, irreversible, or security-critical outputs.
+- **Alert fatigue**: Automated checks that fire too often train reviewers to dismiss failures — the [cry-wolf failure mode](yes-man-agent.md). When every warning is noise, real errors get approved.
+- **Bottleneck on low-stakes output**: Applying the same scrutiny to a one-off throwaway script as to production auth code destroys the productivity benefit of AI assistance. Reserve manual verification for high-stakes, irreversible, or security-critical outputs; automate the rest with [incremental verification](../verification/incremental-verification.md).
 
 The fix is calibrated verification, not universal paranoia.
 

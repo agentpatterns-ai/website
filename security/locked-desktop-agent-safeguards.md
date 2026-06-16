@@ -10,7 +10,7 @@ aliases:
   - locked-session computer use safeguards
   - desktop agent lock-state safeguards
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 status: current
 ---
 
@@ -84,10 +84,10 @@ The scope statement — "not a general-purpose remote-unlock path for your Mac" 
 ## Key Takeaways
 
 - A desktop-controlling agent is a single principal that holds the user's session credentials while the user is away — four independent axes (time, visibility, presence, recovery) bound that authority.
-- Short-lived authorisation expires per-turn, not per-session, and never auto-refreshes on the agent's own activity.
+- Short-lived authorisation in Codex expires per-turn, not per-session, and never auto-refreshes on the agent's own activity.
 - Display coverage is a soft defence; it stops shoulder-surfing, not determined local attackers.
 - Relock on local input must pause auto-unlock until manual recovery — without the pause, the agent re-takes control the next time the user steps away.
-- Manual-unlock fallback engages on ambiguous failure paths to prevent silent degradation into a half-controlled state.
+- Manual-unlock fallback is a [confirmation gate](human-in-the-loop-confirmation-gates.md) on ambiguous failure paths, preventing silent degradation into a half-controlled state.
 - For sensitive workloads, a separate VM or service account is often the better alternative — these safeguards fit the consumer-desktop case where the agent must act as the user.
 
 ## Related

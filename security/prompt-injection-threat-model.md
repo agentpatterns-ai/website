@@ -56,7 +56,7 @@ No single defense is complete. Effective defense requires:
 
 1. **Treat external content as untrusted input** — never execute logic derived from external content without explicit user authorization.
 2. **Minimal permissions** — the agent accesses only what the current task requires.
-3. **Explicit user confirmation for irreversible actions** — require approval before external-effect actions (sending messages, making API calls, modifying files).
+3. **Explicit user confirmation for irreversible actions** — require approval at a [confirmation gate](human-in-the-loop-confirmation-gates.md) before external-effect actions (sending messages, making API calls, modifying files).
 4. **Monitor for anomalous tool-call patterns** — loops that begin making unrelated API calls or accessing unusual resources may indicate a successful injection.
 
 Layering these controls — input filtering, output validation, permission scoping, and human confirmation gates — ensures no single bypass compromises the system.
@@ -70,7 +70,7 @@ Prompt injection succeeds because transformer-based models are provenance-blind:
 Strict injection defenses have real costs. Three conditions where the overhead outweighs the benefit:
 
 1. **Fully controlled data pipelines**: When all content originates from internal, access-controlled sources with no external input path, treating every document as potentially hostile adds friction without reducing real risk. The attack surface doesn't exist in a closed system.
-2. **Confirmation fatigue undermines compliance**: Approval gates work only if users read the prompts. In high-volume automation, users habituate to approvals, reducing gates to security theater while implying active human oversight.
+2. **Confirmation fatigue undermines compliance**: Approval gates work only if users read the prompts, the pressure that motivates batched UIs like the [tool confirmation carousel](../agent-design/tool-confirmation-carousel.md). In high-volume automation, users habituate to approvals, reducing gates to security theater while implying active human oversight.
 3. **Defense mechanisms can be weaponized**: Keyword blocking and output validation can be triggered by legitimate content resembling injection payloads, breaking valid tasks. Research shows certain baseline defenses produce "counterproductive side effects" ([arXiv:2604.03870](https://arxiv.org/abs/2604.03870)). Over-filtering degrades utility without stopping attacks that adapt to the filter.
 
 ## Example
@@ -109,7 +109,7 @@ The system prompt uses minimal permissions (no outbound POST capability) and req
 
 - Any text an agent reads from an external source is a potential injection vector, not just system prompt or user input.
 - Severity scales with agent capability — higher capability means higher potential damage from a successful injection.
-- Common attacks use hidden text, impersonation, contextual redirect, and chained fetches.
+- Common attacks use hidden text, impersonation, contextual redirect, and chained fetches; [indirect-injection discovery](indirect-injection-discovery.md) surfaces which ones reach your agent.
 - Treat external content as untrusted input; require explicit user authorization before irreversible actions.
 - Minimal permissions reduce attack surface — agents should access only what the current task requires.
 

@@ -75,7 +75,7 @@ Same surface symptom, different cause, different fix:
 
 - **Strong-model deployments.** GPT-5 and Claude Opus 4.6 show near-zero premature-termination on SWE-EVO. Pre-completion checklists add cost without benefit — upgrading the model is the honest fix.
 - **Trivial stopping criteria.** For single-assertion tasks, agent self-assessment matches observable state already.
-- **Over-verification spiral.** Runtime-enforced verification without an iteration cap can trigger the inverse pathology (continuing past completion).
+- **Over-verification spiral.** Runtime-enforced verification without an iteration cap can trigger the inverse pathology, [continuing past completion](../verification/completion-failure-taxonomy.md).
 - **Benchmark masking.** Harnesses that only check final-state pass hide premature completion when agents happen to fix the first bug. Score unfixed-but-should-have-been tests, not net-pass delta.
 
 ## Key Takeaways
@@ -92,6 +92,6 @@ Same surface symptom, different cause, different fix:
 - [Harness Hill-Climbing](../agent-design/harness-hill-climbing.md) — pre-completion checklist as a tunable harness variable
 - [Completion Failure Taxonomy](../verification/completion-failure-taxonomy.md) — broader failure classification for completion systems
 - [Objective Drift](objective-drift.md) — adjacent failure: subtly different task completed
-- [Agent Self-Review Loop](../agent-design/agent-self-review-loop.md) — post-patch verification pattern
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — post-patch verification pattern
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md) — verification steps before declaring done
 - [Red-Green-Refactor for Agents](../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion

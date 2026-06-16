@@ -65,7 +65,7 @@ Models handle filesystem navigation natively — reading directories, searching 
 
 **Include a manifest.** A top-level `README.md` or `manifest.json` listing available server categories and their purposes helps the agent orient without reading every subdirectory.
 
-**Search over listing.** Provide keyword or embedding-based search so the agent locates tools without exhaustive listing. Return file paths, not full definitions.
+**Search over listing.** Provide keyword or embedding-based search so the agent locates MCP tools without exhaustive listing. Return file paths, not full definitions.
 
 **File content format.** Each tool file should contain the minimum: function signature, brief description, and parameters. The purpose is selective loading, not documentation.
 

@@ -42,7 +42,7 @@ A fourth, orthogonal option is to consume one of these families as a **managed/h
 
 ## When Containers Win
 
-- **High session churn with prebuilt images.** Cold start is dominated by image pull, not VM boot; with [prebuilt agent environments](../agent-design/prebuilt-agent-environments.md) and a warm cache, the first tool call lands sub-second.
+- **High session churn with prebuilt images.** Cold start is dominated by image pull, not VM boot; with [prebuilt agent environments](../agent-design/cloud-agent-session-bootstrap.md) and a warm cache, the first tool call lands sub-second.
 - **Dev-machine parity.** The container the agent runs matches CI's.
 - **Low-cost CI fleets.** Container runtimes ship with every CI provider — no extra infra.
 
@@ -101,7 +101,7 @@ A platform team evaluates runtimes for a fleet running customer-submitted prompt
 
 - [Dual-Boundary Sandboxing for Secure Agent Execution](dual-boundary-sandboxing.md)
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md)
-- [Prebuilt Agent Environments](../agent-design/prebuilt-agent-environments.md)
+- [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md)
 - [Session Harness Sandbox Separation for Long-Running Agents](../agent-design/session-harness-sandbox-separation.md)
 - [Docker sbx Adoption for Coding Agents](docker-sbx-adoption.md)
 - [Windows Sandboxing for Coding Agents](windows-sandbox-primitives-coding-agents.md)

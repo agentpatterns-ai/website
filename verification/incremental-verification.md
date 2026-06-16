@@ -17,7 +17,7 @@ maturity: established
 
 An agent that generates 500 lines of code before any verification may have made a wrong assumption at line 10. Everything after that point is built on a mistake. Unwinding the cascade is expensive — each dependent decision must be re-evaluated.
 
-Incremental verification inserts checkpoints between stages. After each meaningful unit of work, you verify before proceeding. The cost of a checkpoint is low; the cost of debugging downstream consequences is high.
+Incremental verification inserts checkpoints between stages, the same shape as [staged evidence gates](staged-evidence-gates-program-repair.md) in program repair. After each meaningful unit of work, you verify before proceeding. The cost of a checkpoint is low; the cost of debugging downstream consequences is high.
 
 ## Why This Works
 
@@ -29,9 +29,9 @@ This is the same principle as [fail-fast in software design](https://martinfowle
 
 ### Code: Build → Test → Iterate
 
-Implement one function, run the test suite, fix failures, move to the next function. Do not write multiple functions before running tests — the second function may build on a broken assumption in the first.
+Implement one function, run the test suite, fix failures, move to the next function — the inner loop of [test-driven agent development](tdd-agent-development.md). Do not write multiple functions before running tests — the second function may build on a broken assumption in the first.
 
-Type checking is continuous verification: compile after each change, not after a batch. Type errors at the function boundary are simpler to fix than type errors across a module.
+Type checking is continuous verification — a [deterministic guardrail](deterministic-guardrails.md) that compiles after each change, not after a batch. Type errors at the function boundary are simpler to fix than type errors across a module.
 
 ### Documents: Claim-by-Claim Verification
 
@@ -39,7 +39,7 @@ Check each source as it is cited, not after the whole document is written. A hal
 
 ### Agent Workflows: Stage Gates
 
-Agent pipelines should include explicit verification steps between stages, not just at the end of the pipeline. A research → draft → review pipeline with no verification between research and draft means the draft may be built on unverified claims.
+Agent pipelines should include explicit verification steps between stages, not just at the end of the pipeline. A research → draft → review pipeline with no verification between research and draft means the draft may be built on unverified claims — the case for [layered accuracy defense](layered-accuracy-defense.md).
 
 ```mermaid
 graph TD
@@ -67,13 +67,13 @@ Before making a batch of changes: save a known-good state (commit, checkpoint, s
 Checkpoints are not free. Adding a validation step [introduces latency and cost overhead](https://arxiv.org/pdf/2511.00330) that can dominate runtime on long trajectories. Incremental verification turns into a drag when:
 
 - **The unit is too small.** Checking after every token or line suppresses exploration — a model forced to pass a type check before line two cannot sketch across functions before refining.
-- **The verifier is weaker than the generator.** An LLM-as-judge that hallucinates rejects correct work and blesses wrong work. The checkpoint must be more reliable than the thing being verified; compilers and tests qualify, unconstrained models often do not.
-- **The task is throwaway.** Prototypes and spikes are cheaper to rewrite than to incrementally verify. Fixed per-checkpoint overhead never pays back on code that is discarded.
+- **The verifier is weaker than the generator.** An [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) that hallucinates rejects correct work and blesses wrong work. The checkpoint must be more reliable than the thing being verified; compilers and tests qualify, unconstrained models often do not.
+- **The task is throwaway.** Prototypes and spikes are cheaper to rewrite than to incrementally verify — match the checkpoint cadence to [risk-based task sizing](risk-based-task-sizing.md). Fixed per-checkpoint overhead never pays back on code that is discarded.
 - **Granularity misaligns with failure modes.** If errors only manifest across components (integration bugs, emergent behavior), unit-level checkpoints pass while the real failure hides until the end-to-end test.
 
 Use incremental verification where the verifier is stronger than the generator, a wrong step is expensive, and the unit carries meaningful signal.
 
-A stronger caveat applies to AI coding agents. Checkpoints that only inspect the agent's own narration — "I fixed the bug", "all tests pass" — are easy to fool. Practitioners report agents that [claim fixes for code that was never changed](https://dev.to/moonrunnerkc/ai-coding-agents-lie-about-their-work-outcome-based-verification-catches-it-12b4) and insist tests pass when the transcript shows failures. Pair step gates with outcome-based checks — `git diff`, build exit codes, test output — and cross-reference claims against that evidence. A checkpoint that reads the agent's self-report is not a checkpoint.
+A stronger caveat applies to AI coding agents, where [trusting the agent's self-report](../anti-patterns/trust-without-verify.md) is its own failure mode. Checkpoints that only inspect the agent's own narration — "I fixed the bug", "all tests pass" — are easy to fool. Practitioners report agents that [claim fixes for code that was never changed](https://dev.to/moonrunnerkc/ai-coding-agents-lie-about-their-work-outcome-based-verification-catches-it-12b4) and insist tests pass when the transcript shows failures. Pair step gates with outcome-based checks — `git diff`, build exit codes, test output — and cross-reference claims against that evidence. A checkpoint that reads the agent's self-report is not a checkpoint.
 
 ## Key Takeaways
 

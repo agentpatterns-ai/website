@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: emerging
 ---
 
 # Event-Driven System Reminders
@@ -107,8 +107,8 @@ A reminder is only generated when the failure count crosses the threshold. The `
 
 Event-driven reminders add value for long-running, multi-step agents but introduce real costs in simpler contexts:
 
-- **Short sessions**: Reminder infrastructure is pure overhead when a session rarely exceeds a few dozen exchanges. Instruction fade-out is negligible; detector and template machinery adds complexity without benefit.
-- **Detector false positives**: A badly tuned failure threshold fires on normal retry behavior, injecting redundant guidance into a functioning flow. Accumulated user-role injections consume tokens and can themselves occupy low-attention context positions — recreating the problem they're meant to solve.
+- **Short sessions**: Reminder infrastructure is pure overhead when a session rarely exceeds a few dozen exchanges. Instruction fade-out is negligible; a well-structured static [system prompt](system-prompt-altitude.md) covers the case, and detector and template machinery adds complexity without benefit.
+- **Detector false positives**: A badly tuned failure threshold fires on normal retry behavior, injecting redundant guidance into a functioning flow. Accumulated user-role injections consume tokens and can themselves occupy the [low-attention middle](../context-engineering/lost-in-the-middle.md) of the context — recreating the problem they're meant to solve.
 - **Template drift**: If reminder templates are not kept consistent with the system prompt, injected user messages can contradict baseline instructions, producing confused behavior that is harder to debug than simple fade-out.
 - **Context token pressure**: Each injected reminder consumes tokens. Under tight context budgets, frequent reminder injection accelerates the context pressure it aims to mitigate ([Bui, 2025 §2.3.4](https://arxiv.org/abs/2603.05344)).
 
@@ -118,7 +118,7 @@ Prefer event-driven reminders for long-running or safety-critical agents. For sh
 
 - Static system prompts fade in effectiveness over extended sessions; event-driven reminders counter this.
 - Detect specific conditions (repeated failures, budget pressure, safety violations) rather than injecting reminders on a schedule.
-- Escalate reminder severity via guardrail counters: advisory, then warning, then mandatory.
+- Escalate reminder severity via guardrail counters: advisory at 1 violation, warning at 2–3, mandatory at 4+.
 - Inject reminders as user messages for better attention persistence than system prompt additions.
 - Design reminders as additive safety — detector failures must not break the agent.
 

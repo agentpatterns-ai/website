@@ -11,7 +11,7 @@ aliases:
   - observability calibration probes
   - deliberate bug planting
 last_reviewed: 2026-06-12
-maturity: established
+maturity: emerging
 ---
 
 # Planted-Bug Methodology: Deliberate Bugs as Observability Calibration
@@ -22,7 +22,7 @@ Planted bugs are deterministic, deliberately-injected defects whose role is to c
 
 ## Why Plant Bugs
 
-Chaos experiments depend on observability to determine whether the system behaved acceptably — [without logs, traces, and metrics you cannot detect deviations from steady state](https://principlesofchaos.org/). That makes observability a prerequisite for every chaos experiment, but leaves the prerequisite itself untested. The question "does our observability work?" has no falsifiable answer when you only observe organic incidents.
+Chaos experiments depend on observability to determine whether the system behaved acceptably — [without logs, traces, and metrics you cannot detect deviations from steady state](https://principlesofchaos.org/). That makes observability a prerequisite for every chaos experiment, but leaves the prerequisite itself untested. The question "does our observability work?" has no falsifiable answer when you only observe the organic incidents that feed [incident-to-eval synthesis](incident-to-eval-synthesis.md).
 
 Planted bugs convert that question into a measurable one. Each fixture has a known root cause, a known layer, and a known injection time. The signals either lead a diagnosing agent to the responsible layer or they don't — a binary pass/fail per probe, applied to the observability stack rather than the application.
 
@@ -76,9 +76,9 @@ Other failures the catalogue exposes:
 
 - **Solo engineer with full system context** can mentally simulate the failure path and reach the same gap by reading code. Fixtures add ceremony without diagnostic value at that scale.
 - **Pre-production prototype.** Every refactor breaks the catalogue; calibration shifts faster than the bugs.
-- **High-fidelity production replay already in place.** Shadow traffic gives organic calibration from real signals — synthetic planted bugs are duplicative unless coverage gaps remain.
+- **High-fidelity production replay already in place.** Shadow traffic gives organic calibration from the real signals an [OTel-based observability stack](../observability/agent-observability-otel.md) already records — synthetic planted bugs are duplicative unless coverage gaps remain.
 - **Observability stack itself is broken.** Planted bugs reveal the gap but offer no remediation path — the methodology surfaces the symptom without naming the fix.
-- **Fixtures drift from real failure modes.** Engineers plant the bugs they already know how to instrument for. Without periodic refresh from the incident-to-eval pipeline, the catalogue calibrates against a fake distribution.
+- **Fixtures drift from real failure modes.** Engineers plant the bugs they already know how to instrument for, rather than the ones [incident-to-eval synthesis](incident-to-eval-synthesis.md) would surface from production. Without periodic refresh from the incident-to-eval pipeline, the catalogue calibrates against a fake distribution.
 
 ## Example
 

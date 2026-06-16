@@ -8,7 +8,7 @@ tags:
   - context-engineering
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Discoverable vs Non-Discoverable Context
@@ -64,7 +64,7 @@ Instruction files are prepended to every context window before the agent reads a
 
 **Directory trees in instruction files**: The agent can run a glob. The tree in the file is stale within a sprint.
 
-**Code samples that mirror real code**: The agent can read the real file. The sample drifts the moment the code changes.
+**Code samples that mirror real code**: The agent can read the real file. The sample [drifts the moment the code changes](../instructions/agents-md-as-table-of-contents.md).
 
 **API signatures as documentation**: The agent can read the source. Duplicating signatures creates two sources of truth and one of them will be wrong.
 

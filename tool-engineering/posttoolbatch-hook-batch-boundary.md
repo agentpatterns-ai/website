@@ -11,7 +11,7 @@ aliases:
   - batch-boundary hook
   - once-per-batch injection
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # PostToolBatch Hook: Once-Per-Decision-Cycle Injection at the Batch Boundary

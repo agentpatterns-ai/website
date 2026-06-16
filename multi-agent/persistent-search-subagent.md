@@ -25,8 +25,8 @@ A persistent shared search sub-agent is a single long-lived agent that owns all 
 
 The pattern pays off only under specific conditions. Apply it when **all** hold:
 
-- **Large repository, high exploration overlap.** Multiple agents repeatedly search the same modules. The redundant fraction of generated output scales with agent count, so the savings grow with overlap — and shrink to nothing when overlap is low.
-- **Output-dominated workload.** Agents generate substantial text describing what they found. If agents mostly read and rarely re-emit large descriptions, the output-token lever is small and input-side prompt caching is the better spend.
+- **Large repository, high exploration overlap.** Multiple agents repeatedly search the same modules. The redundant fraction of generated output scales with [agent count](sub-agents-fan-out.md), so the savings grow with overlap — and shrink to nothing when overlap is low.
+- **Output-dominated workload.** Agents generate substantial text describing what they found. If agents mostly read and rarely re-emit large descriptions, the output-token lever is small and input-side [prompt caching](../context-engineering/prompt-caching-architectural-discipline.md) is the better spend.
 - **Latency tolerates a shared lookup hop.** A single searcher serialises queries. The work must tolerate that hop without the searcher becoming a throughput bottleneck.
 - **Working tree is stable during the episode.** Cached search records assume the code they point at has not moved.
 
@@ -38,7 +38,7 @@ The mechanism rests on a measured cost asymmetry: generating an output token con
 
 Routing lookups through one persistent searcher attacks output volume on two axes:
 
-- **Deduplication** — a region the searcher has already covered is described once, not once per agent.
+- **Deduplication** — a region the searcher has [already covered](semantic-caching-multi-agent.md) is described once, not once per agent.
 - **Distillation** — the searcher returns file-location references instead of full contents, shrinking each response.
 
 Because the expensive axis (output) shrinks while the cheap axis (cached input re-reads) is what gets removed, total cost drops without changing task outcomes. On SWE-Bench Verified, this cut per-episode GPU energy by roughly 25% at equivalent task performance ([Cho et al., 2026](https://arxiv.org/abs/2605.27787)).

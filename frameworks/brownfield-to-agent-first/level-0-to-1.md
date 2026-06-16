@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # L0 → L1: Making the Repo Readable
@@ -190,9 +190,9 @@ If the agent invents architecture or mislocates new code, your project instructi
 
 - The project instructions file is the single highest-leverage action for an L0 repo. Generate it with `/init` (Claude Code) and refine from there.
 - Include only what would cause mistakes if absent. A concise, accurate file beats a comprehensive, stale one.
-- Directory structure communicates architecture. Renaming directories to reflect architectural layers is one of the highest-ROI refactors for agent-assisted development.
+- A self-describing [directory structure](../../agent-design/codebase-readiness.md) communicates architecture. Renaming directories to reflect architectural layers is one of the highest-ROI refactors for agent-assisted development.
 - Document known inconsistencies explicitly. An undocumented inconsistency will be replicated; a documented one can be avoided.
-- CI baseline is prerequisite infrastructure. Every subsequent level depends on it.
+- A CI baseline — even a minimal GitHub Actions lint-and-build gate — is prerequisite infrastructure. Every subsequent level — starting with [L1 → L2](level-1-to-2.md) — depends on it.
 
 ## Related
 

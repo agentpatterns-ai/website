@@ -7,7 +7,7 @@ tags:
   - tool-agnostic
   - multi-agent
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Agent Handoff Protocols: Passing Work Between Agents
@@ -72,7 +72,7 @@ Passing a previous agent's full output or conversation transcript to the next ag
 Structured handoff protocols add overhead that is not always justified:
 
 - **Short-lived or single-stage pipelines** — when one agent can complete the task end-to-end, a schema adds friction without benefit. Protocols pay off only when work genuinely crosses agent boundaries.
-- **Rapidly evolving schemas** — if the upstream agent's outputs change frequently, maintaining a schema contract creates synchronization overhead. Loose prose may be more adaptive during early prototyping when the pipeline shape is not yet stable.
+- **Rapidly evolving schemas** — if the upstream agent's outputs change frequently, maintaining a schema contract creates synchronization overhead. Loose prose may be more adaptive than [typed schemas at agent boundaries](typed-schemas-at-agent-boundaries.md) during early prototyping when the pipeline shape is not yet stable.
 - **Over-summarization** — aggressive summarization at handoff boundaries can discard context the downstream agent actually needs. When the upstream agent cannot reliably distinguish essential from incidental detail, the summary may omit critical caveats or edge-case findings, causing the downstream agent to proceed on an incomplete picture.
 - **Rigid schemas hiding uncertainty** — structured fields suggest certainty. An agent filling `findings` with a well-formatted JSON array may obscure that its conclusions were tentative; the downstream agent reads the structure as authoritative. Prose notes with hedging language sometimes preserve epistemic uncertainty better than named fields with string values.
 
@@ -103,7 +103,7 @@ The writer agent's system prompt references this schema explicitly: it reads `fi
 
 ## Why It Works
 
-Structured schemas eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs — a pattern GitHub Engineering describes in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
+[Structured schemas](typed-schemas-at-agent-boundaries.md) eliminate ambiguity at parse time. A downstream agent consuming a prose summary must determine — through language understanding — where the "findings" end and the "open questions" begin. With a schema, field boundaries are explicit and token-for-token predictable. This reduces the probability that the receiving agent misinterprets scope or acts on information the upstream agent intended as provisional. The effect is amplified in longer pipelines: each stage of ambiguity compounds, so early-stage structure prevents error propagation across multiple handoffs — a pattern GitHub Engineering describes in its analysis of [why multi-agent workflows often fail](https://github.blog/ai-and-ml/generative-ai/multi-agent-workflows-often-fail-heres-how-to-engineer-ones-that-dont/), where ambiguity in early handoffs surfaces as wrong actions several agents downstream.
 
 ## Key Takeaways
 

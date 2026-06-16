@@ -11,7 +11,7 @@ aliases:
   - ADK SkillToolset
   - Google ADK agent skills
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Google ADK Skills

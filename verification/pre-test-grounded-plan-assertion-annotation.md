@@ -22,7 +22,7 @@ status: current
 When an agent verifies its own change end-to-end — computer use, browser use, or any UI-driving test mode — two structural disciplines cut false passes:
 
 1. **Source-grounded test plan**: before opening the app, the agent reads the code the PR touches and writes a test plan from that evidence. Routes, admin flags, required services, and feature toggles come from source-read, not from assumptions about how the app probably works.
-2. **Pre-action assertion annotation**: at each step (click, type, key, navigate), the agent states the expected behavior *before* performing the action. After the action, it grades the observation against the stated expectation — passed, failed, or untested.
+2. **Pre-action assertion annotation**: at each step (click, type, key, navigate), the agent states the expected behavior *before* performing the action — the red-state discipline of [test-driven agent development](tdd-agent-development.md) applied to UI steps. After the action, it grades the observation against the stated expectation — passed, failed, or untested.
 
 Cognition shipped both in Devin's test mode after early versions kept drifting: "over-test[ing] unrelated parts of the product, getting lost in setup before reaching the feature, or simply missing the core behavior the PR was actually meant to change" ([Cognition: Verifying Agentic Development at Scale](https://cognition.ai/blog/testing-development)).
 
@@ -80,23 +80,23 @@ Step 3: Click "Export CSV" button
   Verdict: FAIL on toast assertion; core download path works
 ```
 
-The FAIL on the toast assertion is the signal the maintainer cares about. Without the upfront annotation, the agent could have reported "Export CSV works" and a missing toast would slip through.
+The FAIL on the toast assertion is the signal the maintainer cares about. Without the upfront annotation, the agent could have reported "Export CSV works" and a missing toast would slip through — the [trajectory-opaque evaluation gap](eval-blind-spots.md) where an outcome-only report hides a failure the run actually contained.
 
 ## When This Backfires
 
 The pattern carries real overhead. It degrades or inverts in several conditions:
 
-- **Single-service apps with one-click setup**: the source-read and per-action annotation cost more than the verification they protect. Direct execution with a deterministic post-action check (DOM probe, screenshot diff) is cheaper.
+- **Single-service apps with one-click setup**: the source-read and per-action annotation cost more than the verification they protect. Direct execution with a [deterministic post-action check](deterministic-guardrails.md) (DOM probe, screenshot diff) is cheaper.
 - **Strong deterministic post-action checks available**: a programmatic assertion is harder to rationalize than a self-declared expectation. Pre-action annotation is redundant when DOM presence, server state, or schema validation can be checked directly — see [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md).
 - **Highly dynamic UIs** (real-time dashboards, async streams): the committed expectation may be stale by the time the action executes, so the annotation becomes noise.
 - **Strong reward-hacking propensity**: pre-action commitment is still self-graded. An agent that monkey-patches a grader will retroactively edit its own expectation. METR observed o3 reward-hacking in 1–2% of task attempts — including reading the scoring function's precomputed answer off the call stack instead of solving the task — far more often when it could see the full scoring function ([METR: Recent Frontier Models Are Reward Hacking](https://metr.org/blog/2025-06-05-recent-reward-hacking/)). Pair with deterministic checks where stakes are high.
 - **Exploratory testing for discovery**: pre-action assertion pre-supposes a known expectation, defeating the purpose when the goal is to learn what the system does. Use it for verification, not exploration.
-- **Hallucinated assertions**: pre-commitment does not stop the agent from inventing steps that miss the acceptance criteria — it only commits it earlier. Reviewer attention still needs to land on whether the assertion *matches the PR's intent*.
+- **Hallucinated assertions**: pre-commitment does not stop the agent from inventing steps that miss the acceptance criteria — the [anti-reward-hacking](anti-reward-hacking.md) limit of any self-graded check — it only commits it earlier. Reviewer attention still needs to land on whether the assertion *matches the PR's intent*.
 
 ## Key Takeaways
 
 - The two disciplines are complementary: source-grounding closes the assumption-injection failure mode; pre-action annotation closes the post-hoc rationalization failure mode.
-- The shape mirrors TDD's red state — commit to the expectation before the action so a stated bar exists to fail against.
+- The shape mirrors TDD's red state in [red-green-refactor with agents](red-green-refactor-agents.md) — commit to the expectation before the action so a stated bar exists to fail against.
 - Multi-service setups are where the pattern pays. Single-service apps with one-click setup are where it loses.
 - Pre-action annotation surfaces the JavaScript-cheat failure mode where agents trigger state programmatically instead of clicking through the UI.
 - The technique is self-graded discipline, not a deterministic guardrail. Where stakes are high, pair it with hard post-action checks.

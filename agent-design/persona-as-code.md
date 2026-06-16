@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - instructions
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Persona-as-Code: Defining Agent Roles as Structured Docs
@@ -19,7 +19,7 @@ Persona-as-Code is a design practice where each agent's role is expressed as a s
 
 ## The Problem with Implicit Roles
 
-When an agent's role is embedded in a single monolithic system prompt alongside tool definitions, workflow steps, and project context, the role boundary becomes invisible. Two things happen:
+When an agent's role is embedded in a single [monolithic system prompt](progressive-disclosure-agents.md) alongside tool definitions, workflow steps, and project context, the role boundary becomes invisible. Two things happen:
 
 - Agents overstep — the "Developer" agent quietly makes architectural decisions that belong to the Architect
 - Agents conflict — two agents legitimately claim the same change from different angles, and the merge step has no principle to resolve it
@@ -33,7 +33,7 @@ A persona is a self-contained Markdown file that encodes one agent's identity. E
 1. **Domain** — what area of expertise does this agent hold?
 2. **Responsibilities** — what outputs does this agent produce?
 3. **Constraints** — what is this agent not allowed to do?
-4. **Scope exclusions** — which roles own adjacent decisions?
+4. **Scope exclusions** — [which roles own adjacent decisions](specialized-agent-roles.md)?
 
 The file is the agent's system prompt. It is also the contract between agents. When a handoff happens, the receiving agent knows its scope from the file; the sending agent knows what it should not have touched.
 
@@ -142,7 +142,7 @@ Each persona operates within its file — the boundary is enforced by the spec, 
 Persona-as-code adds coordination surface area. Three conditions where it is worse than a unified prompt:
 
 1. **Scope boundaries are ambiguous.** If the line between two personas is unclear — both can reasonably claim a decision — explicit exclusions do not resolve the conflict; they just relocate it to a boundary dispute. Role-based systems can show rigidity when task requirements deviate from predefined scope, resulting in disputes or functional deficiencies ([Tran et al., arXiv 2501.06322](https://arxiv.org/abs/2501.06322)).
-2. **Single-agent or short-session workflows.** Maintaining separate persona files and artifact handoff conventions adds overhead with no benefit when a single agent handles a bounded task end-to-end. A well-structured system prompt is simpler.
+2. **Single-agent or short-session workflows.** Maintaining separate persona files and [artifact handoff conventions](handoff-skill-context-transfer.md) adds overhead with no benefit when a single agent handles a bounded task end-to-end. A well-structured system prompt is simpler.
 3. **Rapidly changing requirements.** Persona files encode stable role definitions. When the domain or team structure is still evolving, keeping multiple files consistent costs more than the clarity they provide.
 
 ## Key Takeaways

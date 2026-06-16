@@ -35,7 +35,7 @@ Four additional preconditions:
 
 - **Thin third-party API surface.** Over 60% of LLM code-translation errors come from API mistranslations ([APIRAT — arXiv:2504.14852](https://arxiv.org/abs/2504.14852)) — literal mapping invokes non-existent APIs or omits required ones. The recipe applies to numerical kernels, codecs, parsers, and protocol implementations where the source's library surface is small and target-equivalent.
 - **A domain expert as director, not reviewer.** The FESOM2 paper attributes detection of a latent constant bug — an Adams-Bashforth offset coded as 10⁻⁹ instead of 0.1, which destabilised the Arctic only after ~110 simulated days — to the domain expert reading diffs and recognising physically wrong but syntactically correct output ([arXiv:2606.11356](https://arxiv.org/abs/2606.11356)). A non-expert reviewer cannot make that call.
-- **Source-target language pair preserves control flow.** Fortran→C and C→Kokkos preserve loops, indices, and memory layouts. Fortran→Rust, COBOL→Go, or imperative→functional ports require structural changes literal translation cannot encode.
+- **Source-target language pair preserves control flow.** Fortran→C and C→Kokkos preserve loops, indices, and memory layouts. Fortran→Rust, COBOL→Go, or imperative→functional ports require structural changes literal translation cannot encode — [SACTOR](https://arxiv.org/abs/2503.12511) is the better-fit shape there.
 - **Fast acceptance loop.** The "any divergence is a port bug" rule presumes per-kernel and short whole-model runs fit a normal review cycle. A port whose verification step takes days cannot run the literal-rule loop.
 
 ## Why It Works
@@ -50,7 +50,7 @@ The same shape appears in [SACTOR](https://arxiv.org/abs/2503.12511) (C → unid
 
 Split the port so each stage changes exactly one property. FESOM2 used two: Fortran→C reproduces numerics inside a single intermediate language with broad library compatibility; C→Kokkos introduces performance-portable parallelism without re-litigating numeric choices. The intermediate C stage forces commitment to a single configuration of compile-time switches and defaults, eliminating an ambiguity axis before parallelism is layered on ([arXiv:2606.11356](https://arxiv.org/abs/2606.11356)).
 
-Carry the same shape to other ports — Fortran→C++ might be staged as Fortran→serial C++ → parallel C++/OpenMP/CUDA. Stage count is not the point; one-axis-per-stage is. Skip the intermediate stage and the assistant has two open questions at once (what does the source do, and how should we parallelise it), and divergences stop localising.
+Carry the same shape to other ports — Fortran→C++ might be staged as Fortran→serial C++ → parallel C++/OpenMP/CUDA. Stage count is not the point; one-axis-per-stage is. Skip the intermediate stage and the assistant has two open questions at once (what does the source do, and how should we parallelise it), and divergences stop localising ([arXiv:2606.11356](https://arxiv.org/abs/2606.11356)).
 
 ### Layer 2: Literal Translation, Enforced at Constant Granularity
 
@@ -90,7 +90,7 @@ Add always-on sanity probes (out-of-range field detection), stale-halo probes (b
 ## Triggers and Constraints
 
 - **Trigger** — staged ports run kernel-by-kernel; the assistant proposes a port, the twin verifier runs at next compile, divergence triggers a fix loop. There is no schedule.
-- **Bound on agent authority** — the assistant translates literally and constructs the harness; the domain expert authorises every departure from literal translation and reviews every diff before it lands. The assistant may not change a constant or rearrange floating-point arithmetic on its own initiative.
+- **Bound on agent authority** — the assistant translates literally and constructs the harness; the domain expert authorises every departure from literal translation and reviews every diff before it lands ([arXiv:2606.11356](https://arxiv.org/abs/2606.11356)). The assistant may not change a constant or rearrange floating-point arithmetic on its own initiative.
 - **Out-of-scope** — the recipe does not cover ports where idiomatic refinement is the goal in itself (C→Rust for memory safety, Fortran→Julia for ecosystem fit). For those, see SACTOR's two-phase pipeline ([arXiv:2503.12511](https://arxiv.org/abs/2503.12511)) or the [Documentation-Guided Legacy Migration](documentation-guided-legacy-migration.md) workflow.
 
 ## Multi-Tool Coverage

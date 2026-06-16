@@ -36,7 +36,7 @@ DevBench evaluates six task categories derived from what developers actually do:
 
 ### Context handling is the differentiator
 
-Models diverge most on tasks requiring understanding of large surrounding context — multi-file dependencies, project-wide conventions, imported types. This is where developers most need AI assistance and where synthetic benchmarks provide the least signal.
+Models diverge most on tasks requiring understanding of large surrounding context — multi-file dependencies, project-wide conventions, imported types. This is where developers most need AI assistance and where [synthetic benchmarks](benchmark-contamination-eval-risk.md) provide the least signal.
 
 ## Evaluation Strategy
 
@@ -54,7 +54,7 @@ Identify what your team actually asks AI tools to do. Common categories: complet
 
 ### 2. Match benchmark to workload
 
-Use benchmarks matching your task types. Synthetic puzzles cannot predict multi-file refactoring performance. Telemetry-derived benchmarks provide per-task breakdowns for the slice that matters.
+Use [benchmarks matching your task types](../workflows/eval-driven-development.md). Synthetic puzzles cannot predict multi-file refactoring performance. Telemetry-derived benchmarks provide per-task breakdowns for the slice that matters.
 
 ### 3. Filter by language
 
@@ -80,7 +80,7 @@ DevBench's design choices map directly to evaluation best practices:
 Benchmark-driven selection fails or loses value under three conditions:
 
 - **Team lacks internal eval capacity**: Running models against real codebase PRs requires instrumented tooling, reviewer time, and repeatable test cases. Teams without this infrastructure treat public benchmark scores as final answers — restoring the original problem.
-- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., completions to large-scale refactors), the chosen model may no longer fit. Revisit selection when language or task mix shifts.
+- **Workload profile shifts post-selection**: If the dominant task type changes (e.g., completions to large-scale refactors), the chosen model may no longer fit. Revisit selection through the [eval-driven loop](../workflows/eval-driven-development.md) when language or task mix shifts.
 - **Benchmark data becomes contaminated**: Published benchmark suites become training targets once released. DevBench's contamination-resistant design mitigates this, but no public benchmark stays uncontaminated indefinitely. See [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md). [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
 
 ## Why It Works

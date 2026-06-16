@@ -11,7 +11,7 @@ aliases:
   - security constitution
   - constitutional spec-driven development
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Security Constitution for AI Code Generation
@@ -81,7 +81,7 @@ Security principles inject at each phase of a spec-driven workflow ([Marri, 2026
 
 **Planning phase** — The implementation plan includes security constraints as acceptance criteria. "All endpoints validate input against schema" becomes a plan step, not an afterthought.
 
-**Task phase** — Each task definition carries its applicable principles inline. The agent sees the constraint at the point of code generation.
+**Task phase** — Each task definition carries its applicable principles (`SEC-001`, `SEC-002`) inline. The agent sees the constraint at the point of code generation.
 
 ```mermaid
 graph TD
@@ -97,7 +97,7 @@ graph TD
 
 ## Mechanical Enforcement
 
-A constitution in a prompt is guidance. A constitution backed by linters, CI gates, and hooks is enforcement. The document serves both roles — human-readable constraints that also feed automated checks.
+A constitution in a prompt is guidance. A constitution backed by linters, CI gates, and hooks is enforcement — the layer [deterministic guardrails](../verification/deterministic-guardrails.md) provides. The document serves both roles — human-readable constraints that also feed automated checks.
 
 **Linters and static analysis** — Map each MUST principle to a linter rule. SEC-001 maps to a SQL injection scanner (see [CWE-89](https://cwe.mitre.org/data/definitions/89.html)). SEC-002 maps to secret detection tools like [`gitleaks`](https://github.com/gitleaks/gitleaks) or [`trufflehog`](https://github.com/trufflesecurity/trufflehog). See [secrets management for agents](secrets-management-for-agents.md) for the broader credential handling pattern.
 

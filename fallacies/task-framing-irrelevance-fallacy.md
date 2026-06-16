@@ -17,7 +17,7 @@ maturity: established
 
 ## The Fallacy
 
-If a model is capable enough, it should solve a problem regardless of presentation. Variable names, surrounding context, and prompt wording are noise the model filters out. Prompt engineering is aesthetics, not substance.
+If a model is capable enough, it should solve a problem regardless of presentation. Variable names, [surrounding context](../context-engineering/context-engineering.md), and prompt wording are noise the model filters out. Prompt engineering is aesthetics, not substance.
 
 This leads practitioners to underinvest in prompt construction, leave irrelevant files open, use vague task descriptions, and dismiss output quality differences as model inconsistency rather than framing variation.
 
@@ -47,7 +47,7 @@ Anthropic's guidance on building agents states that tool definitions deserve ["j
 
 > "Refactor the payment service."
 
-No files specified, no constraints, no goal. Relevant files compete for attention with everything else in context, and the output addresses surface structure rather than the intended change.
+No files specified, no constraints, no goal. Relevant files [compete for attention](../anti-patterns/distractor-interference.md) with everything else in context, and the output addresses surface structure rather than the intended change.
 
 **Fallacy corrected** — closed irrelevant files, provided specific framing:
 
@@ -61,7 +61,7 @@ The framing effect is real but uneven. In specific conditions, surface presentat
 
 - **Structured-output and function-calling modes** — a strict JSON schema or typed function signature constrains the response space, so surrounding-prompt framing produces negligible output differences.
 - **Highly fine-tuned task-specific models** — narrow-domain fine-tuning builds strong priors that partially override prompt framing.
-- **Very short, unambiguous queries** — retrieval-style tasks with one determinate answer ("What is the return type of X?") rarely shift with framing.
+- **Very short, unambiguous queries** — retrieval-style tasks with one determinate answer (`What is the return type of X?`) rarely shift with framing.
 
 Optimizing framing here yields diminishing returns. The fallacy is the *blanket* claim that framing never matters — not the observation that it matters less in constrained modes.
 
@@ -69,7 +69,7 @@ Optimizing framing here yields diminishing returns. The fallacy is the *blanket*
 
 - LLM outputs are a function of framing, not just problem structure — changing surface presentation produces measurably different results.
 - Prompt engineering is precision work — parameter names, task descriptions, and context composition affect which patterns the model activates.
-- Irrelevant context is not neutral — open files, conversation history, and surrounding instructions compete with task-relevant content.
+- Irrelevant context is not neutral — open files, conversation history, and surrounding instructions [compete with task-relevant content](../anti-patterns/distractor-interference.md).
 - Attribute output variation to framing before attributing it to model capability.
 
 ## Related

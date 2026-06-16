@@ -12,7 +12,7 @@ tags:
   - workflows
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Multi-Model Plan Synthesis
@@ -44,7 +44,7 @@ Do not share outputs between models during this phase — cross-contamination el
 
 ### 2. Synthesis
 
-Feed all plans to a synthesis model (or one of the planners) and ask it to build a hybrid:
+Feed all plans to a [synthesis model](fan-out-synthesis.md) (or one of the planners) and ask it to build a hybrid:
 
 ```
 You have received architecture plans from multiple AI models.
@@ -91,7 +91,7 @@ graph TD
 
 Diverse reasoning paths sample different regions of the hypothesis space. When multiple models produce independent plans, each model's training distribution emphasizes different constraints — one may foreground failure modes, another observability, another operational simplicity. Synthesis captures these perspectives without requiring any single model to hold all of them simultaneously.
 
-The mechanism is analogous to ensemble learning: agreement across diverse sources raises confidence precisely because each source was likely to produce different errors. Disagreement surfaces tradeoffs that a single planner would make implicitly; forcing those tradeoffs into the open allows deliberate human review rather than silent default.
+The mechanism is analogous to [ensemble learning](voting-ensemble-pattern.md): agreement across diverse sources raises confidence precisely because each source was likely to produce different errors. Disagreement surfaces tradeoffs that a single planner would make implicitly; forcing those tradeoffs into the open allows deliberate human review rather than silent default.
 
 Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that feeding a model a diverse set of prompts in parallel elicits varied reasoning paths and improves performance over a single prompt ([Dipper, 2024](https://arxiv.org/abs/2412.15238)).
 
@@ -108,9 +108,9 @@ Not warranted for routine well-defined tasks with strong single-model baselines.
 The strongest case against this pattern: for most tasks, a single capable planner combined with fast iteration exposes architectural errors earlier and more cheaply than any amount of pre-implementation synthesis. Specific conditions under which the pattern underperforms:
 
 - **Synthesizer bias dominates.** The synthesis model anchors on its own perspective and silently downweights the other plans, producing a hybrid that mostly reflects a single training distribution while inheriting coordination overhead. This failure mode is hard to detect from the synthesis output alone.
-- **Decision paralysis on disagreements.** When models disagree on many decisions, the "tradeoff review" step expands into an open-ended architecture debate. Teams stall waiting for human adjudication on questions a prototype would answer in an hour.
+- **Decision paralysis on disagreements.** When models disagree on many decisions, the "tradeoff review" step expands into an open-ended architecture debate rather than the decisive majority pick a [voting ensemble](voting-ensemble-pattern.md) would force. Teams stall waiting for human adjudication on questions a prototype would answer in an hour.
 - **Cheap-to-revert tasks.** For greenfield work where architectural pivots are inexpensive (internal tools, early prototypes, throwaway spikes), delayed implementation costs more than any planning-error it might prevent.
-- **Tight model correlation.** Frontier models trained on overlapping corpora increasingly converge on similar architectural defaults. When plans are near-duplicates, the synthesis step adds overhead without adding diversity signal.
+- **Tight model correlation.** Frontier models trained on overlapping corpora increasingly converge on similar architectural defaults. When plans are near-duplicates, the synthesis step adds overhead without adding the [diversity signal](fan-out-synthesis.md) it depends on.
 - **Well-defined problems with canonical answers.** For tasks with a dominant community solution (standard CRUD app, standard CI pipeline), all models tend to converge on the canonical answer. The synthesis step is pure overhead.
 
 ## Key Takeaways

@@ -10,7 +10,7 @@ aliases:
   - out-of-band agent notifications
   - hook desktop notifications
 last_reviewed: 2026-06-03
-maturity: established
+maturity: adopted
 ---
 
 # Out-of-Band Hook Notifications via terminalSequence

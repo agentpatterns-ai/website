@@ -11,7 +11,7 @@ aliases:
   - "agent commit signing"
   - "agent identity in version control"
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Agent Commit Attribution: Signed Commits and Agent Identity
@@ -81,7 +81,7 @@ GitHub offers two mechanisms to enforce signing at the policy layer — see [Git
 
 **Option A — Branch protection rule** (classic): enable "Require signed commits" for the target branch pattern. Any push without a valid signature is rejected.
 
-**Option B — Repository ruleset** (recommended for organizations): create a ruleset targeting the branch pattern and add the "Require a signature" rule. Rulesets support actor-scoped conditions — require signing only for bot accounts while allowing human contributors to push unsigned commits during a migration period.
+**Option B — Repository ruleset** (recommended for organizations): create a ruleset targeting the branch pattern and add the "Require a signature" rule. Rulesets support actor-scoped conditions — a policy lever for [agent governance](agent-governance-policies.md) that requires signing only for bot accounts while allowing human contributors to push unsigned commits during a migration period.
 
 ## Trade-offs
 

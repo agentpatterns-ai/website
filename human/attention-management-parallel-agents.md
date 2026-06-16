@@ -44,10 +44,10 @@ Osmani describes pairing background agents (4-5 low-touch sessions handling mech
 
 ### Task Classification for Delegation
 
-Not all work benefits equally from parallel dispatch. Osmani distinguishes three tiers:
+Not all work benefits equally from parallel dispatch. Osmani distinguishes [three tiers](../agent-design/delegation-decision.md):
 
 - **Fully delegated** — mechanical implementation, boilerplate, migrations. Fire and review later.
-- **Checkpoint-based** — shared interfaces, integration points. Agent works autonomously between human review gates.
+- **Checkpoint-based** — shared interfaces, integration points. Agent works autonomously between [human review gates](bottleneck-migration.md).
 - **Human-only** — architecture decisions, product intent, security-critical judgment. Never delegated.
 
 [Source: [Addy Osmani — Your AI Coding Agents Need a Manager](https://addyosmani.com/blog/coding-agents-manager/)]
@@ -62,7 +62,7 @@ Armin Ronacher: "it's only so much my mind can review." Context-switch throughpu
 
 CPU schedulers are deterministic; human attention is not. Key differences:
 
-- **Fatigue degrades throughput.** Review quality drops over extended sessions, compounding error risk across active agents.
+- **[Fatigue degrades throughput.](cognitive-load-ai-fatigue.md)** Review quality drops over extended sessions, compounding error risk across active agents.
 - **Not all switches are equal.** Switching between two boilerplate agents costs less than switching between an architecture decision and a debugging session.
 - **Coordination overhead grows non-linearly.** Brooks's Law applies — each additional agent session increases the total coordination surface, and linear speedup is not guaranteed.
 

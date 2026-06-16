@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - agent-design
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Team Onboarding for AI Agent Workflows and Adoption
@@ -17,7 +17,7 @@ maturity: established
 
 ## Why Teams Stall
 
-You can adopt agent workflows individually through personal experimentation. Teams need coordination. Without shared conventions, team members develop incompatible habits: different prompt styles, conflicting agent configurations, no agreement on when to trust output. The result is inconsistent quality and a lack of compounding improvement — each person reinvents the same lessons.
+You can adopt agent workflows individually through personal experimentation. Teams need coordination. Without [shared conventions](central-repo-shared-agent-standards.md), team members develop incompatible habits: different prompt styles, conflicting agent configurations, no agreement on when to trust output. The result is inconsistent quality and a lack of compounding improvement — each person reinvents the same lessons.
 
 Effective onboarding addresses this by aligning the team on three things: shared infrastructure, calibrated trust, and a common vocabulary.
 
@@ -25,13 +25,13 @@ Effective onboarding addresses this by aligning the team on three things: shared
 
 The foundation is a project-level instructions file. Per the [AGENTS.md standard](https://agents.md), this file describes project conventions, constraints, and agent guidance in a location all tools can read. Every team member reads it; every agent reads it. It becomes the source of truth for how agents should behave on your project.
 
-Skills and commands live in version control alongside the code they support. Your team reviews changes to agent configuration the same way you review code changes — through pull requests, with comment and approval. This prevents configuration drift and creates an audit trail.
+[Skills and commands live in version control](../instructions/prompt-governance-via-pr.md) alongside the code they support. Your team reviews changes to agent configuration the same way you review code changes — through pull requests, with comment and approval. This prevents configuration drift and creates an audit trail.
 
 The [repository bootstrap checklist](repository-bootstrap-checklist.md) covers the mechanics of setting this up.
 
 ## Onboarding Sequence
 
-Start with read-only agent tasks before write tasks. Research and analysis carry lower risk — the agent produces output the developer evaluates before acting. Write tasks (code generation, file editing, PRs) require more trust and better review habits. Starting with read-only builds familiarity with agent behavior without the risk of bad output landing in the codebase.
+Start with read-only agent tasks before write tasks. Research and analysis carry lower risk — the agent produces output the developer evaluates before acting. Write tasks (code generation, file editing, PRs) require more trust and better review habits. Starting with read-only [builds familiarity with agent behavior](codebase-qa-onboarding.md) without the risk of bad output landing in the codebase.
 
 A practical sequence:
 
@@ -47,7 +47,7 @@ Teach the trust spectrum early. Agents do their most reliable work on high-conte
 
 ## Shifting Review Culture
 
-Reviewing agent output is structurally different from reviewing human code. Human code review often focuses on style, naming, and structural preferences. Agent output review focuses on correctness: does this do what was intended, are there subtle errors, did the agent hallucinate an API or misunderstand a constraint?
+Reviewing agent output is structurally different from reviewing human code. Human code review often focuses on style, naming, and structural preferences. [Agent output review focuses on correctness](../code-review/agent-assisted-code-review.md): does this do what was intended, are there subtle errors, did the agent hallucinate an API or misunderstand a constraint?
 
 Common patterns to teach reviewers:
 
@@ -60,11 +60,11 @@ Common patterns to teach reviewers:
 
 **Over-reliance**: Trusting agent output without review because it "looks right." Agent output can be plausible and wrong. Verification habits must be built early.
 
-**Under-trust**: Refusing to delegate anything meaningful because of occasional errors. This loses most of the productivity gain. Calibrate based on task type, not general skepticism.
+**Under-trust**: [Refusing to delegate anything meaningful](ai-development-maturity-model.md) because of occasional errors. This loses most of the productivity gain. Calibrate based on task type, not general skepticism.
 
-**Inconsistent usage**: Some team members use agents heavily, others not at all. This creates knowledge asymmetry and makes the shared infrastructure undervalued. Minimum baseline adoption helps.
+**Inconsistent usage**: [Some team members use agents heavily, others not at all](agent-governance-policies.md). This creates knowledge asymmetry and makes the shared infrastructure undervalued. Minimum baseline adoption helps.
 
-**Vocabulary mismatch**: Terms like "agent," "skill," "command," and "prompt" mean different things in different tools. Establish shared definitions early — what your team means by these terms in your specific setup.
+**Vocabulary mismatch**: [Terms like "agent," "skill," "command," and "prompt"](../agent-design/agent-terminology-disambiguation.md) mean different things in different tools. Establish shared definitions early — what your team means by these terms in your specific setup.
 
 ## Shared Vocabulary
 

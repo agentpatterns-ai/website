@@ -10,7 +10,7 @@ aliases:
   - pre-coding success agreement
   - generator-evaluator agreement
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Sprint Contracts: Pre-Coding Success Agreements for Multi-Agent Tasks
@@ -19,7 +19,7 @@ maturity: established
 
 ## The Problem
 
-Multi-agent loops break down when success criteria are undefined at coding time. Evaluators score output against whatever the generator produced, drifting toward approval because they have no prior commitment to contradict. Generators optimize for undefined targets and produce inconsistent results.
+Multi-agent loops break down when success criteria are undefined at coding time. Evaluators score output against whatever the generator produced, drifting toward approval because they have no prior commitment to contradict — the failure mode a bare [evaluator-optimizer](evaluator-optimizer.md) loop leaves open. Generators optimize for undefined targets and produce inconsistent results.
 
 Without explicit criteria agreed *before* generation, evaluation becomes post-hoc rationalization — the evaluator sees plausible output and convinces itself the requirements were met.
 
@@ -29,7 +29,7 @@ The pattern uses three agent roles, each with a distinct session and context bou
 
 - **Planner** — expands a brief into a spec, scopes one sprint chunk, writes the contract, and hands it to the evaluator before the generator starts.
 - **Generator** — implements against the contract. No access to the evaluator's session or reasoning.
-- **Evaluator** — commits to the rubric *before* seeing output, then scores the generator's result against the agreed dimensions.
+- **Evaluator** — commits to the rubric *before* seeing output, then scores the generator's result against the agreed dimensions; planner, generator, and evaluator are [specialized agent roles](specialized-agent-roles.md) with isolated sessions.
 
 ```mermaid
 graph TD
@@ -64,13 +64,13 @@ Calibration process:
 1. Run the evaluator against known-good and known-bad examples.
 2. Identify where its judgment diverged from the correct verdict.
 3. Update the system prompt to enforce skepticism at those failure points.
-4. Add few-shot examples to reduce score drift.
+4. Add few-shot examples to reduce score drift — the criteria-drift effect Shankar et al. document.
 
 ## Context Isolation
 
 The evaluator must not have access to the generator's reasoning. When a generator explains decisions inline — "I chose this layout because..." — an evaluator that reads those explanations inherits the framing and is more likely to accept the output.
 
-Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's transcript. File-based communication supports this — one agent writes, the other reads, with no shared context window.
+Session-level isolation enforces the boundary: the evaluator receives the artifact and the contract, not the generator's transcript. [File-based agent coordination](../multi-agent/file-based-agent-coordination.md) supports this — one agent writes, the other reads, with no shared context window.
 
 ## When to Apply
 

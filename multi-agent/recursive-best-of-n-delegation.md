@@ -9,7 +9,7 @@ aliases:
   - recursive best-of-N
   - parallel candidate selection
 last_reviewed: 2026-05-27
-maturity: established
+maturity: adopted
 ---
 
 # Recursive Best-of-N Delegation

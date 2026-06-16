@@ -47,7 +47,7 @@ Tool docstrings should include:
 
 A model with no prior knowledge of your system forms its understanding entirely from the docstring. Write accordingly.
 
-This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly. A well-written docstring is a compact, always-present reference that shapes every tool invocation.
+This works because LLMs reason over tool descriptions via in-context learning — the docstring is the model's only ground truth about what a tool does and how to call it correctly, which is why [tool descriptions read like onboarding docs](tool-descriptions-as-onboarding.md). A well-written docstring is a compact, always-present reference that shapes every tool invocation.
 
 ## Poka-Yoke: Mistake-Proofing
 
@@ -62,7 +62,7 @@ The goal is to make the correct call easier than the incorrect call.
 
 ## Independent Testing
 
-Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
+Test tools independently before full agent integration. Observe how the model calls each tool in isolation: correct selection, correct parameters, correct output handling — the junior-developer test [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) recommends. Errors in full agent loops are ambiguous — prompt, tool, or interaction. Isolated testing surfaces tool-specific misuse and eliminates one variable from loop-level failures.
 
 ## Tool Result Optimization
 
@@ -137,7 +137,7 @@ Tool engineering investment pays off when tools are reused across many agent ses
 
 - **Rapidly-changing interfaces**: when the tool's API contract is still unstable, heavyweight docstrings become maintenance debt — the description drifts from actual behavior, misleading the model more than a terse stub would.
 - **One-off or exploratory scripts**: a tool called once in a single session does not need edge-case documentation or enumerated parameter values; the cost of engineering it outweighs the benefit.
-- **Upstream documentation already exists**: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies.
+- **Upstream documentation already exists**: if the tool wraps a well-documented external API the model has strong training priors for, a thin wrapper that exposes the native interface may outperform a custom docstring that introduces inconsistencies — the rationale behind a [Unix CLI-native tool interface](unix-cli-native-tool-interface.md).
 
 Apply the full pattern to stable, shared tools that are called repeatedly across agent runs. Apply minimal-viable documentation to throwaway or prototype tooling.
 

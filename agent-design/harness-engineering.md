@@ -135,7 +135,7 @@ Codebases drift -- documentation goes stale, boundaries erode, conventions accum
 
 A TypeScript subscription API has three source directories: `src/types`, `src/services`, and `src/api`. An agent is asked to add a billing webhook endpoint.
 
-**Without harness engineering**: the agent imports a database client directly into the route handler, pulls a UI formatter from a shared utility, and opens a PR. It works locally. CI fails in staging due to a circular import and a missing environment variable. A human debugs it for an hour.
+**Without harness engineering**: the agent imports a database client directly into the route handler (`src/api`), pulls a UI formatter from a shared utility, and opens a PR. It works locally. CI fails in staging due to a circular import and a missing environment variable. A human debugs it for an hour.
 
 **With harness engineering**:
 
@@ -161,8 +161,68 @@ Harness engineering addresses structural failure modes reliably -- import violat
 Three specific conditions where the investment pays off less:
 
 - **Over-constraint limits problem-solving** -- excessively narrow linter rules block valid solutions and force agents to contort implementations to satisfy constraints rather than solve the actual problem. Comprehensive tool libraries with every capability gave worse results than stripped-down essentials in Vercel's experience; fewer choices made agents faster and more reliable ([NxCode](https://www.nxcode.io/resources/news/harness-engineering-complete-guide-ai-agent-codex-2026)).
-- **Documentation maintenance overhead** -- monolithic instruction files rot quickly; stale rules become noise that degrades agent decision quality. The harness requires active maintenance proportional to codebase change rate, or it becomes a liability.
+- **Documentation maintenance overhead** -- monolithic instruction files rot quickly; stale rules become noise that degrades agent decision quality (the failure mode [AGENTS.md as a compact index](../instructions/agents-md-as-table-of-contents.md) is designed to avoid). The harness requires active maintenance proportional to codebase change rate, or it becomes a liability.
 - **Short-lived codebases** -- building custom linters, structural tests, and layered docs pays off across many agent sessions. For prototypes or throwaway code, the investment cost exceeds the reliability benefit.
+
+## Runtime Harness Adaptation: Fixing the Interface, Not the Model
+
+A specialised application of the feedback signal above fixes recurring LLM-agent failures by editing the model-environment interface, not the model. Each recurring failure in a training trajectory becomes a rule, skill, validator, or monitor at one of four layers; the harness is held fixed at evaluation. [Xu et al. (2026)](https://arxiv.org/abs/2605.22166) report 116 of 126 model-environment settings improved across 18 backbones — average +88.5% relative — with harnesses evolved from a single 4B model transferring to 17 others.
+
+The technique only generalises in **deterministic, rule-governed environments** with stable tool interfaces and stable success criteria; the authors flag fully open-ended tasks as outside scope ([Xu et al., 2026](https://arxiv.org/html/2605.22166v1)). Coding-agent work sits *between*: refactoring a typed codebase with linters and tests is rule-governed; building a novel feature from a vague prompt is not. Use the four-layer surface for the rule-governed slices.
+
+```mermaid
+graph LR
+    M[Frozen model] --> EC[Environment<br/>Contract]
+    EC --> PS[Procedural<br/>Skills]
+    PS --> AR[Action<br/>Realization]
+    AR --> E[Environment]
+    E --> TR[Trajectory<br/>Regulation]
+    TR --> M
+```
+
+| Layer | What it does | Failure mode it catches |
+|-------|--------------|-------------------------|
+| **Environment contract** | Makes stable constraints, policy clauses, tool-use rules, and known pitfalls explicit before the first turn | Valid syntax, wrong tool usage — model never saw the rule |
+| **Procedural skill** | Skill library distilled from training trajectories; retrieves task-relevant skills as non-parametric guidance | Reasoning gaps the model could fill if shown the right procedure once |
+| **Action realization** | Gate between model output and environment; verifies executability, canonicalises interface errors, blocks deterministically failing actions | Action intent unclear in executable form, repeated bad-argument calls |
+| **Trajectory regulation** | Post-execution monitor for repetition, stagnation, budget exhaustion; triggers recovery | Degenerate loops, premature termination, runaway budgets |
+
+Each layer is sourced from observed trajectory failures, not from a priori design. Encoding the interface once and gating execution against it converts per-call inference into retrieval and gating, which LLMs perform more consistently than reconstruction from weights ([Zhou et al., 2026 — externalization survey](https://arxiv.org/pdf/2604.08224); [Xu et al., 2026](https://arxiv.org/abs/2605.22166)). Cross-backbone transfer holds only to the extent that what is encoded is environment-side, not model-side. When the next model handles an action natively — structured output, native tool-call repair, internal stopping — action-realization and trajectory-regulation layers become depreciating capital: Cursor measured a 30% drop on GPT-5-Codex when reasoning traces were dropped between tool calls, forcing the model to re-infer its prior thought process ([Cursor](https://cursor.com/blog/codex-model-harness)). Place each fix at the matching layer (policy violation → environment contract; reasoning skip → procedural skill; bad argument → action realization; loop or stall → trajectory regulation), hold the harness fixed at evaluation, and re-ablate on every model swap to drop rules whose lift evaporates ([per-model harness tuning](per-model-harness-tuning.md), [isometric harness ablation](isometric-harness-ablation.md)).
+
+## Meta-Engineering Harness: The Production-Scale Composite
+
+Scaled across many features and months, harness engineering becomes a *composite* architecture that integrates contract compilation, role-specialized agents, adversarial verification, and outer-loop calibration into one feedback loop. This is a `emerging` production-scale pattern: it pays back only when four conditions hold simultaneously, per the deployment report in [Sengupta et al., May 2026](https://arxiv.org/abs/2605.25665):
+
+- **Continuous production, not project work** — the same system delivers many features over months or years.
+- **Feature throughput amortises the outer loop** — below roughly ten features per quarter, the failure-classification pipeline costs more than it saves.
+- **Token-cost overhead is acceptable** — single agents use about 4x more tokens than chat, multi-agent systems about 15x ([Anthropic Engineering](https://www.anthropic.com/engineering/multi-agent-research-system)).
+- **Requirements settle before generation** — the two-pass compiler needs contracts stable enough to compile against.
+
+Below this threshold, simpler architectures — single-agent harnesses, [sprint contracts](sprint-contracts.md) per task, [research-plan-implement](../workflows/research-plan-implement.md) loops — deliver better cost-per-feature.
+
+```mermaid
+graph TD
+    REQ[Operational + product requirements] --> C[Two-pass contract compilation]
+    C --> R[Role-specialized agents]
+    R --> G[Generator agents produce output]
+    G --> V[Independent adversarial verification]
+    V -->|Pass| D[Deploy]
+    V -->|Fail| F[Four-way failure arbiter]
+    D -->|Production failures| F
+    F --> M[Markdown specialization memory]
+    M --> O[Outer-loop calibration]
+    O -->|Refines| C
+    O -->|Refines| R
+```
+
+The four mechanisms:
+
+1. **Two-pass contract compilation.** Requirements compile into explicit, machine-readable contracts *before* any agent generates code. Two passes exist because operational requirements (latency, error budgets, observability) and product requirements (user-visible behaviour) carry different trade-off boundaries — one pass cannot reconcile both without losing structure ([Sengupta et al., 2026](https://arxiv.org/abs/2605.25665)). This is broader than per-task [sprint contracts](sprint-contracts.md): the harness compiles the entire feature surface.
+2. **Role-specialized agents.** Work routes through agents with exclusive scopes — see [specialized agent roles](specialized-agent-roles.md) — extended with explicit handoff schemas addressing accountability and context-fragmentation problems ([traceability research](https://arxiv.org/abs/2510.07614)).
+3. **Independent and adversarial verification.** Verification runs as a separate role with no access to the generator's reasoning, plus a "four-way failure arbiter" for the canonical disagreement outcomes ([Sengupta et al., 2026](https://arxiv.org/abs/2605.25665)). Critic-builder separation favours false positives over false negatives ([Adversarial Code Review pattern](https://asdlc.io/patterns/adversarial-code-review/)) — but role separation alone is not sufficient: framing a change as bug-free reduces LLM vulnerability detection by 16–93% ([arxiv 2603.18740](https://arxiv.org/abs/2603.18740)). The contract is load-bearing — it gives the verifier an independent target no upstream framing can defeat.
+4. **Outer-loop calibration via failure classification.** Production failures feed back into structural improvements to contracts and verification boundaries, not per-feature patches — the [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) discipline at architecture level. The substrate is persistent markdown memory with "specialization records," structurally the same as [persona-as-code](persona-as-code.md) and [agent memory patterns](agent-memory-patterns.md). The payments case study — 17 features over several weeks — surfaced contract incompleteness and verification-boundary gaps that the calibration loop turned into targeted architectural improvements rather than 17 one-off patches.
+
+The calibration loop is the part that earns the "meta" prefix; without it, the architecture is just a multi-agent pipeline. It backfires below the throughput threshold, on heavy feature interdependencies where role-separation coordination overhead exceeds parallelism benefit (coding tasks "have fewer parallelizable opportunities than research" — [Anthropic Engineering](https://www.anthropic.com/engineering/multi-agent-research-system)), under frequent requirement churn that staleness contracts faster than calibration refines them, and in cost-constrained deployments. The originating 17-feature deployment includes no single-agent A/B baseline — treat the architecture as a structurally-grounded candidate, not an empirically-proven default.
 
 ## Key Takeaways
 
@@ -176,9 +236,9 @@ Three specific conditions where the investment pays off less:
 
 - [Agent Harness](agent-harness.md) -- the specific initializer/worker two-phase architecture
 - [Harness Hill-Climbing](harness-hill-climbing.md) -- eval-driven iterative improvement of the agent harness using benchmark scores as the optimization signal
-- [Runtime Harness Adaptation](runtime-harness-adaptation.md) -- evolving a four-layer interface from failure trajectories so a frozen model succeeds without retraining
-- [L2 → L3: Building Mechanical Enforcement](../frameworks/brownfield-to-agent-first/level-2-to-3.md) -- step-by-step implementation of PreToolUse hooks, structured task definitions, and session scaffolding
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) -- when runtime-adaptation transfer breaks, declare model-keyed overrides
+- [Sprint Contracts](sprint-contracts.md) -- per-task evaluator agreements; the constituent mechanism the meta-engineering composite scales up
+- [Specialized Agent Roles](specialized-agent-roles.md) -- the role-specialization mechanism the meta-engineering composite extends with handoff schemas
+- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) -- the calibration discipline that converts production failures into structural improvements
 - [Codebase Readiness](codebase-readiness.md) -- code-level qualities that make a codebase agent-friendly
-- [Agent-First Software Design](agent-first-software-design.md) -- designing systems where agents are the primary consumers
-- [Behavioral Drivers of Coding Agent Success](behavioral-drivers-agent-success.md) -- failure clusters and success patterns derived from trajectory analysis across agent runs
 - [Rigor Relocation](../human/rigor-relocation.md) -- the broader thesis that engineering discipline relocates from code to scaffolding

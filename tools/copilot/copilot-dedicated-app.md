@@ -62,7 +62,7 @@ The second half of the mechanism is **backend-held session state**. Because sess
 A small team runs three concurrent Copilot sessions against one monorepo from the dedicated app, dropping to the IDE only when a session needs hands-on work:
 
 1. **Open the app's inbox.** Six issues and four PRs across two connected repos: two issues need triage, two PRs await Agent Merge.
-2. **Dispatch from inbox.** Start a session from the rate-limiting issue — it opens with issue text, repo state, and a fresh branch. Dispatch two more for unrelated issues. All three run as worktree-isolated rows in the session list.
+2. **Dispatch from inbox.** Start a Copilot session from the rate-limiting issue — it opens with issue text, repo state, and a fresh branch. Dispatch two more for unrelated issues. All three run as worktree-isolated rows in the session list.
 3. **Steer from the session list.** Session 2 enters "needs input" with a question about expected status codes — answer it from the session view, no IDE round-trip.
 4. **Hand off to the IDE only when it pays.** Session 1 hits a tricky refactor; open the branch in VS Code, edit two files inline, let the session pick up the new state. Cursor-and-buffer work happens where it fits; orchestration stays in the app.
 5. **Approve Agent Merge.** Two sessions complete with passing checks; Agent Merge clears the remaining review comments. The third needs more iteration — leave a redirect and continue.

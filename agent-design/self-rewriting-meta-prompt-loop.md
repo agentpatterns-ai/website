@@ -95,7 +95,7 @@ A 2026 study found that reflective APO with a defective seed can degrade accurac
 ## Related
 
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Harness Hill-Climbing](harness-hill-climbing.md)
 - [Loop Strategy Spectrum](loop-strategy-spectrum.md)
 - [Convergence Detection](convergence-detection.md)

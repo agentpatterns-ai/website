@@ -54,7 +54,7 @@ Multi-model consensus provides the strongest diversity: calling one model N time
 Voting works best on tasks with **discrete, verifiable outputs** where the correct answer exists but a single run might miss it:
 
 - **Classification** — is this input malicious, compliant, or out-of-scope?
-- **Security flagging** — does this diff introduce a vulnerability?
+- **Security flagging** — does this diff introduce a vulnerability? (the [adversarial multi-model](adversarial-multi-model-pipeline.md) use case)
 - **Content moderation** — does this output violate policy?
 - **Code correctness checks** — does this function handle the edge case?
 
@@ -97,7 +97,7 @@ For routine tasks with strong single-run baselines, voting is wasteful. Reserve 
 
 LLMs are stochastic: the same prompt samples from a distribution of reasoning paths. Wrong answers scatter — each error follows its own spurious chain of thought — while correct answers cluster, because independent paths converge on the same consistent logic. Majority voting selects the answer most paths agree on, drowning out idiosyncratic errors ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)).
 
-Multi-model consensus strengthens this further. Different models have independent failure modes rooted in distinct training data and architectures, so an error that is systematic for one model is uncorrelated with errors in another — the correct answer remains the densest cluster even as ensemble size grows.
+[Multi-model consensus](multi-model-plan-synthesis.md) strengthens this further. Different models have independent failure modes rooted in distinct training data and architectures, so an error that is systematic for one model is uncorrelated with errors in another — the correct answer remains the densest cluster even as ensemble size grows.
 
 This entire argument rests on errors being **independent**, and that assumption is fragile. When the runs share training lineage — same base model, or smaller models distilled from a common teacher — their mistakes correlate, and correlated wrong answers cluster just as tightly as correct ones, so the majority can confidently converge on the same error. Distillation makes nominally "different" models behave alike; tracking pairwise [agent-genealogical similarity](../verification/distillation-induced-similarity-metrics.md) surfaces when the ensemble's diversity is an illusion and the voting gain has collapsed.
 

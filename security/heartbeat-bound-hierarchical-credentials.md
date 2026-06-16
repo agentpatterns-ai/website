@@ -74,7 +74,7 @@ The pattern relocates the freshness check from a network round-trip to local cry
 
 - HBHC is the right pattern when cascading revocation across a parent-child agent tree is the design goal and TTL rotation alone is too coarse.
 - The deterministic-revocation bound holds only under bounded clock skew and parent keys in secure enclaves — these are hard prerequisites, not nice-to-haves.
-- For short-task agents already on SPIFFE-style rotation, TTL expiry already bounds zombie risk; HBHC adds protocol complexity without changing realized blast radius.
+- For short-task agents already on SPIFFE-style rotation, TTL expiry already bounds zombie risk; HBHC adds protocol complexity without changing realized [blast radius](blast-radius-containment.md).
 - The parent process becomes a hard liveness dependency for the entire subtree — fail-closed by design, but partitions revoke healthy descendants.
 
 ## Related

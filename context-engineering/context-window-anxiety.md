@@ -93,7 +93,7 @@ None of these mitigations eliminates the behavior — they reduce its likelihood
 
 ## Key Takeaways
 
-- Context anxiety is a behavioral shift (premature closure) distinct from quality degradation (dumb zone) and memory loss (compaction).
+- Context anxiety is a behavioral shift (premature closure) distinct from [quality degradation (dumb zone)](context-window-dumb-zone.md) and memory loss (compaction).
 - Buffer allocation, counter-prompting, and token budget transparency each address the same root cause from different angles.
 - Trigger thresholds are model-dependent and not publicly benchmarked; apply mitigations proactively in long, multi-step agentic tasks.
 - Counter-prompting placement matters: both start and end of the system prompt, exploiting primacy and recency.
@@ -101,6 +101,7 @@ None of these mitigations eliminates the behavior — they reduce its likelihood
 ## Related
 
 - [Context Window Dumb Zone](context-window-dumb-zone.md) — quality degradation as context fills; distinct mechanism
+- [Context Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — the observability angle: measuring fill rather than the behavioral premature-closure here
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — compacting before the dumb zone sets in
 - [Context Budget Allocation](context-budget-allocation.md) — allocating tokens deliberately across preloaded context and working space
 - [Goal Recitation](goal-recitation.md) — periodically rewriting objectives at the tail of context to prevent goal drift

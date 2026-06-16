@@ -8,7 +8,7 @@ tags:
   - security
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Cross-Repo Agent Search
@@ -38,7 +38,7 @@ The `code_search` and `search` buckets are reported separately by `/rate_limit`,
 
 ## Composition With Local Search
 
-The two primitives are not substitutes. A useful default order:
+The two primitives — [local indexed search](indexed-regex-search-agent-tools.md) and cross-repo search — are not substitutes. A useful default order:
 
 ```mermaid
 flowchart TD
@@ -81,7 +81,7 @@ Cross-repo search is the wrong primitive in four common cases:
 
 - **High-iteration debugging loops.** Once the agent is querying the same repo more than a handful of times, the 10 req/min ceiling becomes a wall and snippet-only context starves the loop of surrounding code. Clone once, index locally, iterate freely.
 - **Saturated result sets.** Any query whose true hit count exceeds 1,000 returns silently truncated evidence. A migration agent that bases "we found everyone" on a capped result set will miss call sites — narrow the query with `path:`/`language:` until the count is well under the cap, or accept that the tool cannot answer the question.
-- **Repos that fit on disk.** For a monorepo or a small set of known suspect repos, `gh repo clone` plus local grep gives full context with no per-query budget, no result cap, and no audit-log noise. Cross-repo search adds latency and quota burn for no extra signal.
+- **Repos that fit on disk.** For a monorepo or a small set of known suspect repos, `gh repo clone` plus local grep gives full context with no per-query budget, no result cap, and no audit-log noise. Cross-repo search adds latency and quota burn against the 10-req/min code-search ceiling for no extra signal.
 - **Audit-sensitive environments.** Every query lands in org-level audit logs against a real identity. In regulated orgs, an agent that issues dozens of speculative queries per task can trip security review or breach data-handling policies that ad-hoc CLI use would not. Budget queries deliberately or route through a service account with explicit approval.
 
 Recent multi-repo benchmarks reinforce the discovery-only framing: on organisation-scale tasks, agents without cross-repo retrieval find almost none of the relevant files (Precision@5 ≈ 0.007), and even with a retrieval tool they recover under half (Precision@5 ≈ 0.47) — and the benchmark notes that better retrieval precision still does not translate into a proportional jump in task reward ([CodeScaleBench, Sourcegraph 2026](https://sourcegraph.com/blog/codescalebench-testing-coding-agents-on-large-codebases-and-multi-repo-software-engineering-tasks)). Treat cross-repo search as a pointer to the next clone, not as a substitute for working inside the target repo.

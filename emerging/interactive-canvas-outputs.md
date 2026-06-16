@@ -40,7 +40,7 @@ Do not use a canvas when:
 
 ## The Source-Traceability Gap
 
-A rendered dashboard looks authoritative. The query behind it may be wrong. A canvas presents the synthesis — the chart, the aggregation, the filter — without automatically surfacing the inputs. This is the same failure mode as any LLM output that hides its intermediate reasoning, amplified by the visual confidence the rendering provides.
+A rendered dashboard looks authoritative. The query behind it may be wrong. A canvas presents the synthesis — the chart, the aggregation, the filter — without automatically surfacing the inputs. This is the same failure mode as any LLM output that [hides its intermediate reasoning](../human/visible-thinking-ai-development.md), amplified by the visual confidence the rendering provides.
 
 Mitigations belong in the canvas itself:
 
@@ -61,7 +61,7 @@ Two practical consequences:
 
 ## Why This Is an Output-Shape Pattern, Not an Architectural One
 
-Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes what the human does with the result; they do not change what the agent did to produce it.
+Anthropic's canonical list of agent patterns — prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer — does not include artifacts or canvases ([Anthropic](https://www.anthropic.com/engineering/building-effective-agents)). That is deliberate. The underlying agent architecture is unchanged whether the output ships as Markdown, JSON, a chart, or a dashboard. Canvases are a UI affordance that changes [what the human does with the result](../agent-design/durable-interactive-artifacts.md); they do not change what the agent did to produce it.
 
 Treating canvases as an architectural pattern conflates tooling with design. Treating them as an output-shape decision — one of several ways to package the same underlying work — keeps the focus on the real question: does this output have enough structure that rendering it beats describing it, and is the verification gap small enough to accept?
 

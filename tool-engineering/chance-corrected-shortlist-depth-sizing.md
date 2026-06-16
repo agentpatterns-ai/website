@@ -12,7 +12,7 @@ aliases:
   - BoR shortlist sizing
   - chance-corrected tool retrieval
 last_reviewed: 2026-06-10
-maturity: established
+maturity: adopted
 ---
 
 # Chance-Corrected Shortlist Depth Sizing

@@ -23,7 +23,7 @@ Every agent definition answers the same questions regardless of the tool:
 - **Identity** — what is this agent, what is its role?
 - **Instructions** — what are its operating constraints, quality bar, and procedures?
 - **Tools** — which tools can it use, which are restricted?
-- **Model** — which LLM and configuration runs this agent?
+- **Model** — which LLM and configuration (`model:`) runs this agent?
 - **Permissions** — how does it interact with the human (ask, auto-approve, sandbox)?
 - **Skills** — what domain knowledge does it load on demand?
 

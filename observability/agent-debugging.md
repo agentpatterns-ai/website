@@ -62,7 +62,7 @@ In Claude Code, [tool permissions are configured in `.claude/settings.json`](htt
 
 ### Step 4: Was the Model Right for the Task?
 
-Some failures are capability problems, not context problems. A smaller model produces confidently wrong output on complex reasoning. If context, instructions, and tools look right but output is still wrong, retest with a more capable model tier.
+Some failures are [capability problems, not context problems](../workflows/escape-hatches.md). A smaller model produces confidently wrong output on complex reasoning. If context, instructions, and tools look right but output is still wrong, retest with a more capable model tier.
 
 ## Transcript Analysis
 
@@ -112,7 +112,7 @@ The diagnostic sequence assumes the failure is structural. Three conditions wher
 
 - The four agent-failure modes are missing context, conflicting instructions, missing or blocked tools, and capability ceiling — classify before you change anything.
 - Use `/memory` to inspect every CLAUDE.md and rules file that actually loaded; layered scopes (user vs. project vs. managed) cause silent contradictions.
-- Compaction drops path-scoped rules; rules that held early in a session may quietly fall out, so check session length before blaming the model.
+- Claude Code's compaction drops path-scoped rules; rules that held early in a session may quietly fall out, so check session length before blaming the model.
 - Reproduce in a fresh session with identical inputs to separate structural bugs (instructions, skills, tools) from session-specific drift.
 - Skip the full diagnostic for transient errors, true capability gaps, or over-instrumented setups — retry, escalate the tier, or reduce instruction surface area instead.
 

@@ -20,7 +20,7 @@ Semantic issue search lets you describe an issue in chat — "the flaky test abo
 Pick natural-language semantic search when the query is dominated by intent rather than exact tokens:
 
 - **Symptom-to-issue lookup**: you remember what the bug *does*, not how the report was worded ("auth fails on Safari after token refresh").
-- **Duplicate detection before opening a new issue**: a paraphrased description is exactly the shape an embedding index handles well.
+- **Duplicate detection before opening a new issue**: a paraphrased description is exactly the shape an embedding index handles well, the [find-before-create](backlog-triage-skill.md) check that keeps the backlog clean.
 - **Triage on an unfamiliar repo**: you do not know the project's preferred labels, components, or wording conventions.
 - **Conversational scoping inside an existing chat**: the agent is already in the chat surface; switching out to the issues UI breaks the loop.
 
@@ -65,7 +65,7 @@ Embedding models map paraphrases of the same intent to nearby vectors in a learn
 ## When This Backfires
 
 - **Trusting a single semantic hit for duplicate detection**: the announcement does not document whether closed issues are indexed or how recency affects ranking, and pure dense retrieval is known to miss exact-token matches. A duplicate-detection workflow that relies only on semantic search will silently leak duplicates of recently-closed or terse-titled issues. Pair it with a keyword pass.
-- **Reproducibility breakage in scripted triage**: scheduled workflows that read the top-N results from a semantic query get non-deterministic outputs as the index updates. If the script asserts on result identity, it will flake.
+- **Reproducibility breakage in scripted triage**: [scheduled triage workflows](continuous-triage.md) that read the top-N results from a semantic query get non-deterministic outputs as the index updates. If the script asserts on result identity, it will flake.
 - **Cross-repo and audit drift**: assuming the chat surface covers your full triage scope. The GA is repository-level; an org-wide security sweep still needs `gh search issues` with explicit filters.
 - **Silent recall failure on exact tokens**: rare strings — error codes, IDs, version strings — disappear into the pooled vector representation. The user sees results but cannot tell that the real match was dropped, because the system never surfaces a "no exact match" signal ([TianPan](https://tianpan.co/blog/2026-04-12-hybrid-search-production-bm25-dense-embeddings)).
 - **Loss of debuggability**: when keyword search misses, you adjust terms or boolean structure; when semantic search misses, "users are often unsure whether a missing result reflects a gap in coverage, a prompt interpretation issue, or a retrieval limitation" ([Castor](https://www.castordoc.com/ai-strategy/how-to-improve-precision-in-natural-language-search)).

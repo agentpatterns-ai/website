@@ -7,7 +7,7 @@ tags:
   - workflows
   - copilot
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Cloud-Local Agent Handoff
@@ -86,14 +86,14 @@ After verifying the fix passes locally, the developer pushes the commit.
 /delegate Fix the session expiry bug described in #247 — the refresh token rotation is not updating the stored token
 ```
 
-The coding agent picks up the task on a new branch, works asynchronously, and opens a separate PR. The developer continues refining the auth redirect fix locally while the cloud agent handles session expiry in parallel.
+The coding agent picks up the task on a new branch, works asynchronously, and opens a separate PR. The developer continues refining the auth redirect fix locally while the [cloud coding agent](../tools/copilot/coding-agent.md) handles session expiry in parallel.
 
 ## When This Backfires
 
 Cloud-local handoff depends on session state being transferable, which breaks down in several conditions:
 
 - **Stale or truncated session logs** — cloud agents that run long tasks may produce logs exceeding the local context window. The receiving session loads partial context and may misunderstand prior decisions.
-- **Branch divergence** — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume.
+- **Branch divergence** — if the local branch has commits not yet on the remote, or the remote has moved ahead, the handoff leaves the developer resolving merge conflicts before work can resume; a [single-branch strategy](../workflows/single-branch-git-agent-swarms.md) sidesteps this class of conflict.
 - **Environment mismatch** — cloud runners have different toolchains, credentials, and network access than local machines. A task that succeeded in the cloud (e.g., calling an internal API via runner credentials) may fail locally without equivalent configuration.
 - **Toolchain lock-in** — the integrated handoff is GitHub Copilot-specific. Teams using other agent stacks must implement session serialization manually via shared branch state and exported logs.
 

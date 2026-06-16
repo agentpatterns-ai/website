@@ -12,7 +12,7 @@ aliases:
   - bounded agent pool
   - batch agent dispatch
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Bounded Batch Dispatch
@@ -72,7 +72,7 @@ When an agent in a batch fails, collect completed results, record the failed ite
 - **Fixed N doesn't adapt.** Batch size is calibrated once at run start. If model latency spikes or your rate-limit tier changes mid-run, N is miscalibrated with no feedback loop to correct it.
 - **Interdependent items.** If item 30 needs output from item 12, batching breaks the dependency — use sequential processing when items have ordering constraints.
 - **Very short items at low N.** Agent spawn overhead can exceed work duration for trivial tasks; a single agent processing items sequentially is faster.
-- **Context isolation has a cost.** One agent per item means one full context initialisation per item. For large queues with shared context (system prompt, rubric, reference data), prompt caching becomes essential to avoid ITPM exhaustion.
+- **Context isolation has a cost.** One agent per item means one full [context initialisation](sub-agents-fan-out.md) per item. For large queues with shared context (system prompt, rubric, reference data), prompt caching becomes essential to avoid ITPM exhaustion.
 - **N near the rate-limit ceiling.** Failed agents retrying simultaneously can push the next burst over the limit. Keep N at 60–80% of the RPM ceiling.
 
 ## Why It Works

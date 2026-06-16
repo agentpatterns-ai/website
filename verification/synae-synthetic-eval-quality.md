@@ -40,7 +40,7 @@ A set can score high on one axis and fail another. The decomposition exists beca
 
 ## Why It Works
 
-Synthetic datasets diverge from production silently because the generator's prior is not the user's. Generators sample from model-induced distributions — templated prompts, in-context examples, fixed tool schemas — while production samples real intents, tool errors, and multi-step plans. A passing synthetic suite can still let a deploy regress.
+Synthetic datasets diverge from production silently because the generator's prior is not the user's. Generators sample from model-induced distributions — templated prompts, in-context examples, fixed tool schemas — while production samples real intents, tool errors, and multi-step plans. A passing synthetic suite can still let a deploy regress where a [golden query pair](golden-query-pairs-regression.md) suite would not.
 
 SynAE counters this by decomposition: scoring each trace component on each pillar attributes ranking distortion to a specific axis rather than a black-box verdict. The paper grounds this in controlled experiments where each generation failure mode moves a predictable pillar ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
 
@@ -79,7 +79,7 @@ Skip or replace the framework when:
 
 ## Key Takeaways
 
-- Synthetic eval data drifts silently from production; SynAE catches the drift before a deploy gate trusts the suite.
+- Synthetic eval data drifts silently from production — the same idealized-condition inflation [benchmark contamination as eval risk](benchmark-contamination-eval-risk.md) describes; SynAE catches the drift before a deploy gate trusts the suite.
 - Score on three orthogonal pillars across four trace components — the matrix is the artefact, not an aggregated number.
 - Five known generation failure modes have predictable pillar signatures; read the signatures to pick the right fix.
 - Skip when there is no production reference, the agent is single-turn, the set is small, or the LLM judge is uncalibrated.

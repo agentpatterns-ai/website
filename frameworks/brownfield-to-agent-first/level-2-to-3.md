@@ -8,7 +8,7 @@ tags:
   - tool-agnostic
   - frameworks
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # L2 → L3: Building Mechanical Enforcement
@@ -195,7 +195,7 @@ Decompose large features into single-session units with verifiable outcomes. A s
 Run this exit check:
 
 1. Ask the agent to write to a restricted path (e.g., directly edit a migration file). The hook should block it with a clear message.
-2. Ask the agent to execute a standard task using a skill definition. It should follow the steps without requiring clarification about conventions.
+2. Ask the agent to execute a standard task using a skill definition (the runtime contract described in [Skill-Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md)). It should follow the steps without requiring clarification about conventions.
 3. Pause a multi-session task mid-way. Start a new session, point it to the progress file, and verify it resumes correctly without losing context.
 
 ---
@@ -208,15 +208,15 @@ Hook-based enforcement trades flexibility for safety. Three conditions where it 
 
 **False positives in hook logic.** Shell-based hooks that match on substrings (e.g., `grep -q 'db:reset'`) will trigger on commands like `db:reset-cache` that are safe. False positives that produce terminal `deny` responses leave the agent in an unrecoverable state mid-task. Prefer exact-match conditions and test hooks against a suite of representative tool calls before deploying.
 
-**Hook proliferation without a removal process.** Teams add hooks reactively after incidents. Without a sunset process, hooks accumulate and the constrained solution space shrinks until agents can no longer complete tasks without human intervention. Maintain a hook registry with an owner and last-reviewed date; review annually.
+**Hook proliferation without a removal process.** Teams add hooks reactively after incidents. Without a sunset process, hooks accumulate and the constrained solution space shrinks until agents can no longer complete tasks without human intervention. Maintain a hook registry — the same inventory the [Hook Catalog](../../tool-engineering/hook-catalog.md) organises — with an owner and last-reviewed date; review annually.
 
 ---
 
 ## Key Takeaways
 
 - **Instructions provide context; hooks provide enforcement.** Use instructions for things the agent should understand; use hooks for things the agent must not do regardless of instruction.
-- **Structured task definitions eliminate ambiguity** and encode architectural rules into replayable workflows. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
-- **Session scaffolding preserves quality across multi-session work.** Progress files and structured commit messages replace degrading conversation history with durable, editable artifacts.
+- **Structured task definitions eliminate ambiguity** and encode architectural rules into replayable workflows — the structured-artifact half of the [Agent Harness](../../agent-design/agent-harness.md) pattern. They are the difference between "the agent knows the pattern" and "the agent always follows the pattern."
+- **Session scaffolding preserves quality across multi-session work.** Progress files and structured commit messages replace degrading conversation history with the durable artifacts that [Context Engineering](../../context-engineering/context-engineering.md) calls for.
 - **One task per session** with a verifiable exit condition. Decompose large features before giving them to an agent.
 
 ## Related

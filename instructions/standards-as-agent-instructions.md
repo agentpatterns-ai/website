@@ -30,7 +30,7 @@ The actionable form gives a verifiable rule; the vague form gives interpretive l
 
 ## Why Agents Read Standards Literally
 
-Humans read standards with context — domain knowledge, edge-case judgment, intent over letter. Agents apply the rule as written. Ambiguity does not yield a reasonable interpretation; it yields the interpretation most consistent with training data, which may not match project conventions. Standards designed so agents can follow them without interpretation are also clearer for humans.
+Humans read standards with context — domain knowledge, edge-case judgment, intent over letter. Agents apply the rule as written. Ambiguity does not yield a reasonable interpretation; it yields the interpretation most consistent with training data, which may not match project conventions — the gap that [concrete examples](example-driven-vs-rule-driven-instructions.md) close. Standards designed so agents can follow them without interpretation are also clearer for humans.
 
 ## File Hierarchy
 

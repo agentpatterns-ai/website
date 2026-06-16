@@ -8,7 +8,7 @@ tags:
   - technique
   - tool-agnostic
 last_reviewed: 2026-06-12
-maturity: established
+maturity: adopted
 ---
 
 # Incident Log Investigation Skill
@@ -19,11 +19,11 @@ An incident log investigation skill is a specialist agent that dispatches parall
 
 ## The Framing
 
-Incident investigation is one of the highest-leverage agentic use cases. The blast radius of a slow investigation is high; the relevant signals are scattered across multiple observability systems. A well-designed skill can navigate all of them and surface correlated evidence — but only if its output is trustworthy. The patterns here (parallel tool calls, context-budget discipline, eval-backed precision) apply beyond this specific three-system setup.
+Incident investigation is one of the highest-leverage agentic use cases. The blast radius of a slow investigation is high; the relevant signals are scattered across multiple observability systems. A well-designed skill can navigate all of them and surface correlated evidence — but only if its output is trustworthy. The patterns here (parallel tool calls, context-budget discipline, eval-backed precision) apply beyond this specific 3-system setup.
 
 ## Architecture
 
-The skill sits at the end of a delegation chain. A generalist incident agent accepts the initial report, determines that log evidence is needed, and forks to this specialist skill.
+The skill sits at the end of a delegation chain. A generalist incident agent accepts the initial report, determines that log evidence is needed, and forks to this specialist skill — the [orchestrator-worker](../multi-agent/orchestrator-worker.md) shape applied to incident response.
 
 ```mermaid
 graph TD
@@ -99,7 +99,7 @@ This matches the orchestrator-workers pattern for scenarios where subtask discov
 
 ## Eval Design
 
-Precision is the core quality metric. An eval suite that tests whether the skill "returned logs" will pass on a skill that returns misleading signals. The grader must test whether the skill surfaced the **correct root-cause signal**.
+Precision is the core quality metric. An eval suite that tests whether the skill "returned logs" will pass on a skill that returns misleading signals. The grader must test whether the skill surfaced the **correct root-cause signal** — the precision-first discipline of [eval-driven development](eval-driven-development.md).
 
 ### Building the Test Set
 
@@ -118,7 +118,7 @@ Hold out a set of known incidents with verified root causes. For each:
 | Tool call count | Efficiency; high count signals the skill is fetching broadly and discarding |
 | Token consumption | Context cost per investigation |
 
-High tool call counts are the key signal that the skill is not filtering effectively — it is fetching everything and relying on the model to discard irrelevant results. [Source: [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md)]
+High tool call counts are the key signal that the skill is not filtering effectively — it is fetching everything and relying on the model to discard irrelevant results. [Source: [Eval-Driven Development for tool building](eval-driven-development.md#applying-the-loop-to-tool-building)]
 
 ### Anti-Reward-Hacking Grader
 
@@ -231,7 +231,6 @@ The specific Intercom implementation (Snowflake + Honeycomb + Datadog combinatio
 
 ## Related
 
-- [Evaluation-Driven Development for Agent Tools](eval-driven-tool-development.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md)
 - [Runbooks as Agent Instructions](runbooks-as-agent-instructions.md)
 - [Progressive Disclosure for Agent Definitions](../agent-design/progressive-disclosure-agents.md)

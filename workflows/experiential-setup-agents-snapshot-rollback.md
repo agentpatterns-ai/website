@@ -24,7 +24,7 @@ An experiential-learning setup pipeline is a repository-setup workflow in which 
 
 The pattern is **not** the default answer for repository setup. Three preconditions must hold:
 
-1. **No usable dev-environment artifact upstream.** When the target repo ships a maintained devcontainer, Nix flake, or pinned `Dockerfile`, a single declarative pull beats any trial-and-repair loop on latency and reliability. See [Prebuilt Agent Environments](../agent-design/prebuilt-agent-environments.md) and [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) for those alternatives.
+1. **No usable dev-environment artifact upstream.** When the target repo ships a maintained devcontainer, Nix flake, or pinned `Dockerfile`, a single declarative pull beats any trial-and-repair loop on latency and reliability. See [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md) and [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) for those alternatives.
 2. **Heterogeneous repos with shared substrate.** Cross-repo experience reuse only pays back when the executable actions transfer — repos using the same package manager family (`pip`/`uv`/`poetry`) share installable fixes; a `pnpm` monorepo and a `cargo` workspace share almost none.
 3. **Ambiguous verification.** Surface build success does not always imply the repo's documented features run. Multi-service apps with integration-test gates surface this; single-package libraries with one `make test` invocation usually do not.
 
@@ -91,10 +91,10 @@ graph TD
 
 ## When This Backfires
 
-- **Repos with maintained dev-environment artifacts.** A devcontainer, Nix flake, or pinned Dockerfile produces a working environment in one declarative pull — no agentic reasoning, no snapshot overhead, no verification protocol. Reach for [Prebuilt Agent Environments](../agent-design/prebuilt-agent-environments.md) or [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) before this pattern.
+- **Repos with maintained dev-environment artifacts.** A devcontainer, Nix flake, or pinned Dockerfile produces a working environment in one declarative pull — no agentic reasoning, no snapshot overhead, no verification protocol. Reach for [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md) or [Agent Environment Bootstrapping](agent-environment-bootstrapping.md) before this pattern.
 - **Heterogeneous repos with no shared substrate.** When repos span fundamentally different toolchains (`pnpm` monorepo vs. `cabal` vs. `cargo` workspace vs. `uv`), the executable-action half of XPU records shares little reusable content. Prior cross-task transfer work documents that low-abstraction memories cause negative transfer in this regime ([Memory Transfer Learning](../agent-design/memory-transfer-learning.md)).
 - **CI hot path with many parallel matrix entries.** Per-command `docker commit` adds seconds of overhead per state-modifying step. On CI runners executing setup across hundreds of matrix entries, this compounds — pre-bake the image instead.
-- **Single-shot or rarely-run setups.** XPU's value is amortised reuse. A one-time bootstrap of a single repo never pays back the cost of building, storing, and querying the experience store. The first run dominates.
+- **Single-shot or rarely-run setups.** XPU's value is amortised reuse. A one-time bootstrap of a single repo never pays back the cost of building, storing, and querying the experience store — reach instead for [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md). The first run dominates.
 - **Binary, cheap verification.** When a single `make test` cleanly signals setup success, the prosecutor-judge protocol is overkill. The protocol earns its keep only when "did setup work?" is itself ambiguous.
 
 ## Why It Works
@@ -139,7 +139,7 @@ If the repo had shipped a devcontainer, the entire pipeline above is replaced by
 ## Related
 
 - [Agent Environment Bootstrapping for AI Agent Development](agent-environment-bootstrapping.md)
-- [Prebuilt Agent Environments](../agent-design/prebuilt-agent-environments.md)
+- [Prebuilt Agent Environments](../agent-design/cloud-agent-session-bootstrap.md)
 - [Rollback-First Design](../agent-design/rollback-first-design.md)
 - [Memory Transfer Learning](../agent-design/memory-transfer-learning.md)
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](../agent-design/experience-graphs-self-evolving-agents.md)

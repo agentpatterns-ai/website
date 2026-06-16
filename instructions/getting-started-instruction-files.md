@@ -11,7 +11,7 @@ tags:
   - instructions
   - tool-agnostic
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Getting Started: Setting Up Your Instruction File
@@ -110,7 +110,7 @@ When you outgrow 200 lines:
 
 ## Instructions Are Context, Not Enforcement
 
-Agents read instruction files on a best-effort basis. They are not configuration. Specificity and conciseness improve compliance, but they cannot guarantee it.
+Agents read instruction files on a best-effort basis. They are not configuration. Specificity and conciseness improve compliance, but they cannot guarantee it — adherence is bounded by the [instruction compliance ceiling](../instructions/instruction-compliance-ceiling.md).
 
 For rules that must never be violated, use deterministic mechanisms:
 
@@ -208,7 +208,7 @@ Each version adds only what the agent needed and did not have. Nothing is added 
 Instruction files create value when they are maintained. They create liability when they are not:
 
 - **Stale structural references mislead.** Directory paths, file names, and module boundaries change. An instruction file that documents `src/api/handlers/` after a refactor actively directs the agent to the wrong place. Update the file or remove the reference when the codebase changes.
-- **Auto-generated files underperform.** Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file. Review and trim aggressively before committing.
+- **Auto-generated files underperform.** Asking the agent to draft its own instruction file is a useful bootstrapping technique, but LLM-generated context files tend to be generic and verbose. The output works as a first draft — not a finished file; shipping it unread is the [cargo-cult agent setup](../anti-patterns/cargo-cult-agent-setup.md) failure. Review and trim aggressively before committing.
 - **Over-specification reduces adherence.** Adding more rules does not guarantee more compliance. Instruction-following accuracy degrades as instruction density increases. A file with 30 specific, high-signal rules outperforms one with 150 that includes noise.
 
 ## Key Takeaways

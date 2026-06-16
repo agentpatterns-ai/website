@@ -135,5 +135,5 @@ The contract holds before any tool runs.
 - [Critic Agent Pattern](critic-agent-plan-review.md)
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
-- [Agent Self-Review Loop](agent-self-review-loop.md)
+- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
 - [Structured Output Constraints](../verification/structured-output-constraints.md)

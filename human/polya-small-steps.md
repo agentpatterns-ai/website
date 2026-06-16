@@ -9,7 +9,7 @@ aliases:
   - small-steps AI discipline
   - comprehension-first coding
 last_reviewed: 2026-06-13
-maturity: established
+maturity: adopted
 ---
 
 # Polya Small-Steps: Using AI to Think Better, Not Think Less
@@ -31,7 +31,7 @@ George Polya's problem-solving framework from *[How to Solve It](https://en.wiki
 | **Understand the problem** | Formulate the problem precisely before prompting. Ask AI: "What are the constraints here?" not "Write me a solution." |
 | **Devise a plan** | Outline an approach with AI as a sounding board. "What algorithm would you use for this and why?" before requesting any code. |
 | **Carry out the plan** | Execute 1–2 logical steps at a time with immediate feedback — run, test, or verify before proceeding. |
-| **Look back** | Review what was produced. If you cannot explain every line you commit, that is your signal to ask for an explanation or rewrite it yourself. |
+| **Look back** | Review what was produced. If you cannot [explain every line you commit](../anti-patterns/comprehension-debt.md), that is your signal to ask for an explanation or rewrite it yourself. |
 
 The discipline is explicit about the fourth step: **comprehension is the exit gate**. Code you cannot explain does not get committed.
 
@@ -67,7 +67,7 @@ graph TD
 Use the small-steps discipline when:
 
 - **Learning a new domain or library** — the Anthropic study used this exact scenario. Comprehension during learning compounds; delegation during learning doesn't.
-- **Novel or research-grade problems** — unfamiliar solution space means you cannot evaluate whether the output is correct without understanding it.
+- **Novel or research-grade problems** — unfamiliar solution space means you [cannot evaluate whether the output is correct](developer-control-strategies-ai-agents.md) without understanding it.
 - **High-stakes code** — authentication, data models, financial logic. Black-box code in these paths creates compounding risk.
 - **Skill preservation is a goal** — deliberately maintaining capability in areas you would otherwise delegate entirely.
 
@@ -91,7 +91,7 @@ A developer is learning `asyncio` and needs to implement a rate-limited API clie
 Prompt: "Write an async API client with rate limiting using asyncio semaphore"
 ```
 
-The agent produces 60 lines. Tests pass. The developer commits without reading. Three days later the rate limiter behaves unexpectedly under burst load. They cannot debug it without asking the agent — paying off comprehension debt with more debt.
+The agent produces 60 lines. Tests pass. The developer [commits without reading](../anti-patterns/vibe-coding.md). Three days later the rate limiter behaves unexpectedly under burst load. They cannot debug it without asking the agent — paying off comprehension debt with more debt.
 
 **Small-steps mode** (scores 65%+):
 

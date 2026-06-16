@@ -135,9 +135,9 @@ The config blocks runtime pulls from public registries; `skill-scanner` catches 
 The full stack carries operational cost, and partial adoption leaves residual exposure:
 
 - **Scanner false positives**: LLM-based semantic scanners misclassify legitimate security tooling, pen-test utilities, and obfuscated-but-valid config as malicious. Fail-on-high without review capacity blocks productive skills; lowering the threshold loses real payloads.
-- **Pinning vs. patch velocity**: Hash pinning prevents rug-pull mutations but also blocks legitimate patches. Without a re-vetting workflow, it creates a backlog.
+- **Pinning vs. patch velocity**: Hash pinning prevents the rug-pull mutations that [tool signing](tool-signing-verification.md) also targets, but it blocks legitimate patches too. Without a re-vetting workflow, it creates a backlog.
 - **Multi-model latency**: Consensus roughly doubles per-invocation inference time. Restrict it to first-use or high-privilege calls rather than every invocation.
-- **Mirror governance drift**: Without a clear owner, the internal mirror becomes a rubber stamp and skills bypass the intake gate informally.
+- **Mirror governance drift**: Without a clear owner, the internal mirror becomes a rubber stamp and skills bypass the [intake-time intent gate](semantic-intent-validation-skills.md) informally.
 
 The full stack is most justified when agents load third-party skills at runtime with broad filesystem or network access. For internal skill sets authored by one team, hash pinning plus code review may suffice.
 

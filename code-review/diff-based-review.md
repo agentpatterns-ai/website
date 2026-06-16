@@ -58,7 +58,7 @@ The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200�
 Multi-stage pipelines have multiple natural diff boundaries:
 
 1. **Research stage** — diff the research notes against the issue description. Verify the researcher captured the right sources.
-2. **Draft stage** — diff the draft against the research notes. Verify the writer only used sourced material.
+2. **Draft stage** — diff the draft against the research notes. Verify the writer only used sourced material; unsourced additions show up in the `git diff`.
 3. **Revision stage** — diff the revised draft against the original draft. Verify reviewer feedback was applied correctly.
 
 Each diff is small and reviewable in isolation. Reviewing a 10-line diff against a known state is far easier than reviewing the final artifact against nothing.
@@ -75,7 +75,7 @@ Diff-only review has blind spots. Graphite notes that diff-only reviewers "may m
 
 **Full output review** — asking a reviewer to read the complete artifact rather than the diff. The reviewer re-reads everything the previous stage already validated.
 
-**Single large PR** — bundling an entire agent session's work into one PR. The diff is large, contains multiple concerns, and is harder to bisect when something is wrong.
+**Single large PR** — bundling an entire agent session's work into one PR. The diff is large, contains multiple concerns, and is harder to bisect when something is wrong — the case [agent-driven PR slicing](agent-driven-pr-slicing.md) decomposes into reviewable units.
 
 **No checkpoints** — relying on human review as the only diff boundary. Without intermediate checkpoints, the first reviewable diff is the complete output.
 

@@ -23,7 +23,7 @@ The [coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-age
 
 ## Self-Review & Security
 
-Before opening a PR, the coding agent implements the [agent self-review loop](../../agent-design/agent-self-review-loop.md): it [reviews its own changes](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) using Copilot code review, iterates on feedback, and runs security scanning: [CodeQL code scanning, secret scanning, and dependency vulnerability checks](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/).
+Before opening a PR, the coding agent implements the [agent self-review loop](../../code-review/agent-self-review-loop.md): it [reviews its own changes](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/) using Copilot code review, iterates on feedback, and runs security scanning: [CodeQL code scanning, secret scanning, and dependency vulnerability checks](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/).
 
 ## MCP Server Support
 

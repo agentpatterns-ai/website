@@ -115,14 +115,14 @@ The trifecta model is a structural heuristic, not a guarantee:
 
 1. **Leg removal is not always feasible.** A research agent fetching live web content, holding API keys, and posting to external endpoints has all three legs by design. For unavoidable trifectas, add compensating controls — output scanning, rate-limiting, egress anomaly detection.
 
-2. **Partial-leg states are underspecified.** "Read-only egress" and "tokenized private data" sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
+2. **Partial-leg states are underspecified.** "Read-only egress" and "[tokenized private data](pii-tokenization-in-agent-context.md)" sit between leg-present and leg-absent. Binary Yes/No columns produce false confidence when a leg is partially present.
 
 3. **Leg removal migrates risk.** Tokenizing PII shifts the attack to the token resolver; sandboxing egress shifts it to sandbox-escape. Each removal creates a new high-value target that must itself be hardened.
 
 ## Key Takeaways
 
 - Risk requires all three legs at once: private data, untrusted input, and external egress. Removing any one closes the exfiltration path.
-- Remove egress first for coding agents — most tasks need no network, and a default-deny sandbox is a deterministic control the model cannot override.
+- Remove egress first for coding agents — most tasks need no network, and a [default-deny sandbox](dual-boundary-sandboxing.md) is a deterministic control the model cannot override.
 - Audit per execution path, not per agent. A single path with three "Yes" values demands architectural mitigation, not prompt-level defenses.
 - Leg removal migrates risk rather than erasing it: each removed leg creates a new high-value target (token resolver, sandbox boundary) that must itself be hardened.
 

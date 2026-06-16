@@ -30,7 +30,7 @@ Three conditions, all required:
 - **Triage trigger, not in-loop abort.** Average lead time is 83–84% of trajectory completion — most tool calls have already executed by then ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). The signal routes runs to review queues, not to a circuit breaker.
 - **No optimisation pressure at the judge.** Training against a CoT monitor produces obfuscated reasoning that hides the conflict while preserving the hack ([Baker et al. 2025, arxiv 2503.11926](https://arxiv.org/abs/2503.11926)), and the obfuscation generalises to unseen tasks ([arxiv 2601.23086 — CoT Obfuscation Generalises to Unseen Tasks](https://arxiv.org/abs/2601.23086)). RL or fine-tuning against this judge erodes its precision.
 
-If a condition fails, fall back to [learned prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) (typed-event scoring, substrate-independent) or [trajectory-aware outcome grading](../verification/trajectory-opaque-evaluation-gap.md) (catches safety violations outcome-only graders miss).
+If a condition fails, fall back to [learned prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) (typed-event scoring, substrate-independent) or [trajectory-aware outcome grading](../verification/eval-blind-spots.md) (catches safety violations outcome-only graders miss).
 
 ## The Operational Definition
 
@@ -46,7 +46,7 @@ Five conflict categories ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)):
 | Tool output vs. plan | Test fails, agent continues as if it passed |
 | Inference vs. inference | Two derived facts contradict, agent picks one and proceeds |
 | Constraint vs. derivation | Stated rule rules out the chosen path, agent takes it anyway |
-| Unresolved uncertainty | Agent flags "I'm not sure if X" then acts on X |
+| Unresolved uncertainty | Agent flags "I'm not sure if `X`" then acts on `X` |
 | Environment vs. premise | Repo state contradicts the task's framing, agent acts on the framing |
 
 The definition subsumes verbalized reward hacking (proxy-vs-goal tension named, proxy optimised anyway) and adds the four other categories.
@@ -74,7 +74,7 @@ Verbalised conflict carries information that terminal outcome does not. A CoT co
 Three conditions where the signal collapses or actively misleads:
 
 1. **Optimisation pressure against the judge.** Direct CoT optimisation produces obfuscated reward hacking — models keep hacking while their CoT stops surfacing the conflict ([Baker et al. 2025, arxiv 2503.11926](https://arxiv.org/abs/2503.11926)), and [Korbak et al.](https://www.greaterwrong.com/posts/HPqRsgSzgQd5HQsrB/learned-chain-of-thought-obfuscation-generalises-to-unseen) show it generalises to unseen tasks. Fine-tuning against this judge erodes its precision until the signal looks clean while the failure rate holds.
-2. **Low-verbosity backbones.** Gemma4-31B's 13 zero-reasoning trajectories gave the detector nothing to read; significance collapsed to p=0.31 ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Short-CoT models and harnesses that strip reasoning before logging sit here; [outcome-aware trajectory grading](../verification/trajectory-opaque-evaluation-gap.md) and [typed-event prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) remain useful.
+2. **Low-verbosity backbones.** Gemma4-31B's 13 zero-reasoning trajectories gave the detector nothing to read; significance collapsed to p=0.31 ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Short-CoT models and harnesses that strip reasoning before logging sit here; [outcome-aware trajectory grading](../verification/eval-blind-spots.md) and [typed-event prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) remain useful.
 3. **Need for in-loop abort.** 83–84% lead time means destructive tool calls have already issued by the time the flag arrives ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). For destructive `rm` or irreversible API calls, [circuit breakers](circuit-breakers.md) and [pre-completion checklists](../verification/pre-completion-checklists.md) bind earlier.
 
 A steelman of the opposite: CoT is unreliable post-hoc narrative ([Anthropic 2025](https://www.anthropic.com/research/reasoning-models-dont-say-think)), 2% verbalisation on reward-hacked answers is a thin substrate, and cheaper signals — terminal test failure, output-verifier mismatch — recover most of the same trajectories. The Qwen numbers refute its strong form (the 47-point gap is real on that substrate), but it holds wherever any of the three conditions above fails.
@@ -105,5 +105,5 @@ Compare with a trajectory where the agent silently writes to the same file witho
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](../fallacies/chain-of-thought-reasoning-fallacy.md) — Why a CoT-reading judge inherits a faithfulness ceiling and what the 2% verbalisation rate on reward-hacked answers implies for monitor precision.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md) — The orthogonal-grader rubric that complements a CoT-level signal; the strained-coherence judge is one signal among several.
 - [Learned Prefix Monitors for Agent Traces](../verification/learned-prefix-monitors-agent-traces.md) — A typed-event supervised scorer; the substrate-independent alternative when the agent does not produce verbose CoT.
-- [Trajectory-Opaque Evaluation Gap](../verification/trajectory-opaque-evaluation-gap.md) — Structured trajectory auditing catches 44% of safety violations outcome graders miss; complementary to the conflict-acknowledgment signal.
+- [Trajectory-Opaque Evaluation Gap](../verification/eval-blind-spots.md) — Structured trajectory auditing catches 44% of safety violations outcome graders miss; complementary to the conflict-acknowledgment signal.
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — In-loop abort triggers that bind earlier than the 83–84% strained-coherence lead time, for the destructive-action use case.
